@@ -1,3 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SILO RPG: STARTER CAMPAIGNS &amp; PLAYER ARCHETYPES</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle > .toc-toggle {
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+  
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">SILO RPG: STARTER CAMPAIGNS &amp; PLAYER
+ARCHETYPES</span>
+
+    <span class="navbar-meta">Silo RPG</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#silo-rpg-starter-campaigns-player-archetypes" id="toc-silo-rpg-starter-campaigns-player-archetypes">SILO RPG: STARTER
+CAMPAIGNS &amp; PLAYER ARCHETYPES</a>
+<ul>
+<li><a href="#part-1-building-a-citizen-player-archetypes" id="toc-part-1-building-a-citizen-player-archetypes">PART 1: BUILDING A
+CITIZEN (PLAYER ARCHETYPES)</a>
+<ul>
+<li><a href="#the-runner-veteran-porter" id="toc-the-runner-veteran-porter">1. The “Runner” (Veteran
+Porter)</a></li>
+<li><a href="#the-grease-stained-mechanical-tech" id="toc-the-grease-stained-mechanical-tech">2. The “Grease-Stained”
+(Mechanical Tech)</a></li>
+<li><a href="#the-grey-market-supply-clerk" id="toc-the-grey-market-supply-clerk">3. The “Grey-Market” (Supply
+Clerk)</a></li>
+<li><a href="#the-disgraced-ex-deputy-watchman" id="toc-the-disgraced-ex-deputy-watchman">4. The “Disgraced” (Ex-Deputy
+/ Watchman)</a></li>
+<li><a href="#the-green-thumb-hydroponics-farmer" id="toc-the-green-thumb-hydroponics-farmer">5. The “Green-Thumb”
+(Hydroponics Farmer)</a></li>
+<li><a href="#the-scrap-medic-shadow-doctor" id="toc-the-scrap-medic-shadow-doctor">6. The “Scrap Medic” (Shadow
+Doctor)</a></li>
+<li><a href="#the-wirehead-it-hardware-scrapper" id="toc-the-wirehead-it-hardware-scrapper">7. The “Wirehead” (IT
+Hardware Scrapper)</a></li>
+<li><a href="#the-soil-duty-compost-mortician" id="toc-the-soil-duty-compost-mortician">8. The “Soil-Duty” (Compost
+Mortician)</a></li>
+<li><a href="#why-are-you-together-party-bonds" id="toc-why-are-you-together-party-bonds">WHY ARE YOU TOGETHER? (PARTY
+BONDS)</a></li>
+</ul></li>
+<li><a href="#part-2-the-starter-campaigns-3-4-sessions-each" id="toc-part-2-the-starter-campaigns-3-4-sessions-each">PART 2: THE
+STARTER CAMPAIGNS (3-4 SESSIONS EACH)</a>
+<ul>
+<li><a href="#campaign-1-the-partition-war-mundane-slice-of-life" id="toc-campaign-1-the-partition-war-mundane-slice-of-life">CAMPAIGN 1:
+“THE PARTITION WAR” (MUNDANE SLICE-OF-LIFE)</a></li>
+<li><a href="#campaign-2-the-chit-poor-harvest-mundane-slice-of-life" id="toc-campaign-2-the-chit-poor-harvest-mundane-slice-of-life">CAMPAIGN
+2: “THE CHIT-POOR HARVEST” (MUNDANE SLICE-OF-LIFE)</a></li>
+<li><a href="#campaign-3-the-flickering-dark-mundane-slice-of-life" id="toc-campaign-3-the-flickering-dark-mundane-slice-of-life">CAMPAIGN
+3: “THE FLICKERING DARK” (MUNDANE SLICE-OF-LIFE)</a></li>
+<li><a href="#campaign-4-the-down-shift-transfer-mundane-slice-of-life" id="toc-campaign-4-the-down-shift-transfer-mundane-slice-of-life">CAMPAIGN
+4: “THE DOWN-SHIFT TRANSFER” (MUNDANE SLICE-OF-LIFE)</a></li>
+<li><a href="#campaign-5-the-rust-in-the-reclamation" id="toc-campaign-5-the-rust-in-the-reclamation">CAMPAIGN 5: “THE RUST IN
+THE RECLAMATION”</a></li>
+<li><a href="#campaign-6-the-ghost-in-the-ledger-mundane-slice-of-life" id="toc-campaign-6-the-ghost-in-the-ledger-mundane-slice-of-life">CAMPAIGN
+6: “THE GHOST IN THE LEDGER” (MUNDANE SLICE-OF-LIFE)</a></li>
+<li><a href="#campaign-7-the-tier-inheritance-mundane-slice-of-life" id="toc-campaign-7-the-tier-inheritance-mundane-slice-of-life">CAMPAIGN
+7: “THE TIER INHERITANCE” (MUNDANE SLICE-OF-LIFE)</a></li>
+<li><a href="#campaign-8-the-missing-porter" id="toc-campaign-8-the-missing-porter">CAMPAIGN 8: “THE MISSING
+PORTER”</a></li>
+<li><a href="#campaign-9-the-lottery-swap" id="toc-campaign-9-the-lottery-swap">CAMPAIGN 9: “THE LOTTERY
+SWAP”</a></li>
+<li><a href="#campaign-10-the-generator-hammer" id="toc-campaign-10-the-generator-hammer">CAMPAIGN 10: “THE GENERATOR
+HAMMER”</a></li>
+</ul></li>
+<li><a href="#part-3-running-the-campaigns-at-the-table" id="toc-part-3-running-the-campaigns-at-the-table">PART 3: RUNNING THE
+CAMPAIGNS AT THE TABLE</a>
+<ul>
+<li><a href="#campaign-1-quick-kit-the-partition-war" id="toc-campaign-1-quick-kit-the-partition-war">CAMPAIGN 1 QUICK KIT:
+“THE PARTITION WAR”</a></li>
+<li><a href="#campaign-2-quick-kit-the-chit-poor-harvest" id="toc-campaign-2-quick-kit-the-chit-poor-harvest">CAMPAIGN 2 QUICK
+KIT: “THE CHIT-POOR HARVEST”</a></li>
+<li><a href="#campaign-3-quick-kit-the-flickering-dark" id="toc-campaign-3-quick-kit-the-flickering-dark">CAMPAIGN 3 QUICK KIT:
+“THE FLICKERING DARK”</a></li>
+<li><a href="#campaign-4-quick-kit-the-down-shift-transfer" id="toc-campaign-4-quick-kit-the-down-shift-transfer">CAMPAIGN 4 QUICK
+KIT: “THE DOWN-SHIFT TRANSFER”</a></li>
+<li><a href="#campaign-5-quick-kit-the-rust-in-the-reclamation" id="toc-campaign-5-quick-kit-the-rust-in-the-reclamation">CAMPAIGN 5
+QUICK KIT: “THE RUST IN THE RECLAMATION”</a></li>
+<li><a href="#campaign-6-quick-kit-the-ghost-in-the-ledger" id="toc-campaign-6-quick-kit-the-ghost-in-the-ledger">CAMPAIGN 6 QUICK
+KIT: “THE GHOST IN THE LEDGER”</a></li>
+<li><a href="#campaign-7-quick-kit-the-tier-inheritance" id="toc-campaign-7-quick-kit-the-tier-inheritance">CAMPAIGN 7 QUICK KIT:
+“THE TIER INHERITANCE”</a></li>
+<li><a href="#campaign-8-quick-kit-the-missing-porter" id="toc-campaign-8-quick-kit-the-missing-porter">CAMPAIGN 8 QUICK KIT:
+“THE MISSING PORTER”</a></li>
+<li><a href="#campaign-9-quick-kit-the-lottery-swap" id="toc-campaign-9-quick-kit-the-lottery-swap">CAMPAIGN 9 QUICK KIT:
+“THE LOTTERY SWAP”</a></li>
+<li><a href="#campaign-10-quick-kit-the-generator-hammer" id="toc-campaign-10-quick-kit-the-generator-hammer">CAMPAIGN 10 QUICK
+KIT: “THE GENERATOR HAMMER”</a></li>
+<li><a href="#universal-campaign-tools" id="toc-universal-campaign-tools">UNIVERSAL CAMPAIGN TOOLS</a></li>
+</ul></li>
+</ul></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
 <h1 id="silo-rpg-starter-campaigns-player-archetypes">SILO RPG: STARTER
 CAMPAIGNS &amp; PLAYER ARCHETYPES</h1>
 <p>This document provides a structured starting point for a tabletop
@@ -51,8 +555,8 @@ to forge requisitions and skim off the top.</li>
 <li><strong>Starting Gear:</strong> A digital or physical ledger, 50 Red
 Chits (hidden), a concealed glass shiv, a counterfeit Judicial
 stamp.</li>
-<li><strong>The Secret:</strong> You are deeply in debt to “Old Man
-Brass” and the Scrap Syndicates.</li>
+<li><strong>The Secret:</strong> You are deeply in debt to “Auntie
+Cinder” and the Scrap Syndicates.</li>
 <li><strong>The Desire:</strong> To buy your way into the Up Top and
 secure an apartment with a real door.</li>
 </ul>
@@ -189,10 +693,149 @@ locks, one appraises the scrap, and one provides muscle.</td>
 <hr />
 <h2 id="part-2-the-starter-campaigns-3-4-sessions-each">PART 2: THE
 STARTER CAMPAIGNS (3-4 SESSIONS EACH)</h2>
-<p>Choose one of the following four scenarios to begin your campaign.
-Each is designed to introduce the players to a different facet of the
-Silo’s oppressive reality.</p>
-<h3 id="campaign-1-the-rust-in-the-reclamation">CAMPAIGN 1: “THE RUST IN
+<p>The following order is designed as a natural campaign flow: start
+with local, mundane survival problems, build emotional attachment to
+recurring NPCs, then widen into conspiracy, forbidden spaces, and
+deep-system secrets.</p>
+<h3 id="campaign-1-the-partition-war-mundane-slice-of-life">CAMPAIGN 1:
+“THE PARTITION WAR” (MUNDANE SLICE-OF-LIFE)</h3>
+<p><strong>Theme:</strong> Community friction, resource management, and
+daily survival. <strong>Location:</strong> The Slums of the Down Deep
+(Level 92).</p>
+<ul>
+<li><strong>The Premise:</strong> A “Structural Seam” shift has caused a
+minor collapse on Level 92, rendering three apartments uninhabitable.
+Supply refuses to grant new housing for months. As a result, Judicial
+has mandated “Vertical Cohabitation.” Your family’s 20-square-meter
+apartment is now home to you, your Shadow, and a rival family of four. A
+weary mid-level Supply clerk named <strong>Nel Ardin</strong> is the
+only official who seems to care, but his influence is limited.</li>
+<li><strong>Session 1: The Crowded Room.</strong> Dealing with the
+immediate fallout. The rival family (the Miller clan) is loud, they use
+too much water, and they’ve taken the best sleeping corner. The party
+must manage their <strong>Stress</strong> levels while trying to
+negotiate a “house treaty.” <em>Climax:</em> A theft occurs—a valuable
+family heirloom (a non-relic locket) goes missing. The party must find
+it before a brawl breaks out.</li>
+<li><strong>Session 2: The Scavenge Hunt.</strong> The only way to get
+the Millers out is to fix their old apartment themselves. Supply claims
+they don’t have the parts (heavy-duty rivets and sealant). Nel quietly
+tells the party which requisition shelf to stop trusting. The party must
+travel to the <strong>Scrap Syndicates</strong> on Level 101 to barter
+for the parts using their own personal rations and chits.
+<em>Climax:</em> Navigating a dangerous, pitch-black “Ghost Level” to
+recover abandoned structural supports.</li>
+<li><strong>Session 3: The Repair &amp; The Red Tape.</strong> The party
+has the parts, but now they need a “Mechanical Authorization” to perform
+the repair, or they’ll be arrested for sabotage. They must bribe a weary
+Mechanical Shadow or forge the documents. <em>Climax:</em> Performing a
+dangerous, high-pressure repair on a structural beam while the Miller
+family watches. Success doesn’t uncover a conspiracy—it just means you
+finally get your apartment back to yourselves and earn a few chits of
+gratitude.</li>
+</ul>
+<hr />
+<h3 id="campaign-2-the-chit-poor-harvest-mundane-slice-of-life">CAMPAIGN
+2: “THE CHIT-POOR HARVEST” (MUNDANE SLICE-OF-LIFE)</h3>
+<p><strong>Theme:</strong> Scarcity, the gray market, and the
+desperation of hunger. <strong>Location:</strong> The Hydroponics Rings
+(Levels 60–80).</p>
+<ul>
+<li><strong>The Premise:</strong> It has been a terrible cycle. A minor
+mold outbreak means the soy yield is down 15%. Because Supply takes
+their official cut first, the workers on the Hydroponics levels are left
+with half-rations for the month. People are getting desperate, and the
+party’s “Block” is running out of food. Nel Ardin quietly warns them
+that the official numbers have been massaged and their tier is going to
+starve first.</li>
+<li><strong>Session 1: The Skim.</strong> The party decides the only way
+their families will eat is to “skim” from the official harvest before it
+goes to Supply. <em>Climax:</em> A tense, coordinated distraction in the
+sweltering, UV-lit vats to smuggle out five heavy bags of unprocessed
+soy-meal without the foreman noticing.</li>
+<li><strong>Session 2: The Barter Grind.</strong> You can’t just eat raw
+soy-meal; it needs to be processed, and doing so openly will get them
+arrested. The party must venture to the “Textile Tiers” to find an
+illegal, hand-cranked grinding press. <em>Climax:</em> Negotiating with
+the sweatshop workers, who demand a steep price (perhaps a favor or a
+valuable tool) to use the press in secret.</li>
+<li><strong>Session 3: The Hungry Neighbor.</strong> The party has the
+processed food, but word gets out on their floor. A desperate neighbor
+begs for a share for their sick child. If the party shares, they don’t
+have enough for themselves. If they refuse, the neighbor threatens to
+tell a “Friend of the Silo” about the skim. <em>Climax:</em> A brutal,
+deeply personal moral negotiation in a cramped hallway. How do you
+survive without losing your humanity?</li>
+</ul>
+<hr />
+<h3 id="campaign-3-the-flickering-dark-mundane-slice-of-life">CAMPAIGN
+3: “THE FLICKERING DARK” (MUNDANE SLICE-OF-LIFE)</h3>
+<p><strong>Theme:</strong> Infrastructure decay, neighborhood
+solidarity, and class resentment. <strong>Location:</strong> A Deep
+Residential Slum (Level 105).</p>
+<ul>
+<li><strong>The Premise:</strong> Due to a minor issue at the Generator,
+the Mayor has ordered “Load Shedding.” Level 105 has been selected to
+have its power cut by 50%. The hallway lights are off, the water pumps
+are at a trickle, and the air scrubbers are running at minimum capacity,
+making the floor stifling and suffocating. Nel Ardin manages to bury the
+worst of the ration penalties for one day, buying the party just enough
+time to act.</li>
+<li><strong>Session 1: The Dark Tier.</strong> The party must navigate
+the immediate dangers of a dark level. Crime spikes instantly. The
+party’s objective is simply to keep their specific hallway safe, dealing
+with panicked neighbors, minor thefts, and the oppressive, stale
+air.</li>
+<li><strong>Session 2: The Siphon.</strong> The level above them (Level
+104) houses mid-tier supervisors and has full power. The party realizes
+they can splice a heavy-duty cable from an industrial socket on 104 and
+run it down the maintenance shaft to power their floor’s water pump.
+<em>Climax:</em> A dangerous, illegal “jury-rigging” job in the vertical
+crawlspace, risking electrocution and discovery.</li>
+<li><strong>Session 3: The Inspector Calls.</strong> The splice works,
+but the sudden power draw alerts IT and Mechanical. A weary, low-level
+inspector is sent down to find the illegal siphon. <em>Climax:</em> The
+entire hallway must work together to hide the cable, distract the
+inspector, and convince him to write it off as a “faulty sensor gauge.”
+If they fail, the Sheriff is called, and the block loses power for a
+month.</li>
+</ul>
+<hr />
+<h3 id="campaign-4-the-down-shift-transfer-mundane-slice-of-life">CAMPAIGN
+4: “THE DOWN-SHIFT TRANSFER” (MUNDANE SLICE-OF-LIFE)</h3>
+<p><strong>Theme:</strong> Bureaucracy, heartbreak, and the social cost
+of vertical mobility. <strong>Location:</strong> The Upper Mids (Levels
+45–50).</p>
+<ul>
+<li><strong>The Premise:</strong> By now, the party’s close friend
+<strong>Nel Ardin</strong>, the mid-level Supply Clerk who helped them
+survive housing disputes, shortages, and blackouts, has fallen in love
+with a Mechanic from Level 133. Against all odds, they secured a
+marriage permit. The problem? Judicial approved the union under the
+condition that Nel must “Down-Shift”—transferring job and residence to
+Level 133 to join the spouse.</li>
+<li><strong>Session 1: The Goodbye Feast.</strong> The party needs to
+throw a farewell party, but rations are tight. They must pool their
+chits, barter with a Hydroponics smuggler for a single real potato, and
+deal with the social stigma from their Up-Top leaning neighbors who view
+the Down-Shift as a “class betrayal.”</li>
+<li><strong>Session 2: The Red Tape Trap.</strong> On the eve of the
+move, a jealous rival in Supply intentionally “loses” Nel’s official
+transfer manifest. If the manifest isn’t stamped by dawn, the marriage
+permit is revoked. <em>Climax:</em> The party must sneak into the dark,
+silent Supply offices, not to steal a relic or hack a server, but simply
+to find a misfiled piece of paper and forge a manager’s stamp.</li>
+<li><strong>Session 3: The Long Walk.</strong> The actual journey down
+60 levels. It is exhausting. They have to hire a Porter to carry the
+meager belongings, navigate the crowded bazaars, and face the culture
+shock of arriving in the sweltering, deafening Down Deep.
+<em>Climax:</em> There is no grand villain. The climax is the emotional
+realization that this friend is effectively gone forever, separated by a
+cultural and physical gulf that is too exhausting to cross
+regularly.</li>
+</ul>
+<hr />
+<h3 id="campaign-5-the-rust-in-the-reclamation">CAMPAIGN 5: “THE RUST IN
 THE RECLAMATION”</h3>
 <p><strong>Theme:</strong> Bureaucracy, environmental disaster, and
 moral ambiguity. <strong>Location:</strong> The Mids (Levels 80–85).</p>
@@ -219,7 +862,91 @@ turn in the Doctor (who meant well), the Clerk (the parasite), or frame
 it as an accident to save both?</li>
 </ul>
 <hr />
-<h3 id="campaign-2-the-missing-porter">CAMPAIGN 2: “THE MISSING
+<h3 id="campaign-6-the-ghost-in-the-ledger-mundane-slice-of-life">CAMPAIGN
+6: “THE GHOST IN THE LEDGER” (MUNDANE SLICE-OF-LIFE)</h3>
+<p><strong>Theme:</strong> Bureaucratic erasure, identity, and the
+terrifying cost of existing. <strong>Location:</strong> The Mids
+Administrative Tiers (Levels 40–50).</p>
+<ul>
+<li><strong>The Premise:</strong> A longtime neighbor—a lifelong
+resident known by every family on the block—has been administratively
+deleted from the Silo’s population registry. A lazy data-merge during
+the Level 84 contamination cleanup paperwork wiped their entry. Without
+a registry number, they have no ration allocation, no legal right to
+their apartment, and their work assignment has been voided. Housing
+Compliance will sweep the level in 72 hours. The party must navigate the
+chain of administrative desks to get their neighbor re-registered before
+they are arrested as an “unregistered occupant.”</li>
+<li><strong>Session 1: The Desk That Passes the Buck.</strong> The party
+quickly learns the deletion was a minor clerical error—their neighbor’s
+old record still exists, it was simply “archived” rather than deleted.
+But correcting it requires a “Registry Review” form, which requires a
+supervisor’s signature, which requires a formal appointment three weeks
+out. The party must find a shortcut: bribery, a forged appointment slip,
+or leverage. <em>Climax:</em> A junior IT archivist agrees to flag the
+old record for restoration—but only in exchange for a favor involving a
+very sensitive personal errand.</li>
+<li><strong>Session 2: The Chain of Stamps.</strong> The restoration
+requires confirmation from three departments simultaneously: Medical
+must verify biometrics, IT must issue a formal record-reinstatement, and
+Supply must issue a provisional ration token. The party splits up to run
+all three at once. Each desk hits a different bureaucratic wall.
+<em>Climax:</em> At the final desk, a suspicious Supply clerk realizes
+the party is trying to shortcut the system. He doesn’t stop them—but he
+writes their names down.</li>
+<li><strong>Session 3: The Compliance Sweep.</strong> The Housing
+Compliance officer arrives six hours early. The restoration paperwork is
+queued, but the official printout hasn’t been issued. The party must
+stall the officer—through distraction, misdirection, or a neighborly
+appeal to the one human instinct the officer hasn’t fully
+suppressed—long enough for a weary administrator to issue a hand-written
+provisional certificate. <em>Climax:</em> There is no conspiracy. There
+is no villain. There is just a person who almost ceased to exist because
+of a typo, and a party that spent three days fighting staplers and
+rubber stamps to prove otherwise.</li>
+</ul>
+<hr />
+<h3 id="campaign-7-the-tier-inheritance-mundane-slice-of-life">CAMPAIGN
+7: “THE TIER INHERITANCE” (MUNDANE SLICE-OF-LIFE)</h3>
+<p><strong>Theme:</strong> Property, grief, and the cold economics of
+death. <strong>Location:</strong> Lower Mids (Levels 60–70).</p>
+<ul>
+<li><strong>The Premise:</strong> An elderly resident the party knew in
+passing dies without registering a housing beneficiary. Per Silo law,
+unassigned apartments are immediately reclaimed by Supply and
+reallocated. The deceased’s adult child—who lived with them, cooked for
+them, cared for them—was technically registered two levels down, making
+their residency informal. They have 48 hours to file a competing claim
+or they lose the apartment and are reassigned to a communal dormitory.
+The problem: a Supply floor manager has already earmarked the unit for a
+“preferred applicant”—the nephew of a Friend of the Silo.</li>
+<li><strong>Session 1: The Empty Room.</strong> The child is too
+grief-stricken to advocate for themselves. The party steps in, gathering
+evidence of actual residency: witness statements from neighbors,
+ration-draw records that show two people eating from one unit, the
+worn-down patch of floor next to the window where the child always
+slept. <em>Climax:</em> The Supply manager stops by to “catalog the
+unit.” He is polite, efficient, and makes clear in the quietest possible
+way that he expects no complications.</li>
+<li><strong>Session 2: The Co-Signatory Problem.</strong> Filing a
+formal “Competing Claim” requires a co-signatory with Level 40 clearance
+or above—someone with institutional standing willing to stake a small
+piece of their reputation. Everyone the party asks finds a polite reason
+to decline. <em>Climax:</em> A retired, half-blind former IT
+administrator who has nothing left to lose agrees to co-sign. Her price:
+three favors, to be named later, and a real cup of chicory.</li>
+<li><strong>Session 3: The Tribunal.</strong> Three Supply clerks hear
+the competing claims in a windowless room. The preferred applicant’s
+sponsor attends in person, dropping no explicit threats—just presence
+and implication. The party must present their evidence, read the room,
+and find the one clerk on the panel whose conscience isn’t fully bought.
+<em>Climax:</em> Even a clean win is narrow. The child keeps the
+apartment. The Supply manager makes a quiet note of the party’s names.
+Nothing explodes. Nothing is solved. But one person gets to keep their
+home, and that has to be enough.</li>
+</ul>
+<hr />
+<h3 id="campaign-8-the-missing-porter">CAMPAIGN 8: “THE MISSING
 PORTER”</h3>
 <p><strong>Theme:</strong> Cults, the unknown geography of the Silo, and
 forbidden beliefs. <strong>Location:</strong> The deep Mids / The Gap
@@ -248,40 +975,7 @@ negotiate, fight, or join the cult to silence the Judicial message
 forever.</li>
 </ul>
 <hr />
-<h3 id="campaign-3-the-generator-hammer">CAMPAIGN 3: “THE GENERATOR
-HAMMER”</h3>
-<p><strong>Theme:</strong> Industrial terror, class warfare, and the
-secrets of the deep earth. <strong>Location:</strong> The Down Deep
-(Levels 130–144).</p>
-<ul>
-<li><strong>The Premise:</strong> A rhythmic, terrifying pounding is
-coming from the Generator on Level 144. It sounds like a massive hammer.
-Mechanical claims it’s “just a loose bearing,” but the lights in the
-party’s level are flickering in a discernible code. Someone is tapping
-an SOS into the power grid from the very bottom of the Silo.</li>
-<li><strong>Session 1: Decoding the Dark.</strong> The party figures out
-the pattern. The SOS is coming from an iron miner presumed dead in a
-cave-in last week. The party must travel down to the oppressive,
-sweltering slums of Level 130 and find the miner’s old crew.
-<em>Climax:</em> The crew refuses to talk, terrified of Shift-Boss Knox,
-until the party survives an “accident” in the coal shafts meant to
-silence them.</li>
-<li><strong>Session 2: The Deep Descent.</strong> The party must bypass
-Mechanical’s strict checkpoints to reach Level 144. They must disguise
-themselves or use the perilous vertical maintenance shafts (the
-“Rat-Runs”). <em>Climax:</em> Arriving at the deafening Generator room
-and sneaking past Knox’s loyalist guards.</li>
-<li><strong>Session 3: The Vault Door.</strong> The pounding isn’t
-coming from the turbine. It’s coming from beneath the floorplates. The
-party crawls under the generator and finds the missing miner. He isn’t
-trapped by rocks; he is locked inside a massive, pre-Silo steel vault
-door (The Digger) that Knox is trying to open in secret.
-<em>Climax:</em> Knox’s men arrive. The party must decide whether to
-save the miner, blow Knox’s secret to Judicial, or strike a dark bargain
-with the lord of the Down Deep.</li>
-</ul>
-<hr />
-<h3 id="campaign-4-the-lottery-swap">CAMPAIGN 4: “THE LOTTERY SWAP”</h3>
+<h3 id="campaign-9-the-lottery-swap">CAMPAIGN 9: “THE LOTTERY SWAP”</h3>
 <p><strong>Theme:</strong> IT espionage, extreme paranoia, and the
 desperate desire for a family. <strong>Location:</strong> Up Top and
 Upper Mids (Levels 20–34).</p>
@@ -302,145 +996,573 @@ find a way through the freezing, heavily guarded IT bulkhead.
 <em>Climax:</em> Hacking a terminal in the freezing server room while
 hiding from a roaming IT “Shadow.” They identify the specific IT clerk
 who made the change.</li>
-<li><h2
-id="session-3-the-judicial-trap.-the-party-corners-the-corrupt-it-clerk.-he-confesses-he-was-blackmailed-by-inquisitor-vance-judicial-to-give-the-lottery-to-vances-niece.-climax-a-high-stakes-political-standoff.-the-party-cannot-simply-punch-a-judicial-inquisitor.-they-must-use-the-blackmail-forge-their-own-counter-evidence-or-stage-a-public-scene-at-the-viewport-cafeteria-to-force-the-mayor-to-intervene-risking-the-cleaning-if-they-fail."><strong>Session
-3: The Judicial Trap.</strong> The party corners the corrupt IT clerk.
-He confesses he was blackmailed by Inquisitor Vance (Judicial) to give
-the Lottery to Vance’s niece. <em>Climax:</em> A high-stakes political
-standoff. The party cannot simply punch a Judicial Inquisitor. They must
-use the blackmail, forge their own counter-evidence, or stage a public
-scene at the Viewport cafeteria to force the Mayor to intervene, risking
-The Cleaning if they fail.</h2></li>
-</ul>
-<h2 id="campaign-5-the-partition-war-mundane-slice-of-life">CAMPAIGN 5:
-“THE PARTITION WAR” (MUNDANE SLICE-OF-LIFE)</h2>
-<p><strong>Theme:</strong> Community friction, resource management, and
-daily survival. <strong>Location:</strong> The Slums of the Down Deep
-(Level 92).</p>
-<ul>
-<li><strong>The Premise:</strong> A “Structural Seam” shift has caused a
-minor collapse on Level 92, rendering three apartments uninhabitable.
-Supply refuses to grant new housing for months. As a result, Judicial
-has mandated “Vertical Cohabitation.” Your family’s 20-square-meter
-apartment is now home to you, your Shadow, and a rival family of
-four.</li>
-<li><strong>Session 1: The Crowded Room.</strong> Dealing with the
-immediate fallout. The rival family (the Miller clan) is loud, they use
-too much water, and they’ve taken the best sleeping corner. The party
-must manage their <strong>Stress</strong> levels while trying to
-negotiate a “house treaty.” <em>Climax:</em> A theft occurs—a valuable
-family heirloom (a non-relic locket) goes missing. The party must find
-it before a brawl breaks out.</li>
-<li><strong>Session 2: The Scavenge Hunt.</strong> The only way to get
-the Millers out is to fix their old apartment themselves. Supply claims
-they don’t have the parts (heavy-duty rivets and sealant). The party
-must travel to the <strong>Scrap Syndicates</strong> on Level 101 to
-barter for the parts using their own personal rations and chits.
-<em>Climax:</em> Navigating a dangerous, pitch-black “Ghost Level” to
-recover abandoned structural supports.</li>
-<li><strong>Session 3: The Repair &amp; The Red Tape.</strong> The party
-has the parts, but now they need a “Mechanical Authorization” to perform
-the repair, or they’ll be arrested for sabotage. They must bribe a weary
-Mechanical Shadow or forge the documents. <em>Climax:</em> Performing a
-dangerous, high-pressure repair on a structural beam while the Miller
-family watches. Success doesn’t uncover a conspiracy—it just means you
-finally get your apartment back to yourselves and earn a few chits of
-gratitude.</li>
+<li><strong>Session 3: The Judicial Trap.</strong> The party corners the
+corrupt IT clerk. He confesses he was blackmailed by Inquisitor Sel
+Verin (Judicial) to give the Lottery to Verin’s niece. <em>Climax:</em>
+A high-stakes political standoff. The party cannot simply punch a
+Judicial Inquisitor. They must use the blackmail, forge their own
+counter-evidence, or stage a public scene at the Viewport cafeteria to
+force the Mayor to intervene, risking The Cleaning if they fail.</li>
 </ul>
 <hr />
-<h3
-id="campaign-6-the-down-shift-transfer-mundane-slice-of-life">CAMPAIGN
-6: “THE DOWN-SHIFT TRANSFER” (MUNDANE SLICE-OF-LIFE)</h3>
-<p><strong>Theme:</strong> Bureaucracy, heartbreak, and the social cost
-of vertical mobility. <strong>Location:</strong> The Upper Mids (Levels
-45–50).</p>
+<h3 id="campaign-10-the-generator-hammer">CAMPAIGN 10: “THE GENERATOR
+HAMMER”</h3>
+<p><strong>Theme:</strong> Industrial terror, class warfare, and the
+secrets of the deep earth. <strong>Location:</strong> The Down Deep
+(Levels 130–144).</p>
 <ul>
-<li><strong>The Premise:</strong> The party’s close friend (or a PC), a
-mid-level Supply Clerk, fell in love with a Mechanic from Level 110.
-Against all odds, they secured a marriage permit. The problem? Judicial
-approved the union under the condition that the Supply Clerk must
-“Down-Shift”—transferring their job and residence to Level 110 to join
-the spouse.</li>
-<li><strong>Session 1: The Goodbye Feast.</strong> The party needs to
-throw a farewell party, but rations are tight. They must pool their
-chits, barter with a Hydroponics smuggler for a single real potato, and
-deal with the social stigma from their Up-Top leaning neighbors who view
-the Down-Shift as a “class betrayal.”</li>
-<li><strong>Session 2: The Red Tape Trap.</strong> On the eve of the
-move, a jealous rival in Supply intentionally “loses” the clerk’s
-official transfer manifest. If the manifest isn’t stamped by dawn, the
-marriage permit is revoked. <em>Climax:</em> The party must sneak into
-the dark, silent Supply offices, not to steal a relic or hack a server,
-but simply to find a misfiled piece of paper and forge a manager’s
-stamp.</li>
-<li><strong>Session 3: The Long Walk.</strong> The actual journey down
-60 levels. It is exhausting. They have to hire a Porter to carry the
-meager belongings, navigate the crowded bazaars, and face the culture
-shock of arriving in the sweltering, deafening Down Deep.
-<em>Climax:</em> There is no grand villain. The climax is the emotional
-realization that this friend is effectively gone forever, separated by a
-cultural and physical gulf that is too exhausting to cross
-regularly.</li>
+<li><strong>The Premise:</strong> A rhythmic, terrifying pounding is
+coming from the Generator on Level 144. It sounds like a massive hammer.
+Mechanical claims it’s “just a loose bearing,” but the lights in the
+party’s level are flickering in a discernible code. Someone is tapping
+an SOS into the power grid from the very bottom of the Silo.</li>
+<li><strong>Session 1: Decoding the Dark.</strong> The party figures out
+the pattern. The SOS is coming from an iron miner presumed dead in a
+cave-in last week. The party must travel down to the oppressive,
+sweltering slums of Level 130 and find the miner’s old crew.
+<em>Climax:</em> The crew refuses to talk, terrified of Shift-Boss
+Rourke, until the party survives an “accident” in the coal shafts meant
+to silence them.</li>
+<li><strong>Session 2: The Deep Descent.</strong> The party must bypass
+Mechanical’s strict checkpoints to reach Level 144. They must disguise
+themselves or use the perilous vertical maintenance shafts (the
+“Rat-Runs”). <em>Climax:</em> Arriving at the deafening Generator room
+and sneaking past Rourke’s loyalist guards.</li>
+<li><strong>Session 3: The Vault Door.</strong> The pounding isn’t
+coming from the turbine. It’s coming from beneath the floorplates. The
+party crawls under the generator and finds the missing miner. He isn’t
+trapped by rocks; he is locked inside a massive, pre-Silo steel vault
+door (The Digger) that Rourke is trying to open in secret.
+<em>Climax:</em> Rourke’s men arrive. The party must decide whether to
+save the miner, blow Rourke’s secret to Judicial, or strike a dark
+bargain with the lord of the Down Deep.</li>
 </ul>
 <hr />
-<h3 id="campaign-7-the-chit-poor-harvest-mundane-slice-of-life">CAMPAIGN
-7: “THE CHIT-POOR HARVEST” (MUNDANE SLICE-OF-LIFE)</h3>
-<p><strong>Theme:</strong> Scarcity, the gray market, and the
-desperation of hunger. <strong>Location:</strong> The Hydroponics Rings
-(Levels 60–80).</p>
+<h2 id="part-3-running-the-campaigns-at-the-table">PART 3: RUNNING THE
+CAMPAIGNS AT THE TABLE</h2>
+<p>The campaign premises above are designed to be evocative. Use the
+following quick kits when you want the scenarios to run with less prep
+and more momentum.</p>
+<h3 id="campaign-1-quick-kit-the-partition-war">CAMPAIGN 1 QUICK KIT:
+“THE PARTITION WAR”</h3>
 <ul>
-<li><strong>The Premise:</strong> It has been a terrible cycle. A minor
-mold outbreak means the soy yield is down 15%. Because Supply takes
-their official cut first, the workers on the Hydroponics levels are left
-with half-rations for the month. People are getting desperate, and the
-party’s “Block” is running out of food.</li>
-<li><strong>Session 1: The Skim.</strong> The party decides the only way
-their families will eat is to “skim” from the official harvest before it
-goes to Supply. <em>Climax:</em> A tense, coordinated distraction in the
-sweltering, UV-lit vats to smuggle out five heavy bags of unprocessed
-soy-meal without the foreman noticing.</li>
-<li><strong>Session 2: The Barter Grind.</strong> You can’t just eat raw
-soy-meal; it needs to be processed, and doing so openly will get them
-arrested. The party must venture to the “Textile Tiers” to find an
-illegal, hand-cranked grinding press. <em>Climax:</em> Negotiating with
-the sweatshop workers, who demand a steep price (perhaps a favor or a
-valuable tool) to use the press in secret.</li>
-<li><strong>Session 3: The Hungry Neighbor.</strong> The party has the
-processed food, but word gets out on their floor. A desperate neighbor
-begs for a share for their sick child. If the party shares, they don’t
-have enough for themselves. If they refuse, the neighbor threatens to
-tell a “Friend of the Silo” about the skim. <em>Climax:</em> A brutal,
-deeply personal moral negotiation in a cramped hallway. How do you
-survive without losing your humanity?</li>
+<li><strong>Key Faces:</strong> Jora Miller (proud rival matriarch),
+Tavin Holt (weary Supply housing clerk), <strong>Nel Ardin</strong>
+(helpful clerk with limited pull), Bee (child thief with good
+intentions), Mett Saar (underpaid Mechanical Shadow).</li>
+<li><strong>Clue Chain:</strong> Missing heirloom -&gt; child’s secret
+hidey-hole -&gt; truth about the collapse seam -&gt; blocked requisition
+file -&gt; black-market path to repair parts.</li>
+<li><strong>Escalation Clock:</strong> Families stop sharing space -&gt;
+hallway brawl -&gt; deputy intervention -&gt; one family is forcibly
+relocated or arrested.</li>
+<li><strong>Fail Forward:</strong> If the party cannot prove who took
+the locket, Bee returns it anonymously after overhearing the adults
+prepare for violence.</li>
 </ul>
-<hr />
-<h3 id="campaign-8-the-flickering-dark-mundane-slice-of-life">CAMPAIGN
-8: “THE FLICKERING DARK” (MUNDANE SLICE-OF-LIFE)</h3>
-<p><strong>Theme:</strong> Infrastructure decay, neighborhood
-solidarity, and class resentment. <strong>Location:</strong> A Deep
-Residential Slum (Level 105).</p>
+<h3 id="campaign-2-quick-kit-the-chit-poor-harvest">CAMPAIGN 2 QUICK
+KIT: “THE CHIT-POOR HARVEST”</h3>
 <ul>
-<li><strong>The Premise:</strong> Due to a minor issue at the Generator,
-the Mayor has ordered “Load Shedding.” Level 105 has been selected to
-have its power cut by 50%. The hallway lights are off, the water pumps
-are at a trickle, and the air scrubbers are running at minimum capacity,
-making the floor stifling and suffocating.</li>
-<li><strong>Session 1: The Dark Tier.</strong> The party must navigate
-the immediate dangers of a dark level. Crime spikes instantly. The
-party’s objective is simply to keep their specific hallway safe, dealing
-with panicked neighbors, minor thefts, and the oppressive, stale
-air.</li>
-<li><strong>Session 2: The Siphon.</strong> The level above them (Level
-104) houses mid-tier supervisors and has full power. The party realizes
-they can splice a heavy-duty cable from an industrial socket on 104 and
-run it down the maintenance shaft to power their floor’s water pump.
-<em>Climax:</em> A dangerous, illegal “jury-rigging” job in the vertical
-crawlspace, risking electrocution and discovery.</li>
-<li><strong>Session 3: The Inspector Calls.</strong> The splice works,
-but the sudden power draw alerts IT and Mechanical. A weary, low-level
-inspector is sent down to find the illegal siphon. <em>Climax:</em> The
-entire hallway must work together to hide the cable, distract the
-inspector, and convince him to write it off as a “faulty sensor gauge.”
-If they fail, the Sheriff is called, and the block loses power for a
-month.</li>
+<li><strong>Key Faces:</strong> Foreman Dera Vos (hard but hungry), Minn
+Ose (textile machine keeper), Cala Venn (desperate neighbor), Brikk
+(Syndicate grain broker), <strong>Nel Ardin</strong> (the clerk who
+tipped them off).</li>
+<li><strong>Clue Chain:</strong> Yield shortfall -&gt; skim opportunity
+-&gt; processing bottleneck -&gt; textile favor debt -&gt; public
+pressure from the hungry floor.</li>
+<li><strong>Escalation Clock:</strong> Half-rations begin -&gt; thefts
+multiply -&gt; a child collapses from hunger -&gt; informants trade
+names for food.</li>
+<li><strong>Fail Forward:</strong> If the party loses the soy, they can
+still bargain for community food relief by exposing who skimmed worse
+than they did.</li>
 </ul>
+<h3 id="campaign-3-quick-kit-the-flickering-dark">CAMPAIGN 3 QUICK KIT:
+“THE FLICKERING DARK”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Rella Voss (hallway organizer),
+Inspector Dorn (not eager to ruin lives), Tekk Mar (cable-splicing
+mechanic), Yune (teen scout who knows the crawlspace), <strong>Nel
+Ardin</strong> (the friend buying them a little time).</li>
+<li><strong>Clue Chain:</strong> Dark hallway incidents -&gt; power
+disparity with Level 104 -&gt; access to industrial socket -&gt; illegal
+splice -&gt; incoming inspection.</li>
+<li><strong>Escalation Clock:</strong> Crime rises -&gt; pump fails
+entirely -&gt; stale air causes sickness -&gt; Sheriff uses blackout as
+pretext for crackdown.</li>
+<li><strong>Fail Forward:</strong> If the splice job fails, the PCs
+still create enough light to become local heroes, but now everyone knows
+they meddled with the grid.</li>
+</ul>
+<h3 id="campaign-4-quick-kit-the-down-shift-transfer">CAMPAIGN 4 QUICK
+KIT: “THE DOWN-SHIFT TRANSFER”</h3>
+<ul>
+<li><strong>Key Faces:</strong> <strong>Nel Ardin</strong> (the
+transferring clerk), Rho Kell (mechanic spouse), Supervisor Pell
+(jealous rival), Hobb Fen (porter hired for the move).</li>
+<li><strong>Clue Chain:</strong> Missing manifest -&gt; supervisor’s
+late-night office access -&gt; forged delay stamp -&gt; hidden file
+drawer -&gt; path through the long walk south.</li>
+<li><strong>Escalation Clock:</strong> Permit deadline nears -&gt;
+neighbors turn cold -&gt; rival alerts Judicial -&gt; dawn arrives with
+incomplete papers.</li>
+<li><strong>Fail Forward:</strong> If the party cannot save the original
+manifest, they can salvage the marriage by proving sabotage and forcing
+a temporary extension.</li>
+</ul>
+<h3 id="campaign-5-quick-kit-the-rust-in-the-reclamation">CAMPAIGN 5
+QUICK KIT: “THE RUST IN THE RECLAMATION”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Deputy Mara Quill (desperate local law),
+Doctor Pell Rane (well-meaning Shadow Doctor), Kett Varo (Supply
+parasite), Nix “Red-Hand” Sol (Syndicate courier).</li>
+<li><strong>Clue Chain:</strong> Red residue at the tap -&gt;
+half-melted container -&gt; Supply requisition mismatch -&gt; courier
+delivery route -&gt; Doctor Rane’s hidden lab.</li>
+<li><strong>Escalation Clock:</strong> Families get sick -&gt;
+Hydroponics contamination scare -&gt; quarantine rumor sparks panic
+-&gt; Judicial sanitation team arrives.</li>
+<li><strong>Fail Forward:</strong> If the party misses a clue, a dying
+victim produces matching residue on clothing, or a Porter saw the
+courier run the stairs.</li>
+</ul>
+<h3 id="campaign-6-quick-kit-the-ghost-in-the-ledger">CAMPAIGN 6 QUICK
+KIT: “THE GHOST IN THE LEDGER”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Ossa Remm (the erased neighbor),
+Archivist Tay (IT clerk owed a favor), Supply Clerk Phen (the man who
+writes names down), Retired Administrator Voss (half-blind,
+unimpressed), Compliance Officer Brenn (not cruel, just
+procedural).</li>
+<li><strong>Clue Chain:</strong> Ration denial at the communal tap -&gt;
+registry lookup fails -&gt; archived record located in IT -&gt;
+three-desk confirmation loop -&gt; Supply clerk obstruction -&gt;
+provisional certificate race.</li>
+<li><strong>Escalation Clock:</strong> Ration access cut -&gt; work
+assignment voided -&gt; apartment flagged for sweep -&gt; compliance
+officer arrives ahead of schedule -&gt; arrest warrant issued.</li>
+<li><strong>Fail Forward:</strong> If the paperwork isn’t complete in
+time, Ossa is held for 48 hours in a compliance cell rather than
+permanently reassigned—giving the party one last window to finalize the
+restoration.</li>
+</ul>
+<h3 id="campaign-7-quick-kit-the-tier-inheritance">CAMPAIGN 7 QUICK KIT:
+“THE TIER INHERITANCE”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Dava Senne (grieving child), Supply
+Manager Torr (quietly threatening), Preferred Applicant Brem (oblivious
+nephew, not malicious), Retired IT Administrator Wren Cass
+(co-signatory, sharp despite the age), Panel Clerk Ilen Mosk (the one
+with a conscience).</li>
+<li><strong>Clue Chain:</strong> Informal residency records -&gt;
+double-draw ration logs -&gt; neighbor witness statements -&gt;
+clearance co-signatory requirement -&gt; Wren Cass’s three favors -&gt;
+tribunal preparation.</li>
+<li><strong>Escalation Clock:</strong> 48-hour window opens -&gt;
+manager catalogs the unit -&gt; preferred applicant moves belongings in
+-&gt; competing claim filing deadline passes.</li>
+<li><strong>Fail Forward:</strong> If the party misses the filing
+window, Wren Cass knows a procedural trick: a “bereavement review”
+extension can be filed within 24 hours of the original deadline if new
+residency evidence surfaces.</li>
+</ul>
+<h3 id="campaign-8-quick-kit-the-missing-porter">CAMPAIGN 8 QUICK KIT:
+“THE MISSING PORTER”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Elias Dane (missing Porter), Sister
+Avrel (Flame Watcher negotiator), Deputy Colm Werr (lazy but not
+stupid), Bessa Pike (porter union elder).</li>
+<li><strong>Clue Chain:</strong> Blood and broken satchel -&gt; porter
+timetable discrepancy -&gt; architectural mismatch -&gt; hidden vent
+grate -&gt; captive on Level 80.5.</li>
+<li><strong>Escalation Clock:</strong> Family starts asking publicly
+-&gt; Judicial notices the missing message -&gt; cult moves Elias deeper
+-&gt; execution preparations begin.</li>
+<li><strong>Fail Forward:</strong> If the party cannot find the gap, a
+child relay runner reveals Elias used an “impossible stair”
+shortcut.</li>
+</ul>
+<h3 id="campaign-9-quick-kit-the-lottery-swap">CAMPAIGN 9 QUICK KIT:
+“THE LOTTERY SWAP”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Lysa Trent (the robbed winner),
+Inquisitor Sel Verin (architect of the fraud), Enid Marr (IT clerk under
+blackmail), Doctor Hal Wen (archivist on night shift).</li>
+<li><strong>Clue Chain:</strong> Blood-test hardcopy -&gt; archive burn
+order -&gt; terminal access log -&gt; Enid’s forged credentials -&gt;
+Verin’s family tie to the replacement winner.</li>
+<li><strong>Escalation Clock:</strong> Celebration turns to rumor -&gt;
+records begin disappearing -&gt; Verin frames the PCs -&gt; public
+hearing or silent arrest.</li>
+<li><strong>Fail Forward:</strong> If they lose the paper trail, a
+morgue attendant remembers the incineration order and names the
+wrongdoer for a price.</li>
+</ul>
+<h3 id="campaign-10-quick-kit-the-generator-hammer">CAMPAIGN 10 QUICK
+KIT: “THE GENERATOR HAMMER”</h3>
+<ul>
+<li><strong>Key Faces:</strong> Shift-Boss Rourke (deep tyrant), Iri
+Vale (terrified miner’s widow), Joss Trent (surviving crewman), Old
+Merek (generator sage).</li>
+<li><strong>Clue Chain:</strong> Light-flicker code -&gt; dead miner’s
+crew -&gt; blocked maintenance route -&gt; checkpoint ledger lie -&gt;
+vault noise under floorplates.</li>
+<li><strong>Escalation Clock:</strong> Pounding worsens -&gt; Mechanical
+lockdown -&gt; Rourke silences witnesses -&gt; the vault opens or
+collapses.</li>
+<li><strong>Fail Forward:</strong> If they fail to reach Level 144
+cleanly, they arrive branded as intruders but still hear the SOS and
+must act fast.</li>
+</ul>
+<h3 id="universal-campaign-tools">UNIVERSAL CAMPAIGN TOOLS</h3>
+<ul>
+<li><strong>Best Opening Move:</strong> Start with a queue, a work
+shift, or a communal crisis rather than a briefing. The Silo feels most
+real when trouble interrupts routine.</li>
+<li><strong>Best Mid-Campaign Twist:</strong> Reveal that an apparently
+personal problem is being shaped by paperwork, surveillance, or a
+shortage upstream.</li>
+<li><strong>Best Endings:</strong> Success should rarely feel clean. Let
+the party save their people, expose one layer of corruption, or buy
+temporary relief at a lasting social cost.</li>
+</ul>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

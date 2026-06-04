@@ -60,3 +60,6 @@ logs/
 
 # Scratch / ephemeral workspace
 .scratch/
+
+# Pandoc / tool cache
+.cache/
