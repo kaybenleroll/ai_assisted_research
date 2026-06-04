@@ -10,9 +10,17 @@ This guide is for you.
 
 It is written for someone who is new to both large language models (LLMs) and container technology. You will come away knowing what an LLM inference server is, why containers are the right way to run one, which tools exist across the full spectrum from beginner-friendly to production-grade, and how to make a considered choice based on your hardware and goals.
 
-We will not prescribe a single solution. We will map the territory.
+This guide leans practical. Wherever there's a clear starting point for someone new to local inference, it says so.
 
 ## Introduction
+
+### What This Covers
+
+Inference stacks for running LLMs on your own hardware — what they are, how to choose between them, and how to deploy them. Covers hardware requirements, container runtimes, model selection, and five practical deployment blueprints for common starting points.
+
+### What This Is Not
+
+This is not a guide to training or fine-tuning models. It does not cover cloud-only inference, distributed training, or advanced quantisation theory. It won't teach you to build agents from scratch — for that, see the AI Agents Primer. The deployment blueprints are opinionated starting points, not exhaustive configuration references.
 
 ### How This Guide Is Structured
 
@@ -713,140 +721,11 @@ Open WebUI has RAG built in — you can upload documents directly in the chat in
 
 ### Access Layer: OpenClaw for Remote Personal Assistant Workflows
 
-OpenClaw is the "last-mile" gateway: your model runs locally, but you can interact through messaging channels (WhatsApp, Telegram, Slack, Discord, iMessage).
+OpenClaw is a personal assistant gateway: it connects messaging apps (WhatsApp, Telegram, Signal, iMessage) to your local inference stack and routes replies back through the same channel. If you want to use the local model you just set up as a persistent personal assistant you can message from your phone, OpenClaw is how that works.
 
-### What OpenClaw Actually Does
+When it matters here: if you are deploying Setup 3 or Setup 4 and want a conversational interface beyond a local TUI, OpenClaw is the layer that adds it. It is not an inference server — it sits in front of one.
 
-OpenClaw runs a persistent local gateway. Messages are relayed from chat apps to your local model backend and returned as replies:
-
-```text
-Your phone -> messaging service -> OpenClaw gateway (your machine) -> Ollama -> model
-                                                                                 |
-Your phone <- messaging service <- OpenClaw gateway <----------------------- response
-```
-
-It also supports coding-agent workflows, bundled web search, MCP tools, and a local TUI.
-
-Important boundary: message transport still uses each messaging provider's infrastructure, but model execution and assistant state remain local.
-
-### Setting It Up
-
-OpenClaw is launched directly through Ollama:
-
-```bash
-# Ollama handles installation, model selection, and daemon startup
-ollama launch openclaw
-```
-
-On first run, Ollama walks you through:
-1. Installing OpenClaw via npm (if not already present)
-2. A security notice explaining what tool-level access the agent will have
-3. Model selection — local or cloud
-4. Configuring your messaging provider(s) and starting the gateway daemon
-
-To connect your messaging apps:
-
-```bash
-openclaw configure --section channels
-```
-
-This opens an interactive setup for WhatsApp, Telegram, Slack, Discord, or iMessage. Each provider has its own connection mechanism (QR code scan for WhatsApp, bot token for Telegram, etc.).
-
-To launch headlessly — useful if you want to start it automatically at boot or inside a container:
-
-```bash
-# --yes skips interactive prompts; --model is required
-ollama launch openclaw --model qwen3.5 --yes
-```
-
-To stop the gateway:
-
-```bash
-openclaw gateway stop
-```
-
-### Recommended Models for OpenClaw
-
-OpenClaw is an agentic assistant — it does multi-turn reasoning, uses tools, and processes long context. The official documentation recommends **at least a 64K token context window** for local models. This is because agent loops accumulate tool call results, conversation history, and web search output into the context very quickly.
-
-| Model | VRAM needed | Notes |
-|---|---|---|
-| `qwen3.5` (local) | ~11 GB | Reasoning, coding, vision — the local sweet spot |
-| `gemma4` (local) | ~16 GB | Strong reasoning and code |
-| `qwen3.5:cloud` | None local | Falls back to Ollama cloud; good for testing |
-| `kimi-k2.5:cloud` | None local | Multimodal reasoning with sub-agents |
-
-### Running OpenClaw on an Older Laptop: 64 GB RAM, 6 GB VRAM
-
-6 GB VRAM cannot fully host recommended OpenClaw models, but 64 GB RAM is enough for strong partial-offload setups.
-
-Use **partial GPU offloading**: put as many layers as possible on GPU and keep the rest on CPU/RAM.
-
-llama.cpp's `--n-gpu-layers` flag controls how many layers go to the GPU. A 7B model has 32 transformer layers; a 13B has 40.
-
-**Practical configuration for a 7B model on 6 GB VRAM:**
-
-```bash
-# With llama-server: load 28 of 32 layers onto the 6GB GPU, rest on CPU
-llama-server -m ./qwen2.5-7b-instruct-Q4_K_M.gguf \
-  --n-gpu-layers 28 \
-  --ctx-size 65536 \
-  --port 8080
-```
-
-For a 7B Q4 model (~4.5 GB), `--n-gpu-layers 28` typically uses ~3.5-4 GB VRAM, leaving KV-cache headroom. Remaining layers run on CPU. 64 GB RAM is enough for large context KV cache.
-
-With Ollama, the equivalent is set via an environment variable or a Modelfile:
-
-```bash
-# Set GPU layer count globally for Ollama
-OLLAMA_NUM_GPU=28 ollama serve
-
-# Or create a custom Modelfile for a specific model
-cat > Modelfile << 'EOF'
-FROM qwen2.5:7b
-PARAMETER num_gpu 28
-PARAMETER num_ctx 65536
-EOF
-
-ollama create my-qwen-laptop -f Modelfile
-ollama run my-qwen-laptop
-```
-
-**What to expect performance-wise:**
-
-On modern Intel/AMD laptops with partial offload, 7B Q4 typically delivers ~8-15 tok/s. Long-context prefill is slower, but interactive chat is usable.
-
-**Your advantage is context headroom.** 64 GB RAM absorbs large KV cache growth during long agent loops.
-
-**A concrete setup for this laptop:**
-
-```bash
-# 1. Install Ollama natively (not in a container — container GPU passthrough
-#    on laptops with integrated+discrete GPU can be tricky)
-curl -fsSL https://ollama.com/install.sh | sh
-
-# 2. Create a Modelfile tuned for your laptop
-cat > ~/qwen-laptop.Modelfile << 'EOF'
-FROM qwen2.5:7b-instruct-q4_K_M
-PARAMETER num_gpu 28
-PARAMETER num_ctx 65536
-PARAMETER num_thread 8
-EOF
-
-ollama create qwen-laptop -f ~/qwen-laptop.Modelfile
-
-# 3. Launch OpenClaw against this model
-ollama launch openclaw --model qwen-laptop
-```
-
-`num_thread 8` is a starting point. Tune toward physical core count; too many threads can add overhead.
-
-### Why You Might Want This Setup
-
-The main benefit is not raw speed. It is **privacy + persistence** with local files, databases, and MCP-connected tools.
-
-For a 64 GB RAM / 6 GB VRAM laptop, this enables a practical roaming assistant with large retained context.
+For setup instructions, model recommendations, hardware-constrained deployment, and security hardening, see the [OpenClaw Primer](../openclaw_primer/openclaw_primer.md).
 
 ---
 
@@ -875,8 +754,7 @@ Here is how to cut through the options:
 **Do you want everything on a home server accessible to your whole household?**
 → LocalAI or Ollama + Open WebUI in Podman, with user accounts in Open WebUI. LocalAI has native multi-user support; Open WebUI provides it as a layer on top of Ollama.
 
-**Do you want to chat with your local model from your phone or messaging apps?**
-→ OpenClaw via `ollama launch openclaw`. If your machine has plenty of RAM but modest VRAM (e.g., 6 GB GPU, 64 GB RAM), use partial GPU offloading with a 7B model — you get a responsive assistant with a large context window at no cloud cost.
+- Personal assistant use — see the [OpenClaw Primer](../openclaw_primer/openclaw_primer.md)
 
 ---
 
