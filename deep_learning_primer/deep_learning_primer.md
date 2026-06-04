@@ -94,19 +94,31 @@ Two dimensions describe an MLP's size. Width is the number of neurons in a layer
 
 Here is a small MLP — three inputs, one hidden layer of two neurons, one output:
 
-```text
-   Input            Hidden              Output
-
-   x₁ ──w₁₁──┐
-             ├────▶ h₁ = σ(z₁) ──v₁──┐
-   x₂ ──w₁₂──┤                       ├──▶ ŷ = σ(z_out)
-             ├────▶ h₂ = σ(z₂) ──v₂──┘
-   x₃ ──w₁₃──┘
-
-   z₁ = w₁₁x₁ + w₁₂x₂ + w₁₃x₃ + b₁
-   z₂ = w₂₁x₁ + w₂₂x₂ + w₂₃x₃ + b₂
-   z_out = v₁h₁ + v₂h₂ + b_out
+```mermaid
+graph LR
+    subgraph Input["Input Layer"]
+        x1["x1"]
+        x2["x2"]
+        x3["x3"]
+    end
+    subgraph Hidden["Hidden Layer"]
+        h1["h1 = σ(z1)"]
+        h2["h2 = σ(z2)"]
+    end
+    subgraph Output["Output Layer"]
+        y["ŷ = σ(z_out)"]
+    end
+    x1 -- "w11" --> h1
+    x2 -- "w12" --> h1
+    x3 -- "w13" --> h1
+    x1 -- "w21" --> h2
+    x2 -- "w22" --> h2
+    x3 -- "w23" --> h2
+    h1 -- "v1" --> y
+    h2 -- "v2" --> y
 ```
+
+The pre-activations are $z_1 = w_{11}x_1 + w_{12}x_2 + w_{13}x_3 + b_1$, $z_2 = w_{21}x_1 + w_{22}x_2 + w_{23}x_3 + b_2$, and $z_\text{out} = v_1 h_1 + v_2 h_2 + b_\text{out}$.
 
 Every arrow carries a weight, every hidden and output neuron adds a bias and applies an activation, and the signal flows strictly left to right. Read top to bottom and you can see the structure that gives the network its power: the hidden units $h_1$ and $h_2$ are intermediate features the network constructs for itself, and the output combines them. With enough hidden units arranged this way, the XOR problem that defeated a single perceptron becomes trivial — one hidden layer is enough to carve the input space into the regions XOR needs.
 
@@ -336,21 +348,25 @@ $$\left\lfloor \frac{n - k + 2p}{s} \right\rfloor + 1$$
 
 where $n$ is the input size, $k$ the kernel size, $p$ the padding, and $s$ the stride. For a $5 \times 5$ input with a $3 \times 3$ kernel, no padding, and stride 1, you get $\lfloor (5 - 3 + 0)/1 \rfloor + 1 = 3$, a $3 \times 3$ output. Here is that exact case, with the kernel shown in its first and last positions as it slides across the input:
 
-```text
-Input 5x5            Kernel 3x3 at top-left      Kernel 3x3 at bottom-right
-. . . . .            [x x x] . .                 . . [x x x]
-. . . . .            [x x x] . .                 . . [x x x]
-. . . . .            [x x x] . .                 . . [x x x]
-. . . . .            . . . . .                   . . . . .
-. . . . .            . . . . .                   . . . . .
-                      |                           |
-                      v                           v
-                  output[0,0]                  output[2,2]
-
-Output 3x3 (one number per valid kernel position):
-o o o
-o o o
-o o o
+```mermaid
+flowchart LR
+    subgraph kernel["3×3 Kernel (9 shared weights)"]
+        kw["w00 w01 w02\nw10 w11 w12\nw20 w21 w22"]
+    end
+    subgraph input["5×5 Input Feature Map"]
+        p1["Position (0,0):\ntop-left 3×3 patch"]
+        p2["... 7 more positions ..."]
+        p3["Position (2,2):\nbottom-right 3×3 patch"]
+    end
+    subgraph output["3×3 Output\n⌊(5−3+0)/1⌋+1 = 3 per side"]
+        o1["output[0,0]"]
+        o2["..."]
+        o3["output[2,2]"]
+    end
+    kernel --> p1 & p2 & p3
+    p1 -- "dot product" --> o1
+    p2 --> o2
+    p3 -- "dot product" --> o3
 ```
 
 The kernel visits nine positions in total — three across, three down — and each produces one output value, giving the $3 \times 3$ map.
@@ -493,12 +509,22 @@ $$\mathbf{y}_t = \mathbf{W}_y \mathbf{h}_t + \mathbf{b}_y$$
 
 You can picture the RNN by "unrolling" it across time — drawing one copy of the cell per time step, with the hidden state threaded from each copy to the next:
 
-```text
-        y₁              y₂              y₃
-        ↑               ↑               ↑
-x₁ → [RNN] → h₁ → [RNN] → h₂ → [RNN] → h₃ → ...
-       ↑               ↑               ↑
-   (h₀ in)         (h₁ in)         (h₂ in)
+```mermaid
+graph LR
+    h0(["h0 in"]) --> rnn1[["RNN"]]
+    x1["x1"] --> rnn1
+    rnn1 --> y1(["y1"])
+    rnn1 --> h1(["h1"])
+
+    h1 --> rnn2[["RNN"]]
+    x2["x2"] --> rnn2
+    rnn2 --> y2(["y2"])
+    rnn2 --> h2(["h2"])
+
+    h2 --> rnn3[["RNN"]]
+    x3["x3"] --> rnn3
+    rnn3 --> y3(["y3"])
+    rnn3 --> dots(["..."])
 ```
 
 The crucial detail is that every box labelled `[RNN]` is the *same* box — the weight matrices $\mathbf{W}_h$, $\mathbf{W}_x$, and the bias are shared across all time steps. There is one set of parameters, applied repeatedly. This is exactly the parameter-sharing logic of a CNN, just applied along the time axis instead of across spatial positions: a CNN reuses a kernel at every location, an RNN reuses a cell at every step. The shared cell is what lets a single small network handle a sequence of any length.
@@ -671,37 +697,31 @@ A more modern approach, **RoPE** (Rotary Position Embedding), is now standard in
 
 The transformer stacks these pieces into an encoder and a decoder. The encoder turns the input sequence into a stack of context-rich representations; the decoder generates the output sequence one token at a time, attending both to what it has generated so far and to the encoder's output. Here is the overall structure:
 
-```text
-        INPUT                                   OUTPUT (shifted right)
-          │                                            │
-   Token embedding                             Token embedding
-          │                                            │
-   + Positional encoding                       + Positional encoding
-          │                                            │
-  ┌───────▼────────┐                          ┌────────▼─────────┐
-  │  ENCODER block │  (×N)                     │  DECODER block   │  (×N)
-  │                │                           │                  │
-  │  Multi-head    │                           │  Masked          │
-  │  self-attn     │                           │  multi-head      │
-  │      │         │                           │  self-attn       │
-  │   + residual   │                           │      │           │
-  │   LayerNorm    │                           │   + residual     │
-  │      │         │                           │   LayerNorm      │
-  │      │         │                           │      │           │
-  │      │         │        encoder output     │  Cross-attn ◄────┼── (K,V from
-  │      │         │ ─────────────────────────►│      │           │    encoder)
-  │      │         │                           │   + residual     │
-  │      │         │                           │   LayerNorm      │
-  │  Feed-forward  │                           │      │           │
-  │      │         │                           │  Feed-forward    │
-  │   + residual   │                           │      │           │
-  │   LayerNorm    │                           │   + residual     │
-  └───────┬────────┘                           │   LayerNorm      │
-          │                                    └────────┬─────────┘
-          └──────────► encoder output                   │
-                                                  Linear + softmax
-                                                         │
-                                                  output probabilities
+```mermaid
+flowchart LR
+    subgraph enc["Encoder Stack (×N)"]
+        direction TB
+        ei["Input tokens"] --> ee["Token embedding\n+ positional encoding"]
+        ee --> esa["Multi-head self-attention"]
+        esa --> enorm1["+ Residual & LayerNorm"]
+        enorm1 --> eff["Feed-forward network"]
+        eff --> eo["+ Residual & LayerNorm"]
+    end
+
+    subgraph dec["Decoder Stack (×N)"]
+        direction TB
+        di["Output tokens\n(shifted right)"] --> de["Token embedding\n+ positional encoding"]
+        de --> dmsa["Masked multi-head\nself-attention"]
+        dmsa --> dnorm1["+ Residual & LayerNorm"]
+        dnorm1 --> dca["Cross-attention\n(Q from decoder,\nK,V from encoder)"]
+        dca --> dnorm2["+ Residual & LayerNorm"]
+        dnorm2 --> dff["Feed-forward network"]
+        dff --> dnorm3["+ Residual & LayerNorm"]
+    end
+
+    eo -- "K, V" --> dca
+    dnorm3 --> lin["Linear + Softmax"]
+    lin --> out["Output probabilities"]
 ```
 
 Each encoder block has two sub-layers: a multi-head self-attention over the input sequence, followed by a position-wise feed-forward network. Each decoder block has three: a *masked* multi-head self-attention over the output generated so far (masked so it cannot peek at future tokens, explained below), a cross-attention whose queries come from the decoder and whose keys and values come from the encoder's output, and a feed-forward network. Stack $N$ of each (the original paper used $N = 6$).

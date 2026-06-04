@@ -63,3 +63,9 @@ logs/
 
 # Pandoc / tool cache
 .cache/
+
+# Mermaid rendered image cache
+.build/
+
+# Chromium profile written by mermaid container (--userns=keep-id)
+.config/
