@@ -1,0 +1,2 @@
+% Use DejaVu Sans Mono for code blocks — LM Mono lacks Greek (λ π ≈) and many Unicode symbols.
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}

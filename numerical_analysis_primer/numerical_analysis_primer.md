@@ -1,6 +1,6 @@
 # Numerical Analysis Primer: Practical, Detailed, and Friendly
 
-## 1. Why This Exists
+## Why This Exists
 
 Most introductions to numerical analysis land in one of two camps: short and hand-wavey, easy to read but hard to use, or rigorous and dense to the point where they become difficult to apply in real work. The first type leaves you unable to reason about whether your code is correct. The second type is technically complete but often inaccessible until you already have the background it assumes.
 
@@ -40,13 +40,13 @@ This is not a full proof-based textbook, and it makes no attempt to be one. If y
 
 ---
 
-## 2. The Different Approaches to Numerical Analysis
+## The Different Approaches to Numerical Analysis
 
 When people say "approaches to numerical analysis," they might mean different things. Sometimes they mean classes of algorithms (direct vs iterative). Sometimes they mean modeling style (deterministic vs stochastic). Sometimes they mean workflow priorities (error-first vs throughput-first).
 
 You should know all of these lenses, because they affect both design and outcomes.
 
-### 2.1 Direct vs Iterative Methods
+### Direct vs Iterative Methods
 
 #### Direct methods
 A direct method aims to reach a solution in a finite sequence of operations. In exact arithmetic, Gaussian elimination solves a linear system exactly in finite steps.
@@ -72,7 +72,7 @@ flowchart TD
 
 The diagram summarises the first design decision in linear algebra: whether you commit to a finite factorisation or build an iteration that converges to a stopping criterion. Problem size and sparsity pattern are the primary signals, but the consequence of the choice — deterministic completion versus controllable approximation — is what matters most downstream.
 
-### 2.2 Deterministic vs Stochastic Methods
+### Deterministic vs Stochastic Methods
 
 #### Deterministic
 A deterministic method gives exactly the same result every time it runs with the same input. There are no random draws, no seeds to manage, and no statistical fluctuation in results. This predictability makes verification and debugging straightforward: if a result is wrong, it is reproducibly wrong, which means you can isolate the problem systematically. The trapezoidal rule, classical Runge-Kutta methods, and Newton's method are all deterministic in this sense — given identical floating-point inputs and the same execution path, they produce identical outputs.
@@ -80,7 +80,7 @@ A deterministic method gives exactly the same result every time it runs with the
 #### Stochastic
 Stochastic methods deliberately introduce randomness as a core ingredient. Results vary from run to run unless the seed is fixed, and accuracy is characterized statistically — you expect a result within some confidence interval rather than guaranteeing a deterministic bound. Monte Carlo integration, stochastic gradient methods, and randomized linear algebra sketches all work this way. It is worth being direct about something: stochastic methods are not sloppy or imprecise by nature. They are often the only practical choice when deterministic methods cannot scale. High-dimensional integration is the clearest case: Monte Carlo error scales like $1/\sqrt{n}$ regardless of dimension, while deterministic quadrature rules require exponentially more evaluation points as dimension grows — a combinatorial explosion that makes them unusable beyond a handful of dimensions.
 
-### 2.3 Local vs Global Approximation
+### Local vs Global Approximation
 
 #### Local approximation
 A local method builds its approximation using information near a specific point or within a small neighborhood, without claiming anything about behavior far away. Finite difference derivative estimates use function values at nearby points only. Newton updates linearize the function around the current iterate, ignoring curvature elsewhere. Adaptive mesh refinement makes local decisions about where to place grid points based on estimated error in each cell, independent of distant regions. The strength of local methods is robustness: strange behavior in one part of the domain does not contaminate estimates elsewhere.
@@ -88,7 +88,7 @@ A local method builds its approximation using information near a specific point 
 #### Global approximation
 A global method constructs a single approximation intended to be valid across the entire interval or domain. Polynomial interpolation through all nodes, spectral methods that represent the solution as a sum of basis functions over the whole domain, and spline fits over an entire dataset all operate this way. When the target function is smooth and the basis is well-chosen, global methods can achieve remarkably high accuracy with relatively few degrees of freedom — spectral methods on smooth periodic functions can converge faster than any fixed polynomial rate. The downside is sensitivity: a function with a singularity or rough spot in one region can degrade accuracy everywhere, since global basis functions respond to the entire domain.
 
-### 2.4 Discretization-First vs Model-Reduction-First
+### Discretization-First vs Model-Reduction-First
 
 #### Discretization-first
 The classical path in computational science is to start from governing equations — differential equations, integral equations, conservation laws — and discretize them directly into a finite algebraic system. Finite difference methods replace derivatives with local polynomial approximations on a grid. Finite element and finite volume methods divide the domain into small cells and enforce the equations either locally or via variational principles. The resulting algebraic systems can be large, but the path from model to computation is direct and the numerical behavior is well understood.
@@ -98,7 +98,7 @@ An alternative path, increasingly important in modern scientific computing, is t
 
 This distinction matters especially when full-order simulation is far too expensive to run in a loop — for design optimization, uncertainty propagation, or real-time control — and some accuracy loss from the reduced model is an acceptable trade-off.
 
-### 2.5 Strong-Form vs Weak-Form Thinking
+### Strong-Form vs Weak-Form Thinking
 
 This distinction is especially important in differential equations and becomes unavoidable once you work with partial differential equations seriously.
 
@@ -108,7 +108,7 @@ In the strong form, the governing equation must hold at every point in the domai
 #### Weak form
 In the weak form, the equation is multiplied by a test function and integrated over the domain. The result is an integral condition that the solution must satisfy for all allowable test functions. This approach has two major advantages. First, it reduces the differentiability requirements on the solution, allowing functions that are not smooth enough to satisfy the strong form but are still meaningful in an integral sense. Second, it opens the door to Galerkin-type methods, where you look for the solution in a finite-dimensional subspace — which is precisely how finite element methods work. Weak-form approaches tend to be better suited to complex geometry, natural boundary conditions, and solutions with local roughness.
 
-### 2.6 Forward vs Inverse Problems
+### Forward vs Inverse Problems
 
 #### Forward problems
 In a forward problem, you are given a model and its parameters and asked to compute the outputs. You know the governing equations, you know the inputs, and you run the computation forward in the natural causal direction. This is the standard computational science workflow: given the physical law and the initial or boundary conditions, simulate what happens. Forward problems are generally well-posed — small changes in inputs produce proportionally small changes in outputs, and solutions are usually unique.
@@ -116,7 +116,7 @@ In a forward problem, you are given a model and its parameters and asked to comp
 #### Inverse problems
 In an inverse problem, you observe some outputs — often noisy, incomplete, or indirect measurements — and want to infer the underlying parameters, initial conditions, or model structure that would have produced them. You are running the causal chain backwards. Inverse problems tend to be fundamentally harder for several reasons that are mathematical, not just computational. They are often ill-posed: multiple parameter sets can explain the observed data nearly equally well, small amounts of noise in the measurements can correspond to wildly different parameter values, and without additional constraints the problem may have no unique solution. Regularization — adding prior information or smoothness penalties to distinguish plausible solutions — is central to making inverse problems tractable, and choosing the right regularization is often as much an art as a science.
 
-### 2.7 Error-First vs Throughput-First Workflow
+### Error-First vs Throughput-First Workflow
 
 #### Error-first workflow
 In an error-first workflow, you begin by asking what accuracy your application actually requires, and every other decision follows from that. You choose the method and stopping criteria based on their error behavior, instrument the computation with residual checks and convergence diagnostics, and only benchmark runtime once the accuracy is under control. This sequencing ensures you are not optimizing speed at the expense of correctness, and it forces you to think carefully about what “good enough” means for the problem at hand.
@@ -141,11 +141,11 @@ If this section feels conceptual, good. This is your method-selection map. The r
 
 ---
 
-## 3. Floating-Point Arithmetic: Why Numbers Behave Strangely
+## Floating-Point Arithmetic: Why Numbers Behave Strangely
 
 Before algorithms, we need machine arithmetic reality.
 
-### 3.1 Floating-Point in One Minute
+### Floating-Point in One Minute
 
 Most scientific code uses IEEE 754 floating-point, where a real number is represented roughly as:
 $$
@@ -159,7 +159,7 @@ $$
 $$
 in floating-point arithmetic, because rounding happens after each operation and the order of additions changes what gets rounded when.
 
-### 3.2 Machine Epsilon and Unit Roundoff
+### Machine Epsilon and Unit Roundoff
 
 Machine epsilon is often introduced as "the smallest number such that $1 + \epsilon > 1$" in floating-point arithmetic. That definition is useful, but in practice you should think of it as a scale marker: it tells you roughly how much relative precision the format can represent near 1.0.
 
@@ -172,7 +172,7 @@ Unit roundoff is closely related and is often defined as half this value under r
 
 Why this matters is not that every result is off by exactly that amount, but that this sets the floor for what arithmetic alone can promise. If your algorithm asks for relative tolerances far below this scale, the request is physically meaningless in double precision. If your method performs huge numbers of operations, these tiny errors can accumulate and be amplified by conditioning. As a working rule, solver tolerances in the $10^{-8}$ to $10^{-12}$ range are often sensible in double precision, while claims of stable relative accuracy near $10^{-16}$ across large computations should be treated skeptically unless the problem structure strongly supports it.
 
-### 3.3 Catastrophic Cancellation
+### Catastrophic Cancellation
 
 Subtracting nearly equal numbers destroys significant digits.
 
@@ -187,7 +187,7 @@ $$
 
 Same math, very different floating-point behavior.
 
-### 3.4 Overflow, Underflow, and Subnormals
+### Overflow, Underflow, and Subnormals
 
 The finite range of floating-point representation creates boundary conditions that are easy to overlook until they cause problems. **Overflow** occurs when a number is too large to be represented; in IEEE 754 arithmetic, the result typically becomes infinity, which then propagates through subsequent calculations in ways that can be confusing to diagnose. **Underflow** is the opposite problem: a number too close to zero may flush to zero entirely, silently discarding a small but potentially meaningful quantity. Before complete underflow, numbers enter the **subnormal** range, where the mantissa leading bit is no longer assumed to be one, extending the representable range near zero but with progressively fewer significant digits.
 
@@ -202,8 +202,8 @@ The basic numbers:
 
 | Type | Bits | Exponent bits | Mantissa bits | Approx. range | Machine epsilon | Throughput note |
 |---|---|---|---|---|---|---|
-| float32 | 32 | 8 | 23 | ±3.4 × 10³⁸ | ~1.2 × 10⁻⁷ | 2–4× faster on GPUs; half memory |
-| float64 | 64 | 11 | 52 | ±1.8 × 10³⁰⁸ | ~2.2 × 10⁻¹⁶ | Standard for most scientific work |
+| float32 | 32 | 8 | 23 | $\pm 3.4 \times 10^{38}$ | ${\sim}1.2 \times 10^{-7}$ | 2–4× faster on GPUs; half memory |
+| float64 | 64 | 11 | 52 | $\pm 1.8 \times 10^{308}$ | ${\sim}2.2 \times 10^{-16}$ | Standard for most scientific work |
 
 Float32 is acceptable when throughput or memory is the binding constraint and you are not accumulating errors over many operations. Machine-learning inference is the clearest case: modern GPUs execute float32 at two to four times the throughput of float64, and cutting precision in half also halves memory bandwidth. For neural-network inference, where you are doing one forward pass on fixed weights, the rounding errors rarely matter. The same logic applies to iterative refinement workflows, where you can run the inner iterations cheaply in float32 and apply a correction pass in float64 — you get most of the speed gain without surrendering final accuracy. Graphics pipelines have used float32 by default for decades for the same reason.
 
@@ -215,7 +215,7 @@ IEEE 754 defines four rounding modes. The default is round-to-nearest-even, some
 
 The other modes are round-toward-zero (truncation toward the origin), round-up (ceiling), and round-down (floor). These are mainly useful in interval arithmetic, where you deliberately round lower bounds down and upper bounds up to guarantee containment. In normal scientific computing, the default round-to-nearest-even is almost always correct, and changing it requires both a deliberate decision and hardware/compiler support that varies across environments.
 
-### 3.5 Idiomatic Language Notes
+### Idiomatic Language Notes
 
 The three languages in this primer each have a natural style for numerical work, and working against that style usually means slower and less readable code.
 
@@ -246,11 +246,11 @@ println(eps(Float64))
 
 ---
 
-## 4. Error, Conditioning, and Stability: The Core Triangle
+## Error, Conditioning, and Stability: The Core Triangle
 
 You can build beautiful algorithms that still fail in practice if you blur these three concepts.
 
-### 4.1 Absolute vs Relative Error
+### Absolute vs Relative Error
 
 Given true value $x$ and approximation $\hat{x}$:
 $$
@@ -261,7 +261,7 @@ $$
 
 Absolute error is scale-dependent. Relative error is usually more meaningful across varying magnitudes.
 
-### 4.2 Forward Error vs Backward Error
+### Forward Error vs Backward Error
 
 The **forward error** is the most intuitive notion of error: it is simply the difference between the computed answer and the true answer. If you compute $\hat{x}$ and the truth is $x^*$, the forward error is $\|\hat{x} - x^*\|$. This is what most people mean when they ask how accurate the result is.
 
@@ -269,7 +269,7 @@ The **backward error** frames the question differently. Instead of asking how fa
 
 Backward error analysis is one of the most powerful tools in numerical analysis. Its strength is that many stable algorithms can be shown to have small backward error even though the forward error might look worrying at first glance. If the backward error is small and the problem is well-conditioned, the forward error must also be small — because a well-conditioned problem does not amplify small input perturbations into large output changes.
 
-### 4.3 Conditioning: Property of the Problem
+### Conditioning: Property of the Problem
 
 Conditioning is a property of the mathematical problem, not of any particular algorithm. It measures how sensitive the output is to small perturbations in the input. A well-conditioned problem has the property that small changes in the data produce proportionally small changes in the answer. An ill-conditioned problem amplifies perturbations: a tiny change in the input can cause a large change in the output.
 
@@ -282,13 +282,13 @@ When $\kappa(A)$ is large, the matrix is close to singular in a relative sense, 
 
 A critical point that often gets missed: conditioning is a property of the problem, not the algorithm. You can use the most stable algorithm in existence and still get poor results if the problem itself is ill-conditioned.
 
-### 4.4 Stability: Property of the Algorithm
+### Stability: Property of the Algorithm
 
 Stability is a property of the algorithm rather than the problem. A numerically stable algorithm is one that does not amplify internal rounding errors beyond what the problem’s conditioning warrants. In practice, stability means that the total error in the output is roughly proportional to the product of the condition number and the floating-point unit roundoff — the algorithm does not make things worse than the problem and the arithmetic inherently require.
 
 An important and often-confused point: a stable algorithm applied to an ill-conditioned problem can still produce poor results, and that is not a failure of the algorithm. If the problem amplifies small perturbations by a factor of $10^{10}$ and you are working in double precision, you can expect to lose roughly ten digits of accuracy no matter how careful the implementation is. The algorithm is doing its job; the problem is simply sensitive. The practical implication is that diagnosing numerical failures requires separating the two questions: is the algorithm stable, and is the problem well-conditioned?
 
-### 4.5 Consistency, Stability, Convergence (for Discretizations)
+### Consistency, Stability, Convergence (for Discretizations)
 
 For numerical methods that discretize differential equations — replacing continuous derivatives with finite differences or similar approximations — there is a classical and important theorem that governs their behavior, often called the Lax equivalence theorem in the context of linear problems.
 
@@ -298,7 +298,7 @@ Stability is the additional requirement. Roughly, a method is stable if small er
 
 The key theorem states that for well-posed linear problems: consistency plus stability implies convergence. Equivalently, if a consistent method fails to converge, it must be unstable. This separates the analysis into two tractable pieces and explains why stability analysis — checking stability regions, CFL conditions, and energy estimates — is so central to numerical methods for differential equations. A scheme that is consistent but unstable will diverge as you refine the grid, which is the opposite of the convergence you hoped for.
 
-### 4.6 Practical Error Budgeting
+### Practical Error Budgeting
 
 One of the most practically useful habits in numerical work is setting up an error budget before writing a single line of solver code. The total error in a numerical result is not just one thing — it is a sum of contributions from several distinct sources, each of which must be understood and managed separately.
 
@@ -358,11 +358,11 @@ println("cond(A) = ", cond_A)
 
 ---
 
-## 5. Root Finding in Depth
+## Root Finding in Depth
 
 Root finding solves $f(x)=0$. It sounds narrow, but this appears everywhere: equilibrium points, nonlinear constraints, implicit time steps, calibration tasks, and more.
 
-### 5.1 Bisection: Reliable Workhorse
+### Bisection: Reliable Workhorse
 
 Assume continuous $f$ on $[a,b]$ with opposite signs at endpoints.
 
@@ -372,7 +372,7 @@ Bisection has a strong convergence guarantee: as long as the initial bracket is 
 
 The cost is convergence speed. Bisection has linear convergence: each step reduces the interval by exactly half, so after $n$ steps the interval width is $(b-a)/2^n$. To gain one extra decimal digit of accuracy requires roughly 3.3 more iterations. For many problems this is perfectly acceptable. But if you need high precision and the function is smooth, you will eventually want a method with faster convergence. The other practical limitation is the bracketing requirement: you need $a$ and $b$ with opposite signs, which means you need to already know the root lies in a specific interval. Finding a good bracket is sometimes the harder part of the problem.
 
-### 5.2 Newton's Method: Fast but Fragile
+### Newton's Method: Fast but Fragile
 
 Update rule:
 $$
@@ -385,7 +385,7 @@ The geometric picture helps: Newton replaces $f$ near $x_n$ with its tangent lin
 
 The failure modes of Newton’s method are real and worth taking seriously. If the derivative $f'(x_n)$ is near zero at some iterate, the update step becomes enormous and the method typically diverges. A bad initial guess — far from the root, or on the wrong side of a local maximum or minimum — can send the iterates to entirely the wrong part of the domain. Non-smooth functions can make the derivative discontinuous, invalidating the local linear approximation that the method relies on. In some configurations, Newton’s method cycles between points without converging, or oscillates in a chaotic pattern. The practical lesson is that Newton’s method should be paired with some form of safeguard — a step-length control, a bracket check, or a fallback to bisection — unless you have strong reasons to trust the starting point.
 
-### 5.3 Secant Method: Derivative-Free Newton Flavor
+### Secant Method: Derivative-Free Newton Flavor
 
 Approximates derivative from two prior points:
 $$
@@ -396,13 +396,13 @@ Convergence is superlinear, often better than bisection and cheaper than Newton 
 
 The secant method works by replacing the true derivative $f'(x_n)$ with a finite-difference slope through the last two iterates, so each step is a Newton-like step without explicit derivative evaluation. That derivative-free behavior is why it is popular for black-box functions. The tradeoff is weaker robustness than bracketing methods: if $f(x_n)-f(x_{n-1})$ is tiny, the step can explode, and without a maintained bracket the iteration can drift away from the target root.
 
-### 5.4 Hybrids in Production
+### Hybrids in Production
 
 Production-quality root-finding libraries rarely commit to a single method. The standard approach combines the safety of a bracketing method with the speed of a superlinearly convergent method, switching between them based on the behavior of the iteration. The idea is straightforward: maintain a bracket at all times so that you always know the root lies inside a known interval, but try to take a fast Newton or secant step whenever that step falls within the bracket and looks like genuine progress. If the fast step would fall outside the bracket or the update is suspiciously large, fall back to bisection to guarantee halving the interval.
 
 Brent’s method, implemented in many standard libraries including SciPy’s `brentq` and R’s `uniroot`, is the classic example of this design. It uses inverse quadratic interpolation when the iterates are behaving well and bisection as the safety net. The result is a method that is as fast as Newton-like methods on smooth problems and as reliable as bisection on difficult ones. This “safe and fast” hybrid mentality is good engineering practice for any algorithm that needs to be trusted across a wide range of inputs.
 
-### 5.5 Stopping Criteria That Actually Work
+### Stopping Criteria That Actually Work
 
 Stopping criteria are a place where even experienced practitioners cut corners, and it tends to bite them later. Stopping on a single condition is almost always wrong.
 
@@ -496,7 +496,7 @@ println("residual norm: ", norm(result.residual_norm))
 
 All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a hybridised MINPACK routine (essentially Newton with step controls), `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
 
-### 5.6 Shared Example: Find root of $f(x)=\cos(x)-x$
+### Shared Example: Find root of $f(x)=\cos(x)-x$
 
 This function has a root near $0.739085...$
 
@@ -658,19 +658,19 @@ println("newton: ", newton(f, df, 0.5))
 
 ---
 
-## 6. Numerical Linear Algebra: The Center of Gravity
+## Numerical Linear Algebra: The Center of Gravity
 
 If numerical analysis had a downtown area, it would be linear algebra.
 
 Why? Because many nonlinear, differential, and optimization problems eventually reduce to solving linear systems or least-squares subproblems.
 
-### 6.1 Dense vs Sparse Thinking
+### Dense vs Sparse Thinking
 
 The first design decision in any linear algebra problem is whether the matrix is dense or sparse, and getting this wrong is expensive.
 
 A dense matrix has most of its entries nonzero. The appropriate tools are the BLAS- and LAPACK-backed factorization routines that power NumPy, R's base matrix operations, and Julia's standard library. To understand why this matters, it helps to know what BLAS and LAPACK actually are.
 
-#### 6.1.1 BLAS and LAPACK: The Foundation Layer
+#### BLAS and LAPACK: The Foundation Layer
 
 **BLAS** (Basic Linear Algebra Subprograms) is a standardized, language-agnostic interface for elementary linear algebra operations. It is not an implementation; it is a specification. Different vendors provide different implementations — OpenBLAS (open-source, widely portable), Intel MKL (proprietary, often the fastest on x86), Apple Accelerate, AMD BLIS — but they all expose the same interface.
 
@@ -687,7 +687,7 @@ When you call `numpy.dot(A, B)` or `A @ B`, you are calling a BLAS Level 3 routi
 
 This two-layer design is crucial: it means that when a BLAS vendor releases a faster implementation (tuned for a new CPU, or exploiting a new instruction set), all LAPACK routines and all downstream libraries benefit immediately without recompilation. NumPy, R, Julia, and MATLAB all benefit from the same BLAS and LAPACK development.
 
-#### 6.1.2 Practical Implications
+#### Practical Implications
 
 Understanding this layering changes how you write numerical code:
 
@@ -771,7 +771,7 @@ u3 = F \ (2 * rhs)
 
 For symmetric positive definite sparse matrices Julia's `cholesky` calls CHOLMOD, which includes reordering (nested dissection by default) and delivers competitive fill-in on 2D and 3D grid problems without any explicit reordering call from your code.
 
-### 6.2 Factorization Choices
+### Factorization Choices
 
 Not all factorizations are created equal, and the choice matters for both efficiency and numerical conditioning.
 
@@ -807,7 +807,7 @@ A = U\Sigma V^T,
 $$
 where diagonal entries of $\Sigma$ are singular values. A useful mental model is: SVD rotates coordinates so the matrix acts like pure scaling along orthogonal directions. Once you see those scales, rank deficiency and ill-conditioning stop being mysterious; they become directly visible.
 
-### 6.3 Least Squares: Better Than Forcing Exact Fit
+### Least Squares: Better Than Forcing Exact Fit
 
 Given overdetermined system $Ax \approx b$, least squares solves:
 $$
@@ -816,7 +816,7 @@ $$
 
 The naive approach is the normal equations $A^T A x = A^T b$, a square system you can solve directly. This works, but it squares the condition number: if $\kappa(A) = 10^6$, then $\kappa(A^T A) = 10^{12}$, and you have lost twelve decimal digits of accuracy before solving a single equation. QR factorization applied directly to $A$ — as implemented in `numpy.linalg.lstsq`, R's `lm`, and Julia's `\` for tall matrices — solves the same problem without this numerical hazard and should almost always be preferred.
 
-### 6.4 Iterative Solvers for Large Systems
+### Iterative Solvers for Large Systems
 
 When matrices are large and sparse, direct methods become impractical and iterative solvers take over.
 
@@ -860,7 +860,7 @@ A practical selection loop looks like this:
 
 The key engineering tradeoff is this: stronger preconditioners reduce iterations but cost more to build/apply. The winner is the one that minimizes wall-clock time for your real workload, not the one with the fewest Krylov iterations on a toy case.
 
-### 6.5 Shared Example A: Solve a system and compute residual
+### Shared Example A: Solve a system and compute residual
 
 Use:
 $$
@@ -927,7 +927,7 @@ println("x: ", x)
 println("residual norm: ", residual)
 ```
 
-### 6.6 Shared Example B: Least squares line fit
+### Shared Example B: Least squares line fit
 
 Fit $y \approx \beta_0 + \beta_1 x$ to data.
 
@@ -1199,12 +1199,12 @@ Using `Symmetric(A)` in Julia is the equivalent of `symmetric=TRUE` in R or `eig
 
 ---
 
-## 7. Interpolation and Approximation
+## Interpolation and Approximation
 
 Interpolation asks for a function that matches known data points exactly.
 Approximation allows mismatch and optimizes some criterion.
 
-### 7.1 Polynomial Interpolation and Runge's Phenomenon
+### Polynomial Interpolation and Runge's Phenomenon
 
 The natural first instinct is to use a single polynomial of degree $n-1$ through $n$ data points. By Lagrange's theorem, such a polynomial always exists and is unique. So far so good.
 
@@ -1231,7 +1231,7 @@ The remaining two degrees of freedom are fixed by boundary conditions, which mod
 
 When you call `scipy.interpolate.CubicSpline(x, y)`, what happens under the hood is exactly this: the tridiagonal system is assembled, the not-a-knot conditions are applied to the first and last rows, and the result is solved for the $M_i$. The cubic polynomial on each subinterval is then constructed from $M_i$, $M_{i+1}$, $y_i$, $y_{i+1}$, and $h_i$ using the standard Hermite interpolation formula.
 
-### 7.2 Better Choices: Piecewise and Orthogonal Bases
+### Better Choices: Piecewise and Orthogonal Bases
 
 There are several well-established ways to avoid Runge's phenomenon while still getting high-quality approximations.
 
@@ -1264,13 +1264,13 @@ These nodes cluster toward $\pm 1$ in a way that controls the Runge oscillations
 
 ![Runge's phenomenon: degree-10 interpolant on uniform vs Chebyshev nodes](figures/runge_phenomenon.png)
 
-### 7.3 Basis Choice Matters
+### Basis Choice Matters
 
 Any approximation is implicitly a statement about which basis functions you believe the target function lives in. When you fit a polynomial, you are claiming the function is well-approximated by a linear combination of $\{1, x, x^2, \ldots\}$. When you fit a spline, you are working in a piecewise-polynomial space. When you use Fourier series, you are assuming periodic structure.
 
 The monomial basis $\{1, x, x^2, \ldots\}$ is conceptually simple but can be numerically ill-conditioned at high degree — the basis functions become nearly linearly dependent. Orthogonal polynomial families — Legendre, Chebyshev, Hermite — are better conditioned and arise naturally from the structure of the approximation problem. Spline bases have local support, meaning each basis function is nonzero only on a small part of the domain, leading to sparse matrices and local control. Radial basis functions are particularly useful for scattered data in multiple dimensions where regular grids may not be available.
 
-### 7.4 Error Perspective
+### Error Perspective
 
 Understanding interpolation error requires thinking about several interacting factors.
 
@@ -1282,7 +1282,7 @@ Understanding interpolation error requires thinking about several interacting fa
 
 **Extrapolation** is perhaps the most underappreciated danger. Polynomial and spline fits can behave unpredictably outside the range of the data, and the further you extrapolate, the worse it gets. Any numerical result claimed outside the fitting domain should be treated with strong skepticism.
 
-### 7.5 Shared Example: Compare linear interpolation and cubic spline at a target point
+### Shared Example: Compare linear interpolation and cubic spline at a target point
 
 Data: sample $\sin(x)$ on coarse grid and estimate at intermediate points.
 
@@ -1342,11 +1342,11 @@ println("truth: ", sin.(xq))
 
 ---
 
-## 8. Numerical Differentiation and Integration (Quadrature)
+## Numerical Differentiation and Integration (Quadrature)
 
 These are dual ideas in calculus, but numerically they have very different pain points.
 
-### 8.1 Numerical Differentiation Is Noise-Amplifying
+### Numerical Differentiation Is Noise-Amplifying
 
 Finite differences approximate derivatives by evaluating the function at nearby points. The standard forward difference is:
 $$
@@ -1367,7 +1367,7 @@ The optimal step size for central differences is not arbitrary. Truncation error
 
 ![Step size vs error for central differences: truncation vs cancellation error](figures/finite_diff_stepsize.png)
 
-### 8.2 Numerical Integration Is Smoothing
+### Numerical Integration Is Smoothing
 
 Integration tends to average out noise and local irregularities, making quadrature far more forgiving and robust than differentiation in practice.
 
@@ -1383,13 +1383,13 @@ The reason it performs better is that fitting a quadratic over each pair of subi
 
 **Adaptive quadrature** automatically subdivides the integration interval in regions where the function is difficult — steep, oscillatory, or nearly singular — and uses coarser spacing where the function is smooth. Most production integration libraries use some form of adaptive quadrature as their default strategy.
 
-### 8.3 Error Orders and Practical Meaning
+### Error Orders and Practical Meaning
 
 When a method has error $O(h^p)$, halving the step size reduces the error roughly by a factor of $2^p$ in the asymptotic regime. This is a useful practical diagnostic: run the method at a few step sizes and observe how fast the error decreases. A factor of 4 per halving suggests second-order convergence; a factor of 16 suggests fourth-order.
 
 But the asymptotic regime requires a fine enough grid to resolve the function's features. On coarse grids, or for rough functions with discontinuities or kinks, the theoretical order may not yet be visible. Observing the expected convergence rate is itself a form of verification — it tells you the method is working correctly and the grid is in the asymptotic regime. If the rate looks wrong, the most likely causes are an implementation error, a function feature the grid is not resolving, or a problem that is rougher than expected.
 
-### 8.4 Shared Example A: Central difference derivative of $\exp(x)$ at $x=1$
+### Shared Example A: Central difference derivative of $\exp(x)$ at $x=1$
 
 **Python**
 ```python
@@ -1438,7 +1438,7 @@ for h in (1e-1, 1e-3, 1e-5, 1e-7)
 end
 ```
 
-### 8.5 Shared Example B: Integrate $\exp(-x^2)$ on $[0,1]$
+### Shared Example B: Integrate $\exp(-x^2)$ on $[0,1]$
 
 No elementary antiderivative, ideal for quadrature demo.
 
@@ -1667,14 +1667,14 @@ Typical output shows error around $10^{-8}$ — consistent with the $O(\sqrt{\ep
 
 ---
 
-## 9. ODEs: Turning Dynamics Into Computation
+## ODEs: Turning Dynamics Into Computation
 
 Ordinary differential equations model change:
 $$
 \frac{dy}{dt} = f(t,y), \quad y(t_0)=y_0
 $$
 
-### 9.1 Explicit vs Implicit Methods
+### Explicit vs Implicit Methods
 
 #### Explicit
 An explicit method computes the next state using only current and past information. Forward Euler is the simplest:
@@ -1713,7 +1713,7 @@ The practical selection rule: reach for BDF first on stiff problems; move to Rad
 
 ![Stability regions: forward Euler vs backward Euler in the complex plane](figures/stability_regions.png)
 
-### 9.2 Stiffness: Why Tiny Steps Sometimes Appear
+### Stiffness: Why Tiny Steps Sometimes Appear
 
 A stiff system contains multiple time scales — some fast, some slow — where the fast time scale forces explicit integrators to take tiny steps even when you only care about the slow dynamics.
 
@@ -1721,7 +1721,7 @@ A chemical reaction network is a classic example: some species react on microsec
 
 Identifying stiffness is not always obvious upfront. Symptoms include explicit methods requiring unreasonably small step sizes, error estimates behaving inconsistently, or the solver working extremely hard on what should be a simple problem. When these signs appear, switching to an implicit or stiff-aware solver is usually the right move. For stiff problems, providing an analytical Jacobian rather than relying on finite-difference approximations can give large speedups, since implicit steps require solving a linear system involving the Jacobian at each iteration.
 
-### 9.3 Local and Global Error
+### Local and Global Error
 
 The **local truncation error** is the error introduced in a single step, assuming the previous step was exact. It determines the method's order: a fourth-order method has local truncation error $O(h^5)$, so halving the step size reduces it by a factor of 32.
 
@@ -1729,7 +1729,7 @@ The **global error** is what you actually care about — the total accumulated e
 
 Step-size control matters as much as method order in practice. Adaptive solvers continuously estimate the local error at each step and adjust $h$ to keep it within a specified tolerance, taking large steps where the solution is smooth and small steps where it is changing rapidly. This delivers the desired accuracy with far fewer function evaluations than a fixed-step method.
 
-### 9.4 PDE Discretization Basics: Finite Difference, Finite Volume, Finite Element
+### PDE Discretization Basics: Finite Difference, Finite Volume, Finite Element
 
 You are absolutely right to care about this distinction because these three methods often solve "the same" PDE with very different tradeoffs.
 
@@ -1751,7 +1751,7 @@ How to choose in practice:
 
 All three discretize a continuous PDE into algebraic equations. The right one is usually the method whose assumptions best match your domain geometry, conservation requirements, and software ecosystem.
 
-#### 9.4.1 Which problem types map to which method?
+#### Which problem types map to which method?
 
 If you think in terms of problem archetypes rather than method names, method choice becomes much clearer:
 
@@ -1881,7 +1881,7 @@ Plots.savefig("figures/poisson_fdm_julia.png")
 
 For this problem ($f(x) = \pi^2 \sin(\pi x)$, exact solution $u(x) = \sin(\pi x)$), the FDM error scales as $O(h^2)$: with $n = 99$ interior points the maximum error is around $8 \times 10^{-5}$, and halving $h$ should reduce it to about $2 \times 10^{-5}$.
 
-### 9.5 Shared Example A: Non-stiff IVP, compare Euler and RK4
+### Shared Example A: Non-stiff IVP, compare Euler and RK4
 
 Problem:
 $$
@@ -2000,7 +2000,7 @@ println("Euler: ", y_euler, " error: ", abs(y_euler - y_true))
 println("RK4  : ", y_rk4, " error: ", abs(y_rk4 - y_true))
 ```
 
-### 9.6 Shared Example B: Use ecosystem solver with adaptivity
+### Shared Example B: Use ecosystem solver with adaptivity
 
 This is where idiomatic language differences shine.
 
@@ -2048,11 +2048,11 @@ println("accepted steps: ", length(sol.t) - 1)
 
 ---
 
-## 10. Optimization: Finding Good Decisions Numerically
+## Optimization: Finding Good Decisions Numerically
 
 Optimization is numerical analysis with objectives and constraints.
 
-### 10.1 Unconstrained Basics
+### Unconstrained Basics
 
 Given a differentiable objective function $f(x)$, unconstrained optimization seeks:
 $$
@@ -2113,7 +2113,7 @@ The `m` parameter in `LBFGS` controls history length; the default of 10 is a rea
 
 Why they matter: they use geometric or directional probes instead of derivatives, so they still work for black-box objectives where gradients are unavailable or too noisy. The tradeoff is that they usually scale worse and come with weaker guarantees in high dimensions.
 
-### 10.2 Step Size and Line Search
+### Step Size and Line Search
 
 Even with a good search direction, taking the wrong step size can ruin the iteration. A step that is too long may overshoot and land somewhere worse. A step that is too short wastes iterations on marginal progress.
 
@@ -2121,13 +2121,13 @@ Even with a good search direction, taking the wrong step size can ruin the itera
 
 **Trust-region methods** take a different approach: rather than searching along a fixed direction, they define a region around the current point within which a quadratic model is trusted, and find the best step within that region. Trust-region methods tend to be more robust on difficult problems where line search methods struggle, and they are particularly useful when the Hessian approximation is poor or the objective is not smooth.
 
-### 10.3 Convex vs Nonconvex Landscape
+### Convex vs Nonconvex Landscape
 
 In **convex optimization**, the objective function and feasible set are both convex. Any local minimum is a global minimum, and standard gradient-based methods cannot be permanently trapped in suboptimal regions. Strong theoretical convergence guarantees exist, and solvers can be certified to find the global solution. Linear programming, quadratic programming, and many statistical estimation problems fall in this category.
 
 In **nonconvex optimization**, the objective landscape may have many local minima, saddle points, and flat regions. Standard gradient-based methods can get stuck in local optima that are arbitrarily far from the global solution. In practice this is handled by running the optimizer from multiple starting points, using stochastic methods that can escape local minima, or accepting a good local solution when the problem does not require the global one. For many engineering and machine learning applications, a good local solution is entirely adequate.
 
-### 10.4 Constraints
+### Constraints
 
 Real-world optimization problems almost always come with constraints. **Equality constraints** fix the value of some function of the variables. **Inequality constraints** restrict variables to a region. **Bound constraints** simply clamp each variable to a range. The differences between these categories matter for which algorithms work well, but the underlying theory runs through a single set of conditions.
 
@@ -2180,7 +2180,7 @@ where $\boldsymbol{\lambda}$ is the multiplier vector and $\rho > 0$ is a penalt
 
 ADMM (Alternating Direction Method of Multipliers) is a closely related splitting variant that has become particularly popular for distributed optimization and problems with separable structure. The idea is to split the variable set and alternate minimisation steps over each part while enforcing consensus through augmented Lagrangian multiplier updates.
 
-### 10.5 Stochastic Optimisation
+### Stochastic Optimisation
 
 ![Convex vs nonconvex optimisation landscapes](figures/optimisation_landscape.png)
 
@@ -2226,7 +2226,7 @@ Flux.train!(loss, params(model), data_loader, opt)
 
 For scientific objectives without an automatic differentiation framework available, use `minimize` with `method='L-BFGS-B'` and a numerical Jacobian, or add noise explicitly to the objective to simulate stochastic behaviour.
 
-### 10.6 Variance Reduction
+### Variance Reduction
 
 The gap between SGD and full gradient descent is not just a theoretical curiosity. For convex problems, full gradient descent converges *linearly* — each step reduces the error by a constant factor, so you need $O(\log(1/\varepsilon))$ iterations to reach precision $\varepsilon$. SGD with a fixed learning rate converges at $O(1/k)$, which is sublinear — you need $O(1/\varepsilon)$ iterations for the same precision. That is an enormous practical difference when $\varepsilon$ is small. Variance reduction methods close this gap by reducing the gradient noise without paying the full cost of an exact gradient.
 
@@ -2244,7 +2244,7 @@ The cost is memory: storing one gradient per data point requires $O(n \cdot d)$ 
 
 **When to use variance reduction.** The honest answer is that variance reduction is worth the overhead in a specific niche: large-$n$ convex or mildly nonconvex objectives where you can afford to store per-example gradient information and you care about precise convergence rather than approximate solutions. Statistical learning problems — logistic regression, SVMs, regularised least squares — fit well. For deep learning the situation is different: the objectives are nonconvex, $n$ is often enormous, per-example gradient storage is impractical, and Adam-family methods with adaptive learning rates empirically outperform SVRG-style methods without requiring the checkpoint overhead. The convergence theory for variance reduction in nonconvex settings is also substantially weaker, so the practical case for it in deep learning is thin.
 
-### 10.7 Shared Example: Fit exponential decay model
+### Shared Example: Fit exponential decay model
 
 Model:
 $$
@@ -2304,9 +2304,9 @@ Most of the linear algebra treatment so far has assumed your system is well-cond
 
 Recall from the conditioning discussion in section 4: the condition number $\kappa(\mathbf{A})$ bounds how much a relative perturbation in the data $\mathbf{b}$ can be amplified in the solution $\mathbf{x}$. When $\kappa(\mathbf{A})$ is large, small noise in $\mathbf{b}$ translates to enormous noise in $\mathbf{x}$.
 
-The SVD makes this visible. Section 6 covered that the SVD writes $\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$, where the diagonal entries of $\mathbf{\Sigma}$ are the singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n \geq 0$. The pseudo-inverse solution is:
+The SVD makes this visible. Section 6 covered that the SVD writes $\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^T$, where the diagonal entries of $\boldsymbol{\Sigma}$ are the singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n \geq 0$. The pseudo-inverse solution is:
 
-$$\mathbf{x} = \mathbf{V}\mathbf{\Sigma}^{-1}\mathbf{U}^T\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
+$$\mathbf{x} = \mathbf{V}\boldsymbol{\Sigma}^{-1}\mathbf{U}^T\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
 
 Each term amplifies the component of $\mathbf{b}$ aligned with $\mathbf{u}_i$ by the factor $1/\sigma_i$. When some $\sigma_i$ are very small — near-rank-deficiency — the corresponding terms blow up. A tiny amount of noise in $\mathbf{b}$ in a nearly null-space direction gets amplified by $1/\sigma_{\min}$, which for an ill-conditioned problem can be enormous.
 
@@ -2438,11 +2438,11 @@ For ridge regression in Julia, `GLM.jl` does not natively support ridge, but `Mu
 
 ---
 
-## 11. Choosing Methods in Practice: A Real Workflow
+## Choosing Methods in Practice: A Real Workflow
 
 Method choice is almost never about picking the fanciest algorithm. It is mostly about matching constraints.
 
-### 11.1 A Practical Decision Checklist
+### A Practical Decision Checklist
 
 Before locking in a method, run through a short diagnostic checklist.
 
@@ -2462,7 +2462,7 @@ Before locking in a method, run through a short diagnostic checklist.
 
 **What is the cost of a wrong answer?** If wrong answers have serious consequences, robust conservative methods and careful validation are worth their additional cost.
 
-### 11.2 Example Method Selection Heuristics
+### Example Method Selection Heuristics
 
 
 1. **Small dense linear system**: direct LU/QR solve. You get predictable runtime and strong library support.
@@ -2474,7 +2474,7 @@ Before locking in a method, run through a short diagnostic checklist.
 7. **High-dimensional integration**: Monte Carlo or quasi-Monte Carlo. Grid-based quadrature scales poorly as dimension grows.
 
 
-### 11.3 Validate Before You Trust
+### Validate Before You Trust
 
 Any numerical result should be accompanied by at least basic validation before you rely on it.
 
@@ -2488,7 +2488,7 @@ Any numerical result should be accompanied by at least basic validation before y
 
 **Cross-checking with a second solver** is the gold standard: if two independent methods with different algorithms agree to within expected tolerances, you have strong grounds for confidence.
 
-### 11.4 Report Uncertainty, Not Just Point Estimates
+### Report Uncertainty, Not Just Point Estimates
 
 Good numerical practice does not end with producing a number. Professional work should document the tolerances used, report residual norms or error estimates alongside results, note any conditioning or stability diagnostics that were checked, and describe the runtime and computational context.
 
@@ -2496,23 +2496,23 @@ The difference between "the answer is 3.1416" and "the answer is $3.1416 \pm 10^
 
 ---
 
-## 12. Idiomatic Coding Differences: Python vs R vs Julia
+## Idiomatic Coding Differences: Python vs R vs Julia
 
 The point of this section is to respect each language's native style instead of forcing one uniform template.
 
-### 12.1 Python Style in Scientific Work
+### Python Style in Scientific Work
 
 Python scientific computing is built around NumPy and SciPy. The usual style is to express work as array operations, not Python-level element loops. The reason is practical: Python loop overhead is expensive, while NumPy hands the heavy lifting to compiled kernels. Good rule of thumb: vectorize first, then only drop to explicit loops if profiling says it is worth it.
 
-### 12.2 R Style in Numerical and Statistical Work
+### R Style in Numerical and Statistical Work
 
 R was built for statistics, and its style reflects that. Vectorization in R is not a micro-optimization; it is the default way to write clear code. Vectors, matrices, and data frames are first-class, and core functions are built around them. The formula interface (`lm`, `nls`, and friends) is especially useful because model code stays close to the math.
 
-### 12.3 Julia Style for Performance and Clarity
+### Julia Style for Performance and Clarity
 
 Julia was designed so readable numerical code can still run fast. Its JIT compiler means code that looks close to mathematical pseudocode often runs near C speed. The practical consequence is important: explicit loops are fine in Julia. Broadcasting with `.` remains useful for concise array expressions, but you do not have to contort code just to avoid loops.
 
-### 12.4 Shared Concept, Different Idioms
+### Shared Concept, Different Idioms
 
 Seeing the same algorithm in all three languages exposes something that is easy to miss when you work in just one: the underlying numerical method is language-agnostic, but the shape of the code that implements it reveals what each language values. The algorithm here is bisection — simple enough that no library machinery is needed, but concrete enough that idiomatic choices are visible.
 
@@ -2580,7 +2580,7 @@ The explicit loop in Julia runs at speeds comparable to a C implementation — t
 
 ---
 
-## 13. Case Study: Building Confidence in a Numerical Result
+## Case Study: Building Confidence in a Numerical Result
 
 Let us run a small, realistic workflow around one concrete question:
 
@@ -2590,11 +2590,11 @@ I = \int_0^1 e^{-x^2}dx
 $$
 and quantify confidence."
 
-### 13.1 First Pass
+### First Pass
 
 Start with a moderate trapezoidal grid, say $n = 100$ subintervals. That gives you a quick baseline and a place to begin a refinement study. Do not overthink accuracy yet; that comes in the next step.
 
-### 13.2 Refinement Study
+### Refinement Study
 
 Run the trapezoidal rule at $n = 100, 200, 400, 800, 1600$ and record the results. For a smooth function on a smooth interval, trapezoid is second-order, so doubling $n$ should cut error by about a factor of 4.
 
@@ -2719,53 +2719,53 @@ T_rich = T_prev + (T_prev - T_prev2) / 3
 
 All three implementations should produce the same convergence table. The ratio column landing near 4.00 for each halving is your convergence confirmation. The Richardson extrapolation result should be accurate to near machine precision, demonstrating that two second-order estimates, properly combined, can match what a much finer grid would achieve directly.
 
-### 13.3 Cross-Check
+### Cross-Check
 
 Cross-check your trapezoidal estimate against an adaptive library integrator: `scipy.integrate.quad` in Python, `integrate` in R, or `quadgk` in Julia. Since these use different algorithms, a big mismatch is a useful warning sign. For this smooth, bounded integrand on a finite interval, they should agree to near machine precision.
 
-### 13.4 Conditioning Note
+### Conditioning Note
 
 Integration of a smooth, bounded function over a finite interval is usually well-conditioned: small changes in the integrand cause small changes in the integral. That is the opposite of numerical differentiation, which is often poorly conditioned. In this example, truncation error from quadrature dominates, and you can see and control it directly by refining the grid.
 
-### 13.5 Reporting the Result
+### Reporting the Result
 
 A solid report here includes the final estimate, the grid sequence with observed convergence rate, a cross-check against an adaptive integrator, and runtime context when it matters. You are not just stating a number; you are showing the evidence behind it.
 
 ---
 
-## 14. Common Failure Patterns (and Fixes)
+## Common Failure Patterns (and Fixes)
 
-### 14.1 Blind Trust in Defaults
+### Blind Trust in Defaults
 
 Every solver ships with default tolerances, iteration limits, and method choices. They are decent generic starting points, but often wrong for your specific problem. A default relative tolerance of $10^{-6}$ might be much tighter than necessary (wasting compute) or too loose for your use case (silently reducing accuracy).
 
 **Fix**: inspect the solver's diagnostic output — residuals, iteration counts, convergence flags — before trusting the result. If the solver hit its iteration limit without converging, that is information you need to act on.
 
-### 14.2 Ignoring Scaling
+### Ignoring Scaling
 
 Optimization and linear algebra methods care a lot about variable scales. If some variables live in $[0,1]$ while others live in $[0,10^9]$, many algorithms behave badly because gradients and curvature are dominated by the largest scales.
 
 **Fix**: non-dimensionalize your problem before solving it. Choose characteristic scales for each variable and divide through so that all variables are order 1. This often improves conditioning by orders of magnitude.
 
-### 14.3 Solving Ill-Conditioned Formulations Directly
+### Solving Ill-Conditioned Formulations Directly
 
 The normal equations approach to least squares ($A^T A x = A^T b$) squares the condition number of $A$. If $A$ is mildly ill-conditioned with $\kappa(A) = 10^6$, then $A^T A$ has condition number $10^{12}$, and you have lost twelve decimal digits of accuracy before solving anything. Similarly, computing $A^{-1}$ explicitly to solve $Ax = b$ is always wrong numerically — it is slower than factorization and less accurate.
 
 **Fix**: use QR or SVD directly on $A$ for least squares. Use factorization-based solves rather than explicit inverses. If the problem is ill-conditioned by nature, regularization may be the right tool rather than a more stable algorithm.
 
-### 14.4 Overfitting Noisy Data with Exact Interpolation
+### Overfitting Noisy Data with Exact Interpolation
 
 If data is noisy and you force exact interpolation (high-degree polynomial or a spline knot at every point), you usually fit the noise as well as the signal. The curve hits every observed point, but can oscillate badly between points and behave unpredictably outside the data range.
 
 **Fix**: use smoothing splines, regularized regression, or low-degree polynomial fits. The degree of smoothing acts as a regularization parameter that should be chosen based on an estimate of the noise level or by cross-validation.
 
-### 14.5 Weak Stopping Criteria
+### Weak Stopping Criteria
 
 Stopping purely on iteration count does not guarantee convergence. Stopping purely on step size can declare success when the iterate has stalled rather than converged. Stopping purely on residual can miss roots or solutions where the function is flat nearby.
 
 **Fix**: combine at least two conditions — residual below tolerance and step below relative tolerance — and impose a hard iteration cap as a safety net. When the cap fires, signal it clearly rather than silently returning an under-converged result.
 
-### 14.6 No Validation Harness
+### No Validation Harness
 
 Numerical code that has never been checked against a known answer can be quietly wrong. It runs, returns plausible numbers, and never crashes, which makes the error hard to notice and easy to trust.
 
@@ -2773,13 +2773,13 @@ Numerical code that has never been checked against a known answer can be quietly
 
 ---
 
-## 15. Extended Multi-Language Example: A Small End-to-End Pipeline
+## Extended Multi-Language Example: A Small End-to-End Pipeline
 
 Goal: solve an ODE, then fit a simple model to noisy observations generated from that solution.
 
 This example is compact, but it mirrors real work: simulation followed by parameter estimation.
 
-### 15.1 Problem Setup
+### Problem Setup
 
 Dynamics:
 $$
@@ -2787,7 +2787,7 @@ y'(t) = -k y(t), \quad y(0)=2
 $$
 Generate noisy observations at fixed times, then estimate $k$ from those observations.
 
-### 15.2 Python
+### Python
 
 ```python
 import numpy as np
@@ -2818,7 +2818,7 @@ print("true k:", true_k)
 print("estimated k:", fit.x[0])
 ```
 
-### 15.3 R
+### R
 
 ```r
 library(deSolve)
@@ -2847,7 +2847,7 @@ cat("true k:", true_k, "\n")
 cat("estimated k:", fit$par, "\n")
 ```
 
-### 15.4 Julia
+### Julia
 
 ```julia
 using DifferentialEquations
@@ -2875,13 +2875,13 @@ println("true k: ", true_k)
 println("estimated k: ", Optim.minimizer(result)[1])
 ```
 
-### 15.5 Why This Pattern Matters
+### Why This Pattern Matters
 
 This tiny pipeline captures a very common real-world pattern: you have a model with unknown parameters, noisy data, and a fitting loop that updates parameters to reduce mismatch. The ODE here is simple, but the structure scales directly. Swap in a larger dynamical system, more parameters, and practical constraints, and you are in systems biology, climate calibration, or pharmacokinetics. The loop remains the same: solve forward, compare with data, update parameters, repeat.
 
 ---
 
-## 16. Where to Go Deeper Next
+## Where to Go Deeper Next
 
 Each topic in this primer is a doorway into a much larger field.
 
@@ -2899,7 +2899,7 @@ Each topic in this primer is a doorway into a much larger field.
 
 ---
 
-## 17. Reading List (Practical + Rigorous)
+## Reading List (Practical + Rigorous)
 
 For rigorous theoretical foundations:
 
@@ -2921,7 +2921,7 @@ For practical coding references:
 
 ---
 
-## 18. Closing Notes
+## Closing Notes
 
 Numerical analysis can look intimidating at first because it sits at the intersection of mathematics, software engineering, and domain modeling. The notation can be dense, the failure modes are subtle, and a lot of the literature assumes significant mathematical background.
 

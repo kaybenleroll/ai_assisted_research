@@ -2,8 +2,8 @@ SOURCE_MD   := "numerical_analysis_primer.md"
 PROJECT_DIR := "numerical_analysis_primer"
 TITLE       := "Numerical Analysis Primer: A Practical Guide for Practitioners"
 AUTHOR      := "June 2026"
-HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua"
-PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua"
+HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
 ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
 
 # Generate R figures (inside rocker container)
