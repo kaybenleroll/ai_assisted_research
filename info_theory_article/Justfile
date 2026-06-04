@@ -2,7 +2,7 @@ SOURCE_MD   := "information_theory_series_combined.md"
 PROJECT_DIR := "info_theory_article"
 TITLE       := "Information about information series"
 AUTHOR      := "Marianne Freiberger"
-HTML_EXTRA  := ""
+HTML_EXTRA  := "--mathjax"
 PDF_EXTRA   := ""
 
 import '../_shared/common.just'
