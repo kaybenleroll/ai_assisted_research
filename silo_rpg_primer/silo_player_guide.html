@@ -1,3 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SILO SYSTEM: PLAYER&#39;S SURVIVAL GUIDE</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle > .toc-toggle {
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+  
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">SILO SYSTEM: PLAYER&#39;S SURVIVAL
+GUIDE</span>
+
+    <span class="navbar-meta">Silo RPG</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#silo-system-players-survival-guide" id="toc-silo-system-players-survival-guide">SILO SYSTEM: PLAYER’S
+SURVIVAL GUIDE</a>
+<ul>
+<li><a href="#the-three-absolute-truths" id="toc-the-three-absolute-truths">THE THREE ABSOLUTE TRUTHS</a>
+<ul>
+<li><a href="#the-outside-is-death" id="toc-the-outside-is-death">1. The
+Outside is Death</a></li>
+<li><a href="#the-pact-is-law" id="toc-the-pact-is-law">2. The Pact is
+Law</a></li>
+<li><a href="#the-cleaning-is-our-burden" id="toc-the-cleaning-is-our-burden">3. The Cleaning is Our
+Burden</a></li>
+</ul></li>
+<li><a href="#the-world-you-know-the-three-sectors" id="toc-the-world-you-know-the-three-sectors">THE WORLD YOU KNOW (THE
+THREE SECTORS)</a>
+<ul>
+<li><a href="#up-top-levels-148" id="toc-up-top-levels-148">Up Top
+(Levels 1–48)</a></li>
+<li><a href="#the-mids-levels-4996" id="toc-the-mids-levels-4996">The
+Mids (Levels 49–96)</a></li>
+<li><a href="#down-deep-levels-97144" id="toc-down-deep-levels-97144">Down Deep (Levels 97–144)</a></li>
+</ul></li>
+<li><a href="#how-the-silo-feels-to-live-in" id="toc-how-the-silo-feels-to-live-in">HOW THE SILO FEELS TO LIVE IN</a>
+<ul>
+<li><a href="#what-a-typical-level-contains" id="toc-what-a-typical-level-contains">What a Typical Level
+Contains</a></li>
+<li><a href="#the-distance-between-levels" id="toc-the-distance-between-levels">The Distance Between
+Levels</a></li>
+<li><a href="#split-levels-half-levels-and-dead-spaces" id="toc-split-levels-half-levels-and-dead-spaces">Split Levels,
+Half-Levels, and Dead Spaces</a></li>
+</ul></li>
+<li><a href="#the-local-radius-where-many-citizens-actually-live" id="toc-the-local-radius-where-many-citizens-actually-live">THE LOCAL
+RADIUS (WHERE MANY CITIZENS ACTUALLY LIVE)</a></li>
+<li><a href="#faces-you-know-by-reputation" id="toc-faces-you-know-by-reputation">FACES YOU KNOW BY REPUTATION</a>
+<ul>
+<li><a href="#the-famous-people-everyone-knows" id="toc-the-famous-people-everyone-knows">The Famous People Everyone
+Knows</a></li>
+<li><a href="#the-local-faces-people-actually-talk-about" id="toc-the-local-faces-people-actually-talk-about">The Local Faces
+People Actually Talk About</a></li>
+</ul></li>
+<li><a href="#groups-families-and-factions-people-talk-about" id="toc-groups-families-and-factions-people-talk-about">GROUPS,
+FAMILIES, AND FACTIONS PEOPLE TALK ABOUT</a></li>
+<li><a href="#landmarks-in-the-late-mids-and-shallow-deep" id="toc-landmarks-in-the-late-mids-and-shallow-deep">LANDMARKS IN THE
+LATE MIDS AND SHALLOW DEEP</a></li>
+<li><a href="#your-place-in-the-machine-character-roles" id="toc-your-place-in-the-machine-character-roles">YOUR PLACE IN THE
+MACHINE (CHARACTER ROLES)</a></li>
+<li><a href="#what-your-citizen-knows-without-asking" id="toc-what-your-citizen-knows-without-asking">WHAT YOUR CITIZEN KNOWS
+WITHOUT ASKING</a></li>
+<li><a href="#what-a-normal-day-feels-like" id="toc-what-a-normal-day-feels-like">WHAT A NORMAL DAY FEELS
+LIKE</a></li>
+<li><a href="#session-zero-questions-for-your-block" id="toc-session-zero-questions-for-your-block">SESSION ZERO QUESTIONS
+FOR YOUR BLOCK</a></li>
+<li><a href="#silo-slang-and-common-sayings" id="toc-silo-slang-and-common-sayings">SILO SLANG AND COMMON
+SAYINGS</a></li>
+<li><a href="#a-final-warning" id="toc-a-final-warning">A FINAL
+WARNING</a></li>
+</ul></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
 <h1 id="silo-system-players-survival-guide">SILO SYSTEM: PLAYER’S
 SURVIVAL GUIDE</h1>
 <p><strong>“We do not know why we are here. We do not know who built the
@@ -94,6 +579,254 @@ threats. The Down Deep is dangerous, but the people there know that
 without them, the entire Silo dies in the dark.</li>
 </ul>
 <hr />
+<h2 id="how-the-silo-feels-to-live-in">HOW THE SILO FEELS TO LIVE
+IN</h2>
+<p>You do not think in blueprints. You think in stairs, queues, walls,
+and how long your legs will hurt afterward.</p>
+<h3 id="what-a-typical-level-contains">What a Typical Level
+Contains</h3>
+<p>A level is usually not one single room. It is a ring of spaces
+wrapped around the central stair:</p>
+<ul>
+<li><strong>The stair landing:</strong> The public face of the level,
+where people pass through, rest, trade gossip, and get seen.</li>
+<li><strong>The inner corridors:</strong> Pipes, ducts, maintenance
+doors, and utility access closer to the core.</li>
+<li><strong>The lived spaces:</strong> Apartments, offices, workshops,
+farms, clinics, storage rooms, or tank galleries depending on the
+level’s purpose.</li>
+<li><strong>The outer wall:</strong> Thick concrete, patched wiring,
+narrow storage niches, and the constant sense that the earth is pressing
+in from the other side.</li>
+</ul>
+<p>On a residential level, this means cramped homes, shared wash areas,
+and hallway politics. On a work level, it means noise, quota boards,
+foremen, and people who resent outsiders slowing things down.</p>
+<h3 id="the-distance-between-levels">The Distance Between Levels</h3>
+<p>There are about <strong>50 stairs between official
+levels</strong>.</p>
+<ul>
+<li><strong>1-3 levels:</strong> local movement</li>
+<li><strong>5-10 levels:</strong> a real trip</li>
+<li><strong>10+ levels:</strong> something people complain about
+afterward</li>
+<li><strong>20+ levels:</strong> an undertaking unless you are a Porter,
+on official business, or desperate</li>
+</ul>
+<p>That is why citizens often talk about a level as if it were another
+town. Practically speaking, it is.</p>
+<h3 id="split-levels-half-levels-and-dead-spaces">Split Levels,
+Half-Levels, and Dead Spaces</h3>
+<p>Most citizens know that not every part of the Silo makes clean
+sense.</p>
+<ul>
+<li><strong>Split levels:</strong> A level can feel socially split even
+when it has only one official number. One side may be residential while
+the other is tanks, workshops, or storage.</li>
+<li><strong>Half-levels and service spaces:</strong> People speak of
+utility bands, maintenance galleries, and sealed access rooms that seem
+to sit between official levels. Most citizens never enter them and are
+not meant to ask questions.</li>
+<li><strong>Structural seams:</strong> Some levels feel different
+underfoot—louder, more flexible, more patched. People say the Silo is
+breathing.</li>
+<li><strong>Dead spaces:</strong> Crawlways, vent chambers, flooded
+rooms, and abandoned corners that physically exist but do not appear on
+any public map.</li>
+</ul>
+<p>The first few sessions of play should turn these from rumors into
+places you actually know.</p>
+<hr />
+<h2 id="the-local-radius-where-many-citizens-actually-live">THE LOCAL
+RADIUS (WHERE MANY CITIZENS ACTUALLY LIVE)</h2>
+<p>Most citizens know the whole Silo only in the abstract. What they
+know <em>personally</em> is a cluster of floors, routes, queues, and
+faces. If you are from the late Mids or the shallow Down Deep, the
+following levels likely mean something to you.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Levels</th>
+<th style="text-align: left;">What People Think Of Them</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>45-50</strong></td>
+<td style="text-align: left;">The upper Mids where paperwork hardens
+into fate: transfer manifests, marriage approvals, and long waits
+outside Supply offices.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>60-80</strong></td>
+<td style="text-align: left;">The Hydroponics rings: humid air,
+artificial suns, soy vats, algae stink, and workers who know exactly how
+many mouths depend on every tray.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>79-85</strong></td>
+<td style="text-align: left;">Narrow stairs, tank rooms, and maintenance
+access where water, rumor, and panic move faster than officials do.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>92</strong></td>
+<td style="text-align: left;">A hard-lived residential seam where
+families double up, walls crack, and every repair becomes
+political.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>101-105</strong></td>
+<td style="text-align: left;">The start of the true Deep: flooded scrap
+tiers, illegal deals, failing lights, jury-rigged pumps, and the feeling
+that official help is already too far away.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="faces-you-know-by-reputation">FACES YOU KNOW BY REPUTATION</h2>
+<p>You may never have met these people, but if you live in this part of
+the Silo, you have heard their names.</p>
+<h3 id="the-famous-people-everyone-knows">The Famous People Everyone
+Knows</h3>
+<ul>
+<li><strong>Mayor Tamsin Rook:</strong> The official voice of the Silo.
+Lower-tier citizens know her as an old, careful leader who appears
+during speeches, crises, and public rituals. People argue constantly
+about whether she is powerless, wise, or simply too far away to
+matter.</li>
+<li><strong>Chief Deputy Harlan Fiske:</strong> The Sheriff’s hard edge.
+He is known as the man who appears when a problem has already become
+serious. In common talk, his name means inspections, arrests, and “don’t
+be stupid on the stairs.”</li>
+<li><strong>Inquisitor Sel Verin:</strong> A senior Judicial name spoken
+with caution. Even people who have never seen him know he is tied to
+investigations, sealed orders, and the kind of legal attention that
+ruins whole families.</li>
+<li><strong>Merrow Hale, Head of IT:</strong> More rumor than man to
+most lower-level citizens. People know IT answers to him, that his
+levels are cold and quiet, and that asking too many questions about
+computers is a good way to get noticed.</li>
+<li><strong>Tavi Rune (Porters’ Union):</strong> Famous in a more
+practical way than the officials above. If you live by the stairs, you
+know that when Tavi speaks, messages move, prices shift, and people
+start choosing their words carefully.</li>
+<li><strong>Auntie Cinder (Scrap Syndicates):</strong> Half criminal,
+half folk-devil. Children hear stories about her, adults pretend not to
+know her name, and everyone understands that if real parts appear on a
+dead level, her people probably touched them first.</li>
+<li><strong>Matron Ysra Thorn (Hydroponics):</strong> A public face of
+food, quotas, and harvest pressure. She is respected by workers, blamed
+by the hungry, and spoken of like a weather pattern: if she says a cycle
+will be hard, everyone listens.</li>
+</ul>
+<h3 id="the-local-faces-people-actually-talk-about">The Local Faces
+People Actually Talk About</h3>
+<ul>
+<li><strong>Nel Ardin (Supply Clerk):</strong> A tired, decent clerk
+from the Mids who sometimes “loses” the right form for the right people.
+Known for helping when he should probably keep his head down.</li>
+<li><strong>The Miller Clan:</strong> Not a single person but a whole
+family whose arguments spill into hallways, repair queues, and housing
+ledgers. If you live near the seams, you know at least one Miller
+story.</li>
+<li><strong>Rella Voss:</strong> The sort of hallway organizer every
+struggling tier eventually produces: practical, loud when necessary, and
+impossible to ignore during a crisis.</li>
+<li><strong>Inspector Dorn:</strong> A name people use when they mean
+the lower-level face of Mechanical oversight. Not famous across the
+whole Silo, but well known in the Deep as the kind of inspector who can
+ruin your week or save your floor.</li>
+</ul>
+<hr />
+<h2 id="groups-families-and-factions-people-talk-about">GROUPS,
+FAMILIES, AND FACTIONS PEOPLE TALK ABOUT</h2>
+<p>These are not hidden conspiracies. They are the names that come up in
+queues, workshops, and communal kitchens.</p>
+<ul>
+<li><strong>The Miller Clan:</strong> A large, stubborn family from the
+residential seams. Loud, proud, always entangled in somebody else’s
+housing dispute.</li>
+<li><strong>The Porters’ Union:</strong> Not officially in charge of
+anything, which is why they know everything. If they stop carrying, the
+Silo chokes.</li>
+<li><strong>The Scrap Syndicates:</strong> Smugglers, gamblers, fixers,
+and thieves. Everyone condemns them in public and knows someone who has
+bought from them in private.</li>
+<li><strong>Block Watches:</strong> Unofficial hallway defense groups
+formed when the Sheriff is too slow, too absent, or too expensive to
+trust.</li>
+<li><strong>Hydroponics Crews:</strong> Territorial work gangs held
+together by quota pressure, exhausted loyalty, and the knowledge that
+one bad cycle means hunger for everyone.</li>
+<li><strong>The Friends of the Silo:</strong> Informants, loyalists,
+fanatics, opportunists, or all four at once. No one can agree who
+belongs to them, which is part of their power.</li>
+</ul>
+<hr />
+<h2 id="landmarks-in-the-late-mids-and-shallow-deep">LANDMARKS IN THE
+LATE MIDS AND SHALLOW DEEP</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Place</th>
+<th style="text-align: left;">Why It Matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>The Level 50 Supply
+Offices</strong></td>
+<td style="text-align: left;">Where forms go to be approved, buried, or
+quietly altered.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Level 60 Porter
+Landings</strong></td>
+<td style="text-align: left;">A crossroads of gossip, freight, and
+exhausted runners drinking brackish water before another climb.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Algae Vats (around Level
+72)</strong></td>
+<td style="text-align: left;">Green-lit humidity, long shifts, and the
+smell of survival itself.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Water Stations (around Levels
+80-84)</strong></td>
+<td style="text-align: left;">The heart of daily arguments: lines,
+ration disputes, contamination scares, and whispered rumors.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Seam Apartments (Level
+92)</strong></td>
+<td style="text-align: left;">Cramped family housing where repairs are
+never complete and everyone knows too much about everyone else.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Flooded Tier (Level
+101)</strong></td>
+<td style="text-align: left;">A half-ruined scrap market where good
+parts, bad debts, and dangerous people all circulate together.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Dark Tier (Level
+105)</strong></td>
+<td style="text-align: left;">A level used in complaints and warnings:
+failing lights, stale air, and the sense that the Deep is swallowing one
+more block.</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="your-place-in-the-machine-character-roles">YOUR PLACE IN THE
 MACHINE (CHARACTER ROLES)</h2>
 <p>When you create your character, you aren’t an adventurer. You are a
@@ -123,6 +856,132 @@ higher standard of living, but you are also much closer to the
 terrifying gaze of Judicial.</li>
 </ul>
 <hr />
+<h2 id="what-your-citizen-knows-without-asking">WHAT YOUR CITIZEN KNOWS
+WITHOUT ASKING</h2>
+<p>Even the most obedient citizen learns the following truths just by
+surviving:</p>
+<ul>
+<li>A trip of more than ten levels is not casual. You pack water, trade
+for a place to sleep, or hire a Porter if you can afford one.</li>
+<li>Paper beats memory. If a clerk has a stamped form and you only have
+the truth, the clerk wins.</li>
+<li>Every level has at least one fixer, one gossip, and one person
+everyone suspects is a Friend of the Silo.</li>
+<li>If the lights pulse off-schedule, people stop what they are doing.
+It usually means a death, a failure, or an order from above.</li>
+<li>Porters know the real geography. Mechanical knows which walls shake.
+Supply knows who is lying. Medical knows who is desperate. IT knows more
+than anyone admits.</li>
+<li>Children are “Gifted” names, not born with them. On their fifth
+birthday, if they survive, they inherit the name of a dead
+ancestor.</li>
+</ul>
+<hr />
+<h2 id="what-a-normal-day-feels-like">WHAT A NORMAL DAY FEELS LIKE</h2>
+<p>Before the first few sessions of play turn your life upside down,
+this is what “normal” looks like:</p>
+<ul>
+<li>You wake to recycled air, queue for water, and check whether the
+lights are behaving normally.</li>
+<li>You go to shift because missing work hurts your whole household, not
+just your pride.</li>
+<li>You trade small favors all day: line-holding, message-carrying,
+tool-borrowing, ration-stretching.</li>
+<li>You hear two or three rumors before mid-cycle and believe at least
+one of them a little.</li>
+<li>You measure distance in sore legs, not maps.</li>
+<li>You end the day wondering whether the person across the hall is a
+friend, a burden, or an informant.</li>
+</ul>
+<p>The first few sessions should answer the rest: who your block trusts,
+which levels you fear, what the local power map looks like, and what you
+are willing to do when the machinery of the Silo turns against ordinary
+people.</p>
+<hr />
+<h2 id="session-zero-questions-for-your-block">SESSION ZERO QUESTIONS
+FOR YOUR BLOCK</h2>
+<p>Use these prompts when building characters so the party feels like
+citizens from the same world instead of strangers who happened to
+meet.</p>
+<ol type="1">
+<li>Which person on your level depends on your wages to survive?</li>
+<li>Which department do you distrust on principle, and what did they do
+to your family?</li>
+<li>What minor law did you break as a child and get away with?</li>
+<li>Who taught you how to survive the stairs, the queues, or the
+inspections?</li>
+<li>What rumor about the Silo do you secretly hope is true?</li>
+<li>What debt, favor, or shame keeps you from simply walking away from
+trouble?</li>
+</ol>
+<hr />
+<h2 id="silo-slang-and-common-sayings">SILO SLANG AND COMMON
+SAYINGS</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Term</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Up-Top</strong></td>
+<td style="text-align: left;">Anything associated with privilege,
+surveillance, or clean-handed authority.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Down-Shift</strong></td>
+<td style="text-align: left;">A transfer to a lower level, often treated
+as exile even when technically voluntary.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Soft-Hands</strong></td>
+<td style="text-align: left;">A Deep insult for people who do paperwork
+instead of labor.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Grease</strong></td>
+<td style="text-align: left;">The Mechanics and other Down Deep workers
+who keep the Silo alive.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Shadow</strong></td>
+<td style="text-align: left;">An apprentice learning under a mentor;
+also slang for someone with no real power yet.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Good Tape</strong></td>
+<td style="text-align: left;">Any rare, high-quality repair material
+that official channels claim does not exist.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dead Space</strong></td>
+<td style="text-align: left;">A vent, crawl, sealed room, or
+unregistered area that is absent from public maps.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Blue Water</strong></td>
+<td style="text-align: left;">Water that tastes “wrong” and is rumored
+to be drugged by Medical or Judicial.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Pact-Blind</strong></td>
+<td style="text-align: left;">Someone who obeys the law so rigidly that
+they stop seeing obvious cruelty.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>“Mind the rail.”</strong></td>
+<td style="text-align: left;">A warning to be careful, keep quiet, or
+stop asking dangerous questions.</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="a-final-warning">A FINAL WARNING</h2>
 <p>The Silo is not just a place; it is a living, breathing entity that
 wants to maintain the status quo at all costs.</p>
@@ -137,3 +996,343 @@ steel doors.</p>
 <p>Protect your family, do your job, and never look too long at the
 Viewport.</p>
 <p>Welcome to the Silo.</p>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

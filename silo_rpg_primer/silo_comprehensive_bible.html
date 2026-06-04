@@ -1,3 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC
+EDITION)</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle > .toc-toggle {
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+  
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">SILO SYSTEM: COMPREHENSIVE WORLD BIBLE
+(ENCYCLOPEDIC EDITION)</span>
+
+    <span class="navbar-meta">Silo RPG</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#silo-system-comprehensive-world-bible-encyclopedic-edition" id="toc-silo-system-comprehensive-world-bible-encyclopedic-edition">SILO
+SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)</a>
+<ul>
+<li><a href="#chapter-1-the-architecture-the-grind" id="toc-chapter-1-the-architecture-the-grind">CHAPTER 1: THE
+ARCHITECTURE &amp; THE GRIND</a>
+<ul>
+<li><a href="#the-anatomy-of-the-cylinder" id="toc-the-anatomy-of-the-cylinder">1.1 The Anatomy of the
+Cylinder</a></li>
+<li><a href="#the-closed-loop-economy" id="toc-the-closed-loop-economy">1.2 The Closed-Loop Economy</a></li>
+<li><a href="#the-life-cycle-the-bureaucracy" id="toc-the-life-cycle-the-bureaucracy">1.3 The Life Cycle &amp; The
+Bureaucracy</a></li>
+</ul></li>
+<li><a href="#chapter-2-the-law-the-panopticon" id="toc-chapter-2-the-law-the-panopticon">CHAPTER 2: THE LAW &amp; THE
+PANOPTICON</a>
+<ul>
+<li><a href="#the-two-faces-of-order" id="toc-the-two-faces-of-order">2.1 The Two Faces of Order</a></li>
+<li><a href="#the-justice-process" id="toc-the-justice-process">2.2 The
+Justice Process</a></li>
+<li><a href="#surveillance-the-all-seeing-eye" id="toc-surveillance-the-all-seeing-eye">2.3 Surveillance: The
+All-Seeing Eye</a></li>
+<li><a href="#taboos-and-capital-offenses" id="toc-taboos-and-capital-offenses">2.4 Taboos and Capital
+Offenses</a></li>
+</ul></li>
+<li><a href="#chapter-3-the-departments-the-five-pillars" id="toc-chapter-3-the-departments-the-five-pillars">CHAPTER 3: THE
+DEPARTMENTS (THE FIVE PILLARS)</a>
+<ul>
+<li><a href="#it-information-technology-the-wardens-of-knowledge" id="toc-it-information-technology-the-wardens-of-knowledge">3.1 IT
+(Information Technology): The Wardens of Knowledge</a></li>
+<li><a href="#mechanical-the-engine-of-survival" id="toc-mechanical-the-engine-of-survival">3.2 Mechanical: The Engine of
+Survival</a></li>
+<li><a href="#supply-the-gatekeepers-of-scarcity" id="toc-supply-the-gatekeepers-of-scarcity">3.3 Supply: The Gatekeepers
+of Scarcity</a></li>
+<li><a href="#medical-the-triage-wardens" id="toc-medical-the-triage-wardens">3.4 Medical: The Triage
+Wardens</a></li>
+<li><a href="#hydroponics-the-breath-and-the-bread" id="toc-hydroponics-the-breath-and-the-bread">3.5 Hydroponics: The
+Breath and the Bread</a></li>
+</ul></li>
+<li><a href="#chapter-4-the-144-levels-the-gazetteer" id="toc-chapter-4-the-144-levels-the-gazetteer">CHAPTER 4: THE 144
+LEVELS (THE GAZETTEER)</a>
+<ul>
+<li><a href="#the-up-top-levels-1---48" id="toc-the-up-top-levels-1---48">4.1 THE UP TOP (LEVELS 1 -
+48)</a></li>
+<li><a href="#the-mids-levels-49---96" id="toc-the-mids-levels-49---96">4.2 THE MIDS (LEVELS 49 - 96)</a></li>
+<li><a href="#the-down-deep-levels-97---144" id="toc-the-down-deep-levels-97---144">4.3 THE DOWN DEEP (LEVELS 97 -
+144)</a></li>
+</ul></li>
+<li><a href="#chapter-5-culture-rituals-and-sub-factions" id="toc-chapter-5-culture-rituals-and-sub-factions">CHAPTER 5: CULTURE,
+RITUALS, AND SUB-FACTIONS</a>
+<ul>
+<li><a href="#the-dialects-of-depth" id="toc-the-dialects-of-depth">5.1
+The Dialects of Depth</a></li>
+<li><a href="#cultural-rituals" id="toc-cultural-rituals">5.2 Cultural
+Rituals</a></li>
+<li><a href="#illegal-sub-factions" id="toc-illegal-sub-factions">5.3
+Illegal Sub-factions</a></li>
+</ul></li>
+<li><a href="#chapter-6-the-engineering-of-survival-technical-specifications" id="toc-chapter-6-the-engineering-of-survival-technical-specifications">CHAPTER
+6: THE ENGINEERING OF SURVIVAL (TECHNICAL SPECIFICATIONS)</a>
+<ul>
+<li><a href="#the-great-lungs-air-scrubbers" id="toc-the-great-lungs-air-scrubbers">6.1 The Great Lungs (Air
+Scrubbers)</a></li>
+<li><a href="#the-water-cycle-reclamation-distribution" id="toc-the-water-cycle-reclamation-distribution">6.2 The Water Cycle
+(Reclamation &amp; Distribution)</a></li>
+<li><a href="#the-power-grid-thermal-geothermal" id="toc-the-power-grid-thermal-geothermal">6.3 The Power Grid (Thermal
+Geothermal)</a></li>
+</ul></li>
+<li><a href="#chapter-7-medical-realities-and-the-syndrome" id="toc-chapter-7-medical-realities-and-the-syndrome">CHAPTER 7: MEDICAL
+REALITIES AND “THE SYNDROME”</a>
+<ul>
+<li><a href="#the-triage-protocol" id="toc-the-triage-protocol">7.1 The
+Triage Protocol</a></li>
+<li><a href="#the-syndrome-the-madness-of-walls" id="toc-the-syndrome-the-madness-of-walls">7.2 The Syndrome (The Madness
+of Walls)</a></li>
+</ul></li>
+<li><a href="#chapter-8-the-shadow-economy-and-barter-tables" id="toc-chapter-8-the-shadow-economy-and-barter-tables">CHAPTER 8: THE
+SHADOW ECONOMY AND BARTER TABLES</a>
+<ul>
+<li><a href="#the-value-of-nothing" id="toc-the-value-of-nothing">8.1
+The Value of “Nothing”</a></li>
+<li><a href="#barter-exchange-table-gm-guide" id="toc-barter-exchange-table-gm-guide">8.2 Barter Exchange Table (GM
+Guide)</a></li>
+</ul></li>
+<li><a href="#chapter-9-the-daily-simulation-routines-and-calendars" id="toc-chapter-9-the-daily-simulation-routines-and-calendars">CHAPTER
+9: THE DAILY SIMULATION (ROUTINES AND CALENDARS)</a>
+<ul>
+<li><a href="#the-clock-of-the-silo" id="toc-the-clock-of-the-silo">9.1
+The “Clock” of the Silo</a></li>
+<li><a href="#the-calendar-of-the-dead" id="toc-the-calendar-of-the-dead">9.2 The Calendar of the Dead</a></li>
+</ul></li>
+<li><a href="#chapter-10-npcs-and-the-human-element" id="toc-chapter-10-npcs-and-the-human-element">CHAPTER 10: NPCs AND THE
+HUMAN ELEMENT</a>
+<ul>
+<li><a href="#the-up-top-bureaucrats" id="toc-the-up-top-bureaucrats">10.1 The Up Top Bureaucrats</a></li>
+<li><a href="#the-mids-workers" id="toc-the-mids-workers">10.2 The Mids
+Workers</a></li>
+<li><a href="#the-down-deep-outcasts" id="toc-the-down-deep-outcasts">10.3 The Down Deep Outcasts</a></li>
+</ul></li>
+<li><a href="#chapter-11-geography-deep-dive-the-forgotten-spaces" id="toc-chapter-11-geography-deep-dive-the-forgotten-spaces">CHAPTER 11:
+GEOGRAPHY DEEP DIVE (THE FORGOTTEN SPACES)</a>
+<ul>
+<li><a href="#the-mechanical-crawls" id="toc-the-mechanical-crawls">11.1
+The Mechanical Crawls</a></li>
+<li><a href="#the-ghost-levels" id="toc-the-ghost-levels">11.2 The
+“Ghost” Levels</a></li>
+</ul></li>
+<li><a href="#chapter-12-the-syndrome-and-the-psychology-of-walls" id="toc-chapter-12-the-syndrome-and-the-psychology-of-walls">CHAPTER 12:
+THE SYNDROME AND THE PSYCHOLOGY OF WALLS</a>
+<ul>
+<li><a href="#the-terror-of-the-open" id="toc-the-terror-of-the-open">12.1 The Terror of the Open</a></li>
+<li><a href="#the-shadow-talk" id="toc-the-shadow-talk">12.2 The “Shadow
+Talk”</a></li>
+</ul></li>
+<li><a href="#chapter-13-the-complete-level-gazetteer-1---144" id="toc-chapter-13-the-complete-level-gazetteer-1---144">CHAPTER 13: THE
+COMPLETE LEVEL GAZETTEER (1 - 144)</a>
+<ul>
+<li><a href="#the-up-top-levels-1---48-1" id="toc-the-up-top-levels-1---48-1">THE UP TOP (LEVELS 1 - 48)</a></li>
+<li><a href="#the-mids-levels-49---96-1" id="toc-the-mids-levels-49---96-1">THE MIDS (LEVELS 49 - 96)</a></li>
+<li><a href="#the-down-deep-levels-97---144-1" id="toc-the-down-deep-levels-97---144-1">THE DOWN DEEP (LEVELS 97 -
+144)</a></li>
+</ul></li>
+<li><a href="#chapter-14-the-mechanical-physics-of-the-silo" id="toc-chapter-14-the-mechanical-physics-of-the-silo">CHAPTER 14: THE
+MECHANICAL PHYSICS OF THE SILO</a>
+<ul>
+<li><a href="#atmospheric-pressure-and-temperature" id="toc-atmospheric-pressure-and-temperature">14.1 Atmospheric Pressure
+and Temperature</a></li>
+<li><a href="#the-logistics-of-message-tubes" id="toc-the-logistics-of-message-tubes">14.2 The Logistics of Message
+Tubes</a></li>
+</ul></li>
+<li><a href="#chapter-15-character-progression-and-the-tiers" id="toc-chapter-15-character-progression-and-the-tiers">CHAPTER 15:
+CHARACTER PROGRESSION AND THE “TIERS”</a>
+<ul>
+<li><a href="#standing-ranks" id="toc-standing-ranks">15.1 Standing
+Ranks</a></li>
+</ul></li>
+<li><a href="#chapter-16-crime-punishment-and-the-black-market-extended" id="toc-chapter-16-crime-punishment-and-the-black-market-extended">CHAPTER
+16: CRIME, PUNISHMENT, AND THE BLACK MARKET (EXTENDED)</a>
+<ul>
+<li><a href="#the-hierarchy-of-contraband" id="toc-the-hierarchy-of-contraband">16.1 The Hierarchy of
+Contraband</a></li>
+<li><a href="#the-anatomy-of-a-black-market-deal" id="toc-the-anatomy-of-a-black-market-deal">16.2 The Anatomy of a Black
+Market Deal</a></li>
+</ul></li>
+<li><a href="#chapter-17-psychology-and-social-tensions-deep-dive" id="toc-chapter-17-psychology-and-social-tensions-deep-dive">CHAPTER 17:
+PSYCHOLOGY AND SOCIAL TENSIONS (DEEP DIVE)</a>
+<ul>
+<li><a href="#the-shadow-resentment" id="toc-the-shadow-resentment">17.1
+The “Shadow” Resentment</a></li>
+<li><a href="#the-up-down-conflict" id="toc-the-up-down-conflict">17.2
+The “Up-Down” Conflict</a></li>
+</ul></li>
+<li><a href="#chapter-18-the-architecture-of-the-inner-ring" id="toc-chapter-18-the-architecture-of-the-inner-ring">CHAPTER 18: THE
+ARCHITECTURE OF THE “INNER RING”</a>
+<ul>
+<li><a href="#the-conduits" id="toc-the-conduits">18.1 The
+Conduits</a></li>
+<li><a href="#the-vents-the-rogue-highway" id="toc-the-vents-the-rogue-highway">18.2 The “Vents” (The Rogue
+Highway)</a></li>
+</ul></li>
+<li><a href="#chapter-19-recreation-and-the-human-spirit" id="toc-chapter-19-recreation-and-the-human-spirit">CHAPTER 19:
+RECREATION AND THE HUMAN SPIRIT</a>
+<ul>
+<li><a href="#games-of-chance" id="toc-games-of-chance">19.1 Games of
+Chance</a></li>
+<li><a href="#the-acoustic-culture" id="toc-the-acoustic-culture">19.2
+The Acoustic Culture</a></li>
+</ul></li>
+<li><a href="#chapter-20-the-gms-toolkit-situational-tables" id="toc-chapter-20-the-gms-toolkit-situational-tables">CHAPTER 20: THE
+GM’S TOOLKIT (SITUATIONAL TABLES)</a>
+<ul>
+<li><a href="#what-do-i-smell-level-atmosphere" id="toc-what-do-i-smell-level-atmosphere">20.1 “What do I smell?” (Level
+Atmosphere)</a></li>
+<li><a href="#stairwell-encounters" id="toc-stairwell-encounters">20.2
+Stairwell Encounters</a></li>
+</ul></li>
+<li><a href="#chapter-21-the-history-of-the-ruin-official-version" id="toc-chapter-21-the-history-of-the-ruin-official-version">CHAPTER 21:
+THE HISTORY OF THE “RUIN” (OFFICIAL VERSION)</a></li>
+<li><a href="#chapter-22-the-shadow-pharmacy-list-of-drugs" id="toc-chapter-22-the-shadow-pharmacy-list-of-drugs">CHAPTER 22: THE
+SHADOW PHARMACY (LIST OF DRUGS)</a></li>
+<li><a href="#chapter-23-the-mechanics-of-the-suit-technical" id="toc-chapter-23-the-mechanics-of-the-suit-technical">CHAPTER 23: THE
+MECHANICS OF THE SUIT (TECHNICAL)</a></li>
+<li><a href="#chapter-24-the-geology-of-the-silo" id="toc-chapter-24-the-geology-of-the-silo">CHAPTER 24: THE GEOLOGY OF
+THE SILO</a></li>
+<li><a href="#chapter-25-a-final-word-on-atmosphere" id="toc-chapter-25-a-final-word-on-atmosphere">CHAPTER 25: A FINAL WORD
+ON ATMOSPHERE</a></li>
+<li><a href="#chapter-26-the-faces-of-the-silo-npc-roster" id="toc-chapter-26-the-faces-of-the-silo-npc-roster">CHAPTER 26: THE
+FACES OF THE SILO (NPC ROSTER)</a>
+<ul>
+<li><a href="#the-up-top-the-elite-the-enforcers" id="toc-the-up-top-the-elite-the-enforcers">26.1 The Up Top (The Elite
+&amp; The Enforcers)</a></li>
+<li><a href="#the-mids-the-hustlers-the-harvesters" id="toc-the-mids-the-hustlers-the-harvesters">26.2 The Mids (The
+Hustlers &amp; The Harvesters)</a></li>
+<li><a href="#the-down-deep-the-grease-the-grime" id="toc-the-down-deep-the-grease-the-grime">26.3 The Down Deep (The
+Grease &amp; The Grime)</a></li>
+</ul></li>
+<li><a href="#chapter-27-armory-gear-and-the-economy-of-violence" id="toc-chapter-27-armory-gear-and-the-economy-of-violence">CHAPTER 27:
+ARMORY, GEAR, AND THE ECONOMY OF VIOLENCE</a>
+<ul>
+<li><a href="#weapons-the-arsenal-of-scarcity" id="toc-weapons-the-arsenal-of-scarcity">27.1 Weapons (The Arsenal of
+Scarcity)</a></li>
+<li><a href="#armor-the-myth-of-protection" id="toc-armor-the-myth-of-protection">27.2 Armor (The Myth of
+Protection)</a></li>
+<li><a href="#adventuring-gear-survival-in-the-cylinder" id="toc-adventuring-gear-survival-in-the-cylinder">27.3 Adventuring Gear
+(Survival in the Cylinder)</a></li>
+</ul></li>
+<li><a href="#chapter-28-ecology-flora-and-silo-fauna" id="toc-chapter-28-ecology-flora-and-silo-fauna">CHAPTER 28: ECOLOGY,
+FLORA, AND SILO FAUNA</a>
+<ul>
+<li><a href="#fauna-the-meat-and-the-vermin" id="toc-fauna-the-meat-and-the-vermin">28.1 Fauna (The Meat and The
+Vermin)</a></li>
+<li><a href="#flora-the-hydroponic-balance" id="toc-flora-the-hydroponic-balance">28.2 Flora (The Hydroponic
+Balance)</a></li>
+</ul></li>
+<li><a href="#chapter-29-the-rumor-mill-d20-generator" id="toc-chapter-29-the-rumor-mill-d20-generator">CHAPTER 29: THE RUMOR
+MILL (d20 GENERATOR)</a></li>
+<li><a href="#chapter-30-the-gms-quick-reference-sheets" id="toc-chapter-30-the-gms-quick-reference-sheets">CHAPTER 30: THE GM’S
+QUICK-REFERENCE SHEETS</a>
+<ul>
+<li><a href="#travel-time-by-stair" id="toc-travel-time-by-stair">30.1
+Travel Time by Stair</a></li>
+<li><a href="#security-and-response-at-a-glance" id="toc-security-and-response-at-a-glance">30.2 Security and Response at
+a Glance</a></li>
+<li><a href="#everyday-costs-bribes-and-favors" id="toc-everyday-costs-bribes-and-favors">30.3 Everyday Costs, Bribes,
+and Favors</a></li>
+<li><a href="#punishments-at-a-glance" id="toc-punishments-at-a-glance">30.4 Punishments at a Glance</a></li>
+</ul></li>
+<li><a href="#chapter-31-core-play-procedure-system-agnostic" id="toc-chapter-31-core-play-procedure-system-agnostic">CHAPTER 31: CORE
+PLAY PROCEDURE (SYSTEM-AGNOSTIC)</a>
+<ul>
+<li><a href="#when-to-call-for-uncertainty" id="toc-when-to-call-for-uncertainty">31.1 When to Call for
+Uncertainty</a></li>
+<li><a href="#the-three-pressure-tracks" id="toc-the-three-pressure-tracks">31.2 The Three Pressure
+Tracks</a></li>
+<li><a href="#consequence-menu" id="toc-consequence-menu">31.3
+Consequence Menu</a></li>
+<li><a href="#fail-forward-by-scene-type" id="toc-fail-forward-by-scene-type">31.4 Fail-Forward by Scene
+Type</a></li>
+<li><a href="#escalation-clocks" id="toc-escalation-clocks">31.5
+Escalation Clocks</a></li>
+<li><a href="#downtime-between-crises" id="toc-downtime-between-crises">31.6 Downtime Between Crises</a></li>
+</ul></li>
+<li><a href="#chapter-32-faction-sheets" id="toc-chapter-32-faction-sheets">CHAPTER 32: FACTION SHEETS</a>
+<ul>
+<li><a href="#reading-a-faction-fast" id="toc-reading-a-faction-fast">32.1 Reading a Faction Fast</a></li>
+</ul></li>
+<li><a href="#chapter-33-the-slice-of-life-engine" id="toc-chapter-33-the-slice-of-life-engine">CHAPTER 33: THE
+SLICE-OF-LIFE ENGINE</a>
+<ul>
+<li><a href="#block-problems-d12" id="toc-block-problems-d12">33.1 Block
+Problems (d12)</a></li>
+<li><a href="#inspections-and-sweeps-d10" id="toc-inspections-and-sweeps-d10">33.2 Inspections and Sweeps
+(d10)</a></li>
+<li><a href="#favors-people-ask-of-the-pcs-d12" id="toc-favors-people-ask-of-the-pcs-d12">33.3 Favors People Ask of the
+PCs (d12)</a></li>
+<li><a href="#sudden-shortages-d10" id="toc-sudden-shortages-d10">33.4
+Sudden Shortages (d10)</a></li>
+</ul></li>
+</ul></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
 <h1 id="silo-system-comprehensive-world-bible-encyclopedic-edition">SILO
 SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)</h1>
 <p><strong>RESTRICTED ACCESS // GM REFERENCE MANUAL</strong> <em>(This
@@ -613,15 +1300,14 @@ to oxygen consumption). They believe the Silo is a “tomb” and that fire
 will “wake the world.”</li>
 <li><strong>The Scrap Syndicates:</strong> The mafia of the Mids. They
 hijack Supply shipments and run illegal gambling rings. Their leader,
-“Old Man Brass,” is said to have more chits than the Mayor.</li>
+“Auntie Cinder,” is said to have more chits than the Mayor.</li>
 <li><strong>The Shadow Doctors:</strong> Desperate medics who have
 stolen enough supplies to set up clandestine clinics. They perform the
 “Illegal Cut”—removing birth control implants for couples who lost the
 Lottery.</li>
 </ul>
 <hr />
-<h2
-id="chapter-6-the-engineering-of-survival-technical-specifications">CHAPTER
+<h2 id="chapter-6-the-engineering-of-survival-technical-specifications">CHAPTER
 6: THE ENGINEERING OF SURVIVAL (TECHNICAL SPECIFICATIONS)</h2>
 <p>To the average citizen, the Silo’s systems are magic. To the GM, they
 are the levers of tension. When a system fails, the stakes are immediate
@@ -825,9 +1511,9 @@ loyalty to her family in the grease and her duty to the Up Top.</li>
 </ul>
 <h3 id="the-mids-workers">10.2 The Mids Workers</h3>
 <ul>
-<li><strong>Old Man Brass (Scrap Syndicate):</strong> He lives in a room
-filled with “Legal Scrap” that looks suspiciously like relics. He knows
-the location of every hidden camera on Levels 50 through 60.</li>
+<li><strong>Auntie Cinder (Scrap Syndicate):</strong> She lives in a
+room filled with “Legal Scrap” that looks suspiciously like relics. She
+knows the location of every hidden camera on Levels 50 through 60.</li>
 <li><strong>Farmer Jole (Hydroponics):</strong> A man who talks to his
 algae vats. He believes the plants can sense the “mood” of the Silo. He
 is the first to know when a rebellion is brewing.</li>
@@ -1029,8 +1715,7 @@ or a Department Head. You are too important to be easily “disappeared”
 by Judicial.</li>
 </ul>
 <hr />
-<h2
-id="chapter-16-crime-punishment-and-the-black-market-extended">CHAPTER
+<h2 id="chapter-16-crime-punishment-and-the-black-market-extended">CHAPTER
 16: CRIME, PUNISHMENT, AND THE BLACK MARKET (EXTENDED)</h2>
 <p>In a world of total scarcity, every object has a story, and every
 crime is an act of desperation or rebellion.</p>
@@ -1368,7 +2053,7 @@ conflict. Below is a roster of key NPCs across the sectors.</p>
 <h3 id="the-up-top-the-elite-the-enforcers">26.1 The Up Top (The Elite
 &amp; The Enforcers)</h3>
 <ul>
-<li><strong>Mayor Jahns (The Pragmatist):</strong>
+<li><strong>Mayor Tamsin Rook (The Pragmatist):</strong>
 <ul>
 <li><em>Role:</em> The elected leader of the Silo. Currently on Level
 5.</li>
@@ -1380,7 +2065,7 @@ them.</li>
 <li><em>The Secret:</em> She is quietly stockpiling unrecorded
 antibiotics, suspecting an impending conflict.</li>
 </ul></li>
-<li><strong>Chief Deputy Marnes (The Loyal Hound):</strong>
+<li><strong>Chief Deputy Harlan Fiske (The Loyal Hound):</strong>
 <ul>
 <li><em>Role:</em> The Sheriff’s right hand. Level 1.</li>
 <li><em>Appearance:</em> Heavily scarred from a riot in the Mids twenty
@@ -1391,7 +2076,7 @@ Sheriff as a politician and himself as the actual law.</li>
 the Scrap Syndicates and allows it, so long as the violence stays out of
 the Up Top.</li>
 </ul></li>
-<li><strong>Inquisitor Vance (Judicial):</strong>
+<li><strong>Inquisitor Sel Verin (Judicial):</strong>
 <ul>
 <li><em>Role:</em> Senior Judicial Clerk. Level 8.</li>
 <li><em>Appearance:</em> Immaculate white uniform. Speaks softly and
@@ -1402,7 +2087,7 @@ believes the Silo is too lenient and that a “purging” is necessary.</li>
 watch) which he uses to hypnotize himself during stressful
 interrogations.</li>
 </ul></li>
-<li><strong>Bernard (Head of IT):</strong>
+<li><strong>Merrow Hale (Head of IT):</strong>
 <ul>
 <li><em>Role:</em> The true power in the Silo. Level 34.</li>
 <li><em>Appearance:</em> Soft, pale, and constantly sweating despite the
@@ -1416,7 +2101,7 @@ regularly communicates with Silo 1.</li>
 <h3 id="the-mids-the-hustlers-the-harvesters">26.2 The Mids (The
 Hustlers &amp; The Harvesters)</h3>
 <ul>
-<li><strong>Quartermaster “Fingers” Kael (Supply):</strong>
+<li><strong>Quartermaster “Hooks” Sera Krail (Supply):</strong>
 <ul>
 <li><em>Role:</em> Runs the primary supply depot on Level 50.</li>
 <li><em>Appearance:</em> Missing two fingers on his left hand. Wears a
@@ -1426,7 +2111,7 @@ into an Up Top retirement.</li>
 <li><em>The Secret:</em> He is the primary supplier for the Shadow
 Doctors, trading stolen medical gear for exorbitant chits.</li>
 </ul></li>
-<li><strong>Matron Elara (Hydroponics):</strong>
+<li><strong>Matron Ysra Thorn (Hydroponics):</strong>
 <ul>
 <li><em>Role:</em> The undisputed boss of the Algae Vats on Level
 72.</li>
@@ -1438,7 +2123,7 @@ the vats like her children.</li>
 that can produce a mild hallucinogen, which she sells to the
 Porters.</li>
 </ul></li>
-<li><strong>Dr. Aris (The Shadow Doctor):</strong>
+<li><strong>Dr. Len Morra (The Shadow Doctor):</strong>
 <ul>
 <li><em>Role:</em> A rogue medic operating out of a vent on Level
 88.</li>
@@ -1450,7 +2135,7 @@ going to the Level 30 hospital.</li>
 implants, keeping the removed implants in a jar to prove he beat the
 system.</li>
 </ul></li>
-<li><strong>Cass (The Porter Union Boss):</strong>
+<li><strong>Tavi Rune (The Porter Union Boss):</strong>
 <ul>
 <li><em>Role:</em> The unofficial leader of the Porters. Based on the
 Level 60 landings.</li>
@@ -1466,7 +2151,7 @@ ledger.</li>
 <h3 id="the-down-deep-the-grease-the-grime">26.3 The Down Deep (The
 Grease &amp; The Grime)</h3>
 <ul>
-<li><strong>Shift-Boss Knox (Mechanical):</strong>
+<li><strong>Shift-Boss Rourke (Mechanical):</strong>
 <ul>
 <li><em>Role:</em> The lord of Level 144. Runs the Generator.</li>
 <li><em>Appearance:</em> Massive, completely bald, and covered in
@@ -1478,19 +2163,19 @@ perfection from his mechanics.</li>
 beneath the oil reservoir (The Digger) but has kept it hidden from IT,
 waiting for the right moment to breach it.</li>
 </ul></li>
-<li><strong>“Old Man Brass” (Scrap Syndicate Boss):</strong>
+<li><strong>“Auntie Cinder” (Scrap Syndicate Boss):</strong>
 <ul>
 <li><em>Role:</em> Organized crime leader. Level 101 (The Flooded
 Tier).</li>
 <li><em>Appearance:</em> Wears an absurd, patched-together coat of many
 colors. Sits on a chair made of welded piping.</li>
-<li><em>Motivation:</em> Control of the black market. He wants to corner
-the market on smuggled food from the Mids.</li>
-<li><em>The Secret:</em> He is not actually old; he is 30, but suffers
-from a rare aging disease that Medical refused to treat, fueling his
+<li><em>Motivation:</em> Control of the black market. She wants to
+corner the market on smuggled food from the Mids.</li>
+<li><em>The Secret:</em> She is not actually old; she is 30, but suffers
+from a rare aging disease that Medical refused to treat, fueling her
 hatred of the Up Top.</li>
 </ul></li>
-<li><strong>Juliette Nichols (The Savant):</strong>
+<li><strong>Mira Quell (The Savant):</strong>
 <ul>
 <li><em>Role:</em> A mid-level mechanic, brilliant but insubordinate.
 Level 130.</li>
@@ -1801,4 +2486,1089 @@ of IT, testing a new clerk).</td>
 </tbody>
 </table>
 <hr />
+<h2 id="chapter-30-the-gms-quick-reference-sheets">CHAPTER 30: THE GM’S
+QUICK-REFERENCE SHEETS</h2>
+<p>These tools are meant to sit beside the GM during play. They are not
+new lore; they are compressed forms of the setting so you can answer
+table questions fast.</p>
+<h3 id="travel-time-by-stair">30.1 Travel Time by Stair</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Distance</th>
+<th style="text-align: left;">Fit Citizen</th>
+<th style="text-align: left;">Porter</th>
+<th style="text-align: left;">Citizen Carrying Load / Escorting
+Injured</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1-5 levels</strong></td>
+<td style="text-align: left;">10-20 minutes</td>
+<td style="text-align: left;">5-10 minutes</td>
+<td style="text-align: left;">20-30 minutes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6-15 levels</strong></td>
+<td style="text-align: left;">30-75 minutes</td>
+<td style="text-align: left;">20-40 minutes</td>
+<td style="text-align: left;">1-2 hours</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>16-30 levels</strong></td>
+<td style="text-align: left;">2-4 hours</td>
+<td style="text-align: left;">1-2 hours</td>
+<td style="text-align: left;">Half a day</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>31-60 levels</strong></td>
+<td style="text-align: left;">Most of a day</td>
+<td style="text-align: left;">4-6 hours</td>
+<td style="text-align: left;">A full day and likely an overnight
+stop</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>61+ levels</strong></td>
+<td style="text-align: left;">An expedition</td>
+<td style="text-align: left;">A brutal all-day run</td>
+<td style="text-align: left;">Multiple days, supplies required</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Fast Rule:</strong> Any non-Porter crossing more than 20
+levels arrives tired, sweaty, thirsty, and socially out of place.</li>
+<li><strong>Faster Rule:</strong> If the exact time does not matter, ask
+whether the trip is <em>local</em>, <em>serious</em>, or
+<em>expedition-scale</em> and narrate accordingly.</li>
+</ul>
+<h3 id="security-and-response-at-a-glance">30.2 Security and Response at
+a Glance</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Zone</th>
+<th style="text-align: left;">Typical SR</th>
+<th style="text-align: left;">First Response</th>
+<th style="text-align: left;">Most Common Complication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Viewport / IT / Judicial
+corridors</strong></td>
+<td style="text-align: left;">1-10</td>
+<td style="text-align: left;">IT security, Judicial clerk, or armed
+deputy</td>
+<td style="text-align: left;">Someone already knows the PCs’ names</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mayor / Medical / major
+offices</strong></td>
+<td style="text-align: left;">11-25</td>
+<td style="text-align: left;">Clerk, orderly, deputy</td>
+<td style="text-align: left;">Paper trail and witnesses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Markets / Mids residential
+tiers</strong></td>
+<td style="text-align: left;">26-45</td>
+<td style="text-align: left;">Local deputy or neighborhood
+informant</td>
+<td style="text-align: left;">Crowds, rumors, and collateral
+witnesses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hydroponics / Supply
+floors</strong></td>
+<td style="text-align: left;">30-50</td>
+<td style="text-align: left;">Foreman, quartermaster, or hungry
+workers</td>
+<td style="text-align: left;">Shortage panic spreads fast</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Down Deep slums / maintenance
+crawls</strong></td>
+<td style="text-align: left;">45-75</td>
+<td style="text-align: left;">Local toughs, Mechanics, or nobody at
+all</td>
+<td style="text-align: left;">Danger comes from the environment
+first</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ghost levels / vents / dead
+spaces</strong></td>
+<td style="text-align: left;">70-100</td>
+<td style="text-align: left;">No official response until after the
+fact</td>
+<td style="text-align: left;">The place itself tries to kill them</td>
+</tr>
+</tbody>
+</table>
+<h3 id="everyday-costs-bribes-and-favors">30.3 Everyday Costs, Bribes,
+and Favors</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Need</th>
+<th style="text-align: left;">Typical Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>A hot meal with actual
+protein</strong></td>
+<td style="text-align: left;">8-15 chits or a meaningful favor</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>A bed for a night on a stranger’s
+floor</strong></td>
+<td style="text-align: left;">5 chits, gossip, or guard duty</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>A stamped form moved to the top of
+the stack</strong></td>
+<td style="text-align: left;">10-30 chits</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Looking the other way during a
+minor infraction</strong></td>
+<td style="text-align: left;">1 meal, 1 bottle, or 1 name</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>A Porter carrying a private
+package off-ledger</strong></td>
+<td style="text-align: left;">15-40 chits depending on risk</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>A Mechanical part “that does not
+officially exist”</strong></td>
+<td style="text-align: left;">Barter plus future leverage</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Real medicine</strong></td>
+<td style="text-align: left;">More than most citizens can pay; almost
+always comes with strings</td>
+</tr>
+</tbody>
+</table>
+<h3 id="punishments-at-a-glance">30.4 Punishments at a Glance</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Offense</th>
+<th style="text-align: left;">Usual Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Queue-jumping, ration skimming,
+petty theft</strong></td>
+<td style="text-align: left;">Fines, ration cuts, public
+humiliation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Forgery, black-market dealing,
+repeat theft</strong></td>
+<td style="text-align: left;">Holding cells, beatings, transfer to
+labor</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Illegal tampering with
+infrastructure</strong></td>
+<td style="text-align: left;">Mine labor, political suspicion, family
+blacklisting</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Relic possession</strong></td>
+<td style="text-align: left;">Interrogation, disappearance, or being
+made an informant</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sedition / “I want to go
+outside”</strong></td>
+<td style="text-align: left;">Cleaning</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="chapter-31-core-play-procedure-system-agnostic">CHAPTER 31: CORE
+PLAY PROCEDURE (SYSTEM-AGNOSTIC)</h2>
+<p>The Silo works best when risk feels cumulative. Use the following
+procedures with any base system to keep pressure rising even when the
+PCs technically “succeed.”</p>
+<h3 id="when-to-call-for-uncertainty">31.1 When to Call for
+Uncertainty</h3>
+<p>Call for a roll, test, or move only when at least one of the
+following is true:</p>
+<ul>
+<li>The action risks official notice.</li>
+<li>The action risks bodily harm, exhaustion, or contamination.</li>
+<li>The action could cost scarce time, rations, tools, or social
+trust.</li>
+<li>Failure would make the next scene more dangerous rather than simply
+stop play.</li>
+</ul>
+<p>If none apply, let the PCs do it. Life in the Silo is already hard
+enough.</p>
+<h3 id="the-three-pressure-tracks">31.2 The Three Pressure Tracks</h3>
+<p>Track these openly or privately:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Track</th>
+<th style="text-align: left;">It Measures</th>
+<th style="text-align: left;">Typical Triggers</th>
+<th style="text-align: left;">At 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Stress</strong></td>
+<td style="text-align: left;">Fear, crowding, guilt, and claustrophobic
+overload</td>
+<td style="text-align: left;">Holding cells, riots, corpse work, family
+pressure, witnessing a Cleaning</td>
+<td style="text-align: left;">The character cracks: freeze, lash out,
+confess, or flee. Reset to 2 after the crisis.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Heat</strong></td>
+<td style="text-align: left;">How much attention the PCs have drawn</td>
+<td style="text-align: left;">Forgery, camera exposure, bribery,
+repeated questions, embarrassing authority</td>
+<td style="text-align: left;">Authority acts: raids, tails, arrests, or
+mandatory interviews. Reset to 2 once the response lands.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Fatigue</strong></td>
+<td style="text-align: left;">Physical depletion from stairs, hunger,
+injury, and overwork</td>
+<td style="text-align: left;">Long climbs, skipped meals, poor sleep,
+carrying loads, labor shifts</td>
+<td style="text-align: left;">The body gives out: collapse, tremor,
+dropped gear, slowed movement. Reset to 2 after rest or medical
+care.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="consequence-menu">31.3 Consequence Menu</h3>
+<p>On a mixed success or failure, choose one consequence that pushes
+play forward:</p>
+<ul>
+<li><strong>Time:</strong> They get it done, but the scene runs long and
+another faction acts first.</li>
+<li><strong>Attention:</strong> They succeed, but Heat rises or a
+witness remembers them.</li>
+<li><strong>Wear:</strong> A tool breaks, clothing tears, or a precious
+consumable is spent.</li>
+<li><strong>Strain:</strong> Stress or Fatigue rises because the cost
+was personal.</li>
+<li><strong>Debt:</strong> Someone helps them and now expects
+repayment.</li>
+<li><strong>Damage:</strong> The environment changes for the worse:
+blackout, leak, stampede, or lockdown.</li>
+</ul>
+<h3 id="fail-forward-by-scene-type">31.4 Fail-Forward by Scene Type</h3>
+<ul>
+<li><strong>Bureaucracy:</strong> They get the form, but it is logged
+under their name.</li>
+<li><strong>Stealth:</strong> They avoid immediate capture, but someone
+saw a silhouette, heard a voice, or finds evidence later.</li>
+<li><strong>Travel:</strong> They arrive, but dehydrated, late, or
+missing a piece of gear.</li>
+<li><strong>Social Pressure:</strong> They win the argument, but create
+a grudge, rumor, or compromise.</li>
+<li><strong>Repair Work:</strong> The machine works for now, but only if
+fed more parts, more labor, or a dangerous workaround.</li>
+</ul>
+<h3 id="escalation-clocks">31.5 Escalation Clocks</h3>
+<p>When the PCs start meddling in a problem larger than a single room,
+create one 4-segment clock:</p>
+<ul>
+<li><strong>Authority Clock:</strong> Fills when they leave evidence,
+anger officials, or show a pattern.</li>
+<li><strong>Neighborhood Clock:</strong> Fills when rumors spread,
+shortages worsen, or civilians panic.</li>
+<li><strong>Infrastructure Clock:</strong> Fills when a leak,
+contamination, or power fault gets worse.</li>
+</ul>
+<p>When a clock fills, something irreversible happens in the fiction. Do
+not only threaten; change the situation.</p>
+<h3 id="downtime-between-crises">31.6 Downtime Between Crises</h3>
+<p>Between major scenes, each PC can usually do one meaningful
+thing:</p>
+<ul>
+<li><strong>Work the Shift:</strong> Earn modest chits, but stay on
+someone’s radar.</li>
+<li><strong>Lay Low:</strong> Reduce Heat, but lose access to rumors and
+fast opportunities.</li>
+<li><strong>Scrounge:</strong> Find a part, ration, or contact, but risk
+owing a favor.</li>
+<li><strong>Care for Someone:</strong> Reduce that person’s Stress or
+Fatigue and deepen the relationship.</li>
+<li><strong>Ask the Stairs:</strong> Gather rumors through Porters,
+traders, and queue-lines.</li>
+</ul>
+<hr />
+<h2 id="chapter-32-faction-sheets">CHAPTER 32: FACTION SHEETS</h2>
+<p>Use these when the PCs touch politics and survival at the same
+time.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Faction</th>
+<th style="text-align: left;">Public Face</th>
+<th style="text-align: left;">Real Objective</th>
+<th style="text-align: left;">Primary Leverage</th>
+<th style="text-align: left;">What They Want from PCs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>IT</strong></td>
+<td style="text-align: left;">Efficient stewards of data and
+infrastructure</td>
+<td style="text-align: left;">Preserve information monopolies and buried
+truths</td>
+<td style="text-align: left;">Cameras, archives, access permissions,
+cold rooms</td>
+<td style="text-align: left;">Deny them anomalies, recover stolen tech,
+carry sealed messages</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Judicial</strong></td>
+<td style="text-align: left;">Guardians of order and the Pact</td>
+<td style="text-align: left;">Keep fear abstract and obedience
+routine</td>
+<td style="text-align: left;">Trials, disappearances, sealed warrants,
+informants</td>
+<td style="text-align: left;">Names, leverage, quiet compliance,
+manufactured examples</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sheriff’s Office</strong></td>
+<td style="text-align: left;">Visible law, public peace, crowd
+control</td>
+<td style="text-align: left;">Prevent open chaos without learning too
+much</td>
+<td style="text-align: left;">Deputies, patrols, legal force, local
+trust</td>
+<td style="text-align: left;">Witnesses, calm streets, culprits easy to
+arrest</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mechanical</strong></td>
+<td style="text-align: left;">Proud labor backbone of the Silo</td>
+<td style="text-align: left;">Keep the machine alive and protect their
+autonomy</td>
+<td style="text-align: left;">Access to power, repairs, heavy labor,
+strategic sabotage</td>
+<td style="text-align: left;">Honest warnings, spare parts, silence
+about unsafe realities</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Supply</strong></td>
+<td style="text-align: left;">Neutral stewards of scarcity</td>
+<td style="text-align: left;">Turn inventory into political power</td>
+<td style="text-align: left;">Ledgers, stamps, rations, delays</td>
+<td style="text-align: left;">Favors, signatures, selective shortages,
+deniable runners</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Medical</strong></td>
+<td style="text-align: left;">Healers and birthkeepers</td>
+<td style="text-align: left;">Manage bodies, fertility, and social
+stability</td>
+<td style="text-align: left;">Drugs, diagnoses, records, quarantine
+authority</td>
+<td style="text-align: left;">Samples, quiet patients, plausible
+paperwork</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Porters’ Union</strong></td>
+<td style="text-align: left;">Tireless runners of the stairs</td>
+<td style="text-align: left;">Maintain neutrality and protect the flow
+of news</td>
+<td style="text-align: left;">Speed, routes, gossip, discreet
+delivery</td>
+<td style="text-align: left;">Respect, water, fair payment,
+noninterference</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scrap Syndicates</strong></td>
+<td style="text-align: left;">Not public at all</td>
+<td style="text-align: left;">Profit from every shortage and weak
+point</td>
+<td style="text-align: left;">Contraband, debt, intimidation, salvage
+crews</td>
+<td style="text-align: left;">Future favors, silence, risky jobs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Flame Watchers</strong></td>
+<td style="text-align: left;">Spiritual weirdos and rumor-fodder</td>
+<td style="text-align: left;">Keep hope alive even when hope is
+dangerous</td>
+<td style="text-align: left;">Secret rooms, coded talk, believers, relic
+lore</td>
+<td style="text-align: left;">Sympathy, cover, recruits, proof that the
+world is bigger</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-a-faction-fast">32.1 Reading a Faction Fast</h3>
+<p>If you need to improvise quickly, answer four questions:</p>
+<ol type="1">
+<li>What is this faction afraid of right now?</li>
+<li>What are they short on?</li>
+<li>Who would embarrass them if the truth came out?</li>
+<li>What small thing can the PCs do that would make this faction
+temporarily useful?</li>
+</ol>
+<hr />
+<h2 id="chapter-33-the-slice-of-life-engine">CHAPTER 33: THE
+SLICE-OF-LIFE ENGINE</h2>
+<p>These generators keep the campaign grounded in the daily grind before
+the big revelations.</p>
+<h3 id="block-problems-d12">33.1 Block Problems (d12)</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Roll</th>
+<th style="text-align: left;">Problem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;">A shared water line is giving only a brown
+trickle.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;">Someone is sleeping in the laundry room
+and stealing heat from the pipework.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;">A family from another level has been
+reassigned into an already crowded apartment.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;">The ration clerk’s ledger does not match
+the actual grain sacks.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;">A dead body cannot be moved until
+paperwork arrives, and everyone has to live around it.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">The hallway lights burn out and Supply
+says replacements are “pending.”</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;">A child found something metallic in a wall
+cavity and refuses to say where.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>8</strong></td>
+<td style="text-align: left;">A local deputy is shaking people down for
+“inspection fees.”</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>9</strong></td>
+<td style="text-align: left;">Mold creeps through an entire sleeping
+tier.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>10</strong></td>
+<td style="text-align: left;">The floor’s unofficial fixer vanishes with
+everyone’s chit box.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>11</strong></td>
+<td style="text-align: left;">A marriage permit is denied and both
+families blame each other.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>12</strong></td>
+<td style="text-align: left;">A known Friend of the Silo suddenly starts
+acting frightened instead of smug.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inspections-and-sweeps-d10">33.2 Inspections and Sweeps
+(d10)</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Roll</th>
+<th style="text-align: left;">Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;">A camera finally got repaired and
+immediately caught last week’s crime.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;">Supply reported impossible consumption
+numbers.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;">Someone talked too loudly after Pact
+Silence.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;">A black-market item surfaced in the wrong
+class of hands.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;">Judicial wants one arrest to remind the
+level who is in charge.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">A deputy lost face publicly and wants
+revenge disguised as duty.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;">Medical flagged a cluster of
+sedative-resistant citizens.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>8</strong></td>
+<td style="text-align: left;">A Porter carried a message they were not
+supposed to read.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>9</strong></td>
+<td style="text-align: left;">An air-scrubber fault provides perfect
+cover for a fishing expedition.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>10</strong></td>
+<td style="text-align: left;">The inspection is fake; the real target is
+elsewhere on the level.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="favors-people-ask-of-the-pcs-d12">33.3 Favors People Ask of the
+PCs (d12)</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Roll</th>
+<th style="text-align: left;">Favor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;">Carry a message without reading it.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;">Sit with a dying relative so the family
+can work their shift.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;">Find out whether a deputy can be
+bribed.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;">Hide a forbidden object for one night
+only.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;">Smuggle fresh water to someone under
+quarantine.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">Escort a child ten levels for a
+name-gifting ceremony.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;">Intimidate a landlord without making it
+look official.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>8</strong></td>
+<td style="text-align: left;">Bring a Mechanical part to a doctor who
+should not have it.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>9</strong></td>
+<td style="text-align: left;">Stand in a ration line for someone too
+injured to climb.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>10</strong></td>
+<td style="text-align: left;">Recover a body before Judicial turns it
+into an example.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>11</strong></td>
+<td style="text-align: left;">Deliver a forged form before dawn.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>12</strong></td>
+<td style="text-align: left;">Learn whether a missing worker ran away,
+was arrested, or was selected as an informant.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sudden-shortages-d10">33.4 Sudden Shortages (d10)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Roll</th>
+<th style="text-align: left;">Shortage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;">Lamp oil</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;">Filter cloth</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;">Antibiotics</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;">Rabbit feed</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;">Rivets</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">Boiler sealant</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;">Salt</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>8</strong></td>
+<td style="text-align: left;">Boots in common sizes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>9</strong></td>
+<td style="text-align: left;">Clean bandages</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>10</strong></td>
+<td style="text-align: left;">Good heat tape</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <p><strong>[END OF COMPREHENSIVE WORLD BIBLE]</strong></p>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
