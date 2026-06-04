@@ -53,12 +53,21 @@ info-theory-html:
 info-theory-all:
   cd info_theory_article && just all
 
+deep-learning-html:
+  cd deep_learning_primer && just html
+
+deep-learning-pdf:
+  cd deep_learning_primer && just pdf
+
+deep-learning-all:
+  cd deep_learning_primer && just all
+
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -70,4 +79,5 @@ clean-generated:
   cd claude_code_alternative && just clobber
   cd silo_rpg_primer && just silo-clobber
   cd info_theory_article && just clobber
+  cd deep_learning_primer && just clobber
   @echo "✓ Generated artifacts cleaned"
