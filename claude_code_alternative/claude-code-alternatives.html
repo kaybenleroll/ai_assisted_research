@@ -492,7 +492,11 @@ Survey of AI Coding Agents in 2026</span>
 Code Alternatives: A Comprehensive Survey of AI Coding Agents in
 2026</a>
 <ul>
-<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#introduction" id="toc-introduction">Introduction</a>
+<ul>
+<li><a href="#what-this-is-not" id="toc-what-this-is-not">What This Is
+Not</a></li>
+</ul></li>
 <li><a href="#the-ai-coding-agent-taxonomy" id="toc-the-ai-coding-agent-taxonomy">The AI Coding Agent
 Taxonomy</a></li>
 <li><a href="#part-i-cli-native-tools" id="toc-part-i-cli-native-tools">Part I: CLI-Native Tools</a>
@@ -608,6 +612,15 @@ path to a conclusion, jump to the <a href="#feature-comparison-matrix">Feature C
 and the <a href="#recommendations">Recommendations</a>. The deep-dive
 sections are there for when you need to evaluate a specific tool
 seriously.</p>
+<h3 id="what-this-is-not">What This Is Not</h3>
+<p>This survey covers tools that were verifiable and actively maintained
+as of early 2026. It does not cover tools no longer in active
+development, purely GUI-based editors with no API or CLI surface, or
+general-purpose LLM interfaces that happen to accept code. Cloud IDE
+platforms (Replit, Gitpod, etc.) are out of scope unless they offer a
+dedicated coding-agent mode. Claims in this document are marked verified
+or refuted based on direct testing; where a claim could not be verified,
+it is flagged.</p>
 <hr />
 <h2 id="the-ai-coding-agent-taxonomy">The AI Coding Agent Taxonomy</h2>
 <p>Before comparing tools, it helps to understand the four distinct
@@ -1051,7 +1064,7 @@ page)</li>
 <li>Any OpenAI-compatible API endpoint</li>
 </ul>
 <p><strong>OpenRouter setup:</strong></p>
-<pre><code>In VS Code: Open Cline extension settings
+<pre class="text"><code>In VS Code: Open Cline extension settings
 API Provider: OpenRouter
 API Key: sk-or-...
 Model: anthropic/claude-3.5-sonnet (or any OpenRouter model)</code></pre>
