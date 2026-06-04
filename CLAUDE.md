@@ -16,6 +16,7 @@ Each primer lives in its own subdirectory with a thin `Justfile` that sets varia
 
 **Primer directories:**
 - `building_ai_agents/`
+- `deep_learning_primer/`
 - `political_systems/`
 - `numerical_analysis_primer/`
 - `claude_code_alternative/`
@@ -62,6 +63,8 @@ import '../_shared/common.just'
 2. Add corresponding targets to the top-level `Justfile` (follow existing pattern).
 
 3. Do not add intermediates to git. Commit only `.md`, `Justfile`, `.html`, `.pdf`.
+
+4. **Update `README.md`** at the repo root — add a row to the appropriate table with the document title linked to its `.html` file. The README is the GitHub Pages landing page; every new document must appear there.
 
 ---
 
