@@ -2,7 +2,7 @@ SOURCE_MD   := "deep_learning_primer.md"
 PROJECT_DIR := "deep_learning_primer"
 TITLE       := "Deep Learning and Generative AI: A Technical Primer"
 AUTHOR      := "June 2026"
-HTML_EXTRA  := "--mathjax"
-PDF_EXTRA   := ""
+HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua"
+PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua"
 
 import '../_shared/common.just'
