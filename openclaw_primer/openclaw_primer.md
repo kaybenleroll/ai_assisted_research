@@ -159,6 +159,35 @@ openclaw gateway status --deep
 openclaw doctor
 ```
 
+### 6.7 Ollama-native quick setup
+
+The Podman bootstrapping flow above is the self-contained posture this guide emphasizes, but there is a faster path for users who already run Ollama and want a single-command launch. Ollama can drive OpenClaw directly, handling installation, model selection, and daemon startup in one step.
+
+```bash
+ollama launch openclaw
+```
+
+On first run this walks you through the full interactive setup:
+
+1. Installing OpenClaw via npm if it is not already present.
+2. A security notice explaining the tool-level access the agent will be granted.
+3. Model selection — local or cloud.
+4. Configuring your messaging provider(s) and starting the gateway daemon.
+
+For unattended starts — boot-time services or container launch — use the headless variant. `--yes` skips the interactive prompts and `--model` is required:
+
+```bash
+ollama launch openclaw --model qwen3.5 --yes
+```
+
+To stop the gateway:
+
+```bash
+openclaw gateway stop
+```
+
+This path trades some of the explicit container boundaries described above for convenience. It is a good fit for single-user local setups where you control the host directly.
+
 ## 7. Running OpenClaw with Local LLMs
 
 OpenClaw integrates with both native local providers and OpenAI-compatible proxy-style providers. Choosing between them is primarily about behavior guarantees and operational preference.
@@ -166,6 +195,17 @@ OpenClaw integrates with both native local providers and OpenAI-compatible proxy
 ### 7.1 Model selection and fallback semantics
 
 OpenClaw distinguishes configured defaults, auto-selected fallback state, and explicit user overrides. This is operationally important. Configured defaults can walk fallback chains. Explicit user selections are strict by design and fail visibly when unavailable.
+
+Model choice is not just a quality decision; it is a context-budget decision. OpenClaw is an agentic assistant that does multi-turn reasoning, calls tools, and processes long context, so the local model you pick needs room to work. Plan on at least a 64K token context window for local models running agentic workloads. Agent loops accumulate tool call results, conversation history, and web search output into context very quickly, and a model that cannot hold that working set will start truncating or failing mid-task.
+
+The following models are practical defaults for local-first operation, with two cloud entries kept as fallback:
+
+| Model | VRAM needed | Notes |
+|---|---|---|
+| `qwen3.5` (local) | ~11 GB | Reasoning, coding, vision — the local sweet spot |
+| `gemma4` (local) | ~16 GB | Strong reasoning and code |
+| `qwen3.5:cloud` | None local | Falls back to Ollama cloud; good for testing |
+| `kimi-k2.5:cloud` | None local | Multimodal reasoning with sub-agents |
 
 ### 7.2 Ollama
 
@@ -194,6 +234,30 @@ LiteLLM is valuable as an abstraction and routing layer over multiple model back
 ### 7.6 On-demand local services
 
 OpenClaw can also manage provider-local service startup via `localService` config, allowing heavyweight model services to spin up on demand instead of running continuously.
+
+### 7.7 Constrained hardware: partial GPU offloading
+
+The reason to run this on constrained hardware at all is not raw speed — you will not beat a hosted model on tokens per second. The benefit is privacy and persistence: local files, local databases, and MCP-connected tools, all under boundaries you own. On a 64 GB RAM / 6 GB VRAM laptop this is enough to run a practical roaming assistant with large retained context, which is often more valuable day-to-day than a faster model that forgets everything between sessions.
+
+That class of laptop cannot fully host the recommended OpenClaw models in 6 GB of VRAM, but 64 GB of RAM is plenty for a strong partial-offload setup: put as many layers as possible on the GPU and keep the rest on CPU/RAM.
+
+With llama.cpp, the `--n-gpu-layers` flag controls how many transformer layers go to the GPU. A 7B model has 32 layers; a 13B has 40. Loading 28 of 32 layers of a 7B Q4 model typically uses ~3.5–4 GB of VRAM, leaving KV-cache headroom, with the remaining layers on CPU. Your 64 GB of RAM is what absorbs large KV-cache growth during long agent loops — that headroom is the whole point.
+
+With Ollama, set the equivalent through a Modelfile:
+
+```bash
+cat > ~/qwen-laptop.Modelfile << 'EOF'
+FROM qwen2.5:7b-instruct-q4_K_M
+PARAMETER num_gpu 28
+PARAMETER num_ctx 65536
+PARAMETER num_thread 8
+EOF
+
+ollama create qwen-laptop -f ~/qwen-laptop.Modelfile
+ollama launch openclaw --model qwen-laptop
+```
+
+Expect roughly 8–15 tok/s for 7B Q4 with partial offload on a modern Intel/AMD laptop. Long-context prefill is slower, but interactive chat stays usable. Treat `num_thread 8` as a starting point and tune toward your physical core count — too many threads adds overhead rather than throughput.
 
 ## 8. Podman + Local LLMs: Containment Patterns
 
