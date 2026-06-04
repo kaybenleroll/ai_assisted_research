@@ -1,0 +1,130 @@
+SOURCE_MD   := "silo_index.md"
+PROJECT_DIR := "silo_rpg_primer"
+TITLE       := "Silo RPG"
+AUTHOR      := "Silo RPG"
+HTML_EXTRA  := ""
+PDF_EXTRA   := ""
+
+import '../_shared/common.just'
+
+# Multi-doc orchestration (shared html/pdf/all act on silo_index only)
+silo-html: silo-index-html silo-player-html silo-gm-html silo-bible-html silo-campaign-html
+silo-pdf: silo-index-pdf silo-player-pdf silo-gm-pdf silo-bible-pdf silo-campaign-pdf
+silo-all: silo-html silo-pdf
+
+silo-clobber:
+  rm -fv silo_index.html silo_index.pdf \
+         silo_player_guide.html silo_player_guide.pdf \
+         silo_gm_secrets.html silo_gm_secrets.pdf \
+         silo_comprehensive_bible.html silo_comprehensive_bible.pdf \
+         silo_starter_campaign.html silo_starter_campaign.pdf
+
+silo-index-html:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_index.md -o silo_index.html \
+    {{HTML_FLAGS_BASE}} \
+    --template="{{TEMPLATE}}" \
+    --metadata title="SILO RPG DOCUMENT INDEX" \
+    --metadata author="{{AUTHOR}}"
+
+silo-index-pdf:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_index.md -o silo_index.pdf \
+    {{PDF_FLAGS_BASE}} \
+    --include-in-header="{{COMPACT_LATEX}}" \
+    --metadata title="SILO RPG DOCUMENT INDEX" \
+    --metadata author="{{AUTHOR}}"
+
+silo-player-html:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_player_guide.md -o silo_player_guide.html \
+    {{HTML_FLAGS_BASE}} \
+    --template="{{TEMPLATE}}" \
+    --metadata title="SILO SYSTEM: PLAYER'S SURVIVAL GUIDE" \
+    --metadata author="{{AUTHOR}}"
+
+silo-player-pdf:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_player_guide.md -o silo_player_guide.pdf \
+    {{PDF_FLAGS_BASE}} \
+    --include-in-header="{{COMPACT_LATEX}}" \
+    --metadata title="SILO SYSTEM: PLAYER'S SURVIVAL GUIDE" \
+    --metadata author="{{AUTHOR}}"
+
+silo-gm-html:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_gm_secrets.md -o silo_gm_secrets.html \
+    {{HTML_FLAGS_BASE}} \
+    --template="{{TEMPLATE}}" \
+    --metadata title="SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE" \
+    --metadata author="{{AUTHOR}}"
+
+silo-gm-pdf:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_gm_secrets.md -o silo_gm_secrets.pdf \
+    {{PDF_FLAGS_BASE}} \
+    --include-in-header="{{COMPACT_LATEX}}" \
+    --metadata title="SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE" \
+    --metadata author="{{AUTHOR}}"
+
+silo-bible-html:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_comprehensive_bible.md -o silo_comprehensive_bible.html \
+    {{HTML_FLAGS_BASE}} \
+    --template="{{TEMPLATE}}" \
+    --metadata title="SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)" \
+    --metadata author="{{AUTHOR}}"
+
+silo-bible-pdf:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_comprehensive_bible.md -o silo_comprehensive_bible.pdf \
+    {{PDF_FLAGS_BASE}} \
+    --include-in-header="{{COMPACT_LATEX}}" \
+    --metadata title="SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)" \
+    --metadata author="{{AUTHOR}}"
+
+silo-campaign-html:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_starter_campaign.md -o silo_starter_campaign.html \
+    {{HTML_FLAGS_BASE}} \
+    --template="{{TEMPLATE}}" \
+    --metadata title="SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES" \
+    --metadata author="{{AUTHOR}}"
+
+silo-campaign-pdf:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    silo_starter_campaign.md -o silo_starter_campaign.pdf \
+    {{PDF_FLAGS_BASE}} \
+    --include-in-header="{{COMPACT_LATEX}}" \
+    --metadata title="SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES" \
+    --metadata author="{{AUTHOR}}"
