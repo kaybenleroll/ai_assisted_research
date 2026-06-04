@@ -41,12 +41,24 @@ catmodel-html-dev:
 catmodel-html-full:
   cd catmodel_elt_documents && just render-full-container
 
+silo-html:
+  cd silo_rpg_primer && just silo-html
+
+silo-all:
+  cd silo_rpg_primer && just silo-all
+
+info-theory-html:
+  cd info_theory_article && just html
+
+info-theory-all:
+  cd info_theory_article && just all
+
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -56,4 +68,6 @@ clean-generated:
   cd openclaw_primer && just clobber
   cd research_local_llms && just clobber
   cd claude_code_alternative && just clobber
+  cd silo_rpg_primer && just silo-clobber
+  cd info_theory_article && just clobber
   @echo "✓ Generated artifacts cleaned"
