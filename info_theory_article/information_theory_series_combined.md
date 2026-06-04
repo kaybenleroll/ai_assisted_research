@@ -191,9 +191,7 @@ Now imagine a completely random string of a thousand zeroes of ones; one that do
 
 "Kolmogorov complexity is misnamed because really it just measures patternlessness," says [Scott Aaronson](http://scottaaronson.com/), a computer scientist at the Massachusetts Institute of Technology. "If we are actually trying to measures complexity, we need something that is small for very simple strings and also small for completely patternless strings. Then there should be some third class of strings for which that measure is not small."
 
-As an example, look at the string
-
-000011111100110011.
+As an example, look at the string `000011111100110011`.
 
 Does it contain a pattern? After staring at it for a while, you'll probably spot that it's made out of double bits 00 and 11 - you never see a 0 or a 1 occur alone. The order in which the 00s and 11s occur, however, seems random. Perhaps a measure of complexity and/or information should evaluate the amount of structure within this string, the doubling of bits, ignoring the random part. That way, completely random strings would have a low complexity value, as they have no structure at all, and so would strings with a very simple structure. Strings that contain more complex patterns would have a higher value.
 
