@@ -2881,7 +2881,7 @@ This tiny pipeline captures a very common real-world pattern: you have a model w
 
 ---
 
-## Where to Go Deeper Next
+## Further Reading and Resources
 
 Each topic in this primer is a doorway into a much larger field.
 
@@ -2889,39 +2889,36 @@ Each topic in this primer is a doorway into a much larger field.
 
 **Advanced linear algebra** covers Krylov subspace theory in depth, preconditioner design, iterative refinement, and randomized methods for large-scale matrix problems. Trefethen and Bau is the best single reference.
 
-**Inverse problems and regularization** covers Tikhonov regularization, Bayesian inference, total variation methods, and the theory of ill-posed problems. Any time you are fitting a model to data, you are brushing up against this.
+**Eigenvalue problems** extend well beyond the basic power iteration covered here. Shift-and-invert strategies, the QR algorithm, and Krylov-based methods such as Arnoldi and Lanczos are the tools of choice at scale. Parlett's *The Symmetric Eigenvalue Problem* is the definitive rigorous treatment.
+
+**Inverse problems and regularization** covers Tikhonov regularization, Bayesian inference, total variation methods, and the theory of ill-posed problems. Any time you are fitting a model to data, you are brushing up against this. Hastie, Tibshirani, and Friedman's *The Elements of Statistical Learning* covers the machine learning angle thoroughly.
 
 **Uncertainty quantification** addresses how to propagate uncertainty from inputs to outputs, covering Monte Carlo methods, polynomial chaos expansions, and sensitivity analysis. It is increasingly central to any serious computational modeling workflow.
 
-**Automatic differentiation** has transformed numerical optimization and machine learning by making exact derivative computation of essentially arbitrary programs practical. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood.
+**Automatic differentiation** has transformed numerical optimization and machine learning by making exact derivative computation of essentially arbitrary programs practical. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood. Griewank and Walther's *Evaluating Derivatives* is the rigorous reference.
 
 **High-performance computing** covers everything that happens when problems are too large for a single core: memory hierarchy effects, cache-friendly data layouts, parallelization strategies, and GPU-aware algorithms.
 
----
-
-## Reading List (Practical + Rigorous)
-
 For rigorous theoretical foundations:
-
 
 1. Burden and Faires, *Numerical Analysis* — the standard undergraduate text; broad, accessible, and proof-based.
 2. Trefethen and Bau, *Numerical Linear Algebra* — beautifully written, focused on the linear algebra core, short enough to read cover-to-cover.
 3. Golub and Van Loan, *Matrix Computations* — the comprehensive reference for everything matrix-related.
-4. Sauer, *Numerical Analysis* — a good alternative undergraduate text with more computational flavor.
-5. Hairer, Norsett, and Wanner, *Solving Ordinary Differential Equations I* — the definitive treatment of non-stiff ODE methods.
-6. Quarteroni, Sacco, and Saleri, *Numerical Mathematics* — rigorous and broad, good for graduate study.
-
+4. Parlett, *The Symmetric Eigenvalue Problem* — the definitive treatment of eigenvalue algorithms.
+5. Griewank and Walther, *Evaluating Derivatives* — the standard reference for automatic differentiation, covering both forward and reverse mode in depth.
+6. Hastie, Tibshirani, and Friedman, *The Elements of Statistical Learning* — covers regularization, shrinkage, and model selection from a statistical learning perspective.
+7. Sauer, *Numerical Analysis* — a good alternative undergraduate text with more computational flavor.
+8. Hairer, Norsett, and Wanner, *Solving Ordinary Differential Equations I* — the definitive treatment of non-stiff ODE methods.
+9. Quarteroni, Sacco, and Saleri, *Numerical Mathematics* — rigorous and broad, good for graduate study.
 
 For practical coding references:
 
 1. NumPy and SciPy official documentation — well-written and full of worked examples.
 2. R documentation for base numerical routines, plus the deSolve and optim package vignettes.
 3. Julia documentation, plus the DifferentialEquations.jl, Optim.jl, and LsqFit.jl package docs — often the most detailed and most modern of the three.
-
+4. JAX documentation and the "Autodiff Cookbook" — the clearest practical introduction to automatic differentiation in a production framework.
 
 ---
-
-## Closing Notes
 
 Numerical analysis can look intimidating at first because it sits at the intersection of mathematics, software engineering, and domain modeling. The notation can be dense, the failure modes are subtle, and a lot of the literature assumes significant mathematical background.
 
@@ -2936,6 +2933,5 @@ Five questions worth keeping in your head:
 3. Is my algorithm stable enough for this problem and this precision requirement?
 4. Do my diagnostics — residuals, convergence rates, cross-checks — support trusting this result?
 5. Given the structure, scale, and constraints, is there a better-suited approach I haven't considered?
-
 
 Ask these every time. The answers are not always comfortable, but they are almost always useful.

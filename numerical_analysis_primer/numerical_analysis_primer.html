@@ -809,10 +809,8 @@ R</a></li>
 <li><a href="#julia" id="toc-julia"><span class="toc-section-number">18.4</span> Julia</a></li>
 <li><a href="#why-this-pattern-matters" id="toc-why-this-pattern-matters"><span class="toc-section-number">18.5</span> Why This Pattern Matters</a></li>
 </ul></li>
-<li><a href="#where-to-go-deeper-next" id="toc-where-to-go-deeper-next"><span class="toc-section-number">19</span> Where to Go Deeper Next</a></li>
-<li><a href="#reading-list-practical-rigorous" id="toc-reading-list-practical-rigorous"><span class="toc-section-number">20</span> Reading List (Practical +
-Rigorous)</a></li>
-<li><a href="#closing-notes" id="toc-closing-notes"><span class="toc-section-number">21</span> Closing Notes</a></li>
+<li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources"><span class="toc-section-number">19</span> Further Reading and
+Resources</a></li>
 </ul></div>
 
     </aside>
@@ -5034,7 +5032,8 @@ parameters, and practical constraints, and you are in systems biology,
 climate calibration, or pharmacokinetics. The loop remains the same:
 solve forward, compare with data, update parameters, repeat.</p>
 <hr />
-<h1 data-number="19" id="where-to-go-deeper-next"><span class="header-section-number">19</span> Where to Go Deeper Next</h1>
+<h1 data-number="19" id="further-reading-and-resources"><span class="header-section-number">19</span> Further Reading and
+Resources</h1>
 <p>Each topic in this primer is a doorway into a much larger field.</p>
 <p><strong>PDE numerics</strong> is the natural extension of ODE methods
 to problems with spatial variation. Finite difference, finite volume,
@@ -5046,10 +5045,17 @@ computational science.</p>
 theory in depth, preconditioner design, iterative refinement, and
 randomized methods for large-scale matrix problems. Trefethen and Bau is
 the best single reference.</p>
+<p><strong>Eigenvalue problems</strong> extend well beyond the basic
+power iteration covered here. Shift-and-invert strategies, the QR
+algorithm, and Krylov-based methods such as Arnoldi and Lanczos are the
+tools of choice at scale. Parlett’s <em>The Symmetric Eigenvalue
+Problem</em> is the definitive rigorous treatment.</p>
 <p><strong>Inverse problems and regularization</strong> covers Tikhonov
 regularization, Bayesian inference, total variation methods, and the
 theory of ill-posed problems. Any time you are fitting a model to data,
-you are brushing up against this.</p>
+you are brushing up against this. Hastie, Tibshirani, and Friedman’s
+<em>The Elements of Statistical Learning</em> covers the machine
+learning angle thoroughly.</p>
 <p><strong>Uncertainty quantification</strong> addresses how to
 propagate uncertainty from inputs to outputs, covering Monte Carlo
 methods, polynomial chaos expansions, and sensitivity analysis. It is
@@ -5058,14 +5064,12 @@ increasingly central to any serious computational modeling workflow.</p>
 optimization and machine learning by making exact derivative computation
 of essentially arbitrary programs practical. Understanding forward and
 reverse mode AD gives you a much clearer picture of what tools like
-PyTorch and JAX are actually doing under the hood.</p>
+PyTorch and JAX are actually doing under the hood. Griewank and
+Walther’s <em>Evaluating Derivatives</em> is the rigorous reference.</p>
 <p><strong>High-performance computing</strong> covers everything that
 happens when problems are too large for a single core: memory hierarchy
 effects, cache-friendly data layouts, parallelization strategies, and
 GPU-aware algorithms.</p>
-<hr />
-<h1 data-number="20" id="reading-list-practical-rigorous"><span class="header-section-number">20</span> Reading List (Practical +
-Rigorous)</h1>
 <p>For rigorous theoretical foundations:</p>
 <ol type="1">
 <li>Burden and Faires, <em>Numerical Analysis</em> — the standard
@@ -5075,6 +5079,14 @@ written, focused on the linear algebra core, short enough to read
 cover-to-cover.</li>
 <li>Golub and Van Loan, <em>Matrix Computations</em> — the comprehensive
 reference for everything matrix-related.</li>
+<li>Parlett, <em>The Symmetric Eigenvalue Problem</em> — the definitive
+treatment of eigenvalue algorithms.</li>
+<li>Griewank and Walther, <em>Evaluating Derivatives</em> — the standard
+reference for automatic differentiation, covering both forward and
+reverse mode in depth.</li>
+<li>Hastie, Tibshirani, and Friedman, <em>The Elements of Statistical
+Learning</em> — covers regularization, shrinkage, and model selection
+from a statistical learning perspective.</li>
 <li>Sauer, <em>Numerical Analysis</em> — a good alternative
 undergraduate text with more computational flavor.</li>
 <li>Hairer, Norsett, and Wanner, <em>Solving Ordinary Differential
@@ -5092,9 +5104,11 @@ optim package vignettes.</li>
 <li>Julia documentation, plus the DifferentialEquations.jl, Optim.jl,
 and LsqFit.jl package docs — often the most detailed and most modern of
 the three.</li>
+<li>JAX documentation and the “Autodiff Cookbook” — the clearest
+practical introduction to automatic differentiation in a production
+framework.</li>
 </ol>
 <hr />
-<h1 data-number="21" id="closing-notes"><span class="header-section-number">21</span> Closing Notes</h1>
 <p>Numerical analysis can look intimidating at first because it sits at
 the intersection of mathematics, software engineering, and domain
 modeling. The notation can be dense, the failure modes are subtle, and a
