@@ -393,7 +393,7 @@ This Plan/Act split allows you to review the strategy before any files are modif
 
 **OpenRouter setup:**
 
-```
+```text
 In VS Code: Open Cline extension settings
 API Provider: OpenRouter
 API Key: sk-or-...

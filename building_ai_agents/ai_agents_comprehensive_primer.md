@@ -78,7 +78,7 @@ Another way to think about this: the model is very good at choosing the next bes
 Here's where the magic happens. Instead of just asking an LLM to "solve this problem," you structure the interaction so the LLM outputs **instructions for what to do next**.
 
 **Example 1: Simple tool use**
-```
+```text
 System prompt: "You are an agent. You can call these tools:
 - search(query): searches the web
 - read_file(path): reads a file
@@ -161,7 +161,7 @@ Let's walk through a real example to see this in action.
 - Goal: Resolve the issue and customer satisfaction
 
 **Iteration 1:**
-```
+```text
 Prompt sent to LLM:
 "You are a customer support agent. Task: Handle customer complaint about order #12345
 Available tools: get_order(), check_inventory(), apply_refund(), send_email()
@@ -187,7 +187,7 @@ System executes: Returns order details
 ```
 
 **Iteration 2:**
-```
+```text
 Prompt sent to LLM:
 "Previous context:
 - Retrieved order #12345: Widget A and Widget B, delivered May 15
@@ -207,7 +207,7 @@ System executes: Returns inventory status
 ```
 
 **Iteration 3:**
-```
+```text
 Prompt sent to LLM:
 "Previous context:
 - Order #12345: Widget A (broken) and Widget B (delivered May 15)
@@ -228,7 +228,7 @@ System executes: Returns confirmation
 ```
 
 **Iteration 4:**
-```
+```text
 Prompt sent to LLM:
 "Previous context:
 - Order #12345: Widget A (broken) and Widget B
@@ -251,7 +251,7 @@ System executes: Email sent successfully
 ```
 
 **Iteration 5:**
-```
+```text
 Prompt sent to LLM:
 "Previous context:
 - Order #12345: Widget A (broken) and Widget B
@@ -325,7 +325,7 @@ Inconsistent return shapes silently break agent behavior. If one response says `
 **4. Proper Error Handling**
 When a tool fails (API timeout, database error, permission denied), it should return a clear error message the LLM can reason about:
 
-```
+```text
 Tool call failed:
 search_orders(query="john@example.com", limit=10)
 Error: "Database connection timeout. Please retry."
@@ -362,14 +362,14 @@ Most production agents combine all three categories. Retrieval gets facts, analy
 ### Tool Orchestration Patterns
 
 **Sequential:** Do one thing, then another
-```
+```text
 1. search_orders() → find order
 2. check_inventory() → see if replacement available
 3. apply_refund() → process refund
 ```
 
 **Parallel:** Do multiple independent tasks at once
-```
+```text
 In parallel:
 - check_inventory(item_A)
 - check_inventory(item_B)
@@ -377,7 +377,7 @@ In parallel:
 ```
 
 **Conditional:** Do X if condition, otherwise do Y
-```
+```text
 If inventory_available:
   - ship_replacement()
 Else:
@@ -406,7 +406,7 @@ LLMs have a "context window"—a limit on how much text they can process in one 
 
 For a customer support agent handling orders, this seems huge. But consider:
 
-```
+```text
 System prompt (instructions):        2,000 tokens
 Tool definitions (5 tools):          1,000 tokens
 Conversation history (10 messages):  3,000 tokens
@@ -454,7 +454,7 @@ Memory design is ultimately product design. You're deciding what the agent remem
 ### Managing Memory in Practice
 
 **Summarization:** When context gets long, ask the LLM to summarize:
-```
+```text
 "So far you have:
 1. Found order #12345 (customer: john@example.com)
 2. Identified issue: broken Widget A
@@ -466,7 +466,7 @@ Continue with: Send customer notification"
 
 **Retrieval-Augmented Generation (RAG):** Instead of storing all history, store key facts in a database and retrieve what's relevant:
 
-```
+```text
 Agent thinking: "I need to help with Widget A"
 System searches vector database:
 - Returns: "Widget A: Premium model, $29.99, ships in 2 days"
@@ -502,7 +502,7 @@ A practical default policy:
 
 One of the most effective patterns for autonomous agents is **ReAct**: the agent alternates between **Reasoning** (thinking through what to do) and **Acting** (calling tools).
 
-```
+```text
 Agent prompt structure:
 "Thought: Let me think about what to do...
 I need to [reasoning about approach]
@@ -548,7 +548,7 @@ Concrete planning example (travel rebooking agent):
 
 Autonomous agents fail. Good agents **recover gracefully**:
 
-```
+```text
 Tool call fails:
   search_database() timeout
 
@@ -648,7 +648,7 @@ Quick selection heuristic:
 **The Problem:** LLMs sometimes generate confidently incorrect information or tool calls.
 
 Example:
-```
+```text
 Agent thinks: "Let me search for order #XYZ999"
 Calls: search_orders(query="XYZ999")
 LLM had completely made up this order ID
@@ -682,7 +682,7 @@ If you need a short operating principle: summarize early, summarize often, and n
 
 **The Problem:** Each LLM call costs money and takes time. A 10-step agent task = 10 LLM calls.
 
-```
+```text
 1 LLM call: ~0.5 seconds, $0.001
 Agent task (10 steps): ~5 seconds, $0.01
 Agent running all day: thousands of calls, dollars per day
@@ -748,7 +748,7 @@ These are much easier to evaluate than open-ended research agents.
 
 **Example:**
 ```python
-# First agent: Weather information retriever
+### First agent: Weather information retriever
 Tools:
   - search_weather_api(city)
   - format_report(data)
@@ -940,7 +940,7 @@ That is already a meaningful business win.
 - They coordinate to solve problems
 
 **Agentic Loops with Reflection:** Agents evaluate their own work and revise:
-```
+```text
 1. Agent generates first draft of response
 2. Agent reviews: "Is this right? Did I miss anything?"
 3. Agent revises based on self-review

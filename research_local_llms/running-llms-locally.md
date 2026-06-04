@@ -12,6 +12,8 @@ It is written for someone who is new to both large language models (LLMs) and co
 
 We will not prescribe a single solution. We will map the territory.
 
+## Introduction
+
 ### How This Guide Is Structured
 
 To keep this practical, the guide is arranged as one flow:
@@ -717,7 +719,7 @@ OpenClaw is the "last-mile" gateway: your model runs locally, but you can intera
 
 OpenClaw runs a persistent local gateway. Messages are relayed from chat apps to your local model backend and returned as replies:
 
-```
+```text
 Your phone -> messaging service -> OpenClaw gateway (your machine) -> Ollama -> model
                                                                                  |
 Your phone <- messaging service <- OpenClaw gateway <----------------------- response
