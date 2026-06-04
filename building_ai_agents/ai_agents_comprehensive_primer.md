@@ -2,6 +2,14 @@
 
 ## Introduction
 
+### What This Covers
+
+This primer covers how autonomous AI agents work at a technical level: the execution loop, tool use, memory management, multi-agent patterns, and common failure modes. It walks through design decisions you will face when building agents that act reliably in the real world, and includes a worked end-to-end example.
+
+### What This Is Not
+
+This is not a guide to training or fine-tuning LLMs. It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
+
 When you hear about AI agents doing autonomous work—making API calls, retrieving data, making decisions, and executing complex workflows—you're likely hearing about a fascinating but often misunderstood technology. The core confusion typically stems from a simple question: *if AI systems like large language models (LLMs) are trained to generate text, how do they become agents that actually do things?*
 
 The answer is elegantly simple: **LLMs don't become agents by themselves. Instead, they become the reasoning engine inside a larger system that combines their decision-making capabilities with tools, memory, and structured processes.** This primer explains how that system works, why it's powerful, and what you need to understand to build one.

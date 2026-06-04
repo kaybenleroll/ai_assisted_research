@@ -15,6 +15,10 @@ This document surveys the entire landscape of AI coding agents available as of m
 
 **How to read this document:** If you want the fastest path to a conclusion, jump to the [Feature Comparison Matrix](#feature-comparison-matrix), the [Provider Flexibility Analysis](#provider-flexibility-analysis), and the [Recommendations](#recommendations). The deep-dive sections are there for when you need to evaluate a specific tool seriously.
 
+### What This Is Not
+
+This survey covers tools that were verifiable and actively maintained as of early 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Claims in this document are marked verified or refuted based on direct testing; where a claim could not be verified, it is flagged.
+
 ---
 
 ## The AI Coding Agent Taxonomy

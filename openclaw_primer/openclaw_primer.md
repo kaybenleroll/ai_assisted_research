@@ -14,7 +14,11 @@ When people first hear “OpenClaw,” they can land on two completely different
 
 The second source of confusion is that the ecosystem around personal AI assistants has become noisy. Most guides either stay at marketing language or collapse into short install checklists that do not prepare you for real operation. In practice, the first five minutes are not the hard part. The hard part begins when you need to choose model routing rules, define tool execution boundaries, safely expose channels, manage persistent state, and recover quickly when something fails.
 
-This primer is written to bridge that gap. It is intentionally long-form and operationally grounded. By the end, you should have three things: a clear mental model of what OpenClaw is, practical patterns for how people actually use it, and a container-first setup path that keeps the host surface area as small and explicit as possible.
+This primer is written to bridge that gap. It is intentionally long-form and operationally grounded.
+
+### What This Covers
+
+By the end, you should have three things: a clear mental model of what OpenClaw is, practical patterns for how people actually use it, and a container-first setup path that keeps the host surface area as small and explicit as possible.
 
 ## 2. What OpenClaw Is Used For
 

@@ -1,5 +1,13 @@
 # Introduction
 
+### What This Covers
+
+Ten European national electoral systems: how each converts votes into seats, how seats translate into governments, and how the design of each system shapes political outcomes in practice. The primer includes comparative analysis, worked numerical examples, and a framework for evaluating coalition risk.
+
+### What This Is Not
+
+This is not a complete history of electoral-system evolution, and it makes no argument for which system is best. It is not a guide to voting as a citizen in any particular country. The EU Parliament election process is used as contextual scaffolding, but this primer is about domestic systems, not the EU legislature itself.
+
 European voting systems are different ways of solving the same problem: turning votes into seats and seats into governments. They optimize for different priorities, including proportional fairness, local MP accountability, party control, and coalition stability. That is why systems that look similar on paper can produce very different political outcomes.
 
 If you want the short version, the real argument underneath almost every European system is this: how much should the system reward a clear winner, and how much should it try to mirror the actual shape of the vote? Once you see that trade-off, the rest of the map gets easier to read.
