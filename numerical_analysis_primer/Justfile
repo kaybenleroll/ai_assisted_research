@@ -1,9 +1,21 @@
 SOURCE_MD   := "numerical_analysis_primer.md"
 PROJECT_DIR := "numerical_analysis_primer"
 TITLE       := "Numerical Analysis Primer: A Practical Guide for Practitioners"
-AUTHOR      := "May 2026"
-HTML_EXTRA  := "--mathjax"
-PDF_EXTRA   := ""
+AUTHOR      := "June 2026"
+HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua"
+PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua"
+ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
+
+# Generate R figures (inside rocker container)
+plots:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{ROCKER}} \
+    Rscript generate_plots.R
+
+# Generate figures then render both HTML and PDF
+full: plots html pdf
 
 import '../_shared/common.just'
 
