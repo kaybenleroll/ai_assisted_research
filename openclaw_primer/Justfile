@@ -1,0 +1,8 @@
+SOURCE_MD   := "openclaw_primer.md"
+PROJECT_DIR := "openclaw_primer"
+TITLE       := "OpenClaw Primer: A Comprehensive, Podman-First Guide"
+AUTHOR      := "28 May 2026"
+HTML_EXTRA  := ""
+PDF_EXTRA   := ""
+
+import '../_shared/common.just'

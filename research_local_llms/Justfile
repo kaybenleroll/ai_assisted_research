@@ -1,0 +1,8 @@
+SOURCE_MD   := "running-llms-locally.md"
+PROJECT_DIR := "research_local_llms"
+TITLE       := "Running LLMs Locally: A Complete Beginner's Landscape"
+AUTHOR      := "May 2026"
+HTML_EXTRA  := ""
+PDF_EXTRA   := ""
+
+import '../_shared/common.just'
