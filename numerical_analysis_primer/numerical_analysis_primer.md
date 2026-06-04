@@ -60,6 +60,18 @@ Iterative methods produce a sequence of approximations, often improving until a 
 
 Iterative methods become attractive — and often necessary — when problems outgrow what direct factorization can handle. For very large or sparse systems, forming and storing a dense factorization is simply infeasible: memory costs scale quadratically or worse, and fill-in during factorization can destroy the sparsity that made the problem tractable to begin with. Iterative methods sidestep this by working entirely through matrix-vector products, which remain cheap if the matrix is sparse or structured. The payoff is a controllable trade-off between accuracy and runtime: you can stop early if a rough answer suffices, or iterate longer to tighten the result. Conjugate gradient and GMRES are the two workhorses of iterative linear algebra. Newton iterations, fixed-point iterations, and gradient-based optimization methods all belong in this family too, even when the underlying problem is not a linear system.
 
+
+```mermaid
+flowchart TD
+    Q{Problem size\nand structure?}
+    Q --> |"Small/medium n,\ndense matrix"| D["Direct method\n(LU, Cholesky, QR)"]
+    Q --> |"Large n,\nsparse matrix"| I["Iterative method\n(CG, GMRES, multigrid)"]
+    D --> R["Exact result\n(up to rounding)"]
+    I --> RI["Approximate result\n(converges to tolerance)"]
+```
+
+The diagram summarises the first design decision in linear algebra: whether you commit to a finite factorisation or build an iteration that converges to a stopping criterion. Problem size and sparsity pattern are the primary signals, but the consequence of the choice — deterministic completion versus controllable approximation — is what matters most downstream.
+
 ### 2.2 Deterministic vs Stochastic Methods
 
 #### Deterministic
@@ -180,6 +192,28 @@ Same math, very different floating-point behavior.
 The finite range of floating-point representation creates boundary conditions that are easy to overlook until they cause problems. **Overflow** occurs when a number is too large to be represented; in IEEE 754 arithmetic, the result typically becomes infinity, which then propagates through subsequent calculations in ways that can be confusing to diagnose. **Underflow** is the opposite problem: a number too close to zero may flush to zero entirely, silently discarding a small but potentially meaningful quantity. Before complete underflow, numbers enter the **subnormal** range, where the mantissa leading bit is no longer assumed to be one, extending the representable range near zero but with progressively fewer significant digits.
 
 These edge cases rarely matter in simple computations, but in long iterative loops — ODE integrators, optimization methods, matrix iterations — they can silently corrupt intermediate quantities in ways that produce plausible-looking but wrong final results. Building checks for infinities and NaNs into iterative code is a cheap safeguard that pays off consistently.
+
+
+### Single vs Double Precision in Practice
+
+The default in almost all scientific code is double precision (float64), but there are real situations where single precision (float32) is the right call, and a handful where even double is not enough. Knowing the difference matters before you hit one of those situations.
+
+The basic numbers:
+
+| Type | Bits | Exponent bits | Mantissa bits | Approx. range | Machine epsilon | Throughput note |
+|---|---|---|---|---|---|---|
+| float32 | 32 | 8 | 23 | ±3.4 × 10³⁸ | ~1.2 × 10⁻⁷ | 2–4× faster on GPUs; half memory |
+| float64 | 64 | 11 | 52 | ±1.8 × 10³⁰⁸ | ~2.2 × 10⁻¹⁶ | Standard for most scientific work |
+
+Float32 is acceptable when throughput or memory is the binding constraint and you are not accumulating errors over many operations. Machine-learning inference is the clearest case: modern GPUs execute float32 at two to four times the throughput of float64, and cutting precision in half also halves memory bandwidth. For neural-network inference, where you are doing one forward pass on fixed weights, the rounding errors rarely matter. The same logic applies to iterative refinement workflows, where you can run the inner iterations cheaply in float32 and apply a correction pass in float64 — you get most of the speed gain without surrendering final accuracy. Graphics pipelines have used float32 by default for decades for the same reason.
+
+Float64 is non-negotiable in several categories. Any computation where errors accumulate over thousands of steps — ODE integration with tight tolerances, eigenvalue solvers on ill-conditioned matrices, long Markov-chain simulations — benefits from the extra fifteen digits of relative precision. Any problem whose condition number approaches $10^7$ or above is spending float32's entire precision budget just on conditioning, leaving nothing for the computation itself. And whenever you are comparing against published numerical benchmarks, you should match their precision to avoid false discrepancies.
+
+#### Rounding modes
+
+IEEE 754 defines four rounding modes. The default is round-to-nearest-even, sometimes called banker's rounding. The "even" refers to the tiebreaking rule: when a result is exactly halfway between two representable values, the mode rounds to whichever one has a zero in the least-significant mantissa bit. This alternates rounding direction depending on the value and eliminates the systematic upward bias that plain round-half-up produces over many operations.
+
+The other modes are round-toward-zero (truncation toward the origin), round-up (ceiling), and round-down (floor). These are mainly useful in interval arithmetic, where you deliberately round lower bounds down and upper bounds up to guarantee containment. In normal scientific computing, the default round-to-nearest-even is almost always correct, and changing it requires both a deliberate decision and hardware/compiler support that varies across environments.
 
 ### 3.5 Idiomatic Language Notes
 
@@ -381,6 +415,86 @@ A robust stopping rule combines both: check that the residual is below tolerance
 $$|f(x_n)| < \tau_f \quad \text{and} \quad |x_n - x_{n-1}| < \tau_x (1 + |x_n|)$$
 
 The iteration cap should be generous enough that it only triggers for genuinely non-converging runs, not for difficult but solvable problems. And when the cap is hit, the code should signal it clearly rather than silently returning an under-converged result.
+
+
+### Newton's Method for Systems
+
+Scalar Newton's method generalises cleanly to systems of equations, but the generalisation introduces new failure modes and practical design choices that are worth understanding explicitly.
+
+The problem is: find $\mathbf{x}^* \in \mathbb{R}^n$ such that $F(\mathbf{x}^*) = \mathbf{0}$, where $F : \mathbb{R}^n \to \mathbb{R}^n$. Each component of $F$ is one equation; you have $n$ equations in $n$ unknowns.
+
+The Newton step at iterate $\mathbf{x}_k$ is:
+
+$$\mathbf{J}_F(\mathbf{x}_k)\,\delta\mathbf{x}_k = -F(\mathbf{x}_k), \qquad \mathbf{x}_{k+1} = \mathbf{x}_k + \delta\mathbf{x}_k$$
+
+where $\mathbf{J}_F(\mathbf{x}_k)$ is the $n \times n$ Jacobian matrix with entries $[\mathbf{J}_F]_{ij} = \partial F_i / \partial x_j$. The critical implementation note is that you should never invert the Jacobian. Computing $\mathbf{J}_F^{-1}$ explicitly costs $O(n^3)$, is numerically worse than factorisation, and throws away the structure of the system. Instead, solve the linear system using LU or Cholesky, and if you need multiple right-hand sides with the same Jacobian, factor once and reuse.
+
+**Why it converges quadratically.** Expand $F(\mathbf{x}^*)$ around $\mathbf{x}_k$:
+
+$$\mathbf{0} = F(\mathbf{x}^*) = F(\mathbf{x}_k) + \mathbf{J}_F(\mathbf{x}_k)(\mathbf{x}^* - \mathbf{x}_k) + O(\|\mathbf{x}^* - \mathbf{x}_k\|^2)$$
+
+Rearranging and defining the error $\mathbf{e}_k = \mathbf{x}^* - \mathbf{x}_k$:
+
+$$\mathbf{J}_F(\mathbf{x}_k)\mathbf{e}_k = -F(\mathbf{x}_k) + O(\|\mathbf{e}_k\|^2)$$
+
+The Newton step solves $\mathbf{J}_F(\mathbf{x}_k)\delta\mathbf{x}_k = -F(\mathbf{x}_k)$ exactly, so $\delta\mathbf{x}_k = \mathbf{e}_k + O(\|\mathbf{e}_k\|^2)$, and the error at the next step is $\mathbf{e}_{k+1} = \mathbf{e}_k - \delta\mathbf{x}_k = O(\|\mathbf{e}_k\|^2)$. The error squared is the signature of quadratic convergence.
+
+**Practical pitfalls.** A singular or near-singular Jacobian at some iterate means the linear system is ill-conditioned and the Newton step is unreliable — this happens when the initial guess is poor or the problem itself is degenerate near a bifurcation point. A bad initial guess can send the iteration into a region where the Jacobian is singular or where the quadratic model is misleading; unlike scalar Newton, there is no simple bracketing safety net in multiple dimensions. Global convergence is not guaranteed without additional structure: you can add a line search (accept the step only if it reduces $\|F(\mathbf{x})\|_2$) or a trust-region constraint to the step size, but neither is trivial to implement reliably.
+
+**Broyden's method.** When the Jacobian is expensive to evaluate — perhaps because $F$ involves a simulation or a long numerical computation — you can use a quasi-Newton update that avoids re-evaluating $\mathbf{J}_F$ at each step. Broyden's method maintains an approximate Jacobian $\mathbf{J}_k$ and updates it with a rank-1 correction after each step:
+
+$$\mathbf{J}_{k+1} = \mathbf{J}_k + \frac{\bigl(F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k) - \mathbf{J}_k \mathbf{s}_k\bigr)\mathbf{s}_k^T}{\|\mathbf{s}_k\|^2}$$
+
+where $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$. The update is designed so that $\mathbf{J}_{k+1}\mathbf{s}_k = F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k)$, which is the secant condition in multiple dimensions. Convergence is superlinear rather than quadratic, but the cost per step is much lower when Jacobian evaluations are expensive.
+
+**Code examples.** For a concrete system, consider:
+
+$$F_1(x_1, x_2) = x_1^2 + x_2^2 - 4, \qquad F_2(x_1, x_2) = x_1 x_2 - 1$$
+
+**Python**
+```python
+import numpy as np
+from scipy.optimize import fsolve
+
+def F(x):
+    return [x[0]**2 + x[1]**2 - 4,
+            x[0] * x[1] - 1]
+
+x0 = [1.0, 1.5]
+sol = fsolve(F, x0, full_output=True)
+print("solution:", sol[0])
+print("residual norm:", np.linalg.norm(F(sol[0])))
+```
+
+**R**
+```r
+library(nleqslv)
+
+F <- function(x) {
+  c(x[1]^2 + x[2]^2 - 4,
+    x[1] * x[2] - 1)
+}
+
+sol <- nleqslv(c(1.0, 1.5), F)
+cat("solution:", sol$x, "\n")
+cat("residual norm:", sqrt(sum(F(sol$x)^2)), "\n")
+```
+
+**Julia**
+```julia
+using NLsolve
+
+function F!(res, x)
+    res[1] = x[1]^2 + x[2]^2 - 4
+    res[2] = x[1] * x[2] - 1
+end
+
+result = nlsolve(F!, [1.0, 1.5])
+println("solution: ", result.zero)
+println("residual norm: ", norm(result.residual_norm))
+```
+
+All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a hybridised MINPACK routine (essentially Newton with step controls), `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
 
 ### 5.6 Shared Example: Find root of $f(x)=\cos(x)-x$
 
@@ -588,6 +702,75 @@ The high-level lesson: dense linear algebra has been carefully engineered at the
 
 A sparse matrix is mostly zeros — perhaps 99% zeros in a large finite element problem. Storing the zeros wastes memory; multiplying by them wastes time. Sparse matrix formats store only the nonzero entries and their indices, and sparse factorization algorithms exploit the zero structure to avoid unnecessary work. Feeding a million-by-million sparse matrix to a dense BLAS/LAPACK solver will exhaust memory long before producing an answer. This is not an edge case; it is a routine failure mode when solver choices ignore sparsity.
 
+
+#### Fill-in and reordering
+
+The sparsity of a matrix before factorisation is not the same as the sparsity of its factors. LU of a sparse matrix can produce factors that are much denser — in the worst case fully dense — even when the original matrix has a tiny fraction of nonzero entries. This creation of new nonzeros during factorisation is called fill-in, and it is the central cost concern in sparse direct solvers.
+
+A concrete illustration: a tridiagonal $n \times n$ matrix has $3n - 2$ nonzeros, and its LU factorisation is also tridiagonal with $O(n)$ nonzeros. This is the best case — structure is preserved. An arrow matrix (dense first row and column, diagonal elsewhere) can fill completely during naive Gaussian elimination, producing $O(n^2)$ nonzeros from $O(n)$ originals. The fill-in pattern depends on the order in which variables are eliminated, and reordering the unknowns before factorisation is one of the highest-leverage steps in sparse solver engineering.
+
+Two reordering strategies dominate in practice. **Minimum-degree reordering** eliminates the variable connected to the fewest other variables first, deferring dense regions until last, where they can be handled more compactly. It is cheap to compute and effective on many unstructured problems. **Nested dissection** recursively partitions the sparsity graph into subsets separated by small separators, exploiting the fact that eliminating separator variables last limits communication between subproblems. For 2D grid problems, nested dissection gives $O(n^{3/2})$ fill-in and $O(n^{3/2})$ operation count compared to $O(n^2)$ for natural row ordering — a decisive win on large grids.
+
+#### Sparse Cholesky vs sparse LU
+
+If your matrix is symmetric positive definite, use sparse Cholesky, not sparse LU. The SPD structure guarantees positive pivots, so no pivoting is needed — the factorisation is stable by construction. This halves the work and memory compared to LU, and the absence of pivoting means the sparsity structure is fully determined by the symbolic step and is consistent across different right-hand sides. For general nonsymmetric matrices, sparse LU with partial pivoting is necessary, though you pay for pivoting with less predictable fill patterns and some memory overhead.
+
+#### Code
+
+Python's `scipy.sparse.linalg` covers the common use cases directly:
+
+```python
+import numpy as np
+import scipy.sparse as sp
+import scipy.sparse.linalg as spla
+import matplotlib.pyplot as plt
+
+# Assemble 1D Poisson tridiagonal: -u_{i-1} + 2u_i - u_{i+1} = h^2 f_i
+n = 50
+h = 1.0 / (n + 1)
+diagonals = [np.full(n - 1, -1.0), np.full(n, 2.0), np.full(n - 1, -1.0)]
+A = sp.diags(diagonals, [-1, 0, 1], format="csr")
+
+f = np.ones(n)
+rhs = h**2 * f
+
+# Direct sparse solve
+u = spla.spsolve(A, rhs)
+
+# Factor once, solve multiple right-hand sides
+lu = spla.splu(A)
+u2 = lu.solve(rhs)
+u3 = lu.solve(2 * rhs)   # second right-hand side, no re-factorisation
+
+# Sparsity pattern
+plt.spy(A, markersize=3)
+plt.title("Tridiagonal sparsity pattern")
+plt.savefig("figures/tridiagonal_spy.png", dpi=120, bbox_inches="tight")
+```
+
+`spla.spsolve` picks Cholesky if the matrix is SPD and LU otherwise. `spla.splu` exposes the factors directly so you can solve multiple right-hand sides cheaply — factorisation is the expensive step; each additional solve costs only $O(\text{nnz})$ once the factors exist.
+
+In Julia, the `\` operator dispatches automatically:
+
+```julia
+using SparseArrays, LinearAlgebra
+
+n = 50
+h = 1.0 / (n + 1)
+A = spdiagm(-1 => fill(-1.0, n-1), 0 => fill(2.0, n), 1 => fill(-1.0, n-1))
+rhs = h^2 * ones(n)
+
+# Julia's \ detects sparsity and SPD structure, calls CHOLMOD for SPD sparse
+u = A \ rhs
+
+# Factor explicitly for multiple solves
+F = cholesky(A)
+u2 = F \ rhs
+u3 = F \ (2 * rhs)
+```
+
+For symmetric positive definite sparse matrices Julia's `cholesky` calls CHOLMOD, which includes reordering (nested dissection by default) and delivers competitive fill-in on 2D and 3D grid problems without any explicit reordering call from your code.
+
 ### 6.2 Factorization Choices
 
 Not all factorizations are created equal, and the choice matters for both efficiency and numerical conditioning.
@@ -785,6 +968,237 @@ println("beta0, beta1: ", beta)
 
 ---
 
+## Eigenvalue Problems
+
+The previous section treated linear algebra mostly as "solve **A****x** = **b**." That is the right problem when you know the right-hand side. But many important problems instead ask: for what values of $\lambda$ does **A****x** = $\lambda$**x** have a nontrivial solution? This is the eigenvalue problem, and it shows up everywhere — not as a mathematical curiosity, but as the natural formulation of questions about stability, dominant behaviour, vibration, and information structure.
+
+### Why Eigenvalue Problems Matter
+
+The eigenvalue equation $\mathbf{A}\mathbf{x} = \lambda\mathbf{x}$ says that **x** is a direction that **A** does not rotate — it only scales. The scalar $\lambda$ is the eigenvalue and **x** is the corresponding eigenvector. For a general $n \times n$ matrix there are at most $n$ such pairs, though they may be complex and may not all be distinct.
+
+That abstract statement connects to concrete phenomena in several domains.
+
+**Stability analysis.** If you discretise a differential equation $\dot{\mathbf{u}} = \mathbf{A}\mathbf{u}$, the solution is $\mathbf{u}(t) = e^{\mathbf{A}t}\mathbf{u}(0)$, and the eigenvalues of **A** determine whether that solution grows or decays. Any eigenvalue with positive real part drives exponential growth — an unstable mode. Checking eigenvalue signs is therefore the standard test for linear stability, and it is why control engineers, fluid dynamicists, and numerical ODE designers all reach for eigenvalue routines constantly.
+
+**Principal Component Analysis (PCA).** PCA computes the eigendecomposition of a data covariance matrix. The eigenvector corresponding to the largest eigenvalue $\lambda_1$ is the direction of maximum variance in the data; the eigenvector for $\lambda_2$ is the direction of maximum remaining variance orthogonal to the first, and so on. The eigenvalues tell you how much variance each direction explains, which is how you decide how many components to keep. At its core, PCA is a matrix diagonalisation problem — eigen routines are doing the heavy lifting whenever you call `sklearn.decomposition.PCA`.
+
+**Vibration modes.** In structural mechanics, the natural frequencies of a structure are the square roots of the eigenvalues of a mass-normalised stiffness matrix. Each eigenvector is the corresponding mode shape — the pattern of motion at that frequency. Knowing that a bridge resonates at 1.2 Hz or that an aircraft wing has a flutter mode near cruise speed is directly a question about eigenvalues, and getting it wrong has obvious engineering consequences.
+
+**PageRank.** Google's original PageRank algorithm boils down to finding the dominant eigenvector of a large, sparse, column-stochastic matrix describing the web's link structure. The eigenvector corresponding to eigenvalue $\lambda_1 = 1$ tells you the stationary distribution of a random walk over web pages — which is the page's rank. The web graph has billions of nodes; computing this eigenvector efficiently on a sparse matrix is exactly why fast iterative eigensolvers matter.
+
+These are not contrived examples. They are reasons why eigenvalue code is in every serious numerical computing library and why understanding it — including its failure modes — is worth your time.
+
+### Power Iteration
+
+Power iteration is the simplest eigenvalue algorithm and the one that builds the clearest intuition. Start with a random vector **v**, multiply by **A** repeatedly, and normalise at each step:
+
+```text
+v = random unit vector
+for k = 1, 2, 3, ...:
+    w = A @ v
+    v = w / ||w||_2
+    lambda = v^T @ A @ v   # Rayleigh quotient
+```
+
+After enough iterations, **v** converges to the eigenvector corresponding to the eigenvalue with the largest absolute value — the dominant eigenvector — and the Rayleigh quotient $\mathbf{v}^T \mathbf{A}\mathbf{v}$ converges to $\lambda_1$.
+
+**Why it converges.** Expand the initial random vector in the eigenbasis of **A**: $\mathbf{v}_0 = \sum_i c_i \mathbf{q}_i$, where $\mathbf{q}_i$ are the eigenvectors and $c_i$ are coordinates. After $k$ multiplications by **A**:
+
+$$\mathbf{A}^k \mathbf{v}_0 = \sum_i c_i \lambda_i^k \mathbf{q}_i = \lambda_1^k \left( c_1 \mathbf{q}_1 + \sum_{i>1} c_i \left(\frac{\lambda_i}{\lambda_1}\right)^k \mathbf{q}_i \right)$$
+
+Every component with $i > 1$ carries a factor $(\lambda_i / \lambda_1)^k$. Since $|\lambda_1|$ is the largest by assumption, $|\lambda_i / \lambda_1| < 1$ for all other eigenvalues, and those components shrink geometrically. After normalising, what remains is dominated more and more by $\mathbf{q}_1$. The convergence rate per iteration is $|\lambda_2 / \lambda_1|$ — the ratio of the second-largest to the largest eigenvalue in absolute value. If these are close, convergence is slow; if they are well-separated, it is fast.
+
+This ratio is the key number to think about when power iteration is struggling. A matrix with $|\lambda_1| = 100$ and $|\lambda_2| = 99$ will converge painfully slowly — about 1% error reduction per step. The same matrix with $|\lambda_2| = 1$ converges in a handful of iterations.
+
+![Power iteration convergence: residual versus iteration count](figures/eigenvalue_convergence.png)
+
+**Deflation.** Power iteration only gives you the dominant eigenvalue. To find the next one, you deflate: once $\lambda_1$ and $\mathbf{q}_1$ are known, subtract out their contribution from **A** to get a deflated matrix $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T$. Power iteration on $\mathbf{A}'$ converges to $\lambda_2$. You can repeat this to peel off further eigenvalues one by one. In practice, deflation accumulates rounding errors, so it is mostly useful conceptually or for finding a small number of extreme eigenvalues. For finding many eigenvalues the QR algorithm or Krylov methods are more robust.
+
+**Inverse iteration and shift-and-invert.** Power iteration converges to the largest-magnitude eigenvalue. What if you want the smallest, or one near a specific value $\sigma$? Replace **A** with $(\mathbf{A} - \sigma \mathbf{I})^{-1}$. The eigenvalues of this shifted-inverted matrix are $1/(\lambda_i - \sigma)$, so the eigenvalue of **A** nearest $\sigma$ becomes the dominant eigenvalue of the transformed problem. Power iteration on $(\mathbf{A} - \sigma \mathbf{I})^{-1}$ — meaning: solve a linear system $(\mathbf{A} - \sigma \mathbf{I})\mathbf{w} = \mathbf{v}$ at each step instead of multiplying — then converges to the eigenpair nearest $\sigma$. This is inverse iteration. The convergence rate becomes $|\lambda_{\text{near}} - \sigma| / |\lambda_{\text{next}} - \sigma|$, which can be extraordinary when $\sigma$ is close to a target eigenvalue. A single shift close to the target often gives convergence in fewer than ten steps.
+
+### The QR Algorithm
+
+Power iteration is instructive but limited. The QR algorithm is the workhorse for computing all eigenvalues of a dense matrix, and it is what is running inside `numpy.linalg.eig`, R's `eigen()`, and Julia's `LinearAlgebra.eigen()`.
+
+The core idea is iterated QR factorisation. At each step, factorise the current matrix $\mathbf{A}_k = \mathbf{Q}_k \mathbf{R}_k$, then form the next iterate by reversing the factors:
+
+$$\mathbf{A}_{k+1} = \mathbf{R}_k \mathbf{Q}_k$$
+
+This is an orthogonal similarity transformation: $\mathbf{A}_{k+1} = \mathbf{Q}_k^T \mathbf{A}_k \mathbf{Q}_k$, so all $\mathbf{A}_k$ share the same eigenvalues. Under mild conditions, $\mathbf{A}_k$ converges to Schur form — upper triangular (for general matrices) or diagonal (for symmetric matrices) — with the eigenvalues on the diagonal. The eigenvectors appear in the product of all the $\mathbf{Q}_k$ matrices accumulated along the way.
+
+**Why it works at all** is non-obvious. Heuristically, each QR step is doing something like a step of power iteration on each column simultaneously, using orthogonality to keep the directions from collapsing. The formal explanation requires more machinery, but the practical point is: it converges, it is stable, and Schur form is a numerically clean representation of eigenstructure.
+
+**Shift acceleration.** Without shifts, convergence is controlled by eigenvalue ratios in the same way as power iteration — potentially slow. The standard fix is Wilkinson shifts: at each step, shift by an estimate of the smallest eigenvalue (computed from the bottom $2 \times 2$ corner of the current matrix), run one QR step, then unshift. This drives the subdiagonal entries toward zero much faster and usually gives cubic convergence near the end of the process. In practice, the shifted QR algorithm finishes in $O(n)$ iterations on most matrices, so the total cost is dominated by the QR factorisations: $O(n^3)$ overall.
+
+**Symmetric vs general.** When **A** is symmetric, the Schur form is diagonal with real eigenvalues — a full eigendecomposition. The standard path is to first reduce **A** to symmetric tridiagonal form (Householder reflections, $O(n^3)$ but with a small constant), then run QR on the tridiagonal, which is much cheaper at $O(n^2)$ per iteration. The LAPACK routine is `dsyev` (or `dsyevd` for the divide-and-conquer variant, which is often faster). When **A** is general (non-symmetric), eigenvalues may be complex, and the Schur form is quasi-upper-triangular with $1 \times 1$ and $2 \times 2$ diagonal blocks. The LAPACK routine is `dgeev`. All three language libraries call these routines through their standard eigenvalue functions — you do not need to invoke LAPACK directly, but knowing the symmetric path exists means you should always tell the solver when your matrix is symmetric, because it is faster and gives guaranteed real eigenvalues.
+
+Do not implement the QR algorithm yourself. It is numerically subtle — getting the shift strategy right, handling near-deflations, maintaining orthogonality — and the library implementations have decades of work in them. Use `numpy.linalg.eigh` for symmetric, `numpy.linalg.eig` for general, and let LAPACK do its job.
+
+### Krylov Methods for Large Sparse Problems
+
+The QR algorithm is $O(n^3)$. For a $10^6 \times 10^6$ sparse matrix — the kind that arises routinely in finite element analysis, network problems, and machine learning — computing all eigenvalues is not just slow; it is not even a sensible goal. You typically want only the $k$ eigenvalues with the largest magnitude, or the $k$ smallest, where $k$ is perhaps 10 or 100, not $10^6$.
+
+This is where Krylov subspace methods come in. Instead of transforming the full matrix, they build a low-dimensional subspace that captures the action of **A** well for the eigenvalues you care about.
+
+The Krylov subspace of dimension $m$ starting from vector **v** is:
+
+$$K_m(\mathbf{A}, \mathbf{v}) = \text{span}\{\mathbf{v},\, \mathbf{A}\mathbf{v},\, \mathbf{A}^2\mathbf{v},\, \ldots,\, \mathbf{A}^{m-1}\mathbf{v}\}$$
+
+The key point is that you never need to store or factorise **A** explicitly. You only need to compute matrix-vector products **A****w** for various **w**. For a large sparse matrix, that product costs $O(\text{nnz})$ — proportional to the number of nonzero entries, which for sparse matrices is far smaller than $n^2$. The Krylov subspace implicitly captures the dominant action of **A** through those products, and you extract eigenvalue approximations (called Ritz values) by solving a small $m \times m$ eigenproblem on the projected matrix.
+
+**Lanczos iteration** (for symmetric matrices) builds an orthonormal basis for the Krylov subspace using a short three-term recurrence. The projected matrix is tridiagonal, which is cheap to diagonalise. Convergence for extreme eigenvalues (largest and smallest) is typically fast, and the algorithm is memory-efficient.
+
+**Arnoldi iteration** (for general non-symmetric matrices) builds the same Krylov subspace but the recurrence is longer — each new basis vector must be orthogonalised against all previous ones, which is more expensive. The projected matrix is upper Hessenberg. GMRES (which you met in the linear systems section) is actually Arnoldi applied to the residual minimisation problem, so there is a deep algorithmic connection between large-scale eigensolvers and large-scale linear solvers.
+
+**ARPACK** (ARnoldi PACKage) is the standard implementation of the implicitly restarted Arnoldi method, which addresses a practical problem: a full Krylov basis of dimension $m$ requires storing $m$ vectors of length $n$ and $O(m^2)$ orthogonalisation work, which gets expensive as $m$ grows. Restarting with a compressed basis keeps memory bounded while retaining convergence progress. ARPACK has been the workhorse for large sparse eigenvalue computations for decades. When you call `scipy.sparse.linalg.eigs` in Python, you are calling ARPACK. When you use `Arpack.eigs` in Julia, same thing. In R, the base `eigen()` function only handles dense matrices; for large sparse problems, the `RSpectra` package wraps ARPACK cleanly.
+
+The practical usage pattern is: specify how many eigenvalues you want (`k`), which ones (largest magnitude, smallest real part, near a shift $\sigma$), and supply either a sparse matrix or a function that computes matrix-vector products. The solver handles everything else. Shift-and-invert is again your friend here: to find eigenvalues near a target $\sigma$ in a large sparse problem, use `sigma=sigma` in `scipy.sparse.linalg.eigs`, which internally factors $(\mathbf{A} - \sigma \mathbf{I})$ and applies shift-and-invert.
+
+### Generalised Eigenproblems
+
+The standard eigenproblem has **A****x** = $\lambda$**x**. The generalised eigenproblem is:
+
+$$\mathbf{A}\mathbf{x} = \lambda \mathbf{B}\mathbf{x}$$
+
+This arises naturally in structural mechanics (stiffness matrix **A** and mass matrix **B**), in stability analysis of discretised PDEs, and in any problem where two bilinear forms compete. When **B** is the identity, you recover the standard problem.
+
+The generalised problem looks like a minor generalisation but has some subtle wrinkles. If **B** is singular, there can be infinite eigenvalues. If **B** is indefinite, eigenvalues can be complex even when **A** is symmetric. The most tractable and common case is when **B** is symmetric positive definite (SPD).
+
+When **B** is SPD, you can reduce the generalised problem to a standard one without losing symmetry. Factor $\mathbf{B} = \mathbf{L}\mathbf{L}^T$ (Cholesky). Then **x** = $\mathbf{L}^{-T}$**y** transforms the system:
+
+$$\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{L}\mathbf{L}^T \mathbf{L}^{-T}\mathbf{y}$$
+
+$$\mathbf{L}^{-1}\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{y}$$
+
+The transformed matrix $\mathbf{L}^{-1}\mathbf{A}\mathbf{L}^{-T}$ is symmetric (when **A** is symmetric) and the standard symmetric eigensolver applies. You can then recover the original eigenvectors as $\mathbf{x}_i = \mathbf{L}^{-T}\mathbf{y}_i$. This is not something you need to do by hand — `scipy.linalg.eigh(A, B)` handles the Cholesky reduction internally and returns correctly normalised eigenvectors — but understanding the transformation tells you why SPD **B** is a special, well-behaved case and what breaks when **B** is merely positive semidefinite (ill-conditioned near the boundary of the SPD cone).
+
+For non-SPD **B**, you fall back to the general LAPACK routine `dggev`, exposed as `scipy.linalg.eig(A, B)` with two matrix arguments. It is slower and less numerically clean, but it handles the full generalised problem.
+
+### Code
+
+The examples below show the most common eigenvalue computations in each language. Each uses the appropriate specialist function rather than a generic solver, and shows how to check the result.
+
+**Python**
+
+For a dense symmetric matrix, `numpy.linalg.eigh` is the right call — it is faster than `eig`, returns real eigenvalues sorted in ascending order, and is numerically more stable:
+
+```python
+import numpy as np
+from scipy.sparse.linalg import eigs
+from scipy.sparse import diags
+
+# Dense symmetric problem
+A = np.array([[4.0, 1.0, 0.0],
+              [1.0, 3.0, 1.0],
+              [0.0, 1.0, 2.0]])
+
+eigenvalues, eigenvectors = np.linalg.eigh(A)
+print("eigenvalues (ascending):", eigenvalues)
+
+# Verify: A @ v ≈ lambda * v for first eigenpair
+lam, v = eigenvalues[0], eigenvectors[:, 0]
+residual = np.linalg.norm(A @ v - lam * v)
+print("residual ||Av - λv||:", residual)
+
+# Dense general (non-symmetric) problem
+B = np.array([[0.0, -1.0], [1.0, 0.0]])  # rotation — complex eigenvalues
+vals, vecs = np.linalg.eig(B)
+print("eigenvalues of rotation matrix:", vals)  # expect ±1j
+
+# Large sparse problem — 5 largest-magnitude eigenvalues
+n = 1000
+diag_vals = np.arange(1.0, n + 1)
+A_sparse = diags(diag_vals)  # diagonal sparse matrix, eigenvalues are the diag entries
+vals_sparse, vecs_sparse = eigs(A_sparse, k=5, which="LM")
+print("5 largest eigenvalues:", np.sort(np.real(vals_sparse))[::-1])
+```
+
+For a generalised eigenproblem with SPD **B**:
+
+```python
+from scipy.linalg import eigh
+
+A = np.array([[2.0, 1.0], [1.0, 3.0]])
+B = np.array([[4.0, 1.0], [1.0, 2.0]])  # SPD
+
+eigenvalues, eigenvectors = eigh(A, B)
+print("generalised eigenvalues:", eigenvalues)
+```
+
+**R**
+
+R's base `eigen()` handles dense matrices. For large sparse problems, `RSpectra` wraps ARPACK and is the standard choice:
+
+```r
+library(Matrix)    # sparse matrix support
+library(RSpectra)  # ARPACK wrapper for large sparse eigenproblems
+
+# Dense symmetric matrix
+A <- matrix(c(4, 1, 0,
+              1, 3, 1,
+              0, 1, 2),
+            nrow = 3, byrow = TRUE)
+
+result <- eigen(A, symmetric = TRUE)
+cat("eigenvalues:", result$values, "\n")
+
+# Verify first eigenpair
+lam <- result$values[1]
+v   <- result$vectors[, 1]
+cat("residual:", norm(A %*% v - lam * v, type = "2"), "\n")
+
+# Large sparse problem — 5 largest eigenvalues
+n <- 1000
+A_sparse <- Diagonal(x = 1:n)  # sparse diagonal matrix
+
+result_sparse <- eigs_sym(A_sparse, k = 5, which = "LM")
+cat("5 largest eigenvalues:", sort(result_sparse$values, decreasing = TRUE), "\n")
+```
+
+Note that `eigen(A, symmetric = TRUE)` is meaningfully faster than `eigen(A)` on symmetric matrices and guarantees real output — always set this flag when you know your matrix is symmetric.
+
+**Julia**
+
+Julia's `LinearAlgebra` standard library provides `eigen` (dense) and the `Arpack` package handles large sparse problems:
+
+```julia
+using LinearAlgebra
+using SparseArrays
+using Arpack
+
+# Dense symmetric matrix
+A = [4.0  1.0  0.0;
+     1.0  3.0  1.0;
+     0.0  1.0  2.0]
+
+F = eigen(Symmetric(A))     # Symmetric wrapper signals symmetric path
+println("eigenvalues: ", F.values)
+
+# Verify first eigenpair
+λ, v = F.values[1], F.vectors[:, 1]
+println("residual: ", norm(A * v - λ * v))
+
+# Dense general (non-symmetric) matrix
+B = [0.0 -1.0; 1.0 0.0]
+G = eigen(B)
+println("complex eigenvalues: ", G.values)   # expect 0±1im
+
+# Large sparse problem — 5 largest-magnitude eigenvalues
+n = 1000
+A_sparse = spdiagm(0 => Float64.(1:n))
+
+vals, vecs = eigs(A_sparse, nev=5, which=:LM)
+println("5 largest eigenvalues: ", sort(real.(vals), rev=true))
+```
+
+Using `Symmetric(A)` in Julia is the equivalent of `symmetric=TRUE` in R or `eigh` in NumPy: it invokes the symmetric LAPACK path, returns sorted real eigenvalues, and is faster. When you know the matrix is symmetric, always say so.
+
+**A note on output conventions.** NumPy's `eigh` returns eigenvalues in ascending order; R's `eigen` returns them in descending order; Julia's `eigen` on a `Symmetric` matrix returns them ascending. This is a frequent source of off-by-one mistakes when porting code across languages. Always check the sort order, especially when you only want the top-$k$ eigenvalues and are indexing into the result array by position.
+
+---
+
+---
+
 ## 7. Interpolation and Approximation
 
 Interpolation asks for a function that matches known data points exactly.
@@ -798,6 +1212,25 @@ The problem is that high-degree polynomials on uniform grids can oscillate wildl
 
 The lesson is not that polynomial interpolation is always bad — it is that high-degree polynomial interpolation on equally spaced nodes is often bad. The oscillations are a consequence of this particular combination of basis, node placement, and degree, not an inherent failure of polynomials.
 
+
+#### Cubic spline coefficient construction
+
+The practical value of understanding what a spline solver actually does is that it demystifies the boundary condition choices and explains why those choices can change the interpolant noticeably near the endpoints.
+
+A natural cubic spline on knots $x_0 < x_1 < \cdots < x_n$ with values $y_0, \ldots, y_n$ is fully determined once you know the second derivatives $M_i = S''(x_i)$ at each knot. The $C^2$ continuity condition at each interior knot produces one equation per interior point, giving a system for $M_1, \ldots, M_{n-1}$. With $h_i = x_{i+1} - x_i$, the equation at knot $i$ is:
+
+$$h_{i-1} M_{i-1} + 2(h_{i-1} + h_i) M_i + h_i M_{i+1} = 6\left(\frac{y_{i+1} - y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right)$$
+
+This is a tridiagonal linear system, which can be solved in $O(n)$ time by Thomas's algorithm (the tridiagonal specialisation of Gaussian elimination). Tridiagonality is not an accident — each equation involves only the three consecutive second derivatives at knots $i-1$, $i$, and $i+1$, reflecting the purely local coupling of cubic pieces.
+
+The remaining two degrees of freedom are fixed by boundary conditions, which modify the first and last equations of the system:
+
+- **Natural (free) boundary:** $M_0 = M_n = 0$. The spline has zero curvature at the endpoints, which is a sensible default when the data provides no information about endpoint derivatives. The visual effect is that the curve enters and exits the data range "straight."
+- **Clamped boundary:** you specify $S'(x_0)$ and $S'(x_n)$. The first and last equations are replaced by constraints that match the given slopes. This reduces oscillation near the endpoints if the true derivatives are known.
+- **Not-a-knot condition:** the third derivative is forced to be continuous at the second knot ($x_1$) and the second-to-last knot ($x_{n-1}$), effectively merging the first two and last two cubic pieces. This is the default in `scipy.interpolate.CubicSpline` and tends to give the most visually natural result when endpoint derivatives are unknown.
+
+When you call `scipy.interpolate.CubicSpline(x, y)`, what happens under the hood is exactly this: the tridiagonal system is assembled, the not-a-knot conditions are applied to the first and last rows, and the result is solved for the $M_i$. The cubic polynomial on each subinterval is then constructed from $M_i$, $M_{i+1}$, $y_i$, $y_{i+1}$, and $h_i$ using the standard Hermite interpolation formula.
+
 ### 7.2 Better Choices: Piecewise and Orthogonal Bases
 
 There are several well-established ways to avoid Runge's phenomenon while still getting high-quality approximations.
@@ -807,6 +1240,29 @@ There are several well-established ways to avoid Runge's phenomenon while still 
 **Chebyshev nodes** are a node placement strategy that dramatically reduces oscillation for global polynomial interpolation. Instead of equally spaced points, you cluster them near the endpoints according to a cosine distribution. With Chebyshev nodes, global polynomial interpolation converges far more reliably for smooth functions.
 
 **Least-squares polynomial approximation** is the right tool when data is noisy. Rather than requiring the polynomial to pass through every data point exactly, you fit the best polynomial of a fixed degree in the least-squares sense. The degree acts as a regularization parameter: low degree gives a smooth, robust fit; high degree risks fitting the noise.
+
+
+#### Legendre, Chebyshev, and Hermite polynomials
+
+The monomial basis $\{1, x, x^2, \ldots\}$ works conceptually but becomes ill-conditioned at high degree because the basis vectors are nearly parallel in the relevant inner-product sense. Orthogonal polynomial families replace monomials with functions that are mutually orthogonal with respect to a specific inner product, which dramatically improves the conditioning of approximation problems and often reveals natural structure.
+
+**Legendre polynomials** $P_n(x)$ are orthogonal on $[-1, 1]$ with weight function 1:
+
+$$\int_{-1}^{1} P_m(x) P_n(x)\, dx = 0 \quad (m \neq n)$$
+
+They are generated by the Rodrigues formula $P_n(x) = \frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n$ and satisfy the three-term recurrence $(n+1)P_{n+1}(x) = (2n+1)xP_n(x) - nP_{n-1}(x)$, which is the stable way to evaluate them numerically. Gauss-Legendre quadrature chooses nodes at the roots of $P_n$ and achieves the maximum possible polynomial exactness ($2n-1$) with $n$ function evaluations.
+
+**Chebyshev polynomials** $T_n(x) = \cos(n \arccos x)$ on $[-1, 1]$ are orthogonal with weight $(1-x^2)^{-1/2}$. The cosine definition might look circular, but it is the key to their properties: the recurrence $T_{n+1}(x) = 2xT_n(x) - T_{n-1}(x)$ follows directly, and the roots are the Chebyshev nodes
+
+$$x_k = \cos\!\left(\frac{(2k-1)\pi}{2n}\right), \quad k = 1, \ldots, n$$
+
+These nodes cluster toward $\pm 1$ in a way that controls the Runge oscillations that destroy uniform-node interpolation. The Lebesgue constant — which measures the worst-case amplification of data errors into interpolation errors — grows only logarithmically with $n$ for Chebyshev nodes, compared to exponential growth for uniform nodes. This means Chebyshev interpolation is nearly as good as the best possible interpolation scheme, while uniform-node interpolation can diverge even for perfectly smooth functions.
+
+**Hermite polynomials** $H_n(x) = (-1)^n e^{x^2} \frac{d^n}{dx^n} e^{-x^2}$ are orthogonal on $(-\infty, \infty)$ with Gaussian weight $e^{-x^2}$. They are the natural basis for integrals against a Gaussian — Gauss-Hermite quadrature is the right method when your integrand is the product of a smooth function and a Gaussian, which appears constantly in probability, statistics, and quantum mechanics.
+
+**Convergence.** For analytic functions (functions with convergent Taylor series in a neighbourhood of the real line), Chebyshev interpolation at $n$ nodes achieves geometric (exponential) convergence: the maximum error decays like $r^{-n}$ for some $r > 1$ depending on the width of the analyticity strip. Uniform-node polynomial interpolation for the same function can diverge — the maximum error actually grows with $n$ for smooth functions with the wrong global structure, as Runge's phenomenon illustrates.
+
+![Runge's phenomenon: degree-10 interpolant on uniform vs Chebyshev nodes](figures/runge_phenomenon.png)
 
 ### 7.3 Basis Choice Matters
 
@@ -905,6 +1361,11 @@ f'(x) \approx \frac{f(x+h)-f(x-h)}{2h}
 $$
 
 This allows a larger optimal $h$ (around $\epsilon_{mach}^{1/3} \approx 10^{-5}$ for double precision) and is generally preferred for smooth functions. When derivative accuracy is critical, automatic differentiation — which computes exact derivatives of the code rather than approximating them — is often a better choice than any finite difference scheme.
+
+
+The optimal step size for central differences is not arbitrary. Truncation error from the Taylor expansion scales as $O(h^2)$. Cancellation error arises because computing $f(x+h) - f(x-h)$ in floating-point loses roughly $h/\varepsilon_\text{mach}$ digits to catastrophic cancellation, giving a cancellation error of $O(\varepsilon_\text{mach}/h)$. The total error is minimised when $h^2 \approx \varepsilon_\text{mach}/h$, giving optimal $h \approx \varepsilon_\text{mach}^{1/3} \approx 6 \times 10^{-6}$ for double precision. You cannot make $h$ arbitrarily small — doing so makes cancellation dominate and the error actually grows. This is exactly why automatic differentiation (covered later) is preferable: it achieves machine-precision derivatives with no step-size tuning whatsoever.
+
+![Step size vs error for central differences: truncation vs cancellation error](figures/finite_diff_stepsize.png)
 
 ### 8.2 Numerical Integration Is Smoothing
 
@@ -1036,6 +1497,176 @@ println("quadgk: ", val)
 
 ---
 
+## Automatic Differentiation
+
+Getting derivatives out of code is one of those problems that looks solved until you actually think about what the options are.
+
+The naive approach is finite differences: evaluate your function at $x$ and $x+h$, subtract, divide by $h$. The primer's differentiation section already shows why this is unpleasant. You have to choose $h$, and $h$ too large means truncation error, $h$ too small means catastrophic cancellation. For a scalar function you can usually muddle through, but for a function of $n$ inputs you need $n$ function evaluations per gradient — and you are still fighting the step-size tradeoff the whole time.
+
+The other apparent alternative is symbolic differentiation: feed the expression to a computer algebra system and get an analytic formula for the derivative. That works for textbook examples. For real code — branchy, loopy, calling external routines — it either does not apply or produces symbolic expressions that grow exponentially with the depth of the computation. This is called expression swell, and it is why symbolic differentiation is not a general engineering tool.
+
+### What AD Is Not
+
+Automatic differentiation (AD) is neither of these things, and the distinction matters enough to state clearly before getting into mechanics.
+
+It is not finite differences. AD computes derivatives that are exact to machine precision — not approximate. There is no step size to tune, no truncation error, no cancellation problem. You do not get a derivative-like number that happens to be close to the true derivative; you get the derivative, computed to the same floating-point accuracy as the function evaluation itself.
+
+It is not symbolic differentiation either. AD does not manipulate mathematical expressions. It works at the level of the program: the actual sequence of floating-point operations your code executes. Expression swell cannot happen because AD never constructs a symbolic expression at all.
+
+What AD does is apply the chain rule mechanically and automatically to the sequence of primitive operations that make up your function — additions, multiplications, transcendentals, whatever the function actually does — and accumulate exact derivative information alongside the function evaluation. The result is exact derivatives at the cost of a constant multiple of the original computation, with no tuning required.
+
+### Forward Mode: Dual Numbers
+
+The cleanest way to understand forward-mode AD is through dual numbers.
+
+A dual number has the form $\hat{a} = a + a'\varepsilon$, where $a$ is the primal value and $a'$ is the tangent (derivative seed), and $\varepsilon$ is a formal symbol satisfying $\varepsilon^2 = 0$ but $\varepsilon \neq 0$. That single rule — $\varepsilon^2 = 0$ — is what makes the whole thing work.
+
+With this rule, arithmetic on dual numbers propagates derivatives automatically through the chain rule. Work out the rules for the basic operations:
+
+$$\hat{a} + \hat{b} = (a + b) + (a' + b')\varepsilon$$
+
+$$\hat{a} \cdot \hat{b} = ab + (ab' + a'b)\varepsilon$$
+
+The product rule falls out of ordinary multiplication once you drop $\varepsilon^2$ terms. For transcendentals, Taylor expansion around the primal value does the work. Since $\varepsilon^2 = 0$, every higher-order term vanishes:
+
+$$\sin(\hat{a}) = \sin(a + a'\varepsilon) = \sin(a) + a'\cos(a)\varepsilon$$
+
+$$\exp(\hat{a}) = \exp(a + a'\varepsilon) = \exp(a) + a'\exp(a)\varepsilon$$
+
+In each case, the $\varepsilon$ coefficient of the result is exactly what the chain rule would give you.
+
+To compute $f'(x)$ at a point $x_0$, you evaluate $f(\hat{x})$ where $\hat{x} = x_0 + 1 \cdot \varepsilon$ (seed the tangent to 1). The $\varepsilon$ coefficient of the output is $f'(x_0)$.
+
+**Worked example: $f(x) = \sin(x^2)$ at $x_0 = \pi/4$.**
+
+Seed: $\hat{x} = x_0 + 1 \cdot \varepsilon$.
+
+Step 1 — square: $\hat{x}^2 = x_0^2 + 2x_0\varepsilon$. The tangent of $x^2$ is $2x$, as expected.
+
+Step 2 — sine: $\sin(\hat{x}^2) = \sin(x_0^2) + 2x_0 \cos(x_0^2)\varepsilon$.
+
+So $f'(x_0) = 2x_0 \cos(x_0^2)$, which is exactly what the chain rule gives. No step size. No truncation. One pass through the function.
+
+The cost of forward mode is straightforward: one dual-number pass computes both $f(x)$ and $Jv$ — the Jacobian times a tangent vector $v$. To get the full Jacobian of a function $F: \mathbb{R}^n \to \mathbb{R}^m$, you need $n$ passes (one per input dimension, each with a different seed). Forward mode is the right choice when $n \ll m$.
+
+### Reverse Mode
+
+Forward mode propagates tangents from inputs to outputs. Reverse mode goes the other way: it propagates sensitivity — how much each intermediate quantity affects the output — from outputs back to inputs.
+
+The mechanism is a Wengert tape, also called a computation graph. During the forward pass, every elementary operation is recorded along with its local partial derivatives. No function values are thrown away; the tape stores everything needed to trace the computation backwards.
+
+Once the forward pass completes, the backward pass walks the tape in reverse order. It starts by seeding the output sensitivity (typically set to 1 for a scalar loss), and at each node it multiplies the incoming sensitivity by the stored local derivative and accumulates it into the upstream operands' gradients. This is the chain rule, executed in reverse, automatically.
+
+**Short example: $f(x_1, x_2) = x_1 \cdot x_2 + \sin(x_1)$ at $(x_1, x_2) = (2, 3)$.**
+
+Forward pass nodes:
+- $v_1 = x_1 \cdot x_2 = 6$, storing local partials $\partial v_1/\partial x_1 = x_2 = 3$, $\partial v_1/\partial x_2 = x_1 = 2$.
+- $v_2 = \sin(x_1) = \sin(2)$, storing local partial $\partial v_2/\partial x_1 = \cos(2)$.
+- $f = v_1 + v_2$, with $\partial f/\partial v_1 = 1$, $\partial f/\partial v_2 = 1$.
+
+Backward pass (seed $\bar{f} = 1$):
+- $\bar{v}_1 = 1$, $\bar{v}_2 = 1$.
+- $\bar{x}_1 \mathrel{+}= \bar{v}_1 \cdot x_2 = 3$ (from the product node).
+- $\bar{x}_2 \mathrel{+}= \bar{v}_1 \cdot x_1 = 2$ (from the product node).
+- $\bar{x}_1 \mathrel{+}= \bar{v}_2 \cdot \cos(x_1) = \cos(2)$ (from the sine node).
+
+Result: $\partial f/\partial x_1 = 3 + \cos(2)$, $\partial f/\partial x_2 = 2$. One forward pass plus one backward pass, for both partial derivatives simultaneously.
+
+The cost of reverse mode: one forward pass plus one backward pass computes the full gradient $\nabla f$ for a scalar $f: \mathbb{R}^n \to \mathbb{R}$, regardless of $n$. To get the full Jacobian for a function $F: \mathbb{R}^n \to \mathbb{R}^m$, you need $m$ backward passes (one per output dimension). Reverse mode is the right choice when $m \ll n$.
+
+### Forward vs Reverse: When to Use Which
+
+The decision comes down to the shape of the Jacobian $\mathbf{J} \in \mathbb{R}^{m \times n}$.
+
+| Situation | Preferred mode | Passes needed |
+|---|---|---|
+| $n$ inputs, $m$ outputs, $n \ll m$ | Forward | $n$ forward passes |
+| $n$ inputs, $m$ outputs, $m \ll n$ | Reverse | $m$ backward passes |
+| Scalar output ($m = 1$) | Reverse | 1 forward + 1 backward |
+| Scalar input ($n = 1$) | Forward | 1 forward |
+
+The canonical engineering case for reverse mode is a scalar loss function over many parameters — exactly the shape of neural network training, where $m = 1$ and $n$ might be millions. The canonical case for forward mode is a single-input function with many outputs, such as a trajectory simulation where you want the full sensitivity of all state variables to a single initial condition.
+
+For square Jacobians where $n \approx m$, the two modes cost roughly the same per Jacobian entry, and other factors — tape overhead, memory usage, implementation maturity — drive the choice.
+
+### Connection to Backpropagation
+
+If you have worked with neural networks, reverse-mode AD should look familiar: it is backpropagation. Not analogous to backpropagation — it literally is the same algorithm, described more generally.
+
+In neural network training, the computation graph is the network itself: layers, activations, loss function. The forward pass computes predictions and records operations. The backward pass accumulates gradients layer by layer. The "delta" terms that propagate backwards in classical backpropagation derivations are exactly the adjoints accumulated on the Wengert tape.
+
+The contribution of the AD framing is that it makes clear backpropagation is not special to neural networks. It is the right algorithm for differentiating any scalar function of many inputs, regardless of the structure of the computation. For more on the ML-specific context, see the deep learning primer.
+
+### Code
+
+**Python (JAX)**
+
+JAX provides clean, composable AD. `jax.grad` gives reverse-mode gradients; `jax.jacfwd` and `jax.jacrev` give full Jacobians in forward and reverse mode respectively.
+
+```python
+import jax
+import jax.numpy as jnp
+
+def f(x):
+    return jnp.sin(x ** 2)
+
+# Reverse-mode gradient (scalar output)
+df = jax.grad(f)
+print(df(jnp.array(jnp.pi / 4)))  # exact to machine precision
+
+# Full Jacobian of a vector function
+def F(x):
+    return jnp.array([jnp.sin(x[0]), x[0] * x[1], jnp.exp(x[1])])
+
+x0 = jnp.array([1.0, 2.0])
+print(jax.jacfwd(F)(x0))   # forward mode: 2 inputs, so 2 passes
+print(jax.jacrev(F)(x0))   # reverse mode: 3 outputs, so 3 passes
+```
+
+**Julia (ForwardDiff.jl / Zygote.jl)**
+
+Julia's ecosystem has mature, production-quality AD libraries for both modes.
+
+```julia
+using ForwardDiff, Zygote
+
+f(x) = sin(x^2)
+
+# Forward mode — exact derivative
+println(ForwardDiff.derivative(f, π/4))
+
+# Reverse mode via Zygote
+println(f'(π/4))  # Zygote hooks into Julia's function composition syntax
+
+# Jacobian of a vector function — forward mode
+F(x) = [sin(x[1]), x[1]*x[2], exp(x[2])]
+x0 = [1.0, 2.0]
+println(ForwardDiff.jacobian(F, x0))
+```
+
+**R: what you would have used before AD, and why it is worse**
+
+R does not have a mature AD library. The standard tool is `numDeriv::grad`, which uses finite differences — exactly what the primer's differentiation section warned you about.
+
+```r
+library(numDeriv)
+
+f <- function(x) sin(x^2)
+
+x0 <- pi / 4
+true_deriv <- 2 * x0 * cos(x0^2)   # analytic: chain rule by hand
+
+fd_deriv <- grad(f, x0)
+
+cat(sprintf("True derivative : %.15f\n", true_deriv))
+cat(sprintf("numDeriv result : %.15f\n", fd_deriv))
+cat(sprintf("Absolute error  : %.3e\n", abs(fd_deriv - true_deriv)))
+```
+
+Typical output shows error around $10^{-8}$ — consistent with the $O(\sqrt{\epsilon_\text{mach}})$ floor from the cancellation-vs-truncation tradeoff described earlier. For a single smooth scalar function this is often tolerable. For a gradient of a loss over thousands of parameters, accumulated finite-difference errors become a real problem, and the $n$ function evaluations per gradient become expensive. This is the concrete cost of not having AD: you pay in both accuracy and computation.
+
+---
+
 ## 9. ODEs: Turning Dynamics Into Computation
 
 Ordinary differential equations model change:
@@ -1064,6 +1695,23 @@ $$
 Since $y_{n+1}$ appears inside $f$ on the right-hand side, each step requires solving a (possibly nonlinear) system of equations. This adds complexity and cost per step, but the payoff is dramatically better stability. Implicit methods can take much larger steps for the same accuracy on stiff problems, making them far more efficient overall when explicit methods are constrained to tiny steps.
 
 For the same test equation, backward Euler gives $y_{n+1}=\frac{1}{1-h\lambda}y_n$. For $\operatorname{Re}(\lambda)<0$, this is stable for any positive step size, which is the key reason implicit methods dominate stiff dynamics despite higher per-step cost.
+
+
+#### BDF methods and implicit Runge-Kutta
+
+Backward Euler — implicit, first-order, A-stable — is the entry point to a whole family of implicit multistep methods called backward differentiation formulae (BDF). BDF($k$) approximates $y'(t_{n+1})$ using a $k$-step backward difference of the solution values themselves. BDF(1) is backward Euler. BDF(2) is
+
+$$\frac{3}{2}y_{n+1} - 2y_n + \frac{1}{2}y_{n-1} = h f(t_{n+1}, y_{n+1})$$
+
+BDF methods are A-stable up to order 2, which guarantees stability for any step size on dissipative problems. Orders 3 through 6 are A($\alpha$)-stable — stable in a wedge-shaped region of the left half-plane — so they require some care on highly oscillatory problems but remain effective for most stiff systems encountered in practice. BDF(6) is the practical upper limit; higher-order BDF methods are unstable.
+
+In Python: `scipy.integrate.solve_ivp(method='BDF')` uses an adaptive-order BDF implementation that adjusts both step size and order during the integration. MATLAB's `ode15s` is based on the same family. Both are good defaults for stiff problems in the moderate-accuracy regime ($10^{-3}$ to $10^{-8}$ tolerances).
+
+For higher accuracy on stiff problems, implicit Runge-Kutta methods — Gauss-Legendre and Radau — are worth knowing. These are fully implicit methods: all stage values are coupled and must be solved simultaneously, so each step requires solving a nonlinear system of size $s \times n$ (where $s$ is the number of stages). That is expensive per step, but the methods are A-stable or L-stable (meaning stability is maintained even in the stiff limit where $h|\lambda| \to \infty$) and can achieve high order with large steps. Radau IIA in particular is L-stable at all orders and is the basis for the well-regarded `radau` solver in Fortran and the `Radau` method in `scipy.integrate.solve_ivp`. For problems requiring relative tolerances tighter than $10^{-8}$, Radau often beats BDF on stiff problems because its stability properties allow genuinely large steps where BDF's lower-order accuracy limits the practical step size.
+
+The practical selection rule: reach for BDF first on stiff problems; move to Radau when you need high accuracy or when the problem's stiffness ratio is extreme.
+
+![Stability regions: forward Euler vs backward Euler in the complex plane](figures/stability_regions.png)
 
 ### 9.2 Stiffness: Why Tiny Steps Sometimes Appear
 
@@ -1123,6 +1771,115 @@ A practical way to use this table:
 3. If geometry and boundary complexity dominate, bias toward FEM.
 4. If both are simple and you need speed-to-first-result, FDM is often the fastest path.
 5. Re-evaluate after a prototype: the best final method is the one that meets accuracy and runtime targets on your real problem, not the one that sounds best in theory.
+
+
+#### 1D Poisson equation: FDM, FEM, and FVM in detail
+
+The 1D Poisson equation
+
+$$-u''(x) = f(x), \quad x \in [0, 1], \quad u(0) = u(1) = 0$$
+
+is the simplest second-order boundary value problem and a good template for understanding all three major PDE discretisation approaches.
+
+**Finite difference discretisation.** Divide $[0,1]$ into $n$ equal subintervals with $h = 1/n$ and interior nodes $x_i = ih$ for $i = 1, \ldots, n-1$. Replacing $u''(x_i)$ with the central-difference approximation gives
+
+$$\frac{-u_{i-1} + 2u_i - u_{i+1}}{h^2} = f_i, \quad i = 1, \ldots, n-1$$
+
+with $u_0 = u_n = 0$ imposed directly. For $n-1 = 3$ interior points this system reads
+
+$$\frac{1}{h^2}\begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix} \begin{bmatrix} u_1 \\ u_2 \\ u_3 \end{bmatrix} = \begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix}$$
+
+The tridiagonal structure follows directly from the local stencil: each equation couples only adjacent unknowns.
+
+```mermaid
+flowchart LR
+    subgraph Grid["FDM Grid on [0,1]"]
+        direction LR
+        u0["u₀\n(BC=0)"] --> u1["u₁"] --> u2["u₂"] --> dots["···"] --> un1["u_{n-1}"] --> un["uₙ\n(BC=0)"]
+    end
+    subgraph System["Tridiagonal System Ax = f"]
+        row["[-1  2  -1] / h²\n× [u_{i-1}  uᵢ  u_{i+1}]\n= fᵢ"]
+    end
+    Grid --> System
+```
+
+**Finite element weak form.** Multiply the strong form by a test function $v$ and integrate over $[0, 1]$:
+
+$$\int_0^1 u'' v\, dx = -\int_0^1 f v\, dx$$
+
+Integrating by parts and using $v(0) = v(1) = 0$:
+
+$$\int_0^1 u' v'\, dx = \int_0^1 f v\, dx$$
+
+This is the weak form. Choose piecewise linear basis functions $\phi_i$ centred at node $i$, where $\phi_i(x_j) = \delta_{ij}$. The stiffness matrix entries are
+
+$$K_{ij} = \int_0^1 \phi_i'(x) \phi_j'(x)\, dx$$
+
+Since $\phi_i'$ is nonzero only on the two intervals adjacent to node $i$, $K_{ij} = 0$ whenever $|i-j| > 1$. The matrix is again tridiagonal. On a uniform mesh with piecewise linears, evaluating the integrals analytically gives $K_{ii} = 2/h$ and $K_{i,i\pm 1} = -1/h$, which is identical to the FDM matrix (up to the factor of $1/h^2$ absorbed into scaling). This is not a coincidence: for this particular combination of uniform mesh, second-order operator, and piecewise linear basis, FDM and FEM produce the same algebraic system.
+
+In general — non-uniform meshes, higher-order bases, higher-dimensional problems — FDM and FEM diverge. FEM handles irregular geometry and mixed boundary conditions more cleanly because the variational formulation is flexible; the stiffness matrix entries become integrals over each element that accommodate any geometry and any basis functions.
+
+**Finite volume pointer.** For the Poisson equation, FVM integrates $-u'' = f$ over each control volume $[x_{i-1/2}, x_{i+1/2}]$ and enforces flux balance at the faces. For 1D on a uniform mesh the resulting discrete equations are again identical to FDM. The FVM perspective becomes indispensable when the PDE is in conservation form — advection, compressible flow, hyperbolic systems — where flux conservation between cells is a physical constraint, not just a mathematical convenience.
+
+**Python code: FDM for 1D Poisson.**
+
+```python
+import numpy as np
+import scipy.sparse as sp
+import scipy.sparse.linalg as spla
+import matplotlib.pyplot as plt
+
+n = 99                          # number of interior points
+h = 1.0 / (n + 1)
+x = np.linspace(h, 1 - h, n)   # interior nodes
+
+# Assemble tridiagonal system
+diag_main = np.full(n,  2.0)
+diag_off  = np.full(n - 1, -1.0)
+A = sp.diags([diag_off, diag_main, diag_off], [-1, 0, 1], format="csr") / h**2
+
+# Right-hand side: f(x) = pi^2 sin(pi x), exact solution u(x) = sin(pi x)
+f = np.pi**2 * np.sin(np.pi * x)
+u = spla.spsolve(A, f)
+
+u_exact = np.sin(np.pi * x)
+print(f"Max error: {np.max(np.abs(u - u_exact)):.3e}")
+
+plt.plot(x, u,       label="FDM")
+plt.plot(x, u_exact, label="Exact", linestyle="--")
+plt.legend()
+plt.xlabel("x")
+plt.ylabel("u(x)")
+plt.title("1D Poisson: FDM solution")
+plt.savefig("figures/poisson_fdm.png", dpi=120, bbox_inches="tight")
+```
+
+**Julia code: FDM for 1D Poisson.**
+
+```julia
+using SparseArrays, LinearAlgebra
+import Plots
+
+n = 99
+h = 1.0 / (n + 1)
+x = range(h, 1 - h; length=n)
+
+A = spdiagm(-1 => fill(-1.0, n-1),
+             0 => fill( 2.0, n),
+             1 => fill(-1.0, n-1)) ./ h^2
+
+f = π^2 .* sin.(π .* collect(x))
+u = A \ f
+
+u_exact = sin.(π .* collect(x))
+println("Max error: $(maximum(abs.(u - u_exact)))")
+
+Plots.plot(collect(x), [u u_exact]; label=["FDM" "Exact"],
+           linestyle=[:solid :dash], xlabel="x", ylabel="u(x)")
+Plots.savefig("figures/poisson_fdm_julia.png")
+```
+
+For this problem ($f(x) = \pi^2 \sin(\pi x)$, exact solution $u(x) = \sin(\pi x)$), the FDM error scales as $O(h^2)$: with $n = 99$ interior points the maximum error is around $8 \times 10^{-5}$, and halving $h$ should reduce it to about $2 \times 10^{-5}$.
 
 ### 9.5 Shared Example A: Non-stiff IVP, compare Euler and RK4
 
@@ -1310,9 +2067,47 @@ A practical intuition: for small enough steps, the first-order model points down
 
 Near a well-behaved minimizer, the objective looks almost quadratic, and Newton is basically solving that local quadratic directly. That is where the fast convergence comes from. Farther away, raw Newton can overshoot or even point uphill, which is why production solvers add damping, line search, or trust-region safeguards.
 
-**Quasi-Newton methods** like BFGS and L-BFGS are the practical workhorse for medium-to-large smooth optimization. They build a running approximation of the Hessian using gradient differences across iterations, capturing curvature information without the cost of computing second derivatives explicitly. L-BFGS uses a limited-memory version of this approximation, making it applicable to problems with millions of variables.
+**Quasi-Newton methods: BFGS and L-BFGS**
 
-Why they are such workhorses: they capture much of Newton's curvature benefit while keeping iteration cost closer to first-order methods. BFGS-style updates are also designed to preserve positive definiteness under standard conditions, which helps keep search directions stable.
+BFGS — named for Broyden, Fletcher, Goldfarb, and Shanno — is the practical workhorse for smooth unconstrained optimization. The core idea is to approximate the *inverse* Hessian $\mathbf{H}^{-1}$ directly, so that each iteration requires only a matrix-vector product rather than a linear solve. At each step the approximation is updated using information from the most recent gradient change, without ever computing a second derivative.
+
+The update rule is derived from the secant condition: the new Hessian approximation must satisfy $\mathbf{H}_{k+1} \mathbf{s}_k = \mathbf{y}_k$, where $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$ is the step taken and $\mathbf{y}_k = \nabla f(\mathbf{x}_{k+1}) - \nabla f(\mathbf{x}_k)$ is the corresponding change in gradient. This says: the approximate Hessian must agree with the true curvature along the direction you just moved. Applied to the inverse Hessian approximation, this gives the rank-2 update
+
+$$
+\mathbf{H}_{k+1}^{-1} = \left(\mathbf{I} - \rho_k \mathbf{s}_k \mathbf{y}_k^T\right)\mathbf{H}_k^{-1}\left(\mathbf{I} - \rho_k \mathbf{y}_k \mathbf{s}_k^T\right) + \rho_k \mathbf{s}_k \mathbf{s}_k^T
+$$
+
+where $\rho_k = 1/(\mathbf{y}_k^T \mathbf{s}_k)$. Each iteration adds two rank-1 outer products to the previous approximation — hence "rank-2 update." This structure guarantees the approximation stays symmetric and, under the Wolfe conditions on line search, stays positive definite. That last property matters: it means the search direction $-\mathbf{H}_k^{-1} \nabla f(\mathbf{x}_k)$ always points downhill.
+
+Why BFGS converges fast: as the iterates approach the solution, the accumulated curvature information makes the approximation increasingly accurate, and the algorithm transitions from linear to *superlinear* convergence — each step roughly squares the error. You get much of Newton's speed without ever touching second derivatives.
+
+The catch is memory. Storing $\mathbf{H}_k^{-1}$ for a problem with $n$ variables requires $O(n^2)$ space. For problems in the thousands of variables this is fine. For problems in the millions — which is routine in machine learning and PDE-constrained optimization — it is not.
+
+**L-BFGS** (Limited-memory BFGS) solves this by storing only the last $m$ pairs $(\mathbf{s}_k, \mathbf{y}_k)$, typically $m \in [5, 20]$. Instead of maintaining the dense matrix, the algorithm reconstructs the Hessian-vector product on the fly using a *two-loop recursion* over the stored pairs. Memory drops from $O(n^2)$ to $O(mn)$, which is entirely negligible. The convergence is slightly weaker than full BFGS — you are using less history — but in practice L-BFGS is competitive on a wide range of large smooth problems, and it is the standard choice whenever $n$ is large.
+
+In Python, both are a one-line call:
+
+```python
+from scipy.optimize import minimize
+
+# Full BFGS — suitable for moderate n
+result = minimize(f, x0, jac=grad_f, method='BFGS')
+
+# L-BFGS-B — large n, optional bound constraints
+result = minimize(f, x0, jac=grad_f, method='L-BFGS-B',
+                  bounds=[(-5, 5)] * len(x0))
+```
+
+In Julia, `Optim.jl` exposes both directly:
+
+```julia
+using Optim
+
+result = optimize(f, grad_f!, x0, BFGS())
+result = optimize(f, grad_f!, x0, LBFGS(m=10))
+```
+
+The `m` parameter in `LBFGS` controls history length; the default of 10 is a reasonable starting point for most problems.
 
 **Derivative-free methods** like Nelder-Mead or Powell are the fallback when gradients are unavailable or unreliable — for instance when the objective is noisy or computed by a legacy simulation code.
 
@@ -1334,17 +2129,122 @@ In **nonconvex optimization**, the objective landscape may have many local minim
 
 ### 10.4 Constraints
 
-Real-world optimization problems almost always come with constraints. **Equality constraints** fix the value of some function of the variables. **Inequality constraints** restrict variables to lie within a region. **Bound constraints** simply clamp each variable to a range.
+Real-world optimization problems almost always come with constraints. **Equality constraints** fix the value of some function of the variables. **Inequality constraints** restrict variables to a region. **Bound constraints** simply clamp each variable to a range. The differences between these categories matter for which algorithms work well, but the underlying theory runs through a single set of conditions.
 
-**Projected gradient methods** handle simple box constraints by projecting each gradient step back into the feasible region, and they are efficient when the projection is cheap. Why they work: each iterate is made feasible immediately, so the method is simple and scales well for separable bound constraints.
+**KKT conditions.** The first-order optimality conditions for a constrained problem are the Karush-Kuhn-Tucker (KKT) conditions. For a problem with equality constraints $c_i(\mathbf{x}) = 0$ and inequality constraints $g_j(\mathbf{x}) \leq 0$, a feasible point $\mathbf{x}^*$ is a local minimum only if there exist multipliers $\lambda_i$ and $\mu_j \geq 0$ satisfying: stationarity of the Lagrangian $\nabla f(\mathbf{x}^*) + \sum \lambda_i \nabla c_i(\mathbf{x}^*) + \sum \mu_j \nabla g_j(\mathbf{x}^*) = 0$; primal feasibility ($c_i = 0$, $g_j \leq 0$); dual feasibility ($\mu_j \geq 0$); and complementary slackness ($\mu_j g_j(\mathbf{x}^*) = 0$ — each inequality is either active or its multiplier is zero). These conditions tell you what a solution must look like. They do not tell you how to find one — that is the job of the algorithm.
 
-**Interior-point methods** maintain a solution strictly inside the feasible region and use barrier functions to keep it there, scaling well to very large problems. Why they work: the barrier smooths hard constraints into a sequence of unconstrained-like subproblems while preserving global feasibility structure.
+**Sequential quadratic programming (SQP).** SQP applies Newton-like ideas directly to the KKT system. At each iterate $\mathbf{x}_k$, the algorithm constructs a quadratic subproblem: a quadratic approximation to the Lagrangian as the objective, with the constraints linearised around $\mathbf{x}_k$. Solving that subproblem gives a step that makes progress on both the objective and constraint satisfaction simultaneously. Because the local quadratic model becomes exact near a solution, SQP converges fast — typically superlinearly — when derivatives are accurate and the starting point is reasonable.
 
-**Sequential quadratic programming (SQP)** solves a sequence of quadratic subproblems that approximate the original problem near the current iterate and is a standard choice for smooth nonlinear constrained problems. Under the hood, it applies Newton-like ideas to the KKT optimality system, which is why local convergence can be very fast when derivatives are accurate.
+The standard Python implementation is `scipy.optimize.minimize(method='SLSQP')`, which handles equality and inequality constraints together:
 
-**Augmented Lagrangian methods** add a penalty term to the objective to enforce constraints, and tend to be more flexible when the constraint structure is complex. Why they work: Lagrange multipliers and penalties cooperate so you avoid both pure-penalty ill-conditioning and strict feasibility requirements at every inner iteration.
+```python
+from scipy.optimize import minimize
 
-### 10.5 Shared Example: Fit exponential decay model
+constraints = [
+    {'type': 'eq',   'fun': lambda x: x[0] + x[1] - 1.0},   # x0 + x1 = 1
+    {'type': 'ineq', 'fun': lambda x: x[0] - 0.1},           # x0 >= 0.1
+]
+result = minimize(f, x0, method='SLSQP', constraints=constraints,
+                  jac=grad_f)
+```
+
+SLSQP is a good default for small-to-medium nonlinear problems with a mix of constraint types.
+
+**Interior-point (barrier) methods.** For large or highly constrained problems, interior-point methods are usually faster. The idea is to replace each inequality constraint $g_j(\mathbf{x}) \leq 0$ with a logarithmic barrier term $-\mu \log(-g_j(\mathbf{x}))$ added to the objective, where the barrier parameter $\mu > 0$ controls how hard the constraint is enforced. As $\mu \to 0$, the barrier pushes the solution toward the true constrained optimum along what is called the *central path*. The key advantage is that iterates are always strictly feasible, and the barrier converts a hard constrained problem into a sequence of smooth unconstrained-like subproblems.
+
+Interior-point methods scale remarkably well with the number of constraints — adding thousands of inequality constraints does not fundamentally change the per-iteration cost, because the barrier terms add smoothly to the objective rather than fragmenting the problem structure. This makes them the standard approach for linear and second-order cone programming. In Python:
+
+```python
+from scipy.optimize import linprog
+import cvxpy as cp
+
+# Linear program via scipy
+res = linprog(c, A_ub=A, b_ub=b, method='highs')
+
+# Convex program via cvxpy — specify structure, let solver pick method
+x = cp.Variable(n)
+prob = cp.Problem(cp.Minimize(cp.quad_form(x, P)),
+                  [A @ x <= b])
+prob.solve()
+```
+
+`cvxpy` is particularly useful because it lets you express the problem structure symbolically and then hands off to an appropriate interior-point solver automatically.
+
+**Augmented Lagrangian methods.** A third major approach combines penalty terms with Lagrange multipliers. The augmented Lagrangian for equality constraints is
+
+$$
+L_\rho(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) + \boldsymbol{\lambda}^T c(\mathbf{x}) + \frac{\rho}{2}\|c(\mathbf{x})\|^2
+$$
+
+where $\boldsymbol{\lambda}$ is the multiplier vector and $\rho > 0$ is a penalty parameter. Each outer iteration minimises $L_\rho$ over $\mathbf{x}$ with $\boldsymbol{\lambda}$ fixed, then updates $\boldsymbol{\lambda} \leftarrow \boldsymbol{\lambda} + \rho \, c(\mathbf{x})$. The key difference from pure penalty methods ($\boldsymbol{\lambda} = 0$, just the quadratic term) is that the multiplier update means a finite $\rho$ is sufficient — you do not need to drive $\rho \to \infty$ to enforce the constraint, which is what causes ill-conditioning in pure penalty methods. The method tolerates more flexibility in the inner solve and tends to be robust when the constraint structure is complex or the problem is not smooth everywhere.
+
+ADMM (Alternating Direction Method of Multipliers) is a closely related splitting variant that has become particularly popular for distributed optimization and problems with separable structure. The idea is to split the variable set and alternate minimisation steps over each part while enforcing consensus through augmented Lagrangian multiplier updates.
+
+### 10.5 Stochastic Optimisation
+
+![Convex vs nonconvex optimisation landscapes](figures/optimisation_landscape.png)
+
+The methods in the preceding sections all assume you can evaluate $f(\mathbf{x})$ and $\nabla f(\mathbf{x})$ exactly. In machine learning and large-scale data fitting, that assumption breaks. When the objective is a sum over $n$ data points — $f(\mathbf{x}) = \frac{1}{n}\sum_{i=1}^n f_i(\mathbf{x})$ — computing the exact gradient requires a pass over the entire dataset, which may contain millions or billions of examples. Stochastic optimisation replaces the exact gradient with a cheap noisy estimate and accepts that the noise is the price of tractability.
+
+**Mini-batch gradient descent** estimates the gradient from a small random subset (a mini-batch) of the data:
+
+$$
+g_k \approx \frac{1}{|B|}\sum_{i \in B} \nabla f_i(\mathbf{x}_k)
+$$
+
+where $B$ is a randomly sampled batch. This estimate is unbiased — its expectation is the true gradient — but it has variance that shrinks with batch size. The variance-versus-progress tradeoff is the central tension: a larger batch gives a more accurate gradient but costs more computation per step. A smaller batch gives noisier steps but lets you take many more of them for the same compute budget.
+
+That noise turns out to have a useful side effect. Because the gradient estimate is random, the iterates do not converge to a fixed point but wander around the neighbourhood of a minimum. This wandering can help escape shallow local minima and saddle points that would trap a deterministic method. There is a growing body of evidence that noisy gradients act as implicit regularisation for overparameterised models, nudging the solution toward flatter minima that generalise better.
+
+**Convergence with noisy gradients.** The fundamental difference from deterministic gradient descent is that convergence guarantees now hold in expectation, not deterministically. For a convex objective with a fixed learning rate $\eta$, SGD (stochastic gradient descent with batch size 1) converges to a neighbourhood of the minimum — not the minimum itself. The radius of that neighbourhood is proportional to $\eta$. To achieve exact convergence you need a decreasing learning rate schedule, $\eta_k \to 0$, but then the convergence rate slows down compared to what a fixed rate would give in the early iterations. The headline comparison: SGD with a fixed rate converges at $O(1/k)$ for convex problems; deterministic gradient descent converges linearly, $O(\rho^k)$ for $\rho < 1$. The gap is the cost of stochastic noise, and closing it is the subject of the variance reduction methods in the next subsection.
+
+**Learning rate is the key parameter.** Set it too large and the iterates diverge or oscillate. Set it too small and progress is painfully slow. In practice you tune it by watching the loss curve: a learning rate that is too large produces spiky, increasing loss; one that is too small produces a curve that barely moves. Common schedules include step decay (halve the rate every fixed number of epochs), exponential decay, and cosine annealing, which cycles the rate smoothly from a maximum down to near zero and optionally restarts. Adaptive methods like Adam, RMSProp, and AdaGrad adjust the effective learning rate per parameter using accumulated gradient statistics — these are covered in depth in the deep learning primer and are not repeated here.
+
+For scientific computing applications outside the machine learning context, stochastic optimisation is less common, but it does arise when the objective involves Monte Carlo estimates or when evaluating the gradient is itself a sampling process. In those settings `scipy.optimize.minimize` with a numerical gradient estimate is often sufficient. In Python with PyTorch for a machine learning sketch:
+
+```python
+import torch
+
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+
+for x_batch, y_batch in dataloader:
+    optimizer.zero_grad()
+    loss = criterion(model(x_batch), y_batch)
+    loss.backward()   # computes stochastic gradient
+    optimizer.step()
+```
+
+In Julia, `Flux.jl` provides an equivalent:
+
+```julia
+using Flux
+
+opt = Descent(0.01)   # plain SGD; Flux.Momentum, Flux.Adam also available
+
+Flux.train!(loss, params(model), data_loader, opt)
+```
+
+For scientific objectives without an automatic differentiation framework available, use `minimize` with `method='L-BFGS-B'` and a numerical Jacobian, or add noise explicitly to the objective to simulate stochastic behaviour.
+
+### 10.6 Variance Reduction
+
+The gap between SGD and full gradient descent is not just a theoretical curiosity. For convex problems, full gradient descent converges *linearly* — each step reduces the error by a constant factor, so you need $O(\log(1/\varepsilon))$ iterations to reach precision $\varepsilon$. SGD with a fixed learning rate converges at $O(1/k)$, which is sublinear — you need $O(1/\varepsilon)$ iterations for the same precision. That is an enormous practical difference when $\varepsilon$ is small. Variance reduction methods close this gap by reducing the gradient noise without paying the full cost of an exact gradient.
+
+**SVRG (Stochastic Variance Reduced Gradient).** The key observation is that the noise in an SGD step comes from the difference between the full gradient and the single-sample estimate. SVRG makes this explicit. At the start of each outer epoch, compute and store a full gradient checkpoint $\tilde{\nabla} f(\tilde{\mathbf{x}})$ at the current iterate $\tilde{\mathbf{x}}$. Then each inner stochastic step uses the corrected estimate
+
+$$
+g_k = \nabla f_i(\mathbf{x}_k) - \nabla f_i(\tilde{\mathbf{x}}) + \tilde{\nabla} f(\tilde{\mathbf{x}})
+$$
+
+The correction term subtracts the same sample's contribution at the checkpoint and adds back the full gradient at the checkpoint. When $\mathbf{x}_k$ is close to $\tilde{\mathbf{x}}$, the two single-sample terms nearly cancel and the estimate is dominated by the full gradient $\tilde{\nabla} f(\tilde{\mathbf{x}})$ — which is accurate. As the iterates move further from the checkpoint, the variance grows, which is why you periodically refresh the checkpoint. The result is that for strongly convex objectives SVRG restores linear convergence, the same rate as full gradient descent, while paying only one full gradient pass per epoch rather than one per step.
+
+**SAG (Stochastic Average Gradient).** SAG takes a different approach: maintain a table of the most recent gradient evaluated for each data point $i$. Each step picks a random index $i$, computes a fresh gradient for that index, updates the table, and takes a step using the average of all stored gradients. Because the average is smooth and updates incrementally, the variance of the step direction decreases over time. SAG converges at $O(1/k)$ for strongly convex objectives, with a constant significantly better than plain SGD — and the constant improves as the algorithm accumulates more accurate per-example gradient estimates.
+
+The cost is memory: storing one gradient per data point requires $O(n \cdot d)$ memory, where $d$ is the number of parameters. For large $n$ and small $d$ this is entirely feasible. For neural networks where $d$ is in the millions this is typically not.
+
+**When to use variance reduction.** The honest answer is that variance reduction is worth the overhead in a specific niche: large-$n$ convex or mildly nonconvex objectives where you can afford to store per-example gradient information and you care about precise convergence rather than approximate solutions. Statistical learning problems — logistic regression, SVMs, regularised least squares — fit well. For deep learning the situation is different: the objectives are nonconvex, $n$ is often enormous, per-example gradient storage is impractical, and Adam-family methods with adaptive learning rates empirically outperform SVRG-style methods without requiring the checkpoint overhead. The convergence theory for variance reduction in nonconvex settings is also substantially weaker, so the practical case for it in deep learning is thin.
+
+### 10.7 Shared Example: Fit exponential decay model
 
 Model:
 $$
@@ -1393,6 +2293,148 @@ fit = curve_fit(model, t, y, p0)
 
 println("a, b: ", coef(fit))
 ```
+
+---
+
+## Regularisation
+
+Most of the linear algebra treatment so far has assumed your system is well-conditioned and has a unique solution. When those assumptions break down — as they do constantly in real problems — you need a different approach. That is what regularisation provides.
+
+### Motivation: Ill-Conditioned Systems
+
+Recall from the conditioning discussion in section 4: the condition number $\kappa(\mathbf{A})$ bounds how much a relative perturbation in the data $\mathbf{b}$ can be amplified in the solution $\mathbf{x}$. When $\kappa(\mathbf{A})$ is large, small noise in $\mathbf{b}$ translates to enormous noise in $\mathbf{x}$.
+
+The SVD makes this visible. Section 6 covered that the SVD writes $\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$, where the diagonal entries of $\mathbf{\Sigma}$ are the singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n \geq 0$. The pseudo-inverse solution is:
+
+$$\mathbf{x} = \mathbf{V}\mathbf{\Sigma}^{-1}\mathbf{U}^T\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
+
+Each term amplifies the component of $\mathbf{b}$ aligned with $\mathbf{u}_i$ by the factor $1/\sigma_i$. When some $\sigma_i$ are very small — near-rank-deficiency — the corresponding terms blow up. A tiny amount of noise in $\mathbf{b}$ in a nearly null-space direction gets amplified by $1/\sigma_{\min}$, which for an ill-conditioned problem can be enormous.
+
+This is not an algorithmic deficiency; it is a property of the problem. No algorithm can stably solve a system where the problem itself is ill-posed. The solutions are: throw away the ill-conditioned directions (truncated SVD), penalise large solutions (Tikhonov), or promote sparse solutions ($\ell_1$ regularisation). Each is a different way of trading solution fidelity for stability.
+
+### Truncated SVD
+
+The simplest regularisation is to throw away the problem's bad directions entirely.
+
+If you keep only the $k$ largest singular values — those large enough to be trusted — the truncated solution is:
+
+$$\mathbf{x}_k = \sum_{i=1}^{k} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
+
+The remaining singular components, where $\sigma_i < \sigma_{\min}^{\text{thresh}}$, are simply set to zero in the pseudo-inverse rather than amplifying noise. The result is stable but biased: you are effectively solving a projected version of the original problem.
+
+Choosing the truncation threshold $k$ is the hard part. The right signal is a gap in the singular value spectrum: if $\sigma_1 \geq \cdots \geq \sigma_k \gg \sigma_{k+1} \approx \cdots \approx \sigma_n$, the gap at index $k$ tells you the problem has effective rank $k$, and truncating there is natural. If the singular values decay smoothly with no gap, truncated SVD is a blunt instrument and Tikhonov regularisation is usually a better choice.
+
+Truncated SVD appears throughout applied mathematics under different names — it is the basis of PCA, low-rank approximation in data compression, and latent semantic analysis in text retrieval. The numerical idea is always the same: project onto the subspace where the operator is well-conditioned.
+
+### Tikhonov Regularisation
+
+Rather than making a hard threshold decision, Tikhonov regularisation adds a penalty on solution size to the least-squares objective:
+
+$$\min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \mu\|\mathbf{x}\|_2^2$$
+
+The parameter $\mu > 0$ controls the tradeoff: large $\mu$ shrinks the solution toward zero but degrades the fit; small $\mu$ approaches the unregularised least-squares solution. Differentiating and setting to zero gives the regularised normal equations:
+
+$$(\mathbf{A}^T\mathbf{A} + \mu\mathbf{I})\mathbf{x} = \mathbf{A}^T\mathbf{b}$$
+
+The effect on singular value amplification is illuminating. In the SVD frame, the unregularised pseudo-inverse amplifies the $i$-th singular component by $1/\sigma_i$. The Tikhonov solution replaces this with:
+
+$$\frac{\sigma_i}{\sigma_i^2 + \mu}$$
+
+For large singular values where $\sigma_i^2 \gg \mu$, the factor is approximately $1/\sigma_i$ — nearly the same as the unregularised solution. For small singular values where $\sigma_i^2 \ll \mu$, the factor is approximately $\sigma_i/\mu$, which is small and bounded. Tikhonov does not discard the small-$\sigma$ directions; it damps them smoothly, in proportion to how untrustworthy they are.
+
+In statistics, this is ridge regression: the $\mu\|\mathbf{x}\|_2^2$ penalty shrinks the coefficient vector and reduces variance at the cost of introducing bias. The bias-variance tradeoff is the same story: $\mu = 0$ gives the minimum-bias (maximum-variance) solution; increasing $\mu$ reduces variance but moves the estimator away from the true coefficients.
+
+### $\ell_1$ Regularisation (LASSO)
+
+Tikhonov's $\ell_2$ penalty shrinks all coefficients toward zero, but it never sets any of them exactly to zero. When you believe the true solution is sparse — only a few coefficients are genuinely nonzero — Tikhonov is the wrong tool. LASSO uses an $\ell_1$ penalty instead:
+
+$$\min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \mu\|\mathbf{x}\|_1$$
+
+The $\ell_1$ penalty is not smooth at zero, which turns out to be its key feature rather than a drawback.
+
+The geometry explains why. The $\ell_2$ ball $\|\mathbf{x}\|_2 \leq c$ is a sphere — smooth everywhere, no vertices. The $\ell_1$ ball $\|\mathbf{x}\|_1 \leq c$ is a diamond (in 2D) or cross-polytope (in higher dimensions), with corners sitting exactly on the coordinate axes. When the residual contours of the data term intersect the constraint set, they are far more likely to hit a corner of the diamond than a smooth point on the sphere. A corner corresponds to a solution where all coordinates except one or two are exactly zero — that is sparsity.
+
+This is not just geometric intuition: the subdifferential structure of $\|\cdot\|_1$ means that the optimality conditions force many coefficients to land exactly at zero, in contrast to $\ell_2$ which only drives coefficients to small values.
+
+LASSO beats ridge regression when the true underlying problem is sparse — feature selection in high-dimensional regression, compressed sensing, sparse signal recovery. When most predictors are genuinely relevant and the true coefficient vector is dense, LASSO's preference for zeros works against you and ridge is better. In practice, elastic net (a linear combination of $\ell_1$ and $\ell_2$ penalties) handles both cases and is a robust default when you are unsure.
+
+### Choosing $\mu$: the L-Curve
+
+Both Tikhonov and LASSO require you to choose $\mu$. This is the central practical difficulty.
+
+The L-curve method plots $\log\|\mathbf{A}\mathbf{x}_\mu - \mathbf{b}\|_2$ (residual norm) against $\log\|\mathbf{x}_\mu\|$ (solution norm) as $\mu$ varies from very small to very large. The resulting curve typically has an L-shape: for small $\mu$, the solution norm is large (the fit is good but the solution is wild); for large $\mu$, the residual is large (the solution is small but the fit is poor). The corner of the L is where both quantities are simultaneously reasonable — the natural operating point.
+
+![L-curve for regularisation parameter selection](figures/lcurve.png)
+
+The L-curve corner can be located numerically by finding the point of maximum curvature. In practice, the curve is not always a clean L — for severely ill-conditioned problems with coloured noise, it can be flat or have multiple inflection points — but it remains a useful diagnostic even when the corner is ambiguous.
+
+**Cross-validation** treats $\mu$ as a hyperparameter and selects it by held-out prediction error. Split the data, fit the regularised model at a grid of $\mu$ values on the training portion, evaluate prediction error on the held-out portion, and pick the $\mu$ that minimises it. This is computationally heavier than the L-curve but directly optimises the quantity you actually care about, and it is the standard approach in statistical learning contexts.
+
+The **discrepancy principle** is appropriate when you have a reliable estimate of the noise level $\delta$ in $\mathbf{b}$. The idea is to choose $\mu$ so that the residual $\|\mathbf{A}\mathbf{x}_\mu - \mathbf{b}\|_2$ matches the expected noise magnitude. Fitting below the noise level is overfit regardless of how small the regularisation looks: you are modelling noise, not signal. The discrepancy principle enforces this boundary directly.
+
+### Code
+
+**Python**
+
+```python
+import numpy as np
+from scipy.sparse.linalg import lsqr
+from sklearn.linear_model import Ridge, Lasso
+
+# Tikhonov via scipy — 'damp' is the sqrt of the mu coefficient
+# (scipy minimises ||Ax - b||^2 + damp^2 ||x||^2)
+result = lsqr(A, b, damp=np.sqrt(mu))
+x_tikhonov = result[0]
+
+# Ridge via sklearn — equivalent for dense problems
+ridge = Ridge(alpha=mu, fit_intercept=False)
+ridge.fit(A, b)
+
+# LASSO
+lasso = Lasso(alpha=mu / (2 * len(b)), fit_intercept=False)
+lasso.fit(A, b)
+```
+
+Note the factor convention: `scipy.sparse.linalg.lsqr` uses `damp` as $\sqrt{\mu}$ in the objective $\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \text{damp}^2\|\mathbf{x}\|_2^2$, and `sklearn.linear_model.Lasso` uses a slightly different scaling by default — check the docstring before assuming parameters are comparable across libraries.
+
+**R**
+
+The `glmnet` package handles both ridge and LASSO cleanly, including automatic $\mu$ selection by cross-validation.
+
+```r
+library(glmnet)
+
+# Fit ridge (alpha=0) or LASSO (alpha=1) across a path of lambda values
+# glmnet uses lambda for what this primer calls mu
+fit_ridge <- glmnet(A, b, alpha = 0, intercept = FALSE)
+fit_lasso <- glmnet(A, b, alpha = 1, intercept = FALSE)
+
+# Cross-validated mu selection
+cv_fit <- cv.glmnet(A, b, alpha = 1, intercept = FALSE)
+best_mu <- cv_fit$lambda.min
+x_lasso_cv <- coef(cv_fit, s = "lambda.min")
+```
+
+Note that `glmnet` uses `lambda` where this primer uses $\mu$ — the two are the same thing. The package normalises the penalty internally, so `lambda` values are not directly comparable to $\mu$ in the theoretical formulas above without accounting for the scaling.
+
+**Julia**
+
+```julia
+using Lasso, GLM
+
+# LASSO path — returns coefficients at multiple penalty values
+X = Matrix(A)
+y = vec(b)
+
+fit = fit(LassoPath, X, y, intercept=false)
+# Select a specific penalty strength from the path
+coef(fit)[:, end]   # most-penalised (sparsest) solution
+
+# Or specify a single lambda value
+fit_single = fit(LassoPath, X, y, lambda=[mu], intercept=false)
+```
+
+For ridge regression in Julia, `GLM.jl` does not natively support ridge, but `MultivariateStats.jl` provides `ridge(X, y, mu)` directly, and Tikhonov can always be computed manually by augmenting the system: stack $\sqrt{\mu}\mathbf{I}$ below $\mathbf{A}$ and zeros below $\mathbf{b}$, then solve with the ordinary least-squares solver.
 
 ---
 
@@ -1472,7 +2514,69 @@ Julia was designed so readable numerical code can still run fast. Its JIT compil
 
 ### 12.4 Shared Concept, Different Idioms
 
-Seeing the same computation in all three languages is useful because it separates mathematical essentials from language style. The underlying algorithm is the same; only the expression differs. Python leans on wrapped kernels and API ergonomics. R leans on vectorized data workflows. Julia leans on direct mathematical code with compiler speed. Once you see that, it is easier to focus on numerical ideas instead of syntax noise.
+Seeing the same algorithm in all three languages exposes something that is easy to miss when you work in just one: the underlying numerical method is language-agnostic, but the shape of the code that implements it reveals what each language values. The algorithm here is bisection — simple enough that no library machinery is needed, but concrete enough that idiomatic choices are visible.
+
+**Python**
+
+```python
+# Explicit loop
+def bisect(f, a, b, tol=1e-10):
+    while (b - a) / 2 > tol:
+        mid = (a + b) / 2
+        if f(mid) == 0:
+            return mid
+        elif f(a) * f(mid) < 0:
+            b = mid
+        else:
+            a = mid
+    return (a + b) / 2
+
+# Idiomatic one-liner
+from scipy.optimize import brentq
+root = brentq(lambda x: x**3 - 2, 0, 2)
+```
+
+The `brentq` one-liner is how you would actually solve this in production Python. The loop version demonstrates that Python has no built-in type constraints — `f` is any callable, `a` and `b` are any comparable values, and the function applies to floats, complex numbers, or anything else that supports the arithmetic without any declaration change.
+
+**R**
+
+```r
+# Explicit loop
+bisect <- function(f, a, b, tol = 1e-10) {
+  while ((b - a) / 2 > tol) {
+    mid <- (a + b) / 2
+    if (f(mid) == 0) return(mid)
+    else if (f(a) * f(mid) < 0) b <- mid
+    else a <- mid
+  }
+  (a + b) / 2
+}
+
+# Idiomatic one-liner
+root <- uniroot(function(x) x^3 - 2, c(0, 2))$root
+```
+
+Notice that `uniroot` returns a list, not a scalar — you extract `$root` explicitly. R functions almost always return structured objects, and this is a deliberate design choice: the return value carries convergence diagnostics alongside the answer, so you pay attention to what the solver actually found. The `<-` assignment operator is functionally equivalent to `=` here, but it is a strong community norm and you will see it in all idiomatic R code.
+
+**Julia**
+
+```julia
+# Explicit loop
+function bisect(f, a, b, tol=1e-10)
+    while (b - a) / 2 > tol
+        mid = (a + b) / 2
+        f(mid) == 0 && return mid
+        f(a) * f(mid) < 0 ? (b = mid) : (a = mid)
+    end
+    return (a + b) / 2
+end
+
+# Idiomatic one-liner
+using Roots
+root = find_zero(x -> x^3 - 2, (0.0, 2.0))
+```
+
+The explicit loop in Julia runs at speeds comparable to a C implementation — the JIT compiler generates native code for this kind of type-stable, loop-heavy arithmetic. The `&&` short-circuit and the ternary expression are idiomatic Julia: they are not clever tricks to avoid loop overhead (there is no such overhead), they are just compact ways to express conditional flow that the compiler handles efficiently. `find_zero` from Roots.jl dispatches to Brent's method when given an interval, giving the same robustness as `brentq` with Julia's multiple-dispatch design.
 
 ---
 
@@ -1495,6 +2599,125 @@ Start with a moderate trapezoidal grid, say $n = 100$ subintervals. That gives y
 Run the trapezoidal rule at $n = 100, 200, 400, 800, 1600$ and record the results. For a smooth function on a smooth interval, trapezoid is second-order, so doubling $n$ should cut error by about a factor of 4.
 
 Look at consecutive differences: $|I_{2n} - I_n|$ should shrink by about 4 each time. If that pattern holds, you are in the asymptotic regime and your extrapolation is on solid ground. If it does not, either the grid is missing important structure or the implementation needs another look.
+
+
+Here is the refinement study in code. The target is $I = \int_0^1 e^{-x^2}\, dx$; the true value is available from `scipy.integrate.quad` (Python), `integrate` (R), or `quadgk` (Julia) at near-machine-precision accuracy.
+
+**Python**
+
+```python
+import numpy as np
+from scipy.integrate import quad
+
+def trapezoid(f, a, b, n):
+    x = np.linspace(a, b, n + 1)
+    y = f(x)
+    h = (b - a) / n
+    return h * (y[0]/2 + np.sum(y[1:-1]) + y[-1]/2)
+
+f = lambda x: np.exp(-x**2)
+true_val, _ = quad(f, 0, 1)
+
+h0 = 0.1
+print(f"{'h':>10}  {'T(h)':>18}  {'Error':>12}  {'Ratio':>8}")
+prev_err = None
+T_prev = None
+for k in range(5):
+    n = int(1 / (h0 / 2**k))
+    T = trapezoid(f, 0, 1, n)
+    err = abs(T - true_val)
+    ratio = prev_err / err if prev_err else float('nan')
+    print(f"{h0/2**k:>10.5f}  {T:>18.15f}  {err:>12.3e}  {ratio:>8.2f}")
+    prev_err = err
+    T_prev2, T_prev = T_prev, T
+
+# Richardson extrapolation
+T_rich = T_prev + (T_prev - T_prev2) / 3
+print(f"\nRichardson extrapolation: {T_rich:.15f}")
+print(f"Richardson error:         {abs(T_rich - true_val):.3e}")
+```
+
+The ratio column should converge toward 4, confirming second-order convergence. Richardson extrapolation takes two consecutive estimates $T(h)$ and $T(h/2)$ and cancels the leading $O(h^2)$ error term:
+
+$$T^* = T(h/2) + \frac{T(h/2) - T(h)}{3}$$
+
+The factor of 3 comes from the fact that halving $h$ reduces the leading error term by 4, so $T(h/2) = I + c(h/2)^2 + \cdots$ and $T(h) = I + ch^2 + \cdots$, giving $T^* = T(h/2) + (T(h/2) - T(h))/3 = I + O(h^4)$. Richardson extrapolation essentially buys you two extra orders of accuracy from two second-order estimates, which is why the error typically drops by a factor of 16 or more beyond what the finest grid alone achieves.
+
+**R**
+
+```r
+trapezoid <- function(f, a, b, n) {
+  x <- seq(a, b, length.out = n + 1)
+  y <- f(x)
+  h <- (b - a) / n
+  h * (y[1]/2 + sum(y[2:n]) + y[n+1]/2)
+}
+
+f <- function(x) exp(-x^2)
+true_val <- integrate(f, 0, 1)$value
+
+h0 <- 0.1
+cat(sprintf("%10s  %18s  %12s  %8s\n", "h", "T(h)", "Error", "Ratio"))
+prev_err <- NULL
+T_prev <- NULL
+T_prev2 <- NULL
+
+for (k in seq(0, 4)) {
+  n <- as.integer(1 / (h0 / 2^k))
+  T <- trapezoid(f, 0, 1, n)
+  err <- abs(T - true_val)
+  ratio <- if (!is.null(prev_err)) prev_err / err else NaN
+  cat(sprintf("%10.5f  %18.15f  %12.3e  %8.2f\n", h0/2^k, T, err, ratio))
+  prev_err <- err
+  T_prev2 <- T_prev
+  T_prev <- T
+}
+
+T_rich <- T_prev + (T_prev - T_prev2) / 3
+cat(sprintf("\nRichardson extrapolation: %.15f\n", T_rich))
+cat(sprintf("Richardson error:         %.3e\n", abs(T_rich - true_val)))
+```
+
+**Julia**
+
+```julia
+using QuadGK
+
+function trapezoid(f, a, b, n)
+    h = (b - a) / n
+    s = 0.5 * (f(a) + f(b))
+    for i in 1:(n - 1)
+        s += f(a + i * h)
+    end
+    return h * s
+end
+
+f(x) = exp(-x^2)
+true_val, _ = quadgk(f, 0.0, 1.0; rtol=1e-14)
+
+h0 = 0.1
+@printf("%10s  %18s  %12s  %8s\n", "h", "T(h)", "Error", "Ratio")
+prev_err = NaN
+T_prev2 = NaN
+T_prev = NaN
+
+for k in 0:4
+    n = Int(round(1 / (h0 / 2^k)))
+    T = trapezoid(f, 0.0, 1.0, n)
+    err = abs(T - true_val)
+    ratio = isnan(prev_err) ? NaN : prev_err / err
+    @printf("%10.5f  %18.15f  %12.3e  %8.2f\n", h0/2^k, T, err, ratio)
+    prev_err = err
+    T_prev2 = T_prev
+    T_prev = T
+end
+
+T_rich = T_prev + (T_prev - T_prev2) / 3
+@printf("\nRichardson extrapolation: %.15f\n", T_rich)
+@printf("Richardson error:         %.3e\n", abs(T_rich - true_val))
+```
+
+All three implementations should produce the same convergence table. The ratio column landing near 4.00 for each halving is your convergence confirmation. The Richardson extrapolation result should be accurate to near machine precision, demonstrating that two second-order estimates, properly combined, can match what a much finer grid would achieve directly.
 
 ### 13.3 Cross-Check
 
