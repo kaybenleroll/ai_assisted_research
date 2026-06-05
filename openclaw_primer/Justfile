@@ -2,7 +2,7 @@ SOURCE_MD   := "openclaw_primer.md"
 PROJECT_DIR := "openclaw_primer"
 TITLE       := "OpenClaw Primer: A Comprehensive, Podman-First Guide"
 AUTHOR      := "28 May 2026"
-HTML_EXTRA  := ""
-PDF_EXTRA   := ""
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'

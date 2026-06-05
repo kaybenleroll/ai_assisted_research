@@ -2,7 +2,7 @@ SOURCE_MD   := "running-llms-locally.md"
 PROJECT_DIR := "research_local_llms"
 TITLE       := "Running LLMs Locally: A Complete Beginner's Landscape"
 AUTHOR      := "May 2026"
-HTML_EXTRA  := ""
-PDF_EXTRA   := ""
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'
