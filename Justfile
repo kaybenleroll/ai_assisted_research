@@ -62,12 +62,21 @@ deep-learning-pdf:
 deep-learning-all:
   cd deep_learning_primer && just all
 
+eval-loop-html:
+  cd evaluation_loop_primer && just html
+
+eval-loop-pdf:
+  cd evaluation_loop_primer && just pdf
+
+eval-loop-all:
+  cd evaluation_loop_primer && just all
+
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html eval-loop-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all eval-loop-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -80,4 +89,5 @@ clean-generated:
   cd silo_rpg_primer && just silo-clobber
   cd info_theory_article && just clobber
   cd deep_learning_primer && just clobber
+  cd evaluation_loop_primer && just clobber
   @echo "✓ Generated artifacts cleaned"
