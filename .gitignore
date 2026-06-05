@@ -69,3 +69,6 @@ logs/
 
 # Chromium profile written by mermaid container (--userns=keep-id)
 .config/
+
+# R default plot output
+**/Rplots.pdf
