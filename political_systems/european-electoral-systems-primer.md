@@ -1,10 +1,10 @@
 # Introduction
 
-### What This Covers
+## What This Covers
 
 Ten European national electoral systems: how each converts votes into seats, how seats translate into governments, and how the design of each system shapes political outcomes in practice. The primer includes comparative analysis, worked numerical examples, and a framework for evaluating coalition risk.
 
-### What This Is Not
+## What This Is Not
 
 This is not a complete history of electoral-system evolution, and it makes no argument for which system is best. It is not a guide to voting as a citizen in any particular country. The EU Parliament election process is used as contextual scaffolding, but this primer is about domestic systems, not the EU legislature itself.
 
@@ -12,7 +12,7 @@ European voting systems are different ways of solving the same problem: turning 
 
 If you want the short version, the real argument underneath almost every European system is this: how much should the system reward a clear winner, and how much should it try to mirror the actual shape of the vote? Once you see that trade-off, the rest of the map gets easier to read.
 
-# Part 1: Foundational Concepts
+# Foundational Concepts
 
 ## The Core Electoral Trade-Off
 
@@ -118,7 +118,7 @@ Finally, you get hybrid systems like Germany and Italy, which try to mix local r
 
 That is the whole game. Everything else is detail.
 
-# Part 2: The 10 Electoral Systems
+# The 10 Electoral Systems
 
 ## The United Kingdom: First-Past-The-Post
 
@@ -327,6 +327,8 @@ The parties above the threshold convert votes into seats through the list formul
 
 Romania shows that PR does not automatically mean open candidate choice or endless fragmentation. Closed lists and thresholds can make PR feel centralized and party-driven.
 
+# Comparative Lenses
+
 ## Ten Mini Case Studies: How Votes Became Governments
 
 These are compact, high-level snapshots from recent election cycles. They are included to show translation logic, not to provide a full historical record.
@@ -390,9 +392,9 @@ The table below is intentionally approximate and decision-oriented. It is design
 
 Use this table as a quick conversion lens: when vote concentration is modest but seat concentration is high, the system is usually adding a governability bonus; when both remain fragmented, coalition negotiation is the real executive-selection mechanism.
 
-# Part 3: Comparative Lenses
+## Comparative Summary
 
-## A Quick Comparison Table
+### At a Glance
 
 | Country | Basic style | Voter picks | Who controls candidates | Proportionality | Local link |
 | --- | --- | --- | --- | --- | --- |
@@ -407,7 +409,7 @@ Use this table as a quick conversion lens: when vote concentration is modest but
 | Sweden | Open-list PR | Party or candidate on list | Moderate party control | Very high | Medium |
 | Romania | Closed-list PR | Party list | Very strong party control | Medium-high | Medium |
 
-## What These Systems Actually Feel Like In Real Life
+### What These Systems Feel Like In Practice
 
 These systems differ less in democratic legitimacy than in political texture.
 
@@ -417,7 +419,7 @@ Ireland emphasizes voter choice among candidates, Germany engineered proportiona
 
 Spain and Romania are more party-list-driven, while the Netherlands, Denmark, and Sweden combine strong proportionality with different balances of fragmentation, correction, and voter influence over candidates.
 
-## The Trade-Offs, Plain English
+### The Trade-Offs, Plain English
 
 If you want a super blunt version:
 
@@ -427,7 +429,7 @@ If you want a super blunt version:
 4. MMP tries to have both local MPs and proportional results, but the machinery gets complicated fast.
 5. Closed-list PR makes seat allocation clean, but it gives parties a lot of control.
 6. Open-list PR gives voters more say, but it still keeps party logic at the center.
-7. Leveling seats and adjustment seats are the system's way of saying, "Yes, that district result was a bit weird, let's fix it." 
+7. Leveling seats and adjustment seats are the system's way of saying, "Yes, that district result was a bit weird, let's fix it."
 
 That last idea is really the modern European theme. Very few systems are satisfied with pure winner-takes-all anymore. Even when they are not perfectly proportional, they usually try to patch the rough edges.
 
@@ -483,7 +485,7 @@ Why it matters: some disagreements are symbolic; others are cabinet-breaking.
 
 Worsening signal: coalition leaders escalate disputes in public rather than containing them in bargaining forums.
 
-# Part 4: Technical Analysis Tools
+# Technical Analysis Tools
 
 ## The Math Layer That Usually Gets Hidden
 
