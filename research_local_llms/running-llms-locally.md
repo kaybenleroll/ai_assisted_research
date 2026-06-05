@@ -48,7 +48,7 @@ If those are true, you are ready.
 
 ---
 
-## Part 1: Foundations You Actually Need
+## Foundations
 
 Before running anything, you need a mental model of what you are actually running.
 
@@ -66,12 +66,6 @@ When you type a message, the inference pipeline does this:
 4. Append that token to the input and repeat until an end-of-sequence token is produced
 
 All of this is mathematically just matrix multiplication at enormous scale. It is the reason GPUs — which are fundamentally matrix multiplication accelerators — give you dramatically better performance than CPUs alone.
-
----
-
-## Core Concepts That Drive Day-to-Day Decisions
-
-These terms will come up repeatedly. Getting them straight now will save you a lot of confusion.
 
 ### Quantisation
 
@@ -104,7 +98,7 @@ Most beginners hit this confusion point early, so let's make it explicit now.
 - **Ollama Library** is a curated model catalogue that wraps model files in simple names like `llama3.2:3b`.
 - **A model page** usually includes: weights, quantised variants, a license, and a model card that explains intended use and limitations.
 
-When this guide says "download from Hugging Face", it means: open a model page on `huggingface.co`, choose a compatible file (usually GGUF for llama.cpp-class tools), and verify the license and model card before use. We will go deeper on this in Part 5.
+When this guide says "download from Hugging Face", it means: open a model page on `huggingface.co`, choose a compatible file (usually GGUF for llama.cpp-class tools), and verify the license and model card before use. We will go deeper on this in the model-selection section below.
 
 ### Context Window
 
@@ -122,7 +116,7 @@ These are parameters you control at inference time. **Temperature** controls ran
 
 ---
 
-## Part 2: Hardware and Runtime Constraints
+## Hardware and Runtime Constraints
 
 Your hardware determines which models and servers are practical. Here is an honest assessment:
 
@@ -168,7 +162,7 @@ If you have multiple machines — say, a beefy workstation and a laptop — seve
 
 ---
 
-## Part 3: Inference Stack Options
+## Inference Stack Options
 
 This is the heart of the guide. There are many tools, each with a different philosophy. We will cover them honestly.
 
@@ -442,13 +436,13 @@ macOS containers (via Podman Desktop's VM, or Docker Desktop) do not have direct
 
 ---
 
-## Part 4: Practical Deployment Blueprints
+## Practical Deployment Blueprints
 
 Let's translate theory into working setups for the main use cases.
 
 Quick note before you copy commands: image tags, model names, and CLI flags can change over time. If a command fails, check the current official docs for that tool and treat this guide's command blocks as patterns rather than immutable strings.
 
-### Setup 1: "I want to chat with a model today, minimal effort"
+### "I want to chat with a model today, minimal effort"
 
 Use **Ollama**, natively installed or in a container.
 
@@ -480,7 +474,7 @@ Open your browser at `http://localhost:3000`. Create an account (local only), an
 
 ---
 
-### Setup 2: "I want a coding assistant in VS Code"
+### "I want a coding assistant in VS Code"
 
 The [Continue](https://continue.dev/) extension for VS Code connects to any OpenAI-compatible backend. With Ollama running, add this to your `~/.continue/config.json`:
 
@@ -509,7 +503,7 @@ For the VS Code extension that turns llama.cpp's FIM (fill-in-the-middle) capabi
 
 ---
 
-### Setup 3: "I want a persistent API service with Podman"
+### "I want a persistent API service with Podman"
 
 Use a Podman + user-systemd service so your API starts on boot (Linux). On macOS/Windows, use your platform startup tooling.
 
@@ -535,7 +529,7 @@ Any app can now call `http://your-machine:8080/v1/chat/completions` via standard
 
 ---
 
-### Setup 4: "I want everything — text, audio, images, agents"
+### "I want everything — text, audio, images, agents"
 
 Use **LocalAI** with a persistent volume for models.
 
@@ -565,7 +559,7 @@ LocalAI's API is a superset of OpenAI's, so OpenAI-compatible libraries work dir
 
 ---
 
-### Setup 5: "I want to build AI agents"
+### "I want to build AI agents"
 
 Agents need reliable **tool calling**: model emits structured tool requests, your code executes them, and feeds results back.
 
@@ -602,7 +596,7 @@ For agents with tool use, ensure the model you choose has been trained for instr
 
 ---
 
-## Part 5: Model Selection and Operational Decisions
+## Model Selection and Operational Decisions
 
 The server software is only half the equation. You also need to choose which model to run.
 
@@ -805,7 +799,9 @@ You own the weights. You own the compute. Nothing you type leaves your machine.
 
 ---
 
-## Appendix A: Quick-Command Cheatsheet
+## Appendix
+
+### Quick-Command Cheatsheet
 
 ```bash
 # === Ollama ===
@@ -849,9 +845,7 @@ r = client.chat.completions.create(
 print(r.choices[0].message.content)
 ```
 
----
-
-## Appendix B: Further Reading
+### Further Reading
 
 - [llama.cpp README](https://github.com/ggml-org/llama.cpp) — the engine under most of this ecosystem
 - [Ollama documentation](https://docs.ollama.com) — model library, API reference, integrations

@@ -487,118 +487,99 @@ Podman-First Guide</span>
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
-<li><a href="#openclaw-primer-a-comprehensive-podman-first-guide" id="toc-openclaw-primer-a-comprehensive-podman-first-guide">OpenClaw
-Primer: A Comprehensive, Podman-First Guide</a>
+<li><a href="#why-this-primer-exists" id="toc-why-this-primer-exists"><span class="toc-section-number">1</span> Why This Primer Exists</a>
 <ul>
-<li><a href="#what-openclaw-is-how-people-use-it-and-how-to-run-it-with-local-llms" id="toc-what-openclaw-is-how-people-use-it-and-how-to-run-it-with-local-llms">What
-OpenClaw Is, How People Use It, and How to Run It with Local
-LLMs</a></li>
-<li><a href="#why-this-primer-exists" id="toc-why-this-primer-exists">1.
-Why This Primer Exists</a>
-<ul>
-<li><a href="#what-this-covers" id="toc-what-this-covers">What This
-Covers</a></li>
+<li><a href="#what-this-covers" id="toc-what-this-covers"><span class="toc-section-number">1.1</span> What This Covers</a></li>
 </ul></li>
-<li><a href="#what-openclaw-is-used-for" id="toc-what-openclaw-is-used-for">2. What OpenClaw Is Used For</a>
+<li><a href="#what-openclaw-is-used-for" id="toc-what-openclaw-is-used-for"><span class="toc-section-number">2</span> What OpenClaw Is Used For</a>
 <ul>
-<li><a href="#what-jobs-openclaw-performs-in-practice" id="toc-what-jobs-openclaw-performs-in-practice">2.1 What jobs OpenClaw
-performs in practice</a></li>
-<li><a href="#what-openclaw-is-not" id="toc-what-openclaw-is-not">2.2
-What OpenClaw is not</a></li>
+<li><a href="#what-jobs-openclaw-performs-in-practice" id="toc-what-jobs-openclaw-performs-in-practice"><span class="toc-section-number">2.1</span> What jobs OpenClaw performs in
+practice</a></li>
+<li><a href="#what-openclaw-is-not" id="toc-what-openclaw-is-not"><span class="toc-section-number">2.2</span> What OpenClaw is not</a></li>
 </ul></li>
-<li><a href="#how-people-actually-use-openclaw" id="toc-how-people-actually-use-openclaw">3. How People Actually Use
-OpenClaw</a>
+<li><a href="#how-people-actually-use-openclaw" id="toc-how-people-actually-use-openclaw"><span class="toc-section-number">3</span> How People Actually Use OpenClaw</a>
 <ul>
-<li><a href="#pattern-a-single-user-daily-assistant" id="toc-pattern-a-single-user-daily-assistant">3.1 Pattern A:
-Single-user daily assistant</a></li>
-<li><a href="#pattern-b-multi-channel-command-center" id="toc-pattern-b-multi-channel-command-center">3.2 Pattern B:
-Multi-channel command center</a></li>
-<li><a href="#pattern-c-local-first-with-hosted-safety-net" id="toc-pattern-c-local-first-with-hosted-safety-net">3.3 Pattern C:
-Local-first with hosted safety net</a></li>
-<li><a href="#pattern-d-containerized-operations" id="toc-pattern-d-containerized-operations">3.4 Pattern D: Containerized
+<li><a href="#pattern-a-single-user-daily-assistant" id="toc-pattern-a-single-user-daily-assistant"><span class="toc-section-number">3.1</span> Pattern A: Single-user daily
+assistant</a></li>
+<li><a href="#pattern-b-multi-channel-command-center" id="toc-pattern-b-multi-channel-command-center"><span class="toc-section-number">3.2</span> Pattern B: Multi-channel command
+center</a></li>
+<li><a href="#pattern-c-local-first-with-hosted-safety-net" id="toc-pattern-c-local-first-with-hosted-safety-net"><span class="toc-section-number">3.3</span> Pattern C: Local-first with hosted
+safety net</a></li>
+<li><a href="#pattern-d-containerized-operations" id="toc-pattern-d-containerized-operations"><span class="toc-section-number">3.4</span> Pattern D: Containerized
 operations</a></li>
 </ul></li>
-<li><a href="#ideas-for-how-you-could-use-openclaw" id="toc-ideas-for-how-you-could-use-openclaw">4. Ideas for How You Could
-Use OpenClaw</a></li>
-<li><a href="#openclaw-architecture-in-one-mental-model" id="toc-openclaw-architecture-in-one-mental-model">5. OpenClaw
-Architecture in One Mental Model</a>
+<li><a href="#ideas-for-how-you-could-use-openclaw" id="toc-ideas-for-how-you-could-use-openclaw"><span class="toc-section-number">4</span> Ideas for How You Could Use
+OpenClaw</a></li>
+<li><a href="#openclaw-architecture-in-one-mental-model" id="toc-openclaw-architecture-in-one-mental-model"><span class="toc-section-number">5</span> OpenClaw Architecture in One Mental
+Model</a>
 <ul>
-<li><a href="#state-locations-that-matter" id="toc-state-locations-that-matter">5.1 State locations that
+<li><a href="#state-locations-that-matter" id="toc-state-locations-that-matter"><span class="toc-section-number">5.1</span> State locations that
 matter</a></li>
 </ul></li>
-<li><a href="#comprehensive-local-setup-podman-first-self-contained" id="toc-comprehensive-local-setup-podman-first-self-contained">6.
-Comprehensive Local Setup (Podman-First, Self-Contained)</a>
+<li><a href="#comprehensive-local-setup-podman-first-self-contained" id="toc-comprehensive-local-setup-podman-first-self-contained"><span class="toc-section-number">6</span> Comprehensive Local Setup
+(Podman-First, Self-Contained)</a>
 <ul>
-<li><a href="#deployment-goals" id="toc-deployment-goals">6.1 Deployment
-goals</a></li>
-<li><a href="#prerequisites" id="toc-prerequisites">6.2
-Prerequisites</a></li>
-<li><a href="#bootstrapping-flow" id="toc-bootstrapping-flow">6.3
-Bootstrapping flow</a></li>
-<li><a href="#persistence-model" id="toc-persistence-model">6.4
-Persistence model</a></li>
-<li><a href="#optional-quadlet-mode" id="toc-optional-quadlet-mode">6.5
-Optional Quadlet mode</a></li>
-<li><a href="#day-2-operations" id="toc-day-2-operations">6.6 Day-2
-operations</a></li>
-<li><a href="#ollama-native-quick-setup" id="toc-ollama-native-quick-setup">6.7 Ollama-native quick
-setup</a></li>
-</ul></li>
-<li><a href="#running-openclaw-with-local-llms" id="toc-running-openclaw-with-local-llms">7. Running OpenClaw with Local
-LLMs</a>
-<ul>
-<li><a href="#model-selection-and-fallback-semantics" id="toc-model-selection-and-fallback-semantics">7.1 Model selection and
-fallback semantics</a></li>
-<li><a href="#ollama" id="toc-ollama">7.2 Ollama</a></li>
-<li><a href="#lm-studio" id="toc-lm-studio">7.3 LM Studio</a></li>
-<li><a href="#vllm" id="toc-vllm">7.4 vLLM</a></li>
-<li><a href="#litellm" id="toc-litellm">7.5 LiteLLM</a></li>
-<li><a href="#on-demand-local-services" id="toc-on-demand-local-services">7.6 On-demand local services</a></li>
-<li><a href="#constrained-hardware-partial-gpu-offloading" id="toc-constrained-hardware-partial-gpu-offloading">7.7 Constrained
-hardware: partial GPU offloading</a></li>
-</ul></li>
-<li><a href="#podman-local-llms-containment-patterns" id="toc-podman-local-llms-containment-patterns">8. Podman + Local LLMs:
-Containment Patterns</a></li>
-<li><a href="#example-configuration-snippets" id="toc-example-configuration-snippets">9. Example Configuration
-Snippets</a>
-<ul>
-<li><a href="#local-first-with-hosted-fallback" id="toc-local-first-with-hosted-fallback">9.1 Local-first with hosted
-fallback</a></li>
-<li><a href="#non-main-sandbox-baseline" id="toc-non-main-sandbox-baseline">9.2 Non-main sandbox
-baseline</a></li>
-<li><a href="#generic-openai-compatible-local-provider" id="toc-generic-openai-compatible-local-provider">9.3 Generic
-OpenAI-compatible local provider</a></li>
-</ul></li>
-<li><a href="#security-and-hardening-checklist" id="toc-security-and-hardening-checklist">10. Security and Hardening
-Checklist</a></li>
-<li><a href="#troubleshooting-guide" id="toc-troubleshooting-guide">11.
-Troubleshooting Guide</a></li>
-<li><a href="#suggested-adoption-path" id="toc-suggested-adoption-path">12. Suggested Adoption Path</a></li>
-<li><a href="#self-contained-reality" id="toc-self-contained-reality">13. Self-Contained Reality</a></li>
-<li><a href="#reference-links" id="toc-reference-links">14. Reference
-Links</a></li>
-<li><a href="#full-podman-compose-stack-openclaw-ollama-optional-vllm" id="toc-full-podman-compose-stack-openclaw-ollama-optional-vllm">15.
-Full Podman Compose Stack (OpenClaw + Ollama + Optional vLLM)</a>
-<ul>
-<li><a href="#included-operational-files" id="toc-included-operational-files">15.1 Included operational
-files</a></li>
-<li><a href="#launch-flow" id="toc-launch-flow">15.2 Launch
-flow</a></li>
-<li><a href="#optional-vllm-profile" id="toc-optional-vllm-profile">15.3
-Optional vLLM profile</a></li>
-</ul></li>
-<li><a href="#backup-and-restore-runbook" id="toc-backup-and-restore-runbook">16. Backup and Restore Runbook</a>
-<ul>
-<li><a href="#backup" id="toc-backup">16.1 Backup</a></li>
-<li><a href="#restore" id="toc-restore">16.2 Restore</a></li>
-<li><a href="#post-restore-validation" id="toc-post-restore-validation">16.3 Post-restore validation</a></li>
-</ul></li>
-<li><a href="#hardening-profile-matrix" id="toc-hardening-profile-matrix">17. Hardening Profile Matrix</a></li>
-<li><a href="#deterministic-bring-up-sequence" id="toc-deterministic-bring-up-sequence">18. Deterministic Bring-Up
+<li><a href="#deployment-goals" id="toc-deployment-goals"><span class="toc-section-number">6.1</span> Deployment goals</a></li>
+<li><a href="#prerequisites" id="toc-prerequisites"><span class="toc-section-number">6.2</span> Prerequisites</a></li>
+<li><a href="#bootstrapping-flow" id="toc-bootstrapping-flow"><span class="toc-section-number">6.3</span> Bootstrapping flow</a></li>
+<li><a href="#persistence-model" id="toc-persistence-model"><span class="toc-section-number">6.4</span> Persistence model</a></li>
+<li><a href="#optional-quadlet-mode" id="toc-optional-quadlet-mode"><span class="toc-section-number">6.5</span> Optional Quadlet mode</a></li>
+<li><a href="#day-2-operations" id="toc-day-2-operations"><span class="toc-section-number">6.6</span> Day-2 operations</a></li>
+<li><a href="#ollama-native-quick-setup" id="toc-ollama-native-quick-setup"><span class="toc-section-number">6.7</span> Ollama-native quick setup</a></li>
+<li><a href="#recommended-adoption-sequence" id="toc-recommended-adoption-sequence"><span class="toc-section-number">6.8</span> Recommended Adoption
 Sequence</a></li>
-<li><a href="#closing-perspective" id="toc-closing-perspective">19.
-Closing Perspective</a></li>
 </ul></li>
+<li><a href="#running-openclaw-with-local-llms" id="toc-running-openclaw-with-local-llms"><span class="toc-section-number">7</span> Running OpenClaw with Local LLMs</a>
+<ul>
+<li><a href="#model-selection-and-fallback-semantics" id="toc-model-selection-and-fallback-semantics"><span class="toc-section-number">7.1</span> Model selection and fallback
+semantics</a></li>
+<li><a href="#ollama" id="toc-ollama"><span class="toc-section-number">7.2</span> Ollama</a></li>
+<li><a href="#lm-studio" id="toc-lm-studio"><span class="toc-section-number">7.3</span> LM Studio</a></li>
+<li><a href="#vllm" id="toc-vllm"><span class="toc-section-number">7.4</span> vLLM</a></li>
+<li><a href="#litellm" id="toc-litellm"><span class="toc-section-number">7.5</span> LiteLLM</a></li>
+<li><a href="#on-demand-local-services" id="toc-on-demand-local-services"><span class="toc-section-number">7.6</span> On-demand local services</a></li>
+<li><a href="#constrained-hardware-partial-gpu-offloading" id="toc-constrained-hardware-partial-gpu-offloading"><span class="toc-section-number">7.7</span> Constrained hardware: partial GPU
+offloading</a></li>
+</ul></li>
+<li><a href="#podman-local-llms-containment-patterns" id="toc-podman-local-llms-containment-patterns"><span class="toc-section-number">8</span> Podman + Local LLMs: Containment
+Patterns</a></li>
+<li><a href="#example-configuration-snippets" id="toc-example-configuration-snippets"><span class="toc-section-number">9</span> Example Configuration Snippets</a>
+<ul>
+<li><a href="#local-first-with-hosted-fallback" id="toc-local-first-with-hosted-fallback"><span class="toc-section-number">9.1</span> Local-first with hosted
+fallback</a></li>
+<li><a href="#non-main-sandbox-baseline" id="toc-non-main-sandbox-baseline"><span class="toc-section-number">9.2</span> Non-main sandbox baseline</a></li>
+<li><a href="#generic-openai-compatible-local-provider" id="toc-generic-openai-compatible-local-provider"><span class="toc-section-number">9.3</span> Generic OpenAI-compatible local
+provider</a></li>
+</ul></li>
+<li><a href="#operational-reference" id="toc-operational-reference"><span class="toc-section-number">10</span> Operational Reference</a>
+<ul>
+<li><a href="#security-and-hardening-checklist" id="toc-security-and-hardening-checklist"><span class="toc-section-number">10.1</span> Security and Hardening
+Checklist</a></li>
+<li><a href="#troubleshooting-guide" id="toc-troubleshooting-guide"><span class="toc-section-number">10.2</span> Troubleshooting Guide</a></li>
+<li><a href="#hardening-profile-matrix" id="toc-hardening-profile-matrix"><span class="toc-section-number">10.3</span> Hardening Profile Matrix</a></li>
+</ul></li>
+<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">11</span> Reference Links</a></li>
+<li><a href="#runbooks" id="toc-runbooks"><span class="toc-section-number">12</span> Runbooks</a>
+<ul>
+<li><a href="#full-podman-compose-stack-openclaw-ollama-optional-vllm" id="toc-full-podman-compose-stack-openclaw-ollama-optional-vllm"><span class="toc-section-number">12.1</span> Full Podman Compose Stack
+(OpenClaw + Ollama + Optional vLLM)</a>
+<ul>
+<li><a href="#included-operational-files" id="toc-included-operational-files"><span class="toc-section-number">12.1.1</span> Included operational
+files</a></li>
+<li><a href="#launch-flow" id="toc-launch-flow"><span class="toc-section-number">12.1.2</span> Launch flow</a></li>
+<li><a href="#optional-vllm-profile" id="toc-optional-vllm-profile"><span class="toc-section-number">12.1.3</span> Optional vLLM profile</a></li>
+</ul></li>
+<li><a href="#backup-and-restore" id="toc-backup-and-restore"><span class="toc-section-number">12.2</span> Backup and Restore</a>
+<ul>
+<li><a href="#backup" id="toc-backup"><span class="toc-section-number">12.2.1</span> Backup</a></li>
+<li><a href="#restore" id="toc-restore"><span class="toc-section-number">12.2.2</span> Restore</a></li>
+<li><a href="#post-restore-validation" id="toc-post-restore-validation"><span class="toc-section-number">12.2.3</span> Post-restore
+validation</a></li>
+</ul></li>
+<li><a href="#deterministic-bring-up-sequence" id="toc-deterministic-bring-up-sequence"><span class="toc-section-number">12.3</span> Deterministic Bring-Up
+Sequence</a></li>
+</ul></li>
+<li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">13</span> Closing Perspective</a></li>
 </ul></div>
 
     </aside>
@@ -606,14 +587,10 @@ Closing Perspective</a></li>
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
     <main class="content">
-<h1 id="openclaw-primer-a-comprehensive-podman-first-guide">OpenClaw
-Primer: A Comprehensive, Podman-First Guide</h1>
-<h2 id="what-openclaw-is-how-people-use-it-and-how-to-run-it-with-local-llms">What
-OpenClaw Is, How People Use It, and How to Run It with Local LLMs</h2>
 <hr />
 <p><em>Long-form edition · 28 May 2026</em></p>
 <hr />
-<h2 id="why-this-primer-exists">1. Why This Primer Exists</h2>
+<h1 data-number="1" id="why-this-primer-exists"><span class="header-section-number">1</span> Why This Primer Exists</h1>
 <p>When people first hear “OpenClaw,” they can land on two completely
 different projects, and that ambiguity creates confusion before any
 technical work even starts. One historical usage points to an older game
@@ -630,12 +607,12 @@ rules, define tool execution boundaries, safely expose channels, manage
 persistent state, and recover quickly when something fails.</p>
 <p>This primer is written to bridge that gap. It is intentionally
 long-form and operationally grounded.</p>
-<h3 id="what-this-covers">What This Covers</h3>
+<h2 data-number="1.1" id="what-this-covers"><span class="header-section-number">1.1</span> What This Covers</h2>
 <p>By the end, you should have three things: a clear mental model of
 what OpenClaw is, practical patterns for how people actually use it, and
 a container-first setup path that keeps the host surface area as small
 and explicit as possible.</p>
-<h2 id="what-openclaw-is-used-for">2. What OpenClaw Is Used For</h2>
+<h1 data-number="2" id="what-openclaw-is-used-for"><span class="header-section-number">2</span> What OpenClaw Is Used For</h1>
 <p>At its core, OpenClaw is a personal assistant control plane that sits
 between users, channels, models, and tools. That sounds abstract until
 you map it to daily use: it is the system that decides how your
@@ -653,8 +630,8 @@ local providers as your primary path for cost and privacy while keeping
 hosted providers configured as fallback for resilience. In practice,
 this balance is often more useful than ideological purity in either
 direction.</p>
-<h3 id="what-jobs-openclaw-performs-in-practice">2.1 What jobs OpenClaw
-performs in practice</h3>
+<h2 data-number="2.1" id="what-jobs-openclaw-performs-in-practice"><span class="header-section-number">2.1</span> What jobs OpenClaw performs in
+practice</h2>
 <p>In real deployments, OpenClaw handles channel ingress and egress,
 session routing, model selection, provider failover behavior, tool-call
 policy, and operational checks. It also carries lifecycle
@@ -663,19 +640,19 @@ validation, diagnostics, health status, and continuity across
 restarts.</p>
 <p>That is why it is better viewed as an operations layer for
 assistants, not as a simple chat surface.</p>
-<h3 id="what-openclaw-is-not">2.2 What OpenClaw is not</h3>
+<h2 data-number="2.2" id="what-openclaw-is-not"><span class="header-section-number">2.2</span> What OpenClaw is not</h2>
 <p>OpenClaw is not a model server, and it does not replace model-serving
 systems such as Ollama, LM Studio, or vLLM. It is also not merely a
 themed chat UI. Its value comes from orchestration and control, not from
 owning the underlying inference engine.</p>
-<h2 id="how-people-actually-use-openclaw">3. How People Actually Use
-OpenClaw</h2>
+<h1 data-number="3" id="how-people-actually-use-openclaw"><span class="header-section-number">3</span> How People Actually Use
+OpenClaw</h1>
 <p>Successful OpenClaw usage tends to follow a few repeatable deployment
 patterns. The common trait across these patterns is disciplined
 boundaries: clear model policy, clear channel policy, and clear tool
 policy.</p>
-<h3 id="pattern-a-single-user-daily-assistant">3.1 Pattern A:
-Single-user daily assistant</h3>
+<h2 data-number="3.1" id="pattern-a-single-user-daily-assistant"><span class="header-section-number">3.1</span> Pattern A: Single-user daily
+assistant</h2>
 <p>This is the best starting point for most users. One gateway, one main
 assistant identity, one or two channels, and simple model fallback
 rules. The benefit is not merely simplicity; it is diagnosability. When
@@ -685,8 +662,8 @@ fewer moving parts.</p>
 drafting, summarization, lightweight automation, and recurring
 workflows. Teams that skip this phase often end up debugging avoidable
 complexity later.</p>
-<h3 id="pattern-b-multi-channel-command-center">3.2 Pattern B:
-Multi-channel command center</h3>
+<h2 data-number="3.2" id="pattern-b-multi-channel-command-center"><span class="header-section-number">3.2</span> Pattern B: Multi-channel
+command center</h2>
 <p>Once the single-user baseline is stable, many users extend to
 multiple surfaces: Control UI, mobile nodes, and one or more chat
 channels. This is where OpenClaw’s channel and session model becomes
@@ -695,8 +672,8 @@ delivery paths while preserving context and policy.</p>
 <p>The security posture must evolve with this transition. Pairing rules,
 allowlists, and non-main sandboxing become core controls rather than
 optional hardening.</p>
-<h3 id="pattern-c-local-first-with-hosted-safety-net">3.3 Pattern C:
-Local-first with hosted safety net</h3>
+<h2 data-number="3.3" id="pattern-c-local-first-with-hosted-safety-net"><span class="header-section-number">3.3</span> Pattern C: Local-first with
+hosted safety net</h2>
 <p>This pattern is increasingly common because it aligns cost, privacy,
 and reliability in a practical way. Local providers handle primary
 traffic. Hosted providers remain available as fallback when local
@@ -704,15 +681,15 @@ services are unavailable, slow, or unsuitable for the request.</p>
 <p>The result is a system that is more private than hosted-only, more
 resilient than local-only, and usually cheaper than always using cloud
 models.</p>
-<h3 id="pattern-d-containerized-operations">3.4 Pattern D: Containerized
-operations</h3>
+<h2 data-number="3.4" id="pattern-d-containerized-operations"><span class="header-section-number">3.4</span> Pattern D: Containerized
+operations</h2>
 <p>Operators who care about reproducibility and controlled blast radius
 often run OpenClaw in containers, keep state on explicit mounts, and use
 host-side CLI as the management plane. This is the posture emphasized
 throughout this guide because it matches a self-contained operational
 objective.</p>
-<h2 id="ideas-for-how-you-could-use-openclaw">4. Ideas for How You Could
-Use OpenClaw</h2>
+<h1 data-number="4" id="ideas-for-how-you-could-use-openclaw"><span class="header-section-number">4</span> Ideas for How You Could Use
+OpenClaw</h1>
 <p>The most useful ideas are concrete enough that you can implement a
 first version in days, not months.</p>
 <p>For documentation-heavy work, OpenClaw can become a documentation
@@ -733,8 +710,8 @@ low-level telemetry becomes readable status rather than raw noise.</p>
 <p>For role-separated workflows, OpenClaw can host multiple assistant
 identities with distinct workspaces and policy. That separation can
 drastically reduce accidental cross-context behavior.</p>
-<h2 id="openclaw-architecture-in-one-mental-model">5. OpenClaw
-Architecture in One Mental Model</h2>
+<h1 data-number="5" id="openclaw-architecture-in-one-mental-model"><span class="header-section-number">5</span> OpenClaw Architecture in One
+Mental Model</h1>
 <p>A practical debugging model is to think in layers: gateway, agent,
 provider, execution, state. Most troubleshooting becomes easier when you
 identify the failing layer before changing configuration.</p>
@@ -748,26 +725,26 @@ config, auth profiles, session data, and workspace.</p>
 a channel policy problem. A risky tool action is usually an
 execution-policy issue, not a model quality issue. A restart regression
 is often state drift, not immediate runtime logic.</p>
-<h3 id="state-locations-that-matter">5.1 State locations that
-matter</h3>
+<h2 data-number="5.1" id="state-locations-that-matter"><span class="header-section-number">5.1</span> State locations that
+matter</h2>
 <p>In container-first setups, state discipline is non-negotiable.
 Configuration, auth profile material, workspace data, and session
 artifacts should all persist outside ephemeral container layers. If this
 boundary is unclear, upgrades and restores become fragile.</p>
-<h2 id="comprehensive-local-setup-podman-first-self-contained">6.
-Comprehensive Local Setup (Podman-First, Self-Contained)</h2>
+<h1 data-number="6" id="comprehensive-local-setup-podman-first-self-contained"><span class="header-section-number">6</span> Comprehensive Local Setup
+(Podman-First, Self-Contained)</h1>
 <p>This section is intentionally operational and assumes your goal is
 repeatable operation, not one-time demonstration.</p>
-<h3 id="deployment-goals">6.1 Deployment goals</h3>
+<h2 data-number="6.1" id="deployment-goals"><span class="header-section-number">6.1</span> Deployment goals</h2>
 <p>A strong target posture is rootless Podman runtime, explicit state
 persistence mounts, minimal host dependencies, and optional user-level
 service management for restart behavior. This keeps host contracts
 narrow while preserving operational control.</p>
-<h3 id="prerequisites">6.2 Prerequisites</h3>
+<h2 data-number="6.2" id="prerequisites"><span class="header-section-number">6.2</span> Prerequisites</h2>
 <p>You need Linux, rootless Podman, OpenClaw CLI on host, and optionally
 <code>systemd --user</code> for service management. On headless systems,
 lingering can be used for boot-time continuity.</p>
-<h3 id="bootstrapping-flow">6.3 Bootstrapping flow</h3>
+<h2 data-number="6.3" id="bootstrapping-flow"><span class="header-section-number">6.3</span> Bootstrapping flow</h2>
 <p>Use source checkout to align with official helper scripts.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/openclaw/openclaw.git</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> openclaw</span></code></pre></div>
@@ -785,21 +762,21 @@ lingering can be used for boot-time continuity.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">OPENCLAW_CONTAINER</span><span class="op">=</span>openclaw</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> dashboard <span class="at">--no-open</span></span></code></pre></div>
-<h3 id="persistence-model">6.4 Persistence model</h3>
+<h2 data-number="6.4" id="persistence-model"><span class="header-section-number">6.4</span> Persistence model</h2>
 <p>Treat persistence as architecture, not convenience. Config,
 workspace, auth, and session artifacts should all map to known durable
 paths. Avoid anonymous state where possible.</p>
-<h3 id="optional-quadlet-mode">6.5 Optional Quadlet mode</h3>
+<h2 data-number="6.5" id="optional-quadlet-mode"><span class="header-section-number">6.5</span> Optional Quadlet mode</h2>
 <p>If you need service semantics and restart behavior, user-level
 Quadlet can provide cleaner day-2 operations than manual relaunch
 loops.</p>
-<h3 id="day-2-operations">6.6 Day-2 operations</h3>
+<h2 data-number="6.6" id="day-2-operations"><span class="header-section-number">6.6</span> Day-2 operations</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> logs <span class="at">-f</span> openclaw</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> stop openclaw</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/run-openclaw-podman.sh</span> launch</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> doctor</span></code></pre></div>
-<h3 id="ollama-native-quick-setup">6.7 Ollama-native quick setup</h3>
+<h2 data-number="6.7" id="ollama-native-quick-setup"><span class="header-section-number">6.7</span> Ollama-native quick setup</h2>
 <p>The Podman bootstrapping flow above is the self-contained posture
 this guide emphasizes, but there is a faster path for users who already
 run Ollama and want a single-command launch. Ollama can drive OpenClaw
@@ -824,13 +801,23 @@ and <code>--model</code> is required:</p>
 <p>This path trades some of the explicit container boundaries described
 above for convenience. It is a good fit for single-user local setups
 where you control the host directly.</p>
-<h2 id="running-openclaw-with-local-llms">7. Running OpenClaw with Local
-LLMs</h2>
+<h2 data-number="6.8" id="recommended-adoption-sequence"><span class="header-section-number">6.8</span> Recommended Adoption
+Sequence</h2>
+<ol type="1">
+<li>Bring up Podman runtime and verify health.</li>
+<li>Configure one local provider first.</li>
+<li>Add one hosted fallback.</li>
+<li>Enable non-main sandboxing before opening external channels.</li>
+<li>Containerize model services for stronger containment if needed.</li>
+<li>Establish backup cadence.</li>
+</ol>
+<h1 data-number="7" id="running-openclaw-with-local-llms"><span class="header-section-number">7</span> Running OpenClaw with Local
+LLMs</h1>
 <p>OpenClaw integrates with both native local providers and
 OpenAI-compatible proxy-style providers. Choosing between them is
 primarily about behavior guarantees and operational preference.</p>
-<h3 id="model-selection-and-fallback-semantics">7.1 Model selection and
-fallback semantics</h3>
+<h2 data-number="7.1" id="model-selection-and-fallback-semantics"><span class="header-section-number">7.1</span> Model selection and fallback
+semantics</h2>
 <p>OpenClaw distinguishes configured defaults, auto-selected fallback
 state, and explicit user overrides. This is operationally important.
 Configured defaults can walk fallback chains. Explicit user selections
@@ -881,7 +868,7 @@ operation, with two cloud entries kept as fallback:</p>
 </tr>
 </tbody>
 </table>
-<h3 id="ollama">7.2 Ollama</h3>
+<h2 data-number="7.2" id="ollama"><span class="header-section-number">7.2</span> Ollama</h2>
 <p>Ollama is a strong local-first path, but the key setup detail is API
 mode. For OpenClaw’s Ollama provider, native API endpoint behavior is
 preferred over <code>/v1</code> compatibility mode when reliable tool
@@ -891,24 +878,24 @@ behavior matters.</p>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> onboard</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models list <span class="at">--provider</span> ollama</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models set ollama/gemma4</span></code></pre></div>
-<h3 id="lm-studio">7.3 LM Studio</h3>
+<h2 data-number="7.3" id="lm-studio"><span class="header-section-number">7.3</span> LM Studio</h2>
 <p>LM Studio is useful when you want local model serving with easier
 lifecycle controls. OpenClaw can target LM Studio with OpenAI-compatible
 request modes depending on capability.</p>
-<h3 id="vllm">7.4 vLLM</h3>
+<h2 data-number="7.4" id="vllm"><span class="header-section-number">7.4</span> vLLM</h2>
 <p>vLLM is commonly used for higher-throughput serving scenarios. In
 OpenClaw, it is treated as an OpenAI-compatible provider and should be
 configured with explicit timeout and model metadata assumptions.</p>
-<h3 id="litellm">7.5 LiteLLM</h3>
+<h2 data-number="7.5" id="litellm"><span class="header-section-number">7.5</span> LiteLLM</h2>
 <p>LiteLLM is valuable as an abstraction and routing layer over multiple
 model backends. It is often used where centralized policy and provider
 switching are required.</p>
-<h3 id="on-demand-local-services">7.6 On-demand local services</h3>
+<h2 data-number="7.6" id="on-demand-local-services"><span class="header-section-number">7.6</span> On-demand local services</h2>
 <p>OpenClaw can also manage provider-local service startup via
 <code>localService</code> config, allowing heavyweight model services to
 spin up on demand instead of running continuously.</p>
-<h3 id="constrained-hardware-partial-gpu-offloading">7.7 Constrained
-hardware: partial GPU offloading</h3>
+<h2 data-number="7.7" id="constrained-hardware-partial-gpu-offloading"><span class="header-section-number">7.7</span> Constrained hardware: partial
+GPU offloading</h2>
 <p>The reason to run this on constrained hardware at all is not raw
 speed — you will not beat a hosted model on tokens per second. The
 benefit is privacy and persistence: local files, local databases, and
@@ -941,8 +928,8 @@ Intel/AMD laptop. Long-context prefill is slower, but interactive chat
 stays usable. Treat <code>num_thread 8</code> as a starting point and
 tune toward your physical core count — too many threads adds overhead
 rather than throughput.</p>
-<h2 id="podman-local-llms-containment-patterns">8. Podman + Local LLMs:
-Containment Patterns</h2>
+<h1 data-number="8" id="podman-local-llms-containment-patterns"><span class="header-section-number">8</span> Podman + Local LLMs: Containment
+Patterns</h1>
 <p>There are three practical containment patterns.</p>
 <p>Pattern one runs OpenClaw in containers but leaves model services on
 host. It is easy to adopt but less self-contained. Pattern two
@@ -952,10 +939,10 @@ Pattern three adds stricter sandboxing and narrow tool policies for
 higher-risk surfaces.</p>
 <p>Most mature setups converge toward pattern two after proving behavior
 in pattern one.</p>
-<h2 id="example-configuration-snippets">9. Example Configuration
-Snippets</h2>
-<h3 id="local-first-with-hosted-fallback">9.1 Local-first with hosted
-fallback</h3>
+<h1 data-number="9" id="example-configuration-snippets"><span class="header-section-number">9</span> Example Configuration
+Snippets</h1>
+<h2 data-number="9.1" id="local-first-with-hosted-fallback"><span class="header-section-number">9.1</span> Local-first with hosted
+fallback</h2>
 <pre class="json5"><code>{
   agents: {
     defaults: {
@@ -988,7 +975,7 @@ fallback</h3>
     }
   }
 }</code></pre>
-<h3 id="non-main-sandbox-baseline">9.2 Non-main sandbox baseline</h3>
+<h2 data-number="9.2" id="non-main-sandbox-baseline"><span class="header-section-number">9.2</span> Non-main sandbox baseline</h2>
 <pre class="json5"><code>{
   agents: {
     defaults: {
@@ -1000,8 +987,8 @@ fallback</h3>
     }
   }
 }</code></pre>
-<h3 id="generic-openai-compatible-local-provider">9.3 Generic
-OpenAI-compatible local provider</h3>
+<h2 data-number="9.3" id="generic-openai-compatible-local-provider"><span class="header-section-number">9.3</span> Generic OpenAI-compatible local
+provider</h2>
 <pre class="json5"><code>{
   agents: {
     defaults: {
@@ -1031,7 +1018,8 @@ OpenAI-compatible local provider</h3>
     }
   }
 }</code></pre>
-<h2 id="security-and-hardening-checklist">10. Security and Hardening
+<h1 data-number="10" id="operational-reference"><span class="header-section-number">10</span> Operational Reference</h1>
+<h2 data-number="10.1" id="security-and-hardening-checklist"><span class="header-section-number">10.1</span> Security and Hardening
 Checklist</h2>
 <p>Hardening should scale with exposure. Loopback-only personal setups
 can prioritize convenience. Any remotely reachable surface should
@@ -1040,7 +1028,7 @@ boundaries.</p>
 <p>At minimum, keep publish scope narrow, enforce pairing and
 allowlists, avoid broad host binds, and run diagnostics after
 significant config changes.</p>
-<h2 id="troubleshooting-guide">11. Troubleshooting Guide</h2>
+<h2 data-number="10.2" id="troubleshooting-guide"><span class="header-section-number">10.2</span> Troubleshooting Guide</h2>
 <p>Start with transport and state truth before tuning behavior.
 Reachability failures usually come from runtime/port/publish issues.
 Auth failures usually come from token mismatch or target confusion.
@@ -1048,69 +1036,7 @@ Provider mismatches often come from namespace assumptions in
 containerized environments.</p>
 <p>When tool calls appear as plain text, treat backend compatibility as
 a likely cause before rewriting assistant logic.</p>
-<h2 id="suggested-adoption-path">12. Suggested Adoption Path</h2>
-<ol type="1">
-<li>Bring up Podman runtime and verify health.</li>
-<li>Configure one local provider first.</li>
-<li>Add one hosted fallback.</li>
-<li>Enable non-main sandboxing before opening external channels.</li>
-<li>Containerize model services for stronger containment if needed.</li>
-<li>Establish backup cadence.</li>
-</ol>
-<h2 id="self-contained-reality">13. Self-Contained Reality</h2>
-<p>No deployment is literally zero-touch. The real goal is explicit host
-contracts, explicit persistence, explicit secret handling, and explicit
-recovery steps. OpenClaw plus rootless Podman fits this model well when
-boundary discipline is maintained.</p>
-<h2 id="reference-links">14. Reference Links</h2>
-<ul>
-<li>OpenClaw repository: https://github.com/openclaw/openclaw</li>
-<li>OpenClaw docs: https://docs.openclaw.ai</li>
-<li>Podman install guide: https://docs.openclaw.ai/install/podman</li>
-<li>Docker guide: https://docs.openclaw.ai/install/docker</li>
-<li>Models: https://docs.openclaw.ai/concepts/models</li>
-<li>Model failover:
-https://docs.openclaw.ai/concepts/model-failover</li>
-<li>Local models: https://docs.openclaw.ai/gateway/local-models</li>
-<li>Local model services:
-https://docs.openclaw.ai/gateway/local-model-services</li>
-<li>Sandboxing: https://docs.openclaw.ai/gateway/sandboxing</li>
-<li>Ollama provider: https://docs.openclaw.ai/providers/ollama</li>
-<li>LM Studio provider: https://docs.openclaw.ai/providers/lmstudio</li>
-<li>vLLM provider: https://docs.openclaw.ai/providers/vllm</li>
-<li>LiteLLM provider: https://docs.openclaw.ai/providers/litellm</li>
-</ul>
-<hr />
-<h2 id="full-podman-compose-stack-openclaw-ollama-optional-vllm">15.
-Full Podman Compose Stack (OpenClaw + Ollama + Optional vLLM)</h2>
-<p>This project includes a concrete compose baseline so the primer is
-directly actionable. The stack is designed for local-only exposure,
-explicit persistence, and optional model-serving expansion.</p>
-<h3 id="included-operational-files">15.1 Included operational files</h3>
-<ul>
-<li><code>podman-compose.yml</code></li>
-<li><code>scripts/backup_state.sh</code></li>
-<li><code>scripts/restore_state.sh</code></li>
-</ul>
-<h3 id="launch-flow">15.2 Launch flow</h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml ps</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml logs <span class="at">-f</span> openclaw</span></code></pre></div>
-<h3 id="optional-vllm-profile">15.3 Optional vLLM profile</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml <span class="at">--profile</span> vllm up <span class="at">-d</span></span></code></pre></div>
-<h2 id="backup-and-restore-runbook">16. Backup and Restore Runbook</h2>
-<p>State integrity is central to reliable assistant operation. The
-included scripts provide a baseline snapshot and restore workflow.</p>
-<h3 id="backup">16.1 Backup</h3>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/backup_state.sh</span></span></code></pre></div>
-<h3 id="restore">16.2 Restore</h3>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/restore_state.sh</span> ./backups/openclaw_state_YYYYMMDD_HHMMSS.tar.gz</span></code></pre></div>
-<h3 id="post-restore-validation">16.3 Post-restore validation</h3>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models status</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models list <span class="at">--provider</span> ollama</span></code></pre></div>
-<h2 id="hardening-profile-matrix">17. Hardening Profile Matrix</h2>
+<h2 data-number="10.3" id="hardening-profile-matrix"><span class="header-section-number">10.3</span> Hardening Profile Matrix</h2>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1173,7 +1099,57 @@ included scripts provide a baseline snapshot and restore workflow.</p>
 </table>
 <p>Do not advance to a higher exposure profile until the current profile
 is stable and validated.</p>
-<h2 id="deterministic-bring-up-sequence">18. Deterministic Bring-Up
+<h1 data-number="11" id="reference-links"><span class="header-section-number">11</span> Reference Links</h1>
+<ul>
+<li>OpenClaw repository: https://github.com/openclaw/openclaw</li>
+<li>OpenClaw docs: https://docs.openclaw.ai</li>
+<li>Podman install guide: https://docs.openclaw.ai/install/podman</li>
+<li>Docker guide: https://docs.openclaw.ai/install/docker</li>
+<li>Models: https://docs.openclaw.ai/concepts/models</li>
+<li>Model failover:
+https://docs.openclaw.ai/concepts/model-failover</li>
+<li>Local models: https://docs.openclaw.ai/gateway/local-models</li>
+<li>Local model services:
+https://docs.openclaw.ai/gateway/local-model-services</li>
+<li>Sandboxing: https://docs.openclaw.ai/gateway/sandboxing</li>
+<li>Ollama provider: https://docs.openclaw.ai/providers/ollama</li>
+<li>LM Studio provider: https://docs.openclaw.ai/providers/lmstudio</li>
+<li>vLLM provider: https://docs.openclaw.ai/providers/vllm</li>
+<li>LiteLLM provider: https://docs.openclaw.ai/providers/litellm</li>
+</ul>
+<hr />
+<h1 data-number="12" id="runbooks"><span class="header-section-number">12</span> Runbooks</h1>
+<h2 data-number="12.1" id="full-podman-compose-stack-openclaw-ollama-optional-vllm"><span class="header-section-number">12.1</span> Full Podman Compose Stack
+(OpenClaw + Ollama + Optional vLLM)</h2>
+<p>This project includes a concrete compose baseline so the primer is
+directly actionable. The stack is designed for local-only exposure,
+explicit persistence, and optional model-serving expansion.</p>
+<h3 data-number="12.1.1" id="included-operational-files"><span class="header-section-number">12.1.1</span> Included operational
+files</h3>
+<ul>
+<li><code>podman-compose.yml</code></li>
+<li><code>scripts/backup_state.sh</code></li>
+<li><code>scripts/restore_state.sh</code></li>
+</ul>
+<h3 data-number="12.1.2" id="launch-flow"><span class="header-section-number">12.1.2</span> Launch flow</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml ps</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml logs <span class="at">-f</span> openclaw</span></code></pre></div>
+<h3 data-number="12.1.3" id="optional-vllm-profile"><span class="header-section-number">12.1.3</span> Optional vLLM profile</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml <span class="at">--profile</span> vllm up <span class="at">-d</span></span></code></pre></div>
+<h2 data-number="12.2" id="backup-and-restore"><span class="header-section-number">12.2</span> Backup and Restore</h2>
+<p>State integrity is central to reliable assistant operation. The
+included scripts provide a baseline snapshot and restore workflow.</p>
+<h3 data-number="12.2.1" id="backup"><span class="header-section-number">12.2.1</span> Backup</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/backup_state.sh</span></span></code></pre></div>
+<h3 data-number="12.2.2" id="restore"><span class="header-section-number">12.2.2</span> Restore</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/restore_state.sh</span> ./backups/openclaw_state_YYYYMMDD_HHMMSS.tar.gz</span></code></pre></div>
+<h3 data-number="12.2.3" id="post-restore-validation"><span class="header-section-number">12.2.3</span> Post-restore validation</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models status</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models list <span class="at">--provider</span> ollama</span></code></pre></div>
+<h2 data-number="12.3" id="deterministic-bring-up-sequence"><span class="header-section-number">12.3</span> Deterministic Bring-Up
 Sequence</h2>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">OPENCLAW_CONTAINER</span><span class="op">=</span>openclaw</span>
@@ -1182,12 +1158,16 @@ Sequence</h2>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> config set agents.defaults.sandbox.mode <span class="st">&#39;&quot;non-main&quot;&#39;</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/backup_state.sh</span></span></code></pre></div>
-<h2 id="closing-perspective">19. Closing Perspective</h2>
+<h1 data-number="13" id="closing-perspective"><span class="header-section-number">13</span> Closing Perspective</h1>
 <p>The real value of this stack is not simply running local models. It
 is controlling assistant behavior under explicit operational rules you
 own. If you maintain clear boundaries for runtime, state, policy, and
 recovery, OpenClaw can move from “interesting tool” to dependable daily
 system.</p>
+<p>No deployment is literally zero-touch. The real goal is explicit host
+contracts, explicit persistence, explicit secret handling, and explicit
+recovery steps. OpenClaw plus rootless Podman fits this model well when
+boundary discipline is maintained.</p>
     </main>
 
   </div>
