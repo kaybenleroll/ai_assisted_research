@@ -2,8 +2,8 @@ SOURCE_MD   := "ai_agents_comprehensive_primer.md"
 PROJECT_DIR := "building_ai_agents"
 TITLE       := "Building Autonomous AI Agents: A Comprehensive Primer"
 AUTHOR      := "May 2026"
-HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua"
-PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua -V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono'"
+HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua -V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'
 
