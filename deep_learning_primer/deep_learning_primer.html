@@ -520,176 +520,151 @@ Technical Primer</span>
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
-<li><a href="#deep-learning-and-generative-ai-a-technical-primer" id="toc-deep-learning-and-generative-ai-a-technical-primer">Deep
-Learning and Generative AI: A Technical Primer</a>
+<li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a>
 <ul>
-<li><a href="#introduction" id="toc-introduction">Introduction</a>
-<ul>
-<li><a href="#what-this-covers" id="toc-what-this-covers">What This
-Covers</a></li>
-<li><a href="#what-this-is-not" id="toc-what-this-is-not">What This Is
-Not</a></li>
-<li><a href="#assumed-background" id="toc-assumed-background">Assumed
-Background</a></li>
-<li><a href="#how-this-guide-is-structured" id="toc-how-this-guide-is-structured">How This Guide Is
+<li><a href="#what-this-covers" id="toc-what-this-covers"><span class="toc-section-number">1.1</span> What This Covers</a></li>
+<li><a href="#what-this-is-not" id="toc-what-this-is-not"><span class="toc-section-number">1.2</span> What This Is Not</a></li>
+<li><a href="#assumed-background" id="toc-assumed-background"><span class="toc-section-number">1.3</span> Assumed Background</a></li>
+<li><a href="#how-this-guide-is-structured" id="toc-how-this-guide-is-structured"><span class="toc-section-number">1.4</span> How This Guide Is
 Structured</a></li>
 </ul></li>
-<li><a href="#why-deep-learning-now" id="toc-why-deep-learning-now">Why
-Deep Learning Now</a>
+<li><a href="#why-deep-learning-now" id="toc-why-deep-learning-now"><span class="toc-section-number">2</span>
+Why Deep Learning Now</a>
 <ul>
-<li><a href="#data" id="toc-data">Data</a></li>
-<li><a href="#compute" id="toc-compute">Compute</a></li>
-<li><a href="#algorithms" id="toc-algorithms">Algorithms</a></li>
-<li><a href="#why-classical-ml-hits-a-ceiling" id="toc-why-classical-ml-hits-a-ceiling">Why Classical ML Hits a
+<li><a href="#data" id="toc-data"><span class="toc-section-number">2.1</span> Data</a></li>
+<li><a href="#compute" id="toc-compute"><span class="toc-section-number">2.2</span> Compute</a></li>
+<li><a href="#algorithms" id="toc-algorithms"><span class="toc-section-number">2.3</span> Algorithms</a></li>
+<li><a href="#why-classical-ml-hits-a-ceiling" id="toc-why-classical-ml-hits-a-ceiling"><span class="toc-section-number">2.4</span> Why Classical ML Hits a
 Ceiling</a></li>
-<li><a href="#the-imagenet-moment" id="toc-the-imagenet-moment">The
-ImageNet Moment</a></li>
+<li><a href="#the-imagenet-moment" id="toc-the-imagenet-moment"><span class="toc-section-number">2.5</span> The ImageNet Moment</a></li>
 </ul></li>
-<li><a href="#neural-network-fundamentals" id="toc-neural-network-fundamentals">Neural Network Fundamentals</a>
+<li><a href="#neural-network-fundamentals" id="toc-neural-network-fundamentals"><span class="toc-section-number">3</span> Neural Network Fundamentals</a>
 <ul>
-<li><a href="#the-perceptron" id="toc-the-perceptron">The
-Perceptron</a></li>
-<li><a href="#from-perceptron-to-mlp" id="toc-from-perceptron-to-mlp">From Perceptron to MLP</a></li>
-<li><a href="#activation-functions" id="toc-activation-functions">Activation Functions</a></li>
-<li><a href="#the-forward-pass" id="toc-the-forward-pass">The Forward
-Pass</a></li>
-<li><a href="#the-universal-approximation-theorem" id="toc-the-universal-approximation-theorem">The Universal Approximation
+<li><a href="#the-perceptron" id="toc-the-perceptron"><span class="toc-section-number">3.1</span> The Perceptron</a></li>
+<li><a href="#from-perceptron-to-mlp" id="toc-from-perceptron-to-mlp"><span class="toc-section-number">3.2</span> From Perceptron to MLP</a></li>
+<li><a href="#activation-functions" id="toc-activation-functions"><span class="toc-section-number">3.3</span> Activation Functions</a></li>
+<li><a href="#the-forward-pass" id="toc-the-forward-pass"><span class="toc-section-number">3.4</span> The Forward Pass</a></li>
+<li><a href="#the-universal-approximation-theorem" id="toc-the-universal-approximation-theorem"><span class="toc-section-number">3.5</span> The Universal Approximation
 Theorem</a></li>
 </ul></li>
-<li><a href="#training-deep-networks" id="toc-training-deep-networks">Training Deep Networks</a>
+<li><a href="#training-deep-networks" id="toc-training-deep-networks"><span class="toc-section-number">4</span> Training Deep Networks</a>
 <ul>
-<li><a href="#loss-functions" id="toc-loss-functions">Loss
-Functions</a></li>
-<li><a href="#backpropagation" id="toc-backpropagation">Backpropagation</a></li>
-<li><a href="#vanishing-and-exploding-gradients" id="toc-vanishing-and-exploding-gradients">Vanishing and Exploding
+<li><a href="#loss-functions" id="toc-loss-functions"><span class="toc-section-number">4.1</span> Loss Functions</a></li>
+<li><a href="#backpropagation" id="toc-backpropagation"><span class="toc-section-number">4.2</span> Backpropagation</a></li>
+<li><a href="#vanishing-and-exploding-gradients" id="toc-vanishing-and-exploding-gradients"><span class="toc-section-number">4.3</span> Vanishing and Exploding
 Gradients</a></li>
-<li><a href="#gradient-descent-variants" id="toc-gradient-descent-variants">Gradient Descent Variants</a></li>
-<li><a href="#weight-initialisation" id="toc-weight-initialisation">Weight Initialisation</a></li>
-<li><a href="#regularisation" id="toc-regularisation">Regularisation</a></li>
-<li><a href="#batch-normalisation" id="toc-batch-normalisation">Batch
-Normalisation</a></li>
-<li><a href="#learning-rate-schedules" id="toc-learning-rate-schedules">Learning Rate Schedules</a></li>
-<li><a href="#training-failure-modes" id="toc-training-failure-modes">Training Failure Modes</a></li>
-<li><a href="#the-convolution-operation" id="toc-the-convolution-operation">The convolution operation</a></li>
-<li><a href="#pooling-layers" id="toc-pooling-layers">Pooling
-layers</a></li>
-<li><a href="#architecture-evolution" id="toc-architecture-evolution">Architecture evolution</a></li>
-<li><a href="#transfer-learning" id="toc-transfer-learning">Transfer
-learning</a></li>
-<li><a href="#vision-transformers-briefly" id="toc-vision-transformers-briefly">Vision Transformers,
+<li><a href="#gradient-descent-variants" id="toc-gradient-descent-variants"><span class="toc-section-number">4.4</span> Gradient Descent Variants</a></li>
+<li><a href="#weight-initialisation" id="toc-weight-initialisation"><span class="toc-section-number">4.5</span> Weight Initialisation</a></li>
+<li><a href="#regularisation" id="toc-regularisation"><span class="toc-section-number">4.6</span> Regularisation</a></li>
+<li><a href="#batch-normalisation" id="toc-batch-normalisation"><span class="toc-section-number">4.7</span> Batch Normalisation</a></li>
+<li><a href="#learning-rate-schedules" id="toc-learning-rate-schedules"><span class="toc-section-number">4.8</span> Learning Rate Schedules</a></li>
+<li><a href="#training-failure-modes" id="toc-training-failure-modes"><span class="toc-section-number">4.9</span> Training Failure Modes</a></li>
+<li><a href="#the-convolution-operation" id="toc-the-convolution-operation"><span class="toc-section-number">4.10</span> The convolution
+operation</a></li>
+<li><a href="#pooling-layers" id="toc-pooling-layers"><span class="toc-section-number">4.11</span> Pooling layers</a></li>
+<li><a href="#architecture-evolution" id="toc-architecture-evolution"><span class="toc-section-number">4.12</span> Architecture evolution</a></li>
+<li><a href="#transfer-learning" id="toc-transfer-learning"><span class="toc-section-number">4.13</span> Transfer learning</a></li>
+<li><a href="#vision-transformers-briefly" id="toc-vision-transformers-briefly"><span class="toc-section-number">4.14</span> Vision Transformers,
 briefly</a></li>
-<li><a href="#when-cnns-are-the-wrong-tool" id="toc-when-cnns-are-the-wrong-tool">When CNNs are the wrong
+<li><a href="#when-cnns-are-the-wrong-tool" id="toc-when-cnns-are-the-wrong-tool"><span class="toc-section-number">4.15</span> When CNNs are the wrong
 tool</a></li>
-<li><a href="#code-a-small-convnet-in-three-frameworks" id="toc-code-a-small-convnet-in-three-frameworks">Code: a small ConvNet
-in three frameworks</a></li>
-</ul></li>
-<li><a href="#recurrent-neural-networks" id="toc-recurrent-neural-networks">Recurrent Neural Networks</a>
-<ul>
-<li><a href="#the-rnn-cell" id="toc-the-rnn-cell">The RNN cell</a></li>
-<li><a href="#backpropagation-through-time" id="toc-backpropagation-through-time">Backpropagation through
-time</a></li>
-<li><a href="#the-vanishing-gradient-problem-in-rnns" id="toc-the-vanishing-gradient-problem-in-rnns">The vanishing gradient
-problem in RNNs</a></li>
-<li><a href="#lstm" id="toc-lstm">LSTM</a></li>
-<li><a href="#gru" id="toc-gru">GRU</a></li>
-<li><a href="#when-rnns-still-earn-their-place" id="toc-when-rnns-still-earn-their-place">When RNNs still earn their
-place</a></li>
-<li><a href="#code-an-lstm-in-three-frameworks" id="toc-code-an-lstm-in-three-frameworks">Code: an LSTM in three
+<li><a href="#code-a-small-convnet-in-three-frameworks" id="toc-code-a-small-convnet-in-three-frameworks"><span class="toc-section-number">4.16</span> Code: a small ConvNet in three
 frameworks</a></li>
 </ul></li>
-<li><a href="#attention-and-transformers" id="toc-attention-and-transformers">Attention and Transformers</a>
+<li><a href="#recurrent-neural-networks" id="toc-recurrent-neural-networks"><span class="toc-section-number">5</span> Recurrent Neural Networks</a>
 <ul>
-<li><a href="#the-attention-intuition" id="toc-the-attention-intuition">The attention intuition</a></li>
-<li><a href="#scaled-dot-product-attention" id="toc-scaled-dot-product-attention">Scaled dot-product
+<li><a href="#the-rnn-cell" id="toc-the-rnn-cell"><span class="toc-section-number">5.1</span> The RNN cell</a></li>
+<li><a href="#backpropagation-through-time" id="toc-backpropagation-through-time"><span class="toc-section-number">5.2</span> Backpropagation through
+time</a></li>
+<li><a href="#the-vanishing-gradient-problem-in-rnns" id="toc-the-vanishing-gradient-problem-in-rnns"><span class="toc-section-number">5.3</span> The vanishing gradient problem in
+RNNs</a></li>
+<li><a href="#lstm" id="toc-lstm"><span class="toc-section-number">5.4</span> LSTM</a></li>
+<li><a href="#gru" id="toc-gru"><span class="toc-section-number">5.5</span> GRU</a></li>
+<li><a href="#when-rnns-still-earn-their-place" id="toc-when-rnns-still-earn-their-place"><span class="toc-section-number">5.6</span> When RNNs still earn their
+place</a></li>
+<li><a href="#code-an-lstm-in-three-frameworks" id="toc-code-an-lstm-in-three-frameworks"><span class="toc-section-number">5.7</span> Code: an LSTM in three
+frameworks</a></li>
+</ul></li>
+<li><a href="#attention-and-transformers" id="toc-attention-and-transformers"><span class="toc-section-number">6</span> Attention and Transformers</a>
+<ul>
+<li><a href="#the-attention-intuition" id="toc-the-attention-intuition"><span class="toc-section-number">6.1</span> The attention intuition</a></li>
+<li><a href="#scaled-dot-product-attention" id="toc-scaled-dot-product-attention"><span class="toc-section-number">6.2</span> Scaled dot-product
 attention</a></li>
-<li><a href="#multi-head-attention" id="toc-multi-head-attention">Multi-head attention</a></li>
-<li><a href="#positional-encoding" id="toc-positional-encoding">Positional encoding</a></li>
-<li><a href="#the-full-transformer-architecture" id="toc-the-full-transformer-architecture">The full transformer
+<li><a href="#multi-head-attention" id="toc-multi-head-attention"><span class="toc-section-number">6.3</span> Multi-head attention</a></li>
+<li><a href="#positional-encoding" id="toc-positional-encoding"><span class="toc-section-number">6.4</span> Positional encoding</a></li>
+<li><a href="#the-full-transformer-architecture" id="toc-the-full-transformer-architecture"><span class="toc-section-number">6.5</span> The full transformer
 architecture</a></li>
-<li><a href="#layer-normalisation" id="toc-layer-normalisation">Layer
-normalisation</a></li>
-<li><a href="#bert-versus-gpt" id="toc-bert-versus-gpt">BERT versus
-GPT</a></li>
-<li><a href="#code-self-attention-in-three-frameworks" id="toc-code-self-attention-in-three-frameworks">Code: self-attention in
-three frameworks</a></li>
+<li><a href="#layer-normalisation" id="toc-layer-normalisation"><span class="toc-section-number">6.6</span> Layer normalisation</a></li>
+<li><a href="#bert-versus-gpt" id="toc-bert-versus-gpt"><span class="toc-section-number">6.7</span> BERT versus GPT</a></li>
+<li><a href="#code-self-attention-in-three-frameworks" id="toc-code-self-attention-in-three-frameworks"><span class="toc-section-number">6.8</span> Code: self-attention in three
+frameworks</a></li>
 </ul></li>
-<li><a href="#large-language-models" id="toc-large-language-models">Large Language Models</a>
+<li><a href="#large-language-models" id="toc-large-language-models"><span class="toc-section-number">7</span>
+Large Language Models</a>
 <ul>
-<li><a href="#tokenisation-the-model-never-sees-text" id="toc-tokenisation-the-model-never-sees-text">Tokenisation: the model
-never sees text</a></li>
-<li><a href="#pre-training-objectives" id="toc-pre-training-objectives">Pre-training objectives</a></li>
-<li><a href="#scaling-laws" id="toc-scaling-laws">Scaling laws</a></li>
-<li><a href="#fine-tuning-adapting-without-retraining" id="toc-fine-tuning-adapting-without-retraining">Fine-tuning: adapting
-without retraining</a></li>
-<li><a href="#rlhf-from-completion-to-instruction-following" id="toc-rlhf-from-completion-to-instruction-following">RLHF: from
-completion to instruction-following</a></li>
-<li><a href="#emergent-capabilities" id="toc-emergent-capabilities">Emergent capabilities</a></li>
+<li><a href="#tokenisation-the-model-never-sees-text" id="toc-tokenisation-the-model-never-sees-text"><span class="toc-section-number">7.1</span> Tokenisation: the model never sees
+text</a></li>
+<li><a href="#pre-training-objectives" id="toc-pre-training-objectives"><span class="toc-section-number">7.2</span> Pre-training objectives</a></li>
+<li><a href="#scaling-laws" id="toc-scaling-laws"><span class="toc-section-number">7.3</span> Scaling laws</a></li>
+<li><a href="#fine-tuning-adapting-without-retraining" id="toc-fine-tuning-adapting-without-retraining"><span class="toc-section-number">7.4</span> Fine-tuning: adapting without
+retraining</a></li>
+<li><a href="#rlhf-from-completion-to-instruction-following" id="toc-rlhf-from-completion-to-instruction-following"><span class="toc-section-number">7.5</span> RLHF: from completion to
+instruction-following</a></li>
+<li><a href="#emergent-capabilities" id="toc-emergent-capabilities"><span class="toc-section-number">7.6</span> Emergent capabilities</a></li>
 </ul></li>
-<li><a href="#variational-autoencoders" id="toc-variational-autoencoders">Variational Autoencoders</a>
+<li><a href="#variational-autoencoders" id="toc-variational-autoencoders"><span class="toc-section-number">8</span> Variational Autoencoders</a>
 <ul>
-<li><a href="#autoencoders-and-the-gap-they-leave" id="toc-autoencoders-and-the-gap-they-leave">Autoencoders, and the gap
-they leave</a></li>
-<li><a href="#the-latent-variable-view" id="toc-the-latent-variable-view">The latent-variable view</a></li>
-<li><a href="#the-elbo" id="toc-the-elbo">The ELBO</a></li>
-<li><a href="#the-reparameterisation-trick" id="toc-the-reparameterisation-trick">The reparameterisation
+<li><a href="#autoencoders-and-the-gap-they-leave" id="toc-autoencoders-and-the-gap-they-leave"><span class="toc-section-number">8.1</span> Autoencoders, and the gap they
+leave</a></li>
+<li><a href="#the-latent-variable-view" id="toc-the-latent-variable-view"><span class="toc-section-number">8.2</span> The latent-variable view</a></li>
+<li><a href="#the-elbo" id="toc-the-elbo"><span class="toc-section-number">8.3</span> The ELBO</a></li>
+<li><a href="#the-reparameterisation-trick" id="toc-the-reparameterisation-trick"><span class="toc-section-number">8.4</span> The reparameterisation
 trick</a></li>
-<li><a href="#putting-it-together" id="toc-putting-it-together">Putting
-it together</a></li>
-<li><a href="#limitations" id="toc-limitations">Limitations</a></li>
+<li><a href="#putting-it-together" id="toc-putting-it-together"><span class="toc-section-number">8.5</span> Putting it together</a></li>
+<li><a href="#limitations" id="toc-limitations"><span class="toc-section-number">8.6</span> Limitations</a></li>
 </ul></li>
-<li><a href="#generative-adversarial-networks" id="toc-generative-adversarial-networks">Generative Adversarial
-Networks</a>
+<li><a href="#generative-adversarial-networks" id="toc-generative-adversarial-networks"><span class="toc-section-number">9</span> Generative Adversarial Networks</a>
 <ul>
-<li><a href="#the-minimax-game" id="toc-the-minimax-game">The minimax
-game</a></li>
-<li><a href="#why-gans-are-hard-to-train" id="toc-why-gans-are-hard-to-train">Why GANs are hard to train</a></li>
-<li><a href="#wasserstein-gan" id="toc-wasserstein-gan">Wasserstein
-GAN</a></li>
-<li><a href="#architecture-variants" id="toc-architecture-variants">Architecture variants</a></li>
-<li><a href="#when-gans-are-still-the-right-tool" id="toc-when-gans-are-still-the-right-tool">When GANs are still the
-right tool</a></li>
+<li><a href="#the-minimax-game" id="toc-the-minimax-game"><span class="toc-section-number">9.1</span> The minimax game</a></li>
+<li><a href="#why-gans-are-hard-to-train" id="toc-why-gans-are-hard-to-train"><span class="toc-section-number">9.2</span> Why GANs are hard to
+train</a></li>
+<li><a href="#wasserstein-gan" id="toc-wasserstein-gan"><span class="toc-section-number">9.3</span> Wasserstein GAN</a></li>
+<li><a href="#architecture-variants" id="toc-architecture-variants"><span class="toc-section-number">9.4</span> Architecture variants</a></li>
+<li><a href="#when-gans-are-still-the-right-tool" id="toc-when-gans-are-still-the-right-tool"><span class="toc-section-number">9.5</span> When GANs are still the right
+tool</a></li>
 </ul></li>
-<li><a href="#diffusion-models" id="toc-diffusion-models">Diffusion
-Models</a>
+<li><a href="#diffusion-models" id="toc-diffusion-models"><span class="toc-section-number">10</span> Diffusion Models</a>
 <ul>
-<li><a href="#the-forward-process" id="toc-the-forward-process">The
-forward process</a></li>
-<li><a href="#the-reverse-process" id="toc-the-reverse-process">The
-reverse process</a></li>
-<li><a href="#score-matching-briefly" id="toc-score-matching-briefly">Score matching, briefly</a></li>
-<li><a href="#ddim-fewer-steps" id="toc-ddim-fewer-steps">DDIM: fewer
-steps</a></li>
-<li><a href="#classifier-free-guidance" id="toc-classifier-free-guidance">Classifier-free guidance</a></li>
-<li><a href="#latent-diffusion" id="toc-latent-diffusion">Latent
-diffusion</a></li>
-<li><a href="#comparison-vaes-gans-diffusion" id="toc-comparison-vaes-gans-diffusion">Comparison: VAEs, GANs,
+<li><a href="#the-forward-process" id="toc-the-forward-process"><span class="toc-section-number">10.1</span> The forward process</a></li>
+<li><a href="#the-reverse-process" id="toc-the-reverse-process"><span class="toc-section-number">10.2</span> The reverse process</a></li>
+<li><a href="#score-matching-briefly" id="toc-score-matching-briefly"><span class="toc-section-number">10.3</span> Score matching, briefly</a></li>
+<li><a href="#ddim-fewer-steps" id="toc-ddim-fewer-steps"><span class="toc-section-number">10.4</span> DDIM: fewer steps</a></li>
+<li><a href="#classifier-free-guidance" id="toc-classifier-free-guidance"><span class="toc-section-number">10.5</span> Classifier-free guidance</a></li>
+<li><a href="#latent-diffusion" id="toc-latent-diffusion"><span class="toc-section-number">10.6</span> Latent diffusion</a></li>
+<li><a href="#comparison-vaes-gans-diffusion" id="toc-comparison-vaes-gans-diffusion"><span class="toc-section-number">10.7</span> Comparison: VAEs, GANs,
 Diffusion</a></li>
 </ul></li>
-<li><a href="#frameworks-and-ecosystem" id="toc-frameworks-and-ecosystem">Frameworks and Ecosystem</a>
+<li><a href="#frameworks-and-ecosystem" id="toc-frameworks-and-ecosystem"><span class="toc-section-number">11</span> Frameworks and Ecosystem</a>
 <ul>
-<li><a href="#pytorch" id="toc-pytorch">PyTorch</a></li>
-<li><a href="#tensorflow-and-keras" id="toc-tensorflow-and-keras">TensorFlow and Keras</a></li>
-<li><a href="#jax" id="toc-jax">JAX</a></li>
-<li><a href="#huggingface" id="toc-huggingface">HuggingFace</a></li>
-<li><a href="#choosing-between-them" id="toc-choosing-between-them">Choosing Between Them</a></li>
+<li><a href="#pytorch" id="toc-pytorch"><span class="toc-section-number">11.1</span> PyTorch</a></li>
+<li><a href="#tensorflow-and-keras" id="toc-tensorflow-and-keras"><span class="toc-section-number">11.2</span> TensorFlow and Keras</a></li>
+<li><a href="#jax" id="toc-jax"><span class="toc-section-number">11.3</span> JAX</a></li>
+<li><a href="#huggingface" id="toc-huggingface"><span class="toc-section-number">11.4</span> HuggingFace</a></li>
+<li><a href="#choosing-between-them" id="toc-choosing-between-them"><span class="toc-section-number">11.5</span> Choosing Between Them</a></li>
 </ul></li>
-<li><a href="#when-to-use-what" id="toc-when-to-use-what">When to Use
-What</a>
+<li><a href="#when-to-use-what" id="toc-when-to-use-what"><span class="toc-section-number">12</span> When to Use What</a>
 <ul>
-<li><a href="#the-first-cut-structured-versus-unstructured-data" id="toc-the-first-cut-structured-versus-unstructured-data">The First
-Cut: Structured Versus Unstructured Data</a></li>
-<li><a href="#images-and-spatial-data" id="toc-images-and-spatial-data">Images and Spatial Data</a></li>
-<li><a href="#sequences-and-text" id="toc-sequences-and-text">Sequences
-and Text</a></li>
-<li><a href="#generation-which-generative-model" id="toc-generation-which-generative-model">Generation: Which Generative
+<li><a href="#the-first-cut-structured-versus-unstructured-data" id="toc-the-first-cut-structured-versus-unstructured-data"><span class="toc-section-number">12.1</span> The First Cut: Structured Versus
+Unstructured Data</a></li>
+<li><a href="#images-and-spatial-data" id="toc-images-and-spatial-data"><span class="toc-section-number">12.2</span> Images and Spatial Data</a></li>
+<li><a href="#sequences-and-text" id="toc-sequences-and-text"><span class="toc-section-number">12.3</span> Sequences and Text</a></li>
+<li><a href="#generation-which-generative-model" id="toc-generation-which-generative-model"><span class="toc-section-number">12.4</span> Generation: Which Generative
 Model</a></li>
-<li><a href="#compute-and-data-requirements" id="toc-compute-and-data-requirements">Compute and Data
+<li><a href="#compute-and-data-requirements" id="toc-compute-and-data-requirements"><span class="toc-section-number">12.5</span> Compute and Data
 Requirements</a></li>
-<li><a href="#the-practical-starting-point" id="toc-the-practical-starting-point">The Practical Starting
+<li><a href="#the-practical-starting-point" id="toc-the-practical-starting-point"><span class="toc-section-number">12.6</span> The Practical Starting
 Point</a></li>
-<li><a href="#what-to-read-next" id="toc-what-to-read-next">What to Read
-Next</a></li>
-</ul></li>
+<li><a href="#what-to-read-next" id="toc-what-to-read-next"><span class="toc-section-number">12.7</span> What to Read Next</a></li>
 </ul></li>
 </ul></div>
 
@@ -698,9 +673,7 @@ Next</a></li>
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
     <main class="content">
-<h1 id="deep-learning-and-generative-ai-a-technical-primer">Deep
-Learning and Generative AI: A Technical Primer</h1>
-<h2 id="introduction">Introduction</h2>
+<h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
 <p>Deep learning is everywhere, and the explanations of it split into
 two unhelpful camps. The first treats neural networks as magic black
 boxes: you feed in data, gradient descent does something mysterious, and
@@ -727,7 +700,7 @@ an image.</p>
 learning the way you already reason about classical ML — not as a
 believer in magic, but as someone who knows the failure modes, the
 design choices, and the mathematics underneath.</p>
-<h3 id="what-this-covers">What This Covers</h3>
+<h2 data-number="1.1" id="what-this-covers"><span class="header-section-number">1.1</span> What This Covers</h2>
 <p>This is a deep reference, not a tutorial. It covers neural network
 fundamentals — the perceptron, the multilayer perceptron, activation
 functions, the forward pass, and the training machinery of
@@ -744,7 +717,7 @@ rather than label existing data. It closes with the practical frameworks
 <p>The whole thing is designed for a reader who knows classical ML and
 wants the next layer down: the equations, the intuitions, and the
 reasons each design choice exists.</p>
-<h3 id="what-this-is-not">What This Is Not</h3>
+<h2 data-number="1.2" id="what-this-is-not"><span class="header-section-number">1.2</span> What This Is Not</h2>
 <p>This is not a guide to training models from scratch on novel research
 problems. Reproducing a frontier result is its own discipline involving
 data pipelines, hyperparameter searches, and a great deal of patience;
@@ -758,7 +731,7 @@ engineering, distributed training infrastructure, or model serving at
 scale. Those are real and large topics, but they are about running deep
 learning systems in production, not about understanding what the systems
 are.</p>
-<h3 id="assumed-background">Assumed Background</h3>
+<h2 data-number="1.3" id="assumed-background"><span class="header-section-number">1.3</span> Assumed Background</h2>
 <p>You should be comfortable with gradient descent — what a gradient is,
 why following its negative reduces a loss, and what a learning rate
 does. You should know loss functions (mean squared error,
@@ -774,7 +747,8 @@ You do not need to remember how to invert a matrix by hand or to recite
 the proof of the chain rule. You do need to be willing to read an
 equation slowly. Every piece of notation introduced here is explained
 the first time it appears.</p>
-<h3 id="how-this-guide-is-structured">How This Guide Is Structured</h3>
+<h2 data-number="1.4" id="how-this-guide-is-structured"><span class="header-section-number">1.4</span> How This Guide Is
+Structured</h2>
 <p>The arc runs from foundations to frontier. It opens with why deep
 learning became viable when it did — a question of data, compute, and
 algorithms rather than raw cleverness. It then builds the multilayer
@@ -789,7 +763,7 @@ frameworks and the practical concerns of building real systems. Each
 section assumes the ones before it, so the vanishing-gradient problem
 defined while discussing training is the same one that explains why
 recurrent networks struggle with long sequences.</p>
-<h2 id="why-deep-learning-now">Why Deep Learning Now</h2>
+<h1 data-number="2" id="why-deep-learning-now"><span class="header-section-number">2</span> Why Deep Learning Now</h1>
 <p>Neural networks are not new. The perceptron dates to 1958.
 Backpropagation, the algorithm that trains modern networks, was
 understood and published in the 1980s. Multilayer networks, the
@@ -802,7 +776,7 @@ The answer is not a single breakthrough. It is the simultaneous arrival
 of three ingredients that had each been missing: data, compute, and a
 handful of algorithmic fixes that made deep networks trainable in
 practice.</p>
-<h3 id="data">Data</h3>
+<h2 data-number="2.1" id="data"><span class="header-section-number">2.1</span> Data</h2>
 <p>A neural network with millions of parameters is a high-capacity
 model. In classical-ML terms, it sits on the far end of the
 bias-variance tradeoff: enormous flexibility, and therefore enormous
@@ -825,7 +799,7 @@ next, better model. This virtuous cycle is why the organisations with
 the most user interaction tend to have the best models — not because
 their researchers are uniquely brilliant, but because the flywheel has
 been turning longer.</p>
-<h3 id="compute">Compute</h3>
+<h2 data-number="2.2" id="compute"><span class="header-section-number">2.2</span> Compute</h2>
 <p>Training a deep network is, computationally, an enormous pile of
 matrix multiplications. The forward pass multiplies inputs by weight
 matrices layer after layer; the backward pass multiplies gradients by
@@ -861,7 +835,7 @@ numbers are why the hardware matters: shaving the cost of a matrix
 multiply, or running more of them in parallel, is the difference between
 a training run that finishes in days and one that never finishes at
 all.</p>
-<h3 id="algorithms">Algorithms</h3>
+<h2 data-number="2.3" id="algorithms"><span class="header-section-number">2.3</span> Algorithms</h2>
 <p>Data and compute set the stage, but deep networks were still
 genuinely hard to train, and a cluster of algorithmic fixes — each
 sounding minor on its own — was collectively what made depth work.</p>
@@ -890,8 +864,8 @@ use higher learning rates and worry less about the exact initialisation.
 None of these is conceptually deep. Together they are most of the reason
 a ten-layer network in 2015 trained where a ten-layer network in 1995
 would have stalled.</p>
-<h3 id="why-classical-ml-hits-a-ceiling">Why Classical ML Hits a
-Ceiling</h3>
+<h2 data-number="2.4" id="why-classical-ml-hits-a-ceiling"><span class="header-section-number">2.4</span> Why Classical ML Hits a
+Ceiling</h2>
 <p>There is a deeper reason all of this matters, and it explains why
 deep learning did not just speed up classical ML but replaced it on
 whole categories of problem. Classical models work beautifully on
@@ -918,7 +892,7 @@ extraction stops being a separate, brittle, human-engineered stage and
 becomes part of the model, learned end-to-end from data. This is the
 real shift, and it is why deep learning ate computer vision and natural
 language processing rather than merely improving them.</p>
-<h3 id="the-imagenet-moment">The ImageNet Moment</h3>
+<h2 data-number="2.5" id="the-imagenet-moment"><span class="header-section-number">2.5</span> The ImageNet Moment</h2>
 <p>All three ingredients converged in a single, legible event. The
 ImageNet Large Scale Visual Recognition Challenge (ILSVRC) was an annual
 competition to classify ImageNet images, and progress had been
@@ -939,8 +913,8 @@ networks and backpropagation were old. What it did was demonstrate, on a
 benchmark nobody could argue with, that the three ingredients had
 finally arrived together. That is why deep learning is a story about
 2012 and not about 1986.</p>
-<h2 id="neural-network-fundamentals">Neural Network Fundamentals</h2>
-<h3 id="the-perceptron">The Perceptron</h3>
+<h1 data-number="3" id="neural-network-fundamentals"><span class="header-section-number">3</span> Neural Network Fundamentals</h1>
+<h2 data-number="3.1" id="the-perceptron"><span class="header-section-number">3.1</span> The Perceptron</h2>
 <p>The neural network’s founding metaphor is the biological neuron. A
 neuron receives signals from other neurons through its dendrites, sums
 them up, and if the total exceeds some threshold it fires, sending a
@@ -973,7 +947,7 @@ perceptron cannot represent XOR, and this is not a quirk of one toy
 problem. It is the general fact that one linear boundary is not enough
 for problems whose structure is not linearly separable. The fix is to
 stop using one neuron.</p>
-<h3 id="from-perceptron-to-mlp">From Perceptron to MLP</h3>
+<h2 data-number="3.2" id="from-perceptron-to-mlp"><span class="header-section-number">3.2</span> From Perceptron to MLP</h2>
 <p>Stack neurons into layers and you get a multilayer perceptron (MLP).
 The input layer is just the input vector. One or more hidden layers each
 take the previous layer’s outputs, apply their own weighted sums and
@@ -1009,7 +983,7 @@ constructs for itself, and the output combines them. With enough hidden
 units arranged this way, the XOR problem that defeated a single
 perceptron becomes trivial — one hidden layer is enough to carve the
 input space into the regions XOR needs.</p>
-<h3 id="activation-functions">Activation Functions</h3>
+<h2 data-number="3.3" id="activation-functions"><span class="header-section-number">3.3</span> Activation Functions</h2>
 <p>The hidden-layer activation <span class="math inline">\(\sigma\)</span> is not a cosmetic detail; without
 it the entire network collapses. Suppose every layer were purely linear
 — just <span class="math inline">\(\mathbf{W}\mathbf{x} +
@@ -1078,7 +1052,7 @@ gives the optimiser a continuous gradient everywhere, which empirically
 helps training stability in very large models. GELU is the default
 activation in the transformer architectures behind BERT and the GPT
 family, where it consistently edges out plain ReLU.</p>
-<h3 id="the-forward-pass">The Forward Pass</h3>
+<h2 data-number="3.4" id="the-forward-pass"><span class="header-section-number">3.4</span> The Forward Pass</h2>
 <p>Putting the pieces together, the forward pass is the computation that
 turns an input into a prediction. Take a two-layer MLP for a ten-class
 classification problem — the classic MNIST digit setup. The input is a
@@ -1114,8 +1088,8 @@ activate, multiply, add bias, softmax — is the forward pass. Tracking
 the dimensions (<span class="math inline">\(784 \to 256 \to 10\)</span>)
 is the habit that catches most architecture bugs before they ever
 run.</p>
-<h3 id="the-universal-approximation-theorem">The Universal Approximation
-Theorem</h3>
+<h2 data-number="3.5" id="the-universal-approximation-theorem"><span class="header-section-number">3.5</span> The Universal Approximation
+Theorem</h2>
 <p>A natural question is how much an MLP can actually represent. The
 universal approximation theorem gives a striking answer. Informally: a
 feedforward network with a single hidden layer, a nonlinear activation,
@@ -1140,7 +1114,7 @@ approximation theorem explains why neural networks are not obviously
 limited, but it does not explain why deep networks work. The reason
 depth wins in practice is efficiency, not representability: practical
 depth beats impractical width.</p>
-<h2 id="training-deep-networks">Training Deep Networks</h2>
+<h1 data-number="4" id="training-deep-networks"><span class="header-section-number">4</span> Training Deep Networks</h1>
 <p>A network’s weights start as random numbers, and the forward pass on
 a fresh network produces noise. Training is the process of adjusting
 those weights so the predictions become good — and for a deep network
@@ -1150,7 +1124,7 @@ in the direction that reduces the loss. This section is about how that
 happens: the loss functions that define “good,” the backpropagation
 algorithm that computes the gradients, the optimisers that apply them,
 and the many ways the process goes wrong.</p>
-<h3 id="loss-functions">Loss Functions</h3>
+<h2 data-number="4.1" id="loss-functions"><span class="header-section-number">4.1</span> Loss Functions</h2>
 <p>You already know the loss functions; they carry over from classical
 ML with no change. The only new wrinkle is that in a neural network the
 choice of loss and the choice of output activation are linked, and the
@@ -1176,7 +1150,7 @@ Softmax with cross-entropy for single-label classification, linear
 output with MSE for regression, sigmoid output with binary cross-entropy
 for multi-label. Pick the loss for your problem and the output
 activation is determined.</p>
-<h3 id="backpropagation">Backpropagation</h3>
+<h2 data-number="4.2" id="backpropagation"><span class="header-section-number">4.2</span> Backpropagation</h2>
 <p>Backpropagation is the algorithm that computes the gradient of the
 loss with respect to every weight in the network. It is the single most
 important idea in training, and it is not magic — it is the chain rule
@@ -1289,8 +1263,8 @@ understanding backprop — it is backprop, automated. When a gradient is
 zero where it should not be, or explodes to infinity, the explanation is
 always somewhere in the chain of local derivatives you just saw, and
 knowing that chain is how you debug it.</p>
-<h3 id="vanishing-and-exploding-gradients">Vanishing and Exploding
-Gradients</h3>
+<h2 data-number="4.3" id="vanishing-and-exploding-gradients"><span class="header-section-number">4.3</span> Vanishing and Exploding
+Gradients</h2>
 <p>The backward pass just described has a built-in danger, and it is
 important enough that several later architectures are designed
 specifically to escape it. Look again at how the error propagates: at
@@ -1334,7 +1308,7 @@ per-layer factor near 1. This problem returns with full force in
 recurrent networks, where the same weight matrix is multiplied not
 across layers but across time steps, and the later RNN section relies on
 exactly this analysis without re-deriving it.</p>
-<h3 id="gradient-descent-variants">Gradient Descent Variants</h3>
+<h2 data-number="4.4" id="gradient-descent-variants"><span class="header-section-number">4.4</span> Gradient Descent Variants</h2>
 <p>Once backpropagation has produced the gradient, an optimiser decides
 how to use it to update the weights. Plain stochastic gradient descent
 (SGD) is the baseline you already know: take a mini-batch, compute the
@@ -1401,7 +1375,7 @@ why Adam is the default. It gives you momentum’s acceleration and
 RMSProp’s per-weight adaptation in one optimiser, and it converges
 quickly and reliably on the kinds of loss surfaces deep networks
 produce. When in doubt, reach for Adam.</p>
-<h3 id="weight-initialisation">Weight Initialisation</h3>
+<h2 data-number="4.5" id="weight-initialisation"><span class="header-section-number">4.5</span> Weight Initialisation</h2>
 <p>Before training begins the weights have to be set to something, and
 the obvious choice — all zeros — is catastrophically wrong. If every
 weight in a layer is identical, every neuron in that layer computes the
@@ -1433,7 +1407,7 @@ set by the fan-in:</p>
 relatives, Xavier for sigmoid and tanh. Getting this right is part of
 why modern deep networks train where older ones stalled — a well-chosen
 initialisation keeps gradients alive from the very first step.</p>
-<h3 id="regularisation">Regularisation</h3>
+<h2 data-number="4.6" id="regularisation"><span class="header-section-number">4.6</span> Regularisation</h2>
 <p>The classical regularisers carry straight over. L2 weight decay
 (penalising the sum of squared weights) and L1 (penalising the sum of
 absolute weights) work exactly as they do in linear models, shrinking
@@ -1459,7 +1433,7 @@ signature of overfitting beginning — the model is now learning the
 training set’s noise rather than its signal — and halting at the bottom
 of the validation curve keeps the model at its best-generalising point.
 It costs nothing and is essentially always worth doing.</p>
-<h3 id="batch-normalisation">Batch Normalisation</h3>
+<h2 data-number="4.7" id="batch-normalisation"><span class="header-section-number">4.7</span> Batch Normalisation</h2>
 <p>Batch normalisation is one of the techniques that made very deep
 networks practical, and it works by normalising the activations as they
 flow through the network. For a mini-batch <span class="math inline">\(\mathcal{B} = \{x_1, \ldots, x_m\}\)</span> of
@@ -1491,7 +1465,7 @@ batches. Modern architectures, transformers in particular, mostly use
 layer normalisation instead, which normalises across the features of a
 single example rather than across the batch. The reason that change
 matters becomes clear in the transformer section.</p>
-<h3 id="learning-rate-schedules">Learning Rate Schedules</h3>
+<h2 data-number="4.8" id="learning-rate-schedules"><span class="header-section-number">4.8</span> Learning Rate Schedules</h2>
 <p>A fixed learning rate is rarely optimal across an entire training
 run. Early on, the weights are random and the loss surface is
 treacherous, so large steps can destabilise everything; late on, near a
@@ -1516,7 +1490,7 @@ at first, accelerates through the middle, and flattens out gently as it
 approaches the minimum near the end, which empirically lands the model
 in a better solution than an abrupt drop. Warmup followed by cosine
 decay is the standard schedule for training large modern models.</p>
-<h3 id="training-failure-modes">Training Failure Modes</h3>
+<h2 data-number="4.9" id="training-failure-modes"><span class="header-section-number">4.9</span> Training Failure Modes</h2>
 <p>Training rarely goes smoothly the first time, and most failures
 announce themselves through the shape of the loss curves. The diagnoses
 below cover the common cases:</p>
@@ -1571,7 +1545,7 @@ separate weight for every (input pixel, output neuron) pair, a CNN
 learns a small set of filters and slides them across the whole image.
 The result is dramatically fewer parameters and a model that actually
 respects how images are put together.</p>
-<h3 id="the-convolution-operation">The convolution operation</h3>
+<h2 data-number="4.10" id="the-convolution-operation"><span class="header-section-number">4.10</span> The convolution operation</h2>
 <p>The core operation is the 2D convolution. You have an input feature
 map <span class="math inline">\(\mathbf{X}\)</span> — for the first
 layer, this is the image itself — and a small kernel (also called a
@@ -1640,7 +1614,7 @@ transformation. The parameter count of a conv layer depends on the
 kernel size and channel counts, and not at all on the image resolution.
 You can feed it a bigger image and it costs more compute but not one
 extra weight.</p>
-<h3 id="pooling-layers">Pooling layers</h3>
+<h2 data-number="4.11" id="pooling-layers"><span class="header-section-number">4.11</span> Pooling layers</h2>
 <p>Convolution detects features; pooling summarises them and shrinks the
 spatial dimensions. <strong>Max pooling</strong> slides a window —
 usually <span class="math inline">\(2 \times 2\)</span> — over the
@@ -1666,7 +1640,7 @@ the equivariance of convolution — convolution moves the feature in the
 output, pooling makes the output indifferent to small moves. That is
 usually what you want for classification, where you care that a cat is
 present, not exactly which pixel its ear starts on.</p>
-<h3 id="architecture-evolution">Architecture evolution</h3>
+<h2 data-number="4.12" id="architecture-evolution"><span class="header-section-number">4.12</span> Architecture evolution</h2>
 <p>The history of CNN architectures is a story of a few key ideas, each
 unlocking the next level of depth, told across a handful of landmark
 networks.</p>
@@ -1731,7 +1705,7 @@ same trick you will see again in the residual connections of the
 transformer. With it, networks of 152 layers became trainable;
 ResNet-152 won ILSVRC 2015 with a top-5 error of 3.57%, below the
 commonly cited human benchmark on the same task.</p>
-<h3 id="transfer-learning">Transfer learning</h3>
+<h2 data-number="4.13" id="transfer-learning"><span class="header-section-number">4.13</span> Transfer learning</h2>
 <p>Training a large CNN from scratch needs a lot of labelled data and a
 lot of compute, and most people have neither for their specific problem.
 Transfer learning is the standard escape hatch, and it works because of
@@ -1761,7 +1735,8 @@ freeze the early layers that learned transferable edges and textures,
 retrain the later layers that need to specialise. The less your data
 resembles ImageNet (medical scans, satellite imagery), the more layers
 you will want to unfreeze.</p>
-<h3 id="vision-transformers-briefly">Vision Transformers, briefly</h3>
+<h2 data-number="4.14" id="vision-transformers-briefly"><span class="header-section-number">4.14</span> Vision Transformers,
+briefly</h2>
 <p>Convolution is not the only way to process images. The Vision
 Transformer, or ViT (Dosovitskiy et al., 2020), discards convolution
 almost entirely. It chops the image into a grid of fixed-size patches —
@@ -1784,7 +1759,8 @@ not constrained by convolution’s assumptions and can learn whatever
 spatial structure the data actually contains. The headline lesson is
 that architectural priors and data volume are substitutes: the more data
 you have, the less you need to bake in by hand.</p>
-<h3 id="when-cnns-are-the-wrong-tool">When CNNs are the wrong tool</h3>
+<h2 data-number="4.15" id="when-cnns-are-the-wrong-tool"><span class="header-section-number">4.15</span> When CNNs are the wrong
+tool</h2>
 <p>Convolution is a bet that your data has grid-like spatial structure
 where locality and translation matter. When that bet is wrong, a CNN is
 the wrong tool. Plain text and most time series have no two-dimensional
@@ -1801,8 +1777,8 @@ to its neighbours” — breaks convolution’s core assumption entirely.
 Graph neural networks generalise the idea of convolution to arbitrary
 graph structure, and transformers handle sets and sequences with learned
 relationships; for non-grid data, reach for those instead.</p>
-<h3 id="code-a-small-convnet-in-three-frameworks">Code: a small ConvNet
-in three frameworks</h3>
+<h2 data-number="4.16" id="code-a-small-convnet-in-three-frameworks"><span class="header-section-number">4.16</span> Code: a small ConvNet in three
+frameworks</h2>
 <p>Here is the same small CNN — two conv-pool blocks feeding a linear
 classifier, sized for 28×28 MNIST digits — written idiomatically in
 three frameworks. The shapes line up across all three: each <span class="math inline">\(2 \times 2\)</span> pool halves the spatial size,
@@ -1881,7 +1857,7 @@ style.</p>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model.<span class="bu">apply</span>(params, x)</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)  <span class="co"># (8, 10)</span></span></code></pre></div>
 <hr />
-<h2 id="recurrent-neural-networks">Recurrent Neural Networks</h2>
+<h1 data-number="5" id="recurrent-neural-networks"><span class="header-section-number">5</span> Recurrent Neural Networks</h1>
 <p>Everything so far has assumed a fixed-size input that arrives all at
 once. Language does not work that way, and neither does any data with
 order. Consider “The cat sat on the mat” and “The mat sat on the cat.” A
@@ -1901,7 +1877,7 @@ that summary as each new element arrives. This handles variable length
 naturally (just keep stepping until the input runs out) and respects
 order by construction (the state at step <span class="math inline">\(t\)</span> depends on everything that came before,
 in order).</p>
-<h3 id="the-rnn-cell">The RNN cell</h3>
+<h2 data-number="5.1" id="the-rnn-cell"><span class="header-section-number">5.1</span> The RNN cell</h2>
 <p>At each time step <span class="math inline">\(t\)</span>, the
 recurrent cell takes two inputs — the current element of the sequence
 <span class="math inline">\(\mathbf{x}_t\)</span> and the hidden state
@@ -1928,7 +1904,8 @@ applied along the time axis instead of across spatial positions: a CNN
 reuses a kernel at every location, an RNN reuses a cell at every step.
 The shared cell is what lets a single small network handle a sequence of
 any length.</p>
-<h3 id="backpropagation-through-time">Backpropagation through time</h3>
+<h2 data-number="5.2" id="backpropagation-through-time"><span class="header-section-number">5.2</span> Backpropagation through
+time</h2>
 <p>To train an RNN you unroll it across the full sequence of <span class="math inline">\(T\)</span> steps, which turns it into a (very
 deep, but weight-tied) feed-forward network, and then you run ordinary
 backpropagation over that unrolled graph. This procedure has a name —
@@ -1946,8 +1923,8 @@ and each step contributes a Jacobian factor:</p>
 \mathcal{L}}{\partial \mathbf{h}_T}\]</span></p>
 <p>That product of <span class="math inline">\(T\)</span> Jacobians is
 the whole problem.</p>
-<h3 id="the-vanishing-gradient-problem-in-rnns">The vanishing gradient
-problem in RNNs</h3>
+<h2 data-number="5.3" id="the-vanishing-gradient-problem-in-rnns"><span class="header-section-number">5.3</span> The vanishing gradient problem
+in RNNs</h2>
 <p>This is the vanishing/exploding gradient phenomenon from §4, and the
 recurrent structure is where it bites hardest. The reason is the product
 above. Each Jacobian <span class="math inline">\(\frac{\partial
@@ -1968,7 +1945,7 @@ have a short memory, regardless of how long the sequence actually is.
 Exploding gradients, the other half of the same coin, are easier to
 patch with gradient clipping (cap the gradient norm), but vanishing
 gradients need an architectural fix. That fix is gating.</p>
-<h3 id="lstm">LSTM</h3>
+<h2 data-number="5.4" id="lstm"><span class="header-section-number">5.4</span> LSTM</h2>
 <p>The Long Short-Term Memory network, or LSTM (Hochreiter &amp;
 Schmidhuber, 1997), attacks the vanishing gradient at its root. It
 introduces a second piece of state alongside the hidden state: a
@@ -2020,7 +1997,7 @@ exactly when it needs to preserve information over a long span, keeping
 the gradient highway clear for as many steps as the task demands. The
 gate gives the network direct control over its own memory’s gradient
 flow, which is what vanilla RNNs lacked.</p>
-<h3 id="gru">GRU</h3>
+<h2 data-number="5.5" id="gru"><span class="header-section-number">5.5</span> GRU</h2>
 <p>The Gated Recurrent Unit, or GRU (Cho et al., 2014), is a streamlined
 relative of the LSTM. It keeps the gating idea but uses only two gates
 and drops the separate cell state, folding everything into the hidden
@@ -2051,8 +2028,8 @@ dependency is real but not the make-or-break factor. Reach for an LSTM
 when the task hinges on very long-range memory and you want the extra
 control the separate cell state and dedicated output gate provide. When
 it genuinely matters, try both.</p>
-<h3 id="when-rnns-still-earn-their-place">When RNNs still earn their
-place</h3>
+<h2 data-number="5.6" id="when-rnns-still-earn-their-place"><span class="header-section-number">5.6</span> When RNNs still earn their
+place</h2>
 <p>Transformers (§7) have largely displaced RNNs for natural language,
 where their parallelism and direct long-range attention win decisively.
 But RNNs hold onto real niches, and the reasons are structural. The
@@ -2069,8 +2046,8 @@ limits, where a small recurrent model beats a transformer you cannot
 afford to host. And the fourth is data with a genuinely recurrent
 character — many time-series problems — where the recurrent inductive
 bias matches the underlying process and helps rather than hinders.</p>
-<h3 id="code-an-lstm-in-three-frameworks">Code: an LSTM in three
-frameworks</h3>
+<h2 data-number="5.7" id="code-an-lstm-in-three-frameworks"><span class="header-section-number">5.7</span> Code: an LSTM in three
+frameworks</h2>
 <p>The same single-layer LSTM classifier in each framework: it consumes
 a sequence, takes the final hidden state, and maps it to class logits.
 The shapes follow each framework’s convention for sequence batches.</p>
@@ -2131,7 +2108,7 @@ style.</p>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> model.<span class="bu">apply</span>(params, x)</span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)  <span class="co"># (8, 5)</span></span></code></pre></div>
 <hr />
-<h2 id="attention-and-transformers">Attention and Transformers</h2>
+<h1 data-number="6" id="attention-and-transformers"><span class="header-section-number">6</span> Attention and Transformers</h1>
 <p>The LSTM tamed the vanishing gradient, but it left a structural
 bottleneck in place. In a classic sequence-to-sequence setup — translate
 a sentence, summarise a paragraph — an encoder RNN reads the whole input
@@ -2150,7 +2127,7 @@ verb? Attend heavily to the subject and the source verb. Generating a
 noun? Attend to the corresponding source noun. Nothing has to be crammed
 into a single vector, because the decoder can reach back to whatever it
 needs, whenever it needs it.</p>
-<h3 id="the-attention-intuition">The attention intuition</h3>
+<h2 data-number="6.1" id="the-attention-intuition"><span class="header-section-number">6.1</span> The attention intuition</h2>
 <p>A clean mental model for attention is a soft dictionary lookup. An
 ordinary dictionary maps keys to values: you supply a key, find the
 matching entry, and get back its value. Attention does a soft version of
@@ -2166,7 +2143,8 @@ is dominated by that key’s value, approximating a hard lookup; if it
 matches several keys partially, the result blends their values. The
 whole thing is differentiable, which is the point — you can train it end
 to end with backpropagation.</p>
-<h3 id="scaled-dot-product-attention">Scaled dot-product attention</h3>
+<h2 data-number="6.2" id="scaled-dot-product-attention"><span class="header-section-number">6.2</span> Scaled dot-product
+attention</h2>
 <p>The transformer’s specific form of attention packs all the queries,
 keys, and values into matrices — <span class="math inline">\(\mathbf{Q}\)</span>, <span class="math inline">\(\mathbf{K}\)</span>, <span class="math inline">\(\mathbf{V}\)</span>, one row per position — and
 computes them all at once:</p>
@@ -2199,7 +2177,7 @@ sequence, including itself, to build a context-aware representation. In
 the keys and values from another — this is how a decoder attends over an
 encoder’s output, which is exactly the bottleneck-removing mechanism we
 started with.</p>
-<h3 id="multi-head-attention">Multi-head attention</h3>
+<h2 data-number="6.3" id="multi-head-attention"><span class="header-section-number">6.3</span> Multi-head attention</h2>
 <p>A single attention operation produces one weighted view of the
 sequence, but one view is limiting — there are many different kinds of
 relationship a token might want to track at once. Multi-head attention
@@ -2227,7 +2205,7 @@ dimension is set to <span class="math inline">\(d_{\text{model}} /
 H\)</span>, so that splitting <span class="math inline">\(d_{\text{model}}\)</span> across <span class="math inline">\(H\)</span> heads keeps the total computation
 roughly the same as a single full-width attention — you get the
 diversity of multiple heads at essentially no extra cost.</p>
-<h3 id="positional-encoding">Positional encoding</h3>
+<h2 data-number="6.4" id="positional-encoding"><span class="header-section-number">6.4</span> Positional encoding</h2>
 <p>Self-attention has a property that is both a feature and a problem:
 it is permutation-equivariant. Because attention computes weighted sums
 over a <em>set</em> of keys and values, with no inherent notion of which
@@ -2269,8 +2247,8 @@ product. Because the dot product of two rotated vectors depends only on
 the difference of their rotation angles, relative position falls out of
 the attention scores naturally, and it does so without any additive
 encoding and with good behaviour as sequences get long.</p>
-<h3 id="the-full-transformer-architecture">The full transformer
-architecture</h3>
+<h2 data-number="6.5" id="the-full-transformer-architecture"><span class="header-section-number">6.5</span> The full transformer
+architecture</h2>
 <p>The transformer stacks these pieces into an encoder and a decoder.
 The encoder turns the input sequence into a stack of context-rich
 representations; the decoder generates the output sequence one token at
@@ -2305,7 +2283,7 @@ path back through the identity, so even a deep stack of blocks trains
 without the gradient vanishing. Transformers are deep, and they would
 not train without these skip connections any more than a 152-layer CNN
 would.</p>
-<h3 id="layer-normalisation">Layer normalisation</h3>
+<h2 data-number="6.6" id="layer-normalisation"><span class="header-section-number">6.6</span> Layer normalisation</h2>
 <p>Transformers normalise with layer normalisation rather than the batch
 normalisation of §4, and the difference is which dimension you normalise
 over. Batch norm computes its mean and variance over the batch dimension
@@ -2337,7 +2315,7 @@ sub-layer <em>before</em> attention or the FFN, with the form <span class="math 
 residual path completely clean — nothing normalises the signal
 travelling down the skip connections — which makes deep transformers
 markedly more stable to train.</p>
-<h3 id="bert-versus-gpt">BERT versus GPT</h3>
+<h2 data-number="6.7" id="bert-versus-gpt"><span class="header-section-number">6.7</span> BERT versus GPT</h2>
 <p>Two model families took the transformer in different directions, and
 the contrast is the clearest way to understand what the architecture’s
 two halves are each good for. Both use the same building blocks; they
@@ -2379,8 +2357,8 @@ understanding; GPT is a decoder trained causally for generation. The
 same transformer, pointed at two different objectives, gives you the two
 dominant families of modern language models — and §8 picks up the GPT
 line to build out large language models in full.</p>
-<h3 id="code-self-attention-in-three-frameworks">Code: self-attention in
-three frameworks</h3>
+<h2 data-number="6.8" id="code-self-attention-in-three-frameworks"><span class="header-section-number">6.8</span> Code: self-attention in three
+frameworks</h2>
 <p>Here is scaled dot-product self-attention with a single head,
 implemented from the formula in each framework so the mechanism is
 visible rather than hidden inside a library call. Each version projects
@@ -2458,7 +2436,7 @@ parameters are initialised and applied explicitly as always.</p>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> attn.init(jax.random.PRNGKey(<span class="dv">0</span>), x)</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> attn.<span class="bu">apply</span>(params, x)</span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(out.shape)  <span class="co"># (8, 10, 16)</span></span></code></pre></div>
-<h2 id="large-language-models">Large Language Models</h2>
+<h1 data-number="7" id="large-language-models"><span class="header-section-number">7</span> Large Language Models</h1>
 <p>A large language model is not a new architecture. It is the
 transformer from §7 — usually the decoder-only half, sometimes the full
 encoder-decoder — scaled up until the parameter count runs into the
@@ -2480,8 +2458,8 @@ tokens, what objective the model is trained on, how loss behaves as you
 add compute, how a pre-trained model is cheaply adapted to a task, how
 it is taught to follow instructions, and the strange fact that some
 capabilities only appear once the model is large enough.</p>
-<h3 id="tokenisation-the-model-never-sees-text">Tokenisation: the model
-never sees text</h3>
+<h2 data-number="7.1" id="tokenisation-the-model-never-sees-text"><span class="header-section-number">7.1</span> Tokenisation: the model never
+sees text</h2>
 <p>Before any of the math in §7 can run, you have to turn a string into
 a sequence of integers. This step is more consequential than it looks,
 and it is the first place things quietly go wrong.</p>
@@ -2542,7 +2520,7 @@ chunks, and the chunking changes with context. When an LLM flubs a
 multiplication, the failure often started here, before the first
 attention layer ever ran. Tokenisation is a lossy, quirky lens, and
 everything downstream looks through it.</p>
-<h3 id="pre-training-objectives">Pre-training objectives</h3>
+<h2 data-number="7.2" id="pre-training-objectives"><span class="header-section-number">7.2</span> Pre-training objectives</h2>
 <p>Once text is tokens, you need something to train on. There is no
 labelled data at internet scale, so the objective has to be
 self-supervised: the text supplies its own targets. Two objectives
@@ -2586,7 +2564,7 @@ every position is genuinely more informative than seeing only the left
 context. So the rough division is CLM for generation, MLM for
 representation. The headline LLMs you interact with — GPT, Claude, Llama
 — are decoder-only CLM models, because the product is generation.</p>
-<h3 id="scaling-laws">Scaling laws</h3>
+<h2 data-number="7.3" id="scaling-laws"><span class="header-section-number">7.3</span> Scaling laws</h2>
 <p>The defining empirical fact about LLMs is that their loss is
 predictable. Kaplan et al. (2020) measured how test loss falls as you
 increase three things — the number of parameters, the size of the
@@ -2618,8 +2596,8 @@ is the smallest model that hits our quality bar, trained on enough data
 to earn its parameters?” That shift is why the field moved toward
 smaller, longer-trained models for deployment even as the frontier kept
 pushing scale at the top end.</p>
-<h3 id="fine-tuning-adapting-without-retraining">Fine-tuning: adapting
-without retraining</h3>
+<h2 data-number="7.4" id="fine-tuning-adapting-without-retraining"><span class="header-section-number">7.4</span> Fine-tuning: adapting without
+retraining</h2>
 <p>A pre-trained model is a general next-token predictor. To make it
 good at a specific task — summarising legal documents, answering medical
 questions in a house style — you adapt it. The brute-force option is
@@ -2662,8 +2640,8 @@ attention machinery and they steer its behaviour, much as a well-crafted
 prompt would, except the steering is learned by gradient descent rather
 than written by hand. It trains even fewer parameters than LoRA, at the
 cost of consuming some of the context window.</p>
-<h3 id="rlhf-from-completion-to-instruction-following">RLHF: from
-completion to instruction-following</h3>
+<h2 data-number="7.5" id="rlhf-from-completion-to-instruction-following"><span class="header-section-number">7.5</span> RLHF: from completion to
+instruction-following</h2>
 <p>A pre-trained CLM model completes text. That is not the same as being
 helpful. Ask a raw pre-trained model “What is the capital of France?”
 and a plausible continuation is another question — because in the
@@ -2727,7 +2705,7 @@ exploit of its own grader. (Newer methods like Direct Preference
 Optimisation fold these stages together and skip the explicit reward
 model, but the conceptual structure — preferences supply the signal, a
 proximity constraint prevents collapse — is the same.)</p>
-<h3 id="emergent-capabilities">Emergent capabilities</h3>
+<h2 data-number="7.6" id="emergent-capabilities"><span class="header-section-number">7.6</span> Emergent capabilities</h2>
 <p>The last thing to know about scale is the strangest. At small scale,
 a language model does roughly what you’d expect: it completes tokens,
 more or less fluently. At large scale, models exhibit capabilities that
@@ -2767,7 +2745,7 @@ as agents — see the AI Agents Primer in this collection
 (<code>../building_ai_agents/ai_agents_comprehensive_primer.md</code>).
 This section covered what an LLM <em>is</em>; that one covers what you
 <em>do</em> with it.</p>
-<h2 id="variational-autoencoders">Variational Autoencoders</h2>
+<h1 data-number="8" id="variational-autoencoders"><span class="header-section-number">8</span> Variational Autoencoders</h1>
 <p>Generative modelling is the problem of learning a distribution well
 enough to draw new samples from it — new faces, new sentences, new
 molecules. The next three sections cover the three families that
@@ -2778,8 +2756,8 @@ to understand each is to see the problem it was built to fix in its
 predecessor. We start with the VAE, and the cleanest way to motivate it
 is to look at the problem ordinary autoencoders solve, and then the
 problem they create.</p>
-<h3 id="autoencoders-and-the-gap-they-leave">Autoencoders, and the gap
-they leave</h3>
+<h2 data-number="8.1" id="autoencoders-and-the-gap-they-leave"><span class="header-section-number">8.1</span> Autoencoders, and the gap they
+leave</h2>
 <p>An autoencoder is two networks trained as a pair. An
 <strong>encoder</strong> <span class="math inline">\(q_\phi(\mathbf{z}
 \mid \mathbf{x})\)</span> takes an input <span class="math inline">\(\mathbf{x}\)</span> — an image, say — and
@@ -2816,7 +2794,7 @@ producing nonsense partway across. The autoencoder learned to represent
 the training data, but it did not learn a latent <em>distribution</em>
 you can sample from. That is the generative gap, and closing it is the
 entire point of the VAE.</p>
-<h3 id="the-latent-variable-view">The latent-variable view</h3>
+<h2 data-number="8.2" id="the-latent-variable-view"><span class="header-section-number">8.2</span> The latent-variable view</h2>
 <p>To fix the gap you need a different framing. Stop thinking of the
 encoder as the primary object and start with a generative story for how
 data is produced. Imagine that to make a data point, nature first
@@ -2842,7 +2820,7 @@ neural-network decoder, <span class="math inline">\(p_\theta(\mathbf{x}
 latent space has no closed form and cannot be computed directly. We need
 a way to optimise the marginal likelihood without ever evaluating that
 integral.</p>
-<h3 id="the-elbo">The ELBO</h3>
+<h2 data-number="8.3" id="the-elbo"><span class="header-section-number">8.3</span> The ELBO</h2>
 <p>The way through is to bring the encoder back, but now with a job
 defined by the generative story. The true posterior <span class="math inline">\(p(\mathbf{z} \mid \mathbf{x})\)</span> — the
 distribution over latents that could have produced a given <span class="math inline">\(\mathbf{x}\)</span> — is exactly as intractable as
@@ -2894,7 +2872,8 @@ zero or its variance from one. No integral, no sampling needed for this
 term: you read <span class="math inline">\(\boldsymbol{\mu}\)</span> and
 <span class="math inline">\(\boldsymbol{\sigma}\)</span> straight off
 the encoder and plug in.</p>
-<h3 id="the-reparameterisation-trick">The reparameterisation trick</h3>
+<h2 data-number="8.4" id="the-reparameterisation-trick"><span class="header-section-number">8.4</span> The reparameterisation
+trick</h2>
 <p>There is one obstacle left, and it is in the reconstruction term. To
 estimate <span class="math inline">\(\mathbb{E}_{q_\phi}[\log
 p_\theta(\mathbf{x} \mid \mathbf{z})]\)</span> you have to sample <span class="math inline">\(\mathbf{z}\)</span> from <span class="math inline">\(q_\phi(\mathbf{z} \mid \mathbf{x})\)</span> and
@@ -2921,7 +2900,7 @@ encoder. The randomness is still there, sample to sample, but it no
 longer blocks the gradient. This single trick is what makes the VAE
 trainable end-to-end by gradient descent, and the same idea reappears
 whenever you need to differentiate through a sampling step.</p>
-<h3 id="putting-it-together">Putting it together</h3>
+<h2 data-number="8.5" id="putting-it-together"><span class="header-section-number">8.5</span> Putting it together</h2>
 <p>In practice the encoder is built to output <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\log \boldsymbol{\sigma}^2\)</span> rather than
 <span class="math inline">\(\boldsymbol{\sigma}\)</span> directly —
 predicting the log-variance keeps the value numerically stable and
@@ -2958,7 +2937,7 @@ and produces nonsense in the middle. With a VAE the KL regularisation
 has filled in the space, so the interpolation sweeps smoothly from one
 image to the other — every intermediate point decodes to something
 coherent, even if blurry.</p>
-<h3 id="limitations">Limitations</h3>
+<h2 data-number="8.6" id="limitations"><span class="header-section-number">8.6</span> Limitations</h2>
 <p>That word “blurry” is the VAE’s signature weakness, and it falls
 straight out of the objective. The reconstruction term rewards the
 decoder for assigning probability to the true <span class="math inline">\(\mathbf{x}\)</span> across the spread of latents
@@ -2981,8 +2960,8 @@ reasons the field looked past VAEs for high-fidelity generation — toward
 GANs and diffusion models, the next two sections — even though the VAE’s
 structured, samplable latent space remains so useful that it reappears
 as a component inside latent diffusion at the end of this part.</p>
-<h2 id="generative-adversarial-networks">Generative Adversarial
-Networks</h2>
+<h1 data-number="9" id="generative-adversarial-networks"><span class="header-section-number">9</span> Generative Adversarial
+Networks</h1>
 <p>The VAE’s blurriness traces back to its objective: a likelihood-based
 loss that rewards hedging toward the average. GANs throw that objective
 out entirely. Instead of training a generator to maximise a likelihood,
@@ -2993,7 +2972,7 @@ pulling toward a blurry mean. The generator improves by being told,
 repeatedly, exactly how it got caught. The payoff is sharpness; the
 price, as we’ll see, is that the training is genuinely hard to make
 converge.</p>
-<h3 id="the-minimax-game">The minimax game</h3>
+<h2 data-number="9.1" id="the-minimax-game"><span class="header-section-number">9.1</span> The minimax game</h2>
 <p>Two networks play against each other. The <strong>generator</strong>
 <span class="math inline">\(G_\theta\)</span> takes a noise vector <span class="math inline">\(\mathbf{z} \sim p_z\)</span> — typically a
 standard Gaussian — and maps it to a fake data point <span class="math inline">\(G_\theta(\mathbf{z})\)</span>. The
@@ -3030,7 +3009,7 @@ distribution <span class="math inline">\(p_G\)</span>. So in principle a
 GAN drives <span class="math inline">\(p_G\)</span> toward <span class="math inline">\(p_\text{data}\)</span> under a sensible
 divergence. That is the reassuring theory. The practice is where it gets
 difficult.</p>
-<h3 id="why-gans-are-hard-to-train">Why GANs are hard to train</h3>
+<h2 data-number="9.2" id="why-gans-are-hard-to-train"><span class="header-section-number">9.2</span> Why GANs are hard to train</h2>
 <p>GANs are notorious, and the difficulties are not incidental — they
 fall out of the minimax structure. Three are worth knowing by name.</p>
 <p>The first is <strong>vanishing gradients for the generator</strong>,
@@ -3069,7 +3048,7 @@ other indefinitely, the loss curves swinging around without settling,
 never reaching the equilibrium the theory promises. Unlike ordinary loss
 minimisation, where the objective falls and stops, an adversarial game
 has no guarantee of converging at all under gradient descent.</p>
-<h3 id="wasserstein-gan">Wasserstein GAN</h3>
+<h2 data-number="9.3" id="wasserstein-gan"><span class="header-section-number">9.3</span> Wasserstein GAN</h2>
 <p>A good deal of the instability traces back to the divergence the
 original GAN minimises. When <span class="math inline">\(p_\text{data}\)</span> and <span class="math inline">\(p_G\)</span> have little overlap — which is
 exactly the situation early in training, when the generator is bad — the
@@ -3115,7 +3094,7 @@ D(\hat{\mathbf{x}})\|_2 - 1)^2\big],\]</span></p>
 between real and fake examples. This softly holds the critic’s gradient
 norm near 1 without the pathologies of weight clipping, and it is the
 recipe most stable GAN training is built on.</p>
-<h3 id="architecture-variants">Architecture variants</h3>
+<h2 data-number="9.4" id="architecture-variants"><span class="header-section-number">9.4</span> Architecture variants</h2>
 <p>Several variants are worth recognising. <strong>DCGAN</strong> was
 the one that made GANs work reliably on images: build both networks from
 convolutions — transposed convolutions in the generator to upsample
@@ -3135,8 +3114,8 @@ learned style vector at every resolution of the generator, giving
 control over coarse structure and fine detail separately; for several
 years its faces were the state of the art in photorealistic generation
 and the source of most “this person does not exist” demonstrations.</p>
-<h3 id="when-gans-are-still-the-right-tool">When GANs are still the
-right tool</h3>
+<h2 data-number="9.5" id="when-gans-are-still-the-right-tool"><span class="header-section-number">9.5</span> When GANs are still the right
+tool</h2>
 <p>Diffusion models have displaced GANs as the default for high-fidelity
 image generation, but GANs are far from obsolete, and the reasons come
 down to what the adversarial setup uniquely offers. The biggest is
@@ -3153,7 +3132,7 @@ pix2pix, where the adversarial signal directly judges whether a
 translated image looks like it belongs in the target domain. Wherever
 you need fast sampling or adversarial feedback on a specific
 distributional property, the GAN is still the right tool.</p>
-<h2 id="diffusion-models">Diffusion Models</h2>
+<h1 data-number="10" id="diffusion-models"><span class="header-section-number">10</span> Diffusion Models</h1>
 <p>Diffusion models come from one disarmingly simple observation. Take
 an image and add a little Gaussian noise. Add a little more. Keep going
 for enough steps and the image dissolves into pure, structureless noise
@@ -3165,7 +3144,7 @@ gradually removing noise until a coherent image emerges from static.
 This turns out to give the most stable training and the highest sample
 quality of any generative family, which is why it underpins essentially
 every state-of-the-art image generator.</p>
-<h3 id="the-forward-process">The forward process</h3>
+<h2 data-number="10.1" id="the-forward-process"><span class="header-section-number">10.1</span> The forward process</h2>
 <p>The noising is defined as a fixed Markov chain — fixed meaning it has
 no learned parameters; it is the same recipe for every image. Over <span class="math inline">\(T\)</span> steps it gradually adds Gaussian noise,
 each step nudging the image toward the noise distribution:</p>
@@ -3202,7 +3181,7 @@ no loop. As <span class="math inline">\(t\)</span> runs from 1 to <span class="m
 near 0, so <span class="math inline">\(\mathbf{x}_t\)</span> slides
 smoothly from “the original image” to “pure noise”, and you can land
 anywhere on that path instantly.</p>
-<h3 id="the-reverse-process">The reverse process</h3>
+<h2 data-number="10.2" id="the-reverse-process"><span class="header-section-number">10.2</span> The reverse process</h2>
 <p>To generate, you want to run the chain backwards: given a noisy <span class="math inline">\(\mathbf{x}_t\)</span>, produce a slightly less
 noisy <span class="math inline">\(\mathbf{x}_{t-1}\)</span>. The true
 reverse conditional <span class="math inline">\(p(\mathbf{x}_{t-1} \mid
@@ -3249,7 +3228,7 @@ step’s noise; the trailing <span class="math inline">\(\sigma_t
 \mathbf{z}\)</span> adds a small amount of fresh randomness back in,
 which keeps the reverse process a proper stochastic sampler rather than
 a deterministic collapse. Run all the way down and <span class="math inline">\(\mathbf{x}_0\)</span> is your generated image.</p>
-<h3 id="score-matching-briefly">Score matching, briefly</h3>
+<h2 data-number="10.3" id="score-matching-briefly"><span class="header-section-number">10.3</span> Score matching, briefly</h2>
 <p>It is worth knowing that this connects to a broader theory, because
 it explains why the noise-prediction trick works and links diffusion to
 a whole other line of research. The <strong>score</strong> of a
@@ -3268,7 +3247,7 @@ direction toward higher data density at each noise level. This places
 diffusion inside the family of energy-based and score-based generative
 models, and the equivalence is more than cosmetic — it is where a lot of
 the theory and the faster samplers come from.</p>
-<h3 id="ddim-fewer-steps">DDIM: fewer steps</h3>
+<h2 data-number="10.4" id="ddim-fewer-steps"><span class="header-section-number">10.4</span> DDIM: fewer steps</h2>
 <p>The DDPM sampler has one serious practical drawback: it wants on the
 order of 1000 steps, one per noise level, and each step is a full
 forward pass through a large network. Generating one image takes a
@@ -3295,7 +3274,7 @@ the next level down. Because the process is deterministic given the
 starting noise, DDIM also gives you a clean latent-to-image map, which
 makes interpolation and editing in noise space possible — the same
 starting noise always produces the same image.</p>
-<h3 id="classifier-free-guidance">Classifier-free guidance</h3>
+<h2 data-number="10.5" id="classifier-free-guidance"><span class="header-section-number">10.5</span> Classifier-free guidance</h2>
 <p>Everything so far generates unconditionally — it draws <em>some</em>
 image from the learned distribution, with no way to ask for a specific
 one. To condition on a class label or a text prompt <span class="math inline">\(\mathbf{c}\)</span>, the trick that won is
@@ -3323,7 +3302,7 @@ diversity for fidelity to the prompt, so push it too far and outputs
 become over-saturated and samey. This single dial is the mechanism
 behind the prompt control in DALL-E 2, Stable Diffusion, and Imagen, and
 tuning it is most of what “guidance scale” means in those tools.</p>
-<h3 id="latent-diffusion">Latent diffusion</h3>
+<h2 data-number="10.6" id="latent-diffusion"><span class="header-section-number">10.6</span> Latent diffusion</h2>
 <p>There is one more piece, and it is what made high-resolution
 text-to-image practical rather than a research curiosity. Running
 diffusion directly in pixel space is brutally expensive: a 256×256 RGB
@@ -3355,8 +3334,8 @@ at every layer the image being denoised “looks up” the parts of the
 prompt relevant to each spatial location. That is the whole
 text-to-image pathway: encode the prompt, diffuse in latent space under
 cross-attention to the prompt, decode to pixels.</p>
-<h3 id="comparison-vaes-gans-diffusion">Comparison: VAEs, GANs,
-Diffusion</h3>
+<h2 data-number="10.7" id="comparison-vaes-gans-diffusion"><span class="header-section-number">10.7</span> Comparison: VAEs, GANs,
+Diffusion</h2>
 <p>Pulling the three families together, each makes a different bargain,
 and the table below is the cheat sheet. VAEs give you a clean,
 structured latent space and rock-solid training but blurry samples. GANs
@@ -3425,7 +3404,7 @@ you can compose.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="frameworks-and-ecosystem">Frameworks and Ecosystem</h2>
+<h1 data-number="11" id="frameworks-and-ecosystem"><span class="header-section-number">11</span> Frameworks and Ecosystem</h1>
 <p>The mathematics in this primer is framework-agnostic. A convolution
 is a convolution, backpropagation computes the same gradients, and the
 Adam update rule is the same arithmetic whether you express it in
@@ -3437,7 +3416,7 @@ what matters most, and those bets shaped their APIs, their performance
 characteristics, and the communities that grew around them. Knowing
 which framework fits which job is part of the practical skill, so it is
 worth understanding what each one is actually optimising for.</p>
-<h3 id="pytorch">PyTorch</h3>
+<h2 data-number="11.1" id="pytorch"><span class="header-section-number">11.1</span> PyTorch</h2>
 <p>PyTorch came out of Meta AI Research (then Facebook AI Research) in
 2016, and its design philosophy is summed up in one phrase: it feels
 like Python. Operations execute eagerly — immediately, as the Python
@@ -3483,7 +3462,7 @@ universally ship PyTorch implementations, HuggingFace integration is
 first-class, and production deployment is handled through TorchScript
 (which serialises a model into a form runnable without Python) and
 TorchServe.</p>
-<h3 id="tensorflow-and-keras">TensorFlow and Keras</h3>
+<h2 data-number="11.2" id="tensorflow-and-keras"><span class="header-section-number">11.2</span> TensorFlow and Keras</h2>
 <p>TensorFlow arrived first, from Google Brain in 2015, and its original
 design was the opposite of PyTorch’s. Computation graphs were static:
 you defined the entire graph declaratively, describing the operations
@@ -3519,7 +3498,7 @@ shared with JAX. The current balance is clear enough: PyTorch has
 largely won research, while TensorFlow and Keras hold ground in
 production, particularly in Google-adjacent stacks, and remain unusually
 friendly for beginners.</p>
-<h3 id="jax">JAX</h3>
+<h2 data-number="11.3" id="jax"><span class="header-section-number">11.3</span> JAX</h2>
 <p>JAX, from Google Research in 2018, is the odd one out, and the most
 interesting if your work strays off the beaten path. It is not really a
 deep learning framework at all — it is a system for composable function
@@ -3567,7 +3546,7 @@ instead), and stateful randomness handled by threading an explicit PRNG
 key through every function that needs one. The initial learning curve is
 the steepest of the three, and it is steepest precisely where JAX is
 most different from the imperative style everyone arrives with.</p>
-<h3 id="huggingface">HuggingFace</h3>
+<h2 data-number="11.4" id="huggingface"><span class="header-section-number">11.4</span> HuggingFace</h2>
 <p>HuggingFace is not a framework in the same sense — it is a model hub
 and a library ecosystem layered on top of PyTorch and TensorFlow, and it
 is most of the reason the practical barrier to using state-of-the-art
@@ -3589,7 +3568,7 @@ Now it is two lines:</p>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoModelForSequenceClassification.from_pretrained(<span class="st">&quot;bert-base-uncased&quot;</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(<span class="st">&quot;bert-base-uncased&quot;</span>)</span></code></pre></div>
-<h3 id="choosing-between-them">Choosing Between Them</h3>
+<h2 data-number="11.5" id="choosing-between-them"><span class="header-section-number">11.5</span> Choosing Between Them</h2>
 <p>The three frameworks line up cleanly along a few axes, and the table
 below is the quick reference. The short version: PyTorch is the default
 for research and an increasingly strong choice for production;
@@ -3720,7 +3699,7 @@ lines and a training loop for free. Flax makes the parameters explicit
 so the whole thing is a pure function you can differentiate, batch, and
 parallelise by wrapping it in a transformation. None is wrong; they are
 answers to different questions.</p>
-<h2 id="when-to-use-what">When to Use What</h2>
+<h1 data-number="12" id="when-to-use-what"><span class="header-section-number">12</span> When to Use What</h1>
 <p>This is the synthesis. Everything up to here has been mechanism —
 what each architecture is and how it trains. This section is the
 decision guide: not an exhaustive taxonomy of every model that exists,
@@ -3728,8 +3707,8 @@ but the handful of questions you actually ask when you sit down to pick
 an architecture for a real problem. The questions are roughly in the
 order you should ask them, because the early ones eliminate whole
 branches of the tree.</p>
-<h3 id="the-first-cut-structured-versus-unstructured-data">The First
-Cut: Structured Versus Unstructured Data</h3>
+<h2 data-number="12.1" id="the-first-cut-structured-versus-unstructured-data"><span class="header-section-number">12.1</span> The First Cut: Structured
+Versus Unstructured Data</h2>
 <p>Before anything else, look at your data. If it is tabular — rows that
 are independent of each other, columns that are individually meaningful,
 the kind of thing that lives comfortably in a spreadsheet or a database
@@ -3744,7 +3723,7 @@ It is a consequence of what deep learning is good at — discovering
 features from raw signal — and tabular data is the case where the
 features are already discovered. Reach for a neural network on tabular
 data only when you have a specific reason, not by default.</p>
-<h3 id="images-and-spatial-data">Images and Spatial Data</h3>
+<h2 data-number="12.2" id="images-and-spatial-data"><span class="header-section-number">12.2</span> Images and Spatial Data</h2>
 <p>For images, the choice is between convolutional networks and Vision
 Transformers, and it comes down to how much data you have and where the
 model will run. CNNs are the right call for limited data and
@@ -3762,7 +3741,7 @@ useful results on segmentation and image-text matching before you have
 done any task-specific fine-tuning at all. The first thing to try on a
 new vision problem is often one of these pretrained models, not a
 network of your own.</p>
-<h3 id="sequences-and-text">Sequences and Text</h3>
+<h2 data-number="12.3" id="sequences-and-text"><span class="header-section-number">12.3</span> Sequences and Text</h2>
 <p>For text and sequences, transformers have almost entirely displaced
 RNNs, and the practical workflow reflects it. Start with a pretrained
 transformer: BERT-class models for understanding tasks (classification,
@@ -3777,8 +3756,8 @@ one-step-at-a-time nature of a recurrent model is exactly what the
 deployment needs. But for the overwhelming majority of NLP work, the
 question is which pretrained transformer to fine-tune, not whether to
 use one.</p>
-<h3 id="generation-which-generative-model">Generation: Which Generative
-Model</h3>
+<h2 data-number="12.4" id="generation-which-generative-model"><span class="header-section-number">12.4</span> Generation: Which Generative
+Model</h2>
 <p>When the task is generation, the choice among VAEs, GANs, and
 diffusion models follows from what you are optimising for, and the
 trade-offs are distinct enough that the question almost answers itself
@@ -3802,8 +3781,8 @@ faster.</p>
 <p>If you want text generation, the answer is a decoder-only transformer
 in the GPT style. Diffusion for text is an active research area and an
 interesting one, but it is not yet the practical choice.</p>
-<h3 id="compute-and-data-requirements">Compute and Data
-Requirements</h3>
+<h2 data-number="12.5" id="compute-and-data-requirements"><span class="header-section-number">12.5</span> Compute and Data
+Requirements</h2>
 <p>It helps to have a rough sense of what each architecture costs to
 train from scratch, because the numbers are what make the “use a
 pretrained model” advice concrete rather than abstract. The table below
@@ -3873,7 +3852,8 @@ shape of it is the point.</p>
 the gap between “CPU feasible” and “TPU months” is the gap between a
 weekend project and a budget that only a handful of organisations can
 field.</p>
-<h3 id="the-practical-starting-point">The Practical Starting Point</h3>
+<h2 data-number="12.6" id="the-practical-starting-point"><span class="header-section-number">12.6</span> The Practical Starting
+Point</h2>
 <p>Which leads to the single most useful piece of advice in this primer:
 for almost every real application, start with a pretrained model. The
 compute and data required to train a competitive model from scratch are
@@ -3886,7 +3866,7 @@ model, so their learned features will not transfer; you actually have
 the data and the compute to do it; and you have a specific, articulable
 reason to believe pretrained features will fail you. If you cannot make
 all three arguments, fine-tune.</p>
-<h3 id="what-to-read-next">What to Read Next</h3>
+<h2 data-number="12.7" id="what-to-read-next"><span class="header-section-number">12.7</span> What to Read Next</h2>
 <p>This primer gives you the conceptual foundation; the papers give you
 the detail and the caveats it omits by design. The ones worth reading in
 the original are “Attention Is All You Need” (Vaswani et al., 2017) for
