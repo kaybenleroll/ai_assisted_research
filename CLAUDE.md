@@ -68,6 +68,26 @@ import '../_shared/common.just'
 
 ---
 
+## Primer Build and Render Notes
+
+- Commit the generation script alongside figure outputs for reproducibility
+- Add `--mathjax` to `HTML_EXTRA` to enable TeX math rendering in HTML output
+- When grepping xelatex output for errors, use `Error|Missing \$|Undefined control` — generic warning grep misses actual failures
+- Verify the rendered PDF exists and has non-trivial file size before committing
+- Scan all ` ```text ``` ` blocks in a primer before planning diagram replacement — prevents missed diagrams during build work
+- For important primer topics, use full coverage rather than cross-references to other documents
+- Use wrapper recipes (e.g. `full`) to chain shared targets from `_shared/common.just` — `just` does not support override of imported recipes
+- Grep document prose for embedded section references before stripping or renumbering headings
+- Apply `--number-sections` (and any shift flags) consistently across all primers when setting the standard — piecemeal application was the original defect
+- Primer plot generation uses R via the rocker container — the pandoc container has no pip
+- Use `--shift-heading-level-by=-1` with `--number-sections` when the source has a body `# H1` followed by `##` sections — without the shift, `##` sections number as 1.1 not 1
+- Configure DejaVu Sans Mono as monospace font in PDF headers when code blocks contain Greek characters — lmmono lacks Greek coverage
+- Mermaid diagram support uses a Lua filter in `_shared/` that generates PNG intermediates before pandoc runs
+- All rendering and computation must run in containers to ensure reproducibility; do not install libraries on the host for primer builds
+- Pre-share a notation contract table with all parallel agents writing mathematical content
+
+---
+
 ## Silo RPG — Context-Navigation Mandate
 
 When asked anything about Silo RPG lore, rules, mechanics, setting, or campaign content:
