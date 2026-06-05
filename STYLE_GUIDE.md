@@ -160,3 +160,5 @@ Introduce every term the first time it appears in the context of this document. 
 ## Length
 
 Primers in this collection are long-form by design. Do not pad, but do not compress past the point where a new reader can follow without outside reference. The goal is self-contained understanding, not a summary that requires the reader to go look things up.
+
+- When in doubt about content depth, prefer the fuller treatment
