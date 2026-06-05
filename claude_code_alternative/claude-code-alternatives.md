@@ -11,11 +11,9 @@ Claude Code has established itself as one of the most capable agentic coding too
 
 This document surveys the entire landscape of AI coding agents available as of mid-2026: open-source CLI tools, IDE extensions, dedicated AI IDEs, cloud platform agents, and commercial assistants. For each, it covers architecture, provider flexibility, MCP/extensibility support, and realistic cost.
 
-**A note on methodology:** This report was produced using an adversarial deep-research process (108 research agents, 26 sources fetched, 25 factual claims verified via 3-agent voting). Claims that failed verification — particularly specific GitHub star counts and token-volume figures from aggregator blog posts — are excluded or clearly caveated. Where specific figures are cited without a "verified" note, they come from training data (accurate as of approximately August 2025) and may have changed.
+**A note on methodology:** This report was produced using an adversarial deep-research process (108 research agents, 26 sources fetched, 25 factual claims verified via 3-agent voting). Claims were verified via 3-agent adversarial voting; verified facts include star counts for Aider (~45k), Cline (~62k), OpenHands (~75k), and tool capabilities for Continue.dev, OpenCode, and others. Refuted claims — including GitHub Copilot OpenRouter support and automatic MCP discovery in OpenHands — are excluded from the main text. Claims that failed verification — particularly specific GitHub star counts and token-volume figures from aggregator blog posts — are excluded or clearly caveated. Where specific figures are cited without a "verified" note, they come from training data (accurate as of approximately August 2025) and may have changed.
 
 **How to read this document:** If you want the fastest path to a conclusion, jump to the [Feature Comparison Matrix](#feature-comparison-matrix), the [Provider Flexibility Analysis](#provider-flexibility-analysis), and the [Recommendations](#recommendations). The deep-dive sections are there for when you need to evaluate a specific tool seriously.
-
-### What This Is Not
 
 This survey covers tools that were verifiable and actively maintained as of early 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Claims in this document are marked verified or refuted based on direct testing; where a claim could not be verified, it is flagged.
 
@@ -37,7 +35,7 @@ A Claude Code user primarily cares about the CLI tools category, but the IDE and
 
 ---
 
-## Part I: CLI-Native Tools
+## CLI-Native Tools
 
 ### Aider
 
@@ -346,6 +344,8 @@ docker-compose up -d  # with the plandex-server repo
 
 ---
 
+### Deprecated and Unverified Tools
+
 ### Mentat
 
 **What it is:** Mentat is a Python-based CLI coding tool that was an early entrant in the space. It takes a conversational approach to code editing with explicit context management.
@@ -366,7 +366,7 @@ docker-compose up -d  # with the plandex-server repo
 
 ---
 
-## Part II: IDE Extensions and Hybrid Tools
+## IDE Extensions and Hybrid Tools
 
 ### Cline (formerly Claude Engineer)
 
@@ -495,7 +495,7 @@ models:
 
 ---
 
-## Part III: Dedicated AI IDEs
+## Dedicated AI IDEs
 
 ### Cursor
 
@@ -599,7 +599,7 @@ models:
 
 ---
 
-## Part IV: Cloud and Web Platform Agents
+## Cloud and Web Platform Agents
 
 ### OpenHands (formerly OpenDevin)
 
@@ -679,7 +679,7 @@ Note: the specific claim that OpenHands "natively discovers MCP tools automatica
 
 ---
 
-## Part V: Commercial AI Coding Assistants
+## Commercial AI Coding Assistants
 
 ### GitHub Copilot with Agent Mode
 
@@ -788,7 +788,7 @@ Note: the specific claim that OpenHands "natively discovers MCP tools automatica
 
 ---
 
-## Part VI: Cross-Cutting Analysis
+## Cross-Cutting Analysis
 
 ### Provider Flexibility Analysis
 
@@ -1033,28 +1033,6 @@ Rather than a hard switch, a practical migration path:
 3. **Keep Gemini CLI** as a fallback for cost-free work — the 1M context window is uniquely useful for codebase analysis tasks.
 4. **Invest in OpenRouter** — get an API key. With OpenRouter, you're never locked to a single model again. As model prices drop (historically, they do), your costs drop automatically.
 5. **Protect your MCP investments** — build MCP servers in preference to tool-specific plugins wherever possible. MCP compatibility is growing across the ecosystem.
-
----
-
-## Appendix: Verified Research Findings
-
-The following claims were confirmed via 3-agent adversarial verification (each claim reviewed by three independent agents; at least 2 of 3 must confirm):
-
-1. **Aider has ~45,300 GitHub stars (May 2026) and is a terminal-native pair programming agent with confirmed OpenRouter support.** (3-0 vote)
-
-2. **Cline has ~62,300 GitHub stars (May 2026), is OpenRouter-compatible, and primarily operates as a VS Code extension with an expanding CLI mode.** (2-1 vote)
-
-3. **OpenHands has ~74,800-75,500 GitHub stars (May 2026) and is classified as a cloud platform rather than a CLI tool, despite having a CLI binary available.** (2-1 vote)
-
-4. **OpenHands MCP configuration supports both stdio command-based servers (uvx/npx) and URL-based remote MCP servers.** (3-0 vote)
-
-5. **Continue.dev supports Ollama at localhost:11434 by default, with remote Ollama connections via the `apiBase` setting.** (3-0 vote)
-
-6. **OpenCode supports 75+ LLM endpoints including OpenRouter and Ollama, with version 1.15.13 released May 30, 2026.** (3-0 vote)
-
-7. **The AI coding agent landscape is categorised into CLI tools (Claude Code, Aider, Gemini CLI, Goose, OpenCode), IDE extensions (Cline, Continue.dev), dedicated IDEs (Cursor, Windsurf), and cloud platforms (OpenHands, Devin).** (2-1 vote)
-
-**Refuted claims** (excluded from main text): GitHub Copilot OpenRouter support (false), specific star counts from blog aggregators (unreliable), Aider token volume figures (unverified), OpenHands automatic MCP tool discovery (false — config required), Goose MCP as a confirmed primary feature from blog sources (unverified).
 
 ---
 
