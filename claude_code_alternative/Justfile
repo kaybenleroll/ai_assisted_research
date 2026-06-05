@@ -2,7 +2,7 @@ SOURCE_MD   := "claude-code-alternatives.md"
 PROJECT_DIR := "claude_code_alternative"
 TITLE       := "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026"
 AUTHOR      := "May 2026"
-HTML_EXTRA  := ""
-PDF_EXTRA   := ""
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'
