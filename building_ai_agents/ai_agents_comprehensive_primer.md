@@ -20,7 +20,7 @@ We'll keep this practical and conversational. The goal here is not to bury you i
 
 ---
 
-## Part 1: Fundamentals
+## Fundamentals
 
 ### What Is an Autonomous AI Agent?
 
@@ -69,7 +69,7 @@ Mini example: an IT access agent receives "Grant dashboard access." It checks us
 
 ---
 
-## Part 2: How LLMs Enable Autonomous Behavior
+## How LLMs Enable Autonomous Behavior
 
 ### The Misconception: LLMs as Black Boxes
 
@@ -133,7 +133,7 @@ This also explains why loop-based agents often outperform one giant prompt. The 
 
 ---
 
-## Part 3: The Execution Loop
+## The Execution Loop
 
 ### The Agent Lifecycle
 
@@ -286,7 +286,7 @@ What this walkthrough demonstrates is the key idea behind reliable autonomy: the
 
 ---
 
-## Part 4: Tools and Actions
+## Tools and Actions
 
 ### What Makes a Good Tool?
 
@@ -400,7 +400,7 @@ Rule of thumb:
 
 ---
 
-## Part 5: Memory and Context
+## Memory and Context
 
 ### The Context Window Problem
 
@@ -504,7 +504,7 @@ A practical default policy:
 
 ---
 
-## Part 6: Design Patterns and Strategies
+## Design Patterns, Architectures, and Frameworks
 
 ### ReAct Pattern (Reasoning + Acting)
 
@@ -569,10 +569,6 @@ Still fails after 2 retries:
    escalate to a human agent."
   escalate_to_human()
 ```
-
----
-
-## Part 7: Practical Architectures and Frameworks
 
 ### The Execution Loop Implementation
 
@@ -649,7 +645,7 @@ Quick selection heuristic:
 
 ---
 
-## Part 8: Key Challenges
+## Key Challenges
 
 ### Challenge 1: Hallucination
 
@@ -735,7 +731,7 @@ Debug one failed trajectory at a time. Root-cause certainty beats broad guesswor
 
 ---
 
-## Part 9: Building Your First Agent
+## Building Agents
 
 ### Start Simple
 
@@ -808,10 +804,6 @@ def test_agent_error_recovery():
     assert result.handles_error_gracefully == True
     # Agent should ask for clarification, not crash
 ```
-
----
-
-## Part 10: Building a Real Agent End-to-End (Specific Use Case)
 
 Let's make this concrete with a full use case: **an inbound customer support triage agent for an e-commerce store**.
 
@@ -924,7 +916,7 @@ A healthy v1 support triage agent usually:
 
 That is already a meaningful business win.
 
-## Part 11: Current Limitations and Future Directions
+## Conclusion
 
 ### Current Limitations (2026)
 
@@ -964,10 +956,6 @@ That is already a meaningful business win.
 
 **Model Context Protocol (MCP):** Emerging standard for how agents and tools communicate, enabling better tool ecosystem.
 
----
-
-## Conclusion
-
 Autonomous AI agents are not magical. They're engineered systems combining:
 
 1. **LLM as reasoning engine** - Excellent pattern-matching to understand context and plan
@@ -984,7 +972,7 @@ If you remember one practical takeaway, make it this: treat agent development li
 
 ---
 
-## Further Reading
+## Further Reading and Resources
 
 - **ReAct Paper:** "ReAct: Synergizing Reasoning and Acting in Language Models" (Yao et al., 2023)
 - **Reflexion:** "Reflexion: Language Agents with Verbal Reinforcement Learning" (Shinn et al., 2023)  
@@ -993,7 +981,5 @@ If you remember one practical takeaway, make it this: treat agent development li
 - **Framework Docs:** Pydantic AI, LangGraph, CrewAI official documentation
 
 ---
-
-**Word count: expanded edition**
 
 *Created: May 20, 2026*
