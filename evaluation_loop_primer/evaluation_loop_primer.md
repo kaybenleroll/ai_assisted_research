@@ -8,8 +8,11 @@ Andrej Karpathy gave this loop its clearest articulation. In his 2017 essay "Sof
 
 By December 2022 Karpathy had sharpened the idea into what he called a data engine. His formulation: "competitive advantage in AI goes not so much to those with data but those with a data engine: iterated data acquisition, annotation, training, evaluation" — and the winner is whoever can spin that loop fastest. The loop has a fixed shape:
 
-```text
-collect -> label -> train -> evaluate -> deploy -> telemetry -> repeat
+```{.mermaid caption="The data engine loop: every box is plumbing; evaluate is the load-bearing sensor."}
+graph LR
+    collect[Collect] --> label[Label] --> train[Train] --> evaluate[Evaluate]
+    evaluate --> deploy[Deploy] --> telemetry[Telemetry] --> collect
+    style evaluate fill:#f96,stroke:#333,stroke-width:3px
 ```
 
 You collect inputs, label them with the right answer, train a model, evaluate how well it does, deploy it, gather telemetry on where it fails in the wild, and feed those failures back into the next collection round. Tesla's self-driving stack is the canonical worked example. The team would identify a rare failure scenario — say, a particular kind of badly-occluded stop sign — design a trigger that fires when the fleet encounters it, collect sensor data from cars that hit that trigger, annotate it at scale, retrain, deploy, and repeat. Their "Shadow Mode" is the telemetry step made concrete: a shadow autopilot runs silently alongside the human driver, and every time its prediction disagrees with what the human actually did, the system banks a candidate failure case. The disagreement is the signal.
@@ -61,6 +64,14 @@ So absolute scoring against a reference is a dead end for subjective tasks. The 
 
 You can see it in the numbers on humans themselves. When you ask two people to assign an absolute quality score to a single LLM response, their inter-rater agreement typically lands somewhere in the 70–81% range, depending on the task and how tightly the annotation protocol is written. That range is itself instructive: tighten the protocol and the agreement climbs toward the top of the band; leave "good" undefined and it sinks toward the bottom. But it never reaches 100%, because reasonable people genuinely disagree about what "good" means in isolation. That residual disagreement is the noise floor — the irreducible scatter you cannot annotate your way out of.
 
+That 70–81% figure deserves more scrutiny than it usually gets, because raw percent agreement is a misleading measure. If two raters scribbled scores at random — each using a 5-point scale with equal frequency across the points — they would still land on the same number roughly 20% of the time, purely by accident. Raw agreement therefore conflates genuine consensus with chance overlap, and inflates the apparent reliability of any annotation process. The fix is to subtract out the chance baseline. Cohen's $\kappa$ (Cohen, 1960) does exactly this for two raters:
+
+$$\kappa = \frac{p_o - p_e}{1 - p_e}$$
+
+where $p_o$ is the observed agreement and $p_e$ is the agreement expected by chance. A $\kappa$ of 0 means the raters agree no better than dice; $\kappa = 1$ is perfect agreement. The conventional benchmarks (Landis and Koch, 1977) read $\kappa < 0.2$ as poor, $0.2$–$0.4$ as fair, $0.4$–$0.6$ as moderate, $0.6$–$0.8$ as substantial, and $> 0.8$ as near-perfect.
+
+Two raters is the simple case. Fleiss' $\kappa$ generalises the same chance correction to $n > 2$ annotators scoring the same items, and Krippendorff's $\alpha$ is the most flexible of the family — it copes with any number of raters, nominal through interval scales, and missing data. Run the chance correction on subjective LLM-quality annotation and the comfortable percent-agreement numbers collapse: measured in Fleiss' $\kappa$, inter-rater agreement on output quality typically sits in the moderate band, $0.4$–$0.6$, in the literature. The task is genuinely harder than raw agreement lets on.
+
 The noise floor sets a hard ceiling on automation, and this is the number to internalise. A well-tuned LLM-as-judge agrees with humans at roughly 80–85% under optimised protocols. Read that against the 70–81% humans manage with each other and the conclusion is uncomfortable but clean: the best automated judges sit *at* the human-human floor, not above it. An LLM judge is not a more objective oracle that escapes human messiness — it is a fast, cheap imitation of a human rater, and it inherits the rater's disagreement as its hard limit. No judge, human or machine, gets to be more certain about subjective quality than humans are with each other. Any pipeline that reports 95% "accuracy" on a subjective task is measuring agreement with one particular labelling convention, not agreement with the truth.
 
 Here is the hinge the whole next section swings on. Ask a human "rate this response 1 to 10" and you get noise. Ask the same human "which of these two is better, **Response Alpha** or **Response Beta**" and you get a far more stable answer. The generator-discriminator gap says comparison is where the reliable signal lives. The four moves that follow are, at bottom, an elaborate scheme for converting that one reliable judgment — A beat B — back into the scalar that optimisation demands.
@@ -69,6 +80,16 @@ Here is the hinge the whole next section swings on. Ask a human "rate this respo
 
 You cannot directly measure "quality." So you manufacture a stand-in. Four moves do the manufacturing, always in this order: **Decompose, Compare, Aggregate, Automate**. Each move buys you something — tractability, reliability, a scalar, scale — and each one charges the same toll. What comes out the far end is never quality itself. It is a *correlated shadow of quality*: a number that moves with the thing you care about closely enough to optimise against, while never being the thing itself. Name that price at every step, because forgetting it is how teams end up optimising the shadow until it detaches from the substance.
 
+
+```{.mermaid caption="The four moves convert subjective quality into an optimisable scalar, one transformation at a time."}
+graph LR
+    q[Subjective quality] --> d["Decompose<br/>sub-dimensions"]
+    d --> c["Compare<br/>pairwise verdicts"]
+    c --> a["Aggregate<br/>latent rating"]
+    a --> au["Automate<br/>LLM-judge scalar"]
+    au --> s["Correlated shadow<br/>of quality"]
+    style s stroke-dasharray: 5 5
+```
 ### Decompose
 
 The first move attacks the vagueness head-on. "Was this a good explanation?" is unanswerable because "good" hides a dozen distinct questions. So you break it into 3–6 sub-dimensions and give each one a small, **behaviourally-anchored** scale — every level defined by an observable behaviour rather than an adjective. Instead of "rate clarity 1–5," you write a rubric where a 4 means "fully resolves the task without any missing step" and a 0 means "leaves the core question unanswered." The anchors are behaviours, not vibes.
@@ -115,7 +136,42 @@ Here is the bridge worth stopping for. The fitted Bradley-Terry model is not onl
 
 ### Automate
 
-The fourth move removes the human from the inner loop so the whole thing can run at machine speed. You replace the human judge with an LLM judge, and the sharpest version reads more than the judge's chosen token. **G-Eval** (Yang Liu et al., "G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment," EMNLP 2023, arXiv:2303.16634) does not take the judge's output token "4" at face value. It reads the log-probabilities the judge assigns to each score token "1" through "5" and computes the expected value:
+The fourth move removes the human from the inner loop so the whole thing can run at machine speed. You replace the human judge with an LLM judge, and the sharpest version reads more than the judge's chosen token.
+
+The prompt that does the asking looks like this:
+
+```text
+You are an expert evaluator scoring how well a response answers a question
+for a specific reader. Judge only the response shown; do not rewrite it.
+
+QUESTION:
+"What is a derivative contract? My manager mentioned it in a meeting and I
+have no finance background."
+
+RESPONSE:
+{{response}}
+
+Score the response on each dimension below, using the 1-5 scale:
+
+  Accuracy       — is every claim correct and free of misleading shortcuts?
+  Accessibility  — would a self-declared non-specialist follow it unaided?
+  Completeness   — does it resolve the question without leaving a core gap?
+  Memorability   — will the reader retain the core idea afterwards?
+
+Scale anchors:
+  5 — exemplary: meets the dimension with no reservation
+  4 — strong: meets it with a minor, non-blocking flaw
+  3 — adequate: meets it but with a flaw a careful reader would notice
+  2 — weak: partially meets it; a real shortcoming on this dimension
+  1 — failing: does not meet it at all
+
+Return one integer score (1-5) per dimension, then one sentence of
+justification per dimension. Output the scores first.
+```
+
+The chosen integer is the lossy part; G-Eval recovers the rest.
+
+**G-Eval** (Yang Liu et al., "G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment," EMNLP 2023, arXiv:2303.16634) does not take the judge's output token "4" at face value. It reads the log-probabilities the judge assigns to each score token "1" through "5" and computes the expected value:
 
 $$\hat{s} = \sum_{i=1}^{5} i \cdot p_i$$
 
@@ -138,6 +194,8 @@ def g_eval_score(logprobs: dict[str, float]) -> float:
 
 Now an LLM judge reads the derivatives question, reads **Response Alpha** and **Response Beta**, and emits a score with no human in the loop — at the cost that the judge has its own biases, and its number is a correlated shadow of a human judgment, which was itself a correlated shadow of quality. You are now two shadows deep, which is precisely why the agreement ceiling from §2 matters: automation cannot climb above the human noise floor it was trained to imitate.
 
+Two cheap mitigations take the worst of that bias off the table before you trust the number. The first is a **position swap**: run the judge twice on the same pair, once with **Response Alpha** first and once with **Response Beta** first, and average the two scores. An LLM judge has a standing tendency to favour whichever response it reads first or last regardless of content, and presenting each order exactly once cancels that tendency arithmetically rather than hoping the judge ignores it. It doubles the inference cost and removes a whole class of artefacts; the trade is almost always worth it. The second is **multiple independent judges**: run several judges on the same pair and average their scores or take a majority vote. This shrinks the per-judge variance the way any ensemble does, and it partially dilutes systematic self-preference — a panel of different model families cannot all rate the same response highly purely because each finds its own phrasing more probable. Neither move tells you *why* the biases exist; §7 takes apart the mechanisms — self-preference, verbosity, and position — and explains why instructing a judge to be impartial does not remove them. For now it is enough that the swap and the panel blunt their effect.
+
 These four moves are not specific to chatbots. Take an insurance company evaluating how well an LLM summarises complex policy documents for claimants. The moves apply identically: **Decompose** "good summary" into accuracy, coverage, plain-language score, and a missing-information penalty; **Compare** two candidate summaries pairwise; **Aggregate** the comparisons into a latent quality rating; **Automate** with an LLM judge that reads the policy and the summary together. Different domain, same machine — and the same toll, four times over: every number it produces is a correlated shadow of quality, never quality itself.
 
 ## Escaping Subjectivity: Verifiable Rewards
@@ -149,6 +207,12 @@ This is clean in a way nothing in §§2–3 was. Go back to the master principle
 The trajectory on coding benchmarks shows what this unlocked. **SWE-bench Verified** is a benchmark of real GitHub issues, where a model must produce a patch that makes the repository's test suite pass — a perfectly verifiable reward, because the test suite already exists and either goes green or it does not. There is no rubric to write and no judge to calibrate; the repository's own tests are the ground truth. When Devin launched in March 2024 it scored 13.86%. By this writing, Claude Sonnet 4.5 scores 77.2% on the standard harness and 82.0% with parallel compute, and Sonnet 4.6 scores 79.6%. In roughly two years the benchmark went from "barely works" to approaching saturation.
 
 That is the verifiable-reward loop spinning exactly as Karpathy's data engine predicts. Collect real failures the model cannot yet fix, verify candidate patches automatically against the test suite, keep the ones that pass and train on them, redeploy, and surface the next tranche of failures. The line goes nearly vertical because the evaluate step — the one that was load-bearing and expensive and noisy for every subjective task in this primer — here costs almost nothing and carries almost no noise. You can run it millions of times without paying a single human annotator or absorbing a single point of inter-rater disagreement. The thermometer is free and exact, so the control loop spins as fast as the compute allows.
+
+Two metrics dominate the reporting once the checker is free. The first is **pass@k**: generate $k$ candidate solutions and ask how many pass. The naive estimator — the fraction of sampled candidates that pass — is biased downward when $k$ is small relative to the true pass rate, because a handful of draws understates how often the model *would* succeed given more attempts. Chen et al. 2021 ("Evaluating Large Language Models Trained on Code," arXiv:2107.03374, the HumanEval paper) give the unbiased estimator: draw $n \geq k$ samples, count the $c$ that pass, and report
+
+$$\text{pass}@k = 1 - \frac{\binom{n-c}{k}}{\binom{n}{k}}$$
+
+which is the probability that a random size-$k$ subset of the $n$ samples contains at least one that passes. This is the estimator used to report HumanEval and SWE-bench numbers. The second is **best-of-n**: generate $n$ candidates, score them, and keep only the highest-rated one. Where pass@k measures whether the model can hit the target across $k$ tries, best-of-n measures the quality of its best single attempt under a selection step, which is the right frame when you care what the model *can* produce given multiple shots rather than what it produces by default. It is a staple of reasoning evaluation, sitting alongside verifiable rewards as the scoring layer over sampled candidates.
 
 Saturation brings its own problem. When a benchmark gets near-solved, two things happen: it stops discriminating between strong models, and it starts leaking into training data. Contamination — test problems appearing, directly or paraphrased, in the pretraining corpus — turns a verified score into a memorisation score. In February 2026 OpenAI abandoned SWE-bench Verified over exactly these contamination concerns. The decontaminated successors are SWE-Rebench and SWE-bench Pro, built from issues that postdate the models' training cutoffs or live in private repositories the models never saw. The data engine does not stop when a benchmark saturates; it forces you to build a harder one.
 
@@ -175,6 +239,30 @@ Once the reward model is trained, it becomes the scoring function in a reinforce
 There is one critical addition: a KL-divergence penalty that measures how far the updated policy has drifted from the original reference policy and adds that distance as a cost. This is the leash. It is not a safety measure. It is a stability mechanism, and understanding why requires naming what happens without it.
 
 Without the KL penalty, the policy has no reason to stay near natural language. It quickly discovers that certain degenerate output patterns — repetitive token strings, incoherent but reward-model-pleasing constructions — score high on a reward model that was fitted on a finite sample and therefore has exploitable blind spots. The policy does not "intend" to cheat; it is doing exactly what the optimisation objective asks. The result is classic Goodhart: the reward model is a proxy for quality, and once the policy optimises hard enough against the proxy, the proxy detaches from the thing it was proxying. You get outputs that score high on the reward model and are useless or unintelligible to a human. The KL leash makes that drift expensive, keeping the policy in the neighbourhood of text that resembles its pre-RLHF distribution. The standard RLHF framing here follows InstructGPT (Ouyang et al., 2022).
+
+### Direct Preference Optimisation: Skipping the Reward Model
+
+The PPO pipeline has three moving parts: fit a reward model on preference pairs, then run PPO to maximise its score, with the KL leash holding the policy near its starting distribution. Direct Preference Optimisation (Rafailov et al., 2023) collapses the first two into one. It never materialises a reward model. Instead it derives a loss directly on the preference pairs whose minimiser is *exactly* the policy that PPO would have reached against the fitted reward model under the same KL constraint. The reward model does not vanish — it is folded into the policy loss, which is why the paper's subtitle reads "Your Language Model is Secretly a Reward Model." As the §3 Aggregate step already established, that reward model is Bradley-Terry preference estimation at neural-network scale; DPO simply declines to estimate it as a separate object.
+
+The loss is
+
+$$\mathcal{L}_{\text{DPO}} = -\mathbb{E}_{(x, y_w, y_l)} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)} \right) \right],$$
+
+where $x$ is the prompt, $y_w$ the preferred response and $y_l$ the rejected one, $\pi_\theta$ the policy being trained, $\pi_{\text{ref}}$ a frozen reference (typically the supervised-fine-tuned checkpoint), $\beta$ the strength of the KL constraint and $\sigma$ the logistic function. The bracketed term is an implicit reward: the log-ratio $\beta \log \pi_\theta / \pi_{\text{ref}}$ *is* the reward the policy assigns, so the loss pushes the implicit reward of the winner above that of the loser. The reference policy plays the role the KL leash played in PPO — drift away from it is penalised through the same ratio.
+
+The practical payoff is a shorter pipeline on the same data: identical preference pairs, the same KL-constraint concept, but no separate reward-model training phase, no PPO rollout loop and no reward-model evaluation at inference. By 2024–2025, DPO and its variants — IPO, KTO, SimPO — had largely displaced PPO-based RLHF in many production instruction-following pipelines, with PPO retaining the advantage where the reward signal is strong and verifiable (reasoning tasks with checkable answers) and at the largest deployment scales.
+
+None of this escapes Goodhart. DPO optimises against the preference data directly, so if those pairs carry the labellers' blind spots — the systematic gaps left by whoever ranked the responses — the policy encodes them just as faithfully as a reward model would have, and arguably more directly, since there is no intermediate model to smooth or regularise them away.
+
+```{.mermaid caption="Two routes from preference pairs to an improved policy: RLHF fits a reward model and optimises with PPO under a KL leash; DPO trains the policy directly."}
+graph LR
+    pairs["Preference pairs<br/>A beat B"] --> rm["Reward model<br/>Bradley-Terry fit"]
+    rm --> ppo["PPO update<br/>+ KL leash"]
+    ppo --> policy[Improved policy]
+    pairs -. "DPO: skip the reward model" .-> dpo[DPO loss]
+    dpo --> policy
+    style dpo stroke-dasharray: 5 5
+```
 
 ### Constitutional AI and RLAIF
 
@@ -242,6 +330,8 @@ The third is a **human seed set**: a small collection of manually curated golden
 
 The fourth is **silver-to-gold promotion**. Start wide: collect large volumes of model outputs rated by a weak, cheap judge — automatic heuristics, a small classifier, a quick crowdsource pass. Call this the silver tier. Then promote a fraction of those items to gold by routing them through careful human review. You get broad coverage early and accumulate reliable annotations over time as the project matures. The danger is that the silver labels quietly contaminate the gold tier if the promotion threshold is too loose, or if reviewers rubber-stamp items rather than scrutinise them. Quality control on the promotion step matters as much as the promotion itself.
 
+Once you hold any eval set at all — a seed batch or a silver tier — the next question is economic: which unlabelled examples should you annotate next to extract the most signal per dollar? **Active learning** answers by interrogating the model rather than sampling at random. **Uncertainty sampling** picks the examples where the current model is least confident: the predicted label probability sits near 1/N for N classes, or the score distribution is at its flattest. These are precisely the cases the model cannot yet handle, so a label moves it the most. **Disagreement sampling** applies when you have an ensemble or several judges — you route the examples they split on hardest, treating disagreement as a direct proxy for annotation value. This is where active learning meets silver-to-gold: instead of promoting a random slice of silver items to expensive gold review, you promote the highest-uncertainty or highest-disagreement ones, concentrating scarce human attention exactly where it shifts the model most.
+
 None of these is a free lunch. A truly novel domain — one that no existing model covers with any reliability, one where even frontier models are consistently wrong — has no shortcut available. You are buying your first eval set with human labour, full stop, and there is no technical trick that changes that. The cold-start problem is, at bottom, an argument that domain expertise is not optional: it has to enter the loop somewhere, and if it cannot enter via a model, it enters via a person.
 
 ## Why the Number Lies: Goodhart and Its Family
@@ -266,11 +356,30 @@ The third form hits verifiable rewards specifically: **gaming unit tests**. RLVR
 
 The pattern has a name: the **benchmark treadmill**. A new benchmark emerges that discriminates between models. Labs optimise against it. It saturates — the top models converge — or it becomes contaminated, or both. A harder benchmark emerges to replace it and the cycle restarts. SWE-bench Verified went from 2% to near-saturation in roughly two years before OpenAI abandoned it over contamination concerns in February 2026. This is not a temporary problem that a cleverer benchmark design will solve. It is a structural property of the measurement ecosystem: any fixed target under optimisation pressure will eventually be hit, and hitting it tells you less and less about real capability the longer the optimisation runs.
 
+```{.mermaid caption="The benchmark treadmill: any fixed target under optimisation pressure is eventually hit, then must be replaced."}
+graph LR
+    emerge["New benchmark<br/>discriminates"] --> optimise["Labs optimise<br/>against it"]
+    optimise --> saturate["Saturates or<br/>contaminated"] --> harder["Harder benchmark<br/>needed"] --> emerge
+```
+
 What this means for the loop is the point to hold onto. The eval step is not a neutral sensor that measures the model from outside. It is a target sitting inside the same system that is doing the training, subject to the same optimisation pressure as everything else in the pipeline. Every eval you build will degrade as the model improves against it. The number will drift from the thing you cared about, slowly at first and then faster, until the eval is measuring its own shadow rather than your goal. Goodhart's treadmill is the steady state of the measurement ecosystem, and building new evals — constantly, deliberately, with fresh data and fresh human attention — is not a project you complete. It is the maintenance cost of keeping the loop honest.
 
 ## Evaluating Agents, Not Just Outputs
 
 Everything up to this point is about evaluating a single output — a response, a summary, a code snippet. An agent changes the problem structure in a way that makes all of it harder. An agent is a tool-using LLM taking multi-step actions: it writes code, browses the web, reads files, executes commands, and decides what to do next based on what it finds. The outcome at step 87 depends on choices at step 3. When you are evaluating that kind of system, "did it produce the right final answer?" is a much thinner question than it sounds.
+
+```{.mermaid caption="Single-output evaluation scores one response; agent evaluation must score a multi-step trajectory and assign credit across it."}
+graph TB
+    subgraph Single["Single-output eval"]
+        out[Output] --> judge[Judge] --> sc1[Score]
+    end
+    subgraph Agent["Agent trajectory eval"]
+        s1[Step 1] --> s2[Step 2] --> s3["..."] --> sN[Step N] --> outcome[Outcome] --> sc2[Outcome score]
+        s1 -.-> proc[Process score]
+        s2 -.-> proc
+        sN -.-> proc
+    end
+```
 
 ### Trajectory vs Outcome
 
@@ -379,3 +488,6 @@ The following works are cited directly in this primer or are the canonical sourc
 - Anthropic. Claude 4 System Card. May 2025.
 - Anthropic. Responsible Scaling Policy. https://www.anthropic.com/index/anthropics-responsible-scaling-policy
 - OpenAI. Preparedness Framework. https://openai.com/safety/preparedness
+- Rafailov, R. et al. "Direct Preference Optimization: Your Language Model is Secretly a Reward Model." NeurIPS 2023. https://arxiv.org/abs/2305.18290
+- Chen, M. et al. "Evaluating Large Language Models Trained on Code" (HumanEval / Codex / pass@k estimator). arXiv:2107.03374, 2021. https://arxiv.org/abs/2107.03374
+- Cohen, J. "A coefficient of agreement for nominal scales." Educational and Psychological Measurement, 1960. Krippendorff, K. *Content Analysis: An Introduction to Its Methodology* (2nd ed.), 2004.

@@ -2,7 +2,7 @@ SOURCE_MD   := "evaluation_loop_primer.md"
 PROJECT_DIR := "evaluation_loop_primer"
 TITLE       := "The Evaluation Loop: How AI Systems Learn to Improve"
 AUTHOR      := "June 2026"
-HTML_EXTRA  := "--mathjax --number-sections --shift-heading-level-by=-1"
-PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
+HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'
