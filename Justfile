@@ -71,12 +71,21 @@ eval-loop-pdf:
 eval-loop-all:
   cd evaluation_loop_primer && just all
 
+military-html:
+  cd military_structure_primer && just html
+
+military-pdf:
+  cd military_structure_primer && just pdf
+
+military-all:
+  cd military_structure_primer && just all
+
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html eval-loop-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html eval-loop-html military-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all eval-loop-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all eval-loop-all military-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -90,4 +99,5 @@ clean-generated:
   cd info_theory_article && just clobber
   cd deep_learning_primer && just clobber
   cd evaluation_loop_primer && just clobber
+  cd military_structure_primer && just clobber
   @echo "✓ Generated artifacts cleaned"

@@ -18,6 +18,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [Running LLMs Locally](research_local_llms/running-llms-locally.html) | Landscape of options for running language models on local hardware |
 | [Claude Code Alternatives](claude_code_alternative/claude-code-alternatives.html) | Survey of AI coding agents as of 2026 |
 | [The Evaluation Loop](evaluation_loop_primer/evaluation_loop_primer.html) | Turning subjective AI task quality into numeric evals: the four moves, verifiable rewards, RLHF/DSPy, Goodhart failure modes, agent evaluation |
+| [Military Organisation, Ranks, and Doctrine](military_structure_primer/military_structure_primer.html) | How armies are structured from fire team to army group, how ranks map to command levels, the Napoleonic inheritance, 20th-century adaptations, and naval/air force equivalents |
 
 ## Articles
 

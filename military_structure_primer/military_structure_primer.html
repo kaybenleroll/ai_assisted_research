@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Military Organisation, Ranks, and Doctrine: A Structural
+Primer</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle > .toc-toggle {
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+  
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">Military Organisation, Ranks, and
+Doctrine: A Structural Primer</span>
+
+    <span class="navbar-meta">June 2026</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#the-logic-of-military-hierarchy" id="toc-the-logic-of-military-hierarchy"><span class="toc-section-number">1</span> The Logic of Military
+Hierarchy</a></li>
+<li><a href="#the-building-blocks-from-fire-team-to-battalion" id="toc-the-building-blocks-from-fire-team-to-battalion"><span class="toc-section-number">2</span> The Building Blocks: From Fire Team
+to Battalion</a>
+<ul>
+<li><a href="#fire-team-and-squad" id="toc-fire-team-and-squad"><span class="toc-section-number">2.1</span> Fire Team and Squad</a></li>
+<li><a href="#platoon" id="toc-platoon"><span class="toc-section-number">2.2</span> Platoon</a></li>
+<li><a href="#company" id="toc-company"><span class="toc-section-number">2.3</span> Company</a></li>
+<li><a href="#battalion" id="toc-battalion"><span class="toc-section-number">2.4</span> Battalion</a></li>
+</ul></li>
+<li><a href="#the-brigade-and-above-operational-echelons" id="toc-the-brigade-and-above-operational-echelons"><span class="toc-section-number">3</span> The Brigade and Above: Operational
+Echelons</a>
+<ul>
+<li><a href="#brigade" id="toc-brigade"><span class="toc-section-number">3.1</span> Brigade</a></li>
+<li><a href="#division" id="toc-division"><span class="toc-section-number">3.2</span> Division</a></li>
+<li><a href="#corps" id="toc-corps"><span class="toc-section-number">3.3</span> Corps</a></li>
+<li><a href="#field-army-and-army-group" id="toc-field-army-and-army-group"><span class="toc-section-number">3.4</span> Field Army and Army Group</a></li>
+<li><a href="#task-forces-and-ad-hoc-formations" id="toc-task-forces-and-ad-hoc-formations"><span class="toc-section-number">3.5</span> Task Forces and Ad Hoc
+Formations</a></li>
+</ul></li>
+<li><a href="#rank-systems-officers-ncos-and-the-structure-of-authority" id="toc-rank-systems-officers-ncos-and-the-structure-of-authority"><span class="toc-section-number">4</span> Rank Systems: Officers, NCOs, and
+the Structure of Authority</a>
+<ul>
+<li><a href="#the-three-categories" id="toc-the-three-categories"><span class="toc-section-number">4.1</span> The Three Categories</a></li>
+<li><a href="#rank-versus-appointment" id="toc-rank-versus-appointment"><span class="toc-section-number">4.2</span> Rank versus Appointment</a></li>
+<li><a href="#nato-standardisation-of-and-or-codes" id="toc-nato-standardisation-of-and-or-codes"><span class="toc-section-number">4.3</span> NATO Standardisation: OF and OR
+Codes</a></li>
+<li><a href="#comparative-rank-table" id="toc-comparative-rank-table"><span class="toc-section-number">4.4</span> Comparative Rank Table</a></li>
+<li><a href="#warrant-officers" id="toc-warrant-officers"><span class="toc-section-number">4.5</span> Warrant Officers</a></li>
+<li><a href="#promotion-and-the-up-or-out-system" id="toc-promotion-and-the-up-or-out-system"><span class="toc-section-number">4.6</span> Promotion and the Up-or-Out
+System</a></li>
+<li><a href="#flag-officers-and-the-senior-grades" id="toc-flag-officers-and-the-senior-grades"><span class="toc-section-number">4.7</span> Flag Officers and the Senior
+Grades</a></li>
+</ul></li>
+<li><a href="#the-british-regimental-tradition" id="toc-the-british-regimental-tradition"><span class="toc-section-number">5</span> The British Regimental Tradition</a>
+<ul>
+<li><a href="#origins-and-the-cardwell-childers-reforms" id="toc-origins-and-the-cardwell-childers-reforms"><span class="toc-section-number">5.1</span> Origins and the Cardwell-Childers
+Reforms</a></li>
+<li><a href="#the-cap-badge" id="toc-the-cap-badge"><span class="toc-section-number">5.2</span> The Cap Badge</a></li>
+<li><a href="#modern-amalgamations-and-large-regiments" id="toc-modern-amalgamations-and-large-regiments"><span class="toc-section-number">5.3</span> Modern Amalgamations and Large
+Regiments</a></li>
+<li><a href="#the-armoured-exception" id="toc-the-armoured-exception"><span class="toc-section-number">5.4</span> The Armoured Exception</a></li>
+<li><a href="#functional-corps" id="toc-functional-corps"><span class="toc-section-number">5.5</span> Functional Corps</a></li>
+</ul></li>
+<li><a href="#the-napoleonic-inheritance-how-modern-structure-was-invented" id="toc-the-napoleonic-inheritance-how-modern-structure-was-invented"><span class="toc-section-number">6</span> The Napoleonic Inheritance: How
+Modern Structure Was Invented</a>
+<ul>
+<li><a href="#the-pre-napoleonic-army" id="toc-the-pre-napoleonic-army"><span class="toc-section-number">6.1</span> The Pre-Napoleonic Army</a></li>
+<li><a href="#the-corps-darmée" id="toc-the-corps-darmée"><span class="toc-section-number">6.2</span> The Corps d’Armée</a></li>
+<li><a href="#spread-and-legacy" id="toc-spread-and-legacy"><span class="toc-section-number">6.3</span> Spread and Legacy</a></li>
+</ul></li>
+<li><a href="#twentieth-century-adaptation-three-organisational-revolutions" id="toc-twentieth-century-adaptation-three-organisational-revolutions"><span class="toc-section-number">7</span> Twentieth-Century Adaptation: Three
+Organisational Revolutions</a>
+<ul>
+<li><a href="#stormtroopers-and-mission-command" id="toc-stormtroopers-and-mission-command"><span class="toc-section-number">7.1</span> Stormtroopers and Mission
+Command</a></li>
+<li><a href="#the-panzer-division-and-combined-arms-at-scale" id="toc-the-panzer-division-and-combined-arms-at-scale"><span class="toc-section-number">7.2</span> The Panzer Division and Combined
+Arms at Scale</a></li>
+<li><a href="#soviet-deep-battle" id="toc-soviet-deep-battle"><span class="toc-section-number">7.3</span> Soviet Deep Battle</a></li>
+</ul></li>
+<li><a href="#naval-and-air-force-equivalents" id="toc-naval-and-air-force-equivalents"><span class="toc-section-number">8</span> Naval and Air Force Equivalents</a>
+<ul>
+<li><a href="#the-navy-rank-translation-and-task-organisation" id="toc-the-navy-rank-translation-and-task-organisation"><span class="toc-section-number">8.1</span> The Navy: Rank Translation and
+Task Organisation</a></li>
+<li><a href="#the-air-force-squadron-to-major-command" id="toc-the-air-force-squadron-to-major-command"><span class="toc-section-number">8.2</span> The Air Force: Squadron to Major
+Command</a></li>
+<li><a href="#the-squadron-problem" id="toc-the-squadron-problem"><span class="toc-section-number">8.3</span> The “Squadron” Problem</a></li>
+<li><a href="#the-marine-air-ground-task-force" id="toc-the-marine-air-ground-task-force"><span class="toc-section-number">8.4</span> The Marine Air-Ground Task
+Force</a></li>
+</ul></li>
+<li><a href="#beyond-nato-the-chinese-pla-and-russian-armed-forces" id="toc-beyond-nato-the-chinese-pla-and-russian-armed-forces"><span class="toc-section-number">9</span> Beyond NATO: The Chinese PLA and
+Russian Armed Forces</a>
+<ul>
+<li><a href="#the-peoples-liberation-army" id="toc-the-peoples-liberation-army"><span class="toc-section-number">9.1</span> The People’s Liberation
+Army</a></li>
+<li><a href="#the-russian-armed-forces-reform-reversal-and-ukraine" id="toc-the-russian-armed-forces-reform-reversal-and-ukraine"><span class="toc-section-number">9.2</span> The Russian Armed Forces: Reform,
+Reversal, and Ukraine</a></li>
+</ul></li>
+<li><a href="#nato-interoperability-shared-standards-and-persistent-friction" id="toc-nato-interoperability-shared-standards-and-persistent-friction"><span class="toc-section-number">10</span> NATO Interoperability: Shared
+Standards and Persistent Friction</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">11</span> Further Reading</a></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
+<p>Every army in history has had to solve the same problem: how do you
+direct thousands — or hundreds of thousands — of armed people, in the
+noise and chaos of a battlefield, so that their violence is applied to
+the right targets at the right time? The answer is hierarchy. Not
+bureaucratic habit, not tradition for its own sake, but a functional
+architecture that turns an undifferentiated crowd into an instrument
+capable of coordinated action. This primer explains how that
+architecture works: what the building blocks are, how ranks map to
+command levels, how the modern system came to exist, and where different
+national and service traditions diverge.</p>
+<p>The focus is the industrial era — roughly the Napoleonic Wars to the
+present — because that is when modern military organisation solidified
+into its familiar shape. Pre-modern armies are touched on only to show
+what Napoleon’s innovations replaced.</p>
+<hr />
+<h1 data-number="1" id="the-logic-of-military-hierarchy"><span class="header-section-number">1</span> The Logic of Military
+Hierarchy</h1>
+<p>The fundamental constraint on any organisation is the span of
+control: no human can directly manage more than roughly six to twelve
+subordinates and remain effective. Beyond that threshold, supervision
+degrades, communication breaks down, and the organisation fragments in a
+crisis. The solution is nesting. You group individuals into small teams,
+group teams into sections, sections into platoons, and so on until the
+full army is a hierarchy of manageable spans, each layer commanded by
+someone who has direct authority over only the layer below.</p>
+<p>Military hierarchies typically use multiples of three or four at each
+echelon. The “rule of threes” — three subordinate units per commander —
+is the most common. It gives a commander two manoeuvre elements and one
+reserve, the minimum for flexible tactics. Four is used where fire
+support or logistics units are added alongside the manoeuvre elements.
+These numbers are not sacred; they are the practical outcome of
+centuries of experiment.</p>
+<p>Three terms recur throughout this primer and deserve careful
+definition.</p>
+<p><strong>Echelon</strong> means a level in the hierarchy — squad,
+platoon, company. All units at the same echelon share a position in the
+chain, regardless of their specific size or role.</p>
+<p><strong>Formation</strong> means an ad hoc grouping assembled for a
+specific mission, which may combine units from different echelons or
+arms. A task force is a formation; a battle group is a formation.
+Formations dissolve when the mission ends.</p>
+<p><strong>Appointment</strong> is the job someone is given;
+<strong>rank</strong> is the grade they hold permanently. A lieutenant
+colonel commands a battalion by appointment; if that appointment ends,
+they are still a lieutenant colonel. These can diverge significantly,
+especially in wartime when experience outpaces the promotion cycle.
+Understanding the distinction prevents confusion when, for example, a
+general officer is found commanding a force smaller than their rank
+would suggest.</p>
+<hr />
+<h1 data-number="2" id="the-building-blocks-from-fire-team-to-battalion"><span class="header-section-number">2</span> The Building Blocks: From Fire
+Team to Battalion</h1>
+<p><img role="img" aria-label="The ground force hierarchy: echelons from fire team to army group, each level grouping three or four of the level below." src="data:image/png;base64,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" alt="The ground force hierarchy: echelons from fire team to army group, each level grouping three or four of the level below." /></p>
+<h2 data-number="2.1" id="fire-team-and-squad"><span class="header-section-number">2.1</span> Fire Team and Squad</h2>
+<p>The smallest tactical unit in most Western armies is the <strong>fire
+team</strong>: four soldiers organised around a single weapon system (in
+the US Army, the M249 light machine gun or the automatic rifle). A fire
+team has a team leader — typically a Corporal or Specialist — and three
+other soldiers with distinct roles: automatic rifleman, grenadier, and
+rifleman. The team is small enough for a single person to lead without
+any formal command structure; it functions on direct instruction and
+personal example.</p>
+<p>Two fire teams and a squad leader form a <strong>squad</strong> of
+nine (US Army) or eight to twelve (other armies). In the British Army
+the equivalent is called a <strong>section</strong>, and the distinction
+is not merely terminological — the British section is typically led by a
+Corporal (NATO code OR-4), while the US squad leader is a Staff Sergeant
+(OR-6), reflecting different views on how much leadership experience the
+smallest unit requires. The squad or section is the basic manoeuvre
+element in infantry combat; it can fight independently for short periods
+but cannot sustain itself logistically.</p>
+<h2 data-number="2.2" id="platoon"><span class="header-section-number">2.2</span> Platoon</h2>
+<p>Three or four squads plus a small headquarters form a
+<strong>platoon</strong> of 26 to 44 soldiers. In the US Army a platoon
+is commanded by a Second Lieutenant (OF-1), the most junior officer
+grade, advised by a Sergeant First Class (OR-7) serving as Platoon
+Sergeant. In the British Army the Platoon Commander is a Lieutenant and
+the Platoon Sergeant a Colour Sergeant or Sergeant; the platoon runs
+slightly smaller, typically 25 to 30. The Platoon Sergeant’s role is to
+run the platoon’s administration, logistics, and discipline so the
+officer can focus on tactics — a division of labour that repeats at
+every echelon of the hierarchy.</p>
+<p>The platoon is the lowest echelon typically led by a commissioned
+officer. Below this level, military authority rests entirely with
+NCOs.</p>
+<h2 data-number="2.3" id="company"><span class="header-section-number">2.3</span> Company</h2>
+<p>Three to five platoons plus a company headquarters form a
+<strong>company</strong> of 80 to 190 soldiers. (The equivalent in
+armoured and cavalry units is called a <strong>squadron</strong>; in
+artillery, a <strong>battery</strong>.) Company sizes vary considerably
+by type: a light infantry company runs around 130 soldiers, an armoured
+company perhaps 60 — fewer people but more vehicles and organic
+firepower.</p>
+<p>In the US Army the company commander is a Captain (OF-2), supported
+by a First Sergeant (OR-8), the senior NCO of the company and the
+commanding officer’s primary advisor on personnel and welfare. In the
+British Army the same appointment is held by a Major (OF-3). This is one
+of the most persistent sources of cross-national confusion: a British
+Captain (OF-2) shares the same code and title as a US Captain but is
+typically a company second-in-command or adjutant, not a company
+commander. A British Major (OF-3) and a US Captain (OF-2) do the same
+job at different NATO codes — functional counterparts despite a
+one-grade difference.</p>
+<p>The company is the primary logistical unit in many armies: it holds
+organic transport, maintains supplies and ammunition, and cares for its
+own casualties before evacuation. Below company level, logistics is
+handled by the echelon above; the squad cannot feed and resupply itself
+independently.</p>
+<h2 data-number="2.4" id="battalion"><span class="header-section-number">2.4</span> Battalion</h2>
+<p>Three to five companies form a <strong>battalion</strong> of 300 to
+1,000 soldiers, commanded by a Lieutenant Colonel (OF-4) and supported
+by a Command Sergeant Major (OR-9) or Regimental Sergeant Major. The
+battalion is the primary tactical unit in most Western armies: it is the
+smallest formation that combines all arms (infantry, organic mortars,
+reconnaissance elements, and often direct-fire anti-armour weapons) and
+has a headquarters capable of planning and coordinating multi-company
+operations over days. It has its own logistics train, medical section,
+and communications capacity.</p>
+<p>The battalion is where NCO authority reaches its institutional
+ceiling. The Command Sergeant Major is the most senior NCO in the
+formation and advises the commanding officer on all matters touching on
+soldiers’ welfare, discipline, and training. No NCO commands a
+battalion; the commanding officer is always a commissioned officer.</p>
+<hr />
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 25%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Echelon</th>
+<th style="text-align: right;">Personnel</th>
+<th>US Commander</th>
+<th>NATO OF/OR</th>
+<th>British Commander</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fire Team</td>
+<td style="text-align: right;">4</td>
+<td>Corporal / Specialist</td>
+<td>OR-4</td>
+<td>Corporal</td>
+</tr>
+<tr>
+<td>Section / Squad</td>
+<td style="text-align: right;">8–12</td>
+<td>Staff Sergeant</td>
+<td>OR-6</td>
+<td>Corporal</td>
+</tr>
+<tr>
+<td>Platoon</td>
+<td style="text-align: right;">26–44</td>
+<td>Second Lieutenant</td>
+<td>OF-1</td>
+<td>Lieutenant</td>
+</tr>
+<tr>
+<td>Company / Squadron / Battery</td>
+<td style="text-align: right;">80–190</td>
+<td>Captain</td>
+<td>OF-2</td>
+<td>Major (OF-3)†</td>
+</tr>
+<tr>
+<td>Battalion</td>
+<td style="text-align: right;">300–1,000</td>
+<td>Lieutenant Colonel</td>
+<td>OF-4</td>
+<td>Lieutenant Colonel</td>
+</tr>
+<tr>
+<td>Brigade / BCT</td>
+<td style="text-align: right;">1,500–5,000</td>
+<td>Colonel</td>
+<td>OF-5</td>
+<td>Brigadier (OF-6)†</td>
+</tr>
+<tr>
+<td>Division</td>
+<td style="text-align: right;">10,000–18,000</td>
+<td>Major General</td>
+<td>OF-7</td>
+<td>Major General</td>
+</tr>
+<tr>
+<td>Corps</td>
+<td style="text-align: right;">20,000–45,000</td>
+<td>Lieutenant General</td>
+<td>OF-8</td>
+<td>Lieutenant General</td>
+</tr>
+<tr>
+<td>Field Army</td>
+<td style="text-align: right;">50,000–150,000+</td>
+<td>General (4-star)</td>
+<td>OF-9</td>
+<td>General</td>
+</tr>
+<tr>
+<td>Army Group</td>
+<td style="text-align: right;">400,000+</td>
+<td>General of the Army</td>
+<td>OF-10</td>
+<td>Field Marshal</td>
+</tr>
+</tbody>
+</table>
+<p>† British functional counterparts differ by one grade: a British
+Major (OF-3) commands a company where a US Captain (OF-2) would; a
+British Brigadier (OF-6) commands a brigade where a US Colonel (OF-5)
+would.</p>
+<hr />
+<h1 data-number="3" id="the-brigade-and-above-operational-echelons"><span class="header-section-number">3</span> The Brigade and Above:
+Operational Echelons</h1>
+<h2 data-number="3.1" id="brigade"><span class="header-section-number">3.1</span> Brigade</h2>
+<p>Three or more battalions, augmented with artillery, engineers,
+logistics, and reconnaissance, form a <strong>brigade</strong> of 1,500
+to 5,000 soldiers. The brigade is the lowest echelon that is always
+<strong>combined arms</strong> — meaning it contains a balanced mix of
+infantry, armour, fires, and support, and can execute a full tactical
+mission without external augmentation. Below brigade level, battalions
+rely on the brigade for artillery, logistics, and specialist
+capabilities.</p>
+<p>In the US Army, the post-2003 modular restructuring created the
+<strong>Brigade Combat Team (BCT)</strong> as the primary tactical unit.
+There are three types. The <strong>Infantry Brigade Combat Team
+(IBCT)</strong> is foot-mobile, designed for complex and urban terrain;
+it is the lightest and most deployable. The <strong>Stryker Brigade
+Combat Team (SBCT)</strong> is built around wheeled infantry carrier
+vehicles, trading armour protection for strategic mobility and speed of
+deployment. The <strong>Armoured Brigade Combat Team (ABCT)</strong> is
+the heavy formation, built around main battle tanks and tracked infantry
+carriers; it has the most firepower and the least strategic mobility.
+The BCT commander is a Colonel (OF-5). In the British Army and most
+continental NATO armies a brigade is commanded by a Brigadier or
+Brigadier General (OF-6).</p>
+<h2 data-number="3.2" id="division"><span class="header-section-number">3.2</span> Division</h2>
+<p>Two or more brigades, plus organic aviation, artillery, engineers,
+and a sustainment brigade, form a <strong>division</strong> of 10,000 to
+18,000 soldiers. The division commander is a Major General (two stars,
+OF-7). A US Army division typically contains three BCTs plus aviation,
+fires, and sustainment brigades — the support elements are themselves
+brigade-sized.</p>
+<p>The division is the lowest echelon that has its own organic aviation
+(attack helicopters, reconnaissance aircraft, and transport) and can
+therefore shape the battlefield beyond the range of its ground fires. It
+is also the primary echelon at which intelligence fusion occurs: the
+division has a dedicated intelligence staff capable of synthesising
+signals, imagery, and human intelligence rather than simply passing
+information up.</p>
+<h2 data-number="3.3" id="corps"><span class="header-section-number">3.3</span> Corps</h2>
+<p>Two to five divisions, plus corps-level artillery, air defence,
+military intelligence, and logistics, form a <strong>corps</strong> of
+20,000 to 45,000 soldiers, commanded by a Lieutenant General (three
+stars, OF-8). The corps is an operational rather than tactical echelon:
+it does not typically fight directly but coordinates the operations of
+its divisions across a theatre, synchronises joint fires (including
+close air support and naval gunfire), manages logistics across multiple
+lines of communication, and handles the interface with higher command
+and allied formations.</p>
+<h2 data-number="3.4" id="field-army-and-army-group"><span class="header-section-number">3.4</span> Field Army and Army Group</h2>
+<p>A <strong>field army</strong> of 50,000 to 150,000 or more soldiers
+groups two or more corps under a four-star General (OF-9). Above this,
+in large-scale coalition or theatre warfare, two or more field armies
+are grouped into an <strong>army group</strong>, historically commanded
+by a General of the Army or Field Marshal (OF-10, five-star) and
+numbering in the hundreds of thousands. The army group echelon was
+standard in both World Wars; today it is rarely activated in peacetime
+and would represent a wartime coalition command.</p>
+<h2 data-number="3.5" id="task-forces-and-ad-hoc-formations"><span class="header-section-number">3.5</span> Task Forces and Ad Hoc
+Formations</h2>
+<p>Permanent formation tables are the peacetime baseline; war constantly
+demands improvisation. A <strong>task force</strong> is a temporary
+formation assembled from elements of different units and arms,
+designated by its mission or its commander’s name. In the Wehrmacht this
+was the <strong>Kampfgruppe</strong> — a battle group typically named
+for its commanding officer (Kampfgruppe Peiper, Kampfgruppe von Luck)
+and assembled from whatever infantry, armour, artillery, and engineers
+were available. The same principle appears in every modern army: because
+permanent formations cannot always be resized to fit the tactical
+problem, commanders assemble what they need from their available assets
+and give it a temporary designation.</p>
+<hr />
+<h1 data-number="4" id="rank-systems-officers-ncos-and-the-structure-of-authority"><span class="header-section-number">4</span> Rank Systems: Officers, NCOs, and
+the Structure of Authority</h1>
+<h2 data-number="4.1" id="the-three-categories"><span class="header-section-number">4.1</span> The Three Categories</h2>
+<p>Military personnel divide into three categories with distinct bases
+of authority and distinct career paths.</p>
+<p><strong>Enlisted soldiers</strong> are the base of the pyramid. They
+enter with basic qualifications, receive trade training, and perform
+tactical duties under direction. Authority accrues through promotion,
+which reflects demonstrated competence and time served.</p>
+<p><strong>Non-commissioned officers (NCOs)</strong> are promoted
+enlisted personnel who have been appointed to leadership roles within
+the enlisted body. They do not hold a formal commission from the head of
+state; their authority derives from appointment by their chain of
+command and seniority within the system. The NCO corps is the
+institutional layer that translates officer orders into action,
+maintains day-to-day discipline and standards, trains junior soldiers,
+and advises officers who lack experience. The French call them
+<em>sous-officiers</em>; the Germans, <em>Unteroffiziere</em>. The NCO
+corps as a formally institutionalised layer of leadership — with its own
+career structure, training schools, and doctrinal role — is broadly a
+development of the 18th- and 19th-century European armies, and its
+quality is widely regarded as the single best predictor of an army’s
+tactical effectiveness.</p>
+<p><strong>Commissioned officers</strong> hold a formal appointment —
+historically a royal or presidential commission — and enter through an
+officer academy, university training corps, or officer candidate school,
+usually after tertiary education. They plan, command, and are legally
+accountable for their orders in ways that NCOs are not. The commission
+creates a formal distinction: officers exercise command authority; NCOs
+exercise supervisory authority delegated within that structure. In most
+armies the two career paths are nearly impermeable; an NCO who becomes
+an officer is the exception, not the rule, and the transition is treated
+as a significant institutional event.</p>
+<h2 data-number="4.2" id="rank-versus-appointment"><span class="header-section-number">4.2</span> Rank versus Appointment</h2>
+<p>Rank is personal and permanent. Appointment is organisational and
+temporary. A Lieutenant Colonel is always a Lieutenant Colonel; whether
+they are currently commanding a battalion, serving as a brigade chief of
+staff, or attending a staff college course is a matter of appointment.
+These can diverge considerably: in wartime, a colonel might be given a
+corps to command because no suitable general is available; a general
+might find themselves commanding a task force the size of a battalion.
+The rank describes the individual; the echelon describes the job.</p>
+<h2 data-number="4.3" id="nato-standardisation-of-and-or-codes"><span class="header-section-number">4.3</span> NATO Standardisation: OF and OR
+Codes</h2>
+<p>NATO’s STANAG 2116 provides a common reference grid for ranks across
+member nations. Officers are coded OF-1 (most junior commissioned grade)
+through OF-10 (five-star, dormant). Other Ranks — enlisted and NCOs
+combined — are coded OR-1 through OR-9. The codes describe structural
+equivalence, not always coincident national titles. Where codes coincide
+but roles diverge: a British Captain (OF-2) and a US Captain (OF-2)
+share code and title, but the British officer is typically a company
+second-in-command while the US officer commands the company. Where codes
+diverge but roles align: a British Major (OF-3) and a US Captain (OF-2)
+both command companies despite holding different grades. STANAG 2116
+provides the grid for staff coordination; it cannot fully smooth the
+grade-slippage that national systems have accumulated over
+centuries.</p>
+<h2 data-number="4.4" id="comparative-rank-table"><span class="header-section-number">4.4</span> Comparative Rank Table</h2>
+<p>The table below maps NATO codes to national titles for three
+representative armies. Note that titles diverge considerably even when
+the structural role is identical.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>NATO Code</th>
+<th>US Army</th>
+<th>British Army</th>
+<th>Bundeswehr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OR-1</td>
+<td>Private</td>
+<td>Private (or Guardsman / Gunner / Sapper by arm)</td>
+<td>Soldat</td>
+</tr>
+<tr>
+<td>OR-2</td>
+<td>Private Second Class</td>
+<td>—</td>
+<td>Gefreiter</td>
+</tr>
+<tr>
+<td>OR-3</td>
+<td>Private First Class</td>
+<td>Lance Corporal</td>
+<td>Obergefreiter</td>
+</tr>
+<tr>
+<td>OR-4</td>
+<td>Specialist / Corporal</td>
+<td>Corporal</td>
+<td>Stabsgefreiter</td>
+</tr>
+<tr>
+<td>OR-5</td>
+<td>Sergeant</td>
+<td>Sergeant</td>
+<td>Unteroffizier</td>
+</tr>
+<tr>
+<td>OR-6</td>
+<td>Staff Sergeant</td>
+<td>Staff Sergeant / Colour Sergeant</td>
+<td>Feldwebel</td>
+</tr>
+<tr>
+<td>OR-7</td>
+<td>Sergeant First Class</td>
+<td>—</td>
+<td>Hauptfeldwebel</td>
+</tr>
+<tr>
+<td>OR-8</td>
+<td>Master Sergeant / First Sergeant</td>
+<td>Warrant Officer Class 2</td>
+<td>Stabsfeldwebel</td>
+</tr>
+<tr>
+<td>OR-9</td>
+<td>Command Sergeant Major / Sergeant Major of the Army</td>
+<td>Warrant Officer Class 1</td>
+<td>Oberstabsfeldwebel</td>
+</tr>
+<tr>
+<td>OF-1</td>
+<td>Second Lieutenant / First Lieutenant</td>
+<td>Second Lieutenant / Lieutenant</td>
+<td>Leutnant / Oberleutnant</td>
+</tr>
+<tr>
+<td>OF-2</td>
+<td>Captain</td>
+<td>Captain</td>
+<td>Hauptmann</td>
+</tr>
+<tr>
+<td>OF-3</td>
+<td>Major</td>
+<td>Major</td>
+<td>Major</td>
+</tr>
+<tr>
+<td>OF-4</td>
+<td>Lieutenant Colonel</td>
+<td>Lieutenant Colonel</td>
+<td>Oberstleutnant</td>
+</tr>
+<tr>
+<td>OF-5</td>
+<td>Colonel</td>
+<td>Colonel</td>
+<td>Oberst</td>
+</tr>
+<tr>
+<td>OF-6</td>
+<td>Brigadier General</td>
+<td>Brigadier</td>
+<td>Brigadegeneral</td>
+</tr>
+<tr>
+<td>OF-7</td>
+<td>Major General</td>
+<td>Major General</td>
+<td>Generalmajor</td>
+</tr>
+<tr>
+<td>OF-8</td>
+<td>Lieutenant General</td>
+<td>Lieutenant General</td>
+<td>Generalleutnant</td>
+</tr>
+<tr>
+<td>OF-9</td>
+<td>General</td>
+<td>General</td>
+<td>General</td>
+</tr>
+<tr>
+<td>OF-10</td>
+<td>General of the Army (dormant)</td>
+<td>Field Marshal (effectively honorary)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The British OR-8 and OR-9 slots are worth examining. British Warrant
+Officers Class 1 and 2 (WO1, WO2) occupy these codes, but they are not
+the same institution as US Army warrant officers. British WOs are senior
+NCO appointments — the Regimental Sergeant Major (RSM) is a WO1, the
+Company Sergeant Major (CSM) is a WO2 — and they are the apex of the NCO
+career path. They hold a warrant from the Defence Council rather than a
+commission, but they are not technical specialists; they are senior
+leaders.</p>
+<h2 data-number="4.5" id="warrant-officers"><span class="header-section-number">4.5</span> Warrant Officers</h2>
+<p>The US Army’s warrant officer corps is a distinct structure, filling
+grades W-1 through W-5. Warrants are technical and tactical experts —
+helicopter pilots, intelligence analysts, special forces team leaders,
+cyber operators — who do not follow the standard commissioned officer
+career path. They have command authority within their specialty but
+typically do not command manoeuvre formations. A CW5 (Chief Warrant
+Officer 5) may have decades of mastery in a specific domain that no
+general officer would have; the warrant structure preserves that
+expertise outside the promotion-driven churn of the regular officer
+corps. Germany’s Bundeswehr has no equivalent category; those functions
+are distributed between NCOs and specialist officers.</p>
+<h2 data-number="4.6" id="promotion-and-the-up-or-out-system"><span class="header-section-number">4.6</span> Promotion and the Up-or-Out
+System</h2>
+<p>Most modern Western armies use selection boards to decide promotion
+above a certain point. Below major, promotion is largely time-based and
+automatic; above major, officers compete for a limited number of slots
+and are assessed by boards of senior officers. The US Army formalised
+this under the Defense Officer Personnel Management Act (DOPMA) of 1980:
+officers not selected for promotion within a defined time window are
+separated from the service. This “up or out” system is designed to
+prevent stagnation at mid-grade and to accelerate talent to senior
+positions, but it creates strong incentives for risk-aversion and
+careerism, which military reformers have criticised since the 1980s.</p>
+<h2 data-number="4.7" id="flag-officers-and-the-senior-grades"><span class="header-section-number">4.7</span> Flag Officers and the Senior
+Grades</h2>
+<p>Officers above OF-5 (Colonel) enter the flag officer grades, named
+for the flag or pennant traditionally flown to mark a general’s or
+admiral’s headquarters.</p>
+<p><strong>OF-6 (one star)</strong>: Brigadier General in the US Army;
+Brigadier in the British Army. In the US Army, a one-star is a General
+officer. In the British Army, a Brigadier is explicitly <em>not</em>
+classified as a General officer by convention — a distinction that
+surprises most outsiders, since the French Général de brigade and German
+Brigadegeneral at the same NATO code are classified as general officers
+in their respective armies. The British Brigadier commands a brigade;
+the US Brigadier General typically serves as an assistant division
+commander or in a staff role rather than commanding a brigade.</p>
+<p><strong>OF-7 (two stars)</strong>: Major General; commands a
+division.</p>
+<p><strong>OF-8 (three stars)</strong>: Lieutenant General; commands a
+corps or serves as a theatre-level commander.</p>
+<p><strong>OF-9 (four stars)</strong>: General; commands a field army, a
+geographic combatant command, or serves as Chief of Staff of a
+service.</p>
+<p><strong>OF-10 (five stars)</strong>: General of the Army (US) or
+Field Marshal (UK and Commonwealth). The five-star grade was created in
+the United States in December 1944 primarily to address coalition
+protocol: when the US Supreme Commander in Europe, Dwight Eisenhower,
+was promoted to General of the Army, he would outrank British Field
+Marshals commanding armies under him unless the British also held
+five-star equivalent rank — which they already did through Montgomery
+and Alexander. The British Field Marshal grade predates the US General
+of the Army by centuries. Today, the grade is effectively dormant in
+both countries; the US has not promoted to five-star since Omar Bradley
+in 1950, and the British last held active Field Marshals in meaningful
+operational command during the Second World War. Modern field marshal
+appointments in the UK are essentially honorary dignities.</p>
+<p>Napoleon’s Marshals of the Empire (<em>Maréchaux d’Empire</em>)
+deserve a note here. The rank of Maréchal was not a rank in the chain of
+command but a dignity — an appointment conferring enormous status and
+independent command authority. Napoleon created 26 of them between 1804
+and 1815. They commanded corps and armies, but the dignity was personal
+to the individual, not tied to a specific echelon. A Maréchal commanding
+a corps and a Maréchal commanding three corps were both Maréchaux; the
+appointment described the person, not the job.</p>
+<hr />
+<h1 data-number="5" id="the-british-regimental-tradition"><span class="header-section-number">5</span> The British Regimental
+Tradition</h1>
+<p>Nothing confuses readers approaching British military organisation
+for the first time more reliably than the word “regiment.” In US Army
+and most continental European usage, a regiment is a tactical formation
+of several battalions — an operational entity that deploys and fights.
+In the British Army, an infantry regiment is primarily an
+administrative, cultural, and ceremonial body: the family to which
+soldiers belong throughout their careers, the holder of the cap badge,
+the custodian of battle honours, the manager of a regimental association
+and museum. The regiment does not deploy to battle as a regiment; its
+<strong>battalions</strong> do.</p>
+<p>This distinction is the single most important thing to understand
+about the British system.</p>
+<h2 data-number="5.1" id="origins-and-the-cardwell-childers-reforms"><span class="header-section-number">5.1</span> Origins and the
+Cardwell-Childers Reforms</h2>
+<p>The regimental system dates to the 17th century, when regiments were
+raised and owned by their colonels under royal commission. The colonel
+recruited, paid, clothed, and equipped the regiment from a royal
+allowance; the regiment bore his name. This system was chaotic and
+expensive, and it produced wide variation in quality and reliability.
+The first serious rationalisation came with the <strong>Cardwell Reforms
+of 1872</strong>, which divided Britain into approximately 66 regimental
+districts aligned with county boundaries. Each district had a depot and
+two battalions: one serving overseas (garrisoning the empire), one at
+home recruiting and training, feeding drafts to the overseas battalion.
+The <strong>Childers Reforms of 1881</strong> formalised this into the
+linked-battalion county regiment system, giving most regiments
+geographical names — the Durham Light Infantry, the Worcestershire
+Regiment, the Seaforth Highlanders — that connected them to a specific
+recruiting area and community.</p>
+<p>This territorial anchoring served two purposes: a practical
+recruitment pipeline in a volunteer army, and a social bond between
+soldiers and their home communities that generated fierce regimental
+loyalty and fighting spirit. The system produced soldiers who identified
+primarily as members of the Gloucestershire Regiment or the Parachute
+Regiment rather than as generic members of the British Army.</p>
+<h2 data-number="5.2" id="the-cap-badge"><span class="header-section-number">5.2</span> The Cap Badge</h2>
+<p>The cap badge is the outward mark of regimental membership and is
+taken seriously in a way that outsiders frequently underestimate. Every
+regiment has a unique badge — often incorporating county heraldry, a
+royal cypher, or a commemorative device from a specific battle — worn on
+the beret or service dress cap. Transferring between regiments is
+culturally unusual and was historically uncommon. The badge is worn
+throughout a soldier’s career; it marks the regiment as the primary unit
+of institutional identity in a way that has no parallel in most other
+armies.</p>
+<h2 data-number="5.3" id="modern-amalgamations-and-large-regiments"><span class="header-section-number">5.3</span> Modern Amalgamations and Large
+Regiments</h2>
+<p>Post-war defence reductions forced successive rounds of amalgamation.
+Regiments that had maintained separate identities through two world wars
+were merged, producing hyphenated names that reflected often painful
+consolidations (the Duke of Edinburgh’s Royal Regiment, the Royal
+Anglian Regiment). The most recent wave under the Future Army Structure
+reorganisation created <strong>large regiments</strong>: multi-battalion
+administrative bodies that retain distinct battalion identities. The
+<strong>Rifles</strong> — the largest infantry regiment in the British
+Army — absorbed the Devon and Dorsets, the Light Infantry, the Royal
+Green Jackets, and the Royal Gloucestershire, Berkshire and Wiltshire
+Regiment. Soldiers serve in 1 Rifles, 4 Rifles, or 5 Rifles, but the cap
+badge and administrative home are The Rifles.</p>
+<h2 data-number="5.4" id="the-armoured-exception"><span class="header-section-number">5.4</span> The Armoured Exception</h2>
+<p>In the Royal Armoured Corps, the regiment is the tactical unit, not a
+parent administrative body. An armoured regiment of roughly 550 soldiers
+and 58 main battle tanks is the equivalent of an infantry battalion; it
+deploys and fights as a regiment, commanded by a Lieutenant Colonel.
+This reflects the different tactical geometry of armoured warfare, where
+a regiment-sized formation of tanks is the primary manoeuvre element,
+not a company-sized one.</p>
+<h2 data-number="5.5" id="functional-corps"><span class="header-section-number">5.5</span> Functional Corps</h2>
+<p>The British Army also uses “corps” in a functional rather than
+echelon sense. The Royal Artillery, Royal Engineers, Royal Corps of
+Signals, Royal Electrical and Mechanical Engineers (REME), and Adjutant
+General’s Corps are all “corps” — not tactical corps in the sense of two
+or three divisions, but institutional homes for soldiers in specialist
+trades. A gunner belongs to the Royal Artillery regardless of which
+battery or regiment he is currently serving in. This use of “corps” to
+mean “branch of service” is distinct from the echelon corps (a formation
+of divisions) and has caused centuries of confusion when British
+officers speak to American counterparts.</p>
+<hr />
+<h1 data-number="6" id="the-napoleonic-inheritance-how-modern-structure-was-invented"><span class="header-section-number">6</span> The Napoleonic Inheritance: How
+Modern Structure Was Invented</h1>
+<h2 data-number="6.1" id="the-pre-napoleonic-army"><span class="header-section-number">6.1</span> The Pre-Napoleonic Army</h2>
+<p>Before the Revolutionary Wars, European armies had no permanent
+formation between the regiment and the army. Regiments were the highest
+persistent tactical and administrative units; everything above them —
+divisions, columns, wings — was assembled ad hoc for a specific campaign
+and dissolved when it ended. More important, regiments were strictly
+branch-specific: infantry regiments had no cavalry, cavalry regiments
+had no infantry, and artillery was collected in separate park commands.
+No formation below the army itself contained all three combat arms.</p>
+<p>This imposed a decisive constraint on strategy. An army could not
+divide into independent formations because any detachment that separated
+from the main body was unbalanced: if it had only infantry, it could not
+screen, pursue, or reconnoitre; if it had only cavalry, it could not
+hold ground. The army moved as a single mass along a single route,
+limited in speed by the slowest element, in strategic reach by the need
+to stay together, and in deception by the impossibility of advancing on
+multiple axes simultaneously.</p>
+<p>French theorists had identified this problem in the decades before
+the Revolution. Maurice de Saxe argued for permanent combined-arms
+formations in his 1757 <em>Mes Rêveries</em>. Marshal Broglie
+experimented with temporary divisions during the Seven Years’ War. The
+theorist Guibert, in his <em>Essai général de Tactique</em> (1772),
+advocated formations capable of operating independently. Jean de Bourcet
+theorised dispersed marching and rapid concentration. Napoleon read and
+re-read all of them. But the ideas were conceptual; no army had
+institutionalised them.</p>
+<h2 data-number="6.2" id="the-corps-darmée"><span class="header-section-number">6.2</span> The Corps d’Armée</h2>
+<p><img role="img" aria-label="A Napoleonic corps d&#39;armée: the first permanent combined-arms formation capable of independent strategic manoeuvre and tactical battle." src="data:image/png;base64,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f77Lg1VKClE+MO/tbXGJeSRcX8CngF/jG8oUqRpUTIjyup0bTkvo4sO+kkf4FfRJ4L6X8otFH+8+efyw1w88JCIiIiIiIhc4BwQREREREREREREREXkcExBERERERERERERERORxTEAQEREREREREREREZHHMQFBREREREREREREREQexwQEERERERERERERERF5HBMQRERERERERERERETkcUxAEBERERERERERERGRxzEBQUREREREuc65c+fkm2++kj17dgkR0eW2cuVymT9/rv36rl3bTZsUFxcnRERE5D4/ISIiIiIiUhcuXJCIiLWybt0/GvjfIYUKFZbKlauZpWPHruLjc/n6L509e1o++WSilCtXQapUqSaetnLlcvn++1n26wULFpJq1WpK06YtJSSkxUWfFe8lOjpSxo//zJ2nl0OHDsiQIQN1eVlatmzn1mOeeupe8/oDBz4uRDkhN23jl+Ls2TMyfPiz0q7djXLLLbeLJzjtTERtAAAQAElEQVRvf6tX/ymbNm2QW2/tZ65v3fqvaQduuukWKVy4sFwJK1embbeuuqq0+dvdcks/KV26jBDlBytXpt0OHL344igpU+Zq8bS//vpNpk4dK5Mnf6nPX1bygqNHj8hnn02WtWv/Fj8/f2nbtpM88MBTul8olOljDx7cL++++4bce+9j0rBhiFwOnjpG4rHWlcEREEREREREJOfPn5dXXnlKT94flx07tmpQK1CDbAHy55/L5Jdf5ntNYNJdx44dkaioMKlbt4GePDeRihWryO7d2813MGjQHfodxKS5f8WKlaV27Wvdfv4iRYpKjRq1NVBRzu3H4PnLl68oRDkhL23jv/++WDZujJC5c78wSZWs2Lx5o0ybNvmi271h+3Nut5KSkuTnn7+V++/vKZGRoUKUHzhvB45LwYIFJSdcfXU5qVWrrgQEFJW84u23XzWJ1n79Bmpi9WZZsGCezJz5iVuPjY+PM3+DkyePy+WS1TY6MTFRXnvt6Ut+HvIMjoAgIiIiIsrnEMAbNepFE9B7662J0qJFa8kv7rhjoBQvXsJ+PTo6Sr+DYfLGG8/IRx/N1WBDgLm9R48+khXFihWXkSMnZ+kxgwe/JEQ5Ia9t40iYYOQDAmZhYatNb1Z3IXmxb9+ei273pu3Psd1KSUkxPXqnTBkjn3wyT4jyC+f9d06qV6+B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J9BZGRKPYAaSHgiUtmt3oxklkpyclO5zoDccejligtjM5pVwBT0NUUoAAQ18RlcJEfwf/hYo+ZKVvzO+L5SIwITbGK1xJRw/mCDLvtwT++jbtTw3++MVpO1D/G3P1ChYKCB/FCFAr0/8/pAAdLUNoJ3AZK/47bozx0B6Fi/+UcaPfytbiTJsf5i8tXLlqpIT782SWVuQkey0p2gbYmN3mSQxXnP16r80oPq0TJv23UWfFe0kkqr4rJcK73X//lgz8iEn6qZfTj9O2nE67lRSuycm1IkQL/fhi9tmNOpQ5u7azbw3rId9Onqno5RkRqN0MtpeMBro3XeHy9y5S82oRiQ20UM9o31jZu1YVuB59u7dbba1jBIKnjyGQukkjEhCQjA9njqWcOd5XL0fjD7A3wLtN/4unpaV9hyfAfsF3NdT82ykdzyF3/TAgT1NBxR0SrnSFn+y++Sxg0l9B0+o6f5w3CziCAgiIiIiojwEPYaxZASBqXr1GkhWVapUxSwZwQkkTqiuJJzcW+UUYPXqP806s/duQQ3j7LJGlmSWVMDJbc2adSS7cHJftWr1DO+DJArqWWcVAh5X+m9I3i2z9gXthCeCTUuWzJdWrTpka5QOgpmueOq9WbKTYBSH95LVbRFtg+Nnw+gEtIkoU+XM1W3Z5envjciC329GQXSLO9uLtY92J+mWneOk9GB/jJ7/mfHkMRTKbmbGU8cS7jyPq/eDpMClHAtlJivtEj6DVXbKU9I7nsK8akgAv/pqP8kvmIAgIiIiIqI8Y9Kk0ZKSkmx6m5Ute41ER0fKd9/NNCeV9es3FiLybrGxu2XXrm3yyy8/ytat/8qHH84RSjV06INy7bXBJtCH+RdWrlxuen7femu/dMvGERFRzsMIC8x5gbkufvjha+natadbibW8gnsgIiIiIiLKM9CTDnNhYMJI9KxDD9+bbrpF7r//CQbgiPKA335baCaar1mzrrz66jtuj2zKD1AiZf78OabMCeaaqFy5mjz88BC57ba7hIiIrhy0yyiHhznbrr++vTzyyDOSn/AInIiIiIiI8owePfqY5XJDfehfflknRJSz7r33UbPQxZ5++hWzEFFamGwaC9GVgnnZfvzxL8mv8scMWEREREREREREREREdFkxAUFERERERERERERERB7HBAQREREREREREREREXkcExBERERERERERERERORxmU5CffxgQvHZo7clCFE+cCHpQiEpIHlCctKF+JU/Hkha+WOBFCHK8y74+PpIntlXJcWnFOa+l/KLC8kXiueVfS8RERERERGllWECwv987eVSfEt5IcovdIt4cly1o8+I9ytUILFvkhQoJET5hF+BC/GSBxwpXn1PhdNbyglRfuErsr94nRNCREREREREeU6GCYhBHxdI1NURIcpHBkne8OA79U7r6rQQkVcZPtyMWuK+l4iIiIiIiIi8HueAICIiIiIiIiIiIiIij2MCgoiIiIiIiIiIiIiIPI4JCCIiIiIiIiIiIiIi8jgmIIiIiIiIiIiIiIiIyOOYgCAiIiIiIiIiIiIiIo9jAoKIiIiIiIiIiIiIiDyOCQgiIiIiIiIiIiIiIvI4JiCIiIiIiIiIiIiIiMjjmIAgIiIiIiIiIiIiIiKP8xMiIiIiIrpkFy7IhV0bTiUc2x+fIER0SRLjk311m0qRPEI/i6yaf/Csj0+BC0JEuVr8uZRCkkdcSLmQEhN+Mv7AjvOJQkTkwunjSYUlhzEBQURERETkET6zThxJiNJFiOjSFRCfE5JHaALigb1bz/gLEXmFpAIBuyUPSIiTD48fjP9NFyEiSk+yFNwoOaiAEBEREREREREREREReRjngCAiIiIiIiIiIiIiIo9jAoKIiIiIiIiIiIiIiDyOCQgiIiIiIiIiIiIiIvI4JiCIiIiIiIiIiIiIiMjjmIAgIiIiIiIi+j97diwAAAAAMMjfehI7SyMAAHYCAgAAAAAA2AkIAAAAAABgJyAAAAAAAICdgAAAAAAAAHYCAgAAAAAA2AUAAP//InOp2wAAAAZJREFUAwD4/ed66UNIrAAAAABJRU5ErkJggg==" alt="A Napoleonic corps d&#39;armée: the first permanent combined-arms formation capable of independent strategic manoeuvre and tactical battle." /></p>
+<p>Napoleon permanently organised the French army into corps d’armée in
+1800, and the design solved the pre-Napoleonic problem directly. Each
+corps contained infantry divisions, a cavalry formation for screening
+and reconnaissance, a reserve of heavier artillery beyond what the
+divisions carried, engineer detachments, and a logistics train capable
+of sustaining the corps independently for days. Because any corps
+contained all three combat arms in organic assignment, it could engage
+and hold an enemy force while the rest of the army converged — which
+was, in essence, the operational method Napoleon used in every major
+campaign.</p>
+<p>The practical working size of a corps was 20,000 to 30,000 soldiers,
+though Napoleon adjusted this widely by circumstance. Davout commanded
+27,000 at Auerstedt in 1806 and drove an offensive victory against the
+Prussian main army of over 50,000 under the Duke of Brunswick — his III
+Corps attacked, routed a force twice its size, and broke the engagement
+before Napoleon’s own battle at Jena, twelve miles away, had concluded.
+The self-sufficiency of the corps meant that the Grande Armée could
+march on multiple axes, each corps a day’s march from the next — what
+Napoleon called the <em>bataillon carré</em> (square battalion), a loose
+formation of four corps arranged so that any two were within supporting
+distance of any threatened point. No army that marched as a single mass
+could match this for speed, strategic reach, or deception.</p>
+<h2 data-number="6.3" id="spread-and-legacy"><span class="header-section-number">6.3</span> Spread and Legacy</h2>
+<p>The defeats of the War of the Fourth Coalition (1806–07) forced
+Prussia to adopt the corps system almost immediately. The reformers
+Scharnhorst and Gneisenau, working under the restrictions of the Treaty
+of Tilsit, restructured the Prussian army on Napoleonic lines; by 1813
+the army that fought at Leipzig used permanent corps and divisions.
+Austria reformed after the catastrophic defeats of 1805 and 1809. Russia
+organised its forces into corps by the 1812 campaign. Even Britain,
+which never adopted the permanent peacetime corps, used Wellington’s
+divisions in the Peninsular War as the primary combined-arms manoeuvre
+element.</p>
+<p>The structural legacy is direct and traceable. The modern US Army
+corps, commanded by a Lieutenant General and containing multiple
+divisions with organic artillery, engineers, and logistics, is the same
+functional architecture that Napoleon codified in 1800 and that Davout
+demonstrated at Jena. Two centuries of incremental reform have changed
+the weapons, the vehicles, the communications, and the doctrine, but the
+basic answer to the span-of-control and combined-arms problems has not
+changed.</p>
+<hr />
+<h1 data-number="7" id="twentieth-century-adaptation-three-organisational-revolutions"><span class="header-section-number">7</span> Twentieth-Century Adaptation:
+Three Organisational Revolutions</h1>
+<p>The Napoleonic inheritance — company to battalion to regiment to
+division to corps — survived into the 20th century largely intact. The
+industrial era introduced three innovations that modified but did not
+replace it.</p>
+<h2 data-number="7.1" id="stormtroopers-and-mission-command"><span class="header-section-number">7.1</span> Stormtroopers and Mission
+Command</h2>
+<p>The Western Front shattered the assumption that mass infantry
+assaults could break through fixed defences. Massed formations attacking
+across a broad front generated catastrophic losses for negligible gain;
+the problem was not courage but geometry. Machine guns, barbed wire, and
+pre-registered artillery fire turned any predictable, massed approach
+into a killing ground.</p>
+<p>The German response was systematic and doctrinal. From 1915 onward,
+specialist assault units — <em>Stosstruppen</em> (stormtroopers) —
+developed new methods under officers like Captain Willy Ernst Rohr of
+Sturmbataillon Rohr. Rather than attacking in waves across the entire
+front, small groups of ten to twenty specialists — armed with grenades,
+pistols, light machine guns, flamethrowers, and light mortars — probed
+for weak points, bypassed strongpoints, and drove deep into the enemy
+rear, leaving isolated resistance for follow-on forces. The underlying
+principle was <strong>infiltration</strong>: find the gaps, exploit them
+fast, let momentum carry the attack forward before the defender can
+respond.</p>
+<p>This required a fundamental change in how orders were given.
+Prescriptive orders — “advance at H-hour, cross the wire at this point,
+turn left at this landmark” — are useless to a small unit that has
+already bypassed the wire and is now 500 metres into the enemy position.
+Instead, orders stated the objective and allocated resources, then
+trusted subordinate leaders to find their own way. The Germans
+formalised this as <em>Auftragstaktik</em> — mission tactics — and it
+became the doctrine of the Reichswehr and then the Wehrmacht. A German
+junior officer or senior NCO was expected to act on initiative whenever
+the situation departed from the plan, without waiting for orders, so
+long as he kept the mission objective in mind. The contrast with the
+prescriptive, synchronised approach of most Allied armies in both world
+wars was stark, and it gave German formations at every echelon a speed
+of response that partially compensated for chronic material
+disadvantages.</p>
+<h2 data-number="7.2" id="the-panzer-division-and-combined-arms-at-scale"><span class="header-section-number">7.2</span> The Panzer Division and
+Combined Arms at Scale</h2>
+<p>The second revolution was the <strong>Panzer division</strong>, which
+applied the combined-arms principle to mechanised warfare and proved, in
+the campaigns of 1939 and 1940, that speed and concentration could
+shatter armies before they could respond.</p>
+<p>A fully equipped Panzer division contained a tank regiment of roughly
+300 vehicles, two or more motorised infantry regiments, organic
+artillery capable of moving with the armour, anti-tank and anti-aircraft
+elements, an engineer battalion for obstacle breaching, a signals
+battalion, and a full logistics train. This was the first time all arms
+had been permanently integrated at division level and fully motorised —
+able to advance not at the pace of a walking infantryman (25 kilometres
+per day at best) but at the pace of wheeled and tracked vehicles (100
+kilometres per day in good conditions). At Sedan in May 1940 Guderian’s
+XIX Corps covered 240 kilometres in four days, a strategic movement that
+the French had designed their entire defensive plan to make
+impossible.</p>
+<p>Alongside the Panzer division, the Wehrmacht routinely employed the
+<strong>Kampfgruppe</strong> — an ad hoc battle group, usually named for
+its commander, assembled from whatever assets were available for a
+specific task. A Kampfgruppe might contain two tank companies, a
+motorised infantry battalion, a battery of self-propelled artillery, and
+a platoon of engineers: enough to be combined-arms capable without the
+full overhead of a division. The Kampfgruppe institutionalised tactical
+flexibility and allowed the Germans to concentrate force rapidly without
+waiting for formal orders restructuring the permanent chain of
+command.</p>
+<h2 data-number="7.3" id="soviet-deep-battle"><span class="header-section-number">7.3</span> Soviet Deep Battle</h2>
+<p>The third revolution was conceptual rather than purely technological.
+Soviet theorists in the late 1920s and 1930s — most notably Mikhail
+Tukhachevsky and Vladimir Triandafillov — developed the doctrine of
+<strong>deep battle</strong> (<em>glubokiy boy</em>): simultaneous
+attacks across the full depth of the enemy’s position, from front-line
+trenches to operational reserves to command nodes and supply lines,
+designed to paralyse the enemy’s ability to respond rather than simply
+pushing back his forward line.</p>
+<p>Deep battle required a specific organisational answer: forces had to
+be echeloned so that a breakthrough echelon penetrated the forward
+defence, an exploitation echelon (typically mechanised or armoured)
+poured through the gap before the enemy could close it, and a reserve
+echelon exploited further to prevent consolidation. This was not the
+Napoleonic sequential battle — breakthrough, then pursuit — but a
+near-simultaneous attack on multiple echelons of depth. The doctrine was
+formalised in the Field Regulations of 1936 (PU-36), then suppressed
+when Tukhachevsky was executed in Stalin’s purge of the military in
+1937, then rediscovered from necessity after the catastrophic losses of
+1941.</p>
+<p>Operation Bagration in June–August 1944 was the largest demonstration
+of deep battle at operational scale in military history. Four Soviet
+fronts (army groups) attacked Army Group Centre simultaneously on a
+600-kilometre front. Mechanised and tank armies poured through the
+initial penetrations, encircling formations before they could withdraw,
+destroying Army Group Centre as a coherent force in six weeks. The
+Germans lost approximately 300,000 killed or captured; the Red Army
+advanced up to 600 kilometres. The operation was enabled by the Soviet
+organisational structure — multiple echelons of armoured and mechanised
+corps, managed through a front-level command that could coordinate
+operations across enormous distances — and by the Stavka (Soviet high
+command) reserve system that maintained fresh forces throughout.</p>
+<p>The legacy of deep battle is direct in NATO doctrine. AirLand Battle,
+the US Army’s warfighting concept formalised in the 1982 and 1986
+editions of FM 100-5, explicitly drew on Soviet deep battle theory to
+argue for simultaneous attacks against the enemy’s rear areas,
+disrupting reinforcement and supply before the ground battle was decided
+on the forward line. The modern concept of multi-domain operations
+descends from the same intellectual tradition.</p>
+<hr />
+<h1 data-number="8" id="naval-and-air-force-equivalents"><span class="header-section-number">8</span> Naval and Air Force
+Equivalents</h1>
+<h2 data-number="8.1" id="the-navy-rank-translation-and-task-organisation"><span class="header-section-number">8.1</span> The Navy: Rank Translation and
+Task Organisation</h2>
+<p>Naval rank titles are entirely different from army titles, though
+they occupy the same NATO pay grades. The most persistent source of
+confusion is the word “captain”: a naval Captain (O-6) is the equivalent
+of a Colonel, not an army Captain. Conversely, a naval Lieutenant (O-3)
+equals an army Captain. The table below shows the full officer
+equivalence.</p>
+<table>
+<thead>
+<tr>
+<th>Pay Grade</th>
+<th>US Navy</th>
+<th>US Army Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O-1</td>
+<td>Ensign</td>
+<td>Second Lieutenant</td>
+</tr>
+<tr>
+<td>O-2</td>
+<td>Lieutenant (Junior Grade)</td>
+<td>First Lieutenant</td>
+</tr>
+<tr>
+<td>O-3</td>
+<td>Lieutenant</td>
+<td>Captain</td>
+</tr>
+<tr>
+<td>O-4</td>
+<td>Lieutenant Commander</td>
+<td>Major</td>
+</tr>
+<tr>
+<td>O-5</td>
+<td>Commander</td>
+<td>Lieutenant Colonel</td>
+</tr>
+<tr>
+<td>O-6</td>
+<td>Captain</td>
+<td>Colonel</td>
+</tr>
+<tr>
+<td>O-7</td>
+<td>Rear Admiral (Lower Half)</td>
+<td>Brigadier General</td>
+</tr>
+<tr>
+<td>O-8</td>
+<td>Rear Admiral (Upper Half)</td>
+<td>Major General</td>
+</tr>
+<tr>
+<td>O-9</td>
+<td>Vice Admiral</td>
+<td>Lieutenant General</td>
+</tr>
+<tr>
+<td>O-10</td>
+<td>Admiral</td>
+<td>General</td>
+</tr>
+<tr>
+<td>O-11</td>
+<td>Fleet Admiral (wartime only)</td>
+<td>General of the Army</td>
+</tr>
+</tbody>
+</table>
+<p>Below the fleet level, naval formations are assembled by mission
+rather than permanent establishment, using the <strong>task
+organisation</strong> system. A <strong>fleet</strong> — commanded by a
+Vice Admiral — generates <strong>task forces</strong> (designated TF,
+commanded by CTF), which divide into <strong>task groups</strong> (TG,
+CTG) and <strong>task units</strong> (TU, CTU). Numbering is
+hierarchical and decimal: Task Unit 62.5.3 is the third unit in the
+fifth group of Task Force 62, itself under the Sixth Fleet. The system
+is deliberately flexible: a fleet can re-designate forces, split task
+forces, and reassign ships to new groups within hours.</p>
+<p>The <strong>Carrier Strike Group (CSG)</strong> is the primary modern
+operational naval formation. It typically comprises an aircraft carrier
+with an embarked air wing of 65 to 70 aircraft, one or two
+Ticonderoga-class guided missile cruisers, two to three Arleigh
+Burke-class guided missile destroyers, an attack submarine screening
+ahead, and a supply ship. A CSG is a self-contained combined-arms
+formation in naval terms: organic air power, surface fires, subsurface
+capability, and its own logistics.</p>
+<h2 data-number="8.2" id="the-air-force-squadron-to-major-command"><span class="header-section-number">8.2</span> The Air Force: Squadron to
+Major Command</h2>
+<p>The US Air Force hierarchy from bottom to top:
+<strong>flight</strong> (the smallest element, typically 4–24 aircraft),
+<strong>squadron</strong> (18–24 aircraft, the primary tactical unit,
+commanded by a Lieutenant Colonel), <strong>group</strong> (two or more
+squadrons, Colonel), <strong>wing</strong> (two or more groups, the
+primary base-level command, Brigadier General or Colonel),
+<strong>numbered air force</strong> (two or more wings, Major General or
+Lieutenant General), <strong>major command (MAJCOM)</strong> (Lieutenant
+General or General).</p>
+<p>The RAF uses a distinctive rank terminology that confuses those
+familiar with army equivalents:</p>
+<table>
+<thead>
+<tr>
+<th>RAF Rank</th>
+<th>Army Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pilot Officer</td>
+<td>Second Lieutenant</td>
+</tr>
+<tr>
+<td>Flying Officer</td>
+<td>Lieutenant</td>
+</tr>
+<tr>
+<td>Flight Lieutenant</td>
+<td>Captain</td>
+</tr>
+<tr>
+<td>Squadron Leader</td>
+<td>Major</td>
+</tr>
+<tr>
+<td>Wing Commander</td>
+<td>Lieutenant Colonel</td>
+</tr>
+<tr>
+<td>Group Captain</td>
+<td>Colonel</td>
+</tr>
+<tr>
+<td>Air Commodore</td>
+<td>Brigadier</td>
+</tr>
+<tr>
+<td>Air Vice Marshal</td>
+<td>Major General</td>
+</tr>
+<tr>
+<td>Air Marshal</td>
+<td>Lieutenant General</td>
+</tr>
+<tr>
+<td>Air Chief Marshal</td>
+<td>General</td>
+</tr>
+<tr>
+<td>Marshal of the Royal Air Force</td>
+<td>Field Marshal</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="8.3" id="the-squadron-problem"><span class="header-section-number">8.3</span> The “Squadron” Problem</h2>
+<p>The word “squadron” is used in three entirely different senses across
+the armed forces, and confusing them is easy. In the navy, a squadron is
+a grouping of three to seven ships of a similar type (a destroyer
+squadron). In the air force, a squadron is the primary flying unit of 18
+to 24 aircraft, the air force equivalent of an infantry company or
+battalion. In the army, a squadron is the armoured or cavalry equivalent
+of a company — typically 60 to 100 soldiers and 14 to 20 vehicles. All
+three uses are current and in regular use; context is the only
+guide.</p>
+<h2 data-number="8.4" id="the-marine-air-ground-task-force"><span class="header-section-number">8.4</span> The Marine Air-Ground Task
+Force</h2>
+<p>The US Marine Corps answers the combined-arms question differently
+from the army. Rather than achieving combined arms at brigade or
+division level by attaching aviation from a separate air force command,
+the Marines organise into <strong>Marine Air-Ground Task Forces
+(MAGTFs)</strong>, which integrate ground combat, aviation, and
+logistics under a single command by design.</p>
+<p>A MAGTF has three permanent elements: a Ground Combat Element
+(infantry, armour, artillery), an Aviation Combat Element (fixed-wing
+and rotary aircraft organic to the force), and a Combat Logistics
+Element. The standard deployable MAGTF is the <strong>Marine
+Expeditionary Unit (MEU)</strong> of roughly 2,200 Marines with 6 to 8
+helicopters and 6 fixed-wing aircraft, routinely deployed aboard a
+three-ship amphibious ready group. Above this sits the <strong>Marine
+Expeditionary Brigade (MEB)</strong> for mid-scale operations and the
+<strong>Marine Expeditionary Force (MEF)</strong>, a full combined-arms
+force of 50,000 or more, for major operations.</p>
+<p>The MAGTF model gives a combatant commander a self-contained
+expeditionary capability without the coordination overhead of
+synchronising army ground forces with an independent air force — at the
+cost of maintaining a dedicated aviation arm within the Marine Corps
+itself.</p>
+<hr />
+<h1 data-number="9" id="beyond-nato-the-chinese-pla-and-russian-armed-forces"><span class="header-section-number">9</span> Beyond NATO: The Chinese PLA and
+Russian Armed Forces</h1>
+<p>The preceding sections have used Western armies as the reference
+frame. Two other forces deserve attention: the People’s Liberation Army,
+the largest ground force in the world, and the Russian Armed Forces,
+whose campaign in Ukraine from 2022 has provided an unprecedented public
+window into the strengths and failures of a non-NATO structural
+model.</p>
+<h2 data-number="9.1" id="the-peoples-liberation-army"><span class="header-section-number">9.1</span> The People’s Liberation
+Army</h2>
+<p>The PLA is in the middle of the most comprehensive structural
+reorganisation in its history. The 2015–2016 reforms, formally announced
+in December 2015 and implemented through 2016, dissolved the seven
+Military Region Commands that had governed the PLA since 1956 and
+replaced them with five Theatre Commands: Eastern (headquarters Nanjing,
+covering the Taiwan Strait and East China Sea), Southern (Guangzhou,
+South China Sea), Western (Chengdu, western borders with India and
+Central Asia), Northern (Shenyang, the Russian and Korean borders), and
+Central (Beijing, capital defence and strategic reserve). The reform
+separated two functions that had previously been combined: building the
+army — recruiting, training, equipping — retained by the service
+branches (Ground Force, Navy, Air Force, Rocket Force, and — until its
+2024 reorganisation into successor commands including a Cyberspace Force
+and Information Support Force — the Strategic Support Force); and using
+the army — operational command in wartime — assigned to the Theatre
+Commands as joint commands reporting directly to the Central Military
+Commission.</p>
+<p>This is a structural answer to the same joint operations problem NATO
+has wrestled with for decades. Theatre commanders have authority over
+all service components in their theatre, removing the inter-service
+coordination overhead that plagued earlier PLA operations. The reform
+explicitly studied the US combatant command structure, and the parallel
+is deliberate.</p>
+<p>Below the theatre command, the primary manoeuvre formation is the
+<strong>Group Army</strong> — roughly equivalent to a Western corps,
+controlling five or six combined arms brigades plus specialist brigades
+for aviation, artillery, air defence, and logistics. The reform reduced
+the previous 18 Group Armies to 13, redesignated the 71st through the
+83rd Army. At the same time it elevated the <strong>combined arms
+brigade</strong> as the primary tactical building block, converting many
+old divisions — the primary combined-arms unit since the Korean War — to
+brigades. Divisions still exist in the structure but are no longer the
+standard form.</p>
+<p>The PLA rank system has one grade that has no parallel among NATO
+members or other major military establishments. Between Colonel and
+Major General sits the <strong>Senior Colonel</strong> (<em>dà
+xiào</em>), occupying the structural gap between NATO OF-5 and OF-6 —
+above a Colonel but not a general officer grade. Introduced in the 1955
+rank system modelled on Soviet practice, it was abolished along with all
+PLA ranks during the Cultural Revolution in 1965 and restored in the
+1988 rank reform. In practice it is the grade of a senior brigade
+commander, a regiment commander within a division, or a substantial
+headquarters staff officer. There are periodic proposals to replace it
+with a one-star general grade, but as of the available record this has
+not been implemented.</p>
+<p>In December 2015 the PLA also established a fourth full service
+branch: the <strong>Rocket Force</strong>, replacing the Second
+Artillery Corps that had existed since 1966. The Rocket Force controls
+China’s conventional ballistic and cruise missile arsenal as well as its
+nuclear forces, and is resourced and commanded at service-branch level —
+a deliberate signal of the strategic weight China assigns to missile
+power.</p>
+<h2 data-number="9.2" id="the-russian-armed-forces-reform-reversal-and-ukraine"><span class="header-section-number">9.2</span> The Russian Armed Forces:
+Reform, Reversal, and Ukraine</h2>
+<p>Post-Soviet Russia inherited the Soviet armed forces’ structure,
+culture, and equipment. The Soviet model was division-centric: a
+combined arms army controlled three or four divisions, each division
+with three regiments, each regiment with three battalions — a hierarchy
+designed for large-scale conventional war in Central Europe with
+manpower vast enough to absorb attrition.</p>
+<p>The 2008 Georgia war exposed severe coordination failures and
+prompted the “New Look” reforms under Defence Minister Serdyukov. The
+reforms dissolved the division-regiment structure and replaced it with
+brigades, creating a flatter hierarchy and discharging approximately
+140,000 warrant officers (<em>Прапорщики</em>, Praporshchiki) whose
+positions were to be absorbed into NCO roles. By 2013 the reform was
+partially reversed. Defence Minister Shoigu reinstated divisions —
+beginning with the Tamanskaya and Kantemirovskaya guards divisions near
+Moscow — and restored the Praporshchik grade in July 2013, acknowledging
+that the specialist-technical functions warrants had performed could not
+simply be reassigned to NCOs without investment in training and pay that
+had not been made. The current structure is a hybrid: Military Districts
+controlling Combined Arms Armies, which in turn control a mix of
+divisions with organic regiments and independent brigades. The Combined
+Arms Army — abolished in the 2008 reforms — was also restored as the
+primary operational level command.</p>
+<p>Russia’s officer hierarchy contains one grade without a NATO
+equivalent: the <strong>Colonel General</strong>
+(<em>Генерал-полковник</em>), positioned between Lieutenant General
+(OF-8) and General of the Army (OF-9), wearing four stars. Inherited
+directly from the Soviet system of 1943, it produces a five-step general
+officer ladder — Major General, Lieutenant General, Colonel General,
+General of the Army, Marshal of the Russian Federation — compared to
+NATO’s standard four general officer grades below the dormant
+five-star.</p>
+<p>The <strong>Battalion Tactical Group (BTG)</strong> was the formation
+Russia deployed in Donbas from 2014 and at scale in 2022. A BTG of
+roughly 800 personnel was assembled from a regiment or brigade, given
+organic artillery (two or three batteries), air defence, anti-tank
+elements, engineers, and logistics sufficient for independent operations
+— a combined-arms force at battalion scale, deliberately mirroring the
+combined-arms principle at a lower echelon than Western forces typically
+achieve. The structural weakness was infantry: a BTG typically fielded
+only around 200 dismounted soldiers despite its 800-person strength,
+because the remainder were crews, specialists, and support personnel. In
+the limited sub-threshold operations the BTG was designed for — Donbas
+2014–15, where irregular forces supplemented the infantry — this was
+manageable. In large-scale conventional combat against a peer opponent
+in 2022 it was not. Urban fighting, defensive depth, and multi-axis
+advances all demand infantry mass that 200 soldiers cannot provide. By
+late 2022 UK military intelligence assessed that BTGs had largely been
+abandoned as the primary formation, replaced by smaller platoon-scale
+assault detachments for offensive action and a partial return to
+regiment and division as the manoeuvre echelon. The BTG’s failure was
+structural rather than merely tactical: a formation optimised for
+limited war was committed to a large one.</p>
+<hr />
+<h1 data-number="10" id="nato-interoperability-shared-standards-and-persistent-friction"><span class="header-section-number">10</span> NATO Interoperability: Shared
+Standards and Persistent Friction</h1>
+<p>NATO is a military alliance of over thirty nations with armies,
+navies, and air forces built on different national traditions, equipment
+fleets, and doctrinal schools. Making them work together in a crisis
+requires a framework of shared standards, and NATO has built an
+extensive one. Over 1,200 Standardisation Agreements (STANAGs) cover
+everything from rank equivalence (STANAG 2116) to tactical symbology
+(APP-6, the standard for marking unit positions on maps) to ammunition
+calibres, fuel specifications, radio protocols, and medical evacuation
+procedures.</p>
+<p>The <strong>Enhanced Forward Presence (EFP)</strong>, established in
+2017 and significantly reinforced following Russia’s full-scale invasion
+of Ukraine in 2022, provides a practical test case for how
+interoperability works in practice. Multinational battlegroups of
+approximately 1,000 to 2,000 soldiers are deployed in Estonia, Latvia,
+Lithuania, and Poland, each commanded by a framework nation (the UK in
+Estonia, Canada in Latvia, Germany in Lithuania, the US in Poland) with
+contributing nations providing company- and platoon-sized elements.
+These battlegroups must plan, train, and be able to fight together
+despite having different radios, different command vocabularies,
+different rules of engagement inherited from national law, and different
+tactical cultures.</p>
+<p>The experience of EFP has clarified where standardisation genuinely
+works and where it has limits. Tactical symbology is broadly
+standardised and effective; staff officers from different nations can
+read each other’s maps. Fuel is partially standardised for NATO
+vehicles. But encrypted radio interoperability remains patchy; nations
+using national cryptographic systems cannot always communicate directly
+with allies without going through liaison elements. Command philosophy
+differs substantially: the US Army’s mission command doctrine, which
+devolves considerable authority to junior leaders to exercise
+initiative, sits uneasily alongside armies with more directive
+traditions in which detailed orders from above are the norm. And mixing
+units from different nations within a single company — as opposed to
+national companies within a multinational battalion — multiplies the
+coordination problem sharply enough that it is generally avoided below
+battalion level.</p>
+<p>The EFP battlegroups would, in a major war, serve as a tripwire and
+an immediate reinforcement cadre rather than a self-sufficient fighting
+force. They are large enough to trigger Article 5 if attacked but not
+large enough to conduct extended combined-arms combat independently.
+Reinforcement from pre-positioned equipment stocks and rapid-deployment
+forces would be required within days; the logistical and procedural
+challenge of integrating those reinforcements with the existing
+battlegroups under a coherent multinational corps command remains one of
+the principal practical problems that NATO headquarters exercises are
+designed to rehearse.</p>
+<hr />
+<h1 data-number="11" id="further-reading"><span class="header-section-number">11</span> Further Reading</h1>
+<p>The literature on military organisation is extensive. The following
+works are starting points for each of the major themes in this
+primer.</p>
+<p><strong>Military history and structure generally</strong>: John
+Keegan, <em>The Face of Battle</em> (1976) — the canonical account of
+what battle actually looks like from the soldier’s perspective, with
+implications throughout for why organisation matters. Martin van
+Creveld, <em>Supplying War</em> (1977) — how logistics determines the
+organisational limits of military formations. Trevor Dupuy, <em>A Genius
+for War</em> (1977) — quantitative analysis of German military
+effectiveness, relevant to Auftragstaktik.</p>
+<p><strong>The Napoleonic system</strong>: David Chandler, <em>The
+Campaigns of Napoleon</em> (1966) — the standard reference for
+Napoleonic operational art, including the corps system in action. Rory
+Muir, <em>Tactics and the Experience of Battle in the Age of
+Napoleon</em> (1998) — how the structure translated into combat.</p>
+<p><strong>20th-century organisation</strong>: Robert Citino, <em>The
+German Way of War</em> (2005) — the doctrine of <em>Bewegungskrieg</em>
+(war of manoeuvre) and its organisational roots. Richard Overy, <em>Why
+the Allies Won</em> (1995) — the Soviet deep battle and industrial
+capacity case. Williamson Murray and Allan Millett (eds), <em>Military
+Innovation in the Interwar Period</em> (1996) — how the Panzer division
+and other innovations were developed between the wars.</p>
+<p><strong>Modern US Army structure</strong>: Department of the Army,
+<em>FM 3-0: Operations</em> (2022 edition) — the current statement of US
+Army doctrine, freely available online. The Army’s BCT structure is
+described in detail in <em>FM 3-96: Brigade Combat Team</em> (2021).</p>
+<p><strong>Ranks and the British system</strong>: David Fraser, <em>And
+We Shall Shock Them: The British Army in the Second World War</em>
+(1983) — the regimental system under pressure. Allan Mallinson, <em>The
+Making of the British Army</em> (2009) — accessible historical survey
+from Marlborough to the present.</p>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
