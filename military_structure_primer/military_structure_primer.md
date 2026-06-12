@@ -53,7 +53,7 @@ The platoon is the lowest echelon typically led by a commissioned officer. Below
 
 Three to five platoons plus a company headquarters form a **company** of 80 to 190 soldiers. (The equivalent in armoured and cavalry units is called a **squadron**; in artillery, a **battery**.) Company sizes vary considerably by type: a light infantry company runs around 130 soldiers, an armoured company perhaps 60 — fewer people but more vehicles and organic firepower.
 
-In the US Army the company commander is a Captain (NATO code OF-3), supported by a First Sergeant (OR-8), the senior NCO of the company and the commanding officer's primary advisor on personnel and welfare. In the British Army the same appointment is held by a Major (also OF-3 under NATO coding, though the rank title differs). This is one of the most persistent sources of cross-national confusion: a British Captain (OF-2) is typically a company second-in-command or adjutant, not a company commander. When a British Major and a US Captain stand at the same command level, they hold the same NATO code despite different national titles.
+In the US Army the company commander is a Captain (OF-2), supported by a First Sergeant (OR-8), the senior NCO of the company and the commanding officer's primary advisor on personnel and welfare. In the British Army the same appointment is held by a Major (OF-3). This is one of the most persistent sources of cross-national confusion: a British Captain (OF-2) shares the same code and title as a US Captain but is typically a company second-in-command or adjutant, not a company commander. A British Major (OF-3) and a US Captain (OF-2) do the same job at different NATO codes — functional counterparts despite a one-grade difference.
 
 The company is the primary logistical unit in many armies: it holds organic transport, maintains supplies and ammunition, and cares for its own casualties before evacuation. Below company level, logistics is handled by the echelon above; the squad cannot feed and resupply itself independently.
 
@@ -70,13 +70,15 @@ The battalion is where NCO authority reaches its institutional ceiling. The Comm
 | Fire Team | 4 | Corporal / Specialist | OR-4 | Corporal |
 | Section / Squad | 8–12 | Staff Sergeant | OR-6 | Corporal |
 | Platoon | 26–44 | Second Lieutenant | OF-1 | Lieutenant |
-| Company / Squadron / Battery | 80–190 | Captain | OF-3 | Major |
+| Company / Squadron / Battery | 80–190 | Captain | OF-2 | Major (OF-3)† |
 | Battalion | 300–1,000 | Lieutenant Colonel | OF-4 | Lieutenant Colonel |
-| Brigade / BCT | 1,500–5,000 | Colonel | OF-5 | Brigadier |
+| Brigade / BCT | 1,500–5,000 | Colonel | OF-5 | Brigadier (OF-6)† |
 | Division | 10,000–18,000 | Major General | OF-7 | Major General |
 | Corps | 20,000–45,000 | Lieutenant General | OF-8 | Lieutenant General |
 | Field Army | 50,000–150,000+ | General (4-star) | OF-9 | General |
 | Army Group | 400,000+ | General of the Army | OF-10 | Field Marshal |
+
+† British functional counterparts differ by one grade: a British Major (OF-3) commands a company where a US Captain (OF-2) would; a British Brigadier (OF-6) commands a brigade where a US Colonel (OF-5) would.
 
 ---
 
@@ -126,7 +128,7 @@ Rank is personal and permanent. Appointment is organisational and temporary. A L
 
 ### NATO Standardisation: OF and OR Codes
 
-NATO's STANAG 2116 provides a common reference grid for ranks across member nations. Officers are coded OF-1 (most junior commissioned grade) through OF-10 (five-star, dormant). Other Ranks — enlisted and NCOs combined — are coded OR-1 through OR-9. The codes describe structural position, not national title: a British Major and a US Captain both occupy OF-3 because both command at the same echelon (company), even though their rank titles differ by one notch.
+NATO's STANAG 2116 provides a common reference grid for ranks across member nations. Officers are coded OF-1 (most junior commissioned grade) through OF-10 (five-star, dormant). Other Ranks — enlisted and NCOs combined — are coded OR-1 through OR-9. The codes describe structural equivalence, not always coincident national titles. Where codes coincide but roles diverge: a British Captain (OF-2) and a US Captain (OF-2) share code and title, but the British officer is typically a company second-in-command while the US officer commands the company. Where codes diverge but roles align: a British Major (OF-3) and a US Captain (OF-2) both command companies despite holding different grades. STANAG 2116 provides the grid for staff coordination; it cannot fully smooth the grade-slippage that national systems have accumulated over centuries.
 
 ### Comparative Rank Table
 
@@ -237,7 +239,7 @@ graph TD
 
 Napoleon permanently organised the French army into corps d'armée in 1800, and the design solved the pre-Napoleonic problem directly. Each corps contained infantry divisions, a cavalry formation for screening and reconnaissance, a reserve of heavier artillery beyond what the divisions carried, engineer detachments, and a logistics train capable of sustaining the corps independently for days. Because any corps contained all three combat arms in organic assignment, it could engage and hold an enemy force while the rest of the army converged — which was, in essence, the operational method Napoleon used in every major campaign.
 
-The practical working size of a corps was 20,000 to 30,000 soldiers, though Napoleon adjusted this widely by circumstance. Davout commanded 27,000 at Jena-Auerstedt in 1806 and defeated a Prussian force twice his size by holding until the broader engagement resolved. The self-sufficiency of the corps meant that the Grande Armée could march on multiple axes, each corps a day's march from the next — what Napoleon called the *bataillon carré* (square battalion), a loose formation of four corps arranged so that any two were within supporting distance of any threatened point. No army that marched as a single mass could match this for speed, strategic reach, or deception.
+The practical working size of a corps was 20,000 to 30,000 soldiers, though Napoleon adjusted this widely by circumstance. Davout commanded 27,000 at Auerstedt in 1806 and drove an offensive victory against the Prussian main army of over 50,000 under the Duke of Brunswick — his III Corps attacked, routed a force twice its size, and broke the engagement before Napoleon's own battle at Jena, twelve miles away, had concluded. The self-sufficiency of the corps meant that the Grande Armée could march on multiple axes, each corps a day's march from the next — what Napoleon called the *bataillon carré* (square battalion), a loose formation of four corps arranged so that any two were within supporting distance of any threatened point. No army that marched as a single mass could match this for speed, strategic reach, or deception.
 
 ### Spread and Legacy
 
@@ -334,6 +336,34 @@ The US Marine Corps answers the combined-arms question differently from the army
 A MAGTF has three permanent elements: a Ground Combat Element (infantry, armour, artillery), an Aviation Combat Element (fixed-wing and rotary aircraft organic to the force), and a Combat Logistics Element. The standard deployable MAGTF is the **Marine Expeditionary Unit (MEU)** of roughly 2,200 Marines with 6 to 8 helicopters and 6 fixed-wing aircraft, routinely deployed aboard a three-ship amphibious ready group. Above this sits the **Marine Expeditionary Brigade (MEB)** for mid-scale operations and the **Marine Expeditionary Force (MEF)**, a full combined-arms force of 50,000 or more, for major operations.
 
 The MAGTF model gives a combatant commander a self-contained expeditionary capability without the coordination overhead of synchronising army ground forces with an independent air force — at the cost of maintaining a dedicated aviation arm within the Marine Corps itself.
+
+---
+
+## Beyond NATO: The Chinese PLA and Russian Armed Forces
+
+The preceding sections have used Western armies as the reference frame. Two other forces deserve attention: the People's Liberation Army, the largest ground force in the world, and the Russian Armed Forces, whose campaign in Ukraine from 2022 has provided an unprecedented public window into the strengths and failures of a non-NATO structural model.
+
+### The People's Liberation Army
+
+The PLA is in the middle of the most comprehensive structural reorganisation in its history. The 2015–2016 reforms, formally announced in December 2015 and implemented through 2016, dissolved the seven Military Region Commands that had governed the PLA since 1956 and replaced them with five Theatre Commands: Eastern (headquarters Nanjing, covering the Taiwan Strait and East China Sea), Southern (Guangzhou, South China Sea), Western (Chengdu, western borders with India and Central Asia), Northern (Shenyang, the Russian and Korean borders), and Central (Beijing, capital defence and strategic reserve). The reform separated two functions that had previously been combined: building the army — recruiting, training, equipping — retained by the service branches (Ground Force, Navy, Air Force, Rocket Force, and — until its 2024 reorganisation into successor commands including a Cyberspace Force and Information Support Force — the Strategic Support Force); and using the army — operational command in wartime — assigned to the Theatre Commands as joint commands reporting directly to the Central Military Commission.
+
+This is a structural answer to the same joint operations problem NATO has wrestled with for decades. Theatre commanders have authority over all service components in their theatre, removing the inter-service coordination overhead that plagued earlier PLA operations. The reform explicitly studied the US combatant command structure, and the parallel is deliberate.
+
+Below the theatre command, the primary manoeuvre formation is the **Group Army** — roughly equivalent to a Western corps, controlling five or six combined arms brigades plus specialist brigades for aviation, artillery, air defence, and logistics. The reform reduced the previous 18 Group Armies to 13, redesignated the 71st through the 83rd Army. At the same time it elevated the **combined arms brigade** as the primary tactical building block, converting many old divisions — the primary combined-arms unit since the Korean War — to brigades. Divisions still exist in the structure but are no longer the standard form.
+
+The PLA rank system has one grade that has no parallel among NATO members or other major military establishments. Between Colonel and Major General sits the **Senior Colonel** (*dà xiào*), occupying the structural gap between NATO OF-5 and OF-6 — above a Colonel but not a general officer grade. Introduced in the 1955 rank system modelled on Soviet practice, it was abolished along with all PLA ranks during the Cultural Revolution in 1965 and restored in the 1988 rank reform. In practice it is the grade of a senior brigade commander, a regiment commander within a division, or a substantial headquarters staff officer. There are periodic proposals to replace it with a one-star general grade, but as of the available record this has not been implemented.
+
+In December 2015 the PLA also established a fourth full service branch: the **Rocket Force**, replacing the Second Artillery Corps that had existed since 1966. The Rocket Force controls China's conventional ballistic and cruise missile arsenal as well as its nuclear forces, and is resourced and commanded at service-branch level — a deliberate signal of the strategic weight China assigns to missile power.
+
+### The Russian Armed Forces: Reform, Reversal, and Ukraine
+
+Post-Soviet Russia inherited the Soviet armed forces' structure, culture, and equipment. The Soviet model was division-centric: a combined arms army controlled three or four divisions, each division with three regiments, each regiment with three battalions — a hierarchy designed for large-scale conventional war in Central Europe with manpower vast enough to absorb attrition.
+
+The 2008 Georgia war exposed severe coordination failures and prompted the "New Look" reforms under Defence Minister Serdyukov. The reforms dissolved the division-regiment structure and replaced it with brigades, creating a flatter hierarchy and discharging approximately 140,000 warrant officers (*Прапорщики*, Praporshchiki) whose positions were to be absorbed into NCO roles. By 2013 the reform was partially reversed. Defence Minister Shoigu reinstated divisions — beginning with the Tamanskaya and Kantemirovskaya guards divisions near Moscow — and restored the Praporshchik grade in July 2013, acknowledging that the specialist-technical functions warrants had performed could not simply be reassigned to NCOs without investment in training and pay that had not been made. The current structure is a hybrid: Military Districts controlling Combined Arms Armies, which in turn control a mix of divisions with organic regiments and independent brigades. The Combined Arms Army — abolished in the 2008 reforms — was also restored as the primary operational level command.
+
+Russia's officer hierarchy contains one grade without a NATO equivalent: the **Colonel General** (*Генерал-полковник*), positioned between Lieutenant General (OF-8) and General of the Army (OF-9), wearing four stars. Inherited directly from the Soviet system of 1943, it produces a five-step general officer ladder — Major General, Lieutenant General, Colonel General, General of the Army, Marshal of the Russian Federation — compared to NATO's standard four general officer grades below the dormant five-star.
+
+The **Battalion Tactical Group (BTG)** was the formation Russia deployed in Donbas from 2014 and at scale in 2022. A BTG of roughly 800 personnel was assembled from a regiment or brigade, given organic artillery (two or three batteries), air defence, anti-tank elements, engineers, and logistics sufficient for independent operations — a combined-arms force at battalion scale, deliberately mirroring the combined-arms principle at a lower echelon than Western forces typically achieve. The structural weakness was infantry: a BTG typically fielded only around 200 dismounted soldiers despite its 800-person strength, because the remainder were crews, specialists, and support personnel. In the limited sub-threshold operations the BTG was designed for — Donbas 2014–15, where irregular forces supplemented the infantry — this was manageable. In large-scale conventional combat against a peer opponent in 2022 it was not. Urban fighting, defensive depth, and multi-axis advances all demand infantry mass that 200 soldiers cannot provide. By late 2022 UK military intelligence assessed that BTGs had largely been abandoned as the primary formation, replaced by smaller platoon-scale assault detachments for offensive action and a partial return to regiment and division as the manoeuvre echelon. The BTG's failure was structural rather than merely tactical: a formation optimised for limited war was committed to a large one.
 
 ---
 
