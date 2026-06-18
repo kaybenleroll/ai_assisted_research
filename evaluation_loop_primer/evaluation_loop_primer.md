@@ -2,7 +2,7 @@
 
 ## The Core Idea: Measure It, Then Optimise It
 
-Here is the thing nobody tells you when you start building with AI: the model is the easy part. You can download a strong open-weight model this afternoon, or call a frontier one over an API in three lines of code. What separates a system that gets better every month from one that plateaus on day one is not the model. It is whether you have built a loop around the model that turns its mistakes into the next version's training signal — and whether, somewhere in that loop, you can attach a number to "how good was that?"
+Here is the thing nobody tells you when you start building with AI: the model is often the easy part. You can download a strong open-weight model this afternoon, or call a frontier one over an API in three lines of code. What separates a system that gets better every month from one that plateaus on day one is whether you have built a loop that turns mistakes into the next improvement signal — and whether, somewhere in that loop, you can attach a defensible number or checklist to "how good was that?"
 
 Andrej Karpathy gave this loop its clearest articulation. In his 2017 essay "Software 2.0," he argued that for a growing class of problems, the program is no longer hand-written logic but a model whose behaviour is shaped by data, and so "most of the active software development takes the form of curating, growing, massaging and cleaning labeled datasets." The precondition he named for this to work at all is blunt: "repeated evaluation is possible and cheap." Hold onto that sentence. The whole primer hangs off it.
 
@@ -23,14 +23,16 @@ The organising principle underneath all of it is one more Karpathy line, and it 
 
 Which is exactly why the evaluate step is load-bearing, and why it gets a whole primer to itself. Think of the data engine as a control loop, the kind that runs a thermostat: it senses a value, compares it to a target, and acts to close the gap. A thermostat without a thermometer is just a heater with no off switch. The evaluate step is the thermometer. It is the only place in the loop where open-ended performance gets converted into a number, and without that number, nothing downstream can move. Training has no gradient to follow. Deployment has no bar to clear. Telemetry has nothing to compare against. The loop does not slow down — it stops. Every other box in the diagram is plumbing; evaluate is the sensor, and a control loop is only ever as good as its sensor.
 
-So the deep problem of this primer is not "how do we train models." It is the prior question: when the thing you care about is subjective — clarity, helpfulness, taste, judgment — how do you manufacture a number trustworthy enough to optimise against? That is the question the rest of these pages take apart.
+So the deep problem of this primer is not only "how do we train models." It is the prior question: when the thing you care about is subjective — clarity, helpfulness, taste, judgment — how do you manufacture an evaluation signal trustworthy enough to optimise against? Sometimes that signal is a scalar score for weight updates; sometimes it is a behavioural rubric for instruction and skill wording. That is the question the rest of these pages take apart.
 
 ### What This Primer Covers
 
 - The data engine loop and why evaluation is its load-bearing step.
+- A practical fork in the loop: improving model weights at scale versus improving instruction and skill wording at low volume.
 - Why open-ended quality resists measurement, and why reference-overlap metrics like BLEU and ROUGE fail on it.
 - The generator-discriminator gap: why judging is easier than producing, and why that asymmetry rescues evaluation.
 - The four moves that turn subjective quality into a usable score: Decompose, Compare, Aggregate, Automate.
+- The lightweight instruction loop: rubric-driven transcript inspection for iterative skill wording improvements.
 - Behaviourally-anchored rubrics as a replacement for vague quality scales.
 - Pairwise comparison and large-scale human preference collection (Chatbot Arena).
 - Aggregating comparisons into latent ratings via Elo and the Bradley-Terry model, with the mathematics worked through.
@@ -197,6 +199,305 @@ Now an LLM judge reads the derivatives question, reads **Response Alpha** and **
 Two cheap mitigations take the worst of that bias off the table before you trust the number. The first is a **position swap**: run the judge twice on the same pair, once with **Response Alpha** first and once with **Response Beta** first, and average the two scores. An LLM judge has a standing tendency to favour whichever response it reads first or last regardless of content, and presenting each order exactly once cancels that tendency arithmetically rather than hoping the judge ignores it. It doubles the inference cost and removes a whole class of artefacts; the trade is almost always worth it. The second is **multiple independent judges**: run several judges on the same pair and average their scores or take a majority vote. This shrinks the per-judge variance the way any ensemble does, and it partially dilutes systematic self-preference — a panel of different model families cannot all rate the same response highly purely because each finds its own phrasing more probable. Neither move tells you *why* the biases exist; §7 takes apart the mechanisms — self-preference, verbosity, and position — and explains why instructing a judge to be impartial does not remove them. For now it is enough that the swap and the panel blunt their effect.
 
 These four moves are not specific to chatbots. Take an insurance company evaluating how well an LLM summarises complex policy documents for claimants. The moves apply identically: **Decompose** "good summary" into accuracy, coverage, plain-language score, and a missing-information penalty; **Compare** two candidate summaries pairwise; **Aggregate** the comparisons into a latent quality rating; **Automate** with an LLM judge that reads the policy and the summary together. Different domain, same machine — and the same toll, four times over: every number it produces is a correlated shadow of quality, never quality itself.
+
+## The Lightweight Loop: When You Are Editing Instructions, Not Weights
+
+The four moves described above — and the rest of this primer from here onward — assume you have something you can retrain. The loop spins because you can collect failures, label them, and push a gradient through parameters. But there is a second, growing class of practitioners who are iterating on AI systems and have no weights to adjust at all: they are editing instruction text. A system prompt. A workflow definition. A skill file that tells an agent to diagnose a bug by working through five specific phases in order before touching any code. The model itself is fixed; the thing being changed is what it is told to do.
+
+This looks like the same problem. It has the same feel — change something, observe whether the system behaves better, change it again. But the feedback mechanism is structurally different, and applying the full four-move apparatus to it produces the wrong tool for the job. It is worth making this distinction explicit before the primer moves into reward models and RLHF, because the instruction-editing case is where most practitioners first encounter the question "how do I measure this?" — and where the machinery in the next sections is most likely to mislead by appearing applicable when it is not.
+
+### What Changes, and What Does Not
+
+Model training changes what a system *knows* — parameters encode probability distributions over tokens, shaped by every gradient update the model has ever received. Instruction editing changes what it is *told to do* — the context it receives each time it is invoked. These are different levers. A badly-worded training example degrades underlying capability. A badly-worded instruction leaves the capability intact but misdirects it: the model can follow the instruction it received, it is just not the right instruction. The failure modes are different, the evidence trails are different, and the correction mechanisms are different.
+
+The practical consequence: you do not need a training signal to improve instructions. You need to be able to read the instruction's output and tell whether it did what you intended. That is a simpler requirement than manufacturing a gradient, but it is the same underlying demand from §2 — you must be able to evaluate the output before you can improve the system.
+
+### Quality Means Something Different Here
+
+For the single-turn responses in earlier sections, "quality" meant something about the content of the answer — accuracy, accessibility, completeness. For instruction-following systems that prescribe a multi-step process, quality primarily means **adherence**: did the agent execute the intended steps, in the intended order, without skipping? Adherence is observable. You do not need a judge to manufacture a number; you need a checklist that describes what correct execution looks like at each phase, and a session transcript to check it against. For a diagnostic skill that says *build a feedback loop before hypothesising*, the criterion is concrete: a runnable repro or failing test must exist in the session before any hypotheses are offered. Either it does or it does not. The generator-discriminator gap from §2 applies here too — it is much easier to check whether a phase was skipped than to produce the correct phase yourself — but the check costs almost nothing because the answer is binary.
+
+This is the **Decompose** step from §3 applied not to output quality but to *process* quality. Instead of breaking "good answer" into accuracy, accessibility, and memorability, you break "correct skill execution" into its observable phases and write a behavioural anchor for each one: what does completion of this phase look like in the transcript? Write those anchors before you ever invoke the skill, because writing them forces you to notice which phase descriptions are vague enough to permit skipping. A rubric that says "phase 1 complete: a runnable repro exists" is immune to the slippage that afflicts a rubric that says "phase 1 complete: the agent seems to understand the problem."
+
+### The Lightweight Loop
+
+The loop that results is recognisably the data engine, running at much lower RPM:
+
+```{.mermaid caption="The instruction-editing loop is the data engine at human speed: inspect transcripts against a rubric, locate the wording that permitted the failure, revise it."}
+graph LR
+    write["Write instruction<br/>with phase rubric"] --> invoke["Invoke in<br/>real sessions"]
+    invoke --> inspect["Inspect transcript<br/>against rubric"]
+    inspect --> locate["Locate wording<br/>that permitted failure"]
+    locate --> revise["Revise<br/>that wording"]
+    revise --> write
+```
+
+The collect step is invoking the instruction in real work. The label step is checking the transcript against the rubric — did phase 1 complete before phase 2 began? The evaluate step is noting which phase the adherence failure clustered in. The train step is editing the specific wording that allowed the failure. There is no automated scoring and no gradient; the loop runs at the speed of a session post-mortem rather than a GPU. But it is the same loop, with the same load-bearing evaluate step in the middle.
+
+A practical note on volume: the statistical methods from §§3–4 — Elo, Bradley-Terry, G-Eval — require enough comparisons to converge to a stable estimate. For a collection of twenty or thirty skill files, each invoked a handful of times per month, that threshold is never reached. Inspection-and-revision works better at this scale than scoring-and-aggregating, for the same reason that you would not run a clinical trial on a sample of four. The quantitative machinery is not wrong; it is simply inappropriate to the data volume available.
+
+### Worked Example: Improving `grill-me` Wording with a Karpathy-Style Loop
+
+Take a real workflow skill such as `grill-me`. The goal is not to improve the model's latent reasoning ability; it is to reduce instruction ambiguity so execution is more consistent. The loop is the same shape as Karpathy's data engine, but each stage is lightweight and text-driven.
+
+Start with a concrete failure pattern you can observe in transcripts:
+
+- The skill asks user questions too early, before enough repo exploration.
+- The skill asks broad or duplicate questions that could have been answered from code.
+- The skill claims "shared understanding" but still leaves unresolved design branches.
+
+Now define behavioural anchors (your measurement surface):
+
+| Dimension | 0 (Fail) | 1 (Pass) |
+|---|---|---|
+| Exploration-first adherence | First user question appears before evidence summary | Evidence summary appears before any user question |
+| Non-derivable questioning | Asks questions answerable from repo/docs | Asks only questions explicitly marked non-derivable |
+| Tree closure | Ends interview with open branches | Replays decisions and lists no unresolved branches |
+
+With those anchors, rewrite only the wording most likely to permit failure. For example:
+
+Before (weak, easy to misinterpret):
+
+```text
+Ask one question at a time after exploration.
+```
+
+After (strong, testable):
+
+```text
+Do not ask the user any question until you have produced an evidence summary
+from repository findings with at least 5 concrete facts.
+For each fact, cite the source file/path.
+Only ask a user question if you cannot derive the answer from code/docs after
+exhaustive search; for each such question, state why it is non-derivable.
+Before finishing, replay all decisions and explicitly list unresolved branches
+as "OPEN" (or state "No open branches").
+```
+
+Notice what changed: not tone, but observability. The revised wording creates transcript-visible pass/fail checks.
+
+Then run a small loop over real work (for example, 5 invocations):
+
+1. Use version A wording for sessions 1-2 and version B for sessions 3-5.
+2. Score each session against the three binary anchors above.
+3. Count pass rates per anchor for A vs B.
+4. Keep B only if it improves at least two anchors without regressing the third.
+5. If not, edit the smallest ambiguous phrase and rerun another 3-5 sessions.
+
+This is Karpathy's loop in miniature:
+
+- Collect: session transcripts.
+- Label: anchor pass/fail per session.
+- Train: edit instruction wording.
+- Evaluate: compare anchor pass rates by wording version.
+- Deploy: keep the better wording and continue observing.
+
+No gradients, no reward model, no Elo required. The loop still qualifies as an evaluation engine because it converts fuzzy dissatisfaction ("this skill feels off") into a repeatable update rule over observed behaviour.
+
+### Worked Example: Improving `diagnose` Wording Without Touching Weights
+
+The same method applies to a process-heavy skill such as `diagnose`, where the central requirement is to establish a reproducible feedback loop before hypothesising. In practice, this skill often drifts in exactly one direction: the agent starts proposing causes before it has built a deterministic reproducer. That drift is not a model-capability failure. It is a wording-permission failure.
+
+Suppose you review five recent sessions and see this pattern:
+
+- In three sessions, hypotheses appeared before any runnable failing test or deterministic repro script.
+- In two sessions, the loop existed but was flaky (non-deterministic, noisy assertions).
+- In one session, the agent moved to implementation after observing a single failing run rather than a stable repeated failure.
+
+You can score this with an anchor set aimed at behavioural compliance:
+
+| Anchor | Fail condition | Pass condition |
+|---|---|---|
+| Repro-gate | Hypothesis appears before loop artifact exists | Runnable repro artifact exists before first hypothesis |
+| Loop quality | Loop is flaky or symptom-level only | Loop is deterministic and asserts the target symptom |
+| Transition discipline | Moves to fix without stable repro evidence | Moves to fix only after repeated stable failure signal |
+
+Now tighten only the instruction text that allowed the most common failure.
+
+Before (high-level, permissive):
+
+```text
+Do not proceed to Phase 2 until you have a loop you believe in.
+```
+
+After (operational, transcript-checkable):
+
+```text
+Before any hypothesis is stated, produce a runnable repro artifact
+(test, script, or command) and execute it twice with the same failing signal.
+If the two runs do not fail identically, treat the loop as invalid and continue
+loop-hardening; do not hypothesise yet.
+Only enter fix implementation after a stable loop is present and the exact
+assertion/symptom is captured in the artifact output.
+```
+
+This revision does three useful things: it introduces a hard gate ("before any hypothesis"), it forces repeatability (two matching failures), and it defines what qualifies as transition readiness.
+
+Run a small A/B sequence in live work:
+
+1. Label three sessions under old wording and three under new wording.
+2. Score each session on the three anchors above.
+3. Compute pass-rate deltas per anchor.
+4. Keep the new wording only if repro-gate and transition-discipline both improve and loop-quality does not regress.
+
+At this scale, avoid overfitting to one anecdote. Keep a wording change only if it survives at least three independent tasks with different failure modes (for example API bug, UI regression, and performance issue). If it helps one and hurts two, revert.
+
+### A Reusable Micro-Protocol for Any Skill Wording Edit
+
+Most teams get stuck because they try to "improve the whole skill" at once. The loop works better when each cycle edits one ambiguous phrase and tests one explicit hypothesis.
+
+Use this protocol:
+
+1. Pick one recurring failure in transcripts, phrased as behaviour, not vibes.
+2. Write 2-4 binary anchors that would detect this failure.
+3. Identify the narrowest phrase in the skill that could permit it.
+4. Rewrite that phrase so pass/fail is visible in transcript evidence.
+5. Test on 3-5 real invocations.
+6. Keep or revert based on anchor deltas, then log the result.
+
+A useful logging format is a one-line changelog per iteration:
+
+```text
+skill=diagnose | change=add repro hard gate | sample=6 sessions |
+repro_gate +50pp | loop_quality +17pp | transition_discipline +33pp | keep
+```
+
+Those one-line records become your low-volume dataset. They are small, but over time they let you answer practical questions that otherwise remain fuzzy: Which wording edits reliably improve adherence? Which edits trade one failure for another? Which skills are stable enough to stop changing for a while?
+
+### From Fuzzy Intuition to Controlled Iteration
+
+When people say "this skill feels off," they are usually detecting one of three things: a gate is too soft, a criterion is unobservable, or an exit condition is undefined. The lightweight loop gives each of those a direct correction path:
+
+- Soft gate -> convert to explicit precondition with a visible artifact.
+- Unobservable criterion -> replace adjectives with evidence requirements.
+- Undefined exit -> add explicit completion language and unresolved-branch handling.
+
+That is the practical payoff of importing Karpathy's loop into instruction design. You are not pretending to run frontier post-training on a handful of sessions. You are building a disciplined measurement-and-revision habit that is proportionate to the scale of skill files and still grounded in evaluation, not intuition alone.
+
+### Operating Checklist: Evaluate and Improve One Skill Wording
+
+Use this checklist to run a single improvement cycle on a skill. Copy it, fill it in, file the result, and repeat. Over time the one-line logs from step 7 become your skill-wording audit trail.
+
+**1. Identify the failure pattern**
+
+- [ ] Review 3–5 recent transcripts of this skill.
+- [ ] Describe the specific failure in behaviour terms (not "feels off" or "wrong", but "X appeared before Y in the transcript").
+- [ ] Estimate frequency: does this failure appear in 1/5 sessions? 3/5? Every session?
+
+**2. Write behavioural anchors**
+
+- [ ] Define 2–4 binary criteria that would let you check if the failure occurred.
+- [ ] For each criterion, write explicit pass and fail conditions.
+- [ ] Verify: could you hand these criteria to someone unfamiliar with the skill and they could score a transcript?
+
+**3. Identify the ambiguous phrase**
+
+- [ ] Read the skill file and locate the phrase most likely to permit the failure.
+- [ ] Is it a gate condition? A criterion description? An exit condition?
+- [ ] Make sure it is one phrase, not a paragraph — you are editing a pinpoint, not a rewrite.
+
+**4. Rewrite for observability**
+
+- [ ] Replace adjectives with evidence requirements (e.g., "thorough exploration" -> "5+ concrete facts with file paths").
+- [ ] Add explicit gating language if this is a gate ("before X is done, never do Y").
+- [ ] Add explicit artifact requirements if this controls evidence ("produce a runnable test" not "understand the problem").
+
+**5. A/B test on real work**
+
+- [ ] Use old wording for sessions A1, A2, A3 (or as many as you have this week).
+- [ ] Use new wording for sessions B1, B2, B3 (next few sessions).
+- [ ] Score all sessions against the anchors from step 2.
+- [ ] Record pass rate for each anchor under A and B.
+
+**6. Decide: keep, revert, or iterate**
+
+- [ ] Check: does the new wording improve at least two anchors?
+- [ ] Check: does it regress any anchor by more than 1–2 sessions (noise tolerance)?
+- [ ] If yes to both checks, keep the new wording.
+- [ ] If no, revert and try a different phrase, or run more sessions if you have fewer than three per condition.
+
+**7. Log the result**
+
+Copy and paste this line into a skill-changelog file (e.g., `.scratch/skill_wording_log.md`):
+
+```text
+skill=SKILLNAME | date=YYYY-MM-DD | change="DESCRIBE THE REWRITE" | 
+sample=N sessions | anchor1_delta=±Npp | anchor2_delta=±Npp | 
+anchor3_delta=±Npp | decision=KEEP/REVERT | notes="ANYTHING INTERESTING"
+```
+
+Example:
+
+```text
+skill=diagnose | date=2026-06-18 | change="add repro hard gate: 'before any hypothesis, execute repro twice with matching failure'" |
+sample=6 sessions | repro_gate=+50pp | loop_quality=+17pp | transition_discipline=+33pp | decision=KEEP | notes="transitions still delayed on one complex session, not regression, will monitor"
+```
+
+**8. Move to the next skill or repeat**
+
+- [ ] If you logged a KEEP, let it run for another 5–10 sessions to check for side effects.
+- [ ] If you logged a REVERT, file a note of what didn't work so you don't try the same edit again.
+- [ ] Pick the next skill with the clearest failure pattern and repeat from step 1.
+
+### Prompt Template: Copy and Paste to Evaluate a Skill
+
+If you want to run a skill-wording evaluation loop with agent assistance, copy the template below into a Claude Code session (or similar) and fill in the bracketed sections. This prompt will guide a subagent through the measurement and revision steps.
+
+```text
+I want to improve the wording of a Claude Code skill to reduce execution failures.
+
+## Skill to Evaluate
+
+Skill name: [SKILLNAME]
+Skill file path: [PATH/TO/SKILL.md]
+
+## Known Failure Pattern
+
+The skill is not being followed correctly in one specific way:
+[DESCRIBE THE FAILURE: e.g., "The agent writes a hypothesis before building a runnable failing test"]
+
+Observed frequency: [1-2 sessions / 3-5 sessions / most sessions]
+
+## Recent Session Transcripts
+
+[PASTE 3-5 RECENT SESSION TRANSCRIPTS WHERE THIS FAILURE APPEARED]
+
+## Your Task
+
+1. Review the transcripts and confirm the failure pattern.
+2. Write 2-4 behavioural anchors (binary pass/fail criteria) that would detect this failure.
+   For each anchor, state explicit pass and fail conditions.
+3. Read the skill file and identify the narrowest phrase most likely to permit this failure.
+   (It should be one sentence or clause, not a paragraph.)
+4. Rewrite that phrase to make pass/fail observable in the transcript.
+   Use explicit evidence requirements, not adjectives or vibes.
+5. Suggest a small A/B test plan: how many sessions, which wording for which sessions.
+6. After the A/B test, I will score the sessions against your anchors.
+   You will then recommend keep or revert based on the delta.
+
+Please start with step 1: review the transcripts and confirm the failure pattern.
+```
+
+Fill in the bracketed fields and paste into your session. The agent will walk you through a complete evaluation cycle.
+
+### What You Can and Cannot Measure
+
+Three questions arise every time someone tries to evaluate instruction quality, and they have different answers.
+
+**Can you tell whether the instructions were followed?** Yes. Read the transcript against the rubric. This is inspection, and it works at any volume. It requires only that you have written observable criteria beforehand — vague anchors produce vague answers.
+
+**Can you tell whether one version of the instructions produced better outputs than another?** For skills that generate text outputs — a plan, a code review, a specification — yes, with pairwise comparison. Run the same scenario under both versions, present the two outputs to a judge (human or LLM), and apply the Compare and Aggregate steps from §3 to a small, controlled experiment. This is exactly the four-move apparatus applied at low data volume: the statistical power is weak, but a consistent directional signal across ten to twenty sessions is meaningful evidence.
+
+**Can you tell whether following the instructions produces better outcomes than not following them at all?** This is the counterfactual, and it is the hardest question. You almost never have the "no instruction" world to compare against, and the few times you approximate it — running a session without the skill and comparing results — the confounds are severe: different task, different context, different day. For most instruction sets, this question must be treated as a design bet rather than an empirical question. You encode a belief that disciplined diagnosis finds bugs faster than ad hoc investigation; you build the instruction to express that belief; you watch for disconfirming evidence over time. This is not a failure of the loop — it is the honest boundary of what low-volume behavioural evaluation can settle.
+
+### Where the Primer's Machinery Switches Back On
+
+Volume and output type are the two thresholds at which the full four-move apparatus becomes the right tool.
+
+If the instruction you are iterating produces **text outputs** — documents, reports, structured artefacts — and you can accumulate enough sessions to collect comparable outputs, the Compare step is the natural entry point. Set up a controlled experiment: old instruction, ten sessions; new instruction, ten sessions; pairwise comparison of the outputs. Aggregate with Elo or Bradley-Terry. Automate with an LLM judge once the rubric is stable. The infrastructure from §§3–4 was built for exactly this shape of problem, and it applies here without modification.
+
+If the instruction prescribes a **workflow process** rather than generating a document, or if the invocation volume is simply too low for statistical aggregation to be meaningful, the lightweight loop above is the right tool. The transition between the two is not a precise boundary — it is a question of whether your data volume is sufficient to trust a statistical estimate, and whether your output type admits of comparison at all. When in doubt, start with the rubric and inspection; add scoring infrastructure when you have enough data to make calibration worthwhile.
+
+The underlying principle is the one this primer has been building since §1: a control loop is only as good as its sensor. For instruction editing at low volume, the sensor is a human reading a transcript against a rubric. For high-volume text output, the sensor is an LLM judge reading pairwise comparisons. The evaluate step is load-bearing in both cases; only its implementation changes with the scale.
 
 ## Escaping Subjectivity: Verifiable Rewards
 
