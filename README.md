@@ -19,6 +19,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [Claude Code Alternatives](claude_code_alternative/claude-code-alternatives.html) | Survey of AI coding agents as of 2026 |
 | [The Evaluation Loop](evaluation_loop_primer/evaluation_loop_primer.html) | Turning subjective AI task quality into numeric evals: the four moves, verifiable rewards, RLHF/DSPy, Goodhart failure modes, agent evaluation |
 | [Military Organisation, Ranks, and Doctrine](military_structure_primer/military_structure_primer.html) | How armies are structured from fire team to army group, how ranks map to command levels, the Napoleonic inheritance, 20th-century adaptations, and naval/air force equivalents |
+| [Oh My Zsh: A Practical Guide](ohmyzsh_primer/ohmyzsh_primer.html) | ZSH fundamentals, Oh My Zsh architecture, deep plugin coverage, themes, advanced features, and a personalised setup audit |
 
 ## Articles
 
