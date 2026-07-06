@@ -202,10 +202,10 @@ The basic numbers:
 
 | Type | Bits | Exponent bits | Mantissa bits | Approx. range | Machine epsilon | Throughput note |
 |---|---|---|---|---|---|---|
-| float32 | 32 | 8 | 23 | $\pm 3.4 \times 10^{38}$ | ${\sim}1.2 \times 10^{-7}$ | 2–4× faster on GPUs; half memory |
+| float32 | 32 | 8 | 23 | $\pm 3.4 \times 10^{38}$ | ${\sim}1.2 \times 10^{-7}$ | 2–4× faster on data-centre GPUs (consumer GPUs: much larger); half memory |
 | float64 | 64 | 11 | 52 | $\pm 1.8 \times 10^{308}$ | ${\sim}2.2 \times 10^{-16}$ | Standard for most scientific work |
 
-Float32 is acceptable when throughput or memory is the binding constraint and you are not accumulating errors over many operations. Machine-learning inference is the clearest case: modern GPUs execute float32 at two to four times the throughput of float64, and cutting precision in half also halves memory bandwidth. For neural-network inference, where you are doing one forward pass on fixed weights, the rounding errors rarely matter. The same logic applies to iterative refinement workflows, where you can run the inner iterations cheaply in float32 and apply a correction pass in float64 — you get most of the speed gain without surrendering final accuracy. Graphics pipelines have used float32 by default for decades for the same reason.
+Float32 is acceptable when throughput or memory is the binding constraint and you are not accumulating errors over many operations. Machine-learning inference is the clearest case: data-centre GPUs (A100/H100-class) execute float32 at two to four times the throughput of float64, and cutting precision in half also halves memory bandwidth. Consumer GPUs are far more lopsided — float64 throughput there is often 1/32 to 1/64 of float32, so the incentive to drop to float32 is even stronger on that hardware. For neural-network inference, where you are doing one forward pass on fixed weights, the rounding errors rarely matter. The same logic applies to iterative refinement workflows, where you can run the inner iterations cheaply in float32 and apply a correction pass in float64 — you get most of the speed gain without surrendering final accuracy. Graphics pipelines have used float32 by default for decades for the same reason.
 
 Float64 is non-negotiable in several categories. Any computation where errors accumulate over thousands of steps — ODE integration with tight tolerances, eigenvalue solvers on ill-conditioned matrices, long Markov-chain simulations — benefits from the extra fifteen digits of relative precision. Any problem whose condition number approaches $10^7$ or above is spending float32's entire precision budget just on conditioning, leaving nothing for the computation itself. And whenever you are comparing against published numerical benchmarks, you should match their precision to avoid false discrepancies.
 
@@ -491,7 +491,7 @@ end
 
 result = nlsolve(F!, [1.0, 1.5])
 println("solution: ", result.zero)
-println("residual norm: ", norm(result.residual_norm))
+println("residual norm: ", result.residual_norm)
 ```
 
 All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a hybridised MINPACK routine (essentially Newton with step controls), `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
@@ -693,7 +693,7 @@ Understanding this layering changes how you write numerical code:
 
 
 1. **Use library calls, not loops.** A call to `np.linalg.solve(A, b)` hits LAPACK which uses BLAS Level 3 operations. A Python loop over rows of the matrix hits nothing but Python's interpreter. The library call is not just faster; it can be 50–100x faster. This is not premature optimization; it is basic engineering.
-2. **Dense matrix operations are highly tuned.** Once your matrix is in the BLAS/LAPACK ecosystem, you can expect performance close to the machine's peak throughput. Modern CPUs can approach 50–100 GFLOP/s (billions of floating-point operations per second) on matrix multiplication, and a good BLAS will hit a significant fraction of that. Hand-written code rarely does.
+2. **Dense matrix operations are highly tuned.** Once your matrix is in the BLAS/LAPACK ecosystem, you can expect performance close to the machine's peak throughput. Modern multi-core CPUs with AVX-512 can sustain hundreds of GFLOP/s (billions of floating-point operations per second) up to beyond a TFLOP/s on matrix multiplication, and a good BLAS will hit a significant fraction of that. Hand-written code rarely does.
 3. **Different BLAS implementations can have large performance differences.** NumPy compiled against OpenBLAS might be 2–3x faster or slower on a particular operation compared to the same NumPy compiled against MKL, depending on the operation and the CPU. This is usually not something you need to tune, but it is worth knowing when comparing benchmarks across machines or environments.
 4. **BLAS Level 1 and 2 operations are memory-bound.** They do not vectorize as efficiently as Level 3. When possible, rephrase a problem to use Level 3 operations (e.g., batch solves instead of many single solves; matrix products instead of sequences of matrix-vector products).
 
@@ -709,7 +709,7 @@ The sparsity of a matrix before factorisation is not the same as the sparsity of
 
 A concrete illustration: a tridiagonal $n \times n$ matrix has $3n - 2$ nonzeros, and its LU factorisation is also tridiagonal with $O(n)$ nonzeros. This is the best case — structure is preserved. An arrow matrix (dense first row and column, diagonal elsewhere) can fill completely during naive Gaussian elimination, producing $O(n^2)$ nonzeros from $O(n)$ originals. The fill-in pattern depends on the order in which variables are eliminated, and reordering the unknowns before factorisation is one of the highest-leverage steps in sparse solver engineering.
 
-Two reordering strategies dominate in practice. **Minimum-degree reordering** eliminates the variable connected to the fewest other variables first, deferring dense regions until last, where they can be handled more compactly. It is cheap to compute and effective on many unstructured problems. **Nested dissection** recursively partitions the sparsity graph into subsets separated by small separators, exploiting the fact that eliminating separator variables last limits communication between subproblems. For 2D grid problems, nested dissection gives $O(n^{3/2})$ fill-in and $O(n^{3/2})$ operation count compared to $O(n^2)$ for natural row ordering — a decisive win on large grids.
+Two reordering strategies dominate in practice. **Minimum-degree reordering** eliminates the variable connected to the fewest other variables first, deferring dense regions until last, where they can be handled more compactly. It is cheap to compute and effective on many unstructured problems. **Nested dissection** recursively partitions the sparsity graph into subsets separated by small separators, exploiting the fact that eliminating separator variables last limits communication between subproblems. For 2D grid problems, nested dissection gives $O(n \log n)$ fill-in and $O(n^{3/2})$ operations, compared to $O(n^{3/2})$ fill-in and $O(n^2)$ operations for the natural banded ordering — a decisive win on large grids.
 
 #### Sparse Cholesky vs sparse LU
 
@@ -748,7 +748,7 @@ plt.title("Tridiagonal sparsity pattern")
 plt.savefig("figures/tridiagonal_spy.png", dpi=120, bbox_inches="tight")
 ```
 
-`spla.spsolve` picks Cholesky if the matrix is SPD and LU otherwise. `spla.splu` exposes the factors directly so you can solve multiple right-hand sides cheaply — factorisation is the expensive step; each additional solve costs only $O(\text{nnz})$ once the factors exist.
+`spla.spsolve` always uses SuperLU (sparse LU) — it does not detect SPD structure or fall back to Cholesky, and SciPy has no built-in sparse Cholesky at all. If your matrix is SPD and you want to exploit that, use `scikit-sparse`'s CHOLMOD binding, or solve iteratively with CG. `spla.splu` exposes the factors directly so you can solve multiple right-hand sides cheaply — factorisation is the expensive step; each additional solve costs only $O(\text{nnz})$ once the factors exist.
 
 In Julia, the `\` operator dispatches automatically:
 
@@ -769,7 +769,7 @@ u2 = F \ rhs
 u3 = F \ (2 * rhs)
 ```
 
-For symmetric positive definite sparse matrices Julia's `cholesky` calls CHOLMOD, which includes reordering (nested dissection by default) and delivers competitive fill-in on 2D and 3D grid problems without any explicit reordering call from your code.
+For symmetric positive definite sparse matrices Julia's `cholesky` calls CHOLMOD, which includes reordering (AMD by default, with nested dissection via METIS available when enabled) and delivers competitive fill-in on 2D and 3D grid problems without any explicit reordering call from your code.
 
 ### Factorization Choices
 
@@ -1012,7 +1012,7 @@ This ratio is the key number to think about when power iteration is struggling. 
 
 ![Power iteration convergence: residual versus iteration count](figures/eigenvalue_convergence.png)
 
-**Deflation.** Power iteration only gives you the dominant eigenvalue. To find the next one, you deflate: once $\lambda_1$ and $\mathbf{q}_1$ are known, subtract out their contribution from **A** to get a deflated matrix $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T$. Power iteration on $\mathbf{A}'$ converges to $\lambda_2$. You can repeat this to peel off further eigenvalues one by one. In practice, deflation accumulates rounding errors, so it is mostly useful conceptually or for finding a small number of extreme eigenvalues. For finding many eigenvalues the QR algorithm or Krylov methods are more robust.
+**Deflation.** Power iteration only gives you the dominant eigenvalue. To find the next one, you deflate: once $\lambda_1$ and $\mathbf{q}_1$ are known, subtract out their contribution from **A** to get a deflated matrix $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T$ — this formula relies on $\mathbf{q}_1$ being orthonormal, which holds for symmetric/normal **A**; for general matrices you need the left eigenvector instead, $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{w}_1^T / (\mathbf{w}_1^T\mathbf{q}_1)$. Power iteration on $\mathbf{A}'$ converges to $\lambda_2$. You can repeat this to peel off further eigenvalues one by one. In practice, deflation accumulates rounding errors, so it is mostly useful conceptually or for finding a small number of extreme eigenvalues. For finding many eigenvalues the QR algorithm or Krylov methods are more robust.
 
 **Inverse iteration and shift-and-invert.** Power iteration converges to the largest-magnitude eigenvalue. What if you want the smallest, or one near a specific value $\sigma$? Replace **A** with $(\mathbf{A} - \sigma \mathbf{I})^{-1}$. The eigenvalues of this shifted-inverted matrix are $1/(\lambda_i - \sigma)$, so the eigenvalue of **A** nearest $\sigma$ becomes the dominant eigenvalue of the transformed problem. Power iteration on $(\mathbf{A} - \sigma \mathbf{I})^{-1}$ — meaning: solve a linear system $(\mathbf{A} - \sigma \mathbf{I})\mathbf{w} = \mathbf{v}$ at each step instead of multiplying — then converges to the eigenpair nearest $\sigma$. This is inverse iteration. The convergence rate becomes $|\lambda_{\text{near}} - \sigma| / |\lambda_{\text{next}} - \sigma|$, which can be extraordinary when $\sigma$ is close to a target eigenvalue. A single shift close to the target often gives convergence in fewer than ten steps.
 
@@ -1028,7 +1028,7 @@ This is an orthogonal similarity transformation: $\mathbf{A}_{k+1} = \mathbf{Q}_
 
 **Why it works at all** is non-obvious. Heuristically, each QR step is doing something like a step of power iteration on each column simultaneously, using orthogonality to keep the directions from collapsing. The formal explanation requires more machinery, but the practical point is: it converges, it is stable, and Schur form is a numerically clean representation of eigenstructure.
 
-**Shift acceleration.** Without shifts, convergence is controlled by eigenvalue ratios in the same way as power iteration — potentially slow. The standard fix is Wilkinson shifts: at each step, shift by an estimate of the smallest eigenvalue (computed from the bottom $2 \times 2$ corner of the current matrix), run one QR step, then unshift. This drives the subdiagonal entries toward zero much faster and usually gives cubic convergence near the end of the process. In practice, the shifted QR algorithm finishes in $O(n)$ iterations on most matrices, so the total cost is dominated by the QR factorisations: $O(n^3)$ overall.
+**Shift acceleration.** Without shifts, convergence is controlled by eigenvalue ratios in the same way as power iteration — potentially slow. The standard fix is Wilkinson shifts: at each step, shift by the eigenvalue of the trailing $2 \times 2$ block (the bottom-right corner of the current matrix) that is closest to the bottom-right diagonal entry — this targets the eigenvalue currently being deflated, not the smallest eigenvalue of the matrix overall — run one QR step, then unshift. This drives the subdiagonal entries toward zero much faster and usually gives cubic convergence near the end of the process for the symmetric tridiagonal case (general matrices see quadratic convergence with shifted QR). In practice, the shifted QR algorithm finishes in $O(n)$ iterations on most matrices, so the total cost is dominated by the QR factorisations: $O(n^3)$ overall.
 
 **Symmetric vs general.** When **A** is symmetric, the Schur form is diagonal with real eigenvalues — a full eigendecomposition. The standard path is to first reduce **A** to symmetric tridiagonal form (Householder reflections, $O(n^3)$ but with a small constant), then run QR on the tridiagonal, which is much cheaper at $O(n^2)$ per iteration. The LAPACK routine is `dsyev` (or `dsyevd` for the divide-and-conquer variant, which is often faster). When **A** is general (non-symmetric), eigenvalues may be complex, and the Schur form is quasi-upper-triangular with $1 \times 1$ and $2 \times 2$ diagonal blocks. The LAPACK routine is `dgeev`. All three language libraries call these routines through their standard eigenvalue functions — you do not need to invoke LAPACK directly, but knowing the symmetric path exists means you should always tell the solver when your matrix is symmetric, because it is faster and gives guaranteed real eigenvalues.
 
@@ -1197,8 +1197,6 @@ Using `Symmetric(A)` in Julia is the equivalent of `symmetric=TRUE` in R or `eig
 
 ---
 
----
-
 ## Interpolation and Approximation
 
 Interpolation asks for a function that matches known data points exactly.
@@ -1206,7 +1204,7 @@ Approximation allows mismatch and optimizes some criterion.
 
 ### Polynomial Interpolation and Runge's Phenomenon
 
-The natural first instinct is to use a single polynomial of degree $n-1$ through $n$ data points. By Lagrange's theorem, such a polynomial always exists and is unique. So far so good.
+The natural first instinct is to use a single polynomial of degree $n-1$ through $n$ data points. The interpolating polynomial exists and is unique (Lagrange interpolation). So far so good.
 
 The problem is that high-degree polynomials on uniform grids can oscillate wildly, particularly near the boundaries of the interval. The canonical example is interpolating $f(x) = 1/(1+25x^2)$ on equally spaced nodes on $[-1,1]$: as you increase the number of nodes, the polynomial fit at the endpoints gets dramatically worse rather than better. This is Runge's phenomenon.
 
@@ -1363,7 +1361,7 @@ $$
 This allows a larger optimal $h$ (around $\epsilon_{mach}^{1/3} \approx 10^{-5}$ for double precision) and is generally preferred for smooth functions. When derivative accuracy is critical, automatic differentiation — which computes exact derivatives of the code rather than approximating them — is often a better choice than any finite difference scheme.
 
 
-The optimal step size for central differences is not arbitrary. Truncation error from the Taylor expansion scales as $O(h^2)$. Cancellation error arises because computing $f(x+h) - f(x-h)$ in floating-point loses roughly $h/\varepsilon_\text{mach}$ digits to catastrophic cancellation, giving a cancellation error of $O(\varepsilon_\text{mach}/h)$. The total error is minimised when $h^2 \approx \varepsilon_\text{mach}/h$, giving optimal $h \approx \varepsilon_\text{mach}^{1/3} \approx 6 \times 10^{-6}$ for double precision. You cannot make $h$ arbitrarily small — doing so makes cancellation dominate and the error actually grows. This is exactly why automatic differentiation (covered later) is preferable: it achieves machine-precision derivatives with no step-size tuning whatsoever.
+The optimal step size for central differences is not arbitrary. Truncation error from the Taylor expansion scales as $O(h^2)$. Cancellation error arises because $f(x+h)$ and $f(x-h)$ agree in their leading $\sim|\log_{10} h|$ digits, so the subtraction loses that many digits to catastrophic cancellation, leaving an absolute error of roughly $\varepsilon_\text{mach}|f(x)|$ in the numerator — which, after dividing by $2h$, gives a cancellation error of $O(\varepsilon_\text{mach}/h)$ in the derivative estimate. The total error is minimised when $h^2 \approx \varepsilon_\text{mach}/h$, giving optimal $h \approx \varepsilon_\text{mach}^{1/3} \approx 6 \times 10^{-6}$ for double precision. You cannot make $h$ arbitrarily small — doing so makes cancellation dominate and the error actually grows. This is exactly why automatic differentiation (covered later) is preferable: it achieves machine-precision derivatives with no step-size tuning whatsoever.
 
 ![Step size vs error for central differences: truncation vs cancellation error](figures/finite_diff_stepsize.png)
 
@@ -1663,7 +1661,7 @@ cat(sprintf("numDeriv result : %.15f\n", fd_deriv))
 cat(sprintf("Absolute error  : %.3e\n", abs(fd_deriv - true_deriv)))
 ```
 
-Typical output shows error around $10^{-8}$ — consistent with the $O(\sqrt{\epsilon_\text{mach}})$ floor from the cancellation-vs-truncation tradeoff described earlier. For a single smooth scalar function this is often tolerable. For a gradient of a loss over thousands of parameters, accumulated finite-difference errors become a real problem, and the $n$ function evaluations per gradient become expensive. This is the concrete cost of not having AD: you pay in both accuracy and computation.
+`numDeriv::grad`'s default method is Richardson extrapolation rather than a plain central difference, so typical output shows error around $10^{-10}$ to $10^{-12}$ on smooth functions like this one — much tighter than the $O(\sqrt{\epsilon_\text{mach}})$ floor you'd get from a single central difference. For a single smooth scalar function this is often tolerable. For a gradient of a loss over thousands of parameters, accumulated finite-difference errors become a real problem, and the $n$ function evaluations per gradient become expensive. This is the concrete cost of not having AD: you pay in both accuracy and computation.
 
 ---
 
@@ -2026,8 +2024,9 @@ rhs <- function(t, y, parms) {
   list(-2 * y)
 }
 
-times <- c(0, 1)
-out <- ode(y = c(y = 1), times = times, func = rhs, parms = NULL, method = "rk4")
+times <- seq(0, 1, by = 0.1)
+out <- ode(y = c(y = 1), times = times, func = rhs, parms = NULL,
+           method = "lsoda", rtol = 1e-8, atol = 1e-10)
 print(out)
 ```
 
@@ -2079,7 +2078,7 @@ $$
 
 where $\rho_k = 1/(\mathbf{y}_k^T \mathbf{s}_k)$. Each iteration adds two rank-1 outer products to the previous approximation — hence "rank-2 update." This structure guarantees the approximation stays symmetric and, under the Wolfe conditions on line search, stays positive definite. That last property matters: it means the search direction $-\mathbf{H}_k^{-1} \nabla f(\mathbf{x}_k)$ always points downhill.
 
-Why BFGS converges fast: as the iterates approach the solution, the accumulated curvature information makes the approximation increasingly accurate, and the algorithm transitions from linear to *superlinear* convergence — each step roughly squares the error. You get much of Newton's speed without ever touching second derivatives.
+Why BFGS converges fast: as the iterates approach the solution, the accumulated curvature information makes the approximation increasingly accurate, and the algorithm transitions from linear to *superlinear* convergence — the error ratio between successive steps tends to zero, faster than any fixed linear rate, though not the full error-squaring of Newton. You get much of Newton's speed without ever touching second derivatives.
 
 The catch is memory. Storing $\mathbf{H}_k^{-1}$ for a problem with $n$ variables requires $O(n^2)$ space. For problems in the thousands of variables this is fine. For problems in the millions — which is routine in machine learning and PDE-constrained optimization — it is not.
 
@@ -2196,7 +2195,7 @@ where $B$ is a randomly sampled batch. This estimate is unbiased — its expecta
 
 That noise turns out to have a useful side effect. Because the gradient estimate is random, the iterates do not converge to a fixed point but wander around the neighbourhood of a minimum. This wandering can help escape shallow local minima and saddle points that would trap a deterministic method. There is a growing body of evidence that noisy gradients act as implicit regularisation for overparameterised models, nudging the solution toward flatter minima that generalise better.
 
-**Convergence with noisy gradients.** The fundamental difference from deterministic gradient descent is that convergence guarantees now hold in expectation, not deterministically. For a convex objective with a fixed learning rate $\eta$, SGD (stochastic gradient descent with batch size 1) converges to a neighbourhood of the minimum — not the minimum itself. The radius of that neighbourhood is proportional to $\eta$. To achieve exact convergence you need a decreasing learning rate schedule, $\eta_k \to 0$, but then the convergence rate slows down compared to what a fixed rate would give in the early iterations. The headline comparison: SGD with a fixed rate converges at $O(1/k)$ for convex problems; deterministic gradient descent converges linearly, $O(\rho^k)$ for $\rho < 1$. The gap is the cost of stochastic noise, and closing it is the subject of the variance reduction methods in the next subsection.
+**Convergence with noisy gradients.** The fundamental difference from deterministic gradient descent is that convergence guarantees now hold in expectation, not deterministically. For a convex objective with a fixed learning rate $\eta$, SGD (stochastic gradient descent with batch size 1) converges to a neighbourhood of the minimum — not the minimum itself. The radius of that neighbourhood is proportional to $\eta$. To achieve exact convergence you need a decreasing learning rate schedule, $\eta_k \to 0$, but then the convergence rate slows down compared to what a fixed rate would give in the early iterations. The headline comparison: SGD with a decaying learning rate schedule converges at $O(1/k)$ for strongly convex problems (and $O(1/\sqrt{k})$ for merely convex ones); deterministic gradient descent converges linearly, $O(\rho^k)$ for $\rho < 1$, on strongly convex smooth objectives. The gap is the cost of stochastic noise, and closing it is the subject of the variance reduction methods in the next subsection.
 
 **Learning rate is the key parameter.** Set it too large and the iterates diverge or oscillate. Set it too small and progress is painfully slow. In practice you tune it by watching the loss curve: a learning rate that is too large produces spiky, increasing loss; one that is too small produces a curve that barely moves. Common schedules include step decay (halve the rate every fixed number of epochs), exponential decay, and cosine annealing, which cycles the rate smoothly from a maximum down to near zero and optionally restarts. Adaptive methods like Adam, RMSProp, and AdaGrad adjust the effective learning rate per parameter using accumulated gradient statistics — these are covered in depth in the deep learning primer and are not repeated here.
 
@@ -2221,14 +2220,16 @@ using Flux
 
 opt = Descent(0.01)   # plain SGD; Flux.Momentum, Flux.Adam also available
 
-Flux.train!(loss, params(model), data_loader, opt)
+Flux.train!(loss, model, data_loader, opt)  # Flux >= 0.13; explicit-params style
 ```
+
+Older code (pre-0.13 Flux) used the implicit-params form `Flux.train!(loss, params(model), data_loader, opt)`, which is now removed.
 
 For scientific objectives without an automatic differentiation framework available, use `minimize` with `method='L-BFGS-B'` and a numerical Jacobian, or add noise explicitly to the objective to simulate stochastic behaviour.
 
 ### Variance Reduction
 
-The gap between SGD and full gradient descent is not just a theoretical curiosity. For convex problems, full gradient descent converges *linearly* — each step reduces the error by a constant factor, so you need $O(\log(1/\varepsilon))$ iterations to reach precision $\varepsilon$. SGD with a fixed learning rate converges at $O(1/k)$, which is sublinear — you need $O(1/\varepsilon)$ iterations for the same precision. That is an enormous practical difference when $\varepsilon$ is small. Variance reduction methods close this gap by reducing the gradient noise without paying the full cost of an exact gradient.
+The gap between SGD and full gradient descent is not just a theoretical curiosity. For strongly convex problems, full gradient descent converges *linearly* — each step reduces the error by a constant factor, so you need $O(\log(1/\varepsilon))$ iterations to reach precision $\varepsilon$. SGD with a decaying learning rate converges at $O(1/k)$, which is sublinear — you need $O(1/\varepsilon)$ iterations for the same precision. That is an enormous practical difference when $\varepsilon$ is small. Variance reduction methods close this gap by reducing the gradient noise without paying the full cost of an exact gradient.
 
 **SVRG (Stochastic Variance Reduced Gradient).** The key observation is that the noise in an SGD step comes from the difference between the full gradient and the single-sample estimate. SVRG makes this explicit. At the start of each outer epoch, compute and store a full gradient checkpoint $\tilde{\nabla} f(\tilde{\mathbf{x}})$ at the current iterate $\tilde{\mathbf{x}}$. Then each inner stochastic step uses the corrected estimate
 
@@ -2238,7 +2239,7 @@ $$
 
 The correction term subtracts the same sample's contribution at the checkpoint and adds back the full gradient at the checkpoint. When $\mathbf{x}_k$ is close to $\tilde{\mathbf{x}}$, the two single-sample terms nearly cancel and the estimate is dominated by the full gradient $\tilde{\nabla} f(\tilde{\mathbf{x}})$ — which is accurate. As the iterates move further from the checkpoint, the variance grows, which is why you periodically refresh the checkpoint. The result is that for strongly convex objectives SVRG restores linear convergence, the same rate as full gradient descent, while paying only one full gradient pass per epoch rather than one per step.
 
-**SAG (Stochastic Average Gradient).** SAG takes a different approach: maintain a table of the most recent gradient evaluated for each data point $i$. Each step picks a random index $i$, computes a fresh gradient for that index, updates the table, and takes a step using the average of all stored gradients. Because the average is smooth and updates incrementally, the variance of the step direction decreases over time. SAG converges at $O(1/k)$ for strongly convex objectives, with a constant significantly better than plain SGD — and the constant improves as the algorithm accumulates more accurate per-example gradient estimates.
+**SAG (Stochastic Average Gradient).** SAG takes a different approach: maintain a table of the most recent gradient evaluated for each data point $i$. Each step picks a random index $i$, computes a fresh gradient for that index, updates the table, and takes a step using the average of all stored gradients. Because the average is smooth and updates incrementally, the variance of the step direction decreases over time. SAG converges linearly for strongly convex objectives (and at $O(1/k)$ for merely convex ones), with a constant significantly better than plain SGD — and the constant improves as the algorithm accumulates more accurate per-example gradient estimates.
 
 The cost is memory: storing one gradient per data point requires $O(n \cdot d)$ memory, where $d$ is the number of parameters. For large $n$ and small $d$ this is entirely feasible. For neural networks where $d$ is in the millions this is typically not.
 
@@ -2682,6 +2683,7 @@ cat(sprintf("Richardson error:         %.3e\n", abs(T_rich - true_val)))
 
 ```julia
 using QuadGK
+using Printf
 
 function trapezoid(f, a, b, n)
     h = (b - a) / n
