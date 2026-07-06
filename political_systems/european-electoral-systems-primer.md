@@ -162,7 +162,7 @@ Round 1:
 | Hard Right | 29% |
 | Other | 16% |
 
-Nobody wins outright, so the top two or three relevant contenders move forward, depending on the election type. Then the losing camps may negotiate, withdraw, or ask their supporters to consolidate around one side.
+Nobody wins outright, so the top two or three relevant contenders move forward, depending on the election type. In legislative races, whether the third candidate here (Center, at 24%) actually qualifies for round two depends on turnout, since the threshold is measured against registered voters rather than votes cast, not against the other candidates' totals. Then the losing camps may negotiate, withdraw, or ask their supporters to consolidate around one side.
 
 That is why French elections can get very political between rounds: the system creates a bargaining window, not just a counting process.
 
@@ -210,7 +210,7 @@ Toy example:
 | B | 30% | 30 |
 | C | 30% | 30 |
 
-Now imagine Party A wins 45 local districts while Party B wins 10 and Party C wins 5. Under older versions of the system, the parliament would grow to accommodate the overhang. Under the newer German rules, the seat total is capped and some constituency winners from the overrepresented party may not be seated.
+In a 100-seat chamber, now imagine Party A wins 45 local districts while Party B wins 10 and Party C wins 5. Under older versions of the system, the parliament would grow to accommodate the overhang. Under the newer German rules, the seat total is capped and some constituency winners from the overrepresented party may not be seated.
 
 Still, the logic is consistent: Germany wants the final parliament to match the party vote as closely as possible without completely abandoning local districts.
 
@@ -255,7 +255,7 @@ The whole country is effectively one constituency for the House of Representativ
 
 That means very small parties can get in, and political fragmentation is normal. Coalitions are not an accident in the Netherlands. They are the basic operating system.
 
-One useful detail is that voters are not completely locked out of candidate choice. It is an open-list system, so a popular candidate can climb the list if they get enough preference votes. The party still controls the overall list structure, but voters have more say than in a closed-list system like Spain.
+One useful detail is that voters are not completely locked out of candidate choice. It is a semi-open, or flexible-list, system: a candidate needs preference votes exceeding roughly a quarter of the electoral quota to jump the list order, and in practice list order still decides the vast majority of seats. The party still controls the overall list structure, but voters have more say than in a closed-list system like Spain.
 
 Toy example:
 
@@ -335,7 +335,7 @@ These are compact, high-level snapshots from recent election cycles. They are in
 
 ### United Kingdom
 
-In the 2024 general election, Labour converted a vote share in the mid-30s into a very large Commons majority. Under FPTP, constituency efficiency mattered more than proportional vote-seat matching. Governing consequence: high legislative capacity early in the term, despite a sizable national vote-seat gap.
+In the 2024 general election, Labour converted a vote share in the low-to-mid 30s (33.7 percent) into a very large Commons majority. Under FPTP, constituency efficiency mattered more than proportional vote-seat matching. Governing consequence: high legislative capacity early in the term, despite a sizable national vote-seat gap.
 
 ### France
 
@@ -343,11 +343,11 @@ Recent cycles showed the two-round system producing strong strategic behavior be
 
 ### Ireland
 
-Ireland's 2020 election delivered a fragmented Dail where no single party could govern alone. STV translated voter preferences into a broad multiparty chamber with strong local-candidate dynamics. Governing consequence: coalition construction became the core executive task, not a postscript.
+Ireland's November 2024 election again delivered a fragmented Dail: Fianna Fail took 48 seats and Fine Gael 38, but their combined first-preference vote share barely cleared 40 percent (21.9 and 20.8 percent respectively), with Sinn Fein a close third at 39 seats on 19 percent. STV translated that fragmented preference vote into a broad multiparty chamber with strong local-candidate dynamics, and no single party could govern alone. Governing consequence: the same Fianna Fail-Fine Gael arrangement that governed the outgoing Dail reassembled with independents (this time without the Greens), and coalition construction again took nearly two months, with Micheal Martin returning as Taoiseach in January 2025. Coalition construction remains the core executive task under STV, not a postscript.
 
 ### Germany
 
-Germany's 2021 election produced a Bundestag where party-vote proportionality constrained coalition options more than constituency symbolism. The eventual SPD-Greens-FDP coalition reflected programmatic bargaining across three distinct policy profiles. Governing consequence: stable formal majority, but internal negotiation friction on fiscal and energy files.
+Germany's snap election in February 2025, called after the SPD-Greens-FDP "traffic light" coalition collapsed, is the sharper illustration of party-vote proportionality constraining coalition options. The FDP polled 4.3 percent, missed the 5 percent threshold, and lost its seats entirely; the CDU/CSU led on 28.5 percent, with the AfD roughly doubling its 2021 result to take second place at 20.8 percent. None of that mattered for who governed: the seat math forced a CDU/CSU-SPD grand coalition, the only combination with a workable majority in the newly capped 630-seat Bundestag, agreed in April 2025 under Chancellor Friedrich Merz. Governing consequence: party-vote proportionality did its job of matching seats to votes, but it left the two largest mainstream blocs no option except to govern together, with the cap rule itself determining how many of the CDU/CSU's local wins actually converted into seats.
 
 ### Italy
 
@@ -359,7 +359,7 @@ The 2023 election produced no simple winner-takes-government outcome. Closed-lis
 
 ### Netherlands
 
-The 2023 Dutch election again showed national-level PR generating a highly plural parliament, even when one party finishes first. Very low effective barriers to entry preserved broad representation and fragmented bargaining space. Governing consequence: long coalition-formation timelines remained a structural feature, not an anomaly.
+The October 2025 Dutch election, called after the PVV-led coalition collapsed, pushed the fragmentation point further than usual: D66 and the PVV tied for the most seats at 26 each, the first time two parties have tied for first place since 1956. Very low effective barriers to entry preserved broad representation and fragmented bargaining space, and every governing party from the outgoing coalition lost seats, with NSC wiped out entirely. Governing consequence: long coalition-formation timelines remained a structural feature, not an anomaly. Formation talks ran into 2026, and the resulting D66-VVD-CDA minority coalition under Prime Minister Rob Jetten excludes the PVV, which had led the outgoing government, showing how national PR can hand a party the largest vote share without any claim on power.
 
 ### Denmark
 
@@ -379,13 +379,13 @@ The table below is intentionally approximate and decision-oriented. It is design
 
 | Country | Recent cycle | Largest bloc vote share | Largest bloc seat outcome | System translation pattern |
 | --- | --- | ---: | ---: | --- |
-| UK | 2024 | mid-30s | large absolute Commons majority | Strong winner bonus under FPTP |
+| UK | 2024 | low-to-mid 30s | large absolute Commons majority | Strong winner bonus under FPTP |
 | France | 2024 legislative | no bloc majority vote | fragmented Assembly | Two-round filtering with strategic withdrawals |
-| Ireland | 2020 | leading parties in low-mid 20s | no single-party majority | STV spreads representation across multiple parties |
-| Germany | 2021 | largest party in mid-20s | coalition majority required | Party-vote proportionality constrains coalition options |
+| Ireland | 2024 | leading parties in low-mid 20s | no single-party majority | STV spreads representation across multiple parties |
+| Germany | 2025 | largest party high-20s | grand-coalition majority required | Party-vote proportionality plus seat cap constrains coalition options |
 | Italy | 2022 | winning coalition in low-mid 40s combined | solid parliamentary majority | Mixed system rewards pre-election bloc coordination |
 | Spain | 2023 | largest party low-30s | no governing majority alone | Provincial PR plus regional pivots shape investiture math |
-| Netherlands | 2023 | largest party around low-mid 20s | far from majority alone | National PR sustains high fragmentation |
+| Netherlands | 2025 | largest parties tied around high teens | far from majority alone | National PR sustains high fragmentation |
 | Denmark | 2022 | largest party high-20s | coalition arithmetic still required | PR with correction seats moderates distortion |
 | Sweden | 2022 | bloc competition around mid-40s combined | narrow governing arrangement | PR plus bloc discipline determines executive outcome |
 | Romania | 2024 cycle context | largest bloc around low-20s to low-30s range | coalition-dependent majority formation | Closed-list PR with thresholds favors larger organized parties |
@@ -495,13 +495,13 @@ Three knobs matter a lot:
 
 1. District magnitude (how many seats are allocated in each district).
 2. Thresholds (formal legal thresholds and effective thresholds caused by small district size).
-3. Allocation formula (D'Hondt, Sainte-Lague, largest remainder, and so on).
+3. Allocation formula (D'Hondt, Sainte-Laguë, largest remainder, and so on).
 
-### D'Hondt versus Sainte-Lague in one minute
+### D'Hondt versus Sainte-Laguë in one minute
 
 D'Hondt divides party vote totals by 1, 2, 3, ... and assigns seats to the highest quotients. Because the divisor starts at 1 and then increments linearly, larger parties tend to keep appearing near the top.
 
-Sainte-Lague uses odd-number divisors 1, 3, 5, ... which smooths that advantage and is usually friendlier to mid-sized parties.
+Sainte-Laguë uses odd-number divisors 1, 3, 5, ... which smooths that advantage and is usually friendlier to mid-sized parties.
 
 That is why two countries with similar vote shares can still end up with different coalition arithmetic.
 
@@ -516,7 +516,7 @@ That is one reason the Netherlands (national district) feels so different from S
 For STV, the Droop quota is:
 
 $$
-	ext{Quota} = \left\lfloor \frac{V}{S+1} \right\rfloor + 1
+\text{Quota} = \left\lfloor \frac{V}{S+1} \right\rfloor + 1
 $$
 
 where $V$ is valid votes and $S$ is seats.
