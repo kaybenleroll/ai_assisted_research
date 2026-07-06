@@ -6,9 +6,5 @@
 *.fdb_latexmk
 *.fls
 
-# Generated output files
-*.html
-*.pdf
-
 # Build intermediates
 .build/
