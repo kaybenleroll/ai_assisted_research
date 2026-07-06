@@ -656,7 +656,7 @@ you reach for it constantly.</p>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(m</span><span class="dv">-1</span><span class="op">.)</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Only executable files</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(x)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(x.)</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files larger than 1MB</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(L</span>m<span class="dv">+1</span><span class="op">)</span></span>
@@ -690,7 +690,7 @@ additional flags:</p>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into array on /</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">parts</span><span class="op">=</span><span class="va">(${(</span><span class="op">s:</span><span class="st">/</span><span class="op">:</span><span class="va">)path})</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$parts</span><span class="op">[</span><span class="dv">2</span><span class="op">]</span>            <span class="co"># home</span></span></code></pre></div>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$parts</span><span class="op">[</span><span class="dv">1</span><span class="op">]</span>            <span class="co"># home</span></span></code></pre></div>
 <p>The <code>(U)</code>, <code>(L)</code>, <code>(s:delim:)</code> and
 similar parameter flags are ZSH-specific. They’re not a party trick;
 they eliminate a lot of <code>awk</code>/<code>sed</code> one-liners for
@@ -705,11 +705,18 @@ actually matter:</p>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> SHARE_HISTORY     <span class="co"># share history across sessions in real time</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> EXTENDED_HISTORY  <span class="co"># record timestamp with each command</span></span></code></pre></div>
 <p><code>SHARE_HISTORY</code> means that if you have three terminals
-open, history flows between them as you type — you don’t have to close
-and reopen to pick up commands from another session.
+open, history flows between them as each command finishes running — you
+don’t have to close and reopen to pick up commands from another session.
 <code>HIST_IGNORE_SPACE</code> is the one you want for sensitive
 commands: prefix any command with a space and it doesn’t go into
 history.</p>
+<p>Worth knowing before you go copy these into your <code>.zshrc</code>:
+OMZ’s <code>lib/history.zsh</code> already sets
+<code>HIST_IGNORE_SPACE</code>, <code>HIST_IGNORE_DUPS</code>,
+<code>SHARE_HISTORY</code>, and <code>EXTENDED_HISTORY</code>
+unconditionally, regardless of theme or plugins. The block above is
+shown for completeness — to make explicit what OMZ is doing for you —
+not because you need to add it yourself.</p>
 <h3 id="named-directories">Named Directories</h3>
 <p>ZSH lets you name directories and use them like variables in
 paths:</p>
@@ -741,13 +748,18 @@ has a clear layout:</p>
 <p>When your shell starts, OMZ loads <code>oh-my-zsh.sh</code>, which:
 1. Loads everything in <code>lib/</code> (history config, completion
 setup, key bindings, utility functions) 2. Sources each enabled plugin’s
-<code>.plugin.zsh</code> file 3. Loads the theme 4. Sources everything
-in <code>custom/</code> that ends in <code>.zsh</code></p>
+<code>.plugin.zsh</code> file 3. Sources everything in
+<code>custom/</code> that ends in <code>.zsh</code> 4. Loads the
+theme</p>
 <p>The <code>custom/</code> directory is where your personalizations
 live and where they survive OMZ updates. If you write a custom function
 and put it in <code>~/.oh-my-zsh/custom/myconfig.zsh</code>, it gets
 loaded automatically. If you put the same function in a bundled plugin
 file, the next <code>omz update</code> will overwrite it.</p>
+<p>The theme loading last matters in practice: because it runs after
+<code>custom/</code>, a theme can clobber prompt-related settings you
+set in a custom file. If a customization to your prompt doesn’t seem to
+be taking effect, check whether the theme is overwriting it on load.</p>
 <h3 id="the-lib-layer">The <code>lib/</code> Layer</h3>
 <p>Most users never look at <code>lib/</code>, but it does a lot. The
 files there configure:</p>
@@ -806,7 +818,7 @@ call it done. The more interesting ones:</p>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">glog</span>   <span class="co"># git log --oneline --decorate --graph</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Less obvious but very useful</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ex">gupa</span>   <span class="co"># git pull --rebase --autostash</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ex">gpra</span>   <span class="co"># git pull --rebase --autostash</span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="ex">gcf</span>    <span class="co"># git config --list</span></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ex">gclean</span> <span class="co"># git clean -id (interactive clean)</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ex">gwip</span>   <span class="co"># commit a work-in-progress stash</span></span>
@@ -833,7 +845,7 @@ levels deep.</p>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fzf</span> <span class="at">--preview</span> <span class="st">&#39;cat {}&#39;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kill a process by fuzzy-searching running processes</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-9</span> <span class="va">$(</span><span class="fu">ps</span> aux <span class="kw">|</span> <span class="ex">fzf</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span><span class="va">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="va">$(</span><span class="fu">ps</span> aux <span class="kw">|</span> <span class="ex">fzf</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span><span class="va">)</span>   <span class="co"># plain TERM first; add -9 only if it won&#39;t die</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Open a recent git branch</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="va">$(</span><span class="fu">git</span> branch <span class="kw">|</span> <span class="ex">fzf</span><span class="va">)</span></span>
@@ -846,19 +858,34 @@ just provides the shell integration; learning <code>fzf</code>’s flags
 unlocks the full power.</p>
 <h3 id="zsh-autosuggestions">zsh-autosuggestions</h3>
 <p>This plugin shows a greyed-out suggestion as you type, based on your
-history. Press the right arrow key to accept the full suggestion, or
-press <code>End</code> to move to the end of the current word.</p>
+history. The plugin’s model splits into two groups of key bindings:
+widgets that accept the <em>whole</em> suggestion, and widgets that
+accept it one word at a time.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You type:</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># It shows (in grey):</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;fix typo in README&quot;</span>   ← suggestion from history</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Right arrow accepts the whole thing</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+F accepts one character at a time</span></span></code></pre></div>
-<p>The plugin also supports accepting a suggestion word-by-word. By
-default this uses Ctrl+Space but can be rebound:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^ &#39;</span> autosuggest-accept-word</span></code></pre></div>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Right arrow, End, and Ctrl+F all accept the whole suggestion</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+F accepts one word at a time</span></span></code></pre></div>
+<p>By default, right arrow (<code>forward-char</code>), <code>End</code>
+(<code>end-of-line</code>), and Ctrl+F (also bound to
+<code>forward-char</code> in emacs mode) are all in
+<code>ZSH_AUTOSUGGEST_ACCEPT_WIDGETS</code> — that array controls which
+movement widgets, when invoked, accept the entire suggestion rather than
+just moving the cursor. There’s no character-at-a-time acceptance by
+default; anything in that array takes the whole line.</p>
+<p>Word-by-word acceptance is a separate array,
+<code>ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS</code>, and it’s driven by
+<code>forward-word</code> — Alt+F in emacs mode. There’s no default
+Ctrl+Space binding for this.</p>
+<p>If you want a custom key to accept a suggestion (whole or partial),
+you don’t invent a new widget name — you bind an existing movement
+widget and add it to the relevant array. For example, to make Ctrl+Space
+accept one word at a time:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^ &#39;</span> forward-word</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="va">ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS</span><span class="op">+=</span><span class="va">(</span>forward-word<span class="va">)</span></span></code></pre></div>
 <p>One tuning option worth knowing: by default it only suggests from
 history. You can also enable completion-based suggestions:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">ZSH_AUTOSUGGEST_STRATEGY</span><span class="op">=</span><span class="va">(</span>history completion<span class="va">)</span></span></code></pre></div>
@@ -872,9 +899,14 @@ highlights commands in real time as you type:</p>
 <li>Commands that exist: green</li>
 <li>Commands that don’t exist: red</li>
 <li>Strings and quoted arguments: yellow</li>
-<li>Options/flags: light blue</li>
-<li>Pipes, redirects, semicolons: magenta</li>
 </ul>
+<p>Options/flags and pipes/redirects/semicolons are recognized as
+distinct token types internally, but the default <code>main</code>
+highlighter styles leave them unstyled — no color unless you configure
+<code>ZSH_HIGHLIGHT_STYLES</code> yourself. If you want flags or
+separators to stand out visually, that’s a
+<code>ZSH_HIGHLIGHT_STYLES</code> customization, not default
+behavior.</p>
 <p>The value is catching typos before you press Enter. You type
 <code>pythno script.py</code> and the red highlight catches it
 immediately. You type <code>ls --recusrive</code> and it’s red before
@@ -889,7 +921,7 @@ that doesn’t have it.</p>
 it needs to run after everything else.</p>
 <h3 id="history-1">history</h3>
 <p>The <code>history</code> plugin provides convenient aliases:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h</span>          <span class="co"># full history (with timestamps if EXTENDED_HISTORY is set)</span></span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h</span>          <span class="co"># full history (with timestamps if HIST_STAMPS is set in .zshrc)</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hs</span>         <span class="co"># history | grep (case-sensitive)</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hsi</span>        <span class="co"># history | grep (case-insensitive)</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all git commands you&#39;ve run</span></span>
@@ -953,24 +985,35 @@ a minimum threshold:</p>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="va">TIMER_FORMAT</span><span class="op">=</span><span class="st">&#39;%d seconds&#39;</span></span></code></pre></div>
 <h3 id="rsync">rsync</h3>
 <p>Provides aliases for common <code>rsync</code> patterns:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-copy</span>      <span class="co"># rsync -avz (archive, verbose, compress)</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-move</span>      <span class="co"># rsync -avz --remove-source-files</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-update</span>    <span class="co"># rsync -avzu (skip files newer at destination)</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-synchronize</span> <span class="co"># rsync -avzu --delete (full sync)</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-copy</span>      <span class="co"># rsync --partial --progress -h --archive (archive, progress, human-readable)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-move</span>      <span class="co"># rsync --partial --progress -h --remove-source-files --recursive</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-update</span>    <span class="co"># rsync --partial --progress -h --update --archive (skip files newer at destination)</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-synchronize</span> <span class="co"># rsync --partial --progress -h --update --archive --delete (full sync)</span></span></code></pre></div>
 <p>The flags are ones you’d reach for often but never quite remember the
 exact combination of.</p>
 <h3 id="systemd">systemd</h3>
-<p>Provides short aliases for common <code>systemctl</code> and
-<code>journalctl</code> operations:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-status</span>   <span class="co"># systemctl status</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-start</span>    <span class="co"># systemctl start</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-stop</span>     <span class="co"># systemctl stop</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-restart</span>  <span class="co"># systemctl restart</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-enable</span>   <span class="co"># systemctl enable --now</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-disable</span>  <span class="co"># systemctl disable --now</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-list</span>     <span class="co"># systemctl list-units</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ex">jc</span>          <span class="co"># journalctl -xe (recent logs with context)</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="ex">jcf</span>         <span class="co"># journalctl -f (follow/tail logs)</span></span></code></pre></div>
+<p>Provides short aliases for common <code>systemctl</code> operations.
+There’s no <code>journalctl</code> coverage in this plugin — if you want
+short aliases for log commands, those are worth adding yourself.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-status</span>      <span class="co"># sudo systemctl status</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-start</span>       <span class="co"># sudo systemctl start</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-stop</span>        <span class="co"># sudo systemctl stop</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-restart</span>     <span class="co"># sudo systemctl restart</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-enable</span>      <span class="co"># sudo systemctl enable</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-enable-now</span>  <span class="co"># sudo systemctl enable --now</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-disable</span>     <span class="co"># sudo systemctl disable</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-disable-now</span> <span class="co"># sudo systemctl disable --now</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-mask-now</span>    <span class="co"># sudo systemctl mask --now</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-list-units</span>  <span class="co"># sudo systemctl list-units</span></span></code></pre></div>
+<p>The privileged aliases all embed <code>sudo</code> for you, so you
+don’t type it separately. Every one of them also has a <code>scu-</code>
+twin that drops the <code>sudo</code> and adds <code>--user</code>, for
+managing your own user-level units instead of system-wide ones —
+<code>scu-status</code> is <code>systemctl --user status</code>,
+<code>scu-restart</code> is <code>systemctl --user restart</code>, and
+so on. If you run anything as a systemd user service, the
+<code>scu-</code> family is arguably more useful day to day than the
+system-wide aliases.</p>
 <p>If you interact with systemd services regularly, these cut down the
 typing considerably.</p>
 <h3 id="mise">mise</h3>
@@ -981,10 +1024,13 @@ so that tool versions are correctly set in every shell session. Without
 this, you’d need to call <code>eval &quot;$(mise activate zsh)&quot;</code>
 manually in your <code>.zshrc</code>.</p>
 <h3 id="gh">gh</h3>
-<p>Completions for the GitHub CLI (<code>gh</code>). Tab-completion for
-commands, flags, and — notably — repository names and PR/issue numbers
-when the context makes them available. If you use <code>gh</code>
-frequently, this saves a lot of flag-hunting.</p>
+<p>Completions for the GitHub CLI (<code>gh</code>). The plugin runs
+<code>gh completion --shell zsh</code> and caches the result, so you get
+tab-completion for <code>gh</code>’s commands and flags. It doesn’t
+dynamically complete repository names or PR/issue numbers — that would
+need live API calls, which this plugin doesn’t make. If you use
+<code>gh</code> frequently, the command/flag completion alone saves a
+lot of flag-hunting.</p>
 <hr />
 <h2 id="themes-what-a-good-prompt-does">Themes: What a Good Prompt
 Does</h2>
@@ -1029,9 +1075,13 @@ one, the segment characters render as boxes.</p>
 themes directory is a variant that adds a timestamp and puts the command
 input on its own line, which makes long paths more readable.</p>
 <h3 id="powerlevel10k-p10k">Powerlevel10k (p10k)</h3>
-<p>Powerlevel10k is the current standard for people who want a serious
-prompt. It is not bundled with OMZ but is the most popular third-party
-theme by a significant margin.</p>
+<p>Powerlevel10k is in maintenance mode — functional and still widely
+used, but not under active feature development; treat it as stable
+rather than cutting-edge. It is not bundled with OMZ but is the most
+popular third-party theme by a significant margin. If you want something
+under more active development, Starship and Pure are worth a look,
+though neither matches p10k’s specific combination of instant prompt and
+a configuration wizard.</p>
 <p>What makes p10k different:</p>
 <ul>
 <li><strong>Configuration wizard</strong> — runs
@@ -1087,7 +1137,7 @@ and survive OMZ updates:</p>
 <p>OMZ ships a management command that most users don’t know exists:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> update               <span class="co"># Update oh-my-zsh</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin list          <span class="co"># List all available plugins</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin enable git    <span class="co"># Enable a plugin without editing .zshrc</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin enable git    <span class="co"># Enable a plugin without hand-editing .zshrc</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin disable git   <span class="co"># Disable a plugin</span></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> theme list           <span class="co"># List available themes</span></span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> theme use agnoster   <span class="co"># Switch theme temporarily</span></span>
@@ -1166,23 +1216,29 @@ them to key sequences:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Paste last argument of last command (already bound to Alt+. by default)</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># But you can write custom widgets:</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Widget: surround current word in quotes</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">quote-word()</span> <span class="kw">{</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">zle</span> select-in-word</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">LBUFFER</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${LBUFFER}</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">RBUFFER</span><span class="op">=</span><span class="st">&quot;</span><span class="dt">\&quot;</span><span class="va">${RBUFFER}</span><span class="st">&quot;</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="bu">zle</span> <span class="at">-N</span> quote-word</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^[q&#39;</span> quote-word   <span class="co"># Alt+Q</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Widget: push current command to a stack, run something else, pop back</span></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="co"># This is already provided by ZSH as push-line (Ctrl+Q by default)</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Type a command, realize you need to run something first, press Ctrl+Q</span></span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the other command, press Enter, your original command is restored</span></span></code></pre></div>
-<p><code>push-line</code> (bound to Ctrl+Q in OMZ) is worth knowing: if
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Widget: prepend sudo to the current command</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">prepend-sudo()</span> <span class="kw">{</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="va">BUFFER</span><span class="op">=</span><span class="st">&quot;sudo </span><span class="va">$BUFFER</span><span class="st">&quot;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">CURSOR</span><span class="op">=</span><span class="va">$((CURSOR</span> <span class="op">+</span> <span class="dv">5</span><span class="va">))</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="bu">zle</span> <span class="at">-N</span> prepend-sudo</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^[s&#39;</span> prepend-sudo   <span class="co"># Alt+S</span></span></code></pre></div>
+<p>Realize halfway through typing a command that it needs root? Alt+S
+prepends <code>sudo</code> without you having to jump to the start of
+the line, type it, and jump back. <code>BUFFER</code> is the whole
+command line as a string, and <code>CURSOR</code> is the cursor’s
+character offset into it — direct edits to both are the basic pattern
+for any custom ZLE widget.</p>
+<p>Stock zsh (not something OMZ adds) already ships a related trick:
+<code>push-line</code>, bound to Ctrl+Q in emacs mode by default. If
 you’re mid-command and realize you need to run something else first,
 Ctrl+Q parks your current input, you run what you need, and your
-original command comes back on the next prompt.</p>
+original command comes back on the next prompt. One catch: if your
+terminal has flow control enabled (<code>stty ixon</code>, common on
+many default configs), Ctrl+Q is intercepted by the terminal driver as
+XON and never reaches zsh at all — the key will simply do nothing. If
+that’s the case for you, either run <code>stty -ixon</code> or use the
+Esc-q alternative binding instead.</p>
 <hr />
 <h2 id="your-setup-an-honest-audit">Your Setup: An Honest Audit</h2>
 <p>Here is a concrete look at what is active in your configuration, what
@@ -1283,10 +1339,11 @@ Considering</h3>
 <span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Show port usage</span></span>
 <span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ports=<span class="st">&#39;ss -tlnp&#39;</span></span></code></pre></div>
 <p>And a few ZSH options worth adding to your <code>.zshrc</code> if
-they’re not there:</p>
+they’re not there (note: <code>HIST_IGNORE_SPACE</code> and friends from
+the History section earlier are already set by OMZ’s
+<code>lib/history.zsh</code> — no need to add those yourself):</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> AUTO_CD          <span class="co"># type a directory name to cd into it</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> CORRECT          <span class="co"># suggest corrections for mistyped commands</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> HIST_IGNORE_SPACE <span class="co"># commands starting with space aren&#39;t recorded</span></span></code></pre></div>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> CORRECT          <span class="co"># suggest corrections for mistyped commands</span></span></code></pre></div>
 <hr />
 <h2 id="when-omz-is-not-enough">When OMZ Is Not Enough</h2>
 <p>Oh My Zsh is the right choice for most people, but there are

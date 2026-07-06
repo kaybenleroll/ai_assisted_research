@@ -51,7 +51,7 @@ ls **/*.log
 ls *(m-1.)
 
 # Only executable files
-ls *(x)
+ls *(x.)
 
 # Files larger than 1MB
 ls *(Lm+1)
@@ -87,7 +87,7 @@ echo ${(U)str}            # HELLO WORLD
 
 # Split into array on /
 parts=(${(s:/:)path})
-echo $parts[2]            # home
+echo $parts[1]            # home
 ```
 
 The `(U)`, `(L)`, `(s:delim:)` and similar parameter flags are ZSH-specific. They're not a party trick; they eliminate a lot of `awk`/`sed` one-liners for string manipulation in scripts.
@@ -105,7 +105,9 @@ setopt SHARE_HISTORY     # share history across sessions in real time
 setopt EXTENDED_HISTORY  # record timestamp with each command
 ```
 
-`SHARE_HISTORY` means that if you have three terminals open, history flows between them as you type — you don't have to close and reopen to pick up commands from another session. `HIST_IGNORE_SPACE` is the one you want for sensitive commands: prefix any command with a space and it doesn't go into history.
+`SHARE_HISTORY` means that if you have three terminals open, history flows between them as each command finishes running — you don't have to close and reopen to pick up commands from another session. `HIST_IGNORE_SPACE` is the one you want for sensitive commands: prefix any command with a space and it doesn't go into history.
+
+Worth knowing before you go copy these into your `.zshrc`: OMZ's `lib/history.zsh` already sets `HIST_IGNORE_SPACE`, `HIST_IGNORE_DUPS`, `SHARE_HISTORY`, and `EXTENDED_HISTORY` unconditionally, regardless of theme or plugins. The block above is shown for completeness — to make explicit what OMZ is doing for you — not because you need to add it yourself.
 
 ### Named Directories
 
@@ -145,10 +147,12 @@ Understanding the structure of OMZ makes it easier to know what to change and wh
 When your shell starts, OMZ loads `oh-my-zsh.sh`, which:
 1. Loads everything in `lib/` (history config, completion setup, key bindings, utility functions)
 2. Sources each enabled plugin's `.plugin.zsh` file
-3. Loads the theme
-4. Sources everything in `custom/` that ends in `.zsh`
+3. Sources everything in `custom/` that ends in `.zsh`
+4. Loads the theme
 
 The `custom/` directory is where your personalizations live and where they survive OMZ updates. If you write a custom function and put it in `~/.oh-my-zsh/custom/myconfig.zsh`, it gets loaded automatically. If you put the same function in a bundled plugin file, the next `omz update` will overwrite it.
+
+The theme loading last matters in practice: because it runs after `custom/`, a theme can clobber prompt-related settings you set in a custom file. If a customization to your prompt doesn't seem to be taking effect, check whether the theme is overwriting it on load.
 
 ### The `lib/` Layer
 
@@ -204,7 +208,7 @@ gds    # git diff --staged
 glog   # git log --oneline --decorate --graph
 
 # Less obvious but very useful
-gupa   # git pull --rebase --autostash
+gpra   # git pull --rebase --autostash
 gcf    # git config --list
 gclean # git clean -id (interactive clean)
 gwip   # commit a work-in-progress stash
@@ -234,7 +238,7 @@ Most people know Ctrl+R for history. The other two are underused. `Ctrl+T` is fa
 fzf --preview 'cat {}'
 
 # Kill a process by fuzzy-searching running processes
-kill -9 $(ps aux | fzf | awk '{print $2}')
+kill $(ps aux | fzf | awk '{print $2}')   # plain TERM first; add -9 only if it won't die
 
 # Open a recent git branch
 git checkout $(git branch | fzf)
@@ -247,7 +251,7 @@ The underlying tool accepts any input on stdin and returns the selected line on 
 
 ### zsh-autosuggestions
 
-This plugin shows a greyed-out suggestion as you type, based on your history. Press the right arrow key to accept the full suggestion, or press `End` to move to the end of the current word.
+This plugin shows a greyed-out suggestion as you type, based on your history. The plugin's model splits into two groups of key bindings: widgets that accept the *whole* suggestion, and widgets that accept it one word at a time.
 
 ```zsh
 # You type:
@@ -256,14 +260,19 @@ git commit
 # It shows (in grey):
 git commit -m "fix typo in README"   ← suggestion from history
 
-# Right arrow accepts the whole thing
-# Ctrl+F accepts one character at a time
+# Right arrow, End, and Ctrl+F all accept the whole suggestion
+# Alt+F accepts one word at a time
 ```
 
-The plugin also supports accepting a suggestion word-by-word. By default this uses Ctrl+Space but can be rebound:
+By default, right arrow (`forward-char`), `End` (`end-of-line`), and Ctrl+F (also bound to `forward-char` in emacs mode) are all in `ZSH_AUTOSUGGEST_ACCEPT_WIDGETS` — that array controls which movement widgets, when invoked, accept the entire suggestion rather than just moving the cursor. There's no character-at-a-time acceptance by default; anything in that array takes the whole line.
+
+Word-by-word acceptance is a separate array, `ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS`, and it's driven by `forward-word` — Alt+F in emacs mode. There's no default Ctrl+Space binding for this.
+
+If you want a custom key to accept a suggestion (whole or partial), you don't invent a new widget name — you bind an existing movement widget and add it to the relevant array. For example, to make Ctrl+Space accept one word at a time:
 
 ```zsh
-bindkey '^ ' autosuggest-accept-word
+bindkey '^ ' forward-word
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS+=(forward-word)
 ```
 
 One tuning option worth knowing: by default it only suggests from history. You can also enable completion-based suggestions:
@@ -281,8 +290,8 @@ This plugin is not in the default OMZ bundle — it requires a separate install.
 - Commands that exist: green
 - Commands that don't exist: red
 - Strings and quoted arguments: yellow
-- Options/flags: light blue
-- Pipes, redirects, semicolons: magenta
+
+Options/flags and pipes/redirects/semicolons are recognized as distinct token types internally, but the default `main` highlighter styles leave them unstyled — no color unless you configure `ZSH_HIGHLIGHT_STYLES` yourself. If you want flags or separators to stand out visually, that's a `ZSH_HIGHLIGHT_STYLES` customization, not default behavior.
 
 The value is catching typos before you press Enter. You type `pythno script.py` and the red highlight catches it immediately. You type `ls --recusrive` and it's red before you hit Enter. After using it for a week you will miss it in any shell that doesn't have it.
 
@@ -300,7 +309,7 @@ Then add `zsh-syntax-highlighting` to your `plugins` array. It must be **last in
 The `history` plugin provides convenient aliases:
 
 ```zsh
-h          # full history (with timestamps if EXTENDED_HISTORY is set)
+h          # full history (with timestamps if HIST_STAMPS is set in .zshrc)
 hs         # history | grep (case-sensitive)
 hsi        # history | grep (case-insensitive)
 ```
@@ -382,29 +391,32 @@ TIMER_FORMAT='%d seconds'
 Provides aliases for common `rsync` patterns:
 
 ```zsh
-rsync-copy      # rsync -avz (archive, verbose, compress)
-rsync-move      # rsync -avz --remove-source-files
-rsync-update    # rsync -avzu (skip files newer at destination)
-rsync-synchronize # rsync -avzu --delete (full sync)
+rsync-copy      # rsync --partial --progress -h --archive (archive, progress, human-readable)
+rsync-move      # rsync --partial --progress -h --remove-source-files --recursive
+rsync-update    # rsync --partial --progress -h --update --archive (skip files newer at destination)
+rsync-synchronize # rsync --partial --progress -h --update --archive --delete (full sync)
 ```
 
 The flags are ones you'd reach for often but never quite remember the exact combination of.
 
 ### systemd
 
-Provides short aliases for common `systemctl` and `journalctl` operations:
+Provides short aliases for common `systemctl` operations. There's no `journalctl` coverage in this plugin — if you want short aliases for log commands, those are worth adding yourself.
 
 ```zsh
-sc-status   # systemctl status
-sc-start    # systemctl start
-sc-stop     # systemctl stop
-sc-restart  # systemctl restart
-sc-enable   # systemctl enable --now
-sc-disable  # systemctl disable --now
-sc-list     # systemctl list-units
-jc          # journalctl -xe (recent logs with context)
-jcf         # journalctl -f (follow/tail logs)
+sc-status      # sudo systemctl status
+sc-start       # sudo systemctl start
+sc-stop        # sudo systemctl stop
+sc-restart     # sudo systemctl restart
+sc-enable      # sudo systemctl enable
+sc-enable-now  # sudo systemctl enable --now
+sc-disable     # sudo systemctl disable
+sc-disable-now # sudo systemctl disable --now
+sc-mask-now    # sudo systemctl mask --now
+sc-list-units  # sudo systemctl list-units
 ```
+
+The privileged aliases all embed `sudo` for you, so you don't type it separately. Every one of them also has a `scu-` twin that drops the `sudo` and adds `--user`, for managing your own user-level units instead of system-wide ones — `scu-status` is `systemctl --user status`, `scu-restart` is `systemctl --user restart`, and so on. If you run anything as a systemd user service, the `scu-` family is arguably more useful day to day than the system-wide aliases.
 
 If you interact with systemd services regularly, these cut down the typing considerably.
 
@@ -414,7 +426,7 @@ The `mise` plugin initializes `mise` (the polyglot version manager, formerly `rt
 
 ### gh
 
-Completions for the GitHub CLI (`gh`). Tab-completion for commands, flags, and — notably — repository names and PR/issue numbers when the context makes them available. If you use `gh` frequently, this saves a lot of flag-hunting.
+Completions for the GitHub CLI (`gh`). The plugin runs `gh completion --shell zsh` and caches the result, so you get tab-completion for `gh`'s commands and flags. It doesn't dynamically complete repository names or PR/issue numbers — that would need live API calls, which this plugin doesn't make. If you use `gh` frequently, the command/flag completion alone saves a lot of flag-hunting.
 
 ---
 
@@ -457,7 +469,7 @@ The `agnoster-timestamp-newline` theme in your custom themes directory is a vari
 
 ### Powerlevel10k (p10k)
 
-Powerlevel10k is the current standard for people who want a serious prompt. It is not bundled with OMZ but is the most popular third-party theme by a significant margin.
+Powerlevel10k is in maintenance mode — functional and still widely used, but not under active feature development; treat it as stable rather than cutting-edge. It is not bundled with OMZ but is the most popular third-party theme by a significant margin. If you want something under more active development, Starship and Pure are worth a look, though neither matches p10k's specific combination of instant prompt and a configuration wizard.
 
 What makes p10k different:
 
@@ -518,7 +530,7 @@ OMZ ships a management command that most users don't know exists:
 ```zsh
 omz update               # Update oh-my-zsh
 omz plugin list          # List all available plugins
-omz plugin enable git    # Enable a plugin without editing .zshrc
+omz plugin enable git    # Enable a plugin without hand-editing .zshrc
 omz plugin disable git   # Disable a plugin
 omz theme list           # List available themes
 omz theme use agnoster   # Switch theme temporarily
@@ -620,22 +632,18 @@ ZSH's line editor is programmable. You can write functions and bind them to key 
 # Paste last argument of last command (already bound to Alt+. by default)
 # But you can write custom widgets:
 
-# Widget: surround current word in quotes
-quote-word() {
-  zle select-in-word
-  LBUFFER="${LBUFFER}\""
-  RBUFFER="\"${RBUFFER}"
+# Widget: prepend sudo to the current command
+prepend-sudo() {
+  BUFFER="sudo $BUFFER"
+  CURSOR=$((CURSOR + 5))
 }
-zle -N quote-word
-bindkey '^[q' quote-word   # Alt+Q
-
-# Widget: push current command to a stack, run something else, pop back
-# This is already provided by ZSH as push-line (Ctrl+Q by default)
-# Type a command, realize you need to run something first, press Ctrl+Q
-# Run the other command, press Enter, your original command is restored
+zle -N prepend-sudo
+bindkey '^[s' prepend-sudo   # Alt+S
 ```
 
-`push-line` (bound to Ctrl+Q in OMZ) is worth knowing: if you're mid-command and realize you need to run something else first, Ctrl+Q parks your current input, you run what you need, and your original command comes back on the next prompt.
+Realize halfway through typing a command that it needs root? Alt+S prepends `sudo` without you having to jump to the start of the line, type it, and jump back. `BUFFER` is the whole command line as a string, and `CURSOR` is the cursor's character offset into it — direct edits to both are the basic pattern for any custom ZLE widget.
+
+Stock zsh (not something OMZ adds) already ships a related trick: `push-line`, bound to Ctrl+Q in emacs mode by default. If you're mid-command and realize you need to run something else first, Ctrl+Q parks your current input, you run what you need, and your original command comes back on the next prompt. One catch: if your terminal has flow control enabled (`stty ixon`, common on many default configs), Ctrl+Q is intercepted by the terminal driver as XON and never reaches zsh at all — the key will simply do nothing. If that's the case for you, either run `stty -ixon` or use the Esc-q alternative binding instead.
 
 ---
 
@@ -733,12 +741,11 @@ alias gst='git status'   # already from git plugin, but worth knowing
 alias ports='ss -tlnp'
 ```
 
-And a few ZSH options worth adding to your `.zshrc` if they're not there:
+And a few ZSH options worth adding to your `.zshrc` if they're not there (note: `HIST_IGNORE_SPACE` and friends from the History section earlier are already set by OMZ's `lib/history.zsh` — no need to add those yourself):
 
 ```zsh
 setopt AUTO_CD          # type a directory name to cd into it
 setopt CORRECT          # suggest corrections for mistyped commands
-setopt HIST_IGNORE_SPACE # commands starting with space aren't recorded
 ```
 
 ---
