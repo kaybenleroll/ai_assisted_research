@@ -708,9 +708,9 @@ you will see:</p>
 </tr>
 <tr>
 <td>Q2_K</td>
-<td>2</td>
-<td>~2.5 GB</td>
-<td>Noticeable</td>
+<td>~2.6</td>
+<td>~2.8 GB</td>
+<td>Significant</td>
 </tr>
 </tbody>
 </table>
@@ -722,12 +722,14 @@ quality within that family. For most purposes, <strong>Q4_K_M is the
 sweet spot</strong> — it is small enough to fit comfortably and smart
 enough to be genuinely useful.</p>
 <h2 data-number="2.3" id="gguf"><span class="header-section-number">2.3</span> GGUF</h2>
-<p><strong>GGUF</strong> (GPT-Generated Unified Format) is the file
-format used by llama.cpp and the majority of the local inference
-ecosystem. You will see <code>.gguf</code> files everywhere. It is a
-single-file format that bundles both the weights and the model’s
-metadata (vocabulary, architecture, recommended prompt templates) into
-one portable file.</p>
+<p><strong>GGUF</strong> — the llama.cpp model format, successor to the
+older GGML format (“GG” refers to Georgi Gerganov, llama.cpp’s original
+author; despite the popular backronym “GPT-Generated Unified Format,”
+the name isn’t an official expansion) — is the file format used by
+llama.cpp and the majority of the local inference ecosystem. You will
+see <code>.gguf</code> files everywhere. It is a single-file format that
+bundles both the weights and the model’s metadata (vocabulary,
+architecture, recommended prompt templates) into one portable file.</p>
 <p>If you download a model for local inference, you almost certainly
 want the GGUF version. Look for filenames like
 <code>llama-3.1-8b-instruct-Q4_K_M.gguf</code>.</p>
@@ -790,8 +792,8 @@ overnight, embedding generation (where you are not waiting for output
 interactively), and small models (1–3B parameters) that actually run
 fine at 15–30 tok/s on CPU.</p>
 <p>llama.cpp in particular is extraordinarily well optimised for CPU
-inference, using AVX2, AVX-512, and AMX instructions depending on your
-CPU generation.</p>
+inference, using AVX2, AVX-512, and (on Intel Sapphire Rapids and newer)
+AMX instructions depending on your CPU generation.</p>
 <h2 data-number="3.2" id="nvidia-gpu"><span class="header-section-number">3.2</span> NVIDIA GPU</h2>
 <p>This is the gold standard for local inference. CUDA is the most
 mature GPU acceleration path.</p>
@@ -830,19 +832,28 @@ and the specific model architecture.</p>
 <h2 data-number="3.3" id="amd-gpu"><span class="header-section-number">3.3</span> AMD GPU</h2>
 <p>AMD support has improved substantially. The software path is ROCm
 (AMD’s equivalent of CUDA). llama.cpp, vLLM, and LocalAI all support
-ROCm. The main caution is that ROCm officially supports only a subset of
-AMD GPU generations (RDNA 2 and RDNA 3 are generally fine; older cards
-may need workarounds). Performance is competitive with NVIDIA when
-properly configured.</p>
+ROCm. The main caution is that ROCm’s official support tier is narrower
+than it looks: RDNA 3 is well covered, but RDNA 2 support has
+historically been partial (workable on higher-end cards like the RX
+6800+, often via an HSA override, rather than fully supported out of the
+box); older cards may need more workarounds still. Performance can be
+competitive with NVIDIA when properly configured, but typical
+llama.cpp/vLLM results on ROCm still lag CUDA in practice more often
+than not — budget time for tuning.</p>
 <h2 data-number="3.4" id="apple-silicon-m-series"><span class="header-section-number">3.4</span> Apple Silicon (M-series)</h2>
 <p>Apple Silicon Macs are exceptionally good for local inference —
 arguably the best consumer hardware per dollar for this use case. The
 reason is <strong>unified memory</strong>: the CPU, GPU, and Neural
 Engine all share the same high-bandwidth memory pool, so a 36 GB M3 Max
-can use all 36 GB for model weights, whereas a 36 GB machine with a
-discrete GPU would be split between system RAM and VRAM.</p>
-<p>An M4 Max with 64 GB unified memory can run a 70B Q4 model and
-generate 20–30 tokens per second. That is impressive.</p>
+can dedicate most of that memory to model weights (macOS reserves some
+for the OS and caps the GPU’s working set below the full pool), whereas
+a 36 GB machine with a discrete GPU would be split between system RAM
+and VRAM.</p>
+<p>An M4 Max with 64 GB unified memory can run a 70B Q4 model at roughly
+8–12 tokens per second — usable for interactive chat, though token
+generation on any unified-memory Mac is ultimately bound by memory
+bandwidth, not compute. A ~30B-class model on the same hardware is
+noticeably faster, in the 20–30 tokens-per-second range.</p>
 <p>llama.cpp uses Apple’s Metal framework for GPU acceleration on Apple
 Silicon. Ollama and LocalAI both work natively on macOS.</p>
 <h2 data-number="3.5" id="multi-machine-and-heterogeneous-setups"><span class="header-section-number">3.5</span> Multi-Machine and Heterogeneous
@@ -954,15 +965,18 @@ OpenAI-compatible endpoint at <code>/v1</code>.</p>
 <p><strong>Container support:</strong> Ollama publishes official Docker
 images. Running with Podman is straightforward.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CPU-only</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 ollama/ollama</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NVIDIA GPU</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 <span class="dt">\</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  ollama/ollama</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull and run a model inside the container</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec ollama ollama run llama3.2</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ollama-data:/root/.ollama <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  ollama/ollama</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># NVIDIA GPU</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ollama-data:/root/.ollama <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  ollama/ollama</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull and run a model inside the container</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec ollama ollama run llama3.2</span></code></pre></div>
 <p><strong>Ideal for:</strong> Beginners, anyone who wants a “just
 works” experience, people building coding assistants or chat UIs who
 want a quick local backend, anyone integrating with tools like
@@ -985,9 +999,9 @@ one API surface for all modalities.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CPU-only (simplest)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-ti</span> <span class="at">--name</span> local-ai <span class="at">-p</span> 8080:8080 localai/localai:latest</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NVIDIA GPU (CUDA 13)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NVIDIA GPU (check LocalAI&#39;s docs for the current CUDA tag suffix — it tracks CUDA releases)</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-ti</span> <span class="at">--name</span> local-ai <span class="at">-p</span> 8080:8080 <span class="at">--gpus</span> all <span class="dt">\</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-13</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-12</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># AMD GPU</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-ti</span> <span class="at">--name</span> local-ai <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
@@ -1007,9 +1021,10 @@ capabilities</strong> — autonomous agents with tool use, RAG
 support — making it an increasingly compelling all-in-one platform.</p>
 <p><strong>Ideal for:</strong> Users who want a single container to
 handle text, embeddings, speech, and image generation. Teams who want
-multi-user support (API key auth, quotas, role-based access). Anyone
-building a production-grade private AI platform. Kubernetes deployments
-(Helm chart available).</p>
+multi-user support via API-key auth (for quota enforcement or role-based
+access, pair it with a gateway like LiteLLM in front). Anyone building a
+production-grade private AI platform. Kubernetes deployments (Helm chart
+available).</p>
 <p><strong>Limitations:</strong> More complex to configure than Ollama.
 The breadth of features means more moving parts. Backend management
 (installing/removing backends via OCI images on the fly) is powerful but
@@ -1030,19 +1045,19 @@ requests are dynamically added to in-progress batches, reducing latency
 across multiple GPUs or machines - <strong>200+ model
 architectures</strong> supported including all major LLMs,
 mixture-of-experts models (DeepSeek, Mixtral), and multimodal models -
-OpenAI-compatible API, plus Anthropic Messages API and gRPC</p>
+OpenAI-compatible REST API (the documented, stable interface — check
+current vLLM docs before assuming support for any other API shape)</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>uv pip install vllm</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Start the server</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>python <span class="op">-</span>m vllm.entrypoints.openai.api_server <span class="op">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>model meta<span class="op">-</span>llama<span class="op">/</span>Llama<span class="op">-</span><span class="fl">3.1</span><span class="op">-</span><span class="dv">8</span><span class="er">B</span><span class="op">-</span>Instruct</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Or with Podman (Docker syntax is shown in most upstream docs)</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>podman run <span class="op">--</span>gpus <span class="bu">all</span> <span class="op">\</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">-</span>p <span class="dv">8000</span>:<span class="dv">8000</span> <span class="op">\</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  vllm<span class="op">/</span>vllm<span class="op">-</span>openai:latest <span class="op">\</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>model meta<span class="op">-</span>llama<span class="op">/</span>Llama<span class="op">-</span><span class="fl">3.1</span><span class="op">-</span><span class="dv">8</span><span class="er">B</span><span class="op">-</span>Instruct</span></code></pre></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>vllm serve meta<span class="op">-</span>llama<span class="op">/</span>Llama<span class="op">-</span><span class="fl">3.1</span><span class="op">-</span><span class="dv">8</span><span class="er">B</span><span class="op">-</span>Instruct</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Or with Podman (Docker syntax is shown in most upstream docs)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>podman run <span class="op">--</span>gpus <span class="bu">all</span> <span class="op">\</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">-</span>p <span class="dv">8000</span>:<span class="dv">8000</span> <span class="op">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  vllm<span class="op">/</span>vllm<span class="op">-</span>openai:latest <span class="op">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>model meta<span class="op">-</span>llama<span class="op">/</span>Llama<span class="op">-</span><span class="fl">3.1</span><span class="op">-</span><span class="dv">8</span><span class="er">B</span><span class="op">-</span>Instruct</span></code></pre></div>
 <p><strong>Ideal for:</strong> Anyone serving an API to multiple users
 simultaneously. Production deployments on cloud GPUs. Teams needing high
 throughput (requests per second). Scenarios where model response latency
@@ -1064,8 +1079,10 @@ OpenAI-compatible API.</p>
 GUI over CLI, macOS users who want the slickest Apple Silicon
 experience, anyone who just wants to experiment without touching a
 terminal.</p>
-<p><strong>Limitations:</strong> Closed-source (though free). Cannot be
-run headlessly in a container. Not suitable for server deployments.</p>
+<p><strong>Limitations:</strong> Closed-source (though free). Not
+containerisable — a headless service mode and <code>lms</code> CLI exist
+for running it without the GUI, but it remains desktop-oriented rather
+than a true server deployment.</p>
 <hr />
 <h2 data-number="4.6" id="jan"><span class="header-section-number">4.6</span> Jan</h2>
 <p><strong>What it is:</strong> An open-source (Apache 2.0) desktop
@@ -1086,13 +1103,16 @@ server/headless use.</p>
 <h2 data-number="4.7" id="open-webui"><span class="header-section-number">4.7</span> Open WebUI</h2>
 <p><strong>What it is:</strong> Not an inference engine but a
 <strong>browser-based chat interface</strong> that connects to a running
-backend (Ollama, OpenAI-compatible APIs, or its own built-in llama.cpp
-engine). Think: a self-hosted ChatGPT-style UI that sits in front of
-your inference server.</p>
+backend (Ollama, or any OpenAI-compatible API). Think: a self-hosted
+ChatGPT-style UI that sits in front of your inference server. There’s
+also a bundled-Ollama container image (the <code>:ollama</code> tag)
+that packages an Ollama server alongside the UI in one container, but
+Open WebUI itself does not run inference.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to a running Ollama instance</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">-p</span> 3000:3000 <span class="dt">\</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  ghcr.io/open-webui/open-webui:main</span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">-p</span> 3000:8080 <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  ghcr.io/open-webui/open-webui:main</span></code></pre></div>
 <p>Open WebUI supports multi-user accounts, conversation history, RAG
 via document upload, image generation, and voice input. It is the most
 popular front-end for self-hosted LLM deployments.</p>
@@ -1227,11 +1247,15 @@ available to containers.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the NVIDIA Container Toolkit (Fedora/RHEL)</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">dnf</span> install nvidia-container-toolkit</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a container with all GPUs</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">--device</span> nvidia.com/gpu=all ...</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Or with Docker&#39;s syntax (also works with Podman CDI)</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--gpus</span> all ...</span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the CDI spec so `nvidia.com/gpu=all` resolves to your hardware</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (without this step, the device reference below does not exist yet)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">nvidia-ctk</span> cdi generate <span class="at">--output</span><span class="op">=</span>/etc/cdi/nvidia.yaml</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a container with all GPUs</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">--device</span> nvidia.com/gpu=all ...</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Or with Docker&#39;s syntax (also works with Podman CDI)</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--gpus</span> all ...</span></code></pre></div>
 <p><strong>AMD with Podman/Docker:</strong></p>
 <p>AMD GPUs are exposed as device files in <code>/dev/kfd</code> and
 <code>/dev/dri</code>. You mount them directly.</p>
@@ -1272,7 +1296,7 @@ container.</p>
 <p>If you want the pretty web UI, add Open WebUI:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="dt">\</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> open-webui <span class="dt">\</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3000:3000 <span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 3000:8080 <span class="dt">\</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> open-webui:/app/backend/data <span class="dt">\</span></span>
@@ -1284,27 +1308,29 @@ by your local Ollama instance.</p>
 <h2 data-number="5.2" id="i-want-a-coding-assistant-in-vs-code"><span class="header-section-number">5.2</span> “I want a coding assistant in
 VS Code”</h2>
 <p>The <a href="https://continue.dev/">Continue</a> extension for VS
-Code connects to any OpenAI-compatible backend. With Ollama running, add
-this to your <code>~/.continue/config.json</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Qwen2.5-Coder 7B (local)&quot;</span><span class="fu">,</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;provider&quot;</span><span class="fu">:</span> <span class="st">&quot;ollama&quot;</span><span class="fu">,</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;model&quot;</span><span class="fu">:</span> <span class="st">&quot;qwen2.5-coder:7b&quot;</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;tabAutocompleteModel&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Qwen2.5-Coder 1.5B (autocomplete)&quot;</span><span class="fu">,</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;provider&quot;</span><span class="fu">:</span> <span class="st">&quot;ollama&quot;</span><span class="fu">,</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;model&quot;</span><span class="fu">:</span> <span class="st">&quot;qwen2.5-coder:1.5b&quot;</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+Code connects to any OpenAI-compatible backend. Continue’s config format
+is YAML (<code>~/.continue/config.yaml</code>); an older
+<code>config.json</code> format still auto-migrates but is deprecated,
+so use YAML directly. With Ollama running, add this:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Qwen3-Coder (local)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3-coder:7b</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> chat</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Qwen3-Coder autocomplete</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3-coder:1.5b</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> autocomplete</span></span></code></pre></div>
 <p>After editing the config, reload VS Code so the extension picks up
 model changes cleanly.</p>
-<p><code>qwen2.5-coder:7b</code> is excellent for chat-based coding
-help. The 1.5B model for autocomplete is fast enough to provide inline
-suggestions without lag.</p>
+<p>A current Qwen3-Coder size in the 7–8B range is excellent for
+chat-based coding help; a smaller (~1.5B) size for autocomplete is fast
+enough to provide inline suggestions without lag. Check Ollama’s library
+for the exact tag names available at the time you read this —
+coding-model naming has churned as families iterate.</p>
 <p>For the VS Code extension that turns llama.cpp’s FIM
 (fill-in-the-middle) capability directly into inline completions, see <a href="https://github.com/ggml-org/llama.vscode">llama.vscode</a>.</p>
 <hr />
@@ -1312,21 +1338,26 @@ suggestions without lag.</p>
 service with Podman”</h2>
 <p>Use a Podman + user-systemd service so your API starts on boot
 (Linux). On macOS/Windows, use your platform startup tooling.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start the container</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="dt">\</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> llm-api <span class="dt">\</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  ghcr.io/ggml-org/llama.cpp:server-cuda <span class="dt">\</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-hf</span> ggml-org/Meta-Llama-3.1-8B-Instruct-GGUF <span class="dt">\</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--port</span> 8080 <span class="dt">\</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--host</span> 0.0.0.0</span>
+<p>Since Podman 4.4, <code>podman generate systemd</code> is deprecated
+in favour of <strong>Quadlet</strong> — a <code>.container</code> unit
+file that systemd reads directly, without an intermediate
+<code>podman generate</code> step. Write
+<code>~/.config/containers/systemd/llm-api.container</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Unit]</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Description</span><span class="ot">=</span><span class="st">Local LLM API (llama.cpp)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[Container]</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Image</span><span class="ot">=</span><span class="st">ghcr.io/ggml-org/llama.cpp:server-cuda</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="dt">ContainerName</span><span class="ot">=</span><span class="st">llm-api</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="dt">PublishPort</span><span class="ot">=</span><span class="st">8080:8080</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="dt">AddDevice</span><span class="ot">=</span><span class="st">nvidia.com/gpu=all</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">-hf ggml-org/Meta-Llama-3.1-8B-Instruct-GGUF --port 8080 --host 0.0.0.0</span></span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a systemd unit file</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> generate systemd <span class="at">--name</span> llm-api <span class="op">&gt;</span> ~/.config/systemd/user/llm-api.service</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable it</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> enable <span class="at">--now</span> llm-api</span></code></pre></div>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="kw">[Install]</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">default.target</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload user systemd and start it</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> daemon-reload</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> enable <span class="at">--now</span> llm-api.service</span></code></pre></div>
 <p>Any app can now call
 <code>http://your-machine:8080/v1/chat/completions</code> via standard
 OpenAI SDKs.</p>
@@ -1336,23 +1367,23 @@ audio, images, agents”</h2>
 <p>Use <strong>LocalAI</strong> with a persistent volume for models.</p>
 <p><code>docker run</code> examples from LocalAI docs usually translate
 directly to <code>podman run</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="dt">\</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> localai <span class="dt">\</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--gpus</span> all <span class="dt">\</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> localai-models:/build/models <span class="dt">\</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-13</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Install a text model</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec localai local-ai run llama-3.2-3b-instruct:q4_k_m</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Install a speech-to-text model</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec localai local-ai run whisper-base</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Now POST to the standard OpenAI endpoints:</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># /v1/chat/completions — text generation</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># /v1/audio/transcriptions — speech to text</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># /v1/embeddings — embeddings for RAG</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> localai <span class="dt">\</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--gpus</span> all <span class="dt">\</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> localai-models:/build/models <span class="dt">\</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-12</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Install a text model</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec localai local-ai run llama-3.2-3b-instruct:q4_k_m</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Install a speech-to-text model</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec localai local-ai run whisper-base</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Now POST to the standard OpenAI endpoints:</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># /v1/chat/completions — text generation</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># /v1/audio/transcriptions — speech to text</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># /v1/embeddings — embeddings for RAG</span></span></code></pre></div>
 <p>LocalAI’s API is a superset of OpenAI’s, so OpenAI-compatible
 libraries work directly.</p>
 <hr />
@@ -1379,22 +1410,23 @@ code-centric agent framework</li>
 </ul>
 <p>All of these accept a <code>base_url</code> parameter pointing at
 your local server:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Point the standard OpenAI client at your local server</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">&quot;http://localhost:11434/v1&quot;</span>,  <span class="co"># Ollama</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span><span class="st">&quot;none&quot;</span>,                         <span class="co"># no key needed locally</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.chat.completions.create(</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">&quot;llama3.1:8b&quot;</span>,</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[{<span class="st">&quot;role&quot;</span>: <span class="st">&quot;user&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;What is 2 + 2?&quot;</span>}],</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Point the standard OpenAI client at your local server</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">&quot;http://localhost:11434/v1&quot;</span>,  <span class="co"># Ollama</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span><span class="st">&quot;none&quot;</span>,                         <span class="co"># no key needed locally</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">&quot;llama3.1:8b&quot;</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[{<span class="st">&quot;role&quot;</span>: <span class="st">&quot;user&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;What is 2 + 2?&quot;</span>}],</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>For agents with tool use, ensure the model you choose has been
-trained for instruction following and function calling. <strong>Llama
-3.1/3.2</strong>, <strong>Qwen 2.5</strong>, <strong>Mistral
-Nemo</strong>, and <strong>Gemma 3</strong> are all solid choices. The
+trained for instruction following and function calling.
+<strong>Qwen3</strong>, <strong>Llama</strong> (3.x or 4, depending on
+what you need), <strong>gpt-oss</strong>, <strong>Mistral Nemo</strong>,
+and <strong>Gemma 3</strong> are all solid choices. The
 <code>instruct</code> variants (as opposed to base models) are what you
 want.</p>
 <p><strong>Model Context Protocol (MCP)</strong> is an emerging standard
@@ -1470,15 +1502,30 @@ clear conversion notes.</li>
 problems.</p>
 <h2 data-number="6.4" id="model-families-worth-knowing-as-of-may-2026"><span class="header-section-number">6.4</span> Model Families Worth Knowing
 (as of May 2026)</h2>
-<p><strong>Meta’s Llama series</strong> — The Llama 3.x models are free
-for commercial use (with some size restrictions), well-tested, and
-universally supported. Llama 3.2 3B is a strong small model; Llama 3.1
-8B and 70B are the workhorse mid and large options.</p>
-<p><strong>Qwen (Alibaba)</strong> — Qwen 2.5 and 3 are competitive with
-Llama at equivalent sizes, with particularly strong coding and
-multilingual capability. Qwen2.5-Coder is the current go-to for
-coding-specific tasks. Qwen3 introduces models with a “thinking”
-mode.</p>
+<p>Treat this list as a snapshot of families, not a fixed leaderboard —
+this space moves fast enough that the specific size or version leading
+today may not be leading by the time you read this. Check the model’s
+Hugging Face page or the vendor’s own docs for the current lineup before
+committing to one.</p>
+<p><strong>Qwen (Alibaba)</strong> — the most actively and rapidly
+iterated open-weight family, with multiple point releases through 2026.
+Broadly regarded as a leading open-weight line, competitive with closed
+frontier models on coding and agentic benchmarks, and popular for local
+deployment. Qwen3 is the current generation, with a “thinking” mode for
+harder reasoning tasks; Qwen3-Coder is the current go-to for
+coding-specific work.</p>
+<p><strong>gpt-oss (OpenAI)</strong> — OpenAI’s first open-weight
+release in years, shipped in two sizes (roughly 20B and 120B
+parameters). Reasoning-focused and text-only (no native multimodal
+input). Notable less for raw benchmark position than for what it
+represents: OpenAI participating in the open-weight ecosystem after
+years of closed-only releases.</p>
+<p><strong>Meta’s Llama series</strong> — still free for commercial use
+(with some size restrictions) and widely supported, but Meta’s release
+cadence has slowed noticeably compared to rivals, with larger follow-on
+variants delayed or unreleased. Llama 4 (Scout/Maverick) and Llama 3.3
+70B are the most recent major releases as of this writing; check Meta’s
+own AI documentation for anything newer.</p>
 <p><strong>Mistral / Mixtral</strong> — Mistral 7B is efficient and
 capable. Mixtral 8x7B is a Mixture-of-Experts model that is effectively
 a 47B parameter model that only activates 13B at a time — fast to run
@@ -1491,6 +1538,11 @@ its weight class on reasoning tasks. Very good for the size.</p>
 (including into Llama and Qwen architectures) are strong reasoning
 models. The distilled versions (e.g., DeepSeek-R1-Distill-Qwen-7B) are
 practical locally.</p>
+<p><strong>Broader ecosystem</strong> — Google (Gemma), Alibaba (Qwen),
+Meta (Llama), Mistral, OpenAI (gpt-oss), and Zhipu (GLM) all now ship
+competitive open-weight families. Open-weight is no longer a niche
+compared to closed frontier models — it’s a real, fast-moving
+alternative.</p>
 <h2 data-number="6.5" id="sizing-guide"><span class="header-section-number">6.5</span> Sizing Guide</h2>
 <table>
 <thead>
@@ -1502,23 +1554,23 @@ practical locally.</p>
 <tbody>
 <tr>
 <td>4 GB</td>
-<td>3B Q4 (Llama 3.2 3B, Qwen2.5 3B)</td>
+<td>~3B Q4 (e.g. a small Qwen3 or Llama variant)</td>
 </tr>
 <tr>
 <td>6–8 GB</td>
-<td>7–8B Q4 (Llama 3.1 8B, Qwen2.5 7B)</td>
+<td>~7–8B Q4 (e.g. Qwen3 8B)</td>
 </tr>
 <tr>
 <td>12–16 GB</td>
-<td>13–14B Q4 (Phi-4 14B, Qwen2.5 14B)</td>
+<td>~13–14B Q4 (e.g. Phi-4 14B, a mid Qwen3 size)</td>
 </tr>
 <tr>
 <td>24 GB</td>
-<td>32–34B Q4 (Qwen2.5 32B)</td>
+<td>~30B-class Q4</td>
 </tr>
 <tr>
 <td>48 GB+ or unified</td>
-<td>70B Q4 (Llama 3.1 70B)</td>
+<td>~70B-class Q4</td>
 </tr>
 </tbody>
 </table>
@@ -1614,10 +1666,11 @@ Remote Personal Assistant Workflows</h2>
 routes replies back through the same channel. If you want to use the
 local model you just set up as a persistent personal assistant you can
 message from your phone, OpenClaw is how that works.</p>
-<p>When it matters here: if you are deploying Setup 3 or Setup 4 and
-want a conversational interface beyond a local TUI, OpenClaw is the
-layer that adds it. It is not an inference server — it sits in front of
-one.</p>
+<p>When it matters here: if you are running “I want a persistent API
+service with Podman” or “I want everything — text, audio, images,
+agents” and want a conversational interface beyond a local TUI, OpenClaw
+is the layer that adds it. It is not an inference server — it sits in
+front of one.</p>
 <p>For setup instructions, model recommendations, hardware-constrained
 deployment, and security hardening, see the <a href="../openclaw_primer/openclaw_primer.md">OpenClaw Primer</a>.</p>
 <hr />
@@ -1654,28 +1707,27 @@ Open WebUI provides it as a layer on top of Ollama.</p>
 <p>Rather than getting lost in choices, here is a concrete sequence for
 a beginner:</p>
 <p><strong>Day 1 — Get something running in 15 minutes:</strong></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://ollama.com/install.sh <span class="kw">|</span> <span class="fu">sh</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run llama3.2:3b</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://ollama.com/install.sh <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run llama3.2:3b</span></code></pre></div>
 <p>Chat with it. See what it can and cannot do. Appreciate the speed
 difference with and without GPU.</p>
 <p><strong>Day 2 — Add a web UI:</strong> Stand up Open WebUI pointing
 at your Ollama. Create an account. Upload a document. Try RAG.</p>
 <p><strong>Day 3 — Try the API:</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:11434/v1/chat/completions <span class="dt">\</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;model&quot;: &quot;llama3.2:3b&quot;,</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain containers in one sentence.&quot;}]</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:11434/v1/chat/completions <span class="dt">\</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;model&quot;: &quot;llama3.2:3b&quot;,</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain containers in one sentence.&quot;}]</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }&#39;</span></span></code></pre></div>
 <p>Now you understand why everything in this ecosystem being
 OpenAI-compatible is powerful.</p>
 <p><strong>Day 4 — Containerise it properly:</strong> Move Ollama into a
 Podman container with a persistent volume for models and a systemd user
 service so it survives reboots.</p>
-<p><strong>Day 5 — Explore the model landscape:</strong> Try
-<code>qwen2.5-coder:7b</code> for coding tasks. Try
-<code>nomic-embed-text</code> for embeddings. Pull a larger model and
-compare quality.</p>
+<p><strong>Day 5 — Explore the model landscape:</strong> Try a current
+Qwen3-Coder size for coding tasks. Try <code>nomic-embed-text</code> for
+embeddings. Pull a larger model and compare quality.</p>
 <p>From there, the path branches based on what you are building.</p>
 <hr />
 <h1 data-number="7" id="conclusion"><span class="header-section-number">7</span> Conclusion</h1>
@@ -1699,45 +1751,46 @@ your machine.</p>
 <hr />
 <h1 data-number="8" id="appendix"><span class="header-section-number">8</span> Appendix</h1>
 <h2 data-number="8.1" id="quick-command-cheatsheet"><span class="header-section-number">8.1</span> Quick-Command Cheatsheet</h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Ollama ===</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull llama3.1:8b            <span class="co"># Download a model</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run llama3.1:8b             <span class="co"># Interactive chat</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> list                         <span class="co"># List downloaded models</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> rm llama3.1:8b              <span class="co"># Remove a model</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve                        <span class="co"># Start API server (port 11434)</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># === llama-server ===</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-hf</span> ggml-org/gemma-3-1b-it-GGUF                <span class="co"># Download from HF and serve</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-m</span> model.gguf <span class="at">--port</span> 8080 <span class="at">--n-gpu-layers</span> 99    <span class="co"># Load to GPU</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + Ollama ===</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 <span class="dt">\</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ollama-data:/root/.ollama ollama/ollama</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec ollama ollama pull llama3.2:3b</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + Open WebUI ===</span></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> open-webui <span class="at">-p</span> 3000:3000 <span class="dt">\</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> open-webui:/app/backend/data <span class="dt">\</span></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  ghcr.io/open-webui/open-webui:main</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + LocalAI (NVIDIA) ===</span></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> localai <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> localai-models:/build/models <span class="dt">\</span></span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-13</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="co"># === Python: Use any local server with OpenAI SDK ===</span></span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install openai</span></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&quot;</span></span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="st">from openai import OpenAI</span></span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="st">client = OpenAI(base_url=&#39;http://localhost:11434/v1&#39;, api_key=&#39;none&#39;)</span></span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="st">r = client.chat.completions.create(</span></span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="st">    model=&#39;llama3.2:3b&#39;,</span></span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a><span class="st">    messages=[{&#39;role&#39;:&#39;user&#39;,&#39;content&#39;:&#39;Hello!&#39;}]</span></span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a><span class="st">print(r.choices[0].message.content)</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Ollama ===</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull llama3.1:8b            <span class="co"># Download a model</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run llama3.1:8b             <span class="co"># Interactive chat</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> list                         <span class="co"># List downloaded models</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> rm llama3.1:8b              <span class="co"># Remove a model</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve                        <span class="co"># Start API server (port 11434)</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># === llama-server ===</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-hf</span> ggml-org/gemma-3-1b-it-GGUF                <span class="co"># Download from HF and serve</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-m</span> model.gguf <span class="at">--port</span> 8080 <span class="at">--n-gpu-layers</span> 99    <span class="co"># Load to GPU</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + Ollama ===</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 <span class="dt">\</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ollama-data:/root/.ollama ollama/ollama</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec ollama ollama pull llama3.2:3b</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + Open WebUI ===</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> open-webui <span class="at">-p</span> 3000:8080 <span class="dt">\</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> open-webui:/app/backend/data <span class="dt">\</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  ghcr.io/open-webui/open-webui:main</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + LocalAI (NVIDIA) ===</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> localai <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> localai-models:/build/models <span class="dt">\</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-12</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="co"># === Python: Use any local server with OpenAI SDK ===</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install openai</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&quot;</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="st">from openai import OpenAI</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="st">client = OpenAI(base_url=&#39;http://localhost:11434/v1&#39;, api_key=&#39;none&#39;)</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="st">r = client.chat.completions.create(</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="st">    model=&#39;llama3.2:3b&#39;,</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="st">    messages=[{&#39;role&#39;:&#39;user&#39;,&#39;content&#39;:&#39;Hello!&#39;}]</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="st">print(r.choices[0].message.content)</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <h2 data-number="8.2" id="further-reading"><span class="header-section-number">8.2</span> Further Reading</h2>
 <ul>
 <li><a href="https://github.com/ggml-org/llama.cpp">llama.cpp README</a>

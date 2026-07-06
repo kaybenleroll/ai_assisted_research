@@ -627,10 +627,11 @@ The precondition he named for this to work at all is blunt: “repeated
 evaluation is possible and cheap.” Hold onto that sentence. The whole
 primer hangs off it.</p>
 <p>By December 2022 Karpathy had sharpened the idea into what he called
-a data engine. His formulation: “competitive advantage in AI goes not so
-much to those with data but those with a data engine: iterated data
-acquisition, annotation, training, evaluation” — and the winner is
-whoever can spin that loop fastest. The loop has a fixed shape:</p>
+a data engine. His formulation, in paraphrase: competitive advantage in
+AI goes not so much to those with data, but to those with a data engine
+— iterated data acquisition, re-training, evaluation, deployment, and
+telemetry — and the winner is whoever can spin that loop fastest. The
+loop has a fixed shape:</p>
 <p><img role="img" aria-label="The data engine loop: every box is plumbing; evaluate is the load-bearing sensor." src="data:image/png;base64,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" alt="The data engine loop: every box is plumbing; evaluate is the load-bearing sensor." /></p>
 <p>You collect inputs, label them with the right answer, train a model,
 evaluate how well it does, deploy it, gather telemetry on where it fails
@@ -824,7 +825,7 @@ p_e}\]</span></p>
 agreement and <span class="math inline">\(p_e\)</span> is the agreement
 expected by chance. A <span class="math inline">\(\kappa\)</span> of 0
 means the raters agree no better than dice; <span class="math inline">\(\kappa = 1\)</span> is perfect agreement. The
-conventional benchmarks (Landis and Koch, 1977) read <span class="math inline">\(\kappa &lt; 0.2\)</span> as poor, <span class="math inline">\(0.2\)</span>–<span class="math inline">\(0.4\)</span> as fair, <span class="math inline">\(0.4\)</span>–<span class="math inline">\(0.6\)</span> as moderate, <span class="math inline">\(0.6\)</span>–<span class="math inline">\(0.8\)</span> as substantial, and <span class="math inline">\(&gt; 0.8\)</span> as near-perfect.</p>
+conventional benchmarks (Landis and Koch, 1977) read <span class="math inline">\(\kappa &lt; 0\)</span> as poor, <span class="math inline">\(0\)</span>–<span class="math inline">\(0.2\)</span> as slight, <span class="math inline">\(0.2\)</span>–<span class="math inline">\(0.4\)</span> as fair, <span class="math inline">\(0.4\)</span>–<span class="math inline">\(0.6\)</span> as moderate, <span class="math inline">\(0.6\)</span>–<span class="math inline">\(0.8\)</span> as substantial, and <span class="math inline">\(&gt; 0.8\)</span> as near-perfect.</p>
 <p>Two raters is the simple case. Fleiss’ <span class="math inline">\(\kappa\)</span> generalises the same chance
 correction to <span class="math inline">\(n &gt; 2\)</span> annotators
 scoring the same items, and Krippendorff’s <span class="math inline">\(\alpha\)</span> is the most flexible of the family
@@ -894,16 +895,18 @@ is a model of good, not good itself.</p>
 scoring responses in isolation; show a judge two at a time and ask only
 which is better. This is what Chatbot Arena (the LMSYS platform) does at
 scale: users see two anonymous model responses to the same prompt and
-vote for the one they prefer. By the 2024 paper (Liang et al., “Chatbot
-Arena: An Open Platform for Evaluating LLMs by Human Preference,” ICML
-2024, arXiv:2403.04132) the platform had gathered more than 6 million
-pairwise preference votes. For our example, the comparison is exactly
-the question you could already answer: shown <strong>Response
-Alpha</strong> beside <strong>Response Beta</strong> for a self-declared
-non-specialist, which is better? The price: a pile of “A beat B”
-verdicts is more reliable than any single score, but it is not yet a
-number you can rank with. A heap of pairwise outcomes is a correlated
-shadow of a quality ordering that does not yet exist as a scale.</p>
+vote for the one they prefer. The 2024 paper (Chiang, W.-L. et al.,
+“Chatbot Arena: An Open Platform for Evaluating LLMs by Human
+Preference,” ICML 2024, arXiv:2403.04132) reported roughly 240,000
+pairwise preference votes at time of publication; the platform’s
+cumulative total grew into the millions by 2025–2026. For our example,
+the comparison is exactly the question you could already answer: shown
+<strong>Response Alpha</strong> beside <strong>Response Beta</strong>
+for a self-declared non-specialist, which is better? The price: a pile
+of “A beat B” verdicts is more reliable than any single score, but it is
+not yet a number you can rank with. A heap of pairwise outcomes is a
+correlated shadow of a quality ordering that does not yet exist as a
+scale.</p>
 <h2 data-number="3.3" id="aggregate"><span class="header-section-number">3.3</span> Aggregate</h2>
 <p>The third move turns that heap of comparisons into a single latent
 rating per item — the scalar optimisation has been demanding all along.
@@ -948,11 +951,11 @@ a fixed table of items — and you have built the <strong>reward
 model</strong> used in RLHF. It is the identical operation: fit a model
 over comparisons. The §3 Aggregate step, generalised to a neural network
 over all possible outputs and applied during training, <em>is</em> the
-RLHF reward model. Sections from §5 onward pick this up; the identity is
-laid here. The price stays fixed: a latent rating is a correlated shadow
-of quality, and a reward model is that same shadow with a gradient
-running through it — optimise hard enough against it and the model
-learns the shadow’s blind spots.</p>
+RLHF reward model. §6 onward picks this up; the identity is laid here.
+The price stays fixed: a latent rating is a correlated shadow of
+quality, and a reward model is that same shadow with a gradient running
+through it — optimise hard enough against it and the model learns the
+shadow’s blind spots.</p>
 <h2 data-number="3.4" id="automate"><span class="header-section-number">3.4</span> Automate</h2>
 <p>The fourth move removes the human from the inner loop so the whole
 thing can run at machine speed. You replace the human judge with an LLM
@@ -1030,7 +1033,7 @@ average their scores or take a majority vote. This shrinks the per-judge
 variance the way any ensemble does, and it partially dilutes systematic
 self-preference — a panel of different model families cannot all rate
 the same response highly purely because each finds its own phrasing more
-probable. Neither move tells you <em>why</em> the biases exist; §7 takes
+probable. Neither move tells you <em>why</em> the biases exist; §8 takes
 apart the mechanisms — self-preference, verbosity, and position — and
 explains why instructing a judge to be impartial does not remove them.
 For now it is enough that the swap and the panel blunt their effect.</p>
@@ -1123,7 +1126,7 @@ specific wording that allowed the failure. There is no automated scoring
 and no gradient; the loop runs at the speed of a session post-mortem
 rather than a GPU. But it is the same loop, with the same load-bearing
 evaluate step in the middle.</p>
-<p>A practical note on volume: the statistical methods from §§3–4 — Elo,
+<p>A practical note on volume: the statistical methods from §3 — Elo,
 Bradley-Terry, G-Eval — require enough comparisons to converge to a
 stable estimate. For a collection of twenty or thirty skill files, each
 invoked a handful of times per month, that threshold is never reached.
@@ -1505,9 +1508,9 @@ can accumulate enough sessions to collect comparable outputs, the
 Compare step is the natural entry point. Set up a controlled experiment:
 old instruction, ten sessions; new instruction, ten sessions; pairwise
 comparison of the outputs. Aggregate with Elo or Bradley-Terry. Automate
-with an LLM judge once the rubric is stable. The infrastructure from
-§§3–4 was built for exactly this shape of problem, and it applies here
-without modification.</p>
+with an LLM judge once the rubric is stable. The infrastructure from §3
+was built for exactly this shape of problem, and it applies here without
+modification.</p>
 <p>If the instruction prescribes a <strong>workflow process</strong>
 rather than generating a document, or if the invocation volume is simply
 too low for statistical aggregation to be meaningful, the lightweight
@@ -1548,16 +1551,23 @@ human disagreement behind it. The correlated shadow of quality becomes,
 for these tasks, quality itself: a unit test does not approximate
 correctness, it decides it.</p>
 <p>The trajectory on coding benchmarks shows what this unlocked.
-<strong>SWE-bench Verified</strong> is a benchmark of real GitHub
-issues, where a model must produce a patch that makes the repository’s
-test suite pass — a perfectly verifiable reward, because the test suite
-already exists and either goes green or it does not. There is no rubric
-to write and no judge to calibrate; the repository’s own tests are the
-ground truth. When Devin launched in March 2024 it scored 13.86%. By
-this writing, Claude Sonnet 4.5 scores 77.2% on the standard harness and
-82.0% with parallel compute, and Sonnet 4.6 scores 79.6%. In roughly two
-years the benchmark went from “barely works” to approaching
-saturation.</p>
+<strong>SWE-bench</strong> is a benchmark of real GitHub issues, where a
+model must produce a patch that makes the repository’s test suite pass —
+a perfectly verifiable reward, because the test suite already exists and
+either goes green or it does not. There is no rubric to write and no
+judge to calibrate; the repository’s own tests are the ground truth.
+When Devin launched in March 2024 it scored 13.86% on the original
+benchmark, against a prior state of the art of 1.96%. The benchmark was
+later refined into <strong>SWE-bench Verified</strong>, an
+OpenAI-curated 500-issue subset released in August 2024 to filter out
+unsolvable or ill-specified issues; top scores on Verified were already
+well above 30% at launch. A recent Claude Sonnet model at the time of
+writing scores in the high-70s to low-80s percent on Verified, depending
+on harness configuration and compute budget — check current leaderboards
+(e.g. Epoch AI, llm-stats) for up-to-date standings, since self-reported
+vendor scores dominate this leaderboard. In roughly two years the
+trajectory went from “barely works” to a successor benchmark already
+approaching saturation.</p>
 <p>That is the verifiable-reward loop spinning exactly as Karpathy’s
 data engine predicts. Collect real failures the model cannot yet fix,
 verify candidate patches automatically against the test suite, keep the
@@ -1583,8 +1593,10 @@ report</p>
 <p><span class="math display">\[\text{pass}@k = 1 -
 \frac{\binom{n-c}{k}}{\binom{n}{k}}\]</span></p>
 <p>which is the probability that a random size-<span class="math inline">\(k\)</span> subset of the <span class="math inline">\(n\)</span> samples contains at least one that
-passes. This is the estimator used to report HumanEval and SWE-bench
-numbers. The second is <strong>best-of-n</strong>: generate <span class="math inline">\(n\)</span> candidates, score them, and keep only
+passes. This is the estimator used to report HumanEval numbers;
+SWE-bench headline scores, by contrast, are single-attempt
+percent-resolved figures, not the unbiased pass@k estimate. The second
+is <strong>best-of-n</strong>: generate <span class="math inline">\(n\)</span> candidates, score them, and keep only
 the highest-rated one. Where pass@k measures whether the model can hit
 the target across <span class="math inline">\(k\)</span> tries,
 best-of-n measures the quality of its best single attempt under a
@@ -1596,12 +1608,14 @@ verifiable rewards as the scoring layer over sampled candidates.</p>
 two things happen: it stops discriminating between strong models, and it
 starts leaking into training data. Contamination — test problems
 appearing, directly or paraphrased, in the pretraining corpus — turns a
-verified score into a memorisation score. In February 2026 OpenAI
-abandoned SWE-bench Verified over exactly these contamination concerns.
-The decontaminated successors are SWE-Rebench and SWE-bench Pro, built
-from issues that postdate the models’ training cutoffs or live in
-private repositories the models never saw. The data engine does not stop
-when a benchmark saturates; it forces you to build a harder one.</p>
+verified score into a memorisation score. Reports have circulated of
+major labs moving away from SWE-bench Verified over exactly this concern
+— unverifiable at the time of writing, but consistent with the
+benchmark-treadmill pattern. Successor benchmarks such as SWE-Rebench
+and SWE-bench Pro respond by drawing from issues that postdate the
+models’ training cutoffs or live in private repositories the models
+never saw. The data engine does not stop when a benchmark saturates; it
+forces you to build a harder one.</p>
 <p>Now the boundary, because it is the whole reason the rest of this
 primer exists. RLVR works precisely and only where subjectivity was
 already absent. Automated testing can verify code because a test suite
@@ -1656,15 +1670,14 @@ and two candidate responses and mark which they prefer, producing a
 labelled comparison set. The model is trained with a pairwise ranking
 loss that pushes the chosen response’s score above the rejected
 response’s score for each pair.</p>
-<p>InstructGPT (Ouyang et al., 2022) used roughly 5,000–60,000 such
-comparisons depending on the task, with simpler tasks requiring fewer
-pairs and harder tasks needing more to cover the relevant variation.
-That range is not a rule — it reflects the practical reality that the
-reward model’s sample efficiency tracks how much the task varies along
-dimensions the comparisons can expose. A prompt domain that is narrow
-and repetitive saturates quickly; one that is diverse and nuanced needs
-the full range to avoid a reward model that is locally accurate but
-globally brittle.</p>
+<p>InstructGPT (Ouyang et al., 2022) trained its reward model on roughly
+33,000 prompts, each with 4 to 9 model responses ranked by human
+labellers; expanding every ranking into all of its pairwise comparisons
+— <span class="math inline">\(\binom{K}{2}\)</span> pairs for <span class="math inline">\(K\)</span> ranked responses — yielded several
+hundred thousand training pairs in total. Ranking <span class="math inline">\(K\)</span> responses in one pass is more
+label-efficient than collecting <span class="math inline">\(K\)</span>
+independent pairwise judgments, since a single ranking of <span class="math inline">\(K\)</span> items yields <span class="math inline">\(\binom{K}{2}\)</span> comparisons for the
+annotator cost of ordering them once.</p>
 <h2 data-number="6.2" id="rlhf-via-ppo-with-a-kl-leash"><span class="header-section-number">6.2</span> RLHF via PPO with a KL
 Leash</h2>
 <p>Once the reward model is trained, it becomes the scoring function in
@@ -1699,10 +1712,12 @@ preference pairs, then run PPO to maximise its score, with the KL leash
 holding the policy near its starting distribution. Direct Preference
 Optimisation (Rafailov et al., 2023) collapses the first two into one.
 It never materialises a reward model. Instead it derives a loss directly
-on the preference pairs whose minimiser is <em>exactly</em> the policy
-that PPO would have reached against the fitted reward model under the
-same KL constraint. The reward model does not vanish — it is folded into
-the policy loss, which is why the paper’s subtitle reads “Your Language
+on the preference pairs whose minimiser is the same optimum that the
+KL-constrained RLHF objective defines over the fitted reward model — not
+necessarily what PPO’s stochastic, approximate optimisation would
+converge to in practice, but the same fixed point the objective is
+aiming at. The reward model does not vanish — it is folded into the
+policy loss, which is why the paper’s subtitle reads “Your Language
 Model is Secretly a Reward Model.” As the §3 Aggregate step already
 established, that reward model is Bradley-Terry preference estimation at
 neural-network scale; DPO simply declines to estimate it as a separate
@@ -1729,7 +1744,14 @@ reward-model evaluation at inference. By 2024–2025, DPO and its variants
 — IPO, KTO, SimPO — had largely displaced PPO-based RLHF in many
 production instruction-following pipelines, with PPO retaining the
 advantage where the reward signal is strong and verifiable (reasoning
-tasks with checkable answers) and at the largest deployment scales.</p>
+tasks with checkable answers) and at the largest deployment scales. On
+that verifiable-reward side, <strong>GRPO</strong> (Group Relative
+Policy Optimisation, the algorithm behind DeepSeek-R1) has become the
+workhorse of the RLVR wave described in §5: it drops PPO’s separate
+value-network critic and instead scores each rollout against the average
+reward of a group of rollouts sampled for the same prompt, which is
+cheaper to run and better suited to the verifiable, high-throughput
+reward signals RLVR relies on.</p>
 <p>None of this escapes Goodhart. DPO optimises against the preference
 data directly, so if those pairs carry the labellers’ blind spots — the
 systematic gaps left by whoever ranked the responses — the policy
@@ -1972,12 +1994,13 @@ cutoff: strong performance on problems published before the cutoff,
 near-chance performance on problems from the same difficulty tier
 published just after. This was first documented by Horace He (<span class="citation" data-cites="cHHillee">@cHHillee</span>,
 x.com/cHHillee/status/1635790330854526981) and was statistically
-confirmed in a NeurIPS 2024 paper (Roberts, Jain, Roy, Khaitan,
-Schaeffer) that correlated benchmark performance with GitHub presence.
-The signal is not that frontier models cannot reason about competitive
-programming; it is that a significant fraction of their apparent skill
-on pre-cutoff problems is memorisation, and that fraction disappears
-exactly where the memorisation runs out.</p>
+confirmed in Roberts et al., “Data Contamination Through the Lens of
+Time” (arXiv:2310.10628), which correlated benchmark performance with
+GitHub presence using a longitudinal cutoff analysis. The signal is not
+that frontier models cannot reason about competitive programming; it is
+that a significant fraction of their apparent skill on pre-cutoff
+problems is memorisation, and that fraction disappears exactly where the
+memorisation runs out.</p>
 <p><strong>Judge bias</strong> adds another layer. LLM judges score
 their own lower-perplexity text higher, independent of quality. This is
 mechanistic: a model literally finds its own outputs more probable, and
@@ -2009,13 +2032,15 @@ optimised before submission.</p>
 new benchmark emerges that discriminates between models. Labs optimise
 against it. It saturates — the top models converge — or it becomes
 contaminated, or both. A harder benchmark emerges to replace it and the
-cycle restarts. SWE-bench Verified went from 2% to near-saturation in
-roughly two years before OpenAI abandoned it over contamination concerns
-in February 2026. This is not a temporary problem that a cleverer
-benchmark design will solve. It is a structural property of the
-measurement ecosystem: any fixed target under optimisation pressure will
-eventually be hit, and hitting it tells you less and less about real
-capability the longer the optimisation runs.</p>
+cycle restarts. SWE-bench went from roughly 2% to double digits within
+months, and its August 2024 successor, SWE-bench Verified, saturated
+quickly enough that reports have circulated (unverifiable at the time of
+writing) of major labs moving away from it over contamination concerns.
+This is not a temporary problem that a cleverer benchmark design will
+solve. It is a structural property of the measurement ecosystem: any
+fixed target under optimisation pressure will eventually be hit, and
+hitting it tells you less and less about real capability the longer the
+optimisation runs.</p>
 <p><img role="img" aria-label="The benchmark treadmill: any fixed target under optimisation pressure is eventually hit, then must be replaced." src="data:image/png;base64,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mhD5kkuutIsvvjxmSZ58+fLbxInj7cUXB9uCBfN8gEPy58/vg/033NDJ6tRpEPFYBbhef324vfvua76HaSQqC6TyQOk1YcJP1rdvdx9gSu6YY07yPYCjJSI6dGjjEyl9+jzjSxINGPCwTZs2KcV+l112nV1zza1JEi1KVAwY8IjNmjUjdN3jjz/gl4AmC9ek4bJ27d92xRVn++277nrQzj77wojP5YknnrfKlavZ0KF9UwT5ChcuYu3b32IXXXSZ7d6927+fb731sv377+Yk+9WqVdcefPBJXws+uYEDe9vnn7/vg3WvvvpJitu//voTGzFikAvarbdIVGJq0KBXIpYmefvtkf75JP9b6DN2442drVWrswxA5iiZp7ZA/+/VtmZERs4Larsfe+x+P0IgCNLreC0BtQsffvhT6DHOPfcYv61268orb4j6fHr1usd++eUHn4x+5pnXktw2ZswXro3vYU2bHmX9+g3zAfXevbv681AgKC0nS5cutvfff8O++eZTF+DfmuKxTjrpdLv88g4umF47dN2PP37j271Vq1aErrv00jOSHKdzXLt27ZNcp+cyeHAfd96YmOJxTjnlLLvttvv8fDuRZKatjUXJ31697vbnqEj32aFDJzv66OMjHhucH4K/l/4mTz/9qG3cuCG0z8svf0ACAgAAZCkSEAAAHGDUq3LQoN4+GKSesgosqYemetCqt+batWts+PCBtnfvnhTBlXALF87z8xyI7kM97XWs7kc98Dt2bG/XX3+HC9pcm+Q4BcoVlFcgQ/QcgnkSdGwQPFfPz/RSwPull4aGLisop8B6EJhSHe/JkydY9+79fDIgmunTJ9mTT/b070fRosXca6vgAlHL/XsnCqorSPf440NDSQj1ClVPWiVd5syZ6a9Tr9XDDisRul/NCZFeM2ZM9omQlSuXW8mSpdzrKe+fi3ry6r0aNqy/7yGr/T788G0fHFRP2SJFirnXPdcHCefNm+0SEHfa88+/nebRKaK68sOHDwpd1nupxwoeX4oUKRoxIDZw4GMucLWvLIwCpEqi6G+/fPkS/zlRkmjZssV21VU3GoDM0f8vJT9/+eV7l2TtnO6AcEbOC/r/vGXLZt+LfubMaf5YtQ/hPf2VqM4qek4Krt9zzw0+IK72V22uRh9opFXg44//F0qK6H3R61KiXOcFPWclG9R+jhjxrj9n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qLGuUKGypYcC70oo3HvvjbZw4V8+463nECQSlAjo1u12f2LQ6/z88w980kIjLfSYQWb8hx++tuefH2AZtXDhPB/479XrHv9Yev/0Ph52WAl/+7ZtW32CZNy47yMer5PGyJHP+vdFozeUONHrUCZclJF++OF7/aiKgN7HLVs2+zJVwaiFkiUPt8aNm4eWRo2apXgsPY+XXhrqkw86Tu+DPk/aXrt2jT8JaULrlM8x458VAAAAAACAzJgxY7Ldddf1Pg6kjp6KZ2gJAv4KrD/0UGc/QiESJS169rwrlDxQR9e6dRv6GJI6yb7xxov24IN3pui0Gq/j4xHfU0xG70GQfChZspSPHwXxp++//9JuvfVyW7VqRcTjFbt64IHbQ8mHfPnyhapZKCakuNY333xqQE7BCIhsMHHieB8cFwV67723lx8SpYZBjcVXX33kg8nBPumloPv27dt9iSBNthw0fKIGUwHvTZs2hALhgQUL5tnTTz/q91Gv9z59nk0yUbSe22+//exHHkQydGg/f99nnXWBXXPNrT55kVEDBjziA+EPPdTfN7zBc3/mmSfss8/e80PJOna82o8yaNeuvV1//R2hgLkSFD16dPJD9r788kN/u4L/6aXXO2RIX2vZ8kS7776HfemkwNix31r//j39yWjYsP529NEnpChzpJENbdpcZa1anW21atUNJUZ00tRJqEuXW3wS47XXXrDevYf423SCe/LJF/z2ZZedaevXr/P3o2x1NF988aFPwkibNlda+/a3hpI1Skjo76LEkia01nvaosUxoWMz+lkBAAAAAADIrFGjnvOdIXv27J+kQoRiMv369fAxNHXgVOwjeQUKjRpQ/Eg0UkJxDXViFSUEPvzwbXvuuaf8fSgmct11t8f1+HjE9xSTeeyxLr50t2JX99zTyxo1ahq6XeXG9T4okaD1gAEvJjlejzNixGC/rcTDbbd18XEoxYV03xMmjHVxob6+CgiQUzACIhuo8ZH8+fPboEGv+FI/QfBcw6kUML/77ocsIxQ0VsMsrVtfnCSgLAqSK4Fw/PGtUhyrRl8lgPRc+vcfkST5EDy3008/N+pjjx//o1166bX+uWcm+SDKdPfs+VQo+RA8906dHvAjHUTJhxNPPM1uuKFTklp2arCVMBCNKPjjjymWUbqvhx8ekCT5IHrca665zW+vXr3SVqxYmuJY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" alt="The benchmark treadmill: any fixed target under optimisation pressure is eventually hit, then must be replaced." /></p>
 <p>What this means for the loop is the point to hold onto. The eval step
 is not a neutral sensor that measures the model from outside. It is a
@@ -2073,22 +2098,27 @@ back to the annotation problem. Most teams settle for <strong>Outcome
 Reward Models</strong> (ORMs) instead, accepting that credit assignment
 is imprecise. ORMs are cheaper; they are also blunt instruments, and
 they are the reason agents can learn to game final outcomes by routes
-the designer never anticipated — the reward model shape from §§3–5
+the designer never anticipated — the reward model shape from §3 and §6
 applies here too, just stretched across a longer episode.</p>
 <h2 data-number="9.3" id="swe-bench-and-the-benchmark-trajectory"><span class="header-section-number">9.3</span> SWE-bench and the Benchmark
 Trajectory</h2>
-<p><strong>SWE-bench Verified</strong> is a benchmark of real GitHub
-issues where an agent must produce a patch that makes the repository’s
-own test suite pass. The reward is verifiable: the tests go green or
-they do not, and there is no rubric to argue about. When Cognition AI’s
-Devin launched in March 2024 it scored 13.86%, against a prior state of
-the art of 1.96%. By mid-2026, Claude Sonnet 4.5 scores 77.2% on the
-standard harness (82.0% with parallel compute) and Sonnet 4.6 scores
-79.6%. The benchmark is approaching saturation.</p>
-<p>Saturation is already generating successor problems. In February 2026
-OpenAI abandoned SWE-bench Verified over contamination concerns — test
-issues appearing in training data turn a capability score into a
-memorisation score. SWE-Rebench and SWE-bench Pro respond by drawing
+<p><strong>SWE-bench</strong>, later refined into <strong>SWE-bench
+Verified</strong> (an OpenAI-curated 500-issue subset, released August
+2024), is a benchmark of real GitHub issues where an agent must produce
+a patch that makes the repository’s own test suite pass. The reward is
+verifiable: the tests go green or they do not, and there is no rubric to
+argue about. When Cognition AI’s Devin launched in March 2024 it scored
+13.86% on the original benchmark, against a prior state of the art of
+1.96%. A recent Claude Sonnet model at the time of writing scores in the
+high-70s to low-80s percent on SWE-bench Verified, depending on harness
+configuration — check current leaderboards for up-to-date standings,
+since self-reported vendor scores dominate. The benchmark is approaching
+saturation.</p>
+<p>Saturation is already generating successor problems: contamination —
+test issues appearing in training data — turns a capability score into a
+memorisation score, and reports have circulated (unverifiable at the
+time of writing) of major labs moving away from SWE-bench Verified over
+exactly this concern. SWE-Rebench and SWE-bench Pro respond by drawing
 from post-cutoff or private-repository issues the models never saw.
 METR’s separate analysis found that a substantial fraction of
 test-passing agent PRs would not actually be merged by repository
@@ -2100,29 +2130,34 @@ SWE-bench-Passing PRs Would Not Be Merged into Main,” March 2026.)</p>
 the Evaluator</h2>
 <p>The agent evaluation problem has one failure mode with no equivalent
 in single-turn evaluation: an agent can attack the harness itself.
-Berkeley RDI researchers demonstrated seven distinct exploits by which
-zero-capability agents can score 100% on major agent benchmarks without
-completing any actual task — injecting false “task complete” signals,
-poisoning the evaluator’s context, or exploiting interface bugs in the
-evaluation harness. (“Trustworthy Benchmarks for Agents,” Berkeley RDI,
-2024–2025.) This is Goodhart’s Law applied specifically to agent
-evaluation: when the harness becomes the target rather than the task,
-the agent optimises against the harness. A single-turn LLM judge can be
-fooled into giving a high score; an agent harness can be compromised in
-the sense that a computer system can be compromised — by finding and
-exploiting seams in how it is built.</p>
+Researchers at Berkeley RDI (the Center for Responsible, Decentralized
+Intelligence at UC Berkeley) — led by Hao Wang with Qiuyang Mang, Alvin
+Cheung, Koushik Sen, and Dawn Song — demonstrated that zero-capability
+agents can be made to score at or near 100% on several major agent
+benchmarks without completing any actual task, by injecting false “task
+complete” signals, poisoning the evaluator’s context, or exploiting
+interface bugs in the evaluation harness. (Hao Wang et al., Berkeley
+RDI, benchmark-exploit audit targeted at NeurIPS; the same team is
+building “BenchJack,” an automated benchmark-vulnerability scanner.)
+This is Goodhart’s Law applied specifically to agent evaluation: when
+the harness becomes the target rather than the task, the agent optimises
+against the harness. A single-turn LLM judge can be fooled into giving a
+high score; an agent harness can be compromised in the sense that a
+computer system can be compromised — by finding and exploiting seams in
+how it is built.</p>
 <h2 data-number="9.5" id="what-the-metr-rct-found"><span class="header-section-number">9.5</span> What the METR RCT Found</h2>
 <p>The sharpest evidence for the gap between benchmark progress and
 real-world impact comes from a randomised controlled trial METR ran in
-2025. The study assigned N=246 tasks to experienced open-source
-developers, half using AI coding tools and half not. Developers using
-the tools were 19% slower on average than those without them — while
-simultaneously believing they were 20% faster. (Source: METR, 2025
-randomised controlled trial on developer productivity.) The benchmark
-trajectory says capability has increased dramatically. The RCT says
-that, for experienced developers on realistic tasks, that increase has
-not yet translated into a measurable productivity gain. The benchmark
-number and the production outcome may be measuring different things.</p>
+2025. The study had 16 experienced open-source developers complete 246
+tasks between them, with each task randomly assigned to be done with AI
+coding-tool assistance or without. Developers using the tools were 19%
+slower on average than when unassisted — while simultaneously believing
+they were 20% faster. (Source: METR, 2025 randomised controlled trial on
+developer productivity.) The benchmark trajectory says capability has
+increased dramatically. The RCT says that, for experienced developers on
+realistic tasks, that increase has not yet translated into a measurable
+productivity gain. The benchmark number and the production outcome may
+be measuring different things.</p>
 <h2 data-number="9.6" id="what-this-means-for-the-loop"><span class="header-section-number">9.6</span> What This Means for the
 Loop</h2>
 <p>Evaluating agents requires three things that single-turn output
@@ -2131,13 +2166,14 @@ multi-step credit assignment across long episodes, and robust harness
 isolation so the agent cannot attack the evaluator instead of the task.
 All three are harder and more expensive than running a pairwise
 comparison or reading a judge’s log-probabilities.</p>
-<p>The SWE-bench trajectory — from 2% to 77%+ in two years — looks like
-rapid capability gain, and on the verifiable coding task it genuinely
-is. But the METR RCT finding sits alongside that number as a check:
-experienced developers 19% slower in production, believing they are 20%
-faster. The eval step is even more load-bearing for agents than for
-single-turn outputs, and more fragile. More of what can go wrong with it
-is invisible to outcome-only scoring, more of the gaming surface is
+<p>The SWE-bench trajectory — from single digits to a successor
+benchmark near-saturated within two years — looks like rapid capability
+gain, and on the verifiable coding task it genuinely is. But the METR
+RCT finding sits alongside that number as a check: experienced
+developers 19% slower in production, believing they are 20% faster. The
+eval step is even more load-bearing for agents than for single-turn
+outputs, and more fragile. More of what can go wrong with it is
+invisible to outcome-only scoring, more of the gaming surface is
 structural rather than statistical, and the cost of building a good
 harness is higher. The thermometer problem does not get easier when the
 thing you are measuring has fifty steps and can read the
@@ -2154,15 +2190,18 @@ this primer.</p>
 <p>Anthropic structures its deployment decisions around a published
 document called the Responsible Scaling Policy (RSP), which
 operationalises safety commitments as AI Safety Levels — ASL for short.
-The levels are tiered: ASL-2 covers models at current frontier
-capability; ASL-3 applies to models that begin to approach dangerous
-autonomy thresholds. The gate is a scorecard. No model ships at a given
-level unless it scores below the defined capability thresholds on a
-specified eval suite. The ASL-3 threshold, as documented in the RSP,
-requires demonstrated ability to autonomously complete 2–8 hour
-SWE-style tasks on a defined benchmark. This is the CI/CD eval gate idea
-taken from software engineering and written into company policy: no
-score, no ship.</p>
+The levels are tiered: ASL-2 covered models through the pre-2025
+frontier; ASL-3 is triggered by capability thresholds spanning CBRN
+(chemical, biological, radiological, nuclear) uplift and autonomy
+criteria — including an autonomy checkpoint for demonstrated ability to
+complete 2–8 hour SWE-style tasks on a defined benchmark, which triggers
+comprehensive assessment rather than being the sole ASL-3 trigger
+itself. ASL-3 is not a future tier: Claude Opus 4 shipped under ASL-3
+protections in May 2025, per the same Claude 4 System Card cited below.
+The gate is a scorecard. No model ships at a given level unless it
+scores below the defined capability thresholds on a specified eval
+suite. This is the CI/CD eval gate idea taken from software engineering
+and written into company policy: no score, no ship.</p>
 <p>The implementation pipeline behind that gate runs: structured
 red-teaming to discover failure modes, conversion of findings into
 classifier training data, and injection of those into the next training
@@ -2189,17 +2228,18 @@ Teaming,” arXiv 2503.16431, March 2025. The structural logic is
 identical to Anthropic’s: define the capability you are worried about,
 build an eval for it, make the eval gate the deployment decision.</p>
 <p><strong>Anchor 3: Chatbot Arena as ecosystem-level eval</strong></p>
-<p>Chatbot Arena, built by LMSYS / UC Berkeley (Liang et al., “Chatbot
-Arena: An Open Platform for Evaluating LLMs by Human Preference,” ICML
-2024, arXiv 2403.04132), is the §3 Compare + Aggregate pipeline running
-at ecosystem scale, in public, continuously. Real users submit real
-prompts, see two anonymous model responses side by side, and vote for
-the one they prefer. The Bradley-Terry model runs over the accumulated
-votes — more than six million of them by the 2024 paper — and produces
+<p>Chatbot Arena, built by LMSYS / UC Berkeley (Chiang, W.-L. et al.,
+“Chatbot Arena: An Open Platform for Evaluating LLMs by Human
+Preference,” ICML 2024, arXiv 2403.04132), is the §3 Compare + Aggregate
+pipeline running at ecosystem scale, in public, continuously. Real users
+submit real prompts, see two anonymous model responses side by side, and
+vote for the one they prefer. The Bradley-Terry model runs over the
+accumulated votes — roughly 240,000 of them at the time of the 2024
+paper, grown to several million cumulatively by 2025–2026 — and produces
 continuously updated ratings for every model on the platform. This is
 not a controlled study; it is an open market for preference signal, and
 it is the closest thing the field has to a shared, living benchmark. The
-Llama-4 gaming episode (covered in §7) demonstrated that even this is
+Llama-4 gaming episode (covered in §8) demonstrated that even this is
 under adversarial pressure — labs can and do optimise specifically for
 Arena performance, which degrades the very signal they are competing
 on.</p>
@@ -2225,15 +2265,16 @@ evaluation loop is built, and as of mid-2026 none of them has a
 published solution that scales.</p>
 <p><strong>Goodhart’s treadmill has no exit</strong></p>
 <p>Any proxy that is optimised against degrades as a measure. The
-benchmark treadmill documented in §§7 and 9 is the empirical record of
+benchmark treadmill documented in §§8 and 10 is the empirical record of
 this: MMLU saturated, then Chatbot Arena was gamed, then SWE-bench
-Verified approached saturation fast enough that OpenAI abandoned it in
-February 2026 over contamination concerns, and the decontaminated
-successors (SWE-Rebench, SWE-bench Pro) are already under development
-pressure. Retro-holdout sets and private test suites delay
-contamination; they do not eliminate it. Harder benchmarks provide more
-signal but are faster to saturate as capabilities grow, because the same
-RLVR dynamics that drove SWE-bench from 14% to 80% in two years apply
+Verified approached saturation fast enough that reports circulated of
+major labs moving away from it over contamination concerns (unverifiable
+at the time of writing), and the decontaminated successors (SWE-Rebench,
+SWE-bench Pro) are already under development pressure. Retro-holdout
+sets and private test suites delay contamination; they do not eliminate
+it. Harder benchmarks provide more signal but are faster to saturate as
+capabilities grow, because the same RLVR dynamics that drove SWE-bench
+from single digits to near-saturation within about two years apply
 equally to any verifiable task. This is a structural property of the
 loop, not a temporary engineering problem. The only honest framing is
 that the field runs on a benchmark treadmill and has not published any
@@ -2257,10 +2298,11 @@ to aggregate by majority while acknowledging the concern in
 footnotes.</p>
 <p><strong>Benchmark scores have decoupled from economic
 value</strong></p>
-<p>METR’s 2025 randomised controlled trial — 246 tasks, experienced
-open-source developers — found that AI assistance produced 19% slower
-real-world productivity despite developers believing they were 20%
-faster (METR, “Measuring the Impact of AI Assistance on Programmer
+<p>METR’s 2025 randomised controlled trial — 16 experienced open-source
+developers completing 246 tasks between them, with AI assistance
+randomised at the task level — found that AI assistance produced 19%
+slower real-world productivity despite developers believing they were
+20% faster (METR, “Measuring the Impact of AI Assistance on Programmer
 Productivity,” 2025). The direction of the belief error is instructive:
 the thing that made developers feel faster was not the thing that made
 them actually faster. There is no large-scale, cross-domain study
@@ -2279,24 +2321,25 @@ signal that the reward model was trained to predict is no longer a
 reliable ground truth, because the human cannot tell which output is
 actually better.</p>
 <p>Three research-stage approaches exist for this regime.
-<strong>Weak-to-strong generalisation</strong> asks whether a weaker
+<strong>Weak-to-strong generalisation</strong> (Burns et al., OpenAI,
+“Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak
+Supervision,” December 2023, arXiv:2312.09390) asks whether a weaker
 supervisor can train a stronger model to generalise correctly beyond the
-supervisor’s own competence — Anthropic’s research programme on this
-explores whether a GPT-2-class “supervisor” can, through imperfect
-labels, elicit correct behaviour from a GPT-4-class model on tasks the
-supervisor cannot reliably solve itself. <strong>Debate</strong> is a
-research direction from OpenAI and others: two models argue opposite
-positions and a human adjudicates the argument, on the premise that
-detecting a dishonest or flawed argument is easier than directly
-evaluating the underlying claim. <strong>Iterated distillation and
-amplification</strong>, or IDA, is a research programme due to Paul
-Christiano: repeatedly decompose a hard task into subtasks that are
-within a human’s (or weaker model’s) ability to evaluate, solve each
-subtask, distil the results into a stronger model, and iterate —
-bootstrapping eval capability upward one level at a time. All three
-remain research-stage with no deployed solution as of mid-2026. They are
-not near-future engineering projects. They are open research
-problems.</p>
+supervisor’s own competence — OpenAI’s experiment tests whether a
+GPT-2-class “supervisor” can, through imperfect labels, elicit correct
+behaviour from a GPT-4-class model on tasks the supervisor cannot
+reliably solve itself. <strong>Debate</strong> is a research direction
+from OpenAI and others: two models argue opposite positions and a human
+adjudicates the argument, on the premise that detecting a dishonest or
+flawed argument is easier than directly evaluating the underlying claim.
+<strong>Iterated distillation and amplification</strong>, or IDA, is a
+research programme due to Paul Christiano: repeatedly decompose a hard
+task into subtasks that are within a human’s (or weaker model’s) ability
+to evaluate, solve each subtask, distil the results into a stronger
+model, and iterate — bootstrapping eval capability upward one level at a
+time. All three remain research-stage with no deployed solution as of
+mid-2026. They are not near-future engineering projects. They are open
+research problems.</p>
 <p><strong>A brief note on test-time compute</strong></p>
 <p>Models that spend more inference-time compute — chain-of-thought,
 tree search, self-critique passes — often score higher on benchmarks.
@@ -2332,9 +2375,12 @@ with human feedback” (InstructGPT). NeurIPS 2022.
 https://arxiv.org/abs/2203.02155</li>
 <li>Liu, Y. et al. “G-Eval: NLG Evaluation using GPT-4 with Better Human
 Alignment.” EMNLP 2023. https://arxiv.org/abs/2303.16634</li>
-<li>Liang, W. et al. “Chatbot Arena: An Open Platform for Evaluating
+<li>Chiang, W.-L. et al. “Chatbot Arena: An Open Platform for Evaluating
 LLMs by Human Preference.” ICML 2024.
 https://arxiv.org/abs/2403.04132</li>
+<li>Burns, C. et al. (OpenAI). “Weak-to-Strong Generalization: Eliciting
+Strong Capabilities With Weak Supervision.” December 2023.
+https://arxiv.org/abs/2312.09390</li>
 <li>Bai, Y. et al. (Anthropic). “Constitutional AI: Harmlessness from AI
 Feedback.” December 2022.
 https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback</li>
@@ -2347,15 +2393,18 @@ Debias Automatic Evaluators.” (AlpacaEval 2.0) arXiv:2404.04475,
 <li>He, H. (<span class="citation" data-cites="cHHillee">@cHHillee</span>). Documentation of GPT-4
 Codeforces contamination cliff. March 2023.
 https://x.com/cHHillee/status/1635790330854526981</li>
-<li>Roberts, A. et al. “Contamination in NLP Benchmarks.” NeurIPS
-2024.</li>
+<li>Roberts et al. “Data Contamination Through the Lens of Time.”
+arXiv:2310.10628, 2023.</li>
 <li>Ahmad, L. et al. (OpenAI). “OpenAI’s Approach to External Red
 Teaming for AI Models and Systems.” arXiv:2503.16431, 2025.</li>
 <li>METR. “Measuring the Impact of AI Assistance on Programmer
 Productivity.” Randomised controlled trial, 2025. https://metr.org</li>
 <li>METR. “Many SWE-bench-Passing PRs Would Not Be Merged into Main.”
 March 2026. https://metr.org</li>
-<li>Berkeley RDI. “Trustworthy Benchmarks for Agents.” 2024–2025.</li>
+<li>Wang, H. et al. (Berkeley RDI / UC Berkeley Center for Responsible,
+Decentralized Intelligence). Benchmark-exploit audit of AI agent
+evaluation harnesses (SWE-bench, WebArena, OSWorld, GAIA,
+Terminal-Bench). Pre-publication work, targeted at NeurIPS.</li>
 <li>Anthropic. Claude 4 System Card. May 2025.</li>
 <li>Anthropic. Responsible Scaling Policy.
 https://www.anthropic.com/index/anthropics-responsible-scaling-policy</li>

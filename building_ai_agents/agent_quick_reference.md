@@ -141,11 +141,13 @@ async def execute_tool_with_retry(tool_call, max_retries=2):
             validated_args = validate_schema(tool_call.args)
             result = await execute(tool_call.name, validated_args)
             return {"success": True, "result": result}
-        except ValidationError:
+        except ValidationError as error:
             if attempt < max_retries - 1:
                 # Ask LLM to fix arguments
                 corrected = await llm.correct_tool_args(tool_call, error)
                 tool_call = corrected
+            else:
+                return {"success": False, "error": str(error)}
         except ToolError as e:
             return {"success": False, "error": str(e)}
 ```
@@ -156,13 +158,13 @@ async def execute_tool_with_retry(tool_call, max_retries=2):
 
 ### Short-Term: Context Window
 **What to keep:**
-- Latest 5-10 interactions (full detail)
+- Latest 8-12 interactions (full detail)
 - Current task description
 - Active dependencies
 
 **When to compress:**
+- Conversation exceeds ~20 messages (roughly every 10 actions)
 - Approaching 80% of context limit
-- Task depth > 15 steps
 
 ```python
 if len(conversation) > 20:
@@ -194,7 +196,9 @@ for memory in relevant_memories:
     context += f"- {memory.summary}\n"
 ```
 
-**Scoring function:**
+**Scoring function** (illustrative — the equal-weighted 1/3-1/3-1/3 version is
+what Generative Agents used; the weights below are just a starting point, tune
+per your data):
 ```
 score = 0.4 * recency + 0.4 * relevance + 0.2 * importance
 ```
@@ -249,7 +253,8 @@ Example reflection:
 ```
 = (completed_successfully / total_attempted) * 100%
 
-Threshold: 
+Threshold (illustrative starting points, not industry benchmarks — set your
+own bar from baseline data and business risk tolerance):
   - MVP: >70%
   - Production: >90%
   - Enterprise: >95%
@@ -267,7 +272,7 @@ Optimization: Reduce redundant tool calls
 ```
 = (claims_without_tool_backing / total_claims) * 100%
 
-Acceptable: <5%
+Acceptable: <5% (illustrative starting point — calibrate to your domain's risk)
 Detection: Analyze final output for unsourced claims
 ```
 
@@ -281,7 +286,11 @@ Improvement: Better instruction + schema validation
 
 ### Cost per Task
 ```
-= (input_tokens + output_tokens * 1.5) * price_per_1k_tokens
+= (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
+
+Note: input and output tokens are priced separately, and output is typically
+priced several times higher than input (e.g. 5x for Claude-class models) — a
+single blended multiplier understates cost.
 
 Optimization:
   - Cache system prompts
@@ -301,7 +310,7 @@ SELECT
   SUM(CASE WHEN success=true THEN 1 ELSE 0 END) as successful,
   (SUM(CASE WHEN success=true THEN 1 ELSE 0 END)::float / COUNT(*)) * 100 as success_rate
 FROM agent_executions
-WHERE created_at > NOW() - INTERVAL 30 days
+WHERE created_at > NOW() - INTERVAL '30 days'
 GROUP BY DATE(created_at)
 ORDER BY date DESC
 ```
@@ -314,7 +323,8 @@ SELECT
   STDDEV(cost_usd) as stddev_cost,
   MAX(cost_usd) as max_cost
 FROM agent_executions
-WHERE created_at > NOW() - INTERVAL 7 days
+WHERE created_at > NOW() - INTERVAL '7 days'
+GROUP BY agent_id
 HAVING STDDEV(cost_usd) > AVG(cost_usd) * 0.5
 ORDER BY max_cost DESC
 ```
@@ -328,7 +338,7 @@ SELECT
   AVG(latency_ms) as avg_latency_ms,
   MAX(latency_ms) as max_latency_ms
 FROM tool_executions
-WHERE created_at > NOW() - INTERVAL 7 days
+WHERE created_at > NOW() - INTERVAL '7 days'
 GROUP BY tool_name
 ORDER BY success_rate ASC, max_latency_ms DESC
 ```
@@ -353,7 +363,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 
 ### MVP Agent (Week 1)
 ```
-☐ Choose model (Claude 3.5 Sonnet recommended)
+☐ Choose model (a current mid-tier frontier model, e.g. Claude Sonnet 5, is a reasonable default — check current pricing/capability docs before committing)
 ☐ Define 3-5 core tools
 ☐ Write system prompt
 ☐ Implement basic agentic loop
@@ -388,9 +398,10 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 
 ### Per-Task Cost Calculation
 ```
-Base cost = (input_tokens + output_tokens * 1.5) / 1000 * price_per_1k
+Base cost = (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
 
-Example (Claude 3.5 Sonnet):
+Example (illustrative pricing for a mid-tier frontier model — check current
+provider rate cards for actual numbers):
   Input: 2000 tokens ($0.003 per 1k) = $0.006
   Output: 500 tokens ($0.015 per 1k) = $0.0075
   Total: $0.0135 per task
@@ -402,7 +413,9 @@ Monthly = tasks_per_day * avg_cost_per_task * 30 * growth_factor
 
 Example:
   1000 tasks/day * $0.015 * 30 = $450/month base
-  With 20% monthly growth: $450 * (1.2^12) = ~$25k/year
+  With 20% monthly growth compounding, year-one total is the sum of
+  $450 * 1.2^k for k=0..11, not $450 * 1.2^12 (that's just month 12's cost,
+  ~$4,013). The correct twelve-month sum is ~$18k/year.
 ```
 
 ### Optimization ROI

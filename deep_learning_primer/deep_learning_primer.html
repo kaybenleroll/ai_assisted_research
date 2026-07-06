@@ -785,13 +785,17 @@ memorises them — textbook overfitting. The capacity that makes deep
 networks powerful is a liability without data to constrain it.</p>
 <p>For most of the field’s history, that data did not exist in usable
 form. The thing that changed was the arrival of large, labelled
-datasets, and the canonical example is ImageNet. Released in 2009,
-ImageNet contained 1.2 million labelled training images across 1000
-categories, hand-annotated at a scale nobody had attempted before. This
-mattered for a reason that is easy to undersell: a high-capacity model
-needs enough labelled examples to pin down its many degrees of freedom,
-and ImageNet was the first vision dataset large enough to do that for a
-deep network. Suddenly the model’s appetite could be fed.</p>
+datasets, and the canonical example is ImageNet. The full ImageNet
+database, released in 2009, held around 3.2 million labelled images
+across tens of thousands of categories (WordNet synsets); the subset
+that mattered for training deep networks was the annual ILSVRC
+benchmark’s 1000-category slice — about 1.2 million labelled training
+images across 1000 categories — hand-annotated at a scale nobody had
+attempted before. This mattered for a reason that is easy to undersell:
+a high-capacity model needs enough labelled examples to pin down its
+many degrees of freedom, and the ILSVRC subset was the first vision
+dataset large enough to do that for a deep network. Suddenly the model’s
+appetite could be fed.</p>
 <p>Once that loop closes, it accelerates. More data trains better
 models; better models power more useful products; useful products
 attract more users, who generate more data; and that data trains the
@@ -1351,7 +1355,10 @@ is normalised across the network.</p>
 <p><strong>Adam</strong> combines both ideas, and it is the default
 optimiser for most of deep learning today. It maintains a momentum-style
 running average of the gradient (<span class="math inline">\(\mathbf{m}\)</span>, the first moment) and an
-RMSProp-style running average of the squared gradient (<span class="math inline">\(\mathbf{v}\)</span>, the second moment):</p>
+RMSProp-style running average of the squared gradient (<span class="math inline">\(\mathbf{v}\)</span>, the second moment — note:
+this <span class="math inline">\(\mathbf{v}\)</span> is Adam’s internal
+bookkeeping variable, not the momentum velocity from the previous
+subsection, despite the shared letter):</p>
 <p><span class="math display">\[\mathbf{m} \leftarrow \beta_1 \mathbf{m}
 + (1 - \beta_1) \nabla \mathcal{L}, \qquad \mathbf{v} \leftarrow \beta_2
 \mathbf{v} + (1 - \beta_2)(\nabla \mathcal{L})^2.\]</span></p>
@@ -1416,12 +1423,19 @@ regularisers worth knowing well.</p>
 <p>Dropout is the signature technique. During training, on each forward
 pass, you randomly set a fraction <span class="math inline">\(p\)</span>
 of the activations in a layer to zero — different neurons dropped each
-step. At inference time you keep all activations but scale them by <span class="math inline">\((1 - p)\)</span> to compensate for the fact that
-more units are now active than during training. The reason dropout works
-is that it prevents co-adaptation. When any neuron might vanish on the
-next step, the network cannot afford to build features that depend on a
-precise, fragile combination of specific neurons; it is forced to spread
-the representation across redundant units so that the answer survives
+step. Conceptually, at inference time you would then keep all
+activations but scale them by <span class="math inline">\((1 -
+p)\)</span> to compensate for the fact that more units are now active
+than during training. In practice, every modern framework implements the
+equivalent <em>inverted dropout</em>: it does the rescaling at training
+time instead, dividing the surviving activations by <span class="math inline">\((1 - p)\)</span> on every training step, so
+inference needs no scaling at all and can simply run the network as-is.
+Same expected activation, but the correction moves to training so the
+inference path stays untouched. The reason dropout works is that it
+prevents co-adaptation. When any neuron might vanish on the next step,
+the network cannot afford to build features that depend on a precise,
+fragile combination of specific neurons; it is forced to spread the
+representation across redundant units so that the answer survives
 whichever ones are dropped. The effect resembles training a large
 ensemble of thinned networks that share weights, and the redundancy it
 forces generalises better than a network that has been allowed to put
@@ -1446,16 +1460,23 @@ value, and then applies a learnable scale and shift:</p>
 variance across the batch; the learnable parameters <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\beta\)</span> then let the network rescale and
 re-shift them to whatever distribution actually serves the task, so
 normalisation does not throw away representational power. Three benefits
-follow. First, it counters internal covariate shift — the way the
-distribution of inputs to a deep layer keeps shifting as the layers
-below it update — by pinning that distribution to a stable scale, so
-each layer trains against a more consistent target. Second, it makes
-training far less sensitive to the learning rate, because the
-normalisation prevents activations from drifting into extreme ranges,
-letting you use larger rates and train faster. Third, because the batch
-statistics inject a little noise (each example is normalised using its
-randomly-assembled batch), it has a mild regularising effect that
-sometimes reduces the need for dropout.</p>
+follow, though the first is more contested than the original paper let
+on. The 2015 paper’s own explanation was that batch norm counters
+internal covariate shift — the way the distribution of inputs to a deep
+layer keeps shifting as the layers below it update — by pinning that
+distribution to a stable scale, so each layer trains against a more
+consistent target. Later work (Santurkar et al., 2018) found batch norm
+still works even when covariate shift is deliberately reinjected, and
+argued the real benefit is a smoother optimisation landscape — smaller,
+more predictable gradients that let you take bigger, safer steps. The
+question of exactly why batch norm helps is not fully settled; treat the
+covariate-shift story as the traditional intuition rather than a proven
+mechanism. Second, it makes training far less sensitive to the learning
+rate, because the normalisation prevents activations from drifting into
+extreme ranges, letting you use larger rates and train faster. Third,
+because the batch statistics inject a little noise (each example is
+normalised using its randomly-assembled batch), it has a mild
+regularising effect that sometimes reduces the need for dropout.</p>
 <p>The standard placement is after the linear transformation and before
 the activation function — normalise the pre-activations, then pass them
 through the nonlinearity. One caveat to carry forward: batch
@@ -1560,7 +1581,13 @@ a single number summarising how strongly the kernel’s pattern is present
 in the patch anchored at <span class="math inline">\((i, j)\)</span>.
 Run this over every position and you get a new feature map — an
 “activation map” showing where in the image that particular pattern
-fired.</p>
+fired. One pedantic note worth having: true mathematical convolution
+flips the kernel before sliding it; what’s written above — and what
+every deep learning framework calls “convolution” — skips the flip and
+is technically cross-correlation. Since the kernel is learned either
+way, the flip makes no practical difference, but it is why the operation
+you implement never quite matches the definition in a signal-processing
+textbook.</p>
 <p>Three properties fall out of this design, and each one is doing real
 work. The first is <strong>parameter sharing</strong>: the same <span class="math inline">\(k \times k\)</span> weights are reused at every
 position. A <span class="math inline">\(3 \times 3\)</span> kernel has
@@ -1817,8 +1844,8 @@ shaped <code>(8, 28, 28, 1)</code> rather than PyTorch’s channels-first
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers, Sequential</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Sequential([</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    layers.Conv2D(<span class="dv">32</span>, <span class="dv">3</span>, padding<span class="op">=</span><span class="st">&quot;same&quot;</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                  input_shape<span class="op">=</span>(<span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">1</span>)),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    layers.Input(shape<span class="op">=</span>(<span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">1</span>)),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    layers.Conv2D(<span class="dv">32</span>, <span class="dv">3</span>, padding<span class="op">=</span><span class="st">&quot;same&quot;</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>),</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    layers.MaxPooling2D(<span class="dv">2</span>),</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    layers.Conv2D(<span class="dv">64</span>, <span class="dv">3</span>, padding<span class="op">=</span><span class="st">&quot;same&quot;</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>),</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    layers.MaxPooling2D(<span class="dv">2</span>),</span>
@@ -2046,6 +2073,15 @@ limits, where a small recurrent model beats a transformer you cannot
 afford to host. And the fourth is data with a genuinely recurrent
 character — many time-series problems — where the recurrent inductive
 bias matches the underlying process and helps rather than hinders.</p>
+<p>Worth naming here: <strong>state-space models</strong> (SSMs), most
+prominently <strong>Mamba</strong> (Gu &amp; Dao, 2023), are the current
+standard answer to exactly the pitch above — linear-cost sequence
+processing with a fixed-size recurrent state, but with a training-time
+formulation that parallelises across the sequence the way a transformer
+does, closing much of the throughput gap that made vanilla RNNs
+impractical to train at scale. Where you would once have reached for an
+LSTM or GRU on long-sequence, streaming, or edge workloads, an SSM is
+now the more common choice.</p>
 <h2 data-number="5.7" id="code-an-lstm-in-three-frameworks"><span class="header-section-number">5.7</span> Code: an LSTM in three
 frameworks</h2>
 <p>The same single-layer LSTM classifier in each framework: it consumes
@@ -2274,7 +2310,16 @@ the FFN’s job is to transform each token’s representation on its own.
 The inner dimension is conventionally four times the model dimension,
 <span class="math inline">\(d_{\text{ff}} = 4 \times
 d_{\text{model}}\)</span>, giving the block extra capacity to process
-what attention gathered.</p>
+what attention gathered. That is the 2017 formulation; modern LLMs from
+LLaMA onward mostly replace the plain ReLU FFN with
+<strong>SwiGLU</strong> — a gated variant that multiplies two linear
+projections together, one passed through a Swish activation — and shrink
+the inner dimension to roughly <span class="math inline">\(d_{\text{ff}}
+\approx \tfrac{8}{3} d_{\text{model}}\)</span> to keep the parameter
+count comparable despite the extra projection. It is the same one-line
+footnote as RoPE and pre-LN elsewhere in this section: the mechanism
+above is the textbook version, and production models have since tweaked
+it.</p>
 <p>Every sub-layer is wrapped in a residual connection and a layer
 normalisation, in the form <span class="math inline">\(\text{LayerNorm}(\mathbf{x} +
 \text{Sublayer}(\mathbf{x}))\)</span>. The residual is there for exactly
@@ -2291,7 +2336,8 @@ over. Batch norm computes its mean and variance over the batch dimension
 instead computes them over the feature dimension, independently for each
 single example:</p>
 <p><span class="math display">\[\text{LayerNorm}(\mathbf{x}) = \gamma
-\odot \frac{\mathbf{x} - \mu}{\sigma + \epsilon} + \beta\]</span></p>
+\odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \epsilon}} +
+\beta\]</span></p>
 <p>where <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> are the mean and standard
 deviation of the features of that one example, <span class="math inline">\(\epsilon\)</span> is a small constant for
 numerical stability, and <span class="math inline">\(\gamma\)</span>,
@@ -2575,17 +2621,20 @@ is a straight line. This is unusual and useful. It means you can train
 small models, fit the curve, and forecast the loss of a model ten times
 larger before you spend a cent training it.</p>
 <p>The first-order practical lesson from Kaplan was that, for a fixed
-compute budget, you should scale model size and dataset size together
-rather than pouring everything into a bigger model trained on the same
-data. The sharper correction came from the <strong>Chinchilla</strong>
-paper (Hoffmann et al., 2022), which showed that the previous generation
-of large models — GPT-3 among them — were badly <em>undertrained</em>.
-They were too big for the number of tokens they had seen. Chinchilla’s
-finding, often quoted as a rule of thumb, is that compute-optimal
-training uses roughly <strong>20 tokens per parameter</strong>. A
-70-billion-parameter model wants about 1.4 trillion training tokens to
-be trained well; a 175-billion model trained on only 300 billion tokens,
-as GPT-3 was, is leaving capability on the table.</p>
+compute budget, you should put most of the extra compute into a bigger
+model and comparatively little into more data — their fitted exponents
+had parameters scaling much faster than dataset size (roughly <span class="math inline">\(N \propto C^{0.73}\)</span> against <span class="math inline">\(D \propto C^{0.27}\)</span>). This is exactly the
+recipe that produced GPT-3: a huge model trained on a comparatively
+modest 300 billion tokens. The sharper correction came from the
+<strong>Chinchilla</strong> paper (Hoffmann et al., 2022), which showed
+that this generation of large models — GPT-3 among them — were badly
+<em>undertrained</em>. They were too big for the number of tokens they
+had seen. Chinchilla’s finding, often quoted as a rule of thumb, is that
+compute-optimal training uses roughly <strong>20 tokens per
+parameter</strong>. A 70-billion-parameter model wants about 1.4
+trillion training tokens to be trained well; a 175-billion model trained
+on only 300 billion tokens, as GPT-3 was, is leaving capability on the
+table.</p>
 <p>The implication reaches past the training run. A smaller model
 trained on the compute-optimal amount of data can match a larger model
 that was undertrained — and the smaller model is cheaper to run for
@@ -2679,8 +2728,10 @@ the loop, which is what makes the next stage affordable.</p>
 language model as a policy <span class="math inline">\(\pi_\theta\)</span> and fine-tune it with
 reinforcement learning — classically <strong>Proximal Policy
 Optimisation</strong> (PPO) — to produce outputs the reward model scores
-highly. The objective is</p>
-<p><span class="math display">\[\mathcal{L}_\text{RLHF} =
+highly. The objective, a quantity to <em>maximise</em> rather than
+minimise — so called out as <span class="math inline">\(J(\theta)\)</span> rather than the <span class="math inline">\(\mathcal{L}\)</span> used elsewhere in this primer
+for losses to be minimised — is</p>
+<p><span class="math display">\[J_\text{RLHF}(\theta) =
 \mathbb{E}\big[r_\phi(\mathbf{x}, \mathbf{y})\big] - \beta \cdot
 \text{KL}\big[\pi_\theta \| \pi_\text{SFT}\big].\]</span></p>
 <p>The first term is the reward to maximise. The second term is the
@@ -3108,12 +3159,17 @@ and <span class="math inline">\(D(\mathbf{x}, \mathbf{y})\)</span>, and
 the generator learns to produce a sample of the requested class while
 the discriminator judges real-versus-fake conditioned on that class —
 turning an uncontrolled sampler into one you can steer.
-<strong>StyleGAN</strong> (Karras et al.) pushed photorealism to its
-peak with adaptive instance normalisation (AdaIN), which injects a
-learned style vector at every resolution of the generator, giving
-control over coarse structure and fine detail separately; for several
-years its faces were the state of the art in photorealistic generation
-and the source of most “this person does not exist” demonstrations.</p>
+<strong>StyleGAN</strong> (Karras et al., 2018) pushed photorealism to
+its peak by injecting a learned style vector at every resolution of the
+generator, giving control over coarse structure and fine detail
+separately; for several years its faces were the state of the art in
+photorealistic generation and the source of most “this person does not
+exist” demonstrations. The original StyleGAN did this via adaptive
+instance normalisation (AdaIN), but AdaIN turned out to cause
+characteristic droplet-shaped artefacts; StyleGAN2 (2019) replaced it
+with weight demodulation, which achieves the same per-resolution style
+control without the artefacts. “StyleGAN” today usually means the
+StyleGAN2/3 line, not the original AdaIN-based version.</p>
 <h2 data-number="9.5" id="when-gans-are-still-the-right-tool"><span class="header-section-number">9.5</span> When GANs are still the right
 tool</h2>
 <p>Diffusion models have displaced GANs as the default for high-fidelity
@@ -3123,15 +3179,18 @@ speed: a GAN generates in a <strong>single forward pass</strong>, while
 diffusion needs many sequential denoising steps, so when you need
 samples fast — interactive tools, real-time generation, anything
 latency-sensitive — a GAN’s one-shot sampling is a decisive advantage.
-They remain strong for video, where the single-pass speed compounds
-across frames and where adversarial losses help enforce temporal
-consistency. And they own image-to-image translation and domain
-adaptation — turning horses into zebras, sketches into photos, summer
-scenes into winter ones — through architectures like CycleGAN and
-pix2pix, where the adversarial signal directly judges whether a
-translated image looks like it belongs in the target domain. Wherever
-you need fast sampling or adversarial feedback on a specific
-distributional property, the GAN is still the right tool.</p>
+They retain a niche in latency-critical video — real-time avatar and
+face-reenactment systems, where single-pass speed matters more than
+absolute fidelity — though for general video generation, diffusion and
+transformer-based (DiT) models have taken over since 2023–24: Sora, Veo,
+and Runway Gen-3 are all diffusion-family, not GAN-family. And GANs own
+image-to-image translation and domain adaptation — turning horses into
+zebras, sketches into photos, summer scenes into winter ones — through
+architectures like CycleGAN and pix2pix, where the adversarial signal
+directly judges whether a translated image looks like it belongs in the
+target domain. Wherever you need fast sampling or adversarial feedback
+on a specific distributional property, the GAN is still the right
+tool.</p>
 <h1 data-number="10" id="diffusion-models"><span class="header-section-number">10</span> Diffusion Models</h1>
 <p>Diffusion models come from one disarmingly simple observation. Take
 an image and add a little Gaussian noise. Add a little more. Keep going
@@ -3246,7 +3305,13 @@ in disguise, and the denoising it learns is really an estimate of the
 direction toward higher data density at each noise level. This places
 diffusion inside the family of energy-based and score-based generative
 models, and the equivalence is more than cosmetic — it is where a lot of
-the theory and the faster samplers come from.</p>
+the theory and the faster samplers come from. A close relative worth a
+name-check is <strong>flow matching</strong>, which trains a network to
+regress a velocity field along a simpler, often-straight path between
+noise and data rather than a noise-prediction target; it underpins
+several frontier image and video models (Stable Diffusion 3, Flux)
+alongside — and increasingly instead of — classic score/noise
+matching.</p>
 <h2 data-number="10.4" id="ddim-fewer-steps"><span class="header-section-number">10.4</span> DDIM: fewer steps</h2>
 <p>The DDPM sampler has one serious practical drawback: it wants on the
 order of 1000 steps, one per noise level, and each step is a full
@@ -3327,13 +3392,19 @@ diffusion a small, well-behaved space to work in.</p>
 <p>Text conditioning in Stable Diffusion uses machinery you already know
 from §7. A CLIP text encoder turns the prompt into a sequence of
 embedding vectors, and those embeddings are injected into the denoising
-network — a U-Net — through <strong>cross-attention</strong>. The image
-features supply the queries, the text embeddings supply the keys and
-values, exactly the encoder-decoder cross-attention pattern from §7, so
-at every layer the image being denoised “looks up” the parts of the
-prompt relevant to each spatial location. That is the whole
-text-to-image pathway: encode the prompt, diffuse in latent space under
-cross-attention to the prompt, decode to pixels.</p>
+network through <strong>cross-attention</strong>. The original Stable
+Diffusion used a U-Net (a convolutional encoder-decoder with skip
+connections) as that denoising network; since 2024 frontier models (SD3,
+Flux, Sora) have mostly replaced it with a <strong>diffusion transformer
+(DiT)</strong> — a plain transformer operating on patchified latents —
+which scales more predictably with data and compute than the
+convolutional U-Net does. The image features supply the queries, the
+text embeddings supply the keys and values, exactly the encoder-decoder
+cross-attention pattern from §7, so at every layer the image being
+denoised “looks up” the parts of the prompt relevant to each spatial
+location. That is the whole text-to-image pathway: encode the prompt,
+diffuse in latent space under cross-attention to the prompt, decode to
+pixels.</p>
 <h2 data-number="10.7" id="comparison-vaes-gans-diffusion"><span class="header-section-number">10.7</span> Comparison: VAEs, GANs,
 Diffusion</h2>
 <p>Pulling the three families together, each makes a different bargain,
@@ -3386,9 +3457,9 @@ you can compose.</p>
 </tr>
 <tr>
 <td>Latent space</td>
-<td>Structured, interpolatable</td>
-<td>Unstructured</td>
-<td>None (pixel/latent space)</td>
+<td>Structured, interpolatable (learned encoder)</td>
+<td>Smooth, interpolatable (no encoder — inversion required)</td>
+<td>Noise space via DDIM (no encoder)</td>
 </tr>
 <tr>
 <td>Text conditioning</td>
@@ -3459,9 +3530,14 @@ advantage. It narrows the performance gap substantially while keeping
 the ergonomic, eager-by-default API for everything else. The ecosystem
 around PyTorch is the deepest in the field: research papers almost
 universally ship PyTorch implementations, HuggingFace integration is
-first-class, and production deployment is handled through TorchScript
-(which serialises a model into a form runnable without Python) and
-TorchServe.</p>
+first-class, and the production deployment story keeps moving:
+TorchScript and TorchServe were the long-standing answer, but
+TorchScript is now legacy (superseded by <code>torch.export</code> and
+AOTInductor) and TorchServe entered limited maintenance in 2024. For
+edge deployment the current path is ExecuTorch; for serving large
+models, purpose-built inference servers like vLLM have largely taken
+over from general-purpose model servers. Expect this toolchain to keep
+shifting faster than the modelling APIs above it.</p>
 <h2 data-number="11.2" id="tensorflow-and-keras"><span class="header-section-number">11.2</span> TensorFlow and Keras</h2>
 <p>TensorFlow arrived first, from Google Brain in 2015, and its original
 design was the opposite of PyTorch’s. Computation graphs were static:
@@ -3612,7 +3688,8 @@ tax.</p>
 </tr>
 <tr>
 <td>Production deployment</td>
-<td>TorchServe, TorchScript</td>
+<td><code>torch.export</code>/ExecuTorch, vLLM-class serving (shifting
+toolchain)</td>
 <td>TF Serving, TFLite, TF.js</td>
 <td>Less mature</td>
 </tr>
@@ -3663,12 +3740,13 @@ of layers:</p>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.Sequential([</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(<span class="dv">256</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>, input_shape<span class="op">=</span>(<span class="dv">784</span>,)),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(<span class="dv">10</span>),   <span class="co"># logits; softmax applied in the loss</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> tf.random.normal((<span class="dv">32</span>, <span class="dv">784</span>))   <span class="co"># batch of 32 MNIST images</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> model(x)                 <span class="co"># shape: (32, 10)</span></span></code></pre></div>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    keras.layers.Input(shape<span class="op">=</span>(<span class="dv">784</span>,)),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(<span class="dv">256</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(<span class="dv">10</span>),   <span class="co"># logits; softmax applied in the loss</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> tf.random.normal((<span class="dv">32</span>, <span class="dv">784</span>))   <span class="co"># batch of 32 MNIST images</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> model(x)                 <span class="co"># shape: (32, 10)</span></span></code></pre></div>
 <p>And in JAX with Flax, the model is again a module, but the parameters
 live outside it. You define the architecture, then call
 <code>init</code> with an explicit random key to produce a parameter
@@ -3769,15 +3847,15 @@ latent space is the whole point; it is the asset you are buying, and the
 slightly blurry samples are the price.</p>
 <p>If you want very fast single-pass generation and can tolerate the
 training instability that comes with it, use a GAN. StyleGAN remains a
-strong choice for photorealistic images, and GAN-based models are still
-competitive for video, where their temporal coherence and raw generation
-speed hold up against diffusion.</p>
+strong choice for photorealistic images, and GANs still hold a niche in
+latency-critical video generation (real-time avatars, face reenactment)
+— but for general-purpose video generation, diffusion and
+diffusion-transformer models have taken over.</p>
 <p>If you want state-of-the-art quality and diversity and generation
-speed is not your primary concern, use a diffusion model. As of 2024
-this is the default for image, audio, and video generation — the
-iterative denoising process is slow, but it produces the best samples,
-and a great deal of engineering has gone into making the sampling
-faster.</p>
+speed is not your primary concern, use a diffusion model. This is the
+default for image, audio, and video generation — the iterative denoising
+process is slow, but it produces the best samples, and a great deal of
+engineering has gone into making the sampling faster.</p>
 <p>If you want text generation, the answer is a decoder-only transformer
 in the GPT style. Diffusion for text is an active research area and an
 interesting one, but it is not yet the practical choice.</p>
@@ -3844,7 +3922,7 @@ shape of it is the point.</p>
 <td>Stable Diffusion from scratch</td>
 <td>LAION-5B (billions of images)</td>
 <td>890M</td>
-<td>TPU months</td>
+<td>GPU months (≈150K A100-hours)</td>
 </tr>
 </tbody>
 </table>

@@ -226,17 +226,15 @@ openclaw models list --provider ollama
 openclaw models set ollama/gemma4
 ```
 
-### LM Studio
+### LM Studio, vLLM, and LiteLLM
 
-LM Studio is useful when you want local model serving with easier lifecycle controls. OpenClaw can target LM Studio with OpenAI-compatible request modes depending on capability.
+These three are all reached through OpenClaw's generic OpenAI-compatible provider path — the "Generic OpenAI-compatible local provider" config later in this primer is the concrete stanza to adapt for any of them, pointed at each backend's own base URL and API key.
 
-### vLLM
+LM Studio is useful when you want local model serving with easier lifecycle controls than raw llama.cpp — its GUI handles model download and switching, and it exposes an OpenAI-compatible endpoint OpenClaw can target directly.
 
-vLLM is commonly used for higher-throughput serving scenarios. In OpenClaw, it is treated as an OpenAI-compatible provider and should be configured with explicit timeout and model metadata assumptions.
+vLLM is commonly used for higher-throughput serving scenarios, particularly when serving one model to multiple concurrent agents or users. In OpenClaw, it is treated as an OpenAI-compatible provider and should be configured with explicit timeout and model metadata assumptions, since vLLM's own defaults are tuned for throughput rather than agentic tool-calling latency.
 
-### LiteLLM
-
-LiteLLM is valuable as an abstraction and routing layer over multiple model backends. It is often used where centralized policy and provider switching are required.
+LiteLLM is valuable as an abstraction and routing layer over multiple model backends — it fronts several providers (local and hosted) behind one OpenAI-compatible endpoint, so it's often used where centralized policy and provider switching are required rather than talking to a single backend directly.
 
 ### On-demand local services
 
@@ -248,14 +246,18 @@ The reason to run this on constrained hardware at all is not raw speed — you w
 
 That class of laptop cannot fully host the recommended OpenClaw models in 6 GB of VRAM, but 64 GB of RAM is plenty for a strong partial-offload setup: put as many layers as possible on the GPU and keep the rest on CPU/RAM.
 
-With llama.cpp, the `--n-gpu-layers` flag controls how many transformer layers go to the GPU. A 7B model has 32 layers; a 13B has 40. Loading 28 of 32 layers of a 7B Q4 model typically uses ~3.5–4 GB of VRAM, leaving KV-cache headroom, with the remaining layers on CPU. Your 64 GB of RAM is what absorbs large KV-cache growth during long agent loops — that headroom is the whole point.
+With llama.cpp, the `--n-gpu-layers` flag controls how many transformer layers go to the GPU. Layer counts vary by model family: Qwen2.5-7B has 28 transformer layers, while Llama-family 7B models have 32. Loading 22 of Qwen2.5-7B's 28 layers onto the GPU typically uses ~3.5–4 GB of VRAM for weights, with the remaining 6 layers running on CPU/RAM — a genuine partial offload, not a full one.
+
+KV cache doesn't follow the weights split the way you might expect. In llama.cpp and Ollama, the KV cache for GPU-offloaded layers lives in VRAM by default, not RAM — only the CPU-resident layers' KV cache lives in system RAM. So your 64 GB of RAM absorbs KV-cache growth for the 6 CPU-resident layers, but VRAM still has to hold the growing KV cache for the 22 GPU-resident layers as context fills. At a 64K context window, that VRAM-side KV cache can add several GB on top of the ~3.5–4 GB of weights, which will not fit comfortably in 6 GB. Squeeze it down with KV cache quantization (`OLLAMA_KV_CACHE_TYPE=q8_0`, or `q4_0` if you need more headroom) rather than assuming the full fp16 KV cache is free.
 
 With Ollama, set the equivalent through a Modelfile:
 
 ```bash
+export OLLAMA_KV_CACHE_TYPE=q8_0
+
 cat > ~/qwen-laptop.Modelfile << 'EOF'
 FROM qwen2.5:7b-instruct-q4_K_M
-PARAMETER num_gpu 28
+PARAMETER num_gpu 22
 PARAMETER num_ctx 65536
 PARAMETER num_thread 8
 EOF
@@ -300,10 +302,10 @@ Most mature setups converge toward pattern two after proving behavior in pattern
           {
             id: "gemma4",
             name: "gemma4",
-            reasoning: false,
+            reasoning: false, // no reasoning-token support in this API mode; model quality is unaffected
             input: ["text"],
             cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-            contextWindow: 32768,
+            contextWindow: 65536,
             maxTokens: 4096
           }
         ]
@@ -414,6 +416,8 @@ Do not advance to a higher exposure profile until the current profile is stable 
 ### Full Podman Compose Stack (OpenClaw + Ollama + Optional vLLM)
 
 This project includes a concrete compose baseline so the primer is directly actionable. The stack is designed for local-only exposure, explicit persistence, and optional model-serving expansion.
+
+`podman-compose.yml` publishes two loopback-only ports on the `openclaw` service: `18789` for the dashboard covered earlier, and `18790` for the gateway's bridge connection. Both stay loopback-bound by default — treat any change that exposes `18790` beyond localhost with the same scrutiny as the dashboard port.
 
 #### Included operational files
 
