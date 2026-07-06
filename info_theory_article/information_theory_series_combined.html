@@ -519,10 +519,10 @@ string?</p>
 <p>It’s a tricky question. If your string of symbols constitutes a
 passage of English text, then you could just count the number of words
 it contains. But this is silly: it would give the sentence “The Sun will
-rise tomorrow” the same information value as he sentence “The world will
-end tomorrow” when the second is clearly much more significant than the
-first. Whether or not we find a message informative depends on whether
-it’s news to us and what this news means to us.</p>
+rise tomorrow” the same information value as the sentence “The world
+will end tomorrow” when the second is clearly much more significant than
+the first. Whether or not we find a message informative depends on
+whether it’s news to us and what this news means to us.</p>
 <p>Shannon stayed clear of the slippery concept of meaning, declaring it
 “irrelevant to the engineering problem”, but he did take on board the
 idea that information is related to what’s new: it’s related to
@@ -540,7 +540,6 @@ word “the”, appearing, on average, <a href="http://ucrel.lancs.ac.uk/bncfreq
 times</a> in a million words. The word “invasion” appears, on average,
 only 19 times per million words, while “alien” is not even listed,
 presumably because it is so rare.</p>
-<p><em>Unsurprised women watching the ticker tape in 1918.</em></p>
 <p>You could simply measure the amount of surprise you feel when a word
 occurs by the number of times it occurs per million words in some large
 volume of English text. But this would be missing a trick. The word
@@ -584,7 +583,6 @@ certain probability distribution. This way, we can measure surprise not
 only for languages spoken by people, but also for strings of 0s and 1s
 produced by a computer, or for smoke signals sent in the forest.</p>
 <h2 data-number="1.2" id="calculating-surprise"><span class="header-section-number">1.2</span> Calculating surprise</h2>
-<p><em>Most people would be surprised by an alien invasion.</em></p>
 <p>This line of thinking led Shannon to consider an idealised situation.
 Suppose there’s a random process which produces strings of symbols
 according to a certain probability distribution, which we know. Assume,
@@ -606,13 +604,13 @@ surprise of seeing <span class="math inline">\(x\)</span> followed by
 individual surprises. You can convince yourself of this by imagining
 that I tell you two facts that aren’t related to each other, for example
 “the cat is black” and “today is Monday”. Because they are unrelated the
-total amount of surprise contained of both sentences is the information
+total amount of surprise contained in both sentences is the information
 of the first plus the information of the second. A function that does
 make surprises <em>additive</em> is the <em>logarithm</em> of the
 reciprocal of probabilities: <span class="math display">\[s(x) =
 \log\left( 1/p(x) \right).\]</span> We still have the inverse
 relationship (the less probable a symbol the greater the surprise) and
-the surprise of seeing <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> appear one after the other is now <span class="math display">\[s(xy) = \log{\left( 1/(p(x)p(y) \right))} =
+the surprise of seeing <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> appear one after the other is now <span class="math display">\[s(xy) = \log\left( 1/(p(x)p(y)) \right) =
 \log\left( 1/p(x) \right) + \log\left( 1/p(y) \right) = s(x) +
 s(y).\]</span> According to this definition the surprise associated to
 seeing a longer string is simply the sum of the individual surprises.
@@ -649,8 +647,6 @@ for the logarithm, we know that <span class="math inline">\(\log\left(
 <span class="math inline">\(H\)</span> as <span class="math display">\[H
 = - (p_{1}\log p_{1} + p_{2}\log p_{2} + p_{3}\log p_{3} + ... +
 p_{n}\log p_{n}).\]</span></p>
-<p><em>The concept of entropy was first developed in the context of
-thermodynamics, the study of heat.</em></p>
 <p>If you know some physics then this expression might look familiar. It
 looks exactly the same as a quantity called <em>entropy</em> which
 physicists had defined around seventy years earlier to understand the
@@ -673,20 +669,22 @@ ones. See <a href="http://cm.bell-labs.com/cm/ms/what/shannonday/shannon1948.pdf
 paper</a> to find out more.)</p>
 <h2 data-number="1.4" id="entropy-of-a-coin-flip"><span class="header-section-number">1.4</span> Entropy of a coin flip</h2>
 <p>Let’s look at an example. Suppose the machine can only produce two
-symbols, an <span class="math inline">\(H\)</span> and a <span class="math inline">\(T,\)</span> and that it picks them with equal
-probability of <span class="math inline">\(1/2.\)</span> It might do so
-by flipping a fair coin, hence the choice of the symbols. The entropy of
-this probability distribution is <span class="math display">\[H =
-1/2\log(2) + 1/2\log(2) = \log(2).\]</span> Choosing the base of the
-logarithm to be 2, this gives us a nice round value: <span class="math display">\[H = \log_{2}(2) = 1.\]</span> Now suppose that
-the coin is crooked, so it come up heads 90% of the time. This means
-that <span class="math inline">\(p(H) = 0.9\)</span> and <span class="math inline">\(p(T) = 0.1.\)</span> The entropy now becomes <span class="math display">\[H = 0.9\log_{2}(1/0.9) + 0.1\log_{2}(1/0.1) =
-0.469.\]</span> It’s lower than the entropy of the fair coin and this
+symbols, <span class="math inline">\(h\)</span> for heads and <span class="math inline">\(t\)</span> for tails, and that it picks them with
+equal probability of <span class="math inline">\(1/2.\)</span> It might
+do so by flipping a fair coin, hence the choice of the symbols. The
+entropy of this probability distribution is <span class="math display">\[H = 1/2\log(2) + 1/2\log(2) = \log(2).\]</span>
+Choosing the base of the logarithm to be 2, this gives us a nice round
+value: <span class="math display">\[H = \log_{2}(2) = 1.\]</span> Now
+suppose that the coin is crooked, so it comes up heads 90% of the time.
+This means that <span class="math inline">\(p(h) = 0.9\)</span> and
+<span class="math inline">\(p(t) = 0.1.\)</span> The entropy now becomes
+<span class="math display">\[H = 0.9\log_{2}(1/0.9) + 0.1\log_{2}(1/0.1)
+= 0.469.\]</span> It’s lower than the entropy of the fair coin and this
 makes sense: knowing that the coin is crooked, we can guess the outcome
-correctly around 90% of time by tipping on H. Therefore, on average, our
-surprise at seeing the actual outcome isn’t that great — it’s definitely
-less than for a fair coin. Thinking of surprise as measuring the
-information, this tells us that the average amount of information
+correctly around 90% of time by betting on heads. Therefore, on average,
+our surprise at seeing the actual outcome isn’t that great — it’s
+definitely less than for a fair coin. Thinking of surprise as measuring
+the information, this tells us that the average amount of information
 inherent in the machine printing one symbol is less than the
 corresponding number for the fair coin.</p>
 <p>But why on Earth would you want to calculate the average amount of
@@ -731,7 +729,7 @@ and C. Suppose that A has frequency 1/2 (in a long text half of the
 letters will be A) and B and C have frequency 1/4 each (in a long text a
 quarter of the letters will be B and another quarter will be C). Since A
 is the most frequent, let’s use a single bit, say 0, to encode it. For B
-and C we will use two bits each, say 01 and 11. You can check for
+and C we will use two bits each, say 10 and 11. You can check for
 yourself that this is a decent code — the receiver can decode it to find
 the original letter sequence without any ambiguity. To encode a text
 made up of those letters, we need one bit per symbol half of the time
@@ -780,7 +778,6 @@ symbols, the number</p>
 <p><span class="math display">\[H = p_{1}\log{(1/p_{1})} +
 p_{2}\log{(1/p_{2})} + p_{3}\log{(1/p_{3})} + ... +
 p_{n}\log{(1/p_{n})}\]</span></p>
-<p><em>Claude Shannon.</em></p>
 <p>is called the <em>entropy</em> of the distribution, as discussed in
 the previous section. Shannon proved that the average number of bits
 needed per symbol cannot be smaller than the entropy, no matter how
@@ -799,13 +796,13 @@ Shannon showed that this is indeed correct: by picking a clever way of
 encoding your symbols you can guarantee an average transmission rate
 that’s as close to <span class="math inline">\(C/H\)</span> per second
 as you like. Conversely, no matter how you encode your symbols, it’s
-impossible to transmit at a faster rate than <span class="math inline">\(C/H.\)</span> This neat fact is knows as Shannon’s
+impossible to transmit at a faster rate than <span class="math inline">\(C/H.\)</span> This neat fact is known as Shannon’s
 <em>source coding theorem</em>.</p>
 <p>Shannon published this result in <em><a href="http://cm.bell-labs.com/cm/ms/what/shannonday/shannon1948.pdf">A
 mathematical theory of communication</a></em>, “A paper that is justly
 celebrated as one of the greatest of the twentieth century,” says
-Aaronson. It’s a highly theoretical effort. The source code theorem, for
-example, doesn’t tell you which code gets you within a specified
+Aaronson. It’s a highly theoretical effort. The source coding theorem,
+for example, doesn’t tell you which code gets you within a specified
 distance of the maximal rate of <em>C/H</em> per second — it only says
 that there is one.</p>
 <p>When it comes to practical applications, the theorem also has a major
@@ -823,7 +820,6 @@ random interference mangles it up on the way. Surprisingly though, you
 can always reduce the error rate to nearly zero, simply by choosing a
 clever way of encoding the message.</p>
 <h2 data-number="3.1" id="flipping-bits"><span class="header-section-number">3.1</span> Flipping bits</h2>
-<p><em>How do you cope with errors?</em></p>
 <p>To get a feel for this, imagine you want to transmit the outcome of a
 coin flip to me via some long-distance communication channel, writing a
 0 for heads and a 1 for tails. You know there’s a chance that a 0 will
@@ -851,7 +847,7 @@ understand the sentence. This is a property of human languages: we don’t
 maximally compress the information for a good reason.”</p>
 <h2 data-number="3.2" id="errors-versus-redundancy"><span class="header-section-number">3.2</span> Errors versus redundancy</h2>
 <p>Just how error-proof can you make things using such error-correcting
-codes? In our example above the error rate would be zero if we could we
+codes? In our example above the error rate would be zero if we could be
 sure that the channel only ever flips one bit per block of three. In
 reality things aren’t that predictable: you might know that your channel
 flips one bit per three <em>on average</em>, but this doesn’t mean that
@@ -870,7 +866,6 @@ need to add more redundancy, an even smaller error rate requires even
 more redundancy, and so on, beyond all limits. A near-zero error rate
 would then require a near-infinite amount of redundancy, which means
 near-zero efficiency.</p>
-<p><em>Radio transmissions can be noisy.</em></p>
 <p>In the earlier days of long-distance communication this was indeed
 what people thought: when you’re dealing with a noisy channel, you have
 no choice but trade your error rate for redundancy. In 1948, however,
@@ -890,7 +885,10 @@ amount of information carried by a symbol produced by the machine.
 Adding redundancy to a message reduces the amount of information per
 symbol and therefore lowers the entropy. What Shannon showed is that
 once the entropy is below some critical value, a code with an
-arbitrarily small rate of decoding error can always be found.</p>
+arbitrarily small rate of decoding error can always be found. That
+critical value is the channel’s <em>capacity</em> — the maximum rate at
+which the channel can convey information given its noise
+characteristics.</p>
 <h2 data-number="3.3" id="finding-the-best-code"><span class="header-section-number">3.3</span> Finding the best code</h2>
 <p>How do you find that magic code? Unfortunately, Shannon doesn’t tell
 us. “Shannon didn’t give a single concrete example of what code you
@@ -929,7 +927,6 @@ that’s because the text is pretty dense. If there’s only one, then the
 information it conveys is rather basic, or at least not very
 complex.</p>
 <h2 data-number="4.1" id="measuring-complexity"><span class="header-section-number">4.1</span> Measuring complexity</h2>
-<p><em>Andrey Kolmogorov (1903 - 1987).</em></p>
 <p>In the 1960s mathematicians developed a way of measuring the
 complexity of a piece of information that reflects this intuition. They
 were looking at information from a computer’s point of view. To a
@@ -990,7 +987,6 @@ Informally, this means that there is no general method for computing the
 Kolmogorov complexity of any given string. You might be able to compute
 it for some strings, but there’s no general recipe that works for
 all.</p>
-<p><em>Bertrand Russell (1872 - 1970).</em></p>
 <p>There’s a very elegant proof of this fact, based on a logical
 conundrum called <em>Berry’s paradox</em>. First notice that I could use
 ordinary English words to specify a number. For example, the sentence
@@ -998,7 +994,7 @@ ordinary English words to specify a number. For example, the sentence
 five. Clearly not every number can be specified using a short sentence,
 say of at most 20 words. I, for one, can’t think of a brief way to
 specify the number 2,354,899,123,657. Amongst the numbers that can’t be
-specified by a sentence of at most 20 words be, there must be a smallest
+specified by a sentence of at most 20 words, there must be a smallest
 one, which I’ll call <em>n</em>.</p>
 <p>But hang on — I’ve just specified <em>n</em> using the sentence</p>
 <p>Sentence A: “<em>n</em> is the smallest whole number that cannot be
@@ -1041,7 +1037,6 @@ crude approximation of Kolmogorov complexity. Kolmogorov complexity
 would be the theoretical ideal compression. What you’re getting with
 standard compression methods are various non-ideal compressions, which
 use various regularities in your data, but not all regularities.”</p>
-<p><em>How to compare two strings representing DNA?</em></p>
 <p>The theoretical concept has inspired some very practical
 applications. Imagine, for example, you want to compare two DNA strings,
 or two music or image files, to see if they are correlated in some way.
@@ -1056,10 +1051,11 @@ include the program that outputs <em>x</em> and print the output
 twice.</p>
 <p>If, on the other hand, <em>x</em> and <em>y</em> aren’t correlated at
 all, then the shortest computer program to produce <em>xy</em> would
-have to consist of the shortest program that outputs <em>x</em> and the
-shortest program that outputs <em>y</em>. So in that case the Kolmogorov
-complexity of <em>xy</em> equals the Kolmogorov complexity of <em>x</em>
-plus the Kolmogorov complexity of <em>y</em>.</p>
+have to consist of, roughly, the shortest program that outputs
+<em>x</em> and the shortest program that outputs <em>y</em>. So in that
+case the Kolmogorov complexity of <em>xy</em> approximately equals the
+Kolmogorov complexity of <em>x</em> plus the Kolmogorov complexity of
+<em>y</em>.</p>
 <p>In practice you can’t compute the Kolmogorov complexity, but you can
 use compression programs to approximate it. If the approximated
 complexity of <em>xy</em> is close to the sum of the approximated
@@ -1087,7 +1083,6 @@ exciting movie can be captured in a sober string of 0s and 1s, to be
 stored and processed by computers. Zeroes and ones are the backbone of
 information technology — but where within those strings does the
 information they represent really lie?</p>
-<p><em>Where is the information in this?</em></p>
 <p>It’s a question people have been asking themselves for a surprisingly
 long time. Back in the 1940s the mathematician <a href="http://www-history.mcs.st-and.ac.uk/Mathematicians/Shannon.html">Claude
 Shannon</a> realised that information is only informative when it’s
@@ -1105,15 +1100,16 @@ thousand zeroes. A computer program that outputs that string only needs
 to say “print 0; 1000 times”, so it’s pretty short, leading to a low
 Kolmogorov complexity. This makes sense, as the string is very
 basic.</p>
-<p>Now imagine a completely random string of a thousand zeroes of ones;
+<p>Now imagine a completely random string of a thousand zeroes and ones;
 one that doesn’t exhibit any pattern at all. A program that outputs that
 string has no choice but to say “print:” and then quote the entire
 string. There is no pattern here to exploit to make the program any
 shorter. Long random strings have high (in fact maximal) Kolmogorov
-complexity. (Shannon’s measure of information similarly assigns a
-maximal value to patternlessness.) But does this make sense? Patternless
-strings may be hard to describe, but don’t we usually associate
-complexity with some sort of structure, albeit a complex one?</p>
+complexity. (Shannon’s measure similarly assigns maximal entropy to a
+<em>source</em> whose output is completely unpredictable.) But does this
+make sense? Patternless strings may be hard to describe, but don’t we
+usually associate complexity with some sort of structure, albeit a
+complex one?</p>
 <p>“Kolmogorov complexity is misnamed because really it just measures
 patternlessness,” says <a href="http://scottaaronson.com/">Scott
 Aaronson</a>, a computer scientist at the Massachusetts Institute of
@@ -1133,7 +1129,6 @@ random strings would have a low complexity value, as they have no
 structure at all, and so would strings with a very simple structure.
 Strings that contain more complex patterns would have a higher
 value.</p>
-<p><em>Any pattern in this?</em></p>
 <p>This is exactly the idea behind a concept called
 <em>sophistication</em>, which emerged in the 1980s. The idea is to look
 at programs that can produce a given string, taking some other
@@ -1145,12 +1140,12 @@ string made up of the triples 010 and 101) would lead to a longer
 program.</p>
 <p>Loosely speaking, the <em>sophistication</em> of a string <em>s</em>
 is the length of the shortest program that outputs <em>s</em> given some
-random string as input, and then halts no matter (no matter the value of
-the input). The input reflects the random, and in a sense uninteresting,
+random string as input, and then halts (no matter the value of the
+input). The input reflects the random, and in a sense uninteresting,
 part of the string, while the program reflects its structure. How do we
 decide whether the input string is “random”? We can use Kolmogorov
 complexity to do this: we require that the Kolmogorov complexity of the
-input sting be not much smaller than its length (in technical language,
+input string be not much smaller than its length (in technical language,
 such a string is called <em>algorithmically random</em>).</p>
 <h2 data-number="5.1" id="is-anything-sophisticated"><span class="header-section-number">5.1</span> Is anything sophisticated?</h2>
 <p>This seems neat, but it poses an awkward question. As we’ve seen,
@@ -1171,8 +1166,6 @@ laws and the injection of some random component. If the law part is
 simple, and we like to think of the laws of physics as simple, and the
 random part is not being counted, then how are you ever going to get
 [high] sophistication?”</p>
-<p><em>The equations governing planetary motion are quite simple.
-Artist’s impression courtesy NASA .</em></p>
 <p>As an example, imagine recording the time the Sun reaches a
 particular point in the sky each day. The resulting string of numbers
 may exhibit a little randomness due to small measuring errors, but it’s
@@ -1205,7 +1198,7 @@ completely new. Ralph Hartley’s pioneering 1928 paper, <em>Transmission
 of information</em> has an entire section entitled <em>Elimination of
 psychological factors</em>. Today, we’re much more comfortable with
 thinking of information in such sober terms. But with so much research
-still gong on, it seems that its real secret still hasn’t been
+still going on, it seems that its real secret still hasn’t been
 cracked.</p>
     </main>
 
