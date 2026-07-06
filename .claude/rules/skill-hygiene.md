@@ -10,3 +10,4 @@ Promoted from session captures. Review with `/reflect`.
 - When scoping coordinated changes to a project, check for companion documents beyond the primary source file
 - When adding Mermaid diagrams to a primer, render a small subset covering all new syntactic features through the container before committing to a full build — the filter leaves raw fences in HTML output while pandoc exits 0 on failure
 - After building a primer with Mermaid diagrams, grep the HTML output for raw fence patterns (graph LR, graph TB, subgraph, stroke-dasharray, literal {.mermaid}) — any hit means mmdc failed silently; also confirm each diagram has a rendered figure or img tag, as the build exits 0 regardless of mmdc failure
+- Check for config/ignore-file outliers (e.g. `.gitignore`) that contradict documented repo conventions before scoping changes — leftovers from initial import can silently exclude files the conventions say should be committed
