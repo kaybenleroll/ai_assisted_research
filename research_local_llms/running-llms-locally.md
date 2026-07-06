@@ -80,13 +80,13 @@ Quantisation reduces the precision of those weights. Common levels you will see:
 | FP16 / BF16 | 16 | ~14 GB | None (training precision) |
 | Q8_0 | 8 | ~7 GB | Negligible |
 | Q4_K_M | 4 | ~4.5 GB | Very small |
-| Q2_K | 2 | ~2.5 GB | Noticeable |
+| Q2_K | ~2.6 | ~2.8 GB | Significant |
 
 The **K** in names like `Q4_K_M` refers to a refinement of the quantisation method (k-quants) that preserves quality better than naive 4-bit by using different precision for different parts of the weight matrix. The `_M` suffix indicates medium quality within that family. For most purposes, **Q4_K_M is the sweet spot** — it is small enough to fit comfortably and smart enough to be genuinely useful.
 
 ### GGUF
 
-**GGUF** (GPT-Generated Unified Format) is the file format used by llama.cpp and the majority of the local inference ecosystem. You will see `.gguf` files everywhere. It is a single-file format that bundles both the weights and the model's metadata (vocabulary, architecture, recommended prompt templates) into one portable file.
+**GGUF** — the llama.cpp model format, successor to the older GGML format ("GG" refers to Georgi Gerganov, llama.cpp's original author; despite the popular backronym "GPT-Generated Unified Format," the name isn't an official expansion) — is the file format used by llama.cpp and the majority of the local inference ecosystem. You will see `.gguf` files everywhere. It is a single-file format that bundles both the weights and the model's metadata (vocabulary, architecture, recommended prompt templates) into one portable file.
 
 If you download a model for local inference, you almost certainly want the GGUF version. Look for filenames like `llama-3.1-8b-instruct-Q4_K_M.gguf`.
 
@@ -128,7 +128,7 @@ A modern desktop CPU (e.g., AMD Ryzen 9 7950X with 32 threads) can generate roug
 
 CPU inference is legitimate for: automated batch jobs that run overnight, embedding generation (where you are not waiting for output interactively), and small models (1–3B parameters) that actually run fine at 15–30 tok/s on CPU.
 
-llama.cpp in particular is extraordinarily well optimised for CPU inference, using AVX2, AVX-512, and AMX instructions depending on your CPU generation.
+llama.cpp in particular is extraordinarily well optimised for CPU inference, using AVX2, AVX-512, and (on Intel Sapphire Rapids and newer) AMX instructions depending on your CPU generation.
 
 ### NVIDIA GPU
 
@@ -146,13 +146,13 @@ The numbers are approximate; the exact fit depends on context length and the spe
 
 ### AMD GPU
 
-AMD support has improved substantially. The software path is ROCm (AMD's equivalent of CUDA). llama.cpp, vLLM, and LocalAI all support ROCm. The main caution is that ROCm officially supports only a subset of AMD GPU generations (RDNA 2 and RDNA 3 are generally fine; older cards may need workarounds). Performance is competitive with NVIDIA when properly configured.
+AMD support has improved substantially. The software path is ROCm (AMD's equivalent of CUDA). llama.cpp, vLLM, and LocalAI all support ROCm. The main caution is that ROCm's official support tier is narrower than it looks: RDNA 3 is well covered, but RDNA 2 support has historically been partial (workable on higher-end cards like the RX 6800+, often via an HSA override, rather than fully supported out of the box); older cards may need more workarounds still. Performance can be competitive with NVIDIA when properly configured, but typical llama.cpp/vLLM results on ROCm still lag CUDA in practice more often than not — budget time for tuning.
 
 ### Apple Silicon (M-series)
 
-Apple Silicon Macs are exceptionally good for local inference — arguably the best consumer hardware per dollar for this use case. The reason is **unified memory**: the CPU, GPU, and Neural Engine all share the same high-bandwidth memory pool, so a 36 GB M3 Max can use all 36 GB for model weights, whereas a 36 GB machine with a discrete GPU would be split between system RAM and VRAM.
+Apple Silicon Macs are exceptionally good for local inference — arguably the best consumer hardware per dollar for this use case. The reason is **unified memory**: the CPU, GPU, and Neural Engine all share the same high-bandwidth memory pool, so a 36 GB M3 Max can dedicate most of that memory to model weights (macOS reserves some for the OS and caps the GPU's working set below the full pool), whereas a 36 GB machine with a discrete GPU would be split between system RAM and VRAM.
 
-An M4 Max with 64 GB unified memory can run a 70B Q4 model and generate 20–30 tokens per second. That is impressive.
+An M4 Max with 64 GB unified memory can run a 70B Q4 model at roughly 8–12 tokens per second — usable for interactive chat, though token generation on any unified-memory Mac is ultimately bound by memory bandwidth, not compute. A ~30B-class model on the same hardware is noticeably faster, in the 20–30 tokens-per-second range.
 
 llama.cpp uses Apple's Metal framework for GPU acceleration on Apple Silicon. Ollama and LocalAI both work natively on macOS.
 
@@ -239,10 +239,13 @@ Ollama manages a local model registry. `ollama pull`, `ollama list`, `ollama rm`
 
 ```bash
 # CPU-only
-podman run -d --name ollama -p 11434:11434 ollama/ollama
+podman run -d --name ollama -p 11434:11434 \
+  -v ollama-data:/root/.ollama \
+  ollama/ollama
 
 # NVIDIA GPU
 podman run -d --name ollama -p 11434:11434 \
+  -v ollama-data:/root/.ollama \
   --device nvidia.com/gpu=all \
   ollama/ollama
 
@@ -266,9 +269,9 @@ podman exec ollama ollama run llama3.2
 # CPU-only (simplest)
 podman run -ti --name local-ai -p 8080:8080 localai/localai:latest
 
-# NVIDIA GPU (CUDA 13)
+# NVIDIA GPU (check LocalAI's docs for the current CUDA tag suffix — it tracks CUDA releases)
 podman run -ti --name local-ai -p 8080:8080 --gpus all \
-  localai/localai:latest-gpu-nvidia-cuda-13
+  localai/localai:latest-gpu-nvidia-cuda-12
 
 # AMD GPU
 podman run -ti --name local-ai -p 8080:8080 \
@@ -288,7 +291,7 @@ local-ai run ollama://gemma:2b
 
 As of 2026, LocalAI has also added **built-in agent capabilities** — autonomous agents with tool use, RAG (retrieval-augmented generation), and Model Context Protocol (MCP) support — making it an increasingly compelling all-in-one platform.
 
-**Ideal for:** Users who want a single container to handle text, embeddings, speech, and image generation. Teams who want multi-user support (API key auth, quotas, role-based access). Anyone building a production-grade private AI platform. Kubernetes deployments (Helm chart available).
+**Ideal for:** Users who want a single container to handle text, embeddings, speech, and image generation. Teams who want multi-user support via API-key auth (for quota enforcement or role-based access, pair it with a gateway like LiteLLM in front). Anyone building a production-grade private AI platform. Kubernetes deployments (Helm chart available).
 
 **Limitations:** More complex to configure than Ollama. The breadth of features means more moving parts. Backend management (installing/removing backends via OCI images on the fly) is powerful but adds operational surface area.
 
@@ -304,15 +307,14 @@ vLLM also features:
 - **Continuous batching** — new requests are dynamically added to in-progress batches, reducing latency
 - **Tensor and pipeline parallelism** — split a model across multiple GPUs or machines
 - **200+ model architectures** supported including all major LLMs, mixture-of-experts models (DeepSeek, Mixtral), and multimodal models
-- OpenAI-compatible API, plus Anthropic Messages API and gRPC
+- OpenAI-compatible REST API (the documented, stable interface — check current vLLM docs before assuming support for any other API shape)
 
 ```python
 # Install
 uv pip install vllm
 
 # Start the server
-python -m vllm.entrypoints.openai.api_server \
-  --model meta-llama/Llama-3.1-8B-Instruct
+vllm serve meta-llama/Llama-3.1-8B-Instruct
 
 # Or with Podman (Docker syntax is shown in most upstream docs)
 podman run --gpus all \
@@ -335,7 +337,7 @@ You open it, browse a built-in model catalogue (pulling from Hugging Face), down
 
 **Ideal for:** Non-technical users, people who prefer GUI over CLI, macOS users who want the slickest Apple Silicon experience, anyone who just wants to experiment without touching a terminal.
 
-**Limitations:** Closed-source (though free). Cannot be run headlessly in a container. Not suitable for server deployments.
+**Limitations:** Closed-source (though free). Not containerisable — a headless service mode and `lms` CLI exist for running it without the GUI, but it remains desktop-oriented rather than a true server deployment.
 
 ---
 
@@ -353,11 +355,12 @@ Like LM Studio, Jan provides a GUI for downloading and chatting with models. It 
 
 ### Open WebUI
 
-**What it is:** Not an inference engine but a **browser-based chat interface** that connects to a running backend (Ollama, OpenAI-compatible APIs, or its own built-in llama.cpp engine). Think: a self-hosted ChatGPT-style UI that sits in front of your inference server.
+**What it is:** Not an inference engine but a **browser-based chat interface** that connects to a running backend (Ollama, or any OpenAI-compatible API). Think: a self-hosted ChatGPT-style UI that sits in front of your inference server. There's also a bundled-Ollama container image (the `:ollama` tag) that packages an Ollama server alongside the UI in one container, but Open WebUI itself does not run inference.
 
 ```bash
 # Connect to a running Ollama instance
-podman run -d -p 3000:3000 \
+podman run -d -p 3000:8080 \
+  --add-host=host.docker.internal:host-gateway \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   ghcr.io/open-webui/open-webui:main
 ```
@@ -411,6 +414,10 @@ The NVIDIA Container Toolkit installs a hook that makes GPUs available to contai
 # Install the NVIDIA Container Toolkit (Fedora/RHEL)
 dnf install nvidia-container-toolkit
 
+# Generate the CDI spec so `nvidia.com/gpu=all` resolves to your hardware
+# (without this step, the device reference below does not exist yet)
+nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+
 # Run a container with all GPUs
 podman run --device nvidia.com/gpu=all ...
 
@@ -463,7 +470,7 @@ If you want the pretty web UI, add Open WebUI:
 ```bash
 podman run -d \
   --name open-webui \
-  -p 3000:3000 \
+  -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   -v open-webui:/app/backend/data \
@@ -476,28 +483,26 @@ Open your browser at `http://localhost:3000`. Create an account (local only), an
 
 ### "I want a coding assistant in VS Code"
 
-The [Continue](https://continue.dev/) extension for VS Code connects to any OpenAI-compatible backend. With Ollama running, add this to your `~/.continue/config.json`:
+The [Continue](https://continue.dev/) extension for VS Code connects to any OpenAI-compatible backend. Continue's config format is YAML (`~/.continue/config.yaml`); an older `config.json` format still auto-migrates but is deprecated, so use YAML directly. With Ollama running, add this:
 
-```json
-{
-  "models": [
-    {
-      "title": "Qwen2.5-Coder 7B (local)",
-      "provider": "ollama",
-      "model": "qwen2.5-coder:7b"
-    }
-  ],
-  "tabAutocompleteModel": {
-    "title": "Qwen2.5-Coder 1.5B (autocomplete)",
-    "provider": "ollama",
-    "model": "qwen2.5-coder:1.5b"
-  }
-}
+```yaml
+models:
+  - name: Qwen3-Coder (local)
+    provider: ollama
+    model: qwen3-coder:7b
+    roles:
+      - chat
+
+  - name: Qwen3-Coder autocomplete
+    provider: ollama
+    model: qwen3-coder:1.5b
+    roles:
+      - autocomplete
 ```
 
 After editing the config, reload VS Code so the extension picks up model changes cleanly.
 
-`qwen2.5-coder:7b` is excellent for chat-based coding help. The 1.5B model for autocomplete is fast enough to provide inline suggestions without lag.
+A current Qwen3-Coder size in the 7–8B range is excellent for chat-based coding help; a smaller (~1.5B) size for autocomplete is fast enough to provide inline suggestions without lag. Check Ollama's library for the exact tag names available at the time you read this — coding-model naming has churned as families iterate.
 
 For the VS Code extension that turns llama.cpp's FIM (fill-in-the-middle) capability directly into inline completions, see [llama.vscode](https://github.com/ggml-org/llama.vscode).
 
@@ -507,22 +512,27 @@ For the VS Code extension that turns llama.cpp's FIM (fill-in-the-middle) capabi
 
 Use a Podman + user-systemd service so your API starts on boot (Linux). On macOS/Windows, use your platform startup tooling.
 
+Since Podman 4.4, `podman generate systemd` is deprecated in favour of **Quadlet** — a `.container` unit file that systemd reads directly, without an intermediate `podman generate` step. Write `~/.config/containers/systemd/llm-api.container`:
+
+```ini
+[Unit]
+Description=Local LLM API (llama.cpp)
+
+[Container]
+Image=ghcr.io/ggml-org/llama.cpp:server-cuda
+ContainerName=llm-api
+PublishPort=8080:8080
+AddDevice=nvidia.com/gpu=all
+Exec=-hf ggml-org/Meta-Llama-3.1-8B-Instruct-GGUF --port 8080 --host 0.0.0.0
+
+[Install]
+WantedBy=default.target
+```
+
 ```bash
-# Start the container
-podman run -d \
-  --name llm-api \
-  -p 8080:8080 \
-  --device nvidia.com/gpu=all \
-  ghcr.io/ggml-org/llama.cpp:server-cuda \
-  -hf ggml-org/Meta-Llama-3.1-8B-Instruct-GGUF \
-  --port 8080 \
-  --host 0.0.0.0
-
-# Generate a systemd unit file
-podman generate systemd --name llm-api > ~/.config/systemd/user/llm-api.service
-
-# Enable it
-systemctl --user enable --now llm-api
+# Reload user systemd and start it
+systemctl --user daemon-reload
+systemctl --user enable --now llm-api.service
 ```
 
 Any app can now call `http://your-machine:8080/v1/chat/completions` via standard OpenAI SDKs.
@@ -541,7 +551,7 @@ podman run -d \
   -p 8080:8080 \
   --gpus all \
   -v localai-models:/build/models \
-  localai/localai:latest-gpu-nvidia-cuda-13
+  localai/localai:latest-gpu-nvidia-cuda-12
 
 # Install a text model
 podman exec localai local-ai run llama-3.2-3b-instruct:q4_k_m
@@ -590,7 +600,7 @@ response = client.chat.completions.create(
 )
 ```
 
-For agents with tool use, ensure the model you choose has been trained for instruction following and function calling. **Llama 3.1/3.2**, **Qwen 2.5**, **Mistral Nemo**, and **Gemma 3** are all solid choices. The `instruct` variants (as opposed to base models) are what you want.
+For agents with tool use, ensure the model you choose has been trained for instruction following and function calling. **Qwen3**, **Llama** (3.x or 4, depending on what you need), **gpt-oss**, **Mistral Nemo**, and **Gemma 3** are all solid choices. The `instruct` variants (as opposed to base models) are what you want.
 
 **Model Context Protocol (MCP)** is an emerging standard for exposing tools to LLMs. Both LocalAI and Jan support MCP client-side, meaning you can connect your local LLM to any MCP server (filesystem, databases, web browsers, custom APIs) with standardised tool definitions.
 
@@ -641,9 +651,13 @@ This 60-second pass prevents most "it runs but behaves strangely" problems.
 
 ### Model Families Worth Knowing (as of May 2026)
 
-**Meta's Llama series** — The Llama 3.x models are free for commercial use (with some size restrictions), well-tested, and universally supported. Llama 3.2 3B is a strong small model; Llama 3.1 8B and 70B are the workhorse mid and large options.
+Treat this list as a snapshot of families, not a fixed leaderboard — this space moves fast enough that the specific size or version leading today may not be leading by the time you read this. Check the model's Hugging Face page or the vendor's own docs for the current lineup before committing to one.
 
-**Qwen (Alibaba)** — Qwen 2.5 and 3 are competitive with Llama at equivalent sizes, with particularly strong coding and multilingual capability. Qwen2.5-Coder is the current go-to for coding-specific tasks. Qwen3 introduces models with a "thinking" mode.
+**Qwen (Alibaba)** — the most actively and rapidly iterated open-weight family, with multiple point releases through 2026. Broadly regarded as a leading open-weight line, competitive with closed frontier models on coding and agentic benchmarks, and popular for local deployment. Qwen3 is the current generation, with a "thinking" mode for harder reasoning tasks; Qwen3-Coder is the current go-to for coding-specific work.
+
+**gpt-oss (OpenAI)** — OpenAI's first open-weight release in years, shipped in two sizes (roughly 20B and 120B parameters). Reasoning-focused and text-only (no native multimodal input). Notable less for raw benchmark position than for what it represents: OpenAI participating in the open-weight ecosystem after years of closed-only releases.
+
+**Meta's Llama series** — still free for commercial use (with some size restrictions) and widely supported, but Meta's release cadence has slowed noticeably compared to rivals, with larger follow-on variants delayed or unreleased. Llama 4 (Scout/Maverick) and Llama 3.3 70B are the most recent major releases as of this writing; check Meta's own AI documentation for anything newer.
 
 **Mistral / Mixtral** — Mistral 7B is efficient and capable. Mixtral 8x7B is a Mixture-of-Experts model that is effectively a 47B parameter model that only activates 13B at a time — fast to run relative to its quality.
 
@@ -653,15 +667,17 @@ This 60-second pass prevents most "it runs but behaves strangely" problems.
 
 **DeepSeek** — DeepSeek-R1 and its distillations (including into Llama and Qwen architectures) are strong reasoning models. The distilled versions (e.g., DeepSeek-R1-Distill-Qwen-7B) are practical locally.
 
+**Broader ecosystem** — Google (Gemma), Alibaba (Qwen), Meta (Llama), Mistral, OpenAI (gpt-oss), and Zhipu (GLM) all now ship competitive open-weight families. Open-weight is no longer a niche compared to closed frontier models — it's a real, fast-moving alternative.
+
 ### Sizing Guide
 
 | Your VRAM / Shared Memory | Recommended Model Size |
 |---|---|
-| 4 GB | 3B Q4 (Llama 3.2 3B, Qwen2.5 3B) |
-| 6–8 GB | 7–8B Q4 (Llama 3.1 8B, Qwen2.5 7B) |
-| 12–16 GB | 13–14B Q4 (Phi-4 14B, Qwen2.5 14B) |
-| 24 GB | 32–34B Q4 (Qwen2.5 32B) |
-| 48 GB+ or unified | 70B Q4 (Llama 3.1 70B) |
+| 4 GB | ~3B Q4 (e.g. a small Qwen3 or Llama variant) |
+| 6–8 GB | ~7–8B Q4 (e.g. Qwen3 8B) |
+| 12–16 GB | ~13–14B Q4 (e.g. Phi-4 14B, a mid Qwen3 size) |
+| 24 GB | ~30B-class Q4 |
+| 48 GB+ or unified | ~70B-class Q4 |
 
 When in doubt, start with the Q4_K_M quantisation and the model size that fits in your memory with 20% headroom to spare. That headroom goes to the KV cache.
 
@@ -717,7 +733,7 @@ Open WebUI has RAG built in — you can upload documents directly in the chat in
 
 OpenClaw is a personal assistant gateway: it connects messaging apps (WhatsApp, Telegram, Signal, iMessage) to your local inference stack and routes replies back through the same channel. If you want to use the local model you just set up as a persistent personal assistant you can message from your phone, OpenClaw is how that works.
 
-When it matters here: if you are deploying Setup 3 or Setup 4 and want a conversational interface beyond a local TUI, OpenClaw is the layer that adds it. It is not an inference server — it sits in front of one.
+When it matters here: if you are running "I want a persistent API service with Podman" or "I want everything — text, audio, images, agents" and want a conversational interface beyond a local TUI, OpenClaw is the layer that adds it. It is not an inference server — it sits in front of one.
 
 For setup instructions, model recommendations, hardware-constrained deployment, and security hardening, see the [OpenClaw Primer](../openclaw_primer/openclaw_primer.md).
 
@@ -781,7 +797,7 @@ Now you understand why everything in this ecosystem being OpenAI-compatible is p
 Move Ollama into a Podman container with a persistent volume for models and a systemd user service so it survives reboots.
 
 **Day 5 — Explore the model landscape:**
-Try `qwen2.5-coder:7b` for coding tasks. Try `nomic-embed-text` for embeddings. Pull a larger model and compare quality.
+Try a current Qwen3-Coder size for coding tasks. Try `nomic-embed-text` for embeddings. Pull a larger model and compare quality.
 
 From there, the path branches based on what you are building.
 
@@ -821,7 +837,7 @@ podman run -d --name ollama -p 11434:11434 \
 podman exec ollama ollama pull llama3.2:3b
 
 # === Podman + Open WebUI ===
-podman run -d --name open-webui -p 3000:3000 \
+podman run -d --name open-webui -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   -v open-webui:/app/backend/data \
@@ -831,7 +847,7 @@ podman run -d --name open-webui -p 3000:3000 \
 podman run -d --name localai -p 8080:8080 \
   --device nvidia.com/gpu=all \
   -v localai-models:/build/models \
-  localai/localai:latest-gpu-nvidia-cuda-13
+  localai/localai:latest-gpu-nvidia-cuda-12
 
 # === Python: Use any local server with OpenAI SDK ===
 # pip install openai
@@ -843,6 +859,7 @@ r = client.chat.completions.create(
     messages=[{'role':'user','content':'Hello!'}]
 )
 print(r.choices[0].message.content)
+"
 ```
 
 ### Further Reading
