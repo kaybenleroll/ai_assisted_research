@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claude Code Alternatives: A Comprehensive Survey of AI Coding
-Agents in 2026</title>
+Agents in 2026 (Mid-2026 Refresh)</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -474,9 +474,9 @@ code span.fu { color: #c792ea !important; }
 
   <nav class="navbar">
     <span class="navbar-brand">Claude Code Alternatives: A Comprehensive
-Survey of AI Coding Agents in 2026</span>
+Survey of AI Coding Agents in 2026 (Mid-2026 Refresh)</span>
 
-    <span class="navbar-meta">May 2026</span>
+    <span class="navbar-meta">July 2026</span>
 
   </nav>
 
@@ -499,22 +499,26 @@ Taxonomy</a></li>
 <li><a href="#gemini-cli-by-google" id="toc-gemini-cli-by-google"><span class="toc-section-number">3.4</span> Gemini CLI (by Google)</a></li>
 <li><a href="#plandex" id="toc-plandex"><span class="toc-section-number">3.5</span> Plandex</a></li>
 <li><a href="#swe-agent" id="toc-swe-agent"><span class="toc-section-number">3.6</span> SWE-agent</a></li>
-<li><a href="#deprecated-and-unverified-tools" id="toc-deprecated-and-unverified-tools"><span class="toc-section-number">3.7</span> Deprecated and Unverified
+<li><a href="#openai-codex-cli" id="toc-openai-codex-cli"><span class="toc-section-number">3.7</span> OpenAI Codex CLI</a></li>
+<li><a href="#amp-sourcegraph" id="toc-amp-sourcegraph"><span class="toc-section-number">3.8</span> Amp (Sourcegraph)</a></li>
+<li><a href="#deprecated-and-unverified-tools" id="toc-deprecated-and-unverified-tools"><span class="toc-section-number">3.9</span> Deprecated and Unverified
 Tools</a></li>
-<li><a href="#mentat" id="toc-mentat"><span class="toc-section-number">3.8</span> Mentat</a></li>
-<li><a href="#qwen-code-and-kimi-cli" id="toc-qwen-code-and-kimi-cli"><span class="toc-section-number">3.9</span> Qwen Code and Kimi CLI</a></li>
+<li><a href="#mentat" id="toc-mentat"><span class="toc-section-number">3.10</span> Mentat</a></li>
+<li><a href="#qwen-code-and-kimi-cli" id="toc-qwen-code-and-kimi-cli"><span class="toc-section-number">3.11</span> Qwen Code and Kimi CLI</a></li>
 </ul></li>
 <li><a href="#ide-extensions-and-hybrid-tools" id="toc-ide-extensions-and-hybrid-tools"><span class="toc-section-number">4</span> IDE Extensions and Hybrid Tools</a>
 <ul>
-<li><a href="#cline-formerly-claude-engineer" id="toc-cline-formerly-claude-engineer"><span class="toc-section-number">4.1</span> Cline (formerly Claude
-Engineer)</a></li>
+<li><a href="#cline-formerly-claude-dev" id="toc-cline-formerly-claude-dev"><span class="toc-section-number">4.1</span> Cline (formerly Claude
+Dev)</a></li>
 <li><a href="#continue.dev" id="toc-continue.dev"><span class="toc-section-number">4.2</span> Continue.dev</a></li>
 </ul></li>
 <li><a href="#dedicated-ai-ides" id="toc-dedicated-ai-ides"><span class="toc-section-number">5</span> Dedicated AI IDEs</a>
 <ul>
 <li><a href="#cursor" id="toc-cursor"><span class="toc-section-number">5.1</span> Cursor</a></li>
-<li><a href="#windsurf-by-codeium" id="toc-windsurf-by-codeium"><span class="toc-section-number">5.2</span> Windsurf (by Codeium)</a></li>
+<li><a href="#windsurf-now-devin-desktop-cognition-ai" id="toc-windsurf-now-devin-desktop-cognition-ai"><span class="toc-section-number">5.2</span> Windsurf (now Devin Desktop,
+Cognition AI)</a></li>
 <li><a href="#zed-ai" id="toc-zed-ai"><span class="toc-section-number">5.3</span> Zed AI</a></li>
+<li><a href="#google-antigravity-2.0" id="toc-google-antigravity-2.0"><span class="toc-section-number">5.4</span> Google Antigravity 2.0</a></li>
 </ul></li>
 <li><a href="#cloud-and-web-platform-agents" id="toc-cloud-and-web-platform-agents"><span class="toc-section-number">6</span> Cloud and Web Platform Agents</a>
 <ul>
@@ -526,11 +530,12 @@ OpenDevin)</a></li>
 <ul>
 <li><a href="#github-copilot-with-agent-mode" id="toc-github-copilot-with-agent-mode"><span class="toc-section-number">7.1</span> GitHub Copilot with Agent
 Mode</a></li>
-<li><a href="#amazon-q-developer-formerly-codewhisperer" id="toc-amazon-q-developer-formerly-codewhisperer"><span class="toc-section-number">7.2</span> Amazon Q Developer (formerly
-CodeWhisperer)</a></li>
+<li><a href="#amazon-q-developer-formerly-codewhisperer-being-sunset-see-kiro" id="toc-amazon-q-developer-formerly-codewhisperer-being-sunset-see-kiro"><span class="toc-section-number">7.2</span> Amazon Q Developer (formerly
+CodeWhisperer) — being sunset, see Kiro</a></li>
 <li><a href="#jetbrains-ai-assistant" id="toc-jetbrains-ai-assistant"><span class="toc-section-number">7.3</span> JetBrains AI Assistant</a></li>
 <li><a href="#tabnine" id="toc-tabnine"><span class="toc-section-number">7.4</span> Tabnine</a></li>
-<li><a href="#supermaven" id="toc-supermaven"><span class="toc-section-number">7.5</span> Supermaven</a></li>
+<li><a href="#supermaven-discontinued-folded-into-cursor" id="toc-supermaven-discontinued-folded-into-cursor"><span class="toc-section-number">7.5</span> Supermaven — discontinued, folded
+into Cursor</a></li>
 </ul></li>
 <li><a href="#cross-cutting-analysis" id="toc-cross-cutting-analysis"><span class="toc-section-number">8</span> Cross-Cutting Analysis</a>
 <ul>
@@ -542,39 +547,54 @@ Compatibility</a></li>
 Studio)</a></li>
 </ul></li>
 <li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">8.2</span> Feature Comparison Matrix</a></li>
-<li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">8.3</span> Extensibility Deep Dive</a>
+</ul></li>
+<li><a href="#unverifiedlower-confidence-see-the-relevant-tools-section-for-sourcing-caveats.-gemini-clis-1m-token-context-window-is-a-model-level-feature-independent-of-the-consumer-free-tiers-june-2026-deprecation-see-cost-analysis.-corrected-from-a-bare-yes-claude-codes-browser-access-is-via-mcp-servers-e.g.-playwright-or-webfetch-not-a-built-in-browser-like-clines-puppeteer-integration.-corrected-from-a-hedged-claim-gooses-mcp-support-is-a-confirmed-core-architectural-pillar-70-extensions-3000-compatible-servers-not-a-disputed-one.-gemini-clis-consumer-free-tier-ended-june-18-2026-only-enterprise-code-assist-tiers-remain." id="toc-unverifiedlower-confidence-see-the-relevant-tools-section-for-sourcing-caveats.-gemini-clis-1m-token-context-window-is-a-model-level-feature-independent-of-the-consumer-free-tiers-june-2026-deprecation-see-cost-analysis.-corrected-from-a-bare-yes-claude-codes-browser-access-is-via-mcp-servers-e.g.-playwright-or-webfetch-not-a-built-in-browser-like-clines-puppeteer-integration.-corrected-from-a-hedged-claim-gooses-mcp-support-is-a-confirmed-core-architectural-pillar-70-extensions-3000-compatible-servers-not-a-disputed-one.-gemini-clis-consumer-free-tier-ended-june-18-2026-only-enterprise-code-assist-tiers-remain."><span class="toc-section-number">9</span> * Unverified/lower-confidence — see
+the relevant tool’s section for sourcing caveats. † Gemini CLI’s
+1M-token context window is a model-level feature, independent of the
+consumer free tier’s June 2026 deprecation (see Cost Analysis). ‡
+Corrected from a bare “Yes”: Claude Code’s browser access is via MCP
+servers (e.g. Playwright) or WebFetch, not a built-in browser like
+Cline’s Puppeteer integration. § Corrected from a hedged claim — Goose’s
+MCP support is a confirmed, core architectural pillar (70+ extensions,
+3,000+ compatible servers), not a disputed one. ¶ Gemini CLI’s consumer
+free tier ended June 18, 2026; only enterprise Code Assist tiers
+remain.</a>
 <ul>
-<li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">8.3.1</span> Claude Code’s Extension
+<li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">9.1</span> Extensibility Deep Dive</a>
+<ul>
+<li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">9.1.1</span> Claude Code’s Extension
 Architecture</a></li>
-<li><a href="#how-alternatives-compare" id="toc-how-alternatives-compare"><span class="toc-section-number">8.3.2</span> How Alternatives
+<li><a href="#how-alternatives-compare" id="toc-how-alternatives-compare"><span class="toc-section-number">9.1.2</span> How Alternatives
 Compare</a></li>
-<li><a href="#what-this-means-for-migration" id="toc-what-this-means-for-migration"><span class="toc-section-number">8.3.3</span> What This Means for
+<li><a href="#the-agents.md-open-standard" id="toc-the-agents.md-open-standard"><span class="toc-section-number">9.1.3</span> The AGENTS.md Open
+Standard</a></li>
+<li><a href="#what-this-means-for-migration" id="toc-what-this-means-for-migration"><span class="toc-section-number">9.1.4</span> What This Means for
 Migration</a></li>
 </ul></li>
-<li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">8.4</span> Cost Analysis</a>
+<li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">9.2</span> Cost Analysis</a>
 <ul>
-<li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">8.4.1</span> Defining “Heavy Usage”</a></li>
-<li><a href="#api-cost-estimates-direct-provider-as-of-2025" id="toc-api-cost-estimates-direct-provider-as-of-2025"><span class="toc-section-number">8.4.2</span> API Cost Estimates (Direct
-Provider, as of 2025)</a></li>
-<li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">8.4.3</span> Per-Tool Cost Summary</a></li>
-<li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">8.4.4</span> Cost Migration Strategy</a></li>
+<li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">9.2.1</span> Defining “Heavy Usage”</a></li>
+<li><a href="#api-cost-estimates-direct-provider-as-of-july-2026" id="toc-api-cost-estimates-direct-provider-as-of-july-2026"><span class="toc-section-number">9.2.2</span> API Cost Estimates (Direct
+Provider, as of July 2026)</a></li>
+<li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">9.2.3</span> Per-Tool Cost Summary</a></li>
+<li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">9.2.4</span> Cost Migration Strategy</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#recommendations" id="toc-recommendations"><span class="toc-section-number">9</span> Recommendations</a>
+<li><a href="#recommendations" id="toc-recommendations"><span class="toc-section-number">10</span> Recommendations</a>
 <ul>
-<li><a href="#if-you-want-the-closest-cli-experience-to-claude-code" id="toc-if-you-want-the-closest-cli-experience-to-claude-code"><span class="toc-section-number">9.1</span> If you want the closest CLI
+<li><a href="#if-you-want-the-closest-cli-experience-to-claude-code" id="toc-if-you-want-the-closest-cli-experience-to-claude-code"><span class="toc-section-number">10.1</span> If you want the closest CLI
 experience to Claude Code</a></li>
-<li><a href="#if-you-want-the-best-ide-integrated-alternative" id="toc-if-you-want-the-best-ide-integrated-alternative"><span class="toc-section-number">9.2</span> If you want the best
+<li><a href="#if-you-want-the-best-ide-integrated-alternative" id="toc-if-you-want-the-best-ide-integrated-alternative"><span class="toc-section-number">10.2</span> If you want the best
 IDE-integrated alternative</a></li>
-<li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">9.3</span> If cost is the primary
+<li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">10.3</span> If cost is the primary
 constraint</a></li>
-<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">9.4</span> If MCP server investments are
+<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">10.4</span> If MCP server investments are
 critical</a></li>
-<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">9.5</span> If you need extensibility similar
+<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">10.5</span> If you need extensibility similar
 to Claude Code’s skills+hooks</a></li>
-<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">9.6</span> Migration strategy</a></li>
+<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">10.6</span> Migration strategy</a></li>
 </ul></li>
-<li><a href="#references" id="toc-references"><span class="toc-section-number">10</span> References</a></li>
+<li><a href="#references" id="toc-references"><span class="toc-section-number">11</span> References</a></li>
 </ul></div>
 
     </aside>
@@ -587,30 +607,32 @@ to Claude Code’s skills+hooks</a></li>
 coding tools available: it runs entirely in the terminal, takes
 high-level natural-language instructions, autonomously edits multiple
 files, executes shell commands, runs tests, and iterates until the task
-is done. Its superpowers system — skills, hooks, and MCP server support
-— allows deep customisation of its workflow. For users on the Max plan
-(~$100/month for unlimited usage), the economics are excellent for heavy
-usage. But the plan landscape for AI tools changes rapidly, and a
-prudent engineer should understand the full landscape of alternatives
-before needing them.</p>
+is done. Its extensibility system — skills, hooks, and MCP server
+support — allows deep customisation of its workflow. For heavy users, a
+Max plan (<strong>$100/month for Max 5x, $200/month for Max
+20x</strong>) is good value relative to metered API pricing, but it is
+not unlimited: both tiers carry a 5-hour rolling session cap and a
+separate weekly cap (see Cost Analysis for the exact numbers). The plan
+landscape for AI tools changes rapidly, and a prudent engineer should
+understand the full landscape of alternatives before needing them.</p>
 <p>This document surveys the entire landscape of AI coding agents
 available as of mid-2026: open-source CLI tools, IDE extensions,
 dedicated AI IDEs, cloud platform agents, and commercial assistants. For
 each, it covers architecture, provider flexibility, MCP/extensibility
 support, and realistic cost.</p>
-<p><strong>A note on methodology:</strong> This report was produced
-using an adversarial deep-research process (108 research agents, 26
-sources fetched, 25 factual claims verified via 3-agent voting). Claims
-were verified via 3-agent adversarial voting; verified facts include
-star counts for Aider (~45k), Cline (~62k), OpenHands (~75k), and tool
-capabilities for Continue.dev, OpenCode, and others. Refuted claims —
-including GitHub Copilot OpenRouter support and automatic MCP discovery
-in OpenHands — are excluded from the main text. Claims that failed
-verification — particularly specific GitHub star counts and token-volume
-figures from aggregator blog posts — are excluded or clearly caveated.
-Where specific figures are cited without a “verified” note, they come
-from training data (accurate as of approximately August 2025) and may
-have changed.</p>
+<p><strong>A note on methodology and provenance:</strong> This document
+was originally drafted from an AI model’s training-data snapshot
+(accurate as of approximately August 2025) and has since been fully
+refreshed as of July 2026 via live web research — every tool section,
+table, and cost figure was re-checked against current sources rather
+than carried forward unverified. Facts that were corrected or added
+during this July 2026 refresh are marked “verified 2026-07” (or a
+specific access date) at the point they’re introduced, with the
+corresponding source listed in the References section. Where a figure or
+claim carries no such marker, it should be read as inherited from the
+original snapshot and not independently re-checked this round — treat it
+with appropriate caution and verify before relying on it for a
+decision.</p>
 <p><strong>How to read this document:</strong> If you want the fastest
 path to a conclusion, jump to the <a href="#feature-comparison-matrix">Feature Comparison Matrix</a>, the <a href="#provider-flexibility-analysis">Provider Flexibility Analysis</a>,
 and the <a href="#recommendations">Recommendations</a>. The deep-dive
@@ -631,8 +653,11 @@ categories that have emerged. This taxonomy comes from Artificial
 Analysis’s coding agent classification (verified):</p>
 <p><strong>CLI Tools</strong> run entirely in the terminal. They take
 instructions, edit files, run commands, and loop autonomously. This is
-the category Claude Code belongs to. Other members: Aider, Gemini CLI,
-Goose, OpenCode, Qwen Code, Kimi CLI, Codex (OpenAI).</p>
+the category Claude Code belongs to. Other members: Aider, OpenCode,
+Goose, Gemini CLI, Plandex, SWE-agent, Qwen Code, Kimi CLI, OpenAI Codex
+CLI, Amp (Sourcegraph, hybrid local/cloud), and GitHub Copilot CLI
+(distinct from the IDE-based Copilot covered under IDE Extensions
+below).</p>
 <p><strong>IDE Extensions</strong> augment an existing editor (primarily
 VS Code or JetBrains). They have full access to the editor’s language
 server, refactoring tools, and UI, but are less suitable for scripted or
@@ -640,7 +665,9 @@ headless workflows. Members: Cline, Continue.dev, GitHub Copilot, Amazon
 Q Developer, Tabnine, JetBrains AI Assistant.</p>
 <p><strong>Dedicated AI IDEs</strong> are entire editors rebuilt around
 AI-first workflows. They typically fork VS Code and add deeper AI
-integration than an extension permits. Members: Cursor, Windsurf.</p>
+integration than an extension permits (Zed is the exception, built from
+scratch in Rust). Members: Cursor, Windsurf (now Devin Desktop,
+Cognition AI), Zed AI, AWS Kiro IDE, Google Antigravity 2.0.</p>
 <p><strong>Cloud Platform Agents</strong> run primarily in the cloud or
 a sandboxed environment (Docker). They expose a web UI or API and are
 designed for longer-running autonomous tasks, often with their own
@@ -660,9 +687,13 @@ existing git repository, takes natural-language instructions,
 autonomously edits multiple files, and commits changes.</p>
 <p><strong>Author and licence:</strong> Created by Paul Gauthier. MIT
 licence. Open source at <code>github.com/Aider-AI/aider</code>.</p>
-<p><strong>Community size:</strong> Approximately 45,300 GitHub stars as
-of May 2026 (verified by the deep-research process). This is among the
-largest in the open-source CLI coding agent category.</p>
+<p><strong>Community size:</strong> Approximately 47,100 GitHub stars
+(verified 2026-07, up from 45,300 in May 2026). This is among the
+largest in the open-source CLI coding agent category, though development
+cadence has slowed relative to faster-moving peers like OpenCode and
+Cline — the last push to the main repo was May 22, 2026, versus daily
+pushes elsewhere. Worth watching as a trend rather than dismissing as a
+one-off snapshot.</p>
 <p><strong>Architecture:</strong> Aider is written in Python and uses
 the <code>litellm</code> library as its LLM abstraction layer, which
 means it can talk to virtually any LLM provider that litellm supports.
@@ -687,10 +718,12 @@ cost</li>
 <p><strong>LLM provider support:</strong> Aider supports all major
 providers via litellm, including:</p>
 <ul>
-<li>Anthropic (Claude family — Claude 3.5 Sonnet, Claude 3 Opus,
-etc.)</li>
-<li>OpenAI (GPT-4o, o1, o3)</li>
-<li>Google (Gemini 2.5 Pro via Vertex AI or AI Studio)</li>
+<li>Anthropic (Claude family — <code>claude-sonnet-5</code>,
+<code>claude-opus-4-8</code>,
+<code>claude-haiku-4-5-20251001</code>)</li>
+<li>OpenAI (<code>gpt-5.5</code>, <code>gpt-5.3-codex</code>)</li>
+<li>Google (<code>gemini-3.1-pro-preview</code> via Vertex AI or AI
+Studio)</li>
 <li>AWS Bedrock</li>
 <li>Azure OpenAI</li>
 <li>OpenRouter (verified — full setup documented at
@@ -701,10 +734,10 @@ etc.)</li>
 </ul>
 <p><strong>OpenRouter setup (verified):</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">OPENROUTER_API_KEY</span><span class="op">=</span>sk-or-...</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/anthropic/claude-3.5-sonnet</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/anthropic/claude-sonnet-5</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or any OpenRouter-hosted model:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/deepseek/deepseek-chat</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/google/gemini-2.5-pro</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/deepseek/deepseek-v4-pro</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/google/gemini-3.1-pro-preview</span></code></pre></div>
 <p><strong>Local LLM setup (Ollama):</strong></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start Ollama with a coding model first</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen2.5-coder:32b</span>
@@ -726,10 +759,11 @@ full history of AI changes in <code>git log</code>. There is also an
 <code>/run &lt;command&gt;</code> or <code>--auto-run</code>. Aider can
 also be configured with <code>--test-cmd</code> to run tests
 automatically after each change.</p>
-<p><strong>MCP support:</strong> As of August 2025, Aider did not have
-native MCP server support. This is a meaningful gap compared to Claude
-Code. Check the Aider changelog for current status, as the project moves
-quickly.</p>
+<p><strong>MCP support:</strong> Still absent as of mid-2026. RFC #4506
+proposing native MCP support remains open, and an exploratory PR (#3937)
+was closed without shipping. This is a meaningful and persistent gap
+compared to Claude Code — eleven months on from the original assessment,
+the gap has not closed.</p>
 <p><strong>Extensibility:</strong> Aider has limited plugin architecture
 compared to Claude Code. Configuration is via
 <code>.aider.conf.yml</code> and environment variables. There is no
@@ -744,7 +778,7 @@ split</li>
 <li><strong>help</strong> — help with Aider itself</li>
 </ul>
 <p><strong>Cost model:</strong> Open source, free to use. You pay only
-for the LLM API calls you make. With Claude 3.5 Sonnet via Anthropic
+for the LLM API calls you make. With Claude Sonnet 5 via the Anthropic
 API, a typical coding session might cost $0.50–$3.00 depending on
 context size and number of changes. With OpenRouter you can route to
 cheaper models.</p>
@@ -755,24 +789,27 @@ litellm - OpenRouter support is well-documented and works reliably -
 Mature, battle-tested codebase with high benchmark performance -
 Supports local LLMs via Ollama - Very low overhead — just Python and an
 API key</p>
-<p><strong>Weaknesses:</strong> - No MCP support (as of mid-2025) - No
-skills/hooks system — less extensible than Claude Code - Context
-management is manual (you explicitly <code>/add</code> files) - Less
-capable at long multi-step autonomous tasks compared to Claude Code - No
-built-in web search or browser use</p>
-<hr />
+<p><strong>Weaknesses:</strong> - No MCP support, and no committed
+timeline for one (RFC open, prior PR abandoned) - No skills/hooks system
+— less extensible than Claude Code - Context management is manual (you
+explicitly <code>/add</code> files) - Less capable at long multi-step
+autonomous tasks compared to Claude Code - No built-in web search or
+browser use - Development cadence has slowed relative to faster-moving
+competitors</p>
 <h2 data-number="3.2" id="opencode"><span class="header-section-number">3.2</span> OpenCode</h2>
 <p><strong>What it is:</strong> OpenCode is a terminal UI (TUI) coding
-agent built by the SST/Anomaly team (the same people behind the SST
-serverless framework). It is written in Go and presents a rich
-interactive terminal interface while supporting a very wide range of LLM
-providers.</p>
-<p><strong>Author and licence:</strong> Built by the SST/Anomaly team.
-Open source at <code>github.com/sst/opencode</code>.</p>
-<p><strong>Community size and activity:</strong> Very actively developed
-— version 1.15.13 was released on May 30, 2026, with 815 total releases
-indicating extremely rapid iteration (verified). This is one of the most
-actively maintained tools in the space.</p>
+agent written in Go, presenting a rich interactive terminal interface
+while supporting a very wide range of LLM providers.</p>
+<p><strong>Author and licence:</strong> Originally built by the SST
+team; the project rebranded in early 2026 under a new organisation,
+Anomaly Inc., and the repository moved from <code>sst/opencode</code> to
+<code>anomalyco/opencode</code>. Open source.</p>
+<p><strong>Community size and activity:</strong> 183,000 GitHub stars
+and 7.5 million+ monthly active users (verified 2026-07) — a step change
+from the sub-100k star count of the prior assessment, alongside
+continued rapid releases (v1.17.14 as of July 6, 2026) and 75+ connected
+providers. This is one of the most actively maintained and now most
+widely used tools in the space.</p>
 <p><strong>Architecture:</strong> OpenCode is a Go binary with a full
 TUI (terminal user interface) built using the Bubble Tea framework. It
 integrates with the AI SDK and Models.dev for LLM provider abstraction.
@@ -789,8 +826,7 @@ maintain separate contexts for different tasks.</p>
 <p><strong>LLM provider support:</strong> OpenCode supports 75+ LLM
 endpoints (verified) including:</p>
 <ul>
-<li>Anthropic (Claude family)</li>
-<li>OpenAI</li>
+<li>OpenAI (ChatGPT subscription plans now work natively)</li>
 <li>Google (Gemini via AI Studio or Vertex)</li>
 <li>AWS Bedrock</li>
 <li>Azure OpenAI</li>
@@ -802,6 +838,14 @@ endpoints (verified) including:</p>
 </ul>
 <p>This is the broadest provider flexibility of any CLI tool in the
 category.</p>
+<p><strong>Important change — Anthropic access:</strong> In January
+2026, OpenCode broke with Anthropic: Claude models are no longer bundled
+or accessible through a simplified login flow. Using Claude now requires
+supplying your own Anthropic API key directly, the same as any other
+provider. Over the same period, native ChatGPT subscription support was
+added, so the tool is no longer usefully described as “Claude-adjacent”
+— if anything, the balance now tilts toward OpenAI’s consumer plans for
+users who don’t want to manage a separate API key.</p>
 <p><strong>OpenRouter and Ollama:</strong> Both confirmed as supported
 providers. Configuration is via a
 <code>~/.config/opencode/config.json</code> or project-level config.</p>
@@ -813,38 +857,39 @@ references, and understand project structure at the type level.</p>
 <p><strong>MCP support:</strong> OpenCode supports MCP servers. This is
 a significant advantage over Aider for users who have invested in an MCP
 ecosystem.</p>
-<p><strong>Cost model:</strong> Open source, free to use. API costs
-only.</p>
+<p><strong>Cost model:</strong> Open source, free to use. API costs only
+— for Claude models this now means a directly billed Anthropic API key
+rather than any bundled access.</p>
 <p><strong>Strengths:</strong> - Broadest LLM provider support of any
 CLI tool (75+ endpoints verified) - Rich TUI with a more polished
 interactive experience than most CLI tools - LSP integration for
-semantic code understanding - MCP support - Extremely active development
-- Built in Go — fast, single binary, no Python dependency hell</p>
+semantic code understanding - MCP support - Extremely active
+development, now with a large user base (7.5M+ MAU) - Built in Go —
+fast, single binary, no Python dependency hell - Native ChatGPT
+subscription support</p>
 <p><strong>Weaknesses:</strong> - Relatively new compared to Aider —
 less battle-tested - TUI approach is slightly less scriptable than a
-pure REPL like Aider - Smaller community than Aider - Documentation less
-mature than older tools</p>
-<hr />
+pure REPL like Aider - Claude access now requires a raw Anthropic API
+key — no bundled access, unlike before the January 2026 split -
+Org/rebrand churn (<code>sst/opencode</code> →
+<code>anomalyco/opencode</code>) means older documentation and links may
+be stale</p>
 <h2 data-number="3.3" id="goose-by-block"><span class="header-section-number">3.3</span> Goose (by Block)</h2>
 <p><strong>What it is:</strong> Goose is an open-source, on-device AI
 coding agent developed by Block (formerly Square, the company associated
-with Jack Dorsey). It is available as both a CLI and a desktop
-application. Its primary differentiator is an extensions system with
-native MCP support.</p>
+with Jack Dorsey). It is available as a CLI, a desktop application, and
+an API. Its primary differentiator is an extension system built natively
+on MCP.</p>
 <p><strong>Author and licence:</strong> Developed by Block, Inc. Apache
 2.0 licence. Open source at <code>github.com/block/goose</code>.</p>
-<p><strong>Community size:</strong> Community size was disputed in the
-research verification process — a claim of ~45,800 stars failed the
-adversarial check, and the actual figure from primary sources could not
-be independently confirmed. The project has significant corporate
-backing from Block.</p>
 <p><strong>Architecture:</strong> Goose runs on-device, meaning all
 execution happens locally on your machine (the LLM calls go to wherever
-you configure, including local Ollama). It uses a toolkit/extension
-system where each extension provides a set of tools that the agent can
-use. This is philosophically similar to MCP but is Goose’s own format.
-Goose also supports MCP servers as first-class inputs to the extension
-system, meaning your existing MCP server investments carry over.</p>
+you configure, including local Ollama). Its extension system is built
+directly on MCP rather than a Goose-proprietary format — MCP is a core
+architectural pillar of the tool, not a bolted-on integration. Goose
+ships 70+ documented extensions and is compatible with 3,000+ MCP
+servers from the broader ecosystem, so existing MCP investments carry
+over directly.</p>
 <p><strong>Installation:</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># macOS</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install block/tap/goose</span>
@@ -852,99 +897,107 @@ system, meaning your existing MCP server investments carry over.</p>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># or via install script</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://github.com/block/goose/releases/latest/download/install.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> Goose is model-agnostic and
-supports multiple provider configurations simultaneously. Supported
-providers include Anthropic, OpenAI, Google, Groq, Ollama, and others.
-It does not lock you to a single provider and allows per-task model
-configuration.</p>
-<p><strong>Local LLM support:</strong> Confirmed support for Ollama. The
-claim about this was partially refuted in the adversarial verification
-(a blog post’s description was unverified), but the architectural design
-of Goose makes local LLM support a core feature — the on-device
-philosophy would be undermined by requiring cloud-only models.</p>
+supports multiple provider configurations simultaneously, with 15+
+documented provider integrations including Anthropic, OpenAI, Google,
+Groq, and Ollama. It does not lock you to a single provider and allows
+per-task model configuration.</p>
+<p><strong>Local LLM support:</strong> Confirmed support for Ollama —
+this is a core feature of the on-device design, not a partial or
+unverified claim.</p>
 <p><strong>Agentic capabilities:</strong> Goose can edit files, run
 shell commands, use its extension system to call external tools, and
 iterate autonomously on tasks. It has a particularly strong story for
 DevOps and infrastructure tasks.</p>
-<p><strong>MCP support:</strong> Native MCP integration is listed as a
-core feature. The specific claim about this was refuted (1-2 vote) from
-a blog source, suggesting the blog description was imprecise or
-outdated. Check the official Block documentation for current MCP
-status.</p>
+<p><strong>MCP support:</strong> Confirmed and central to the
+architecture, not a hedged or disputed claim. Goose’s extension system
+is built on MCP, ships 70+ documented extensions, and is compatible with
+3,000+ MCP servers. In December 2025, Block contributed Goose to the
+Linux Foundation’s new Agentic AI Foundation, co-stewarding alongside
+Anthropic’s MCP and OpenAI’s AGENTS.md — a further sign of Goose’s
+commitment to MCP as core infrastructure rather than a side feature.</p>
 <p><strong>Extensions:</strong> The extension system is the key
-differentiator. Extensions are tools the agent can use — analogous to
-MCP servers but in Goose’s format. Built-in extensions include file
-operations, developer tools, and system access.</p>
+differentiator, and it is MCP-native: extensions are effectively MCP
+servers, giving Goose access to the same growing ecosystem Claude Code
+and other MCP-compatible tools draw on.</p>
 <p><strong>Strengths:</strong> - Strong corporate backing from Block —
 less likely to be abandoned - On-device execution philosophy — good for
-privacy - Extension system analogous to MCP - Desktop app available for
-non-terminal users - Apache 2.0 licence - Model flexibility</p>
-<p><strong>Weaknesses:</strong> - Extension ecosystem smaller than MCP’s
-broader ecosystem - Specific feature claims from secondary sources were
-unreliable — verify current status from primary docs - Less pure CLI
-tool than Aider — the desktop app orientation means some rough edges in
-headless terminal use - Star count uncertain</p>
-<hr />
+privacy - MCP-native extension system with 70+ documented extensions and
+3,000+ compatible servers - Desktop app available for non-terminal users
+- Apache 2.0 licence - Model flexibility across 15+ providers -
+Co-steward of the Linux Foundation’s Agentic AI Foundation</p>
+<p><strong>Weaknesses:</strong> - Less pure CLI tool than Aider — the
+desktop app orientation means some rough edges in headless terminal use
+- Younger MCP ecosystem integration story than Claude Code’s, despite
+the architecture being sound</p>
 <h2 data-number="3.4" id="gemini-cli-by-google"><span class="header-section-number">3.4</span> Gemini CLI (by Google)</h2>
 <p><strong>What it is:</strong> Gemini CLI is Google’s open-source
 terminal AI agent, released in mid-2025. It is powered by the Gemini
-model family and includes generous free tier access via Google AI
-Studio, making it effectively zero-cost for moderate usage.</p>
-<p><strong>Author and licence:</strong> Google DeepMind. Apache 2.0
+model family. Through mid-2026 it offered generous free-tier access for
+individual users; that consumer free tier has since ended (see below),
+materially changing its cost position relative to other CLI tools.</p>
+<p><strong>Author and licence:</strong> Google Cloud/Developer Products
+(not Google DeepMind, contrary to earlier reporting). Apache 2.0
 licence. Open source at
 <code>github.com/google-gemini/gemini-cli</code>.</p>
 <p><strong>Community size:</strong> Gemini CLI saw extremely rapid
 adoption after launch — it became one of the fastest-growing GitHub
-repositories in history within weeks of release. Specific star counts
-from secondary sources were not verified by this research process, but
-the viral adoption is not in dispute.</p>
+repositories in history within weeks of release.</p>
 <p><strong>Architecture:</strong> Gemini CLI is a Node.js-based CLI
-agent. It uses Gemini 2.5 Pro by default, which provides up to a 1
-million token context window — the largest of any CLI coding tool. This
+agent. It uses Gemini’s Pro-tier model by default, which provides a very
+large context window — among the largest of any CLI coding tool. This
 means you can load entire codebases into context rather than managing
 file additions manually.</p>
 <p><strong>Installation:</strong></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @google/gemini-cli</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gemini</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> Gemini CLI is primarily
-designed for Google’s Gemini models. It is not model-agnostic in the
-same way as Aider or OpenCode. The primary models available are Gemini
-2.5 Pro and Gemini 2.5 Flash.</p>
-<p><strong>Free tier:</strong> This is the headline feature. The Gemini
-CLI free tier via Google AI Studio provides generous API quotas at no
-cost. For moderate usage, you may pay nothing beyond your time. This
-makes it the most cost-effective option for users who cannot afford API
-costs for heavy usage.</p>
+designed for Google’s Gemini models
+(<code>gemini-3.1-pro-preview</code>, <code>gemini-3.5-flash</code>). It
+is not model-agnostic in the same way as Aider or OpenCode.</p>
+<p><strong>Free tier — deprecated June 18, 2026:</strong> This is the
+most consequential change in this refresh. Google discontinued
+consumer-tier free access on June 18, 2026: Gemini Code Assist for
+Individuals, Google AI Pro, and Google AI Ultra all stopped serving free
+requests. Only enterprise tiers (Gemini Code Assist Standard/Enterprise)
+continue to be offered. Gemini CLI should no longer be recommended as a
+zero-cost option for individual developers — that recommendation is now
+obsolete, not merely dated. Consumer users who relied on the free tier
+are being directed by Google toward the new <strong>Google
+Antigravity</strong> platform instead (see the Dedicated AI IDEs
+section), which is free for individuals and model-agnostic.</p>
 <p><strong>MCP support:</strong> Gemini CLI supports MCP servers, making
-it one of the few CLI tools with confirmed MCP integration alongside
-Claude Code. Configuration is via a <code>~/.gemini/settings.json</code>
-file.</p>
+it one of the CLI tools with confirmed MCP integration alongside Claude
+Code and Goose. Configuration is via a
+<code>~/.gemini/settings.json</code> file.</p>
 <p><strong>Extensions:</strong> Gemini CLI has an extensions mechanism
 that allows adding capabilities beyond the default file editing and
 shell execution.</p>
 <p><strong>Agentic capabilities:</strong> Gemini CLI can read and edit
-files, run shell commands, search the web, and iterate autonomously. The
-1M context window means it is uniquely capable at tasks involving
+files, run shell commands, search the web, and iterate autonomously. Its
+large context window means it is uniquely capable at tasks involving
 entire-codebase understanding.</p>
-<p><strong>Cost model:</strong> Free tier available via Google AI Studio
-(rate-limited). For heavier usage, Gemini 2.5 Pro API pricing
-applies.</p>
-<p><strong>Strengths:</strong> - Effectively free for moderate usage - 1
-million token context window — can load entire codebases - MCP support -
-Open source (Apache 2.0) - Google backing means long-term support likely
-- Very active development</p>
+<p><strong>Cost model:</strong> As of June 18, 2026, individual/consumer
+users no longer have a free tier — standard Gemini API pricing applies
+for the Pro and Flash models, or an enterprise Gemini Code Assist
+subscription is required. Budget-conscious individuals should look to
+Google Antigravity or a different tool’s free/local tier instead.</p>
+<p><strong>Strengths:</strong> - Large context window — can load entire
+codebases - MCP support - Open source (Apache 2.0) - Google backing
+means long-term support likely - Very active development</p>
 <p><strong>Weaknesses:</strong> - Locked to Gemini models — no
-OpenRouter or third-party model support - Gemini models, while capable,
-may not match Claude’s code quality for your specific use cases - Less
-battle-tested than Aider - Node.js dependency - Free tier is
-rate-limited; heavy usage requires paid API</p>
-<hr />
+OpenRouter or third-party model support - No longer free for
+individual/consumer use as of June 18, 2026 — a major change from its
+original positioning - Gemini models, while capable, may not match
+Claude’s code quality for your specific use cases - Less battle-tested
+than Aider - Node.js dependency</p>
 <h2 data-number="3.5" id="plandex"><span class="header-section-number">3.5</span> Plandex</h2>
 <p><strong>What it is:</strong> Plandex is an open-source CLI agent with
 a distinctive planning-first approach. Rather than immediately executing
 changes, it plans multi-file, multi-step tasks and builds up pending
 changes for user review before applying.</p>
-<p><strong>Author and licence:</strong> Created by Evan Conrad. MIT
-licence. Open source at <code>github.com/plandex-ai/plandex</code>.</p>
+<p><strong>Author and licence:</strong> Created by Dane Schneider (<span class="citation" data-cites="danenania">@danenania</span>). MIT licence.
+Open source at <code>github.com/plandex-ai/plandex</code>. Approximately
+15,500 GitHub stars, currently at v2.2.1.</p>
 <p><strong>Architecture:</strong> Plandex is written in Go and uses a
 client-server architecture. The server can be run locally or self-hosted
 on a cloud provider. Changes are accumulated in a “pending changes”
@@ -979,7 +1032,6 @@ multi-file tasks</p>
 quick edits - Less interactive than Aider or OpenCode - Client-server
 architecture adds complexity - LLM provider support less broad than
 Aider/OpenCode - Smaller community</p>
-<hr />
 <h2 data-number="3.6" id="swe-agent"><span class="header-section-number">3.6</span> SWE-agent</h2>
 <p><strong>What it is:</strong> SWE-agent is a research tool from
 Princeton NLP lab, designed primarily for automated software engineering
@@ -991,7 +1043,16 @@ licence. <code>github.com/SWE-agent/SWE-agent</code>.</p>
 <p><strong>Architecture:</strong> SWE-agent uses a Docker-based
 sandboxed environment. The Agent-Computer Interface (ACI) pattern it
 introduces provides structured tools for file navigation, editing, and
-execution in a way that is particularly suited for benchmark tasks.</p>
+execution in a way that is particularly suited for benchmark tasks.
+SWE-agent v1.1.0 remains state-of-the-art on SWE-Bench as of February
+2026 and is not abandoned, but active development in this lineage has
+shifted to a sibling project: <strong>mini-swe-agent</strong>, a
+~100-line Python reimplementation of the same core idea, which has grown
+to 5.4k stars and reaches roughly 65% on SWE-bench Verified. If you’re
+evaluating this family of tools today, check mini-swe-agent as well as
+SWE-agent proper — the smaller project is where most current iteration
+is happening, even though the original benchmark numbers still stand on
+SWE-agent itself.</p>
 <p><strong>Intended use:</strong> Automated bug-fixing on GitHub issues,
 especially in batch/CI contexts. Not designed for interactive
 development sessions.</p>
@@ -1001,21 +1062,127 @@ pipelines</p>
 <p><strong>Weaknesses:</strong> - Not a daily driver — requires Docker,
 not interactive - Research-oriented design means rough UX edges - Slower
 than interactive tools - Not designed for the ad-hoc, exploratory coding
-sessions that Claude Code excels at</p>
-<hr />
-<h2 data-number="3.7" id="deprecated-and-unverified-tools"><span class="header-section-number">3.7</span> Deprecated and Unverified
+sessions that Claude Code excels at - Primary development momentum has
+moved to mini-swe-agent; SWE-agent proper sees less active iteration</p>
+<h2 data-number="3.7" id="openai-codex-cli"><span class="header-section-number">3.7</span> OpenAI Codex CLI</h2>
+<p><strong>What it is:</strong> Codex CLI is OpenAI’s open-source
+terminal coding agent, open-sourced April 16, 2025. It is OpenAI’s
+direct answer to Claude Code and Gemini CLI: a terminal-native agent
+that reads and edits files, runs shell commands, and iterates
+autonomously, with tight integration into ChatGPT’s subscription
+plans.</p>
+<p><strong>Author and licence:</strong> OpenAI. Open source at
+<code>github.com/openai/codex</code>. Approximately 95,900 GitHub stars
+(July 2026); the codebase is 96.5% Rust.</p>
+<p><strong>Architecture:</strong> Codex CLI is a Rust binary, giving it
+a fast startup and low overhead compared to Node.js- or Python-based
+competitors. It defaults to OpenAI’s own hosted models but also supports
+local model backends.</p>
+<p><strong>Installation:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @openai/codex</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or via the standalone Rust binary release</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span></span></code></pre></div>
+<p><strong>Model support:</strong> The default model is
+<code>gpt-5-codex</code>, OpenAI’s flagship coding model; a budget
+variant, <code>gpt-5-codex-mini</code>, is available and gives roughly
+4x the usage budget for lighter workloads. These are Codex’s own
+product-tier model names — distinct from the versioned
+<code>gpt-5.x</code> family used elsewhere in the OpenAI API
+(e.g. <code>gpt-5.5</code>, <code>gpt-5.4</code>) — so don’t conflate
+the two naming schemes when comparing pricing or capability.</p>
+<p><strong>Local model support:</strong> Codex CLI can run against local
+models via an <code>--oss</code> flag, which supports Ollama, LM Studio,
+and MLX backends. This gives it a genuine offline/local-only mode,
+something Gemini CLI lacks entirely.</p>
+<p><strong>Bundled pricing:</strong> Codex CLI usage is bundled into
+ChatGPT’s consumer and business plans rather than metered separately by
+default: Free, Go ($8/mo), Plus ($20/mo), Pro ($100/mo), plus
+Business/Edu/Enterprise tiers. This mirrors Claude Code’s Max-plan
+bundling model more closely than a pay-per-token CLI tool like
+Aider.</p>
+<p><strong>Configuration:</strong> Config lives at
+<code>~/.codex/config.toml</code>, covering model selection, sandboxing
+behaviour, and approval policy for shell commands.</p>
+<p><strong>Agentic capabilities:</strong> Codex CLI can read and edit
+files, run shell commands with configurable approval levels, and iterate
+autonomously across multi-step tasks, broadly comparable in scope to
+Claude Code and Gemini CLI.</p>
+<p><strong>Strengths:</strong> - Backed by OpenAI’s flagship coding
+model, <code>gpt-5-codex</code>, with a cheaper <code>-mini</code>
+variant for budget-conscious usage - Fast, low-overhead Rust binary -
+Genuine local-model mode via <code>--oss</code> (Ollama, LM Studio, MLX)
+— not just a cloud-only tool - Bundled into existing ChatGPT
+subscriptions, so many users already have access with no incremental
+cost - Very large and fast-growing community (95.9k stars)</p>
+<p><strong>Weaknesses:</strong> - Best experience is tied to OpenAI’s
+own models and ChatGPT plans; using it as a purely model-agnostic tool
+is a secondary use case - Newer than Aider/OpenCode as a CLI-first
+product, despite OpenAI’s scale - Product-tier model naming
+(<code>gpt-5-codex</code>) is a separate namespace from the API’s
+versioned models, a frequent source of confusion when comparing pricing
+across tools</p>
+<h2 data-number="3.8" id="amp-sourcegraph"><span class="header-section-number">3.8</span> Amp (Sourcegraph)</h2>
+<p><strong>What it is:</strong> Amp is Sourcegraph’s 2026 rebrand of its
+earlier Cody assistant, repositioned as a hybrid CLI-plus-cloud coding
+agent. It pairs a local CLI with cloud-hosted “Orbs” for offloading
+longer-running or parallel work, similar in spirit to Goose’s
+on-device-plus-extensions model but with a cloud execution tier built in
+from the start.</p>
+<p><strong>Author and licence:</strong> Sourcegraph.</p>
+<p><strong>Architecture:</strong> Amp is built on Sourcegraph’s existing
+code-intelligence infrastructure — cross-repo search, dependency
+analysis, and code-graph features Sourcegraph has developed for years as
+a code search company. This gives it a differentiated strength:
+understanding large, multi-repo codebases at a structural level, rather
+than relying solely on what fits in a model’s context window. The CLI
+handles local, interactive work; Orbs handle cloud-side, longer-running
+or parallelised tasks.</p>
+<p><strong>LLM provider support:</strong> Model-agnostic, with plugin
+and event-hook extensibility for customising behaviour around model
+calls and tool use.</p>
+<p><strong>Cost model:</strong> Pay-as-you-go, with no markup applied
+for individual users over the underlying model cost. Sourcegraph has not
+published a full rate card for Amp as of this writing — treat exact
+pricing as an open question rather than assuming parity with any other
+tool’s numbers.</p>
+<p><strong>Strengths:</strong> - Deep code-intelligence heritage
+(cross-repo search, dependency graphs) not available in most other CLI
+tools - Hybrid local/cloud model gives a path to offloading long-running
+or parallel tasks without leaving the CLI workflow - Model-agnostic with
+extensibility via plugins/event hooks - No markup on individual
+pay-as-you-go pricing</p>
+<p><strong>Weaknesses:</strong> - Full pricing is not yet publicly
+documented — evaluate the actual cost before committing to it for heavy
+use - Newer product identity (rebrand from Cody in 2026) means less
+accumulated community track record under the Amp name specifically -
+Cloud “Orbs” component means it is not a purely local/offline tool in
+the way Aider or Goose can be</p>
+<h2 data-number="3.9" id="deprecated-and-unverified-tools"><span class="header-section-number">3.9</span> Deprecated and Unverified
 Tools</h2>
-<h2 data-number="3.8" id="mentat"><span class="header-section-number">3.8</span> Mentat</h2>
-<p><strong>What it is:</strong> Mentat is a Python-based CLI coding tool
-that was an early entrant in the space. It takes a conversational
-approach to code editing with explicit context management.</p>
-<p><strong>Status:</strong> As of mid-2025, development activity had
-slowed compared to its initial burst. It remains functional but has been
-largely superseded by Aider and newer tools.</p>
+<h2 data-number="3.10" id="mentat"><span class="header-section-number">3.10</span> Mentat</h2>
+<p><strong>What it is:</strong> Mentat was a Python-based CLI coding
+tool and an early entrant in the space, taking a conversational approach
+to code editing with explicit context management.</p>
+<p><strong>Status:</strong> Fully archived and read-only since January
+7, 2025 — this is a firm end-of-life, not a gradual slowdown. Note for
+anyone searching for current status: “Mentat” is now also used by an
+unrelated GitHub bot product from Abante AI, which can make search
+results confusing — the archived coding CLI and the Abante AI bot are
+different products that happen to share a name.</p>
 <p><strong>Note:</strong> For new users, Aider is a better choice in the
 same category — more active, more features, larger community.</p>
-<hr />
-<h2 data-number="3.9" id="qwen-code-and-kimi-cli"><span class="header-section-number">3.9</span> Qwen Code and Kimi CLI</h2>
+<p><strong>Roo Code (fork of Cline) — also deprecated:</strong> Roo
+Code, a fork of Cline created in 2024 to move faster on multi-agent
+workflows (its “Boomerang Tasks” feature) and broader model support, was
+archived on May 15, 2026, after peaking at roughly 24,300 stars and 1.55
+million VS Code installs. The team pivoted to a cloud agent product,
+<code>roomote.dev</code>, on the view that the IDE is no longer the
+right locus for this kind of work. Most of Roo Code’s userbase has since
+moved to Cline itself (see the Cline section) or to Kilo Code, another
+Cline-derived fork. There is no live “current tool” entry for Roo Code
+in this document — by the time of this refresh it is itself
+historical.</p>
+<h2 data-number="3.11" id="qwen-code-and-kimi-cli"><span class="header-section-number">3.11</span> Qwen Code and Kimi CLI</h2>
 <p><strong>What they are:</strong> These are CLI coding agents from
 Chinese AI labs — Qwen Code from Alibaba’s Qwen team and Kimi CLI from
 Moonshot AI. Both are classified alongside Claude Code and Aider as CLI
@@ -1023,26 +1190,34 @@ tools by Artificial Analysis’s taxonomy. Both are positioned as
 competitive alternatives particularly for users who want model diversity
 or prefer models strong at certain programming languages.</p>
 <p><strong>Provider flexibility:</strong> Qwen Code uses Qwen models
-(strong at code, particularly multilingual/non-English codebases). Kimi
+(strong at code, particularly multilingual/non-English codebases;
+current coding-focused models include <code>qwen3-coder-next</code>,
+<code>qwen3-coder-plus</code>, and <code>qwen3-coder-480b</code>). Kimi
 CLI uses Kimi’s models with a very long context window.</p>
-<p><strong>Note:</strong> These tools were not covered by the
-deep-research verification process. Treat specific capability claims
-with appropriate scepticism until you test them directly.</p>
-<hr />
+<p><strong>Note:</strong> These tools were not covered by this round’s
+research refresh. Treat specific capability claims with appropriate
+scepticism until you test them directly.</p>
 <h1 data-number="4" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">4</span> IDE Extensions and Hybrid
 Tools</h1>
-<h2 data-number="4.1" id="cline-formerly-claude-engineer"><span class="header-section-number">4.1</span> Cline (formerly Claude
-Engineer)</h2>
+<h2 data-number="4.1" id="cline-formerly-claude-dev"><span class="header-section-number">4.1</span> Cline (formerly Claude
+Dev)</h2>
 <p><strong>What it is:</strong> Cline is an open-source autonomous
 coding agent that operates primarily as a VS Code extension. It is
 model-agnostic, OpenRouter-compatible, and one of the most capable
-agentic tools available for IDE-based workflows. A CLI mode (Cline CLI
-2.0) has been released, moving it toward hybrid territory.</p>
+agentic tools available for IDE-based workflows. It has since expanded
+well beyond VS Code and beyond the IDE entirely, moving it toward hybrid
+territory.</p>
 <p><strong>Author and licence:</strong> Open source at
 <code>github.com/cline/cline</code>. MIT licence.</p>
-<p><strong>Community size:</strong> Approximately 62,300 GitHub stars
-(verified, May 2026). This makes it one of the most popular tools in the
-entire AI coding agent space, not just this subcategory.</p>
+<p><strong>Community size:</strong> Approximately 61,000-62,000 GitHub
+stars (mid-2026; the figure fluctuates within this band depending on
+snapshot date, not a material change from prior counts). This makes it
+one of the most popular tools in the entire AI coding agent space, not
+just this subcategory.</p>
+<p><strong>Platform reach:</strong> Beyond VS Code, Cline now runs in
+JetBrains IDEs, Cursor, Windsurf, Zed, and Neovim, plus a CLI preview
+for macOS and Linux — the clearest sign yet of the shift from “VS Code
+extension” to platform-agnostic agent.</p>
 <p><strong>Architecture:</strong> Cline runs as a VS Code extension and
 has deep access to the VS Code API — language servers, the file system,
 the integrated terminal, and the browser (via Puppeteer integration). It
@@ -1072,7 +1247,7 @@ page)</li>
 <pre class="text"><code>In VS Code: Open Cline extension settings
 API Provider: OpenRouter
 API Key: sk-or-...
-Model: anthropic/claude-3.5-sonnet (or any OpenRouter model)</code></pre>
+Model: anthropic/claude-sonnet-5 (or any OpenRouter model)</code></pre>
 <p><strong>Agentic capabilities:</strong> Cline can:</p>
 <ul>
 <li>Read and edit any file in the workspace</li>
@@ -1094,28 +1269,38 @@ tools) are portable to Cline.</p>
 customisation capability and supports <code>.clinerules</code> files
 (analogous to <code>.cursorrules</code> or Claude Code’s
 <code>CLAUDE.md</code>) for project-specific behaviour.</p>
-<p><strong>CLI mode (Cline CLI 2.0):</strong> The standalone CLI mode
-makes Cline usable outside VS Code. This is a recent addition and may
+<p><strong>CLI mode:</strong> The standalone CLI preview (macOS/Linux)
+makes Cline usable outside any IDE. This is a recent addition and may
 not have full feature parity with the VS Code extension yet, but the
 trajectory is toward a full CLI-native experience.</p>
 <p><strong>Cost model:</strong> Open source, free. API costs only. Using
 OpenRouter you can route to cheaper models for lower-cost tasks.</p>
+<p><strong>Team note:</strong> OpenAI acqui-hired roughly seven of
+Cline’s core staff in early 2026. This was a talent acquisition, not a
+project acquisition — Cline itself remains independent, open source, and
+actively developed, though it’s worth knowing if you notice any shift in
+velocity.</p>
+<p><strong>Roo Code lineage:</strong> Roo Code forked from Cline in 2024
+to push further on multi-agent workflows (Boomerang Tasks) and broader
+model support. It was archived on May 15, 2026, having peaked around
+24,300 stars and 1.55M VS Code installs; most of its userbase returned
+to Cline, with the rest moving to Kilo Code.</p>
 <p><strong>Strengths:</strong> - Extremely capable agentic tool — one of
 the best - Model-agnostic with OpenRouter support verified - Browser use
 capability is unique among open-source tools - MCP support - Plan/Act
-mode for controlled execution - Very large and active community -
-Growing CLI support</p>
-<p><strong>Weaknesses:</strong> - Primarily an IDE extension — less
-suitable for terminal-first workflows - Requires VS Code (for the full
-extension feature set) - Browser use capability means it can have
-unintended side effects if not supervised - Less scriptable than pure
-CLI tools</p>
-<hr />
+mode for controlled execution - Very large and active community - Now
+reaches far beyond VS Code (JetBrains, Cursor, Windsurf, Zed, Neovim,
+CLI)</p>
+<p><strong>Weaknesses:</strong> - Still primarily an IDE-centric tool —
+the CLI preview trails the extension in feature parity - Browser use
+capability means it can have unintended side effects if not supervised -
+Less scriptable than pure CLI tools</p>
 <h2 data-number="4.2" id="continue.dev"><span class="header-section-number">4.2</span> Continue.dev</h2>
 <p><strong>What it is:</strong> Continue.dev is an open-source AI coding
 assistant for VS Code and JetBrains IDEs. It combines autocomplete,
 chat, and agent capabilities in a single extension, with deep
-configurability via a YAML config file.</p>
+configurability via a YAML config file. Since September 2025 it also
+ships a headless CLI, so it is no longer purely IDE-integrated.</p>
 <p><strong>Author and licence:</strong> Open source at
 <code>github.com/continuedev/continue</code>. Apache 2.0 licence.</p>
 <p><strong>Architecture:</strong> Continue.dev is structured around
@@ -1131,6 +1316,14 @@ instructions</li>
 <p>Configuration lives in <code>~/.continue/config.yaml</code> and can
 specify different models for different features (e.g., a fast local
 model for autocomplete, a more capable cloud model for agent tasks).</p>
+<p><strong>CLI mode (<code>cn</code>):</strong> Continue.dev shipped a
+headless <code>cn</code> CLI in September 2025, offering both a TUI
+interactive mode and a scriptable/background mode
+(<code>cn -p &quot;prompt&quot;</code> for one-shot invocation, plus async
+background jobs). This is a supplementary capability, not a pivot away
+from the IDE extension — Continue.dev is still primarily used as an IDE
+assistant, with the CLI extending it into scripts, CI, and
+terminal-first workflows.</p>
 <p><strong>LLM provider support:</strong> Continue.dev has one of the
 broadest provider lists:</p>
 <ul>
@@ -1143,63 +1336,78 @@ via <code>apiBase</code>)</li>
 <li>Self-hosted models via any OpenAI-compatible endpoint</li>
 </ul>
 <p><strong>Ollama setup (verified):</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.continue/config.yaml</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Local Qwen Coder&quot;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen2.5-coder:32b</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">    # For remote Ollama:</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    # apiBase: http://192.168.1.100:11434</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.continue/config.yaml</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Local Qwen3 Coder&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3.5-9b</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    # For remote Ollama:</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    # apiBase: http://192.168.1.100:11434</span></span></code></pre></div>
 <p><strong>Agent mode:</strong> Continue.dev’s agent mode allows it to
 make multi-file edits based on instructions. Tool support depends on the
 underlying model — models must support function/tool calling. Note: some
 models that claim tool support may not work reliably in agent mode (this
 was partially corroborated in the research, though the specific claim
 was refuted as too broad).</p>
-<p><strong>Extensibility:</strong> Continue.dev supports a block system
-where community-built extensions (“blocks”) add new context providers,
-tools, and model configurations. This is effectively a plugin
+<p><strong>Extensibility:</strong> Beyond MCP, Continue.dev supports a
+block system where community-built extensions (“blocks”) add new context
+providers, tools, and model configurations. This is effectively a plugin
 marketplace for the IDE assistant workflow.</p>
 <p><strong>Strengths:</strong> - Best-in-class for IDE users who want
 full local LLM support - Works in both VS Code and JetBrains - Highly
 configurable via config.yaml - Autocomplete + chat + agent in one
-package - OpenRouter and Ollama support confirmed - Open source, Apache
-2.0</p>
-<p><strong>Weaknesses:</strong> - No CLI mode — purely IDE-integrated -
-Agent mode quality depends heavily on the model’s tool-calling
-capabilities - Less capable at long agentic chains than Cline or Claude
-Code - JetBrains support is less mature than VS Code</p>
-<hr />
+package - OpenRouter and Ollama support confirmed - Headless
+<code>cn</code> CLI extends it into scripts, CI, and terminal workflows
+- Open source, Apache 2.0</p>
+<p><strong>Weaknesses:</strong> - Still primarily IDE-integrated; the
+CLI is supplementary, not a terminal-first redesign - Agent mode quality
+depends heavily on the model’s tool-calling capabilities - Less capable
+at long agentic chains than Cline or Claude Code - JetBrains support is
+less mature than VS Code</p>
 <h1 data-number="5" id="dedicated-ai-ides"><span class="header-section-number">5</span> Dedicated AI IDEs</h1>
 <h2 data-number="5.1" id="cursor"><span class="header-section-number">5.1</span> Cursor</h2>
 <p><strong>What it is:</strong> Cursor is a VS Code fork with deep AI
 integration baked into every layer of the editor. It has become one of
 the most widely adopted commercial AI coding tools, with a large user
-base and reported ARR in the hundreds of millions as of mid-2025.</p>
+base and reported ARR in the hundreds of millions.</p>
 <p><strong>Company:</strong> Anysphere, Inc. Private company,
 significant VC backing.</p>
 <p><strong>Pricing:</strong></p>
 <ul>
-<li><strong>Free</strong> — limited completions and requests per
+<li><strong>Hobby</strong> — Free — limited completions and requests per
 month</li>
-<li><strong>Pro</strong> — ~$20/month — unlimited completions, 500 fast
-requests/month (uses the best available models)</li>
-<li><strong>Business</strong> — ~$40/user/month — team features, admin
+<li><strong>Pro</strong> — $20/month — usage-based credit pool (not a
+fixed request count)</li>
+<li><strong>Pro+</strong> — $60/month — larger credit pool for heavier
+usage</li>
+<li><strong>Ultra</strong> — $200/month — highest credit pool, priority
+access to frontier models</li>
+<li><strong>Teams</strong> — $40/user/month — team features, admin
 controls, SOC 2 compliance</li>
+<li><strong>Enterprise</strong> — custom</li>
 </ul>
+<p>Billing moved from a fixed “500 fast requests/month” allowance to a
+usage-based credit pool in mid-2025 — treat any “N requests/month”
+framing of Cursor pricing as obsolete, not merely dated.</p>
 <p><strong>Architecture:</strong> Cursor extends VS Code with AI
 capabilities at multiple layers: inline completions, a chat sidebar, and
-Composer (the agent mode). It maintains a shadow workspace where it can
-test proposed changes before applying them.</p>
+Agent mode. It maintains a shadow workspace where it can test proposed
+changes before applying them. Cursor 3 supports up to 8 parallel
+isolated agents running on separate git branches, plus a cloud-sandboxed
+Background Agent that converts GitHub issues or Slack messages into
+draft PRs.</p>
 <p><strong>LLM models available:</strong> Cursor Pro gives access to
-Claude 3.5 Sonnet, GPT-4o, o1, Gemini 2.5 Pro, and Cursor’s own
-fine-tuned models. Users can also configure their own API key for direct
-provider access.</p>
-<p><strong>Agent mode (Composer):</strong> Composer is Cursor’s
-multi-file agentic mode. It accepts a task, proposes a plan, and
-executes changes across multiple files. It can run terminal commands in
-Yolo mode (automatic execution without prompting). Yolo mode effectively
-turns Cursor’s agent into a Claude Code-like autonomous operator.</p>
+current-generation Claude, GPT, and Gemini models, alongside Cursor’s
+own in-house model, Composer (Composer 2.5 as of May 2026). Users can
+also configure their own API key for direct provider access.</p>
+<p><strong>Terminology note:</strong> “Composer” and “Agent mode” are
+two different things, not interchangeable. Composer is the name of
+Cursor’s own in-house model — Anysphere trains and ships it as one of
+the model options in the picker. Agent mode is the autonomous multi-file
+execution feature: it accepts a task, proposes a plan, and executes
+changes across multiple files, and can run terminal commands in Yolo
+mode (automatic execution without prompting). Agent mode can be pointed
+at Composer or at any of the other bundled models.</p>
 <p><strong>Context mechanisms:</strong></p>
 <ul>
 <li><code>@codebase</code> — full codebase semantic search</li>
@@ -1215,54 +1423,69 @@ instructions to the AI — similar to Claude Code’s <code>CLAUDE.md</code>
 pattern.</p>
 <p><strong>Provider flexibility:</strong> Limited. While Cursor allows
 “BYO API key” (bring your own Anthropic/OpenAI key), it is not natively
-designed for OpenRouter or arbitrary providers. The product is optimised
-for the models it bundles.</p>
+designed for OpenRouter or arbitrary providers, and it has no local LLM
+support. The product is optimised for the models it bundles.</p>
 <p><strong>Strengths:</strong> - Polished, deeply integrated AI coding
-experience - Composer agent mode is very capable - Semantic codebase
-indexing enables large-codebase context - Large community, extensive
-documentation, many tutorials - Tab completion is best-in-class -
-$20/month Pro is reasonable for moderate usage</p>
+experience - Agent mode is very capable, and now supports parallel
+multi-branch agents - Semantic codebase indexing enables large-codebase
+context - Large community, extensive documentation, many tutorials - Tab
+completion is best-in-class</p>
 <p><strong>Weaknesses:</strong> - IDE-bound — not a CLI tool - Limited
-model flexibility — not OpenRouter compatible - Proprietary — you are
-dependent on Anysphere remaining a going concern and maintaining pricing
-- Heavier than a terminal tool — requires a full VS Code instance</p>
-<hr />
-<h2 data-number="5.2" id="windsurf-by-codeium"><span class="header-section-number">5.2</span> Windsurf (by Codeium)</h2>
-<p><strong>What it is:</strong> Windsurf is an AI-first IDE built by
+model flexibility — still not OpenRouter compatible, no local model
+support - Proprietary — you are dependent on Anysphere remaining a going
+concern and maintaining pricing - Heavier than a terminal tool —
+requires a full VS Code instance - Usage-based credit pricing makes
+monthly cost less predictable than the old flat-request model</p>
+<h2 data-number="5.2" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">5.2</span> Windsurf (now Devin Desktop,
+Cognition AI)</h2>
+<p><strong>What it is:</strong> Windsurf was an AI-first IDE built by
 Codeium, positioned as a direct competitor to Cursor. Its standout
-feature is the Cascade agent, which uses “Flow” — a system that
-maintains contextual awareness across an entire coding session rather
-than treating each interaction as independent.</p>
-<p><strong>Company:</strong> Codeium, Inc. Significant VC backing. Note:
-acquisition discussions with OpenAI were reported in mid-2025; verify
-current ownership before committing to this tool long-term.</p>
-<p><strong>Pricing:</strong></p>
+feature was the Cascade agent, which used “Flow” — a system that
+maintained contextual awareness across an entire coding session rather
+than treating each interaction as independent. The product has since
+been acquired and rebranded; treat “Windsurf” as the legacy name and
+“Devin Desktop” as the current one.</p>
+<p><strong>Ownership timeline:</strong> Cognition AI (maker of Devin)
+acquired Windsurf/Codeium in <strong>December 2025</strong> for roughly
+$250M, then rebranded the product to <strong>Devin Desktop</strong> on
+<strong>June 2, 2026</strong> via an over-the-air update — existing
+settings and plans carried over automatically. Cascade, the former
+Windsurf agent, reached end-of-life on <strong>July 1, 2026</strong>,
+replaced by <strong>Devin Local</strong>: a Rust-based rewrite that
+Cognition claims is roughly 30% more token-efficient and adds subagent
+support. Readers searching for either “Windsurf” or “Devin Desktop”
+should land on this section.</p>
+<p><strong>Company:</strong> Cognition AI.</p>
+<p><strong>Pricing:</strong> Devin Desktop has its own pricing ladder,
+separate from Cognition’s cloud Devin product (see the Devin entry under
+Cloud Platform Agents — do not conflate the two):</p>
 <ul>
-<li><strong>Free</strong> — limited credits per month</li>
-<li><strong>Pro</strong> — ~$15/month</li>
-<li><strong>Team</strong> — per-user enterprise pricing</li>
+<li><strong>Free</strong> — limited quota</li>
+<li><strong>Pro</strong> — $20/month</li>
+<li><strong>Max</strong> — $200/month</li>
+<li><strong>Teams</strong> — $80/month base + $40/seat</li>
 </ul>
-<p><strong>Architecture:</strong> Windsurf is a fork of VS Code (similar
-to Cursor). The Cascade agent is its agentic component. Flow awareness
-means Cascade can reference earlier context in the session without
-explicit re-prompting — it maintains a “memory” of what it has done and
-seen.</p>
-<p><strong>LLM models:</strong> Windsurf uses its own model serving
-infrastructure (Codeium’s). It offers multiple models and allows some
-degree of model selection in higher tiers.</p>
-<p><strong>Provider flexibility:</strong> Like Cursor, Windsurf is
-primarily designed around its own model serving rather than OpenRouter
-or arbitrary providers. There is some BYO API key support but it is not
-the primary use case.</p>
-<p><strong>Strengths:</strong> - Cascade agent with Flow awareness is a
-genuinely differentiated capability - Generally slightly cheaper than
-Cursor - Autocomplete is excellent (Codeium was originally an
-autocomplete specialist) - Clean, polished IDE experience</p>
-<p><strong>Weaknesses:</strong> - IDE-bound - Ownership uncertainty
-(potential OpenAI acquisition) creates long-term risk - Less model
-flexibility than Cursor - Smaller community than Cursor - Less
-documentation and tutorials</p>
-<hr />
+<p><strong>Architecture:</strong> Devin Desktop remains a fork of VS
+Code (as Windsurf was). Devin Local is now its agentic component, having
+fully superseded Cascade as of July 1, 2026.</p>
+<p><strong>LLM models:</strong> Devin Desktop uses Cognition-managed
+inference by default, with some degree of model selection in higher
+tiers.</p>
+<p><strong>Provider flexibility:</strong> Local LLM support is now
+partial — Devin Local can run against local models, while the
+cloud-backed Devin Cloud path remains Cognition-managed inference only.
+Not OpenRouter-compatible.</p>
+<p><strong>Strengths:</strong> - Devin Local carries forward Cascade’s
+session-awareness strengths with better token efficiency - Historically
+cheaper tiers than Cursor at the low end - Autocomplete remains strong
+(inherited from Codeium’s original product) - Clean, polished IDE
+experience</p>
+<p><strong>Weaknesses:</strong> - IDE-bound - Two ownership changes and
+a rebrand in under a year — evaluate stability before committing
+long-term - Less model flexibility than Cursor - Smaller community than
+Cursor; documentation is still catching up to the rebrand - Easy to
+confuse with Cognition’s separate cloud Devin product, which has
+different pricing and a different execution model</p>
 <h2 data-number="5.3" id="zed-ai"><span class="header-section-number">5.3</span> Zed AI</h2>
 <p><strong>What it is:</strong> Zed is a high-performance code editor
 written in Rust, designed for speed and minimal latency. Its AI
@@ -1271,20 +1494,73 @@ editor experience.</p>
 <p><strong>Architecture:</strong> Zed is not a VS Code fork — it is a
 ground-up implementation in Rust with native GPU acceleration. This
 makes it significantly faster than Electron-based editors (VS Code,
-Cursor, Windsurf). AI features are integrated via an assistant
-panel.</p>
-<p><strong>LLM models:</strong> Zed uses Claude models (Anthropic) by
-default. It also supports configuring alternative backends.</p>
-<p><strong>Pricing:</strong> Zed editor is free and open source. Zed AI
-usage has a free tier and credits system.</p>
+Cursor, Devin Desktop). AI features are integrated via an assistant
+panel. Zed’s <strong>Agent Client Protocol</strong> (ACP, launched
+January 2026) is a distinct interoperability feature none of the other
+dedicated AI IDEs offer: it lets Claude Code, Codex CLI, Gemini CLI, and
+OpenCode run directly inside Zed as pluggable agents, rather than
+requiring Zed’s own agent to do everything.</p>
+<p><strong>LLM models:</strong> Claude is the default. The supported
+provider list is now extensive: OpenAI, Gemini, Amazon Bedrock,
+DeepSeek, GitHub Copilot, LM Studio, Mistral, Ollama, OpenRouter, and
+Vercel.</p>
+<p><strong>Pricing:</strong> Zed the editor is free and open source. Zed
+AI is billed separately on token-based usage, restructured into three
+tiers:</p>
+<ul>
+<li><strong>Personal</strong> — free permanently — 2,000 accepted edit
+predictions/month</li>
+<li><strong>Pro</strong> — $10/month — unlimited edit predictions, $5 of
+tokens included, overage billed at API list price + 10%</li>
+<li><strong>Business</strong> — $30/seat/month</li>
+</ul>
 <p><strong>Strengths:</strong> - Extraordinarily fast editor — the best
 performance of any AI-integrated editor - Open source editor core -
-Clean, focused design</p>
-<p><strong>Weaknesses:</strong> - AI capabilities are less developed
-than Cursor or Windsurf - Smaller plugin/extension ecosystem
-(incompatible with VS Code extensions) - Agentic mode is less mature -
-Primarily macOS and Linux (Windows support in progress)</p>
-<hr />
+Genuinely broad provider flexibility, including local (Ollama) and
+OpenRouter — no longer just “supports configuring alternative backends,”
+both are confirmed Yes - ACP lets you bring your preferred CLI agent
+(Claude Code, Codex CLI, etc.) into the editor instead of relying solely
+on Zed’s own agent</p>
+<p><strong>Weaknesses:</strong> - Smaller plugin/extension ecosystem
+(incompatible with VS Code extensions) - Native agentic mode is still
+less mature than Cursor’s or Devin Desktop’s - Primarily macOS and Linux
+(Windows support in progress) - Token-based overage billing can be less
+predictable than a flat monthly fee for heavy users</p>
+<h2 data-number="5.4" id="google-antigravity-2.0"><span class="header-section-number">5.4</span> Google Antigravity 2.0</h2>
+<p><strong>What it is:</strong> Antigravity is Google’s agent-first IDE,
+unveiled at I/O 2026. Unlike Cursor or Zed, which retrofit agent
+capability onto a code-editing surface, Antigravity is built around two
+primary views: an Editor View for direct code work, and an async
+<strong>Manager Surface</strong> for orchestrating and supervising
+multiple agents working in parallel across tasks.</p>
+<p><strong>Company:</strong> Google (Cloud/Developer Products, the same
+organisation behind Gemini CLI — not Google DeepMind).</p>
+<p><strong>Pricing:</strong> Free for individuals.</p>
+<p><strong>LLM models:</strong> Model-agnostic — ships with Gemini 3
+Pro, Claude Sonnet 4.5, and GPT-OSS available out of the box.</p>
+<p><strong>Why it matters here:</strong> Google deprecated the
+consumer-tier free access to Gemini CLI on June 18, 2026 (Gemini Code
+Assist for Individuals, Google AI Pro, and Google AI Ultra all stopped
+serving requests to individual users — see the Gemini CLI entry).
+Antigravity is Google’s designated landing place for those displaced
+consumer users, and it is free where Gemini CLI’s consumer tier no
+longer is. Anyone evaluating Gemini CLI purely for its old zero-cost
+tier should look here first.</p>
+<p><strong>Confidence note:</strong> This section is sourced from a
+single independent research pass, not cross-verified by a second source.
+The existence of the product, its free-for-individuals pricing, and its
+model-agnostic support for Gemini/Claude/GPT-OSS are reasonably solid;
+treat any finer-grained feature claims (beyond the Editor View / Manager
+Surface split) as provisional pending a future refresh.</p>
+<p><strong>Strengths:</strong> - Free for individual use -
+Model-agnostic rather than locked to Google’s own models - Manager
+Surface is a genuinely different multi-agent orchestration paradigm from
+the single-agent-per-session model most competitors use</p>
+<p><strong>Weaknesses:</strong> - Newest entrant in this table — least
+battle-tested, thinnest independent documentation - Feature depth
+outside the two core views is not yet well-verified -
+Provider/local-model support beyond the three bundled models is
+unconfirmed</p>
 <h1 data-number="6" id="cloud-and-web-platform-agents"><span class="header-section-number">6</span> Cloud and Web Platform
 Agents</h1>
 <h2 data-number="6.1" id="openhands-formerly-opendevin"><span class="header-section-number">6.1</span> OpenHands (formerly
@@ -1293,182 +1569,251 @@ OpenDevin)</h2>
 open-source AI software engineer designed to solve complex software
 engineering tasks autonomously. It is the open-source project that most
 directly competes with commercial cloud agents like Devin.</p>
-<p><strong>Author and licence:</strong> All Hands AI. MIT licence.
-<code>github.com/OpenHands/OpenHands</code>.</p>
-<p><strong>Community size:</strong> Approximately 74,800–75,500 GitHub
-stars (verified range, May 2026). One of the largest open-source AI
-coding projects by community size.</p>
+<p><strong>Author and licence:</strong> MIT licence.
+<code>github.com/OpenHands/OpenHands</code> — the project migrated from
+the <code>All-Hands-AI</code> org to <code>OpenHands</code>; the new
+path is now the canonical one.</p>
+<p><strong>Community size:</strong> Approximately 79,600 GitHub stars,
+7,000+ commits (July 2026). One of the largest open-source AI coding
+projects by community size.</p>
 <p><strong>Architecture:</strong> OpenHands runs in a Docker container
 with a sandboxed execution environment. This is the key architectural
 difference from CLI tools — it doesn’t run directly on your machine; it
 runs in an isolated environment with full access to the shell,
 filesystem, and browser within that sandbox. This makes it safer for
-autonomous long-running tasks but adds Docker as a dependency.</p>
+autonomous long-running tasks but adds Docker as a dependency. The
+project has recently restructured its core: the agent code now lives in
+separate repos (<code>software-agent-sdk</code>,
+<code>agent-canvas</code>), and the primary interface is the
+browser-based <strong>Agent Canvas</strong> rather than the older “Web
+UI” branding.</p>
 <p><strong>Interfaces:</strong></p>
 <ul>
-<li><strong>Web UI</strong> — the primary interface, a browser-based
-chat with the agent</li>
+<li><strong>Agent Canvas</strong> — the primary interface, a
+browser-based UI for interacting with the agent</li>
 <li><strong>CLI</strong> — a lightweight binary available at
-<code>github.com/OpenHands/OpenHands-CLI</code> (verified as existing,
-~191 stars)</li>
+<code>github.com/OpenHands/OpenHands-CLI</code></li>
 <li><strong>API</strong> — programmable access for CI/CD
 integration</li>
 </ul>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Via Docker (recommended)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull docker.all-hands.dev/all-hands-ai/runtime:0.39-nikolaik</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lightweight CLI binary (for terminal-first use)</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install openhands-cli</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Via Docker (recommended)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull docker.all-hands.dev/all-hands-ai/runtime:0.39-nikolaik</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lightweight CLI binary (for terminal-first use)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install openhands-cli</span></code></pre></div>
 <p><strong>LLM provider support:</strong> OpenHands supports multiple
 LLM providers via litellm, including Anthropic, OpenAI, Google, and
 others.</p>
 <p><strong>MCP support:</strong> OpenHands supports MCP server
-configuration (verified). Both command-based stdio servers (via
-<code>uvx</code> or <code>npx</code>) and URL-based remote MCP servers
-are supported:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fetch&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uvx&quot;</span><span class="fu">,</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mcp-server-fetch&quot;</span><span class="ot">]</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;notion&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;https://mcp.notion.com/mcp&quot;</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
-<p>Note: the specific claim that OpenHands “natively discovers MCP tools
-automatically” was refuted in our adversarial verification. MCP is
-supported as a configuration option but may require explicit setup.</p>
+configuration across three transport types — SSE, Streamable HTTP, and
+stdio:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fetch&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uvx&quot;</span><span class="fu">,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mcp-server-fetch&quot;</span><span class="ot">]</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;notion&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;https://mcp.notion.com/mcp&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>For stdio servers, a proxy approach (SuperGateway/FastMCP) is
+recommended over direct stdio for reliability. Note: the claim that
+OpenHands “natively discovers MCP tools automatically” remains refuted —
+MCP is configured explicitly, not auto-discovered.</p>
 <p><strong>Strengths:</strong> - Very capable at complex, long-horizon
 tasks — closest open-source equivalent to Devin - Docker sandboxing
-means it can’t accidentally break your host system - MCP configuration
-support - Massive community and active development - Web UI is more
-accessible than CLI tools</p>
+means it can’t accidentally break your host system - Full MCP support
+across three transport types - Massive community and active development
+- Agent Canvas is more accessible than CLI tools</p>
 <p><strong>Weaknesses:</strong> - Requires Docker — heavier than CLI
 tools - Primarily a cloud/web platform — less suitable for quick
 interactive sessions - Slower to start up than CLI tools (Docker
 container spin-up) - Not a terminal-first tool despite having a CLI
 option</p>
-<hr />
 <h2 data-number="6.2" id="devin-by-cognition-ai"><span class="header-section-number">6.2</span> Devin (by Cognition AI)</h2>
 <p><strong>What it is:</strong> Devin was the first high-profile “AI
 software engineer” capable of autonomously solving complex GitHub issues
-end-to-end. It is a commercial cloud product.</p>
-<p><strong>Pricing:</strong> Enterprise pricing, reportedly expensive
-(thousands per month for teams). Not a realistic Claude Code replacement
-for individual developers on cost grounds.</p>
+end-to-end. It is a commercial cloud product from Cognition AI.</p>
+<p><strong>Pricing:</strong> Core plan is $20/month base plus
+pay-as-you-go ACU billing at $2.25/ACU (1 ACU ≈ 15 minutes of autonomous
+work, roughly $9/hour of Devin work). Team plan is $500/month with 250
+ACUs included, $2.00/ACU overage; Enterprise is custom (SSO, VPC).
+Realistic all-in cost for an individual with moderate use runs
+<strong>$70–220/month</strong> — a meaningfully more expensive picture
+than a flat “$20/month” headline suggests, though far below the old
+“thousands per month” reputation. Whether that’s viable depends on
+usage: light, occasional use can land near the bottom of the range, but
+sustained daily use pushes toward the top of it and past what most
+individual developers pay for Claude Code or a CLI tool.</p>
+<p>Devin now sits alongside a sibling product, <strong>Devin
+Desktop</strong> (formerly Windsurf, rebranded June 2026 after
+Cognition’s acquisition of Windsurf) — see the Windsurf/Devin Desktop
+entry for that product’s separate pricing ladder. The two are distinct:
+Devin (this entry) is the cloud autonomous-agent product with ACU
+billing; Devin Desktop is an IDE with its own subscription tiers.</p>
 <p><strong>Strengths:</strong> - Very capable for long-horizon
-autonomous tasks - Well-integrated with GitHub workflows</p>
-<p><strong>Weaknesses:</strong> - Very expensive — out of range for
-individual developer use - Fully proprietary — no control over the stack
-- Not a CLI tool</p>
-<hr />
+autonomous tasks - Well-integrated with GitHub workflows - No longer
+prohibitively priced for individuals at light-to-moderate usage
+levels</p>
+<p><strong>Weaknesses:</strong> - ACU-based billing makes costs harder
+to predict than a flat subscription; heavy use is still expensive
+relative to CLI-based alternatives - Fully proprietary — no control over
+the stack - Not a CLI tool</p>
 <h1 data-number="7" id="commercial-ai-coding-assistants"><span class="header-section-number">7</span> Commercial AI Coding
 Assistants</h1>
 <h2 data-number="7.1" id="github-copilot-with-agent-mode"><span class="header-section-number">7.1</span> GitHub Copilot with Agent
 Mode</h2>
 <p><strong>What it is:</strong> GitHub Copilot is Microsoft/GitHub’s AI
-coding assistant. It has evolved from autocomplete-only to include chat
-and an agent mode (Copilot Workspace) capable of implementing GitHub
-issues.</p>
-<p><strong>Pricing:</strong></p>
+coding assistant. It now spans autocomplete, chat, an in-IDE “Agent
+Mode,” and a separate cloud-based “Copilot Coding Agent.” These are two
+distinct products, not one: <strong>Agent Mode</strong> (VS Code,
+synchronous, runs locally, GA since early 2026) executes edits directly
+in your editor session; the <strong>Copilot Coding Agent</strong>
+(cloud, asynchronous, GA September 2025) takes a GitHub issue assignment
+and opens a pull request without an open editor session. Both superseded
+the original “Copilot Workspace” preview, which was sunset May 30, 2025
+— that name no longer refers to a current product.</p>
+<p><strong>Pricing (restructured with usage-based billing, June 1,
+2026):</strong></p>
 <ul>
-<li><strong>Individual</strong> — $10/month or $100/year</li>
+<li><strong>Free</strong> — $0/month; 2,000 completions/month</li>
+<li><strong>Pro</strong> — $10/month; unlimited completions + $15/month
+AI credits, $0.04/premium request after quota</li>
+<li><strong>Pro+</strong> — $39/month; unlimited completions + $70/month
+AI credits; premium model access including Claude Opus</li>
+<li><strong>Individual Max</strong> — $100/month; unlimited usage +
+$200/month AI credits</li>
 <li><strong>Business</strong> — $19/user/month</li>
 <li><strong>Enterprise</strong> — $39/user/month</li>
 </ul>
-<p><strong>LLM provider:</strong> GitHub Copilot is powered by OpenAI
-models and GitHub’s own fine-tuned models. It is locked to the
-Microsoft/OpenAI ecosystem.</p>
-<p><strong>OpenRouter support:</strong> The claim that GitHub Copilot
-supports OpenRouter was explicitly refuted in our adversarial
-verification (1-2 vote). It does not support third-party providers.</p>
-<p><strong>Agent mode (Copilot Workspace):</strong> Allows Copilot to
-plan and implement changes for a GitHub issue, proposing a series of
-file edits for review. Less fully autonomous than Claude Code but more
-controlled.</p>
+<p><strong>LLM provider:</strong> Copilot was never as OpenAI-locked as
+it appeared. The built-in model picker (no key required) already
+includes Claude Opus 4.5/4.6, Claude Sonnet 4.5/4.6, and Kimi K2.7 Code
+alongside GPT-5.x-Codex variants. More significantly, <strong>BYOK
+(Bring Your Own Key) is now generally available</strong> for
+Business/Enterprise customers (VS Code, April 22, 2026; Copilot desktop
+app, June 23, 2026), supporting Anthropic, Gemini, OpenRouter, Ollama,
+Azure OpenAI, Foundry Local, and any OpenAI-compatible endpoint. BYOK
+covers chat and agent workflows only — not code completions. Individual
+Free/Pro/Pro+ users get provider flexibility through VS Code’s Language
+Model Chat Provider API instead of full BYOK.</p>
+<p><strong>OpenRouter support:</strong> Now Yes for Business/Enterprise
+via BYOK, and available to individual users through the Language Model
+Chat Provider API. The earlier “not supported” verdict is outdated.</p>
 <p><strong>Strengths:</strong> - Deep GitHub integration — issues, PRs,
-code review - Well-integrated with VS Code and GitHub.com - $10/month is
-the most affordable commercial option - Enterprise features and security
-compliance</p>
-<p><strong>Weaknesses:</strong> - Not OpenRouter-compatible — locked to
-Microsoft/OpenAI - Agent mode is less capable than Claude Code, Cline,
-or Cursor’s Composer - Less suited for non-GitHub workflows -
-Autocomplete quality has been surpassed by Cursor and Windsurf</p>
-<hr />
-<h2 data-number="7.2" id="amazon-q-developer-formerly-codewhisperer"><span class="header-section-number">7.2</span> Amazon Q Developer (formerly
-CodeWhisperer)</h2>
+code review - Real provider flexibility now, not just a wide built-in
+model picker - $10/month remains the most affordable commercial
+completions tier - Enterprise features and security compliance</p>
+<p><strong>Weaknesses:</strong> - BYOK is gated to Business/Enterprise —
+individual-tier flexibility is narrower and completion-only workflows
+still don’t benefit from BYOK at all - Agent Mode and Copilot Coding
+Agent are two separate mental models to learn, with different sync/async
+execution semantics - Less suited for non-GitHub workflows</p>
+<h2 data-number="7.2" id="amazon-q-developer-formerly-codewhisperer-being-sunset-see-kiro"><span class="header-section-number">7.2</span> Amazon Q Developer (formerly
+CodeWhisperer) — being sunset, see Kiro</h2>
 <p><strong>What it is:</strong> Amazon Q Developer is AWS’s AI coding
-assistant, with deep integration into the AWS ecosystem. It was
-rebranded from CodeWhisperer in 2024.</p>
+assistant, with deep integration into the AWS ecosystem (rebranded from
+CodeWhisperer in 2024). Its agentic mode autonomously implements
+features, refactors, and proposes multi-step changes in both IDE and CLI
+— this is no longer a completions-only tool, contrary to earlier
+characterisations.</p>
+<p><strong>CLI agentic mode:</strong> Supports Claude Sonnet 4 / 3.7 /
+3.5 via <code>/model</code>, with file read/write, bash execution, and
+multi-step autonomy — a genuine general-purpose coding agent, not an
+AWS-console-only assistant.</p>
 <p><strong>Pricing:</strong></p>
 <ul>
-<li><strong>Free tier</strong> — limited monthly suggestions</li>
-<li><strong>Pro</strong> — $19/user/month</li>
+<li><strong>Free</strong> — 50 agentic requests/month</li>
+<li><strong>Pro</strong> — $19/user/month; 10,000 inference calls
+(~1,000 user requests)</li>
 </ul>
-<p><strong>LLM provider:</strong> Amazon’s own models plus Anthropic
-Claude (via Bedrock integration). Not independently flexible.</p>
-<p><strong>Agentic capabilities:</strong> Amazon Q can perform
-agent-style tasks within AWS console (reviewing resources, suggesting
-fixes) and in IDEs (refactoring, security scanning). Its agent mode is
-most powerful for AWS-specific tasks.</p>
+<p><strong>Important — deprecation in progress:</strong> AWS is
+sunsetting Q Developer’s IDE plugins and paid subscriptions. New signups
+closed May 15, 2026; end of support is April 30, 2027. <strong>AWS Kiro
+is the designated successor</strong> (see below) — do not recommend Q
+Developer to a new adopter without flagging this.</p>
 <p><strong>Strengths:</strong> - Best-in-class for AWS-heavy workflows -
-Security vulnerability scanning - Integrated IAM policy generation</p>
-<p><strong>Weaknesses:</strong> - AWS-focused — less useful for non-AWS
-codebases - Not a general-purpose coding agent - Provider lock-in to
-Amazon/Anthropic</p>
-<hr />
+Security vulnerability scanning, IAM policy generation - CLI agentic
+mode is now genuinely general-purpose, not AWS-console-limited</p>
+<p><strong>Weaknesses:</strong> - Being wound down — new signups already
+closed - AWS-focused — less useful for non-AWS codebases - Provider
+choice limited to Claude via Bedrock/CLI; no OpenRouter or broad
+model-agnosticism</p>
 <h2 data-number="7.3" id="jetbrains-ai-assistant"><span class="header-section-number">7.3</span> JetBrains AI Assistant</h2>
 <p><strong>What it is:</strong> JetBrains AI Assistant is integrated
 into IntelliJ IDEA, PyCharm, WebStorm, GoLand, and all other JetBrains
-IDEs. It provides chat, completion, and basic agentic features.</p>
-<p><strong>Pricing:</strong> Included in JetBrains All Products Pack
-subscription (~$24.90/month) or as a separate AI add-on.</p>
-<p><strong>LLM models:</strong> JetBrains AI Assistant uses multiple
-models under the hood (both their own and third-party). It offers some
-model choice in settings.</p>
+IDEs. It provides chat, completion, and an autonomous multi-step agent
+called <strong>Junie</strong> — worth naming explicitly, since it is
+JetBrains’ direct answer to agentic coding assistants rather than a
+generic “agentic features” bundle.</p>
+<p><strong>Pricing (fully decoupled from the IDE
+subscription):</strong></p>
+<ul>
+<li><strong>AI Free</strong> — $0</li>
+<li><strong>AI Pro</strong> — Individual $10/month / Business
+$20/month</li>
+<li><strong>AI Ultimate</strong> — Individual $30/month / Business
+$60/month</li>
+<li><strong>AI Enterprise</strong> — custom</li>
+</ul>
+<p>The old “~$24.90/month All Products Pack” bundling is gone; AI
+features are now priced and sold independently of the IDE licence.</p>
+<p><strong>LLM models:</strong> Model rotation includes Claude 4.0
+Sonnet, Claude 4.5 Haiku, Gemini 2.5/3.0, Azure GPT-5, and Qwen 2.5.
+Local model support (Ollama, LM Studio, llama.cpp) is confirmed on IDEs
+v2025.1 and later.</p>
 <p><strong>Strengths:</strong> - Best choice if you are already heavily
 invested in JetBrains IDEs - Deep IDE integration (refactoring,
-inspections, test generation) - Supports both local and cloud models in
-newer versions</p>
-<p><strong>Weaknesses:</strong> - Less capable agent mode than Cursor or
-Cline - Tied to JetBrains subscription - JetBrains IDEs are heavier than
-VS Code</p>
-<hr />
+inspections, test generation) - Junie provides genuine autonomous
+multi-step agent capability, not just chat - Local model support now
+confirmed, closing a prior gap</p>
+<p><strong>Weaknesses:</strong> - Junie is less proven than Cursor’s
+agent mode or Cline on complex multi-file tasks - Pricing is now a
+separate subscription on top of (or instead of) the IDE licence, adding
+cost-tracking overhead for existing JetBrains customers - JetBrains IDEs
+remain heavier than VS Code</p>
 <h2 data-number="7.4" id="tabnine"><span class="header-section-number">7.4</span> Tabnine</h2>
-<p><strong>What it is:</strong> Tabnine is an AI autocomplete tool with
-a long history (one of the first serious AI coding assistants). Its
-focus is primarily on fast, high-quality inline completions rather than
-agentic capabilities.</p>
-<p><strong>Pricing:</strong></p>
+<p><strong>What it is:</strong> Tabnine is an AI coding assistant with a
+long history (one of the first serious AI coding tools), historically
+focused on fast, high-quality inline completions. It has since pivoted
+toward agentic workflows.</p>
+<p><strong>Pricing (materially higher than before — the old ~$12/month
+Pro tier was sunset in 2025):</strong></p>
 <ul>
-<li><strong>Free</strong> — limited completions with smaller models</li>
-<li><strong>Pro</strong> — ~$12/month</li>
-<li><strong>Enterprise</strong> — custom pricing with self-hosted model
+<li><strong>Code Assistant</strong> — $39/user/month</li>
+<li><strong>Agentic Platform</strong> — $59/user/month; adds MCP
+integration, autonomous workflows, CLI access</li>
+<li><strong>Enterprise</strong> — custom, with self-hosted model
 option</li>
 </ul>
 <p><strong>LLM provider:</strong> Tabnine uses its own models plus
-third-party models (Anthropic, etc.). Enterprise tier supports
+third-party models (Anthropic, etc.). Enterprise tier still supports
 self-hosted deployment for data sovereignty.</p>
 <p><strong>Strengths:</strong> - Very fast completions
 (latency-optimised) - Enterprise self-hosted option — best for
-organisations with strict data policies - Long track record</p>
-<p><strong>Weaknesses:</strong> - Primarily completion-focused — not an
-agentic tool - Less capable for instruction-following tasks - Being
-overtaken by Cursor/Windsurf in completions quality</p>
-<hr />
-<h2 data-number="7.5" id="supermaven"><span class="header-section-number">7.5</span> Supermaven</h2>
+organisations with strict data policies - Agentic Platform tier now
+offers MCP integration and CLI access, closing the gap with agent-first
+tools</p>
+<p><strong>Weaknesses:</strong> - Pricing jumped sharply ($12 →
+$39/$59/month) — no longer the budget completions option it once was -
+Agentic capability is newer and less proven than Cursor, Cline, or
+Claude Code - Being overtaken by Cursor/Windsurf on raw completion
+quality</p>
+<h2 data-number="7.5" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">7.5</span> Supermaven — discontinued,
+folded into Cursor</h2>
 <p><strong>What it is:</strong> Supermaven was a VS Code-focused
 autocomplete tool with a very large context window for completions (300k
-tokens). It was notable for its speed and accuracy.</p>
-<p><strong>Status:</strong> Supermaven was acquired by Cursor in late
-2024/early 2025. It is no longer an independent product. Cursor has
-integrated Supermaven’s technology into its tab completion. If
-Supermaven was your tool of choice, Cursor is now its natural
-successor.</p>
-<hr />
+tokens), notable for speed and accuracy.</p>
+<p><strong>Status:</strong> Supermaven is no longer an independent
+product. It was <strong>acquired by Anysphere (Cursor’s parent company)
+in November 2024</strong>, not by Cursor itself as a product — Anysphere
+absorbed the team and technology, and Cursor has integrated Supermaven’s
+completion engine into its tab-completion feature. If Supermaven was
+your tool of choice, Cursor is its direct successor; there is no
+standalone Supermaven product to evaluate separately.</p>
 <h1 data-number="8" id="cross-cutting-analysis"><span class="header-section-number">8</span> Cross-Cutting Analysis</h1>
 <h2 data-number="8.1" id="provider-flexibility-analysis"><span class="header-section-number">8.1</span> Provider Flexibility
 Analysis</h2>
@@ -1496,86 +1841,162 @@ pay-per-token pricing and no monthly subscription.</p>
 <tbody>
 <tr>
 <td>Aider</td>
-<td><strong>Yes (verified)</strong></td>
-<td>Full setup at aider.chat/docs/llms/openrouter.html</td>
+<td>Yes (verified)</td>
+<td>Full setup at aider.chat/docs/llms/openrouter.html; via
+litellm.</td>
 </tr>
 <tr>
 <td>Cline</td>
-<td><strong>Yes (verified)</strong></td>
-<td>Listed on OpenRouter works-with-openrouter page</td>
+<td>Yes (verified)</td>
+<td>Listed on openrouter.ai/works-with-openrouter.</td>
 </tr>
 <tr>
 <td>OpenCode</td>
-<td><strong>Yes (verified)</strong></td>
-<td>75+ endpoints including OpenRouter</td>
+<td>Yes (verified)</td>
+<td>75+ providers incl. OpenRouter; Claude itself now needs a raw API
+key since the Jan 2026 split (OpenRouter routing unaffected).</td>
 </tr>
 <tr>
 <td>Continue.dev</td>
-<td><strong>Yes</strong></td>
-<td>Via OpenRouter provider in config.yaml</td>
+<td>Yes</td>
+<td>Via OpenRouter provider in config.yaml.</td>
 </tr>
 <tr>
 <td>Goose</td>
-<td>Likely</td>
-<td>Supports custom API endpoints</td>
+<td>Partial</td>
+<td>Reachable via custom API endpoint config; not an explicitly named
+provider in Goose’s own docs.</td>
+</tr>
+<tr>
+<td>Amp (Sourcegraph)</td>
+<td>Partial</td>
+<td>Model-agnostic, pay-as-you-go; OpenRouter not explicitly documented
+as a named provider.</td>
+</tr>
+<tr>
+<td>OpenAI Codex CLI</td>
+<td>Partial</td>
+<td>ChatGPT subscription is the native path; local via
+<code>--oss</code>; OpenRouter reachable via API-compatible config, not
+a first-class integration.</td>
 </tr>
 <tr>
 <td>Plandex</td>
 <td>Partial</td>
-<td>Via OpenAI-compatible endpoint</td>
+<td>Via OpenAI-compatible endpoint.</td>
+</tr>
+<tr>
+<td>SWE-agent</td>
+<td>Partial</td>
+<td>Typically direct Claude/OpenAI; OpenRouter-capable but not the
+primary pathway.</td>
 </tr>
 <tr>
 <td>OpenHands</td>
-<td>Yes</td>
-<td>Via litellm provider abstraction</td>
-</tr>
-<tr>
-<td>Cursor</td>
-<td><strong>No</strong></td>
-<td>BYO key supports direct providers only</td>
-</tr>
-<tr>
-<td>Windsurf</td>
-<td>No</td>
-<td>Codeium’s own model serving</td>
+<td>Partial</td>
+<td>Via litellm provider abstraction; not a first-class named provider
+in docs surfaced this round.</td>
 </tr>
 <tr>
 <td>GitHub Copilot</td>
-<td><strong>No (refuted claim)</strong></td>
-<td>Locked to Microsoft/OpenAI</td>
+<td><strong>Yes (was No)</strong></td>
+<td>Via BYOK, GA for Business/Enterprise (April 2026 VS Code, June 2026
+desktop app); individual tier via VS Code Language Model Chat Provider
+API. Does not cover code completions.</td>
+</tr>
+<tr>
+<td>GitHub Copilot CLI</td>
+<td>Partial*</td>
+<td>Model picker spans Claude/GPT/Gemini; explicit OpenRouter support
+unconfirmed.</td>
+</tr>
+<tr>
+<td>Zed AI</td>
+<td><strong>Yes (was Partial)</strong></td>
+<td>Explicitly listed alongside 10+ other providers (Bedrock, DeepSeek,
+Copilot, LM Studio, Mistral, Ollama, Vercel).</td>
+</tr>
+<tr>
+<td>Google Antigravity 2.0</td>
+<td>Partial*</td>
+<td>Described as “model-agnostic” (Gemini 3 Pro, Claude Sonnet 4.5,
+GPT-OSS); OpenRouter specifically unconfirmed.</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>No</td>
+<td>BYO key for direct providers only.</td>
+</tr>
+<tr>
+<td>Windsurf (→ Devin Desktop)</td>
+<td>No</td>
+<td>Cognition-managed inference or Devin Local; not
+OpenRouter-oriented.</td>
+</tr>
+<tr>
+<td>Devin</td>
+<td>No</td>
+<td>Cognition-managed inference only (ACU billing).</td>
 </tr>
 <tr>
 <td>Gemini CLI</td>
 <td>No</td>
-<td>Locked to Gemini models</td>
+<td>Locked to Gemini models.</td>
 </tr>
 <tr>
-<td>Amazon Q</td>
+<td>Amazon Q Developer</td>
 <td>No</td>
-<td>Locked to Amazon/Anthropic</td>
+<td>Locked to Amazon/Anthropic via Bedrock.</td>
 </tr>
 <tr>
-<td>JetBrains AI</td>
-<td>Partial</td>
-<td>Some model flexibility in enterprise</td>
+<td>AWS Kiro IDE</td>
+<td>No</td>
+<td>AWS-native model routing.</td>
+</tr>
+<tr>
+<td>JetBrains AI Assistant</td>
+<td>No</td>
+<td>Tied to JetBrains’ own model rotation, not user-configurable
+OpenRouter.</td>
 </tr>
 <tr>
 <td>Tabnine</td>
 <td>No</td>
-<td>Own models</td>
+<td>Own models plus a fixed provider list.</td>
 </tr>
 </tbody>
 </table>
+<p>* Unverified — not independently confirmed by this refresh’s sourced
+research; treat as an open question rather than a confirmed
+capability.</p>
 <p><strong>Conclusion:</strong> For OpenRouter flexibility, the
-open-source CLI tools (Aider, Cline, OpenCode, Continue.dev) are your
-best options. Commercial IDE tools are generally locked to their own
-ecosystems.</p>
+open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, Goose, Amp)
+remain your best options, and the pool of flexible tools has widened in
+2026 — Zed AI now confirms OpenRouter as one of its ten-plus provider
+integrations, and OpenAI’s own Codex CLI supports local/OSS models via
+its <code>--oss</code> flag even though it isn’t OpenRouter-routed. The
+old blanket claim that commercial IDE tools are locked to their own
+ecosystems no longer holds without qualification: GitHub Copilot rolled
+out Bring-Your-Own-Key (BYOK) as GA in 2026 — first for VS Code
+Business/Enterprise (April 22, 2026), then the Copilot desktop app (June
+23, 2026) — covering Anthropic, Gemini, OpenRouter, Ollama, Azure
+OpenAI, Foundry Local, and any OpenAI-compatible endpoint. This is a
+real exception, not a marginal one, given Copilot was previously this
+document’s exemplar of zero provider flexibility. Two caveats keep it
+from being a full reversal: BYOK applies to chat/agent workflows only
+(not code completions), and it is gated to Business/Enterprise plans —
+individual Free/Pro/Pro+ users get flexibility only through VS Code’s
+Language Model Chat Provider API, a narrower mechanism. Cursor and
+Windsurf (now rebranded Devin Desktop under Cognition AI) remain the
+clearest holdouts: both are still closed to OpenRouter and restrict BYO
+keys to direct providers only.</p>
 <h3 data-number="8.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">8.1.2</span> Local LLM Support (Ollama /
 LM Studio)</h3>
 <p>Running models locally eliminates API costs entirely. Quality of
-locally-runnable models has improved dramatically — Qwen2.5-Coder 32B,
-DeepSeek Coder V2, and Mistral Codestral are serious coding models
-available locally.</p>
+locally-runnable models has continued to improve — Alibaba’s Qwen3.5-9B
+has become a mainstream local choice for coding and RAG workloads
+(viable on 16GB VRAM), and the sub-35B Qwen3 model family remains Apache
+2.0-licensed for unrestricted commercial use and fine-tuning.</p>
 <table>
 <colgroup>
 <col style="width: 18%" />
@@ -1594,109 +2015,180 @@ available locally.</p>
 <tbody>
 <tr>
 <td>Aider</td>
-<td><strong>Yes</strong></td>
-<td><strong>Yes</strong></td>
-<td>Via litellm</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Via litellm.</td>
 </tr>
 <tr>
 <td>Cline</td>
-<td><strong>Yes</strong></td>
-<td><strong>Yes</strong></td>
-<td>Native provider options</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Native provider options.</td>
 </tr>
 <tr>
 <td>OpenCode</td>
-<td><strong>Yes (verified)</strong></td>
-<td><strong>Yes</strong></td>
-<td>75+ endpoints</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Provider-agnostic architecture.</td>
 </tr>
 <tr>
 <td>Continue.dev</td>
-<td><strong>Yes (verified)</strong></td>
-<td><strong>Yes</strong></td>
-<td>localhost:11434 default</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>localhost:11434 default.</td>
 </tr>
 <tr>
 <td>Goose</td>
-<td><strong>Yes</strong></td>
 <td>Yes</td>
-<td>On-device focus</td>
+<td>Partial</td>
+<td>On-device philosophy is core; MCP-configurable local providers.</td>
+</tr>
+<tr>
+<td>Amp (Sourcegraph)</td>
+<td>Yes</td>
+<td>Partial</td>
+<td>CLI-local execution is one of its two hybrid modes (vs. cloud
+“Orbs”).</td>
+</tr>
+<tr>
+<td>OpenAI Codex CLI</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Via <code>--oss</code> flag; also supports MLX.</td>
 </tr>
 <tr>
 <td>Plandex</td>
 <td>Partial</td>
 <td>Partial</td>
-<td>Via OpenAI-compatible API</td>
+<td>Via OpenAI-compatible API config.</td>
 </tr>
 <tr>
 <td>OpenHands</td>
 <td>Yes</td>
 <td>Yes</td>
-<td>Via litellm</td>
+<td>Via litellm; Agent Canvas can be self-hosted.</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td><strong>Yes (was No)</strong></td>
+<td>Yes</td>
+<td>Via BYOK (Ollama, Microsoft Foundry Local), Business/Enterprise, GA
+April 2026.</td>
+</tr>
+<tr>
+<td>GitHub Copilot CLI</td>
+<td>Partial*</td>
+<td>Partial*</td>
+<td>Not confirmed by sourced research this round.</td>
+</tr>
+<tr>
+<td>JetBrains AI Assistant</td>
+<td><strong>Yes (was not listed)</strong></td>
+<td>Yes</td>
+<td>Ollama, LM Studio, llama.cpp confirmed on IDEs v2025.1+.</td>
+</tr>
+<tr>
+<td>Zed AI</td>
+<td>Yes</td>
+<td>Partial</td>
+<td>Ollama explicitly supported.</td>
+</tr>
+<tr>
+<td>Windsurf (→ Devin Desktop)</td>
+<td><strong>Partial (was No)</strong></td>
+<td>No</td>
+<td>Devin Local variant now available (Rust, ~30% more token-efficient);
+Devin Cloud remains cloud-only.</td>
+</tr>
+<tr>
+<td>Devin</td>
+<td>Partial</td>
+<td>No</td>
+<td>Same Devin Local note — Devin Cloud itself is not locally
+runnable.</td>
 </tr>
 <tr>
 <td>Cursor</td>
 <td>No</td>
 <td>No</td>
-<td>Cloud models only</td>
-</tr>
-<tr>
-<td>Windsurf</td>
-<td>No</td>
-<td>No</td>
-<td>Cloud models only</td>
-</tr>
-<tr>
-<td>GitHub Copilot</td>
-<td>No</td>
-<td>No</td>
-<td>Cloud only</td>
+<td>Cloud models only.</td>
 </tr>
 <tr>
 <td>Gemini CLI</td>
 <td>No</td>
 <td>No</td>
-<td>Gemini models only</td>
+<td>Locked to Gemini.</td>
 </tr>
 <tr>
-<td>Zed AI</td>
-<td>Partial</td>
+<td>Amazon Q Developer</td>
 <td>No</td>
-<td>Some local model config</td>
+<td>No</td>
+<td>AWS/Bedrock-locked.</td>
+</tr>
+<tr>
+<td>AWS Kiro IDE</td>
+<td>No</td>
+<td>No</td>
+<td>AWS-native.</td>
+</tr>
+<tr>
+<td>Tabnine</td>
+<td>No</td>
+<td>No</td>
+<td>Cloud/on-prem/air-gapped deployment options exist, but not consumer
+local-model tools like Ollama.</td>
+</tr>
+<tr>
+<td>Google Antigravity 2.0</td>
+<td>Unverified*</td>
+<td>Unverified*</td>
+<td>No sourced information either way.</td>
 </tr>
 </tbody>
 </table>
+<p>* Unverified — not independently confirmed by this refresh’s sourced
+research; treat as an open question rather than a confirmed
+capability.</p>
 <p><strong>Best tools for local LLMs:</strong> Aider, Cline, OpenCode,
-Continue.dev, and Goose are all first-class options for local model
-use.</p>
+Continue.dev, and Goose remain first-class options for local model use,
+and the field has broadened. JetBrains AI Assistant now confirms local
+model support (Ollama, LM Studio, llama.cpp) on IDEs v2025.1+, a
+capability the previous edition of this document didn’t credit it with.
+Amp and OpenAI’s Codex CLI (via <code>--oss</code>, supporting Ollama,
+LM Studio, and MLX) both ship local-model paths as first-class options
+rather than afterthoughts. Cognition’s rebranded
+Windsurf-turned-Devin-Desktop is a partial case: Devin Local (its
+Rust-based, on-device agent, roughly 30% more token-efficient than its
+predecessor) supports local inference, but Devin Cloud remains
+Cognition-managed only — don’t conflate the two when evaluating this
+product.</p>
 <p><strong>Recommended local models for coding (as of
-2025-2026):</strong></p>
+mid-2026):</strong></p>
 <ul>
-<li><strong>Qwen2.5-Coder:32b</strong> — best general coding performance
-locally, fits in 24-32GB VRAM</li>
-<li><strong>DeepSeek Coder V2</strong> — excellent at complex reasoning
-tasks</li>
-<li><strong>Mistral Codestral</strong> — fast, good for completions</li>
-<li><strong>Llama 3.1:70b</strong> — good general-purpose if VRAM
-allows</li>
-<li><strong>Phi-3.5-MoE</strong> — very efficient for limited
-hardware</li>
+<li><strong>Qwen3.5-9B</strong> — mainstream local choice for coding and
+RAG workloads, viable on 16GB VRAM</li>
+<li><strong>Qwen3-Coder</strong> family (Next / Plus / 480B-A35B
+variants) — sub-35B variants are Apache 2.0-licensed for commercial use
+and fine-tuning</li>
+<li><strong>DeepSeek V4</strong> (flash/pro) — strong reasoning-capable
+option; note the older
+<code>deepseek-chat</code>/<code>deepseek-reasoner</code> API models are
+sunset July 24, 2026, so local deployments should track the V4 line</li>
+<li>Hardware requirement guidance is largely unchanged: 16-24GB VRAM
+covers most serious 9B-32B-class local coding models; larger MoE
+variants need considerably more.</li>
 </ul>
-<hr />
 <h2 data-number="8.2" id="feature-comparison-matrix"><span class="header-section-number">8.2</span> Feature Comparison Matrix</h2>
-<table style="width:100%;">
+<p>The matrix spans 16 tools, too many to render legibly as one table at
+this page width — split below into four groups of four.</p>
+<p><strong>Group 1: Claude Code, Aider, OpenCode, Cline</strong></p>
+<table>
 <colgroup>
-<col style="width: 8%" />
-<col style="width: 12%" />
-<col style="width: 6%" />
-<col style="width: 9%" />
-<col style="width: 6%" />
-<col style="width: 12%" />
-<col style="width: 6%" />
-<col style="width: 11%" />
-<col style="width: 10%" />
-<col style="width: 7%" />
-<col style="width: 9%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
 </colgroup>
 <thead>
 <tr>
@@ -1705,12 +2197,6 @@ hardware</li>
 <th>Aider</th>
 <th>OpenCode</th>
 <th>Cline</th>
-<th>Continue.dev</th>
-<th>Goose</th>
-<th>Gemini CLI</th>
-<th>OpenHands</th>
-<th>Cursor</th>
-<th>Windsurf</th>
 </tr>
 </thead>
 <tbody>
@@ -1720,21 +2206,9 @@ hardware</li>
 <td>CLI</td>
 <td>TUI</td>
 <td>VS Code / CLI</td>
-<td>VS Code / JetBrains</td>
-<td>CLI + Desktop</td>
-<td>CLI</td>
-<td>Web / CLI</td>
-<td>IDE</td>
-<td>IDE</td>
 </tr>
 <tr>
 <td><strong>Agentic file editing</strong></td>
-<td>Yes (full)</td>
-<td>Yes (full)</td>
-<td>Yes (full)</td>
-<td>Yes (full)</td>
-<td>Yes (partial)</td>
-<td>Yes (full)</td>
 <td>Yes (full)</td>
 <td>Yes (full)</td>
 <td>Yes (full)</td>
@@ -1746,24 +2220,12 @@ hardware</li>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes (1M tokens)</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
 </tr>
 <tr>
 <td><strong>Shell execution</strong></td>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
-<td>Yes</td>
-<td>Yes (agent mode)</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes (sandboxed)</td>
-<td>Yes (yolo mode)</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -1772,25 +2234,13 @@ hardware</li>
 <td>No</td>
 <td>Partial</td>
 <td>Yes</td>
-<td>No</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
 </tr>
 <tr>
 <td><strong>Browser use</strong></td>
-<td>Yes</td>
+<td>Via MCP/WebFetch‡</td>
 <td>No</td>
 <td>No</td>
 <td>Yes</td>
-<td>No</td>
-<td>No</td>
-<td>No</td>
-<td>Yes</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
 <td><strong>MCP support</strong></td>
@@ -1798,25 +2248,13 @@ hardware</li>
 <td>No</td>
 <td>Yes</td>
 <td>Yes</td>
-<td>Partial</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes (config)</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
-<td><strong>Custom hooks/automation</strong></td>
+<td><strong>Custom hooks</strong></td>
 <td>Yes (skills+hooks)</td>
 <td>No</td>
 <td>Limited</td>
 <td><code>.clinerules</code></td>
-<td>config.yaml</td>
-<td>Extensions</td>
-<td>Settings</td>
-<td>Limited</td>
-<td><code>.cursorrules</code></td>
-<td>Limited</td>
 </tr>
 <tr>
 <td><strong>OpenRouter</strong></td>
@@ -1824,12 +2262,6 @@ hardware</li>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
-<td>Yes</td>
-<td>Likely</td>
-<td>No</td>
-<td>Yes</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
 <td><strong>Local LLMs</strong></td>
@@ -1837,12 +2269,6 @@ hardware</li>
 <td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>No</td>
-<td>Yes</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
 <td><strong>Open source</strong></td>
@@ -1850,23 +2276,11 @@ hardware</li>
 <td>Yes (MIT)</td>
 <td>Yes (MIT)</td>
 <td>Yes (MIT)</td>
-<td>Yes (Apache-2)</td>
-<td>Yes (Apache-2)</td>
-<td>Yes (Apache-2)</td>
-<td>Yes (MIT)</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
 <td><strong>Git integration</strong></td>
 <td>Yes</td>
 <td>Yes (auto-commit)</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
@@ -1876,12 +2290,6 @@ hardware</li>
 <td>API only</td>
 <td>API only</td>
 <td>API only</td>
-<td>API only</td>
-<td>API only</td>
-<td>Free tier + API</td>
-<td>API only</td>
-<td>$20/mo + API</td>
-<td>$15/mo</td>
 </tr>
 <tr>
 <td><strong>Self-hosted option</strong></td>
@@ -1889,25 +2297,387 @@ hardware</li>
 <td>N/A</td>
 <td>N/A</td>
 <td>N/A</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Group 2: Continue.dev, Goose, Gemini CLI,
+OpenHands</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Continue.dev</th>
+<th>Goose</th>
+<th>Gemini CLI</th>
+<th>OpenHands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Interface</strong></td>
+<td>VS Code / JetBrains</td>
+<td>CLI + Desktop</td>
+<td>CLI</td>
+<td>Web / CLI</td>
+</tr>
+<tr>
+<td><strong>Agentic file editing</strong></td>
+<td>Yes (partial)</td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+</tr>
+<tr>
+<td><strong>Multi-file context</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes (1M tokens)†</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Shell execution</strong></td>
+<td>Yes (agent mode)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes (sandboxed)</td>
+</tr>
+<tr>
+<td><strong>Web search</strong></td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Browser use</strong></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>MCP support</strong></td>
+<td>Partial</td>
+<td>Yes (native)§</td>
+<td>Yes</td>
+<td>Yes (config)</td>
+</tr>
+<tr>
+<td><strong>Custom hooks</strong></td>
+<td>config.yaml</td>
+<td>Extensions</td>
+<td>Settings</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td>Yes</td>
+<td>Partial</td>
+<td>No</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td><strong>Local LLMs</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Open source</strong></td>
+<td>Yes (Apache-2)</td>
+<td>Yes (Apache-2)</td>
+<td>Yes (Apache-2)</td>
+<td>Yes (MIT)</td>
+</tr>
+<tr>
+<td><strong>Git integration</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Cost model</strong></td>
+<td>API only</td>
+<td>API only</td>
+<td>Enterprise only¶</td>
+<td>API only</td>
+</tr>
+<tr>
+<td><strong>Self-hosted option</strong></td>
 <td>N/A</td>
 <td>N/A</td>
 <td>N/A</td>
 <td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Group 3: Cursor, Windsurf, Codex CLI, Amp</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Cursor</th>
+<th>Windsurf</th>
+<th>Codex CLI</th>
+<th>Amp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Interface</strong></td>
+<td>IDE</td>
+<td>IDE (now Devin Desktop)</td>
+<td>CLI</td>
+<td>CLI + Cloud</td>
+</tr>
+<tr>
+<td><strong>Agentic file editing</strong></td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+</tr>
+<tr>
+<td><strong>Multi-file context</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes (code-graph)</td>
+</tr>
+<tr>
+<td><strong>Shell execution</strong></td>
+<td>Yes (yolo mode)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Web search</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Browser use</strong></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>MCP support</strong></td>
+<td>No</td>
+<td>No</td>
+<td>Unverified</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Custom hooks</strong></td>
+<td><code>.cursorrules</code></td>
+<td>Limited</td>
+<td>Limited</td>
+<td>Yes (event hooks)</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td>No</td>
+<td>No</td>
+<td>Partial</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td><strong>Local LLMs</strong></td>
+<td>No</td>
+<td>Partial</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Open source</strong></td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Git integration</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Cost model</strong></td>
+<td>$20-200/mo + API</td>
+<td>Free / $20 / $200 / Teams</td>
+<td>Bundled ChatGPT</td>
+<td>Pay-as-you-go, no markup</td>
+</tr>
+<tr>
+<td><strong>Self-hosted option</strong></td>
+<td>No</td>
+<td>No</td>
 <td>No</td>
 <td>No</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 data-number="8.3" id="extensibility-deep-dive"><span class="header-section-number">8.3</span> Extensibility Deep Dive</h2>
+<p><strong>Group 4: Devin, Copilot, Kiro, Antigravity</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Devin</th>
+<th>Copilot</th>
+<th>Kiro</th>
+<th>Antigravity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Interface</strong></td>
+<td>Cloud / Web UI</td>
+<td>IDE + Cloud</td>
+<td>IDE + CLI + Web</td>
+<td>IDE (Editor + Manager)</td>
+</tr>
+<tr>
+<td><strong>Agentic file editing</strong></td>
+<td>Yes (full, sandboxed)</td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+<td>Yes (full)*</td>
+</tr>
+<tr>
+<td><strong>Multi-file context</strong></td>
+<td>Yes</td>
+<td>Yes (Enterprise)</td>
+<td>Yes</td>
+<td>Yes*</td>
+</tr>
+<tr>
+<td><strong>Shell execution</strong></td>
+<td>Yes (sandboxed)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Web search</strong></td>
+<td>Unverified</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Browser use</strong></td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>MCP support</strong></td>
+<td>Unverified</td>
+<td>Yes</td>
+<td>Yes (full)</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Custom hooks</strong></td>
+<td>Limited</td>
+<td>Limited</td>
+<td>Yes (steering rules)</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Partial*</td>
+</tr>
+<tr>
+<td><strong>Local LLMs</strong></td>
+<td>Partial</td>
+<td>Yes</td>
+<td>No</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Open source</strong></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Git integration</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td><strong>Cost model</strong></td>
+<td>$20/mo + $2.25/ACU</td>
+<td>$10-100/mo indiv.</td>
+<td>$20-200/mo (credits)</td>
+<td>Free (individuals)</td>
+</tr>
+<tr>
+<td><strong>Self-hosted option</strong></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Unverified</td>
+</tr>
+</tbody>
+</table>
+<h1 data-number="9" id="unverifiedlower-confidence-see-the-relevant-tools-section-for-sourcing-caveats.-gemini-clis-1m-token-context-window-is-a-model-level-feature-independent-of-the-consumer-free-tiers-june-2026-deprecation-see-cost-analysis.-corrected-from-a-bare-yes-claude-codes-browser-access-is-via-mcp-servers-e.g.-playwright-or-webfetch-not-a-built-in-browser-like-clines-puppeteer-integration.-corrected-from-a-hedged-claim-gooses-mcp-support-is-a-confirmed-core-architectural-pillar-70-extensions-3000-compatible-servers-not-a-disputed-one.-gemini-clis-consumer-free-tier-ended-june-18-2026-only-enterprise-code-assist-tiers-remain."><span class="header-section-number">9</span> * Unverified/lower-confidence —
+see the relevant tool’s section for sourcing caveats. † Gemini CLI’s
+1M-token context window is a model-level feature, independent of the
+consumer free tier’s June 2026 deprecation (see Cost Analysis). ‡
+Corrected from a bare “Yes”: Claude Code’s browser access is via MCP
+servers (e.g. Playwright) or WebFetch, not a built-in browser like
+Cline’s Puppeteer integration. § Corrected from a hedged claim — Goose’s
+MCP support is a confirmed, core architectural pillar (70+ extensions,
+3,000+ compatible servers), not a disputed one. ¶ Gemini CLI’s consumer
+free tier ended June 18, 2026; only enterprise Code Assist tiers
+remain.</h1>
+<h2 data-number="9.1" id="extensibility-deep-dive"><span class="header-section-number">9.1</span> Extensibility Deep Dive</h2>
 <p>One of Claude Code’s most powerful features is its extensibility
-architecture: skills (reusable prompt templates invoked as
+system: skills (reusable prompt templates invoked as
 <code>/commands</code>), hooks (shell commands that fire on events like
 tool calls or session start), and MCP servers (external tools exposed
 via a standard protocol). This combination allows you to build a highly
 personalised, automated coding workflow. How do the alternatives
 compare?</p>
-<h3 data-number="8.3.1" id="claude-codes-extension-architecture"><span class="header-section-number">8.3.1</span> Claude Code’s Extension
+<h3 data-number="9.1.1" id="claude-codes-extension-architecture"><span class="header-section-number">9.1.1</span> Claude Code’s Extension
 Architecture</h3>
 <p>For context, Claude Code’s three-layer system works as follows:</p>
 <ol type="1">
@@ -1929,7 +2699,7 @@ of its reasoning (read from a database, query an external API, access
 browser dev tools, etc.). Any MCP server in the ecosystem
 works.</p></li>
 </ol>
-<h3 data-number="8.3.2" id="how-alternatives-compare"><span class="header-section-number">8.3.2</span> How Alternatives Compare</h3>
+<h3 data-number="9.1.2" id="how-alternatives-compare"><span class="header-section-number">9.1.2</span> How Alternatives Compare</h3>
 <p><strong>Aider:</strong> No equivalent to skills or hooks. No MCP
 support. Configuration via <code>.aider.conf.yml</code> covers model
 settings and preferences but not custom workflows. <em>Least extensible
@@ -1947,83 +2717,142 @@ plugin-like architecture for adding new context providers and tools.
 Config-driven customisation is deep. No hook system. MCP support via
 tool configuration. <em>Good for IDE users, weaker hook/automation
 story.</em></p>
-<p><strong>Goose:</strong> Native extension system with MCP
-compatibility. The extension architecture is the closest conceptual
-match to Claude Code’s MCP+skills combination, though the format
-differs. No hook system equivalent. <em>Strong extensibility story, but
-different API.</em></p>
+<p><strong>Goose:</strong> MCP is a core architectural pillar, not a
+bolt-on — Goose’s extension system is built directly on MCP, with 70+
+documented extensions and 3,000+ compatible MCP servers. It’s the
+closest conceptual match to Claude Code’s MCP+skills combination, though
+the format differs, and it has no hook system equivalent. Goose is also
+a co-steward, alongside Anthropic’s MCP and OpenAI’s AGENTS.md, of the
+Linux Foundation’s Agentic AI Foundation (est. December 2025) — see the
+AGENTS.md note below. <em>Strong extensibility story, and a governance
+role to match.</em></p>
 <p><strong>Gemini CLI:</strong> MCP support confirmed. Extensions
 mechanism for adding capabilities. No hook system. <em>Good starting
-point for building a custom workflow.</em></p>
-<p><strong>OpenHands:</strong> MCP configuration support (verified).
-Limited hook/automation equivalent. Primarily designed for single-task
-autonomous execution rather than a persistent, customised workflow.
-<em>Weakest extensibility story.</em></p>
-<h3 data-number="8.3.3" id="what-this-means-for-migration"><span class="header-section-number">8.3.3</span> What This Means for
+point for building a custom workflow</em>, though note its consumer free
+tier ended June 18, 2026 (see Cost Analysis).</p>
+<p><strong>OpenHands:</strong> MCP support confirmed, with three
+transport types (SSE, Streamable HTTP, stdio) — a proxy approach
+(SuperGateway/FastMCP) is recommended over direct stdio for reliability.
+Configuration is required; MCP tools are not auto-discovered. Limited
+hook/automation equivalent otherwise. <em>Weakest extensibility story
+among the actively-developed alternatives.</em></p>
+<h3 data-number="9.1.3" id="the-agents.md-open-standard"><span class="header-section-number">9.1.3</span> The AGENTS.md Open
+Standard</h3>
+<p>Alongside MCP, a second cross-cutting convention has emerged that
+matters for anyone comparing extensibility stories:
+<strong>AGENTS.md</strong>, an open standard for project-level agent
+instructions. It was formalized in August 2025 by a coalition including
+OpenAI, Google, Cursor, and Factory, and donated to the Linux
+Foundation’s Agentic AI Foundation in December 2025 — the same body
+Goose joined as a co-steward (see above). It is now read by 30+ agents
+and tools, including Codex, Copilot, Cursor, Gemini CLI, Jules, Aider,
+Zed, Windsurf, and Devin. Claude Code itself supports it, via import
+into <code>CLAUDE.md</code>.</p>
+<p>The distinction from MCP matters: MCP standardises
+<em>tool/capability</em> portability (how an agent reaches external
+systems); AGENTS.md standardises <em>project-instruction</em>
+portability (how an agent learns a repo’s conventions, build steps, and
+constraints). They’re complementary, not competing — a tool can support
+one, both, or neither. For anyone currently maintaining a pile of
+per-tool rule files (<code>.clinerules</code>,
+<code>.cursorrules</code>, <code>CLAUDE.md</code>), AGENTS.md is worth
+tracking as a potential single source of truth that many tools can read
+natively, reducing the duplication of instructions across tools.</p>
+<h3 data-number="9.1.4" id="what-this-means-for-migration"><span class="header-section-number">9.1.4</span> What This Means for
 Migration</h3>
-<p>If you have heavily invested in Claude Code’s superpowers system
+<p>If you have heavily invested in Claude Code’s extensibility system
 (skills, hooks, MCPs), a complete migration requires rebuilding your
 workflow on whatever alternative you choose. The good news: MCP server
 investments are portable to any MCP-compatible tool (Cline, OpenCode,
-Gemini CLI, Goose, OpenHands). The skills system has no direct
+Gemini CLI, Goose, OpenHands, Amp). The skills system has no direct
 equivalent in any alternative — the closest analogues are
 <code>.clinerules</code> (Cline), <code>CLAUDE.md</code>-style
 instruction files, or custom system prompts. The hooks system is the
 hardest to replicate — only Claude Code has deterministic shell-command
 hooks that fire on tool events. Alternatives would require wrapping the
-tool in a shell script or using git hooks as a partial substitute.</p>
-<hr />
-<h2 data-number="8.4" id="cost-analysis"><span class="header-section-number">8.4</span> Cost Analysis</h2>
-<p>If you are a heavy Claude Code user currently on the Max plan
-(~$100/month for approximately unlimited usage), what would the same
-usage cost on each alternative?</p>
-<h3 data-number="8.4.1" id="defining-heavy-usage"><span class="header-section-number">8.4.1</span> Defining “Heavy Usage”</h3>
+tool in a shell script or using git hooks as a partial substitute. If
+your per-tool instruction files (rather than MCP servers) are the bigger
+migration cost, look at consolidating onto AGENTS.md — it’s read
+natively by a wider set of tools than any single vendor’s rule-file
+format, and Claude Code can import it into <code>CLAUDE.md</code>.</p>
+<h2 data-number="9.2" id="cost-analysis"><span class="header-section-number">9.2</span> Cost Analysis</h2>
+<p>If you are a heavy Claude Code user currently on a Max plan, what
+would the same usage cost on each alternative? Note first that
+“unlimited usage” is not an accurate description of the Max plan: Max 5x
+($100/month) and Max 20x ($200/month) both carry a 5-hour rolling
+session cap (~225 messages/window on Max 5x, ~900 on Max 20x)
+<em>and</em> a separate weekly cap — one ceiling across all models,
+another specifically for Sonnet models. The session limit was doubled
+and the peak-hour reduction removed on May 6, 2026, which improved
+things, but genuinely unbounded usage was never part of the plan.</p>
+<h3 data-number="9.2.1" id="defining-heavy-usage"><span class="header-section-number">9.2.1</span> Defining “Heavy Usage”</h3>
 <p>For this analysis, heavy usage means: - ~4-8 hours of active coding
 per day - Typical session: long context (50k-200k tokens input), many
 file edits, running tests - Estimated: ~100-200 million input tokens per
 month, 10-20 million output tokens per month</p>
 <p>These are rough estimates — actual token consumption varies
-enormously by workflow and model.</p>
-<h3 data-number="8.4.2" id="api-cost-estimates-direct-provider-as-of-2025"><span class="header-section-number">8.4.2</span> API Cost Estimates (Direct
-Provider, as of 2025)</h3>
-<p>These are ballpark figures using 2025 pricing, which changes
-frequently:</p>
-<p><strong>Anthropic Claude 3.5 Sonnet:</strong> - Input: ~$3/million
-tokens - Output: ~$15/million tokens - Heavy usage estimate: (150M × $3
-+ 15M × $15) / 1M ~= <strong>$450 + $225 = ~$675/month</strong> -
-<em>This is why the Max plan at $100/month is excellent value for heavy
-users.</em></p>
-<p><strong>Anthropic Claude 3 Haiku:</strong> - Input: ~$0.25/million
-tokens - Output: ~$1.25/million tokens - Heavy usage estimate:
-~$56/month - <em>Much cheaper but much less capable for complex
-tasks.</em></p>
-<p><strong>OpenAI GPT-4o:</strong> - Input: ~$2.50/million tokens -
-Output: ~$10/million tokens - Heavy usage estimate: ~$525/month</p>
-<p><strong>Google Gemini 2.5 Pro (via AI Studio):</strong> - Free tier:
-generous rate limits (may cover moderate usage at no cost) - Paid tier:
-~$3.50/million tokens input (for &gt;200k context), ~$10.50/million
-output - Heavy usage estimate: ~$680/month at paid tier, <strong>$0 at
-free tier</strong> (rate-limited)</p>
-<p><strong>DeepSeek V3 (via OpenRouter):</strong> - Input:
-~$0.14/million tokens - Output: ~$0.28/million tokens - Heavy usage
-estimate: <strong>~$27/month</strong> - <em>Dramatically cheaper.
-Competitive coding quality for many tasks.</em></p>
-<p><strong>Qwen2.5-Coder (local via Ollama):</strong> - Cost: $0 — no
-API costs - Hardware requirement: 24GB VRAM for the 32B model -
-<em>Effectively free if you have the hardware.</em></p>
-<h3 data-number="8.4.3" id="per-tool-cost-summary"><span class="header-section-number">8.4.3</span> Per-Tool Cost Summary</h3>
+enormously by workflow and model. The worked examples below use the
+midpoints (~150M input / ~15M output tokens per month).</p>
+<h3 data-number="9.2.2" id="api-cost-estimates-direct-provider-as-of-july-2026"><span class="header-section-number">9.2.2</span> API Cost Estimates (Direct
+Provider, as of July 2026)</h3>
+<p>Pricing changes frequently; treat these as ballpark figures using
+current published rates, not guarantees.</p>
+<p><strong>Anthropic Claude Sonnet 5:</strong> - Input: $2/million
+tokens (introductory, through Aug 31, 2026; rising to $3 thereafter) -
+Output: $10/million tokens (rising to $15 after Aug 31, 2026) - Heavy
+usage estimate: (150M x $2 + 15M x $10) / 1M ≈ <strong>$300 + $150 =
+~$450/month</strong> (rising to ~$675/month once the introductory rate
+ends in September) - <em>This is why a Max plan (5-hour and weekly caps
+notwithstanding) remains good value for genuinely heavy users, even
+though it isn’t the “unlimited” plan the old framing implied.</em></p>
+<p><strong>Anthropic Claude Haiku 4.5:</strong> - Input: $1/million
+tokens - Output: $5/million tokens - Heavy usage estimate: ≈
+<strong>$225/month</strong> - <em>Cheaper and faster than Sonnet 5,
+though the fastest/cheapest current Claude tier is no longer as
+dramatically cheap as the old Haiku 3 figures ($0.25/$1.25) this
+document previously cited — Anthropic’s tiering has shifted upward
+across the board.</em></p>
+<p><strong>OpenAI GPT-5.4 (mid-tier; GPT-4o is no longer
+current):</strong> - Input: $2.50/million tokens - Output: $15/million
+tokens - Heavy usage estimate: (150M x $2.50 + 15M x $15) / 1M ≈
+<strong>$600/month</strong> - <em>The flagship GPT-5.5 ($5/$30 per
+million) runs roughly double this; the budget GPT-5.4-nano ($0.20/$1.25)
+is a DeepSeek-tier option if quality suffices.</em></p>
+<p><strong>Google Gemini 3.1 Pro Preview (paid tier; Pro models left the
+free tier April 1, 2026):</strong> - ≤200k context: $2.00 input / $12.00
+output per million tokens - &gt;200k context: $4.00 input / $18.00
+output per million tokens - Heavy usage estimate: ≈
+<strong>$480/month</strong> at ≤200k context, ≈
+<strong>$870/month</strong> above it - <em>Gemini 3.5 Flash
+($1.50/$9.00) remains free for light usage with reduced daily quotas,
+but heavy usage as defined here will exceed the free quota — there is no
+longer a realistic “$0 at heavy usage” story for Gemini’s API tier.
+(Separately, the Gemini CLI </em>product’s* consumer free tier was
+withdrawn entirely on June 18, 2026 — see below.)*</p>
+<p><strong>DeepSeek V4 Flash (via OpenRouter; supersedes the deprecated
+<code>deepseek-chat</code>/<code>deepseek-reasoner</code>, sunset July
+24, 2026):</strong> - Input: $0.14/million tokens - Output:
+$0.28/million tokens - Heavy usage estimate: <strong>~$25/month</strong>
+- <em>Still dramatically cheaper than any frontier model, with a
+1M-token context window at no extra charge.</em></p>
+<p><strong>Qwen3.5-9B (local via Ollama):</strong> - Cost: $0 — no API
+costs - Hardware requirement: viable on 16GB VRAM (lower bar than the
+24GB the previous Qwen2.5-Coder:32B recommendation needed) -
+<em>Effectively free if you have the hardware, and the hardware bar has
+come down.</em></p>
+<h3 data-number="9.2.3" id="per-tool-cost-summary"><span class="header-section-number">9.2.3</span> Per-Tool Cost Summary</h3>
 <table>
 <colgroup>
-<col style="width: 8%" />
-<col style="width: 28%" />
-<col style="width: 27%" />
-<col style="width: 27%" />
-<col style="width: 9%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
 </colgroup>
 <thead>
 <tr>
-<th>Tool</th>
-<th>Minimum Monthly Cost</th>
+<th>Scenario</th>
+<th>Min Monthly</th>
 <th>Heavy Usage (Cloud)</th>
 <th>Heavy Usage (Local)</th>
 <th>Notes</th>
@@ -2031,142 +2860,463 @@ API costs - Hardware requirement: 24GB VRAM for the 32B model -
 </thead>
 <tbody>
 <tr>
-<td>Aider + Claude Sonnet</td>
+<td>Aider + Claude Sonnet 5</td>
 <td>$0 tool + API</td>
-<td>~$675</td>
+<td>~$450/mo (intro pricing, $2/$10, through Aug 31 2026); ~$675/mo from
+Sept 1 2026 ($3/$15)</td>
 <td>N/A</td>
-<td>Use Haiku for cheaper option</td>
+<td>Was quoted against Claude 3.5 Sonnet (~$675) in the old doc —
+coincidentally similar number, different (current) model.</td>
 </tr>
 <tr>
-<td>Aider + DeepSeek (OpenRouter)</td>
-<td>$0 + API</td>
-<td>~$27</td>
+<td>Aider + Claude Haiku 4.5</td>
+<td>$0 tool + API</td>
+<td>~$225/mo</td>
 <td>N/A</td>
-<td>Significant quality tradeoff</td>
+<td>Cheaper same-vendor fallback; the “reduce cost, stay on Claude”
+scenario.</td>
 </tr>
 <tr>
-<td>Aider + Ollama</td>
+<td>Aider + DeepSeek v4-flash (OpenRouter)</td>
+<td>$0 tool + API</td>
+<td>~$25/mo</td>
+<td>N/A</td>
+<td>Was ~$27/mo in old doc against deepseek-chat (now deprecated,
+sunsets 2026-07-24).</td>
+</tr>
+<tr>
+<td>Aider + Qwen3-Coder-Next (OpenRouter)</td>
+<td>$0 tool + API</td>
+<td>~$28.5/mo</td>
+<td>N/A</td>
+<td>Current mainstream cheap-coding-model recommendation, replacing
+Qwen2.5-Coder.</td>
+</tr>
+<tr>
+<td>Aider + Ollama (local)</td>
 <td>$0</td>
 <td>$0</td>
-<td>GPU hardware cost</td>
-<td>Quality depends on hardware</td>
+<td>GPU hardware cost only</td>
+<td>Recommended local model: Qwen3.5-9B (16GB VRAM viable) rather than
+Qwen2.5-Coder:32b (24GB+).</td>
 </tr>
 <tr>
-<td>OpenCode + DeepSeek</td>
-<td>$0 + API</td>
-<td>~$27</td>
+<td>OpenCode + DeepSeek v4-flash</td>
+<td>$0 tool + API</td>
+<td>~$25/mo</td>
 <td>N/A</td>
-<td>Broadest provider choice</td>
+<td>OpenCode broke with Anthropic Jan 2026 — Claude now requires a raw
+API key; doesn’t affect this DeepSeek-routed cost.</td>
 </tr>
 <tr>
-<td>Cline + OpenRouter</td>
-<td>$0 + API</td>
-<td>Varies by model</td>
+<td>OpenCode (ChatGPT-native)</td>
+<td>$0 tool + ChatGPT subscription</td>
+<td>Bundled — see Codex CLI row (same OpenAI subscription tiers apply
+since the Jan 2026 OpenAI partnership)</td>
 <td>N/A</td>
-<td>Route cheaply via OpenRouter</td>
+<td>New row.</td>
 </tr>
 <tr>
-<td>Gemini CLI</td>
-<td>$0</td>
-<td>$0 (free tier)</td>
+<td>Cline + OpenRouter (model varies)</td>
+<td>$0 tool + API</td>
+<td>Varies — e.g. ~$28.5/mo on Qwen3-Coder-Next, ~$450-675/mo on Claude
+Sonnet 5</td>
 <td>N/A</td>
-<td>Rate limits apply</td>
+<td>Route cheaply via OpenRouter.</td>
+</tr>
+<tr>
+<td>Amp (Sourcegraph)</td>
+<td>Pay-as-you-go, no markup</td>
+<td>Not computable — rate card unpublished</td>
+<td>Partial (CLI-local mode available)</td>
+<td>Sourcegraph has not published per-token rates as of 2026-07-06; see
+ampcode.com/pricing.</td>
+</tr>
+<tr>
+<td>Gemini CLI (individual/consumer)</td>
+<td>$0 (pre-June 18, 2026 only)</td>
+<td>N/A — consumer free tier ended June 18, 2026</td>
+<td>N/A</td>
+<td>If paying API-direct: Gemini 3.1 Flash-Lite ~$60/mo heavy-usage,
+Gemini 3.5 Flash ~$360/mo. See Google Antigravity as the current
+zero-cost Google option.</td>
+</tr>
+<tr>
+<td>Gemini CLI (enterprise, Code Assist Standard/Enterprise)</td>
+<td>Custom (commitment-based)</td>
+<td>Varies by commitment tier (1,500-2,000 req/day quotas)</td>
+<td>N/A</td>
+<td>Enterprise is the only tier still served.</td>
+</tr>
+<tr>
+<td>Google Antigravity 2.0</td>
+<td>$0 (individuals)</td>
+<td>Unverified — no per-token cost data sourced</td>
+<td>N/A</td>
+<td>Confidence: medium-low (single source). Practical successor to the
+old “Gemini CLI free tier” pitch.</td>
 </tr>
 <tr>
 <td>Cursor Pro</td>
-<td>$20/month</td>
-<td>$20/month</td>
+<td>$20/mo</td>
+<td>$20/mo (usage-based credit pool, not a hard cap; heavy users may
+need Pro+/Ultra)</td>
 <td>N/A</td>
-<td>Fixed subscription</td>
+<td>Old “500 fast requests/month” framing is gone; credit-pool billing
+since mid-2025.</td>
 </tr>
 <tr>
-<td>Windsurf Pro</td>
-<td>$15/month</td>
-<td>$15/month</td>
+<td>Cursor Pro+</td>
+<td>$60/mo</td>
+<td>$60/mo (larger credit pool)</td>
 <td>N/A</td>
-<td>Fixed subscription</td>
+<td>New tier.</td>
 </tr>
 <tr>
-<td>GitHub Copilot</td>
-<td>$10/month</td>
-<td>$10/month</td>
+<td>Cursor Ultra</td>
+<td>$200/mo</td>
+<td>$200/mo</td>
 <td>N/A</td>
-<td>Limited agent capabilities</td>
+<td>New tier.</td>
+</tr>
+<tr>
+<td>Devin Desktop (formerly Windsurf) — Pro</td>
+<td>$20/mo</td>
+<td>$20/mo</td>
+<td>Partial (Devin Local)</td>
+<td>Replaces “Windsurf Pro ~$15/month” — both price and product name
+changed.</td>
+</tr>
+<tr>
+<td>Devin Desktop — Max</td>
+<td>$200/mo</td>
+<td>$200/mo</td>
+<td>Partial</td>
+<td>New tier.</td>
+</tr>
+<tr>
+<td>Devin Desktop — Teams</td>
+<td>$80/mo base + $40/seat</td>
+<td>$80 + $40/seat</td>
+<td>Partial</td>
+<td>New tier.</td>
+</tr>
+<tr>
+<td>Devin (cloud agent, Core)</td>
+<td>$20/mo base</td>
+<td>$70-220/mo realistic individual total ($20 base + $2.25/ACU
+pay-as-you-go; 1 ACU ≈ 15 min autonomous work, ~$9/hour)</td>
+<td>N/A</td>
+<td>Replaces both the old “$500+/mo enterprise-only” claim and a flatter
+“$20/month” correction — the real figure is usage-dependent and higher
+than a flat $20.</td>
+</tr>
+<tr>
+<td>Devin (cloud agent, Team)</td>
+<td>$500/mo (250 ACUs included)</td>
+<td>$500 + $2.00/ACU overage</td>
+<td>N/A</td>
+<td>Overage rate now specified.</td>
+</tr>
+<tr>
+<td>GitHub Copilot — Individual Free</td>
+<td>$0/mo</td>
+<td>$0 (2,000 completions/mo cap)</td>
+<td>N/A</td>
+<td>New tier detail.</td>
+</tr>
+<tr>
+<td>GitHub Copilot — Individual Pro</td>
+<td>$10/mo</td>
+<td>$10 + $0.04/premium request after $15 included AI credits
+exhausted</td>
+<td>N/A</td>
+<td>Replaces flat “$10/month” — now usage-based beyond included credits
+(billing changed June 1, 2026).</td>
+</tr>
+<tr>
+<td>GitHub Copilot — Individual Pro+</td>
+<td>$39/mo</td>
+<td>$39 + overage ($70 credits included)</td>
+<td>N/A</td>
+<td>New tier, includes premium models (Claude Opus access).</td>
+</tr>
+<tr>
+<td>GitHub Copilot — Individual Max</td>
+<td>$100/mo</td>
+<td>$100 + overage ($200 credits included)</td>
+<td>N/A</td>
+<td>New tier.</td>
+</tr>
+<tr>
+<td>GitHub Copilot — Business</td>
+<td>$19/user/mo</td>
+<td>$19/user/mo + policy-controlled model catalog</td>
+<td>N/A</td>
+<td>Unchanged from old doc.</td>
+</tr>
+<tr>
+<td>GitHub Copilot — Enterprise</td>
+<td>$39/user/mo</td>
+<td>$39/user/mo</td>
+<td>N/A</td>
+<td>Unchanged from old doc.</td>
+</tr>
+<tr>
+<td>GitHub Copilot CLI</td>
+<td>Bundled — inherits Copilot plan tiers above</td>
+<td>Same</td>
+<td>N/A</td>
+<td>No standalone pricing found; open question whether it requires a
+specific plan tier.</td>
+</tr>
+<tr>
+<td>Amazon Q Developer — Free</td>
+<td>$0/mo</td>
+<td>$0 (50 agentic requests/mo cap)</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>Amazon Q Developer — Pro</td>
+<td>$19/user/mo</td>
+<td>$19/user/mo (10,000 inference calls, ~1,000 user requests)</td>
+<td>N/A</td>
+<td>Also flag the sunset (new signups closed May 15 2026, support ends
+April 30 2027, Kiro is successor).</td>
+</tr>
+<tr>
+<td>AWS Kiro — Free</td>
+<td>$0/mo</td>
+<td>$0 (50 credits)</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>AWS Kiro — Pro</td>
+<td>$20/mo</td>
+<td>$20 (1,000 credits) + $0.04/credit overage</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>AWS Kiro — Pro+</td>
+<td>$40/mo</td>
+<td>$40 (2,000 credits) + overage</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>AWS Kiro — Pro Max</td>
+<td>$100/mo</td>
+<td>$100 (5,000 credits) + overage</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>AWS Kiro — Power</td>
+<td>$200/mo</td>
+<td>$200 (10,000 credits) + overage</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>JetBrains AI — Free</td>
+<td>$0/mo</td>
+<td>$0 (3 credits/30 days)</td>
+<td>N/A</td>
+<td>Old doc had a single vague “$24.90/mo All Products Pack” figure;
+that bundling is gone.</td>
+</tr>
+<tr>
+<td>JetBrains AI — Pro</td>
+<td>$10/user/mo</td>
+<td>$10 (10 credits/mo) + $1/credit top-up</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>JetBrains AI — Ultimate</td>
+<td>$30/user/mo</td>
+<td>$30 (35 credits/mo) + $1/credit top-up</td>
+<td>N/A</td>
+<td>New row.</td>
+</tr>
+<tr>
+<td>Tabnine — Code Assistant</td>
+<td>$39/user/mo (annual)</td>
+<td>$39/user/mo</td>
+<td>N/A</td>
+<td>Replaces old doc’s “~$12/month Pro” — that tier was sunset in 2025;
+a correction, not inflation-adjustment.</td>
+</tr>
+<tr>
+<td>Tabnine — Agentic Platform</td>
+<td>$59/user/mo (annual)</td>
+<td>$59/user/mo</td>
+<td>N/A</td>
+<td>New tier — adds MCP integration, autonomous workflows, CLI
+access.</td>
+</tr>
+<tr>
+<td>Zed AI — Personal</td>
+<td>$0/mo</td>
+<td>$0 (2,000 edit predictions/mo)</td>
+<td>N/A</td>
+<td>Replaces old doc’s vague “free tier and credits system.”</td>
+</tr>
+<tr>
+<td>Zed AI — Pro</td>
+<td>$10/mo</td>
+<td>$10 + token overage at API list price +10% ($5 tokens included)</td>
+<td>N/A</td>
+<td>New precise figure.</td>
+</tr>
+<tr>
+<td>Zed AI — Business</td>
+<td>$30/user/mo</td>
+<td>$30/user/mo</td>
+<td>N/A</td>
+<td>New tier.</td>
+</tr>
+<tr>
+<td>OpenAI Codex CLI</td>
+<td>Bundled in ChatGPT plan</td>
+<td>Free ($0), Go ($8/mo), Plus ($20/mo), Pro ($100/mo) — token-based
+credits within plan; local <code>--oss</code> mode is $0</td>
+<td>$0 via <code>--oss</code> (Ollama/LM Studio/MLX +
+GPT-OSS-20B/120B)</td>
+<td>New tool — major gap fill.</td>
 </tr>
 <tr>
 <td>OpenHands</td>
 <td>$0 tool + API</td>
-<td>Varies</td>
+<td>Varies by chosen provider/model (e.g., ~$25/mo on DeepSeek v4-flash,
+~$450-675/mo on Claude Sonnet 5)</td>
 <td>N/A</td>
-<td>Docker overhead</td>
+<td>Docker overhead is a hardware/time cost, not a monthly fee.</td>
 </tr>
 </tbody>
 </table>
-<h3 data-number="8.4.4" id="cost-migration-strategy"><span class="header-section-number">8.4.4</span> Cost Migration Strategy</h3>
+<h3 data-number="9.2.4" id="cost-migration-strategy"><span class="header-section-number">9.2.4</span> Cost Migration Strategy</h3>
 <p><strong>Scenario 1: Keep Claude-quality results, accept higher
 costs</strong> Use Aider or Cline with direct Anthropic API. Cost:
-~$675/month for heavy usage. This is the worst-case scenario financially
-— you lose the Max plan subsidy.</p>
+~$450/month for heavy usage at Sonnet 5’s introductory rate (~$675/month
+once the standard rate applies from September 2026). This is the
+worst-case scenario financially — you lose the Max plan subsidy, though
+the gap is narrower than it was under 2025 Sonnet pricing.</p>
 <p><strong>Scenario 2: Reduce cost with model diversity</strong> Use
-Aider or OpenCode with OpenRouter, routing to DeepSeek or Qwen for
-routine tasks and Claude/GPT-4o for complex ones. Cost: $50-200/month
-depending on routing strategy. Significant savings, some quality
-tradeoff on simpler models.</p>
+Aider or OpenCode with OpenRouter, routing to DeepSeek V4 or Qwen3-Coder
+for routine tasks and Claude/GPT-5.4 for complex ones. Cost: roughly
+$50-200/month depending on routing strategy. Significant savings, some
+quality tradeoff on simpler models.</p>
 <p><strong>Scenario 3: Go local for routine work, cloud for hard
-tasks</strong> Use Aider or Cline with Ollama (Qwen2.5-Coder:32b) for
-day-to-day coding, escalate to cloud API for complex multi-file
-refactors. Cost: near zero for routine work, occasional API costs for
-hard tasks.</p>
+tasks</strong> Use Aider or Cline with Ollama (Qwen3.5-9B, or a larger
+Qwen3-Coder variant if VRAM allows) for day-to-day coding, escalate to
+cloud API for complex multi-file refactors. Cost: near zero for routine
+work, occasional API costs for hard tasks.</p>
 <p><strong>Scenario 4: Fixed-cost IDE subscription</strong> Move to
-Cursor ($20/month) or Windsurf ($15/month). You lose terminal-native
-workflow but get predictable pricing. Less capable at agentic tasks than
-Claude Code for heavy use cases.</p>
-<p><strong>Scenario 5: Gemini CLI free tier</strong> For
-non-time-sensitive work or as a supplementary tool, Gemini CLI’s free
-tier (Google AI Studio) covers substantial usage. Rate limits apply, but
-for many users this could be zero-cost. Loses model flexibility.</p>
-<hr />
-<h1 data-number="9" id="recommendations"><span class="header-section-number">9</span> Recommendations</h1>
-<h2 data-number="9.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">9.1</span> If you want the closest CLI
+Cursor (Pro $20/month, or Pro+ $60/month for higher usage) or Devin
+Desktop/Windsurf (Pro $20/month, Max $200/month). You lose
+terminal-native workflow but get predictable pricing. Less capable at
+agentic tasks than Claude Code for heavy use cases.</p>
+<p><strong>Scenario 5: Free-for-individuals alternative</strong> Gemini
+CLI’s consumer free tier is gone as of June 18, 2026 — it’s
+enterprise-only now, so it no longer belongs in a “free” scenario.
+Google’s own replacement recommendation for those consumer users is
+<strong>Google Antigravity 2.0</strong>, its new agent-first IDE (Editor
+View plus an async multi-agent “Manager Surface”), which is free for
+individuals and model-agnostic (Gemini 3 Pro, Claude Sonnet 4.5,
+GPT-OSS). Treat this as lower-confidence than the other scenarios here —
+Antigravity’s pricing and feature details are less firmly sourced than
+the rest of this analysis, beyond “exists, free for individuals,
+model-agnostic.”</p>
+<h1 data-number="10" id="recommendations"><span class="header-section-number">10</span> Recommendations</h1>
+<h2 data-number="10.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">10.1</span> If you want the closest CLI
 experience to Claude Code</h2>
 <p><strong>Primary:</strong> Aider — mature, reliable, git-native,
 OpenRouter-supported, local LLM support. Start here. The absence of MCP
 and hooks is a real limitation if you’ve invested heavily in those, but
 the core editing workflow is the most Claude Code-like of any
 open-source tool.</p>
-<p><strong>Secondary:</strong> OpenCode — if you want MCP support and
-broader provider flexibility in a terminal tool, OpenCode is the best
-current option. The TUI differs from a pure REPL but the agent
-capabilities are strong.</p>
-<h2 data-number="9.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">9.2</span> If you want the best
+<p><strong>Secondary:</strong> OpenCode — MCP support and broad provider
+flexibility (75+ connected providers) in a terminal tool, now with a
+large user base (183k GitHub stars, 7.5M+ MAU). One caveat that changes
+its positioning: OpenCode broke with Anthropic in January 2026 — ChatGPT
+subscriptions now work natively, but using Claude through OpenCode
+requires your own Anthropic API key rather than any bundled access. If
+part of OpenCode’s appeal to you was Claude-adjacency, verify that still
+fits your setup.</p>
+<p><strong>Worth evaluating if you want mainstream backing or hybrid
+local/cloud:</strong> OpenAI’s Codex CLI has become a major CLI-native
+competitor in its own right (95.9k GitHub stars, bundled into ChatGPT
+plans from Free up to Enterprise, local-model support via
+<code>--oss</code> for Ollama/LM Studio/MLX) — it’s the closest thing to
+a first-party OpenAI answer to Claude Code. Sourcegraph’s Amp (the 2026
+rebrand of Cody) offers a hybrid local-CLI-plus-cloud-“Orbs” model with
+pay-as-you-go, no-markup pricing for individuals, though its exact rate
+card isn’t published — treat it as promising but under-specified until
+pricing firms up.</p>
+<h2 data-number="10.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">10.2</span> If you want the best
 IDE-integrated alternative</h2>
 <p><strong>Primary:</strong> Cline — model-agnostic,
-OpenRouter-supported, browser use, MCP-compatible, Plan/Act mode. The
-most capable open-source agentic IDE tool available. Its CLI mode is
-improving.</p>
-<p><strong>Secondary:</strong> Continue.dev — if you want best-in-class
-local LLM support and deep IDE integration in VS Code and JetBrains
-simultaneously.</p>
-<p><strong>Commercial option:</strong> Cursor ($20/month) — if you want
-the best polished commercial experience and are comfortable with a VS
-Code workflow. Yolo mode brings it close to Claude Code’s autonomy
-level.</p>
-<h2 data-number="9.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">9.3</span> If cost is the primary
+OpenRouter-supported, browser use, MCP-compatible, Plan/Act mode, and
+now available beyond VS Code (JetBrains, Cursor, Windsurf, Zed, Neovim,
+plus a CLI preview). The most capable open-source agentic IDE tool
+available. Note: Roo Code, a 2024 fork of Cline that grew its own
+multi-agent following, was archived in May 2026; most of its userbase
+returned to Cline, reinforcing Cline’s position here.</p>
+<p><strong>Secondary:</strong> Continue.dev — best-in-class local LLM
+support and deep IDE integration across VS Code and JetBrains
+simultaneously, and as of September 2025 it also ships a headless
+<code>cn</code> CLI for scriptable, non-interactive use — useful if you
+want IDE-first but occasionally need a scriptable escape hatch.</p>
+<p><strong>Commercial option:</strong> Cursor (Pro $20/month, Pro+
+$60/month, Ultra $200/month) — if you want the best polished commercial
+experience and are comfortable with a VS Code-derived workflow. Note the
+terminology shift: “Composer” is now the name of Cursor’s own in-house
+model (Composer 2.5, May 2026), not the agent mode — autonomous
+execution is called “Agent mode.” Cursor 3 supports up to 8 parallel
+isolated agents on separate branches, which brings it closer to Claude
+Code’s autonomy level for some workflows, though it remains OpenRouter-
+and local-model-incompatible.</p>
+<h2 data-number="10.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">10.3</span> If cost is the primary
 constraint</h2>
-<p><strong>Free option:</strong> Gemini CLI — free tier is generous,
-MCP-supported, 1M context window. Quality good for most tasks.</p>
+<p><strong>Free option:</strong> Gemini CLI’s consumer free tier ended
+June 18, 2026 — Google now serves individuals only through enterprise
+Code Assist tiers or steers them to <strong>Google Antigravity
+2.0</strong>, its new free-for-individuals, model-agnostic agent IDE
+(Gemini 3 Pro, Claude Sonnet 4.5, GPT-OSS). If a free, no-strings option
+matters to you, Antigravity — not Gemini CLI — is the current answer,
+though it’s a newer, less battle-tested product than Gemini CLI was.</p>
 <p><strong>Ultra-cheap option:</strong> Aider or OpenCode with DeepSeek
-V3 via OpenRouter — approximately $25-30/month for heavy usage with a
-capable (if not Claude-class) model.</p>
-<p><strong>Zero API cost:</strong> Any tool + Ollama with
-Qwen2.5-Coder:32b — requires GPU hardware but then costs nothing per
-query.</p>
-<h2 data-number="9.4" id="if-mcp-server-investments-are-critical"><span class="header-section-number">9.4</span> If MCP server investments are
+V4 Flash via OpenRouter — approximately $25/month for heavy usage with a
+capable (if not Claude-class) model. (The older
+<code>deepseek-chat</code>/<code>deepseek-reasoner</code> models this
+recommendation used to point to are sunset July 24, 2026 — make sure any
+existing config points at the V4 line.)</p>
+<p><strong>Zero API cost:</strong> Any OpenRouter- or Ollama-compatible
+tool + Qwen3.5-9B locally — requires a GPU (16GB VRAM is now a realistic
+bar) but then costs nothing per query.</p>
+<p><strong>A caution on Devin:</strong> Devin’s headline “$20/month” is
+easy to misread as a budget option. In practice it’s a $20/month base
+plus pay-as-you-go ACU billing at $2.25/ACU (roughly $9/hour of
+autonomous work), and realistic individual moderate use runs
+<strong>$70-220/month all-in</strong> — closer to a mid-tier Claude API
+budget than a cheap alternative. It’s not recommended here as a
+cost-constrained choice; it competes on autonomy/capability, not
+price.</p>
+<h2 data-number="10.4" id="if-mcp-server-investments-are-critical"><span class="header-section-number">10.4</span> If MCP server investments are
 critical</h2>
 <p>Tools with confirmed MCP support: Claude Code (native), OpenCode,
-Cline, Gemini CLI, Goose, OpenHands (config). Of these, OpenCode and
-Cline are the strongest alternatives for a daily coding workflow.</p>
-<h2 data-number="9.5" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">9.5</span> If you need extensibility
+Cline, Gemini CLI, Goose (MCP is a core architectural pillar, with 70+
+extensions and 3,000+ compatible servers), OpenHands (config, multiple
+transports), and Amp. Of these, OpenCode and Cline remain the strongest
+alternatives for a daily coding workflow; Goose is worth a closer look
+than before given how central MCP now is to its design, and its
+co-stewardship (with Anthropic and OpenAI) of the Linux Foundation’s
+Agentic AI Foundation.</p>
+<h2 data-number="10.5" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">10.5</span> If you need extensibility
 similar to Claude Code’s skills+hooks</h2>
 <p>The honest answer: no alternative matches Claude Code’s skills+hooks
 system. The closest approximations: - <strong>Skills
@@ -2174,29 +3324,39 @@ equivalents:</strong> <code>.clinerules</code> (Cline),
 <code>CLAUDE.md</code>-style files, custom system prompts in any tool -
 <strong>Hooks equivalents:</strong> Git hooks, shell wrappers, CI/CD
 tooling — not built into any alternative - <strong>MCP
-equivalents:</strong> Cline, OpenCode, Gemini CLI, Goose all support MCP
-— your server investments are portable</p>
-<h2 data-number="9.6" id="migration-strategy"><span class="header-section-number">9.6</span> Migration strategy</h2>
+equivalents:</strong> Cline, OpenCode, Gemini CLI, Goose, OpenHands, and
+Amp all support MCP — your server investments are portable -
+<strong>Instruction-file equivalents:</strong> if per-tool rule files
+(rather than MCP servers) are your bigger migration cost, AGENTS.md is
+now read natively by 30+ tools and is a better consolidation target than
+any single vendor’s format</p>
+<h2 data-number="10.6" id="migration-strategy"><span class="header-section-number">10.6</span> Migration strategy</h2>
 <p>Rather than a hard switch, a practical migration path:</p>
 <ol type="1">
 <li><strong>Set up Aider</strong> as a Claude Code complement today. Get
 comfortable with it. It is free to try with Haiku (cheap) or Ollama
 (free).</li>
 <li><strong>Test OpenCode</strong> — its MCP support and provider
-flexibility make it the best tool for a full Claude Code replacement
-once mature.</li>
-<li><strong>Keep Gemini CLI</strong> as a fallback for cost-free work —
-the 1M context window is uniquely useful for codebase analysis
-tasks.</li>
+flexibility make it a strong candidate for a full Claude Code
+replacement, with the caveat that Claude access now requires your own
+API key rather than any bundled arrangement.</li>
+<li><strong>Reassess your free-tier fallback</strong> — Gemini CLI’s
+consumer free tier is gone; Google Antigravity 2.0 is the closest
+current free-for-individuals substitute if cost-free work matters to
+you.</li>
 <li><strong>Invest in OpenRouter</strong> — get an API key. With
 OpenRouter, you’re never locked to a single model again. As model prices
 drop (historically, they do), your costs drop automatically.</li>
 <li><strong>Protect your MCP investments</strong> — build MCP servers in
 preference to tool-specific plugins wherever possible. MCP compatibility
-is growing across the ecosystem.</li>
+is growing across the ecosystem. <strong>Do the same for
+AGENTS.md</strong> if you maintain per-tool instruction/rule files
+(<code>.clinerules</code>, <code>.cursorrules</code>,
+<code>CLAUDE.md</code>) — it’s now read by 30+ tools and is a
+lower-maintenance way to keep project instructions portable than
+maintaining one file per vendor.</li>
 </ol>
-<hr />
-<h1 data-number="10" id="references"><span class="header-section-number">10</span> References</h1>
+<h1 data-number="11" id="references"><span class="header-section-number">11</span> References</h1>
 <p>Primary sources (verified):</p>
 <ul>
 <li>OpenRouter works-with-openrouter page:
@@ -2209,14 +3369,61 @@ is growing across the ecosystem.</li>
 <code>docs.openhands.dev/sdk/guides/mcp</code></li>
 <li>OpenHands MCP settings:
 <code>docs.openhands.dev/openhands/usage/settings/mcp-settings</code></li>
+<li>OpenHands GitHub (post org-migration):
+<code>github.com/OpenHands/OpenHands</code></li>
 <li>OpenCode documentation:
 <code>opencode.ai/docs/providers/</code></li>
-<li>OpenCode GitHub: <code>github.com/sst/opencode</code></li>
+<li>OpenCode GitHub (new org, post Jan 2026 rebrand):
+<code>github.com/anomalyco/opencode</code></li>
 <li>Artificial Analysis coding agents taxonomy:
 <code>artificialanalysis.ai/agents/coding</code></li>
 <li>Awesome CLI Coding Agents (bradAGI):
 <code>github.com/bradAGI/awesome-cli-coding-agents</code></li>
+<li>Claude Max plan / usage limits:
+<code>support.claude.com/en/articles/11049741-what-is-the-max-plan</code>
+(accessed 2026-07-06)</li>
+<li>Claude Max session-limit change:
+<code>morphllm.com/claude-code-usage-limits</code> (accessed
+2026-07-06)</li>
+<li>Anthropic API pricing:
+<code>platform.claude.com/docs/en/about-claude/pricing</code> (accessed
+2026-07-06)</li>
+<li>Anthropic model overview:
+<code>platform.claude.com/docs/en/about-claude/models/overview</code>
+(accessed 2026-07-06)</li>
+<li>OpenAI API pricing:
+<code>developers.openai.com/api/docs/pricing</code> (accessed
+2026-07-06)</li>
+<li>Google Gemini API pricing:
+<code>ai.google.dev/gemini-api/docs/pricing</code> (accessed
+2026-07-06)</li>
+<li>DeepSeek API pricing:
+<code>api-docs.deepseek.com/quick_start/pricing</code> (accessed
+2026-07-06)</li>
+<li>Alibaba Qwen API platform: <code>qwen.ai/apiplatform</code>
+(accessed 2026-07-06)</li>
+<li>GitHub Copilot BYOK (VS Code):
+<code>docs.github.com/en/copilot/how-tos/copilot-sdk/auth/byok</code>
+(accessed 2026-07-06)</li>
+<li>GitHub Copilot BYOK GA announcement (VS Code, tier availability):
+<code>code.visualstudio.com/blogs/2026/06/18/byok-vscode</code>
+(accessed 2026-07-06)</li>
+<li>Cognition acquisition of Windsurf / Devin Desktop rebrand:
+<code>devin.ai/desktop</code> (accessed 2026-07-06)</li>
+<li>Cognition/Windsurf acquisition terms ($250M, Dec 2025):
+<code>idlen.io/news/cognition-devin-25-billion-valuation-windsurf-vibe-coding-april-2026</code>
+(accessed 2026-07-06)</li>
+<li>Google Antigravity as Gemini CLI’s consumer successor:
+<code>theregister.com/ai-ml/2026/05/20/bye-bye-gemini-cli-google-nudges-devs-toward-antigravity/5243605</code>
+(accessed 2026-07-06)</li>
+<li>Goose Linux Foundation Agentic AI Foundation co-stewardship:
+<code>knightli.com/en/2026/05/08/goose-open-source-ai-agent-desktop-cli-api</code>
+(accessed 2026-07-06)</li>
 </ul>
+<p><strong>Note:</strong> No direct citable URL was found this refresh
+for the AGENTS.md standard itself (formalized August 2025, donated to
+the Linux Foundation’s Agentic AI Foundation December 2025) — flagging
+as needing a follow-up citation pass rather than inventing one.</p>
 <p>Secondary sources (used for background, not for verified claims):</p>
 <ul>
 <li><code>pinggy.io/blog/top_cli_based_ai_coding_agents/</code></li>
