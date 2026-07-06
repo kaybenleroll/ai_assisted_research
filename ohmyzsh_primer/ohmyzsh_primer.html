@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oh My Zsh: A Practical Guide to Your Shell</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle > .toc-toggle {
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+background-color: #232629;
+color: #7a7c7d;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d; padding-left: 4px; }
+div.sourceCode
+{ color: #cfcfc2; background-color: #232629; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #cfcfc2; } 
+code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } 
+code span.an { color: #3f8058; } 
+code span.at { color: #2980b9; } 
+code span.bn { color: #f67400; } 
+code span.bu { color: #7f8c8d; } 
+code span.cf { color: #fdbc4b; font-weight: bold; } 
+code span.ch { color: #3daee9; } 
+code span.cn { color: #27aeae; font-weight: bold; } 
+code span.co { color: #7a7c7d; } 
+code span.cv { color: #7f8c8d; } 
+code span.do { color: #a43340; } 
+code span.dt { color: #2980b9; } 
+code span.dv { color: #f67400; } 
+code span.er { color: #da4453; text-decoration: underline; } 
+code span.ex { color: #0099ff; font-weight: bold; } 
+code span.fl { color: #f67400; } 
+code span.fu { color: #8e44ad; } 
+code span.im { color: #27ae60; } 
+code span.in { color: #c45b00; } 
+code span.kw { color: #cfcfc2; font-weight: bold; } 
+code span.op { color: #cfcfc2; } 
+code span.ot { color: #27ae60; } 
+code span.pp { color: #27ae60; } 
+code span.re { color: #2980b9; background-color: #153042; } 
+code span.sc { color: #3daee9; } 
+code span.ss { color: #da4453; } 
+code span.st { color: #f44f4f; } 
+code span.va { color: #27aeae; } 
+code span.vs { color: #da4453; } 
+code span.wa { color: #da4453; } 
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+  
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">Oh My Zsh: A Practical Guide to Your
+Shell</span>
+
+    <span class="navbar-meta">Mick Cooney — June 2026</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#oh-my-zsh-a-practical-guide-to-your-shell" id="toc-oh-my-zsh-a-practical-guide-to-your-shell">Oh My Zsh: A
+Practical Guide to Your Shell</a>
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a>
+<ul>
+<li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers">What This Primer Covers</a></li>
+<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not">What This Primer Is Not</a></li>
+<li><a href="#assumed-background" id="toc-assumed-background">Assumed
+Background</a></li>
+</ul></li>
+<li><a href="#why-zsh-over-bash" id="toc-why-zsh-over-bash">Why ZSH Over
+Bash</a>
+<ul>
+<li><a href="#completion" id="toc-completion">Completion</a></li>
+<li><a href="#globbing" id="toc-globbing">Globbing</a></li>
+<li><a href="#parameter-expansion" id="toc-parameter-expansion">Parameter Expansion</a></li>
+<li><a href="#history" id="toc-history">History</a></li>
+<li><a href="#named-directories" id="toc-named-directories">Named
+Directories</a></li>
+</ul></li>
+<li><a href="#how-oh-my-zsh-works" id="toc-how-oh-my-zsh-works">How Oh
+My Zsh Works</a>
+<ul>
+<li><a href="#the-lib-layer" id="toc-the-lib-layer">The
+<code>lib/</code> Layer</a></li>
+<li><a href="#enabling-and-disabling-plugins" id="toc-enabling-and-disabling-plugins">Enabling and Disabling
+Plugins</a></li>
+</ul></li>
+<li><a href="#plugins-worth-knowing-deeply" id="toc-plugins-worth-knowing-deeply">Plugins Worth Knowing Deeply</a>
+<ul>
+<li><a href="#git" id="toc-git">git</a></li>
+<li><a href="#fzf" id="toc-fzf">fzf</a></li>
+<li><a href="#zsh-autosuggestions" id="toc-zsh-autosuggestions">zsh-autosuggestions</a></li>
+<li><a href="#zsh-syntax-highlighting" id="toc-zsh-syntax-highlighting">zsh-syntax-highlighting</a></li>
+<li><a href="#history-1" id="toc-history-1">history</a></li>
+<li><a href="#sudo" id="toc-sudo">sudo</a></li>
+<li><a href="#extract" id="toc-extract">extract</a></li>
+<li><a href="#colored-man-pages" id="toc-colored-man-pages">colored-man-pages</a></li>
+<li><a href="#command-not-found" id="toc-command-not-found">command-not-found</a></li>
+<li><a href="#timer" id="toc-timer">timer</a></li>
+<li><a href="#rsync" id="toc-rsync">rsync</a></li>
+<li><a href="#systemd" id="toc-systemd">systemd</a></li>
+<li><a href="#mise" id="toc-mise">mise</a></li>
+<li><a href="#gh" id="toc-gh">gh</a></li>
+</ul></li>
+<li><a href="#themes-what-a-good-prompt-does" id="toc-themes-what-a-good-prompt-does">Themes: What a Good Prompt
+Does</a>
+<ul>
+<li><a href="#what-information-belongs-in-a-prompt" id="toc-what-information-belongs-in-a-prompt">What Information Belongs
+in a Prompt</a></li>
+<li><a href="#robbyrussell" id="toc-robbyrussell">robbyrussell</a></li>
+<li><a href="#agnoster" id="toc-agnoster">agnoster</a></li>
+<li><a href="#powerlevel10k-p10k" id="toc-powerlevel10k-p10k">Powerlevel10k (p10k)</a></li>
+</ul></li>
+<li><a href="#features-most-omz-users-never-find" id="toc-features-most-omz-users-never-find">Features Most OMZ Users
+Never Find</a>
+<ul>
+<li><a href="#custom-aliases-and-functions-in-custom" id="toc-custom-aliases-and-functions-in-custom">Custom Aliases and
+Functions in <code>custom/</code></a></li>
+<li><a href="#the-omz-command" id="toc-the-omz-command">The
+<code>omz</code> Command</a></li>
+<li><a href="#smart-directory-navigation-without-cd" id="toc-smart-directory-navigation-without-cd">Smart Directory
+Navigation Without <code>cd</code></a></li>
+<li><a href="#z-smarter-directory-jumping" id="toc-z-smarter-directory-jumping"><code>z</code> — Smarter Directory
+Jumping</a></li>
+<li><a href="#zsh-suffix-aliases" id="toc-zsh-suffix-aliases">ZSH Suffix
+Aliases</a></li>
+<li><a href="#global-aliases" id="toc-global-aliases">Global
+Aliases</a></li>
+<li><a href="#zsh-line-editor-zle-widgets" id="toc-zsh-line-editor-zle-widgets">ZSH Line Editor (ZLE)
+Widgets</a></li>
+</ul></li>
+<li><a href="#your-setup-an-honest-audit" id="toc-your-setup-an-honest-audit">Your Setup: An Honest Audit</a>
+<ul>
+<li><a href="#what-you-have" id="toc-what-you-have">What You
+Have</a></li>
+<li><a href="#whats-missing" id="toc-whats-missing">What’s
+Missing</a></li>
+<li><a href="#things-youre-probably-underusing" id="toc-things-youre-probably-underusing">Things You’re Probably
+Underusing</a></li>
+<li><a href="#small-additions-worth-considering" id="toc-small-additions-worth-considering">Small Additions Worth
+Considering</a></li>
+</ul></li>
+<li><a href="#when-omz-is-not-enough" id="toc-when-omz-is-not-enough">When OMZ Is Not Enough</a></li>
+<li><a href="#quick-reference-what-to-do-next" id="toc-quick-reference-what-to-do-next">Quick Reference: What to Do
+Next</a></li>
+<li><a href="#further-reading" id="toc-further-reading">Further
+Reading</a></li>
+</ul></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
+<h1 id="oh-my-zsh-a-practical-guide-to-your-shell">Oh My Zsh: A
+Practical Guide to Your Shell</h1>
+<p><strong>Mick Cooney — June 2026</strong></p>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>Most people who install Oh My Zsh do the same three things: change
+the theme, add the <code>git</code> plugin, and then forget about it for
+two years. The shell gets faster and prettier, but the actual
+productivity gain stays shallow. The plugin list grows by one every time
+someone on Reddit says “you need X,” but the full picture of what the
+framework can do — and what ZSH itself can do underneath it — never
+quite lands.</p>
+<p>This primer tries to fix that. It starts with why ZSH is genuinely
+different from Bash (not just cosmetically), explains how Oh My Zsh is
+actually structured, goes deep on the plugins and features that change
+how you work, and ends with a concrete look at a real setup: what’s
+good, what’s missing, and what to do about it.</p>
+<h3 id="what-this-primer-covers">What This Primer Covers</h3>
+<ul>
+<li>What ZSH adds over Bash that actually matters in daily use</li>
+<li>How Oh My Zsh works under the hood — plugins, themes, the
+<code>custom/</code> directory</li>
+<li>The plugins worth knowing deeply, with real examples of what they
+do</li>
+<li>Themes: what a good prompt gives you and when to switch</li>
+<li>Advanced ZSH features that most OMZ users never touch</li>
+<li>A concrete audit of an existing setup with actionable
+recommendations</li>
+</ul>
+<h3 id="what-this-primer-is-not">What This Primer Is Not</h3>
+<p>This is not a Bash-to-ZSH migration guide, and it does not cover
+every one of the three hundred-plus plugins in the OMZ repository. It
+also does not cover Prezto, Fish, or Nushell — all of which are worth
+knowing about, but that’s a different document. The focus is on getting
+maximum value out of Oh My Zsh specifically, for someone who already has
+it installed and wants to stop leaving capability on the table.</p>
+<h3 id="assumed-background">Assumed Background</h3>
+<p>You are comfortable in a terminal, have used Bash or ZSH before, and
+already have Oh My Zsh installed. You know what a <code>.zshrc</code>
+is. You don’t need to know anything about ZSH internals.</p>
+<hr />
+<h2 id="why-zsh-over-bash">Why ZSH Over Bash</h2>
+<p>It is worth spending a moment on why ZSH exists and what it actually
+adds, because understanding the foundation makes the Oh My Zsh layer
+easier to appreciate. ZSH is not Bash with a better theme engine. It has
+genuinely different capabilities.</p>
+<h3 id="completion">Completion</h3>
+<p>ZSH’s tab completion system — called <code>compsys</code> — is
+architecturally different from Bash’s. In Bash, completion is mostly
+prefix matching: you type <code>git com</code> and it completes to
+<code>git commit</code>. In ZSH, completion is programmable and
+contextual. It knows what <code>git commit</code> accepts as flags. It
+knows that <code>-m</code> takes a string. It can complete hostnames
+from your SSH config, Docker container names, systemd unit names,
+<code>man</code> page sections, and hundreds of other context-specific
+things. Plugin authors write completion functions, and OMZ ships many of
+them.</p>
+<p>You see this in practice every time you type
+<code>git &lt;Tab&gt;</code> and get a menu with descriptions, or type
+<code>docker run --&lt;Tab&gt;</code> and get the full flag list. Bash
+can approximate some of this with <code>bash-completion</code>, but
+ZSH’s system is deeper and more consistent.</p>
+<h3 id="globbing">Globbing</h3>
+<p>ZSH’s glob system is significantly more powerful than Bash’s. This is
+not a feature most people discover organically, but once you know it,
+you reach for it constantly.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Match all .log files recursively (** is a ZSH glob, not Bash)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">**</span>/<span class="pp">*</span>.log</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Only files (not directories) modified in the last day</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(m</span><span class="dv">-1</span><span class="op">.)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Only executable files</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(x)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files larger than 1MB</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(L</span>m<span class="dv">+1</span><span class="op">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine: executable files modified in the last week</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(x.m</span><span class="dv">-7</span><span class="op">)</span></span></code></pre></div>
+<p>The glob qualifiers (the characters inside <code>(...)</code>) filter
+on file metadata: type, modification time, size, permissions. This is
+the kind of thing you’d normally pipe through <code>find</code> with
+four flags; in ZSH it’s a glob modifier.</p>
+<h3 id="parameter-expansion">Parameter Expansion</h3>
+<p>ZSH extends Bash’s already capable parameter expansion with
+additional flags:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">path</span><span class="op">=</span><span class="st">&quot;/home/mcooney/workspace/ai_assisted_research/ohmyzsh_primer/ohmyzsh_primer.md&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Bash-compatible: get filename without path</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">##</span><span class="pp">*</span><span class="st">/</span><span class="va">}</span>          <span class="co"># ohmyzsh_primer.md</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ZSH-only: split on delimiter and get last element</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">t}</span>            <span class="co"># ohmyzsh_primer.md</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Strip extension</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">t</span><span class="op">:</span><span class="va">r}</span>          <span class="co"># ohmyzsh_primer</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Directory part</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">h}</span>            <span class="co"># /home/mcooney/workspace/ai_assisted_research/ohmyzsh_primer</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Uppercase</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="va">str</span><span class="op">=</span><span class="st">&quot;hello world&quot;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${(</span><span class="op">U</span><span class="va">)str}</span>            <span class="co"># HELLO WORLD</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into array on /</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">parts</span><span class="op">=</span><span class="va">(${(</span><span class="op">s:</span><span class="st">/</span><span class="op">:</span><span class="va">)path})</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$parts</span><span class="op">[</span><span class="dv">2</span><span class="op">]</span>            <span class="co"># home</span></span></code></pre></div>
+<p>The <code>(U)</code>, <code>(L)</code>, <code>(s:delim:)</code> and
+similar parameter flags are ZSH-specific. They’re not a party trick;
+they eliminate a lot of <code>awk</code>/<code>sed</code> one-liners for
+string manipulation in scripts.</p>
+<h3 id="history">History</h3>
+<p>ZSH history is more configurable than Bash’s. The key options that
+actually matter:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">HISTSIZE</span><span class="op">=</span>100000          <span class="co"># lines in memory</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">SAVEHIST</span><span class="op">=</span>100000          <span class="co"># lines on disk</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> HIST_IGNORE_DUPS  <span class="co"># don&#39;t record adjacent duplicates</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> HIST_IGNORE_SPACE <span class="co"># don&#39;t record commands starting with space</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> SHARE_HISTORY     <span class="co"># share history across sessions in real time</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> EXTENDED_HISTORY  <span class="co"># record timestamp with each command</span></span></code></pre></div>
+<p><code>SHARE_HISTORY</code> means that if you have three terminals
+open, history flows between them as you type — you don’t have to close
+and reopen to pick up commands from another session.
+<code>HIST_IGNORE_SPACE</code> is the one you want for sensitive
+commands: prefix any command with a space and it doesn’t go into
+history.</p>
+<h3 id="named-directories">Named Directories</h3>
+<p>ZSH lets you name directories and use them like variables in
+paths:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> work=/home/mcooney/workspace</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> proj=/home/mcooney/workspace/ai_assisted_research</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Now you can use ~work and ~proj anywhere</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="pp">~</span>proj</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">~</span>work/some_other_thing</span></code></pre></div>
+<p>Put these in your <code>.zshrc</code> and they persist. It’s the
+equivalent of shell aliases for paths, except they work in any context
+where a path is accepted.</p>
+<hr />
+<h2 id="how-oh-my-zsh-works">How Oh My Zsh Works</h2>
+<p>Understanding the structure of OMZ makes it easier to know what to
+change and where. The repository lives at <code>~/.oh-my-zsh/</code> and
+has a clear layout:</p>
+<pre class="text"><code>~/.oh-my-zsh/
+  lib/           # Core ZSH configuration loaded at startup
+  plugins/       # Bundled plugins (git, docker, fzf, etc.)
+  themes/        # Bundled themes
+  custom/        # Your overrides: themes, plugins, functions
+    plugins/     # Third-party or custom plugins go here
+    themes/      # Custom themes go here
+    aliases.zsh  # Put custom aliases here
+    functions.zsh# Put custom functions here (or any .zsh file)
+  templates/     # Template for new .zshrc
+  tools/         # Install/update scripts</code></pre>
+<p>When your shell starts, OMZ loads <code>oh-my-zsh.sh</code>, which:
+1. Loads everything in <code>lib/</code> (history config, completion
+setup, key bindings, utility functions) 2. Sources each enabled plugin’s
+<code>.plugin.zsh</code> file 3. Loads the theme 4. Sources everything
+in <code>custom/</code> that ends in <code>.zsh</code></p>
+<p>The <code>custom/</code> directory is where your personalizations
+live and where they survive OMZ updates. If you write a custom function
+and put it in <code>~/.oh-my-zsh/custom/myconfig.zsh</code>, it gets
+loaded automatically. If you put the same function in a bundled plugin
+file, the next <code>omz update</code> will overwrite it.</p>
+<h3 id="the-lib-layer">The <code>lib/</code> Layer</h3>
+<p>Most users never look at <code>lib/</code>, but it does a lot. The
+files there configure:</p>
+<ul>
+<li><code>completion.zsh</code> — sets up <code>compsys</code>, enables
+menu completion, configures case-insensitive matching</li>
+<li><code>history.zsh</code> — the history options described
+earlier</li>
+<li><code>key-bindings.zsh</code> — registers Ctrl+R for history search,
+Ctrl+A/E for line navigation, etc.</li>
+<li><code>git.zsh</code> — the helper functions used by git-aware
+themes</li>
+<li><code>functions.zsh</code> — utility functions used internally, like
+<code>omz_urlencode</code></li>
+</ul>
+<p>You rarely edit these directly, but knowing they exist explains why
+certain behaviors appear without you configuring them.</p>
+<h3 id="enabling-and-disabling-plugins">Enabling and Disabling
+Plugins</h3>
+<p>The <code>plugins</code> array in <code>.zshrc</code> is
+straightforward:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">plugins</span><span class="op">=</span><span class="va">(</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  git</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  docker</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  fzf</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  zsh-autosuggestions</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="va">)</span></span></code></pre></div>
+<p>Each name must match either a directory in
+<code>~/.oh-my-zsh/plugins/</code> or
+<code>~/.oh-my-zsh/custom/plugins/</code>. OMZ looks in both places.
+Third-party plugins (like <code>zsh-autosuggestions</code>) are cloned
+into <code>custom/plugins/</code> and added to the list.</p>
+<p>The startup cost of plugins is real. Each plugin sources a file. Most
+are small, but a plugin that initializes a large tool (like a package
+manager) adds perceptible latency. Keep only what you actually use.</p>
+<hr />
+<h2 id="plugins-worth-knowing-deeply">Plugins Worth Knowing Deeply</h2>
+<p>This is not a list of every plugin. It is a deep look at the ones
+that change how you work, with concrete examples of what they actually
+do.</p>
+<h3 id="git">git</h3>
+<p>The <code>git</code> plugin ships over 150 aliases. Most people use
+<code>gst</code> (git status) and <code>gaa</code> (git add –all) and
+call it done. The more interesting ones:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Commonly used</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gst</span>    <span class="co"># git status</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ga</span>     <span class="co"># git add</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">gaa</span>    <span class="co"># git add --all</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">gcmsg</span>  <span class="co"># git commit -m</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">gp</span>     <span class="co"># git push</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">gl</span>     <span class="co"># git pull</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">gco</span>    <span class="co"># git checkout</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ex">gcb</span>    <span class="co"># git checkout -b</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">gd</span>     <span class="co"># git diff</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">gds</span>    <span class="co"># git diff --staged</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="ex">glog</span>   <span class="co"># git log --oneline --decorate --graph</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Less obvious but very useful</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="ex">gupa</span>   <span class="co"># git pull --rebase --autostash</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="ex">gcf</span>    <span class="co"># git config --list</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ex">gclean</span> <span class="co"># git clean -id (interactive clean)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ex">gwip</span>   <span class="co"># commit a work-in-progress stash</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="ex">gunwip</span> <span class="co"># undo the last WIP stash commit</span></span></code></pre></div>
+<p>The <code>gwip</code> / <code>gunwip</code> pair is genuinely useful
+when you need to quickly switch branches mid-work without a full commit.
+<code>gwip</code> creates a temporary <code>[WIP]</code> commit;
+<code>gunwip</code> undoes it and restores the working state.</p>
+<p>The plugin also provides <code>git_prompt_info()</code>, which most
+themes use to show the current branch and status in the prompt.</p>
+<h3 id="fzf">fzf</h3>
+<p><code>fzf</code> is a fuzzy finder for the terminal. The OMZ plugin
+wires it into three key bindings:</p>
+<pre class="text"><code>Ctrl+R    — fuzzy search your command history
+Ctrl+T    — fuzzy find a file in the current directory tree
+Alt+C     — fuzzy cd into a subdirectory</code></pre>
+<p>Most people know Ctrl+R for history. The other two are underused.
+<code>Ctrl+T</code> is faster than typing a path when you remember the
+filename but not the full path. <code>Alt+C</code> is faster than
+<code>cd</code> with tab completion when you’re navigating several
+levels deep.</p>
+<p><code>fzf</code> also integrates with commands directly:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview files while browsing</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fzf</span> <span class="at">--preview</span> <span class="st">&#39;cat {}&#39;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kill a process by fuzzy-searching running processes</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-9</span> <span class="va">$(</span><span class="fu">ps</span> aux <span class="kw">|</span> <span class="ex">fzf</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span><span class="va">)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Open a recent git branch</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="va">$(</span><span class="fu">git</span> branch <span class="kw">|</span> <span class="ex">fzf</span><span class="va">)</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Select from command history and re-run</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="va">$(</span><span class="bu">history</span> <span class="kw">|</span> <span class="ex">fzf</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{$1=&quot;&quot;; print}&#39;</span><span class="va">)</span></span></code></pre></div>
+<p>The underlying tool accepts any input on stdin and returns the
+selected line on stdout, so it composes with everything. The OMZ plugin
+just provides the shell integration; learning <code>fzf</code>’s flags
+unlocks the full power.</p>
+<h3 id="zsh-autosuggestions">zsh-autosuggestions</h3>
+<p>This plugin shows a greyed-out suggestion as you type, based on your
+history. Press the right arrow key to accept the full suggestion, or
+press <code>End</code> to move to the end of the current word.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You type:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># It shows (in grey):</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;fix typo in README&quot;</span>   ← suggestion from history</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Right arrow accepts the whole thing</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+F accepts one character at a time</span></span></code></pre></div>
+<p>The plugin also supports accepting a suggestion word-by-word. By
+default this uses Ctrl+Space but can be rebound:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^ &#39;</span> autosuggest-accept-word</span></code></pre></div>
+<p>One tuning option worth knowing: by default it only suggests from
+history. You can also enable completion-based suggestions:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">ZSH_AUTOSUGGEST_STRATEGY</span><span class="op">=</span><span class="va">(</span>history completion<span class="va">)</span></span></code></pre></div>
+<p>This means if history has no match, it falls back to ZSH
+completions.</p>
+<h3 id="zsh-syntax-highlighting">zsh-syntax-highlighting</h3>
+<p>This plugin is not in the default OMZ bundle — it requires a separate
+install. It is, however, one of the highest-value things you can add. It
+highlights commands in real time as you type:</p>
+<ul>
+<li>Commands that exist: green</li>
+<li>Commands that don’t exist: red</li>
+<li>Strings and quoted arguments: yellow</li>
+<li>Options/flags: light blue</li>
+<li>Pipes, redirects, semicolons: magenta</li>
+</ul>
+<p>The value is catching typos before you press Enter. You type
+<code>pythno script.py</code> and the red highlight catches it
+immediately. You type <code>ls --recusrive</code> and it’s red before
+you hit Enter. After using it for a week you will miss it in any shell
+that doesn’t have it.</p>
+<p>Install:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">${ZSH_CUSTOM</span><span class="op">:-</span><span class="pp">~</span>/.oh-my-zsh/custom<span class="va">}</span>/plugins/zsh-syntax-highlighting</span></code></pre></div>
+<p>Then add <code>zsh-syntax-highlighting</code> to your
+<code>plugins</code> array. It must be <strong>last in the list</strong>
+— this is important; the plugin works by modifying the line buffer, and
+it needs to run after everything else.</p>
+<h3 id="history-1">history</h3>
+<p>The <code>history</code> plugin provides convenient aliases:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">h</span>          <span class="co"># full history (with timestamps if EXTENDED_HISTORY is set)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hs</span>         <span class="co"># history | grep (case-sensitive)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hsi</span>        <span class="co"># history | grep (case-insensitive)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all git commands you&#39;ve run</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hs</span> git</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Find recent docker run commands</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hsi</span> <span class="st">&quot;docker run&quot;</span></span></code></pre></div>
+<p>Simple but far faster than typing <code>history | grep</code> every
+time.</p>
+<h3 id="sudo">sudo</h3>
+<p>Press <code>Esc Esc</code> (two taps) to prepend <code>sudo</code> to
+the current command line or re-run the last command with
+<code>sudo</code>. No plugin is simpler or more immediately useful.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You run:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> install something-big</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Permission denied.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Press Esc Esc</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Line becomes:</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install something-big</span></code></pre></div>
+<h3 id="extract">extract</h3>
+<p>The <code>extract</code> plugin provides a single command
+<code>x</code> (or <code>extract</code>) that works on any archive
+format:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">x</span> archive.tar.gz</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">x</span> archive.zip</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">x</span> archive.bz2</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">x</span> archive.7z</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">x</span> archive.tar.xz</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ex">x</span> archive.rar</span></code></pre></div>
+<p>You never need to remember whether it’s <code>-xzf</code> or
+<code>-xjf</code> or <code>unzip</code> or <code>7z x</code>. The plugin
+detects the format and uses the right tool. It works as long as the
+relevant tool is installed on the system.</p>
+<h3 id="colored-man-pages">colored-man-pages</h3>
+<p>Makes <code>man</code> pages render with color instead of monochrome.
+The improvement is significant for readability, especially for long man
+pages with lots of structure. No configuration needed; just include it
+in your plugins list.</p>
+<h3 id="command-not-found">command-not-found</h3>
+<p>When you type a command that doesn’t exist, instead of a bare
+“command not found” error, the shell suggests the package you need to
+install:</p>
+<pre class="text"><code>$ tree
+zsh: command not found: tree
+
+Command &#39;tree&#39; not found, but can be installed with:
+sudo apt install tree</code></pre>
+<p>Requires <code>command-not-found</code> to be installed on the system
+(most Ubuntu/Debian systems have it). Saves a round-trip to the package
+manager search.</p>
+<h3 id="timer">timer</h3>
+<p>Shows how long each command took, appended to the right side of your
+prompt after the command completes. Useful for scripts and builds where
+you want a rough sense of runtime without explicitly using
+<code>time</code>.</p>
+<pre class="text"><code>some-long-command           [12s]</code></pre>
+<p>No configuration needed. If you find it noisy for short commands, set
+a minimum threshold:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="va">TIMER_THRESHOLD</span><span class="op">=</span>2  <span class="co"># only show if command took &gt; 2 seconds</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="va">TIMER_FORMAT</span><span class="op">=</span><span class="st">&#39;%d seconds&#39;</span></span></code></pre></div>
+<h3 id="rsync">rsync</h3>
+<p>Provides aliases for common <code>rsync</code> patterns:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-copy</span>      <span class="co"># rsync -avz (archive, verbose, compress)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-move</span>      <span class="co"># rsync -avz --remove-source-files</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-update</span>    <span class="co"># rsync -avzu (skip files newer at destination)</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="ex">rsync-synchronize</span> <span class="co"># rsync -avzu --delete (full sync)</span></span></code></pre></div>
+<p>The flags are ones you’d reach for often but never quite remember the
+exact combination of.</p>
+<h3 id="systemd">systemd</h3>
+<p>Provides short aliases for common <code>systemctl</code> and
+<code>journalctl</code> operations:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-status</span>   <span class="co"># systemctl status</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-start</span>    <span class="co"># systemctl start</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-stop</span>     <span class="co"># systemctl stop</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-restart</span>  <span class="co"># systemctl restart</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-enable</span>   <span class="co"># systemctl enable --now</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-disable</span>  <span class="co"># systemctl disable --now</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="ex">sc-list</span>     <span class="co"># systemctl list-units</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ex">jc</span>          <span class="co"># journalctl -xe (recent logs with context)</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="ex">jcf</span>         <span class="co"># journalctl -f (follow/tail logs)</span></span></code></pre></div>
+<p>If you interact with systemd services regularly, these cut down the
+typing considerably.</p>
+<h3 id="mise">mise</h3>
+<p>The <code>mise</code> plugin initializes <code>mise</code> (the
+polyglot version manager, formerly <code>rtx</code>) and enables its
+completions. It runs <code>mise activate zsh</code> during shell startup
+so that tool versions are correctly set in every shell session. Without
+this, you’d need to call <code>eval &quot;$(mise activate zsh)&quot;</code>
+manually in your <code>.zshrc</code>.</p>
+<h3 id="gh">gh</h3>
+<p>Completions for the GitHub CLI (<code>gh</code>). Tab-completion for
+commands, flags, and — notably — repository names and PR/issue numbers
+when the context makes them available. If you use <code>gh</code>
+frequently, this saves a lot of flag-hunting.</p>
+<hr />
+<h2 id="themes-what-a-good-prompt-does">Themes: What a Good Prompt
+Does</h2>
+<p>The theme controls what your prompt looks like. Most people pick one
+that looks appealing and stop there. But a well-designed prompt is
+actually functional: it puts the right information in front of you at
+the right time.</p>
+<h3 id="what-information-belongs-in-a-prompt">What Information Belongs
+in a Prompt</h3>
+<p>A practical prompt should show:</p>
+<ol type="1">
+<li><strong>Current directory</strong> — always. Abbreviated to the last
+2-3 components if deep.</li>
+<li><strong>Git state</strong> — current branch, whether there are
+staged changes, unstaged changes, untracked files, and whether the
+branch is ahead/behind the remote.</li>
+<li><strong>Last command exit code</strong> — some indication of whether
+the last command succeeded or failed.</li>
+<li><strong>Optionally:</strong> active virtual environment, tool
+versions, execution time, user@host for remote sessions.</li>
+</ol>
+<p>What a prompt should not do: show things that never change (always
+the same user on the same machine), show timestamps on every line (the
+<code>timer</code> plugin handles that better), or take noticeable time
+to render.</p>
+<h3 id="robbyrussell">robbyrussell</h3>
+<p>The default theme. Clean, minimal:</p>
+<pre class="text"><code>➜  ai_assisted_research git:(main) ✗</code></pre>
+<p>Shows directory and git branch. The <code>✗</code> indicates there
+are uncommitted changes. It’s good for its simplicity, but it doesn’t
+show whether changes are staged vs unstaged, doesn’t show remote
+divergence, and gives no indication of exit status.</p>
+<h3 id="agnoster">agnoster</h3>
+<p>A powerline-style theme that uses special Unicode characters to
+create a segmented prompt:</p>
+<pre class="text"><code>mcooney@hostname  ~/workspace  main ✘</code></pre>
+<p>(The segments have colored backgrounds in the actual terminal.) Shows
+user, host, path, git branch, and git state. More information than
+robbyrussell. Requires a Nerd Font or Powerline-patched font; without
+one, the segment characters render as boxes.</p>
+<p>The <code>agnoster-timestamp-newline</code> theme in your custom
+themes directory is a variant that adds a timestamp and puts the command
+input on its own line, which makes long paths more readable.</p>
+<h3 id="powerlevel10k-p10k">Powerlevel10k (p10k)</h3>
+<p>Powerlevel10k is the current standard for people who want a serious
+prompt. It is not bundled with OMZ but is the most popular third-party
+theme by a significant margin.</p>
+<p>What makes p10k different:</p>
+<ul>
+<li><strong>Configuration wizard</strong> — runs
+<code>p10k configure</code> and walks you through every prompt option
+interactively, showing previews. You end up with a
+<code>.p10k.zsh</code> config that captures exactly what you chose.</li>
+<li><strong>Instant prompt</strong> — p10k renders a partial prompt
+immediately, before the shell finishes loading. Shell startup feels
+instant even with slow plugins.</li>
+<li><strong>Async segments</strong> — git status and other slow segments
+render asynchronously so they don’t block input.</li>
+<li><strong>Transient prompt</strong> — old prompts in the scroll buffer
+collapse to a minimal form, keeping the terminal cleaner.</li>
+</ul>
+<p>For a full git-aware, multi-context prompt (git state, virtualenv,
+node version, exit status, command timing) without visible startup lag,
+p10k is the practical choice.</p>
+<p>Install:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span><span class="op">=</span>1 https://github.com/romkatv/powerlevel10k.git <span class="dt">\</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">${ZSH_CUSTOM</span><span class="op">:-</span><span class="va">$HOME</span>/.oh-my-zsh/custom<span class="va">}</span>/themes/powerlevel10k</span></code></pre></div>
+<p>Then set <code>ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</code> and run
+<code>p10k configure</code>.</p>
+<hr />
+<h2 id="features-most-omz-users-never-find">Features Most OMZ Users
+Never Find</h2>
+<h3 id="custom-aliases-and-functions-in-custom">Custom Aliases and
+Functions in <code>custom/</code></h3>
+<p>Any <code>.zsh</code> file in <code>~/.oh-my-zsh/custom/</code> is
+sourced automatically. This means you don’t need to clutter
+<code>.zshrc</code> with personal aliases — put them in
+<code>~/.oh-my-zsh/custom/aliases.zsh</code> and they load automatically
+and survive OMZ updates:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.oh-my-zsh/custom/aliases.zsh</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ll=<span class="st">&#39;ls -lAh --color=auto&#39;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ports=<span class="st">&#39;ss -tlnp&#39;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> myip=<span class="st">&#39;curl -s ifconfig.me&#39;</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> reload=<span class="st">&#39;source ~/.zshrc&#39;</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ...=<span class="st">&#39;cd ../..&#39;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ....=<span class="st">&#39;cd ../../..&#39;</span></span></code></pre></div>
+<p>Functions go in the same place or their own file:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.oh-my-zsh/custom/functions.zsh</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create directory and cd into it</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mcd()</span> <span class="kw">{</span> <span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="kw">}</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick find by name</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">f()</span> <span class="kw">{</span> <span class="fu">find</span> . <span class="at">-name</span> <span class="st">&quot;*</span><span class="va">$1</span><span class="st">*&quot;</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">}</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the last N lines of a log file with color</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lf()</span> <span class="kw">{</span> <span class="fu">tail</span> <span class="at">-f</span> <span class="st">&quot;</span><span class="va">${1</span><span class="op">:-</span>/var/log/syslog<span class="va">}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">--color</span><span class="op">=</span>auto <span class="at">-E</span> <span class="st">&quot;ERROR|WARN|INFO|$&quot;</span> <span class="kw">}</span></span></code></pre></div>
+<h3 id="the-omz-command">The <code>omz</code> Command</h3>
+<p>OMZ ships a management command that most users don’t know exists:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> update               <span class="co"># Update oh-my-zsh</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin list          <span class="co"># List all available plugins</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin enable git    <span class="co"># Enable a plugin without editing .zshrc</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> plugin disable git   <span class="co"># Disable a plugin</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> theme list           <span class="co"># List available themes</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> theme use agnoster   <span class="co"># Switch theme temporarily</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="ex">omz</span> changelog            <span class="co"># Show recent OMZ changes</span></span></code></pre></div>
+<p>The <code>plugin list</code> output is useful for discovery — there
+are plugins for tools you use that you may not know OMZ ships.</p>
+<h3 id="smart-directory-navigation-without-cd">Smart Directory
+Navigation Without <code>cd</code></h3>
+<p>ZSH can change directories without typing <code>cd</code>, if you
+enable it:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> AUTO_CD</span></code></pre></div>
+<p>With this set, typing a directory name alone (without
+<code>cd</code>) changes into it:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Without AUTO_CD:</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/workspace/ai_assisted_research</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># With AUTO_CD:</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="ex">~/workspace/ai_assisted_research</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># or if it&#39;s in CDPATH:</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ai_assisted_research</span></span></code></pre></div>
+<p>Combine with <code>CDPATH</code> to jump to frequently used
+directories:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="va">CDPATH</span><span class="op">=</span>.:<span class="pp">~</span>:<span class="pp">~</span>/workspace</span></code></pre></div>
+<p>With this set, typing <code>ai_assisted_research</code> from anywhere
+searches <code>.</code>, <code>~</code>, and <code>~/workspace</code>
+for that directory name and changes into it if found.</p>
+<h3 id="z-smarter-directory-jumping"><code>z</code> — Smarter Directory
+Jumping</h3>
+<p>The <code>z</code> plugin (bundled with OMZ) tracks which directories
+you visit and lets you jump to them by partial name, ranked by how often
+and how recently you’ve been there:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After you&#39;ve visited ~/workspace/ai_assisted_research a few times:</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> ai_assisted   <span class="co"># cd&#39;s to ~/workspace/ai_assisted_research</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> research      <span class="co"># same</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># It picks the highest-ranked match for the pattern</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> num           <span class="co"># might jump to ~/workspace/ai_assisted_research/numerical_analysis_primer</span></span></code></pre></div>
+<p>The ranking function (“frecency”) is frequency × recency —
+directories you go to often and recently rank highest. For codebases you
+navigate daily, <code>z</code> eliminates most explicit <code>cd</code>
+commands.</p>
+<p><code>zoxide</code> is a faster modern alternative with the same
+concept. It integrates with OMZ via a plugin and can be configured to
+replace <code>cd</code> entirely:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install zoxide, then add to .zshrc:</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">zoxide</span> init zsh <span class="at">--cmd</span> cd<span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Now &#39;cd&#39; uses zoxide&#39;s frecency ranking</span></span></code></pre></div>
+<h3 id="zsh-suffix-aliases">ZSH Suffix Aliases</h3>
+<p>ZSH supports suffix aliases — aliases that apply to the file
+extension, so the shell knows what program to use to open a file
+type:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-s</span> py=python3</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-s</span> md=glow       <span class="co"># terminal markdown renderer</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-s</span> pdf=evince</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-s</span> html=firefox</span></code></pre></div>
+<p>With these, typing <code>script.py</code> at the prompt opens it with
+<code>python3</code>, <code>README.md</code> opens with
+<code>glow</code>, and so on. You don’t need to prefix the program
+name.</p>
+<h3 id="global-aliases">Global Aliases</h3>
+<p>Regular aliases only work at the start of a command. Global aliases
+work anywhere in a command line:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-g</span> G=<span class="st">&#39;| grep&#39;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-g</span> L=<span class="st">&#39;| less&#39;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-g</span> T=<span class="st">&#39;| tail -f&#39;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-g</span> NE=<span class="st">&#39;2&gt;/dev/null&#39;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-g</span> NUL=<span class="st">&#39;&gt;/dev/null 2&gt;&amp;1&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With global aliases:</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> aux G python     <span class="co"># ps aux | grep python</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> big_log T       <span class="co"># cat big_log | tail -f</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="ex">some-command</span> NUL    <span class="co"># some-command &gt;/dev/null 2&gt;&amp;1</span></span></code></pre></div>
+<p>This is a ZSH-specific feature with no Bash equivalent.</p>
+<h3 id="zsh-line-editor-zle-widgets">ZSH Line Editor (ZLE) Widgets</h3>
+<p>ZSH’s line editor is programmable. You can write functions and bind
+them to key sequences:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Paste last argument of last command (already bound to Alt+. by default)</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># But you can write custom widgets:</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Widget: surround current word in quotes</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">quote-word()</span> <span class="kw">{</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">zle</span> select-in-word</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">LBUFFER</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${LBUFFER}</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">RBUFFER</span><span class="op">=</span><span class="st">&quot;</span><span class="dt">\&quot;</span><span class="va">${RBUFFER}</span><span class="st">&quot;</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="bu">zle</span> <span class="at">-N</span> quote-word</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^[q&#39;</span> quote-word   <span class="co"># Alt+Q</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Widget: push current command to a stack, run something else, pop back</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="co"># This is already provided by ZSH as push-line (Ctrl+Q by default)</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Type a command, realize you need to run something first, press Ctrl+Q</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the other command, press Enter, your original command is restored</span></span></code></pre></div>
+<p><code>push-line</code> (bound to Ctrl+Q in OMZ) is worth knowing: if
+you’re mid-command and realize you need to run something else first,
+Ctrl+Q parks your current input, you run what you need, and your
+original command comes back on the next prompt.</p>
+<hr />
+<h2 id="your-setup-an-honest-audit">Your Setup: An Honest Audit</h2>
+<p>Here is a concrete look at what is active in your configuration, what
+is working well, and where the gaps are.</p>
+<h3 id="what-you-have">What You Have</h3>
+<p>Your active plugins:</p>
+<pre><code>git  ssh-agent  colored-man-pages  command-not-found  extract  history
+docker  timer  sudo  gh  podman  systemd  chezmoi  rsync  fzf
+mise  zsh-autosuggestions  zsh-claude-code-shell</code></pre>
+<p>This is a well-considered list. The <code>timer</code>,
+<code>sudo</code>, <code>extract</code>, <code>history</code>, and
+<code>colored-man-pages</code> plugins are all underrated workhorses
+that most setups skip. You have <code>fzf</code> and
+<code>zsh-autosuggestions</code>, which are the two highest-value
+plugins. The tool-specific plugins (<code>docker</code>,
+<code>podman</code>, <code>systemd</code>, <code>gh</code>,
+<code>chezmoi</code>, <code>rsync</code>, <code>mise</code>) are all
+appropriate for someone with your tooling.</p>
+<p>Your history config is solid: 100k entries, eternal history logging,
+session sharing. Most people have 1000 entries and wonder why they can’t
+find old commands.</p>
+<h3 id="whats-missing">What’s Missing</h3>
+<p><strong><code>zsh-syntax-highlighting</code> — install this
+first.</strong></p>
+<p>This is the gap that will have the most immediate impact. Every
+command you type is colour-coded as you type it: green means the command
+exists, red means it doesn’t. You’ll catch typos before Enter, see
+unclosed quotes highlighted, and generally have a much more readable
+command line. It’s off by default because it’s a third-party plugin, but
+it’s nearly universal in well-configured ZSH setups.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="dt">\</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span></code></pre></div>
+<p>Add <code>zsh-syntax-highlighting</code> to your plugins list, and —
+critically — put it <strong>last</strong>:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="va">plugins</span><span class="op">=</span><span class="va">(</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  ...your existing plugins...</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  zsh-syntax-highlighting   <span class="co"># must be last</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="va">)</span></span></code></pre></div>
+<p><strong><code>z</code> for directory jumping.</strong></p>
+<p>You’re navigating a workspace with a dozen active directories. The
+<code>z</code> plugin is bundled with OMZ — just add it to your plugins
+list. After a few days of normal use, <code>z research</code> or
+<code>z building</code> gets you directly to the right directory from
+anywhere. No install needed:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="va">plugins</span><span class="op">=</span><span class="va">(</span>... z ...<span class="va">)</span></span></code></pre></div>
+<p><strong>Consider your theme.</strong></p>
+<p>You have <code>agnoster-timestamp-newline</code> in your custom
+themes but are using <code>robbyrussell</code>. This may be intentional,
+but it’s worth trying the custom theme if you haven’t recently — the
+newline variant is easier to read when you’re deep in a long path. If
+you want more git state visibility (staged vs unstaged vs untracked vs
+ahead/behind remote), p10k gives you all of that with a five-minute
+setup via <code>p10k configure</code>.</p>
+<h3 id="things-youre-probably-underusing">Things You’re Probably
+Underusing</h3>
+<p><strong><code>fzf</code> beyond Ctrl+R.</strong></p>
+<p>You have <code>fzf</code> installed. Ctrl+R for history search is
+probably the only thing you use it for. Try: - <code>Ctrl+T</code> while
+typing a command to fuzzy-find a file argument - <code>Alt+C</code> to
+fuzzy-jump into a subdirectory</p>
+<p>Both of these are wired up by the <code>fzf</code> OMZ plugin and
+work out of the box.</p>
+<p><strong>The <code>sudo</code> plugin’s Esc Esc.</strong></p>
+<p>If you’re not already using this reflex, it eliminates one of the
+most common terminal annoyances: running a command, getting “permission
+denied,” and having to retype it with <code>sudo</code>. Press
+<code>Esc Esc</code> after the failed command and it prepends
+<code>sudo</code> for you.</p>
+<p><strong><code>extract</code> / the <code>x</code>
+command.</strong></p>
+<p>If you’re still typing <code>tar -xzf</code> or looking up whether
+it’s <code>-xjf</code> for bz2, the <code>extract</code> plugin’s
+<code>x</code> command handles every archive format uniformly. You
+already have the plugin; just use <code>x archive.tar.gz</code> instead
+of remembering flags.</p>
+<p><strong>History grep.</strong></p>
+<p>The <code>history</code> plugin gives you <code>hs</code> and
+<code>hsi</code> for grepping history. If you’re typing
+<code>history | grep docker</code> to find that run command from last
+week, <code>hs docker</code> does the same thing in fewer
+keystrokes.</p>
+<h3 id="small-additions-worth-considering">Small Additions Worth
+Considering</h3>
+<p>A few things that are low-effort and pay off quickly:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In ~/.oh-my-zsh/custom/aliases.zsh</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Directory navigation shortcuts</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ..=<span class="st">&#39;cd ..&#39;</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ...=<span class="st">&#39;cd ../..&#39;</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ....=<span class="st">&#39;cd ../../..&#39;</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick list</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ll=<span class="st">&#39;ls -lAh --color=auto&#39;</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Git shortcuts beyond what the git plugin provides</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> gst=<span class="st">&#39;git status&#39;</span>   <span class="co"># already from git plugin, but worth knowing</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Show port usage</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ports=<span class="st">&#39;ss -tlnp&#39;</span></span></code></pre></div>
+<p>And a few ZSH options worth adding to your <code>.zshrc</code> if
+they’re not there:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> AUTO_CD          <span class="co"># type a directory name to cd into it</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> CORRECT          <span class="co"># suggest corrections for mistyped commands</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> HIST_IGNORE_SPACE <span class="co"># commands starting with space aren&#39;t recorded</span></span></code></pre></div>
+<hr />
+<h2 id="when-omz-is-not-enough">When OMZ Is Not Enough</h2>
+<p>Oh My Zsh is the right choice for most people, but there are
+situations where it starts to show its age.</p>
+<p><strong>Startup speed.</strong> OMZ adds measurable startup latency,
+mostly from sourcing plugins and initializing completions. On modern
+hardware this is usually under 200ms, which is imperceptible. But if
+you’re on a slow machine, opening many terminals, or doing a lot of
+<code>zsh -c</code> invocations in scripts, it accumulates.
+<code>zinit</code> and <code>zplug</code> are plugin managers that load
+plugins lazily or in parallel and can reduce startup time significantly.
+<code>sheldon</code> is another option with a simple TOML
+configuration.</p>
+<p><strong>Opinionated defaults.</strong> OMZ makes choices about
+completion settings, history handling, and key bindings that most people
+are fine with. If you find yourself fighting the defaults, vanilla ZSH
+with <code>zinit</code> and hand-picked plugins gives you more
+control.</p>
+<p><strong>Alternatives worth knowing.</strong> Prezto is OMZ’s more
+modular cousin — faster startup, more configurable, smaller default
+footprint. Fish shell takes a different approach entirely: better
+out-of-the-box experience, but incompatible syntax with Bash/ZSH, which
+matters if you write a lot of scripts. Nushell is the most radical
+departure — structured data instead of text streams, genuinely different
+mental model, not a daily driver for most people yet.</p>
+<p>For the typical developer workflow, OMZ with a curated plugin list
+and p10k as the theme is a well-tested configuration that will serve you
+well without requiring you to build from scratch.</p>
+<hr />
+<h2 id="quick-reference-what-to-do-next">Quick Reference: What to Do
+Next</h2>
+<p>In order of impact:</p>
+<ol type="1">
+<li><p><strong>Install <code>zsh-syntax-highlighting</code></strong> —
+see the install command in the plugin section above. Add it last in your
+plugins list.</p></li>
+<li><p><strong>Add <code>z</code></strong> to your plugins list (no
+install needed, it’s bundled). Use it for a week.</p></li>
+<li><p><strong>Try <code>Ctrl+T</code> and <code>Alt+C</code></strong>
+with <code>fzf</code> — fuzzy file and directory completion. They’re
+already wired up.</p></li>
+<li><p><strong>Internalize <code>Esc Esc</code></strong> (sudo plugin)
+and <code>x</code> (extract plugin) — you have both, just build the
+habit.</p></li>
+<li><p><strong>Consider p10k</strong> if you want a richer prompt with
+git state detail.</p></li>
+<li><p><strong>Read <code>omz plugin list</code></strong> — there may be
+completions for tools you use daily that you didn’t know OMZ
+ships.</p></li>
+</ol>
+<hr />
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><strong>OMZ repository</strong> — <code>~/.oh-my-zsh/</code> itself:
+<code>plugins/&lt;name&gt;/&lt;name&gt;.plugin.zsh</code> files are the
+source of truth for what each plugin does and what commands/aliases it
+provides.</li>
+<li><strong>ZSH manual</strong> — <code>man zsh</code> is the definitive
+reference. The sections on parameter expansion, globbing qualifiers, and
+ZLE are particularly worth having open.</li>
+<li><strong>Powerlevel10k</strong> — the configuration wizard at
+<code>p10k configure</code> is unusually good documentation in
+interactive form.</li>
+<li><strong>ZSH Users mailing list / r/zsh</strong> — for real-world
+configuration questions; the OMZ wiki has gotten stale in places.</li>
+</ul>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
