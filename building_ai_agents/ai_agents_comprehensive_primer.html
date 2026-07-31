@@ -475,7 +475,7 @@ code span.fu { color: #c792ea !important; }
     <span class="navbar-brand">Building Autonomous AI Agents: A
 Comprehensive Primer</span>
 
-    <span class="navbar-meta">May 2026</span>
+    <span class="navbar-meta">July 2026</span>
 
   </nav>
 
@@ -539,8 +539,8 @@ Acting)</a></li>
 Recovery</a></li>
 <li><a href="#the-execution-loop-implementation" id="toc-the-execution-loop-implementation"><span class="toc-section-number">7.4</span> The Execution Loop
 Implementation</a></li>
-<li><a href="#frameworks-2026-landscape" id="toc-frameworks-2026-landscape"><span class="toc-section-number">7.5</span> Frameworks (2026
-Landscape)</a></li>
+<li><a href="#frameworks-late-july-2026-snapshot" id="toc-frameworks-late-july-2026-snapshot"><span class="toc-section-number">7.5</span> Frameworks (Late-July 2026
+Snapshot)</a></li>
 </ul></li>
 <li><a href="#key-challenges" id="toc-key-challenges"><span class="toc-section-number">8</span> Key Challenges</a>
 <ul>
@@ -611,6 +611,11 @@ engineering in isolation from agentic execution. If you want a survey of
 agent frameworks without implementation depth, this is probably not the
 right starting point — this primer assumes you intend to build
 something.</p>
+<p><strong>Freshness note (July 31, 2026):</strong> This is a conceptual
+and implementation primer, but some details in the ecosystem move
+monthly (framework capabilities, provider SDK features, model pricing,
+and benchmark rankings). Treat specific product/version references as
+dated snapshots and re-check official docs when implementing.</p>
 <p>When you hear about AI agents doing autonomous work—making API calls,
 retrieving data, making decisions, and executing complex
 workflows—you’re likely hearing about a fascinating but often
@@ -750,12 +755,13 @@ typed <code>tool_use</code> content block: a proper object with a name
 and arguments, not text you have to extract them from. You execute the
 tool and send the result back as a <code>tool_result</code> block, and
 the loop continues from there. Anthropic, OpenAI, and Google all support
-this shape; the <code>tool_use</code>/<code>tool_result</code>
+this shape, and the same pattern now appears across a broader set of
+providers as well; the <code>tool_use</code>/<code>tool_result</code>
 terminology above is Anthropic’s, but the concept — schemas in, typed
-call out — is the same everywhere. Models are also specifically trained
-against this interface, so the reliability gain isn’t just “no parsing
-bugs,” it’s “the model is better at using tools when they’re presented
-this way.”</p>
+call out — is now broadly convergent. Models are also specifically
+trained against this interface, so the reliability gain isn’t just “no
+parsing bugs,” it’s “the model is better at using tools when they’re
+presented this way.”</p>
 <p>The practical implication: skip the prompt-tag approach entirely
 unless you’re working with a raw base model that has no tool-calling
 interface at all. For any current frontier model, define your tools
@@ -1203,8 +1209,12 @@ in practice:</p>
 <span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> state.result</span>
 <span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> state.result_with_status(<span class="st">&quot;max_iterations_reached&quot;</span>)</span></code></pre></div>
-<h2 data-number="7.5" id="frameworks-2026-landscape"><span class="header-section-number">7.5</span> Frameworks (2026
-Landscape)</h2>
+<h2 data-number="7.5" id="frameworks-late-july-2026-snapshot"><span class="header-section-number">7.5</span> Frameworks (Late-July 2026
+Snapshot)</h2>
+<p>Before you lock in a framework, treat this section as a decision
+starting point, not a permanent ranking. Framework strengths move
+quickly as maintainers add state management, tracing, eval hooks, and
+human-in-the-loop controls.</p>
 <p><strong>Pydantic AI</strong> (Recommended for type safety)</p>
 <ul>
 <li>Built on Pydantic models</li>
@@ -1242,7 +1252,22 @@ them — converging on similar primitives (tools, delegation/handoff
 between sub-agents, guardrails, tracing). They’re vendor-native
 alternatives to the frameworks above rather than replacements for the
 concepts in this primer, and worth evaluating alongside the third-party
-options if you’re committed to a single provider.</p>
+options if you’re committed to a single provider. SDK names and package
+surfaces change quickly, so verify current package names and feature
+support from provider docs before implementation.</p>
+<p>A practical framework-selection checklist:</p>
+<ol type="1">
+<li>Tooling ergonomics: How hard is it to define and validate tools with
+strict schemas?</li>
+<li>State model: Does the framework expose explicit state transitions,
+or hide them in prompt text?</li>
+<li>Observability: Can you inspect traces, tool calls, and failure paths
+without custom plumbing?</li>
+<li>Safety controls: Can you gate risky actions and enforce approvals
+where needed?</li>
+<li>Portability: How tightly does it lock you into one provider or
+orchestration runtime?</li>
+</ol>
 <hr />
 <h1 data-number="8" id="key-challenges"><span class="header-section-number">8</span> Key Challenges</h1>
 <h2 data-number="8.1" id="challenge-1-hallucination"><span class="header-section-number">8.1</span> Challenge 1: Hallucination</h2>
@@ -1282,9 +1307,12 @@ often, and never summarize away critical state transitions.</p>
 Latency</h2>
 <p><strong>The Problem:</strong> Each LLM call costs money and takes
 time. A 10-step agent task = 10 LLM calls.</p>
-<pre class="text"><code>1 LLM call: ~1-5 seconds (tool schemas + reasoning add overhead), $0.001-0.01
-Agent task (10 steps): ~10-50 seconds, $0.01-0.10
-Agent running all day: thousands of calls, dollars per day</code></pre>
+<pre class="text"><code>Single LLM call: typically milliseconds-to-seconds, depending on model and context size
+Multi-step agent task: often seconds-to-minutes, depending on tool latency and retries
+Cost profile: fractions of a cent to multiple cents per step, so all-day agents can accumulate meaningful spend</code></pre>
+<p>If you need exact numbers for planning, measure your own stack early
+with real prompts and real tools. Published list pricing is a weak proxy
+for end-to-end task cost.</p>
 <p><strong>Solutions:</strong></p>
 <ul>
 <li>Batch tool calls (execute multiple in parallel)</li>
@@ -1526,8 +1554,13 @@ unexpected format, agents often fail. Schema validation helps but isn’t
 foolproof.</p></li>
 <li><p><strong>Cost and latency</strong> - Each LLM call takes time and
 money. Real-time applications are challenging.</p></li>
-<li><p><strong>Knowledge cutoffs</strong> - Training data has a cutoff.
-Agents can’t know recent events unless given access to them.</p></li>
+<li><p><strong>Knowledge cutoffs</strong> - Every model has a cutoff
+date, and those dates change as providers ship new model versions.
+Agents cannot reliably know post-cutoff events unless you provide fresh
+data through tools or retrieval. As a concrete example, Anthropic’s
+current model line spans multiple cutoff points (reliable knowledge
+dates vary by model family), so even within one provider you cannot
+assume a single “current knowledge” date.</p></li>
 <li><p><strong>Interpretability</strong> - Why did the agent choose
 action X instead of Y? Sometimes unclear.</p></li>
 </ol>
@@ -1557,9 +1590,11 @@ and survive failures:</p>
 </ul>
 <p><strong>Model Context Protocol (MCP):</strong> Widely adopted
 standard for how agents and tools communicate — introduced by Anthropic
-in late 2024, now supported across OpenAI, Google, Microsoft, and AWS
-tooling, functioning as a common connector between models and external
-tools/data sources rather than a single vendor’s format.</p>
+in late 2024 and now supported across multiple major ecosystems. In
+practice, MCP is becoming the portability layer for tool access:
+filesystem, databases, HTTP services, source control, docs/search
+endpoints, and custom internal systems can all be exposed through the
+same model-facing pattern rather than bespoke per-vendor adapters.</p>
 <p>Autonomous AI agents are not magical. They’re engineered systems
 combining:</p>
 <ol type="1">
@@ -1603,7 +1638,7 @@ Themselves to Use Tools” (Schick et al., 2023)</li>
 official documentation</li>
 </ul>
 <hr />
-<p><em>Created: May 20, 2026</em></p>
+<p><em>Created: May 20, 2026. Last updated: July 31, 2026.</em></p>
     </main>
 
   </div>
