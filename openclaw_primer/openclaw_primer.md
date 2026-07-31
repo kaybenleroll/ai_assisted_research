@@ -1,4 +1,4 @@
-# OpenClaw Primer: A Comprehensive, Podman-First Guide
+# OpenClaw and Hermes Primer: A Comprehensive, Podman-First Guide
 
 ---
 
@@ -267,6 +267,128 @@ ollama launch openclaw --model qwen-laptop
 ```
 
 Expect roughly 8–15 tok/s for 7B Q4 with partial offload on a modern Intel/AMD laptop. Long-context prefill is slower, but interactive chat stays usable. Treat `num_thread 8` as a starting point and tune toward your physical core count — too many threads adds overhead rather than throughput.
+
+## OpenClaw vs Hermes: What Is Similar and What Is Different
+
+OpenClaw and Hermes are often mentioned in the same conversations because they can be used together in the same local-first stack. The overlap is real, but they sit at different layers and solve different problems.
+
+At a high level, OpenClaw is an assistant orchestration system. Hermes is a model family. If you treat those as interchangeable, architecture decisions become blurry very quickly.
+
+### Core distinction: system layer vs model layer
+
+OpenClaw is the control plane: it routes channels, applies policy, manages tool permissions, handles provider fallbacks, and coordinates state over long-running sessions.
+
+Hermes is the inference engine option inside that control plane: it turns prompts into completions and, depending on model generation and prompt format, can produce structured tool-call outputs.
+
+In short, OpenClaw decides how work is run. Hermes helps perform one reasoning step at a time.
+
+### Similarities that make people compare them
+
+The comparison is not random. In practical local deployments, both are used in support of the same goals:
+
+1. Local-first control over data and model execution.
+2. Reduced dependence on hosted APIs for daily assistant tasks.
+3. Better auditability than opaque managed workflows.
+4. Strong fit for coding, operations, and long-form technical workflows.
+
+That shared use case is why people often say "OpenClaw vs Hermes" even though the more precise framing is "OpenClaw with Hermes".
+
+### Biggest differences in practice
+
+| Dimension | OpenClaw | Hermes |
+|---|---|---|
+| What it is | Assistant platform and orchestration layer | Instruction-tuned model family |
+| Unit of behavior | Session and workflow level | Single prompt/response completion |
+| Tool execution | Owns tool policy and execution boundaries | Produces candidate tool-call content only |
+| State continuity | Coordinates multi-turn memory and agent state | No durable state by itself |
+| Operations scope | Gateway health, routing, policy, channels, fallback | Model quality, context behavior, latency, VRAM fit |
+| Security boundary | Enforces allowlists/sandbox policy | Cannot enforce policy on its own |
+
+The table above is the key architectural point: OpenClaw is where you enforce behavior. Hermes is where you get language intelligence.
+
+### Tool-calling behavior and reliability
+
+Hermes models are commonly chosen because they tend to be capable instruction followers and often behave well with structured output patterns. That can improve tool-call formatting quality in real workloads.
+
+OpenClaw still must validate all tool-call payloads and enforce policy, because model output is never a security control. Even with a strong model, malformed or unsafe calls can still appear. The robust pattern is model capability plus strict boundary checks, not model capability instead of boundary checks.
+
+### Context windows and long-horizon work
+
+People often ask whether a stronger model family alone is enough for long-running assistant tasks. Usually it is not.
+
+Long-horizon assistant behavior depends on two things:
+
+1. Model context capacity and retrieval quality under load.
+2. Orchestration discipline in what gets carried forward, summarized, or dropped.
+
+Hermes helps with the first dimension. OpenClaw governs the second. For multi-file coding and operations workflows, the second dimension usually determines whether the system remains stable over time.
+
+### Deployment and day-2 operations
+
+Running Hermes well is mostly a model-serving problem: quantization choice, GPU/CPU split, context sizing, and endpoint stability.
+
+Running OpenClaw well is mostly an orchestration problem: channel policy, sandbox defaults, fallback chains, state backup, and recovery runbooks.
+
+That split is operationally useful when debugging incidents:
+
+1. If formatting degrades or reasoning quality shifts, inspect model/provider behavior first.
+2. If tool scope, routing, or state continuity breaks, inspect OpenClaw policy and runtime state first.
+
+### Security and control-plane differences
+
+OpenClaw can limit blast radius through non-main sandboxing, reduced workspace access, and constrained tool policy. Hermes cannot do that by itself because it has no direct permission system over host operations.
+
+Treat every model output as untrusted input to the execution layer. The right place to enforce safety is the OpenClaw boundary that receives and validates candidate actions.
+
+### Benchmark-style comparison matrix
+
+If you want to compare these two in a way that informs purchasing and deployment decisions, benchmark the stack as "OpenClaw plus model backend" versus "model-only direct usage" on the same hardware and prompt set.
+
+The table below is not a universal scorecard. It is a practical measurement frame so teams can produce repeatable numbers in their own environment.
+
+| Measurement axis | Hermes direct (model-only) | OpenClaw + Hermes (or other backend) | Why it matters |
+|---|---|---|---|
+| First-token latency | Usually lower because there is minimal orchestration overhead | Usually higher due to routing, policy checks, and tool loop setup | Determines interaction feel for short requests |
+| End-to-end task completion time | Fast for single-pass prompts | Usually better for multi-step tasks with tools because orchestration reduces retries | Captures real productivity, not just raw generation speed |
+| Tokens per second (steady generation) | Primarily model/quantization bound | Similar model-bound throughput, but can include pauses around tool phases | Helps separate inference bottlenecks from agent-loop bottlenecks |
+| VRAM and RAM footprint | Lower platform overhead; mostly serving stack | Higher total footprint due to gateway/session/tool processes | Drives hardware sizing and concurrency ceilings |
+| Tool-call format pass rate | Not applicable without an orchestration layer | Critical metric: percent of tool calls that validate on first parse | Directly impacts reliability of agent workflows |
+| Tool-call success rate | Not applicable without execution layer | Measures successful execution after validation and policy checks | Exposes integration breakage versus model-format issues |
+| Context retention quality over long tasks | Depends on model context behavior only | Depends on both model context and OpenClaw summarization/state policy | Predicts stability on long coding or operations sessions |
+| Failure containment | Limited to prompt-level controls | Stronger when sandboxing, allowlists, and boundary checks are enforced | Defines blast radius under adversarial or malformed inputs |
+| Recovery time after provider failure | Manual reroute or retry | Can be reduced with configured fallback chains and health-aware routing | Key for uptime and unattended workflows |
+| Operational observability | Model logs and serving metrics | Model metrics plus gateway/session/tool lifecycle telemetry | Faster root-cause isolation in production-like setups |
+
+For reproducible results, run at least three workload classes with fixed prompts and a fixed hardware profile:
+
+1. Single-shot generation (summaries, extraction, one-file edits).
+2. Multi-step tool workflow (shell plus file edits plus validation).
+3. Long-horizon session (multi-file changes over an extended context window).
+
+Track medians and p95 values separately. A configuration can look good on average while still being painful in tail latency.
+
+For tool-centric workflows, include two explicit quality metrics:
+
+1. Tool-call schema pass rate on first attempt.
+2. Task success without manual intervention.
+
+Those two often predict user trust better than raw token throughput.
+
+One practical reading rule helps avoid false conclusions: if model-only appears "faster" but fails more multi-step tasks, it is usually optimized for benchmark shape rather than real workflow completion. For assistant operations, completion reliability is typically more valuable than isolated generation speed.
+
+### When to use each approach
+
+Use Hermes directly when your task is mostly single-pass generation and you do not need channel routing, persistent assistant state, or orchestrated tools.
+
+Use OpenClaw with Hermes when you want local reasoning quality plus durable assistant operations: channel integration, policy control, fallback behavior, and repeatable runbooks.
+
+For most users in this primer's target audience, the practical goal is not choosing one over the other. It is composing them correctly:
+
+1. OpenClaw as control plane.
+2. Hermes as one backend option in model policy.
+3. Hosted fallback only where reliability requirements justify it.
+
+That architecture gives you local-first behavior without giving up operational resilience.
 
 ## Podman + Local LLMs: Containment Patterns
 
