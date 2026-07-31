@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenClaw Primer: A Comprehensive, Podman-First Guide</title>
+  <title>OpenClaw and Hermes Primer: A Comprehensive, Podman-First
+Guide</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -472,8 +473,8 @@ code span.fu { color: #c792ea !important; }
 <body>
 
   <nav class="navbar">
-    <span class="navbar-brand">OpenClaw Primer: A Comprehensive,
-Podman-First Guide</span>
+    <span class="navbar-brand">OpenClaw and Hermes Primer: A
+Comprehensive, Podman-First Guide</span>
 
     <span class="navbar-meta">28 May 2026</span>
 
@@ -540,45 +541,67 @@ LiteLLM</a></li>
 <li><a href="#constrained-hardware-partial-gpu-offloading" id="toc-constrained-hardware-partial-gpu-offloading"><span class="toc-section-number">7.5</span> Constrained hardware: partial GPU
 offloading</a></li>
 </ul></li>
-<li><a href="#podman-local-llms-containment-patterns" id="toc-podman-local-llms-containment-patterns"><span class="toc-section-number">8</span> Podman + Local LLMs: Containment
-Patterns</a></li>
-<li><a href="#example-configuration-snippets" id="toc-example-configuration-snippets"><span class="toc-section-number">9</span> Example Configuration Snippets</a>
+<li><a href="#openclaw-vs-hermes-what-is-similar-and-what-is-different" id="toc-openclaw-vs-hermes-what-is-similar-and-what-is-different"><span class="toc-section-number">8</span> OpenClaw vs Hermes: What Is Similar
+and What Is Different</a>
 <ul>
-<li><a href="#local-first-with-hosted-fallback" id="toc-local-first-with-hosted-fallback"><span class="toc-section-number">9.1</span> Local-first with hosted
+<li><a href="#core-distinction-system-layer-vs-model-layer" id="toc-core-distinction-system-layer-vs-model-layer"><span class="toc-section-number">8.1</span> Core distinction: system layer vs
+model layer</a></li>
+<li><a href="#similarities-that-make-people-compare-them" id="toc-similarities-that-make-people-compare-them"><span class="toc-section-number">8.2</span> Similarities that make people
+compare them</a></li>
+<li><a href="#biggest-differences-in-practice" id="toc-biggest-differences-in-practice"><span class="toc-section-number">8.3</span> Biggest differences in
+practice</a></li>
+<li><a href="#tool-calling-behavior-and-reliability" id="toc-tool-calling-behavior-and-reliability"><span class="toc-section-number">8.4</span> Tool-calling behavior and
+reliability</a></li>
+<li><a href="#context-windows-and-long-horizon-work" id="toc-context-windows-and-long-horizon-work"><span class="toc-section-number">8.5</span> Context windows and long-horizon
+work</a></li>
+<li><a href="#deployment-and-day-2-operations" id="toc-deployment-and-day-2-operations"><span class="toc-section-number">8.6</span> Deployment and day-2
+operations</a></li>
+<li><a href="#security-and-control-plane-differences" id="toc-security-and-control-plane-differences"><span class="toc-section-number">8.7</span> Security and control-plane
+differences</a></li>
+<li><a href="#benchmark-style-comparison-matrix" id="toc-benchmark-style-comparison-matrix"><span class="toc-section-number">8.8</span> Benchmark-style comparison
+matrix</a></li>
+<li><a href="#when-to-use-each-approach" id="toc-when-to-use-each-approach"><span class="toc-section-number">8.9</span> When to use each approach</a></li>
+</ul></li>
+<li><a href="#podman-local-llms-containment-patterns" id="toc-podman-local-llms-containment-patterns"><span class="toc-section-number">9</span> Podman + Local LLMs: Containment
+Patterns</a></li>
+<li><a href="#example-configuration-snippets" id="toc-example-configuration-snippets"><span class="toc-section-number">10</span> Example Configuration Snippets</a>
+<ul>
+<li><a href="#local-first-with-hosted-fallback" id="toc-local-first-with-hosted-fallback"><span class="toc-section-number">10.1</span> Local-first with hosted
 fallback</a></li>
-<li><a href="#non-main-sandbox-baseline" id="toc-non-main-sandbox-baseline"><span class="toc-section-number">9.2</span> Non-main sandbox baseline</a></li>
-<li><a href="#generic-openai-compatible-local-provider" id="toc-generic-openai-compatible-local-provider"><span class="toc-section-number">9.3</span> Generic OpenAI-compatible local
+<li><a href="#non-main-sandbox-baseline" id="toc-non-main-sandbox-baseline"><span class="toc-section-number">10.2</span> Non-main sandbox
+baseline</a></li>
+<li><a href="#generic-openai-compatible-local-provider" id="toc-generic-openai-compatible-local-provider"><span class="toc-section-number">10.3</span> Generic OpenAI-compatible local
 provider</a></li>
 </ul></li>
-<li><a href="#operational-reference" id="toc-operational-reference"><span class="toc-section-number">10</span> Operational Reference</a>
+<li><a href="#operational-reference" id="toc-operational-reference"><span class="toc-section-number">11</span> Operational Reference</a>
 <ul>
-<li><a href="#security-and-hardening-checklist" id="toc-security-and-hardening-checklist"><span class="toc-section-number">10.1</span> Security and Hardening
+<li><a href="#security-and-hardening-checklist" id="toc-security-and-hardening-checklist"><span class="toc-section-number">11.1</span> Security and Hardening
 Checklist</a></li>
-<li><a href="#troubleshooting-guide" id="toc-troubleshooting-guide"><span class="toc-section-number">10.2</span> Troubleshooting Guide</a></li>
-<li><a href="#hardening-profile-matrix" id="toc-hardening-profile-matrix"><span class="toc-section-number">10.3</span> Hardening Profile Matrix</a></li>
+<li><a href="#troubleshooting-guide" id="toc-troubleshooting-guide"><span class="toc-section-number">11.2</span> Troubleshooting Guide</a></li>
+<li><a href="#hardening-profile-matrix" id="toc-hardening-profile-matrix"><span class="toc-section-number">11.3</span> Hardening Profile Matrix</a></li>
 </ul></li>
-<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">11</span> Reference Links</a></li>
-<li><a href="#runbooks" id="toc-runbooks"><span class="toc-section-number">12</span> Runbooks</a>
+<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">12</span> Reference Links</a></li>
+<li><a href="#runbooks" id="toc-runbooks"><span class="toc-section-number">13</span> Runbooks</a>
 <ul>
-<li><a href="#full-podman-compose-stack-openclaw-ollama-optional-vllm" id="toc-full-podman-compose-stack-openclaw-ollama-optional-vllm"><span class="toc-section-number">12.1</span> Full Podman Compose Stack
+<li><a href="#full-podman-compose-stack-openclaw-ollama-optional-vllm" id="toc-full-podman-compose-stack-openclaw-ollama-optional-vllm"><span class="toc-section-number">13.1</span> Full Podman Compose Stack
 (OpenClaw + Ollama + Optional vLLM)</a>
 <ul>
-<li><a href="#included-operational-files" id="toc-included-operational-files"><span class="toc-section-number">12.1.1</span> Included operational
+<li><a href="#included-operational-files" id="toc-included-operational-files"><span class="toc-section-number">13.1.1</span> Included operational
 files</a></li>
-<li><a href="#launch-flow" id="toc-launch-flow"><span class="toc-section-number">12.1.2</span> Launch flow</a></li>
-<li><a href="#optional-vllm-profile" id="toc-optional-vllm-profile"><span class="toc-section-number">12.1.3</span> Optional vLLM profile</a></li>
+<li><a href="#launch-flow" id="toc-launch-flow"><span class="toc-section-number">13.1.2</span> Launch flow</a></li>
+<li><a href="#optional-vllm-profile" id="toc-optional-vllm-profile"><span class="toc-section-number">13.1.3</span> Optional vLLM profile</a></li>
 </ul></li>
-<li><a href="#backup-and-restore" id="toc-backup-and-restore"><span class="toc-section-number">12.2</span> Backup and Restore</a>
+<li><a href="#backup-and-restore" id="toc-backup-and-restore"><span class="toc-section-number">13.2</span> Backup and Restore</a>
 <ul>
-<li><a href="#backup" id="toc-backup"><span class="toc-section-number">12.2.1</span> Backup</a></li>
-<li><a href="#restore" id="toc-restore"><span class="toc-section-number">12.2.2</span> Restore</a></li>
-<li><a href="#post-restore-validation" id="toc-post-restore-validation"><span class="toc-section-number">12.2.3</span> Post-restore
+<li><a href="#backup" id="toc-backup"><span class="toc-section-number">13.2.1</span> Backup</a></li>
+<li><a href="#restore" id="toc-restore"><span class="toc-section-number">13.2.2</span> Restore</a></li>
+<li><a href="#post-restore-validation" id="toc-post-restore-validation"><span class="toc-section-number">13.2.3</span> Post-restore
 validation</a></li>
 </ul></li>
-<li><a href="#deterministic-bring-up-sequence" id="toc-deterministic-bring-up-sequence"><span class="toc-section-number">12.3</span> Deterministic Bring-Up
+<li><a href="#deterministic-bring-up-sequence" id="toc-deterministic-bring-up-sequence"><span class="toc-section-number">13.3</span> Deterministic Bring-Up
 Sequence</a></li>
 </ul></li>
-<li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">13</span> Closing Perspective</a></li>
+<li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">14</span> Closing Perspective</a></li>
 </ul></div>
 
     </aside>
@@ -950,7 +973,271 @@ Intel/AMD laptop. Long-context prefill is slower, but interactive chat
 stays usable. Treat <code>num_thread 8</code> as a starting point and
 tune toward your physical core count — too many threads adds overhead
 rather than throughput.</p>
-<h1 data-number="8" id="podman-local-llms-containment-patterns"><span class="header-section-number">8</span> Podman + Local LLMs: Containment
+<h1 data-number="8" id="openclaw-vs-hermes-what-is-similar-and-what-is-different"><span class="header-section-number">8</span> OpenClaw vs Hermes: What Is
+Similar and What Is Different</h1>
+<p>OpenClaw and Hermes are often mentioned in the same conversations
+because they can be used together in the same local-first stack. The
+overlap is real, but they sit at different layers and solve different
+problems.</p>
+<p>At a high level, OpenClaw is an assistant orchestration system.
+Hermes is a model family. If you treat those as interchangeable,
+architecture decisions become blurry very quickly.</p>
+<h2 data-number="8.1" id="core-distinction-system-layer-vs-model-layer"><span class="header-section-number">8.1</span> Core distinction: system layer
+vs model layer</h2>
+<p>OpenClaw is the control plane: it routes channels, applies policy,
+manages tool permissions, handles provider fallbacks, and coordinates
+state over long-running sessions.</p>
+<p>Hermes is the inference engine option inside that control plane: it
+turns prompts into completions and, depending on model generation and
+prompt format, can produce structured tool-call outputs.</p>
+<p>In short, OpenClaw decides how work is run. Hermes helps perform one
+reasoning step at a time.</p>
+<h2 data-number="8.2" id="similarities-that-make-people-compare-them"><span class="header-section-number">8.2</span> Similarities that make people
+compare them</h2>
+<p>The comparison is not random. In practical local deployments, both
+are used in support of the same goals:</p>
+<ol type="1">
+<li>Local-first control over data and model execution.</li>
+<li>Reduced dependence on hosted APIs for daily assistant tasks.</li>
+<li>Better auditability than opaque managed workflows.</li>
+<li>Strong fit for coding, operations, and long-form technical
+workflows.</li>
+</ol>
+<p>That shared use case is why people often say “OpenClaw vs Hermes”
+even though the more precise framing is “OpenClaw with Hermes”.</p>
+<h2 data-number="8.3" id="biggest-differences-in-practice"><span class="header-section-number">8.3</span> Biggest differences in
+practice</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>OpenClaw</th>
+<th>Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What it is</td>
+<td>Assistant platform and orchestration layer</td>
+<td>Instruction-tuned model family</td>
+</tr>
+<tr>
+<td>Unit of behavior</td>
+<td>Session and workflow level</td>
+<td>Single prompt/response completion</td>
+</tr>
+<tr>
+<td>Tool execution</td>
+<td>Owns tool policy and execution boundaries</td>
+<td>Produces candidate tool-call content only</td>
+</tr>
+<tr>
+<td>State continuity</td>
+<td>Coordinates multi-turn memory and agent state</td>
+<td>No durable state by itself</td>
+</tr>
+<tr>
+<td>Operations scope</td>
+<td>Gateway health, routing, policy, channels, fallback</td>
+<td>Model quality, context behavior, latency, VRAM fit</td>
+</tr>
+<tr>
+<td>Security boundary</td>
+<td>Enforces allowlists/sandbox policy</td>
+<td>Cannot enforce policy on its own</td>
+</tr>
+</tbody>
+</table>
+<p>The table above is the key architectural point: OpenClaw is where you
+enforce behavior. Hermes is where you get language intelligence.</p>
+<h2 data-number="8.4" id="tool-calling-behavior-and-reliability"><span class="header-section-number">8.4</span> Tool-calling behavior and
+reliability</h2>
+<p>Hermes models are commonly chosen because they tend to be capable
+instruction followers and often behave well with structured output
+patterns. That can improve tool-call formatting quality in real
+workloads.</p>
+<p>OpenClaw still must validate all tool-call payloads and enforce
+policy, because model output is never a security control. Even with a
+strong model, malformed or unsafe calls can still appear. The robust
+pattern is model capability plus strict boundary checks, not model
+capability instead of boundary checks.</p>
+<h2 data-number="8.5" id="context-windows-and-long-horizon-work"><span class="header-section-number">8.5</span> Context windows and
+long-horizon work</h2>
+<p>People often ask whether a stronger model family alone is enough for
+long-running assistant tasks. Usually it is not.</p>
+<p>Long-horizon assistant behavior depends on two things:</p>
+<ol type="1">
+<li>Model context capacity and retrieval quality under load.</li>
+<li>Orchestration discipline in what gets carried forward, summarized,
+or dropped.</li>
+</ol>
+<p>Hermes helps with the first dimension. OpenClaw governs the second.
+For multi-file coding and operations workflows, the second dimension
+usually determines whether the system remains stable over time.</p>
+<h2 data-number="8.6" id="deployment-and-day-2-operations"><span class="header-section-number">8.6</span> Deployment and day-2
+operations</h2>
+<p>Running Hermes well is mostly a model-serving problem: quantization
+choice, GPU/CPU split, context sizing, and endpoint stability.</p>
+<p>Running OpenClaw well is mostly an orchestration problem: channel
+policy, sandbox defaults, fallback chains, state backup, and recovery
+runbooks.</p>
+<p>That split is operationally useful when debugging incidents:</p>
+<ol type="1">
+<li>If formatting degrades or reasoning quality shifts, inspect
+model/provider behavior first.</li>
+<li>If tool scope, routing, or state continuity breaks, inspect OpenClaw
+policy and runtime state first.</li>
+</ol>
+<h2 data-number="8.7" id="security-and-control-plane-differences"><span class="header-section-number">8.7</span> Security and control-plane
+differences</h2>
+<p>OpenClaw can limit blast radius through non-main sandboxing, reduced
+workspace access, and constrained tool policy. Hermes cannot do that by
+itself because it has no direct permission system over host
+operations.</p>
+<p>Treat every model output as untrusted input to the execution layer.
+The right place to enforce safety is the OpenClaw boundary that receives
+and validates candidate actions.</p>
+<h2 data-number="8.8" id="benchmark-style-comparison-matrix"><span class="header-section-number">8.8</span> Benchmark-style comparison
+matrix</h2>
+<p>If you want to compare these two in a way that informs purchasing and
+deployment decisions, benchmark the stack as “OpenClaw plus model
+backend” versus “model-only direct usage” on the same hardware and
+prompt set.</p>
+<p>The table below is not a universal scorecard. It is a practical
+measurement frame so teams can produce repeatable numbers in their own
+environment.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Measurement axis</th>
+<th>Hermes direct (model-only)</th>
+<th>OpenClaw + Hermes (or other backend)</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First-token latency</td>
+<td>Usually lower because there is minimal orchestration overhead</td>
+<td>Usually higher due to routing, policy checks, and tool loop
+setup</td>
+<td>Determines interaction feel for short requests</td>
+</tr>
+<tr>
+<td>End-to-end task completion time</td>
+<td>Fast for single-pass prompts</td>
+<td>Usually better for multi-step tasks with tools because orchestration
+reduces retries</td>
+<td>Captures real productivity, not just raw generation speed</td>
+</tr>
+<tr>
+<td>Tokens per second (steady generation)</td>
+<td>Primarily model/quantization bound</td>
+<td>Similar model-bound throughput, but can include pauses around tool
+phases</td>
+<td>Helps separate inference bottlenecks from agent-loop
+bottlenecks</td>
+</tr>
+<tr>
+<td>VRAM and RAM footprint</td>
+<td>Lower platform overhead; mostly serving stack</td>
+<td>Higher total footprint due to gateway/session/tool processes</td>
+<td>Drives hardware sizing and concurrency ceilings</td>
+</tr>
+<tr>
+<td>Tool-call format pass rate</td>
+<td>Not applicable without an orchestration layer</td>
+<td>Critical metric: percent of tool calls that validate on first
+parse</td>
+<td>Directly impacts reliability of agent workflows</td>
+</tr>
+<tr>
+<td>Tool-call success rate</td>
+<td>Not applicable without execution layer</td>
+<td>Measures successful execution after validation and policy
+checks</td>
+<td>Exposes integration breakage versus model-format issues</td>
+</tr>
+<tr>
+<td>Context retention quality over long tasks</td>
+<td>Depends on model context behavior only</td>
+<td>Depends on both model context and OpenClaw summarization/state
+policy</td>
+<td>Predicts stability on long coding or operations sessions</td>
+</tr>
+<tr>
+<td>Failure containment</td>
+<td>Limited to prompt-level controls</td>
+<td>Stronger when sandboxing, allowlists, and boundary checks are
+enforced</td>
+<td>Defines blast radius under adversarial or malformed inputs</td>
+</tr>
+<tr>
+<td>Recovery time after provider failure</td>
+<td>Manual reroute or retry</td>
+<td>Can be reduced with configured fallback chains and health-aware
+routing</td>
+<td>Key for uptime and unattended workflows</td>
+</tr>
+<tr>
+<td>Operational observability</td>
+<td>Model logs and serving metrics</td>
+<td>Model metrics plus gateway/session/tool lifecycle telemetry</td>
+<td>Faster root-cause isolation in production-like setups</td>
+</tr>
+</tbody>
+</table>
+<p>For reproducible results, run at least three workload classes with
+fixed prompts and a fixed hardware profile:</p>
+<ol type="1">
+<li>Single-shot generation (summaries, extraction, one-file edits).</li>
+<li>Multi-step tool workflow (shell plus file edits plus
+validation).</li>
+<li>Long-horizon session (multi-file changes over an extended context
+window).</li>
+</ol>
+<p>Track medians and p95 values separately. A configuration can look
+good on average while still being painful in tail latency.</p>
+<p>For tool-centric workflows, include two explicit quality metrics:</p>
+<ol type="1">
+<li>Tool-call schema pass rate on first attempt.</li>
+<li>Task success without manual intervention.</li>
+</ol>
+<p>Those two often predict user trust better than raw token
+throughput.</p>
+<p>One practical reading rule helps avoid false conclusions: if
+model-only appears “faster” but fails more multi-step tasks, it is
+usually optimized for benchmark shape rather than real workflow
+completion. For assistant operations, completion reliability is
+typically more valuable than isolated generation speed.</p>
+<h2 data-number="8.9" id="when-to-use-each-approach"><span class="header-section-number">8.9</span> When to use each approach</h2>
+<p>Use Hermes directly when your task is mostly single-pass generation
+and you do not need channel routing, persistent assistant state, or
+orchestrated tools.</p>
+<p>Use OpenClaw with Hermes when you want local reasoning quality plus
+durable assistant operations: channel integration, policy control,
+fallback behavior, and repeatable runbooks.</p>
+<p>For most users in this primer’s target audience, the practical goal
+is not choosing one over the other. It is composing them correctly:</p>
+<ol type="1">
+<li>OpenClaw as control plane.</li>
+<li>Hermes as one backend option in model policy.</li>
+<li>Hosted fallback only where reliability requirements justify it.</li>
+</ol>
+<p>That architecture gives you local-first behavior without giving up
+operational resilience.</p>
+<h1 data-number="9" id="podman-local-llms-containment-patterns"><span class="header-section-number">9</span> Podman + Local LLMs: Containment
 Patterns</h1>
 <p>There are three practical containment patterns.</p>
 <p>Pattern one runs OpenClaw in containers but leaves model services on
@@ -961,9 +1248,9 @@ Pattern three adds stricter sandboxing and narrow tool policies for
 higher-risk surfaces.</p>
 <p>Most mature setups converge toward pattern two after proving behavior
 in pattern one.</p>
-<h1 data-number="9" id="example-configuration-snippets"><span class="header-section-number">9</span> Example Configuration
+<h1 data-number="10" id="example-configuration-snippets"><span class="header-section-number">10</span> Example Configuration
 Snippets</h1>
-<h2 data-number="9.1" id="local-first-with-hosted-fallback"><span class="header-section-number">9.1</span> Local-first with hosted
+<h2 data-number="10.1" id="local-first-with-hosted-fallback"><span class="header-section-number">10.1</span> Local-first with hosted
 fallback</h2>
 <pre class="json5"><code>{
   agents: {
@@ -997,7 +1284,7 @@ fallback</h2>
     }
   }
 }</code></pre>
-<h2 data-number="9.2" id="non-main-sandbox-baseline"><span class="header-section-number">9.2</span> Non-main sandbox baseline</h2>
+<h2 data-number="10.2" id="non-main-sandbox-baseline"><span class="header-section-number">10.2</span> Non-main sandbox baseline</h2>
 <pre class="json5"><code>{
   agents: {
     defaults: {
@@ -1009,8 +1296,8 @@ fallback</h2>
     }
   }
 }</code></pre>
-<h2 data-number="9.3" id="generic-openai-compatible-local-provider"><span class="header-section-number">9.3</span> Generic OpenAI-compatible local
-provider</h2>
+<h2 data-number="10.3" id="generic-openai-compatible-local-provider"><span class="header-section-number">10.3</span> Generic OpenAI-compatible
+local provider</h2>
 <pre class="json5"><code>{
   agents: {
     defaults: {
@@ -1040,8 +1327,8 @@ provider</h2>
     }
   }
 }</code></pre>
-<h1 data-number="10" id="operational-reference"><span class="header-section-number">10</span> Operational Reference</h1>
-<h2 data-number="10.1" id="security-and-hardening-checklist"><span class="header-section-number">10.1</span> Security and Hardening
+<h1 data-number="11" id="operational-reference"><span class="header-section-number">11</span> Operational Reference</h1>
+<h2 data-number="11.1" id="security-and-hardening-checklist"><span class="header-section-number">11.1</span> Security and Hardening
 Checklist</h2>
 <p>Hardening should scale with exposure. Loopback-only personal setups
 can prioritize convenience. Any remotely reachable surface should
@@ -1050,7 +1337,7 @@ boundaries.</p>
 <p>At minimum, keep publish scope narrow, enforce pairing and
 allowlists, avoid broad host binds, and run diagnostics after
 significant config changes.</p>
-<h2 data-number="10.2" id="troubleshooting-guide"><span class="header-section-number">10.2</span> Troubleshooting Guide</h2>
+<h2 data-number="11.2" id="troubleshooting-guide"><span class="header-section-number">11.2</span> Troubleshooting Guide</h2>
 <p>Start with transport and state truth before tuning behavior.
 Reachability failures usually come from runtime/port/publish issues.
 Auth failures usually come from token mismatch or target confusion.
@@ -1058,7 +1345,7 @@ Provider mismatches often come from namespace assumptions in
 containerized environments.</p>
 <p>When tool calls appear as plain text, treat backend compatibility as
 a likely cause before rewriting assistant logic.</p>
-<h2 data-number="10.3" id="hardening-profile-matrix"><span class="header-section-number">10.3</span> Hardening Profile Matrix</h2>
+<h2 data-number="11.3" id="hardening-profile-matrix"><span class="header-section-number">11.3</span> Hardening Profile Matrix</h2>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1121,7 +1408,7 @@ a likely cause before rewriting assistant logic.</p>
 </table>
 <p>Do not advance to a higher exposure profile until the current profile
 is stable and validated.</p>
-<h1 data-number="11" id="reference-links"><span class="header-section-number">11</span> Reference Links</h1>
+<h1 data-number="12" id="reference-links"><span class="header-section-number">12</span> Reference Links</h1>
 <ul>
 <li>OpenClaw repository: https://github.com/openclaw/openclaw</li>
 <li>OpenClaw docs: https://docs.openclaw.ai</li>
@@ -1140,8 +1427,8 @@ https://docs.openclaw.ai/gateway/local-model-services</li>
 <li>LiteLLM provider: https://docs.openclaw.ai/providers/litellm</li>
 </ul>
 <hr />
-<h1 data-number="12" id="runbooks"><span class="header-section-number">12</span> Runbooks</h1>
-<h2 data-number="12.1" id="full-podman-compose-stack-openclaw-ollama-optional-vllm"><span class="header-section-number">12.1</span> Full Podman Compose Stack
+<h1 data-number="13" id="runbooks"><span class="header-section-number">13</span> Runbooks</h1>
+<h2 data-number="13.1" id="full-podman-compose-stack-openclaw-ollama-optional-vllm"><span class="header-section-number">13.1</span> Full Podman Compose Stack
 (OpenClaw + Ollama + Optional vLLM)</h2>
 <p>This project includes a concrete compose baseline so the primer is
 directly actionable. The stack is designed for local-only exposure,
@@ -1152,32 +1439,32 @@ covered earlier, and <code>18790</code> for the gateway’s bridge
 connection. Both stay loopback-bound by default — treat any change that
 exposes <code>18790</code> beyond localhost with the same scrutiny as
 the dashboard port.</p>
-<h3 data-number="12.1.1" id="included-operational-files"><span class="header-section-number">12.1.1</span> Included operational
+<h3 data-number="13.1.1" id="included-operational-files"><span class="header-section-number">13.1.1</span> Included operational
 files</h3>
 <ul>
 <li><code>podman-compose.yml</code></li>
 <li><code>scripts/backup_state.sh</code></li>
 <li><code>scripts/restore_state.sh</code></li>
 </ul>
-<h3 data-number="12.1.2" id="launch-flow"><span class="header-section-number">12.1.2</span> Launch flow</h3>
+<h3 data-number="13.1.2" id="launch-flow"><span class="header-section-number">13.1.2</span> Launch flow</h3>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml ps</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml logs <span class="at">-f</span> openclaw</span></code></pre></div>
-<h3 data-number="12.1.3" id="optional-vllm-profile"><span class="header-section-number">12.1.3</span> Optional vLLM profile</h3>
+<h3 data-number="13.1.3" id="optional-vllm-profile"><span class="header-section-number">13.1.3</span> Optional vLLM profile</h3>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml <span class="at">--profile</span> vllm up <span class="at">-d</span></span></code></pre></div>
-<h2 data-number="12.2" id="backup-and-restore"><span class="header-section-number">12.2</span> Backup and Restore</h2>
+<h2 data-number="13.2" id="backup-and-restore"><span class="header-section-number">13.2</span> Backup and Restore</h2>
 <p>State integrity is central to reliable assistant operation. The
 included scripts provide a baseline snapshot and restore workflow.</p>
-<h3 data-number="12.2.1" id="backup"><span class="header-section-number">12.2.1</span> Backup</h3>
+<h3 data-number="13.2.1" id="backup"><span class="header-section-number">13.2.1</span> Backup</h3>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/backup_state.sh</span></span></code></pre></div>
-<h3 data-number="12.2.2" id="restore"><span class="header-section-number">12.2.2</span> Restore</h3>
+<h3 data-number="13.2.2" id="restore"><span class="header-section-number">13.2.2</span> Restore</h3>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/restore_state.sh</span> ./backups/openclaw_state_YYYYMMDD_HHMMSS.tar.gz</span></code></pre></div>
-<h3 data-number="12.2.3" id="post-restore-validation"><span class="header-section-number">12.2.3</span> Post-restore validation</h3>
+<h3 data-number="13.2.3" id="post-restore-validation"><span class="header-section-number">13.2.3</span> Post-restore validation</h3>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models status</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> models list <span class="at">--provider</span> ollama</span></code></pre></div>
-<h2 data-number="12.3" id="deterministic-bring-up-sequence"><span class="header-section-number">12.3</span> Deterministic Bring-Up
+<h2 data-number="13.3" id="deterministic-bring-up-sequence"><span class="header-section-number">13.3</span> Deterministic Bring-Up
 Sequence</h2>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> compose <span class="at">-f</span> podman-compose.yml up <span class="at">-d</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">OPENCLAW_CONTAINER</span><span class="op">=</span>openclaw</span>
@@ -1186,7 +1473,7 @@ Sequence</h2>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> config set agents.defaults.sandbox.mode <span class="st">&#39;&quot;non-main&quot;&#39;</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> gateway status <span class="at">--deep</span></span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/backup_state.sh</span></span></code></pre></div>
-<h1 data-number="13" id="closing-perspective"><span class="header-section-number">13</span> Closing Perspective</h1>
+<h1 data-number="14" id="closing-perspective"><span class="header-section-number">14</span> Closing Perspective</h1>
 <p>The real value of this stack is not simply running local models. It
 is controlling assistant behavior under explicit operational rules you
 own. If you maintain clear boundaries for runtime, state, policy, and
