@@ -1786,6 +1786,10 @@ same model. The risk is that teams accidentally change split policy,
 null treatment, encoding choices, or threshold logic while focusing only
 on estimator syntax. Treat those surrounding decisions as first-class
 model components and parity becomes much more reliable.</p>
+<p>If you are skimming this chapter under time pressure, use this route:
+start with the decision table below, jump to the <code>lm()</code> and
+<code>glm()</code> sections for formula parity, then read the validation
+and calibration sections before touching deployment.</p>
 <h2 data-number="7.1" id="the-two-modeling-cultures-in-python"><span class="header-section-number">7.1</span> The Two Modeling Cultures in
 Python</h2>
 <p>R users often conflate “modeling” as one thing because base and tidy
@@ -1828,6 +1832,50 @@ engineering, but it is only one part of the modeling stack. If your work
 looks more like classical statistics or domain-specific inference, you
 should reach for the tool that preserves the right assumptions and
 diagnostics rather than forcing everything into one API.</p>
+<p>Quick chooser by question type:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Primary Question</th>
+<th>First Library to Reach For</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“What is the estimated effect, and how certain are we?”</td>
+<td><code>statsmodels</code></td>
+<td>Built-in inference outputs: SEs, p-values, confidence intervals,
+diagnostics</td>
+</tr>
+<tr>
+<td>“Which model predicts best on holdout data?”</td>
+<td><code>scikit-learn</code></td>
+<td>Pipeline-first CV, metrics, tuning, and production interfaces</td>
+</tr>
+<tr>
+<td>“What is full uncertainty under hierarchical assumptions?”</td>
+<td><code>PyMC</code> (or Stan interface)</td>
+<td>Posterior inference, priors, and hierarchical model structure</td>
+</tr>
+<tr>
+<td>“What is time-to-event risk and hazard behavior?”</td>
+<td><code>lifelines</code> or <code>scikit-survival</code></td>
+<td>Survival-specific estimators and evaluation tools</td>
+</tr>
+<tr>
+<td>“How do we model panel/econometric structures?”</td>
+<td><code>linearmodels</code></td>
+<td>Fixed effects, random effects, IV, and panel-oriented
+estimators</td>
+</tr>
+</tbody>
+</table>
 <h2 data-number="7.3" id="lm-equivalent-ols-with-formula-notation"><span class="header-section-number">7.3</span> <code>lm()</code> Equivalent:
 OLS with Formula Notation</h2>
 <p>R:</p>
@@ -2815,6 +2863,12 @@ experience version: what usually works, what usually fails, and how
 experienced R teams can move with less drama.</p>
 <p>If you only skim one part, skim this chapter and the anti-pattern
 chapter together. They are designed to work as a pair.</p>
+<p>Navigation tip for this chapter: Playbooks 1 through 3 are execution
+mechanics (pipeline design, modeling workflow, and multicore strategy).
+Playbooks 4 through 6 are operational trust (visual parity, incident
+response, and team review habits). Playbooks 7 through 10 are program
+management (wave planning, FAQ, a 12-week ramp, and closing
+strategy).</p>
 <h2 data-number="13.1" id="playbook-1-building-a-data-pipeline-the-python-way-without-losing-tidyverse-clarity"><span class="header-section-number">13.1</span> Playbook 1: Building a Data
 Pipeline the Python Way Without Losing tidyverse Clarity</h2>
 <p>One of the hardest things for experienced R users is not writing
@@ -3061,9 +3115,12 @@ during migration validation.</p>
 <p>For example, suppose you have a “monthly churn dashboard” chart
 family with line + interval ribbons. The migration review should not ask
 only “does it look okay?” It should ask:</p>
-<p>are intervals computed with the same formula, are missing months
-imputed consistently, does the faceting set match, and are y-axis limits
-and transforms consistent?</p>
+<ul>
+<li>are intervals computed with the same formula?</li>
+<li>are missing months imputed consistently?</li>
+<li>does the faceting set match?</li>
+<li>are y-axis limits and transforms consistent?</li>
+</ul>
 <p>That may sound strict. It is exactly the strictness that prevents
 decision drift.</p>
 <p>Another recommendation from teams that migrate successfully:
@@ -3604,6 +3661,10 @@ through realistic scenarios that experienced R teams run into during
 migration.</p>
 <p>If the earlier chapters are your map, this section is your field
 guide.</p>
+<p>If you are choosing where to start, use this quick path: Scenario 1
+for parity discipline, Scenario 3 for ingestion and throughput
+architecture, Scenario 6 for ongoing validation after cutover, and
+Scenario 9 for leadership-level KPI governance.</p>
 <h2 data-number="15.1" id="scenario-1-you-need-a-monthly-churn-scorecard-that-leadership-already-trusts"><span class="header-section-number">15.1</span> Scenario 1: You Need a Monthly
 Churn Scorecard That Leadership Already Trusts</h2>
 <p>This is a very common migration pressure point. Leadership has a
