@@ -1,0 +1,8 @@
+SOURCE_MD   := "python_for_r_users.md"
+PROJECT_DIR := "python_for_r_users"
+TITLE       := "Python for Expert R Users: A Practical Migration Primer"
+AUTHOR      := "July 2026"
+HTML_EXTRA  := "--mathjax --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
+
+import '../_shared/common.just'
