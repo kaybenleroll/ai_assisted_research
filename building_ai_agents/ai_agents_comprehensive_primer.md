@@ -10,6 +10,8 @@ This primer covers how autonomous AI agents work at a technical level: the execu
 
 This is not a guide to training or fine-tuning LLMs. It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
 
+**Freshness note (July 31, 2026):** This is a conceptual and implementation primer, but some details in the ecosystem move monthly (framework capabilities, provider SDK features, model pricing, and benchmark rankings). Treat specific product/version references as dated snapshots and re-check official docs when implementing.
+
 When you hear about AI agents doing autonomous work—making API calls, retrieving data, making decisions, and executing complex workflows—you're likely hearing about a fascinating but often misunderstood technology. The core confusion typically stems from a simple question: *if AI systems like large language models (LLMs) are trained to generate text, how do they become agents that actually do things?*
 
 The answer is elegantly simple: **LLMs don't become agents by themselves. Instead, they become the reasoning engine inside a larger system that combines their decision-making capabilities with tools, memory, and structured processes.** This primer explains how that system works, why it's powerful, and what you need to understand to build one.
@@ -123,7 +125,7 @@ This loop repeats until the LLM says the task is complete.
 
 The tag-based example above works because you told the model to imitate a format in the system prompt — nothing stops it from getting the JSON slightly wrong, wrapping it in markdown, or emitting it mid-sentence. You'd then own a regex/parsing layer responsible for handling every way a model can almost-but-not-quite follow instructions. This is roughly how agents were built in early 2023, and it is fragile in exactly the way you'd expect a text-parsing layer bolted onto a language model to be.
 
-Every major provider now ships a native tool-use API instead. You pass your tool definitions as structured schemas in the API request itself — not as prose in the system prompt — and the model returns a typed `tool_use` content block: a proper object with a name and arguments, not text you have to extract them from. You execute the tool and send the result back as a `tool_result` block, and the loop continues from there. Anthropic, OpenAI, and Google all support this shape; the `tool_use`/`tool_result` terminology above is Anthropic's, but the concept — schemas in, typed call out — is the same everywhere. Models are also specifically trained against this interface, so the reliability gain isn't just "no parsing bugs," it's "the model is better at using tools when they're presented this way."
+Every major provider now ships a native tool-use API instead. You pass your tool definitions as structured schemas in the API request itself — not as prose in the system prompt — and the model returns a typed `tool_use` content block: a proper object with a name and arguments, not text you have to extract them from. You execute the tool and send the result back as a `tool_result` block, and the loop continues from there. Anthropic, OpenAI, and Google all support this shape, and the same pattern now appears across a broader set of providers as well; the `tool_use`/`tool_result` terminology above is Anthropic's, but the concept — schemas in, typed call out — is now broadly convergent. Models are also specifically trained against this interface, so the reliability gain isn't just "no parsing bugs," it's "the model is better at using tools when they're presented this way."
 
 The practical implication: skip the prompt-tag approach entirely unless you're working with a raw base model that has no tool-calling interface at all. For any current frontier model, define your tools through the API's native tools parameter and read `tool_use` blocks off the response. That's the standard mechanism, not an optimization layered on top of the standard mechanism — the pseudocode later in this primer assumes it.
 
@@ -624,7 +626,9 @@ def run_agent(task, max_iterations=10):
     return state.result_with_status("max_iterations_reached")
 ```
 
-### Frameworks (2026 Landscape)
+### Frameworks (Late-July 2026 Snapshot)
+
+Before you lock in a framework, treat this section as a decision starting point, not a permanent ranking. Framework strengths move quickly as maintainers add state management, tracing, eval hooks, and human-in-the-loop controls.
 
 **Pydantic AI** (Recommended for type safety)
 
@@ -653,7 +657,15 @@ Quick selection heuristic:
 - Choose LangGraph when explicit workflow control and state transitions are central.
 - Choose CrewAI when role-based collaboration is the main design pattern.
 
-Worth knowing before you pick one of these: all major providers now also ship official first-party agent SDKs — Anthropic's Claude Agent SDK, OpenAI's Agents SDK, and Google's Agent Development Kit (ADK) among them — converging on similar primitives (tools, delegation/handoff between sub-agents, guardrails, tracing). They're vendor-native alternatives to the frameworks above rather than replacements for the concepts in this primer, and worth evaluating alongside the third-party options if you're committed to a single provider.
+Worth knowing before you pick one of these: all major providers now also ship official first-party agent SDKs — Anthropic's Claude Agent SDK, OpenAI's Agents SDK, and Google's Agent Development Kit (ADK) among them — converging on similar primitives (tools, delegation/handoff between sub-agents, guardrails, tracing). They're vendor-native alternatives to the frameworks above rather than replacements for the concepts in this primer, and worth evaluating alongside the third-party options if you're committed to a single provider. SDK names and package surfaces change quickly, so verify current package names and feature support from provider docs before implementation.
+
+A practical framework-selection checklist:
+
+1. Tooling ergonomics: How hard is it to define and validate tools with strict schemas?
+2. State model: Does the framework expose explicit state transitions, or hide them in prompt text?
+3. Observability: Can you inspect traces, tool calls, and failure paths without custom plumbing?
+4. Safety controls: Can you gate risky actions and enforce approvals where needed?
+5. Portability: How tightly does it lock you into one provider or orchestration runtime?
 
 ---
 
@@ -699,10 +711,12 @@ If you need a short operating principle: summarize early, summarize often, and n
 **The Problem:** Each LLM call costs money and takes time. A 10-step agent task = 10 LLM calls.
 
 ```text
-1 LLM call: ~1-5 seconds (tool schemas + reasoning add overhead), $0.001-0.01
-Agent task (10 steps): ~10-50 seconds, $0.01-0.10
-Agent running all day: thousands of calls, dollars per day
+Single LLM call: typically milliseconds-to-seconds, depending on model and context size
+Multi-step agent task: often seconds-to-minutes, depending on tool latency and retries
+Cost profile: fractions of a cent to multiple cents per step, so all-day agents can accumulate meaningful spend
 ```
+
+If you need exact numbers for planning, measure your own stack early with real prompts and real tools. Published list pricing is a weak proxy for end-to-end task cost.
 
 **Solutions:**
 
@@ -943,7 +957,7 @@ That is already a meaningful business win.
 
 3. **Cost and latency** - Each LLM call takes time and money. Real-time applications are challenging.
 
-4. **Knowledge cutoffs** - Training data has a cutoff. Agents can't know recent events unless given access to them.
+4. **Knowledge cutoffs** - Every model has a cutoff date, and those dates change as providers ship new model versions. Agents cannot reliably know post-cutoff events unless you provide fresh data through tools or retrieval. As a concrete example, Anthropic's current model line spans multiple cutoff points (reliable knowledge dates vary by model family), so even within one provider you cannot assume a single "current knowledge" date.
 
 5. **Interpretability** - Why did the agent choose action X instead of Y? Sometimes unclear.
 
@@ -971,7 +985,7 @@ That is already a meaningful business win.
 - Agent resumes from saved state
 - Useful for long-running tasks
 
-**Model Context Protocol (MCP):** Widely adopted standard for how agents and tools communicate — introduced by Anthropic in late 2024, now supported across OpenAI, Google, Microsoft, and AWS tooling, functioning as a common connector between models and external tools/data sources rather than a single vendor's format.
+**Model Context Protocol (MCP):** Widely adopted standard for how agents and tools communicate — introduced by Anthropic in late 2024 and now supported across multiple major ecosystems. In practice, MCP is becoming the portability layer for tool access: filesystem, databases, HTTP services, source control, docs/search endpoints, and custom internal systems can all be exposed through the same model-facing pattern rather than bespoke per-vendor adapters.
 
 Autonomous AI agents are not magical. They're engineered systems combining:
 
@@ -999,4 +1013,4 @@ If you remember one practical takeaway, make it this: treat agent development li
 
 ---
 
-*Created: May 20, 2026*
+*Created: May 20, 2026. Last updated: July 31, 2026.*
