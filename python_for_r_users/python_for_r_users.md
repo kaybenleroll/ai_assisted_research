@@ -991,6 +991,8 @@ At a high level:
 
 The migration risk in modeling is rarely that Python cannot fit the same model. The risk is that teams accidentally change split policy, null treatment, encoding choices, or threshold logic while focusing only on estimator syntax. Treat those surrounding decisions as first-class model components and parity becomes much more reliable.
 
+If you are skimming this chapter under time pressure, use this route: start with the decision table below, jump to the `lm()` and `glm()` sections for formula parity, then read the validation and calibration sections before touching deployment.
+
 ### The Two Modeling Cultures in Python
 
 R users often conflate "modeling" as one thing because base and tidy modeling workflows feel cohesive. In Python, there is a clearer split:
@@ -1009,6 +1011,16 @@ Use `scikit-learn` when your primary goal is prediction workflows: robust prepro
 Then layer in specialized libraries when the problem demands it. For Bayesian workflows, many teams use `PyMC` (or a Stan interface) to express hierarchical priors and full posterior uncertainty. For survival analysis, `lifelines` and `scikit-survival` cover common time-to-event patterns such as Cox models and competing-risk style workflows. For panel and econometric settings, `linearmodels` adds fixed-effects, random-effects, IV, and related estimators that are awkward to reproduce cleanly with generic ML tools.
 
 The practical takeaway is simple: Python is an ecosystem, not one modeling package. `scikit-learn` is central for predictive engineering, but it is only one part of the modeling stack. If your work looks more like classical statistics or domain-specific inference, you should reach for the tool that preserves the right assumptions and diagnostics rather than forcing everything into one API.
+
+Quick chooser by question type:
+
+| Primary Question | First Library to Reach For | Why |
+|---|---|---|
+| "What is the estimated effect, and how certain are we?" | `statsmodels` | Built-in inference outputs: SEs, p-values, confidence intervals, diagnostics |
+| "Which model predicts best on holdout data?" | `scikit-learn` | Pipeline-first CV, metrics, tuning, and production interfaces |
+| "What is full uncertainty under hierarchical assumptions?" | `PyMC` (or Stan interface) | Posterior inference, priors, and hierarchical model structure |
+| "What is time-to-event risk and hazard behavior?" | `lifelines` or `scikit-survival` | Survival-specific estimators and evaluation tools |
+| "How do we model panel/econometric structures?" | `linearmodels` | Fixed effects, random effects, IV, and panel-oriented estimators |
 
 ### `lm()` Equivalent: OLS with Formula Notation
 
@@ -2053,6 +2065,8 @@ This section is intentionally long, practical, and a little opinionated. The res
 
 If you only skim one part, skim this chapter and the anti-pattern chapter together. They are designed to work as a pair.
 
+Navigation tip for this chapter: Playbooks 1 through 3 are execution mechanics (pipeline design, modeling workflow, and multicore strategy). Playbooks 4 through 6 are operational trust (visual parity, incident response, and team review habits). Playbooks 7 through 10 are program management (wave planning, FAQ, a 12-week ramp, and closing strategy).
+
 ### Playbook 1: Building a Data Pipeline the Python Way Without Losing tidyverse Clarity
 
 One of the hardest things for experienced R users is not writing Python syntax. It is preserving the "pipeline clarity" you are used to. In tidyverse work, a well-written pipeline reads like a story: filter this, aggregate that, derive this feature, join to lookup, summarize outputs. A lot of novice Python code breaks this story into disjoint temporary variables, ad-hoc mutations, and unscoped helper snippets. The result feels messy, and teams conclude that Python itself is messy.
@@ -2270,7 +2284,10 @@ Then implement both R and Python versions against the same contract during migra
 
 For example, suppose you have a "monthly churn dashboard" chart family with line + interval ribbons. The migration review should not ask only "does it look okay?" It should ask:
 
-are intervals computed with the same formula, are missing months imputed consistently, does the faceting set match, and are y-axis limits and transforms consistent?
+- are intervals computed with the same formula?
+- are missing months imputed consistently?
+- does the faceting set match?
+- are y-axis limits and transforms consistent?
 
 That may sound strict. It is exactly the strictness that prevents decision drift.
 
@@ -2703,6 +2720,8 @@ This is the real long-term win.
 This chapter is a practical bridge between concepts and lived execution. Instead of talking about patterns in isolation, it walks through realistic scenarios that experienced R teams run into during migration.
 
 If the earlier chapters are your map, this section is your field guide.
+
+If you are choosing where to start, use this quick path: Scenario 1 for parity discipline, Scenario 3 for ingestion and throughput architecture, Scenario 6 for ongoing validation after cutover, and Scenario 9 for leadership-level KPI governance.
 
 ### Scenario 1: You Need a Monthly Churn Scorecard That Leadership Already Trusts
 
