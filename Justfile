@@ -71,6 +71,15 @@ eval-loop-pdf:
 eval-loop-all:
   cd evaluation_loop_primer && just all
 
+python-r-html:
+  cd python_for_r_users && just html
+
+python-r-pdf:
+  cd python_for_r_users && just pdf
+
+python-r-all:
+  cd python_for_r_users && just all
+
 military-html:
   cd military_structure_primer && just html
 
@@ -90,11 +99,11 @@ ohmyzsh-all:
   cd ohmyzsh_primer && just all
 
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html eval-loop-html military-html ohmyzsh-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all eval-loop-all military-all ohmyzsh-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all eval-loop-all python-r-all military-all ohmyzsh-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
