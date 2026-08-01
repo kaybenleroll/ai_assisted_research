@@ -148,12 +148,20 @@ border-left-color: var(--accent);
 
 #TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
 #TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle {
+display: flex;
+flex-wrap: wrap;
+align-items: baseline;
+}
 #TOC li.has-toggle > .toc-toggle {
+flex: 0 0 auto;
 margin-right: .2rem;
 vertical-align: middle;
 }
 #TOC li.has-toggle > a.toc-link-inline {
 display: inline-block;
+flex: 1 1 auto;
+min-width: 0;
 padding-left: 0;
 border-left: none;
 vertical-align: middle;
@@ -161,6 +169,7 @@ vertical-align: middle;
 #TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
 #TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
 #TOC li.has-toggle > ul {
+flex: 1 0 100%;
 width: 100%;
 }
 
