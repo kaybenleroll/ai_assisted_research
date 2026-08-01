@@ -2255,12 +2255,20 @@ border-left-color: var(--accent);
 
 #TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
 #TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle {
+display: flex;
+flex-wrap: wrap;
+align-items: baseline;
+}
 #TOC li.has-toggle > .toc-toggle {
+flex: 0 0 auto;
 margin-right: .2rem;
 vertical-align: middle;
 }
 #TOC li.has-toggle > a.toc-link-inline {
 display: inline-block;
+flex: 1 1 0%;
+min-width: 0;
 padding-left: 0;
 border-left: none;
 vertical-align: middle;
@@ -2268,6 +2276,7 @@ vertical-align: middle;
 #TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
 #TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
 #TOC li.has-toggle > ul {
+flex: 1 0 100%;
 width: 100%;
 }
 
@@ -3709,8 +3718,8 @@ k = \left(\frac{\mu}{\sigma}\right)^2, \quad
 <span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>timing_df, polars_oep.select([<span class="st">&quot;event_id&quot;</span>, <span class="st">&quot;mean_loss&quot;</span>, <span class="st">&quot;oep&quot;</span>]).head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(   engine  seconds
-0  pandas   0.0164
-1  polars   0.0120, shape: (5, 3)
+0  pandas   0.0167
+1  polars   0.0110, shape: (5, 3)
 ┌──────────┬───────────┬──────────┐
 │ event_id ┆ mean_loss ┆ oep      │
 │ ---      ┆ ---       ┆ ---      │
