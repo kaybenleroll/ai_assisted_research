@@ -61,6 +61,7 @@ import '../_shared/common.just'
 - Configure DejaVu Sans Mono as monospace font when code blocks contain Greek — lmmono lacks Greek coverage
 - Grep xelatex output for `Error|Missing \$|Undefined control`; generic warning grep misses actual failures
 - Verify rendered PDF exists and has non-trivial file size before committing
+- `building_ai_agents` and `numerical_analysis_primer` have `html-mathml`/`html-mathjax` variant targets that `html-full`/`html-dev` don't regenerate — rebuild them explicitly when applying a fix across primers, or they silently carry pre-existing drift.
 - Grep prose for embedded section references before stripping or renumbering headings
 - Scan `text` code blocks before planning diagram replacement
 - Pre-share a notation contract with all parallel agents writing mathematical content
