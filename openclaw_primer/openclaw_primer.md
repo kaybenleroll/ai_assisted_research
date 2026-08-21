@@ -1,605 +1,450 @@
-# OpenClaw and Hermes Primer: A Comprehensive, Podman-First Guide
+# OpenClaw: A Comprehensive, Podman-First Guide
 
 ---
 
-*Long-form edition · 28 May 2026*
+*Long-form edition · 22 August 2026*
 
 ---
 
 ## Why This Primer Exists
 
-When people first hear "OpenClaw," they can land on two completely different projects, and that ambiguity creates confusion before any technical work even starts. One historical usage points to an older game reimplementation, while the current, rapidly evolving project most practitioners mean is the OpenClaw AI assistant platform in the `openclaw/openclaw` repository. This document is explicitly about that modern assistant platform.
+OpenClaw is easy to describe badly. Calling it a chatbot hides the important part; calling it an autonomous agent makes it sound like a single model. OpenClaw is a self-hosted Gateway: one long-lived service that connects chat channels, control-plane clients, agent sessions, model providers, tools, and device nodes.
 
-The second source of confusion is that the ecosystem around personal AI assistants has become noisy. Most guides either stay at marketing language or collapse into short install checklists that do not prepare you for real operation. In practice, the first five minutes are not the hard part. The hard part begins when you need to choose model routing rules, define tool execution boundaries, safely expose channels, manage persistent state, and recover quickly when something fails.
+The first successful conversation is not the difficult milestone. The difficult work starts when you need to decide which channels may reach the agent, where tool calls execute, how model failures are handled, what state survives a restart, and how to recover without guessing. Short installation guides rarely explain those boundaries.
 
-This primer is written to bridge that gap. It is intentionally long-form and operationally grounded.
+This primer gives you an operational mental model and a Podman-first deployment path. It also separates OpenClaw from Hermes Agent Server, a neighboring project with different server processes and state semantics. The comparison matters because both projects are now used as self-hosted assistants, but they are not interchangeable components.
 
-### What This Covers
+### What This Primer Covers
 
-By the end, you should have three things: a clear mental model of what OpenClaw is, practical patterns for how people actually use it, and a container-first setup path that keeps the host surface area as small and explicit as possible.
+You will learn:
+
+1. What the OpenClaw Gateway owns and how messages move through it.
+2. How to install and operate OpenClaw on a host or in a rootless Podman container.
+3. How channels, sessions, model selection, fallbacks, memory, and tool sandboxes fit together.
+4. How to run local models through Ollama or another OpenAI-compatible service.
+5. How OpenClaw compares with Hermes Agent Server and when the two can be combined.
+
+### What This Primer Is Not
+
+This is not a catalogue of every channel plugin, a model benchmark, or a security certification. Provider names, model names, CLI flags, and plugin behavior change quickly; use the linked official documentation to verify a command before applying it to a production host. The examples are patterns you can adapt, not a claim that one configuration is safe for every environment.
 
 ## What OpenClaw Is Used For
 
-At its core, OpenClaw is a personal assistant control plane that sits between users, channels, models, and tools. That sounds abstract until you map it to daily use: it is the system that decides how your assistant receives a message, which model should handle it, what tools are allowed to run, and where the final response should be delivered.
+OpenClaw is a self-hosted assistant Gateway for developers and power users who want one agent reachable through several surfaces. The current project describes a single Gateway serving messaging surfaces such as Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, and WebChat, along with control UI, CLI, and mobile or desktop nodes. Some surfaces ship in core; others are installed as official channel plugins.
 
-This distinction matters because many early "assistant" systems are really single-route pipelines: one UI talking to one model endpoint with minimal policy. That is often fine until you need multiple channels, fallback behavior, tool governance, or long-lived assistant state. OpenClaw is used specifically when those requirements become real.
+The Gateway is the source of truth for sessions, routing, and channel connections. It maintains provider connections, exposes a typed WebSocket control protocol, validates inbound frames, emits lifecycle events, and runs the agent loop that turns model output into tool calls and replies.
 
-Another practical reason people choose OpenClaw is that it supports a local-first posture without forcing a local-only posture. You can run local providers as your primary path for cost and privacy while keeping hosted providers configured as fallback for resilience. In practice, this balance is often more useful than ideological purity in either direction.
+That makes OpenClaw a control plane for agent work rather than a model server. It can talk to hosted providers, local model servers, or both. It can route different agents or sessions to different models. It can put tool execution in a separate sandbox. It does not itself provide the model weights or guarantee that a model's output is safe.
 
 ### What jobs OpenClaw performs in practice
 
-In real deployments, OpenClaw handles channel ingress and egress, session routing, model selection, provider failover behavior, tool-call policy, and operational checks. It also carries lifecycle responsibilities that are easy to underestimate: configuration validation, diagnostics, health status, and continuity across restarts.
+OpenClaw handles channel ingress and egress, identity and pairing, session construction, media handling, model selection, authentication-profile rotation, model fallback, tool policy, sandbox dispatch, workspace access, cron jobs, webhooks, and operational diagnostics.
 
-That is why it is better viewed as an operations layer for assistants, not as a simple chat surface.
+The distinction between those jobs is useful when troubleshooting. A Telegram pairing failure is a channel problem. A provider authentication failure is a model-provider problem. A command that ran in the wrong filesystem is an execution-policy problem. A session that disappeared after a rebuild is a state-persistence problem.
 
 ### What OpenClaw is not
 
-OpenClaw is not a model server, and it does not replace model-serving systems such as Ollama, LM Studio, or vLLM. It is also not merely a themed chat UI. Its value comes from orchestration and control, not from owning the underlying inference engine.
+OpenClaw is not:
+
+- a large language model or model-weight distribution;
+- a replacement for Ollama, vLLM, LM Studio, or another inference server;
+- a security boundary merely because the Gateway is running in a container;
+- a magic memory system that makes every conversation permanently available;
+- the same project as Hermes Agent, Hermes Server, or the Hermes model family.
+
+Containerizing the Gateway can protect the Gateway process and its files, but OpenClaw's own tool sandbox is a separate setting. If you enable no sandbox, tool execution may still occur on the host or in the Gateway container, depending on your configuration.
 
 ## How People Actually Use OpenClaw
 
-Successful OpenClaw usage tends to follow a few repeatable deployment patterns. The common trait across these patterns is disciplined boundaries: clear model policy, clear channel policy, and clear tool policy.
-
 ### Pattern A: Single-user daily assistant
 
-This is the best starting point for most users. One gateway, one main assistant identity, one or two channels, and simple model fallback rules. The benefit is not merely simplicity; it is diagnosability. When behavior goes wrong, you can identify cause quickly because there are fewer moving parts.
+Start with one Gateway, one agent, one model provider, and the Control UI. This gives you a small system whose failures are easy to inspect. Use it for drafting, summarisation, research notes, coding assistance, and low-risk local automation.
 
-In this mode, OpenClaw usually acts as a practical command center for drafting, summarization, lightweight automation, and recurring workflows. Teams that skip this phase often end up debugging avoidable complexity later.
+The useful discipline is to establish a working session before adding channels or specialist agents. If the basic chat cannot complete a normal request, adding messaging integrations only multiplies the places where the failure can appear.
 
-### Pattern B: Multi-channel command center
+### Pattern B: Multi-channel command centre
 
-Once the single-user baseline is stable, many users extend to multiple surfaces: Control UI, mobile nodes, and one or more chat channels. This is where OpenClaw's channel and session model becomes powerful. The same assistant can remain coherent across different delivery paths while preserving context and policy.
+Once the local path is stable, connect the channels you actually use. One Gateway can serve multiple channel plugins, but each channel introduces a new trust boundary: sender identity, pairing, group mentions, attachments, rate limits, and outbound delivery.
 
-The security posture must evolve with this transition. Pairing rules, allowlists, and non-main sandboxing become core controls rather than optional hardening.
+Keep the initial policy narrow. Allow only known senders, require mentions in group chats, and keep the Gateway's published ports on loopback unless you have an explicit remote-access design such as a tailnet or authenticated proxy.
 
-### Pattern C: Local-first with hosted safety net
+### Pattern C: Local-first with hosted fallback
 
-This pattern is increasingly common because it aligns cost, privacy, and reliability in a practical way. Local providers handle primary traffic. Hosted providers remain available as fallback when local services are unavailable, slow, or unsuitable for the request.
+A local model can be the default for privacy and cost while a hosted provider remains available for difficult requests or local-service outages. OpenClaw's fallback behavior has two stages: it rotates usable authentication profiles within the current provider, then tries the configured model fallbacks.
 
-The result is a system that is more private than hosted-only, more resilient than local-only, and usually cheaper than always using cloud models.
+Fallbacks are not always applied to explicit user selections. A configured default can use `agents.defaults.model.fallbacks`; an explicit session model is strict unless that selection has its own fallback policy. When OpenClaw automatically moves to a fallback, that automatic state can persist across subsequent turns while the original primary is periodically reprobed; it is cleared when the primary recovers. Treat this as a reliability feature, not as permission to hide provider errors.
 
-### Pattern D: Containerized operations
+### Pattern D: Specialist agents and nodes
 
-Operators who care about reproducibility and controlled blast radius often run OpenClaw in containers, keep state on explicit mounts, and use host-side CLI as the management plane. This is the posture emphasized throughout this guide because it matches a self-contained operational objective.
+Separate agents can have distinct workspaces, models, and routing bindings. Nodes can expose device capabilities such as camera, screen, voice, or location to the Gateway. This is powerful because the assistant can move from text to action, but it also increases the number of capabilities that need pairing and review.
+
+### Pattern E: Container-first operations
+
+Rootless Podman is a good fit when you want a narrow host contract, explicit bind mounts, and user-level service management. The official Podman path runs the Gateway in a container while the host `openclaw` CLI remains the management surface. It is different from running every tool call in a sandbox; you can choose that separately.
 
 ## Ideas for How You Could Use OpenClaw
 
-The most useful ideas are concrete enough that you can implement a first version in days, not months.
+For documentation work, OpenClaw can summarise a repository, draft release notes, and enforce a project style guide while leaving final changes under review. For engineering triage, it can classify incoming issues and prepare a response without granting permission to merge or deploy.
 
-For documentation-heavy work, OpenClaw can become a documentation operations assistant that summarizes long markdown, drafts release narratives, and enforces style conventions. The practical payoff is reduced documentation drift and better continuity across fast-moving engineering work.
+For personal research, it can act as a persistent synthesis layer across channels and sessions. For homelab operations, it can turn health checks and logs into a digestible daily report. For mobile workflows, a paired node can supply a camera capture or voice interaction while the Gateway retains the session and policy.
 
-For engineering triage, OpenClaw can classify issues, suggest duplicates, and route work by subsystem while remaining constrained by explicit tool policy. Used carefully, it can reduce intake chaos without granting broad automation authority.
-
-For personal research, OpenClaw can act as a persistent synthesis layer. The value is less about one perfect answer and more about retained context under storage boundaries you control.
-
-For homelab operations, it can aggregate health checks and logs into digestible operational summaries. Even modest setups benefit when low-level telemetry becomes readable status rather than raw noise.
-
-For role-separated workflows, OpenClaw can host multiple assistant identities with distinct workspaces and policy. That separation can drastically reduce accidental cross-context behavior.
+The safe design pattern is consistent: let the model propose work, let OpenClaw validate the request and route it, and let an explicit execution boundary decide what the tool can actually touch.
 
 ## OpenClaw Architecture in One Mental Model
 
-A practical debugging model is to think in layers: gateway, agent, provider, execution, state. Most troubleshooting becomes easier when you identify the failing layer before changing configuration.
+Think in five layers:
 
-The gateway layer handles ingress, routing, APIs, and session plumbing. The agent layer carries prompt context, model selection logic, and tool-call behavior. The provider layer maps to model-serving endpoints and auth behavior. The execution layer is where tools run, either on host or sandbox. The state layer holds long-lived truth: config, auth profiles, session data, and workspace.
+1. **Channel and node adapters** receive messages, media, or device events.
+2. **The Gateway** owns routing, sessions, provider connections, WebSocket RPC, and lifecycle events.
+3. **The agent runtime** builds context, calls the selected model, interprets tool requests, and produces replies.
+4. **Providers and model services** generate model output through hosted APIs or local endpoints.
+5. **Tool execution and state** perform actions and persist configuration, credentials, sessions, workspaces, memory, and logs.
 
-This layered view prevents category errors. A provider timeout is not a channel policy problem. A risky tool action is usually an execution-policy issue, not a model quality issue. A restart regression is often state drift, not immediate runtime logic.
+The Gateway is a long-lived process. Control-plane clients such as the CLI, web UI, and desktop app connect to it over WebSocket, normally on `127.0.0.1:18789`. Nodes connect over the same general transport with an explicit node role and declared capabilities. A single Gateway should own a host's messaging sessions; starting multiple competing Gateways against the same state creates confusing locks and duplicate channel connections.
+
+### The message path
+
+A useful trace for a request is:
+
+```text
+channel or UI
+  -> Gateway ingress and authorization
+  -> session resolution and routing
+  -> provider/model request
+  -> validated tool call, if any
+  -> sandbox or configured execution target
+  -> tool result added to context
+  -> model response
+  -> Gateway delivery to the originating surface
+```
+
+The model is only one stage in this path. When a task fails, identify the last successful stage before changing prompts or models.
 
 ### State locations that matter
 
-In container-first setups, state discipline is non-negotiable. Configuration, auth profile material, workspace data, and session artifacts should all persist outside ephemeral container layers. If this boundary is unclear, upgrades and restores become fragile.
+The default state directory is `~/.openclaw`. It contains the main configuration, agent-specific state, auth routing and credential material, channel state, sessions, SQLite databases, and the default workspace under `~/.openclaw/workspace`. Those databases are authoritative state, not disposable caches. A container image is disposable; the mounted state directory is the durable system.
 
-## Comprehensive Local Setup (Podman-First, Self-Contained)
+Do not treat the workspace as a backup of the entire installation. Back up configuration, auth material, session data, memory, and workspace together, and protect the archive as you would protect API credentials.
 
-This section is intentionally operational and assumes your goal is repeatable operation, not one-time demonstration.
+## Comprehensive Local Setup (Podman-First)
+
+This section follows the current official rootless Podman workflow. The commands below assume a Linux host with Podman and an OpenClaw checkout. For a quick non-container install, use the official installer and `openclaw onboard` instead.
 
 ### Deployment goals
 
-A strong target posture is rootless Podman runtime, explicit state persistence mounts, minimal host dependencies, and optional user-level service management for restart behavior. This keeps host contracts narrow while preserving operational control.
+The target posture is a rootless Gateway container, host-controlled state, loopback-only published ports, user-level restart management when needed, and a separate tool sandbox policy for non-main sessions.
 
 ### Prerequisites
 
-You need Linux, rootless Podman, OpenClaw CLI on host, and optionally `systemd --user` for service management. On headless systems, lingering can be used for boot-time continuity.
+You need rootless Podman and the OpenClaw CLI on the host. Current OpenClaw documentation recommends Node 26 and supports Node 22.22.3+, 24.15+, or 25.9+; Node 23 is not a supported floor. The installer can handle Node installation. `systemd --user` is optional for Quadlet-managed startup.
 
-### Bootstrapping flow
+### Install and verify the host CLI
 
-Use source checkout to align with official helper scripts.
-
-```bash
-git clone https://github.com/openclaw/openclaw.git
-cd openclaw
-```
-
-Initialize Podman path:
+The installer is the shortest path for a normal host install:
 
 ```bash
-./scripts/podman/setup.sh
-```
-
-Launch runtime:
-
-```bash
-./scripts/run-openclaw-podman.sh launch
-```
-
-Run onboarding in container context:
-
-```bash
-./scripts/run-openclaw-podman.sh launch setup
-```
-
-Access dashboard:
-
-- `http://127.0.0.1:18789/`
-
-Operate via host CLI targeting the container:
-
-```bash
-export OPENCLAW_CONTAINER=openclaw
-openclaw gateway status --deep
-openclaw dashboard --no-open
-```
-
-### Persistence model
-
-Treat persistence as architecture, not convenience. Config, workspace, auth, and session artifacts should all map to known durable paths. Avoid anonymous state where possible.
-
-### Optional Quadlet mode
-
-If you need service semantics and restart behavior, user-level Quadlet can provide cleaner day-2 operations than manual relaunch loops.
-
-### Day-2 operations
-
-```bash
-podman logs -f openclaw
-podman stop openclaw
-./scripts/run-openclaw-podman.sh launch
-openclaw gateway status --deep
+curl -fsSL https://openclaw.ai/install.sh | bash
+openclaw --version
 openclaw doctor
 ```
 
-### Ollama-native quick setup
+If you want a checkout-based installation, follow the repository's current install instructions. Do not assume that an old `pnpm` or Node version from an earlier guide remains supported.
 
-The Podman bootstrapping flow above is the self-contained posture this guide emphasizes, but there is a faster path for users who already run Ollama and want a single-command launch. Ollama can drive OpenClaw directly, handling installation, model selection, and daemon startup in one step.
+### Bootstrap the Podman Gateway
 
-```bash
-ollama launch openclaw
-```
-
-On first run this walks you through the full interactive setup:
-
-1. Installing OpenClaw via npm if it is not already present.
-2. A security notice explaining the tool-level access the agent will be granted.
-3. Model selection — local or cloud.
-4. Configuring your messaging provider(s) and starting the gateway daemon.
-
-For unattended starts — boot-time services or container launch — use the headless variant. `--yes` skips the interactive prompts and `--model` is required:
+From the OpenClaw repository root:
 
 ```bash
-ollama launch openclaw --model qwen3.5 --yes
+./scripts/podman/setup.sh
+./scripts/run-openclaw-podman.sh launch
+./scripts/run-openclaw-podman.sh launch setup
 ```
 
-To stop the gateway:
+The setup helper builds or selects the Gateway image, creates `~/.openclaw/openclaw.json` if needed, and creates `~/.openclaw/.env` with a Gateway token if one is not present. The launcher uses the current user namespace and mounts OpenClaw state into the container.
+
+Open the Control UI at `http://127.0.0.1:18789/`. For a container install, complete provider authentication through OpenClaw's own setup so credentials are stored in the mounted OpenClaw state. Do not assume that a host login in `~/.claude` or `~/.codex` is visible inside the container.
+
+### Manage the container from the host CLI
+
+Use the container-aware CLI explicitly while you learn the setup:
 
 ```bash
-openclaw gateway stop
+openclaw --container openclaw gateway status --deep
+openclaw --container openclaw doctor
+openclaw --container openclaw dashboard --no-open
+openclaw --container openclaw channels login
 ```
 
-This path trades some of the explicit container boundaries described above for convenience. It is a good fit for single-user local setups where you control the host directly.
+If you operate one named container repeatedly, `OPENCLAW_CONTAINER=openclaw` can be used as the documented shortcut. Verify the target before making configuration changes; a healthy CLI command against the wrong Gateway is still the wrong result.
 
-### Recommended Adoption Sequence
+### Persistence and ports
 
-1. Bring up Podman runtime and verify health.
-2. Configure one local provider first.
-3. Add one hosted fallback.
-4. Enable non-main sandboxing before opening external channels.
-5. Containerize model services for stronger containment if needed.
-6. Establish backup cadence.
+The official launcher persists the configuration directory and workspace from the host. The normal published Gateway port is `18789`; the bridge port is `18790`. Keep both published on `127.0.0.1` unless your remote-access plan explicitly protects them.
 
-## Running OpenClaw with Local LLMs
+The token in `~/.openclaw/.env` is a secret. Do not put it in a checked-in compose file, shell history, screenshot, or support ticket. If you change the host config or workspace paths, pass the same values to both setup and launch; otherwise the two commands can operate on different state.
 
-OpenClaw integrates with both native local providers and OpenAI-compatible proxy-style providers. Choosing between them is primarily about behavior guarantees and operational preference.
+### Optional Quadlet mode
 
-### Model selection and fallback semantics
-
-OpenClaw distinguishes configured defaults, auto-selected fallback state, and explicit user overrides. This is operationally important. Configured defaults can walk fallback chains. Explicit user selections are strict by design and fail visibly when unavailable.
-
-Model choice is not just a quality decision; it is a context-budget decision. OpenClaw is an agentic assistant that does multi-turn reasoning, calls tools, and processes long context, so the local model you pick needs room to work. Plan on at least a 64K token context window for local models running agentic workloads. Agent loops accumulate tool call results, conversation history, and web search output into context very quickly, and a model that cannot hold that working set will start truncating or failing mid-task.
-
-The following models are practical defaults for local-first operation, with two cloud entries kept as fallback:
-
-| Model | VRAM needed | Notes |
-|---|---|---|
-| `qwen3.5` (local) | ~11 GB | Reasoning, coding, vision — the local sweet spot |
-| `gemma4` (local) | ~16 GB | Strong reasoning and code |
-| `qwen3.5:cloud` | None local | Falls back to Ollama cloud; good for testing |
-| `kimi-k2.5:cloud` | None local | Multimodal reasoning with sub-agents |
-
-### Ollama
-
-Ollama is a strong local-first path, but the key setup detail is API mode. For OpenClaw's Ollama provider, native API endpoint behavior is preferred over `/v1` compatibility mode when reliable tool behavior matters.
+On a Linux host with `systemd --user`, run setup with Quadlet enabled:
 
 ```bash
-ollama pull gemma4
-export OLLAMA_API_KEY="ollama-local"
-openclaw onboard
-openclaw models list --provider ollama
-openclaw models set ollama/gemma4
+./scripts/podman/setup.sh --quadlet
+systemctl --user start openclaw.service
+systemctl --user status openclaw.service
+journalctl --user -u openclaw.service -f
 ```
 
-### LM Studio, vLLM, and LiteLLM
-
-These three are all reached through OpenClaw's generic OpenAI-compatible provider path — the "Generic OpenAI-compatible local provider" config later in this primer is the concrete stanza to adapt for any of them, pointed at each backend's own base URL and API key.
-
-LM Studio is useful when you want local model serving with easier lifecycle controls than raw llama.cpp — its GUI handles model download and switching, and it exposes an OpenAI-compatible endpoint OpenClaw can target directly.
-
-vLLM is commonly used for higher-throughput serving scenarios, particularly when serving one model to multiple concurrent agents or users. In OpenClaw, it is treated as an OpenAI-compatible provider and should be configured with explicit timeout and model metadata assumptions, since vLLM's own defaults are tuned for throughput rather than agentic tool-calling latency.
-
-LiteLLM is valuable as an abstraction and routing layer over multiple model backends — it fronts several providers (local and hosted) behind one OpenAI-compatible endpoint, so it's often used where centralized policy and provider switching are required rather than talking to a single backend directly.
-
-### On-demand local services
-
-OpenClaw can also manage provider-local service startup via `localService` config, allowing heavyweight model services to spin up on demand instead of running continuously.
-
-### Constrained hardware: partial GPU offloading
-
-The reason to run this on constrained hardware at all is not raw speed — you will not beat a hosted model on tokens per second. The benefit is privacy and persistence: local files, local databases, and MCP-connected tools, all under boundaries you own. On a 64 GB RAM / 6 GB VRAM laptop this is enough to run a practical roaming assistant with large retained context, which is often more valuable day-to-day than a faster model that forgets everything between sessions.
-
-That class of laptop cannot fully host the recommended OpenClaw models in 6 GB of VRAM, but 64 GB of RAM is plenty for a strong partial-offload setup: put as many layers as possible on the GPU and keep the rest on CPU/RAM.
-
-With llama.cpp, the `--n-gpu-layers` flag controls how many transformer layers go to the GPU. Layer counts vary by model family: Qwen2.5-7B has 28 transformer layers, while Llama-family 7B models have 32. Loading 22 of Qwen2.5-7B's 28 layers onto the GPU typically uses ~3.5–4 GB of VRAM for weights, with the remaining 6 layers running on CPU/RAM — a genuine partial offload, not a full one.
-
-KV cache doesn't follow the weights split the way you might expect. In llama.cpp and Ollama, the KV cache for GPU-offloaded layers lives in VRAM by default, not RAM — only the CPU-resident layers' KV cache lives in system RAM. So your 64 GB of RAM absorbs KV-cache growth for the 6 CPU-resident layers, but VRAM still has to hold the growing KV cache for the 22 GPU-resident layers as context fills. At a 64K context window, that VRAM-side KV cache can add several GB on top of the ~3.5–4 GB of weights, which will not fit comfortably in 6 GB. Squeeze it down with KV cache quantization (`OLLAMA_KV_CACHE_TYPE=q8_0`, or `q4_0` if you need more headroom) rather than assuming the full fp16 KV cache is free.
-
-With Ollama, set the equivalent through a Modelfile:
+For a headless host that must start the service after reboot, user lingering may be required:
 
 ```bash
-export OLLAMA_KV_CACHE_TYPE=q8_0
-
-cat > ~/qwen-laptop.Modelfile << 'EOF'
-FROM qwen2.5:7b-instruct-q4_K_M
-PARAMETER num_gpu 22
-PARAMETER num_ctx 65536
-PARAMETER num_thread 8
-EOF
-
-ollama create qwen-laptop -f ~/qwen-laptop.Modelfile
-ollama launch openclaw --model qwen-laptop
+sudo loginctl enable-linger "$(whoami)"
 ```
 
-Expect roughly 8–15 tok/s for 7B Q4 with partial offload on a modern Intel/AMD laptop. Long-context prefill is slower, but interactive chat stays usable. Treat `num_thread 8` as a starting point and tune toward your physical core count — too many threads adds overhead rather than throughput.
+After editing the generated unit, reload and restart it:
 
-## OpenClaw vs Hermes: What Is Similar and What Is Different
+```bash
+systemctl --user daemon-reload
+systemctl --user restart openclaw.service
+```
 
-OpenClaw and Hermes are often mentioned in the same conversations because they can be used together in the same local-first stack. The overlap is real, but they sit at different layers and solve different problems.
+### Upgrades and recovery
 
-At a high level, OpenClaw is an assistant orchestration system. Hermes is a model family. If you treat those as interchangeable, architecture decisions become blurry very quickly.
+When you rebuild or pull a newer image, restart the container or Quadlet service. If the updated Gateway exits while applying state changes, run a one-off `podman run` with the same image, user mapping, and mounted state, ending with `openclaw doctor --fix`, then start the Gateway normally. The official Podman guide contains the complete command because the exact image and mount paths must match your deployment. Afterward, run a linting preflight:
 
-### Core distinction: system layer vs model layer
+```bash
+openclaw --container openclaw doctor --lint --json
+openclaw --container openclaw gateway status --deep
+```
 
-OpenClaw is the control plane: it routes channels, applies policy, manages tool permissions, handles provider fallbacks, and coordinates state over long-running sessions.
+Do not “fix” an upgrade by deleting `~/.openclaw`. That directory is the system's durable state, not a cache.
 
-Hermes is the inference engine option inside that control plane: it turns prompts into completions and, depending on model generation and prompt format, can produce structured tool-call outputs.
+### Day-two operations
 
-In short, OpenClaw decides how work is run. Hermes helps perform one reasoning step at a time.
+```bash
+podman logs -f openclaw
+podman ps --filter name=openclaw
+podman stop openclaw
+./scripts/run-openclaw-podman.sh launch
+openclaw --container openclaw gateway status --deep
+```
 
-### Similarities that make people compare them
+## Channels, Sessions, and Access Control
 
-The comparison is not random. In practical local deployments, both are used in support of the same goals:
+Channels are not just output formats. They are authenticated ingress paths into an agent with tools. Start with one channel and configure the narrowest useful policy: known-user allowlists, pairing where supported, mention requirements in groups, and no public port exposure.
 
-1. Local-first control over data and model execution.
-2. Reduced dependence on hosted APIs for daily assistant tasks.
-3. Better auditability than opaque managed workflows.
-4. Strong fit for coding, operations, and long-form technical workflows.
+The Control UI is useful for local administration because it gives you a direct view of sessions and configuration. Remote access should use an explicit access layer such as Tailscale or an authenticated proxy. A port that is reachable from a LAN is not “local” merely because the agent is personal.
 
-That shared use case is why people often say "OpenClaw vs Hermes" even though the more precise framing is "OpenClaw with Hermes".
+Sessions are the unit of conversational state. Main, group, channel, and agent-specific sessions can have different routing and sandbox behavior. Do not infer that two messages share context because they reached the same Gateway; inspect the session key and routing policy.
 
-### Biggest differences in practice
+## Models, Providers, and Failover
 
-| Dimension | OpenClaw | Hermes |
-|---|---|---|
-| What it is | Assistant platform and orchestration layer | Instruction-tuned model family |
-| Unit of behavior | Session and workflow level | Single prompt/response completion |
-| Tool execution | Owns tool policy and execution boundaries | Produces candidate tool-call content only |
-| State continuity | Coordinates multi-turn memory and agent state | No durable state by itself |
-| Operations scope | Gateway health, routing, policy, channels, fallback | Model quality, context behavior, latency, VRAM fit |
-| Security boundary | Enforces allowlists/sandbox policy | Cannot enforce policy on its own |
+A model reference has the form `provider/model`. It chooses a provider and model; it does not by itself decide the low-level agent runtime. The primary model normally comes from `agents.defaults.model.primary`, and configured fallbacks are tried in order. Authentication-profile rotation happens inside a provider before OpenClaw advances to the next model.
 
-The table above is the key architectural point: OpenClaw is where you enforce behavior. Hermes is where you get language intelligence.
+Fallback execution is initiated for the current turn, but an automatically selected fallback can remain the active automatic session state across later turns while the original primary is reprobed. Explicit user model choices are intentionally strict, so a visible provider error can be preferable to an unexpected answer from a different model.
 
-### Tool-calling behavior and reliability
+### Ollama: use the native API
 
-Hermes models are commonly chosen because they tend to be capable instruction followers and often behave well with structured output patterns. That can improve tool-call formatting quality in real workloads.
-
-OpenClaw still must validate all tool-call payloads and enforce policy, because model output is never a security control. Even with a strong model, malformed or unsafe calls can still appear. The robust pattern is model capability plus strict boundary checks, not model capability instead of boundary checks.
-
-### Context windows and long-horizon work
-
-People often ask whether a stronger model family alone is enough for long-running assistant tasks. Usually it is not.
-
-Long-horizon assistant behavior depends on two things:
-
-1. Model context capacity and retrieval quality under load.
-2. Orchestration discipline in what gets carried forward, summarized, or dropped.
-
-Hermes helps with the first dimension. OpenClaw governs the second. For multi-file coding and operations workflows, the second dimension usually determines whether the system remains stable over time.
-
-### Deployment and day-2 operations
-
-Running Hermes well is mostly a model-serving problem: quantization choice, GPU/CPU split, context sizing, and endpoint stability.
-
-Running OpenClaw well is mostly an orchestration problem: channel policy, sandbox defaults, fallback chains, state backup, and recovery runbooks.
-
-That split is operationally useful when debugging incidents:
-
-1. If formatting degrades or reasoning quality shifts, inspect model/provider behavior first.
-2. If tool scope, routing, or state continuity breaks, inspect OpenClaw policy and runtime state first.
-
-### Security and control-plane differences
-
-OpenClaw can limit blast radius through non-main sandboxing, reduced workspace access, and constrained tool policy. Hermes cannot do that by itself because it has no direct permission system over host operations.
-
-Treat every model output as untrusted input to the execution layer. The right place to enforce safety is the OpenClaw boundary that receives and validates candidate actions.
-
-### Benchmark-style comparison matrix
-
-If you want to compare these two in a way that informs purchasing and deployment decisions, benchmark the stack as "OpenClaw plus model backend" versus "model-only direct usage" on the same hardware and prompt set.
-
-The table below is not a universal scorecard. It is a practical measurement frame so teams can produce repeatable numbers in their own environment.
-
-| Measurement axis | Hermes direct (model-only) | OpenClaw + Hermes (or other backend) | Why it matters |
-|---|---|---|---|
-| First-token latency | Usually lower because there is minimal orchestration overhead | Usually higher due to routing, policy checks, and tool loop setup | Determines interaction feel for short requests |
-| End-to-end task completion time | Fast for single-pass prompts | Usually better for multi-step tasks with tools because orchestration reduces retries | Captures real productivity, not just raw generation speed |
-| Tokens per second (steady generation) | Primarily model/quantization bound | Similar model-bound throughput, but can include pauses around tool phases | Helps separate inference bottlenecks from agent-loop bottlenecks |
-| VRAM and RAM footprint | Lower platform overhead; mostly serving stack | Higher total footprint due to gateway/session/tool processes | Drives hardware sizing and concurrency ceilings |
-| Tool-call format pass rate | Not applicable without an orchestration layer | Critical metric: percent of tool calls that validate on first parse | Directly impacts reliability of agent workflows |
-| Tool-call success rate | Not applicable without execution layer | Measures successful execution after validation and policy checks | Exposes integration breakage versus model-format issues |
-| Context retention quality over long tasks | Depends on model context behavior only | Depends on both model context and OpenClaw summarization/state policy | Predicts stability on long coding or operations sessions |
-| Failure containment | Limited to prompt-level controls | Stronger when sandboxing, allowlists, and boundary checks are enforced | Defines blast radius under adversarial or malformed inputs |
-| Recovery time after provider failure | Manual reroute or retry | Can be reduced with configured fallback chains and health-aware routing | Key for uptime and unattended workflows |
-| Operational observability | Model logs and serving metrics | Model metrics plus gateway/session/tool lifecycle telemetry | Faster root-cause isolation in production-like setups |
-
-For reproducible results, run at least three workload classes with fixed prompts and a fixed hardware profile:
-
-1. Single-shot generation (summaries, extraction, one-file edits).
-2. Multi-step tool workflow (shell plus file edits plus validation).
-3. Long-horizon session (multi-file changes over an extended context window).
-
-Track medians and p95 values separately. A configuration can look good on average while still being painful in tail latency.
-
-For tool-centric workflows, include two explicit quality metrics:
-
-1. Tool-call schema pass rate on first attempt.
-2. Task success without manual intervention.
-
-Those two often predict user trust better than raw token throughput.
-
-One practical reading rule helps avoid false conclusions: if model-only appears "faster" but fails more multi-step tasks, it is usually optimized for benchmark shape rather than real workflow completion. For assistant operations, completion reliability is typically more valuable than isolated generation speed.
-
-### When to use each approach
-
-Use Hermes directly when your task is mostly single-pass generation and you do not need channel routing, persistent assistant state, or orchestrated tools.
-
-Use OpenClaw with Hermes when you want local reasoning quality plus durable assistant operations: channel integration, policy control, fallback behavior, and repeatable runbooks.
-
-For most users in this primer's target audience, the practical goal is not choosing one over the other. It is composing them correctly:
-
-1. OpenClaw as control plane.
-2. Hermes as one backend option in model policy.
-3. Hosted fallback only where reliability requirements justify it.
-
-That architecture gives you local-first behavior without giving up operational resilience.
-
-## Podman + Local LLMs: Containment Patterns
-
-There are three practical containment patterns.
-
-Pattern one runs OpenClaw in containers but leaves model services on host. It is easy to adopt but less self-contained. Pattern two containerizes both gateway and model services with explicit persistence paths, which is often the best balance of containment and operability. Pattern three adds stricter sandboxing and narrow tool policies for higher-risk surfaces.
-
-Most mature setups converge toward pattern two after proving behavior in pattern one.
-
-## Example Configuration Snippets
-
-### Local-first with hosted fallback
+OpenClaw's Ollama provider uses Ollama's native API, not the OpenAI-compatible `/v1` endpoint. In a Podman Gateway container, `127.0.0.1` means the Gateway container itself, not the host running Ollama. Point the provider at a host or LAN address reachable from the container. For runtimes that provide it, `host.containers.internal` is a useful starting point:
 
 ```json5
 {
+  models: {
+    providers: {
+      ollama: {
+        baseUrl: "http://host.containers.internal:11434",
+        api: "ollama",
+        apiKey: "ollama-local"
+      }
+    }
+  },
   agents: {
     defaults: {
       model: {
         primary: "ollama/gemma4",
-        fallbacks: ["anthropic/claude-sonnet-4-6"]
-      }
-    }
-  },
-  models: {
-    mode: "merge",
-    providers: {
-      ollama: {
-        baseUrl: "http://ollama:11434",
-        api: "ollama",
-        apiKey: "ollama-local",
-        timeoutSeconds: 300,
-        models: [
-          {
-            id: "gemma4",
-            name: "gemma4",
-            reasoning: false, // no reasoning-token support in this API mode; model quality is unaffected
-            input: ["text"],
-            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-            contextWindow: 65536,
-            maxTokens: 4096
-          }
-        ]
+        fallbacks: ["ollama/qwen3.5"]
       }
     }
   }
 }
 ```
 
-### Non-main sandbox baseline
+Do not append `/v1` to that URL. OpenClaw documents that the compatibility endpoint can break tool calling and cause raw tool-call JSON to appear as plain text. Ensure Ollama listens on an interface the container can reach without exposing it more broadly than intended; test connectivity from the Gateway container. A non-loopback custom URL may also require explicit model configuration because automatic discovery is not guaranteed. Local or private Ollama hosts use the `ollama-local` marker; public Ollama Cloud endpoints require a real credential and should use the dedicated cloud provider path where appropriate.
+
+Onboarding can discover installed models and check tool support and context metadata. It does not automatically solve a model that is too small, lacks reliable tool calling, or cannot hold the working context of your task.
+
+### Generic OpenAI-compatible providers
+
+LM Studio, vLLM, LiteLLM, and many hosted gateways expose OpenAI-compatible endpoints. The provider configuration is not interchangeable with Ollama's native configuration: use the endpoint and API mode documented by the service, then verify one real tool call before trusting the integration.
+
+### Choosing a local model
+
+For an agentic workload, evaluate more than tokens per second:
+
+- tool-call schema reliability;
+- context window under accumulated tool results;
+- first-token latency and long-context prefill;
+- memory and VRAM pressure during key-value-cache growth;
+- recovery behavior when the model service restarts.
+
+Do not promise a fixed VRAM number for a model family. Quantisation, context length, vision support, batching, and backend version all change the footprint. Measure the exact model and settings on the hardware you intend to operate.
+
+### Constrained hardware
+
+Partial GPU offload can make a local model usable on a laptop that cannot hold the full model in VRAM. The tradeoff is lower throughput and a more complicated memory budget. The key-value cache can still consume significant VRAM as context grows even when model weights are split between GPU and CPU RAM.
+
+Start with a modest context window, measure memory during a long tool loop, and increase it only when the workload requires it. A nominal “64K context” setting is not free: it changes both latency and memory behavior.
+
+## OpenClaw and Hermes Agent Server
+
+OpenClaw and Hermes are frequently compared because both can power a self-hosted assistant. The precise comparison is OpenClaw Gateway versus the server surfaces of Hermes Agent. Hermes is not merely a model backend, and “Hermes Server” is not one single process in the official terminology.
+
+Hermes has at least three relevant long-running modes:
+
+1. `hermes gateway` connects messaging platforms, runs sessions, and handles scheduled jobs.
+2. The API server, enabled through `API_SERVER_ENABLED=true` and protected with `API_SERVER_KEY`, exposes an OpenAI-compatible HTTP API on port `8642` by default.
+3. `hermes serve` is a headless backend for the desktop application's JSON-RPC/WebSocket interface, commonly listening on port `9119`.
+
+| Dimension | OpenClaw Gateway | Hermes Agent server surfaces |
+|---|---|---|
+| Primary role | Multi-channel Gateway and agent control plane | Agent runtime exposed through messaging, HTTP API, or desktop backend |
+| Main control transport | Typed WebSocket API, Control UI, CLI, nodes | OpenAI-compatible HTTP API; `hermes serve` JSON-RPC/WebSocket; messaging adapters |
+| Default local web surface | Control UI on `127.0.0.1:18789` | API server on `127.0.0.1:8642`; desktop backend commonly on `9119` |
+| Durable state | `~/.openclaw` configuration, SQLite databases, sessions, auth, workspaces, and agent state | `~/.hermes` config, secrets, profiles, memories, skills, cron, sessions, logs, and `state.db` |
+| Execution boundary | Sandbox is off by default; Docker, Podman, SSH, or OpenShell can be selected for tools | Local, Docker, SSH, Singularity, Modal, Daytona, Vercel Sandbox, or other configured backends |
+| Messaging | Channel plugins owned by the Gateway | A separate `hermes gateway` process connects many messaging platforms |
+| Model routing | Provider/model refs, auth-profile rotation, configured fallbacks | Provider configuration and model profiles; routing is configured in Hermes |
+
+Neither product becomes safe merely because its HTTP port is bound to localhost. Both can run commands, read files, use credentials, and access external services. Choose the system whose session, plugin, memory, and execution model matches your workflow, then secure its actual trust boundaries.
+
+### When to use OpenClaw
+
+Choose OpenClaw when one Gateway serving many channels, device nodes, WebChat, and a typed control-plane protocol are central requirements. Its Podman workflow is also attractive when you want the Gateway container and host CLI to have clearly defined roles.
+
+### When to use Hermes Server
+
+Choose Hermes when you want the Hermes Agent runtime's built-in memory, skills, toolsets, profiles, and messaging gateway, or when you want to attach Open WebUI or another OpenAI-compatible frontend directly to a tool-using Hermes backend.
+
+### Combining them
+
+An OpenAI-compatible Hermes API can look like a model endpoint to another system, but that does not mean the two systems share sessions or tool policy. This is an experimental generic OpenAI-compatible integration pattern, not a documented supported OpenClaw-plus-Hermes pairing. Hermes returns a tool-using agent's final response; it is not a plain inference server. If OpenClaw sends a request to Hermes, decide explicitly which system owns tool execution, memory, authorization, and the user-visible session. Avoid building two independent agents that both believe they own the same terminal or credentials.
+
+## Tool Sandboxing and Containment
+
+OpenClaw separates Gateway placement from tool placement. The Gateway can run in a Podman container while tool execution uses a distinct Podman sandbox, or the Gateway can run on the host while tools use a container. Sandboxing is off by default; the relevant settings are `mode`, `scope`, and `backend`.
+
+The useful starting point for a multi-channel assistant is to sandbox all sessions unless you have deliberately trusted the main-session routing:
 
 ```json5
 {
   agents: {
     defaults: {
       sandbox: {
-        mode: "non-main",
-        scope: "agent",
-        workspaceAccess: "none"
+        mode: "all",
+        scope: "session",
+        backend: "podman"
       }
     }
   }
 }
 ```
 
-### Generic OpenAI-compatible local provider
+`non-main` protects group and channel sessions only when those messages do not converge on the main session; direct messages commonly do converge there. Use `all` when channel input is not fully trusted. `scope: "session"` gives each sandboxed session its own runtime; `scope: "agent"` shares one sandbox across that agent's sandboxed sessions. A Podman sandbox also requires the sandbox image, a compatible host-Podman connection, and consistent host-path mounts; browser sandboxing remains Docker-only. Remember that elevated tools can bypass the sandbox, and that the Gateway itself remains outside the tool sandbox.
 
-```json5
-{
-  agents: {
-    defaults: {
-      model: { primary: "local/my-model" }
-    }
-  },
-  models: {
-    mode: "merge",
-    providers: {
-      local: {
-        baseUrl: "http://127.0.0.1:8000/v1",
-        apiKey: "sk-local",
-        api: "openai-completions",
-        timeoutSeconds: 300,
-        models: [
-          {
-            id: "my-model",
-            name: "my-model",
-            reasoning: false,
-            input: ["text"],
-            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-            contextWindow: 120000,
-            maxTokens: 8192
-          }
-        ]
-      }
-    }
-  }
-}
-```
+For higher assurance, remove unnecessary workspace mounts, keep network access constrained, use deny-by-default tool policy for exposed channels, and test the exact operations the assistant is allowed to perform. A sandbox reduces blast radius; it does not turn unreviewed prompts into a formal security proof.
 
 ## Operational Reference
 
-### Security and Hardening Checklist
+### Security checklist
 
-Hardening should scale with exposure. Loopback-only personal setups can prioritize convenience. Any remotely reachable surface should prioritize strict channel policy, controlled tool access, and sandbox boundaries.
+1. Keep Gateway and bridge ports on loopback by default.
+2. Use pairing or explicit allowlists for every messaging surface.
+3. Require mentions in group chats unless the group is fully trusted.
+4. Keep tokens in the OpenClaw state environment file or a supported secret store, never in committed configuration.
+5. Enable non-main or all-session sandboxing before exposing channels.
+6. Review workspace mounts and elevated-tool permissions as a single policy.
+7. Run `openclaw doctor` after upgrades or configuration migrations.
+8. Back up `~/.openclaw` before changing provider, channel, or agent state.
+9. Test recovery from a provider outage and a container replacement.
 
-At minimum, keep publish scope narrow, enforce pairing and allowlists, avoid broad host binds, and run diagnostics after significant config changes.
+### Troubleshooting order
 
-### Troubleshooting Guide
+Start at the outside and move inward:
 
-Start with transport and state truth before tuning behavior. Reachability failures usually come from runtime/port/publish issues. Auth failures usually come from token mismatch or target confusion. Provider mismatches often come from namespace assumptions in containerized environments.
+1. **Reachability:** Is the Gateway process running, and is the expected port bound?
+2. **Authorization:** Does the caller have a valid token, pairing, or allowlist entry?
+3. **Session:** Did the message route to the expected agent and session key?
+4. **Provider:** Can the selected model authenticate and answer a minimal request?
+5. **Tool policy:** Is the requested tool enabled and permitted in this session?
+6. **Execution:** Did the sandbox or host backend run the command in the expected directory?
+7. **State:** Did the result persist to the mounted configuration, workspace, and session directories?
 
-When tool calls appear as plain text, treat backend compatibility as a likely cause before rewriting assistant logic.
+When tool calls arrive as plain text, inspect the provider API mode first. When a container restart loses configuration, inspect mounts and paths before re-running onboarding.
 
-### Hardening Profile Matrix
+### Exposure profiles
 
-| Control Area | Dev | Trusted-Home | Internet-Exposed |
+| Control | Local development | Trusted home or tailnet | Publicly reachable |
 |---|---|---|---|
-| Publish scope | loopback | loopback + controlled remote access | loopback + authenticated proxy/tailnet |
-| Channel policy | minimal | pairing + allowlists | strict pairing + strict allowlists |
-| Sandbox mode | off/non-main | non-main | all or tightly scoped non-main |
-| Workspace access | rw acceptable | prefer none/ro | none by default |
-| Tool policy | broad for testing | constrained | deny-by-default for risky tools |
-| Fallback strategy | simple | explicit chain | explicit chain + active monitoring |
-| Backup policy | ad hoc | scheduled | scheduled + off-host encrypted retention |
-
-Do not advance to a higher exposure profile until the current profile is stable and validated.
-
-## Reference Links
-
-- OpenClaw repository: https://github.com/openclaw/openclaw
-- OpenClaw docs: https://docs.openclaw.ai
-- Podman install guide: https://docs.openclaw.ai/install/podman
-- Docker guide: https://docs.openclaw.ai/install/docker
-- Models: https://docs.openclaw.ai/concepts/models
-- Model failover: https://docs.openclaw.ai/concepts/model-failover
-- Local models: https://docs.openclaw.ai/gateway/local-models
-- Local model services: https://docs.openclaw.ai/gateway/local-model-services
-- Sandboxing: https://docs.openclaw.ai/gateway/sandboxing
-- Ollama provider: https://docs.openclaw.ai/providers/ollama
-- LM Studio provider: https://docs.openclaw.ai/providers/lmstudio
-- vLLM provider: https://docs.openclaw.ai/providers/vllm
-- LiteLLM provider: https://docs.openclaw.ai/providers/litellm
-
----
+| Published ports | Loopback | Loopback plus controlled tailnet access | Authenticated proxy or tailnet; no raw Gateway port |
+| Channel access | One known user | Pairing plus allowlists | Strict allowlists and monitoring |
+| Sandbox | Non-main while testing | Non-main or all | All sessions, narrow tool policy |
+| Workspace | Deliberate read/write | Prefer narrow mounts | None by default |
+| Model fallback | Simple | Explicit chain | Explicit chain plus outage monitoring |
+| Backups | Manual | Scheduled local | Scheduled encrypted off-host copies |
 
 ## Runbooks
 
-### Full Podman Compose Stack (OpenClaw + Ollama + Optional vLLM)
-
-This project includes a concrete compose baseline so the primer is directly actionable. The stack is designed for local-only exposure, explicit persistence, and optional model-serving expansion.
-
-`podman-compose.yml` publishes two loopback-only ports on the `openclaw` service: `18789` for the dashboard covered earlier, and `18790` for the gateway's bridge connection. Both stay loopback-bound by default — treat any change that exposes `18790` beyond localhost with the same scrutiny as the dashboard port.
-
-#### Included operational files
-
-- `podman-compose.yml`
-- `scripts/backup_state.sh`
-- `scripts/restore_state.sh`
-
-#### Launch flow
+### Deterministic bring-up
 
 ```bash
-podman compose -f podman-compose.yml up -d
-podman compose -f podman-compose.yml ps
-podman compose -f podman-compose.yml logs -f openclaw
+./scripts/podman/setup.sh
+./scripts/run-openclaw-podman.sh launch
+./scripts/run-openclaw-podman.sh launch setup
+openclaw --container openclaw gateway status --deep
+openclaw --container openclaw doctor
+openclaw --container openclaw models list
 ```
 
-#### Optional vLLM profile
+Connect one channel, send one normal request, perform one deliberately harmless tool call, and confirm the result appears in the expected workspace. Only then add additional channels, nodes, or providers.
+
+### Backup
+
+Use OpenClaw's backup command for live state. It understands the authoritative SQLite databases and verifies the resulting archive:
 
 ```bash
-podman compose -f podman-compose.yml --profile vllm up -d
+openclaw backup create \
+  --output "$HOME/openclaw-state-$(date +%Y%m%d_%H%M%S).tar.gz" \
+  --verify
 ```
 
-### Backup and Restore
+Store the archive somewhere access-controlled. It can contain tokens, auth state, private conversations, and tool results. Do not copy live SQLite files with a raw `tar` command while the Gateway is writing to them.
 
-State integrity is central to reliable assistant operation. The included scripts provide a baseline snapshot and restore workflow.
-
-#### Backup
+### Validate after restore
 
 ```bash
-./scripts/backup_state.sh
+openclaw --container openclaw doctor --lint --json
+openclaw --container openclaw gateway status --deep
+openclaw --container openclaw models list
 ```
 
-#### Restore
+Send a test message through the Control UI before reconnecting every external channel. This isolates a state or provider problem from a channel-authentication problem.
 
-```bash
-./scripts/restore_state.sh ./backups/openclaw_state_YYYYMMDD_HHMMSS.tar.gz
-```
+## Reference Links
 
-#### Post-restore validation
-
-```bash
-podman compose -f podman-compose.yml up -d
-openclaw gateway status --deep
-openclaw models status
-openclaw models list --provider ollama
-```
-
-### Deterministic Bring-Up Sequence
-
-```bash
-podman compose -f podman-compose.yml up -d
-export OPENCLAW_CONTAINER=openclaw
-openclaw onboard
-openclaw models status
-openclaw config set agents.defaults.sandbox.mode '"non-main"'
-openclaw gateway status --deep
-./scripts/backup_state.sh
-```
+- [OpenClaw documentation](https://docs.openclaw.ai/)
+- [OpenClaw installation](https://docs.openclaw.ai/install)
+- [OpenClaw Podman deployment](https://docs.openclaw.ai/install/podman)
+- [Gateway architecture](https://docs.openclaw.ai/concepts/architecture)
+- [Models and model selection](https://docs.openclaw.ai/concepts/models)
+- [Model failover](https://docs.openclaw.ai/concepts/model-failover)
+- [Ollama provider](https://docs.openclaw.ai/providers/ollama)
+- [Sandboxing](https://docs.openclaw.ai/gateway/sandboxing)
+- [OpenClaw repository](https://github.com/openclaw/openclaw)
+- [Hermes Agent documentation](https://hermes-agent.nousresearch.com/docs/)
+- [Hermes API server](https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/)
+- [Hermes desktop and `hermes serve`](https://hermes-agent.nousresearch.com/docs/user-guide/desktop)
 
 ## Closing Perspective
 
-The real value of this stack is not simply running local models. It is controlling assistant behavior under explicit operational rules you own. If you maintain clear boundaries for runtime, state, policy, and recovery, OpenClaw can move from "interesting tool" to dependable daily system.
+OpenClaw becomes dependable when you stop treating it as a chat window and start treating it as a small distributed system. The Gateway owns connectivity and state; the model proposes reasoning and actions; the tool boundary decides what can happen; the operator owns secrets, access, and recovery.
 
-No deployment is literally zero-touch. The real goal is explicit host contracts, explicit persistence, explicit secret handling, and explicit recovery steps. OpenClaw plus rootless Podman fits this model well when boundary discipline is maintained.
+Rootless Podman is useful because it makes those boundaries visible. It does not remove the need for channel authorization, sandbox policy, backups, or upgrade testing. If you can name the process, state directory, port, credential, and execution target for every part of your setup, you are operating OpenClaw rather than merely hoping it works.
