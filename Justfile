@@ -17,8 +17,14 @@ building-ai-docs:
 political-html:
   cd political_systems && just html
 
+political-all:
+  cd political_systems && just all-docs
+
 numerical-html:
   cd numerical_analysis_primer && just html
+
+numerical-all:
+  cd numerical_analysis_primer && just full
 
 openclaw-html:
   cd openclaw_primer && just html
@@ -60,7 +66,7 @@ info-theory-html:
   cd info_theory_article && just html
 
 info-theory-all:
-  cd info_theory_article && just all
+  cd info_theory_article && just all-docs
 
 deep-learning-html:
   cd deep_learning_primer && just html
@@ -69,6 +75,7 @@ deep-learning-pdf:
   cd deep_learning_primer && just pdf
 
 deep-learning-all:
+  cd deep_learning_primer && just html-variants
   cd deep_learning_primer && just all
 
 eval-loop-html:
@@ -78,7 +85,7 @@ eval-loop-pdf:
   cd evaluation_loop_primer && just pdf
 
 eval-loop-all:
-  cd evaluation_loop_primer && just all
+  cd evaluation_loop_primer && just all-docs
 
 python-r-html:
   cd python_for_r_users && just html

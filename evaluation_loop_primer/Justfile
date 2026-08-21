@@ -2,7 +2,37 @@ SOURCE_MD   := "evaluation_loop_primer.md"
 PROJECT_DIR := "evaluation_loop_primer"
 TITLE       := "The Evaluation Loop: How AI Systems Learn to Improve"
 AUTHOR      := "June 2026"
-HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'
+
+html-mathml:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o evaluation_loop_primer.mathml.html \
+    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml \
+    --lua-filter="filters/mermaid-to-image.lua" \
+    --number-sections --shift-heading-level-by=-1 \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-mathjax:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o evaluation_loop_primer.mathjax.html \
+    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax \
+    --lua-filter="filters/mermaid-to-image.lua" \
+    --number-sections --shift-heading-level-by=-1 \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-variants: html-mathml html-mathjax
+
+all-docs: html-variants all

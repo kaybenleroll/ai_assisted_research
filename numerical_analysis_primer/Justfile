@@ -2,7 +2,7 @@ SOURCE_MD   := "numerical_analysis_primer.md"
 PROJECT_DIR := "numerical_analysis_primer"
 TITLE       := "Numerical Analysis Primer: A Practical Guide for Practitioners"
 AUTHOR      := "June 2026"
-HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
 ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
 
@@ -15,7 +15,7 @@ plots:
     Rscript generate_plots.R
 
 # Generate figures then render both HTML and PDF
-full: plots html pdf
+full: plots html-variants html pdf
 
 import '../_shared/common.just'
 
@@ -26,7 +26,7 @@ html-mathml:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o numerical_analysis_primer.mathml.html \
-    {{HTML_FLAGS_BASE}} --mathml \
+    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}"
@@ -37,7 +37,7 @@ html-mathjax:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o numerical_analysis_primer.mathjax.html \
-    {{HTML_FLAGS_BASE}} --mathjax \
+    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}"
