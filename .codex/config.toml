@@ -1,0 +1,2 @@
+# Use the repository's Claude Code instructions when AGENTS.md is absent.
+project_doc_fallback_filenames = ["CLAUDE.md"]
