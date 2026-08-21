@@ -32,6 +32,15 @@ claude-alt-pdf:
 claude-alt-docs:
   cd claude_code_alternative && just all
 
+codex-claude-html:
+  cd codex_for_claude_code_users && just html
+
+codex-claude-pdf:
+  cd codex_for_claude_code_users && just pdf
+
+codex-claude-docs:
+  cd codex_for_claude_code_users && just all
+
 research-html:
   cd research_local_llms && just html
 
@@ -99,11 +108,11 @@ ohmyzsh-all:
   cd ohmyzsh_primer && just all
 
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs silo-all info-theory-all deep-learning-all eval-loop-all python-r-all military-all ohmyzsh-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all eval-loop-all python-r-all military-all ohmyzsh-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -113,6 +122,7 @@ clean-generated:
   cd openclaw_primer && just clobber
   cd research_local_llms && just clobber
   cd claude_code_alternative && just clobber
+  cd codex_for_claude_code_users && just clobber
   cd silo_rpg_primer && just silo-clobber
   cd info_theory_article && just clobber
   cd deep_learning_primer && just clobber

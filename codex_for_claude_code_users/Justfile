@@ -1,0 +1,8 @@
+SOURCE_MD   := "codex-for-claude-code-users.md"
+PROJECT_DIR := "codex_for_claude_code_users"
+TITLE       := "Codex for Claude Code Users: A Practical Guide to Running Two Coding Agents in One Repository"
+AUTHOR      := "August 2026"
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
+
+import '../_shared/common.just'
