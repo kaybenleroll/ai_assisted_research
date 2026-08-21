@@ -482,7 +482,7 @@
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
-  $math$
+$math$
 </head>
 <body>
 
@@ -604,6 +604,7 @@ $body$
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = '$if(mathrenderer)$$mathrenderer$$else$mathjax$endif$';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -612,8 +613,13 @@ $body$
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {

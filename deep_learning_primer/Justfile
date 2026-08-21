@@ -2,7 +2,36 @@ SOURCE_MD   := "deep_learning_primer.md"
 PROJECT_DIR := "deep_learning_primer"
 TITLE       := "Deep Learning and Generative AI: A Technical Primer"
 AUTHOR      := "June 2026"
-HTML_EXTRA  := "--mathjax --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'
+
+# Keep both browser math renderers available for visual comparison.
+html-mathml:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o deep_learning_primer.mathml.html \
+    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml \
+    --lua-filter="filters/mermaid-to-image.lua" \
+    --number-sections --shift-heading-level-by=-1 \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-mathjax:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o deep_learning_primer.mathjax.html \
+    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax \
+    --lua-filter="filters/mermaid-to-image.lua" \
+    --number-sections --shift-heading-level-by=-1 \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-variants: html-mathml html-mathjax

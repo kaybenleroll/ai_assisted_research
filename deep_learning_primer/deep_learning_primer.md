@@ -118,7 +118,7 @@ graph LR
     h2 -- "v2" --> y
 ```
 
-The pre-activations are $z_1 = w_{11}x_1 + w_{12}x_2 + w_{13}x_3 + b_1$, $z_2 = w_{21}x_1 + w_{22}x_2 + w_{23}x_3 + b_2$, and $z_\text{out} = v_1 h_1 + v_2 h_2 + b_\text{out}$.
+The pre-activations are $z_1 = w_{11}x_1 + w_{12}x_2 + w_{13}x_3 + b_1,$ $z_2 = w_{21}x_1 + w_{22}x_2 + w_{23}x_3 + b_2,$ and $z_{\mathrm{out}} = v_1 h_1 + v_2 h_2 + b_{\mathrm{out}}$.
 
 Every arrow carries a weight, every hidden and output neuron adds a bias and applies an activation, and the signal flows strictly left to right. Read top to bottom and you can see the structure that gives the network its power: the hidden units $h_1$ and $h_2$ are intermediate features the network constructs for itself, and the output combines them. With enough hidden units arranged this way, the XOR problem that defeated a single perceptron becomes trivial — one hidden layer is enough to carve the input space into the regions XOR needs.
 
@@ -140,13 +140,13 @@ is a rescaled sigmoid that outputs values in $(-1, 1)$ instead of $(0, 1)$. The 
 
 **ReLU.** The rectified linear unit,
 
-$$\text{ReLU}(z) = \max(0, z),$$
+$$\operatorname{ReLU}(z) = \max(0, z),$$
 
 throws out the S-curve entirely. It is the identity for positive inputs and zero for negative ones — a hinge at the origin. For any positive input its derivative is exactly 1, so it does not squash gradients on the way back, and that single property is most of why deep networks became trainable. It is also trivially cheap to compute: a comparison and nothing else, against the exponentials that sigmoid and tanh require. ReLU has its own failure mode, the dead neuron problem. If a neuron's pre-activation is negative for every input it ever sees, its output is always zero, its gradient is always zero, and it never updates — it is dead, permanently. A large gradient step can knock a neuron into this state and it never recovers. In practice this is mitigated by careful initialisation and variants like leaky ReLU that allow a small negative slope, but the basic ReLU's combination of cheapness and non-saturation made it the default hidden activation for a decade.
 
 **GELU.** The Gaussian error linear unit,
 
-$$\text{GELU}(z) = z \cdot \Phi(z),$$
+$$\operatorname{GELU}(z) = z \cdot \Phi(z),$$
 
 where $\Phi$ is the cumulative distribution function of the standard normal, is a smooth relative of ReLU. Instead of hard-gating the input with a step at zero, it gates the input by the probability $\Phi(z)$ that a standard normal variable falls below $z$ — so small inputs are softly suppressed and large inputs pass through nearly unchanged. The curve looks like ReLU with the sharp corner rounded off and a slight dip below zero for small negative inputs. That smoothness is the point. ReLU's derivative jumps discontinuously from 0 to 1 at the origin, and a smooth activation gives the optimiser a continuous gradient everywhere, which empirically helps training stability in very large models. GELU is the default activation in the transformer architectures behind BERT and the GPT family, where it consistently edges out plain ReLU.
 
@@ -162,11 +162,11 @@ Here $\mathbf{W}^{(1)}$ has shape $256 \times 784$ — one row per hidden unit, 
 
 The second layer maps that hidden representation to ten class scores and converts them to a probability distribution:
 
-$$\hat{\mathbf{y}} = \text{softmax}\!\left(\mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}\right).$$
+$$\hat{\mathbf{y}} = \operatorname{softmax}\!\left(\mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}\right).$$
 
 Now $\mathbf{W}^{(2)}$ has shape $10 \times 256$, taking the 256-dimensional hidden vector to 10 raw scores (logits), and $\mathbf{b}^{(2)}$ is 10-dimensional. The softmax function turns those ten unbounded scores into ten non-negative numbers that sum to 1:
 
-$$\text{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_j e^{z_j}}.$$
+$$\operatorname{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_j e^{z_j}}.$$
 
 The result $\hat{\mathbf{y}}$ is a probability distribution over the ten digits, and the largest entry is the network's prediction. That entire chain — multiply, add bias, activate, multiply, add bias, softmax — is the forward pass. Tracking the dimensions ($784 \to 256 \to 10$) is the habit that catches most architecture bugs before they ever run.
 
@@ -201,7 +201,7 @@ Start with the right mental model: the computation graph. The forward pass is a 
 Make it concrete with the two-layer MLP from the forward-pass section. Let the loss be cross-entropy, and define the forward computation as
 
 $$\mathbf{z}^{(1)} = \mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)}, \qquad \mathbf{h}^{(1)} = \sigma(\mathbf{z}^{(1)}),$$
-$$\mathbf{z}^{(2)} = \mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}, \qquad \hat{\mathbf{y}} = \text{softmax}(\mathbf{z}^{(2)}).$$
+$$\mathbf{z}^{(2)} = \mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}, \qquad \hat{\mathbf{y}} = \operatorname{softmax}(\mathbf{z}^{(2)}).$$
 
 We want $\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}}$ and $\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}}$. The chain rule tells us to assemble the second-layer gradient from a sequence of local factors:
 
@@ -211,7 +211,13 @@ The first two factors combine into something remarkably clean. Cross-entropy los
 
 $$\frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(2)}} = \hat{\mathbf{y}} - \mathbf{y}.$$
 
-This is worth deriving, because it is one of those results that looks too tidy to be real. With a one-hot label, the loss is $\mathcal{L} = -\log \hat{y}_c$ where $c$ is the true class, and $\hat{y}_k = e^{z_k} / \sum_j e^{z_j}$. Differentiating the softmax gives two cases: for the entry $k = i$, $\frac{\partial \hat{y}_i}{\partial z_i} = \hat{y}_i(1 - \hat{y}_i)$, and for $k \neq i$, $\frac{\partial \hat{y}_k}{\partial z_i} = -\hat{y}_k \hat{y}_i$. Now apply the chain rule for the loss with respect to a single logit $z_i$. Only the true class $c$ contributes a $-\log \hat{y}_c$ term, so $\frac{\partial \mathcal{L}}{\partial z_i} = -\frac{1}{\hat{y}_c} \frac{\partial \hat{y}_c}{\partial z_i}$. Substituting the two softmax cases: when $i = c$ this gives $-\frac{1}{\hat{y}_c} \cdot \hat{y}_c(1 - \hat{y}_c) = \hat{y}_c - 1$, and when $i \neq c$ it gives $-\frac{1}{\hat{y}_c} \cdot (-\hat{y}_c \hat{y}_i) = \hat{y}_i$. Stack these over all $i$ and, using $y_i = 1$ for $i = c$ and $0$ otherwise, the whole vector is exactly $\hat{\mathbf{y}} - \mathbf{y}$. The messy softmax and logarithm derivatives cancel and leave the simplest possible signal: the error.
+This is worth deriving, because it is one of those results that looks too tidy to be real. With a one-hot label, the loss is $\mathcal{L} = -\log \hat{y}_c$ where $c$ is the true class, and $\hat{y}_k = e^{z_k} / \sum_j e^{z_j}$.
+
+Differentiating the softmax gives two cases: for the entry $k = i,$ $\frac{\partial \hat{y}_i}{\partial z_i} = \hat{y}_i(1 - \hat{y}_i),$ and for $k \neq i,$ $\frac{\partial \hat{y}_k}{\partial z_i} = -\hat{y}_k \hat{y}_i$.
+
+Now apply the chain rule for the loss with respect to a single logit $z_i$. Only the true class $c$ contributes a $-\log \hat{y}_c$ term, so $\frac{\partial \mathcal{L}}{\partial z_i} = -\frac{1}{\hat{y}_c} \frac{\partial \hat{y}_c}{\partial z_i}$.
+
+Substituting the two softmax cases: when $i = c$ this gives $-\frac{1}{\hat{y}_c} \cdot \hat{y}_c(1 - \hat{y}_c) = \hat{y}_c - 1,$ and when $i \neq c$ it gives $-\frac{1}{\hat{y}_c} \cdot (-\hat{y}_c \hat{y}_i) = \hat{y}_i$. Stack these over all $i$ and, using $y_i = 1$ for $i = c$ and $0$ otherwise, the whole vector is exactly $\hat{\mathbf{y}} - \mathbf{y}$. The messy softmax and logarithm derivatives cancel and leave the simplest possible signal: the error.
 
 Call that error vector $\boldsymbol{\delta}^{(2)} = \hat{\mathbf{y}} - \mathbf{y}$. Since $\mathbf{z}^{(2)} = \mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}$, the derivative of $\mathbf{z}^{(2)}$ with respect to $\mathbf{W}^{(2)}$ just pulls out $\mathbf{h}^{(1)}$, giving the second-layer weight gradient as an outer product:
 
@@ -271,7 +277,7 @@ The update then uses the bias-corrected momentum, scaled by the bias-corrected a
 
 $$\mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \epsilon} \, \hat{\mathbf{m}}.$$
 
-The typical defaults — $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\epsilon = 10^{-8}$ — work across an enormous range of problems with little tuning, and that robustness is why Adam is the default. It gives you momentum's acceleration and RMSProp's per-weight adaptation in one optimiser, and it converges quickly and reliably on the kinds of loss surfaces deep networks produce. When in doubt, reach for Adam.
+The typical defaults — $\beta_1 = 0.9,$ $\beta_2 = 0.999,$ $\epsilon = 10^{-8}$ — work across an enormous range of problems with little tuning, and that robustness is why Adam is the default. It gives you momentum's acceleration and RMSProp's per-weight adaptation in one optimiser, and it converges quickly and reliably on the kinds of loss surfaces deep networks produce. When in doubt, reach for Adam.
 
 ### Weight Initialisation
 
@@ -279,11 +285,11 @@ Before training begins the weights have to be set to something, and the obvious 
 
 Random is necessary but not sufficient — the scale of the random values matters enormously, because it sets the size of the per-layer multiplicative factor that the vanishing/exploding analysis was all about. Too small and signals shrink to nothing as they pass forward through the network; too large and they blow up. The two standard schemes choose the scale to keep the signal variance roughly constant from layer to layer. Xavier (Glorot) initialisation, designed for sigmoid and tanh, draws weights uniformly with a spread set by the layer's fan-in and fan-out:
 
-$$\mathbf{W} \sim \mathcal{U}\!\left(-\sqrt{\frac{6}{n_{\text{in}} + n_{\text{out}}}}, \; \sqrt{\frac{6}{n_{\text{in}} + n_{\text{out}}}}\right).$$
+$$\mathbf{W} \sim \mathcal{U}\!\left(-\sqrt{\frac{6}{n_{\mathrm{in}} + n_{\mathrm{out}}}}, \; \sqrt{\frac{6}{n_{\mathrm{in}} + n_{\mathrm{out}}}}\right).$$
 
 He initialisation, designed for ReLU layers, accounts for the fact that ReLU zeros out half its inputs on average and so needs a larger scale to compensate, drawing from a normal distribution with variance set by the fan-in:
 
-$$\mathbf{W} \sim \mathcal{N}\!\left(0, \; \frac{2}{n_{\text{in}}}\right).$$
+$$\mathbf{W} \sim \mathcal{N}\!\left(0, \; \frac{2}{n_{\mathrm{in}}}\right).$$
 
 The rule of thumb is simple: He initialisation for ReLU and its relatives, Xavier for sigmoid and tanh. Getting this right is part of why modern deep networks train where older ones stalled — a well-chosen initialisation keeps gradients alive from the very first step.
 
@@ -311,7 +317,7 @@ A fixed learning rate is rarely optimal across an entire training run. Early on,
 
 Warmup handles the dangerous opening. Instead of starting at the full learning rate, you start small and increase it linearly to the target rate over the first few hundred or few thousand steps. This prevents the early instability that a large rate causes on a freshly initialised network — particularly important for large transformers and for Adam, whose adaptive rate estimates are unreliable before enough gradients have accumulated. Cosine decay handles the long tail. After warmup, the rate is decayed following a cosine curve from its peak down toward a small minimum,
 
-$$\eta_t = \eta_{\min} + \tfrac{1}{2}(\eta_{\max} - \eta_{\min})\left(1 + \cos\frac{\pi t}{T}\right),$$
+$$\eta_t = \eta_{\min} + \frac{1}{2}(\eta_{\max} - \eta_{\min})\left(1 + \cos\frac{\pi t}{T}\right),$$
 
 where $t$ is the current step and $T$ the total. The rate falls slowly at first, accelerates through the middle, and flattens out gently as it approaches the minimum near the end, which empirically lands the model in a better solution than an abrupt drop. Warmup followed by cosine decay is the standard schedule for training large modern models.
 
@@ -371,7 +377,7 @@ flowchart LR
 
 The kernel visits nine positions in total — three across, three down — and each produces one output value, giving the $3 \times 3$ map.
 
-In practice a single kernel is never enough, because one kernel detects exactly one kind of pattern. A real convolutional layer has $C_\text{out}$ separate kernels, and each kernel spans all the input channels: its shape is $C_\text{in} \times k \times k$. So for an RGB input, each kernel is $3 \times k \times k$ and convolves across all three colour channels at once, summing the result into a single output map. With $C_\text{out}$ kernels you get $C_\text{out}$ output feature maps, which become the channels fed to the next layer. Concretely, a conv layer with 64 kernels of size $3 \times 3$ acting on a 3-channel input has $64 \times (3 \times 3 \times 3) + 64 = 1792$ parameters — the $+64$ is one bias per kernel. Compare that with the hundreds of millions an MLP would burn on the equivalent transformation. The parameter count of a conv layer depends on the kernel size and channel counts, and not at all on the image resolution. You can feed it a bigger image and it costs more compute but not one extra weight.
+In practice a single kernel is never enough, because one kernel detects exactly one kind of pattern. A real convolutional layer has $C_{\mathrm{out}}$ separate kernels, and each kernel spans all the input channels: its shape is $C_{\mathrm{in}} \times k \times k$. So for an RGB input, each kernel is $3 \times k \times k$ and convolves across all three colour channels at once, summing the result into a single output map. With $C_{\mathrm{out}}$ kernels you get $C_{\mathrm{out}}$ output feature maps, which become the channels fed to the next layer. Concretely, a conv layer with 64 kernels of size $3 \times 3$ acting on a 3-channel input has $64 \times (3 \times 3 \times 3) + 64 = 1792$ parameters — the $+64$ is one bias per kernel. Compare that with the hundreds of millions an MLP would burn on the equivalent transformation. The parameter count of a conv layer depends on the kernel size and channel counts, and not at all on the image resolution. You can feed it a bigger image and it costs more compute but not one extra weight.
 
 ### Pooling layers
 
@@ -527,7 +533,7 @@ graph LR
     rnn3 --> dots(["..."])
 ```
 
-The crucial detail is that every box labelled `[RNN]` is the *same* box — the weight matrices $\mathbf{W}_h$, $\mathbf{W}_x$, and the bias are shared across all time steps. There is one set of parameters, applied repeatedly. This is exactly the parameter-sharing logic of a CNN, just applied along the time axis instead of across spatial positions: a CNN reuses a kernel at every location, an RNN reuses a cell at every step. The shared cell is what lets a single small network handle a sequence of any length.
+The crucial detail is that every box labelled `[RNN]` is the *same* box — the weight matrices $\mathbf{W}_h,$ $\mathbf{W}_x,$ and the bias are shared across all time steps. There is one set of parameters, applied repeatedly. This is exactly the parameter-sharing logic of a CNN, just applied along the time axis instead of across spatial positions: a CNN reuses a kernel at every location, an RNN reuses a cell at every step. The shared cell is what lets a single small network handle a sequence of any length.
 
 ### Backpropagation through time
 
@@ -663,9 +669,13 @@ A clean mental model for attention is a soft dictionary lookup. An ordinary dict
 
 ### Scaled dot-product attention
 
-The transformer's specific form of attention packs all the queries, keys, and values into matrices — $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$, one row per position — and computes them all at once:
+The transformer's specific form of attention packs all the queries, keys, and values into matrices — $\mathbf{Q}, \mathbf{K}, \mathbf{V}$, one row per position — and computes them all at once. First form the scaled score matrix:
 
-$$\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^T}{\sqrt{d_k}}\right)\mathbf{V}$$
+$$\mathbf{S} = \frac{\mathbf{Q}\mathbf{K}^{T}}{\sqrt{d_k}}.$$
+
+Then turn each row of scores into weights and use those weights to average the values:
+
+$$\operatorname{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{softmax}(\mathbf{S})\mathbf{V}$$
 
 Walk through it piece by piece. The product $\mathbf{Q}\mathbf{K}^T$ computes a similarity score for every query against every key — entry $(i, j)$ is the dot product of query $i$ with key $j$, so the result is a matrix of shape (number of queries × number of keys). A large dot product means the query and key point in similar directions, signalling relevance. Dividing by $\sqrt{d_k}$, where $d_k$ is the dimension of the key vectors, is the "scaled" part, and it matters more than it looks. As $d_k$ grows, dot products are sums of more terms and their variance grows with $d_k$, so without the scaling the scores would get large in magnitude, and large inputs push the softmax into its saturated regime where one entry is near 1 and the rest near 0. In saturation the softmax's gradients are tiny, and learning stalls. Dividing by $\sqrt{d_k}$ rescales the scores so their variance stays around 1, keeping the softmax in a healthy, well-gradiented range. The softmax then converts each row of scores into a probability distribution over the keys — non-negative weights summing to 1. Finally multiplying by $\mathbf{V}$ takes, for each query, the weighted average of the value vectors using those attention weights. Every operation here is smooth and differentiable, so gradients flow cleanly back through the weights to the queries, keys, and values.
 
@@ -675,21 +685,21 @@ It is worth distinguishing two uses of this same machinery. In **self-attention*
 
 A single attention operation produces one weighted view of the sequence, but one view is limiting — there are many different kinds of relationship a token might want to track at once. Multi-head attention runs $H$ attention operations in parallel, each with its own learned projection matrices, and combines the results. Each head first projects the queries, keys, and values into its own subspace, then attends within that subspace:
 
-$$\text{head}_i = \text{Attention}(\mathbf{Q}\mathbf{W}_Q^{(i)}, \mathbf{K}\mathbf{W}_K^{(i)}, \mathbf{V}\mathbf{W}_V^{(i)})$$
+$$\mathrm{head}_i = \operatorname{Attention}(\mathbf{Q}\mathbf{W}_Q^{(i)}, \mathbf{K}\mathbf{W}_K^{(i)}, \mathbf{V}\mathbf{W}_V^{(i)})$$
 
 The heads' outputs are concatenated and passed through a final projection $\mathbf{W}_O$ that mixes them back into a single representation:
 
-$$\text{MultiHead}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{Concat}(\text{head}_1, \ldots, \text{head}_H)\mathbf{W}_O$$
+$$\operatorname{MultiHead}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{Concat}(\mathrm{head}_1, \ldots, \mathrm{head}_H)\mathbf{W}_O$$
 
-The motivation is that different heads can specialise. With separate projections, one head is free to learn syntactic relationships — matching a verb to its subject — while another tracks something semantic, like coreference between a pronoun and the noun it refers to, and a third attends to nearby tokens for local context. They run concurrently and independently, and the final projection blends their distinct perspectives into the output. In practice the per-head dimension is set to $d_{\text{model}} / H$, so that splitting $d_{\text{model}}$ across $H$ heads keeps the total computation roughly the same as a single full-width attention — you get the diversity of multiple heads at essentially no extra cost.
+The motivation is that different heads can specialise. With separate projections, one head is free to learn syntactic relationships — matching a verb to its subject — while another tracks something semantic, like coreference between a pronoun and the noun it refers to, and a third attends to nearby tokens for local context. They run concurrently and independently, and the final projection blends their distinct perspectives into the output. In practice the per-head dimension is set to $d_{\mathrm{model}} / H$, so that splitting $d_{\mathrm{model}}$ across $H$ heads keeps the total computation roughly the same as a single full-width attention — you get the diversity of multiple heads at essentially no extra cost.
 
 ### Positional encoding
 
 Self-attention has a property that is both a feature and a problem: it is permutation-equivariant. Because attention computes weighted sums over a *set* of keys and values, with no inherent notion of which came first, shuffling the input tokens produces an identically shuffled output and changes nothing else. The model literally cannot tell "dog bites man" from "man bites dog" on the basis of attention alone — both have the same tokens, and order is invisible to the mechanism. That is fatal for language, where order is meaning.
 
-The fix is to inject position information directly into the token representations, by adding a **positional encoding** $\mathbf{PE}_t$ to each token's embedding before it enters the first attention layer. Now two tokens with the same word but different positions carry different vectors, and attention can pick up on the difference. The original transformer (Vaswani et al., 2017) used a fixed, hand-designed scheme of sinusoids at geometrically spaced frequencies:
+The fix is to inject position information directly into the token representations, by adding a **positional encoding** $\mathrm{PE}_t$ to each token's embedding before it enters the first attention layer. Now two tokens with the same word but different positions carry different vectors, and attention can pick up on the difference. The original transformer (Vaswani et al., 2017) used a fixed, hand-designed scheme of sinusoids at geometrically spaced frequencies:
 
-$$\text{PE}_{(t, 2i)} = \sin\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right), \quad \text{PE}_{(t, 2i+1)} = \cos\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right)$$
+$$\mathrm{PE}_{(t, 2i)} = \sin\!\left(\frac{t}{10000^{2i/d_{\mathrm{model}}}}\right), \quad \mathrm{PE}_{(t, 2i+1)} = \cos\!\left(\frac{t}{10000^{2i/d_{\mathrm{model}}}}\right)$$
 
 Each dimension of the encoding is a sinusoid, with low dimensions varying quickly across positions and high dimensions varying slowly, so the full vector gives every position a unique fingerprint. The reasons for choosing sinusoids are practical. They are fixed rather than learned, so they add no parameters. They extrapolate to sequences longer than any seen in training, because the functions are defined for every position. And they encode relative position implicitly: because of the trigonometric identities, the encoding of position $t + k$ is a fixed linear function of the encoding at $t$, so the model can learn to attend "three tokens back" in a position-independent way. Learned positional embeddings — just a trainable vector per position — are a common alternative that often matches or slightly exceeds sinusoidal encodings in practice, at the cost of not extrapolating beyond the trained length.
 
@@ -730,21 +740,21 @@ Each encoder block has two sub-layers: a multi-head self-attention over the inpu
 
 The feed-forward network is two linear layers with a ReLU between them, applied independently to every position:
 
-$$\text{FFN}(\mathbf{x}) = \max(0, \mathbf{x}\mathbf{W}_1 + \mathbf{b}_1)\mathbf{W}_2 + \mathbf{b}_2$$
+$$\operatorname{FFN}(\mathbf{x}) = \max(0, \mathbf{x}\mathbf{W}_1 + \mathbf{b}_1)\mathbf{W}_2 + \mathbf{b}_2$$
 
-It is "position-wise" because the same FFN is applied to each token's vector separately, with no interaction between positions — all the cross-position mixing already happened in the attention sub-layer, and the FFN's job is to transform each token's representation on its own. The inner dimension is conventionally four times the model dimension, $d_{\text{ff}} = 4 \times d_{\text{model}}$, giving the block extra capacity to process what attention gathered. That is the 2017 formulation; modern LLMs from LLaMA onward mostly replace the plain ReLU FFN with **SwiGLU** — a gated variant that multiplies two linear projections together, one passed through a Swish activation — and shrink the inner dimension to roughly $d_{\text{ff}} \approx \tfrac{8}{3} d_{\text{model}}$ to keep the parameter count comparable despite the extra projection. It is the same one-line footnote as RoPE and pre-LN elsewhere in this section: the mechanism above is the textbook version, and production models have since tweaked it.
+It is "position-wise" because the same FFN is applied to each token's vector separately, with no interaction between positions — all the cross-position mixing already happened in the attention sub-layer, and the FFN's job is to transform each token's representation on its own. The inner dimension is conventionally four times the model dimension, $d_{\mathrm{ff}} = 4 \times d_{\mathrm{model}}$, giving the block extra capacity to process what attention gathered. That is the 2017 formulation; modern LLMs from LLaMA onward mostly replace the plain ReLU FFN with **SwiGLU** — a gated variant that multiplies two linear projections together, one passed through a Swish activation — and shrink the inner dimension to roughly $d_{\mathrm{ff}} \approx \frac{8}{3} d_{\mathrm{model}}$ to keep the parameter count comparable despite the extra projection. It is the same one-line footnote as RoPE and pre-LN elsewhere in this section: the mechanism above is the textbook version, and production models have since tweaked it.
 
-Every sub-layer is wrapped in a residual connection and a layer normalisation, in the form $\text{LayerNorm}(\mathbf{x} + \text{Sublayer}(\mathbf{x}))$. The residual is there for exactly the reason it was in ResNet: the $+\,\mathbf{x}$ gives the gradient a direct path back through the identity, so even a deep stack of blocks trains without the gradient vanishing. Transformers are deep, and they would not train without these skip connections any more than a 152-layer CNN would.
+Every sub-layer is wrapped in a residual connection and a layer normalisation, in the form $\operatorname{LayerNorm}(\mathbf{x} + \operatorname{Sublayer}(\mathbf{x}))$. The residual is there for exactly the reason it was in ResNet: the $+\,\mathbf{x}$ gives the gradient a direct path back through the identity, so even a deep stack of blocks trains without the gradient vanishing. Transformers are deep, and they would not train without these skip connections any more than a 152-layer CNN would.
 
 ### Layer normalisation
 
 Transformers normalise with layer normalisation rather than the batch normalisation of §4, and the difference is which dimension you normalise over. Batch norm computes its mean and variance over the batch dimension — across all the examples in a mini-batch, for each feature. Layer norm instead computes them over the feature dimension, independently for each single example:
 
-$$\text{LayerNorm}(\mathbf{x}) = \gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta$$
+$$\operatorname{LayerNorm}(\mathbf{x}) = \gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta$$
 
-where $\mu$ and $\sigma$ are the mean and standard deviation of the features of that one example, $\epsilon$ is a small constant for numerical stability, and $\gamma$, $\beta$ are learned per-feature scale and shift. Normalising per-example is a much better fit for sequence models. Batch norm's statistics depend on the other examples in the batch, which is awkward when sequences have different lengths and when batches are small, and it behaves differently between training and inference because it must track running statistics. Layer norm sidesteps all of that — each token is normalised using only its own features, so it is independent of batch size, length, and the train/inference distinction.
+where $\mu$ and $\sigma$ are the mean and standard deviation of the features of that one example, $\epsilon$ is a small constant for numerical stability, and $\gamma,$ $\beta$ are learned per-feature scale and shift. Normalising per-example is a much better fit for sequence models. Batch norm's statistics depend on the other examples in the batch, which is awkward when sequences have different lengths and when batches are small, and it behaves differently between training and inference because it must track running statistics. Layer norm sidesteps all of that — each token is normalised using only its own features, so it is independent of batch size, length, and the train/inference distinction.
 
-One detail of placement is worth knowing, because it changed after the original paper. The 2017 transformer used **post-LN**: normalise *after* adding the residual, as written above. Post-LN turned out to be finicky to train at depth, often needing careful learning-rate warm-up. Modern practice has largely shifted to **pre-LN**, applying the norm to the input of each sub-layer *before* attention or the FFN, with the form $\mathbf{x} + \text{Sublayer}(\text{LayerNorm}(\mathbf{x}))$. Pre-LN keeps the residual path completely clean — nothing normalises the signal travelling down the skip connections — which makes deep transformers markedly more stable to train.
+One detail of placement is worth knowing, because it changed after the original paper. The 2017 transformer used **post-LN**: normalise *after* adding the residual, as written above. Post-LN turned out to be finicky to train at depth, often needing careful learning-rate warm-up. Modern practice has largely shifted to **pre-LN**, applying the norm to the input of each sub-layer *before* attention or the FFN, with the form $\mathbf{x} + \operatorname{Sublayer}(\operatorname{LayerNorm}(\mathbf{x}))$. Pre-LN keeps the residual path completely clean — nothing normalises the signal travelling down the skip connections — which makes deep transformers markedly more stable to train.
 
 ### BERT versus GPT
 
@@ -871,13 +881,13 @@ Once text is tokens, you need something to train on. There is no labelled data a
 
 The **Causal Language Model** objective (GPT-style) is to predict the next token given everything before it. You sweep through the corpus and, at every position, ask the model for a distribution over the next token, then penalise it for the probability it assigned to the token that actually came next. Written out, the loss over a sequence of length $T$ is
 
-$$\mathcal{L}_\text{CLM} = -\sum_{t=1}^{T} \log p_\theta(x_t \mid x_1, \ldots, x_{t-1}).$$
+$$\mathcal{L}_{\mathrm{CLM}} = -\sum_{t=1}^{T} \log p_\theta(x_t \mid x_1, \ldots, x_{t-1}).$$
 
 The "causal" part is enforced by the attention mask from §7 — each position can attend only to positions at or before it, never ahead — so the model genuinely has to predict, not peek. Every token in the corpus is a free training example, which is what makes this scale so well.
 
 The **Masked Language Model** objective (BERT-style) instead corrupts the input and asks the model to repair it. Take a sequence, randomly choose about 15% of the positions, replace those tokens with a special `[MASK]` symbol, and train the model to recover the originals using context from both sides. The loss is computed only over the masked positions $\mathcal{M}$:
 
-$$\mathcal{L}_\text{MLM} = -\sum_{t \in \mathcal{M}} \log p_\theta(x_t \mid \mathbf{x}_{\backslash \mathcal{M}}),$$
+$$\mathcal{L}_{\mathrm{MLM}} = -\sum_{t \in \mathcal{M}} \log p_\theta(x_t \mid \mathbf{x}_{\backslash \mathcal{M}}),$$
 
 where $\mathbf{x}_{\backslash \mathcal{M}}$ is the sequence with the masked positions hidden. There is no causal mask here; the model sees the whole sequence at once and reads left-and-right context to fill the gap.
 
@@ -917,7 +927,7 @@ where $y_w$ is the preferred ("winning") completion and $y_l$ the rejected one. 
 
 The third stage is **policy optimisation**. Treat the language model as a policy $\pi_\theta$ and fine-tune it with reinforcement learning — classically **Proximal Policy Optimisation** (PPO) — to produce outputs the reward model scores highly. The objective, a quantity to *maximise* rather than minimise — so called out as $J(\theta)$ rather than the $\mathcal{L}$ used elsewhere in this primer for losses to be minimised — is
 
-$$J_\text{RLHF}(\theta) = \mathbb{E}\big[r_\phi(\mathbf{x}, \mathbf{y})\big] - \beta \cdot \text{KL}\big[\pi_\theta \| \pi_\text{SFT}\big].$$
+$$J_{\mathrm{RLHF}}(\theta) = \mathbb{E}\big[r_\phi(\mathbf{x}, \mathbf{y})\big] - \beta \cdot \operatorname{KL}\big[\pi_\theta \| \pi_{\mathrm{SFT}}\big].$$
 
 The first term is the reward to maximise. The second term is the crucial guardrail: a KL-divergence penalty that keeps the optimised policy close to the SFT model it started from, with $\beta$ controlling how hard the leash pulls.
 
@@ -941,7 +951,7 @@ Generative modelling is the problem of learning a distribution well enough to dr
 
 An autoencoder is two networks trained as a pair. An **encoder** $q_\phi(\mathbf{z} \mid \mathbf{x})$ takes an input $\mathbf{x}$ — an image, say — and compresses it to a low-dimensional latent code $\mathbf{z}$. A **decoder** $p_\theta(\mathbf{x} \mid \mathbf{z})$ takes that code and tries to reconstruct the original input. You train them jointly to minimise reconstruction error, mean-squared for continuous data or binary cross-entropy for binary data:
 
-$$\mathcal{L}_\text{AE} = \| \mathbf{x} - \hat{\mathbf{x}} \|^2.$$
+$$\mathcal{L}_{\mathrm{AE}} = \| \mathbf{x} - \hat{\mathbf{x}} \|^2.$$
 
 The bottleneck — the fact that $\mathbf{z}$ is much smaller than $\mathbf{x}$ — forces the network to discard everything except the structure it needs to reconstruct, so the latent code becomes a compressed representation of the data. Autoencoders compress well, and a small variation (the **denoising autoencoder**, which adds noise to the input and asks the network to reconstruct the clean original) makes them denoise well too. What they do *not* do is generate convincingly, and the reason is structural.
 
@@ -961,15 +971,15 @@ We want to find decoder parameters $\theta$ that make this large for the real da
 
 The way through is to bring the encoder back, but now with a job defined by the generative story. The true posterior $p(\mathbf{z} \mid \mathbf{x})$ — the distribution over latents that could have produced a given $\mathbf{x}$ — is exactly as intractable as the marginal. So introduce an approximation to it: a **variational posterior** $q_\phi(\mathbf{z} \mid \mathbf{x})$, which is just our encoder, outputting a distribution over $\mathbf{z}$ for each input. Then a short argument using Jensen's inequality (you take the log of the marginal, insert $q_\phi$, and push the log inside the expectation) gives a tractable lower bound on the log-likelihood:
 
-$$\log p_\theta(\mathbf{x}) \geq \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\big[\log p_\theta(\mathbf{x} \mid \mathbf{z})\big] - \text{KL}\big(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z})\big).$$
+$$\log p_\theta(\mathbf{x}) \geq \mathbb{E}_{q_\phi(\mathbf{z} \mid \mathbf{x})}\big[\log p_\theta(\mathbf{x} \mid \mathbf{z})\big] - \operatorname{KL}\big(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z})\big).$$
 
 This right-hand side is the **Evidence Lower BOund**, the ELBO. Because it sits below the log-likelihood, pushing it up pushes up a guaranteed lower bound on the quantity we actually care about, and — unlike the marginal — every piece of it is computable. Maximise the ELBO over $\theta$ and $\phi$ and you are doing approximate maximum likelihood.
 
-The two terms have clean readings, and together they are exactly the autoencoder objective plus the regulariser it was missing. The first term, $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$, is a **reconstruction** term: encode $\mathbf{x}$ to a distribution over $\mathbf{z}$, sample, decode, and reward the decoder for assigning high probability to the original. The second term, $-\text{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z}))$, is a **regularisation** term: it penalises the encoder for placing its codes anywhere the prior wouldn't, pulling every per-input posterior toward the standard Gaussian. That second term is precisely what ordinary autoencoders lacked. It forces the encoder to use the same region of latent space the decoder will be sampling from at generation time, so the holes close and sampling from the prior produces something sensible.
+The two terms have clean readings, and together they are exactly the autoencoder objective plus the regulariser it was missing. The first term, $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$, is a **reconstruction** term: encode $\mathbf{x}$ to a distribution over $\mathbf{z}$, sample, decode, and reward the decoder for assigning high probability to the original. The second term, $-\operatorname{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z}))$, is a **regularisation** term: it penalises the encoder for placing its codes anywhere the prior wouldn't, pulling every per-input posterior toward the standard Gaussian. That second term is precisely what ordinary autoencoders lacked. It forces the encoder to use the same region of latent space the decoder will be sampling from at generation time, so the holes close and sampling from the prior produces something sensible.
 
-The KL term is also the part you can compute in closed form, which is what makes the whole thing practical. Choose the encoder to output a diagonal Gaussian, $q_\phi = \mathcal{N}(\boldsymbol{\mu}, \text{diag}(\boldsymbol{\sigma}^2))$, and compare it to the standard normal prior. The KL between two Gaussians has a known formula, and for this case it reduces to
+The KL term is also the part you can compute in closed form, which is what makes the whole thing practical. Choose the encoder to output a diagonal Gaussian, $q_\phi = \mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(\boldsymbol{\sigma}^2))$, and compare it to the standard normal prior. The KL between two Gaussians has a known formula, and for this case it reduces to
 
-$$\text{KL} = \frac{1}{2}\sum_j \left(\mu_j^2 + \sigma_j^2 - \log \sigma_j^2 - 1\right),$$
+$$\operatorname{KL} = \frac{1}{2}\sum_j \left(\mu_j^2 + \sigma_j^2 - \log \sigma_j^2 - 1\right),$$
 
 a sum over latent dimensions of a per-dimension penalty. Each term is minimised at $\mu_j = 0, \sigma_j = 1$ — the prior — and grows as the encoder's mean drifts from zero or its variance from one. No integral, no sampling needed for this term: you read $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ straight off the encoder and plug in.
 
@@ -977,7 +987,7 @@ a sum over latent dimensions of a per-dimension penalty. Each term is minimised 
 
 There is one obstacle left, and it is in the reconstruction term. To estimate $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$ you have to sample $\mathbf{z}$ from $q_\phi(\mathbf{z} \mid \mathbf{x})$ and then decode. But sampling is not a differentiable operation. You cannot backpropagate through a random draw — there is no derivative of "drew this particular sample" with respect to the parameters of the distribution it was drawn from. And $\phi$, the encoder's parameters, are upstream of exactly that draw. Without a gradient path through the sample, the encoder cannot learn.
 
-The **reparameterisation trick** moves the randomness out of the path that needs gradients. Instead of drawing $\mathbf{z}$ directly from $\mathcal{N}(\boldsymbol{\mu}, \text{diag}(\boldsymbol{\sigma}^2))$, draw a fixed-distribution noise vector $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ — which does not depend on $\phi$ at all — and then compute
+The **reparameterisation trick** moves the randomness out of the path that needs gradients. Instead of drawing $\mathbf{z}$ directly from $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(\boldsymbol{\sigma}^2))$, draw a fixed-distribution noise vector $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ — which does not depend on $\phi$ at all — and then compute
 
 $$\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}.$$
 
@@ -1019,15 +1029,15 @@ The VAE's blurriness traces back to its objective: a likelihood-based loss that 
 
 Two networks play against each other. The **generator** $G_\theta$ takes a noise vector $\mathbf{z} \sim p_z$ — typically a standard Gaussian — and maps it to a fake data point $G_\theta(\mathbf{z})$. The **discriminator** $D_\phi$ takes a data point $\mathbf{x}$ and outputs a single number: the probability that $\mathbf{x}$ is real rather than generated. They are trained on opposite objectives, which is the whole idea, and the combined objective is a single minimax expression:
 
-$$\min_\theta \max_\phi \; \mathbb{E}_{\mathbf{x} \sim p_\text{data}}\big[\log D_\phi(\mathbf{x})\big] + \mathbb{E}_{\mathbf{z} \sim p_z}\big[\log\big(1 - D_\phi(G_\theta(\mathbf{z}))\big)\big].$$
+$$\min_\theta \max_\phi \; \mathbb{E}_{\mathbf{x} \sim p_{\mathrm{data}}}\big[\log D_\phi(\mathbf{x})\big] + \mathbb{E}_{\mathbf{z} \sim p_z}\big[\log\big(1 - D_\phi(G_\theta(\mathbf{z}))\big)\big].$$
 
 Read it from the discriminator's side first. $D_\phi$ wants to *maximise* this: drive $D_\phi(\mathbf{x})$ toward 1 on real data (the first term) and drive $D_\phi(G_\theta(\mathbf{z}))$ toward 0 on fakes (the second term), correctly classifying both. The generator wants to *minimise* it, and it only touches the second term — it has no influence over real data — so its goal is to make $D_\phi(G_\theta(\mathbf{z}))$ large, fooling the discriminator into calling its fakes real. You train them in alternation: a few steps improving $D$, a few steps improving $G$, back and forth.
 
 There is a clean piece of theory underneath that explains what the generator is really chasing. For a fixed generator, the discriminator that maximises the objective has a closed form:
 
-$$D^*(\mathbf{x}) = \frac{p_\text{data}(\mathbf{x})}{p_\text{data}(\mathbf{x}) + p_G(\mathbf{x})},$$
+$$D^*(\mathbf{x}) = \frac{p_{\mathrm{data}}(\mathbf{x})}{p_{\mathrm{data}}(\mathbf{x}) + p_G(\mathbf{x})},$$
 
-the probability that a point at $\mathbf{x}$ came from the data rather than the generator, given how often each produces it. Substitute this optimal discriminator back into the objective and the generator's problem reduces to minimising the **Jensen-Shannon divergence** between the real data distribution $p_\text{data}$ and the generator's distribution $p_G$. So in principle a GAN drives $p_G$ toward $p_\text{data}$ under a sensible divergence. That is the reassuring theory. The practice is where it gets difficult.
+the probability that a point at $\mathbf{x}$ came from the data rather than the generator, given how often each produces it. Substitute this optimal discriminator back into the objective and the generator's problem reduces to minimising the **Jensen-Shannon divergence** between the real data distribution $p_{\mathrm{data}}$ and the generator's distribution $p_G$. So in principle a GAN drives $p_G$ toward $p_{\mathrm{data}}$ under a sensible divergence. That is the reassuring theory. The practice is where it gets difficult.
 
 ### Why GANs are hard to train
 
@@ -1041,17 +1051,17 @@ The third is **training oscillation**. Because the two networks chase opposing o
 
 ### Wasserstein GAN
 
-A good deal of the instability traces back to the divergence the original GAN minimises. When $p_\text{data}$ and $p_G$ have little overlap — which is exactly the situation early in training, when the generator is bad — the Jensen-Shannon divergence saturates to a constant, and a constant has no useful gradient. The discriminator can perfectly separate real from fake, the JSD is pinned at its maximum, and the generator gets nothing to climb. The **Wasserstein GAN** (Arjovsky et al., 2017) attacks this at the root by changing the distance being minimised.
+A good deal of the instability traces back to the divergence the original GAN minimises. When $p_{\mathrm{data}}$ and $p_G$ have little overlap — which is exactly the situation early in training, when the generator is bad — the Jensen-Shannon divergence saturates to a constant, and a constant has no useful gradient. The discriminator can perfectly separate real from fake, the JSD is pinned at its maximum, and the generator gets nothing to climb. The **Wasserstein GAN** (Arjovsky et al., 2017) attacks this at the root by changing the distance being minimised.
 
 Instead of JSD it uses the **Earth Mover** or Wasserstein-1 distance, which measures the minimum cost of transporting probability mass to turn one distribution into the other. Crucially, it varies smoothly with the distributions even when they don't overlap — there is always a meaningful "how far apart" even when one distribution sits entirely beside the other, so there is always a gradient. The Wasserstein distance has a dual form that is what you actually compute:
 
-$$W(p_\text{data}, p_G) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{\mathbf{x} \sim p_\text{data}}\big[f(\mathbf{x})\big] - \mathbb{E}_{\mathbf{x} \sim p_G}\big[f(\mathbf{x})\big],$$
+$$W(p_{\mathrm{data}}, p_G) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{\mathbf{x} \sim p_{\mathrm{data}}}\big[f(\mathbf{x})\big] - \mathbb{E}_{\mathbf{x} \sim p_G}\big[f(\mathbf{x})\big],$$
 
 a supremum over all 1-Lipschitz functions $f$. In the GAN, that function is the network — now called a **critic** rather than a discriminator, because it outputs an unbounded real-valued score rather than a probability, so the final sigmoid is dropped. The critic is trained to approximate the supremum, and its output becomes a genuine distance estimate. The practical payoff is large: the critic's loss is a meaningful, non-saturating distance metric, so even a well-trained critic hands the generator informative gradients, and — bonus — the loss value actually correlates with sample quality, which the original GAN's loss never did.
 
 The constraint that $f$ be 1-Lipschitz has to be enforced somehow, and how you do it matters. The original WGAN clipped the critic's weights to a small range, which is crude and causes its own problems. The standard improvement, **WGAN-GP**, enforces the Lipschitz condition with a gradient penalty instead: a Lipschitz constant of 1 means the gradient norm should be 1 everywhere, so you add a term penalising departure from that,
 
-$$\mathcal{L}_\text{GP} = \lambda \, \mathbb{E}_{\hat{\mathbf{x}}}\big[(\|\nabla_{\hat{\mathbf{x}}} D(\hat{\mathbf{x}})\|_2 - 1)^2\big],$$
+$$\mathcal{L}_{\mathrm{GP}} = \lambda \, \mathbb{E}_{\hat{\mathbf{x}}}\big[(\|\nabla_{\hat{\mathbf{x}}} D(\hat{\mathbf{x}})\|_2 - 1)^2\big],$$
 
 evaluated at points $\hat{\mathbf{x}}$ sampled along lines between real and fake examples. This softly holds the critic's gradient norm near 1 without the pathologies of weight clipping, and it is the recipe most stable GAN training is built on.
 
@@ -1083,7 +1093,7 @@ So you can jump straight to any noise level in one shot:
 
 $$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\,\boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}).$$
 
-This is the workhorse of training. To make one training example you pick a random timestep $t$, draw one noise vector $\boldsymbol{\epsilon}$, and produce $\mathbf{x}_t$ directly — no loop. As $t$ runs from 1 to $T$, $\bar{\alpha}_t$ shrinks from near 1 to near 0, so $\mathbf{x}_t$ slides smoothly from "the original image" to "pure noise", and you can land anywhere on that path instantly.
+This is the workhorse of training. To make one training example you pick a random timestep $t,$ draw one noise vector $\boldsymbol{\epsilon},$ and produce $\mathbf{x}_t$ directly — no loop. As $t$ runs from 1 to $T,$ $\bar{\alpha}_t$ shrinks from near 1 to near 0, so $\mathbf{x}_t$ slides smoothly from "the original image" to "pure noise", and you can land anywhere on that path instantly.
 
 ### The reverse process
 
@@ -1091,7 +1101,7 @@ To generate, you want to run the chain backwards: given a noisy $\mathbf{x}_t$, 
 
 The training objective that falls out of this is remarkably plain — strip away the theoretical weighting and what remains is a mean-squared error on noise:
 
-$$\mathcal{L}_\text{simple} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{x}_t, t)\|^2\right].$$
+$$\mathcal{L}_{\mathrm{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{x}_t, t)\|^2\right].$$
 
 Sample an image, sample a timestep, sample noise, form $\mathbf{x}_t$ with the one-shot formula, and train the network to recover the noise you added. That is the entire training loop, and its simplicity — no adversary, no balancing act, just a regression — is a large part of why diffusion training is so stable compared to GANs.
 
@@ -1119,9 +1129,15 @@ It is worth knowing that this connects to a broader theory, because it explains 
 
 The DDPM sampler has one serious practical drawback: it wants on the order of 1000 steps, one per noise level, and each step is a full forward pass through a large network. Generating one image takes a thousand network evaluations, which is slow. **DDIM** (Song et al., 2020) fixes this by reformulating the reverse process. It reparameterises the chain as non-Markovian and makes the reverse step *deterministic* — dropping the random $\sigma_t \mathbf{z}$ term — which, somewhat surprisingly, lets you take much larger steps without wrecking quality. You can skip from $t$ to some much earlier timestep directly, and sampling in 10 to 50 steps gives quality comparable to DDPM's thousand. Each DDIM step first reconstructs an estimate of the clean image from the current noisy one and the predicted noise, then re-noises it to the next (lower) level:
 
-$$\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\underbrace{\left(\frac{\mathbf{x}_t - \sqrt{1-\bar{\alpha}_t}\,\epsilon_\theta(\mathbf{x}_t,t)}{\sqrt{\bar{\alpha}_t}}\right)}_{\text{predicted }\mathbf{x}_0} + \sqrt{1-\bar{\alpha}_{t-1}}\,\epsilon_\theta(\mathbf{x}_t, t).$$
+First reconstruct the clean-image estimate:
 
-The braced term is the model's current best guess at the fully denoised image; the second term pushes it partway back toward noise at the next level down. Because the process is deterministic given the starting noise, DDIM also gives you a clean latent-to-image map, which makes interpolation and editing in noise space possible — the same starting noise always produces the same image.
+$$\widehat{\mathbf{x}}_0 = \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\,\epsilon_\theta(\mathbf{x}_t, t)}{\sqrt{\bar{\alpha}_t}}.$$
+
+Then re-noise that estimate at the next level down:
+
+$$\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 - \bar{\alpha}_{t-1}}\,\epsilon_\theta(\mathbf{x}_t, t).$$
+
+The first term uses the model's current best guess at the fully denoised image; the second term pushes it partway back toward noise at the next level down. Because the process is deterministic given the starting noise, DDIM also gives you a clean latent-to-image map, which makes interpolation and editing in noise space possible — the same starting noise always produces the same image.
 
 ### Classifier-free guidance
 
@@ -1315,7 +1331,7 @@ It helps to have a rough sense of what each architecture costs to train from scr
 | BERT-base from scratch | 1B+ tokens | 110M | TPU weeks |
 | GPT-3 from scratch | 300B tokens | 175B | ~$10M compute |
 | Diffusion (DDPM, CIFAR) | 50K images | 35M | Single GPU day |
-| Stable Diffusion from scratch | LAION-5B (billions of images) | 890M | GPU months (≈150K A100-hours) |
+| Stable Diffusion from scratch | LAION-5B (billions of images) | 890M | GPU months (~150K A100-hours) |
 
 Read down the right-hand column and the practical lesson is obvious: the gap between "CPU feasible" and "TPU months" is the gap between a weekend project and a budget that only a handful of organisations can field.
 

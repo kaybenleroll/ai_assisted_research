@@ -477,7 +477,7 @@ padding-top: 1.25rem;
 
 code span.fu { color: #c792ea !important; } 
 </style>
-  
+
 </head>
 <body>
 
@@ -5895,6 +5895,7 @@ they are almost always useful.</p>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = 'mathml';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -5903,8 +5904,13 @@ they are almost always useful.</p>
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {
