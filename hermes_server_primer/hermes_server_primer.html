@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes Agent Server: A Long-Form, Operations-First
+Primer</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle {
+display: flex;
+flex-wrap: wrap;
+align-items: baseline;
+}
+#TOC li.has-toggle > .toc-toggle {
+flex: 0 0 auto;
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+flex: 1 1 0%;
+min-width: 0;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+flex: 1 0 100%;
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+background-color: #232629;
+color: #7a7c7d;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d; padding-left: 4px; }
+div.sourceCode
+{ color: #cfcfc2; background-color: #232629; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #cfcfc2; } 
+code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } 
+code span.an { color: #3f8058; } 
+code span.at { color: #2980b9; } 
+code span.bn { color: #f67400; } 
+code span.bu { color: #7f8c8d; } 
+code span.cf { color: #fdbc4b; font-weight: bold; } 
+code span.ch { color: #3daee9; } 
+code span.cn { color: #27aeae; font-weight: bold; } 
+code span.co { color: #7a7c7d; } 
+code span.cv { color: #7f8c8d; } 
+code span.do { color: #a43340; } 
+code span.dt { color: #2980b9; } 
+code span.dv { color: #f67400; } 
+code span.er { color: #da4453; text-decoration: underline; } 
+code span.ex { color: #0099ff; font-weight: bold; } 
+code span.fl { color: #f67400; } 
+code span.fu { color: #8e44ad; } 
+code span.im { color: #27ae60; } 
+code span.in { color: #c45b00; } 
+code span.kw { color: #cfcfc2; font-weight: bold; } 
+code span.op { color: #cfcfc2; } 
+code span.ot { color: #27ae60; } 
+code span.pp { color: #27ae60; } 
+code span.re { color: #2980b9; background-color: #153042; } 
+code span.sc { color: #3daee9; } 
+code span.ss { color: #da4453; } 
+code span.st { color: #f44f4f; } 
+code span.va { color: #27aeae; } 
+code span.vs { color: #da4453; } 
+code span.wa { color: #da4453; } 
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">Hermes Agent Server: A Long-Form,
+Operations-First Primer</span>
+
+    <span class="navbar-meta">22 August 2026</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#why-this-primer-exists" id="toc-why-this-primer-exists"><span class="toc-section-number">1</span> Why This Primer Exists</a>
+<ul>
+<li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1.1</span> What This Primer Covers</a></li>
+<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.2</span> What This Primer Is Not</a></li>
+</ul></li>
+<li><a href="#what-hermes-agent-is-used-for" id="toc-what-hermes-agent-is-used-for"><span class="toc-section-number">2</span> What Hermes Agent Is Used For</a>
+<ul>
+<li><a href="#jobs-hermes-performs-in-practice" id="toc-jobs-hermes-performs-in-practice"><span class="toc-section-number">2.1</span> Jobs Hermes performs in
+practice</a></li>
+<li><a href="#what-hermes-is-not" id="toc-what-hermes-is-not"><span class="toc-section-number">2.2</span> What Hermes is not</a></li>
+</ul></li>
+<li><a href="#the-three-server-surfaces-you-must-keep-separate" id="toc-the-three-server-surfaces-you-must-keep-separate"><span class="toc-section-number">3</span> The Three Server Surfaces You Must
+Keep Separate</a>
+<ul>
+<li><a href="#a-common-failure-sequence" id="toc-a-common-failure-sequence"><span class="toc-section-number">3.1</span> A common failure sequence</a></li>
+</ul></li>
+<li><a href="#how-people-actually-use-hermes" id="toc-how-people-actually-use-hermes"><span class="toc-section-number">4</span> How People Actually Use Hermes</a>
+<ul>
+<li><a href="#pattern-a-single-user-terminal-agent" id="toc-pattern-a-single-user-terminal-agent"><span class="toc-section-number">4.1</span> Pattern A: Single-user terminal
+agent</a></li>
+<li><a href="#pattern-b-desktop-client-with-a-headless-backend" id="toc-pattern-b-desktop-client-with-a-headless-backend"><span class="toc-section-number">4.2</span> Pattern B: Desktop client with a
+headless backend</a></li>
+<li><a href="#pattern-c-openai-compatible-application-backend" id="toc-pattern-c-openai-compatible-application-backend"><span class="toc-section-number">4.3</span> Pattern C: OpenAI-compatible
+application backend</a></li>
+<li><a href="#pattern-d-multi-channel-personal-assistant" id="toc-pattern-d-multi-channel-personal-assistant"><span class="toc-section-number">4.4</span> Pattern D: Multi-channel personal
+assistant</a></li>
+<li><a href="#pattern-e-role-separated-profiles" id="toc-pattern-e-role-separated-profiles"><span class="toc-section-number">4.5</span> Pattern E: Role-separated
+profiles</a></li>
+</ul></li>
+<li><a href="#hermes-architecture-in-one-mental-model" id="toc-hermes-architecture-in-one-mental-model"><span class="toc-section-number">5</span> Hermes Architecture in One Mental
+Model</a>
+<ul>
+<li><a href="#the-process-relationships" id="toc-the-process-relationships"><span class="toc-section-number">5.1</span> The process relationships</a></li>
+</ul></li>
+<li><a href="#installation-and-first-bring-up" id="toc-installation-and-first-bring-up"><span class="toc-section-number">6</span> Installation and First Bring-Up</a>
+<ul>
+<li><a href="#source-checkout-for-development" id="toc-source-checkout-for-development"><span class="toc-section-number">6.1</span> Source checkout for
+development</a></li>
+</ul></li>
+<li><a href="#configuration-and-state-under-.hermes" id="toc-configuration-and-state-under-.hermes"><span class="toc-section-number">7</span> Configuration and State Under
+<code>~/.hermes</code></a></li>
+<li><a href="#providers-and-models" id="toc-providers-and-models"><span class="toc-section-number">8</span> Providers and Models</a>
+<ul>
+<li><a href="#provider-fallback-and-model-overrides" id="toc-provider-fallback-and-model-overrides"><span class="toc-section-number">8.1</span> Provider fallback and model
+overrides</a></li>
+</ul></li>
+<li><a href="#memory-curated-continuity-not-an-infinite-transcript" id="toc-memory-curated-continuity-not-an-infinite-transcript"><span class="toc-section-number">9</span> Memory: Curated Continuity, Not an
+Infinite Transcript</a></li>
+<li><a href="#skills-procedural-knowledge-with-a-write-boundary" id="toc-skills-procedural-knowledge-with-a-write-boundary"><span class="toc-section-number">10</span> Skills: Procedural Knowledge with a
+Write Boundary</a></li>
+<li><a href="#terminal-backends-and-security" id="toc-terminal-backends-and-security"><span class="toc-section-number">11</span> Terminal Backends and Security</a>
+<ul>
+<li><a href="#security-baseline" id="toc-security-baseline"><span class="toc-section-number">11.1</span> Security baseline</a></li>
+</ul></li>
+<li><a href="#profiles-separate-agents-without-separate-installs" id="toc-profiles-separate-agents-without-separate-installs"><span class="toc-section-number">12</span> Profiles: Separate Agents Without
+Separate Installs</a></li>
+<li><a href="#messaging-with-hermes-gateway" id="toc-messaging-with-hermes-gateway"><span class="toc-section-number">13</span> Messaging with
+<code>hermes gateway</code></a></li>
+<li><a href="#the-openai-compatible-api-server-on-port-8642" id="toc-the-openai-compatible-api-server-on-port-8642"><span class="toc-section-number">14</span> The OpenAI-Compatible API Server on
+Port 8642</a></li>
+<li><a href="#hermes-serve-desktop-and-headless-json-rpcwebsocket-backend" id="toc-hermes-serve-desktop-and-headless-json-rpcwebsocket-backend"><span class="toc-section-number">15</span> <code>hermes serve</code>: Desktop
+and Headless JSON-RPC/WebSocket Backend</a></li>
+<li><a href="#docker-and-podman-considerations" id="toc-docker-and-podman-considerations"><span class="toc-section-number">16</span> Docker and Podman
+Considerations</a>
+<ul>
+<li><a href="#run-the-official-image" id="toc-run-the-official-image"><span class="toc-section-number">16.1</span> Run the official image</a></li>
+<li><a href="#podman" id="toc-podman"><span class="toc-section-number">16.2</span> Podman</a></li>
+<li><a href="#compose-shape" id="toc-compose-shape"><span class="toc-section-number">16.3</span> Compose shape</a></li>
+</ul></li>
+<li><a href="#operations-and-day-2-diagnostics" id="toc-operations-and-day-2-diagnostics"><span class="toc-section-number">17</span> Operations and Day-2
+Diagnostics</a></li>
+<li><a href="#backups-and-recovery" id="toc-backups-and-recovery"><span class="toc-section-number">18</span> Backups and Recovery</a>
+<ul>
+<li><a href="#full-machine-backup" id="toc-full-machine-backup"><span class="toc-section-number">18.1</span> Full machine backup</a></li>
+<li><a href="#profile-handoff" id="toc-profile-handoff"><span class="toc-section-number">18.2</span> Profile handoff</a></li>
+<li><a href="#recovery-checklist" id="toc-recovery-checklist"><span class="toc-section-number">18.3</span> Recovery checklist</a></li>
+</ul></li>
+<li><a href="#hermes-agent-compared-with-openclaw" id="toc-hermes-agent-compared-with-openclaw"><span class="toc-section-number">19</span> Hermes Agent Compared with
+OpenClaw</a>
+<ul>
+<li><a href="#when-hermes-is-the-better-fit" id="toc-when-hermes-is-the-better-fit"><span class="toc-section-number">19.1</span> When Hermes is the better
+fit</a></li>
+<li><a href="#when-openclaw-is-the-better-fit" id="toc-when-openclaw-is-the-better-fit"><span class="toc-section-number">19.2</span> When OpenClaw is the better
+fit</a></li>
+<li><a href="#when-they-can-be-combined" id="toc-when-they-can-be-combined"><span class="toc-section-number">19.3</span> When they can be
+combined</a></li>
+</ul></li>
+<li><a href="#operational-reference" id="toc-operational-reference"><span class="toc-section-number">20</span> Operational Reference</a>
+<ul>
+<li><a href="#surface-selection-checklist" id="toc-surface-selection-checklist"><span class="toc-section-number">20.1</span> Surface-selection
+checklist</a></li>
+<li><a href="#hardening-checklist" id="toc-hardening-checklist"><span class="toc-section-number">20.2</span> Hardening checklist</a></li>
+<li><a href="#troubleshooting-map" id="toc-troubleshooting-map"><span class="toc-section-number">20.3</span> Troubleshooting map</a></li>
+</ul></li>
+<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">21</span> Reference Links</a></li>
+<li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">22</span> Closing Perspective</a></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
+<hr />
+<p><em>Long-form edition · 22 August 2026</em></p>
+<hr />
+<h1 data-number="1" id="why-this-primer-exists"><span class="header-section-number">1</span> Why This Primer Exists</h1>
+<p>Hermes Agent is easy to misclassify. It is described as a personal AI
+assistant, a coding agent, a messaging bot, a desktop application, an
+OpenAI-compatible server, and a self-improving agent runtime. All of
+those descriptions point at real parts of the project, but they do not
+describe the same process. The most expensive operational mistakes come
+from treating the commands as interchangeable.</p>
+<p>This primer resolves that ambiguity first.
+<code>hermes gateway</code> is the long-running messaging gateway. The
+OpenAI-compatible API server is an HTTP interface that normally listens
+on <code>127.0.0.1:8642</code> when enabled and is normally started
+alongside the gateway. <code>hermes serve</code> is the headless
+JSON-RPC/WebSocket backend used by Hermes Desktop and remote
+desktop-style clients; it is commonly reached on port <code>9119</code>.
+These are related Hermes surfaces, but starting one does not
+automatically start the others.</p>
+<p>The official project is <a href="https://github.com/NousResearch/hermes-agent">NousResearch/hermes-agent</a>,
+documented at <a href="https://hermes-agent.nousresearch.com/docs/">hermes-agent.nousresearch.com</a>.
+This document describes the upstream project as of 22 August 2026.
+Hermes changes quickly, so treat command help and the linked upstream
+pages as the authority when a local installation disagrees with an
+example here.</p>
+<h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
+<p>You will learn what Hermes Agent is and is not, how its processes fit
+together, how to install and configure it, where it keeps state, how
+providers, models, memory, skills, profiles, and terminal backends work,
+and how to operate it safely. You will also get runnable examples for
+the three server surfaces, Docker and Podman deployment patterns, backup
+and recovery runbooks, and a comparison with OpenClaw.</p>
+<p>The emphasis is on the operational boundary: what receives input,
+what chooses a model, what can execute commands, what persists, and what
+must be protected.</p>
+<h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
+<p>This is not a model benchmark, a complete catalog of every messaging
+adapter, or a replacement for provider documentation. Hermes Agent is
+not the same thing as the <a href="https://huggingface.co/NousResearch">Nous Hermes model family</a>;
+here, “Hermes” means the agent runtime and its server surfaces. It is
+also not a promise that a model can safely execute any action it
+proposes. Tool policy, filesystem permissions, network exposure, and
+human approval remain your responsibility.</p>
+<h1 data-number="2" id="what-hermes-agent-is-used-for"><span class="header-section-number">2</span> What Hermes Agent Is Used
+For</h1>
+<p>Hermes Agent is an open-source, tool-using agent runtime from Nous
+Research. It puts a model in a loop with tools, persistent instructions,
+session history, skills, and optional memory providers. You can use it
+interactively in a terminal, expose it through a desktop application,
+connect it to messaging platforms, or embed it behind an OpenAI-shaped
+HTTP client.</p>
+<p>The important mental model is not “a chatbot with many frontends.” It
+is “one agent runtime with several ingress and control surfaces.” A
+Telegram message, a CLI prompt, an OpenAI-compatible request, and a
+Desktop chat can all reach an agent configured with the same profile,
+but each surface has a different protocol, lifecycle, authentication
+story, and set of assumptions about the caller.</p>
+<h2 data-number="2.1" id="jobs-hermes-performs-in-practice"><span class="header-section-number">2.1</span> Jobs Hermes performs in
+practice</h2>
+<p>Hermes can draft and revise documents, inspect repositories, run
+development commands, search the web, use browser or computer-use tools,
+remember compact user preferences, follow procedural skills, and send
+results back through a messaging channel. A profile can be shaped into a
+coding assistant, research assistant, homelab operator, customer-support
+bot, or narrowly scoped internal worker.</p>
+<p>The value increases when the task has continuity. A one-shot
+completion does not need session storage, a profile, or a gateway. A
+coding assistant that should remember repository conventions, use the
+same terminal workspace, and answer from Telegram does.</p>
+<h2 data-number="2.2" id="what-hermes-is-not"><span class="header-section-number">2.2</span> What Hermes is not</h2>
+<p>Hermes is not a model server in the sense of Ollama, vLLM, or
+llama.cpp. It consumes providers and model endpoints; it does not
+replace the inference engine behind them. It can expose an
+OpenAI-compatible API, but that does not mean it serves model weights or
+becomes a general-purpose inference router with every provider model
+listed at <code>/v1/models</code>.</p>
+<p>Hermes is not only a desktop UI. Desktop launches or connects to a
+headless <code>hermes serve</code> backend. The Electron/React surface
+is a client of that backend, not the agent runtime itself.</p>
+<p>Hermes is not the messaging gateway. The gateway is one long-running
+process within the larger system. Running <code>hermes serve</code> will
+not connect Telegram or Discord; running <code>hermes gateway</code>
+will not make the Desktop JSON-RPC backend appear on port 9119.</p>
+<p>Hermes is not a security boundary by itself. Model output is
+untrusted input. The terminal backend, OS account, container
+permissions, API bind address, messaging allowlists, and review gates
+determine the blast radius.</p>
+<h1 data-number="3" id="the-three-server-surfaces-you-must-keep-separate"><span class="header-section-number">3</span> The Three Server Surfaces You
+Must Keep Separate</h1>
+<p>Start with this table whenever you are diagnosing “the Hermes
+server.”</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Command/process</th>
+<th>Protocol and usual port</th>
+<th>Primary client</th>
+<th>What it does not do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Messaging gateway</td>
+<td><code>hermes gateway</code> or <code>hermes gateway run</code></td>
+<td>Platform adapters; the API server may share this process</td>
+<td>Telegram, Discord, Slack, WhatsApp, and other adapters</td>
+<td>It is not the Desktop JSON-RPC backend</td>
+</tr>
+<tr>
+<td>OpenAI-compatible API server</td>
+<td>Enabled with <code>API_SERVER_ENABLED=true</code>; usually launched
+with the gateway</td>
+<td>HTTP, usually <code>127.0.0.1:8642</code></td>
+<td>Open WebUI, LobeChat, curl, SDKs, automation</td>
+<td>It is not a model-weight server and does not use the Desktop WS
+protocol</td>
+</tr>
+<tr>
+<td>Headless backend</td>
+<td><code>hermes serve</code></td>
+<td>JSON-RPC over WebSocket plus HTTP support, commonly
+<code>127.0.0.1:9119</code></td>
+<td>Hermes Desktop and remote desktop-style clients</td>
+<td>It does not configure or poll messaging platforms</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/">official
+API Server guide</a> documents the HTTP surface. The <a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md">Desktop
+guide</a> describes the headless <code>hermes serve</code> process and
+its <code>tui_gateway</code> JSON-RPC/WebSocket API. The <a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md">gateway
+internals guide</a> describes the messaging process.</p>
+<h2 data-number="3.1" id="a-common-failure-sequence"><span class="header-section-number">3.1</span> A common failure sequence</h2>
+<p>Suppose Desktop says it cannot connect, but Telegram works. Do not
+restart the Telegram gateway repeatedly: inspect the
+<code>hermes serve</code> process, its port, its authentication, and the
+Desktop connection target. Conversely, if Desktop works but Telegram is
+silent, inspect <code>hermes gateway status</code>, platform
+credentials, pairing, and adapter logs. If Open WebUI reports connection
+refused on <code>8642</code>, check that the API server is enabled and
+that you did not start only <code>hermes serve</code>.</p>
+<p>The port numbers are defaults and conventions, not a substitute for
+observing the process startup line. Profiles and container deployments
+can require distinct API ports. A Desktop backend may choose an
+available port when launched by the app. Always use the printed
+readiness line or the configured bind address as the final answer.</p>
+<h1 data-number="4" id="how-people-actually-use-hermes"><span class="header-section-number">4</span> How People Actually Use
+Hermes</h1>
+<h2 data-number="4.1" id="pattern-a-single-user-terminal-agent"><span class="header-section-number">4.1</span> Pattern A: Single-user terminal
+agent</h2>
+<p>Start with the CLI or terminal UI on one machine, one profile, one
+provider, and the local terminal backend. This gives you a small failure
+surface while you learn how the agent uses tools, writes memory, and
+edits skills. It is the right place to establish a safe working
+directory and decide whether local execution is acceptable.</p>
+<h2 data-number="4.2" id="pattern-b-desktop-client-with-a-headless-backend"><span class="header-section-number">4.2</span> Pattern B: Desktop client with
+a headless backend</h2>
+<p>Hermes Desktop provides a richer chat surface while
+<code>hermes serve</code> owns the agent runtime. The backend can be
+local or remote. A remote setup commonly runs <code>hermes serve</code>
+on a server reachable over a private network or VPN, while the desktop
+client connects to its JSON-RPC/WebSocket endpoint. Messaging remains
+separate: start a gateway independently if you also want Telegram or
+Discord.</p>
+<h2 data-number="4.3" id="pattern-c-openai-compatible-application-backend"><span class="header-section-number">4.3</span> Pattern C: OpenAI-compatible
+application backend</h2>
+<p>The API server lets an existing OpenAI-shaped client use Hermes as an
+agent backend. This is useful for Open WebUI, LobeChat, internal tools,
+CI jobs, and small scripts. Unlike a plain model endpoint, the request
+can invoke Hermes tools, so the endpoint must be treated as an
+automation control plane, not just a text-generation URL.</p>
+<h2 data-number="4.4" id="pattern-d-multi-channel-personal-assistant"><span class="header-section-number">4.4</span> Pattern D: Multi-channel
+personal assistant</h2>
+<p>The gateway connects multiple adapters at once, routes platform
+messages into profile-scoped sessions, runs scheduled jobs, and delivers
+responses. It is convenient, but convenience increases the importance of
+allowlists, pairing, per-channel toolsets, and a deliberate terminal
+backend. A bot that can run shell commands is not safe merely because
+its chat channel is private.</p>
+<h2 data-number="4.5" id="pattern-e-role-separated-profiles"><span class="header-section-number">4.5</span> Pattern E: Role-separated
+profiles</h2>
+<p>Use a research profile, coding profile, and personal profile instead
+of overloading one memory and one personality. Profiles isolate API
+credentials, <code>SOUL.md</code>, skills, memory, sessions, cron jobs,
+and gateway state. They are also an operational boundary: never run two
+writers against the same Hermes home.</p>
+<h1 data-number="5" id="hermes-architecture-in-one-mental-model"><span class="header-section-number">5</span> Hermes Architecture in One Mental
+Model</h1>
+<p>Think in layers: client surface, transport, agent loop, provider,
+tools, and state.</p>
+<p>The client surface is the CLI/TUI, Desktop, dashboard, messaging
+adapter, or API client. The transport layer turns that interaction into
+a local call, HTTP request, platform event, or JSON-RPC/WebSocket
+message. The agent loop assembles instructions and history, chooses a
+provider/model, asks for the next step, validates tool calls, executes
+approved tools, and repeats until it can answer. The provider layer
+handles model authentication and protocol differences. The tool layer
+includes terminal execution, web and browser capabilities, file
+operations, skills, memory, MCP integrations, and platform-specific
+actions. The state layer persists configuration, credentials, sessions,
+memory, skills, logs, and profile metadata.</p>
+<p>This model prevents category errors. A malformed tool call is usually
+a provider/model or tool-schema issue, not a gateway-port issue. A
+message from an unknown Telegram user is an authorization issue, not a
+memory issue. A Desktop connection refusal is a backend lifecycle or
+network issue, not proof that the model provider is down.</p>
+<h2 data-number="5.1" id="the-process-relationships"><span class="header-section-number">5.1</span> The process relationships</h2>
+<p>The normal relationships look like this:</p>
+<pre class="text"><code>CLI / TUI             \\
+Hermes Desktop         +--&gt; agent runtime --&gt; provider/model
+OpenAI client -- HTTP /
+Messaging platform ----&gt; agent runtime --&gt; tools and terminal backend
+                         agent runtime --&gt; profile-scoped state
+
+hermes gateway  = messaging adapters + sessions + optional API server
+hermes serve    = headless JSON-RPC/WebSocket backend for Desktop clients</code></pre>
+<p>The gateway and <code>serve</code> share runtime concepts and state
+conventions, but they are separate long-running surfaces. A server may
+run both, but do not infer that one command supervises the other unless
+your service manager or container definition explicitly does so.</p>
+<h1 data-number="6" id="installation-and-first-bring-up"><span class="header-section-number">6</span> Installation and First
+Bring-Up</h1>
+<p>The supported installation path is documented in <a href="https://hermes-agent.nousresearch.com/docs/getting-started/installation">Installation</a>.
+On non-Windows systems the installer expects Git; Linux installs may
+also need <code>curl</code> and <code>xz-utils</code>. The installer
+provisions its managed Python and Node-related dependencies rather than
+asking you to build a hand-maintained system environment.</p>
+<p>Run the official installer from a shell you trust. If you prefer to
+inspect downloaded scripts before execution, fetch the script to a
+temporary file, read it, and then run it according to the upstream
+instructions.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://hermes-agent.nousresearch.com/install.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
+<p>For a headless host that does not need browser automation, the
+official installer supports skipping the browser setup:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://hermes-agent.nousresearch.com/install.sh <span class="kw">|</span> <span class="fu">bash</span> <span class="at">-s</span> <span class="at">--</span> <span class="at">--skip-browser</span></span></code></pre></div>
+<p>Verify the launcher before configuring a provider:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> version</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> doctor</span></code></pre></div>
+<p>The interactive setup wizard covers model, terminal, gateway, tool,
+and agent configuration. The Portal path is the shortest way to
+configure a provider plus the Nous tool gateway when you have a Portal
+account:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> setup <span class="at">--portal</span></span></code></pre></div>
+<p>For a more targeted setup, use the surface-specific commands:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> model</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> config set terminal.backend docker</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway setup</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> tools</span></code></pre></div>
+<p>A clean first run should establish four facts: which profile is
+active, which provider/model answers a simple prompt, where terminal
+commands execute, and which server surface you intend to keep running.
+Do not start with every messaging adapter and every optional tool
+enabled.</p>
+<h2 data-number="6.1" id="source-checkout-for-development"><span class="header-section-number">6.1</span> Source checkout for
+development</h2>
+<p>If you are modifying Hermes itself, use the <a href="https://github.com/NousResearch/hermes-agent">repository’s
+development instructions</a> and its managed environment. A source
+checkout is not the same as a production installation: the installed
+launcher must use the project virtual environment, and updates may alter
+both Python and Node dependencies. Run <code>hermes doctor</code> after
+changes and pin the commit or image tag for reproducible
+deployments.</p>
+<h1 data-number="7" id="configuration-and-state-under-.hermes"><span class="header-section-number">7</span> Configuration and State Under
+<code>~/.hermes</code></h1>
+<p>The default Hermes home is <code>~/.hermes</code>. A profile changes
+the effective home through <code>HERMES_HOME</code>; the same layout
+then appears under <code>~/.hermes/profiles/&lt;name&gt;/</code>. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuration/">Configuration
+guide</a> gives the current directory map.</p>
+<pre class="text"><code>~/.hermes/
+|-- config.yaml       # non-secret behavior and model/tool settings
+|-- .env              # API keys, bot tokens, and other secrets
+|-- auth.json         # OAuth/provider credentials when used
+|-- SOUL.md           # primary identity and operating instructions
+|-- memories/         # MEMORY.md and USER.md
+|-- skills/           # bundled, installed, and agent-created skills
+|-- sessions/         # session data and transcripts
+|-- state.db          # canonical SQLite session/state store where present
+|-- cron/             # scheduled job definitions and state
+|-- logs/             # agent, gateway, and error logs
+|-- plugins/          # installed Hermes plugins
+`-- profiles/         # named profile homes</code></pre>
+<p>The exact tree grows with enabled features. Desktop themes, desktop
+plugins, TUI widgets, browser caches, checkpoints, knowledge stores, and
+tool-specific state can also live below the Hermes home. Back up the
+actual home rather than relying on a hand-written list.</p>
+<p>Keep the separation simple: secrets belong in <code>.env</code> or
+the platform’s secret mechanism; ordinary behavior belongs in
+<code>config.yaml</code>. Set restrictive permissions on the home and
+<code>.env</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 700 ~/.hermes</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 600 ~/.hermes/.env ~/.hermes/auth.json <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">||</span> <span class="fu">true</span></span></code></pre></div>
+<p>Do not confuse <code>HERMES_HOME</code> with the operating-system
+<code>HOME</code>. <code>HERMES_HOME</code> selects the Hermes profile
+and therefore its config, memory, sessions, skills, logs, and gateway
+state. Host terminal subprocesses normally retain the real OS user’s
+<code>HOME</code> so <code>git</code>, <code>ssh</code>,
+<code>gh</code>, npm, cloud CLIs, Claude Code, and Codex can find
+existing credentials. Set <code>terminal.home_mode: profile</code> only
+when you intentionally want a separate subprocess home, and then
+initialize those credentials inside the profile home.</p>
+<h1 data-number="8" id="providers-and-models"><span class="header-section-number">8</span> Providers and Models</h1>
+<p>Hermes separates the agent runtime from the provider that supplies
+model inference. Providers can be hosted APIs, Nous Portal,
+OpenAI-compatible endpoints, local model servers, or provider-specific
+integrations. The exact provider list changes; use the <a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuring-models/">current
+model configuration guide</a> and <code>hermes setup model</code> for
+the live inventory.</p>
+<p>The setup wizard is safer than guessing provider-specific YAML keys.
+A generic environment-based example looks like this:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;&gt;</span> ~/.hermes/.env <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">OPENAI_API_KEY=&quot;replace-with-a-secret&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">OPENAI_BASE_URL=&quot;https://api.example.test/v1&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> config set model.default <span class="st">&quot;openai-compatible/model-name&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> doctor</span></code></pre></div>
+<p>For local OpenAI-compatible servers, keep the endpoint on loopback
+until you have deliberately designed authentication and network access.
+LM Studio commonly uses <code>http://127.0.0.1:1234/v1</code>; vLLM and
+SGLang often use an OpenAI-shaped endpoint configured through
+<code>OPENAI_BASE_URL</code>. A placeholder API key may still be
+required by the client library even when the local server ignores
+it.</p>
+<p>Model selection affects more than prose quality. Tool-call
+formatting, context length, reasoning behavior, latency, cost, vision
+support, and provider rate limits all affect the agent loop. A model
+that looks good on a chat benchmark can still fail because it emits
+invalid tool arguments or loses the current working directory after a
+long tool trace.</p>
+<h2 data-number="8.1" id="provider-fallback-and-model-overrides"><span class="header-section-number">8.1</span> Provider fallback and model
+overrides</h2>
+<p>Configure a default model for normal work, then add a deliberate
+fallback policy if unattended operation matters. Test fallbacks by
+disabling the primary provider; do not assume a configured fallback is
+healthy just because its name parses.</p>
+<p>OpenAI-compatible clients often send a hard-coded model such as
+<code>gpt-4o</code>. Hermes intentionally treats a bare model value
+conservatively on <code>/v1/chat/completions</code> and
+<code>/v1/responses</code>: unless direct model requests are enabled,
+the gateway can ignore that generic name and use its configured default.
+A request with an explicit Hermes provider, or Hermes-native run/session
+APIs, follows the documented routing rules. This avoids accidental
+provider bypass by clients that hard-code a model field.</p>
+<p>The API server’s <code>GET /v1/models</code> is intentionally
+minimal. It advertises the Hermes-facing model name that a frontend
+needs; it is not the complete provider/model picker. Hermes-aware
+clients can use <code>/api/model/options</code> for richer
+provider-aware metadata.</p>
+<h1 data-number="9" id="memory-curated-continuity-not-an-infinite-transcript"><span class="header-section-number">9</span> Memory: Curated Continuity, Not
+an Infinite Transcript</h1>
+<p>Hermes has bounded built-in memory. The default memory files are
+<code>~/.hermes/memories/MEMORY.md</code> for durable agent notes and
+<code>USER.md</code> for user preferences. They are compact and injected
+as a snapshot at session start, not treated as an unlimited conversation
+transcript. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/">Persistent
+Memory guide</a> documents the current limits and controls.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">memory</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">memory_enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">user_profile_enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">memory_char_limit</span><span class="kw">:</span><span class="at"> </span><span class="dv">2200</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">user_char_limit</span><span class="kw">:</span><span class="at"> </span><span class="dv">1375</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">write_approval</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
+<p>With <code>write_approval: true</code>, foreground interactive writes
+can ask for approval and non-interactive or messaging writes can be
+staged for review. This is useful when memory is valuable but an
+unattended agent must not silently turn a transient instruction into
+durable behavior.</p>
+<p>Hermes also supports external memory provider plugins. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/">Memory
+Providers guide</a> describes providers such as Honcho, Mem0, Hindsight,
+OpenViking, Holographic, RetainDB, ByteRover, and Supermemory. Only one
+external provider is active at a time, while built-in memory remains
+active alongside it. External memory creates another availability,
+privacy, and backup dependency; document where the data lives before
+enabling it.</p>
+<p>Do not run two agent processes against one Hermes home. Both can
+write memory, and each can load the other’s writes into its next system
+prompt. Use profiles for independent agents and an external memory
+provider when deliberate sharing is required.</p>
+<h1 data-number="10" id="skills-procedural-knowledge-with-a-write-boundary"><span class="header-section-number">10</span> Skills: Procedural Knowledge
+with a Write Boundary</h1>
+<p>Skills are on-demand knowledge documents, normally
+<code>SKILL.md</code> files under <code>~/.hermes/skills/</code>. Hermes
+reads short descriptions cheaply and loads a skill’s full procedure when
+the task needs it. This progressive disclosure pattern lets you add
+detailed workflows without injecting every instruction into every
+request.</p>
+<p>The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/">Skills
+System guide</a> describes bundled, installed, external, and
+agent-created skills. External directories can be configured when a team
+maintains a shared skill tree:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skills</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">external_dirs</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ~/.agents/skills</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> /home/shared/team-skills</span></span></code></pre></div>
+<p>External directories are not automatically read-only. If the Hermes
+process can write them, an agent-managed skill update can change them.
+For a higher-control profile, enable the skill write gate:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skills</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">write_approval</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
+<p>Then review pending changes with the documented
+<code>/skills pending</code>, <code>/skills diff</code>,
+<code>/skills approve</code>, and <code>/skills reject</code> commands.
+Treat skill content as executable policy: a malicious or careless skill
+can tell the model to exfiltrate secrets, weaken a terminal boundary, or
+approve a dangerous workflow.</p>
+<h1 data-number="11" id="terminal-backends-and-security"><span class="header-section-number">11</span> Terminal Backends and
+Security</h1>
+<p>The terminal backend determines where commands execute. Hermes
+currently supports local, Docker, SSH, Modal, Daytona, Vercel Sandbox,
+and Singularity/Apptainer backends. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuration/">Terminal
+Backend section of Configuration</a> is the reference for options and
+optional dependencies.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Execution location</th>
+<th>Isolation posture</th>
+<th>Good default use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local</code></td>
+<td>The Hermes host</td>
+<td>None beyond the OS account</td>
+<td>Personal development with trusted prompts</td>
+</tr>
+<tr>
+<td><code>docker</code></td>
+<td>A persistent container</td>
+<td>Namespaces, caps, resource controls</td>
+<td>Unattended or untrusted tool loops</td>
+</tr>
+<tr>
+<td><code>ssh</code></td>
+<td>A remote host</td>
+<td>Network and account boundary</td>
+<td>Keep the gateway away from the work machine</td>
+</tr>
+<tr>
+<td><code>modal</code> / <code>daytona</code> /
+<code>vercel_sandbox</code></td>
+<td>Managed cloud workspace</td>
+<td>Provider-managed sandbox</td>
+<td>Ephemeral or scalable execution</td>
+</tr>
+<tr>
+<td><code>singularity</code></td>
+<td>HPC container</td>
+<td>Cluster-compatible containment</td>
+<td>Shared research/HPC environments</td>
+</tr>
+</tbody>
+</table>
+<p>The local backend is convenient and dangerous because a successful
+tool call is a real host command. Set a narrow
+<code>terminal.cwd</code>, run Hermes as a non-root account, avoid
+mounting sensitive directories, and do not place broad cloud credentials
+in the process environment.</p>
+<p>For a container backend, start with a deliberately limited
+configuration:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">terminal</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span><span class="at"> docker</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">cwd</span><span class="kw">:</span><span class="at"> /workspace</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">timeout</span><span class="kw">:</span><span class="at"> </span><span class="dv">180</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">docker_image</span><span class="kw">:</span><span class="at"> python:3.12-slim</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">docker_mount_cwd_to_workspace</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">docker_run_as_host_user</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">docker_network</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">container_cpu</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">container_memory</span><span class="kw">:</span><span class="at"> </span><span class="dv">2048</span></span></code></pre></div>
+<p>The exact resource key names can evolve; check
+<code>hermes config</code> and the current guide before applying a large
+policy file. Mounting the current working directory into
+<code>/workspace</code> is an explicit access grant. Forwarding
+<code>GITHUB_TOKEN</code>, <code>NPM_TOKEN</code>, or cloud credentials
+is also an explicit access grant. Only forward variables the terminal
+workload actually needs.</p>
+<p>SSH can provide a cleaner boundary than local execution:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">terminal</span><span class="kw">:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span><span class="at"> ssh</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">cwd</span><span class="kw">:</span><span class="at"> /srv/hermes-work</span></span></code></pre></div>
+<pre class="dotenv"><code>TERMINAL_SSH_HOST=agent-worker.example.internal
+TERMINAL_SSH_USER=hermes
+TERMINAL_SSH_KEY=~/.ssh/hermes_agent_key</code></pre>
+<p>The gateway host then holds messaging and provider credentials while
+the worker host holds the project files. This does not make the model
+trusted; it limits where a bad command can run.</p>
+<h2 data-number="11.1" id="security-baseline"><span class="header-section-number">11.1</span> Security baseline</h2>
+<p>Use platform allowlists and pairing rather than
+<code>GATEWAY_ALLOW_ALL_USERS=true</code>. Keep API and dashboard
+listeners on loopback unless you have an authenticated reverse proxy or
+private network. Give every externally reachable API server a strong
+bearer key. Use dashboard authentication for a non-loopback bind; the
+current Docker documentation explicitly fails closed for an
+unauthenticated public dashboard, and the old insecure bypass is not a
+safe deployment mechanism.</p>
+<p>Keep <code>.env</code>, <code>auth.json</code>, and backups private.
+Review skills and <code>SOUL.md</code> like code. Enable memory and
+skill write approval for unattended or multi-user deployments. Turn on
+tool-loop hard stops for gateways that cannot be watched
+interactively:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tool_loop_guardrails</span><span class="kw">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hard_stop_enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hard_stop_after</span><span class="kw">:</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">exact_failure</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">idempotent_no_progress</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
+<p>The model should never be the only approval layer for sending
+messages, deleting files, changing credentials, or modifying a
+deployment.</p>
+<h1 data-number="12" id="profiles-separate-agents-without-separate-installs"><span class="header-section-number">12</span> Profiles: Separate Agents
+Without Separate Installs</h1>
+<p>A profile is an independent Hermes home. It gives a coding agent and
+a research agent different configuration, credentials, personality,
+skills, memory, sessions, cron jobs, and gateway state while sharing the
+installed runtime.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile create coder</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile create researcher <span class="at">--description</span> <span class="st">&quot;Reads source and external docs, writes findings.&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> <span class="at">-p</span> coder setup model</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> <span class="at">-p</span> coder config set terminal.cwd /home/me/src</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> <span class="at">-p</span> coder chat</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> <span class="at">-p</span> researcher config set terminal.cwd /home/me/research</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> <span class="at">-p</span> researcher chat</span></code></pre></div>
+<p>The profile guide explains that profile commands use
+<code>HERMES_HOME</code> internally. The default profile is the root
+<code>~/.hermes</code>; named profiles live below
+<code>~/.hermes/profiles/</code>. <code>HOME</code> remains the OS
+account home by default, which is why two profiles can intentionally
+share normal CLI credentials unless you opt into
+<code>terminal.home_mode: profile</code>.</p>
+<p>Profile gateways need distinct lifecycle and port planning. Inside
+the official Docker image, s6 supervises multiple profile gateways in
+one container. The API server still needs a distinct
+<code>API_SERVER_PORT</code> per profile if more than one profile
+exposes it. The headless <code>serve</code> backend can serve a profile
+selected by its client/session model; do not assume that it gives every
+API client a separate 8642 listener.</p>
+<h1 data-number="13" id="messaging-with-hermes-gateway"><span class="header-section-number">13</span> Messaging with
+<code>hermes gateway</code></h1>
+<p>The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/messaging">Messaging
+Gateway guide</a> describes a single background gateway that can connect
+configured adapters such as Telegram, Discord, Slack, WhatsApp, Signal,
+Matrix, email, Home Assistant, Microsoft Teams, and many others. The
+gateway owns platform connections, per-chat sessions, typing/streaming
+behavior where supported, scheduled jobs, and outbound delivery.</p>
+<p>Configure adapters through the wizard:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway setup</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway start</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway status</span></code></pre></div>
+<p>For debugging, run it in the foreground:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway</span></code></pre></div>
+<p>For a user-level service on a long-lived host, use the documented
+install path and enable lingering if the service account must run after
+logout:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway install</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">loginctl</span> enable-linger <span class="st">&quot;</span><span class="va">$USER</span><span class="st">&quot;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway restart</span></code></pre></div>
+<p>The exact environment variable depends on the platform. Keep tokens
+in <code>${HERMES_HOME:-~/.hermes}/.env</code>, and use
+platform-specific allowlists or pairing. <code>hermes send</code> is a
+useful distinction: for many bot-token platforms it can call the
+platform REST endpoint directly and exit, so an inbound gateway process
+is not always required for an outbound one-shot message.</p>
+<p>Do not expose the gateway’s platform credentials to a second
+container that shares the same home. Do not run two gateways against one
+profile. Session files, memory, and gateway state are designed for one
+active writer.</p>
+<h1 data-number="14" id="the-openai-compatible-api-server-on-port-8642"><span class="header-section-number">14</span> The OpenAI-Compatible API Server
+on Port 8642</h1>
+<p>The API server is an HTTP adapter for applications that already speak
+the OpenAI format. It is not <code>hermes serve</code>, and it is not a
+replacement for <code>hermes gateway</code>. The current <a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/">API
+Server documentation</a> describes Chat Completions, Responses, run
+lifecycle endpoints, health checks, approvals, steering, and model
+discovery.</p>
+<p>Enable it in the profile’s secrets/config environment and start the
+gateway process that hosts it:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;&gt;</span> ~/.hermes/.env <span class="op">&lt;&lt;&#39;EOF&#39;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="st">API_SERVER_ENABLED=true</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="st">API_SERVER_KEY=&quot;replace-with-a-long-random-secret&quot;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="st"># API_SERVER_HOST=127.0.0.1 is the safe default</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="st"># API_SERVER_PORT=8642 is the normal default</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway</span></code></pre></div>
+<p>Test the endpoint from the same host:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://127.0.0.1:8642/v1/chat/completions <span class="dt">\</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Authorization: Bearer replace-with-a-long-random-secret&quot;</span> <span class="dt">\</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;model&quot;: &quot;hermes-agent&quot;,</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Reply with one short health check.&quot;}],</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;stream&quot;: false</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="st">  }&#39;</span></span></code></pre></div>
+<p>The main compatibility routes include:</p>
+<pre class="text"><code>POST /v1/chat/completions     OpenAI Chat Completions, including SSE streaming
+POST /v1/responses            OpenAI Responses-style stateful requests
+POST /v1/runs                 Start a Hermes-native run
+GET  /v1/runs/{id}             Inspect a run
+GET  /v1/runs/{id}/events      Stream run events
+POST /v1/runs/{id}/approval    Resolve an approval pause
+POST /v1/runs/{id}/steer       Inject guidance at a tool boundary
+POST /v1/runs/{id}/stop        Stop a run
+GET  /v1/models                Minimal advertised model list
+GET  /health                   Cheap liveness check
+GET  /health/detailed          Authenticated readiness information</code></pre>
+<p>The HTTP API can invoke terminal, file, web, memory, and skill tools.
+That makes an API key equivalent to permission to drive an agent,
+subject to the profile’s tool and terminal policy. Keep the default bind
+at <code>127.0.0.1</code>, tunnel it over SSH when practical, and use a
+narrow CORS allowlist only for browser clients. If you bind
+<code>0.0.0.0</code>, require <code>API_SERVER_KEY</code>, put the
+service behind a private network or authenticated reverse proxy, and do
+not rely on CORS as authentication.</p>
+<p>Port conflicts are especially common with profiles and containers.
+Give each API-enabled profile its own port, publish each port
+explicitly, and keep per-profile environment variables in the profile’s
+own <code>.env</code> rather than setting one container-wide value for
+every profile.</p>
+<h1 data-number="15" id="hermes-serve-desktop-and-headless-json-rpcwebsocket-backend"><span class="header-section-number">15</span> <code>hermes serve</code>:
+Desktop and Headless JSON-RPC/WebSocket Backend</h1>
+<p><code>hermes serve</code> launches the headless backend used by
+Hermes Desktop and remote desktop-style clients. It serves the
+<code>tui_gateway</code> JSON-RPC/WebSocket protocol and related HTTP
+endpoints. Desktop launches this process locally by default or connects
+to a remote one when configured. It does not open the browser dashboard
+and does not configure messaging adapters.</p>
+<p>Run it directly when you need a backend for a remote Desktop client
+or want to debug the backend independently of Electron:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> serve</span></code></pre></div>
+<p>On current installations the common listener is
+<code>127.0.0.1:9119</code>, but the process startup output is
+authoritative. A Desktop-managed backend may choose another available
+port and announces readiness in a line such as
+<code>HERMES_BACKEND_READY port=...</code>. Use
+<code>hermes serve --help</code> for the runtime flags supported by the
+installed version.</p>
+<p>The web dashboard is a related but different client surface.
+<code>hermes dashboard</code> starts the browser dashboard backend and
+UI; <code>hermes serve</code> shares the server foundation but selects
+the headless path. A dashboard or <code>serve</code> backend does not
+start <code>hermes gateway</code>, and the messaging gateway does not
+make a Desktop WebSocket client available.</p>
+<p>Treat a remote <code>serve</code> endpoint as an administrative agent
+backend. Protect it with the current dashboard/auth configuration, bind
+it to a private interface or VPN, and do not publish <code>9119</code>
+directly to the public internet. If a reverse proxy terminates TLS,
+preserve WebSocket upgrades and forward the authentication mechanism
+expected by the installed Hermes version.</p>
+<h1 data-number="16" id="docker-and-podman-considerations"><span class="header-section-number">16</span> Docker and Podman
+Considerations</h1>
+<p>There are two different container questions:</p>
+<ol type="1">
+<li><strong>Run Hermes inside a container.</strong> The official image
+stores the agent’s mutable data under <code>/opt/data</code>, normally
+backed by a host <code>~/.hermes</code> mount.</li>
+<li><strong>Use a container as the terminal backend.</strong> Hermes
+itself runs on the host, while tool commands execute in a persistent
+sandbox container.</li>
+</ol>
+<p>Confusing these leads to missing state or an accidentally unsandboxed
+terminal. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/docker/">official
+Docker guide</a> covers both patterns.</p>
+<h2 data-number="16.1" id="run-the-official-image"><span class="header-section-number">16.1</span> Run the official image</h2>
+<p>The official Docker image uses
+<code>nousresearch/hermes-agent</code>. Configure the mounted home
+first:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.hermes</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-it</span> <span class="dt">\</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/.hermes:/opt/data <span class="dt">\</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  nousresearch/hermes-agent setup</span></code></pre></div>
+<p>Run a supervised gateway with the API server port published:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> hermes <span class="dt">\</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span> unless-stopped <span class="dt">\</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/.hermes:/opt/data <span class="dt">\</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 127.0.0.1:8642:8642 <span class="dt">\</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  nousresearch/hermes-agent gateway run</span></code></pre></div>
+<p>To run the dashboard alongside the gateway, enable it and publish the
+common backend port:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> hermes <span class="dt">\</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span> unless-stopped <span class="dt">\</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/.hermes:/opt/data <span class="dt">\</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 127.0.0.1:8642:8642 <span class="dt">\</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 127.0.0.1:9119:9119 <span class="dt">\</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> HERMES_DASHBOARD=1 <span class="dt">\</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  nousresearch/hermes-agent gateway run</span></code></pre></div>
+<p>The image is intended to be upgraded independently of
+<code>/opt/data</code>. Keep the image tag pinned for production rather
+than accepting an unreviewed <code>latest</code> update. The official
+image now supervises gateway services with s6; inspect
+<code>docker logs</code> and the mounted profile logs when debugging,
+and remember that two containers must never write the same Hermes home
+concurrently.</p>
+<h2 data-number="16.2" id="podman"><span class="header-section-number">16.2</span> Podman</h2>
+<p>Rootless Podman is a reasonable Docker-compatible runtime for the
+official image, but validate the exact image, networking, user
+namespace, and volume behavior in your environment. Use
+<code>podman</code> in place of <code>docker</code>, publish loopback
+addresses explicitly, and add <code>:Z</code> on SELinux systems when
+the host policy requires relabeling:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> hermes <span class="dt">\</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--replace</span> <span class="dt">\</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/.hermes:/opt/data:Z&quot;</span> <span class="dt">\</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 127.0.0.1:8642:8642 <span class="dt">\</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  nousresearch/hermes-agent gateway run</span></code></pre></div>
+<p>Rootless UID mapping can make a mounted directory appear owned by an
+unexpected host UID. Check <code>podman unshare</code>, the directory
+permissions, and the runtime user before blaming Hermes. If Hermes uses
+a container terminal backend, the configuration can select the runtime
+binary with the documented <code>HERMES_DOCKER_BINARY</code> override;
+test whether the installed Hermes version accepts Podman for every
+Docker-specific option you enable.</p>
+<p>Do not assume a rootless container has access to the host Docker
+socket, GPU, audio devices, or browser sandbox. Grant those resources
+explicitly, and document the resulting security tradeoff. For a remote
+Desktop backend, publish or proxy the <code>serve</code> port separately
+from the API port; publishing <code>8642</code> does not make the
+JSON-RPC/WebSocket backend available.</p>
+<h2 data-number="16.3" id="compose-shape"><span class="header-section-number">16.3</span> Compose shape</h2>
+<p>The official Docker example uses a persistent data volume and can
+expose both common ports:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hermes</span><span class="kw">:</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> nousresearch/hermes-agent:latest</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> hermes</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> gateway run</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;127.0.0.1:8642:8642&quot;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;127.0.0.1:9119:9119&quot;</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;${HOME}/.hermes:/opt/data&quot;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">HERMES_DASHBOARD</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1&quot;</span></span></code></pre></div>
+<p>For production, replace <code>latest</code> with a real release tag
+available from the project and test the upgrade before rollout. Do not
+copy <code>API_SERVER_KEY</code> into a committed Compose file; keep it
+in the mounted <code>.env</code> or your secret manager.</p>
+<h1 data-number="17" id="operations-and-day-2-diagnostics"><span class="header-section-number">17</span> Operations and Day-2
+Diagnostics</h1>
+<p>Use the smallest diagnostic surface that answers the question:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> version</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> doctor</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> config show</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile list</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway status</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> logs <span class="at">--follow</span></span></code></pre></div>
+<p>For API clients, test liveness before testing a model:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsS</span> http://127.0.0.1:8642/health</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsS</span> http://127.0.0.1:8642/v1/models <span class="dt">\</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Authorization: Bearer </span><span class="va">$API_SERVER_KEY</span><span class="st">&quot;</span></span></code></pre></div>
+<p>For Desktop, verify the <code>hermes serve</code> process and the
+exact readiness port before inspecting model credentials. Check the
+desktop log and the backend log for authentication failures, WebSocket
+upgrade failures, stale process IDs, or a port already in use.</p>
+<p>For a messaging incident, check in this order: platform token and
+adapter enablement, gateway process status, pairing/allowlist, session
+routing, provider health, then tool execution. For an API incident,
+check in this order: listener and bind address, bearer key, request
+path, concurrency cap, provider/model, then tool policy. For a tool
+incident, identify the terminal backend first; the same agent can be
+safe in Docker and dangerous on <code>local</code>.</p>
+<p>Keep logs on persistent storage but treat them as sensitive. They can
+contain prompts, paths, provider errors, and operational metadata even
+when secrets are redacted. Rotate or retain them according to the
+privacy needs of your deployment.</p>
+<p>Updates change both the runtime and bundled skills. Review the <a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md">CLI
+reference</a>, take a backup before a major update, then run
+<code>hermes doctor</code> and a small tool-free prompt before
+re-enabling unattended gateways.</p>
+<h1 data-number="18" id="backups-and-recovery"><span class="header-section-number">18</span> Backups and Recovery</h1>
+<p>Hermes has two useful backup scopes. <code>hermes backup</code>
+captures the whole Hermes home, including profiles and credentials,
+while <code>hermes profile export</code> creates a portable
+single-profile archive with <code>.env</code> and <code>auth.json</code>
+excluded. The official <a href="https://hermes-agent.nousresearch.com/docs/reference/profile-commands/">profile
+command reference</a> and <a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md">CLI
+reference</a> describe the current behavior.</p>
+<h2 data-number="18.1" id="full-machine-backup"><span class="header-section-number">18.1</span> Full machine backup</h2>
+<p>The full backup is appropriate for disaster recovery or moving the
+installation. It contains secrets, so protect the archive like a
+password vault:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">umask</span> 077</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> backup <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/hermes-backup-</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d-%H%M%S<span class="va">)</span><span class="st">.zip&quot;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 600 <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">&quot;</span>/hermes-backup-<span class="pp">*</span>.zip</span></code></pre></div>
+<p>The backup command uses SQLite’s backup API for a consistent database
+snapshot. It excludes the Hermes source checkout and transient SQLite
+sidecars. Still, stop a gateway before a planned migration so no
+external adapter is delivering messages during the cutover.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway stop</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> backup <span class="at">--output</span> /secure/location/hermes-full.zip</span></code></pre></div>
+<p>Restore only after installing a compatible Hermes runtime and
+preserving a copy of the destination home:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ~/.hermes ~/.hermes.before-restore</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.hermes</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> import /secure/location/hermes-full.zip</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> doctor</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile list</span></code></pre></div>
+<p>The exact import confirmation and path behavior can change; read
+<code>hermes import --help</code> before an overwrite. Re-authenticate
+providers or messaging platforms if tokens were intentionally excluded
+or invalidated. Start one profile at a time and verify that the restored
+API bind and gateway adapters are not colliding with an old process.</p>
+<h2 data-number="18.2" id="profile-handoff"><span class="header-section-number">18.2</span> Profile handoff</h2>
+<p>For sharing a profile with another machine or person, prefer the
+credential-stripping export:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile export researcher <span class="dt">\</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output</span> ./researcher-2026-08-22.tar.gz</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile import ./researcher-2026-08-22.tar.gz <span class="dt">\</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> researcher-restored</span></code></pre></div>
+<p>Inspect archives before sharing them. Memory, sessions, user
+preferences, skills, and <code>SOUL.md</code> can contain private
+material even when API keys are removed. A profile distribution in a Git
+repository is a different mechanism: it versions a reviewed agent bundle
+while keeping each install’s credentials and user data local.</p>
+<h2 data-number="18.3" id="recovery-checklist"><span class="header-section-number">18.3</span> Recovery checklist</h2>
+<p>When Hermes fails after an update, preserve logs and the backup
+before deleting state. Check the installed version, run
+<code>hermes doctor</code>, validate YAML, confirm that the launcher
+points at the managed virtual environment, and test the provider with a
+minimal prompt. If the problem is profile-specific, create a temporary
+profile to separate runtime failure from corrupted state. Restore the
+original profile only after confirming which artifact is damaged.</p>
+<h1 data-number="19" id="hermes-agent-compared-with-openclaw"><span class="header-section-number">19</span> Hermes Agent Compared with
+OpenClaw</h1>
+<p>OpenClaw and Hermes appear in the same local-first assistant
+discussions because they can both sit between people, models, tools, and
+messaging channels. They are not identical products, and “Hermes” in
+this document is not a model family.</p>
+<p>At a high level, <a href="https://github.com/openclaw/openclaw">OpenClaw</a> is an assistant
+orchestration/control-plane platform organized around its gateway,
+channels, sessions, routing, tool policy, and provider integrations.
+Hermes Agent is an agent runtime from Nous Research that combines
+interactive clients, tools, skills, memory, profiles, messaging
+adapters, an OpenAI-compatible API server, and a Desktop/headless
+backend. Both can be deployed as a long-running personal or team
+assistant, but their command names, configuration layouts, protocols,
+and operational assumptions differ.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Hermes Agent</th>
+<th>OpenClaw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary identity</td>
+<td>Tool-using agent runtime with CLI/TUI, profiles, skills, memory,
+messaging, API, and Desktop backend</td>
+<td>Assistant orchestration platform and gateway</td>
+</tr>
+<tr>
+<td>Messaging process</td>
+<td><code>hermes gateway</code></td>
+<td>OpenClaw gateway and channel adapters</td>
+</tr>
+<tr>
+<td>OpenAI-shaped integration</td>
+<td>Optional API server, normally <code>8642</code></td>
+<td>Provider/API integrations according to OpenClaw configuration</td>
+</tr>
+<tr>
+<td>Desktop/headless backend</td>
+<td><code>hermes serve</code>, JSON-RPC/WebSocket, commonly
+<code>9119</code></td>
+<td>OpenClaw’s own control/UI surfaces and APIs</td>
+</tr>
+<tr>
+<td>Durable state</td>
+<td><code>~/.hermes</code>, <code>HERMES_HOME</code>, profile
+directories, SQLite/session files, skills and memory</td>
+<td>OpenClaw state/workspace/config layout</td>
+</tr>
+<tr>
+<td>Terminal isolation</td>
+<td>Local, Docker, SSH, Modal, Daytona, Vercel Sandbox, Singularity</td>
+<td>OpenClaw execution and sandbox policy</td>
+</tr>
+<tr>
+<td>Model role</td>
+<td>Hermes routes to configured providers; it is not the Nous Hermes
+model</td>
+<td>OpenClaw also routes to configured providers; it is not a model
+server</td>
+</tr>
+<tr>
+<td>Main operational question</td>
+<td>Which Hermes surface and profile is running, and where do tools
+execute?</td>
+<td>Which gateway, channel, provider, session, and sandbox policy is
+active?</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="19.1" id="when-hermes-is-the-better-fit"><span class="header-section-number">19.1</span> When Hermes is the better
+fit</h2>
+<p>Choose Hermes when you want the Nous Research agent runtime, its
+skill and memory model, profile isolation, terminal-backend choices, a
+native Desktop client, or a direct OpenAI-compatible agent endpoint. It
+is particularly attractive when the distinction between a model response
+and a tool-using, stateful agent is central to your application.</p>
+<h2 data-number="19.2" id="when-openclaw-is-the-better-fit"><span class="header-section-number">19.2</span> When OpenClaw is the better
+fit</h2>
+<p>Choose OpenClaw when its gateway/channel orchestration, ecosystem
+integrations, routing model, sandbox controls, or existing deployment
+conventions match your needs. If your team already operates OpenClaw,
+replacing it with Hermes solely because both can receive chat messages
+is not a technical comparison; compare the control-plane features and
+recovery model you actually use.</p>
+<h2 data-number="19.3" id="when-they-can-be-combined"><span class="header-section-number">19.3</span> When they can be combined</h2>
+<p>They can occupy different layers: OpenClaw can be the outward
+channel/control plane while Hermes or another backend supplies agent
+behavior, or Hermes can expose an API that a separate application
+consumes. A combined deployment adds network, authentication, session,
+and duplicate-tool risks. Define which system owns identity, model
+selection, memory, terminal execution, and outbound messaging before
+connecting them. Do not let both systems independently answer the same
+channel or write the same state directory.</p>
+<h1 data-number="20" id="operational-reference"><span class="header-section-number">20</span> Operational Reference</h1>
+<h2 data-number="20.1" id="surface-selection-checklist"><span class="header-section-number">20.1</span> Surface-selection
+checklist</h2>
+<pre class="text"><code>Need Telegram/Discord/Slack inbound messages?  Start and configure hermes gateway.
+Need Open WebUI or curl over HTTP?             Enable the API server on 8642.
+Need Hermes Desktop or remote JSON-RPC?        Run/connect to hermes serve, often 9119.
+Need browser dashboard administration?         Use hermes dashboard with authentication.
+Need command isolation?                         Configure terminal.backend, separately.
+Need independent identity and memory?          Create a profile, not another process on one home.</code></pre>
+<h2 data-number="20.2" id="hardening-checklist"><span class="header-section-number">20.2</span> Hardening checklist</h2>
+<ol type="1">
+<li>Keep <code>8642</code> and <code>9119</code> on loopback or a
+private network by default.</li>
+<li>Require a strong API bearer key and use a narrow CORS allowlist for
+browser clients.</li>
+<li>Configure dashboard authentication before any non-loopback
+bind.</li>
+<li>Use gateway allowlists and pairing; do not enable all users
+casually.</li>
+<li>Run as a non-root OS account.</li>
+<li>Prefer Docker or SSH terminal execution for unattended agents.</li>
+<li>Set a narrow <code>terminal.cwd</code> and avoid broad host
+mounts.</li>
+<li>Keep secrets in <code>.env</code> or a secret manager, never in Git
+or Compose files.</li>
+<li>Review agent-written skills and memory, enabling write approval when
+needed.</li>
+<li>Back up before updates and verify restored profiles on a test
+path.</li>
+</ol>
+<h2 data-number="20.3" id="troubleshooting-map"><span class="header-section-number">20.3</span> Troubleshooting map</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>First place to look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Telegram/Discord does nothing</td>
+<td><code>hermes gateway status</code>, adapter token, pairing,
+allowlist</td>
+</tr>
+<tr>
+<td>Open WebUI says connection refused</td>
+<td><code>API_SERVER_ENABLED</code>, bind/port, gateway process,
+container publish</td>
+</tr>
+<tr>
+<td>API returns unauthorized</td>
+<td><code>API_SERVER_KEY</code>, profile <code>.env</code>, proxy
+headers, wrong port/profile</td>
+</tr>
+<tr>
+<td>Desktop cannot connect</td>
+<td><code>hermes serve</code>, readiness port, WS upgrade, backend auth,
+VPN/reverse proxy</td>
+</tr>
+<tr>
+<td>Tools run on the wrong machine</td>
+<td><code>terminal.backend</code>, <code>terminal.cwd</code>,
+<code>HERMES_HOME</code> vs <code>HOME</code></td>
+</tr>
+<tr>
+<td>Agent remembers too much or too little</td>
+<td>memory limits, profile selection, external provider status</td>
+</tr>
+<tr>
+<td>Skill change appears unexpectedly</td>
+<td>bundled sync, external directory writability, skill write gate</td>
+</tr>
+<tr>
+<td>Two profiles collide</td>
+<td>duplicate API port, shared home, duplicate gateway process</td>
+</tr>
+<tr>
+<td>Container loses everything after restart</td>
+<td>missing <code>/opt/data</code> mount or wrong host
+path/permissions</td>
+</tr>
+</tbody>
+</table>
+<h1 data-number="21" id="reference-links"><span class="header-section-number">21</span> Reference Links</h1>
+<ul>
+<li><a href="https://hermes-agent.nousresearch.com/docs/">Hermes Agent
+documentation</a></li>
+<li><a href="https://github.com/NousResearch/hermes-agent">NousResearch/hermes-agent
+repository</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/getting-started/installation">Installation</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/getting-started/quickstart">Quickstart</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuration/">Configuration</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuring-models/">Providers
+and models</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/messaging">Messaging
+Gateway</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/">OpenAI-compatible
+API Server</a></li>
+<li><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md">Desktop
+and remote backends</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/docker/">Docker</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/security">Security</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/">Persistent
+Memory</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/">Memory
+Providers</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/">Skills
+System</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/profiles/">Profiles</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs/reference/profile-commands/">Profile
+command reference</a></li>
+<li><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md">CLI
+command reference</a></li>
+<li><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md">Gateway
+internals</a></li>
+<li><a href="https://github.com/openclaw/openclaw">OpenClaw
+repository</a></li>
+</ul>
+<h1 data-number="22" id="closing-perspective"><span class="header-section-number">22</span> Closing Perspective</h1>
+<p>Hermes becomes easier to operate once you stop treating “the server”
+as one thing. The messaging gateway is for platform connections. The API
+server on <code>8642</code> is for OpenAI-shaped HTTP clients.
+<code>hermes serve</code>, commonly on <code>9119</code>, is for Desktop
+and headless JSON-RPC/WebSocket clients. Profiles and
+<code>~/.hermes</code> provide continuity, while terminal backends
+define where the agent’s actions land.</p>
+<p>The safest deployment is therefore explicit: one profile per
+independent agent, one clear owner for each channel, one documented
+terminal boundary, loopback-first network exposure, authenticated remote
+access, and a tested backup. The model can be capable, but the
+surrounding system must still make unsafe actions difficult and
+recoverable.</p>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+      var defaultMathRenderer = 'mathjax';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

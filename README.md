@@ -15,6 +15,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [Building Autonomous AI Agents](building_ai_agents/ai_agents_comprehensive_primer.html) | Comprehensive guide to designing and implementing agentic AI systems |
 | [Agent Implementation Quick Reference](building_ai_agents/agent_quick_reference.html) | Condensed reference card for common agent patterns |
 | [OpenClaw Primer](openclaw_primer/openclaw_primer.html) | Podman-first guide to the OpenClaw framework |
+| [Hermes Server Primer](hermes_server_primer/hermes_server_primer.html) | Guide to the Hermes Server framework |
 | [Running LLMs Locally](research_local_llms/running-llms-locally.html) | Landscape of options for running language models on local hardware |
 | [Claude Code Alternatives](claude_code_alternative/claude-code-alternatives.html) | Survey of AI coding agents, mid-2026 refresh |
 | [Codex for Claude Code Users](codex_for_claude_code_users/codex-for-claude-code-users.html) | Practical guide to running Codex alongside Claude Code in one repository |
