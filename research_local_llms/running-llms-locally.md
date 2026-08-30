@@ -2,7 +2,7 @@
 
 From Zero to Your Own Private AI Stack, With Containers
 
-*~8,200 words · July 2026*
+*~6,300 words · August 2026*
 
 You have used cloud AI tools. They are useful, fast, and easy.
 
@@ -14,7 +14,7 @@ This guide is for that exact move.
 
 It is written for technical beginners to local inference: people who are comfortable in a terminal and can read config files, but have not yet built a local model stack end to end.
 
-Everything here is written as current guidance for July 2026.
+Everything here is written as current guidance for 31 August 2026.
 
 ## Introduction
 
@@ -26,13 +26,14 @@ This is a practical guide to running large language models locally for chat, cod
 2. How hardware limits shape model choices.
 3. How the major runtime options differ in 2026.
 4. Deployment patterns that work in practice.
-5. How to choose, test, and operate models without guesswork.
+5. How text, vision, image-generation, speech, audio, and video models differ.
+6. How to choose, test, and operate models without guesswork.
 
 ### What This Is Not
 
 This is not a training guide. It does not teach full fine-tuning pipelines, distributed pretraining, or benchmark archaeology. It does not try to be a complete reference for every inference engine.
 
-It is a decision-and-deployment guide: enough depth to make good choices, enough implementation detail to run things today.
+It is a decision-and-deployment guide: enough depth to make good choices, enough implementation detail to run things today. Model names and runtime support move quickly, so the dated links and model cards in this guide matter more than any static ranking.
 
 ### Background Assumed
 
@@ -56,7 +57,8 @@ If you need one short answer:
 2. Use llama.cpp directly if you want control.
 3. Use vLLM or SGLang for heavy concurrent serving.
 4. Use LocalAI if you want one local API for many modalities.
-5. Keep your application on OpenAI-compatible APIs so you can switch backends later.
+5. Use ComfyUI/Diffusers for image and video generation, not a chat model.
+6. Keep your application on OpenAI-compatible APIs so you can switch backends later.
 
 ---
 
@@ -79,9 +81,13 @@ A model is a large set of learned weights plus metadata about tokenizer, archite
 For local inference, you will mostly see:
 
 1. GGUF files for llama.cpp-class runtimes
-2. Safetensors/Hugging Face checkpoints for transformer-native runtimes
+2. Safetensors/Hugging Face checkpoints for transformer-native and diffusion runtimes
+3. MLX-converted weights for Apple Silicon
+4. Pipeline components such as a VAE, text encoder, vision encoder, or multimodal projector
 
 GGUF remains the practical default for many local setups because it is portable and quantization-friendly.
+
+It is not the universal format. Image and video generators are commonly distributed as Safetensors components, while Apple-oriented tools often use MLX conversions. A vision-language model may also need a separate vision tower or `mmproj` file.
 
 ### Inference Engine
 
@@ -120,10 +126,10 @@ Common practical choices:
 |---|---|
 | FP16/BF16 | Datacenter or high-memory local GPU runs |
 | 8-bit | Quality-sensitive local serving with decent VRAM |
-| 4-bit | Default local sweet spot for most personal systems |
+| 4-bit | Common local sweet spot for many personal text-model runs |
 | 2-3 bit | Extreme memory constraint, quality trade-off is obvious |
 
-In the GGUF world, 4-bit variants like Q4_K_M remain a strong default for many assistants and coding workflows.
+In the GGUF world, 4-bit variants like Q4_K_M remain a strong llama.cpp baseline for many assistants and coding workflows. They are not a universal optimum: image/video pipelines and accelerator servers often use different formats, and quantization quality depends on the model and hardware.
 
 ### Context Window and KV Cache
 
@@ -146,6 +152,56 @@ The three settings that matter most:
 3. Repetition controls: avoid loops and overuse.
 
 For coding and precise factual tasks, run cooler. For brainstorming, increase controlled randomness.
+
+---
+
+## Beyond Text: Choose the Model for the Modality
+
+"Local model" no longer means only a chatbot. The important split is between models that *understand* an input and models that *generate* an output. A vision-language model (VLM) reads an image and returns text or structured data. An image-generation model turns text or reference images into pixels. A speech-recognition model turns audio into text. They are different model classes, with different files, runtimes, and hardware requirements.
+
+Do not assume that a model advertised as multimodal can generate every modality. Most multimodal language models accept text plus images, audio, or video and generate text. Image and video generators usually use diffusion or flow-matching pipelines and are operated through tools such as [Diffusers](https://github.com/huggingface/diffusers), [ComfyUI](https://github.com/comfyanonymous/ComfyUI), or [InvokeAI](https://github.com/invoke-ai/InvokeAI), not a chat endpoint.
+
+### Practical Model Map
+
+| Workload | Current local examples | Typical local path | What to expect |
+|---|---|---|---|
+| Text, coding, reasoning, and agents | [Qwen3.8](https://github.com/QwenLM/Qwen3.5), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), [gpt-oss](https://openai.com/index/introducing-gpt-oss/), [LFM2.5](https://huggingface.co/LiquidAI/models) | llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM | The broadest ecosystem. Size, quantization, and context length still dominate fit. |
+| Image understanding, OCR, charts, and documents | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite Vision](https://huggingface.co/ibm-granite/granite-vision-4.1-4b), [LFM2.5-VL](https://huggingface.co/LiquidAI/models) | Transformers, vLLM, SGLang, Ollama vision models, or supported llama.cpp multimodal builds | These models describe and reason about pixels; they do not create finished images. OCR quality depends heavily on resolution and layout. |
+| Text-to-image and image editing | [FLUX.2](https://github.com/black-forest-labs/flux2), [Qwen-Image](https://huggingface.co/Qwen/Qwen-Image-Edit), Stable Diffusion family | Diffusers, ComfyUI, InvokeAI | Treat the pipeline, text encoder, variational autoencoder (VAE), and transformer/diffusion weights as one artifact. VRAM rises quickly with resolution and reference images. Licenses differ by checkpoint. |
+| Speech recognition and alignment | [Whisper](https://github.com/openai/whisper), [faster-whisper](https://github.com/SYSTRAN/faster-whisper), [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR), Granite Speech | faster-whisper/CTranslate2, Transformers, vLLM, or experimental llama.cpp audio support | Usually much smaller and easier to run than a general LLM. Use a dedicated automatic speech recognition (ASR) model when transcription is the job. |
+| Speech synthesis and audio understanding | [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni), [XTTS v2](https://github.com/coqui-ai/TTS), CosyVoice | Transformers, project-specific runtimes, or LocalAI | Text-to-speech (TTS), voice cloning, and audio captioning have different quality and consent risks. Check speaker-data terms before cloning a voice. |
+| Video understanding and generation | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni), [Wan2.2](https://github.com/Wan-Video/Wan2.2) | vLLM, SGLang, or Transformers for understanding; Diffusers or model code for generation | Video generation is substantially more demanding than image generation. Wan2.2's 5B text-image-to-video path documents 24 GB VRAM at 720p; its larger paths need much more. |
+| Text and multimodal retrieval | [EmbeddingGemma](https://ai.google.dev/gemma/docs), [Qwen3-VL-Embedding and Reranker](https://github.com/QwenLM/Qwen3-VL-Embedding), BGE-family models | Sentence Transformers, Transformers, Ollama, or a vector database | Embeddings produce vectors, not answers. Evaluate retrieval separately from the language model that writes the final response. |
+
+### What Changed Recently
+
+The frontier has moved toward smaller specialist models and sparse larger models. [Qwen3.8-27B](https://github.com/QwenLM/Qwen3.5) was added in August 2026, while [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2) added 3B, 8B, and 30B reasoning models with configurable thinking modes, native tool calling, and a documented path to 512K context. [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4) combines text and image input across its sizes, with audio support in E2B, E4B, and 12B variants. These are useful examples of why “parameter count” alone is no longer enough: active parameters, modality encoders, context length, and draft models all affect the actual local cost.
+
+Two other changes matter for personal hardware. [LFM2.5-DSpark](https://huggingface.co/blog/LiquidAI/lfm25-dspark) adds a small draft-model path for speculative decoding, reporting up to 3.18× GPU and 2.87× on-device throughput on its tested workloads. [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR) provides 0.6B and 1.7B speech-recognition models supporting 52 languages and dialects, plus a 0.6B forced-aligner. These are different strategies from buying a larger general-purpose model: reduce the model's job, then optimize that job directly.
+
+### Specialist Models Worth Knowing
+
+For image generation, [FLUX.2 Klein](https://github.com/black-forest-labs/flux2) is the practical small-model branch, while FLUX.2 dev is a much larger 32B option. The Klein 4B checkpoint is aimed at consumer GPUs; the 9B and dev variants have different license terms, so read the exact model license before commercial use. [Qwen-Image](https://github.com/QwenLM/Qwen-Image) and [Qwen-Image-Edit](https://huggingface.co/Qwen/Qwen-Image-Edit) are larger Apache-2.0 image-generation/editing options with strong typography and reference-image control. [HunyuanImage 3.0](https://github.com/Tencent-Hunyuan/HunyuanImage-3.0) is a high-end 80B-total/13B-active MoE model, not a desktop recommendation; its license also excludes some territories, including the European Union.
+
+For document work, a general VLM is not always the best tool. [PaddleOCR-VL 1.6](https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/version3.x/algorithm/PaddleOCR-VL/PaddleOCR-VL-1.6.md) and [GLM-OCR](https://github.com/zai-org/glm-ocr) are compact 0.9B-class specialists for layout-aware extraction. [olmOCR 2](https://allenai.org/blog/olmocr-2) is a heavier 7B option for difficult PDFs, equations, tables, handwriting, and reading order. This is a useful pattern: use a small specialist to turn pixels into reliable structure, then pass that structure to a language model.
+
+For speech, [Whisper large-v3-turbo](https://huggingface.co/openai/whisper-large-v3-turbo) remains the broad-compatibility default, while [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR) is a newer small multilingual option. [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) is a practical lightweight TTS model; [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) adds voice design and zero-shot cloning, which makes consent and speaker-data handling part of the deployment decision.
+
+For video, [Wan2.2](https://github.com/Wan-Video/Wan2.2) remains the most approachable open generation path: its TI2V-5B model documents 720p generation on a 24 GB GPU with offloading. [LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5) is a heavier synchronized audio-video option with an official 32 GB minimum. Video generation is still a workstation workload even when the headline parameter count looks modest.
+
+### Image Generation Is Not Vision
+
+This distinction prevents a common failed setup. A VLM such as Qwen3-VL can inspect a screenshot, read a receipt, or answer questions about a photograph. An image model such as FLUX.2 or Qwen-Image can synthesize or edit pixels. They may share a text encoder or appear in the same UI, but they are not interchangeable. For a private document pipeline, the usual sequence is:
+
+1. Use a VLM or OCR model to extract structure from the document.
+2. Use a text model to classify, summarize, or call tools.
+3. Use an image model only if the workflow needs a generated or edited image.
+
+The same separation applies to audio and video. Transcribe with ASR, reason over the transcript with a language model, and synthesize speech or video only at the output stage when required.
+
+### Multimodal Memory Costs
+
+Images, audio, and video become tokens or latent features before the language model sees them. A single high-resolution image or a sampled video can therefore consume more context and key-value (KV) cache than its file size suggests. Start with low resolution, short clips, and a small number of images; increase them only after measuring memory and latency. A model that fits text-only may fail once its vision tower, projector, audio encoder, or video loader is enabled.
 
 ---
 
@@ -188,9 +244,9 @@ Exact fit depends on runtime, context, and architecture. Always leave memory hea
 
 ### AMD GPU Systems
 
-ROCm is now materially better than it was two years ago. Many local users run AMD successfully in 2026.
+ROCm is now materially better than it was two years ago. Many local users run AMD successfully in 2026, and Vulkan paths are useful for some consumer cards and applications. Intel XPU support is also present in parts of the serving ecosystem.
 
-Still, setup friction can be higher than CUDA depending on distro, card generation, and runtime support level.
+Still, setup friction can be higher than CUDA depending on distro, card generation, and runtime support level. Backend support is not uniform: a model may work in llama.cpp on ROCm but not in a particular vLLM or SGLang build, or may support image inputs only on one backend.
 
 Use AMD when:
 
@@ -205,7 +261,7 @@ Apple Silicon remains one of the best personal platforms for local inference due
 
 The key trade-off is that very large models are memory-bandwidth sensitive. You can run them, but throughput can flatten faster than people expect.
 
-For many users, a well-chosen 8B-30B class model on Apple Silicon provides the best quality-to-latency balance.
+For many users, a well-chosen 8B-30B class model on Apple Silicon provides the best quality-to-latency balance. MLX and `mlx-lm`/`mlx-vlm` now make Apple-native text and selected vision workloads particularly attractive; model-specific conversion still matters.
 
 ### Multi-GPU and Multi-Node
 
@@ -225,6 +281,8 @@ If one larger GPU solves your problem, it is often cheaper in time than distribu
 
 There are more choices now, but the core categories are stable.
 
+At the 31 August 2026 cutoff, the release pages showed a fast-moving stack: [Ollama v0.33.2](https://github.com/ollama/ollama/releases), [vLLM v0.28.0](https://github.com/vllm-project/vllm/releases/tag/v0.28.0), [SGLang v0.5.18](https://github.com/sgl-project/sglang/releases), [MLX v0.32.2](https://github.com/ml-explore/mlx/releases), and [Transformers v5.16.1](https://github.com/huggingface/transformers/releases). Treat these as a dated snapshot, not versions to pin blindly; read the model recipe and accelerator requirements before upgrading.
+
 ### llama.cpp and llama-server
 
 llama.cpp is still the foundational local inference engine for GGUF workflows.
@@ -235,7 +293,7 @@ Use it when you want:
 2. Strong CPU performance
 3. Portable execution across many hardware backends
 
-`llama-server` gives you an OpenAI-compatible API endpoint plus basic web chat.
+`llama-server` gives you an OpenAI-compatible API endpoint plus basic web chat. Its current multimodal path uses `libmtmd` and supports image and experimental audio input for selected architectures. These models commonly need two GGUF files: the language model and a matching multimodal projector (`mmproj`). Check the [multimodal support list](https://github.com/ggml-org/llama.cpp/blob/master/docs/multimodal.md); a normal GGUF file is not automatically vision-capable.
 
 ```bash
 # Serve a model pulled from Hugging Face through llama.cpp
@@ -247,9 +305,15 @@ llama-server -m ./model.gguf --host 0.0.0.0 --port 8080
 
 If you enjoy tuning and understanding the engine, this remains a top choice.
 
+### MLX-LM and MLX-VLM
+
+[MLX](https://github.com/ml-explore/mlx) is Apple's array framework for Apple Silicon. `mlx-lm` is a strong path for text models on Macs, and `mlx-vlm` adds model-specific vision-language support. These tools exploit unified memory and avoid the CUDA assumptions in many server stacks. They are excellent for a Mac laptop or workstation, but model conversion and support are more model-specific than with Transformers.
+
+For image generation, use an MLX-specific implementation only when the model's repository documents it. Otherwise use a supported Diffusers or ComfyUI pipeline and expect higher memory pressure.
+
 ### Ollama
 
-Ollama is still the fastest path from zero to working local model.
+Ollama is still the fastest path from zero to a working local model, but it is no longer text-only in practice. Current releases support selected vision models, image inputs, tools, reasoning controls, structured output, and an OpenAI-compatible Responses API. On Apple Silicon, selected models can use an MLX-backed path.
 
 Use it when you want:
 
@@ -262,13 +326,13 @@ Use it when you want:
 curl -fsSL https://ollama.com/install.sh | sh
 
 # Run a model immediately
-ollama run llama3.3
+ollama run gemma4
 
 # Start API service
 ollama serve
 ```
 
-Ollama keeps improving ergonomics and model catalog experience. It is not the most configurable engine, but it is often the most productive default.
+Ollama keeps improving ergonomics and model catalog experience. It is not the most configurable engine, and its OpenAI-compatible surface is only a subset: base64 image data works, while remote image URLs and some tool controls do not. It remains the most productive default for a single user who wants to try text or vision models quickly.
 
 ### LocalAI
 
@@ -289,11 +353,17 @@ podman run -d --name localai -p 8080:8080 --gpus all \
   localai/localai:latest-gpu-nvidia-cuda-12
 ```
 
-It is powerful and flexible, but there is more operational surface area than Ollama.
+It is powerful and flexible, but there is more operational surface area than Ollama. It is a useful compatibility layer, not proof that every underlying model has equal support or quality. Validate each modality separately.
+
+### Transformers and Diffusers
+
+[Transformers](https://github.com/huggingface/transformers) remains the model-definition and native-inference layer for many VLM, OCR, ASR, and text models. Its newer `transformers serve` command can expose an OpenAI-compatible endpoint for supported models, which is convenient for testing before moving to vLLM or SGLang.
+
+[Diffusers](https://github.com/huggingface/diffusers) is the corresponding practical layer for image and video generation. It handles pipelines, schedulers, VAEs, adapters, and quantization. Use it for Python integration and reproducibility; use ComfyUI when you want to inspect and iterate on a graph interactively.
 
 ### vLLM
 
-vLLM remains one of the leading choices for high-throughput serving with strong batching behavior and efficient cache management.
+vLLM remains one of the leading choices for high-throughput serving with strong batching behavior and efficient cache management. Its supported-model surface now includes text, image, video, and audio inputs for selected architectures, with the exact combination depending on the model and backend.
 
 Use it when you want:
 
@@ -307,19 +377,19 @@ uv pip install vllm
 vllm serve meta-llama/Llama-3.3-8B-Instruct
 ```
 
-For local single-user chat, vLLM can be overkill. For multi-user APIs, it is often the right level of machinery.
+For local single-user chat, vLLM can be overkill. For multi-user APIs, it is often the right level of machinery. Its main quantization path is Hugging Face-native (for example FP8, GPTQ, AWQ, MXFP4, NVFP4, and quantized KV cache); GGUF support is experimental and requires the separate [vLLM GGUF plugin](https://docs.vllm.ai/en/latest/features/quantization/gguf/).
 
 ### SGLang
 
-SGLang is now a serious option for optimized serving, especially where structured generation and advanced decode/scheduling behavior matter.
+SGLang is now a serious option for optimized LLM, multimodal, and diffusion serving, especially where structured generation and advanced decode/scheduling behavior matter. Its support is accelerator- and backend-specific, so verify the model's recipe before treating a claimed feature as portable.
 
 Use it when you want:
 
-1. Competitive serving performance in modern GPU stacks
-2. Advanced control for structured output workloads
+1. Competitive serving performance in modern accelerator stacks
+2. Advanced control for structured and multimodal output workloads
 3. Another mature path beyond vLLM for high-demand deployments
 
-In practice, serious teams often benchmark both vLLM and SGLang for their exact request patterns before committing.
+In practice, serious teams often benchmark both vLLM and SGLang for their exact request patterns before committing. For image or video generation, SGLang-Diffusion is a separate path from ordinary chat serving.
 
 ### LM Studio and Jan
 
@@ -335,7 +405,7 @@ These tools are excellent for exploration and personal workflows, less so for ha
 
 ### Open WebUI
 
-Open WebUI is still the dominant self-hosted chat frontend in this ecosystem.
+Open WebUI is still the dominant self-hosted chat frontend in this ecosystem. It is becoming an agent frontend as well, with tool approval and richer state handling. Treat it as a versioned application, not an unpinned image.
 
 Use it when you need:
 
@@ -348,20 +418,22 @@ podman run -d -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   -v open-webui:/app/backend/data \
-  ghcr.io/open-webui/open-webui:main
+  ghcr.io/open-webui/open-webui:v0.11.1
 ```
 
-It does not replace inference backends. It sits in front of them.
+It does not replace inference backends. It sits in front of them. Check the [release page](https://github.com/open-webui/open-webui/releases) before copying the version tag, and keep it patched: an earlier 2026 release line had a DNS-rebinding security advisory.
 
 ### Comparison Snapshot
 
 | Tool | Easiest Start | High Control | High Throughput | Multi-Modal Scope | Typical Persona |
 |---|---|---|---|---|---|
-| Ollama | Excellent | Medium | Medium | Text-first | Solo dev, fast setup |
-| llama.cpp | Medium | Excellent | Medium | Text-first | Tuner, systems-minded user |
+| Ollama | Excellent | Medium | Medium | Text + selected vision/tools | Solo dev, fast setup |
+| llama.cpp | Medium | Excellent | Medium | Text + selected image/audio input | Tuner, systems-minded user |
 | LocalAI | Medium | High | Medium-High | Broad | Platform builder |
-| vLLM | Low | High | Excellent | Text/multimodal serving | API team |
-| SGLang | Low | High | Excellent | Text/structured serving | Performance-focused team |
+| vLLM | Low | High | Excellent | Text + selected media | API team |
+| SGLang | Low | High | Excellent | Text + media + diffusion | Performance-focused team |
+| MLX-LM + MLX-VLM | Medium | High on Apple | Medium | Text + selected vision models | Apple Silicon user |
+| Transformers + Diffusers | Medium | Excellent | Medium-High | VLM/ASR + image/video generation | Python integrator |
 | LM Studio / Jan | Excellent | Low-Medium | Low | Personal use | GUI-first user |
 | Open WebUI | High (as UI) | N/A | N/A | UI layer | Team chat frontend |
 
@@ -425,7 +497,7 @@ Use Ollama + optional Open WebUI.
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
-ollama run llama3.3
+ollama run gemma4
 ```
 
 Then add Open WebUI if you want browser chat and conversation history.
@@ -501,7 +573,7 @@ Who this is for:
 
 ### Blueprint 4: Multi-Modal Local Platform
 
-Use LocalAI when you want one endpoint across text, embeddings, speech, and image workflows.
+Use LocalAI when you want one endpoint across text, embeddings, speech, and image workflows. For serious image/video generation, pair a dedicated Diffusers or ComfyUI service with your language-model API rather than forcing every modality through one backend.
 
 ```bash
 podman run -d --name localai -p 8080:8080 \
@@ -517,6 +589,8 @@ Who this is for:
 1. Prototype platform teams
 2. Self-hosted private AI stacks
 3. Mixed modality requirements
+
+Keep the model boundaries visible: VLM/OCR for perception, ASR/TTS for speech, diffusion/flow pipelines for image and video generation, and an LLM for language reasoning. A single frontend can hide these services, but it cannot remove their different memory, licensing, and failure modes.
 
 ### Blueprint 5: High-Concurrency API for Teams
 
@@ -545,34 +619,39 @@ Do not choose by hype. Choose by workload.
 
 Use this sequence:
 
-1. Define workload shape.
-2. Pick family.
-3. Pick size for hardware.
-4. Pick quantization.
-5. Run short evals.
-6. Freeze baseline.
+1. Define the modality and workload shape.
+2. Pick a family with a license that fits your use.
+3. Pick size for hardware, including encoders and KV cache.
+4. Pick a runtime and its supported format.
+5. Pick quantization or an official compressed checkpoint.
+6. Run short evals.
+7. Freeze the baseline.
 
 ### Workload Shapes
 
-Three broad categories capture most local usage:
+Four broad categories capture most local usage:
 
 1. General assistant chat and summarization
 2. Coding and tool-use agent workflows
 3. Reasoning-heavy long-context tasks
+4. Perception or generation of images, audio, and video
 
 Different families and sizes win in different categories. There is no universal best model.
 
 ### Family-Level Guidance (Practical)
 
-As of July 2026, common strong families for local use include:
+As of 31 August 2026, a useful text-model shortlist includes:
 
-1. Qwen 3 and coder variants for coding and instruction following
-2. Llama 3.3/4-line models for broad compatibility and ecosystem support
-3. Mistral-family options for efficiency and practical quality per compute
-4. Gemma 3 family for compact and capable general use
-5. DeepSeek-family reasoning and distilled variants for stronger reasoning behavior
-6. Phi-family options for lightweight reasoning/coding tiers
-7. gpt-oss variants where you want OpenAI open-weight behavior locally
+1. [Qwen3.5/3.6/3.8](https://github.com/QwenLM/Qwen3.5) for coding, agents, and multimodal work. Qwen's current repository lists Qwen3.8-27B as an August release, but model-card and catalog pages can lag the repository; verify the exact artifact and runtime tag before standardizing on it. Larger Qwen3.5/3.6 MoE models are server-class despite their low active-parameter counts.
+2. [Gemma 4](https://ai.google.dev/gemma/docs/core) for compact reasoning, coding, function calling, and image/audio input on selected variants. Google publishes official quantized memory estimates, which are more useful than a parameter count alone.
+3. [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2) for Apache-2.0 licensed reasoning, coding, native tool calling, and long-context workflows in 3B, 8B, and 30B sizes.
+4. [Muse Glimmer](https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model) for a current 30B local-agent design with image input, a quantized footprint under 20 GB, and speculative decoding. At the August release, some optimized integrations were still landing, so verify runtime support before choosing it as a baseline.
+5. [Mistral 3 and Ministral 3](https://mistral.ai/news/mistral-3/) for efficient Apache-2.0 text-and-vision models; Mistral Small 4 is a much larger 119B-total-parameter hybrid model and is not a normal laptop choice.
+6. [gpt-oss-20b/120b](https://openai.com/index/introducing-gpt-oss/) for open-weight reasoning and tool use. The native MXFP4 releases target roughly 16 GB and 80 GB memory envelopes respectively, before runtime headroom.
+7. [LFM2.5](https://huggingface.co/LiquidAI/models) for small local deployments. Its DSpark draft checkpoints demonstrate that speculative decoding can improve throughput without changing the main model's output.
+8. DeepSeek-R1 distilled models for a well-established reasoning baseline; use the smaller Qwen-derived distills when you need a desktop-sized checkpoint.
+
+Older Llama and Mistral families still matter for compatibility, tutorials, and mature quantized tooling. They are not automatically the best choices for a new deployment.
 
 Treat this as a starting shortlist, not a ranking.
 
@@ -589,6 +668,8 @@ Use realistic tiers:
 
 Start smaller than your maximum fit. Fast feedback usually beats marginal quality gains from oversized models.
 
+Those tiers describe text-model weights. Specialist models can be much smaller: 0.9B OCR models and 0.6B ASR models fit where a general VLM does not. Conversely, a 20B image generator, a vision encoder, or a video pipeline can exceed the memory of a similarly sized text model. For image/video generation, use the model's own hardware guidance; for example, Wan2.2 documents 24 GB VRAM for its 5B 720p text-image-to-video path.
+
 ### Where to Source Models
 
 Primary sources remain:
@@ -602,6 +683,8 @@ Before downloading:
 2. Choose instruct/chat variants unless you need base checkpoints.
 3. Confirm file format compatibility with your runtime.
 4. Record exact model identifiers used in your stack.
+
+For visual and audio models, also record the encoder/projector, pipeline version, resolution or clip length, and any safety or watermarking defaults. For voice cloning and image-generation checkpoints, record the usage restrictions separately from the code license.
 
 ### Minimal Local Eval Loop
 
@@ -635,6 +718,8 @@ You protect future flexibility by designing around stable interfaces.
 Most local runtimes expose chat-completions-style APIs.
 
 If your app isolates model client config behind environment variables, you can switch backend without rewriting business logic.
+
+The common shape is useful, but compatibility is not identity. Vision requests may require base64 image data, a model-specific content schema, or a separate projector. Audio transcription and text-to-speech normally use different endpoints. Responses APIs, stateful conversations, tool choice, structured output, and remote image URLs also vary by runtime. Build a small adapter around these differences instead of scattering backend-specific assumptions through your application.
 
 Python example:
 
@@ -679,9 +764,11 @@ For private document workflows, RAG is still the standard pattern:
 4. Retrieve relevant chunks at query time.
 5. Inject context into generation prompts.
 
-Common local embedding options remain practical through Ollama and open embedding models hosted on Hugging Face.
+Common local embedding options remain practical through Ollama and open embedding models hosted on Hugging Face. The newer [Qwen3-VL embedding and reranker models](https://arxiv.org/abs/2601.04720) extend this pattern to shared text-image-video retrieval, while Google's [EmbeddingGemma](https://ai.google.dev/gemma/docs) is a compact text-retrieval option.
 
 Keep retrieval evaluation separate from generation evaluation. Mixing both in one score hides bottlenecks.
+
+For scanned PDFs, do not assume text extraction is enough. A practical multimodal pipeline can use a specialist OCR/document model such as [PaddleOCR-VL](https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/version3.x/algorithm/PaddleOCR-VL/PaddleOCR-VL-1.6.md), [GLM-OCR](https://github.com/zai-org/glm-ocr), or [olmOCR](https://github.com/allenai/olmocr), then embed the resulting text and layout. Test tables, formulas, handwriting, reading order, and low-quality scans as separate cases.
 
 ---
 
@@ -759,7 +846,23 @@ Benchmark vLLM and SGLang for your request pattern.
 
 ### I need one local platform for text + embeddings + audio + image
 
-Use LocalAI.
+Use LocalAI for a single API surface, but validate each modality independently. For best generation workflows, use LocalAI or an LLM server alongside ComfyUI/Diffusers.
+
+### I need image generation or image editing
+
+Start with FLUX.2 Klein 4B or Qwen-Image/Edit if their licenses fit your use. Use ComfyUI for interactive graphs or Diffusers for code. Do not select a VLM just because it accepts images.
+
+### I need OCR, screenshots, or document understanding
+
+Start with a small VLM or OCR specialist such as Qwen3-VL, Gemma 4, PaddleOCR-VL, GLM-OCR, or olmOCR. Test layout, tables, formulas, and reading order—not only plain paragraphs.
+
+### I need local transcription or speech generation
+
+Use Whisper/faster-whisper for broad transcription compatibility, Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS for speech synthesis. Voice cloning needs explicit speaker consent and a license review.
+
+### I need local video generation
+
+Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can accept slow generation. Larger Wan2.2 or synchronized audio-video models move into workstation and multi-GPU territory. Check territorial restrictions on Tencent models before adopting them.
 
 ### I want a polished local chat UI
 
@@ -781,8 +884,10 @@ Install Ollama and chat with a small model.
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
-ollama run llama3.3
+ollama run gemma4
 ```
+
+If that tag is not present in your installation, run `ollama list` and choose a currently published small instruct model. Model catalogs change faster than this document.
 
 ### Day 2: Add Browser UI
 
@@ -806,14 +911,15 @@ At this point, you are no longer experimenting blindly. You have a repeatable lo
 
 ## Conclusion
 
-Running LLMs locally in 2026 is no longer a niche hobby. It is a practical software capability.
+Running open models locally in 2026 is no longer a niche hobby. It is a practical software capability, and the useful unit is no longer always a language model: it may be an OCR model, an image pipeline, an ASR model, an embedding model, or a video generator.
 
 The ecosystem is broad, but the core strategy is simple:
 
 1. Keep model, engine, and server concerns separate.
 2. Start with the simplest runtime that meets your current need.
-3. Preserve portability through OpenAI-compatible interfaces.
-4. Treat updates as controlled changes, not ad-hoc swaps.
+3. Choose a specialist model when the job is visual, audio, retrieval, or generative media rather than text.
+4. Preserve portability through OpenAI-compatible interfaces where they fit, with a thin adapter for modality-specific differences.
+5. Treat updates as controlled changes, not ad-hoc swaps.
 
 Do that, and you get the best part of local AI: private, configurable intelligence you can run, test, and evolve on your own terms.
 
@@ -846,7 +952,7 @@ podman run -d --name open-webui -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   -v open-webui:/app/backend/data \
-  ghcr.io/open-webui/open-webui:main
+  ghcr.io/open-webui/open-webui:v0.11.1
 
 # === Podman + LocalAI (NVIDIA) ===
 # Verify the current CUDA-specific LocalAI image tag first.
@@ -871,3 +977,9 @@ vllm serve meta-llama/Llama-3.3-8B-Instruct
 - [Hugging Face model hub](https://huggingface.co/models)
 - [LM Studio](https://lmstudio.ai)
 - [Jan](https://jan.ai)
+- [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL)
+- [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR)
+- [FLUX.2](https://github.com/black-forest-labs/flux2)
+- [Wan2.2](https://github.com/Wan-Video/Wan2.2)
+- [MLX](https://github.com/ml-explore/mlx)
+- [Hugging Face Diffusers](https://github.com/huggingface/diffusers)
