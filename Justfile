@@ -123,12 +123,21 @@ ohmyzsh-pdf:
 ohmyzsh-all:
   cd ohmyzsh_primer && just all
 
+comparative-religion-html:
+  cd comparative_religion_primer && just html
+
+comparative-religion-pdf:
+  cd comparative_religion_primer && just pdf
+
+comparative-religion-all:
+  cd comparative_religion_primer && just all
+
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all eval-loop-all python-r-all military-all ohmyzsh-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
