@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running LLMs Locally: A Complete Beginner’s Landscape</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle {
+display: flex;
+flex-wrap: wrap;
+align-items: baseline;
+}
+#TOC li.has-toggle > .toc-toggle {
+flex: 0 0 auto;
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+flex: 1 1 0%;
+min-width: 0;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+flex: 1 0 100%;
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
+max-width: 860px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+th {
+background: #f3f4f6;
+font-weight: 650;
+text-align: left;
+padding: .6rem .9rem;
+border-bottom: 2px solid var(--border);
+white-space: nowrap;
+}
+td {
+padding: .55rem .9rem;
+border-bottom: 1px solid var(--border);
+vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+code {
+font-family: var(--font-mono);
+font-size: .85em;
+background: #f3f4f6;
+color: #be185d;
+padding: .15em .4em;
+border-radius: 3px;
+}
+pre {
+background: var(--code-bg);
+color: #cdd6f4;
+border-radius: var(--radius);
+padding: 1.1rem 1.25rem;
+overflow-x: auto;
+margin: 1.25rem 0;
+font-size: .83rem;
+line-height: 1.6;
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+pre code {
+background: transparent;
+color: inherit;
+padding: 0;
+font-size: inherit;
+}
+
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.5rem 0;
+padding: .75rem 1.25rem;
+background: #eff6ff;
+border-radius: 0 var(--radius) var(--radius) 0;
+color: #1e3a5f;
+font-style: italic;
+}
+
+ul, ol {
+padding-left: 1.75rem;
+margin-bottom: 1rem;
+}
+li { margin-bottom: .3rem; }
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+background-color: #232629;
+color: #7a7c7d;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d; padding-left: 4px; }
+div.sourceCode
+{ color: #cfcfc2; background-color: #232629; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #cfcfc2; } 
+code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } 
+code span.an { color: #3f8058; } 
+code span.at { color: #2980b9; } 
+code span.bn { color: #f67400; } 
+code span.bu { color: #7f8c8d; } 
+code span.cf { color: #fdbc4b; font-weight: bold; } 
+code span.ch { color: #3daee9; } 
+code span.cn { color: #27aeae; font-weight: bold; } 
+code span.co { color: #7a7c7d; } 
+code span.cv { color: #7f8c8d; } 
+code span.do { color: #a43340; } 
+code span.dt { color: #2980b9; } 
+code span.dv { color: #f67400; } 
+code span.er { color: #da4453; text-decoration: underline; } 
+code span.ex { color: #0099ff; font-weight: bold; } 
+code span.fl { color: #f67400; } 
+code span.fu { color: #8e44ad; } 
+code span.im { color: #27ae60; } 
+code span.in { color: #c45b00; } 
+code span.kw { color: #cfcfc2; font-weight: bold; } 
+code span.op { color: #cfcfc2; } 
+code span.ot { color: #27ae60; } 
+code span.pp { color: #27ae60; } 
+code span.re { color: #2980b9; background-color: #153042; } 
+code span.sc { color: #3daee9; } 
+code span.ss { color: #da4453; } 
+code span.st { color: #f44f4f; } 
+code span.va { color: #27aeae; } 
+code span.vs { color: #da4453; } 
+code span.wa { color: #da4453; } 
+
+.code-tabs {
+margin: 1.25rem 0;
+border-radius: var(--radius);
+overflow: hidden;
+border: 1px solid rgba(255,255,255,.08);
+}
+.code-tab-bar {
+display: flex;
+background: #16161f;
+border-bottom: 1px solid rgba(255,255,255,.08);
+padding: 0 .5rem;
+gap: .15rem;
+}
+.code-tab-btn {
+padding: .45rem 1rem;
+background: transparent;
+border: none;
+border-bottom: 2px solid transparent;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+transition: color .15s, border-color .15s;
+white-space: nowrap;
+}
+.code-tab-btn:hover { color: #cdd6f4; }
+.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+.code-tab-panel { display: none; }
+.code-tab-panel.active { display: block; }
+.code-tab-panel > div.sourceCode > pre {
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.code-details {
+margin: 1.25rem 0;
+}
+.code-details > div.sourceCode {
+margin: 0;
+}
+.code-details > div.sourceCode > pre {
+margin: 0;
+border-radius: 0 0 var(--radius) var(--radius);
+box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+}
+.code-summary {
+display: flex;
+align-items: center;
+gap: .5rem;
+padding: .4rem .85rem;
+background: #16161f;
+color: #9399b2;
+font-family: var(--font-mono);
+font-size: .78rem;
+cursor: pointer;
+border-radius: var(--radius) var(--radius) 0 0;
+list-style: none;
+user-select: none;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-summary::before {
+content: '▶';
+font-size: .6rem;
+transition: transform .15s;
+flex-shrink: 0;
+}
+details[open] .code-summary::before { transform: rotate(90deg); }
+details:not([open]) .code-details > div.sourceCode > pre {
+border-radius: 0;
+}
+
+@media (max-width: 768px) {
+.layout {
+display: block;
+}
+.sidebar {
+display: block;
+position: static;
+width: 100%;
+min-width: 0;
+max-width: none;
+height: auto;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding: .75rem 0;
+}
+.sidebar-heading {
+padding-bottom: .25rem;
+}
+#TOC a {
+padding-top: .4rem;
+padding-bottom: .4rem;
+}
+.sidebar-resizer { display: none; }
+.navbar-meta { display: none; }
+.content {
+max-width: 100%;
+padding-top: 1.25rem;
+}
+}
+
+@media print {
+.navbar, .sidebar, .sidebar-resizer { display: none; }
+.content { padding: 0; max-width: 100%; }
+}
+
+code span.fu { color: #c792ea !important; } 
+</style>
+
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">Running LLMs Locally: A Complete
+Beginner’s Landscape</span>
+
+    <span class="navbar-meta">August 2026</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="#what-this-covers" id="toc-what-this-covers"><span class="toc-section-number">1.1</span> What This Covers</a></li>
+<li><a href="#what-this-is-not" id="toc-what-this-is-not"><span class="toc-section-number">1.2</span> What This Is Not</a></li>
+<li><a href="#background-assumed" id="toc-background-assumed"><span class="toc-section-number">1.3</span> Background Assumed</a></li>
+<li><a href="#how-this-is-structured" id="toc-how-this-is-structured"><span class="toc-section-number">1.4</span> How This Is Structured</a></li>
+<li><a href="#quick-read-if-you-are-in-a-hurry" id="toc-quick-read-if-you-are-in-a-hurry"><span class="toc-section-number">1.5</span> Quick Read if You Are in a
+Hurry</a></li>
+</ul></li>
+<li><a href="#foundations-what-you-are-actually-running" id="toc-foundations-what-you-are-actually-running"><span class="toc-section-number">2</span> Foundations: What You Are Actually
+Running</a>
+<ul>
+<li><a href="#model-artifact" id="toc-model-artifact"><span class="toc-section-number">2.1</span> Model Artifact</a></li>
+<li><a href="#inference-engine" id="toc-inference-engine"><span class="toc-section-number">2.2</span> Inference Engine</a></li>
+<li><a href="#server-layer" id="toc-server-layer"><span class="toc-section-number">2.3</span> Server Layer</a></li>
+<li><a href="#quantization-the-lever-you-will-use-most" id="toc-quantization-the-lever-you-will-use-most"><span class="toc-section-number">2.4</span> Quantization (The Lever You Will
+Use Most)</a></li>
+<li><a href="#context-window-and-kv-cache" id="toc-context-window-and-kv-cache"><span class="toc-section-number">2.5</span> Context Window and KV
+Cache</a></li>
+<li><a href="#sampling-controls" id="toc-sampling-controls"><span class="toc-section-number">2.6</span> Sampling Controls</a></li>
+</ul></li>
+<li><a href="#beyond-text-choose-the-model-for-the-modality" id="toc-beyond-text-choose-the-model-for-the-modality"><span class="toc-section-number">3</span> Beyond Text: Choose the Model for
+the Modality</a>
+<ul>
+<li><a href="#practical-model-map" id="toc-practical-model-map"><span class="toc-section-number">3.1</span> Practical Model Map</a></li>
+<li><a href="#what-changed-recently" id="toc-what-changed-recently"><span class="toc-section-number">3.2</span> What Changed Recently</a></li>
+<li><a href="#specialist-models-worth-knowing" id="toc-specialist-models-worth-knowing"><span class="toc-section-number">3.3</span> Specialist Models Worth
+Knowing</a></li>
+<li><a href="#image-generation-is-not-vision" id="toc-image-generation-is-not-vision"><span class="toc-section-number">3.4</span> Image Generation Is Not
+Vision</a></li>
+<li><a href="#multimodal-memory-costs" id="toc-multimodal-memory-costs"><span class="toc-section-number">3.5</span> Multimodal Memory Costs</a></li>
+</ul></li>
+<li><a href="#hardware-reality-in-2026" id="toc-hardware-reality-in-2026"><span class="toc-section-number">4</span> Hardware Reality in 2026</a>
+<ul>
+<li><a href="#cpu-only-systems" id="toc-cpu-only-systems"><span class="toc-section-number">4.1</span> CPU-Only Systems</a></li>
+<li><a href="#nvidia-gpu-systems" id="toc-nvidia-gpu-systems"><span class="toc-section-number">4.2</span> NVIDIA GPU Systems</a></li>
+<li><a href="#amd-gpu-systems" id="toc-amd-gpu-systems"><span class="toc-section-number">4.3</span> AMD GPU Systems</a></li>
+<li><a href="#apple-silicon" id="toc-apple-silicon"><span class="toc-section-number">4.4</span> Apple Silicon</a></li>
+<li><a href="#multi-gpu-and-multi-node" id="toc-multi-gpu-and-multi-node"><span class="toc-section-number">4.5</span> Multi-GPU and Multi-Node</a></li>
+</ul></li>
+<li><a href="#runtime-and-tooling-landscape" id="toc-runtime-and-tooling-landscape"><span class="toc-section-number">5</span> Runtime and Tooling Landscape</a>
+<ul>
+<li><a href="#llama.cpp-and-llama-server" id="toc-llama.cpp-and-llama-server"><span class="toc-section-number">5.1</span> llama.cpp and
+llama-server</a></li>
+<li><a href="#mlx-lm-and-mlx-vlm" id="toc-mlx-lm-and-mlx-vlm"><span class="toc-section-number">5.2</span> MLX-LM and MLX-VLM</a></li>
+<li><a href="#ollama" id="toc-ollama"><span class="toc-section-number">5.3</span> Ollama</a></li>
+<li><a href="#localai" id="toc-localai"><span class="toc-section-number">5.4</span> LocalAI</a></li>
+<li><a href="#transformers-and-diffusers" id="toc-transformers-and-diffusers"><span class="toc-section-number">5.5</span> Transformers and
+Diffusers</a></li>
+<li><a href="#vllm" id="toc-vllm"><span class="toc-section-number">5.6</span> vLLM</a></li>
+<li><a href="#sglang" id="toc-sglang"><span class="toc-section-number">5.7</span> SGLang</a></li>
+<li><a href="#lm-studio-and-jan" id="toc-lm-studio-and-jan"><span class="toc-section-number">5.8</span> LM Studio and Jan</a></li>
+<li><a href="#open-webui" id="toc-open-webui"><span class="toc-section-number">5.9</span> Open WebUI</a></li>
+<li><a href="#comparison-snapshot" id="toc-comparison-snapshot"><span class="toc-section-number">5.10</span> Comparison Snapshot</a></li>
+</ul></li>
+<li><a href="#containers-runtime-hygiene-and-why-reproducibility-wins" id="toc-containers-runtime-hygiene-and-why-reproducibility-wins"><span class="toc-section-number">6</span> Containers, Runtime Hygiene, and Why
+Reproducibility Wins</a>
+<ul>
+<li><a href="#why-containers-matter" id="toc-why-containers-matter"><span class="toc-section-number">6.1</span> Why Containers Matter</a></li>
+<li><a href="#docker-vs-podman" id="toc-docker-vs-podman"><span class="toc-section-number">6.2</span> Docker vs Podman</a></li>
+<li><a href="#image-tags-and-drift" id="toc-image-tags-and-drift"><span class="toc-section-number">6.3</span> Image Tags and Drift</a></li>
+<li><a href="#gpu-access-notes" id="toc-gpu-access-notes"><span class="toc-section-number">6.4</span> GPU Access Notes</a></li>
+</ul></li>
+<li><a href="#deployment-blueprints-that-work" id="toc-deployment-blueprints-that-work"><span class="toc-section-number">7</span> Deployment Blueprints That Work</a>
+<ul>
+<li><a href="#blueprint-1-personal-chat-in-under-20-minutes" id="toc-blueprint-1-personal-chat-in-under-20-minutes"><span class="toc-section-number">7.1</span> Blueprint 1: Personal Chat in
+Under 20 Minutes</a></li>
+<li><a href="#blueprint-2-local-coding-assistant-in-vs-code" id="toc-blueprint-2-local-coding-assistant-in-vs-code"><span class="toc-section-number">7.2</span> Blueprint 2: Local Coding
+Assistant in VS Code</a></li>
+<li><a href="#blueprint-3-persistent-local-api-service" id="toc-blueprint-3-persistent-local-api-service"><span class="toc-section-number">7.3</span> Blueprint 3: Persistent Local API
+Service</a></li>
+<li><a href="#blueprint-4-multi-modal-local-platform" id="toc-blueprint-4-multi-modal-local-platform"><span class="toc-section-number">7.4</span> Blueprint 4: Multi-Modal Local
+Platform</a></li>
+<li><a href="#blueprint-5-high-concurrency-api-for-teams" id="toc-blueprint-5-high-concurrency-api-for-teams"><span class="toc-section-number">7.5</span> Blueprint 5: High-Concurrency API
+for Teams</a></li>
+</ul></li>
+<li><a href="#model-selection-in-2026" id="toc-model-selection-in-2026"><span class="toc-section-number">8</span> Model Selection in 2026</a>
+<ul>
+<li><a href="#the-selection-order-that-works" id="toc-the-selection-order-that-works"><span class="toc-section-number">8.1</span> The Selection Order That
+Works</a></li>
+<li><a href="#workload-shapes" id="toc-workload-shapes"><span class="toc-section-number">8.2</span> Workload Shapes</a></li>
+<li><a href="#family-level-guidance-practical" id="toc-family-level-guidance-practical"><span class="toc-section-number">8.3</span> Family-Level Guidance
+(Practical)</a></li>
+<li><a href="#size-and-quantization-pairing" id="toc-size-and-quantization-pairing"><span class="toc-section-number">8.4</span> Size and Quantization
+Pairing</a></li>
+<li><a href="#where-to-source-models" id="toc-where-to-source-models"><span class="toc-section-number">8.5</span> Where to Source Models</a></li>
+<li><a href="#minimal-local-eval-loop" id="toc-minimal-local-eval-loop"><span class="toc-section-number">8.6</span> Minimal Local Eval Loop</a></li>
+</ul></li>
+<li><a href="#api-compatibility-and-application-design" id="toc-api-compatibility-and-application-design"><span class="toc-section-number">9</span> API Compatibility and Application
+Design</a>
+<ul>
+<li><a href="#keep-app-code-on-openai-compatible-calls" id="toc-keep-app-code-on-openai-compatible-calls"><span class="toc-section-number">9.1</span> Keep App Code on OpenAI-Compatible
+Calls</a></li>
+<li><a href="#guardrails-for-tool-calling" id="toc-guardrails-for-tool-calling"><span class="toc-section-number">9.2</span> Guardrails for Tool
+Calling</a></li>
+<li><a href="#rag-layer-decisions" id="toc-rag-layer-decisions"><span class="toc-section-number">9.3</span> RAG Layer Decisions</a></li>
+</ul></li>
+<li><a href="#operations-keep-it-stable-over-time" id="toc-operations-keep-it-stable-over-time"><span class="toc-section-number">10</span> Operations: Keep It Stable Over
+Time</a>
+<ul>
+<li><a href="#baseline-checklist" id="toc-baseline-checklist"><span class="toc-section-number">10.1</span> Baseline Checklist</a></li>
+<li><a href="#update-discipline" id="toc-update-discipline"><span class="toc-section-number">10.2</span> Update Discipline</a></li>
+<li><a href="#observability-that-actually-helps" id="toc-observability-that-actually-helps"><span class="toc-section-number">10.3</span> Observability That Actually
+Helps</a></li>
+<li><a href="#security-and-privacy-reality" id="toc-security-and-privacy-reality"><span class="toc-section-number">10.4</span> Security and Privacy
+Reality</a></li>
+</ul></li>
+<li><a href="#decision-guide-by-constraint" id="toc-decision-guide-by-constraint"><span class="toc-section-number">11</span> Decision Guide by Constraint</a>
+<ul>
+<li><a href="#i-want-the-easiest-possible-local-setup" id="toc-i-want-the-easiest-possible-local-setup"><span class="toc-section-number">11.1</span> I want the easiest possible local
+setup</a></li>
+<li><a href="#i-want-maximum-low-level-control" id="toc-i-want-maximum-low-level-control"><span class="toc-section-number">11.2</span> I want maximum low-level
+control</a></li>
+<li><a href="#i-need-high-concurrency-for-team-apis" id="toc-i-need-high-concurrency-for-team-apis"><span class="toc-section-number">11.3</span> I need high concurrency for team
+APIs</a></li>
+<li><a href="#i-need-one-local-platform-for-text-embeddings-audio-image" id="toc-i-need-one-local-platform-for-text-embeddings-audio-image"><span class="toc-section-number">11.4</span> I need one local platform for
+text + embeddings + audio + image</a></li>
+<li><a href="#i-need-image-generation-or-image-editing" id="toc-i-need-image-generation-or-image-editing"><span class="toc-section-number">11.5</span> I need image generation or image
+editing</a></li>
+<li><a href="#i-need-ocr-screenshots-or-document-understanding" id="toc-i-need-ocr-screenshots-or-document-understanding"><span class="toc-section-number">11.6</span> I need OCR, screenshots, or
+document understanding</a></li>
+<li><a href="#i-need-local-transcription-or-speech-generation" id="toc-i-need-local-transcription-or-speech-generation"><span class="toc-section-number">11.7</span> I need local transcription or
+speech generation</a></li>
+<li><a href="#i-need-local-video-generation" id="toc-i-need-local-video-generation"><span class="toc-section-number">11.8</span> I need local video
+generation</a></li>
+<li><a href="#i-want-a-polished-local-chat-ui" id="toc-i-want-a-polished-local-chat-ui"><span class="toc-section-number">11.9</span> I want a polished local chat
+UI</a></li>
+<li><a href="#i-want-private-assistant-workflows-through-messaging-apps" id="toc-i-want-private-assistant-workflows-through-messaging-apps"><span class="toc-section-number">11.10</span> I want private assistant
+workflows through messaging apps</a></li>
+</ul></li>
+<li><a href="#day-practical-starter-path" id="toc-day-practical-starter-path"><span class="toc-section-number">12</span> 5-Day Practical Starter Path</a>
+<ul>
+<li><a href="#day-1-run-a-local-model" id="toc-day-1-run-a-local-model"><span class="toc-section-number">12.1</span> Day 1: Run a Local Model</a></li>
+<li><a href="#day-2-add-browser-ui" id="toc-day-2-add-browser-ui"><span class="toc-section-number">12.2</span> Day 2: Add Browser UI</a></li>
+<li><a href="#day-3-use-the-api-directly" id="toc-day-3-use-the-api-directly"><span class="toc-section-number">12.3</span> Day 3: Use the API
+Directly</a></li>
+<li><a href="#day-4-containerize-and-persist" id="toc-day-4-containerize-and-persist"><span class="toc-section-number">12.4</span> Day 4: Containerize and
+Persist</a></li>
+<li><a href="#day-5-compare-two-model-families" id="toc-day-5-compare-two-model-families"><span class="toc-section-number">12.5</span> Day 5: Compare Two Model
+Families</a></li>
+</ul></li>
+<li><a href="#conclusion" id="toc-conclusion"><span class="toc-section-number">13</span> Conclusion</a></li>
+<li><a href="#appendix" id="toc-appendix"><span class="toc-section-number">14</span> Appendix</a>
+<ul>
+<li><a href="#quick-command-cheatsheet" id="toc-quick-command-cheatsheet"><span class="toc-section-number">14.1</span> Quick Command Cheatsheet</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14.2</span> Further Reading</a></li>
+</ul></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
+<p>From Zero to Your Own Private AI Stack, With Containers</p>
+<p><em>~6,300 words · August 2026</em></p>
+<p>You have used cloud AI tools. They are useful, fast, and easy.</p>
+<p>Now you want control.</p>
+<p>You want your prompts and documents to stay on your machine. You want
+predictable cost. You want to wire models into your own tools without
+waiting on a vendor roadmap. You want to understand what is actually
+running.</p>
+<p>This guide is for that exact move.</p>
+<p>It is written for technical beginners to local inference: people who
+are comfortable in a terminal and can read config files, but have not
+yet built a local model stack end to end.</p>
+<p>Everything here is written as current guidance for 31 August
+2026.</p>
+<h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
+<h2 data-number="1.1" id="what-this-covers"><span class="header-section-number">1.1</span> What This Covers</h2>
+<p>This is a practical guide to running large language models locally
+for chat, coding, API workloads, and agent backends. You will learn:</p>
+<ol type="1">
+<li>The minimum concepts you need to avoid common dead ends.</li>
+<li>How hardware limits shape model choices.</li>
+<li>How the major runtime options differ in 2026.</li>
+<li>Deployment patterns that work in practice.</li>
+<li>How text, vision, image-generation, speech, audio, and video models
+differ.</li>
+<li>How to choose, test, and operate models without guesswork.</li>
+</ol>
+<h2 data-number="1.2" id="what-this-is-not"><span class="header-section-number">1.2</span> What This Is Not</h2>
+<p>This is not a training guide. It does not teach full fine-tuning
+pipelines, distributed pretraining, or benchmark archaeology. It does
+not try to be a complete reference for every inference engine.</p>
+<p>It is a decision-and-deployment guide: enough depth to make good
+choices, enough implementation detail to run things today. Model names
+and runtime support move quickly, so the dated links and model cards in
+this guide matter more than any static ranking.</p>
+<h2 data-number="1.3" id="background-assumed"><span class="header-section-number">1.3</span> Background Assumed</h2>
+<p>You can use a terminal, install software, and read logs. If you know
+what a container is and have used Docker or Podman once, you are set. If
+you have not, you can still follow along, but expect to pause and look
+up a couple of commands.</p>
+<h2 data-number="1.4" id="how-this-is-structured"><span class="header-section-number">1.4</span> How This Is Structured</h2>
+<p>The guide follows one flow:</p>
+<ol type="1">
+<li>Foundations (the concepts that actually matter at runtime)</li>
+<li>Hardware constraints (what fits and what does not)</li>
+<li>Inference stack options (what each tool is good at)</li>
+<li>Deployment blueprints (copyable patterns)</li>
+<li>Model and operations decisions (how to stay sane over time)</li>
+</ol>
+<h2 data-number="1.5" id="quick-read-if-you-are-in-a-hurry"><span class="header-section-number">1.5</span> Quick Read if You Are in a
+Hurry</h2>
+<p>If you need one short answer:</p>
+<ol type="1">
+<li>Start with Ollama if you want speed-to-first-result.</li>
+<li>Use llama.cpp directly if you want control.</li>
+<li>Use vLLM or SGLang for heavy concurrent serving.</li>
+<li>Use LocalAI if you want one local API for many modalities.</li>
+<li>Use ComfyUI/Diffusers for image and video generation, not a chat
+model.</li>
+<li>Keep your application on OpenAI-compatible APIs so you can switch
+backends later.</li>
+</ol>
+<hr />
+<h1 data-number="2" id="foundations-what-you-are-actually-running"><span class="header-section-number">2</span> Foundations: What You Are
+Actually Running</h1>
+<p>Most confusion in local LLM work comes from blending three layers
+together.</p>
+<p>Separate them:</p>
+<ol type="1">
+<li>The model artifact (weights + metadata)</li>
+<li>The inference engine (token generation runtime)</li>
+<li>The server or UI layer (APIs, chat interfaces, auth)</li>
+</ol>
+<p>When you keep these layers distinct, the ecosystem stops feeling
+messy.</p>
+<h2 data-number="2.1" id="model-artifact"><span class="header-section-number">2.1</span> Model Artifact</h2>
+<p>A model is a large set of learned weights plus metadata about
+tokenizer, architecture, and prompt formatting.</p>
+<p>For local inference, you will mostly see:</p>
+<ol type="1">
+<li>GGUF files for llama.cpp-class runtimes</li>
+<li>Safetensors/Hugging Face checkpoints for transformer-native and
+diffusion runtimes</li>
+<li>MLX-converted weights for Apple Silicon</li>
+<li>Pipeline components such as a VAE, text encoder, vision encoder, or
+multimodal projector</li>
+</ol>
+<p>GGUF remains the practical default for many local setups because it
+is portable and quantization-friendly.</p>
+<p>It is not the universal format. Image and video generators are
+commonly distributed as Safetensors components, while Apple-oriented
+tools often use MLX conversions. A vision-language model may also need a
+separate vision tower or <code>mmproj</code> file.</p>
+<h2 data-number="2.2" id="inference-engine"><span class="header-section-number">2.2</span> Inference Engine</h2>
+<p>The engine performs tokenization, forward passes, cache management,
+and sampling.</p>
+<p>At runtime, a single response loop is:</p>
+<ol type="1">
+<li>Convert text to tokens.</li>
+<li>Run those tokens through the model.</li>
+<li>Compute next-token probabilities.</li>
+<li>Sample one token.</li>
+<li>Append token and repeat.</li>
+</ol>
+<p>This is why memory bandwidth and cache behavior matter so much. Even
+with good compute hardware, poor memory fit destroys throughput.</p>
+<h2 data-number="2.3" id="server-layer"><span class="header-section-number">2.3</span> Server Layer</h2>
+<p>The server exposes the engine over HTTP and handles request
+structure, batching, and optional auth.</p>
+<p>If you keep to OpenAI-compatible endpoints, you can usually swap
+runtimes with small config changes.</p>
+<p>That API stability is what makes local inference practical for real
+applications, not just demos.</p>
+<h2 data-number="2.4" id="quantization-the-lever-you-will-use-most"><span class="header-section-number">2.4</span> Quantization (The Lever You
+Will Use Most)</h2>
+<p>Quantization reduces weight precision to make models fit smaller
+hardware.</p>
+<p>A simplified mental model:</p>
+<ol type="1">
+<li>Higher precision: better quality ceiling, more memory, slower on
+constrained hardware.</li>
+<li>Lower precision: smaller footprint, faster, but quality loss appears
+sooner on complex tasks.</li>
+</ol>
+<p>Common practical choices:</p>
+<table>
+<thead>
+<tr>
+<th>Quantization</th>
+<th>Typical Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FP16/BF16</td>
+<td>Datacenter or high-memory local GPU runs</td>
+</tr>
+<tr>
+<td>8-bit</td>
+<td>Quality-sensitive local serving with decent VRAM</td>
+</tr>
+<tr>
+<td>4-bit</td>
+<td>Common local sweet spot for many personal text-model runs</td>
+</tr>
+<tr>
+<td>2-3 bit</td>
+<td>Extreme memory constraint, quality trade-off is obvious</td>
+</tr>
+</tbody>
+</table>
+<p>In the GGUF world, 4-bit variants like Q4_K_M remain a strong
+llama.cpp baseline for many assistants and coding workflows. They are
+not a universal optimum: image/video pipelines and accelerator servers
+often use different formats, and quantization quality depends on the
+model and hardware.</p>
+<h2 data-number="2.5" id="context-window-and-kv-cache"><span class="header-section-number">2.5</span> Context Window and KV
+Cache</h2>
+<p>Context window is how much text the model can attend to at once. KV
+cache is the memory used to store token history state.</p>
+<p>Longer context means larger KV cache. That memory cost can dominate
+runs that otherwise fit fine.</p>
+<p>A practical rule:</p>
+<ol type="1">
+<li>Pick model size and quantization first.</li>
+<li>Then increase context until latency and memory stay acceptable.</li>
+<li>Do not assume max advertised context is affordable on your
+hardware.</li>
+</ol>
+<h2 data-number="2.6" id="sampling-controls"><span class="header-section-number">2.6</span> Sampling Controls</h2>
+<p>The three settings that matter most:</p>
+<ol type="1">
+<li>Temperature: randomness.</li>
+<li>Top-p: probability mass cutoff.</li>
+<li>Repetition controls: avoid loops and overuse.</li>
+</ol>
+<p>For coding and precise factual tasks, run cooler. For brainstorming,
+increase controlled randomness.</p>
+<hr />
+<h1 data-number="3" id="beyond-text-choose-the-model-for-the-modality"><span class="header-section-number">3</span> Beyond Text: Choose the Model for
+the Modality</h1>
+<p>“Local model” no longer means only a chatbot. The important split is
+between models that <em>understand</em> an input and models that
+<em>generate</em> an output. A vision-language model (VLM) reads an
+image and returns text or structured data. An image-generation model
+turns text or reference images into pixels. A speech-recognition model
+turns audio into text. They are different model classes, with different
+files, runtimes, and hardware requirements.</p>
+<p>Do not assume that a model advertised as multimodal can generate
+every modality. Most multimodal language models accept text plus images,
+audio, or video and generate text. Image and video generators usually
+use diffusion or flow-matching pipelines and are operated through tools
+such as <a href="https://github.com/huggingface/diffusers">Diffusers</a>, <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a>, or <a href="https://github.com/invoke-ai/InvokeAI">InvokeAI</a>, not a chat
+endpoint.</p>
+<h2 data-number="3.1" id="practical-model-map"><span class="header-section-number">3.1</span> Practical Model Map</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Current local examples</th>
+<th>Typical local path</th>
+<th>What to expect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text, coding, reasoning, and agents</td>
+<td><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.8</a>, <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>,
+<a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
+4.2</a>, <a href="https://openai.com/index/introducing-gpt-oss/">gpt-oss</a>, <a href="https://huggingface.co/LiquidAI/models">LFM2.5</a></td>
+<td>llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM</td>
+<td>The broadest ecosystem. Size, quantization, and context length still
+dominate fit.</td>
+</tr>
+<tr>
+<td>Image understanding, OCR, charts, and documents</td>
+<td><a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL</a>, <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>,
+<a href="https://huggingface.co/ibm-granite/granite-vision-4.1-4b">Granite
+Vision</a>, <a href="https://huggingface.co/LiquidAI/models">LFM2.5-VL</a></td>
+<td>Transformers, vLLM, SGLang, Ollama vision models, or supported
+llama.cpp multimodal builds</td>
+<td>These models describe and reason about pixels; they do not create
+finished images. OCR quality depends heavily on resolution and
+layout.</td>
+</tr>
+<tr>
+<td>Text-to-image and image editing</td>
+<td><a href="https://github.com/black-forest-labs/flux2">FLUX.2</a>, <a href="https://huggingface.co/Qwen/Qwen-Image-Edit">Qwen-Image</a>,
+Stable Diffusion family</td>
+<td>Diffusers, ComfyUI, InvokeAI</td>
+<td>Treat the pipeline, text encoder, variational autoencoder (VAE), and
+transformer/diffusion weights as one artifact. VRAM rises quickly with
+resolution and reference images. Licenses differ by checkpoint.</td>
+</tr>
+<tr>
+<td>Speech recognition and alignment</td>
+<td><a href="https://github.com/openai/whisper">Whisper</a>, <a href="https://github.com/SYSTRAN/faster-whisper">faster-whisper</a>, <a href="https://github.com/QwenLM/Qwen3-ASR">Qwen3-ASR</a>, Granite
+Speech</td>
+<td>faster-whisper/CTranslate2, Transformers, vLLM, or experimental
+llama.cpp audio support</td>
+<td>Usually much smaller and easier to run than a general LLM. Use a
+dedicated automatic speech recognition (ASR) model when transcription is
+the job.</td>
+</tr>
+<tr>
+<td>Speech synthesis and audio understanding</td>
+<td><a href="https://github.com/QwenLM/Qwen3-Omni">Qwen3-Omni</a>, <a href="https://github.com/coqui-ai/TTS">XTTS v2</a>, CosyVoice</td>
+<td>Transformers, project-specific runtimes, or LocalAI</td>
+<td>Text-to-speech (TTS), voice cloning, and audio captioning have
+different quality and consent risks. Check speaker-data terms before
+cloning a voice.</td>
+</tr>
+<tr>
+<td>Video understanding and generation</td>
+<td><a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL</a>, <a href="https://github.com/QwenLM/Qwen3-Omni">Qwen3-Omni</a>, <a href="https://github.com/Wan-Video/Wan2.2">Wan2.2</a></td>
+<td>vLLM, SGLang, or Transformers for understanding; Diffusers or model
+code for generation</td>
+<td>Video generation is substantially more demanding than image
+generation. Wan2.2’s 5B text-image-to-video path documents 24 GB VRAM at
+720p; its larger paths need much more.</td>
+</tr>
+<tr>
+<td>Text and multimodal retrieval</td>
+<td><a href="https://ai.google.dev/gemma/docs">EmbeddingGemma</a>, <a href="https://github.com/QwenLM/Qwen3-VL-Embedding">Qwen3-VL-Embedding
+and Reranker</a>, BGE-family models</td>
+<td>Sentence Transformers, Transformers, Ollama, or a vector
+database</td>
+<td>Embeddings produce vectors, not answers. Evaluate retrieval
+separately from the language model that writes the final response.</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="3.2" id="what-changed-recently"><span class="header-section-number">3.2</span> What Changed Recently</h2>
+<p>The frontier has moved toward smaller specialist models and sparse
+larger models. <a href="https://github.com/QwenLM/Qwen3.5">Qwen3.8-27B</a> was added in
+August 2026, while <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
+4.2</a> added 3B, 8B, and 30B reasoning models with configurable
+thinking modes, native tool calling, and a documented path to 512K
+context. <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>
+combines text and image input across its sizes, with audio support in
+E2B, E4B, and 12B variants. These are useful examples of why “parameter
+count” alone is no longer enough: active parameters, modality encoders,
+context length, and draft models all affect the actual local cost.</p>
+<p>Two other changes matter for personal hardware. <a href="https://huggingface.co/blog/LiquidAI/lfm25-dspark">LFM2.5-DSpark</a>
+adds a small draft-model path for speculative decoding, reporting up to
+3.18× GPU and 2.87× on-device throughput on its tested workloads. <a href="https://github.com/QwenLM/Qwen3-ASR">Qwen3-ASR</a> provides 0.6B
+and 1.7B speech-recognition models supporting 52 languages and dialects,
+plus a 0.6B forced-aligner. These are different strategies from buying a
+larger general-purpose model: reduce the model’s job, then optimize that
+job directly.</p>
+<h2 data-number="3.3" id="specialist-models-worth-knowing"><span class="header-section-number">3.3</span> Specialist Models Worth
+Knowing</h2>
+<p>For image generation, <a href="https://github.com/black-forest-labs/flux2">FLUX.2 Klein</a> is
+the practical small-model branch, while FLUX.2 dev is a much larger 32B
+option. The Klein 4B checkpoint is aimed at consumer GPUs; the 9B and
+dev variants have different license terms, so read the exact model
+license before commercial use. <a href="https://github.com/QwenLM/Qwen-Image">Qwen-Image</a> and <a href="https://huggingface.co/Qwen/Qwen-Image-Edit">Qwen-Image-Edit</a>
+are larger Apache-2.0 image-generation/editing options with strong
+typography and reference-image control. <a href="https://github.com/Tencent-Hunyuan/HunyuanImage-3.0">HunyuanImage
+3.0</a> is a high-end 80B-total/13B-active MoE model, not a desktop
+recommendation; its license also excludes some territories, including
+the European Union.</p>
+<p>For document work, a general VLM is not always the best tool. <a href="https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/version3.x/algorithm/PaddleOCR-VL/PaddleOCR-VL-1.6.md">PaddleOCR-VL
+1.6</a> and <a href="https://github.com/zai-org/glm-ocr">GLM-OCR</a> are
+compact 0.9B-class specialists for layout-aware extraction. <a href="https://allenai.org/blog/olmocr-2">olmOCR 2</a> is a heavier 7B
+option for difficult PDFs, equations, tables, handwriting, and reading
+order. This is a useful pattern: use a small specialist to turn pixels
+into reliable structure, then pass that structure to a language
+model.</p>
+<p>For speech, <a href="https://huggingface.co/openai/whisper-large-v3-turbo">Whisper
+large-v3-turbo</a> remains the broad-compatibility default, while <a href="https://github.com/QwenLM/Qwen3-ASR">Qwen3-ASR</a> is a newer
+small multilingual option. <a href="https://huggingface.co/hexgrad/Kokoro-82M">Kokoro-82M</a> is a
+practical lightweight TTS model; <a href="https://github.com/QwenLM/Qwen3-TTS">Qwen3-TTS</a> adds voice
+design and zero-shot cloning, which makes consent and speaker-data
+handling part of the deployment decision.</p>
+<p>For video, <a href="https://github.com/Wan-Video/Wan2.2">Wan2.2</a>
+remains the most approachable open generation path: its TI2V-5B model
+documents 720p generation on a 24 GB GPU with offloading. <a href="https://huggingface.co/Lightricks/LTX-2.5">LTX-2.5</a> is a
+heavier synchronized audio-video option with an official 32 GB minimum.
+Video generation is still a workstation workload even when the headline
+parameter count looks modest.</p>
+<h2 data-number="3.4" id="image-generation-is-not-vision"><span class="header-section-number">3.4</span> Image Generation Is Not
+Vision</h2>
+<p>This distinction prevents a common failed setup. A VLM such as
+Qwen3-VL can inspect a screenshot, read a receipt, or answer questions
+about a photograph. An image model such as FLUX.2 or Qwen-Image can
+synthesize or edit pixels. They may share a text encoder or appear in
+the same UI, but they are not interchangeable. For a private document
+pipeline, the usual sequence is:</p>
+<ol type="1">
+<li>Use a VLM or OCR model to extract structure from the document.</li>
+<li>Use a text model to classify, summarize, or call tools.</li>
+<li>Use an image model only if the workflow needs a generated or edited
+image.</li>
+</ol>
+<p>The same separation applies to audio and video. Transcribe with ASR,
+reason over the transcript with a language model, and synthesize speech
+or video only at the output stage when required.</p>
+<h2 data-number="3.5" id="multimodal-memory-costs"><span class="header-section-number">3.5</span> Multimodal Memory Costs</h2>
+<p>Images, audio, and video become tokens or latent features before the
+language model sees them. A single high-resolution image or a sampled
+video can therefore consume more context and key-value (KV) cache than
+its file size suggests. Start with low resolution, short clips, and a
+small number of images; increase them only after measuring memory and
+latency. A model that fits text-only may fail once its vision tower,
+projector, audio encoder, or video loader is enabled.</p>
+<hr />
+<h1 data-number="4" id="hardware-reality-in-2026"><span class="header-section-number">4</span> Hardware Reality in 2026</h1>
+<p>Hardware constraints are still the biggest determinant of user
+experience.</p>
+<h2 data-number="4.1" id="cpu-only-systems"><span class="header-section-number">4.1</span> CPU-Only Systems</h2>
+<p>CPU-only inference is valid, but expectations matter.</p>
+<p>CPU-only is good for:</p>
+<ol type="1">
+<li>Small models</li>
+<li>Batch embedding jobs</li>
+<li>Offline or low-interactivity pipelines</li>
+</ol>
+<p>CPU-only is not ideal for:</p>
+<ol type="1">
+<li>Large interactive chat at long context</li>
+<li>Multi-user concurrent serving</li>
+<li>Tool-heavy agent loops with strict latency needs</li>
+</ol>
+<p>Modern llama.cpp builds are excellent on CPU, but a slow token stream
+is still a slow token stream.</p>
+<h2 data-number="4.2" id="nvidia-gpu-systems"><span class="header-section-number">4.2</span> NVIDIA GPU Systems</h2>
+<p>NVIDIA remains the easiest path for predictable high-performance
+local inference because CUDA tooling is mature across runtimes.</p>
+<p>Approximate fit guidance for mainstream quantized models:</p>
+<table>
+<thead>
+<tr>
+<th>VRAM</th>
+<th>Comfortable Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6-8 GB</td>
+<td>Small 3B-8B models at 4-bit</td>
+</tr>
+<tr>
+<td>12-16 GB</td>
+<td>8B-14B class at 4-bit, some 8-bit options</td>
+</tr>
+<tr>
+<td>24 GB</td>
+<td>30B class at 4-bit in many setups</td>
+</tr>
+<tr>
+<td>48 GB+</td>
+<td>70B class at 4-bit for serious local serving</td>
+</tr>
+</tbody>
+</table>
+<p>Exact fit depends on runtime, context, and architecture. Always leave
+memory headroom for KV cache and framework overhead.</p>
+<h2 data-number="4.3" id="amd-gpu-systems"><span class="header-section-number">4.3</span> AMD GPU Systems</h2>
+<p>ROCm is now materially better than it was two years ago. Many local
+users run AMD successfully in 2026, and Vulkan paths are useful for some
+consumer cards and applications. Intel XPU support is also present in
+parts of the serving ecosystem.</p>
+<p>Still, setup friction can be higher than CUDA depending on distro,
+card generation, and runtime support level. Backend support is not
+uniform: a model may work in llama.cpp on ROCm but not in a particular
+vLLM or SGLang build, or may support image inputs only on one
+backend.</p>
+<p>Use AMD when:</p>
+<ol type="1">
+<li>Your target runtime documents strong ROCm support.</li>
+<li>You are willing to spend time validating kernel and driver
+combinations.</li>
+</ol>
+<p>Avoid wishful assumptions. Test your exact card + runtime pair
+early.</p>
+<h2 data-number="4.4" id="apple-silicon"><span class="header-section-number">4.4</span> Apple Silicon</h2>
+<p>Apple Silicon remains one of the best personal platforms for local
+inference due to unified memory and strong Metal acceleration.</p>
+<p>The key trade-off is that very large models are memory-bandwidth
+sensitive. You can run them, but throughput can flatten faster than
+people expect.</p>
+<p>For many users, a well-chosen 8B-30B class model on Apple Silicon
+provides the best quality-to-latency balance. MLX and
+<code>mlx-lm</code>/<code>mlx-vlm</code> now make Apple-native text and
+selected vision workloads particularly attractive; model-specific
+conversion still matters.</p>
+<h2 data-number="4.5" id="multi-gpu-and-multi-node"><span class="header-section-number">4.5</span> Multi-GPU and Multi-Node</h2>
+<p>Splitting models across multiple GPUs or nodes is possible and
+increasingly common in hobby homelabs.</p>
+<p>Do it only when you need it. Complexity rises quickly:</p>
+<ol type="1">
+<li>More failure modes</li>
+<li>Harder reproducibility</li>
+<li>More debugging surface in networking and scheduling</li>
+</ol>
+<p>If one larger GPU solves your problem, it is often cheaper in time
+than distributed experimentation.</p>
+<hr />
+<h1 data-number="5" id="runtime-and-tooling-landscape"><span class="header-section-number">5</span> Runtime and Tooling
+Landscape</h1>
+<p>There are more choices now, but the core categories are stable.</p>
+<p>At the 31 August 2026 cutoff, the release pages showed a fast-moving
+stack: <a href="https://github.com/ollama/ollama/releases">Ollama
+v0.33.2</a>, <a href="https://github.com/vllm-project/vllm/releases/tag/v0.28.0">vLLM
+v0.28.0</a>, <a href="https://github.com/sgl-project/sglang/releases">SGLang
+v0.5.18</a>, <a href="https://github.com/ml-explore/mlx/releases">MLX
+v0.32.2</a>, and <a href="https://github.com/huggingface/transformers/releases">Transformers
+v5.16.1</a>. Treat these as a dated snapshot, not versions to pin
+blindly; read the model recipe and accelerator requirements before
+upgrading.</p>
+<h2 data-number="5.1" id="llama.cpp-and-llama-server"><span class="header-section-number">5.1</span> llama.cpp and llama-server</h2>
+<p>llama.cpp is still the foundational local inference engine for GGUF
+workflows.</p>
+<p>Use it when you want:</p>
+<ol type="1">
+<li>Fine-grained control over runtime flags</li>
+<li>Strong CPU performance</li>
+<li>Portable execution across many hardware backends</li>
+</ol>
+<p><code>llama-server</code> gives you an OpenAI-compatible API endpoint
+plus basic web chat. Its current multimodal path uses
+<code>libmtmd</code> and supports image and experimental audio input for
+selected architectures. These models commonly need two GGUF files: the
+language model and a matching multimodal projector
+(<code>mmproj</code>). Check the <a href="https://github.com/ggml-org/llama.cpp/blob/master/docs/multimodal.md">multimodal
+support list</a>; a normal GGUF file is not automatically
+vision-capable.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Serve a model pulled from Hugging Face through llama.cpp</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-hf</span> ggml-org/gemma-3-1b-it-GGUF <span class="at">--port</span> 8080</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Or serve a local GGUF file</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-m</span> ./model.gguf <span class="at">--host</span> 0.0.0.0 <span class="at">--port</span> 8080</span></code></pre></div>
+<p>If you enjoy tuning and understanding the engine, this remains a top
+choice.</p>
+<h2 data-number="5.2" id="mlx-lm-and-mlx-vlm"><span class="header-section-number">5.2</span> MLX-LM and MLX-VLM</h2>
+<p><a href="https://github.com/ml-explore/mlx">MLX</a> is Apple’s array
+framework for Apple Silicon. <code>mlx-lm</code> is a strong path for
+text models on Macs, and <code>mlx-vlm</code> adds model-specific
+vision-language support. These tools exploit unified memory and avoid
+the CUDA assumptions in many server stacks. They are excellent for a Mac
+laptop or workstation, but model conversion and support are more
+model-specific than with Transformers.</p>
+<p>For image generation, use an MLX-specific implementation only when
+the model’s repository documents it. Otherwise use a supported Diffusers
+or ComfyUI pipeline and expect higher memory pressure.</p>
+<h2 data-number="5.3" id="ollama"><span class="header-section-number">5.3</span> Ollama</h2>
+<p>Ollama is still the fastest path from zero to a working local model,
+but it is no longer text-only in practice. Current releases support
+selected vision models, image inputs, tools, reasoning controls,
+structured output, and an OpenAI-compatible Responses API. On Apple
+Silicon, selected models can use an MLX-backed path.</p>
+<p>Use it when you want:</p>
+<ol type="1">
+<li>Straightforward model pull/run lifecycle</li>
+<li>Local API with minimal setup</li>
+<li>Good integration with coding tools and chat frontends</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install on Linux</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://ollama.com/install.sh <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a model immediately</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run gemma4</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Start API service</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve</span></code></pre></div>
+<p>Ollama keeps improving ergonomics and model catalog experience. It is
+not the most configurable engine, and its OpenAI-compatible surface is
+only a subset: base64 image data works, while remote image URLs and some
+tool controls do not. It remains the most productive default for a
+single user who wants to try text or vision models quickly.</p>
+<h2 data-number="5.4" id="localai"><span class="header-section-number">5.4</span> LocalAI</h2>
+<p>LocalAI is a broad local AI platform exposing OpenAI-style interfaces
+across text, embedding, audio, and image workflows through multiple
+backends.</p>
+<p>Use it when you want:</p>
+<ol type="1">
+<li>One local API surface for multiple modalities</li>
+<li>Flexible backend selection</li>
+<li>Container-first operations</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CPU example</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> localai <span class="at">-p</span> 8080:8080 localai/localai:latest</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NVIDIA example (verify current image tag in LocalAI docs)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> localai <span class="at">-p</span> 8080:8080 <span class="at">--gpus</span> all <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-12</span></code></pre></div>
+<p>It is powerful and flexible, but there is more operational surface
+area than Ollama. It is a useful compatibility layer, not proof that
+every underlying model has equal support or quality. Validate each
+modality separately.</p>
+<h2 data-number="5.5" id="transformers-and-diffusers"><span class="header-section-number">5.5</span> Transformers and Diffusers</h2>
+<p><a href="https://github.com/huggingface/transformers">Transformers</a>
+remains the model-definition and native-inference layer for many VLM,
+OCR, ASR, and text models. Its newer <code>transformers serve</code>
+command can expose an OpenAI-compatible endpoint for supported models,
+which is convenient for testing before moving to vLLM or SGLang.</p>
+<p><a href="https://github.com/huggingface/diffusers">Diffusers</a> is
+the corresponding practical layer for image and video generation. It
+handles pipelines, schedulers, VAEs, adapters, and quantization. Use it
+for Python integration and reproducibility; use ComfyUI when you want to
+inspect and iterate on a graph interactively.</p>
+<h2 data-number="5.6" id="vllm"><span class="header-section-number">5.6</span> vLLM</h2>
+<p>vLLM remains one of the leading choices for high-throughput serving
+with strong batching behavior and efficient cache management. Its
+supported-model surface now includes text, image, video, and audio
+inputs for selected architectures, with the exact combination depending
+on the model and backend.</p>
+<p>Use it when you want:</p>
+<ol type="1">
+<li>Better concurrent throughput than simple single-request loops</li>
+<li>Production-oriented serving behavior</li>
+<li>Strong support for modern large-model serving patterns</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python install route</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install vllm</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vllm</span> serve meta-llama/Llama-3.3-8B-Instruct</span></code></pre></div>
+<p>For local single-user chat, vLLM can be overkill. For multi-user
+APIs, it is often the right level of machinery. Its main quantization
+path is Hugging Face-native (for example FP8, GPTQ, AWQ, MXFP4, NVFP4,
+and quantized KV cache); GGUF support is experimental and requires the
+separate <a href="https://docs.vllm.ai/en/latest/features/quantization/gguf/">vLLM
+GGUF plugin</a>.</p>
+<h2 data-number="5.7" id="sglang"><span class="header-section-number">5.7</span> SGLang</h2>
+<p>SGLang is now a serious option for optimized LLM, multimodal, and
+diffusion serving, especially where structured generation and advanced
+decode/scheduling behavior matter. Its support is accelerator- and
+backend-specific, so verify the model’s recipe before treating a claimed
+feature as portable.</p>
+<p>Use it when you want:</p>
+<ol type="1">
+<li>Competitive serving performance in modern accelerator stacks</li>
+<li>Advanced control for structured and multimodal output workloads</li>
+<li>Another mature path beyond vLLM for high-demand deployments</li>
+</ol>
+<p>In practice, serious teams often benchmark both vLLM and SGLang for
+their exact request patterns before committing. For image or video
+generation, SGLang-Diffusion is a separate path from ordinary chat
+serving.</p>
+<h2 data-number="5.8" id="lm-studio-and-jan"><span class="header-section-number">5.8</span> LM Studio and Jan</h2>
+<p>LM Studio and Jan remain useful GUI-first desktop choices.</p>
+<p>Use them when:</p>
+<ol type="1">
+<li>You want model experimentation without shell-heavy setup</li>
+<li>You prefer desktop UX over service administration</li>
+<li>You still want local APIs for integrations</li>
+</ol>
+<p>These tools are excellent for exploration and personal workflows,
+less so for hardened shared server operations.</p>
+<h2 data-number="5.9" id="open-webui"><span class="header-section-number">5.9</span> Open WebUI</h2>
+<p>Open WebUI is still the dominant self-hosted chat frontend in this
+ecosystem. It is becoming an agent frontend as well, with tool approval
+and richer state handling. Treat it as a versioned application, not an
+unpinned image.</p>
+<p>Use it when you need:</p>
+<ol type="1">
+<li>Browser chat UI</li>
+<li>Multi-user accounts</li>
+<li>RAG-style document chat features on top of your backend</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">-p</span> 3000:8080 <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> open-webui:/app/backend/data <span class="dt">\</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  ghcr.io/open-webui/open-webui:v0.11.1</span></code></pre></div>
+<p>It does not replace inference backends. It sits in front of them.
+Check the <a href="https://github.com/open-webui/open-webui/releases">release
+page</a> before copying the version tag, and keep it patched: an earlier
+2026 release line had a DNS-rebinding security advisory.</p>
+<h2 data-number="5.10" id="comparison-snapshot"><span class="header-section-number">5.10</span> Comparison Snapshot</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Easiest Start</th>
+<th>High Control</th>
+<th>High Throughput</th>
+<th>Multi-Modal Scope</th>
+<th>Typical Persona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ollama</td>
+<td>Excellent</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Text + selected vision/tools</td>
+<td>Solo dev, fast setup</td>
+</tr>
+<tr>
+<td>llama.cpp</td>
+<td>Medium</td>
+<td>Excellent</td>
+<td>Medium</td>
+<td>Text + selected image/audio input</td>
+<td>Tuner, systems-minded user</td>
+</tr>
+<tr>
+<td>LocalAI</td>
+<td>Medium</td>
+<td>High</td>
+<td>Medium-High</td>
+<td>Broad</td>
+<td>Platform builder</td>
+</tr>
+<tr>
+<td>vLLM</td>
+<td>Low</td>
+<td>High</td>
+<td>Excellent</td>
+<td>Text + selected media</td>
+<td>API team</td>
+</tr>
+<tr>
+<td>SGLang</td>
+<td>Low</td>
+<td>High</td>
+<td>Excellent</td>
+<td>Text + media + diffusion</td>
+<td>Performance-focused team</td>
+</tr>
+<tr>
+<td>MLX-LM + MLX-VLM</td>
+<td>Medium</td>
+<td>High on Apple</td>
+<td>Medium</td>
+<td>Text + selected vision models</td>
+<td>Apple Silicon user</td>
+</tr>
+<tr>
+<td>Transformers + Diffusers</td>
+<td>Medium</td>
+<td>Excellent</td>
+<td>Medium-High</td>
+<td>VLM/ASR + image/video generation</td>
+<td>Python integrator</td>
+</tr>
+<tr>
+<td>LM Studio / Jan</td>
+<td>Excellent</td>
+<td>Low-Medium</td>
+<td>Low</td>
+<td>Personal use</td>
+<td>GUI-first user</td>
+</tr>
+<tr>
+<td>Open WebUI</td>
+<td>High (as UI)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>UI layer</td>
+<td>Team chat frontend</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 data-number="6" id="containers-runtime-hygiene-and-why-reproducibility-wins"><span class="header-section-number">6</span> Containers, Runtime Hygiene, and
+Why Reproducibility Wins</h1>
+<p>Containerization is still the safest default for Linux server-style
+local inference.</p>
+<h2 data-number="6.1" id="why-containers-matter"><span class="header-section-number">6.1</span> Why Containers Matter</h2>
+<p>You isolate dependencies:</p>
+<ol type="1">
+<li>CUDA/ROCm stacks</li>
+<li>Python and native library versions</li>
+<li>Runtime binaries and model-serving flags</li>
+</ol>
+<p>This makes rollback possible and debugging less chaotic.</p>
+<h2 data-number="6.2" id="docker-vs-podman"><span class="header-section-number">6.2</span> Docker vs Podman</h2>
+<p>Both are viable. Podman remains attractive for rootless operation and
+daemonless workflow. Docker still has broader tutorial gravity.</p>
+<p>Pick one and standardize across your own docs and scripts. The
+consistency is more important than the brand.</p>
+<h2 data-number="6.3" id="image-tags-and-drift"><span class="header-section-number">6.3</span> Image Tags and Drift</h2>
+<p>Never treat <code>latest</code> as a long-term contract.</p>
+<p>For personal experimentation, <code>latest</code> is fine.</p>
+<p>For repeatable environments, pin tags or digests and record:</p>
+<ol type="1">
+<li>Runtime image</li>
+<li>Model identifier and revision</li>
+<li>Key serving flags</li>
+</ol>
+<p>That single discipline prevents many “it worked last week”
+incidents.</p>
+<h2 data-number="6.4" id="gpu-access-notes"><span class="header-section-number">6.4</span> GPU Access Notes</h2>
+<p>GPU passthrough is still the most common deployment failure
+point.</p>
+<p>Checklist:</p>
+<ol type="1">
+<li>Validate host driver stack first.</li>
+<li>Validate container toolkit runtime access second.</li>
+<li>Only then debug model/server flags.</li>
+</ol>
+<p>If you invert this order, you lose hours in application-level logs
+for a host-level problem.</p>
+<hr />
+<h1 data-number="7" id="deployment-blueprints-that-work"><span class="header-section-number">7</span> Deployment Blueprints That
+Work</h1>
+<p>These are opinionated starting points that fit common goals.</p>
+<h2 data-number="7.1" id="blueprint-1-personal-chat-in-under-20-minutes"><span class="header-section-number">7.1</span> Blueprint 1: Personal Chat in
+Under 20 Minutes</h2>
+<p>Use Ollama + optional Open WebUI.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://ollama.com/install.sh <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run gemma4</span></code></pre></div>
+<p>Then add Open WebUI if you want browser chat and conversation
+history.</p>
+<p>Who this is for:</p>
+<ol type="1">
+<li>First local setup</li>
+<li>Privacy-first personal usage</li>
+<li>No strict performance constraints</li>
+</ol>
+<h2 data-number="7.2" id="blueprint-2-local-coding-assistant-in-vs-code"><span class="header-section-number">7.2</span> Blueprint 2: Local Coding
+Assistant in VS Code</h2>
+<p>Use Ollama as backend and connect via Continue or other
+OpenAI-compatible extension.</p>
+<p>Example <code>~/.continue/config.yaml</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Local coding chat</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3-coder:8b</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> chat</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Local autocomplete</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3-coder:1.5b</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> autocomplete</span></span></code></pre></div>
+<p>If tag names differ in your environment, pick the nearest available
+coder variants from your local registry.</p>
+<p>Who this is for:</p>
+<ol type="1">
+<li>Daily coding assistance</li>
+<li>Fast edit-feedback loops</li>
+<li>Strong local privacy boundary</li>
+</ol>
+<h2 data-number="7.3" id="blueprint-3-persistent-local-api-service"><span class="header-section-number">7.3</span> Blueprint 3: Persistent Local
+API Service</h2>
+<p>Use <code>llama-server</code> or Ollama in a container with
+persistent volumes and service management.</p>
+<p>For Linux + Podman + user systemd, prefer Quadlet units.</p>
+<p><code>~/.config/containers/systemd/llm-api.container</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Unit]</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Description</span><span class="ot">=</span><span class="st">Local LLM API</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[Container]</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Image</span><span class="ot">=</span><span class="st">ghcr.io/ggml-org/llama.cpp:server-cuda</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">ContainerName</span><span class="ot">=</span><span class="st">llm-api</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="dt">PublishPort</span><span class="ot">=</span><span class="st">8080:8080</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="dt">AddDevice</span><span class="ot">=</span><span class="st">nvidia.com/gpu=all</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">-hf ggml-org/Meta-Llama-3.3-8B-Instruct-GGUF --host 0.0.0.0 --port 8080</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">[Install]</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">default.target</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> daemon-reload</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> enable <span class="at">--now</span> llm-api.service</span></code></pre></div>
+<p>Who this is for:</p>
+<ol type="1">
+<li>Stable local endpoint for tools/scripts</li>
+<li>Home lab service-style operation</li>
+<li>Repeatable restarts and updates</li>
+</ol>
+<h2 data-number="7.4" id="blueprint-4-multi-modal-local-platform"><span class="header-section-number">7.4</span> Blueprint 4: Multi-Modal Local
+Platform</h2>
+<p>Use LocalAI when you want one endpoint across text, embeddings,
+speech, and image workflows. For serious image/video generation, pair a
+dedicated Diffusers or ComfyUI service with your language-model API
+rather than forcing every modality through one backend.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> localai <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> localai-models:/build/models <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-12</span></code></pre></div>
+<p>Add models incrementally and validate each modality independently
+before composing full pipelines.</p>
+<p>Who this is for:</p>
+<ol type="1">
+<li>Prototype platform teams</li>
+<li>Self-hosted private AI stacks</li>
+<li>Mixed modality requirements</li>
+</ol>
+<p>Keep the model boundaries visible: VLM/OCR for perception, ASR/TTS
+for speech, diffusion/flow pipelines for image and video generation, and
+an LLM for language reasoning. A single frontend can hide these
+services, but it cannot remove their different memory, licensing, and
+failure modes.</p>
+<h2 data-number="7.5" id="blueprint-5-high-concurrency-api-for-teams"><span class="header-section-number">7.5</span> Blueprint 5: High-Concurrency
+API for Teams</h2>
+<p>Use vLLM or SGLang behind a simple gateway and benchmark request
+patterns with realistic prompt lengths.</p>
+<p>Who this is for:</p>
+<ol type="1">
+<li>Internal multi-user applications</li>
+<li>Latency-sensitive APIs under load</li>
+<li>Throughput-first architecture decisions</li>
+</ol>
+<p>Operational baseline:</p>
+<ol type="1">
+<li>Structured request logging</li>
+<li>Queue depth and latency metrics</li>
+<li>Per-model configuration profiles</li>
+<li>Rollback plan for model/runtime updates</li>
+</ol>
+<hr />
+<h1 data-number="8" id="model-selection-in-2026"><span class="header-section-number">8</span> Model Selection in 2026</h1>
+<p>Do not choose by hype. Choose by workload.</p>
+<h2 data-number="8.1" id="the-selection-order-that-works"><span class="header-section-number">8.1</span> The Selection Order That
+Works</h2>
+<p>Use this sequence:</p>
+<ol type="1">
+<li>Define the modality and workload shape.</li>
+<li>Pick a family with a license that fits your use.</li>
+<li>Pick size for hardware, including encoders and KV cache.</li>
+<li>Pick a runtime and its supported format.</li>
+<li>Pick quantization or an official compressed checkpoint.</li>
+<li>Run short evals.</li>
+<li>Freeze the baseline.</li>
+</ol>
+<h2 data-number="8.2" id="workload-shapes"><span class="header-section-number">8.2</span> Workload Shapes</h2>
+<p>Four broad categories capture most local usage:</p>
+<ol type="1">
+<li>General assistant chat and summarization</li>
+<li>Coding and tool-use agent workflows</li>
+<li>Reasoning-heavy long-context tasks</li>
+<li>Perception or generation of images, audio, and video</li>
+</ol>
+<p>Different families and sizes win in different categories. There is no
+universal best model.</p>
+<h2 data-number="8.3" id="family-level-guidance-practical"><span class="header-section-number">8.3</span> Family-Level Guidance
+(Practical)</h2>
+<p>As of 31 August 2026, a useful text-model shortlist includes:</p>
+<ol type="1">
+<li><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5/3.6/3.8</a> for
+coding, agents, and multimodal work. Qwen’s current repository lists
+Qwen3.8-27B as an August release, but model-card and catalog pages can
+lag the repository; verify the exact artifact and runtime tag before
+standardizing on it. Larger Qwen3.5/3.6 MoE models are server-class
+despite their low active-parameter counts.</li>
+<li><a href="https://ai.google.dev/gemma/docs/core">Gemma 4</a> for
+compact reasoning, coding, function calling, and image/audio input on
+selected variants. Google publishes official quantized memory estimates,
+which are more useful than a parameter count alone.</li>
+<li><a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
+4.2</a> for Apache-2.0 licensed reasoning, coding, native tool calling,
+and long-context workflows in 3B, 8B, and 30B sizes.</li>
+<li><a href="https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model">Muse
+Glimmer</a> for a current 30B local-agent design with image input, a
+quantized footprint under 20 GB, and speculative decoding. At the August
+release, some optimized integrations were still landing, so verify
+runtime support before choosing it as a baseline.</li>
+<li><a href="https://mistral.ai/news/mistral-3/">Mistral 3 and Ministral
+3</a> for efficient Apache-2.0 text-and-vision models; Mistral Small 4
+is a much larger 119B-total-parameter hybrid model and is not a normal
+laptop choice.</li>
+<li><a href="https://openai.com/index/introducing-gpt-oss/">gpt-oss-20b/120b</a>
+for open-weight reasoning and tool use. The native MXFP4 releases target
+roughly 16 GB and 80 GB memory envelopes respectively, before runtime
+headroom.</li>
+<li><a href="https://huggingface.co/LiquidAI/models">LFM2.5</a> for
+small local deployments. Its DSpark draft checkpoints demonstrate that
+speculative decoding can improve throughput without changing the main
+model’s output.</li>
+<li>DeepSeek-R1 distilled models for a well-established reasoning
+baseline; use the smaller Qwen-derived distills when you need a
+desktop-sized checkpoint.</li>
+</ol>
+<p>Older Llama and Mistral families still matter for compatibility,
+tutorials, and mature quantized tooling. They are not automatically the
+best choices for a new deployment.</p>
+<p>Treat this as a starting shortlist, not a ranking.</p>
+<h2 data-number="8.4" id="size-and-quantization-pairing"><span class="header-section-number">8.4</span> Size and Quantization
+Pairing</h2>
+<p>Use realistic tiers:</p>
+<table>
+<thead>
+<tr>
+<th>Hardware Tier</th>
+<th>Good Starting Pair</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4-8 GB VRAM / low-memory systems</td>
+<td>3B-8B at 4-bit</td>
+</tr>
+<tr>
+<td>12-16 GB VRAM</td>
+<td>8B-14B at 4-bit, selective 8-bit</td>
+</tr>
+<tr>
+<td>24 GB VRAM</td>
+<td>14B-30B at 4-bit</td>
+</tr>
+<tr>
+<td>48 GB+ VRAM</td>
+<td>30B-70B class options</td>
+</tr>
+</tbody>
+</table>
+<p>Start smaller than your maximum fit. Fast feedback usually beats
+marginal quality gains from oversized models.</p>
+<p>Those tiers describe text-model weights. Specialist models can be
+much smaller: 0.9B OCR models and 0.6B ASR models fit where a general
+VLM does not. Conversely, a 20B image generator, a vision encoder, or a
+video pipeline can exceed the memory of a similarly sized text model.
+For image/video generation, use the model’s own hardware guidance; for
+example, Wan2.2 documents 24 GB VRAM for its 5B 720p text-image-to-video
+path.</p>
+<h2 data-number="8.5" id="where-to-source-models"><span class="header-section-number">8.5</span> Where to Source Models</h2>
+<p>Primary sources remain:</p>
+<ol type="1">
+<li>Hugging Face Hub for broad model and quantization availability</li>
+<li>Ollama library for curated pull-and-run simplicity</li>
+</ol>
+<p>Before downloading:</p>
+<ol type="1">
+<li>Check license fit for your use case.</li>
+<li>Choose instruct/chat variants unless you need base checkpoints.</li>
+<li>Confirm file format compatibility with your runtime.</li>
+<li>Record exact model identifiers used in your stack.</li>
+</ol>
+<p>For visual and audio models, also record the encoder/projector,
+pipeline version, resolution or clip length, and any safety or
+watermarking defaults. For voice cloning and image-generation
+checkpoints, record the usage restrictions separately from the code
+license.</p>
+<h2 data-number="8.6" id="minimal-local-eval-loop"><span class="header-section-number">8.6</span> Minimal Local Eval Loop</h2>
+<p>Do not trust one impression prompt. Build a tiny repeatable eval
+set.</p>
+<p>Include 15-30 prompts that represent your real work:</p>
+<ol type="1">
+<li>One-turn instruction following</li>
+<li>Multi-turn memory behavior</li>
+<li>Coding edits or debugging responses</li>
+<li>Tool-call formatting correctness</li>
+<li>Domain-specific reasoning checks</li>
+</ol>
+<p>Score each candidate for:</p>
+<ol type="1">
+<li>Accuracy</li>
+<li>Latency</li>
+<li>Stability</li>
+<li>Cost-to-run on your hardware</li>
+</ol>
+<p>That small harness pays off immediately.</p>
+<hr />
+<h1 data-number="9" id="api-compatibility-and-application-design"><span class="header-section-number">9</span> API Compatibility and Application
+Design</h1>
+<p>You protect future flexibility by designing around stable
+interfaces.</p>
+<h2 data-number="9.1" id="keep-app-code-on-openai-compatible-calls"><span class="header-section-number">9.1</span> Keep App Code on
+OpenAI-Compatible Calls</h2>
+<p>Most local runtimes expose chat-completions-style APIs.</p>
+<p>If your app isolates model client config behind environment
+variables, you can switch backend without rewriting business logic.</p>
+<p>The common shape is useful, but compatibility is not identity. Vision
+requests may require base64 image data, a model-specific content schema,
+or a separate projector. Audio transcription and text-to-speech normally
+use different endpoints. Responses APIs, stateful conversations, tool
+choice, structured output, and remote image URLs also vary by runtime.
+Build a small adapter around these differences instead of scattering
+backend-specific assumptions through your application.</p>
+<p>Python example:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">&quot;http://localhost:11434/v1&quot;</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span><span class="st">&quot;none&quot;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">&quot;qwen3-coder:8b&quot;</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;role&quot;</span>: <span class="st">&quot;system&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;You are a concise coding assistant.&quot;</span>},</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;role&quot;</span>: <span class="st">&quot;user&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;Explain what a KV cache does.&quot;</span>},</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="fl">0.2</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].message.content)</span></code></pre></div>
+<h2 data-number="9.2" id="guardrails-for-tool-calling"><span class="header-section-number">9.2</span> Guardrails for Tool
+Calling</h2>
+<p>If you are building agents:</p>
+<ol type="1">
+<li>Validate JSON/tool schemas strictly.</li>
+<li>Bound retries and tool loops.</li>
+<li>Log tool calls and outputs with IDs.</li>
+<li>Separate model mistakes from tool/runtime mistakes in logs.</li>
+</ol>
+<p>This saves enormous debugging time once workflows grow beyond toy
+examples.</p>
+<h2 data-number="9.3" id="rag-layer-decisions"><span class="header-section-number">9.3</span> RAG Layer Decisions</h2>
+<p>For private document workflows, RAG is still the standard
+pattern:</p>
+<ol type="1">
+<li>Chunk documents.</li>
+<li>Generate embeddings.</li>
+<li>Store vectors.</li>
+<li>Retrieve relevant chunks at query time.</li>
+<li>Inject context into generation prompts.</li>
+</ol>
+<p>Common local embedding options remain practical through Ollama and
+open embedding models hosted on Hugging Face. The newer <a href="https://arxiv.org/abs/2601.04720">Qwen3-VL embedding and reranker
+models</a> extend this pattern to shared text-image-video retrieval,
+while Google’s <a href="https://ai.google.dev/gemma/docs">EmbeddingGemma</a> is a compact
+text-retrieval option.</p>
+<p>Keep retrieval evaluation separate from generation evaluation. Mixing
+both in one score hides bottlenecks.</p>
+<p>For scanned PDFs, do not assume text extraction is enough. A
+practical multimodal pipeline can use a specialist OCR/document model
+such as <a href="https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/version3.x/algorithm/PaddleOCR-VL/PaddleOCR-VL-1.6.md">PaddleOCR-VL</a>,
+<a href="https://github.com/zai-org/glm-ocr">GLM-OCR</a>, or <a href="https://github.com/allenai/olmocr">olmOCR</a>, then embed the
+resulting text and layout. Test tables, formulas, handwriting, reading
+order, and low-quality scans as separate cases.</p>
+<hr />
+<h1 data-number="10" id="operations-keep-it-stable-over-time"><span class="header-section-number">10</span> Operations: Keep It Stable Over
+Time</h1>
+<p>Most local deployments fail from drift, not from initial setup.</p>
+<h2 data-number="10.1" id="baseline-checklist"><span class="header-section-number">10.1</span> Baseline Checklist</h2>
+<p>For each deployed model/runtime combo, record:</p>
+<ol type="1">
+<li>Runtime image tag or digest</li>
+<li>Model ID + revision/tag</li>
+<li>Key inference parameters</li>
+<li>Context length</li>
+<li>Hardware target</li>
+<li>Expected latency envelope</li>
+</ol>
+<p>Store this next to your deployment config.</p>
+<h2 data-number="10.2" id="update-discipline"><span class="header-section-number">10.2</span> Update Discipline</h2>
+<p>Use a simple release procedure:</p>
+<ol type="1">
+<li>Pull new runtime/model in staging profile.</li>
+<li>Run your mini eval suite.</li>
+<li>Compare quality and latency against baseline.</li>
+<li>Promote only if metrics and behavior are acceptable.</li>
+</ol>
+<p>Local stacks feel “small,” but this discipline is still worth it.</p>
+<h2 data-number="10.3" id="observability-that-actually-helps"><span class="header-section-number">10.3</span> Observability That Actually
+Helps</h2>
+<p>You do not need enterprise observability to get value.</p>
+<p>Start with:</p>
+<ol type="1">
+<li>Request ID + model ID in logs</li>
+<li>Prompt token count, output token count, duration</li>
+<li>Error rate by endpoint and model</li>
+</ol>
+<p>Those three signals usually pinpoint where quality or latency
+regressed.</p>
+<h2 data-number="10.4" id="security-and-privacy-reality"><span class="header-section-number">10.4</span> Security and Privacy
+Reality</h2>
+<p>Local inference improves privacy posture. It does not automatically
+make your stack secure.</p>
+<p>Still secure:</p>
+<ol type="1">
+<li>API endpoints</li>
+<li>Frontend auth</li>
+<li>Tool execution permissions</li>
+<li>Secrets management</li>
+<li>Backup handling for stored chats and vectors</li>
+</ol>
+<p>If you expose your service over a network, treat it like any other
+internal API.</p>
+<hr />
+<h1 data-number="11" id="decision-guide-by-constraint"><span class="header-section-number">11</span> Decision Guide by
+Constraint</h1>
+<p>Use this when you need a fast recommendation.</p>
+<h2 data-number="11.1" id="i-want-the-easiest-possible-local-setup"><span class="header-section-number">11.1</span> I want the easiest possible
+local setup</h2>
+<p>Use Ollama first.</p>
+<h2 data-number="11.2" id="i-want-maximum-low-level-control"><span class="header-section-number">11.2</span> I want maximum low-level
+control</h2>
+<p>Use llama.cpp directly.</p>
+<h2 data-number="11.3" id="i-need-high-concurrency-for-team-apis"><span class="header-section-number">11.3</span> I need high concurrency for
+team APIs</h2>
+<p>Benchmark vLLM and SGLang for your request pattern.</p>
+<h2 data-number="11.4" id="i-need-one-local-platform-for-text-embeddings-audio-image"><span class="header-section-number">11.4</span> I need one local platform for
+text + embeddings + audio + image</h2>
+<p>Use LocalAI for a single API surface, but validate each modality
+independently. For best generation workflows, use LocalAI or an LLM
+server alongside ComfyUI/Diffusers.</p>
+<h2 data-number="11.5" id="i-need-image-generation-or-image-editing"><span class="header-section-number">11.5</span> I need image generation or
+image editing</h2>
+<p>Start with FLUX.2 Klein 4B or Qwen-Image/Edit if their licenses fit
+your use. Use ComfyUI for interactive graphs or Diffusers for code. Do
+not select a VLM just because it accepts images.</p>
+<h2 data-number="11.6" id="i-need-ocr-screenshots-or-document-understanding"><span class="header-section-number">11.6</span> I need OCR, screenshots, or
+document understanding</h2>
+<p>Start with a small VLM or OCR specialist such as Qwen3-VL, Gemma 4,
+PaddleOCR-VL, GLM-OCR, or olmOCR. Test layout, tables, formulas, and
+reading order—not only plain paragraphs.</p>
+<h2 data-number="11.7" id="i-need-local-transcription-or-speech-generation"><span class="header-section-number">11.7</span> I need local transcription or
+speech generation</h2>
+<p>Use Whisper/faster-whisper for broad transcription compatibility,
+Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS
+for speech synthesis. Voice cloning needs explicit speaker consent and a
+license review.</p>
+<h2 data-number="11.8" id="i-need-local-video-generation"><span class="header-section-number">11.8</span> I need local video
+generation</h2>
+<p>Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can
+accept slow generation. Larger Wan2.2 or synchronized audio-video models
+move into workstation and multi-GPU territory. Check territorial
+restrictions on Tencent models before adopting them.</p>
+<h2 data-number="11.9" id="i-want-a-polished-local-chat-ui"><span class="header-section-number">11.9</span> I want a polished local chat
+UI</h2>
+<p>Use Open WebUI with your backend, or desktop-first tools like LM
+Studio or Jan.</p>
+<h2 data-number="11.10" id="i-want-private-assistant-workflows-through-messaging-apps"><span class="header-section-number">11.10</span> I want private assistant
+workflows through messaging apps</h2>
+<p>Use a gateway layer such as OpenClaw in front of your local inference
+stack. For a deep setup and hardening walkthrough, see the <a href="../primer_openclaw/primer_openclaw.md">OpenClaw Primer</a>.</p>
+<hr />
+<h1 data-number="12" id="day-practical-starter-path"><span class="header-section-number">12</span> 5-Day Practical Starter
+Path</h1>
+<p>If you are new and want momentum without chaos, follow this path.</p>
+<h2 data-number="12.1" id="day-1-run-a-local-model"><span class="header-section-number">12.1</span> Day 1: Run a Local Model</h2>
+<p>Install Ollama and chat with a small model.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://ollama.com/install.sh <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run gemma4</span></code></pre></div>
+<p>If that tag is not present in your installation, run
+<code>ollama list</code> and choose a currently published small instruct
+model. Model catalogs change faster than this document.</p>
+<h2 data-number="12.2" id="day-2-add-browser-ui"><span class="header-section-number">12.2</span> Day 2: Add Browser UI</h2>
+<p>Run Open WebUI and connect it to Ollama.</p>
+<h2 data-number="12.3" id="day-3-use-the-api-directly"><span class="header-section-number">12.3</span> Day 3: Use the API
+Directly</h2>
+<p>Send chat-completions requests and confirm you can call your local
+model from code.</p>
+<h2 data-number="12.4" id="day-4-containerize-and-persist"><span class="header-section-number">12.4</span> Day 4: Containerize and
+Persist</h2>
+<p>Move your runtime into containers with persistent volumes and service
+startup.</p>
+<h2 data-number="12.5" id="day-5-compare-two-model-families"><span class="header-section-number">12.5</span> Day 5: Compare Two Model
+Families</h2>
+<p>Run your mini eval prompts across two families and pick one baseline
+model for your real workflow.</p>
+<p>At this point, you are no longer experimenting blindly. You have a
+repeatable local AI workflow.</p>
+<hr />
+<h1 data-number="13" id="conclusion"><span class="header-section-number">13</span> Conclusion</h1>
+<p>Running open models locally in 2026 is no longer a niche hobby. It is
+a practical software capability, and the useful unit is no longer always
+a language model: it may be an OCR model, an image pipeline, an ASR
+model, an embedding model, or a video generator.</p>
+<p>The ecosystem is broad, but the core strategy is simple:</p>
+<ol type="1">
+<li>Keep model, engine, and server concerns separate.</li>
+<li>Start with the simplest runtime that meets your current need.</li>
+<li>Choose a specialist model when the job is visual, audio, retrieval,
+or generative media rather than text.</li>
+<li>Preserve portability through OpenAI-compatible interfaces where they
+fit, with a thin adapter for modality-specific differences.</li>
+<li>Treat updates as controlled changes, not ad-hoc swaps.</li>
+</ol>
+<p>Do that, and you get the best part of local AI: private, configurable
+intelligence you can run, test, and evolve on your own terms.</p>
+<hr />
+<h1 data-number="14" id="appendix"><span class="header-section-number">14</span> Appendix</h1>
+<h2 data-number="14.1" id="quick-command-cheatsheet"><span class="header-section-number">14.1</span> Quick Command Cheatsheet</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Ollama ===</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify current model tags in the Ollama library before pulling.</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen3-coder:8b</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run qwen3-coder:8b</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> list</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> rm qwen3-coder:8b</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># === llama-server ===</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-hf</span> ggml-org/gemma-3-1b-it-GGUF <span class="at">--port</span> 8080</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="at">-m</span> ./model.gguf <span class="at">--host</span> 0.0.0.0 <span class="at">--port</span> 8080</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + Ollama ===</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> ollama <span class="at">-p</span> 11434:11434 <span class="dt">\</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ollama-data:/root/.ollama <span class="dt">\</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  ollama/ollama</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + Open WebUI ===</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> open-webui <span class="at">-p</span> 3000:8080 <span class="dt">\</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> OLLAMA_BASE_URL=http://host.docker.internal:11434 <span class="dt">\</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> open-webui:/app/backend/data <span class="dt">\</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  ghcr.io/open-webui/open-webui:v0.11.1</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="co"># === Podman + LocalAI (NVIDIA) ===</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the current CUDA-specific LocalAI image tag first.</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">--name</span> localai <span class="at">-p</span> 8080:8080 <span class="dt">\</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">--device</span> nvidia.com/gpu=all <span class="dt">\</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> localai-models:/build/models <span class="dt">\</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  localai/localai:latest-gpu-nvidia-cuda-12</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="co"># === vLLM ===</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install vllm</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="ex">vllm</span> serve meta-llama/Llama-3.3-8B-Instruct</span></code></pre></div>
+<h2 data-number="14.2" id="further-reading"><span class="header-section-number">14.2</span> Further Reading</h2>
+<ul>
+<li><a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a></li>
+<li><a href="https://docs.ollama.com">Ollama docs</a></li>
+<li><a href="https://localai.io">LocalAI docs</a></li>
+<li><a href="https://docs.vllm.ai">vLLM docs</a></li>
+<li><a href="https://docs.sglang.ai">SGLang docs</a></li>
+<li><a href="https://github.com/open-webui/open-webui">Open
+WebUI</a></li>
+<li><a href="https://huggingface.co/models">Hugging Face model
+hub</a></li>
+<li><a href="https://lmstudio.ai">LM Studio</a></li>
+<li><a href="https://jan.ai">Jan</a></li>
+<li><a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL</a></li>
+<li><a href="https://github.com/QwenLM/Qwen3-ASR">Qwen3-ASR</a></li>
+<li><a href="https://github.com/black-forest-labs/flux2">FLUX.2</a></li>
+<li><a href="https://github.com/Wan-Video/Wan2.2">Wan2.2</a></li>
+<li><a href="https://github.com/ml-explore/mlx">MLX</a></li>
+<li><a href="https://github.com/huggingface/diffusers">Hugging Face
+Diffusers</a></li>
+</ul>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+    // Math renderer toggle: switch between generated mathjax/mathml files.
+    (function initMathModeToggle() {
+      var btn = document.getElementById('math-mode-toggle');
+      if (!btn) {
+        return;
+      }
+
+      var path = window.location.pathname || '';
+      var targetPath = '';
+      var label = '';
+      var defaultMathRenderer = 'mathjax';
+
+      if (path.endsWith('.mathml.html')) {
+        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
+        label = 'Switch to MathJax';
+      } else if (path.endsWith('.mathjax.html')) {
+        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
+        label = 'Switch to MathML';
+      } else if (path.endsWith('.html')) {
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
+      }
+
+      if (!targetPath) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    })();
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      function makeTabs(run) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        wrapper.appendChild(tabBar);
+
+        run.forEach(function (div, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = getLang(div);
+          btn.setAttribute('data-idx', String(idx));
+          tabBar.appendChild(btn);
+
+          var panel = document.createElement('div');
+          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
+          panel.setAttribute('data-idx', String(idx));
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+        });
+
+        tabBar.addEventListener('click', function (e) {
+          var btn = e.target;
+          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
+          if (!btn) return;
+          var idx = btn.getAttribute('data-idx');
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
+          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
+        });
+
+        return wrapper;
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var toRemove = [];
+        run.forEach(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          if (prev && isLangLabel(prev)) toRemove.push(prev);
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = run[0];
+        if (toRemove.length > 0) {
+          var firstLabel = toRemove[0];
+          // Use firstLabel only if it genuinely precedes run[0]
+          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            insertionPoint = firstLabel;
+          }
+        }
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
+
+        var widget = makeTabs(run);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

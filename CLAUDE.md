@@ -8,9 +8,13 @@ AI-generated technical primers rendered to HTML + PDF via pandoc, orchestrated w
 
 ## Document Classes
 
-**Pandoc primers** — source → HTML + PDF via `localhost/primers-pandoc:latest`; each has a thin `Justfile` importing `_shared/common.just`. Directories: `building_ai_agents`, `deep_learning_primer`, `political_systems`, `numerical_analysis_primer`, `claude_code_alternative`, `openclaw_primer`, `research_local_llms`, `silo_rpg_primer`, `info_theory_article`.
+**Pandoc primers** — source → HTML + PDF via `localhost/primers-pandoc:latest`; each has a thin `Justfile` importing `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_deep_learning`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`.
 
-**Exception** — `catmodel_elt_documents/`: Quarto + R + Python pipeline, not pandoc, not `_shared/common.just`. Treat as a separate build system.
+**Gaming materials** — `gaming_silo_rpg/` uses the same Pandoc infrastructure but keeps a `gaming_` prefix for its documents.
+
+**Article** — `article_info_theory/` is an article series, not a primer.
+
+**Exception** — `workbook_catmodel_elt_documents/`: Quarto + R + Python pipeline, not pandoc, not `_shared/common.just`. Treat as a separate build system. Its documents and render scripts use the `workbook_` prefix.
 
 ---
 
@@ -61,7 +65,7 @@ import '../_shared/common.just'
 - Configure DejaVu Sans Mono as monospace font when code blocks contain Greek — lmmono lacks Greek coverage
 - Grep xelatex output for `Error|Missing \$|Undefined control`; generic warning grep misses actual failures
 - Verify rendered PDF exists and has non-trivial file size before committing
-- `building_ai_agents` and `numerical_analysis_primer` have `html-mathml`/`html-mathjax` variant targets that `html-full`/`html-dev` don't regenerate — rebuild them explicitly when applying a fix across primers, or they silently carry pre-existing drift.
+- `primer_building_ai_agents` and `primer_numerical_analysis` have `html-mathml`/`html-mathjax` variant targets that `html-full`/`html-dev` don't regenerate — rebuild them explicitly when applying a fix across primers, or they silently carry pre-existing drift.
 - Grep prose for embedded section references before stripping or renumbering headings
 - Scan `text` code blocks before planning diagram replacement
 - Pre-share a notation contract with all parallel agents writing mathematical content
@@ -72,15 +76,15 @@ import '../_shared/common.just'
 
 When asked anything about Silo RPG lore, rules, mechanics, setting, or campaign content:
 
-1. **Read `silo_rpg_primer/silo_index.md` first.** It is the routing map. Do not skip it.
-2. **Do not load the bibles whole.** Never read `silo_comprehensive_bible.md`, `silo_player_guide.md`, `silo_gm_secrets.md`, or `silo_starter_campaign.md` in their entirety — they are large.
+1. **Read `gaming_silo_rpg/gaming_silo_index.md` first.** It is the routing map. Do not skip it.
+2. **Do not load the bibles whole.** Never read `gaming_silo_comprehensive_bible.md`, `gaming_silo_player_guide.md`, `gaming_silo_gm_secrets.md`, or `gaming_silo_starter_campaign.md` in their entirety — they are large.
 3. **Surgical extraction only.** Use grep or line-range reads to pull the specific sections identified by the index.
 
 Source documents:
-- `silo_player_guide.md` — player-facing rules and setting knowledge
-- `silo_gm_secrets.md` — GM-only lore and hidden mechanics
-- `silo_comprehensive_bible.md` — full world reference
-- `silo_starter_campaign.md` — the introductory campaign
+- `gaming_silo_player_guide.md` — player-facing rules and setting knowledge
+- `gaming_silo_gm_secrets.md` — GM-only lore and hidden mechanics
+- `gaming_silo_comprehensive_bible.md` — full world reference
+- `gaming_silo_starter_campaign.md` — the introductory campaign
 
 ---
 

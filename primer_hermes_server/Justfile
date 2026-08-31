@@ -1,0 +1,8 @@
+SOURCE_MD   := "primer_hermes_server.md"
+PROJECT_DIR := "primer_hermes_server"
+TITLE       := "Hermes Agent Server: A Long-Form, Operations-First Primer"
+AUTHOR      := "22 August 2026"
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
+
+import '../_shared/common.just'

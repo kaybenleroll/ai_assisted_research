@@ -1,0 +1,8 @@
+SOURCE_MD   := "primer_ohmyzsh.md"
+PROJECT_DIR := "primer_ohmyzsh"
+TITLE       := "Oh My Zsh: A Practical Guide to Your Shell"
+AUTHOR      := "Mick Cooney — June 2026"
+HTML_EXTRA  := ""
+PDF_EXTRA   := "-V monofont='DejaVu Sans Mono'"
+
+import '../_shared/common.just'

@@ -5,132 +5,132 @@ default:
 
 # Build the shared pandoc image used by all primer projects
 build-image:
-  cd building_ai_agents && just build-image
+  cd primer_building_ai_agents && just build-image
 
 # Per-project render targets
 building-ai-html:
-  cd building_ai_agents && just html
+  cd primer_building_ai_agents && just html
 
 building-ai-docs:
-  cd building_ai_agents && just docs
+  cd primer_building_ai_agents && just docs
 
 political-html:
-  cd political_systems && just html
+  cd primer_political_systems && just html
 
 political-all:
-  cd political_systems && just all-docs
+  cd primer_political_systems && just all-docs
 
 numerical-html:
-  cd numerical_analysis_primer && just html
+  cd primer_numerical_analysis && just html
 
 numerical-all:
-  cd numerical_analysis_primer && just full
+  cd primer_numerical_analysis && just full
 
 openclaw-html:
-  cd openclaw_primer && just html
+  cd primer_openclaw && just html
 
 hermes-server-html:
-  cd hermes_server_primer && just html
+  cd primer_hermes_server && just html
 
 hermes-server-pdf:
-  cd hermes_server_primer && just pdf
+  cd primer_hermes_server && just pdf
 
 hermes-server-all:
-  cd hermes_server_primer && just all
+  cd primer_hermes_server && just all
 
 claude-alt-html:
-  cd claude_code_alternative && just html
+  cd primer_claude_code_alternative && just html
 
 claude-alt-pdf:
-  cd claude_code_alternative && just pdf
+  cd primer_claude_code_alternative && just pdf
 
 claude-alt-docs:
-  cd claude_code_alternative && just all
+  cd primer_claude_code_alternative && just all
 
 codex-claude-html:
-  cd codex_for_claude_code_users && just html
+  cd primer_codex_for_claude_code_users && just html
 
 codex-claude-pdf:
-  cd codex_for_claude_code_users && just pdf
+  cd primer_codex_for_claude_code_users && just pdf
 
 codex-claude-docs:
-  cd codex_for_claude_code_users && just all
+  cd primer_codex_for_claude_code_users && just all
 
 research-html:
-  cd research_local_llms && just html
+  cd primer_research_local_llms && just html
 
 catmodel-html-dev:
-  cd catmodel_elt_documents && just render-dev-container
+  cd workbook_catmodel_elt_documents && just render-dev-container
 
 catmodel-html-full:
-  cd catmodel_elt_documents && just render-full-container
+  cd workbook_catmodel_elt_documents && just render-full-container
 
 silo-html:
-  cd silo_rpg_primer && just silo-html
+  cd gaming_silo_rpg && just silo-html
 
 silo-all:
-  cd silo_rpg_primer && just silo-all
+  cd gaming_silo_rpg && just silo-all
 
 info-theory-html:
-  cd info_theory_article && just html
+  cd article_info_theory && just html
 
 info-theory-all:
-  cd info_theory_article && just all-docs
+  cd article_info_theory && just all-docs
 
 deep-learning-html:
-  cd deep_learning_primer && just html
+  cd primer_deep_learning && just html
 
 deep-learning-pdf:
-  cd deep_learning_primer && just pdf
+  cd primer_deep_learning && just pdf
 
 deep-learning-all:
-  cd deep_learning_primer && just html-variants
-  cd deep_learning_primer && just all
+  cd primer_deep_learning && just html-variants
+  cd primer_deep_learning && just all
 
 eval-loop-html:
-  cd evaluation_loop_primer && just html
+  cd primer_evaluation_loop && just html
 
 eval-loop-pdf:
-  cd evaluation_loop_primer && just pdf
+  cd primer_evaluation_loop && just pdf
 
 eval-loop-all:
-  cd evaluation_loop_primer && just all-docs
+  cd primer_evaluation_loop && just all-docs
 
 python-r-html:
-  cd python_for_r_users && just html
+  cd primer_python_for_r_users && just html
 
 python-r-pdf:
-  cd python_for_r_users && just pdf
+  cd primer_python_for_r_users && just pdf
 
 python-r-all:
-  cd python_for_r_users && just all
+  cd primer_python_for_r_users && just all
 
 military-html:
-  cd military_structure_primer && just html
+  cd primer_military_structure && just html
 
 military-pdf:
-  cd military_structure_primer && just pdf
+  cd primer_military_structure && just pdf
 
 military-all:
-  cd military_structure_primer && just all
+  cd primer_military_structure && just all
 
 ohmyzsh-html:
-  cd ohmyzsh_primer && just html
+  cd primer_ohmyzsh && just html
 
 ohmyzsh-pdf:
-  cd ohmyzsh_primer && just pdf
+  cd primer_ohmyzsh && just pdf
 
 ohmyzsh-all:
-  cd ohmyzsh_primer && just all
+  cd primer_ohmyzsh && just all
 
 comparative-religion-html:
-  cd comparative_religion_primer && just html
+  cd primer_comparative_religion && just html
 
 comparative-religion-pdf:
-  cd comparative_religion_primer && just pdf
+  cd primer_comparative_religion && just pdf
 
 comparative-religion-all:
-  cd comparative_religion_primer && just all
+  cd primer_comparative_religion && just all
 
 # Common daily build across active document projects
 html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html
@@ -141,18 +141,18 @@ html-full: building-ai-html building-ai-docs political-html numerical-html openc
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
-  cd building_ai_agents && just clobber
-  cd political_systems && just clobber
-  cd numerical_analysis_primer && just clobber
-  cd openclaw_primer && just clobber
-  cd hermes_server_primer && just clobber
-  cd research_local_llms && just clobber
-  cd claude_code_alternative && just clobber
-  cd codex_for_claude_code_users && just clobber
-  cd silo_rpg_primer && just silo-clobber
-  cd info_theory_article && just clobber
-  cd deep_learning_primer && just clobber
-  cd evaluation_loop_primer && just clobber
-  cd military_structure_primer && just clobber
-  cd ohmyzsh_primer && just clobber
+  cd primer_building_ai_agents && just clobber
+  cd primer_political_systems && just clobber
+  cd primer_numerical_analysis && just clobber
+  cd primer_openclaw && just clobber
+  cd primer_hermes_server && just clobber
+  cd primer_research_local_llms && just clobber
+  cd primer_claude_code_alternative && just clobber
+  cd primer_codex_for_claude_code_users && just clobber
+  cd gaming_silo_rpg && just silo-clobber
+  cd article_info_theory && just clobber
+  cd primer_deep_learning && just clobber
+  cd primer_evaluation_loop && just clobber
+  cd primer_military_structure && just clobber
+  cd primer_ohmyzsh && just clobber
   @echo "✓ Generated artifacts cleaned"

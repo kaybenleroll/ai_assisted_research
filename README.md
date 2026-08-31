@@ -10,47 +10,47 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 
 | Document | Description |
 |----------|-------------|
-| [Deep Learning and Generative AI](deep_learning_primer/deep_learning_primer.html) | Neural networks, transformers, LLMs, and generative AI — architecture, training, and practical use |
-| [Numerical Analysis Primer](numerical_analysis_primer/numerical_analysis_primer.html) | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
-| [Building Autonomous AI Agents](building_ai_agents/ai_agents_comprehensive_primer.html) | Comprehensive guide to designing and implementing agentic AI systems |
-| [Agent Implementation Quick Reference](building_ai_agents/agent_quick_reference.html) | Condensed reference card for common agent patterns |
-| [OpenClaw Primer](openclaw_primer/openclaw_primer.html) | Podman-first guide to the OpenClaw framework |
-| [Hermes Server Primer](hermes_server_primer/hermes_server_primer.html) | Guide to the Hermes Server framework |
-| [Running LLMs Locally](research_local_llms/running-llms-locally.html) | Landscape of options for running language models on local hardware |
-| [Claude Code Alternatives](claude_code_alternative/claude-code-alternatives.html) | Survey of AI coding agents, mid-2026 refresh |
-| [Codex for Claude Code Users](codex_for_claude_code_users/codex-for-claude-code-users.html) | Practical guide to running Codex alongside Claude Code in one repository |
-| [The Evaluation Loop](evaluation_loop_primer/evaluation_loop_primer.html) | Turning subjective AI task quality into numeric evals: the four moves, verifiable rewards, RLHF/DSPy, Goodhart failure modes, agent evaluation |
-| [Python for Expert R Users](python_for_r_users/python_for_r_users.html) | Comprehensive migration guide for experienced tidyverse, purrr, and furrr users, with deep ggplot2 replacement strategy |
-| [Military Organisation, Ranks, and Doctrine](military_structure_primer/military_structure_primer.html) | How armies are structured from fire team to army group, how ranks map to command levels, the Napoleonic inheritance, 20th-century adaptations, and naval/air force equivalents |
-| [Oh My Zsh: A Practical Guide](ohmyzsh_primer/ohmyzsh_primer.html) | ZSH fundamentals, Oh My Zsh architecture, deep plugin coverage, themes, advanced features, and a personalised setup audit |
+| [Deep Learning and Generative AI](primer_deep_learning/primer_deep_learning.html) | Neural networks, transformers, LLMs, and generative AI — architecture, training, and practical use |
+| [Numerical Analysis Primer](primer_numerical_analysis/primer_numerical_analysis.html) | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
+| [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) | Comprehensive guide to designing and implementing agentic AI systems |
+| [Agent Implementation Quick Reference](primer_building_ai_agents/primer_agent_quick_reference.html) | Condensed reference card for common agent patterns |
+| [OpenClaw Primer](primer_openclaw/primer_openclaw.html) | Podman-first guide to the OpenClaw framework |
+| [Hermes Server Primer](primer_hermes_server/primer_hermes_server.html) | Guide to the Hermes Server framework |
+| [Running LLMs Locally](primer_research_local_llms/primer-running-llms-locally.html) | Landscape of options for running language models on local hardware |
+| [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) | Survey of AI coding agents, mid-2026 refresh |
+| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) | Practical guide to running Codex alongside Claude Code in one repository |
+| [The Evaluation Loop](primer_evaluation_loop/primer_evaluation_loop.html) | Turning subjective AI task quality into numeric evals: the four moves, verifiable rewards, RLHF/DSPy, Goodhart failure modes, agent evaluation |
+| [Python for Expert R Users](primer_python_for_r_users/primer_python_for_r_users.html) | Comprehensive migration guide for experienced tidyverse, purrr, and furrr users, with deep ggplot2 replacement strategy |
+| [Military Organisation, Ranks, and Doctrine](primer_military_structure/primer_military_structure.html) | How armies are structured from fire team to army group, how ranks map to command levels, the Napoleonic inheritance, 20th-century adaptations, and naval/air force equivalents |
+| [Oh My Zsh: A Practical Guide](primer_ohmyzsh/primer_ohmyzsh.html) | ZSH fundamentals, Oh My Zsh architecture, deep plugin coverage, themes, advanced features, and a personalised setup audit |
 
 ## Articles
 
 | Document | Description |
 |----------|-------------|
-| [Information Theory Series](info_theory_article/information_theory_series_combined.html) | Entropy, mutual information, channel capacity, and their applications |
+| [Information Theory Series](article_info_theory/information_theory_series_combined.html) | Entropy, mutual information, channel capacity, and their applications |
 
 ## Politics
 
 | Document | Description |
 |----------|-------------|
-| [European Electoral Systems](political_systems/european-electoral-systems-primer.html) | Practical primer on electoral systems across European democracies |
+| [European Electoral Systems](primer_political_systems/primer-european-electoral-systems.html) | Practical primer on electoral systems across European democracies |
 
 ## Religion
 
 | Document | Description |
 |----------|-------------|
-| [Comparative Religion](comparative_religion_primer/comparative-religion-primer.html) | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
+| [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
 
 ## Silo RPG Materials
 
 | Document | Description |
 |----------|-------------|
-| [Document Index](silo_rpg_primer/silo_index.html) | Navigation map for all Silo RPG source documents |
-| [Player's Survival Guide](silo_rpg_primer/silo_player_guide.html) | Player-facing rules, setting knowledge, and character options |
-| [Game Master's Secrets](silo_rpg_primer/silo_gm_secrets.html) | GM-only lore, hidden mechanics, and macro-level world state |
-| [Comprehensive World Bible](silo_rpg_primer/silo_comprehensive_bible.html) | Full world reference — history, factions, technology, and geography |
-| [Starter Campaigns](silo_rpg_primer/silo_starter_campaign.html) | Introductory campaign scenarios and player archetypes |
+| [Document Index](gaming_silo_rpg/gaming_silo_index.html) | Navigation map for all Silo RPG source documents |
+| [Player's Survival Guide](gaming_silo_rpg/gaming_silo_player_guide.html) | Player-facing rules, setting knowledge, and character options |
+| [Game Master's Secrets](gaming_silo_rpg/gaming_silo_gm_secrets.html) | GM-only lore, hidden mechanics, and macro-level world state |
+| [Comprehensive World Bible](gaming_silo_rpg/gaming_silo_comprehensive_bible.html) | Full world reference — history, factions, technology, and geography |
+| [Starter Campaigns](gaming_silo_rpg/gaming_silo_starter_campaign.html) | Introductory campaign scenarios and player archetypes |
 
 ---
 
@@ -60,10 +60,10 @@ Shared build infrastructure lives in `_shared/`. Each primer has a thin `Justfil
 
 ```
 # Render a specific primer
-cd numerical_analysis_primer && just all
+cd primer_numerical_analysis && just all
 
 # Generate figures then render (primers with plots)
-cd numerical_analysis_primer && just full
+cd primer_numerical_analysis && just full
 ```
 
-The `catmodel_elt_documents/` directory uses a separate Quarto + R + Python pipeline and does not use the pandoc infrastructure.
+The `workbook_catmodel_elt_documents/` directory uses a separate Quarto + R + Python pipeline and does not use the pandoc infrastructure.
