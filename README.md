@@ -36,6 +36,12 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 |----------|-------------|
 | [European Electoral Systems](political_systems/european-electoral-systems-primer.html) | Practical primer on electoral systems across European democracies |
 
+## Religion
+
+| Document | Description |
+|----------|-------------|
+| [Comparative Religion](comparative_religion_primer/comparative-religion-primer.html) | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
+
 ## Silo RPG Materials
 
 | Document | Description |
