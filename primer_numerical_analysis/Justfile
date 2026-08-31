@@ -1,0 +1,45 @@
+SOURCE_MD   := "primer_numerical_analysis.md"
+PROJECT_DIR := "primer_numerical_analysis"
+TITLE       := "Numerical Analysis Primer: A Practical Guide for Practitioners"
+AUTHOR      := "June 2026"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
+ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
+
+# Generate R figures (inside rocker container)
+plots:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{ROCKER}} \
+    Rscript generate_plots.R
+
+# Generate figures then render both HTML and PDF
+full: plots html-variants html pdf
+
+import '../_shared/common.just'
+
+# HTML math variants (different output filenames from shared html recipe)
+html-mathml:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o primer_numerical_analysis.mathml.html \
+    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-mathjax:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o primer_numerical_analysis.mathjax.html \
+    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-variants: html-mathml html-mathjax

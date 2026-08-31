@@ -1,0 +1,34 @@
+SOURCE_MD   := "primer-european-electoral-systems.md"
+PROJECT_DIR := "primer_political_systems"
+TITLE       := "A Practical Primer On European Electoral Systems"
+AUTHOR      := "May 2026"
+HTML_EXTRA  := "--number-sections --mathml --metadata mathrenderer=mathml"
+PDF_EXTRA   := "--number-sections"
+
+import '../_shared/common.just'
+
+html-mathml:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o primer-european-electoral-systems.mathml.html \
+    {{HTML_FLAGS_BASE}} --number-sections --mathml --metadata mathrenderer=mathml \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-mathjax:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o primer-european-electoral-systems.mathjax.html \
+    {{HTML_FLAGS_BASE}} --number-sections --mathjax --metadata mathrenderer=mathjax \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-variants: html-mathml html-mathjax
+
+all-docs: html-variants all

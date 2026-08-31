@@ -1,7 +1,7 @@
 # common.just — shared build recipes for all primers/subprojects
 # Each importing Justfile must define these variables before the import line:
 #   SOURCE_MD   — source markdown filename (e.g. "primer.md")
-#   PROJECT_DIR — project directory name   (e.g. "numerical_analysis_primer")
+#   PROJECT_DIR — project directory name   (e.g. "primer_numerical_analysis")
 #   TITLE       — document title
 #   AUTHOR      — author/date string
 #   HTML_EXTRA  — per-project extra HTML pandoc flags (may be empty string "")
