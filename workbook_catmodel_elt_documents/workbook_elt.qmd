@@ -176,8 +176,8 @@ suppressPackageStartupMessages({
   library(scales)
 })
 
-seed_syn <- as.integer(Sys.getenv("SEED_R", "20260520"))
-set.seed(seed_syn + 303)
+seed_r_synthetic <- as.integer(Sys.getenv("SEED_R", "20260520")) + 303
+set.seed(seed_r_synthetic)
 
 generate_synthetic_elt <- function(
     n_events = 2000,
@@ -244,17 +244,37 @@ library(scales)
 n_sims <- as.integer(Sys.getenv("RENDER_N_SIMS", "10000"))
 seed_r <- as.integer(Sys.getenv("SEED_R", "20260520"))
 seed_py <- as.integer(Sys.getenv("SEED_PY", "20260520"))
+image_identity <- Sys.getenv("WORKBOOK_IMAGE_ID", "not supplied")
+
+command_version <- function(command) {
+  executable <- Sys.which(command)
+  if (!nzchar(executable)) return("not found")
+  paste(system2(executable, "--version", stdout = TRUE, stderr = TRUE), collapse = " ")
+}
+
+python_command <- Sys.getenv("RETICULATE_PYTHON", "python3")
 
 set.seed(seed_r)
 
 tibble(
-  parameter = c("RENDER_N_SIMS", "SEED_R", "SEED_PY"),
-  value = c(n_sims, seed_r, seed_py)
+  parameter = c(
+    "RENDER_N_SIMS", "SEED_R", "SEED_PY", "R", "Python", "Quarto",
+    "Container image"
+  ),
+  value = c(
+    n_sims,
+    seed_r,
+    seed_py,
+    R.version.string,
+    command_version(python_command),
+    command_version("quarto"),
+    image_identity
+  )
 ) |>
   knitr::kable()
 ```
 
-If two runs with the same environment and seeds disagree materially, treat that as a workflow warning.
+`Dockerfile` pins the base image digest, and `render.env` records the same identity for the rendered runtime. The repository has no existing `renv`, Conda, or other dependency-lock workflow; the Dockerfile's exact Python package pins and pinned base image are therefore the supported dependency boundary here. If stochastic outputs from two runs with the same image, environment, and seeds disagree materially, treat that as a workflow warning; the live benchmark timing later in the document is intentionally nondeterministic.
 
 ## ELT Structure, Variants, and Loss Views
 
@@ -279,6 +299,22 @@ In plain terms: `rate` tells you how often this type of event tends to show up, 
 |---|---|---|
 | Vendor-style | `summary_id, type, event_id, rate, mean_loss, standard_deviation, exposure_value` | richer metadata and linkage |
 | Simplified/research | `event_id, rate, mean_loss, std_dev` | compact and easier for examples |
+
+### Minimum input and metadata contract
+
+The four numeric columns are not enough to make a production ELT interpretable. Preserve this metadata alongside every extract and every rendered result:
+
+| Metadata | Why it matters |
+|---|---|
+| Hazard, vulnerability, and financial-module model versions | Identifies the model assumptions behind the loss |
+| Event-set/catalogue version and event IDs | Makes event selection and reruns reproducible |
+| Exposure snapshot date, geography, and peril | Defines what the portfolio actually represents |
+| Currency, valuation date, and inflation/indexation basis | Prevents scale and time-basis errors |
+| Loss view and policy/reinsurance terms | Distinguishes GUL, insured, ceded, and retained results |
+| Secondary-uncertainty basis and parameterization | Defines how `std_dev` becomes a loss distribution |
+| Rate convention and frequency model | Clarifies whether rates are annual intensities, normalized weights, or something else |
+
+Without this contract, a clean-looking OEP or AEP curve can still be impossible to reproduce or compare.
 
 ### GUL vs Insured vs Net/Post-Cat
 
@@ -319,7 +355,7 @@ A practical way to think about it:
 
 Useful distribution options:
 
-1. Truncated Normal: simple but less natural for strong right skew.
+1. Zero-censored Normal: simple, but it creates a point mass at zero and is less natural for strong right skew.
 2. Lognormal: common default, strictly positive.
 3. Gamma: often convenient for right-skewed severity.
 4. Beta-scaled: useful when losses are naturally bounded by layer limits.
@@ -344,6 +380,8 @@ $$
 mu <- 8e6
 sigma <- 4e6
 n_draw <- 30000
+seed_r_distribution <- seed_r + 304
+set.seed(seed_r_distribution)
 
 mu_log <- log(mu^2 / sqrt(mu^2 + sigma^2))
 sigma_log <- sqrt(log(1 + sigma^2 / mu^2))
@@ -352,7 +390,7 @@ k_gamma <- (mu / sigma)^2
 theta_gamma <- sigma^2 / mu
 
 draw_tbl <- bind_rows(
-  tibble(dist = "TruncNormal", loss = pmax(0, rnorm(n_draw, mu, sigma))),
+  tibble(dist = "Zero-censored Normal", loss = pmax(0, rnorm(n_draw, mu, sigma))),
   tibble(dist = "Lognormal", loss = rlnorm(n_draw, mu_log, sigma_log)),
   tibble(dist = "Gamma", loss = rgamma(n_draw, shape = k_gamma, scale = theta_gamma))
 )
@@ -362,12 +400,31 @@ ggplot(draw_tbl, aes(x = loss, color = dist)) +
   scale_x_continuous(labels = dollar_format(scale = 1e-6, suffix = "M")) +
   labs(
     title = "Secondary Uncertainty Distribution Comparison",
-    subtitle = "Same target mean/std dev, different tail shape",
+    subtitle = "Illustrative draws: parameterization, censoring, and tail shape affect realized moments",
     x = "Loss",
     y = "Density"
   ) +
   theme_minimal()
+
+realized_moments_tbl <- draw_tbl |>
+  group_by(dist) |>
+  summarise(
+    realized_mean = mean(loss),
+    realized_sd = sd(loss),
+    zero_mass = mean(loss == 0),
+    .groups = "drop"
+  ) |>
+  mutate(
+    realized_mean = dollar(realized_mean),
+    realized_sd = dollar(realized_sd),
+    zero_mass = percent(zero_mass, accuracy = 0.01)
+  )
+
+realized_moments_tbl |>
+  knitr::kable(col.names = c("Distribution", "Realized mean", "Realized std. dev.", "Zero mass"))
 ```
+
+`pmax(0, rnorm(...))` is not a truncated normal. It censors negative draws at zero, so it adds a point mass at zero and no longer preserves the requested mean and standard deviation. Use a calibrated truncated distribution when those moments matter. The unbounded lognormal and gamma examples can also exceed exposure or contractual caps; apply those caps explicitly before using them in treaty calculations.
 
 ## OEP and AEP: Choosing the Right Lens
 
@@ -390,42 +447,138 @@ Use this map as a guardrail before discussing outputs with pricing committees or
 
 ### OEP (single-event lens)
 
-Occurrence exceedance probability:
+The simplest teaching curve thresholds the conditional mean loss. That is a useful approximation, but it is not the full secondary-uncertainty OEP:
 
 $$
-\text{OEP}(x) = 1 - \exp\left(-\sum_{i: \mu_i \ge x} \text{rate}_i\right)
+\text{mean-loss OEP}(x) = 1 - \exp\left(-\sum_{i: \mu_i \ge x} \text{rate}_i\right)
 $$
 
-Use OEP when the decision is tied to single-event breach behavior.
+When secondary uncertainty is modelled, the exceedance probability for event $i$ is conditional on that event occurring:
+
+$$
+\text{OEP}(x) = 1 - \exp\left(-\sum_i \text{rate}_i P(L_i > x \mid i)\right)
+$$
+
+Use the stochastic form for treaty and capital decisions. Keep the mean-loss curve as a diagnostic so readers can see how much secondary uncertainty changes the result.
 
 ```{r}
-oep_tbl <- toy_elt |>
+validate_severity_inputs <- function(mu, sigma) {
+  if (length(mu) != 1L || length(sigma) != 1L ||
+      !is.numeric(mu) || !is.numeric(sigma) ||
+      !is.finite(mu) || !is.finite(sigma) || mu < 0 || sigma < 0) {
+    stop("Severity inputs must be finite, scalar, and non-negative: mu >= 0 and sigma >= 0.", call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+severity_model <- function(mu, sigma) {
+  validate_severity_inputs(mu, sigma)
+
+  if (mu == 0) return(list(type = "zero", mu = mu, sigma = sigma))
+  if (sigma == 0) return(list(type = "deterministic", mu = mu, sigma = sigma))
+
+  list(
+    type = "lognormal",
+    mu = mu,
+    sigma = sigma,
+    meanlog = log(mu^2 / sqrt(mu^2 + sigma^2)),
+    sdlog = sqrt(log1p(sigma^2 / mu^2))
+  )
+}
+
+simulate_severity <- function(mu, sigma, n = 1L) {
+  if (length(n) != 1L || !is.numeric(n) || !is.finite(n) || n < 1 || n != as.integer(n)) {
+    stop("Severity draw count must be a positive integer.", call. = FALSE)
+  }
+
+  model <- severity_model(mu, sigma)
+  n <- as.integer(n)
+  switch(
+    model$type,
+    zero = rep(0, n),
+    deterministic = rep(model$mu, n),
+    lognormal = rlnorm(n, model$meanlog, model$sdlog)
+  )
+}
+
+severity_tail <- function(x, mu, sigma) {
+  if (length(x) != 1L || !is.numeric(x) || !is.finite(x)) {
+    stop("Severity threshold x must be one finite numeric value.", call. = FALSE)
+  }
+
+  model <- severity_model(mu, sigma)
+  if (model$type == "zero") return(as.numeric(0 > x))
+  if (model$type == "deterministic") return(as.numeric(model$mu > x))
+  if (x < 0) return(1)
+
+  plnorm(x, meanlog = model$meanlog, sdlog = model$sdlog, lower.tail = FALSE)
+}
+
+validate_elt_inputs <- function(elt_tbl) {
+  required <- c("rate", "mean_loss", "std_dev")
+  if (!all(required %in% names(elt_tbl))) {
+    stop("ELT must contain rate, mean_loss, and std_dev columns.", call. = FALSE)
+  }
+  if (any(!is.finite(elt_tbl$rate)) || any(elt_tbl$rate < 0) || sum(elt_tbl$rate) <= 0) {
+    stop("ELT rates must be finite, non-negative, and have a positive total.", call. = FALSE)
+  }
+  walk2(elt_tbl$mean_loss, elt_tbl$std_dev, severity_model)
+  invisible(TRUE)
+}
+
+lognormal_tail <- function(x, mu, sigma) {
+  severity_tail(x, mu, sigma)
+}
+
+stochastic_oep_at <- function(x, elt_tbl) {
+  validate_elt_inputs(elt_tbl)
+  exceedance_rate <- sum(map_dbl(seq_len(nrow(elt_tbl)), function(i) {
+    elt_tbl$rate[[i]] * lognormal_tail(x, elt_tbl$mean_loss[[i]], elt_tbl$std_dev[[i]])
+  }))
+  1 - exp(-exceedance_rate)
+}
+
+mean_loss_oep_tbl <- toy_elt |>
+  group_by(mean_loss) |>
+  summarise(
+    rate = sum(rate),
+    event_count = n(),
+    .groups = "drop"
+  ) |>
   arrange(desc(mean_loss)) |>
   mutate(
     cumulative_rate = cumsum(rate),
-    oep = 1 - exp(-cumulative_rate),
-    return_period = 1 / oep
+    mean_loss_oep = 1 - exp(-cumulative_rate),
+    stochastic_oep = map_dbl(mean_loss, ~ stochastic_oep_at(.x, toy_elt)),
+    return_period = 1 / stochastic_oep
   )
 
-oep_tbl |>
+mean_loss_oep_tbl |>
   transmute(
-    event_id,
     mean_loss = dollar(mean_loss),
-    oep = percent(oep, accuracy = 0.01),
+    event_count,
+    mean_loss_oep = percent(mean_loss_oep, accuracy = 0.01),
+    stochastic_oep = percent(stochastic_oep, accuracy = 0.01),
     return_period = round(return_period, 1)
   ) |>
-  knitr::kable(col.names = c("Event", "Loss", "OEP", "Return Period"))
+  knitr::kable(col.names = c("Mean loss", "Tied events", "Mean-loss OEP", "Stochastic OEP", "Return Period"))
 ```
 
 ### AEP (annual aggregate lens)
 
 Aggregate exceedance probability captures annual accumulation risk.
 
+This example uses a deliberately narrow model contract: independent Poisson event counts, event types sampled with replacement in proportion to their rates, lognormal secondary uncertainty, and no seasonality, clustering, event-set dependence, climate non-stationarity, or cross-peril dependence. Repeated draws of one catalogue row represent repeated occurrences of the same event type, not the same physical event. Those assumptions are useful for teaching the mechanics; they are not universal catastrophe-model assumptions.
+
 ```{r}
+seed_r_annual <- seed_r + 305
+set.seed(seed_r_annual)
+
 simulate_year <- function(elt_tbl) {
+  validate_elt_inputs(elt_tbl)
   lambda <- sum(elt_tbl$rate)
   n_events <- rpois(1, lambda)
-  if (n_events == 0) return(0)
+  if (n_events == 0) return(c(aggregate = 0, maximum = 0))
 
   event_idx <- sample(
     seq_len(nrow(elt_tbl)),
@@ -435,19 +588,15 @@ simulate_year <- function(elt_tbl) {
   )
 
   losses <- map_dbl(event_idx, function(i) {
-    mu <- elt_tbl$mean_loss[i]
-    sigma <- elt_tbl$std_dev[i]
-    if (mu <= 0 || sigma <= 0) return(0)
-
-    mu_log <- log(mu^2 / sqrt(mu^2 + sigma^2))
-    sigma_log <- sqrt(log(1 + sigma^2 / mu^2))
-    rlnorm(1, mu_log, sigma_log)
+    simulate_severity(elt_tbl$mean_loss[[i]], elt_tbl$std_dev[[i]])[[1]]
   })
 
-  sum(losses)
+  c(aggregate = sum(losses), maximum = max(losses))
 }
 
-annual_losses <- replicate(n_sims, simulate_year(toy_elt))
+annual_sim <- replicate(n_sims, simulate_year(toy_elt), simplify = TRUE)
+annual_losses <- as.numeric(annual_sim["aggregate", ])
+annual_maxima <- as.numeric(annual_sim["maximum", ])
 
 aep_tbl <- tibble(return_period = c(10, 25, 50, 100, 250)) |>
   mutate(aep_loss = quantile(annual_losses, probs = 1 - 1 / return_period))
@@ -457,6 +606,148 @@ aep_tbl |>
   knitr::kable(col.names = c("Return Period", "AEP Loss"))
 ```
 
+For a stochastic OEP, return-period inversion solves the probability equation directly. Targets outside the attainable non-negative-loss boundary are returned as `NA` with an explicit status; they are never silently clamped to a nearby event loss.
+
+```{r}
+lookup_oep_loss <- function(target_ep, elt_tbl, initial_upper = NULL, max_expansions = 60L) {
+  validate_elt_inputs(elt_tbl)
+
+  if (length(target_ep) != 1L || !is.numeric(target_ep) || !is.finite(target_ep) ||
+      target_ep < 0 || target_ep > 1) {
+    return(list(loss = NA_real_, status = "invalid_target_ep", target_ep = target_ep))
+  }
+
+  ep_at_zero <- stochastic_oep_at(0, elt_tbl)
+  if (target_ep > ep_at_zero) {
+    return(list(
+      loss = NA_real_,
+      status = "target_above_zero_loss_boundary",
+      target_ep = target_ep,
+      boundary_ep = ep_at_zero
+    ))
+  }
+  if (target_ep == 0) {
+    return(list(
+      loss = NA_real_,
+      status = "target_at_infinite_loss_boundary",
+      target_ep = target_ep,
+      boundary_ep = 0
+    ))
+  }
+  if (isTRUE(all.equal(target_ep, ep_at_zero))) {
+    return(list(
+      loss = 0,
+      status = "lower_boundary",
+      target_ep = target_ep,
+      boundary_ep = ep_at_zero
+    ))
+  }
+
+  upper <- if (is.null(initial_upper)) max(c(elt_tbl$mean_loss, 1), na.rm = TRUE) else initial_upper
+  if (!is.finite(upper) || upper <= 0) upper <- 1
+  upper <- max(upper, 1)
+  expansions <- 0L
+  f <- function(loss) stochastic_oep_at(loss, elt_tbl) - target_ep
+
+  while (f(upper) > 0 && expansions < max_expansions && upper < .Machine$double.xmax / 2) {
+    upper <- upper * 2
+    expansions <- expansions + 1L
+  }
+
+  if (f(upper) > 0) {
+    return(list(
+      loss = NA_real_,
+      status = "upper_bound_not_found",
+      target_ep = target_ep,
+      upper_bound = upper,
+      expansions = expansions
+    ))
+  }
+
+  root <- uniroot(f, interval = c(0, upper), extendInt = "no")$root
+  list(
+    loss = root,
+    status = "ok",
+    target_ep = target_ep,
+    oep_at_loss = stochastic_oep_at(root, elt_tbl),
+    upper_bound = upper,
+    expansions = expansions
+  )
+}
+
+mc_quantile_se <- function(x, prob, n_boot = 40L) {
+  replicate(n_boot, quantile(sample(x, replace = TRUE), prob = prob)) |>
+    sd()
+}
+
+safe_aep_oep_point <- function(target_ep, annual_aggregate, annual_maximum, elt_tbl) {
+  oep <- lookup_oep_loss(target_ep, elt_tbl)
+  if (!identical(oep$status, "ok")) {
+    return(tibble(
+      oep_loss = NA_real_, aep_loss = NA_real_, oep_mc_loss = NA_real_,
+      mc_tolerance = NA_real_, comparison_status = oep$status
+    ))
+  }
+
+  aep_estimate <- as.numeric(quantile(annual_aggregate, probs = 1 - target_ep))
+  oep_mc_estimate <- as.numeric(quantile(annual_maximum, probs = 1 - target_ep))
+  mc_tolerance <- 2 * (
+    mc_quantile_se(annual_aggregate, 1 - target_ep) +
+      mc_quantile_se(annual_maximum, 1 - target_ep)
+  )
+  aggregate_maximum_ok <- aep_estimate + mc_tolerance >= oep_mc_estimate
+  theoretical_mc_ok <- abs(oep$loss - oep_mc_estimate) <= mc_tolerance
+  raw_order_ok <- aep_estimate >= oep$loss
+  comparison_status <- if (!aggregate_maximum_ok || !theoretical_mc_ok) {
+    "invariant_fail"
+  } else if (!raw_order_ok) {
+    "within_mc_tolerance_aep_below_oep"
+  } else {
+    "pass"
+  }
+
+  display_ok <- identical(comparison_status, "pass")
+  tibble(
+    oep_loss = if (display_ok) oep$loss else NA_real_,
+    aep_loss = if (display_ok) aep_estimate else NA_real_,
+    oep_mc_loss = oep_mc_estimate,
+    mc_tolerance = mc_tolerance,
+    comparison_status = comparison_status
+  )
+}
+
+seed_r_mc_diagnostics <- seed_r + 505
+set.seed(seed_r_mc_diagnostics)
+
+mc_diagnostics_tbl <- tibble(
+  metric = c("AAL", "P99 annual", "P99.5 annual"),
+  estimate = c(
+    mean(annual_losses),
+    quantile(annual_losses, 0.99),
+    quantile(annual_losses, 0.995)
+  ),
+  tail_observations = c(
+    n_sims,
+    sum(annual_losses >= quantile(annual_losses, 0.99)),
+    sum(annual_losses >= quantile(annual_losses, 0.995))
+  ),
+  mc_se = c(
+    sd(annual_losses) / sqrt(n_sims),
+    mc_quantile_se(annual_losses, 0.99),
+    mc_quantile_se(annual_losses, 0.995)
+  )
+) |>
+  mutate(
+    estimate = dollar(estimate),
+    mc_se = dollar(mc_se)
+  )
+
+mc_diagnostics_tbl |>
+  knitr::kable(col.names = c("Metric", "Estimate", "Tail observations", "Bootstrap/MC SE"))
+```
+
+Treat these diagnostics as part of the result, not as optional decoration. A 10,000-year development run has only about 40 observations beyond a 1-in-250 annual quantile; even the 100,000-year full run has only a few hundred observations in the far tail. Increase simulation depth, use replicated seeds, or compare with an independently fitted tail model before treating high return periods as stable.
+
 ### OEP vs AEP side-by-side interpretation
 
 The table below is the practical cross-check: for the same return period, how different are OEP and AEP in this portfolio shape?
@@ -464,18 +755,14 @@ The table below is the practical cross-check: for the same return period, how di
 If the AEP/OEP ratio is materially above 1 at the return periods you care about, annual accumulation effects are economically important and should not be handled as an afterthought.
 
 ```{r}
+seed_r_oep_aep_check <- seed_r + 506
+set.seed(seed_r_oep_aep_check)
+
 comparison_tbl <- tibble(return_period = c(10, 25, 50, 100, 250)) |>
-  mutate(
-    target_ep = 1 / return_period,
-    oep_loss = map_dbl(target_ep, function(ep) {
-      oep_tbl |>
-        filter(oep <= ep) |>
-        pull(mean_loss) |>
-        first()
-    }),
-    aep_loss = quantile(annual_losses, probs = 1 - target_ep),
-    ratio_aep_to_oep = aep_loss / oep_loss
-  )
+  mutate(target_ep = 1 / return_period) |>
+  mutate(check = map(target_ep, ~ safe_aep_oep_point(.x, annual_losses, annual_maxima, toy_elt))) |>
+  unnest_wider(check) |>
+  mutate(ratio_aep_to_oep = if_else(comparison_status == "pass", aep_loss / oep_loss, NA_real_))
 
 comparison_tbl |>
   mutate(
@@ -483,16 +770,22 @@ comparison_tbl |>
     aep_loss = dollar(aep_loss),
     ratio_aep_to_oep = round(ratio_aep_to_oep, 2)
   ) |>
-  select(return_period, oep_loss, aep_loss, ratio_aep_to_oep) |>
-  knitr::kable(col.names = c("Return Period", "OEP Loss", "AEP Loss", "AEP/OEP"))
+  select(return_period, oep_loss, aep_loss, oep_mc_loss, mc_tolerance, ratio_aep_to_oep, comparison_status) |>
+  mutate(
+    oep_mc_loss = dollar(oep_mc_loss),
+    mc_tolerance = dollar(mc_tolerance)
+  ) |>
+  knitr::kable(col.names = c("Return Period", "OEP Loss", "AEP Loss", "MC OEP check", "MC tolerance", "AEP/OEP", "Invariant status"))
 ```
+
+Under the stated non-negative compound-Poisson contract, annual aggregate loss is pathwise at least the annual maximum loss. The comparison therefore simulates both quantities from the same annual draws, checks the stochastic OEP root against the simulated annual maximum, and suppresses OEP/AEP values and ratios when the ordering fails beyond twice the combined bootstrap Monte Carlo standard error. `within_mc_tolerance_aep_below_oep` is reported as a review status rather than a numeric ratio below one.
 
 ## Treaty Structures in One Place
 
 Treaty structures are easiest to understand when you map each one to the risk question it is trying to control:
 
 1. Occurrence XL controls the single-event shock profile.
-2. Quota share proportionally reshapes both frequency and severity exposure.
+2. Quota share proportionally scales ceded and retained severity exposure; the underlying event frequency is unchanged unless the cession scope changes.
 3. Aggregate structures cap annual accumulation.
 
 For event loss $L$, attachment $A$, and limit $U$, occurrence XL recovery is:
@@ -502,6 +795,8 @@ $$
 $$
 
 For quota share with cession $q$, ceded loss is $qL$ and net is $(1-q)L$. Aggregate stop-loss style treatment is then applied to annual aggregated loss, not event-level loss.
+
+The table below is intentionally simplified. Real treaty calculations also need exclusions, cession limits, commissions, reinstatements, inuring order, occurrence definitions, and an explicit decision about whether terms apply per occurrence, per event, or in the aggregate.
 
 The worked table below keeps all three in one place so you can compare structural response rather than reviewing three disconnected definitions.
 
@@ -531,9 +826,12 @@ This section is deliberately practical: first show that pandas and polars produc
 
 The goal is not to claim one engine is universally better. The goal is to keep numerical semantics stable while you optimize execution path by workload.
 
-### Small-table parity check (same OEP logic)
+### Small-table mean-loss OEP parity check
+
+This is mean-loss OEP parity: both engines apply the cumulative-rate formula to conditional mean losses. It is not stochastic secondary-uncertainty OEP, and it is not annual occurrence pricing.
 
 ```{python}
+import os
 import numpy as np
 import pandas as pd
 import polars as pl
@@ -559,10 +857,13 @@ pdf[["event_id", "mean_loss", "oep"]], pldf.select(["event_id", "mean_loss", "oe
 
 ### Large-table benchmark pattern (workload dependent)
 
+The timing output is a live local benchmark and is intentionally nondeterministic; use it only to illustrate measurement and workload dependence, not as a reproducible performance claim.
+
 ```{python}
 from time import perf_counter
 
-rng = np.random.default_rng(20260520)
+seed_py = int(os.environ.get("SEED_PY", "20260520"))
+rng = np.random.default_rng(seed_py)
 n = 300_000
 
 pdf_big = pd.DataFrame(
@@ -624,34 +925,32 @@ At event level, two random elements are sampled jointly:
 That produces an empirical event-loss distribution suitable for occurrence-oriented pricing questions.
 
 ```{r}
+seed_r_event_samples <- seed_r + 403
+set.seed(seed_r_event_samples)
+
 generate_event_samples <- function(elt_tbl, n_samples = 30000) {
+  validate_elt_inputs(elt_tbl)
   probs <- elt_tbl$rate / sum(elt_tbl$rate)
   idx <- sample(seq_len(nrow(elt_tbl)), n_samples, replace = TRUE, prob = probs)
 
   losses <- map_dbl(idx, function(i) {
-    mu <- elt_tbl$mean_loss[i]
-    sigma <- elt_tbl$std_dev[i]
-    if (mu <= 0 || sigma <= 0) return(0)
-
-    mu_log <- log(mu^2 / sqrt(mu^2 + sigma^2))
-    sigma_log <- sqrt(log(1 + sigma^2 / mu^2))
-    rlnorm(1, mu_log, sigma_log)
+    simulate_severity(elt_tbl$mean_loss[[i]], elt_tbl$std_dev[[i]])[[1]]
   })
 
-  tibble(loss = losses)
+  tibble(event_id = elt_tbl$event_id[idx], loss = losses)
 }
 
-event_dist_tbl <- generate_event_samples(toy_elt, n_samples = 50000)
+conditional_event_dist_tbl <- generate_event_samples(toy_elt, n_samples = 50000)
 annual_dist_tbl <- tibble(loss = annual_losses)
 
 event_quant_tbl <- tibble(
   percentile = c(0.50, 0.75, 0.90, 0.95, 0.99),
-  event_loss = quantile(event_dist_tbl$loss, probs = percentile)
+  conditional_event_loss = quantile(conditional_event_dist_tbl$loss, probs = percentile)
 ) |>
-  mutate(event_loss = dollar(event_loss))
+  mutate(conditional_event_loss = dollar(conditional_event_loss))
 
 event_quant_tbl |>
-  knitr::kable(col.names = c("Percentile", "Event-level empirical loss"))
+  knitr::kable(col.names = c("Percentile", "Conditional event loss"))
 ```
 
 ### Step 2: Build the empirical annual aggregate sample
@@ -674,25 +973,25 @@ annual_quant_tbl |>
 ```{r}
 comparison_empirical <- tibble(
   percentile = c(0.90, 0.95, 0.99),
-  event_loss = quantile(event_dist_tbl$loss, probs = percentile),
+  conditional_event_loss = quantile(conditional_event_dist_tbl$loss, probs = percentile),
   annual_loss = quantile(annual_losses, probs = percentile),
-  annual_to_event_ratio = annual_loss / event_loss
+  annual_to_conditional_ratio = annual_loss / conditional_event_loss
 ) |>
   mutate(
-    event_loss = dollar(event_loss),
+    conditional_event_loss = dollar(conditional_event_loss),
     annual_loss = dollar(annual_loss),
-    annual_to_event_ratio = round(annual_to_event_ratio, 2)
+    annual_to_conditional_ratio = round(annual_to_conditional_ratio, 2)
   )
 
 comparison_empirical |>
-  knitr::kable(col.names = c("Percentile", "Event Loss", "Annual Loss", "Annual/Event Ratio"))
+  knitr::kable(col.names = c("Percentile", "Conditional Event Loss", "Annual Loss", "Annual/Conditional Ratio"))
 ```
 
 Interpretation:
 
-1. Ratios near 1 suggest limited annual accumulation at that percentile.
-2. Ratios above 1 suggest accumulation pressure is economically relevant.
-3. The ratio profile across percentiles is often more informative than a single point.
+1. This is a scale comparison, not an OEP/AEP comparison: the two samples live in different probability spaces.
+2. Ratios above 1 can indicate accumulation pressure, but they do not carry a return-period interpretation by themselves.
+3. Use the annual sample for AEP and the rate-weighted conditional tails for OEP.
 
 ### Step 4: Visualize shape differences
 
@@ -701,7 +1000,7 @@ The density view below is useful when explaining to non-technical stakeholders w
 ```{r}
 
 bind_rows(
-  event_dist_tbl |> mutate(type = "Event-level"),
+  conditional_event_dist_tbl |> select(loss) |> mutate(type = "Conditional event"),
   annual_dist_tbl |> mutate(type = "Annual aggregate")
 ) |>
   ggplot(aes(x = loss, fill = type)) +
@@ -718,7 +1017,7 @@ bind_rows(
 
 ### Step 5: Convert empirical samples to exceedance views
 
-For decision processes that use exceedance and return-period language, convert empirical samples directly to EP and RP tables.
+For decision processes that use exceedance and return-period language, keep annual EP/RP and conditional event tails separate. The annual sample supports AEP; OEP should use the rate-weighted conditional tail formula above.
 
 Here, exceedance probability (EP) is the share of simulated losses above a threshold, and return period (RP) is approximately $RP = 1/EP$.
 
@@ -728,24 +1027,24 @@ thresholds <- quantile(annual_losses, probs = seq(0.80, 0.995, by = 0.015))
 emp_ep_tbl <- tibble(threshold = as.numeric(thresholds)) |>
   mutate(
     annual_ep = map_dbl(threshold, ~ mean(annual_losses > .x)),
-    event_ep = map_dbl(threshold, ~ mean(event_dist_tbl$loss > .x)),
-    annual_rp = 1 / pmax(annual_ep, 1e-9),
-    event_rp = 1 / pmax(event_ep, 1e-9)
+    stochastic_oep = map_dbl(threshold, ~ stochastic_oep_at(.x, toy_elt)),
+    conditional_event_tail = map_dbl(threshold, ~ mean(conditional_event_dist_tbl$loss > .x)),
+    annual_rp = 1 / pmax(annual_ep, 1e-9)
   )
 
 emp_ep_tbl |>
   transmute(
     threshold = dollar(threshold),
     annual_ep = percent(annual_ep, accuracy = 0.01),
-    event_ep = percent(event_ep, accuracy = 0.01),
-    annual_rp = round(annual_rp, 1),
-    event_rp = round(event_rp, 1)
+    stochastic_oep = percent(stochastic_oep, accuracy = 0.01),
+    conditional_event_tail = percent(conditional_event_tail, accuracy = 0.01),
+    annual_rp = round(annual_rp, 1)
   ) |>
   head(12) |>
-  knitr::kable(col.names = c("Threshold", "Annual EP", "Event EP", "Annual RP", "Event RP"))
+  knitr::kable(col.names = c("Threshold", "Annual EP", "Stochastic OEP", "Conditional Event Tail", "Annual RP"))
 ```
 
-This is usually the handoff point: empirical exceedance outputs with clear assumptions and sensitivity context.
+This is usually the handoff point: empirical annual and occurrence exceedance outputs with clear assumptions and sensitivity context. The conditional event tail is shown for scale only; it is not an annual probability or return period.
 
 ### End-to-end mini-case: synthetic ELT to treaty outputs
 
@@ -757,35 +1056,37 @@ This compact case stitches the full chain together in one place:
 4. Translate losses into occurrence and aggregate treaty response.
 
 ```{r}
-set.seed(seed_r + 404)
+seed_r_mini_annual <- seed_r + 404
+set.seed(seed_r_mini_annual)
 
 mini_elt <- synthetic_elt |>
   select(event_id, rate, mean_loss, std_dev)
 
-mini_annual_losses <- replicate(n_sims, simulate_year(mini_elt))
-mini_event_samples <- generate_event_samples(mini_elt, n_samples = 60000)
+mini_annual_sim <- replicate(n_sims, simulate_year(mini_elt), simplify = TRUE)
+mini_annual_losses <- as.numeric(mini_annual_sim["aggregate", ])
+mini_annual_maxima <- as.numeric(mini_annual_sim["maximum", ])
 
-# OEP from event means.
+# OEP uses rate-weighted conditional secondary-uncertainty tails.
 mini_oep_tbl <- mini_elt |>
+  group_by(mean_loss) |>
+  summarise(rate = sum(rate), event_count = n(), .groups = "drop") |>
   arrange(desc(mean_loss)) |>
   mutate(
     cumulative_rate = cumsum(rate),
-    oep = 1 - exp(-cumulative_rate)
+    mean_loss_oep = 1 - exp(-cumulative_rate),
+    stochastic_oep = map_dbl(mean_loss, ~ stochastic_oep_at(.x, mini_elt))
   )
 
 rp_targets <- c(10, 25, 50, 100, 250)
 
 mini_points_tbl <- tibble(return_period = rp_targets) |>
-  mutate(
-    ep = 1 / return_period,
-    oep_loss = map_dbl(ep, function(x) {
-      mini_oep_tbl |>
-        filter(oep <= x) |>
-        pull(mean_loss) |>
-        first()
-    }),
-    aep_loss = quantile(mini_annual_losses, probs = 1 - ep)
-  )
+  mutate(ep = 1 / return_period)
+
+seed_r_mini_oep_check <- seed_r + 406
+set.seed(seed_r_mini_oep_check)
+mini_points_tbl <- mini_points_tbl |>
+  mutate(check = map(ep, ~ safe_aep_oep_point(.x, mini_annual_losses, mini_annual_maxima, mini_elt))) |>
+  unnest_wider(check)
 
 # Treaty response examples.
 occ_attach <- 12e6
@@ -793,33 +1094,104 @@ occ_limit <- 18e6
 agg_attach <- 65e6
 agg_limit <- 45e6
 
-occ_recovery <- pmin(pmax(mini_event_samples$loss - occ_attach, 0), occ_limit)
 agg_recovery <- pmin(pmax(mini_annual_losses - agg_attach, 0), agg_limit)
 
+validate_layer_inputs <- function(attachment, limit) {
+  if (length(attachment) != 1L || length(limit) != 1L ||
+      !is.numeric(attachment) || !is.numeric(limit) ||
+      !is.finite(attachment) || !is.finite(limit) || attachment < 0 || limit < 0) {
+    stop("Treaty attachment and limit must be finite, scalar, and non-negative.", call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+lognormal_stop_loss <- function(model, threshold) {
+  if (threshold <= 0) return(model$mu)
+  model$mu * pnorm((model$meanlog + model$sdlog^2 - log(threshold)) / model$sdlog) -
+    threshold * pnorm((model$meanlog - log(threshold)) / model$sdlog)
+}
+
+conditional_treaty_stats <- function(elt_tbl, attachment, limit) {
+  validate_elt_inputs(elt_tbl)
+  validate_layer_inputs(attachment, limit)
+
+  by_event <- map_dfr(seq_len(nrow(elt_tbl)), function(i) {
+    mu <- elt_tbl$mean_loss[[i]]
+    sigma <- elt_tbl$std_dev[[i]]
+    model <- severity_model(mu, sigma)
+
+    if (model$type == "zero") {
+      expected_recovery <- 0
+      attachment_probability <- 0
+    } else if (model$type == "deterministic") {
+      expected_recovery <- pmin(pmax(mu - attachment, 0), limit)
+      attachment_probability <- as.numeric(mu > attachment)
+    } else {
+      expected_recovery <- pmin(
+        pmax(
+          lognormal_stop_loss(model, attachment) -
+            lognormal_stop_loss(model, attachment + limit),
+          0
+        ),
+        limit
+      )
+      attachment_probability <- severity_tail(attachment, mu, sigma)
+    }
+
+    tibble(
+      event_id = elt_tbl$event_id[[i]],
+      conditional_expected_recovery = expected_recovery,
+      conditional_attachment_probability = attachment_probability
+    )
+  })
+
+  total_rate <- sum(elt_tbl$rate)
+  list(
+    by_event = by_event,
+    conditional_expected_recovery_per_event = sum(elt_tbl$rate * by_event$conditional_expected_recovery) / total_rate,
+    conditional_attachment_probability_per_event = sum(elt_tbl$rate * by_event$conditional_attachment_probability) / total_rate,
+    annual_expected_recovery = sum(elt_tbl$rate * by_event$conditional_expected_recovery),
+    annual_attachment_probability = 1 - exp(-sum(elt_tbl$rate * by_event$conditional_attachment_probability))
+  )
+}
+
+occ_stats <- conditional_treaty_stats(mini_elt, occ_attach, occ_limit)
+
+# Occurrence-layer figures are analytic event-level lognormal moments. Aggregate
+# figures remain Monte Carlo estimates and expose their simulation standard error.
 treaty_summary_tbl <- tibble(
   metric = c(
-    "Occurrence treaty expected recovery per event",
-    "Occurrence treaty attachment hit rate",
-    "Aggregate treaty expected recovery per year",
-    "Aggregate treaty attachment hit rate"
+    "Conditional expected recovery per event",
+    "Conditional attachment probability per event",
+    "Occurrence treaty expected recovery per year",
+    "Annual probability of at least one occurrence attachment",
+    "Aggregate treaty expected recovery per year (MC)",
+    "Aggregate treaty expected recovery MC SE",
+    "Aggregate treaty attachment hit rate (MC)",
+    "Aggregate treaty attachment hit-rate MC SE"
   ),
   value = c(
-    dollar(mean(occ_recovery)),
-    percent(mean(mini_event_samples$loss > occ_attach), accuracy = 0.01),
+    dollar(occ_stats$conditional_expected_recovery_per_event),
+    percent(occ_stats$conditional_attachment_probability_per_event, accuracy = 0.01),
+    dollar(occ_stats$annual_expected_recovery),
+    percent(occ_stats$annual_attachment_probability, accuracy = 0.01),
     dollar(mean(agg_recovery)),
-    percent(mean(mini_annual_losses > agg_attach), accuracy = 0.01)
+    dollar(sd(agg_recovery) / sqrt(length(agg_recovery))),
+    percent(mean(mini_annual_losses > agg_attach), accuracy = 0.01),
+    percent(sqrt(mean(mini_annual_losses > agg_attach) * (1 - mean(mini_annual_losses > agg_attach)) / length(mini_annual_losses)), accuracy = 0.01)
   )
 )
 
 mini_points_tbl |>
-  mutate(aep_to_oep = round(aep_loss / oep_loss, 2)) |>
+  mutate(aep_to_oep = if_else(comparison_status == "pass", round(aep_loss / oep_loss, 2), NA_real_)) |>
   transmute(
     return_period,
     oep_loss = dollar(oep_loss),
     aep_loss = dollar(aep_loss),
-    aep_to_oep
+    aep_to_oep,
+    comparison_status
   ) |>
-  knitr::kable(col.names = c("Return Period", "OEP Loss", "AEP Loss", "AEP/OEP"))
+  knitr::kable(col.names = c("Return Period", "OEP Loss", "AEP Loss", "AEP/OEP", "Invariant status"))
 
 treaty_summary_tbl |>
   knitr::kable(col.names = c("Treaty Output", "Value"))
@@ -833,7 +1205,7 @@ Why this mini-case matters:
 
 ### Multi-Peril Dependence (Compact Practical Example)
 
-Assuming independence is often convenient, but can understate tail risk when perils are conditionally linked.
+Assuming independence is often convenient, but can understate tail risk when perils are conditionally linked. This example is deliberately a toy marginal-dependence stress: it draws both margins from the same conditional event-loss sample and applies an arbitrary 0.6 scale to the second margin. It does not represent peril-specific frequency, common events, spatial footprints, or a production multi-peril event set.
 
 Treat this as a sensitivity axis, not a binary truth claim. The point is to quantify how much your tail outputs move when dependence is introduced.
 
@@ -849,7 +1221,7 @@ corr <- matrix(c(1, rho, rho, 1), nrow = 2)
 z <- MASS::mvrnorm(n_years, mu = c(0, 0), Sigma = corr)
 u <- pnorm(z)
 
-base_event <- event_dist_tbl$loss
+base_event <- conditional_event_dist_tbl$loss
 
 correlated_total <- quantile(base_event, u[,1]) + 0.6 * quantile(base_event, u[,2])
 independent_total <- sample(base_event, n_years, replace = TRUE) + 0.6 * sample(base_event, n_years, replace = TRUE)
@@ -872,24 +1244,213 @@ In this primer, EVT is positioned as a governance extension to simulation, not a
 The key practical rule is to treat EVT outputs as conditional statements: "given threshold choice and fit assumptions." That framing avoids overconfidence in a single extrapolated number.
 
 ```{r}
+gpd_nll <- function(par, excesses) {
+  xi <- par[[1]]
+  beta <- exp(par[[2]])
+  if (!is.finite(beta) || beta <= 0) return(1e100)
+
+  if (abs(xi) < 1e-8) {
+    return(sum(log(beta) + excesses / beta))
+  }
+
+  support <- 1 + xi * excesses / beta
+  if (any(support <= 0)) return(1e100)
+
+  sum(log(beta) + (1 / xi + 1) * log(support))
+}
+
+fit_gpd <- function(excesses) {
+  excesses <- excesses[is.finite(excesses) & excesses >= 0]
+  if (length(excesses) < 30) {
+    return(list(
+      xi = NA_real_, beta = NA_real_, convergence_code = NA_integer_,
+      optimizer_ok = FALSE, convergence_status = "insufficient_exceedances",
+      support_ok = FALSE, statistical_acceptance = "not_assessed"
+    ))
+  }
+
+  fit <- tryCatch(
+    optim(
+      par = c(0.1, log(max(mean(excesses), 1e-8))),
+      fn = gpd_nll,
+      excesses = excesses,
+      method = "L-BFGS-B",
+      lower = c(-0.95, log(1e-8)),
+      upper = c(5, log(max(max(excesses) * 1e4, 1)))
+    ),
+    error = function(e) NULL
+  )
+
+  if (is.null(fit)) {
+    return(list(
+      xi = NA_real_, beta = NA_real_, convergence_code = NA_integer_,
+      optimizer_ok = FALSE, convergence_status = "optimizer_error",
+      support_ok = FALSE, statistical_acceptance = "not_assessed"
+    ))
+  }
+
+  xi <- fit$par[[1]]
+  beta <- exp(fit$par[[2]])
+  optimizer_ok <- isTRUE(fit$convergence == 0) &&
+    all(is.finite(c(xi, beta))) && beta > 0
+  convergence_status <- if (optimizer_ok) "converged" else paste0("not_converged_code_", fit$convergence)
+  support_ok <- optimizer_ok && (xi >= 0 || max(excesses) <= (-beta / xi))
+
+  list(
+    xi = xi,
+    beta = beta,
+    convergence_code = fit$convergence,
+    optimizer_ok = optimizer_ok,
+    convergence_status = convergence_status,
+    support_ok = support_ok,
+    statistical_acceptance = "pending_threshold_and_diagnostic_review"
+  )
+}
+
+gpd_quantile <- function(prob, xi, beta) {
+  if (abs(xi) < 1e-8) {
+    return(-beta * log1p(-prob))
+  }
+  beta / xi * ((1 - prob)^(-xi) - 1)
+}
+
+gpd_annual_quantile <- function(prob, threshold, n_exceed, n_total, fit) {
+  if (!isTRUE(fit$optimizer_ok) || !isTRUE(fit$support_ok)) return(NA_real_)
+  exceedance_rate <- n_exceed / n_total
+  if (!is.finite(exceedance_rate) || exceedance_rate <= 0) return(NA_real_)
+  conditional_prob <- 1 - (1 - prob) / exceedance_rate
+  if (conditional_prob <= 0) return(threshold)
+  threshold + gpd_quantile(conditional_prob, fit$xi, fit$beta)
+}
+
 threshold <- quantile(annual_losses, 0.95)
 exceedances <- annual_losses[annual_losses > threshold] - threshold
+gpd_95 <- fit_gpd(exceedances)
+p99_empirical <- as.numeric(quantile(annual_losses, 0.99))
+p995_empirical <- as.numeric(quantile(annual_losses, 0.995))
+p99_gpd <- gpd_annual_quantile(0.99, threshold, length(exceedances), length(annual_losses), gpd_95)
+p995_gpd <- gpd_annual_quantile(0.995, threshold, length(exceedances), length(annual_losses), gpd_95)
 
 tibble(
   threshold = threshold,
   exceedance_count = length(exceedances),
-  exceedance_mean = mean(exceedances)
+  exceedance_mean = if (length(exceedances) > 0) mean(exceedances) else NA_real_,
+  xi = gpd_95$xi,
+  beta = gpd_95$beta,
+  p99_empirical = p99_empirical,
+  p99_gpd = p99_gpd,
+  p99_delta = p99_gpd - p99_empirical,
+  p995_empirical = p995_empirical,
+  p995_gpd = p995_gpd,
+  p995_delta = p995_gpd - p995_empirical,
+  optimizer_ok = gpd_95$optimizer_ok,
+  convergence_status = gpd_95$convergence_status,
+  statistical_acceptance = gpd_95$statistical_acceptance
 ) |>
-  mutate(across(where(is.numeric), round, 2)) |>
-  knitr::kable()
+  mutate(
+    across(c(threshold, exceedance_mean, beta, p99_empirical, p99_gpd, p99_delta, p995_empirical, p995_gpd, p995_delta), dollar),
+    across(c(xi), round, 4)
+  ) |>
+  knitr::kable(col.names = c("Threshold", "Exceedances", "Mean Excess", "Xi", "Beta", "Empirical P99", "GPD P99", "Delta P99", "Empirical P99.5", "GPD P99.5", "Delta P99.5", "Optimizer OK", "Convergence status", "Statistical acceptance"))
 ```
 
 Minimal practical steps:
 
 1. Check threshold sensitivity.
-2. Fit tail model.
-3. Compare extrapolated quantiles against simulation tail.
-4. Report a range, not a single “precise” tail number.
+2. Fit the generalized Pareto distribution (GPD) to excesses.
+3. Check diagnostic plots, parameter stability, and the independence assumption.
+4. Compare extrapolated quantiles against the simulation tail.
+5. Report a range, not a single “precise” tail number.
+
+The GPD formula has two important edge cases. As $\xi \to 0$, the excess distribution becomes exponential. When $\xi < 0$, it has a finite upper endpoint at $u - \beta/\xi$. Neither case should be hidden behind a generic power formula. Historical losses can also be dependent or non-stationary, so a numerically successful fit is not evidence that the tail model is decision-valid.
+
+#### Threshold sensitivity with fitted tails
+
+```{r}
+threshold_grid <- quantile(annual_losses, probs = c(0.90, 0.93, 0.95, 0.97))
+
+evt_sens <- map_dfr(threshold_grid, function(u) {
+  exc <- annual_losses[annual_losses > u] - u
+  fit <- fit_gpd(exc)
+  p99_fit <- gpd_annual_quantile(0.99, u, length(exc), length(annual_losses), fit)
+  p995_fit <- gpd_annual_quantile(0.995, u, length(exc), length(annual_losses), fit)
+  tibble(
+    threshold = u,
+    n_exceed = length(exc),
+    xi = fit$xi,
+    beta = fit$beta,
+    p99_empirical = p99_empirical,
+    p99_gpd = p99_fit,
+    p99_delta = p99_fit - p99_empirical,
+    p995_empirical = p995_empirical,
+    p995_gpd = p995_fit,
+    p995_delta = p995_fit - p995_empirical,
+    optimizer_ok = fit$optimizer_ok,
+    convergence_status = fit$convergence_status,
+    support_ok = fit$support_ok
+  )
+})
+
+relative_range <- function(x) {
+  x <- x[is.finite(x)]
+  if (length(x) < 2L || mean(x) == 0) return(NA_real_)
+  diff(range(x)) / abs(mean(x))
+}
+
+absolute_range <- function(x) {
+  x <- x[is.finite(x)]
+  if (length(x) < 2L) return(NA_real_)
+  diff(range(x))
+}
+
+stable_evt_fits <- evt_sens |>
+  filter(optimizer_ok, support_ok)
+
+evt_stability_summary <- tibble(
+  threshold_count = nrow(evt_sens),
+  optimizer_ok_count = sum(evt_sens$optimizer_ok),
+  support_ok_count = sum(evt_sens$support_ok),
+  xi_range = absolute_range(stable_evt_fits$xi),
+  beta_relative_range = relative_range(stable_evt_fits$beta),
+  p99_relative_range = relative_range(stable_evt_fits$p99_gpd),
+  p995_relative_range = relative_range(stable_evt_fits$p995_gpd),
+  threshold_stability = if (
+    nrow(stable_evt_fits) == nrow(evt_sens) &&
+      is.finite(relative_range(stable_evt_fits$beta)) && relative_range(stable_evt_fits$beta) <= 0.25 &&
+      is.finite(relative_range(stable_evt_fits$p99_gpd)) && relative_range(stable_evt_fits$p99_gpd) <= 0.25 &&
+      is.finite(relative_range(stable_evt_fits$p995_gpd)) && relative_range(stable_evt_fits$p995_gpd) <= 0.25
+  ) "pass" else "review_required"
+)
+
+evt_stability_summary |>
+  mutate(across(c(xi_range, beta_relative_range, p99_relative_range, p995_relative_range), round, 4)) |>
+  knitr::kable(col.names = c("Thresholds", "Optimizer OK", "Support OK", "Xi range", "Beta relative range", "P99 relative range", "P99.5 relative range", "Threshold stability"))
+
+evt_sens <- evt_sens |>
+  mutate(
+    statistical_acceptance = if_else(
+      optimizer_ok & support_ok & evt_stability_summary$threshold_stability == "pass",
+      "accepted_conditionally",
+      "review_required"
+    )
+  )
+
+evt_sens |>
+  mutate(
+    threshold = dollar(threshold),
+    beta = dollar(beta),
+    p99_empirical = dollar(p99_empirical),
+    p99_gpd = dollar(p99_gpd),
+    p99_delta = dollar(p99_delta),
+    p995_empirical = dollar(p995_empirical),
+    p995_gpd = dollar(p995_gpd),
+    p995_delta = dollar(p995_delta),
+    xi = round(xi, 4)
+  ) |>
+  knitr::kable(col.names = c("Threshold", "Exceedances", "Xi", "Beta", "Empirical P99", "GPD P99", "Delta P99", "Empirical P99.5", "GPD P99.5", "Delta P99.5", "Optimizer OK", "Convergence status", "Support OK", "Statistical acceptance"))
+```
+
+The threshold table is a stability diagnostic, not a menu from which to select the most convenient tail estimate. A production workflow should add mean-residual-life and parameter-stability plots, dependence checks, non-stationarity tests, and uncertainty intervals around the fitted quantiles.
 
 ## Validation and Sensitivity
 
@@ -936,7 +1497,7 @@ Use explicit, pre-agreed thresholds so model release decisions are repeatable.
 | Data integrity | 100 percent schema checks pass | Block run; remediate mapping/units first |
 | OEP/AEP shape consistency | key return-period points within +/-10 percent of benchmark after approved adjustments | Escalate for assumption review |
 | Tail stability | P99/P99.5 drift under threshold stress less than 15 percent | Restrict tail use; rerun EVT/dependence sensitivity |
-| Backtesting coverage | observed exceedance rate near expected band (for example P95 in 3-7 percent range) | Trigger validation incident and recalibration |
+| Backtesting coverage | pre-specified binomial or Poisson coverage test, with confidence interval, on comparable observed years | Trigger validation incident and recalibration |
 | Reproducibility | rerun delta on key metrics within tolerance band | Freeze release until deterministic issue resolved |
 
 These thresholds are examples. The important part is using fixed gates before decisions are made, not after.
@@ -964,7 +1525,7 @@ For production use, include a standard runbook:
 
 1. Read ELT source file and normalize column names.
 2. Record source type (vendor vs internal simplified).
-3. Record loss view (GUL, insured pre-cat, net post-cat).
+3. Record model/version, event-set version, exposure snapshot, peril/geography, currency/valuation date, financial module, loss view, and treaty terms.
 4. Run baseline diagnostics and save outputs.
 5. Run one stress scenario and one sensitivity scenario.
 6. Produce a one-page decision note with assumptions and limitations.
@@ -1041,7 +1602,8 @@ For advanced tail work, test multiple dependence structures because the same mar
 #### Gaussian vs t-copula style stress
 
 ```{r}
-set.seed(seed_r + 101)
+seed_r_dependence <- seed_r + 101
+set.seed(seed_r_dependence)
 
 n_dep <- 10000
 rho_dep <- 0.35
@@ -1062,7 +1624,7 @@ t2 <- z2 * w
 u1_t <- pt(t1, df = nu)
 u2_t <- pt(t2, df = nu)
 
-sev <- event_dist_tbl$loss
+sev <- conditional_event_dist_tbl$loss
 
 agg_g <- quantile(sev, u1_g) + 0.6 * quantile(sev, u2_g)
 agg_t <- quantile(sev, u1_t) + 0.6 * quantile(sev, u2_t)
@@ -1083,76 +1645,83 @@ Interpretation guidance:
 2. If capital decisions are driven by upper tail points, dependence model choice is a first-order assumption.
 3. Keep dependence assumptions explicit in governance notes.
 
-### Advanced EVT Tail Extrapolation
-
-For threshold exceedances over $u$, a GPD form is commonly used:
-
-$$
-F(x \mid x > u) = 1 - \left(1 + \xi \frac{x-u}{\beta}\right)^{-1/\xi}, \quad x > u
-$$
-
-with shape $\xi$ and scale $\beta$.
-
-In practical governance terms:
-
-1. Threshold choice matters as much as parameter choice.
-2. Stable tail estimates require threshold-range sensitivity checks.
-3. Report interval/range outputs, not a single fragile point estimate.
-
-#### Threshold sensitivity snapshot
-
-```{r}
-threshold_grid <- quantile(annual_losses, probs = c(0.90, 0.93, 0.95, 0.97))
-
-evt_sens <- map_dfr(threshold_grid, function(u) {
-  exc <- annual_losses[annual_losses > u] - u
-  tibble(
-    threshold = u,
-    n_exceed = length(exc),
-    mean_excess = ifelse(length(exc) > 0, mean(exc), NA_real_),
-    p99_empirical = quantile(annual_losses, 0.99)
-  )
-})
-
-evt_sens |>
-  mutate(
-    threshold = dollar(threshold),
-    mean_excess = dollar(mean_excess),
-    p99_empirical = dollar(p99_empirical)
-  ) |>
-  knitr::kable(col.names = c("Threshold", "Exceedance Count", "Mean Excess", "Empirical P99"))
-```
-
 ### Advanced Validation: Backtesting Pattern
 
-When you have observed annual losses, backtesting should be explicit.
-A minimal coverage-style check asks: if model P95 is used as a benchmark, do observed years exceed it about 5 percent of the time?
+When you have observed annual losses, backtesting should be explicit and sample-size aware. This example uses alpha = 0.05, two-sided exact binomial tests, and an explicit pass/fail rule. Model thresholds are estimated from the annual Monte Carlo sample, so their bootstrap Monte Carlo standard errors are reported separately and are not folded into the coverage test.
 
 ```{r}
-set.seed(seed_r + 202)
+seed_r_backtest <- seed_r + 202
+set.seed(seed_r_backtest)
 
-# Placeholder observed losses for demonstration workflow.
+# Synthetic calibration harness only; this is not validation against observed years.
 observed_losses <- annual_losses[sample.int(length(annual_losses), size = 4000, replace = TRUE)] *
   runif(4000, min = 0.95, max = 1.08)
 
-model_p95 <- quantile(annual_losses, 0.95)
-model_p99 <- quantile(annual_losses, 0.99)
-
-backtest_tbl <- tibble(
-  metric = c("Model P95", "Observed exceedance rate over model P95", "Model P99", "Observed exceedance rate over model P99"),
-  value = c(
-    dollar(model_p95),
-    percent(mean(observed_losses > model_p95), accuracy = 0.01),
-    dollar(model_p99),
-    percent(mean(observed_losses > model_p99), accuracy = 0.01)
+coverage_check <- function(
+    observed, threshold, expected_exceedance, label, threshold_mc_se,
+    alpha = 0.05, sidedness = "two.sided", n_percentile_checks = 1L) {
+  n <- length(observed)
+  exceedances <- sum(observed > threshold)
+  alpha_per_check <- alpha / n_percentile_checks
+  test <- binom.test(
+    exceedances,
+    n,
+    p = expected_exceedance,
+    alternative = sidedness,
+    conf.level = 1 - alpha_per_check
   )
-)
+
+  tibble(
+    metric = label,
+    threshold = threshold,
+    threshold_mc_se = threshold_mc_se,
+    n_observed = n,
+    exceedances = exceedances,
+    observed_rate = exceedances / n,
+    expected_rate = expected_exceedance,
+    alpha = alpha,
+    alpha_per_check = alpha_per_check,
+    sidedness = if (sidedness == "two.sided") "two-sided" else sidedness,
+    ci_low = test$conf.int[[1]],
+    ci_high = test$conf.int[[2]],
+    p_value = test$p.value
+  )
+}
+
+model_p95 <- as.numeric(quantile(annual_losses, 0.95))
+model_p99 <- as.numeric(quantile(annual_losses, 0.99))
+threshold_mc_se_p95 <- mc_quantile_se(annual_losses, 0.95)
+threshold_mc_se_p99 <- mc_quantile_se(annual_losses, 0.99)
+backtest_alpha <- 0.05
+backtest_sidedness <- "two.sided"
+backtest_n_checks <- 2L
+
+backtest_tbl <- bind_rows(
+  coverage_check(observed_losses, model_p95, 0.05, "P95 coverage", threshold_mc_se_p95, backtest_alpha, backtest_sidedness, backtest_n_checks),
+  coverage_check(observed_losses, model_p99, 0.01, "P99 coverage", threshold_mc_se_p99, backtest_alpha, backtest_sidedness, backtest_n_checks)
+) |>
+  mutate(
+    p_adjusted = p.adjust(p_value, method = "bonferroni"),
+    pass_fail = if_else(p_adjusted >= alpha, "pass", "fail")
+  ) |>
+  mutate(
+    threshold = dollar(threshold),
+    threshold_mc_se = dollar(threshold_mc_se),
+    observed_rate = percent(observed_rate, accuracy = 0.01),
+    expected_rate = percent(expected_rate, accuracy = 0.01),
+    alpha = percent(alpha, accuracy = 0.1),
+    alpha_per_check = percent(alpha_per_check, accuracy = 0.1),
+    ci_low = percent(ci_low, accuracy = 0.01),
+    ci_high = percent(ci_high, accuracy = 0.01),
+    p_value = round(p_value, 4),
+    p_adjusted = round(p_adjusted, 4)
+  )
 
 backtest_tbl |>
-  knitr::kable()
+  knitr::kable(col.names = c("Metric", "Threshold", "Threshold MC SE", "Observed Years", "Exceedances", "Observed Rate", "Expected Rate", "Alpha", "Alpha/check", "Sidedness", "Bonferroni CI Low", "Bonferroni CI High", "P-value", "Adjusted P-value", "Pass/fail"))
 ```
 
-If observed exceedance rates are materially off expectations, treat this as a model risk event:
+The two percentile checks use Bonferroni adjustment across the displayed checks; no additional percentile checks are implied. For real validation, observed years must be comparable in exposure, terms, geography, peril, valuation date, and loss basis. Do not treat the synthetic harness above as evidence of model validity. If comparable observed exceedance rates are materially off expectations, treat this as a model risk event:
 
 1. Recheck schema/unit mapping and loss view consistency.
 2. Re-estimate uncertainty and dependence assumptions.
@@ -1258,7 +1827,10 @@ Suggested plain-language caveat sentence:
 
 ## References and Further Reading
 
-1. Klugman, Panjer, and Willmot. Loss Models: From Data to Decisions.
-2. McNeil, Frey, and Embrechts. Quantitative Risk Management.
-3. Vendor methodology documentation for AIR/RMS/Oasis style outputs.
-4. Internal model governance standards for pricing and capital usage.
+1. Klugman, Panjer, and Willmot. *Loss Models: From Data to Decisions*.
+2. McNeil, Frey, and Embrechts. *Quantitative Risk Management*.
+3. Coles. *An Introduction to Statistical Modeling of Extreme Values*.
+4. Oasis Loss Modelling Framework documentation: <https://oasislmf.github.io/> (record the project version/date used).
+5. European Commission, Commission Delegated Regulation (EU) 2015/35, especially internal-model validation and governance: <https://eur-lex.europa.eu/eli/reg_del/2015/35/oj>.
+6. Vendor methodology documentation for AIR/RMS outputs, named and versioned in project metadata; proprietary definitions must not be generalized.
+7. Internal model governance standards for pricing and capital usage, named and versioned in the release record.

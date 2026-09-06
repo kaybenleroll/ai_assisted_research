@@ -48,7 +48,11 @@ format:
 2. `FULL_N_SIMS`
 3. `SEED_R`
 4. `SEED_PY`
-5. `OUTPUT_DIR`
+5. `WORKBOOK_IMAGE_ID`
+6. `OUTPUT_DIR`
+
+The Python examples read SEED_PY from the environment so cross-language reruns use the same recorded seed configuration rather than a hidden code constant.
+The base image is digest-pinned; the same image identity is recorded in the canonical primer's runtime section.
 
 ## Expected Render Sequence
 

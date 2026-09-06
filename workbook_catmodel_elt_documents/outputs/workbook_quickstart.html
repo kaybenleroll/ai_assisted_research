@@ -2550,7 +2550,7 @@ padding-top: 1.25rem;
 
 code span.fu { color: #c792ea !important; } 
 </style>
-  
+
   <script>
     (function () {
       var script = document.createElement("script");
@@ -2587,7 +2587,8 @@ code span.fu { color: #c792ea !important; }
 <li><a href="#render-full" id="toc-render-full"><span class="header-section-number">7</span> Render (Full)</a></li>
 <li><a href="#outputs" id="toc-outputs"><span class="header-section-number">8</span> Outputs</a></li>
 <li><a href="#determinism" id="toc-determinism"><span class="header-section-number">9</span> Determinism</a></li>
-<li><a href="#recommended-working-loop" id="toc-recommended-working-loop"><span class="header-section-number">10</span> Recommended Working Loop</a></li>
+<li><a href="#decision-grade-caveats" id="toc-decision-grade-caveats"><span class="header-section-number">10</span> Decision-grade caveats</a></li>
+<li><a href="#recommended-working-loop" id="toc-recommended-working-loop"><span class="header-section-number">11</span> Recommended Working Loop</a></li>
 </ul></div>
 
     </aside>
@@ -2623,6 +2624,7 @@ code span.fu { color: #c792ea !important; }
 <li>End-to-end mini-case: synthetic ELT to treaty outputs</li>
 <li>Decision communication template (pricing committee ready)</li>
 <li>Glossary (Quick Reference)</li>
+<li>OEP/AEP probability-space checks, Monte Carlo diagnostics, and fitted-tail sensitivity</li>
 </ol>
 </section>
 <section id="build-container" class="level2" data-number="4">
@@ -2660,8 +2662,12 @@ code span.fu { color: #c792ea !important; }
 <li><code>SEED_PY</code></li>
 </ul>
 </section>
-<section id="recommended-working-loop" class="level2" data-number="10">
-<h2 data-number="10" class="anchored" data-anchor-id="recommended-working-loop"><span class="header-section-number">10</span> Recommended Working Loop</h2>
+<section id="decision-grade-caveats" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="decision-grade-caveats"><span class="header-section-number">10</span> Decision-grade caveats</h2>
+<p>The primer labels conditional event tails separately from annual EP/RP metrics. OEP uses rate-weighted conditional exceedance probabilities, and annual treaty metrics are rate-weighted under the stated Poisson contract. Full renders include Monte Carlo tail diagnostics, EVT threshold sensitivity, and a sample-size-aware coverage harness; the synthetic backtest is a calibration example, not observed-data validation.</p>
+</section>
+<section id="recommended-working-loop" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="recommended-working-loop"><span class="header-section-number">11</span> Recommended Working Loop</h2>
 <ol type="1">
 <li>Edit content in <code>workbook_elt.qmd</code>.</li>
 <li>Run <code>just render-dev-container</code> for fast feedback.</li>
@@ -2765,6 +2771,7 @@ code span.fu { color: #c792ea !important; }
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = 'mathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -2773,8 +2780,13 @@ code span.fu { color: #c792ea !important; }
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {

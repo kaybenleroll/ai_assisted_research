@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:4.5.1
+FROM docker.io/rocker/tidyverse@sha256:c38f0fea583e3aa82d89d0038e5bb559a04fa813881031f61f6191e683954cf2
 
 ENV TZ=Europe/Dublin
 
