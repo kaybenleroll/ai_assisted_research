@@ -1,23 +1,23 @@
 ---
-title: "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (August 31 Refresh)"
-author: "August 31, 2026"
+title: "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (September 9 Refresh)"
+author: "September 9, 2026"
 ---
 
-# Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (August 31 Refresh)
+# Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (September 9 Refresh)
 
 ## Introduction
 
 Claude Code has established itself as one of the most capable agentic coding tools available: it runs in the terminal and supported editors, takes high-level natural-language instructions, autonomously edits multiple files, executes shell commands, runs tests, and iterates until the task is done. Its extensibility system -- skills, hooks, and MCP server support -- allows deep customisation of its workflow. For heavy users, a Max plan (**$100/month for Max 5x, $200/month for Max 20x**) can be good value relative to metered API pricing, but it is not unlimited: Max has a five-hour session limit and a separate weekly limit, and Anthropic may apply additional caps. Limits are shared across Claude, Claude Code, and Claude Desktop. The plan landscape for AI tools changes rapidly, and a prudent engineer should understand the full landscape of alternatives before needing them.
 
-This document surveys the landscape of AI coding agents available as of **August 31, 2026**: open-source CLI tools, IDE extensions, dedicated AI IDEs, cloud platform agents, and commercial assistants. For each, it covers architecture, provider flexibility, MCP/extensibility support, and realistic cost.
+This document surveys the landscape of AI coding agents available as of **September 9, 2026**: open-source CLI tools, IDE extensions, dedicated AI IDEs, cloud platform agents, and commercial assistants. For each, it covers architecture, provider flexibility, MCP/extensibility support, and realistic cost.
 
-**A note on methodology and provenance:** This document was originally drafted from an AI model's training-data snapshot (accurate as of approximately August 2025), then refreshed via live web research in July and August 2026. The August 31 pass rechecked the most volatile claims against first-party product pages, including Claude and Codex limits, Amp's subscription and Orb pricing, Cline's terminal/plugin/hook support, Goose's current repository, Kiro's unified IDE/CLI/Web architecture, Gemini CLI's transition status, and current DeepSeek pricing. Dated facts carry a date at the point where the distinction matters, with corresponding sources in the References section.
+**A note on methodology and provenance:** This document was originally drafted from an AI model's training-data snapshot (accurate as of approximately August 2025), then refreshed via live web research in July and August 2026. The August 31 pass rechecked the most volatile claims against first-party product pages, including Claude and Codex limits, Amp's subscription and Orb pricing, Cline's terminal/plugin/hook support, Goose's current repository, Kiro's unified IDE/CLI/Web architecture, Gemini CLI's transition status, and current DeepSeek pricing. The September 9 pass added Grok Bot and checked its launch, architecture, controls, privacy requirements, and current access against first-party xAI pages. Dated facts carry a date at the point where the distinction matters, with corresponding sources in the References section.
 
 **Freshness note:** In this field, some sections can age in weeks, not quarters. Treat pricing, benchmark rankings, and model-version statements as snapshots tied to their stated dates.
 
 **How to read this document:** If you want the fastest path to a conclusion, jump to the [Feature Comparison Matrix](#feature-comparison-matrix), the [Provider Flexibility Analysis](#provider-flexibility-analysis), and the [Recommendations](#recommendations). The deep-dive sections are there for when you need to evaluate a specific tool seriously.
 
-This survey covers tools that were verifiable and actively maintained as of August 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Where a claim could not be verified, it is flagged.
+This survey covers tools that were verifiable and actively maintained as of September 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Where a claim could not be verified, it is flagged.
 
 ---
 
@@ -31,7 +31,7 @@ Before comparing tools, it helps to understand the four distinct categories that
 
 **Dedicated AI IDEs** are entire editors rebuilt around AI-first workflows. They typically fork VS Code and add deeper AI integration than an extension permits (Zed is the exception, built from scratch in Rust). Members: Cursor, Windsurf (now Devin Desktop, Cognition AI), Zed AI, AWS Kiro IDE, Google Antigravity 2.0.
 
-**Cloud Platform Agents** run primarily in the cloud or a sandboxed environment (Docker). They expose a web UI or API and are designed for longer-running autonomous tasks, often with their own execution environments. Members: OpenHands, Devin, Manus, Jules, Genie.
+**Cloud Platform Agents** run primarily in the cloud or a sandboxed environment (Docker). They expose a web or app-based interface and are designed for longer-running autonomous tasks, often with their own execution environments. Members: Grok Bot, OpenHands, Devin, Manus, Jules, Genie. Grok Bot sits at the broadest edge of this category: it is a persistent cross-application computer-use agent that can do coding work, not a coding-specific terminal agent.
 
 A Claude Code user primarily cares about the CLI tools category, but the IDE and cloud categories contain tools capable enough to be worth understanding as alternatives -- especially if your workflow includes time in an editor.
 
@@ -708,6 +708,32 @@ Current Cursor pricing documentation also lists MCPs, skills, and hooks on its p
 
 ## Cloud and Web Platform Agents
 
+### Grok Bot (xAI)
+
+**What it is:** Grok Bot is xAI's commercial, hosted computer-use agent. xAI launched it in beta on **August 11, 2026** as a set of persistent AI teammates rather than as another chat session. A Bot has a name, a job, its own conversation and working context, and can turn a repeatable workflow into a skill or routine. Coding is one workload -- xAI describes engineering Bots reproducing bugs and handing fixes to other Bots -- but the product is aimed at work that crosses applications, websites, inboxes, documents, and business systems.
+
+**Architecture:** The desktop and mobile applications are thin clients for chat, review, and approvals. The work runs on a persistent cloud computer with a browser, filesystem, and terminal. Bots can operate applications and websites directly, including services without a clean API or Model Context Protocol (MCP) integration. This makes Grok Bot materially different from an API-only agent: it can use the same graphical interfaces a human uses. All Bots belonging to one user share that user's cloud computer, including its files, browser sessions, and app logins; separate Bots are therefore not separate security boundaries.
+
+**Agentic workflow:** You message a Bot like a colleague, give it a task and access to the required tools or files, and let it work asynchronously. Bots can remember stable preferences, run recurring routines, collaborate through handoffs, and return when they need approval. The product is closer to a persistent operations teammate than to a terminal REPL. It is not a drop-in replacement for Claude Code's local repository workflow: its execution environment is hosted, and its strongest differentiator is cross-application computer use rather than terminal-native editing.
+
+**Access and cost (September 9, 2026 snapshot):** Grok Bot launched for eligible SuperGrok and Cursor subscribers and later expanded to SuperGrok, paid Cursor, and Cursor Teams plans; enterprise rollout is handled through the Cursor account team. xAI's August 26 announcement says Bot usage is separate from existing Grok and Cursor usage, while the current team documentation describes plan-specific allowances. Treat access, quotas, and billing as volatile and check the live plan matrix before budgeting. Grok Bot is a product-level service; access to Grok models through the xAI API is a separate integration path.
+
+**Security and privacy:** Consequential actions can pause for approval, with Auto Review available to inspect computer and tool actions before execution. Passwords, passkeys, two-factor codes, CAPTCHAs, and payment confirmations are handed back to the user through computer takeover rather than entered into ordinary chat. Grok Bot requires cloud data storage and does not support Cursor's Legacy Privacy Mode. Optional execution on the user's local computer is separate from the shared cloud computer and asks for approval by default. Start with read-only tasks, least-privilege connectors, and explicit approval boundaries for sending, publishing, purchasing, deletion, permission changes, and production changes.
+
+**Strengths:**
+
+- Persistent cloud execution that continues while you are away
+- Direct browser and desktop-style interaction across applications, including systems without APIs or MCP servers
+- Durable Bots, routines, memory, and Bot-to-Bot handoffs for repeatable operational work
+- Approval and credential handoff controls for consequential or sensitive actions
+
+**Weaknesses:**
+
+- Proprietary, hosted, and dependent on xAI/Cursor product access and policy
+- Requires cloud storage; the shared computer means one Bot's files and sessions can be available to the user's other Bots
+- Not a local-model, self-hosted, or OpenRouter-oriented workflow
+- Beta product with rapidly changing plan eligibility, quotas, and administrative controls
+
 ### OpenHands (formerly OpenDevin)
 
 **What it is:** OpenHands is a highly capable open-source AI software engineer designed to solve complex software engineering tasks autonomously. It is the open-source project that most directly competes with commercial cloud agents like Devin.
@@ -916,6 +942,7 @@ OpenRouter is a unified API gateway that provides access to hundreds of models f
 | OpenHands | Partial | Via litellm provider abstraction; not a first-class named provider in docs surfaced this round. |
 | GitHub Copilot | Partial | Local BYOK exists in several clients; enterprise-managed custom models are a separate path. OpenRouter and feature coverage depend on client, plan, and policy. |
 | GitHub Copilot CLI | Partial\* | Model picker spans Claude/GPT/Gemini; explicit OpenRouter support unconfirmed. |
+| Grok Bot | No | Managed product; do not confuse xAI API access to Grok models with Grok Bot's product surface. |
 | Zed AI | **Yes (was Partial)** | Explicitly listed alongside 10+ other providers (Bedrock, DeepSeek, Copilot, LM Studio, Mistral, Ollama, Vercel). |
 | Google Antigravity 2.0 | No | Current plans do not offer BYOK/custom endpoints for extending account quotas; third-party model availability is product/plan-specific. |
 | Cursor | No | BYO key for direct providers only. |
@@ -929,7 +956,7 @@ OpenRouter is a unified API gateway that provides access to hundreds of models f
 
 \* Unverified -- not independently confirmed by this refresh's sourced research; treat as an open question rather than a confirmed capability.
 
-**Conclusion:** For OpenRouter flexibility, the open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, and Goose) remain the clearest options. Amp supports provider keys but does not document OpenRouter as a named first-class integration. Zed AI also lists OpenRouter among its supported providers. OpenAI's Codex CLI supports local/OSS models via `--oss`, but OpenRouter is not its primary path. GitHub Copilot now has local BYOK in several clients and enterprise-managed custom models, but availability and feature coverage vary by client and plan. Cursor and Devin Desktop remain closed ecosystems for OpenRouter-style routing.
+**Conclusion:** For OpenRouter flexibility, the open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, and Goose) remain the clearest options. Amp supports provider keys but does not document OpenRouter as a named first-class integration. Zed AI also lists OpenRouter among its supported providers. OpenAI's Codex CLI supports local/OSS models via `--oss`, but OpenRouter is not its primary path. GitHub Copilot now has local BYOK in several clients and enterprise-managed custom models, but availability and feature coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok Bot remain managed products rather than OpenRouter-style routing layers; Grok Bot's cross-application computer use should not be confused with provider flexibility.
 
 #### Local LLM Support (Ollama / LM Studio)
 
@@ -952,6 +979,7 @@ Running models locally eliminates API costs entirely, but not hardware, electric
 | Zed AI | Yes | Partial | Ollama explicitly supported. |
 | Windsurf (→ Devin Desktop) | No | No | Current product documentation confirms local-machine agent execution, not local LLM inference. |
 | Devin | No | No | Devin Cloud uses Cognition-managed inference; do not conflate local execution with local model support. |
+| Grok Bot | No | No | Hosted computer-use product; xAI API model access is a separate path. |
 | Cursor | No | No | Cloud models only. |
 | Gemini CLI | No | No | Gemini-hosted models; individual consumer access moved to Antigravity CLI. |
 | Amazon Q Developer | No | No | AWS/Bedrock-locked. |
@@ -970,7 +998,7 @@ Running models locally eliminates API costs entirely, but not hardware, electric
 
 ### Feature Comparison Matrix
 
-The matrix spans 16 tools, too many to render legibly as one table at this page width -- split below into four groups of four.
+The matrix spans 17 tools, too many to render legibly as one table at this page width -- split below into five groups.
 
 **Group 1: Claude Code, Aider, OpenCode, Cline**
 
@@ -1029,26 +1057,45 @@ The matrix spans 16 tools, too many to render legibly as one table at this page 
 | **Cost model** | $20-200/mo + API | Free / $20 / $200 / Teams | Bundled ChatGPT | $20/$200 plans or pay-as-you-go |
 | **Self-hosted option** | No | No | No | No |
 
-**Group 4: Devin, Copilot, Kiro, Antigravity**
+**Group 4: Devin, Grok Bot, Copilot**
 
-| Feature | Devin | Copilot | Kiro | Antigravity |
-|---|---|---|---|---|
-| **Interface** | Cloud / Web UI | IDE + Cloud | IDE + CLI + Web | Desktop + CLI + IDE integrations |
-| **Agentic file editing** | Yes (full, sandboxed) | Yes (full) | Yes (full) | Yes (full) |
-| **Multi-file context** | Yes | Yes (Enterprise) | Yes | Yes |
-| **Shell execution** | Yes (sandboxed) | Yes | Yes | Yes |
-| **Web search** | Unverified | Yes | Yes | Yes |
-| **Browser use** | Yes | No | No | Yes |
-| **MCP support** | Yes | Yes | Yes (full) | Yes |
-| **Custom hooks** | Limited | Limited | Hooks + steering + skills | Hooks + skills + plugins |
-| **OpenRouter** | No | Partial | No | No |
-| **Local LLMs** | No | Yes | No | No |
-| **Open source** | No | No | No | No |
-| **Git integration** | Yes | Yes | Yes | Yes |
-| **Cost model** | Free / $20 / $200 + usage | $10-100/mo indiv. | $20-200/mo (credits) | Free (individuals) |
-| **Self-hosted option** | No | No | No | Partial (SDK/enterprise paths) |
+| Feature | Devin | Grok Bot | Copilot |
+|---|---|---|---|
+| **Interface** | Cloud / Web UI | Cloud desktop/mobile app | IDE + Cloud |
+| **Agentic file editing** | Yes (full, sandboxed) | Yes (computer-use) | Yes (full) |
+| **Multi-file context** | Yes | Yes (persistent cloud computer) | Yes (Enterprise) |
+| **Shell execution** | Yes (sandboxed) | Yes (cloud computer) | Yes |
+| **Web search** | Unverified | Yes (browser/search) | Yes |
+| **Browser use** | Yes | Yes | No |
+| **MCP support** | Yes | Yes (connectors/custom MCP) | Yes |
+| **Custom hooks** | Limited | Routines / skills / Auto Review | Limited |
+| **OpenRouter** | No | No | Partial |
+| **Local LLMs** | No | No | Yes |
+| **Open source** | No | No | No |
+| **Git integration** | Yes | Yes (via cloud computer) | Yes |
+| **Cost model** | Free / $20 / $200 + usage | Eligible plan + separate Bot usage | $10-100/mo indiv. |
+| **Self-hosted option** | No | No | No |
 
-Product details vary by plan or surface. † Gemini CLI's 1M-token context window is a model-level feature; product quotas still apply. ‡ Claude Code's browser access is via MCP servers (e.g. Playwright) or WebFetch, not a built-in browser. § Goose's MCP support is a confirmed core architectural pillar with documented extensions and broad MCP ecosystem compatibility. ¶ Google's transition announcement and current Gemini CLI authentication pages conflict on consumer access; verify the sign-in path before standardising on it.
+**Group 5: Kiro, Antigravity**
+
+| Feature | Kiro | Antigravity |
+|---|---|---|
+| **Interface** | IDE + CLI + Web | Desktop + CLI + IDE integrations |
+| **Agentic file editing** | Yes (full) | Yes (full) |
+| **Multi-file context** | Yes | Yes |
+| **Shell execution** | Yes | Yes |
+| **Web search** | Yes | Yes |
+| **Browser use** | No | Yes |
+| **MCP support** | Yes (full) | Yes |
+| **Custom hooks** | Hooks + steering + skills | Hooks + skills + plugins |
+| **OpenRouter** | No | No |
+| **Local LLMs** | No | No |
+| **Open source** | No | No |
+| **Git integration** | Yes | Yes |
+| **Cost model** | $20-200/mo (credits) | Free (individuals) |
+| **Self-hosted option** | No | Partial (SDK/enterprise paths) |
+
+Product details vary by plan or surface. † Gemini CLI's 1M-token context window is a model-level feature; product quotas still apply. ‡ Claude Code's browser access is via MCP servers (e.g. Playwright) or WebFetch, not a built-in browser. § Goose's MCP support is a confirmed core architectural pillar with documented extensions and broad MCP ecosystem compatibility. ¶ Google's transition announcement and current Gemini CLI authentication pages conflict on consumer access; verify the sign-in path before standardising on it. Grok Bot's browser, MCP, and computer-use capabilities are product-level features; do not infer equivalent capabilities for the xAI API from this row.
 
 ---
 
@@ -1081,6 +1128,8 @@ For context, Claude Code's three-layer system works as follows:
 **Gemini CLI:** MCP, extensions, and hooks are documented. Individual consumer access is disputed across Google's current pages and the transition announcement; Antigravity CLI is the announced migration target and has skills, hooks, subagents, and plugins. Enterprise/API users should verify which features are present in their Gemini CLI release.
 
 **OpenHands:** MCP support confirmed, with three transport types (SSE, Streamable HTTP, stdio) -- a proxy approach (SuperGateway/FastMCP) is recommended over direct stdio for reliability. Configuration is required; MCP tools are not auto-discovered. Limited hook/automation equivalent otherwise. *Weakest extensibility story among the actively-developed alternatives.*
+
+**Grok Bot:** Supports built-in connectors and custom MCP connectors, alongside skills, routines, Bot handoffs, and approval rules. MCP is optional rather than foundational: the Bot can use a browser and hosted computer directly when a service has no MCP server. Its routines and Auto Review controls are product-specific and are not compatible with Claude Code hooks or other agents' skill formats.
 
 #### The AGENTS.md Open Standard
 
@@ -1180,6 +1229,7 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | Devin (cloud agent, Pro) | $20/mo | $20/mo plus on-demand credits at API pricing | N/A | Current plan; daily and weekly usage allowances apply. |
 | Devin (cloud agent, Max) | $200/mo | $200/mo plus on-demand credits at API pricing | N/A | Current power-user plan with a larger weekly allowance and no daily cap. |
 | Devin (cloud agent, Teams) | $80/mo minimum + $40/full seat | Shared on-demand credits; full seats include their own allowance | N/A | Replaces the legacy ACU/Core and $500 team-plan descriptions. |
+| Grok Bot | Eligible SuperGrok/Cursor/Teams plan | Plan-dependent plus separate Bot usage allowance | N/A | Beta product; access, quotas, and billing vary by plan and change quickly. |
 | GitHub Copilot -- Individual Free | $0/mo | $0 (2,000 completions/mo cap) | N/A | New tier detail. |
 | GitHub Copilot -- Individual Pro | $10/mo | $10 + variable consumption after included AI credits | N/A | AI-credit consumption varies by model and workload; code completions have a separate allowance. |
 | GitHub Copilot -- Individual Pro+ | $39/mo | $39 + overage ($70 credits included) | N/A | New tier, includes premium models (Claude Opus access). |
@@ -1252,9 +1302,15 @@ Antigravity CLI is the announced first-party migration path for individual Googl
 
 **A caution on Devin:** Devin's $20/month Pro plan includes usage allowances, but extra work is purchased as on-demand credits at API pricing. That is clearer than the legacy ACU model, but it still means heavy users can spend beyond the subscription. Devin competes on autonomy and capability, not guaranteed low cost.
 
+### If you need persistent cross-application or asynchronous work
+
+**Primary:** Grok Bot -- if the task crosses websites, inboxes, documents, and business applications and can continue while you are away. Its persistent cloud computer and computer-use interface can reach systems that lack clean APIs or MCP servers. It is a poor fit when local repository control, local models, self-hosting, or strict no-cloud handling is the main requirement.
+
+**Coding-focused alternatives:** Devin remains the better comparison for GitHub-centred autonomous software engineering, while OpenHands is the better comparison when you want an open-source, self-hostable cloud-agent stack. Claude Code remains the better fit for interactive terminal-native work.
+
 ### If MCP server investments are critical
 
-Tools with confirmed MCP support: Claude Code (native), OpenCode, Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural pillar with documented extensions and broad ecosystem compatibility), OpenHands (config, multiple transports), Amp, and Kiro. Of these, OpenCode, Cline, and Kiro have the strongest current combination of agentic execution and extensibility; Goose remains worth a closer look when on-device execution and MCP portability matter.
+Tools with confirmed MCP support: Claude Code (native), OpenCode, Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural pillar with documented extensions and broad ecosystem compatibility), OpenHands (config, multiple transports), Amp, Kiro, and Grok Bot (connectors and custom MCP, alongside direct computer use). Of these, OpenCode, Cline, and Kiro have the strongest current combination of agentic execution and extensibility; Goose remains worth a closer look when on-device execution and MCP portability matter. Grok Bot is the better fit when MCP is unavailable but browser or desktop computer use can bridge the gap.
 
 ### If you need extensibility similar to Claude Code's skills+hooks
 
@@ -1276,7 +1332,7 @@ Rather than a hard switch, a practical migration path:
 
 ## References
 
-First-party sources checked on **August 31, 2026**:
+First-party sources checked on **August 31, 2026** for the main survey snapshot. Grok Bot sources were checked on **September 9, 2026**:
 
 - [Anthropic Max plan and usage limits](https://support.claude.com/en/articles/11049741-what-is-the-max-plan)
 - [Claude Code with Pro or Max](https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan)
@@ -1313,6 +1369,11 @@ First-party sources checked on **August 31, 2026**:
 - [GitHub Copilot BYOK](https://docs.github.com/en/copilot/concepts/models/bring-your-own-key) and [models/pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 - [Amazon Q IDE end-of-support scope](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html)
 - [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing) and [V4 release note](https://api-docs.deepseek.com/news/news260813/)
+- [Introducing Grok Bot](https://x.ai/news/introducing-grok-bot)
+- [Grok Bot overview](https://docs.x.ai/grok-bot/overview)
+- [Grok Bot approvals, security, and privacy](https://docs.x.ai/grok-bot/approvals-security-and-privacy)
+- [Grok Bot for teams and enterprises](https://docs.x.ai/grok-bot/teams-and-enterprises)
+- [Grok Bot access expansion](https://x.ai/news/grok-bot-more-plans)
 - [Aider repository](https://github.com/Aider-AI/aider) and [Aider edit formats](https://aider.chat/docs/more/edit-formats.html)
 - [OpenRouter works-with-openrouter](https://openrouter.ai/works-with-openrouter)
 - [Continue Ollama guide](https://docs.continue.dev/guides/ollama-guide)
