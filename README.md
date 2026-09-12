@@ -23,6 +23,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [Python for Expert R Users](primer_python_for_r_users/primer_python_for_r_users.html) | Comprehensive migration guide for experienced tidyverse, purrr, and furrr users, with deep ggplot2 replacement strategy |
 | [Military Organisation, Ranks, and Doctrine](primer_military_structure/primer_military_structure.html) | How armies are structured from fire team to army group, how ranks map to command levels, the Napoleonic inheritance, 20th-century adaptations, and naval/air force equivalents |
 | [Oh My Zsh: A Practical Guide](primer_ohmyzsh/primer_ohmyzsh.html) | ZSH fundamentals, Oh My Zsh architecture, deep plugin coverage, themes, advanced features, and a personalised setup audit |
+| [Containerization: Docker, Podman, and How Kubernetes Fits In](primer_containerization/primer_containerization.html) | Container fundamentals and the OCI spec, Docker's daemon architecture versus Podman's daemonless model, and how Kubernetes orchestrates it all — with a look at the 2026 landscape |
 
 ## Articles
 
