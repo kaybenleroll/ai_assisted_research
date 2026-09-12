@@ -2154,8 +2154,6 @@ Give each task a stopping rule. Ask for an investigation report before authorizi
 
 Choose model and reasoning settings by task risk and ambiguity. Use a quicker setting for a mechanical rename with strong tests; reserve deeper reasoning for a poorly understood failure, a cross-cutting design decision, or a review where missed edge cases matter. Exact model names, availability, limits, pricing, and plan entitlements belong in a separately verified table, not in timeless repository instructions.
 
-> **Verify before publication (volatile):** Verify current Codex model identifiers, model-selection commands, reasoning controls, usage limits, pricing, plan availability, and API-versus-subscription differences. Do not preserve an unverified number or command in the final primer merely because it was correct during drafting.
-
 ### Make generated changes observable
 
 Generated HTML, PDF, lockfiles, snapshots, database migrations, and vendored assets can make a small source edit look large. Before starting, identify which outputs are expected and how to regenerate them. Afterward, compare both source and generated changes.
@@ -2228,8 +2226,6 @@ Record the raw scores and a short justification. Do not hide a safety failure in
 Review burden measures the human work required after the agent stops. Count the number of correction cycles, files that needed manual cleanup, tests that had to be added by the reviewer, and minutes spent understanding the diff. A small diff can still have a high review burden if the explanation is unclear or the agent changed a subtle invariant.
 
 Record time in separate phases where possible: time to first useful plan, time to implementation, command or build time, and human review time. Record provider-reported usage or cost only when it is available and label its source. UI estimates, API billing, and local wall-clock time are different measurements.
-
-> **Verify before publication (volatile):** Confirm how current Codex and Claude Code surfaces expose usage, token counts, rate limits, model metadata, and cost. Product interfaces and billing terminology may change, so the evaluation template should leave room for “not available” rather than inventing precision.
 
 ### Report distributions, not a single victory lap
 
