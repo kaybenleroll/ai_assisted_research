@@ -1142,15 +1142,16 @@ handles local interactive work; Orbs handle cloud-side execution.</p>
 provider-key configuration and plugin/skill/hook extensibility. It is
 flexible, but “model-agnostic” overstates the default curated product
 surface.</p>
-<p><strong>Cost model:</strong> Amp has a $20/month Megawatt plan with
-at least $20 of included agent usage and 750 hours of small Orbs, a
-$200/month Gigawatt plan with at least $200 of included agent usage and
-1,000 hours of extra-large Orbs, and an unconstrained pay-as-you-go
-path. Individual and non-enterprise workspaces do not pay a model
-markup; Orb compute is charged separately. Included usage resets
-monthly, while purchased credits expire after 12 months. Check the live
+<p><strong>Cost model:</strong> Amp has a free Hobby tier (pay-as-you-go
+orbs, no token fees or limits), a $20/month Individual tier (45,000 orb
+minutes, unlimited repos), a Teams tier (pooled credits, no extra
+platform charge on top of members’ own plans), and a custom-priced
+Enterprise tier (pooled credits only, plus SCIM/audit logs/IP
+allowlisting) (as of 2026-09-12). Individual and non-enterprise
+workspaces do not pay a model markup; Orb compute is metered separately
+by the minute with automatic pause for idle instances. Check the live
 pricing page before budgeting: Amp’s model and compute rates are
-usage-based.</p>
+usage-based and have changed structure before.</p>
 <p><strong>Strengths:</strong> - Sourcegraph-backed product lineage and
 cloud execution for longer tasks - Hybrid local/cloud model gives a path
 to offloading long-running or parallel tasks without leaving the CLI
@@ -2038,9 +2039,12 @@ client, plan, and policy.</td>
 </tr>
 <tr>
 <td>GitHub Copilot CLI</td>
-<td>Partial*</td>
-<td>Model picker spans Claude/GPT/Gemini; explicit OpenRouter support
-unconfirmed.</td>
+<td>Partial</td>
+<td>Official BYOK covers only the <code>openai</code>,
+<code>azure</code>, and <code>anthropic</code> provider types
+(<code>openai</code> = any OpenAI Chat Completions-compatible endpoint);
+OpenRouter is not named as a supported provider, so it is reachable only
+unofficially via the generic <code>openai</code>-compatible path.</td>
 </tr>
 <tr>
 <td>Grok Bot</td>
@@ -2106,9 +2110,6 @@ OpenRouter.</td>
 </tr>
 </tbody>
 </table>
-<p>* Unverified – not independently confirmed by this refresh’s sourced
-research; treat as an open question rather than a confirmed
-capability.</p>
 <p><strong>Conclusion:</strong> For OpenRouter flexibility, the
 open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, and Goose)
 remain the clearest options. Amp supports provider keys but does not
@@ -2176,10 +2177,14 @@ exact model/workload combination before standardising on it.</p>
 <tr>
 <td>Amp (Sourcegraph)</td>
 <td>No</td>
-<td>Unverified</td>
-<td>Local CLI execution does not mean local model inference; current
-docs describe hosted models and provider keys, not Ollama/LM
-Studio.</td>
+<td>No</td>
+<td>Confirmed no local inference: Amp’s Security Reference states
+inference always runs on Sourcegraph-documented hosted providers
+(Anthropic, OpenAI, Google, etc.); running the CLI locally is
+client/orchestration only. No official mention of Ollama, LM Studio,
+llama.cpp, or any local endpoint anywhere in Amp’s docs (Cody, a
+separate Sourcegraph product, has experimental Ollama support – not
+applicable to Amp).</td>
 </tr>
 <tr>
 <td>OpenAI Codex CLI</td>
@@ -2210,9 +2215,13 @@ feature.</td>
 </tr>
 <tr>
 <td>GitHub Copilot CLI</td>
-<td>Partial*</td>
-<td>Partial*</td>
-<td>Not confirmed by sourced research this round.</td>
+<td>Yes</td>
+<td>No</td>
+<td>Copilot CLI’s own BYOK docs name Ollama explicitly as a local
+endpoint example under the <code>openai</code> provider type; LM Studio
+is not named there (it appears only in the separate Copilot app’s BYOK
+docs) – reachable, if at all, only via the generic OpenAI-compatible
+endpoint path, unendorsed.</td>
 </tr>
 <tr>
 <td>JetBrains AI Assistant</td>
@@ -2288,9 +2297,6 @@ BYOK or custom endpoint for additional quota.</td>
 </tr>
 </tbody>
 </table>
-<p>* Unverified – not independently confirmed by this refresh’s sourced
-research; treat as an open question rather than a confirmed
-capability.</p>
 <p><strong>Best tools for local LLMs:</strong> Aider, Cline, OpenCode,
 Continue.dev, Goose, and JetBrains AI Assistant remain the clearest
 options for local model use. OpenAI’s Codex CLI supports local models
@@ -2659,7 +2665,8 @@ OpenHands</strong></p>
 <td>$20-200/mo + API</td>
 <td>Free / $20 / $200 / Teams</td>
 <td>Bundled ChatGPT</td>
-<td>$20/$200 plans or pay-as-you-go</td>
+<td>Free / $20 Individual (orb minutes) / Teams+Enterprise pooled
+credits</td>
 </tr>
 <tr>
 <td><strong>Self-hosted option</strong></td>
@@ -2713,7 +2720,7 @@ OpenHands</strong></p>
 </tr>
 <tr>
 <td><strong>Web search</strong></td>
-<td>Unverified</td>
+<td>Yes (agentic browser tool)‖</td>
 <td>Yes (browser/search)</td>
 <td>Yes</td>
 </tr>
@@ -2869,7 +2876,11 @@ ecosystem compatibility. ¶ Google’s transition announcement and current
 Gemini CLI authentication pages conflict on consumer access; verify the
 sign-in path before standardising on it. Grok Bot’s browser, MCP, and
 computer-use capabilities are product-level features; do not infer
-equivalent capabilities for the xAI API from this row.</p>
+equivalent capabilities for the xAI API from this row. ‖ Devin’s web
+search is not a separately branded feature – it is the agentic cloud
+browser tool proactively looking up documentation and solutions during a
+task. This is distinct from “Devin Search,” a separately documented
+codebase-search feature; do not conflate the two.</p>
 <hr />
 <h2 data-number="8.3" id="extensibility-deep-dive"><span class="header-section-number">8.3</span> Extensibility Deep Dive</h2>
 <p>One of Claude Code’s most powerful features is its extensibility
@@ -3161,12 +3172,15 @@ since the Jan 2026 OpenAI partnership)</td>
 </tr>
 <tr>
 <td>Amp (Sourcegraph)</td>
-<td>$20/mo or pay-as-you-go</td>
-<td>$20 Megawatt / $200 Gigawatt included agent usage plus separately
-metered Orbs; pay-as-you-go also available</td>
-<td>No / unverified</td>
-<td>Current pricing documents model credits and Orb compute separately;
-no model markup for individual workspaces.</td>
+<td>Free (Hobby, pay-as-you-go) or $20/mo (Individual)</td>
+<td>Individual $20/mo includes 45,000 minutes of orb time; Teams and
+Enterprise are pooled-credit, no fixed per-seat platform charge (as of
+2026-09-12)</td>
+<td>No</td>
+<td>Self-hosted is confirmed unavailable at any tier, including
+Enterprise (which adds SCIM/audit logs/IP allowlisting but stays SaaS).
+No markup over provider API prices for individual/non-enterprise plans;
+orb compute is metered separately by the minute with auto-pause.</td>
 </tr>
 <tr>
 <td>Gemini CLI (individual)</td>
