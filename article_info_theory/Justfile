@@ -1,6 +1,6 @@
 SOURCE_MD   := "information_theory_series_combined.md"
 PROJECT_DIR := "article_info_theory"
-TITLE       := "Information about information series"
+TITLE       := "Information About Information: An Information Theory Series"
 AUTHOR      := "Marianne Freiberger"
 HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
