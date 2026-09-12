@@ -2,6 +2,8 @@
 
 This is a long-form, operational guide for Claude Code users who want Codex as a second coding-agent harness while keeping their existing repository workflow intact.
 
+*Product snapshot · September 10, 2026*
+
 ## Introduction
 
 If you already use Claude Code, the first few minutes with Codex can be oddly confusing. The terminal looks familiar. Both tools can inspect a repository, edit files, run commands, and explain a diff. You can give both of them a task such as “add a test for this bug” and get something that looks like the same workflow.
@@ -419,8 +421,8 @@ For this guide, use these terms precisely:
 - A referenced file is not necessarily an included file. A pointer only works
   if the harness reads the target and applies its contents.
 
-The current [Codex instruction-discovery guidance](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
-(checked 21 August 2026) says that Codex checks `AGENTS.override.md`, then
+The current [Codex instruction-discovery guidance](https://developers.openai.com/codex/agent-configuration/agents-md)
+(checked 10 September 2026) says that Codex checks `AGENTS.override.md`, then
 `AGENTS.md`, then configured fallback names in each directory from the project
 root to the current directory. It includes at most one file per directory and
 concatenates the discovered files from root to leaf. The default combined
@@ -753,12 +755,14 @@ Execution capability is separate again. A model may be able to propose a correct
 ### A dated snapshot of the current Codex models
 
 The official [Codex model guidance](https://learn.chatgpt.com/docs/models)
-currently describes a GPT-5.6 family alongside previous-generation models. The
-following is a snapshot checked on 21 August 2026, not a promise that every
+currently describes an Astra model alongside the GPT-5.6 family and previous-
+generation models. The following is a snapshot checked on 10 September 2026,
+not a promise that every
 model is available to every account, interface, or authentication method.
 
 | Model | Practical orientation | Good starting use |
 | --- | --- | --- |
+| `gpt-6-astra` (Astra) | Highest-capability model for complex work across code, apps, and research | Hardest end-to-end tasks that need sustained reasoning and judgment |
 | `gpt-5.6-sol` (Sol) | Highest-capability model in the current family | Ambiguous, high-value, multi-step coding, research, or security work |
 | `gpt-5.6-terra` (Terra) | Balanced everyday model | Routine implementation, debugging, and repository work |
 | `gpt-5.6-luna` (Luna) | Fast, lower-cost model in the family | Clear, repeatable transformations, extraction, and structured tasks |
@@ -774,8 +778,10 @@ section, not in permanent repository instructions.
 
 The practical selection rule is simpler than the catalogue. Start with Terra
 for ordinary work, move to Sol when ambiguity or the cost of a wrong decision
-justifies more capability, and use Luna for clear high-volume tasks. Treat Spark
-as a specialized preview rather than the default for a long, open-ended task.
+justifies more capability, and choose Astra for the hardest end-to-end work
+across multiple tools or surfaces. Use Luna for clear high-volume tasks. Treat
+Spark as a specialized preview rather than the default for a long, open-ended
+task.
 Then choose reasoning effort independently.
 
 ### Choose by task shape
