@@ -2,6 +2,7 @@
 set -euo pipefail
 
 source ./render.env
+export WORKBOOK_IMAGE_ID
 mkdir -p "$OUTPUT_DIR"
 quarto render workbook_executable_index.qmd --to html
 rm -f "$OUTPUT_DIR/workbook_executable_index.html"

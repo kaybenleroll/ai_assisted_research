@@ -2516,7 +2516,7 @@ padding-top: 1.25rem;
 
 code span.fu { color: #c792ea !important; } 
 </style>
-  
+
   <script>
     (function () {
       var script = document.createElement("script");
@@ -2695,8 +2695,10 @@ code span.fu { color: #c792ea !important; }
 <li><code>FULL_N_SIMS</code></li>
 <li><code>SEED_R</code></li>
 <li><code>SEED_PY</code></li>
+<li><code>WORKBOOK_IMAGE_ID</code></li>
 <li><code>OUTPUT_DIR</code></li>
 </ol>
+<p>The Python examples read SEED_PY from the environment so cross-language reruns use the same recorded seed configuration rather than a hidden code constant. The base image is digest-pinned; the same image identity is recorded in the canonical primer’s runtime section.</p>
 </section>
 <section id="expected-render-sequence" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="expected-render-sequence"><span class="header-section-number">5</span> Expected Render Sequence</h2>
@@ -2802,6 +2804,7 @@ code span.fu { color: #c792ea !important; }
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = 'mathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -2810,8 +2813,13 @@ code span.fu { color: #c792ea !important; }
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {

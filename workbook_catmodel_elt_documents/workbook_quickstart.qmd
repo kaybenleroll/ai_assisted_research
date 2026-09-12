@@ -40,6 +40,7 @@ These are useful entry points if you already know the basics:
 3. End-to-end mini-case: synthetic ELT to treaty outputs
 4. Decision communication template (pricing committee ready)
 5. Glossary (Quick Reference)
+6. OEP/AEP probability-space checks, Monte Carlo diagnostics, and fitted-tail sensitivity
 
 ## Build Container
 
@@ -81,6 +82,10 @@ Configuration is in `render.env`.
 - `FULL_N_SIMS`
 - `SEED_R`
 - `SEED_PY`
+
+## Decision-grade caveats
+
+The primer labels conditional event tails separately from annual EP/RP metrics. OEP uses rate-weighted conditional exceedance probabilities, and annual treaty metrics are rate-weighted under the stated Poisson contract. Full renders include Monte Carlo tail diagnostics, EVT threshold sensitivity, and a sample-size-aware coverage harness; the synthetic backtest is a calibration example, not observed-data validation.
 
 ## Recommended Working Loop
 

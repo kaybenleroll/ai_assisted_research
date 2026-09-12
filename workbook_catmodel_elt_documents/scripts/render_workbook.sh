@@ -12,6 +12,7 @@ fi
 
 export SEED_R
 export SEED_PY
+export WORKBOOK_IMAGE_ID
 export RETICULATE_PYTHON="/usr/bin/python3"
 
 mkdir -p "$OUTPUT_DIR"
