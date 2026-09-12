@@ -1332,15 +1332,19 @@ a set of containers that share network and IPC namespaces, so they reach
 each other on <code>localhost</code>, plus an infrastructure container
 that holds the shared namespaces open while individual containers come
 and go.</p>
-<p>The chronology here is routinely stated backwards. Podman’s pod is
-not an import of the Kubernetes concept; the shared-namespace grouping
-idea came from Red Hat’s work on Kubernetes-adjacent tooling and
-predates Podman’s own popularity, and the two concepts are parallel
-expressions of the same design rather than one copying the other. Podman
-is named for it. The practical value is that the mental model transfers:
-if you understand why a sidecar container in a Podman pod can talk to
-the main container on <code>localhost</code>, you understand Kubernetes
-Pod networking, because it is the same mechanism.</p>
+<p>Kubernetes’ Pod predates this by several years — the object goes back
+to Kubernetes’ original 2014–2015 design, itself derived from Google
+Borg’s internal grouping concept. Podman, which grew out of Red Hat’s
+CRI-O work in 2017–2018, deliberately adopted the same shared-namespace
+grouping so that a local Podman workflow would interoperate cleanly with
+real Kubernetes manifests: <code>podman generate kube</code> and
+<code>podman play kube</code> only make sense as a round trip if the
+concept is the same on both sides. Podman is named for it — “Pod
+Manager.” The practical value is that the mental model transfers: if you
+understand why a sidecar container in a Podman pod can talk to the main
+container on <code>localhost</code>, you understand Kubernetes Pod
+networking, because it is the same mechanism, adopted on purpose rather
+than reinvented in parallel.</p>
 <h2 data-number="5.6" id="buildah-and-skopeo"><span class="header-section-number">5.6</span> Buildah and Skopeo</h2>
 <p>Podman ships as part of a set of tools that split responsibilities
 Docker combines into one daemon, which is a meaningfully different
@@ -1900,11 +1904,11 @@ under load and shrink back without intervention.</p>
 Governance</h2>
 <p>Once a cluster is shared, you need boundaries. Namespaces partition
 the cluster logically, so names do not collide and access can be scoped.
-Role-based access control governs who may do what to which resources.
-ResourceQuotas cap total consumption per namespace, and LimitRanges
-constrain individual workloads, which together prevent one team’s
-runaway job from starving everyone else. NetworkPolicies restrict which
-workloads may talk to which.</p>
+Role-based access control (RBAC) governs who may do what to which
+resources. ResourceQuotas cap total consumption per namespace, and
+LimitRanges constrain individual workloads, which together prevent one
+team’s runaway job from starving everyone else. NetworkPolicies restrict
+which workloads may talk to which.</p>
 <p>These mechanisms are how one cluster serves many teams rather than
 each team operating its own. That consolidation is a large part of
 Kubernetes’ economic argument, and it is also the part most often
@@ -2175,9 +2179,10 @@ with API access to read Secrets in a namespace, or access to an
 as sufficient protection is a common and serious mistake. Real practice
 means enabling encryption at rest, restricting read access through RBAC,
 and for anything genuinely sensitive using an external secret manager —
-Vault, or a cloud provider’s KMS-backed store — pulled in through the
-Secrets Store CSI driver or an operator, so the durable copy never lives
-in <code>etcd</code> at all.</p>
+Vault, or a cloud provider’s Key Management Service (KMS)-backed store —
+pulled in through the Secrets Store CSI (Container Storage Interface)
+driver or an operator, so the durable copy never lives in
+<code>etcd</code> at all.</p>
 <p>One practical note: a Secret or ConfigMap mounted as a volume updates
 in place when the object changes, while one injected as an environment
 variable does not — environment variables are set at process start and
@@ -2255,8 +2260,8 @@ for storage by class and size, not by cloud disk identifier — and it is
 what makes the same manifest work on different infrastructure.
 <strong>StorageClass</strong> completes the picture by enabling dynamic
 provisioning: rather than pre-creating volumes, a claim against a
-storage class causes a CSI (Container Storage Interface) driver to
-create the underlying storage on demand.</p>
+storage class causes a CSI driver to create the underlying storage on
+demand.</p>
 <p>The constraint to internalise is access modes.
 <code>ReadWriteOnce</code> means the volume mounts read-write on one
 node, and it is what most block storage supports.
@@ -2481,10 +2486,13 @@ toward Kubernetes even inside single-cloud shops. At the same time ECS
 remains heavily used, particularly for internal and batch workloads, and
 many enterprises run both: ECS where the workload is AWS-only and
 internal, EKS where portability or a Kubernetes-native ecosystem
-matters. Around 46% of container-using organisations now run some form
-of serverless containers, meaning ECS or EKS on Fargate, which suggests
-that avoiding node management is at least as attractive as any
-particular orchestrator.</p>
+matters. A separate 2026 industry survey put the figure for
+container-using organisations running some form of serverless containers
+— ECS or EKS on Fargate — at around 46%; treat that number as indicative
+rather than precise, in the same way as the other survey-sourced figures
+in this primer, but the direction is consistent with the CNCF data:
+avoiding node management looks at least as attractive as any particular
+orchestrator.</p>
 <p>When not to reach for full Kubernetes: when your team is too small to
 operate it competently, which is the most common failure and produces
 the worst outcomes; when you are single-cloud with no portability
