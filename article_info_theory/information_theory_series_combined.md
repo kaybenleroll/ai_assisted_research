@@ -1,4 +1,4 @@
-# Information about information series
+# Information About Information: An Information Theory Series
 
 **Author:** Marianne Freiberger  
 **Date:** 24 March, 2015
