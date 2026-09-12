@@ -10,11 +10,14 @@
 
 **Execution Model:**
 ```
-Thought → Action → Observation → (loop)
+Decision summary → Action → Observation → (loop)
 ```
 
-**Pros:** Interpretable, self-correcting, reduces hallucination
-**Cons:** Verbose, sequential (no parallelism), requires clean action space
+**Pros:** Observable action trace, self-correcting, reduces hallucination when tools ground claims
+**Cons:** Sequential by default, can be verbose, requires a clean action space
+
+Do not depend on exposing hidden chain-of-thought. Log tool calls, arguments,
+observations, outcomes, and concise decision summaries.
 
 **Code Pattern:**
 ```python
@@ -39,7 +42,8 @@ LLM → Tool Calls → Append Results → Loop Until Done
 ```
 
 **Pros:** Flexible, general-purpose, handles complex scenarios
-**Cons:** Can hit maximum iterations, hard to reason about long-term outcomes
+**Cons:** Can hit maximum iterations, hard to reason about long-term outcomes,
+requires explicit authorization around side effects
 
 **Code Pattern (Pydantic AI):**
 ```python
@@ -97,11 +101,25 @@ Task → Agent Selection → Execution → Next Task
 ```
 
 **Pros:** Natural role assignment, clear responsibilities, easy to extend
-**Cons:** Coordination overhead, harder to debug
+**Cons:** Coordination overhead, harder to debug, more trust boundaries
 
 ---
 
 ## Tool Integration Patterns
+
+### Approval Boundary for Side Effects
+
+Classify tools before wiring them into an agent:
+
+| Risk tier | Examples | Default execution |
+|---|---|---|
+| Read-only | Search, retrieve order, inspect logs | Automatic, with least-privilege credentials |
+| Reversible write | Draft email, create ticket, stage file change | Automatic only if the user can undo it; otherwise review |
+| Irreversible or high-impact | Send email, delete data, issue refund, change access | Pause and require explicit approval |
+
+Authorization belongs in the tool/service layer, not only in the prompt. Validate
+the user, tenant, target, policy, and idempotency key immediately before the
+side effect.
 
 ### Synchronous Tool Execution
 ```python
@@ -128,7 +146,7 @@ results = await asyncio.gather(
 ```
 
 **Pros:** Fast for independent tools
-**Cons:** Non-deterministic ordering, harder to debug
+**Cons:** Non-deterministic completion order, harder to debug; never parallelize calls with ordering or shared-state dependencies
 
 ---
 
@@ -234,16 +252,20 @@ Example reflection:
 
 ---
 
-## Framework Selection Matrix
+## Framework and Runtime Selection Matrix
 
-| Dimension | Best Option | Trade-off |
-|-----------|-------------|----------|
-| **Simplicity** | Pydantic AI | Less advanced orchestration |
-| **Multi-agent** | CrewAI | Higher overhead |
-| **Workflow control** | LangGraph | More boilerplate |
-| **Type safety** | Pydantic AI | Python-only |
-| **Observability** | Pydantic AI + Logfire | Proprietary (not required) |
-| **Cost optimization** | LangGraph (more control) | Requires manual tuning |
+| Need | Start with | Why |
+|---|---|---|
+| Typed Python tools and fast implementation | Pydantic AI | Strong schemas and a small abstraction surface |
+| Explicit state, pause/resume, and durable execution | LangGraph | Checkpointing, interrupts, persistence, and workflow control |
+| Role-based multi-agent collaboration | CrewAI | Convenient delegation model; accept coordination overhead |
+| One-provider features and fastest access to its SDK | Provider-native SDK | OpenAI Agents SDK, Claude Agent SDK, or Google ADK; lower portability |
+| Interoperable tool connections | MCP | Standard tool/resource boundary; still apply local authorization |
+| Independent agent-to-agent delegation | A2A | Useful when agents have separate endpoints and lifecycles |
+
+Choose the smallest layer that provides the failure semantics you need. Do not
+add multi-agent orchestration when ordinary functions or a durable workflow
+would make the path clearer.
 
 ---
 
@@ -354,7 +376,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 | **Infinite loops** | Agent gets stuck repeating | Detect repeated actions; inject reflection |
 | **Hallucination** | False claims in output | Require tool backing; audit claims against tools |
 | **Slow execution** | Task takes >1 minute | Parallelize independent tool calls; use smaller model |
-| **Drift over time** | Quality degrades in production | Monitor human eval samples; retrain on recent data |
+| **Drift over time** | Quality degrades after a model, prompt, tool, or data change | Version every dependency; run regression evals and review sampled traces before rollout |
 | **Model version mismatch** | Unexpected behavior changes | Pin model versions; maintain compatibility layer |
 
 ---
@@ -363,7 +385,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 
 ### MVP Agent (Week 1)
 ```
-☐ Choose model (a current mid-tier frontier model, e.g. Claude Sonnet 5, is a reasonable default — check current pricing/capability docs before committing)
+☐ Choose model and record its exact model identifier, provider, and limits
 ☐ Define 3-5 core tools
 ☐ Write system prompt
 ☐ Implement basic agentic loop
@@ -379,12 +401,14 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 ☐ Integrate vector store for memory
 ☐ Set up structured logging
 ☐ Create basic dashboard
+☐ Add prompt-injection and malformed-tool-output tests
 ```
 
 ### Production Ready (Week 4+)
 ```
 ☐ Implement rate limiting & quotas
 ☐ Add human-in-the-loop for critical actions
+☐ Persist state and make side effects idempotent
 ☐ Set up comprehensive monitoring
 ☐ Create incident response runbooks
 ☐ Establish SLA metrics
@@ -527,7 +551,10 @@ Pass/fail: Average rating >= 4/5
 
 **MRKL:** Modular reasoning system routing tasks to specialized expert tools
 
-**A2A:** Agent-to-Agent communication protocol for inter-agent coordination
+**A2A:** Agent-to-Agent protocol for communication between independently deployed agents; use it when separate identity, endpoint, and task lifecycle matter
 
-**MCP:** Model Context Protocol for standardized agent-tool interfaces
+**MCP:** Model Context Protocol for standardized tool and resource interfaces
 
+**Idempotency key:** A caller-supplied identifier that lets a service recognize a retried request and avoid repeating a side effect
+
+**Durable execution:** Persisted workflow execution that can survive failure, pause for input, and resume from saved state
