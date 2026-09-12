@@ -534,16 +534,37 @@ reproducible hand-off</a></li>
 </ul></li>
 <li><a href="#instruction-systems" id="toc-instruction-systems"><span class="toc-section-number">4</span> Instruction systems</a>
 <ul>
-<li><a href="#separate-the-repository-contract-from-the-harness-adapter" id="toc-separate-the-repository-contract-from-the-harness-adapter"><span class="toc-section-number">4.1</span> Separate the repository contract
+<li><a href="#who-owns-agents.md-now" id="toc-who-owns-agents.md-now"><span class="toc-section-number">4.1</span> Who owns <code>AGENTS.md</code>
+now</a></li>
+<li><a href="#separate-the-repository-contract-from-the-harness-adapter" id="toc-separate-the-repository-contract-from-the-harness-adapter"><span class="toc-section-number">4.2</span> Separate the repository contract
 from the harness adapter</a></li>
-<li><a href="#what-claude.md-and-agents.md-mean-in-this-setup" id="toc-what-claude.md-and-agents.md-mean-in-this-setup"><span class="toc-section-number">4.2</span> What <code>CLAUDE.md</code> and
-<code>AGENTS.md</code> mean in this setup</a></li>
-<li><a href="#the-thin-bridge-pattern" id="toc-the-thin-bridge-pattern"><span class="toc-section-number">4.3</span> The thin bridge pattern</a></li>
-<li><a href="#shared-guidance-without-a-second-manual" id="toc-shared-guidance-without-a-second-manual"><span class="toc-section-number">4.4</span> Shared guidance without a second
+<li><a href="#what-claude.md-and-agents.md-mean-in-this-setup" id="toc-what-claude.md-and-agents.md-mean-in-this-setup"><span class="toc-section-number">4.3</span> What <code>CLAUDE.md</code> and
+<code>AGENTS.md</code> mean in this setup</a>
+<ul>
+<li><a href="#claude-code-does-not-read-agents.md" id="toc-claude-code-does-not-read-agents.md"><span class="toc-section-number">4.3.1</span> Claude Code does not read
+<code>AGENTS.md</code></a></li>
+<li><a href="#how-claude-code-discovers-instructions" id="toc-how-claude-code-discovers-instructions"><span class="toc-section-number">4.3.2</span> How Claude Code discovers
+instructions</a></li>
+<li><a href="#how-codex-discovers-instructions" id="toc-how-codex-discovers-instructions"><span class="toc-section-number">4.3.3</span> How Codex discovers
+instructions</a></li>
+</ul></li>
+<li><a href="#the-bridge-pattern-and-which-direction-to-point-it" id="toc-the-bridge-pattern-and-which-direction-to-point-it"><span class="toc-section-number">4.4</span> The bridge pattern, and which
+direction to point it</a>
+<ul>
+<li><a href="#point-claude.md-at-agents.md-with-an-import" id="toc-point-claude.md-at-agents.md-with-an-import"><span class="toc-section-number">4.4.1</span> Point <code>CLAUDE.md</code> at
+<code>AGENTS.md</code>, with an import</a></li>
+<li><a href="#pointing-agents.md-at-claude.md-is-prose-not-a-mechanism" id="toc-pointing-agents.md-at-claude.md-is-prose-not-a-mechanism"><span class="toc-section-number">4.4.2</span> Pointing <code>AGENTS.md</code>
+at <code>CLAUDE.md</code> is prose, not a mechanism</a></li>
+<li><a href="#what-the-bridge-does-not-do" id="toc-what-the-bridge-does-not-do"><span class="toc-section-number">4.4.3</span> What the bridge does not
+do</a></li>
+</ul></li>
+<li><a href="#shared-guidance-without-a-second-manual" id="toc-shared-guidance-without-a-second-manual"><span class="toc-section-number">4.5</span> Shared guidance without a second
 manual</a></li>
-<li><a href="#codex-configuration-is-a-supplement-not-the-project-contract" id="toc-codex-configuration-is-a-supplement-not-the-project-contract"><span class="toc-section-number">4.5</span> Codex configuration is a
+<li><a href="#generating-each-harnesss-files-from-one-source" id="toc-generating-each-harnesss-files-from-one-source"><span class="toc-section-number">4.6</span> Generating each harness’s files
+from one source</a></li>
+<li><a href="#codex-configuration-is-a-supplement-not-the-project-contract" id="toc-codex-configuration-is-a-supplement-not-the-project-contract"><span class="toc-section-number">4.7</span> Codex configuration is a
 supplement, not the project contract</a></li>
-<li><a href="#a-practical-instruction-audit" id="toc-a-practical-instruction-audit"><span class="toc-section-number">4.6</span> A practical instruction
+<li><a href="#a-practical-instruction-audit" id="toc-a-practical-instruction-audit"><span class="toc-section-number">4.8</span> A practical instruction
 audit</a></li>
 </ul></li>
 <li><a href="#workflow-differences" id="toc-workflow-differences"><span class="toc-section-number">5</span> Workflow differences</a>
@@ -577,7 +598,7 @@ Codex models</a></li>
 need less than implementation of ambiguity</a></li>
 <li><a href="#a-model-selection-workflow" id="toc-a-model-selection-workflow"><span class="toc-section-number">6.5</span> A model-selection
 workflow</a></li>
-<li><a href="#fast-strong-and-specialized-are-not-permanent-categories" id="toc-fast-strong-and-specialized-are-not-permanent-categories"><span class="toc-section-number">6.6</span> Fast, strong, and specialized are
+<li><a href="#fast-strong-and-specialised-are-not-permanent-categories" id="toc-fast-strong-and-specialised-are-not-permanent-categories"><span class="toc-section-number">6.6</span> Fast, strong, and specialised are
 not permanent categories</a></li>
 <li><a href="#cost-and-latency-are-part-of-engineering-quality" id="toc-cost-and-latency-are-part-of-engineering-quality"><span class="toc-section-number">6.7</span> Cost and latency are part of
 engineering quality</a></li>
@@ -590,15 +611,37 @@ edition</a></li>
 <li><a href="#start-with-the-job-not-the-feature-name" id="toc-start-with-the-job-not-the-feature-name"><span class="toc-section-number">7.1</span> Start with the job, not the
 feature name</a></li>
 <li><a href="#skills-reusable-workflow-knowledge" id="toc-skills-reusable-workflow-knowledge"><span class="toc-section-number">7.2</span> Skills: reusable workflow
-knowledge</a></li>
+knowledge</a>
+<ul>
+<li><a href="#skills-are-the-one-place-the-two-harnesses-genuinely-converged" id="toc-skills-are-the-one-place-the-two-harnesses-genuinely-converged"><span class="toc-section-number">7.2.1</span> Skills are the one place the two
+harnesses genuinely converged</a></li>
+<li><a href="#custom-slash-commands-are-being-absorbed-into-skills" id="toc-custom-slash-commands-are-being-absorbed-into-skills"><span class="toc-section-number">7.2.2</span> Custom slash commands are being
+absorbed into skills</a></li>
+</ul></li>
 <li><a href="#hooks-automation-around-the-agent" id="toc-hooks-automation-around-the-agent"><span class="toc-section-number">7.3</span> Hooks: automation around the
 agent</a></li>
 <li><a href="#mcp-same-protocol-different-connection" id="toc-mcp-same-protocol-different-connection"><span class="toc-section-number">7.4</span> MCP: same protocol, different
-connection</a></li>
+connection</a>
+<ul>
+<li><a href="#the-configuration-is-not-shared-and-there-is-no-converter" id="toc-the-configuration-is-not-shared-and-there-is-no-converter"><span class="toc-section-number">7.4.1</span> The configuration is not shared,
+and there is no converter</a></li>
+<li><a href="#exposing-one-harness-to-the-other-as-an-mcp-server" id="toc-exposing-one-harness-to-the-other-as-an-mcp-server"><span class="toc-section-number">7.4.2</span> Exposing one harness to the
+other as an MCP server</a></li>
+</ul></li>
 <li><a href="#subagents-delegation-is-not-parallelism-by-itself" id="toc-subagents-delegation-is-not-parallelism-by-itself"><span class="toc-section-number">7.5</span> Subagents: delegation is not
-parallelism by itself</a></li>
+parallelism by itself</a>
+<ul>
+<li><a href="#how-codex-subagents-are-defined" id="toc-how-codex-subagents-are-defined"><span class="toc-section-number">7.5.1</span> How Codex subagents are
+defined</a></li>
+<li><a href="#the-formats-do-not-port-and-one-rough-edge-is-unresolved" id="toc-the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="toc-section-number">7.5.2</span> The formats do not port, and one
+rough edge is unresolved</a></li>
+</ul></li>
 <li><a href="#permissions-and-sandboxing-are-different-controls" id="toc-permissions-and-sandboxing-are-different-controls"><span class="toc-section-number">7.6</span> Permissions and sandboxing are
-different controls</a></li>
+different controls</a>
+<ul>
+<li><a href="#codexs-enterprise-layers-have-no-claude-code-equivalent" id="toc-codexs-enterprise-layers-have-no-claude-code-equivalent"><span class="toc-section-number">7.6.1</span> Codex’s enterprise layers have
+no Claude Code equivalent</a></li>
+</ul></li>
 <li><a href="#a-migration-rule-of-thumb" id="toc-a-migration-rule-of-thumb"><span class="toc-section-number">7.7</span> A migration rule of thumb</a></li>
 </ul></li>
 <li><a href="#prompting-patterns" id="toc-prompting-patterns"><span class="toc-section-number">8</span> Prompting patterns</a>
@@ -631,14 +674,14 @@ checklist</a></li>
 </ul></li>
 <li><a href="#migration-cookbook" id="toc-migration-cookbook"><span class="toc-section-number">9</span> Migration cookbook</a>
 <ul>
-<li><a href="#add-the-smallest-useful-agents.md" id="toc-add-the-smallest-useful-agents.md"><span class="toc-section-number">9.1</span> Add the smallest useful
-<code>AGENTS.md</code></a></li>
+<li><a href="#move-the-canonical-text-to-agents.md-and-import-it" id="toc-move-the-canonical-text-to-agents.md-and-import-it"><span class="toc-section-number">9.1</span> Move the canonical text to
+<code>AGENTS.md</code> and import it</a></li>
 <li><a href="#choose-a-shared-instruction-strategy" id="toc-choose-a-shared-instruction-strategy"><span class="toc-section-number">9.2</span> Choose a shared-instruction
 strategy</a></li>
 <li><a href="#roll-out-in-a-branch-one-capability-at-a-time" id="toc-roll-out-in-a-branch-one-capability-at-a-time"><span class="toc-section-number">9.3</span> Roll out in a branch, one
 capability at a time</a></li>
-<li><a href="#port-integrations-by-behavior-not-by-filename" id="toc-port-integrations-by-behavior-not-by-filename"><span class="toc-section-number">9.4</span> Port integrations by behavior, not
-by filename</a></li>
+<li><a href="#port-integrations-by-behaviour-not-by-filename" id="toc-port-integrations-by-behaviour-not-by-filename"><span class="toc-section-number">9.4</span> Port integrations by behaviour,
+not by filename</a></li>
 <li><a href="#preserve-a-clean-rollback-path" id="toc-preserve-a-clean-rollback-path"><span class="toc-section-number">9.5</span> Preserve a clean rollback
 path</a></li>
 </ul></li>
@@ -687,8 +730,8 @@ an existing repository</a>
 <li><a href="#postflight-checklist" id="toc-postflight-checklist"><span class="toc-section-number">12.1.4</span> Postflight checklist</a></li>
 <li><a href="#choosing-a-harness-or-model-setting" id="toc-choosing-a-harness-or-model-setting"><span class="toc-section-number">12.1.5</span> Choosing a harness or model
 setting</a></li>
-<li><a href="#volatile-claim-verification-list" id="toc-volatile-claim-verification-list"><span class="toc-section-number">12.1.6</span> Volatile-claim verification
-list</a></li>
+<li><a href="#verified-as-of-september-2026" id="toc-verified-as-of-september-2026"><span class="toc-section-number">12.1.6</span> Verified as of September
+2026</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span class="toc-section-number">13</span> References</a></li>
@@ -751,23 +794,26 @@ convention. The point is to make the important choices visible.</p>
 <h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What this primer is not</h2>
 <p>This is not a complete reference manual for either product. Commands,
 configuration keys, available models, plan entitlements, usage limits,
-and interface behavior can change. Where an exact product detail
+and interface behaviour can change. Where an exact product detail
 matters, treat it as a dated claim and check the current official
 documentation before relying on it in automation or team policy.</p>
 <p>It is also not a feature-by-feature promise that every Claude Code
 capability has a Codex equivalent, or vice versa. Similar labels do not
 guarantee similar semantics. A “skill,” “hook,” or “subagent” may be
 implemented differently, may require a different configuration, or may
-have no direct counterpart. The safe approach is to compare the behavior
-you need, such as “run this check before committing” or “delegate this
-independent investigation,” and then find the mechanism that provides
-that behavior in the chosen harness.</p>
+have no direct counterpart. The safe approach is to compare the
+behaviour you need, such as “run this check before committing” or
+“delegate this independent investigation,” and then find the mechanism
+that provides that behaviour in the chosen harness.</p>
 <p>Finally, this guide does not ask you to rewrite a working Claude Code
-setup. Claude Code can remain the primary harness. A thin
-<code>AGENTS.md</code> can give Codex a repository entry point, while
-shared build commands, tests, and neutral project documentation remain
-shared assets. You should only split instructions or workflows when the
-difference is real and worth maintaining.</p>
+setup. Claude Code can remain the primary harness. One canonical
+instruction file can serve both agents, while shared build commands,
+tests, and neutral project documentation remain shared assets. You
+should only split instructions or workflows when the difference is real
+and worth maintaining. The chapter on instruction systems explains which
+file should hold that canonical text and why the direction of the bridge
+between <code>CLAUDE.md</code> and <code>AGENTS.md</code> is not an
+arbitrary choice.</p>
 <h2 data-number="1.3" id="what-you-should-already-know"><span class="header-section-number">1.3</span> What you should already
 know</h2>
 <p>You should be comfortable working in a terminal, reading a git diff,
@@ -854,35 +900,32 @@ investigation-and-plan phase. Another may inspect the failure and then
 ask whether it should apply the proposed patch. Both outcomes can be
 reasonable. Your prompt should make the important boundary explicit, and
 you should verify that the harness honored it before proceeding.</p>
-<p>The harness also determines how repository guidance is discovered.
-Claude Code users commonly put project-specific instructions in
-<code>CLAUDE.md</code>. Codex uses its own instruction-file conventions,
-including <code>AGENTS.md</code> as the natural compatibility entry
-point for a repository. The names are not interchangeable by magic: if
-Codex never loads <code>CLAUDE.md</code>, putting all of your
-operational rules there does not create a reliable Codex workflow.</p>
-<p>That is why a thin bridge is usually better than a second, complete
-instruction manual. A repository can keep <code>CLAUDE.md</code> as the
-canonical project document and add a small <code>AGENTS.md</code> that
-points Codex to it and states any Codex-specific discovery or safety
-notes. If the two files start repeating the same long policy, they will
-drift. If they contain only a pointer and a few genuinely
-harness-specific instructions, the maintenance burden stays small.</p>
-<p>For example, a bridge might look like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Repository instructions</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>The canonical project instructions are in <span class="co">[</span><span class="ot">`CLAUDE.md`</span><span class="co">](CLAUDE.md)</span>. Read and</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>follow that file for repository work.</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>This file is a thin compatibility layer for agents that discover <span class="in">`AGENTS.md`</span>.</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>Keep shared build, test, and style guidance in the canonical instructions.</span></code></pre></div>
-<p>This does not claim that Codex and Claude Code will interpret every
-instruction identically. It gives both sessions a clear route to the
-repository’s shared intent, while leaving room to state a real
-difference when one exists. For instance, an instruction about a
-particular approval mode belongs with the harness that implements that
-mode; a command for building the project belongs in shared project
-guidance.</p>
+<p>The harness also determines how repository guidance is discovered,
+and this is the first place where the two tools genuinely disagree
+rather than merely differ. Claude Code reads <code>CLAUDE.md</code>;
+Codex reads <code>AGENTS.md</code>. Neither reads the other’s file by
+default, and neither says so when it does not. Putting all of your
+operational rules in one of the two files produces a repository where
+half your agent sessions have the rules and half do not, with nothing in
+the session to indicate which case you are in.</p>
+<p>The fix is one canonical file plus a real include, not two manuals.
+Claude Code supports an <code>@path</code> import, so a one-line
+<code>CLAUDE.md</code> pulls in the whole of <code>AGENTS.md</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>@AGENTS.md</span></code></pre></div>
+<p>That is a resolved import rather than a suggestion to the model,
+which is what makes it reliable. The reverse arrangement — a prose
+<code>AGENTS.md</code> linking to <code>CLAUDE.md</code> — is not
+equivalent, because Codex reads the contents of the file it discovers
+and does not treat a Markdown link inside it as an include directive.
+The instruction-systems chapter covers both directions, the supported
+Codex configuration key for the reverse case, and what each one actually
+guarantees.</p>
+<p>This still does not claim that Codex and Claude Code will interpret
+every instruction identically. It gives both sessions the same text,
+while leaving room to state a real difference when one exists. For
+instance, an instruction about a particular approval mode belongs with
+the harness that implements that mode; a command for building the
+project belongs in the shared canonical file.</p>
 <h2 data-number="2.3" id="the-interface-is-where-you-steer-the-session"><span class="header-section-number">2.3</span> The interface is where you
 steer the session</h2>
 <p>The interface is the surface you use to start, observe, and control
@@ -951,7 +994,7 @@ They do not need identical internal workflows to share those assets.</p>
 <li>Keep project facts and shared conventions in a canonical
 location.</li>
 <li>Give each harness a clear instruction-file entry point.</li>
-<li>Put only real harness-specific behavior in harness-specific
+<li>Put only real harness-specific behaviour in harness-specific
 guidance.</li>
 <li>Ask the agent to inspect the working tree before making a broad
 change.</li>
@@ -991,11 +1034,11 @@ tools/env   -&gt; files, commands, services, credentials, execution limits
 repository  -&gt; source, tests, build rules, durable handoff state</code></pre>
 <p>If the generated patch is logically wrong, inspect the model’s
 reasoning and the context it received. If the agent ignored a repository
-rule, inspect instruction discovery and harness behavior. If it proposed
-the right command but could not run it, inspect tools, approval, and
-sandbox constraints. If the second agent misunderstood the first agent’s
-work, inspect the diff and handoff rather than assuming a model upgrade
-will solve the coordination problem.</p>
+rule, inspect instruction discovery and harness behaviour. If it
+proposed the right command but could not run it, inspect tools,
+approval, and sandbox constraints. If the second agent misunderstood the
+first agent’s work, inspect the diff and handoff rather than assuming a
+model upgrade will solve the coordination problem.</p>
 <p>This layered model is the foundation for the rest of the primer. The
 next sections turn it into an initial setup, an instruction-file
 strategy, and task workflows that let you switch harnesses without
@@ -1186,7 +1229,47 @@ by different harnesses; they do not automatically have identical
 discovery rules, precedence, inheritance, or feature support. The
 practical problem is to give two agents one repository contract without
 maintaining two conflicting manuals.</p>
-<h2 data-number="4.1" id="separate-the-repository-contract-from-the-harness-adapter"><span class="header-section-number">4.1</span> Separate the repository
+<h2 data-number="4.1" id="who-owns-agents.md-now"><span class="header-section-number">4.1</span> Who owns <code>AGENTS.md</code>
+now</h2>
+<p>Both of the conventions in this chapter stopped being single-vendor
+conventions on 9 December 2025. On that date the Linux Foundation
+announced the formation of the Agentic AI Foundation (AAIF), and
+contributed as founding projects were <code>AGENTS.md</code>, which
+originated at OpenAI, and the Model Context Protocol (MCP), which
+originated at Anthropic. Block’s <code>goose</code> agent was the third
+founding project. The announcement lists platinum members including
+Anthropic, OpenAI, Amazon Web Services (AWS), Google, Microsoft, Block,
+Bloomberg, and Cloudflare.</p>
+<p>That matters for a two-harness repository in a specific way. The
+instruction filename you are standardising on is no longer owned by the
+vendor of one of your two agents, so a bet on <code>AGENTS.md</code> is
+not a bet on OpenAI. It also creates a genuine oddity worth stating
+plainly rather than softening: Anthropic is a platinum member of the
+foundation that governs <code>AGENTS.md</code>, and Claude Code still
+does not read <code>AGENTS.md</code> natively. Claude Code is not listed
+among the native adopters on the <code>agents.md</code> site. The next
+subsection covers what that costs you and the two officially documented
+ways to fix it.</p>
+<p><code>AGENTS.md</code> has no schema. The <code>agents.md</code> site
+is explicit that the file is “just standard Markdown” with no required
+fields, and the sections it recommends — build and test commands, code
+style, testing instructions, security notes, commit and pull-request
+conventions — are convention only. Nothing validates your file, nothing
+warns you when a harness ignores a section, and two harnesses that both
+claim to read <code>AGENTS.md</code> can still weight its contents
+differently. Portability here is about the filename and the discovery
+algorithm, not about a guaranteed interpretation of the text.</p>
+<p>Adoption is broad on paper. The <code>agents.md</code> site lists
+more than 26 tools as native adopters, including Codex, Cursor, Aider,
+Google Jules, GitHub Copilot, Windsurf, Gemini CLI, Zed, Warp, JetBrains
+Junie, and Devin, and claims more than 60,000 repositories containing
+the file. Both figures are self-reported by the site rather than
+independently audited, so treat the repository count as a marketing
+number. The tool list is the more useful half: it tells you which other
+agents will find a root <code>AGENTS.md</code> without extra
+configuration, which is exactly the question a repository owner needs
+answered before choosing where the canonical text lives.</p>
+<h2 data-number="4.2" id="separate-the-repository-contract-from-the-harness-adapter"><span class="header-section-number">4.2</span> Separate the repository
 contract from the harness adapter</h2>
 <p>Start by classifying an instruction:</p>
 <table>
@@ -1207,23 +1290,27 @@ contract from the harness adapter</h2>
 <td>Repository-wide</td>
 <td>build commands, test requirements, source/output rules, coding
 style, generated-file policy</td>
-<td>Shared project guidance or the project’s canonical instruction
-file</td>
+<td>The canonical instruction file, which both harnesses should read in
+full</td>
 </tr>
 <tr>
 <td>Claude Code-specific</td>
 <td>Claude-only skills, hooks, commands, or interaction conventions</td>
-<td><code>CLAUDE.md</code> or Claude-specific configuration</td>
+<td><code>CLAUDE.md</code> below the import, or <code>.claude/</code>
+configuration</td>
 </tr>
 <tr>
 <td>Codex-specific</td>
-<td>Codex approval, sandbox, model, or session controls</td>
-<td><code>AGENTS.md</code> or Codex configuration</td>
+<td>Codex approval policy, sandbox mode, subagent definitions, or
+session controls</td>
+<td><code>.codex/config.toml</code>, not the shared instruction
+file</td>
 </tr>
 <tr>
 <td>Task-specific</td>
 <td>Constraints for one migration, experiment, or directory</td>
-<td>A local instruction file or the task prompt</td>
+<td>A per-directory <code>AGENTS.override.md</code>, or the task
+prompt</td>
 </tr>
 </tbody>
 </table>
@@ -1237,73 +1324,302 @@ possible.</p>
 Duplication creates two sources of truth. The files will drift, and the
 drift will be hardest to notice when the instructions concern safety,
 generated outputs, or validation.</p>
-<h2 data-number="4.2" id="what-claude.md-and-agents.md-mean-in-this-setup"><span class="header-section-number">4.2</span> What <code>CLAUDE.md</code> and
+<h2 data-number="4.3" id="what-claude.md-and-agents.md-mean-in-this-setup"><span class="header-section-number">4.3</span> What <code>CLAUDE.md</code> and
 <code>AGENTS.md</code> mean in this setup</h2>
 <p>For this guide, use these terms precisely:</p>
 <ul>
-<li><code>CLAUDE.md</code> is the project instruction file associated
-with Claude Code in the existing repository.</li>
-<li><code>AGENTS.md</code> is the Codex-facing compatibility or
-instruction file.</li>
+<li><code>CLAUDE.md</code> is the file Claude Code discovers. In the
+arrangement this chapter recommends it holds an import of the canonical
+text plus any Claude-specific additions, not the canonical text
+itself.</li>
+<li><code>AGENTS.md</code> is the file Codex discovers, and the better
+home for the canonical repository contract because more tools read it
+and because Codex supports per-directory overrides of it.</li>
 <li>“Instruction file” is the neutral term when the advice applies to
 either harness.</li>
-<li>A referenced file is not necessarily an included file. A pointer
-only works if the harness reads the target and applies its
-contents.</li>
+<li>A referenced file is not necessarily an included file.
+<code>@path</code> in <code>CLAUDE.md</code> is a resolved import. A
+Markdown link is not. That distinction decides which direction a bridge
+can safely point.</li>
 </ul>
-<p>The current <a href="https://developers.openai.com/codex/agent-configuration/agents-md">Codex
-instruction-discovery guidance</a> (checked 10 September 2026) says that
-Codex checks <code>AGENTS.override.md</code>, then
-<code>AGENTS.md</code>, then configured fallback names in each directory
-from the project root to the current directory. It includes at most one
-file per directory and concatenates the discovered files from root to
-leaf. The default combined instruction limit is 32 KiB. These are useful
-facts for designing a repository, but they remain product behavior:
-recheck them when a long-lived workflow depends on them. Project-wide
-guidance belongs at the repository root, and deeper directory-specific
-instructions should be explicit.</p>
-<p>The same caution applies to configuration keys. A key accepted by one
-Codex release may be renamed, moved, or removed in another.
-Configuration should support the instruction design; it should not be
-the only place where a safety or validation rule exists.</p>
-<h2 data-number="4.3" id="the-thin-bridge-pattern"><span class="header-section-number">4.3</span> The thin bridge pattern</h2>
-<p>If Claude Code remains the primary harness, the least disruptive
-adaptation is a thin root-level <code>AGENTS.md</code> that names the
-existing <code>CLAUDE.md</code> as canonical. The bridge should explain
-the arrangement, not repeat the project manual. This repository uses
-that pattern:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Repository instructions</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>The canonical project instructions are in <span class="co">[</span><span class="ot">`CLAUDE.md`</span><span class="co">](CLAUDE.md)</span>. Read and</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>follow that file for repository work.</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>This file is intentionally a thin compatibility layer for agents that discover</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="in">`AGENTS.md`</span>, so the project can support Codex without maintaining a second copy</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>of its instructions.</span></code></pre></div>
-<p>The pattern has three advantages. Claude Code keeps its existing
-source of truth. Codex has a conventional entry point to discover.
-Reviewers can see the cross-harness adaptation in a small, obvious
-diff.</p>
-<p>It also has a failure mode: the bridge assumes that Codex follows the
-reference to <code>CLAUDE.md</code>. Test that assumption in a read-only
-first session. If the agent does not read the referenced file, move only
-the genuinely shared rules into a neutral document or reproduce a small,
-carefully maintained subset in <code>AGENTS.md</code>. Do not assume
-that a Markdown link is an instruction include.</p>
-<p>The bridge is not a claim that Claude Code and Codex have feature
-parity. It only establishes where a repository-level reader should
-begin. Harness-specific skills, hooks, permissions, and model controls
-still need their own setup.</p>
-<h2 data-number="4.4" id="shared-guidance-without-a-second-manual"><span class="header-section-number">4.4</span> Shared guidance without a
+<h3 data-number="4.3.1" id="claude-code-does-not-read-agents.md"><span class="header-section-number">4.3.1</span> Claude Code does not read
+<code>AGENTS.md</code></h3>
+<p>This was the open question in earlier drafts of this primer, and it
+is now settled from the primary source. Anthropic’s own memory
+documentation (<code>code.claude.com/docs/en/memory</code>, checked
+September 2026) lists the files Claude Code loads, and
+<code>AGENTS.md</code> is not among them. A repository whose only agent
+instructions live in <code>AGENTS.md</code> gives Claude Code nothing.
+The agent still works — it reads code, runs tests, follows your prompt —
+but your build commands, generated-file policy, and review rules are
+simply absent from its context, and nothing in the session announces
+their absence. That is the worst shape of failure for an instruction
+system: silent, and indistinguishable from a model that chose to ignore
+the rules.</p>
+<p>Anthropic documents two fixes, and both are officially recommended
+rather than community workarounds. The first is a one-line
+<code>CLAUDE.md</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>@AGENTS.md</span></code></pre></div>
+<p><code>@path</code> is Claude Code’s native import syntax, not a
+Markdown link and not a hint to the model. Claude Code resolves the
+import when it assembles context, so the contents of
+<code>AGENTS.md</code> are genuinely in the session. The second fix is a
+symlink:</p>
+<pre class="shell"><code>ln -s AGENTS.md CLAUDE.md</code></pre>
+<p>Prefer the <code>@AGENTS.md</code> import. The symlink is one fewer
+file’s worth of content, but symlinks on Windows require Developer Mode
+or an elevated shell to create, and a repository that any contributor
+may clone on Windows should not depend on one. The import file is plain
+text that works identically everywhere, and it leaves room to append
+genuinely Claude-specific lines below the import without disturbing the
+shared text.</p>
+<p>Two Claude Code commands also cross the boundary, in different ways.
+With the <code>CLAUDE_CODE_NEW_INIT=1</code> environment variable set,
+<code>/init</code> reads <code>AGENTS.md</code> along with other tools’
+rule files and folds what it finds into a generated
+<code>CLAUDE.md</code>. A newer <code>/import</code> command, available
+from Claude Code v2.1.213, performs a one-time copy of another agent’s
+configuration — <code>AGENTS.md</code>, MCP server definitions, custom
+commands, subagents, and skills — into Claude Code’s own native
+locations. Both are migration aids, not live bridges: they copy content
+at the moment you run them, so a later edit to <code>AGENTS.md</code>
+does not propagate. For a repository where both harnesses are in
+continuous use, the <code>@AGENTS.md</code> import is the mechanism that
+stays correct without a maintenance step.</p>
+<h3 data-number="4.3.2" id="how-claude-code-discovers-instructions"><span class="header-section-number">4.3.2</span> How Claude Code discovers
+instructions</h3>
+<p>Claude Code loads instruction files in this order, and the order is
+concatenation rather than override:</p>
+<ol type="1">
+<li>an enterprise-managed policy file, deployed by an organisation’s IT
+administrators, which a user cannot exclude;</li>
+<li>the user file at <code>~/.claude/CLAUDE.md</code>, which applies to
+every project;</li>
+<li>project files, meaning <code>CLAUDE.md</code> or
+<code>.claude/CLAUDE.md</code> in the repository, discovered from the
+filesystem root down to the current working directory; and</li>
+<li><code>CLAUDE.local.md</code>, a personal file intended to be
+gitignored.</li>
+</ol>
+<p>Every discovered file is included. A project <code>CLAUDE.md</code>
+does not replace the user file, and a deeper file does not replace a
+shallower one. Files are concatenated in root-to-cwd order, so guidance
+closer to the working directory appears later in the assembled context
+and is the practical tie-breaker when two files disagree — but the
+earlier text is still present, and a contradiction between the two is a
+contradiction the model has to resolve, not a resolved precedence
+decision. Write ancestor files to be additive rather than relying on a
+descendant to cancel them.</p>
+<p><code>CLAUDE.md</code> files in nested subdirectories behave
+differently from the ones on the root-to-cwd path: they load on demand,
+when work reaches that directory, rather than at launch. That keeps the
+startup context small in a large tree, and it means a rule buried three
+directories down may not be in context when the agent decides how to
+approach the task. Put anything that must always apply on the
+root-to-cwd path.</p>
+<p>For monorepos, the <code>claudeMdExcludes</code> setting lets you
+skip specific ancestor files. That is the lever for the case where a
+repository sits inside a parent directory whose <code>CLAUDE.md</code>
+describes an unrelated project, or where an organisation-wide file is
+accurate but too long to be worth the context it consumes on every
+session.</p>
+<h3 data-number="4.3.3" id="how-codex-discovers-instructions"><span class="header-section-number">4.3.3</span> How Codex discovers
+instructions</h3>
+<p>Codex’s algorithm is genuinely different, and more monorepo-native.
+According to OpenAI’s <code>AGENTS.md</code> guidance (checked 10
+September 2026), Codex resolves a global file first —
+<code>~/.codex/AGENTS.override.md</code> if it exists, otherwise
+<code>~/.codex/AGENTS.md</code> — and then walks from the project root
+down to the current working directory. In each directory it checks for
+<code>AGENTS.override.md</code> first, then <code>AGENTS.md</code>, then
+any configured fallback names, and includes at most one file per
+directory. The search stops at the current working directory and does
+not descend below it. The discovered files are concatenated root-to-cwd,
+so a file closer to the working directory appends after, and effectively
+overrides, the guidance above it. The combined size is capped by
+<code>project_doc_max_bytes</code>, which defaults to 32 KiB.</p>
+<p>The <code>.override.md</code> variant is the part with no Claude Code
+equivalent. It gives you a real per-subtree override:
+<code>services/payments/AGENTS.override.md</code> wins over
+<code>services/payments/AGENTS.md</code> for any work whose working
+directory is in that subtree, without touching the root file that
+governs everything else. In a monorepo where one service has a different
+test runner, a different deployment constraint, or a stricter change
+policy than the rest of the tree, that is the mechanism you want, and it
+is the strongest argument for putting the canonical text in
+<code>AGENTS.md</code> and importing it into <code>CLAUDE.md</code>
+rather than the reverse.</p>
+<p>The two algorithms side by side:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Question</th>
+<th>Claude Code</th>
+<th>Codex CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filenames read</td>
+<td><code>CLAUDE.md</code>, <code>.claude/CLAUDE.md</code>,
+<code>CLAUDE.local.md</code>, managed policy file</td>
+<td><code>AGENTS.override.md</code>, then <code>AGENTS.md</code>, then
+configured fallbacks</td>
+</tr>
+<tr>
+<td>User-level file</td>
+<td><code>~/.claude/CLAUDE.md</code></td>
+<td><code>~/.codex/AGENTS.override.md</code>, else
+<code>~/.codex/AGENTS.md</code></td>
+</tr>
+<tr>
+<td>Directory walk</td>
+<td>Root to cwd, all matches included</td>
+<td>Root to cwd, at most one file per directory</td>
+</tr>
+<tr>
+<td>Below cwd</td>
+<td>Nested files load on demand during work</td>
+<td>Not searched</td>
+</tr>
+<tr>
+<td>Combination rule</td>
+<td>Concatenated, root to cwd</td>
+<td>Concatenated, root to cwd</td>
+</tr>
+<tr>
+<td>Per-subtree override</td>
+<td>None; use <code>claudeMdExcludes</code> to drop an ancestor</td>
+<td><code>AGENTS.override.md</code> in that directory</td>
+</tr>
+<tr>
+<td>Size cap</td>
+<td>Not documented as a byte limit</td>
+<td><code>project_doc_max_bytes</code>, default 32 KiB</td>
+</tr>
+<tr>
+<td>Import primitive</td>
+<td><code>@path</code> imports are resolved</td>
+<td>Discovery only; a Markdown link is not an include</td>
+</tr>
+<tr>
+<td>Reads the other tool’s file</td>
+<td>No; <code>/init</code> and <code>/import</code> can copy it</td>
+<td>Yes, via <code>project_doc_fallback_filenames</code></td>
+</tr>
+</tbody>
+</table>
+<p>The last row is the asymmetry to internalise. Codex has a
+configuration key for reading <code>CLAUDE.md</code> as a fallback.
+Claude Code has no equivalent key for <code>AGENTS.md</code>, and the
+fix is the <code>@AGENTS.md</code> import instead.</p>
+<p>The same caution applies to configuration keys as to product
+behaviour generally. A key accepted by one Codex release may be renamed,
+moved, or removed in another, and Claude Code’s settings schema moves
+too. Configuration should support the instruction design; it should not
+be the only place where a safety or validation rule exists.</p>
+<h2 data-number="4.4" id="the-bridge-pattern-and-which-direction-to-point-it"><span class="header-section-number">4.4</span> The bridge pattern, and which
+direction to point it</h2>
+<p>A bridge file gives the second harness an entry point to the first
+harness’s instructions. There are two directions to point it, and they
+are not equally reliable. Getting this right is the single most
+consequential decision in the chapter.</p>
+<h3 data-number="4.4.1" id="point-claude.md-at-agents.md-with-an-import"><span class="header-section-number">4.4.1</span> Point <code>CLAUDE.md</code>
+at <code>AGENTS.md</code>, with an import</h3>
+<p>The direction that works uses a real include primitive. Put the
+canonical instructions in <code>AGENTS.md</code> and make
+<code>CLAUDE.md</code> an import of it:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>@AGENTS.md</span></code></pre></div>
+<p>Claude Code resolves <code>@AGENTS.md</code> when it assembles
+context, so the full text is present in the session. Codex finds
+<code>AGENTS.md</code> by its own discovery walk. One file holds the
+repository contract, both harnesses receive it, and neither depends on
+the model choosing to follow a link. If Claude Code needs extra
+instructions that mean nothing to Codex, append them below the
+import:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>@AGENTS.md</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claude Code specifics</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use the <span class="in">`render-primer`</span> skill for build work; it wraps the container recipe.</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The pre-commit hook in <span class="in">`.claude/settings.json`</span> blocks committed intermediates.</span></code></pre></div>
+<p>This is the arrangement OpenAI’s own guidance and Anthropic’s memory
+documentation both point at, and it is what several public repositories
+settled on after hitting the problem in production. GitHub’s own
+<code>cli/cli</code> repository is the clearest example: in issue
+<code>cli/cli#14075</code> a maintainer observed that “anyone using
+Claude Code is not reading these [<code>AGENTS.md</code>] instructions
+(at least by default),” and the resolution was a one-line
+<code>CLAUDE.md</code> containing <code>@AGENTS.md</code>. The
+<code>nsnam/ns-3-dev</code> project made the same move in merge request
+<code>!2759</code>, titled “Add AGENTS.md and redirect CLAUDE.md there.”
+Both are ordinary projects that had already written good agent
+instructions and discovered that half their contributors’ agents never
+saw them.</p>
+<p>The symlink alternative, <code>ln -s AGENTS.md CLAUDE.md</code>,
+produces the same result with no file content at all. It is fine on
+Linux and macOS. It needs Developer Mode or an elevated shell on
+Windows, and a repository that Windows contributors may clone should use
+the import instead.</p>
+<h3 data-number="4.4.2" id="pointing-agents.md-at-claude.md-is-prose-not-a-mechanism"><span class="header-section-number">4.4.2</span> Pointing
+<code>AGENTS.md</code> at <code>CLAUDE.md</code> is prose, not a
+mechanism</h3>
+<p>Earlier drafts of this primer recommended the reverse: keep
+<code>CLAUDE.md</code> canonical and add a thin <code>AGENTS.md</code>
+that links to it. That arrangement looks symmetrical and is not. Codex
+discovers <code>AGENTS.md</code> and reads its contents; it does not
+treat a Markdown link inside that file as an include directive. What the
+agent receives is a short document telling it that the real instructions
+are somewhere else. Whether it then reads <code>CLAUDE.md</code> depends
+on whether the model decides to, which is exactly the kind of dependency
+an instruction system should not have.</p>
+<p>Codex does offer a configuration key for this case, and it is a
+better tool than the prose link:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.codex/config.toml or &lt;repo&gt;/.codex/config.toml</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="dt">project_doc_fallback_filenames</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;CLAUDE.md&quot;</span><span class="op">]</span></span></code></pre></div>
+<p>That makes <code>CLAUDE.md</code> a discovered instruction file in
+its own right when <code>AGENTS.md</code> is absent from a directory.
+Note the limits. It is a fallback, so it does not apply when
+<code>AGENTS.md</code> exists in the same directory; it lives in Codex
+configuration rather than in the repository contract, so a contributor
+who has not set it gets nothing; and the project-local
+<code>.codex/</code> layer is skipped entirely for untrusted projects,
+which makes trust status part of your instruction design rather than an
+implementation detail.</p>
+<p>If you have an existing repository with a substantial
+<code>CLAUDE.md</code> and you do not want to move it, the fallback key
+plus a prose <code>AGENTS.md</code> is a defensible interim state. It is
+not the arrangement to build a team convention on. The one-line import
+in the other direction costs a single commit and removes the model’s
+judgement from the loop.</p>
+<h3 data-number="4.4.3" id="what-the-bridge-does-not-do"><span class="header-section-number">4.4.3</span> What the bridge does not
+do</h3>
+<p>A bridge establishes where a repository-level reader should begin. It
+is not a parity claim. Skills, hooks, MCP servers, subagent definitions,
+approval policy, and sandbox policy all live in harness-specific files
+with different formats, and the rest of this primer covers each of them.
+Test the bridge the same way you would test any other assumption: open a
+read-only session in each harness and ask which instruction files it
+found and which rules it believes apply. An agent that cannot name your
+build command has not read your instructions, whatever the file tree
+looks like.</p>
+<h2 data-number="4.5" id="shared-guidance-without-a-second-manual"><span class="header-section-number">4.5</span> Shared guidance without a
 second manual</h2>
 <p>There are three reasonable designs. Pick one deliberately instead of
 allowing the repository to accumulate all three.</p>
-<p>The first is the thin bridge used here: keep the existing canonical
-file and make the other harness point to it. This minimizes change and
-is a good default when the primary harness already has a mature
-instruction set. Verify that the secondary harness actually follows the
-reference, and keep the bridge itself free of rules that exist nowhere
-else.</p>
+<p>The first is the import bridge: put the canonical text in
+<code>AGENTS.md</code> and make <code>CLAUDE.md</code> a one-line
+<code>@AGENTS.md</code> import. This is the smallest change that gives
+both harnesses the same instructions with no dependency on a model
+following a link, and it is the right default in almost every case. Keep
+the importing file free of rules that exist nowhere else, so that a
+reader of <code>AGENTS.md</code> alone is never missing a
+constraint.</p>
 <p>The second is a neutral shared document with small adapters. For
 example, a repository could keep build and validation policy in
 <code>PROJECT_GUIDE.md</code>, then have each harness instruction file
@@ -1320,33 +1636,108 @@ detectable in review.</p>
 <p>For this project, the first design is sufficient. The repository
 already has a substantial <code>CLAUDE.md</code>, and the desired Codex
 adaptation is intentionally lightweight. A migration should not
-reorganize every instruction merely to introduce a second reader.</p>
-<h2 data-number="4.5" id="codex-configuration-is-a-supplement-not-the-project-contract"><span class="header-section-number">4.5</span> Codex configuration is a
+reorganise every instruction merely to introduce a second reader.</p>
+<h2 data-number="4.6" id="generating-each-harnesss-files-from-one-source"><span class="header-section-number">4.6</span> Generating each harness’s files
+from one source</h2>
+<p>Two harnesses is manageable by hand. Two harnesses plus an editor
+assistant, plus a code-review bot, plus whatever a new contributor
+brings, is not — and the parts that are not bridgeable by an import,
+such as MCP server definitions and subagent files, multiply the problem
+because each tool wants the same information in a different file
+format.</p>
+<p>The most mature tool aimed at exactly this problem is
+<strong>Ruler</strong> (<code>github.com/intellectronica/ruler</code>,
+published to npm as <code>@intellectronica/ruler</code>). At the time of
+writing it has roughly 2,900 GitHub stars and 160 forks, over 1,000
+commits, an MIT licence, and real continuous integration. That
+combination matters more than the star count: this is a category where
+half-finished scripts are common, and Ruler is the one with evidence of
+sustained maintenance.</p>
+<p>The model is generate-from-source rather than symlink-everything. You
+keep a <code>.ruler/</code> directory as the single source of truth,
+primarily <code>.ruler/AGENTS.md</code>, plus any additional
+<code>.md</code> files which are concatenated in sorted filename order.
+Running <code>ruler apply</code> writes each target tool’s native
+format: a root <code>AGENTS.md</code>, Claude Code’s files under
+<code>.claude/</code>, Codex’s <code>.codex/config.toml</code>, and the
+equivalents for more than thirty other tools including Cursor, Windsurf,
+Aider, Goose, Zed, and Gemini CLI. MCP server definitions are
+distributed too, configured through <code>ruler.toml</code>, which is
+the part that hand-maintenance gets wrong most often because the JSON
+and TOML shapes are genuinely different rather than merely differently
+named.</p>
+<p>Two newer features are worth knowing about and not worth depending on
+yet. Subagent propagation takes <code>.ruler/agents/</code> and writes
+each tool’s native subagent location; skills distribution takes
+<code>.ruler/skills/</code> and writes each tool’s native skills
+directory. Both are explicitly experimental and off-by-default. Given
+that Claude Code and Codex subagents use incompatible file formats —
+Markdown with YAML frontmatter against TOML — a generator is the only
+plausible route to sharing them, but treat the output as something to
+review rather than trust.</p>
+<p>The discipline this imposes is the thing to understand before
+adopting it. Generated files are added to <code>.gitignore</code> and
+rewritten from scratch on every <code>ruler apply</code>. An edit made
+directly to a generated <code>CLAUDE.md</code> or
+<code>.codex/config.toml</code> is silently discarded the next time
+anyone runs the command, with no conflict and no warning. If you adopt
+Ruler, the rule “never edit a generated file” has to be real, enforced
+in review, and understood by every contributor who might reach for the
+file they can see rather than the one that produces it.</p>
+<p>Smaller alternatives exist and are not equivalent.
+<code>ai-rules-sync</code> takes a different approach, using live
+symlinks to a cached canonical copy instead of a generate step, which
+avoids the clobbering problem at the cost of depending on symlinks; it
+has roughly 37 stars. <code>RuleSync</code> covers similar ground.
+<code>AgentsMesh</code> adds drift checking in continuous integration
+via <code>agentsmesh check</code>, which is a genuinely useful idea if
+your concern is a contributor committing a hand-edited generated file.
+None of the three has Ruler’s maintenance record, and presenting them as
+four comparable options would misrepresent the state of the
+category.</p>
+<p>Note what no tool in this category attempts. None of them bridge
+permissions or sandbox configuration, because the two models are
+structurally different rather than differently spelled — Claude Code
+matches patterns against tool calls at the application layer, Codex sets
+an approval policy and an operating-system sandbox mode. That
+duplication is accepted and unavoidable, and the chapter on feature
+translation explains why.</p>
+<p>No tool solves concurrent access either. If both agents want to work
+in the same repository at the same time, there is no coordination layer
+to install. A community guide on running the two harnesses together
+(<code>github.com/shakacode/claude-code-commands-skills-agents</code>,
+in <code>docs/claude-code-with-codex.md</code>) reaches the same
+conclusion and recommends git worktrees: give each agent its own
+worktree on its own branch, and let git handle the merge the way it
+handles any other two-author change. That guide’s wider advice matches
+everything in this chapter — universal instructions in
+<code>AGENTS.md</code>, <code>CLAUDE.md</code> as an
+<code>@AGENTS.md</code> import plus Claude-specific extras, and
+<code>~/.codex/config.toml</code> left deliberately tool-specific.</p>
+<h2 data-number="4.7" id="codex-configuration-is-a-supplement-not-the-project-contract"><span class="header-section-number">4.7</span> Codex configuration is a
 supplement, not the project contract</h2>
 <p>Codex may have user-level and repository-level configuration for
-model choice, approval behavior, sandboxing, or instruction-file
+model choice, approval behaviour, sandboxing, or instruction-file
 fallback. Those settings are more volatile than repository prose and may
 differ by client. Keep them small, documented, and safe to ignore when a
 user runs another interface.</p>
-<p>At the time of drafting, this repository contains the following
-fallback configuration:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Additional filename tried only when AGENTS.md is missing.</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="dt">project_doc_fallback_filenames</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;CLAUDE.md&quot;</span><span class="op">]</span></span></code></pre></div>
-<p>The intent is narrow: if the normal Codex-facing file is absent, the
-existing Claude Code instruction file remains discoverable as a
-fallback. It does not turn <code>CLAUDE.md</code> into a universal Codex
-configuration format, and it does not add <code>CLAUDE.md</code> as a
-second project instruction source when <code>AGENTS.md</code> is
-present. The current configuration reference also says that
-project-local <code>.codex/</code> layers are skipped for untrusted
-projects, so trust status is part of the setup rather than an
-implementation detail.</p>
+<p>At the time of drafting, this repository sets
+<code>project_doc_fallback_filenames = [&quot;CLAUDE.md&quot;]</code>, whose
+semantics are covered earlier in this chapter. The intent is narrow: if
+the normal Codex-facing file is absent, the existing Claude Code
+instruction file remains discoverable. It does not turn
+<code>CLAUDE.md</code> into a universal Codex configuration format, and
+it does not add <code>CLAUDE.md</code> as a second project instruction
+source when <code>AGENTS.md</code> is present. The current configuration
+reference also says that project-local <code>.codex/</code> layers are
+skipped for untrusted projects, so trust status is part of the setup
+rather than an implementation detail.</p>
 <p>Do not put model preferences, approval choices, or secrets into
 shared project instructions unless every contributor should inherit
 them. A developer who needs a more permissive sandbox for a local
 experiment should be able to make that choice locally without changing
 the repository’s review policy for everyone else.</p>
-<h2 data-number="4.6" id="a-practical-instruction-audit"><span class="header-section-number">4.6</span> A practical instruction
+<h2 data-number="4.8" id="a-practical-instruction-audit"><span class="header-section-number">4.8</span> A practical instruction
 audit</h2>
 <p>When adding Codex to an existing Claude Code repository, audit the
 instruction system in this order:</p>
@@ -1433,8 +1824,8 @@ and test strategy. Both are useful, but they serve different tasks.</p>
 risky change, require the plan to name invariants and verification
 steps. A useful plan answers four questions:</p>
 <ul>
-<li>What behavior changes?</li>
-<li>What behavior must remain unchanged?</li>
+<li>What behaviour changes?</li>
+<li>What behaviour must remain unchanged?</li>
 <li>Which files or interfaces are in scope?</li>
 <li>How will you know the implementation is correct?</li>
 </ul>
@@ -1460,8 +1851,8 @@ plan that records current intent and a rigid script that prevents
 learning.</p>
 <h2 data-number="5.3" id="implementation-constrain-scope-preserve-local-idioms"><span class="header-section-number">5.3</span> Implementation: constrain
 scope, preserve local idioms</h2>
-<p>The implementation stage is where familiar-looking behavior hides the
-biggest practical difference. An agent can produce a plausible patch
+<p>The implementation stage is where familiar-looking behaviour hides
+the biggest practical difference. An agent can produce a plausible patch
 while using the wrong abstraction, editing generated output, or changing
 more files than the request warrants. The harness’s ability to inspect
 and modify files matters, but so does the instruction you give it about
@@ -1469,7 +1860,7 @@ scope.</p>
 <p>State the boundary in terms the repository can enforce. “Fix the
 parser” is weaker than “change the parser under <code>src/config</code>,
 preserve the public error type, add regression coverage for malformed
-input, and do not change the serialization format.” Include explicit
+input, and do not change the serialisation format.” Include explicit
 exclusions when they matter: no dependency upgrades, no unrelated
 formatting, no generated-file edits, no API renaming.</p>
 <p>Ask the agent to implement in a coherent slice rather than narrate
@@ -1494,9 +1885,9 @@ approval, those explicit constraints reduce accidental divergence.</p>
 <h2 data-number="5.4" id="testing-treat-verification-as-part-of-the-task"><span class="header-section-number">5.4</span> Testing: treat verification as
 part of the task</h2>
 <p>A test command is not a magic stamp of correctness. It is evidence
-about a particular slice of behavior under a particular environment. Ask
-the agent to choose tests that correspond to the changed contract, then
-widen verification when the change crosses a boundary.</p>
+about a particular slice of behaviour under a particular environment.
+Ask the agent to choose tests that correspond to the changed contract,
+then widen verification when the change crosses a boundary.</p>
 <p>For a focused bug fix, the useful sequence is usually: reproduce or
 write the failing case, make the smallest change, run the focused test,
 run the relevant package or subsystem tests, and run broader checks if
@@ -1517,7 +1908,7 @@ failure. Ask it to report the command, result, and any limitation:</p>
 
 Do not claim the task is complete based only on static inspection.</code></pre>
 <p>Claude Code and Codex may expose different approval or sandbox
-behavior around commands, especially when a test needs network access,
+behaviour around commands, especially when a test needs network access,
 containers, or writes outside the immediate project directory. Keep the
 conceptual distinction clear: approval determines whether the agent may
 take an action; the sandbox determines what the execution environment
@@ -1534,7 +1925,7 @@ is stronger.</p>
 the confidence</h2>
 <p>An agent’s final summary is a useful index, not a substitute for
 review. The summary can be concise and accurate while omitting a subtle
-behavior change, or it can sound confident when a test was skipped.
+behaviour change, or it can sound confident when a test was skipped.
 Review the actual diff and the evidence behind the claims.</p>
 <p>Ask Codex for a review pass after implementation, including a fresh
 look at scope and failure modes:</p>
@@ -1552,9 +1943,9 @@ Do not modify files during this review.</code></pre>
 approaches the diff without the original implementation narrative. That
 does not make it automatically independent: both agents can inherit the
 same misleading issue description, test gap, or repository instruction.
-If the change is high impact, review the behavior from outside the agent
-loop as well. Run the relevant tests yourself, inspect interfaces, and
-check the final diff against the original request.</p>
+If the change is high impact, review the behaviour from outside the
+agent loop as well. Run the relevant tests yourself, inspect interfaces,
+and check the final diff against the original request.</p>
 <p>Use a clean review context when the task is complex. Continuing in
 the same session preserves useful context, but it also preserves the
 assumptions that produced the patch. A fresh session or a second harness
@@ -1586,7 +1977,7 @@ and make only necessary corrections.</code></pre>
 it. It also prevents a dangerous hand-off pattern: telling the second
 agent that the first agent “finished” when the only evidence is a
 conversational claim.</p>
-<p>Context compaction or summarization introduces another reason to use
+<p>Context compaction or summarisation introduces another reason to use
 checkpoints. Keep durable facts in files that belong in the repository,
 such as plans, issue notes, test output, or a hand-off document, only
 when the project benefits from that record. Otherwise include the
@@ -1621,16 +2012,16 @@ interference. They do not eliminate merge risk: two agents can make
 incompatible assumptions even when they edit different files. Keep
 parallel tasks partitioned by ownership and contract, then run an
 integration test and review the combined diff. If two agents must touch
-the same interface, serialize the design decision before parallelizing
+the same interface, serialise the design decision before parallelising
 implementation.</p>
 <h2 data-number="5.8" id="parallel-work-divide-by-contract-not-by-file-count"><span class="header-section-number">5.8</span> Parallel work: divide by
 contract, not by file count</h2>
 <p>Parallel agents are useful when the work has separable outcomes. “One
 agent per file” is a poor partition if all files implement one coupled
-behavior. Better divisions are “research the existing API,” “add focused
-regression coverage,” “implement the backend adapter,” and “review the
-resulting diff,” provided each role has a clear output and a defined
-boundary.</p>
+behaviour. Better divisions are “research the existing API,” “add
+focused regression coverage,” “implement the backend adapter,” and
+“review the resulting diff,” provided each role has a clear output and a
+defined boundary.</p>
 <p>Give each parallel worker the same repository rules and a narrow task
 contract. Tell workers whether they may edit files, whether they should
 commit, and how they should report conflicts. Keep a single owner for
@@ -1692,7 +2083,7 @@ repository if it is slow to navigate or weak at maintaining constraints
 across many files.</p>
 <p>Reasoning effort is a control over how much internal computation or
 deliberation the system allocates before producing an answer or taking
-the next action. The labels and exact behavior depend on the product
+the next action. The labels and exact behaviour depend on the product
 surface. Conceptually, lower effort favors speed and throughput; higher
 effort gives difficult tasks more room for decomposition, checking, and
 alternative consideration. It does not guarantee correctness, and
@@ -1791,7 +2182,7 @@ instructions.</p>
 with Terra for ordinary work, move to Sol when ambiguity or the cost of
 a wrong decision justifies more capability, and choose Astra for the
 hardest end-to-end work across multiple tools or surfaces. Use Luna for
-clear high-volume tasks. Treat Spark as a specialized preview rather
+clear high-volume tasks. Treat Spark as a specialised preview rather
 than the default for a long, open-ended task. Then choose reasoning
 effort independently.</p>
 <h2 data-number="6.3" id="choose-by-task-shape"><span class="header-section-number">6.3</span> Choose by task shape</h2>
@@ -1875,7 +2266,7 @@ and alternatives so that you can see whether extra reasoning is
 addressing real uncertainty.</p>
 <p>For implementation, increase effort when the patch must preserve
 invariants across files, reason about edge cases, or modify code whose
-behavior is not fully captured by tests. Keep the task bounded. A
+behaviour is not fully captured by tests. Keep the task bounded. A
 powerful model with a broad mandate can still turn a focused fix into an
 unnecessary redesign.</p>
 <p>For testing and review, capability matters because the agent must
@@ -1915,7 +2306,7 @@ broader redesign without explaining why the local fix would be unsafe.</code></p
 ceremony. You can then raise the effort setting for the same task if the
 investigation remains inconclusive, without changing the task
 contract.</p>
-<h2 data-number="6.6" id="fast-strong-and-specialized-are-not-permanent-categories"><span class="header-section-number">6.6</span> Fast, strong, and specialized
+<h2 data-number="6.6" id="fast-strong-and-specialised-are-not-permanent-categories"><span class="header-section-number">6.6</span> Fast, strong, and specialised
 are not permanent categories</h2>
 <p>Product documentation may describe models using categories such as
 fast, general-purpose, reasoning-focused, coding-focused, or preview.
@@ -1932,7 +2323,7 @@ task-oriented, and recheck the official model and usage documentation
 before relying on any volatile detail.</p>
 <p>Do not infer that a model available in one Codex surface is available
 in every other surface. Availability can depend on account,
-organization, region, product, authentication method, rollout stage, or
+organisation, region, product, authentication method, rollout stage, or
 API access. The final version should link to official documentation for
 these points and state the date checked.</p>
 <h2 data-number="6.7" id="cost-and-latency-are-part-of-engineering-quality"><span class="header-section-number">6.7</span> Cost and latency are part of
@@ -1943,7 +2334,7 @@ testing can cost more time and compute than one deliberate first pass.
 Conversely, using maximum effort for every search and formatting change
 wastes budget and slows feedback.</p>
 <p>Estimate the cost of being wrong. For a reversible documentation
-edit, optimize for fast iteration. For a production migration, optimize
+edit, optimise for fast iteration. For a production migration, optimise
 for evidence and review. For an exploratory question, use a bounded
 investigation before committing to a long autonomous run. Track elapsed
 time, number of repair cycles, verification quality, and the final diff,
@@ -1981,7 +2372,7 @@ interface;</li>
 <li>prices, subscription terms, API billing, and plan entitlements;</li>
 <li>support for commits, branches, worktrees, remote operations, and
 parallel execution;</li>
-<li>current sandbox, approval, network, and container behavior.</li>
+<li>current sandbox, approval, network, and container behaviour.</li>
 </ul>
 <p>Use official OpenAI documentation for those checks. Do not turn the
 verification list into a permanent matrix unless someone owns updating
@@ -2032,7 +2423,7 @@ tool call, a lifecycle event, or an explicit request?</li>
 <li><strong>Authority:</strong> was it advisory, a gate that could block
 an action, or an action with its own side effects?</li>
 <li><strong>Scope:</strong> did it apply to one session, one repository,
-one user, or the whole organization?</li>
+one user, or the whole organisation?</li>
 </ol>
 <p>For example, a Claude Code hook that runs a formatter after an edit
 has a different translation from a hook that rejects access to
@@ -2058,48 +2449,77 @@ responsibilities rather than exact command names or file paths.</p>
 </thead>
 <tbody>
 <tr>
-<td>Skills</td>
-<td>Reusable Codex skill, plugin-provided workflow, or repository
-instruction</td>
-<td>Partial to direct</td>
-<td>Packaging, discovery, and invocation are surface- and
-release-dependent.</td>
+<td>Project instructions (<code>CLAUDE.md</code>)</td>
+<td><code>AGENTS.md</code>, plus per-directory
+<code>AGENTS.override.md</code></td>
+<td>Direct capability, different discovery</td>
+<td>Claude Code does not read <code>AGENTS.md</code> without an
+<code>@AGENTS.md</code> import or a symlink.</td>
 </tr>
 <tr>
-<td>Hooks</td>
-<td>Lifecycle automation, shell wrapper, git hook, formatter, or CI
-check</td>
-<td>Partial to non-equivalent</td>
-<td>Do not assume the same event model or blocking guarantees.</td>
+<td>Skills (<code>.claude/skills/&lt;name&gt;/SKILL.md</code>)</td>
+<td>Skills (<code>.agents/skills/&lt;name&gt;/SKILL.md</code>)</td>
+<td>Direct; same specification</td>
+<td>Different directory, shared format. Skill text that names
+harness-specific mechanisms is still harness-specific.</td>
 </tr>
 <tr>
-<td>Model Context Protocol (MCP)</td>
-<td>An MCP server configured for the Codex surface</td>
-<td>Direct at the protocol level; partial at the harness level</td>
-<td>Server configuration, authentication, approvals, and supported
-transports can differ.</td>
+<td>Custom slash commands (<code>.claude/commands/*.md</code>)</td>
+<td><code>~/.codex/prompts/*.md</code>, deprecated in favour of
+skills</td>
+<td>Partial, and shrinking</td>
+<td>Flat directory only, no subdirectories. OpenAI points new work at
+skills.</td>
 </tr>
 <tr>
-<td>Subagents</td>
-<td>Parallel or delegated agent work, when the selected Codex surface
-supports it</td>
+<td>Subagents (<code>.claude/agents/*.md</code>, YAML frontmatter)</td>
+<td>Subagents (<code>~/.codex/agents/*.toml</code>,
+<code>.codex/agents/*.toml</code>)</td>
+<td>Direct in concept, non-portable in format</td>
+<td>Markdown with frontmatter against TOML; no translation tool exists.
+Codex subagents are invoked explicitly, never auto-selected.</td>
+</tr>
+<tr>
+<td>Hooks (<code>.claude/settings.json</code>)</td>
+<td>Hooks (<code>hooks.json</code> or a <code>[hooks]</code> block in
+<code>config.toml</code>)</td>
+<td>Direct in concept, non-portable in format</td>
+<td>Event names largely overlap; matcher syntax, payload shape, and the
+trust model differ. Codex requires hash-keyed trust approval before a
+hook runs.</td>
+</tr>
+<tr>
+<td>MCP servers (<code>.mcp.json</code>)</td>
+<td><code>[mcp_servers.&lt;name&gt;]</code> tables in
+<code>config.toml</code></td>
+<td>Direct at the protocol level, non-equivalent at the configuration
+level</td>
+<td>No shared file, no official converter. Field names and nesting
+differ, not just syntax.</td>
+</tr>
+<tr>
+<td>Permissions (<code>allow</code>/<code>deny</code>/<code>ask</code>
+rules)</td>
+<td><code>approval_policy</code> in <code>config.toml</code></td>
 <td>Partial</td>
-<td>Delegation semantics, context sharing, and result synthesis are not
-necessarily the same.</td>
-</tr>
-<tr>
-<td>Permissions</td>
-<td>Codex approval and authorization controls</td>
-<td>Partial</td>
-<td>Approval answers “may this action proceed?” It is not the same as
-filesystem or network isolation.</td>
+<td>Claude Code matches patterns against tool calls; Codex decides how
+often to ask, not which commands match.</td>
 </tr>
 <tr>
 <td>Sandboxing</td>
-<td>Execution-environment restrictions</td>
-<td>Non-equivalent as a product feature</td>
-<td>A sandbox limits what a process can do; it does not express the full
-intent of a permission policy.</td>
+<td><code>sandbox_mode</code> plus
+<code>[sandbox_workspace_write]</code></td>
+<td>Non-equivalent</td>
+<td>Codex enforces at the operating-system layer with Seatbelt or
+Landlock and seccomp; Claude Code has no documented equivalent.</td>
+</tr>
+<tr>
+<td>Enterprise policy</td>
+<td><code>requirements.toml</code> and
+<code>managed_config.toml</code></td>
+<td>Codex-only for sandbox and approval constraints</td>
+<td>Claude Code’s managed settings cover instructions and permissions;
+they do not express a non-overridable sandbox mode.</td>
 </tr>
 <tr>
 <td>Tool integrations</td>
@@ -2111,12 +2531,19 @@ can use it or write through it.</td>
 </tr>
 </tbody>
 </table>
+<p>Two patterns run through that table. Where the capability is
+described by an open specification — skills, and MCP at the protocol
+level — the two harnesses converge and content moves with little or no
+translation. Where the capability is configuration, every row is a
+separate file in a separate format, and the translation is manual. The
+convergence is real and recent; the configuration fragmentation is not
+improving.</p>
 <p>Product names, supported surfaces, configuration locations, approval
-modes, plugin behavior, and the availability of delegated-agent features
-change more quickly than repository conventions. Check the current Codex
-documentation for the exact release and interface you are documenting.
-This chapter stays concept-first so those checks do not require a
-rewrite.</p>
+modes, plugin behaviour, and the availability of delegated-agent
+features change more quickly than repository conventions. Check the
+current Codex documentation for the exact release and interface you are
+documenting. This chapter stays concept-first so those checks do not
+require a rewrite.</p>
 <h2 data-number="7.2" id="skills-reusable-workflow-knowledge"><span class="header-section-number">7.2</span> Skills: reusable workflow
 knowledge</h2>
 <p>A skill is best understood as a reusable package of instructions,
@@ -2133,9 +2560,9 @@ mostly procedural guidance:</p>
 4. Run the database-specific checks.
 5. Report the migration and its rollback path.</code></pre>
 <p>The translation becomes partial when the Claude Code skill depends on
-harness-specific behavior. Examples include a special invocation syntax,
-a particular subagent type, a lifecycle hook, or an assumed tool name.
-Preserve the workflow and rewrite the parts that refer to those
+harness-specific behaviour. Examples include a special invocation
+syntax, a particular subagent type, a lifecycle hook, or an assumed tool
+name. Preserve the workflow and rewrite the parts that refer to those
 mechanisms. Do not preserve a command name simply because it appears in
 the old skill.</p>
 <p>Keep three kinds of guidance separate:</p>
@@ -2163,19 +2590,169 @@ arbitrary API or SDK workflows are not automatically Codex skills. See
 the <a href="https://learn.chatgpt.com/docs/build-skills/">official
 skill-building documentation</a> before documenting a directory name,
 manifest field, or invocation syntax.</p>
+<h3 data-number="7.2.1" id="skills-are-the-one-place-the-two-harnesses-genuinely-converged"><span class="header-section-number">7.2.1</span> Skills are the one place the
+two harnesses genuinely converged</h3>
+<p>Everything else in this chapter is a translation exercise. Skills are
+not, and the reason is documented history rather than coincidence.
+Anthropic published Agent Skills as an open specification on 18 December
+2025, and OpenAI adopted it into Codex within days of the announcement —
+Simon Willison’s contemporaneous write-up records the gap as a matter of
+days, not releases. The result is that a skill written for one harness
+is usually a skill for the other, with no change to its contents.</p>
+<p>The shared design is progressive disclosure, and both implementations
+describe it the same way. Each skill’s frontmatter requires a
+<code>name</code> and a <code>description</code>, and only those two
+fields are loaded into context up front. Codex’s documentation puts a
+concrete budget on that preamble: the loaded name-and-description set
+should stay under about 2% of the context window, or roughly 8,000
+characters. The body of <code>SKILL.md</code>, along with any bundled
+scripts, references, and assets, loads only when the skill is actually
+invoked. That is what makes it viable to have fifty skills installed:
+the standing cost is fifty short descriptions, and the full cost is paid
+one skill at a time.</p>
+<p>The directories differ, and the Codex side is the more interesting of
+the two:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Claude Code</th>
+<th>Codex CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project</td>
+<td><code>.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+<td><code>.agents/skills/&lt;name&gt;/SKILL.md</code>, searched from cwd
+upward through parent directories to the repository root</td>
+</tr>
+<tr>
+<td>User</td>
+<td><code>~/.claude/skills/</code></td>
+<td><code>$HOME/.agents/skills/</code></td>
+</tr>
+<tr>
+<td>Administrator</td>
+<td>Managed settings</td>
+<td><code>/etc/codex/skills</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note the path. Codex does not use <code>.codex/skills</code>; it uses
+<code>.agents/skills</code>, the same vendor-neutral prefix as
+<code>AGENTS.md</code>. That is a deliberate signal that the directory
+is meant to be shared with other tools rather than owned by Codex, and
+it makes the sharing arrangement obvious: author the skill once, and
+either symlink <code>.claude/skills/&lt;name&gt;</code> to
+<code>.agents/skills/&lt;name&gt;</code> or generate both from one
+source.</p>
+<p>The caveat is about content, not format. A skill that describes a
+procedure — how to write a reversible migration, how to review a
+rendering diff, what the project’s definition of done is — moves between
+harnesses untouched. A skill whose body says “invoke the
+<code>render-primer</code> hook” or “delegate this to the
+<code>explorer</code> subagent” is naming a mechanism that may not
+exist, or may behave differently, on the other side. Write the procedure
+in terms of commands and files, which both harnesses can execute, and
+keep the harness-specific invocation in a short wrapper section that a
+reader can see is harness-specific.</p>
+<h3 data-number="7.2.2" id="custom-slash-commands-are-being-absorbed-into-skills"><span class="header-section-number">7.2.2</span> Custom slash commands are
+being absorbed into skills</h3>
+<p>Claude Code users who rely on <code>.claude/commands/*.md</code> will
+look for the equivalent, and it exists:
+<code>~/.codex/prompts/*.md</code>, where the filename minus the
+<code>.md</code> extension becomes the command name, so
+<code>review-diff.md</code> gives you <code>/review-diff</code>. The
+directory is flat; subdirectories are not supported, which rules out the
+namespacing that a large Claude Code command collection tends to
+grow.</p>
+<p>OpenAI’s own documentation now marks this deprecated in favour of
+skills. Existing prompt files continue to work, so there is no urgency,
+but the direction is unambiguous, and it is the second piece of evidence
+that both vendors regard skills rather than slash commands as the
+durable unit of reusable workflow. If you are porting a Claude Code
+command collection, port it to skills rather than to prompts. The work
+is the same size and the destination is the one both harnesses are
+investing in.</p>
 <h2 data-number="7.3" id="hooks-automation-around-the-agent"><span class="header-section-number">7.3</span> Hooks: automation around the
 agent</h2>
 <p>Claude Code hooks are often used for deterministic actions around
 agent events: checking a command, formatting a file, logging an action,
-or refusing a risky operation. Codex also has a documented hook
-framework, but it is not a drop-in Claude Code hook system. Its current
-documentation describes events such as <code>PreToolUse</code>,
+or refusing a risky operation. Codex has a real hooks system too, and it
+is closer to Claude Code’s than anything else in this chapter apart from
+skills.</p>
+<p>Codex loads hooks from four locations, and all of them are loaded
+together rather than one shadowing another:
+<code>~/.codex/hooks.json</code>, an inline <code>[hooks]</code> block
+in <code>~/.codex/config.toml</code>,
+<code>&lt;repo&gt;/.codex/hooks.json</code>, and a <code>[hooks]</code>
+block in <code>&lt;repo&gt;/.codex/config.toml</code>. Splitting hooks
+across a JSON file and a TOML block in the same scope is legal and is a
+good way to confuse a future maintainer; pick one per scope.</p>
+<p>The lifecycle events are <code>SessionStart</code>,
+<code>SessionEnd</code>, <code>PreToolUse</code>,
 <code>PostToolUse</code>, <code>PermissionRequest</code>,
-<code>SubagentStart</code>, <code>SubagentStop</code>, and
-<code>Stop</code>, with <code>PreToolUse</code> able to block or rewrite
-a tool call. <code>PostToolUse</code> can provide feedback after an
-action; it cannot undo a command that already ran. See the <a href="https://learn.chatgpt.com/docs/hooks/">Codex hooks
-documentation</a> for the current configuration and event contract.</p>
+<code>PreCompact</code>, <code>PostCompact</code>,
+<code>UserPromptSubmit</code>, <code>SubagentStart</code>,
+<code>SubagentStop</code>, <code>Stop</code>, and
+<code>Interrupt</code>. A Claude Code user will recognise almost all of
+that, because the event set closely matches Claude Code’s own. This is
+the third quiet convergence point in the chapter, and unlike skills it
+does not appear to come from a shared specification — it looks like two
+teams arriving at the same decomposition of an agent’s lifecycle. The
+practical consequence is that porting the <em>logic</em> of a hook
+between the two harnesses is usually straightforward, even though
+porting the file is not possible at all.</p>
+<p><code>PreToolUse</code> is the event with authority. A Codex
+<code>PreToolUse</code> hook can deny an action outright, either by
+returning <code>permissionDecision: &quot;deny&quot;</code> or by exiting with
+status code 2, and it can rewrite the tool’s input before the call
+proceeds. That is the same shape as Claude Code’s
+<code>PreToolUse</code> hooks, including the exit-code-2 convention.
+<code>PostToolUse</code> can provide feedback after an action but cannot
+undo a command that already ran, which is the constraint that decides
+where a check belongs: anything that must prevent an outcome goes in
+<code>PreToolUse</code>, and anything in <code>PostToolUse</code> is
+reporting.</p>
+<p>A minimal Codex hook in the TOML form looks like this:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[[hooks.PreToolUse]]</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="dt">matcher</span> <span class="op">=</span> <span class="st">&quot;^Bash$&quot;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[[hooks.PreToolUse.hooks]]</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="dt">type</span> <span class="op">=</span> <span class="st">&quot;command&quot;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="dt">command</span> <span class="op">=</span> <span class="st">&quot;script_path&quot;</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="dt">timeout</span> <span class="op">=</span> <span class="dv">30</span></span></code></pre></div>
+<p>The <code>matcher</code> is a regular expression against the tool
+name, and the nested array lets one matcher run several commands in
+order. Compare that with Claude Code’s hook configuration in
+<code>.claude/settings.json</code>, which is JSON with its own matcher
+conventions: the concepts line up, the text does not, and there is no
+converter.</p>
+<p>Codex adds a trust gate that Claude Code does not have, and it is
+worth understanding before you write a hook that a colleague will
+inherit. A non-managed hook does not run until a user has explicitly
+reviewed and trusted it, and the trust record is keyed to a hash of the
+hook itself. The <code>/hooks</code> command in the CLI is where that
+review happens. Editing the hook changes the hash and invalidates the
+trust, so a modified hook is re-reviewed rather than silently inheriting
+the old approval. This is a genuine safety property: a repository you
+clone cannot run arbitrary commands on your machine through its
+committed hook configuration just because you opened Codex in it.</p>
+<p>Managed hooks, pushed through enterprise configuration, bypass that
+review by design — an organisation’s administrators are the trust
+decision in that case. Administrators can also set
+<code>allow_managed_hooks_only = true</code>, which disables non-managed
+hooks entirely. If you are writing hooks for a team inside a managed
+Codex deployment, check that setting before investing in a repository
+hook that may never be permitted to run.</p>
+<p>See the <a href="https://learn.chatgpt.com/docs/hooks/">Codex hooks
+documentation</a> for the current event contract and payload shapes.</p>
 <p>Translate hooks by moving each responsibility to the narrowest
 deterministic layer:</p>
 <table>
@@ -2209,7 +2786,7 @@ approval</td>
 </tr>
 <tr>
 <td>Record an audit event</td>
-<td>Version-control, command-runner, or organization-level logging</td>
+<td>Version-control, command-runner, or organisation-level logging</td>
 </tr>
 </tbody>
 </table>
@@ -2223,11 +2800,13 @@ test a trivial hook that only records an event. Confirm when it runs,
 what input it receives, whether a non-zero exit blocks the action, and
 whether it runs in the same sandbox as the command it is observing. Only
 then move a formatter or policy check into it.</p>
-<p>Do not assume that Claude Code hook event names, ordering, input
-formats, or blocking guarantees carry over to Codex. Test the exact
-Codex version and surface you use. If a required hook behavior is not
-supported, use repository scripts, git hooks, CI, or an explicit review
-step instead.</p>
+<p>The event names overlap heavily, but do not assume that ordering,
+payload shape, or the exact blocking contract carries over unchanged.
+Port the logic of the hook, not the file, and verify the ported version
+with a trivial event-recording hook before you let it deny anything. If
+a required behaviour turns out not to be supported, use repository
+scripts, git hooks, continuous integration, or an explicit review step
+instead — those layers work regardless of which harness is driving.</p>
 <h2 data-number="7.4" id="mcp-same-protocol-different-connection"><span class="header-section-number">7.4</span> MCP: same protocol, different
 connection</h2>
 <p>The Model Context Protocol (MCP) is a standard way for an AI
@@ -2266,24 +2845,174 @@ approval boundary. Do not infer write authority from a successful read.
 Do not place secrets in an instruction file or prompt when the connector
 has a supported authentication mechanism.</p>
 <p>MCP also does not turn an external system into trusted truth.
-Validate identifiers, minimize the requested scope, and make the agent
+Validate identifiers, minimise the requested scope, and make the agent
 report what it actually read or changed. For a production system, prefer
 an integration with its own audit trail and permission model over a long
 prompt that says the agent should be careful.</p>
+<h3 data-number="7.4.1" id="the-configuration-is-not-shared-and-there-is-no-converter"><span class="header-section-number">7.4.1</span> The configuration is not
+shared, and there is no converter</h3>
+<p>The protocol is common. The configuration file is not, and this is
+the place where a Claude Code user most often assumes a shared standard
+that does not exist. The two harnesses use different files, different
+formats, and different field names.</p>
+<p>Claude Code reads <code>.mcp.json</code> at the project root. The
+file is JSON with a top-level <code>mcpServers</code> object, and each
+server entry carries a <code>type</code> field — <code>stdio</code>,
+<code>http</code> or <code>streamable-http</code>, <code>sse</code>
+(deprecated), or <code>ws</code> — plus <code>command</code>,
+<code>args</code>, and <code>env</code> for a local process, or
+<code>url</code> for a remote server. There is a documented gotcha here
+that costs people an afternoon: an entry with a <code>url</code> but no
+explicit <code>type</code> is read as <code>stdio</code>, which cannot
+work for a remote server, and the entry is skipped. The failure is a
+server that simply is not there, not an error message. Always set
+<code>type</code> explicitly.</p>
+<p>Codex CLI reads TOML tables from <code>~/.codex/config.toml</code>
+for user scope, or <code>.codex/config.toml</code> for project scope.
+Project configuration is additive to the global file rather than
+replacing it, and — as with the instruction-file fallback discussed
+earlier — the project layer is only loaded for trusted projects. Servers
+are declared under <code>[mcp_servers.&lt;name&gt;]</code>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[mcp_servers.context7]</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="dt">command</span> <span class="op">=</span> <span class="st">&quot;npx&quot;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="dt">args</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;-y&quot;</span><span class="op">,</span> <span class="st">&quot;@upstash/context7-mcp&quot;</span><span class="op">]</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="dt">env_vars</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;LOCAL_TOKEN&quot;</span><span class="op">]</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[mcp_servers.context7.env]</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="dt">MY_ENV_VAR</span> <span class="op">=</span> <span class="st">&quot;MY_ENV_VALUE&quot;</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co"># remote/HTTP form</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="kw">[mcp_servers.figma]</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="dt">url</span> <span class="op">=</span> <span class="st">&quot;https://mcp.figma.com/mcp&quot;</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="dt">bearer_token_env_var</span> <span class="op">=</span> <span class="st">&quot;FIGMA_OAUTH_TOKEN&quot;</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="dt">http_headers</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">&quot;X-Figma-Region&quot;</span><span class="op"> =</span> <span class="st">&quot;us-east-1&quot;</span><span class="op"> }</span></span></code></pre></div>
+<p>Two details in that example have no Claude Code counterpart by the
+same name. <code>env_vars</code> is a list of variables to pass through
+from the ambient environment, which is distinct from the
+<code>[mcp_servers.&lt;name&gt;.env]</code> table that sets explicit
+values. And <code>bearer_token_env_var</code> names the variable holding
+a token rather than the token itself, which is the right pattern to copy
+regardless of harness: the credential stays in the environment and out
+of the committed file.</p>
+<p>Codex also exposes operational fields that matter for a server that
+is slow or optional: <code>startup_timeout_sec</code> (default 10) and
+<code>tool_timeout_sec</code> (default 60), plus <code>enabled</code>,
+<code>required</code>, and <code>enabled_tools</code> /
+<code>disabled_tools</code> for trimming a chatty server’s tool list
+down to the handful you actually want in context. That last pair is
+worth using. A server that advertises forty tools consumes context in
+every session whether you call it or not.</p>
+<p>There is no official converter between the two formats as of this
+research, and the mapping is not mechanical enough to make a five-line
+script safe — the transport field, the environment handling, and the
+timeout fields all differ in shape rather than in spelling. In practice,
+teams either hand-maintain both files, accepting that they will drift,
+or generate both from one source with a tool such as Ruler, which
+distributes MCP server definitions through its <code>ruler.toml</code>.
+If you hand-maintain, put the two files next to each other in review so
+a reviewer can see when one changed and the other did not.</p>
+<h3 data-number="7.4.2" id="exposing-one-harness-to-the-other-as-an-mcp-server"><span class="header-section-number">7.4.2</span> Exposing one harness to the
+other as an MCP server</h3>
+<p>There is a more experimental pattern worth knowing about, and it
+inverts the problem: instead of sharing configuration, you let one
+harness call the other as a tool. <code>codex mcp-server</code> runs
+Codex as a stdio MCP server, which means Claude Code can be configured
+to call it:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;codex&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;stdio&quot;</span><span class="fu">,</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;npx&quot;</span><span class="fu">,</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;-y&quot;</span><span class="ot">,</span> <span class="st">&quot;codex&quot;</span><span class="ot">,</span> <span class="st">&quot;mcp-server&quot;</span><span class="ot">]</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>That configuration appears in a real public repository,
+<code>ogmios2/claude-code-codex-mcp</code>, and the pattern is described
+in a small number of blog posts. Treat it as niche and experimental
+rather than mainstream: the sourcing is thin, the delegation semantics
+are not documented the way a first-party feature would be, and you now
+have two agent loops with their own approval and sandbox settings nested
+inside each other, which makes reasoning about authority considerably
+harder. It is genuinely interesting for a case where one harness has a
+tool integration or a model the other lacks. It is not a substitute for
+getting the shared instruction file right.</p>
 <p>Confirm the current Codex surface’s MCP support, supported
 transports, configuration method, authentication flow, and whether
 individual tools require confirmation. These details are volatile. The
-protocol relationship is stable; the client behavior is not.</p>
+protocol relationship is stable; the client behaviour is not.</p>
 <h2 data-number="7.5" id="subagents-delegation-is-not-parallelism-by-itself"><span class="header-section-number">7.5</span> Subagents: delegation is not
 parallelism by itself</h2>
 <p>Claude Code users may use subagents to give a bounded task to a
 separate context: inspect tests, review a design, search for callers, or
-implement a small independent change. Current Codex releases support
-subagent workflows in the CLI, IDE extension, and ChatGPT desktop app;
-the CLI exposes an <code>/agent</code> workflow, and delegated workers
-can inherit or override model and reasoning settings. “Subagent” still
-does not guarantee the same context isolation, tool access, or result
-handoff as Claude Code.</p>
+implement a small independent change. This is an area where the answer
+has changed: early 2025 Codex had nothing comparable, and current Codex
+has subagents as a generally available feature with its own
+configuration format, scoping rules, and concurrency controls. Simon
+Willison, reviewing the feature when it shipped, described it as “very
+similar to the Claude Code implementation.” That is a fair assessment of
+the concept. It is not true of the files.</p>
+<h3 data-number="7.5.1" id="how-codex-subagents-are-defined"><span class="header-section-number">7.5.1</span> How Codex subagents are
+defined</h3>
+<p>A Codex subagent is a TOML file. Personal definitions live in
+<code>~/.codex/agents/</code> and project definitions in
+<code>.codex/agents/</code>. Three fields are required —
+<code>name</code>, <code>description</code>, and
+<code>developer_instructions</code> — and the optional fields are where
+the delegation contract actually gets expressed: <code>model</code>,
+<code>model_reasoning_effort</code>, <code>sandbox_mode</code>,
+<code>mcp_servers</code>, and <code>skills.config</code>.</p>
+<p>The per-subagent <code>sandbox_mode</code> is the field a Claude Code
+user should notice first. It lets a read-only investigator be enforced
+as read-only at the operating-system level rather than asked to behave
+that way in its instructions. If you have been writing “do not edit
+files” into every delegated prompt and hoping, this is the mechanism
+that makes the constraint real. The <code>mcp_servers</code> field does
+the same job for tool access: a subagent that should not reach your
+issue tracker can be given a server list that does not include it.</p>
+<p>Codex ships three built-in subagents — <code>default</code>,
+<code>worker</code>, and <code>explorer</code> — and a custom definition
+with one of those names overrides the built-in. That is convenient and
+also a trap: naming your own agent <code>explorer</code> silently
+replaces a built-in that other instructions or skills may reference.</p>
+<p>Subagents are invoked explicitly, by your request or by the main
+agent acting on an instruction it read, whether that instruction came
+from <code>AGENTS.md</code>, a skill, or your prompt. They are not
+auto-selected from a description the way some delegation systems work.
+That makes the behaviour more predictable and puts the burden on you to
+say when delegation should happen.</p>
+<p>Concurrency and defaults are set globally in an <code>[agents]</code>
+block:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[agents]</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="dt">enabled</span> <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="dt">max_concurrent_threads_per_session</span> <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="dt">default_subagent_model</span> <span class="op">=</span> <span class="st">&quot;gpt-5.6-terra&quot;</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="dt">default_subagent_reasoning_effort</span> <span class="op">=</span> <span class="st">&quot;medium&quot;</span></span></code></pre></div>
+<p><code>max_concurrent_threads_per_session</code> is the control that
+stops an enthusiastic main agent from fanning out further than you can
+review. Set it deliberately.</p>
+<h3 data-number="7.5.2" id="the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="header-section-number">7.5.2</span> The formats do not port, and
+one rough edge is unresolved</h3>
+<p>Claude Code subagents are Markdown files with YAML frontmatter in
+<code>.claude/agents/</code>, carrying fields such as
+<code>description</code>, <code>tools</code>, and <code>model</code>,
+with the body serving as the agent’s instructions. Codex subagents are
+TOML, with the instructions in a <code>developer_instructions</code>
+string. The information overlaps almost completely; the serialisation
+shares nothing. No bridging or translation tool exists as of this
+research. Ruler’s experimental <code>.ruler/agents/</code> propagation
+is the only attempt, and it is explicitly not solid yet.</p>
+<p>One unresolved rough edge is worth flagging rather than glossing.
+GitHub issue <code>openai/codex#15250</code> reports that custom
+subagents placed in <code>.codex/agents</code> are not reliably
+reachable from tool-backed sessions, despite the documentation implying
+that they should be. Treat project-scoped Codex subagents as working but
+not yet dependable: verify that yours is actually reachable in the
+session type you intend to use it from, rather than assuming the
+documented scoping holds everywhere.</p>
+<p>“Subagent” therefore still does not guarantee the same context
+isolation, tool access, or result handoff across the two harnesses, even
+though the concept now exists on both sides.</p>
 <p>Translate a subagent task into an explicit contract:</p>
 <pre class="text"><code>Role: repository investigator
 Scope: inspect only src/auth/ and its tests
@@ -2294,7 +3023,7 @@ Output: a short report with file paths, line numbers, and missing-test hypothese
 second session. It also prevents a common failure mode: asking several
 workers to modify overlapping files and then trying to merge their
 incompatible assumptions.</p>
-<p>Parallelize only independent work. Good candidates are separate
+<p>Parallelise only independent work. Good candidates are separate
 read-only investigations, test discovery, or analysis of disjoint
 modules. Keep architectural decisions, shared-file edits, migrations,
 and final integration under one coordinating context unless you have a
@@ -2311,12 +3040,16 @@ deliberate merge strategy.</p>
 context sharing, model selection per worker, and result synthesis
 depends on the interface and current release. Do not promise a
 particular subagent command or assume that a delegated worker inherits
-the parent session’s tools and approvals.</p>
+the parent session’s tools and approvals — in Codex it may deliberately
+not, because the definition can override the model, the sandbox mode,
+and the MCP server list. That is a feature when you are writing the
+definition and a surprise when you are debugging why a delegated task
+could not run a command the parent session runs freely.</p>
 <h2 data-number="7.6" id="permissions-and-sandboxing-are-different-controls"><span class="header-section-number">7.6</span> Permissions and sandboxing are
 different controls</h2>
 <p>This distinction is the one most likely to cause trouble for a Claude
 Code user. An approval or permission control is a decision about whether
-an action is authorized. A sandbox is a restriction on what the process
+an action is authorised. A sandbox is a restriction on what the process
 can access or execute even if the agent tries. They overlap in purpose,
 but they are not substitutes.</p>
 <p>Consider a command that deletes temporary files:</p>
@@ -2333,18 +3066,133 @@ recovery possible if the other layers fail.</li>
 <p>Use all four layers where the consequence justifies them. Do not
 treat “the agent asked first” as proof that the command is safe, and do
 not treat “the process is sandboxed” as proof that the requested task is
-authorized.</p>
-<p>Claude Code and Codex can differ in how they express approval modes,
-allowed commands, writable directories, network access, and escalation.
-For the current local Codex configuration, the documented sandbox modes
-are <code>read-only</code>, <code>workspace-write</code>, and
-<code>danger-full-access</code>; approval policies include
-<code>untrusted</code>, <code>on-request</code>, and <code>never</code>.
-The CLI exposes <code>/permissions</code>, and workspace-write can be
-configured with writable roots and optional network access. Cloud and
-ChatGPT web environments have different controls, so do not transfer
-this local baseline to them without checking their documentation. The
-visible prompt is not the complete security model.</p>
+authorised.</p>
+<p>The two harnesses do not merely use different names for the same
+control. They are structurally different mechanisms, and no shared
+convention or schema exists to bridge them. State that plainly to
+yourself before trying to port a policy, because the translation is
+genuinely lossy.</p>
+<p>Claude Code expresses permissions as pattern rules in
+<code>.claude/settings.json</code>, scoped at user, project, and local
+level. Rules go into <code>allow</code>, <code>deny</code>, or
+<code>ask</code> lists and are matched against tool names and command
+patterns, and enforcement happens in the application: Claude Code
+consults the rules when it is about to make a tool call and acts
+accordingly. The granularity is the pattern. You can permit
+<code>Bash(git status)</code> and refuse <code>Bash(git push:*)</code>,
+and the distinction is expressed entirely in text.</p>
+<p>Codex splits the same territory across two orthogonal
+<code>config.toml</code> fields. <code>sandbox_mode</code> takes
+<code>&quot;read-only&quot;</code>, <code>&quot;workspace-write&quot;</code>, or
+<code>&quot;danger-full-access&quot;</code>, and <code>workspace-write</code> is
+tuned by a <code>[sandbox_workspace_write]</code> block carrying
+<code>writable_roots</code> and a <code>network_access</code> flag:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="dt">sandbox_mode</span> <span class="op">=</span> <span class="st">&quot;workspace-write&quot;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="dt">approval_policy</span> <span class="op">=</span> <span class="st">&quot;on-request&quot;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[sandbox_workspace_write]</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="dt">writable_roots</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;/home/dev/project&quot;</span><span class="op">,</span> <span class="st">&quot;/home/dev/.cache/project&quot;</span><span class="op">]</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="dt">network_access</span> <span class="op">=</span> <span class="cn">false</span></span></code></pre></div>
+<p>That is enforced by the operating system, not by the agent: macOS
+Seatbelt, and Landlock with seccomp on Linux. A command that violates it
+fails the way any sandboxed process fails, regardless of what the model
+intended or what any instruction file said.</p>
+<p><code>approval_policy</code> is the second, independent field, and it
+controls how often Codex pauses to ask rather than what the sandbox
+permits. <code>&quot;never&quot;</code> and <code>&quot;on-request&quot;</code> are the
+simple values, and a more granular form exists:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dt">approval_policy</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">granular</span><span class="op"> =</span> <span class="op">{ </span><span class="dt">sandbox_approval</span><span class="op"> =</span> <span class="st">&quot;...&quot;</span><span class="op">, </span><span class="dt">rules</span><span class="op"> =</span> <span class="op">[], </span><span class="dt">request_permissions</span><span class="op"> =</span> <span class="st">&quot;...&quot;</span><span class="op">, </span><span class="dt">skill_approval</span><span class="op"> =</span> <span class="st">&quot;...&quot;</span><span class="op"> } }</span></span></code></pre></div>
+<p>Older sources also mention
+<code>approval_policy = &quot;untrusted&quot;</code>. That value is not confirmed
+on the current advanced-configuration documentation, so do not build on
+it without checking; earlier editions of this primer listed it without
+that caveat.</p>
+<p>The orthogonality is the part worth internalising. A session can be
+highly permissive about asking and still be unable to reach the network,
+or can be sandboxed generously and still stop for approval on every
+write. Debugging a blocked command means asking which of the two refused
+it, and the answers have different fixes.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Claude Code</th>
+<th>Codex CLI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where configured</td>
+<td><code>.claude/settings.json</code></td>
+<td><code>config.toml</code></td>
+</tr>
+<tr>
+<td>Unit of control</td>
+<td>Pattern match on tool name or command</td>
+<td>Sandbox mode plus approval policy</td>
+</tr>
+<tr>
+<td>Enforcement layer</td>
+<td>Application</td>
+<td>Operating system (Seatbelt, Landlock and seccomp) for the sandbox;
+application for approvals</td>
+</tr>
+<tr>
+<td>Per-command granularity</td>
+<td>Yes, by pattern</td>
+<td>No; granularity is the mode and the policy</td>
+</tr>
+<tr>
+<td>Filesystem scoping</td>
+<td>Expressed as patterns</td>
+<td><code>writable_roots</code></td>
+</tr>
+<tr>
+<td>Network control</td>
+<td>Expressed as patterns on the commands that use it</td>
+<td><code>network_access</code> flag</td>
+</tr>
+<tr>
+<td>Non-overridable org policy</td>
+<td>Managed settings cover instructions and permissions</td>
+<td><code>requirements.toml</code></td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="7.6.1" id="codexs-enterprise-layers-have-no-claude-code-equivalent"><span class="header-section-number">7.6.1</span> Codex’s enterprise layers
+have no Claude Code equivalent</h3>
+<p>Codex adds two administrator-controlled configuration layers that are
+worth knowing about if you are writing policy for a team rather than for
+yourself. <code>requirements.toml</code> holds hard constraints that a
+user cannot override: an organisation can forbid
+<code>approval_policy = &quot;never&quot;</code> or
+<code>sandbox_mode = &quot;danger-full-access&quot;</code> everywhere, and a
+user’s local configuration cannot win. <code>managed_config.toml</code>
+holds softer defaults that a user can reset. Both are distributed
+through ChatGPT Business or Enterprise policy, macOS mobile device
+management (MDM), or a plain filesystem drop at
+<code>/etc/codex/</code>.</p>
+<p>Claude Code has a managed policy file for instructions and
+permissions, but no documented equivalent that pins a sandbox mode
+organisation-wide, because it has no operating-system sandbox mode to
+pin. If your requirement is “no engineer in this organisation can run an
+agent with unrestricted filesystem access,” Codex has a mechanism for
+that and Claude Code does not — which is a real difference in kind, not
+a gap that better configuration closes.</p>
+<p>None of the cross-tool synchronisation tools described earlier
+attempt to bridge any of this. Permissions and sandboxing remain
+accepted, unavoidable, tool-specific duplication, and the practical
+response is to write the intent down once in prose that a human reviews,
+then implement it twice.</p>
+<p>Cloud and ChatGPT web environments have different controls again, so
+do not transfer this local baseline to them without checking their
+documentation. The visible prompt is not the complete security
+model.</p>
 <p>Before a non-trivial task, state the boundary in plain language:</p>
 <pre class="text"><code>You may read and edit files under this repository and run the project&#39;s tests.
 Do not access sibling directories, production services, real credentials, or the network.
@@ -2356,11 +3204,13 @@ requiring network or an external write is actually blocked or prompts
 for approval. A statement in the prompt is useful policy context, not a
 replacement for enforcement.</p>
 <p>Approval mode names, command-line switches, default sandbox policy,
-network behavior, writable-directory rules, and escalation behavior are
-product and release details. Verify them for the exact Codex interface
-you use. Document the invariant: approval is authorization and
-sandboxing is execution isolation, even when the implementation
-changes.</p>
+network behaviour, writable-directory rules, and escalation behaviour
+are product and release details, and both harnesses change their
+settings schemas between releases. Verify the exact field names for the
+version you use before automating anything. Document the invariant
+instead, because it survives the renames: approval is authorisation,
+sandboxing is execution isolation, and a repository instruction is
+neither.</p>
 <h2 data-number="7.7" id="a-migration-rule-of-thumb"><span class="header-section-number">7.7</span> A migration rule of thumb</h2>
 <p>When translating a Claude Code setup, move information down this
 hierarchy only when necessary:</p>
@@ -2373,7 +3223,7 @@ containers, or policy tooling.</li>
 <li>Put interactive preferences in the harness-specific instruction
 file.</li>
 <li>Put access control and isolation in the approval, operating-system,
-container, and organization layers.</li>
+container, and organisation layers.</li>
 </ol>
 <p>This produces a smaller and more durable Codex layer. It also lets
 Claude Code and Codex share the same tests and repository conventions
@@ -2421,12 +3271,12 @@ turn. This creates a clean checkpoint:</p>
 expired tokens return HTTP 401. Before editing, list the files you expect to
 change and the tests you will run. Do not implement until I approve the plan.</code></pre>
 <p>If your current harness already has a planning mode, use its
-documented behavior, but do not assume that a label such as “plan” means
-the same thing in another harness. The explicit sentence remains
+documented behaviour, but do not assume that a label such as “plan”
+means the same thing in another harness. The explicit sentence remains
 portable.</p>
 <h2 data-number="8.2" id="bounded-implementation"><span class="header-section-number">8.2</span> Bounded implementation</h2>
 <p>A request such as “fix the login bug” leaves too many choices open.
-State the observable behavior, the allowed surface, and the checks that
+State the observable behaviour, the allowed surface, and the checks that
 matter.</p>
 <p>Claude Code-style prompt:</p>
 <pre class="text"><code>Fix the login bug, add tests, and run the suite.</code></pre>
@@ -2440,7 +3290,7 @@ not change dependencies or contact external services. Report failures without
 hiding them.</code></pre>
 <p>The translation adds constraints that prevent common scope drift:
 unrelated cleanup, dependency upgrades, schema changes, and tests that
-pass only because the behavior was weakened. “Run the suite” is also
+pass only because the behaviour was weakened. “Run the suite” is also
 made into a sequence. If the focused test fails, the agent should
 investigate that failure before spending time on the full suite.</p>
 <p>For a small, well-understood task, use a shorter contract:</p>
@@ -2552,7 +3402,7 @@ with the pre-change behavior visible in the test and implementation. Report
 whether this is a product regression, an outdated expectation, an environment
 failure, or an unrelated failure. Then propose one minimal next step.</code></pre>
 <p>If the agent already made several speculative changes, ask it to stop
-and summarize the hypotheses it tried. Do not let it stack another fix
+and summarise the hypotheses it tried. Do not let it stack another fix
 on top of an unclassified failure.</p>
 <h3 data-number="8.6.3" id="the-agent-claims-a-tool-or-capability-is-unavailable"><span class="header-section-number">8.6.3</span> The agent claims a tool or
 capability is unavailable</h3>
@@ -2566,7 +3416,7 @@ permission:</p>
 
 Use no write operation. Report the first failing layer and the exact evidence.</code></pre>
 <p>This avoids both unsafe retries and premature conclusions. A tool can
-be installed but not enabled, visible but read-only, or authorized but
+be installed but not enabled, visible but read-only, or authorised but
 unable to reach the requested resource.</p>
 <h3 data-number="8.6.4" id="the-context-is-stale-or-contradictory"><span class="header-section-number">8.6.4</span> The context is stale or
 contradictory</h3>
@@ -2602,7 +3452,7 @@ outside the repository. If a test cannot run, report the exact blocker and
 continue with safe static checks where possible.</code></pre>
 <p>This is clearer than repeatedly approving routine commands one by
 one, but it still leaves consequential actions behind an explicit
-boundary. The exact approval behavior remains harness-specific.</p>
+boundary. The exact approval behaviour remains harness-specific.</p>
 <h2 data-number="8.7" id="a-compact-prompt-checklist"><span class="header-section-number">8.7</span> A compact prompt checklist</h2>
 <p>Before sending a substantial request, check that it answers the
 questions that matter for this task:</p>
@@ -2626,7 +3476,7 @@ inspection before commitment, define authority separately from goals,
 require evidence, and recover by classifying the failure before making
 another edit. The interface can change. Those habits remain useful.</p>
 <p>Recheck examples that mention a particular Codex mode, command, model
-control, plugin, skill invocation, hook, MCP behavior, or
+control, plugin, skill invocation, hook, MCP behaviour, or
 delegated-agent workflow before publication. Keep the prompts themselves
 generic enough to survive product changes, and link to current official
 documentation where a reader needs exact syntax.</p>
@@ -2642,61 +3492,63 @@ low-risk task has gone through the complete review loop.</p>
 Codex becomes another way to inspect, change, test, and review the same
 repository. The aim is coexistence, not a wholesale rewrite of the
 project’s tooling.</p>
-<h2 data-number="9.1" id="add-the-smallest-useful-agents.md"><span class="header-section-number">9.1</span> Add the smallest useful
-<code>AGENTS.md</code></h2>
+<h2 data-number="9.1" id="move-the-canonical-text-to-agents.md-and-import-it"><span class="header-section-number">9.1</span> Move the canonical text to
+<code>AGENTS.md</code> and import it</h2>
 <p>If a repository already has a carefully maintained
-<code>CLAUDE.md</code>, begin with a bridge. Put it at the repository
-root so Codex can discover it when it starts in the project, and make
-its purpose explicit:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Repository instructions</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>The canonical project instructions are in <span class="co">[</span><span class="ot">`CLAUDE.md`</span><span class="co">](CLAUDE.md)</span>. Read and</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>follow that file for repository work.</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>This file is intentionally a thin compatibility layer for agents that discover</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="in">`AGENTS.md`</span>, so the project can support Codex without maintaining a second copy</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>of its instructions.</span></code></pre></div>
-<p>This bridge is useful because it makes the ownership decision
-visible. It tells a human reviewer that <code>AGENTS.md</code> is not a
-competing policy document, and it instructs the agent to read the
-established instructions. Keep the bridge short enough that somebody can
-understand its role in one glance.</p>
+<code>CLAUDE.md</code>, the migration is two commits and no rewriting.
+The first commit is a pure rename:</p>
+<pre class="shell"><code>git mv CLAUDE.md AGENTS.md</code></pre>
+<p>The second creates the import that keeps Claude Code working:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>@AGENTS.md</span></code></pre></div>
+<p>That is the entire contents of the new <code>CLAUDE.md</code>. Codex
+now discovers <code>AGENTS.md</code> through its own root-to-cwd walk,
+Claude Code resolves the import and receives the same text, and there is
+exactly one file for a reviewer to read. Append Claude-specific lines
+below the import when you have some; leave the file at one line when you
+do not.</p>
+<p>Keeping the two commits separate is worth the extra step. The rename
+shows up in <code>git log --follow</code> and in review as a move rather
+than a rewrite, so the history of the instruction file survives.
+Bundling the rename with content edits produces a diff that looks like a
+new file and hides whatever else changed inside it.</p>
 <p>Do not copy a large <code>CLAUDE.md</code> into
-<code>AGENTS.md</code>. Duplication looks convenient during the first
-migration and becomes a maintenance defect as soon as a command,
-directory name, test rule, or safety constraint changes in one file but
-not the other. A duplicated instruction can also be more dangerous than
-a missing instruction: the agent receives two plausible rules and has to
-guess which one wins.</p>
-<p>The bridge is an instruction, not a guarantee that every harness will
-implement file references in exactly the same way. Test it with a
-harmless inspection request and ask the agent to identify the
-repository’s build command, source-of-truth document, and a constraint
-that appears in <code>CLAUDE.md</code>. If the answer shows that the
-bridge is not being followed reliably, use a shared neutral document for
-the important rules rather than adding more prose to the adapter.</p>
-<p>The bridge remains a small instruction that asks the agent to read
-another file; it is not a documented file-include primitive. Test it
-with a harmless inspection request. If the agent does not reliably
-follow the reference, put the important shared rules in a neutral
-document or reproduce a small, maintained subset in
-<code>AGENTS.md</code>.</p>
+<code>AGENTS.md</code> instead of importing it. Duplication looks
+convenient during the first migration and becomes a maintenance defect
+as soon as a command, directory name, test rule, or safety constraint
+changes in one file but not the other. A duplicated instruction can also
+be more dangerous than a missing instruction: the agent receives two
+plausible rules and has to guess which one wins.</p>
+<p>Verify the result rather than assuming it. Open a read-only session
+in each harness and ask it to name the repository’s build command, its
+source-of-truth document, and one specific constraint that appears only
+in the canonical file. An agent that cannot answer all three has not
+received your instructions, whatever the file tree looks like. That
+check takes a minute and catches the one failure mode this arrangement
+still has: a working directory deep enough in the tree that Codex’s
+root-to-cwd walk never passes the root file.</p>
+<p>If you cannot move the canonical text — because another tool or a
+team convention pins it to <code>CLAUDE.md</code> — the supported
+fallback is Codex’s <code>project_doc_fallback_filenames</code> key
+rather than a prose pointer, with the limits described in the
+instruction-systems chapter. Treat it as an interim state, not a team
+convention.</p>
 <h2 data-number="9.2" id="choose-a-shared-instruction-strategy"><span class="header-section-number">9.2</span> Choose a shared-instruction
 strategy</h2>
-<p>There are three reasonable arrangements. The bridge pattern is the
-least disruptive when Claude Code is the established primary harness. A
-shared-neutral pattern is stronger when both harnesses will make
-frequent changes. A split pattern is appropriate only for genuinely
-harness-specific behavior.</p>
-<p>In the bridge pattern, <code>CLAUDE.md</code> remains canonical and
-<code>AGENTS.md</code> points to it. Repository rules, build commands,
-style guidance, and safety constraints stay where they are. This is a
-good first step for an existing project because it changes discovery
-without reorganizing the project.</p>
+<p>There are three reasonable arrangements. The import pattern is the
+least disruptive and the most reliable. A shared-neutral pattern is
+stronger when the repository already keeps its policy in project
+documentation rather than in an agent file. A split pattern is
+appropriate only for genuinely harness-specific behaviour.</p>
+<p>In the import pattern, <code>AGENTS.md</code> is canonical and
+<code>CLAUDE.md</code> is an <code>@AGENTS.md</code> import. Repository
+rules, build commands, style guidance, and safety constraints all live
+in one file that both harnesses read in full. This is the right first
+step for an existing project because it changes discovery without
+reorganising anything else.</p>
 <p>In the shared-neutral pattern, stable repository rules move into a
 neutral file such as <code>docs/agent-instructions.md</code>. Each
 harness-specific file becomes a short adapter that names the shared file
-and adds only the behavior specific to that harness. The neutral file
+and adds only the behaviour specific to that harness. The neutral file
 should contain facts that remain true regardless of who is acting: which
 directories are source, how to run tests, what must not be modified, and
 how generated artifacts are handled.</p>
@@ -2718,10 +3570,10 @@ not split the underlying safety rule or definition of done.</p>
 <p>The layout is illustrative, not a requirement. Do not create empty
 <code>.claude/</code> or <code>.codex/</code> directories merely to make
 the tree look symmetrical. Add a directory when it contains
-configuration or reusable behavior that the corresponding harness
+configuration or reusable behaviour that the corresponding harness
 actually needs.</p>
 <p>For this primer’s repository, the existing project rules are the
-important shared context: the primer layout, containerized rendering
+important shared context: the primer layout, containerised rendering
 requirement, <code>STYLE_GUIDE.md</code>, and the instruction to
 preserve unrelated work. A Codex bridge should point at those rules
 rather than restating them. If a rule later proves useful to both
@@ -2754,7 +3606,7 @@ show the final diff and test result. Stop before committing.</code></pre>
 respected scope, used the repository’s commands, and reported failures
 honestly. Only after that should you try a task that edits source code,
 runs a longer build, or uses network access.</p>
-<p>A staged rollout can be summarized as a sequence:</p>
+<p>A staged rollout can be summarised as a sequence:</p>
 <ul>
 <li>Discover: inspect instructions, status, structure, and available
 checks.</li>
@@ -2769,15 +3621,15 @@ predictably.</li>
 before the inspection request is complete, ignores a scope boundary, or
 claims a check passed without showing a result, stop and fix the
 workflow before increasing the task size.</p>
-<h2 data-number="9.4" id="port-integrations-by-behavior-not-by-filename"><span class="header-section-number">9.4</span> Port integrations by behavior,
+<h2 data-number="9.4" id="port-integrations-by-behaviour-not-by-filename"><span class="header-section-number">9.4</span> Port integrations by behaviour,
 not by filename</h2>
 <p>Claude Code skills, hooks, Model Context Protocol (MCP) servers,
 subagents, and permission settings may have analogues in Codex, but an
 analogous concept is not necessarily a drop-in replacement. Port the
-behavior you need and test the smallest useful version of it.</p>
+behaviour you need and test the smallest useful version of it.</p>
 <p>For a skill, first write down the input, output, files it may touch,
-commands it may run, and failure behavior. Then decide whether Codex has
-a supported mechanism for that workflow. If it does, port the narrow
+commands it may run, and failure behaviour. Then decide whether Codex
+has a supported mechanism for that workflow. If it does, port the narrow
 workflow and preserve the original Claude Code version until the new one
 has passed the same acceptance checks. If it does not, keep the
 Claude-specific skill and expose the underlying command or document as a
@@ -2791,17 +3643,18 @@ harness-specific.</p>
 <p>For MCP, inventory the data and actions the server provides before
 changing configuration. A read-only documentation server and a
 deployment server have very different risk profiles. Port the read-only
-case first, confirm authentication and network behavior, and do not
+case first, confirm authentication and network behaviour, and do not
 grant write capabilities merely because the old harness had them.</p>
 <p>For subagents or parallel workers, begin with independent read-only
-tasks. Parallelize searches, test inspection, or candidate design notes
-before parallelizing edits. If two workers can modify the same file,
+tasks. Parallelise searches, test inspection, or candidate design notes
+before parallelising edits. If two workers can modify the same file,
 their work needs explicit ownership and a merge strategy; otherwise
 parallelism creates conflicts that cost more time than it saves.</p>
-<p>Keep a migration note for each port. It should say what behavior was
+<p>Keep a migration note for each port. It should say what behaviour was
 required, where it now lives, what remains Claude-specific, and which
-test demonstrates that the behavior works. That record prevents a future
-maintainer from assuming feature parity based on similar names.</p>
+test demonstrates that the behaviour works. That record prevents a
+future maintainer from assuming feature parity based on similar
+names.</p>
 <h2 data-number="9.5" id="preserve-a-clean-rollback-path"><span class="header-section-number">9.5</span> Preserve a clean rollback
 path</h2>
 <p>The migration should be removable without reconstructing the
@@ -2826,7 +3679,7 @@ credentials, generated files, and external services can be reached. The
 risk does not come only from a model making a bad edit. It also comes
 from unclear authority: the agent may be allowed to run a command, but
 the repository may not make clear whether that command is appropriate;
-the sandbox may permit a file write, but the task may not authorize
+the sandbox may permit a file write, but the task may not authorise
 it.</p>
 <h2 data-number="10.1" id="separate-approval-from-sandboxing"><span class="header-section-number">10.1</span> Separate approval from
 sandboxing</h2>
@@ -2836,7 +3689,7 @@ related controls, but they are not interchangeable. An approved command
 can still fail because the sandbox blocks it. A command inside a
 permissive sandbox can still be inappropriate because nobody reviewed
 its scope.</p>
-<p>For example, a containerized PDF build may be an approved repository
+<p>For example, a containerised PDF build may be an approved repository
 operation, but it can still be unsafe if the container receives
 unnecessary credentials or mounts a broad directory. Conversely, a
 read-only search may be safe to permit automatically even when a later
@@ -2846,11 +3699,11 @@ repository instructions. Say which paths may change, whether generated
 files are expected, whether network access is needed, and whether the
 agent may commit. “Fix the build” is not an operational boundary.
 “Inspect the failing primer, change only its source and Justfile, run
-the containerized build, and stop before committing” is.</p>
+the containerised build, and stop before committing” is.</p>
 <h2 data-number="10.2" id="protect-secrets-and-external-systems"><span class="header-section-number">10.2</span> Protect secrets and external
 systems</h2>
 <p>Do not assume that a second harness inherits the first harness’s
-secret-handling behavior. Audit environment variables, credential
+secret-handling behaviour. Audit environment variables, credential
 helpers, configuration files, MCP connections, cloud CLIs, container
 mounts, and shell startup files. A repository may be safe for local
 edits but unsafe for deployment commands if the agent can reach
@@ -2901,7 +3754,7 @@ them. Afterward, compare both source and generated changes.</p>
 outputs. A safe task says which of those files may change and which
 build recipe produces them. The agent should not silently replace an
 output with a host-generated artifact when the repository requires
-containerized rendering.</p>
+containerised rendering.</p>
 <p>Use <code>git diff --stat</code>, the normal diff, and the
 repository’s verification commands. A non-trivial output file is not
 proof of a correct render; a successful command is not proof that the
@@ -2957,7 +3810,7 @@ class of work?</p>
 <h2 data-number="11.1" id="define-the-comparison-before-running-it"><span class="header-section-number">11.1</span> Define the comparison before
 running it</h2>
 <p>Write the evaluation question first. “Is Codex better?” is too broad
-to measure. “For containerized primer maintenance, does Codex complete
+to measure. “For containerised primer maintenance, does Codex complete
 focused source edits with equal correctness and lower review burden?” is
 testable. “Which harness should handle unfamiliar-repository
 exploration?” is another useful question, but it needs a different task
@@ -2967,7 +3820,7 @@ test commands, and starting information for each run. Give each setup a
 fresh session unless session continuity is itself the subject of the
 experiment. Record the model and reasoning setting separately from the
 harness so a model change is not mistaken for a harness effect.</p>
-<p>Randomize the order when practical. If Claude Code always runs first,
+<p>Randomise the order when practical. If Claude Code always runs first,
 it may benefit from a clean task and Codex may benefit from clues left
 in the working tree, or vice versa. The simplest control is to use
 separate worktrees created from the same commit and alternate which
@@ -2993,8 +3846,8 @@ changes. Each task should have a known verification path and a clear
 boundary around committed outputs.</p>
 <p>The task brief should contain what a real engineer would know at the
 start, but not the solution. Include the issue description, relevant
-user-facing behavior, repository constraints, and definition of done. Do
-not give one harness extra hints because its interface makes you more
+user-facing behaviour, repository constraints, and definition of done.
+Do not give one harness extra hints because its interface makes you more
 comfortable.</p>
 <h2 data-number="11.3" id="score-correctness-before-speed"><span class="header-section-number">11.3</span> Score correctness before
 speed</h2>
@@ -3035,7 +3888,7 @@ among successful runs. A simple four-point rubric works well:</p>
 <td>Significant unrelated changes</td>
 <td>Some unnecessary changes</td>
 <td>Mostly bounded</td>
-<td>Only necessary files and behavior changed</td>
+<td>Only necessary files and behaviour changed</td>
 </tr>
 <tr>
 <td>Verification</td>
@@ -3054,7 +3907,7 @@ among successful runs. A simple four-point rubric works well:</p>
 <td>Fits project conventions and improves clarity</td>
 </tr>
 <tr>
-<td>Safety behavior</td>
+<td>Safety behaviour</td>
 <td>Unsafe action or secret exposure</td>
 <td>Ignores a material warning</td>
 <td>Needs intervention</td>
@@ -3065,7 +3918,7 @@ among successful runs. A simple four-point rubric works well:</p>
 </table>
 <p>Record the raw scores and a short justification. Do not hide a safety
 failure inside an average: a run that exposes credentials or modifies an
-unauthorized target should fail the safety gate regardless of its other
+unauthorised target should fail the safety gate regardless of its other
 scores.</p>
 <h2 data-number="11.4" id="record-the-review-burden"><span class="header-section-number">11.4</span> Record the review burden</h2>
 <p>Review burden measures the human work required after the agent stops.
@@ -3109,26 +3962,26 @@ any task where the comparison was not equivalent.</p>
 record</h2>
 <p>Keep one record per run. Plain text or a spreadsheet is enough; the
 important property is consistent fields.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> 2026-08-21</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">repository_revision</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;commit or worktree identifier&gt;&quot;</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">task_id</span><span class="kw">:</span><span class="at"> primer-render-fix-01</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">harness</span><span class="kw">:</span><span class="at"> Codex</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;record exact identifier at run time&gt;&quot;</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">reasoning_setting</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;record exact setting, if exposed&gt;&quot;</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">permissions</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;summary&gt;&quot;</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">network</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;disabled&quot;</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">result</span><span class="kw">:</span><span class="at"> pass</span></span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scores</span><span class="kw">:</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">correctness</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">scope</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">verification</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">maintainability</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">safety</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="fu">wall_clock_minutes</span><span class="kw">:</span><span class="at"> </span><span class="dv">18</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a><span class="fu">review_minutes</span><span class="kw">:</span><span class="at"> </span><span class="dv">7</span></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="fu">correction_cycles</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a><span class="fu">tests</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;commands and outcomes&gt;&quot;</span></span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Changed source and regenerated outputs in the required container.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> 2026-08-21</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">repository_revision</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;commit or worktree identifier&gt;&quot;</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">task_id</span><span class="kw">:</span><span class="at"> primer-render-fix-01</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">harness</span><span class="kw">:</span><span class="at"> Codex</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;record exact identifier at run time&gt;&quot;</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a><span class="fu">reasoning_setting</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;record exact setting, if exposed&gt;&quot;</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a><span class="fu">permissions</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;summary&gt;&quot;</span></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="fu">network</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;disabled&quot;</span></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a><span class="fu">result</span><span class="kw">:</span><span class="at"> pass</span></span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scores</span><span class="kw">:</span></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">correctness</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">scope</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">verification</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">maintainability</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">safety</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a><span class="fu">wall_clock_minutes</span><span class="kw">:</span><span class="at"> </span><span class="dv">18</span></span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a><span class="fu">review_minutes</span><span class="kw">:</span><span class="at"> </span><span class="dv">7</span></span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a><span class="fu">correction_cycles</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a><span class="fu">tests</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;&lt;commands and outcomes&gt;&quot;</span></span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Changed source and regenerated outputs in the required container.&quot;</span></span></code></pre></div>
 <p>The date and identifiers in this example are placeholders for a real
 run record. Do not treat the model, setting, or result values as a claim
 about product performance.</p>
@@ -3140,7 +3993,7 @@ about product performance.</p>
 <li>Use separate worktrees or restore the exact starting state.</li>
 <li>Record harness, model, reasoning setting, permissions, and network
 state.</li>
-<li>Randomize task order when practical.</li>
+<li>Randomise task order when practical.</li>
 <li>Keep independent runs independent; score collaboration
 separately.</li>
 <li>Score correctness and safety before speed or cost.</li>
@@ -3153,10 +4006,10 @@ separately.</li>
 reference</h1>
 <p>Codex does not need to replace Claude Code to be useful. The
 practical opportunity is to add a second harness without creating a
-second, conflicting repository culture. Keep the primary instructions
-authoritative, use a thin <code>AGENTS.md</code> bridge or a shared
-neutral document, and make harness-specific configuration earn its place
-through a real workflow.</p>
+second, conflicting repository culture. Keep one instruction file
+authoritative, bridge to it with a real import rather than a prose
+pointer, and make harness-specific configuration earn its place through
+a real workflow.</p>
 <p>The migration becomes manageable when you treat it as an operational
 change rather than a file rename. Start with inspection, give the agent
 bounded authority, verify generated and source changes, and preserve a
@@ -3173,17 +4026,20 @@ choices explicit enough that another engineer can reproduce them.</p>
 to an existing repository</h2>
 <h3 data-number="12.1.1" id="minimal-migration"><span class="header-section-number">12.1.1</span> Minimal migration</h3>
 <ul>
-<li>Keep <code>CLAUDE.md</code> as the canonical instruction source if
-it already works.</li>
-<li>Add a short root <code>AGENTS.md</code> that points to
-<code>CLAUDE.md</code>.</li>
+<li>Make <code>AGENTS.md</code> the canonical instruction source;
+<code>git mv CLAUDE.md AGENTS.md</code> if the text is already
+there.</li>
+<li>Replace <code>CLAUDE.md</code> with the single line
+<code>@AGENTS.md</code>, plus any Claude-specific extras below it.</li>
+<li>Ask both harnesses, in a read-only session, to name your build
+command and one canonical constraint.</li>
 <li>Ask Codex to inspect instructions and status without editing.</li>
 <li>Run one low-risk, bounded task in a branch or separate
 worktree.</li>
 <li>Review the diff and verification output.</li>
 <li>Add shared-neutral guidance only when a rule genuinely belongs to
 both harnesses.</li>
-<li>Port skills, hooks, MCP, or subagents one behavior at a time.</li>
+<li>Port skills, hooks, MCP, or subagents one behaviour at a time.</li>
 <li>Record what worked, what remained harness-specific, and how to roll
 back.</li>
 </ul>
@@ -3239,31 +4095,97 @@ repository.</li>
 <li>If the task is unsafe or underspecified, clarify or narrow it before
 choosing a model.</li>
 </ul>
-<h3 data-number="12.1.6" id="volatile-claim-verification-list"><span class="header-section-number">12.1.6</span> Volatile-claim verification
-list</h3>
-<p>Before publishing this primer, verify from current official
-documentation:</p>
+<h3 data-number="12.1.6" id="verified-as-of-september-2026"><span class="header-section-number">12.1.6</span> Verified as of September
+2026</h3>
+<p>Earlier editions of this primer carried a list of open questions
+here. Most of them are now answered from primary sources, and the
+answers are in the relevant chapters rather than deferred to a
+checklist. Confirmed:</p>
 <ul>
-<li>How Codex discovers, layers, and prioritizes <code>AGENTS.md</code>
-and related instructions.</li>
-<li>Whether an <code>AGENTS.md</code> reference to
-<code>CLAUDE.md</code> is followed as expected in the supported
-surfaces.</li>
-<li>Current Codex interfaces, installation and authentication steps, and
-command names.</li>
-<li>Current model identifiers, availability, reasoning controls, and
-context limits.</li>
-<li>Current plans, pricing, quotas, rate limits, and
-API-versus-subscription behavior.</li>
-<li>Current support and configuration semantics for skills, hooks, MCP,
-subagents, approvals, and sandboxes.</li>
-<li>Current usage and billing telemetry available for bake-off
-records.</li>
+<li><strong>Claude Code’s instruction discovery and precedence</strong>,
+including the managed policy file, the user file, project files,
+<code>CLAUDE.local.md</code>, concatenation rather than override,
+on-demand loading of nested files, and <code>claudeMdExcludes</code> —
+from Anthropic’s memory documentation.</li>
+<li><strong>Claude Code does not read <code>AGENTS.md</code>
+natively</strong>, and the officially documented fixes are a
+<code>CLAUDE.md</code> containing <code>@AGENTS.md</code> or a symlink —
+from the same source, corroborated by the resolution of
+<code>cli/cli#14075</code> and the <code>nsnam/ns-3-dev</code> merge
+request.</li>
+<li><strong><code>/init</code> with <code>CLAUDE_CODE_NEW_INIT=1</code>
+and <code>/import</code> from v2.1.213</strong> as one-time migration
+paths rather than live bridges.</li>
+<li><strong>Codex’s <code>AGENTS.md</code> discovery</strong>, including
+the global file, the <code>AGENTS.override.md</code> precedence, one
+file per directory, the root-to-cwd concatenation, the stop at cwd, and
+the 32 KiB <code>project_doc_max_bytes</code> default — from OpenAI’s
+<code>AGENTS.md</code> guidance.</li>
+<li><strong>Whether a reference from one instruction file to another is
+followed</strong>: an <code>@AGENTS.md</code> import in Claude Code is a
+real include; a Markdown link in <code>AGENTS.md</code> pointing at
+<code>CLAUDE.md</code> is not, and Codex’s
+<code>project_doc_fallback_filenames</code> is the supported mechanism
+for that direction.</li>
+<li><strong>MCP configuration for both harnesses</strong> —
+<code>.mcp.json</code> with its typed server entries for Claude Code,
+<code>[mcp_servers.&lt;name&gt;]</code> TOML tables for Codex —
+including the absence of any official converter.</li>
+<li><strong>Codex subagents</strong>: TOML definitions, personal and
+project scopes, required and optional fields, the three built-ins,
+explicit invocation, and the <code>[agents]</code> concurrency
+block.</li>
+<li><strong>Skills on both sides</strong>: the shared Agent Skills
+specification, progressive disclosure with a name-and-description
+preamble budget, <code>.claude/skills</code> against
+<code>.agents/skills</code>, and the deprecation of Codex prompt files
+in favour of skills.</li>
+<li><strong>Codex hooks</strong>: the four configuration locations, the
+twelve lifecycle events, <code>PreToolUse</code> denial and input
+rewriting, and the hash-keyed trust review with its managed-hook
+exemption.</li>
+<li><strong>Approvals and sandboxing</strong>: Claude Code’s pattern
+rules against Codex’s orthogonal <code>sandbox_mode</code> and
+<code>approval_policy</code>, the operating-system enforcement
+mechanisms, and Codex’s <code>requirements.toml</code> and
+<code>managed_config.toml</code> enterprise layers.</li>
+<li><strong>Governance</strong>: the Linux Foundation’s Agentic AI
+Foundation announcement of 9 December 2025, with <code>AGENTS.md</code>
+and MCP as founding projects.</li>
 </ul>
-<p>Until those checks are complete, keep the primer’s advice
-architectural and repository-oriented. A bridge, a bounded rollout, an
-explicit safety boundary, and a fair evaluation method remain useful
-even when product names or controls change.</p>
+<p>Two claims in this primer are corroborated but not independently
+primary-confirmed, and are marked as such where they appear. The first
+is the reaction count on the GitHub feature request asking Claude Code
+to read <code>AGENTS.md</code>: it is well attested across secondary
+sources but was not verified from the issue page itself, so this primer
+does not quote a figure. The second is whether
+<code>approval_policy = &quot;untrusted&quot;</code> remains a valid Codex value;
+it appears in older sources but is not confirmed on the current
+advanced-configuration page.</p>
+<p>What remains genuinely volatile, and should be rechecked before you
+rely on it:</p>
+<ul>
+<li>current model identifiers, aliases, families, and per-interface
+availability;</li>
+<li>current plans, pricing, quotas, rate limits, and
+API-versus-subscription behaviour;</li>
+<li>current usage and billing telemetry available for bake-off records;
+and</li>
+<li>the exact configuration field names for both harnesses, because both
+schemas change between releases.</li>
+</ul>
+<p>That last point deserves emphasis over the others. Every
+configuration example in this primer was accurate against the
+documentation cited, and a renamed or relocated key will fail quietly
+rather than loudly — a misspelled field in a TOML or JSON configuration
+file usually means the feature is simply not configured, not that you
+get an error. Sanity-check exact field names against current
+documentation before automating anything, and prefer a test that proves
+the setting took effect over an assumption that the file is correct.</p>
+<p>The architectural advice around those details does not depend on
+them. A single canonical instruction file with a real import, a bounded
+rollout, an explicit safety boundary, and a fair evaluation method
+remain useful even when product names and controls change.</p>
 <h1 data-number="13" id="references"><span class="header-section-number">13</span> References</h1>
 <ul>
 <li><a href="https://learn.chatgpt.com/docs/codex/cli">Codex CLI
@@ -3285,8 +4207,27 @@ subagents</a></li>
 sandboxing</a></li>
 <li><a href="https://learn.chatgpt.com/docs/environments/cloud-environment/">Codex
 cloud environments</a></li>
+<li><a href="https://learn.chatgpt.com/docs/config-file/config-basic">Codex
+configuration: basics</a></li>
+<li><a href="https://learn.chatgpt.com/docs/config-file/config-advanced">Codex
+configuration: advanced</a></li>
+<li><a href="https://learn.chatgpt.com/docs/enterprise/managed-configuration">Codex
+enterprise managed configuration</a></li>
 <li><a href="https://docs.anthropic.com/en/docs/claude-code/overview">Claude
 Code documentation</a></li>
+<li><a href="https://code.claude.com/docs/en/memory">Claude Code memory
+and <code>CLAUDE.md</code></a></li>
+<li><a href="https://code.claude.com/docs/en/mcp">Claude Code MCP
+configuration</a></li>
+<li><a href="https://agents.md/"><code>AGENTS.md</code></a></li>
+<li><a href="https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation">Linux
+Foundation: formation of the Agentic AI Foundation</a></li>
+<li><a href="https://github.com/intellectronica/ruler">Ruler: cross-tool
+agent configuration generator</a></li>
+<li><a href="https://github.com/cli/cli/issues/14075"><code>cli/cli</code>
+issue 14075: Claude Code does not read <code>AGENTS.md</code></a></li>
+<li><a href="https://simonwillison.net/2026/Mar/16/codex-subagents/">Simon
+Willison on Codex subagents</a></li>
 </ul>
     </main>
 
