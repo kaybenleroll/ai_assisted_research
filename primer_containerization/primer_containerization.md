@@ -4,7 +4,7 @@
 
 Containers are the substrate almost everything you deploy now runs on, and most practitioners learn them by osmosis — a `Dockerfile` inherited from a colleague, a `docker compose up` in a README, a YAML manifest someone in platform engineering wrote two years ago and nobody has touched since. That works right up until it doesn't: until a build behaves differently in CI than on your laptop, until a rootless container can't write to a mounted volume, until a Pod sits in `Pending` forever and the only diagnostic you have is a vague memory that Kubernetes "schedules things." At that point the gap between using containers and understanding them turns into wasted days.
 
-This primer closes that gap. It is written for the engineer or data scientist who ships containerised software, reads Kubernetes manifests, and has a working intuition for what a container does — but has never been shown the machinery underneath, and so cannot reason about it when it misbehaves. The goal is not to make you a platform engineer. It is to give you an accurate mental model: what a container actually is at the kernel level, why there are three competing-but-compatible engines, why Kubernetes exists at all, and what the 2026 landscape looks like now rather than what it looked like when the blog post you read was written.
+This primer closes that gap. It is written for the engineer or data scientist who ships containerised software, reads Kubernetes manifests, and has a working intuition for what a container does — but has never been shown the machinery underneath, and so cannot reason about it when it misbehaves. The goal is not to make you a platform engineer. It is to give you an accurate mental model: what a container actually is at the kernel level, how the user-facing engines and lower-level runtimes fit together, why Kubernetes exists at all, and what the 2026 landscape looks like now rather than what it looked like when the blog post you read was written.
 
 ### What This Covers
 
@@ -12,7 +12,7 @@ The primer works bottom-up. It starts with the Linux kernel primitives that make
 
 It then treats the two engines a practitioner actually chooses between. Docker gets its history, its layered client/daemon/`containerd`/`runc` architecture, its current licensing position — which in 2026 is a live commercial concern rather than a footnote — and the state of Compose, Swarm, and Docker Hub. Podman gets its daemonless and rootless architecture, its `systemd` integration, its companion tools, and its recent governance shift. The two then get compared honestly, on the axes that actually decide the choice in 2026.
 
-Next comes the wider runtime landscape: `containerd` and CRI-O, `runc` and `crun`, the hardened runtimes gVisor and Kata Containers, LXC/LXD's quite different model of what a container is for, WebAssembly as a complementary deployment target rather than a successor, and Firecracker microVMs.
+Next comes the practical container contract — image identity and builds, storage, networking, and the security mechanisms that sit alongside namespaces and cgroups — followed by the wider runtime landscape: `containerd` and CRI-O, `runc` and `crun`, the hardened runtimes gVisor and Kata Containers, LXC/LXD's quite different model of what a container is for, WebAssembly as a complementary deployment target rather than a successor, and Firecracker microVMs. A short section on use cases then draws the line between what a container solves on its own and where an orchestrator like Kubernetes actually becomes necessary — the bridge into the primer's second half.
 
 The second half of the primer is Kubernetes. It starts with the coordination problems Kubernetes exists to solve, because Kubernetes is incomprehensible until you know what it is for. Then the architecture — control plane and node components — then the object model, explained by purpose rather than by definition. Then the ecosystem that has grown on top of it: Helm, Kustomize, Operators, service meshes, GitOps, and ingress. Then the lightweight distributions, the genuine alternatives to Kubernetes, and finally the developments from 2025 and 2026 a practitioner should know about — GPU scheduling for AI workloads above all.
 
@@ -31,6 +31,8 @@ You should be comfortable on a Unix command line, know what a process is, and ha
 ### How the Guide Is Structured
 
 The order is deliberate: kernel mechanics, then standards, then engines, then orchestration, then the current state of play. Each section assumes the ones before it. If you are only here for Kubernetes, you can start at the section on why Kubernetes exists — but the architecture discussion will make considerably more sense if you have read the OCI section first, because Kubernetes' relationship to container runtimes is defined entirely in terms of those specifications.
+
+**Freshness note (12 September 2026):** The conceptual sections are intended to age slowly. Version numbers, licensing terms, release status, adoption figures, and ecosystem recommendations are a snapshot of the date above; check the linked project documentation before making an implementation or procurement decision.
 
 ## What a Container Actually Is
 
@@ -52,11 +54,11 @@ Docker's contribution in 2013 was not a new isolation mechanism. It was packagin
 
 A namespace wraps a global system resource so that processes inside the namespace see their own instance of it. Linux has several, and a typical container uses most of them at once:
 
-- **PID namespace** — the process gets its own process-ID tree. The first process in the namespace is PID 1, and processes outside the namespace are simply not visible in `/proc`. This is why `ps` inside a container shows two or three processes rather than the host's several hundred, and it is also why a container's main process inherits PID 1's special responsibilities — notably reaping orphaned child processes, which most application binaries were never written to do.
+- **PID (process ID) namespace** — the process gets its own process-ID tree. The first process in the namespace is PID 1, and processes outside the namespace are simply not visible in `/proc`. This is why `ps` inside a container shows two or three processes rather than the host's several hundred, and it is also why a container's main process inherits PID 1's special responsibilities — notably reaping orphaned child processes, which most application binaries were never written to do.
 - **Network namespace** — its own network interfaces, routing table, `iptables` rules, and socket ports. Two containers can each bind port 8080 without conflict because each has a private port space. Connectivity between namespaces is then arranged explicitly, usually with a virtual ethernet pair bridging the container namespace to the host's.
 - **Mount namespace** — its own mount table. This is what makes the container's root filesystem possible without disturbing the host's, and what makes bind-mounting a host directory into a container a per-container operation.
-- **UTS namespace** — its own hostname and domain name, which is why `hostname` inside a container returns a container ID rather than your laptop's name.
-- **IPC namespace** — its own System V IPC objects and POSIX message queues, so shared-memory segments don't leak between containers.
+- **UTS (Unix Timesharing System) namespace** — its own hostname and domain name, which is why `hostname` inside a container returns a container ID rather than your laptop's name.
+- **IPC (inter-process communication) namespace** — its own System V IPC objects and POSIX message queues, so shared-memory segments don't leak between containers.
 - **User namespace** — its own user and group ID mapping. This is the most consequential one for security, and it is discussed in detail in the Podman section, because it is the mechanism that makes rootless containers work.
 - **Cgroup namespace** — its own view of the control-group hierarchy, so a container can't see the resource limits applied to its siblings.
 
@@ -70,7 +72,7 @@ Namespaces isolate visibility; they do nothing about consumption. A process in i
 
 Two generations exist. cgroups v1 used a separate hierarchy per controller, which made consistent policy across resources awkward and produced a long tail of edge cases. cgroups v2 uses a single unified hierarchy and is now effectively universal on current distributions; Podman 6.0 dropped v1 support entirely, and Kubernetes has moved the same way. If you encounter cgroups v1 in 2026, you are on an old system and should expect tooling friction.
 
-The failure mode worth knowing is the memory limit. When a container exceeds its cgroup memory limit, the kernel's OOM killer terminates a process inside it — usually the largest, which is usually your application. From inside the container this looks like an unexplained hard kill: no stack trace, no exception, no log line, exit code 137. From the host it is an entry in the kernel log. This is the single most common cause of containers that "just restart for no reason," and it is why a JVM or Python process with a heap sized from the host's total memory rather than the cgroup limit will die under load. Modern runtimes read cgroup limits, but only if configured to, and older ones do not.
+The failure mode worth knowing is the memory limit. When a container exceeds its cgroup memory limit, the kernel's out-of-memory (OOM) killer terminates a process inside it — usually the largest, which is usually your application. From inside the container this looks like an unexplained hard kill: no stack trace, no exception, no log line, exit code 137. From the host it is an entry in the kernel log. This is the single most common cause of containers that "just restart for no reason," and it is why a JVM or Python process with a heap sized from the host's total memory rather than the cgroup limit will die under load. Modern runtimes read cgroup limits, but only if configured to, and older ones do not.
 
 CPU limits fail more subtly. The CPU controller in bandwidth mode gives a container a quota per scheduling period; when the quota is exhausted, every thread in the container is stopped until the next period begins. For a latency-sensitive multi-threaded service this produces periodic stalls that look like network problems and do not show up as high CPU utilisation, because the process is not running when it is throttled. Throttling metrics exist in the cgroup filesystem and are worth watching precisely because the obvious metrics hide the problem.
 
@@ -82,7 +84,7 @@ Reads resolve down the stack: the topmost layer containing a given path wins. Wr
 
 This design buys three things. Images share layers, so ten images built from the same base image store that base once on disk and pull it once over the network. Builds cache, because a build step whose inputs haven't changed can reuse the layer it produced last time. And container startup is nearly free, because starting a container means creating a writable layer and mounting an overlay, not copying a filesystem.
 
-The design also produces specific, recurring problems. Copy-up means the first write to a large file in a lower layer is slow and consumes disk equal to the file's size — which is why running a database on a container's writable layer performs badly and why database containers should always use a volume. Deleted files still occupy space in the layer where they were added, so a Dockerfile that downloads a 500MB archive in one `RUN` and deletes it in the next produces an image containing both the archive and the whiteout; the fix is to do both in a single layer, or to use a multi-stage build and copy only the result. And because layer identity is content-addressed, changing anything early in a Dockerfile invalidates every layer after it — the reason the conventional ordering puts dependency installation before application code.
+The design also produces specific, recurring problems. Copy-up means the first write to a large file in a lower layer is slow and consumes disk equal to the file's size — which is why persistent database data should use a volume or external storage rather than the container's writable layer. Deleted files still occupy space in the layer where they were added, so a Dockerfile that downloads a 500MB archive in one `RUN` and deletes it in the next produces an image containing both the archive and the whiteout; the fix is to do both in a single layer, or to use a multi-stage build and copy only the result. And because layer identity is content-addressed, changing anything early in a Dockerfile invalidates every layer after it — the reason the conventional ordering puts dependency installation before application code.
 
 ### Container Versus Virtual Machine
 
@@ -95,6 +97,36 @@ A container shares the host kernel. The isolation boundary is the kernel's names
 Everything else follows. Containers start in milliseconds because there is no kernel to boot and no hardware to enumerate; VMs take seconds. Containers have essentially no steady-state overhead because the processes inside are just host processes; VMs pay for a second kernel and its memory. Containers must share the host's kernel version and its Linux-ness, so a Linux container cannot run on a Windows kernel — which is why Docker Desktop on macOS and Windows runs a Linux VM and puts your containers inside it, a detail that explains most of the performance and filesystem-mount weirdness on those platforms. VMs can run any guest OS.
 
 And the security asymmetry is real, not theoretical. Container escapes via kernel vulnerabilities have happened repeatedly. If your threat model includes hostile code — multi-tenant workloads, customer-supplied builds, or, increasingly in 2026, AI agents executing generated code — plain namespace isolation is not enough on its own. That gap is exactly what gVisor, Kata Containers, and Firecracker exist to fill, and they are covered later.
+
+## The Practical Container Contract
+
+The kernel primitives explain how containers are isolated, but they do not explain the interfaces you use every day. A container image, a container's writable state, its network attachment, and its security profile are separate pieces. Keeping them separate prevents several common category errors — treating an image as a running container, treating a published port as a service-discovery mechanism, or treating a non-root process as a complete security boundary.
+
+### Building and Identifying Images
+
+An image is a portable filesystem and configuration description; a container is one runtime instance of it. A Dockerfile or Containerfile describes a build, but the file itself is not the image and the image is not the source repository. The build context — the files made available to the builder — is part of the input, which is why a careless context can make builds slow and can accidentally copy secrets into an image. `.dockerignore` or its equivalent is a correctness and security control, not just an optimisation.
+
+Use multi-stage builds when the build toolchain is larger or more privileged than the runtime needs. The final stage should contain the application, its runtime dependencies, and the minimum operating-system material it needs, not compilers, package caches, credentials, or test fixtures. BuildKit and Buildah provide different implementations of this workflow; the resulting OCI image is the interoperable artefact.
+
+An image tag is a human-friendly pointer, not an immutable identity. `example/api:latest` can refer to different bytes tomorrow. A digest such as `example/api@sha256:...` identifies one manifest, and a multi-platform tag points to an image index that selects an architecture-specific manifest at pull time. Use tags for discovery and digests for promotion, rollback, and auditability. A build that is reproducible in intent but deploys a moving tag is not reproducible in practice.
+
+### Storage and Lifecycle
+
+The writable layer described above is disposable container state. It disappears when the container is removed and is a poor place for data that must survive replacement. A named volume gives the engine ownership of persistent storage; a bind mount exposes a host path directly; a `tmpfs` mount keeps temporary data in memory. These choices have different ownership, backup, portability, and security consequences, especially in rootless mode. A mount is not baked back into the image when you commit or rebuild the container.
+
+This is also why containers should be replaceable rather than patched in place. Put application code and immutable dependencies in the image, configuration in the environment or mounted files, and durable state in a volume or external service. The model is simple; the difficult part is deciding explicitly which data belongs in which category.
+
+### Networking Is a Separate Layer
+
+A network namespace gives a container its own interfaces, routes, and port space; it does not, by itself, connect the container to anything. Engines usually attach it to a bridge through a virtual Ethernet pair, provide container-local DNS, and install forwarding and address-translation rules. Publishing a port maps a host port to a container port. It is not the same as making the container discoverable by name to other containers, and neither operation is required when containers share a network namespace in a Pod.
+
+The common modes are worth distinguishing. A bridge network gives ordinary isolation with explicit connectivity. `host` networking removes the network namespace and shares the host's ports, trading isolation for simplicity or performance. `none` gives the container no configured network. Kubernetes builds on the same primitives but imposes a different contract: the Pod, not each individual container, is the network endpoint.
+
+### Security Beyond Namespaces
+
+Namespaces and cgroups are necessary but not sufficient security controls. Linux capabilities split root's powers into individual privileges; a container that does not need `NET_ADMIN` or `SYS_ADMIN` should not have them. Seccomp filters restrict which system calls a process may make. SELinux and AppArmor apply mandatory access-control policy outside the process's own view. Read-only root filesystems, dropped capabilities, and no-new-privileges reduce the consequences of a compromise.
+
+The dangerous shortcuts are `--privileged`, mounting sensitive host paths, and exposing a root-equivalent engine socket. Rootless containers improve the default blast radius by mapping container UID 0 to an unprivileged host identity, but they still share the host kernel and still need a threat model. For hostile code, use a stronger boundary such as a sandboxed runtime or a microVM, and treat network egress and credentials as part of the isolation problem too.
 
 ## Standardisation: The OCI Specifications
 
@@ -121,7 +153,7 @@ The separation is the point. Because the boundaries are specified rather than im
 
 Two practical consequences are worth drawing out. First, Podman's claim of Docker compatibility is not reverse engineering; both consume and produce the same specified formats, so compatibility is the default and divergence is the exception. Second, when Kubernetes removed `dockershim` in version 1.24 in 2022 — the adapter layer that let the kubelet talk to Docker specifically — the widespread panic about "Kubernetes dropping Docker support" was misplaced. Kubernetes dropped a Docker-specific *integration*, not Docker-built *images*, because images are an OCI concern and always had been. Clusters switched their runtime to `containerd` or CRI-O and kept running the same images. Standardisation is what made that a configuration change rather than a migration.
 
-The one meaningful gap in this otherwise tidy picture is the build step. Nothing in the OCI specifies how an image is *produced*; the Dockerfile format is a de facto standard maintained by Docker rather than a specified one. That is why build tooling is where the most divergence remains, and why Cloud Native Buildpacks — which graduated in the CNCF in August 2026 and produce OCI images from source without a Dockerfile — are a genuinely interesting development rather than yet another build wrapper.
+The one meaningful gap in this otherwise tidy picture is the build step. Nothing in the OCI specifies how an image is *produced*; the Dockerfile format is a de facto standard maintained by Docker rather than a specified one. That is why build tooling is where the most divergence remains, and why Cloud Native Buildpacks — which produce OCI images from source without a Dockerfile — are a genuinely interesting development rather than yet another build wrapper.
 
 ## Docker
 
@@ -171,9 +203,9 @@ This has become a genuine procurement question rather than a licensing footnote,
 
 Docker Inc. tightened its Subscription Service Agreement such that free use of **Docker Desktop** — the packaged GUI and VM-based product for macOS, Windows, and Linux — is limited to non-commercial and personal use, open-source work, and commercial use only by organisations with **fewer than 250 employees and under $10 million in annual revenue**. Cross either threshold and a paid subscription is required for every user. Government entities are excluded from the free tier regardless of size.
 
-The published tiers run roughly: Pro at about $9 per user per month on an annual commitment (around $11 monthly), Team at about $15 per user per month annually for up to 100 users, and Business at $24 per user per month with no annual discount, mandatory above 100 seats and for organisations in regulated industries with HIPAA or SOC 2 obligations. Business adds SSO/SAML, SCIM provisioning, and Advanced Container Isolation.
+The paid tiers change over time and bundle different features. The relevant editorial point is that commercial Docker Desktop use is tied to a subscription, with organisation plans adding controls such as single sign-on, provisioning, audit features, and hardened isolation. Check Docker's current plan and subscription pages for prices, seat thresholds, and regulated-industry terms rather than copying a number into procurement paperwork.
 
-Two clarifications matter and are routinely confused. First, this is a licence on **Docker Desktop**, not on the Docker Engine or the container format — the engine remains open source under Apache 2.0, and running `dockerd` on a Linux server costs nothing. The bite lands on developer laptops, especially macOS and Windows fleets where Desktop is the practical way to get a Linux container host. Second, Docker Inc. remains an independent, venture-backed company valued at roughly $2.1 billion; it has not been acquired, and the licensing change is a deliberate monetisation strategy rather than a consequence of ownership change.
+Two clarifications matter and are routinely confused. First, this is a licence on **Docker Desktop**, not on the Docker Engine or the container format — the engine remains open source under Apache 2.0, and running `dockerd` on a Linux server costs nothing. The bite lands on developer laptops, especially macOS and Windows fleets where Desktop is the practical way to get a Linux container host. Second, Docker Desktop's commercial terms are a product decision, not a change to OCI image compatibility or to the licensing of every container image you pull.
 
 The practical effect is that a 400-person engineering organisation now has a five-figure-plus annual line item where it previously had none, and finance departments have started asking whether an Apache-2.0 alternative would do. That question is why Podman evaluations spiked, and it is a better predictor of engine choice in 2026 than any feature comparison.
 
@@ -189,9 +221,9 @@ Compose's boundary is that it is a single-host tool. It has no scheduler, no not
 
 Swarm is Docker's built-in clustering and orchestration mode, integrated into the engine since Docker 1.12 in 2016. It lets a set of Docker hosts form a cluster with managers and workers, and deploy services across them with a familiar CLI and a Compose-like file format. It does scheduling, rolling updates, an overlay network, and service discovery, and for a small cluster it is dramatically simpler to stand up and reason about than Kubernetes.
 
-Its current status needs stating carefully, because both "Swarm is dead" and "Swarm is a viable Kubernetes alternative" are wrong. Swarm is maintained at a bugfix and security level — feature-stable rather than feature-frozen — and Mirantis, which acquired Docker's enterprise business, has committed to supporting it through 2030. So it is supported, and it works. But it is not growing, and there have been real compatibility problems with Docker 29 and later around legacy volume plugins, which is the kind of friction that accumulates in a product nobody is investing in.
+Its current status needs stating carefully, because both "Swarm is dead" and "Swarm is a viable Kubernetes alternative" are wrong. It remains usable and receives maintenance, but it is not where the ecosystem's new orchestration work is happening. That means less current documentation, fewer integrations, and a smaller hiring pool than Kubernetes. Treat it as a deliberately small and stable platform choice, not as the default path for a new multi-team platform.
 
-The adoption gap is stark. CNCF survey data from 2026 puts Kubernetes at roughly 82% production adoption among container users against roughly 2.5% for Swarm. That ratio, not the maintenance status, is the decisive fact: choosing Swarm in 2026 means a small and shrinking pool of practitioners, documentation, tooling, and hiring candidates. It remains a reasonable choice for a genuinely small, stable deployment run by a team that does not want to operate Kubernetes — and a poor choice for anything expected to grow.
+The adoption gap is stark. CNCF's January 2026 survey put Kubernetes production adoption among container users at 82%, against roughly 2.5% for Docker Swarm — the same survey cited later in this primer for the Kubernetes-versus-ECS comparison, so treat both figures with the same weight. That ratio, not the maintenance status, is the decisive fact: choosing Swarm means accepting a small pool of practitioners, documentation, tooling, and hiring candidates. It remains a reasonable choice for a genuinely small, stable deployment run by a team that does not want to operate Kubernetes — and a poor choice for anything expected to grow.
 
 ### Docker Hub
 
@@ -217,7 +249,7 @@ The costs are real too. Without a daemon there is nothing to restart your contai
 
 This is the substantive security argument, and it rests on the user namespace.
 
-In rootless mode, the container runs under your own UID. The user namespace maps UIDs inside the container to different UIDs outside it, using ranges allocated to your user in `/etc/subuid` and `/etc/subgid`. Root inside the container — UID 0 — maps to an unprivileged host UID somewhere in your assigned range. Software inside the container sees itself as root and behaves normally: it can bind low ports within its own namespace, write to `/etc`, install packages. From the host's point of view, every one of those actions is performed by an unprivileged user with no special capabilities.
+In rootless mode, the container runs under your own UID. The user namespace maps UIDs inside the container to different UIDs outside it, using ranges allocated to your user in `/etc/subuid` and `/etc/subgid`. Root inside the container — user ID (UID) 0 — maps to an unprivileged host UID somewhere in your assigned range. Software inside the container sees itself as root and behaves normally: it can bind low ports within its own namespace, write to `/etc`, install packages. From the host's point of view, every one of those actions is performed by an unprivileged user with no special capabilities.
 
 The security property that buys you is specific and valuable. If an attacker breaks out of the container, they land as an unprivileged host user, not as root. They have not escalated; they have moved sideways into a low-privilege account. Compare that with the default Docker path, where a container escape or a socket compromise lands on a root daemon.
 
@@ -276,19 +308,19 @@ Podman ships as part of a set of tools that split responsibilities Docker combin
 
 The separation is the point. Docker's model is one daemon that builds, stores, distributes, and runs. Podman's model is separate tools for separate concerns, each usable unprivileged, each composable in a script. For interactive development the difference is small. For automation and for CI systems that should not have privileged access, it is substantial.
 
-### Governance, Versions, and the CNCF Donation
+### Governance, Versions, and the CNCF Sandbox
 
 Podman has always been Red Hat-led, and single-vendor governance was a legitimate objection to adopting it — the mirror image of the objection to Docker.
 
-That changed in the 2025–2026 window, when Podman, Buildah, Skopeo, and Podman Desktop were donated to the Cloud Native Computing Foundation. Red Hat remains the dominant contributor, as Google remains dominant in Kubernetes' early history, but the projects now sit under neutral foundation governance with the usual CNCF requirements around trademarks, contributor structure, and roadmap transparency. For organisations whose adoption criteria include governance, this removes the main blocker.
+In January 2025, the Podman Container Tools project — Podman, Buildah, and Skopeo — entered the Cloud Native Computing Foundation Sandbox. That is meaningful external stewardship, but it is not CNCF graduation or proof of fully neutral governance: Red Hat remains the primary sponsor and contributor. Podman Desktop should be assessed separately. For organisations whose adoption criteria include foundation participation, the move reduces — but does not eliminate — the single-vendor concern.
 
-As of September 2026 the current versions are Podman 6.1.1 (released 2 September 2026), Buildah 1.44.0, and Skopeo 1.23. Podman 6.0 was a deliberate cleanup release that removed a substantial amount of legacy machinery: cgroups v1 support, direct `iptables` manipulation, the CNI networking stack, `slirp4netns`, and the BoltDB state backend, in favour of `netavark` and `aardvark-dns` for networking, `pasta` for rootless connectivity, cgroups v2 only, and a SQLite-backed database. If you are upgrading across the 6.0 boundary, those removals are the thing to check, particularly custom CNI network configuration.
+Version-sensitive details belong in release notes rather than in a durable mental-model primer. If you are upgrading across a major Podman release, check the migration notes for storage backends, cgroups, networking, and rootless connectivity — especially if you have custom CNI configuration or scripts that depend on implementation details.
 
 ### Adoption Reality
 
 Here the honest framing matters more than the advocacy. Podman's architecture is better on the axes that platform engineers and security teams care about, and its usage is nowhere near Docker's.
 
-One 2026 developer survey reported roughly 71% of respondents using Docker against roughly 11% using Podman. Treat the exact figures as indicative rather than precise — survey populations skew — but the shape is not in doubt. Podman's real installed base comes substantially from being the default engine on RHEL 9 and 10, Fedora, CentOS Stream, and AlmaLinux, where it arrives without anyone choosing it. Outside RHEL-adjacent environments, Docker remains the default assumption in tutorials, CI templates, tooling defaults, and job descriptions.
+Podman's real installed base comes substantially from being the default engine on RHEL-family distributions and Fedora, where it arrives without anyone choosing it. Outside that ecosystem, Docker remains the default assumption in tutorials, CI templates, tooling defaults, and job descriptions. The exact market-share numbers are less useful than that distinction, and survey populations vary too much to support false precision here.
 
 So: Podman is the more defensible architecture, winning on paper and dominant within the Red Hat ecosystem, and not winning overall market share. Both halves of that are true, and a recommendation that ignores either is incomplete.
 
@@ -303,12 +335,12 @@ Most comparisons of these two tools that you will find online were written betwe
 | Architecture | Client-server via `dockerd`, root by default | Daemonless; direct fork-exec, `conmon` per container |
 | Privilege model | Root daemon by default; rootless is opt-in configuration | Rootless by default with user-namespace UID mapping |
 | Socket exposure | `/var/run/docker.sock` is root-equivalent | No socket by default; optional user-level API service |
-| Default low-level runtime | `runc` | `crun` |
+| Default low-level runtime | Commonly `runc`; configurable | Commonly `crun`; configurable |
 | `systemd` integration | Bolt-on, awkward | First-class via Quadlet unit files |
 | CLI and image compatibility | Native | Near drop-in for the Docker CLI and Compose files |
 | Build tooling | `docker build` in the daemon; BuildKit | Buildah, usable standalone and unprivileged |
-| Licence (commercial use) | Desktop requires paid subscription above 250 employees or $10M revenue; all government entities | Apache 2.0 throughout, no seat licensing |
-| Governance | Docker Inc., single vendor; `containerd` and `runc` in the CNCF | Donated to the CNCF (2025–2026) with Buildah, Skopeo, Desktop |
+| Licence (commercial use) | Desktop subscription terms apply; verify current thresholds | Open-source components; no Docker Desktop-style seat licence |
+| Governance | Docker Inc., single vendor; `containerd` and `runc` in the CNCF | Podman Container Tools in the CNCF Sandbox; Red Hat remains primary sponsor |
 | Ecosystem position | Dominant; Docker Hub; largest tooling and tutorial base | Minority overall; default on RHEL-family distributions |
 
 The rows that actually decide things are the licence row and the privilege row. The rest are differences you would adapt to within a week.
@@ -333,7 +365,7 @@ Pick Podman when you want containers as `systemd` services on a single host. Qua
 
 ### The Honest Summary
 
-For greenfield work with no platform constraint, Podman is the better default in 2026: same images, near-identical CLI, better security posture, no licence exposure, foundation governance. The reason not to choose it is ecosystem gravity, and ecosystem gravity is a real engineering force, not a failure of nerve — being the only team in the company using a different engine has an ongoing cost.
+For greenfield Linux work with no platform constraint, Podman is the better default in 2026: same images, near-identical CLI, a safer default privilege model, and no Docker Desktop seat licence. The reason not to choose it is ecosystem gravity, and ecosystem gravity is a real engineering force, not a failure of nerve — being the only team in the company using a different engine has an ongoing cost.
 
 Also worth saying plainly: this choice matters less than the amount written about it suggests. Both produce OCI images that run anywhere. Both consume the same Dockerfiles. In production on Kubernetes neither is present — the cluster runs `containerd` or CRI-O, and your build engine is a development and CI concern only. The decision is about developer workflow and build-time privilege, not about what runs in production, and that scoping should keep it proportionate.
 
@@ -341,7 +373,7 @@ Also worth saying plainly: this choice matters less than the amount written abou
 
 Docker and Podman are *engines* — user-facing tools that manage images and orchestrate the act of running a container. Beneath and beside them sits a set of components that matter once you touch Kubernetes or have isolation requirements that plain containers cannot meet. The most important distinction to get straight is the one between a CRI implementation and an OCI runtime, because the terms are used interchangeably in casual writing and they are not interchangeable at all.
 
-A **CRI implementation** talks upwards to Kubernetes. The Container Runtime Interface is a gRPC API that the kubelet uses to say "pull this image," "create a sandbox for this Pod," "start this container." `containerd` and CRI-O are CRI implementations.
+A **CRI implementation** talks upwards to Kubernetes. The Container Runtime Interface is a gRPC API that the kubelet uses to say "pull this image," "create a sandbox for this Pod," "start this container." `containerd` with its CRI plugin and CRI-O are the two common implementations.
 
 An **OCI runtime** talks downwards to the kernel. It consumes a filesystem bundle and a `config.json` and performs the actual isolation work. `runc`, `crun`, `runsc` (gVisor), and `kata-runtime` are OCI runtimes.
 
@@ -364,7 +396,7 @@ graph TB
 
 `containerd` is the mid-level runtime that manages the container lifecycle: pulling and storing images, managing filesystem snapshots, creating and supervising containers through shims, and handling low-level networking hooks. It was extracted from Docker, donated to the CNCF, and has since graduated — the CNCF's highest maturity tier, requiring demonstrated production adoption, a diverse contributor base, and a security audit.
 
-Its significance is that it became shared infrastructure. Docker uses it. Most Kubernetes distributions use it as their CRI implementation, including the managed offerings from all three major clouds. That convergence is healthy: the component doing the most operationally sensitive work is one well-audited, widely-deployed implementation rather than five.
+Its significance is that it became shared infrastructure. Docker uses it. Most Kubernetes distributions use it with its CRI plugin, including the managed offerings from the major clouds. That convergence is healthy: the component doing the most operationally sensitive work is one well-audited, widely-deployed implementation rather than five.
 
 ### CRI-O
 
@@ -374,7 +406,7 @@ The argument for it is minimality. A component with a smaller feature surface ha
 
 ### runc and crun
 
-`runc` is the OCI reference implementation, written in Go, extracted from Docker's `libcontainer`. It is the default in `containerd` and CRI-O and the most widely-deployed container runtime in existence. When you read the runtime specification and wonder what a compliant implementation looks like, `runc` is the answer.
+`runc` is the OCI reference implementation, written in Go, extracted from Docker's `libcontainer`. It remains one of the most widely deployed container runtimes and is a common default in `containerd`; current CRI-O configurations commonly default to `crun` instead. When you read the runtime specification and wonder what a compliant implementation looks like, `runc` is the canonical reference point.
 
 `crun` is a smaller alternative written in C, developed principally by Red Hat, and it is Podman's default. The advantages follow from the language and the smaller scope: lower memory footprint per container, faster startup — Red Hat has reported around 22% faster container start, which is a vendor figure and should be read as "meaningfully but not dramatically faster" — and no Go runtime in the process. `crun` also gained cgroups v2 support earlier than `runc` did, which is how it became Podman's default.
 
@@ -388,7 +420,7 @@ gVisor's `runsc` runtime intercepts the container's system calls and services th
 
 The tradeoffs are concrete. You pay a syscall performance penalty, which ranges from negligible for compute-bound work to significant for syscall-heavy or I/O-heavy workloads. Compatibility is good but not total — gVisor implements most of Linux, and applications relying on obscure syscalls or particular `/proc` behaviour can break. In return you get isolation considerably stronger than namespaces without requiring hardware virtualisation, which means it works in nested-virtualisation environments where a VM-based approach cannot.
 
-The 2026 driver for gVisor is AI agent sandboxing. Running code generated by a language model is, from a security standpoint, running untrusted code submitted by an anonymous party, and the volume of that has grown very fast. Google has reported roughly sixteen-fold growth in gVisor sandbox usage on GKE within a five-month period, attributed to this demand, and has shipped an "Agent Sandbox" product built on gVisor. Treat the growth multiple as a vendor datapoint; the direction is corroborated by the broader shift in what these runtimes are being bought for.
+AI agent sandboxing is a new demand driver for gVisor. Running code generated by a language model is, from a security standpoint, running untrusted code submitted by an anonymous party. The exact adoption growth figures are vendor datapoints and do not belong in a durable primer; the useful point is that agent execution makes the shared-kernel threat model concrete for teams that previously ran only trusted application code.
 
 ### Kata Containers
 
@@ -402,7 +434,7 @@ Kata's position in 2026 is genuine multi-tenant Kubernetes: clusters running wor
 
 The 2026 framing worth carrying is that these are no longer cluster-wide decisions. Kubernetes' **RuntimeClass** object lets you define named runtime configurations and select one per Pod, so a single cluster can run trusted internal services on `runc`, customer-submitted code on gVisor, and multi-tenant workloads on Kata. That per-workload selection is the significant operational change, because it removes the need to pay isolation overhead uniformly or to run separate clusters per trust level.
 
-Roughly: Firecracker dominates serverless and AI-sandbox platform infrastructure, Kata owns multi-tenant Kubernetes, and gVisor has become the substrate for agent-sandboxing use cases. All three are increasingly consumed as RuntimeClass options rather than as platform commitments.
+Roughly: Firecracker is common in serverless and AI-sandbox platforms, Kata is a strong fit for multi-tenant Kubernetes, and gVisor is a strong fit for workloads that need a userspace kernel without a full microVM. All three can be consumed as workload-level isolation choices rather than as platform-wide commitments.
 
 ### LXC and LXD
 
@@ -422,7 +454,7 @@ WebAssembly — Wasm — is a portable binary instruction format originally buil
 
 The genuine advantages are real. Cold starts are in the single-digit to low-tens-of-milliseconds range against hundreds of milliseconds for a container, because there is no filesystem to mount and no process to fork — just a module to instantiate. Module sizes are dramatically smaller than container images, commonly by one to two orders of magnitude, since there is no base OS. Portability is by architecture rather than by convention: the same module runs on x86 and ARM without a multi-platform build. And the security model is capability-based and deny-by-default, so a module has no filesystem or network access unless explicitly granted — which is a stronger starting position than a container's.
 
-The state in 2026 is that Wasm is genuinely maturing rather than perpetually promising. WASI Preview 2 and the Component Model are widely adopted, and WASI 0.3.0, released in February 2026, added native asynchronous I/O — a substantial gap closed, since async was previously bolted on awkwardly. Major platforms run Wasm workloads: Cloudflare Workers is built on it, and AWS Lambda and Azure Functions support it.
+The state in 2026 is that Wasm is genuinely maturing rather than perpetually promising. WASI Preview 2 and the Component Model are important parts of the current direction, but support still varies by runtime and host platform. Check the target platform's compatibility rather than assuming that a Wasm module is as portable operationally as its binary format suggests.
 
 Now the correction, because it matters. **Wasm is not replacing containers, and framing that says it is should be read as marketing.** The "Docker is dead, Wasm killed it" genre is clickbait. The reasons are structural, not maturity-related. Wasm modules are single-language compiled artifacts with a constrained system interface; containers package arbitrary software including things you did not write and cannot recompile. Wasm's threading, filesystem, and networking support remains narrower than a full OS. Anything stateful, anything with a complex dependency tree, anything involving a database or an existing binary you do not control, is a container workload and will stay one.
 
@@ -441,6 +473,64 @@ That combination is what makes VM-grade isolation viable for serverless. Every L
 The notable recent development is **Lambda MicroVMs**, launched in June 2026, which extends Lambda's maximum execution time from 15 minutes to 8 hours, with persistent state across the lifetime of an execution environment and snapshot-based boot. That is a substantial change to what Lambda is for — the 15-minute ceiling was the main reason long-running jobs, batch processing, and agent-style workloads had to go elsewhere. At launch it is limited to Graviton/Arm instances in a subset of regions, initially US-East, US-West, Tokyo, and Ireland, so check availability before designing around it.
 
 For a practitioner, Firecracker mostly matters as infrastructure you consume rather than operate. But the pattern — VM-grade isolation at container-grade startup cost — is the one to keep in mind, because it is the direction the isolation story has been moving and it is what makes per-workload isolation choices affordable.
+
+## Use Cases: From One Container to a Platform
+
+Containers solve a set of practical problems before they become an orchestration strategy. They package an application and its user-space dependencies into a portable artefact, give a job a predictable execution environment, and make replacement cheap. They do not make data durable, schedule work across a fleet, or turn a single process into a distributed system. Those boundaries matter particularly in data and machine learning work, where the code is often portable but the data, hardware, and coordination are not.
+
+The useful progression is not "container, then Kubernetes" as a universal maturity model. It is a sequence of increasingly demanding operational problems:
+
+| Situation | What the container solves | What to add next |
+| --- | --- | --- |
+| One developer or CI job | Dependency drift, native-library differences, and "works on my machine" failures | A pinned image, a clean build, and a registry |
+| One batch job or service on one host | Repeatable execution and simple replacement | A volume or object store for state; `cron`, systemd, Quadlet, or a managed job runner |
+| Several services on one host | Local networking, process grouping, and coordinated startup | Compose or Quadlet, backups, monitoring, and an explicit upgrade procedure |
+| Many independent jobs or services | Portable workload units | A managed batch/container service, or a scheduler if placement and quota become a problem |
+| A shared multi-node fleet | Placement, rescheduling, rollout, autoscaling, and multi-team policy | Kubernetes or another orchestrator, with the operational expertise to run it |
+
+The transition should be driven by coordination and failure requirements, not by a desire to appear production-grade. A container running a serious model on one machine can be entirely appropriate. A lightweight web service spread across thirty nodes may need orchestration even if its code is trivial.
+
+### Reproducible Development and CI
+
+The most broadly useful container is often not a production container. A development image can pin the Python or R version, system libraries, compilers, command-line tools, and GPU user-space libraries that a project expects. A CI job can then build the same image, run tests in a clean environment, and publish the exact artefact that will be promoted later. This removes a large class of failures caused by different host distributions or a developer's accumulated local packages.
+
+For a data team, that means a notebook environment can match the batch job and the model-serving image closely enough that a transformation or import does not change behaviour between stages. Mount the repository and datasets needed for interactive work; keep the environment and its dependencies in the image. Do not put credentials, large mutable datasets, or notebook state in the image. Use image digests for promotion, because a mutable tag makes a supposedly reproducible pipeline ambiguous.
+
+This use case needs no server, cluster, or persistent container. A local engine and a CI runner are enough. The container is valuable because it is a contract for the environment, not because it is long-lived.
+
+### Batch Data Work
+
+An ETL, feature-generation, validation, or backfill job is a natural container workload. The image contains the code and runtime; input data comes from object storage, a warehouse, a database, or a mounted filesystem; output is written to a durable system. The job can be retried or run with a different image digest without modifying the host. A failed job leaves a diagnosable execution record rather than a half-updated machine.
+
+Start with one container invoked by a scheduler, a managed batch service, or a workflow system. Add a queue when jobs compete for limited workers. Add parallel fan-out when one input can be partitioned into independent tasks. Add a cluster scheduler only when placement, fairness, retries, resource quotas, or the number of workers has become the problem. Kubernetes is one way to provide those controls; it is not required merely because the job processes terabytes.
+
+The important separation is between compute and data. The image should not contain the dataset, and the container's writable layer should not be the system of record. Object storage and warehouses usually provide the durability and access patterns; the container provides a repeatable computation over them.
+
+### Notebooks and Interactive Data Science
+
+Containers are useful for giving a team a shared starting environment without requiring everyone to install the same operating system packages. A notebook server can run in a container with the project dependencies, a mounted working directory, and access to a controlled data source. The image can be rebuilt when dependencies change, while notebooks and generated results live outside the disposable container.
+
+There is a trap here: a notebook server is interactive and stateful even when its container is not. Persist the notebook files and intentional outputs, and make long-running work a separately recorded job where possible. A container restart should not be treated as a backup strategy. For a small team, one host plus an access-control layer is often enough; a multi-user notebook platform earns Kubernetes only when it needs placement, per-user isolation, GPU allocation, idle reaping, and shared service integration at scale.
+
+### Machine Learning Training
+
+An ML training image captures the framework, Python packages, compilers, tokenizers, and other user-space dependencies that otherwise make experiments difficult to reproduce. It can also include the CUDA or ROCm user-space libraries expected by the framework. The host still supplies the kernel, GPU device, and usually the vendor driver; the image does not magically make incompatible hardware compatible. GPU access requires an engine/runtime integration and a host configured to expose the device.
+
+For one researcher with one GPU, a local engine or a single VM is usually the right level. For a team sharing a few machines, a queue or managed batch service can allocate GPUs, record logs, retry failed jobs, and prevent one experiment from consuming every device. Containers make those jobs portable; the queue solves contention.
+
+Distributed training changes the shape of the problem. A job may need several GPUs at once, topology-aware placement, coordinated startup, shared checkpoints, and an all-or-nothing allocation so that it does not occupy half the cluster while waiting for the rest. That is where gang scheduling, resource quotas, GPU partitioning, and a cluster scheduler become valuable. Kubernetes can provide the substrate, but the default scheduler alone does not provide the complete ML platform; systems such as Kueue, Volcano, device plugins or Dynamic Resource Allocation, and higher-level frameworks each address different parts of the problem.
+
+### Model Serving and Inference
+
+Serving a model is another ordinary container use case at small scale: package the model server and its dependencies, mount or fetch the model artefact, expose an HTTP or gRPC endpoint, and replace the image when the model or server changes. Readiness checks, resource limits, and an external model registry matter more than the choice of engine.
+
+As serving grows, the requirements become operational. Different models may need different CPU, memory, or GPU profiles; traffic may be bursty; revisions need gradual rollout and rollback; and some models can scale to zero while others need warm capacity. A managed container or serverless inference platform can supply those controls. Kubernetes becomes compelling when many teams need a shared, policy-controlled fleet with heterogeneous hardware and workload-specific scaling. It is not automatically the best answer for one model endpoint.
+
+### When the Ladder Reaches Kubernetes
+
+Kubernetes earns its complexity when several independent demands arrive together: workloads no longer fit one host; nodes fail; services need stable discovery; deployments must roll out without downtime; teams need quotas and access boundaries; and jobs compete for specialised resources. Data and ML platforms often reach this point through shared GPU capacity, distributed training, multi-tenant notebook or inference services, and a mixture of batch and online workloads.
+
+Even then, use a managed Kubernetes service when the organisation needs Kubernetes' API and ecosystem but does not need to own the control plane. Use a managed Spark, Ray, batch, or ML platform when it expresses the workload more directly. The right abstraction is the smallest one that handles the coordination problem: a container packages the work, a scheduler places it, and a platform adds policy and lifecycle management only where those capabilities are needed.
 
 ## Why Kubernetes Exists
 
@@ -500,9 +590,9 @@ The threshold question is straightforward: do you actually have the coordination
 
 ## Kubernetes Core Architecture
 
-Kubernetes is a control system. Its architecture divides into a **control plane** that holds desired state and makes decisions, and **nodes** that run workloads and report status. Every component communicates through the API server and never directly with each other — a hub-and-spoke design that is the key to understanding both how the system behaves and how it fails.
+Kubernetes is a control system. Its architecture divides into a **control plane** that holds desired state and makes decisions, and **nodes** that run workloads and report status. The API server is the hub for cluster state and control-plane coordination; node agents also communicate with their local runtime, network, and storage components. That distinction is the key to understanding both how the system behaves and how it fails.
 
-```{.mermaid caption="Kubernetes control plane and node components. Every arrow goes through the API server; no component talks directly to another."}
+```{.mermaid caption="Kubernetes control plane and node components. The API server coordinates cluster state; node agents also talk to local runtime, network, and storage components."}
 graph TB
     kubectl[kubectl / CI / Operators] --> api
     subgraph ControlPlane[Control plane]
@@ -544,6 +634,8 @@ One more thing worth knowing: Secrets are stored in `etcd` and, unless encryptio
 ### kube-scheduler
 
 The scheduler watches for Pods that have no node assigned and assigns them. Its algorithm runs in two phases: **filtering**, which eliminates nodes that cannot run the Pod — insufficient free resources against its requests, unsatisfied node selectors or affinity rules, taints the Pod does not tolerate, unavailable volumes — and **scoring**, which ranks the surviving nodes by a set of weighted priorities such as spreading replicas across nodes and balancing resource usage. The highest-scoring node wins, and the scheduler writes the assignment back to the API server. It does not start anything; the kubelet on the chosen node notices the assignment and acts.
+
+The distinction between **requests** and **limits** is important. A request is the amount the scheduler reserves when placing the Pod; a limit is a runtime ceiling enforced by the kubelet and cgroups. A Pod can be scheduled because its requests fit and still be throttled or killed when it reaches its limits. Leaving both fields unset does not mean "unlimited and safe" — it means the workload is relying on namespace and node defaults, and may be able to consume resources opportunistically until another workload needs them.
 
 The failure mode you will meet is a Pod stuck in `Pending`, which almost always means filtering eliminated every node. The usual causes are resource requests larger than any node's allocatable capacity, node selectors or affinity rules that match nothing, taints without matching tolerations, and a PersistentVolumeClaim that cannot be bound. `kubectl describe pod` reports the scheduler's reasoning in the events, and reading that output is the fastest diagnostic in Kubernetes.
 
@@ -611,7 +703,7 @@ Ingress is only a specification of intent. Nothing happens unless an **ingress c
 
 **ConfigMap** holds non-sensitive configuration as key-value pairs, consumable as environment variables or mounted as files. Its purpose is to get configuration out of the image, so that the same image runs in development, staging, and production with different settings — the prerequisite for promoting an artefact rather than rebuilding per environment.
 
-**Secret** is structurally the same for sensitive data, and its default protections are weaker than most people assume. Secret values are **base64-encoded, not encrypted**. Base64 is an encoding, not a cipher. Without explicitly enabling encryption at rest, Secrets sit in `etcd` in effectively plaintext, and anyone with API access to read Secrets in a namespace, or access to an `etcd` backup, has them. Treating `kind: Secret` as sufficient protection is a common and serious mistake. Real practice means enabling encryption at rest, restricting read access through RBAC, and for anything genuinely sensitive using an external secret manager — Vault, or a cloud provider's Key Management Service (KMS)-backed store — pulled in through the Secrets Store CSI (Container Storage Interface) driver or an operator, so the durable copy never lives in `etcd` at all.
+**Secret** is structurally the same for sensitive data, and its default protections are weaker than most people assume. Secret values are **base64-encoded, not encrypted**. Base64 is an encoding, not a cipher. Without explicitly enabling encryption at rest, Secrets sit in `etcd` in effectively plaintext, and anyone with API access to read Secrets in a namespace, or access to an `etcd` backup, has them. Treating `kind: Secret` as sufficient protection is a common and serious mistake. Real practice means enabling encryption at rest, restricting read access through RBAC, and considering an external secret manager — Vault, or a cloud provider's Key Management Service (KMS)-backed store — with a CSI driver or operator. Check the integration carefully: some designs mount secrets without creating a Kubernetes Secret, while others synchronise them into `etcd`.
 
 One practical note: a Secret or ConfigMap mounted as a volume updates in place when the object changes, while one injected as an environment variable does not — environment variables are set at process start and cannot change. Applications expecting to pick up rotated credentials need the volume form and code that re-reads the file.
 
@@ -643,7 +735,7 @@ The behaviours to know: a Job's Pods are not cleaned up automatically unless you
 
 Container filesystems are ephemeral. Persistent storage in Kubernetes is deliberately split into two objects to separate two different concerns.
 
-A **PersistentVolume** is a piece of actual storage in the cluster — a cloud disk, an NFS export, a LUN — with a capacity, access modes, and a reclaim policy. It is an infrastructure object, typically the cluster administrator's concern.
+A **PersistentVolume** is a piece of actual storage in the cluster — a cloud disk, a Network File System (NFS) export, a logical unit number (LUN) — with a capacity, access modes, and a reclaim policy. It is an infrastructure object, typically the cluster administrator's concern.
 
 A **PersistentVolumeClaim** is a request: an application asks for 20 GiB with a given access mode and storage class. Kubernetes binds the claim to a suitable volume, and the Pod references the claim, never the volume.
 
@@ -679,9 +771,23 @@ This is the single most important extension pattern in Kubernetes, and it is why
 
 The caution is that an Operator is production software running with broad cluster permissions, and its quality varies enormously. A mature, well-tested operator for a database is a substantial asset. A thinly-maintained one that mismanages a failover is a liability with cluster-admin rights. Evaluate them as you would any critical dependency.
 
+### Policy and Admission
+
+Authentication answers who is making a request; authorisation answers whether that identity may make it; **admission** answers whether the requested object is acceptable before it is persisted. This is where a cluster can enforce rules such as "no privileged containers," "images must come from this registry," "every workload needs resource requests," or "this namespace may use only these security contexts."
+
+Kubernetes' built-in **Pod Security Admission** provides the baseline, restricted, and privileged Pod Security Standards at namespace scope. It is deliberately general. Teams that need organisation-specific rules commonly add a policy engine such as Kyverno or Gatekeeper, and supply-chain policy can use the same admission point to verify image signatures. Policy is part of the platform contract: test it against real workloads, report violations clearly, and keep an emergency path that is audited rather than relying on undocumented cluster-admin exceptions.
+
+### Observability and Debugging
+
+Containers change where the useful evidence lives. Application output normally goes to stdout and stderr for the engine or kubelet to collect; the container's writable filesystem is not a durable log store. The runtime can tell you whether a process exited and with what status, the node can tell you about memory pressure and CPU throttling, and Kubernetes events can tell you why scheduling, mounting, or admission failed. None of those replaces application metrics and distributed traces, which explain behaviour after the process is technically running.
+
+A practical diagnostic model follows the boundaries in this primer. First establish whether the image is the one you intended — inspect its digest and configuration. Then establish whether the process started and received the expected environment, mounts, and signals. Next check resource limits, network namespace and Service endpoints, readiness state, and node or volume conditions. In Kubernetes, `kubectl describe`, events, container logs, runtime metrics, and application telemetry answer different questions; reading only the application log is how a Pending Pod turns into a guessing exercise.
+
+The operational requirement is centralisation. Logs, metrics, events, and traces should survive container and node replacement, carry workload identity, and be queryable across replicas. Otherwise the system's replacement model destroys the evidence needed to understand the failure it was designed to recover from.
+
 ### Service Meshes and the Ambient Shift
 
-A service mesh moves cross-cutting network concerns out of application code: mutual TLS between services, retries, timeouts, circuit breaking, traffic splitting for canary releases, and uniform request-level telemetry. Implementing those consistently across many services in several languages is the problem it solves.
+A service mesh moves cross-cutting network concerns out of application code: mutual Transport Layer Security (TLS) between services, retries, timeouts, circuit breaking, traffic splitting for canary releases, and uniform request-level telemetry. Implementing those consistently across many services in several languages is the problem it solves.
 
 The classic implementation was the **sidecar**: an Envoy proxy injected into every Pod, intercepting all traffic. It worked and it was expensive — a proxy per Pod costing memory and CPU, adding latency on both sides of every call, and coupling proxy upgrades to Pod restarts across the whole fleet.
 
@@ -695,11 +801,11 @@ Practical guidance: if you are evaluating a mesh fresh in 2026, evaluate ambient
 
 If desired state is declarative documents, those documents belong in version control, and something should continuously ensure the cluster matches them. That is **GitOps**: Git is the source of truth, and an in-cluster agent reconciles the cluster against the repository.
 
-**Argo CD** and **Flux** are both CNCF graduated projects with strong production adoption. Argo CD is application-centric with a well-regarded web UI showing sync status and drift, which makes it easy to adopt and easy to explain to people who will not read YAML. Flux is a set of composable controllers with no UI of its own, favoured by teams who want GitOps as infrastructure rather than as a product.
+**Argo CD** and **Flux** are both CNCF graduated projects with strong production adoption. Argo CD is application-centric with a well-regarded web UI showing sync status and drift, which makes it easy to adopt and easy to explain to people who will not read YAML. Flux is a set of composable controllers; teams that want a UI typically add another tool, while teams that want GitOps as infrastructure rather than as a product often prefer Flux's controller model.
 
 The properties that make this worth doing: every change is a reviewed commit with an audit trail; the cluster self-corrects when someone makes a manual change, because the agent sees the drift and reverts it; recovery from cluster loss is applying the repository to a new cluster; and nobody needs cluster write credentials in CI, because the agent pulls rather than the pipeline pushing. That last point is a real security improvement and often the thing that sells it.
 
-The discipline it demands is that manual changes stop working — they get reverted — which is the intended behaviour and is nonetheless disorienting for teams accustomed to `kubectl edit` during an incident.
+The discipline it demands is that manual changes may be reverted when reconciliation and pruning are configured to enforce the repository — which is the intended behaviour and is nonetheless disorienting for teams accustomed to `kubectl edit` during an incident.
 
 ## Lightweight Kubernetes Distributions
 
@@ -723,11 +829,11 @@ Choosing Kubernetes should be a decision, not a default, and there are cases whe
 
 **HashiCorp Nomad** is a single-binary cluster scheduler, considerably simpler to operate than Kubernetes and — unusually — not container-specific. It schedules containers, but also raw executables, Java applications, and virtual machines, using a pluggable task driver model. Its object model is much smaller, which means less to learn and less to misconfigure. Note the ownership change: HashiCorp's acquisition by IBM completed in February 2025, with the full operational transition in September 2025, and Nomad now sits within IBM's automation portfolio. Choose it when you want straightforward scheduling across mixed workload types without Kubernetes' object model, or when you are already invested in Consul and Vault. The cost is a much smaller ecosystem — there is no equivalent of the CNCF landscape or the operator ecosystem behind it.
 
-**Docker Swarm**, covered earlier, still works and is supported through 2030, at roughly 2.5% adoption against Kubernetes' 82%. It is defensible for a small stable deployment run by a team that has decided not to operate Kubernetes, and it is a poor bet for anything that will grow or need to hire.
+**Docker Swarm**, covered earlier, still works and remains a defensible small-platform choice. It is a poor bet for anything that will grow or need to hire because its ecosystem and practitioner pool are much smaller than Kubernetes'.
 
 **Amazon ECS** is AWS's own container orchestrator, and it is the most commonly underrated option. Its mental model is much smaller than Kubernetes' — task definitions and services, not a dozen object kinds — it integrates natively with IAM, CloudWatch, ALB, and the rest of AWS, and it has no control-plane charge, unlike EKS's per-cluster fee. On Fargate it removes node management entirely. The cost is total lock-in: an ECS task definition is not portable anywhere.
 
-The trend data cuts both ways here and is worth quoting accurately. CNCF's January 2026 survey found 82% of container users running Kubernetes in production, up from 66% in 2023 — a strong secular move toward Kubernetes even inside single-cloud shops. At the same time ECS remains heavily used, particularly for internal and batch workloads, and many enterprises run both: ECS where the workload is AWS-only and internal, EKS where portability or a Kubernetes-native ecosystem matters. A separate 2026 industry survey put the figure for container-using organisations running some form of serverless containers — ECS or EKS on Fargate — at around 46%; treat that number as indicative rather than precise, in the same way as the other survey-sourced figures in this primer, but the direction is consistent with the CNCF data: avoiding node management looks at least as attractive as any particular orchestrator.
+The trend data cuts both ways here. CNCF's January 2026 survey found 82% of container users running Kubernetes in production, up from 66% in 2023 — a strong secular move toward Kubernetes even inside single-cloud shops. At the same time ECS remains heavily used, particularly for internal and batch workloads, and many enterprises run both: ECS where the workload is AWS-only and internal, EKS where portability or a Kubernetes-native ecosystem matters. The broader direction is consistent: avoiding node management can matter more than choosing a particular orchestrator.
 
 When not to reach for full Kubernetes: when your team is too small to operate it competently, which is the most common failure and produces the worst outcomes; when you are single-cloud with no portability requirement and a managed service covers you; when your workloads are simpler than the object model assumes — a handful of stateless services with modest traffic; and when you are running on one or two machines, where Podman with Quadlet or Compose will do the job with a fraction of the moving parts.
 
@@ -737,33 +843,33 @@ A few developments from the past eighteen months are genuinely worth a practitio
 
 ### Release Cadence and Versions
 
-Kubernetes ships three minor releases a year. Version 1.37, codenamed "Garhwal," was released on 26 August 2026 with 67 enhancements — 16 graduating to stable, 23 to beta, 27 in alpha, and one deprecation. The preceding patch line, 1.36.4, came out on 11 August 2026. The practical consequence of the cadence is that each minor version has roughly fourteen months of patch support, so a cluster left alone for two years is out of support and its upgrade path is a multi-hop exercise. Upgrade planning is not optional work.
+Kubernetes ships three minor releases a year. Version 1.37, codenamed "Garhwal," was released on 26 August 2026 with 67 enhancements — 16 graduating to stable, 23 to beta, 27 in alpha, and one deprecation. The preceding patch line, 1.36.4, came out on 11 August 2026. The practical consequence of the cadence is that each minor version receives about one year of patch support, so a cluster left alone for two years is out of support and its upgrade path is a multi-hop exercise. Upgrade planning is not optional work.
 
 ### GPU Scheduling and AI Workloads
 
-This is the biggest current storyline, and the underlying problem is the scheduler mismatch described earlier. Kubernetes schedules Pods independently, greedily, one at a time. A distributed training job needs sixteen GPUs simultaneously, on nodes with the right interconnect topology, or the allocated GPUs sit idle waiting for the rest — which at current GPU prices is expensive idleness. Reports put AI workloads at around 40% of enterprise Kubernetes cluster capacity by 2026; treat the exact figure as indicative, but the direction is not in dispute.
+This is the biggest current storyline, and the underlying problem is the scheduler mismatch described earlier. Kubernetes schedules Pods independently, greedily, one at a time. A distributed training job needs sixteen GPUs simultaneously, on nodes with the right interconnect topology, or the allocated GPUs sit idle waiting for the rest — which at current GPU prices is expensive idleness. The exact share of cluster capacity used by AI workloads is hard to measure consistently; the operational pressure is clear even without a market-share number.
 
-**Dynamic Resource Allocation** is the foundational change. DRA graduated to GA in Kubernetes 1.34, replacing the older device-plugin model for GPUs and other specialised hardware. The device-plugin model exposed devices as opaque countable resources — "this node has 4 of `nvidia.com/gpu`" — with no way to express which GPUs, what memory they have, how they are interconnected, or that a workload needs two GPUs on the same NVLink domain. DRA models devices as claimable resources with attributes and structured parameters, so the scheduler can reason about them properly. NVIDIA donated its DRA driver to the CNCF at KubeCon EU 2026, and EKS, GKE, and AKS all shipped DRA-capable 1.34 control planes during the first half of 2026.
+**Dynamic Resource Allocation** is the foundational change. DRA's core API graduated to GA in Kubernetes 1.34, adding a richer path alongside the older device-plugin model for GPUs and other specialised hardware. Device plugins expose devices as opaque countable resources — "this node has 4 of `nvidia.com/gpu`" — while DRA models devices as claimable resources with attributes and structured parameters. That lets the scheduler reason about properties such as memory, topology, and device relationships without requiring every workload to understand the hardware layout. Device plugins are not simply disappearing; the two models will coexist while drivers and managed Kubernetes services catch up.
 
 DRA is one layer of a stack that has stabilised around the following division of labour. **Kueue** handles admission and quota: it holds jobs in queues and admits them only when their full resource requirement is available, with hierarchical quotas and borrowing between teams — solving the problem of a cluster full of half-scheduled jobs that are all waiting and none running. **Volcano** provides batch and gang scheduling, where a job's Pods are scheduled all-or-nothing, plus fair-share and topology-aware placement. **HAMi** provides GPU sharing and virtualisation, letting several workloads share one physical GPU with memory and compute limits, which matters enormously for inference and interactive notebook workloads that cannot use a whole device. **NVIDIA MIG** does the same at the hardware level by partitioning a GPU into isolated instances. Above those, **Kubeflow** is the ML platform control plane, **KServe** provides serverless model serving with scale-to-zero, and **KubeRay** runs distributed Ray workloads.
 
-The practical takeaway is that running serious AI workloads on Kubernetes means deliberately choosing components from this stack. The default scheduler will not do it well, and discovering that after committing to a cluster design is expensive.
+The practical takeaway is that running serious AI workloads on Kubernetes means deliberately choosing components from this stack. The default scheduler does not by itself provide admission, gang scheduling, quota policy, GPU partitioning, or model-serving semantics, and discovering those gaps after committing to a cluster design is expensive.
 
 ### Supply-Chain Security
 
 Container supply-chain tooling has moved from advanced practice to baseline expectation, and the driver was a series of real incidents — the XZ Utils backdoor discovered in 2024 being the best-corroborated example of how far upstream a compromise can sit.
 
-**Sigstore** is the centre of it. Its signing tool, **cosign**, signs container images and stores signatures in the registry alongside the image, so signature distribution is solved by the distribution specification you already use. The important innovation is **keyless signing**: rather than managing long-lived signing keys, a build system authenticates via OIDC to Fulcio, which issues a short-lived certificate bound to that identity, and the signature plus its certificate is recorded in Rekor, a public transparency log. The result is a verifiable claim that a specific image was built by a specific workflow in a specific repository, with no key material to steal or rotate.
+**Sigstore** is the centre of it. Its signing tool, **cosign**, signs container images and stores signatures in the registry alongside the image, so signature distribution is solved by the distribution specification you already use. The important innovation is **keyless signing**: rather than managing long-lived signing keys, a build system authenticates via OpenID Connect (OIDC) to Fulcio, which issues a short-lived certificate bound to that identity, and the signature plus its certificate is recorded in Rekor, a public transparency log. The result is a verifiable claim that a specific image was built by a specific workflow in a specific repository, with no key material to steal or rotate.
 
-This is now normal practice rather than advanced. Major managed registries — Google's Artifact Registry, Amazon ECR, and others — support native OIDC and cosign integration, and admission controllers can be configured to reject images without a valid signature from an expected identity. If your pipeline does not sign images and your cluster does not verify them, that is the most straightforward supply-chain improvement available.
+This is moving from advanced practice toward baseline. Managed registries can store the signatures, and admission controllers can be configured to reject images without a valid signature from an expected identity. If your pipeline does not sign images and your cluster does not verify them, that is one of the most straightforward supply-chain improvements available.
 
 ### Ecosystem Scale and the Wasm Correction
 
-The CNCF landscape now spans over 230 projects with 300,000-plus contributors and 35-plus graduated projects, and Cloud Native Buildpacks graduated in August 2026 — a notable addition because it standardises producing OCI images from source without a Dockerfile, which is the last significant unstandardised step in the container lifecycle.
+The CNCF landscape continues to grow, and Cloud Native Buildpacks are notable because they standardise producing OCI images from source without a Dockerfile. That is useful when you want a consistent build contract across languages, but it does not remove the need to understand the image, registry, and runtime boundaries described earlier.
 
 That scale is a mixed signal. It reflects a genuinely healthy ecosystem and it also means the landscape diagram is no longer usable as a guide. Treat project count as evidence of activity, not as a shopping list; most organisations need a small, deliberately chosen subset, and the discipline of choosing few things and running them well beats breadth.
 
-Two other threads already covered belong in any summary of 2026. The service mesh shift to ambient architectures is real and current, described in the sources as the end of the sidecar-per-pod era. And the growth in gVisor and Kata adoption is now driven substantially by AI agent sandboxing — isolating code execution for autonomous agents — rather than by classical multi-tenant SaaS isolation. That is a genuinely new demand driver, and it is the clearest example of AI workloads reshaping infrastructure choices rather than merely consuming capacity.
+Two other threads already covered belong in any summary of 2026. Ambient service-mesh architectures are a serious alternative to sidecar-per-Pod deployments, not a universal replacement. And AI agent sandboxing is a new demand driver for gVisor, Kata, and Firecracker — isolating code execution for autonomous agents rather than relying only on classical multi-tenant SaaS patterns. That is a clear example of AI workloads reshaping infrastructure choices rather than merely consuming capacity.
 
 ## Closing: A Usable Mental Model
 
@@ -773,6 +879,19 @@ A container is a process with a restricted view of the system, constrained resou
 
 The OCI specifications are why the ecosystem is composable rather than a set of silos. Images, runtimes, and registries are separately specified, which is why Docker-built images run under Podman and `containerd`, why Kubernetes could drop `dockershim` without breaking anything, and why your engine choice does not determine your production runtime.
 
-Docker versus Podman is a real decision with a clear default and low stakes. Podman is the better architecture — daemonless, rootless, Apache-licensed, now under CNCF governance — and Docker has overwhelming ecosystem gravity. Decide on licensing economics and security posture, not on 2021-era feature gaps, and remember that neither runs in your production cluster.
+Docker versus Podman is a real decision with a clear default and low stakes. Podman is the better architecture — daemonless, rootless, Apache-licensed, with Podman Container Tools in the CNCF Sandbox — and Docker has overwhelming ecosystem gravity. Decide on licensing economics and security posture, not on 2021-era feature gaps, and remember that neither runs in your production cluster.
 
 Kubernetes is a reconciliation engine, and that single idea explains all of it. You declare desired state; controllers observe actual state and act continuously to close the gap. Pods, Deployments, Services, and every custom resource are expressions of desired state, and every controller including the ones you write is the same loop. It is the right answer when you genuinely have the fleet coordination problem, and expensive accidental complexity when you do not — so answer that question honestly before you adopt it, because the cost of running it badly is higher than the cost of not running it at all.
+
+## Reference Links
+
+- [Open Container Initiative specifications](https://opencontainers.org/specs/)
+- [Docker Desktop subscription terms](https://docs.docker.com/desktop/setup/install/)
+- [Podman Container Tools in the CNCF](https://www.cncf.io/projects/podman-container-tools/)
+- [Kubernetes release history and support windows](https://kubernetes.io/releases/)
+- [Kubernetes 1.34: Dynamic Resource Allocation reaches GA](https://kubernetes.io/blog/2025/09/01/kubernetes-v1-34-dra-updates/)
+- [CNCF Annual Cloud Native Survey, January 2026](https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/)
+- [Kubernetes Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/)
+- [Kubernetes observability overview](https://kubernetes.io/docs/concepts/cluster-administration/observability/)
+- [Sigstore documentation](https://docs.sigstore.dev/)
+- [AWS Lambda MicroVMs announcement](https://aws.amazon.com/about-aws/whats-new/2026/06/aws-lambda-microvms/)
