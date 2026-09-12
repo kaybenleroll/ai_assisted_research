@@ -381,7 +381,7 @@ codex
 
 **LLM provider support:** Multi-model, with supported provider-key configuration and plugin/skill/hook extensibility. It is flexible, but “model-agnostic” overstates the default curated product surface.
 
-**Cost model:** Amp has a $20/month Megawatt plan with at least $20 of included agent usage and 750 hours of small Orbs, a $200/month Gigawatt plan with at least $200 of included agent usage and 1,000 hours of extra-large Orbs, and an unconstrained pay-as-you-go path. Individual and non-enterprise workspaces do not pay a model markup; Orb compute is charged separately. Included usage resets monthly, while purchased credits expire after 12 months. Check the live pricing page before budgeting: Amp's model and compute rates are usage-based.
+**Cost model:** Amp has a free Hobby tier (pay-as-you-go orbs, no token fees or limits), a $20/month Individual tier (45,000 orb minutes, unlimited repos), a Teams tier (pooled credits, no extra platform charge on top of members' own plans), and a custom-priced Enterprise tier (pooled credits only, plus SCIM/audit logs/IP allowlisting) (as of 2026-09-12). Individual and non-enterprise workspaces do not pay a model markup; Orb compute is metered separately by the minute with automatic pause for idle instances. Check the live pricing page before budgeting: Amp's model and compute rates are usage-based and have changed structure before.
 
 **Strengths:**
 - Sourcegraph-backed product lineage and cloud execution for longer tasks
@@ -972,7 +972,7 @@ Running models locally eliminates API costs entirely, but not hardware, electric
 | Plandex | Partial | Partial | Via OpenAI-compatible API config. |
 | OpenHands | Yes | Yes | Via litellm; Agent Canvas can be self-hosted. |
 | GitHub Copilot | Yes | Yes | Local BYOK is documented for several clients, including Ollama and Microsoft Foundry Local integrations; coverage varies by client and feature. |
-| GitHub Copilot CLI | Partial\* | Partial\* | Not confirmed by sourced research this round. |
+| GitHub Copilot CLI | Yes | No | Copilot CLI's own BYOK docs name Ollama explicitly as a local endpoint example under the `openai` provider type; LM Studio is not named there (it appears only in the separate Copilot app's BYOK docs) -- reachable, if at all, only via the generic OpenAI-compatible endpoint path, unendorsed. |
 | JetBrains AI Assistant | **Yes (was not listed)** | Yes | Ollama, LM Studio, llama.cpp confirmed on IDEs v2025.1+. |
 | Zed AI | Yes | Partial | Ollama explicitly supported. |
 | Windsurf (→ Devin Desktop) | No | No | Current product documentation confirms local-machine agent execution, not local LLM inference. |
@@ -985,7 +985,6 @@ Running models locally eliminates API costs entirely, but not hardware, electric
 | Tabnine | No | No | Cloud/on-prem/air-gapped deployment options exist, but not consumer local-model tools like Ollama. |
 | Google Antigravity 2.0 | No | No | Google-managed models and quotas; the current plans page says no BYOK or custom endpoint for additional quota. |
 
-\* Unverified -- not independently confirmed by this refresh's sourced research; treat as an open question rather than a confirmed capability.
 
 **Best tools for local LLMs:** Aider, Cline, OpenCode, Continue.dev, Goose, and JetBrains AI Assistant remain the clearest options for local model use. OpenAI's Codex CLI supports local models through `--oss` with documented Ollama and LM Studio providers. Amp's local CLI is not evidence of local inference; its current documentation describes hosted models and provider keys. Devin Desktop's local-machine execution should not be treated as local model support without explicit provider documentation.
 
@@ -1052,7 +1051,7 @@ The matrix spans 17 tools, too many to render legibly as one table at this page 
 | **Local LLMs** | No | No | Yes | No |
 | **Open source** | No | No | Yes | No |
 | **Git integration** | Yes | Yes | Yes | Yes |
-| **Cost model** | $20-200/mo + API | Free / $20 / $200 / Teams | Bundled ChatGPT | $20/$200 plans or pay-as-you-go |
+| **Cost model** | $20-200/mo + API | Free / $20 / $200 / Teams | Bundled ChatGPT | Free / $20 Individual (orb minutes) / Teams+Enterprise pooled credits |
 | **Self-hosted option** | No | No | No | No |
 
 **Group 4: Devin, Grok Bot, Copilot**
