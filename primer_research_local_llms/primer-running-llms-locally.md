@@ -2,7 +2,7 @@
 
 From Zero to Your Own Private AI Stack, With Containers
 
-*~6,300 words · August 2026*
+*~6,500 words · September 2026*
 
 You have used cloud AI tools. They are useful, fast, and easy.
 
@@ -14,7 +14,10 @@ This guide is for that exact move.
 
 It is written for technical beginners to local inference: people who are comfortable in a terminal and can read config files, but have not yet built a local model stack end to end.
 
-Everything here is written as current guidance for 31 August 2026.
+Everything here is written as current guidance for 10 September 2026. Runtime
+features and model catalogs change faster than this document can, so use the
+linked official documentation to verify commands and compatibility before you
+standardize a deployment.
 
 ## Introduction
 
@@ -165,7 +168,7 @@ Do not assume that a model advertised as multimodal can generate every modality.
 
 | Workload | Current local examples | Typical local path | What to expect |
 |---|---|---|---|
-| Text, coding, reasoning, and agents | [Qwen3.8](https://github.com/QwenLM/Qwen3.5), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), [gpt-oss](https://openai.com/index/introducing-gpt-oss/), [LFM2.5](https://huggingface.co/LiquidAI/models) | llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM | The broadest ecosystem. Size, quantization, and context length still dominate fit. |
+| Text, coding, reasoning, and agents | [Qwen3.5](https://github.com/QwenLM/Qwen3.5), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), [gpt-oss](https://openai.com/index/introducing-gpt-oss/), [LFM2.5](https://huggingface.co/LiquidAI/models) | llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM | The broadest ecosystem. Size, quantization, and context length still dominate fit. |
 | Image understanding, OCR, charts, and documents | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite Vision](https://huggingface.co/ibm-granite/granite-vision-4.1-4b), [LFM2.5-VL](https://huggingface.co/LiquidAI/models) | Transformers, vLLM, SGLang, Ollama vision models, or supported llama.cpp multimodal builds | These models describe and reason about pixels; they do not create finished images. OCR quality depends heavily on resolution and layout. |
 | Text-to-image and image editing | [FLUX.2](https://github.com/black-forest-labs/flux2), [Qwen-Image](https://huggingface.co/Qwen/Qwen-Image-Edit), Stable Diffusion family | Diffusers, ComfyUI, InvokeAI | Treat the pipeline, text encoder, variational autoencoder (VAE), and transformer/diffusion weights as one artifact. VRAM rises quickly with resolution and reference images. Licenses differ by checkpoint. |
 | Speech recognition and alignment | [Whisper](https://github.com/openai/whisper), [faster-whisper](https://github.com/SYSTRAN/faster-whisper), [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR), Granite Speech | faster-whisper/CTranslate2, Transformers, vLLM, or experimental llama.cpp audio support | Usually much smaller and easier to run than a general LLM. Use a dedicated automatic speech recognition (ASR) model when transcription is the job. |
@@ -175,7 +178,7 @@ Do not assume that a model advertised as multimodal can generate every modality.
 
 ### What Changed Recently
 
-The frontier has moved toward smaller specialist models and sparse larger models. [Qwen3.8-27B](https://github.com/QwenLM/Qwen3.5) was added in August 2026, while [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2) added 3B, 8B, and 30B reasoning models with configurable thinking modes, native tool calling, and a documented path to 512K context. [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4) combines text and image input across its sizes, with audio support in E2B, E4B, and 12B variants. These are useful examples of why “parameter count” alone is no longer enough: active parameters, modality encoders, context length, and draft models all affect the actual local cost.
+The frontier has moved toward smaller specialist models and sparse larger models. Current families such as [Qwen3.5](https://github.com/QwenLM/Qwen3.5), [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), and [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4) illustrate the direction: configurable reasoning, native tool calling, multimodal inputs, and long-context variants are becoming normal product features rather than unusual research demos. These are useful examples of why “parameter count” alone is no longer enough: active parameters, modality encoders, context length, and draft models all affect the actual local cost.
 
 Two other changes matter for personal hardware. [LFM2.5-DSpark](https://huggingface.co/blog/LiquidAI/lfm25-dspark) adds a small draft-model path for speculative decoding, reporting up to 3.18× GPU and 2.87× on-device throughput on its tested workloads. [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR) provides 0.6B and 1.7B speech-recognition models supporting 52 languages and dialects, plus a 0.6B forced-aligner. These are different strategies from buying a larger general-purpose model: reduce the model's job, then optimize that job directly.
 
@@ -281,7 +284,7 @@ If one larger GPU solves your problem, it is often cheaper in time than distribu
 
 There are more choices now, but the core categories are stable.
 
-At the 31 August 2026 cutoff, the release pages showed a fast-moving stack: [Ollama v0.33.2](https://github.com/ollama/ollama/releases), [vLLM v0.28.0](https://github.com/vllm-project/vllm/releases/tag/v0.28.0), [SGLang v0.5.18](https://github.com/sgl-project/sglang/releases), [MLX v0.32.2](https://github.com/ml-explore/mlx/releases), and [Transformers v5.16.1](https://github.com/huggingface/transformers/releases). Treat these as a dated snapshot, not versions to pin blindly; read the model recipe and accelerator requirements before upgrading.
+At the 10 September 2026 cutoff, the release pages still showed a fast-moving stack across [Ollama](https://github.com/ollama/ollama/releases), [vLLM](https://github.com/vllm-project/vllm/releases), [SGLang](https://github.com/sgl-project/sglang/releases), [MLX](https://github.com/ml-explore/mlx/releases), and [Transformers](https://github.com/huggingface/transformers/releases). This document deliberately does not pin a “current” version: runtime and model compatibility is more important than the newest tag, and a moving version number ages immediately. Read the model recipe and accelerator requirements before upgrading.
 
 ### llama.cpp and llama-server
 
@@ -640,9 +643,9 @@ Different families and sizes win in different categories. There is no universal 
 
 ### Family-Level Guidance (Practical)
 
-As of 31 August 2026, a useful text-model shortlist includes:
+As of 10 September 2026, a useful text-model shortlist includes:
 
-1. [Qwen3.5/3.6/3.8](https://github.com/QwenLM/Qwen3.5) for coding, agents, and multimodal work. Qwen's current repository lists Qwen3.8-27B as an August release, but model-card and catalog pages can lag the repository; verify the exact artifact and runtime tag before standardizing on it. Larger Qwen3.5/3.6 MoE models are server-class despite their low active-parameter counts.
+1. [Qwen3.5](https://github.com/QwenLM/Qwen3.5) for coding, agents, and multimodal work. Larger mixture-of-experts variants are server-class despite their low active-parameter counts; verify the exact artifact and runtime support before standardizing on one.
 2. [Gemma 4](https://ai.google.dev/gemma/docs/core) for compact reasoning, coding, function calling, and image/audio input on selected variants. Google publishes official quantized memory estimates, which are more useful than a parameter count alone.
 3. [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2) for Apache-2.0 licensed reasoning, coding, native tool calling, and long-context workflows in 3B, 8B, and 30B sizes.
 4. [Muse Glimmer](https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model) for a current 30B local-agent design with image input, a quantized footprint under 20 GB, and speculative decoding. At the August release, some optimized integrations were still landing, so verify runtime support before choosing it as a baseline.

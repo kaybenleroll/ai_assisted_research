@@ -484,7 +484,7 @@ code span.fu { color: #c792ea !important; }
     <span class="navbar-brand">Running LLMs Locally: A Complete
 Beginner’s Landscape</span>
 
-    <span class="navbar-meta">August 2026</span>
+    <span class="navbar-meta">September 2026</span>
 
   </nav>
 
@@ -651,7 +651,7 @@ Families</a></li>
 
     <main class="content">
 <p>From Zero to Your Own Private AI Stack, With Containers</p>
-<p><em>~6,300 words · August 2026</em></p>
+<p><em>~6,500 words · September 2026</em></p>
 <p>You have used cloud AI tools. They are useful, fast, and easy.</p>
 <p>Now you want control.</p>
 <p>You want your prompts and documents to stay on your machine. You want
@@ -662,8 +662,10 @@ running.</p>
 <p>It is written for technical beginners to local inference: people who
 are comfortable in a terminal and can read config files, but have not
 yet built a local model stack end to end.</p>
-<p>Everything here is written as current guidance for 31 August
-2026.</p>
+<p>Everything here is written as current guidance for 10 September 2026.
+Runtime features and model catalogs change faster than this document
+can, so use the linked official documentation to verify commands and
+compatibility before you standardize a deployment.</p>
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
 <h2 data-number="1.1" id="what-this-covers"><span class="header-section-number">1.1</span> What This Covers</h2>
 <p>This is a practical guide to running large language models locally
@@ -863,7 +865,7 @@ endpoint.</p>
 <tbody>
 <tr>
 <td>Text, coding, reasoning, and agents</td>
-<td><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.8</a>, <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>,
+<td><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5</a>, <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>,
 <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
 4.2</a>, <a href="https://openai.com/index/introducing-gpt-oss/">gpt-oss</a>, <a href="https://huggingface.co/LiquidAI/models">LFM2.5</a></td>
 <td>llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM</td>
@@ -930,15 +932,14 @@ separately from the language model that writes the final response.</td>
 </table>
 <h2 data-number="3.2" id="what-changed-recently"><span class="header-section-number">3.2</span> What Changed Recently</h2>
 <p>The frontier has moved toward smaller specialist models and sparse
-larger models. <a href="https://github.com/QwenLM/Qwen3.5">Qwen3.8-27B</a> was added in
-August 2026, while <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
-4.2</a> added 3B, 8B, and 30B reasoning models with configurable
-thinking modes, native tool calling, and a documented path to 512K
-context. <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>
-combines text and image input across its sizes, with audio support in
-E2B, E4B, and 12B variants. These are useful examples of why “parameter
-count” alone is no longer enough: active parameters, modality encoders,
-context length, and draft models all affect the actual local cost.</p>
+larger models. Current families such as <a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5</a>, <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
+4.2</a>, and <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>
+illustrate the direction: configurable reasoning, native tool calling,
+multimodal inputs, and long-context variants are becoming normal product
+features rather than unusual research demos. These are useful examples
+of why “parameter count” alone is no longer enough: active parameters,
+modality encoders, context length, and draft models all affect the
+actual local cost.</p>
 <p>Two other changes matter for personal hardware. <a href="https://huggingface.co/blog/LiquidAI/lfm25-dspark">LFM2.5-DSpark</a>
 adds a small draft-model path for speculative decoding, reporting up to
 3.18× GPU and 2.87× on-device throughput on its tested workloads. <a href="https://github.com/QwenLM/Qwen3-ASR">Qwen3-ASR</a> provides 0.6B
@@ -1098,15 +1099,12 @@ than distributed experimentation.</p>
 <h1 data-number="5" id="runtime-and-tooling-landscape"><span class="header-section-number">5</span> Runtime and Tooling
 Landscape</h1>
 <p>There are more choices now, but the core categories are stable.</p>
-<p>At the 31 August 2026 cutoff, the release pages showed a fast-moving
-stack: <a href="https://github.com/ollama/ollama/releases">Ollama
-v0.33.2</a>, <a href="https://github.com/vllm-project/vllm/releases/tag/v0.28.0">vLLM
-v0.28.0</a>, <a href="https://github.com/sgl-project/sglang/releases">SGLang
-v0.5.18</a>, <a href="https://github.com/ml-explore/mlx/releases">MLX
-v0.32.2</a>, and <a href="https://github.com/huggingface/transformers/releases">Transformers
-v5.16.1</a>. Treat these as a dated snapshot, not versions to pin
-blindly; read the model recipe and accelerator requirements before
-upgrading.</p>
+<p>At the 10 September 2026 cutoff, the release pages still showed a
+fast-moving stack across <a href="https://github.com/ollama/ollama/releases">Ollama</a>, <a href="https://github.com/vllm-project/vllm/releases">vLLM</a>, <a href="https://github.com/sgl-project/sglang/releases">SGLang</a>, <a href="https://github.com/ml-explore/mlx/releases">MLX</a>, and <a href="https://github.com/huggingface/transformers/releases">Transformers</a>.
+This document deliberately does not pin a “current” version: runtime and
+model compatibility is more important than the newest tag, and a moving
+version number ages immediately. Read the model recipe and accelerator
+requirements before upgrading.</p>
 <h2 data-number="5.1" id="llama.cpp-and-llama-server"><span class="header-section-number">5.1</span> llama.cpp and llama-server</h2>
 <p>llama.cpp is still the foundational local inference engine for GGUF
 workflows.</p>
@@ -1535,14 +1533,12 @@ Works</h2>
 universal best model.</p>
 <h2 data-number="8.3" id="family-level-guidance-practical"><span class="header-section-number">8.3</span> Family-Level Guidance
 (Practical)</h2>
-<p>As of 31 August 2026, a useful text-model shortlist includes:</p>
+<p>As of 10 September 2026, a useful text-model shortlist includes:</p>
 <ol type="1">
-<li><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5/3.6/3.8</a> for
-coding, agents, and multimodal work. Qwen’s current repository lists
-Qwen3.8-27B as an August release, but model-card and catalog pages can
-lag the repository; verify the exact artifact and runtime tag before
-standardizing on it. Larger Qwen3.5/3.6 MoE models are server-class
-despite their low active-parameter counts.</li>
+<li><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5</a> for coding,
+agents, and multimodal work. Larger mixture-of-experts variants are
+server-class despite their low active-parameter counts; verify the exact
+artifact and runtime support before standardizing on one.</li>
 <li><a href="https://ai.google.dev/gemma/docs/core">Gemma 4</a> for
 compact reasoning, coding, function calling, and image/audio input on
 selected variants. Google publishes official quantized memory estimates,
