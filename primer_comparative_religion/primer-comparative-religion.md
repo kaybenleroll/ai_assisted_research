@@ -1,4 +1,4 @@
-# Introduction
+# Comparative Religion: Text, Doctrine, Structure, and Liturgy
 
 Imagine visiting a synagogue on Shabbat, a mosque on Friday, a Catholic Mass, a Hindu temple festival, a gurdwara langar, a Buddhist memorial service, and a Shinto shrine at New Year. At first they all look like “religion”: words, gestures, specialists, sacred objects, food, music, and silence. The deeper question is what those actions are doing. Are they forming a people, receiving grace, remembering God, seeking liberation, purifying a place, or training attention?
 
