@@ -10,7 +10,7 @@ This primer covers how autonomous AI agents work at a technical level: the execu
 
 This is not a guide to training or fine-tuning LLMs. It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
 
-**Freshness note (July 31, 2026):** This is a conceptual and implementation primer, but some details in the ecosystem move monthly (framework capabilities, provider SDK features, model pricing, and benchmark rankings). Treat specific product/version references as dated snapshots and re-check official docs when implementing.
+**Freshness note (September 10, 2026):** This is a conceptual and implementation primer, but framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
 
 When you hear about AI agents doing autonomous work—making API calls, retrieving data, making decisions, and executing complex workflows—you're likely hearing about a fascinating but often misunderstood technology. The core confusion typically stems from a simple question: *if AI systems like large language models (LLMs) are trained to generate text, how do they become agents that actually do things?*
 
@@ -131,6 +131,28 @@ The practical implication: skip the prompt-tag approach entirely unless you're w
 
 Same pattern, different domain: an expense-audit agent can fetch a report, compare each line item to policy, request missing receipts, then approve or escalate. Same loop, different tools.
 
+### The Tool Boundary Is a Trust Boundary
+
+The model proposes an action; application code decides whether that action is
+allowed and performs the side effect. Keep those responsibilities separate.
+Tool schemas constrain shape, but they do not provide authorization. A valid
+`delete_customer` call can still be the wrong action for the current user,
+tenant, policy, or workflow state.
+
+Treat retrieved pages, emails, documents, and tool results as untrusted data.
+They may contain prompt-injection text that looks like an instruction. Put
+authorization, tenant checks, rate limits, idempotency keys, and approval gates
+in the tool or service layer, where they cannot be bypassed by a persuasive
+model response. For irreversible actions, pause before execution and show the
+human the exact arguments, target, and expected consequence.
+
+The current ecosystem exposes this boundary through several converging
+interfaces: provider SDKs offer guardrails, handoffs, tracing, and sometimes
+sandboxed execution; [Model Context Protocol (MCP)](https://modelcontextprotocol.io/specification/2025-06-18)
+standardizes tool and resource connections; and [Agent2Agent (A2A)](https://a2a-protocol.org/latest/)
+addresses communication between independently deployed agents. These are
+integration layers, not replacements for application authorization.
+
 ### Why This Works
 
 LLMs have learned from millions of examples of:
@@ -169,6 +191,23 @@ flowchart TD
 ```
 
 In production, each iteration should be observable. Log the prompt summary, chosen action, tool arguments, result, and elapsed time. That one habit makes debugging dramatically easier.
+
+### From a Loop to a Durable Workflow
+
+A short interactive loop can keep state in memory. A long-running or
+approval-gated agent needs durable state outside the process. Persist a
+workflow identifier, current step, tool-call status, model/prompt versions,
+and the minimum data needed to resume. Make side effects idempotent or record
+an idempotency key before retrying them; otherwise a crash after a successful
+payment or email can cause a duplicate when the agent resumes.
+
+Checkpointing also changes the design of human review. The agent should pause
+with a reviewable action request, not merely ask the language model to “be
+careful.” The reviewer can approve, edit, or reject the exact call, and the
+workflow resumes from saved state. [LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persistence)
+and [interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) are
+concrete examples of this pattern; the same separation can be implemented
+with a database-backed state machine or a durable workflow engine.
 
 ### Concrete Example: A Customer Support Agent
 
@@ -536,7 +575,11 @@ Action: [Next tool call or completion]
 ..."
 ```
 
-This pattern makes the LLM's reasoning **transparent and auditable**. You can see exactly why it chose each action.
+This pattern makes the agent's **action trace** auditable: you can see the
+tool calls, arguments, observations, and outcomes. Do not require or expose a
+hidden chain-of-thought dump as an observability strategy. Record concise
+decision summaries and structured events instead; they are safer to retain and
+usually more useful for debugging.
 
 Transparency only helps if traces stay readable. Prefer concise reasoning summaries over giant free-form dumps.
 
@@ -626,25 +669,25 @@ def run_agent(task, max_iterations=10):
     return state.result_with_status("max_iterations_reached")
 ```
 
-### Frameworks (Late-July 2026 Snapshot)
+### Frameworks, SDKs, and Runtimes (September 2026 Snapshot)
 
 Before you lock in a framework, treat this section as a decision starting point, not a permanent ranking. Framework strengths move quickly as maintainers add state management, tracing, eval hooks, and human-in-the-loop controls.
 
-**Pydantic AI** (Recommended for type safety)
+**Pydantic AI**
 
 - Built on Pydantic models
 - Type-safe tool definitions
 - Excellent for Python projects
 - Modern, actively developed
 
-**LangGraph** (Recommended for complex flows)
+**LangGraph**
 
 - Graph-based agent definitions
 - Excellent for multi-agent systems
 - Supports human-in-the-loop
 - Built by LangChain team
 
-**CrewAI** (Recommended for multi-agent teams)
+**CrewAI**
 
 - Role-based agent design
 - Built-in agent personas
@@ -657,14 +700,35 @@ Quick selection heuristic:
 - Choose LangGraph when explicit workflow control and state transitions are central.
 - Choose CrewAI when role-based collaboration is the main design pattern.
 
-Worth knowing before you pick one of these: all major providers now also ship official first-party agent SDKs — Anthropic's Claude Agent SDK, OpenAI's Agents SDK, and Google's Agent Development Kit (ADK) among them — converging on similar primitives (tools, delegation/handoff between sub-agents, guardrails, tracing). They're vendor-native alternatives to the frameworks above rather than replacements for the concepts in this primer, and worth evaluating alongside the third-party options if you're committed to a single provider. SDK names and package surfaces change quickly, so verify current package names and feature support from provider docs before implementation.
+All major providers now also ship first-party agent SDKs. [OpenAI's Agents SDK](https://openai.github.io/openai-agents-python/)
+documents tools, handoffs, guardrails, tracing, sessions, and sandbox agents;
+Anthropic's [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview)
+and Google's [Agent Development Kit (ADK)](https://google.github.io/adk-docs/)
+provide comparable provider-native paths. These SDKs are sensible when you
+are committed to one provider and want its newest features. They are less
+portable than a thin model adapter plus explicit application state.
+
+The important distinction is between layers:
+
+| Layer | Examples | Main responsibility |
+|---|---|---|
+| Model/provider SDK | OpenAI Agents SDK, Claude Agent SDK, Google ADK | Model calls, tools, handoffs, provider-native controls |
+| Agent framework | Pydantic AI, LangChain agents, CrewAI | Agent definitions, typed tools, common loop abstractions |
+| Orchestration runtime | LangGraph, Temporal, Inngest | Durable state, retries, pause/resume, scheduling |
+| Interoperability | MCP, A2A | Connections between tools, resources, and agents |
+
+Do not choose a framework before choosing the failure semantics you need. A
+single request/response assistant may need only a provider SDK and a few
+functions. A workflow that can wait for a human, survive a deploy, or retry a
+side effect needs persistence and explicit resume behavior regardless of the
+framework name.
 
 A practical framework-selection checklist:
 
 1. Tooling ergonomics: How hard is it to define and validate tools with strict schemas?
 2. State model: Does the framework expose explicit state transitions, or hide them in prompt text?
 3. Observability: Can you inspect traces, tool calls, and failure paths without custom plumbing?
-4. Safety controls: Can you gate risky actions and enforce approvals where needed?
+4. Safety controls: Can you gate risky actions, enforce approvals, and isolate execution where needed?
 5. Portability: How tightly does it lock you into one provider or orchestration runtime?
 
 ---
@@ -949,7 +1013,7 @@ That is already a meaningful business win.
 
 ## Conclusion
 
-### Current Limitations (2026)
+### Current Limitations (September 2026)
 
 1. **LLMs aren't perfect reasoners** - They work through learned pattern matching, not logical deduction. Complex multi-step planning with many variables is still hard.
 
@@ -987,6 +1051,13 @@ That is already a meaningful business win.
 
 **Model Context Protocol (MCP):** Widely adopted standard for how agents and tools communicate — introduced by Anthropic in late 2024 and now supported across multiple major ecosystems. In practice, MCP is becoming the portability layer for tool access: filesystem, databases, HTTP services, source control, docs/search endpoints, and custom internal systems can all be exposed through the same model-facing pattern rather than bespoke per-vendor adapters.
 
+**Agent-to-Agent (A2A):** A complementary protocol for agent-to-agent
+communication. Use it when an agent needs to delegate to an independently
+deployed specialist with its own identity, endpoint, lifecycle, and task
+status. Do not use multi-agent protocols to hide a workflow that would be
+clearer as ordinary functions or durable workflow steps; every extra agent
+adds latency, state, and another trust boundary.
+
 Autonomous AI agents are not magical. They're engineered systems combining:
 
 1. **LLM as reasoning engine** - Excellent pattern-matching to understand context and plan
@@ -1009,8 +1080,10 @@ If you remember one practical takeaway, make it this: treat agent development li
 - **Reflexion:** "Reflexion: Language Agents with Verbal Reinforcement Learning" (Shinn et al., 2023)  
 - **Generative Agents:** "Generative Agents: Interactive Simulacra of Human Behavior" (Park et al., 2023)
 - **Tool Use:** "Toolformer: Language Models Can Teach Themselves to Use Tools" (Schick et al., 2023)
-- **Framework Docs:** Pydantic AI, LangGraph, CrewAI official documentation
+- **Framework Docs:** [Pydantic AI](https://ai.pydantic.dev/), [LangGraph](https://docs.langchain.com/oss/python/langgraph/), and [CrewAI](https://docs.crewai.com/) official documentation
+- **Provider-native agent tooling:** [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/), [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview), and [Google ADK](https://google.github.io/adk-docs/)
+- **Interoperability:** [MCP specification](https://modelcontextprotocol.io/specification/2025-06-18) and [A2A protocol](https://a2a-protocol.org/latest/)
 
 ---
 
-*Created: May 20, 2026. Last updated: July 31, 2026.*
+*Created: May 20, 2026. Last updated: September 10, 2026.*

@@ -476,7 +476,7 @@ padding-top: 1.25rem;
 
 code span.fu { color: #c792ea !important; } 
 </style>
-  
+
 </head>
 <body>
 
@@ -484,7 +484,7 @@ code span.fu { color: #c792ea !important; }
     <span class="navbar-brand">Building Autonomous AI Agents: A
 Comprehensive Primer</span>
 
-    <span class="navbar-meta">July 2026</span>
+    <span class="navbar-meta">September 2026</span>
 
   </nav>
 
@@ -522,6 +522,8 @@ as Black Boxes</a></li>
 and Structured Outputs</a></li>
 <li><a href="#native-tool-use-apis" id="toc-native-tool-use-apis">Native
 Tool Use APIs</a></li>
+<li><a href="#the-tool-boundary-is-a-trust-boundary" id="toc-the-tool-boundary-is-a-trust-boundary">The Tool Boundary Is a
+Trust Boundary</a></li>
 <li><a href="#why-this-works" id="toc-why-this-works">Why This
 Works</a></li>
 </ul></li>
@@ -530,6 +532,8 @@ Execution Loop</a>
 <ul>
 <li><a href="#the-agent-lifecycle" id="toc-the-agent-lifecycle">The
 Agent Lifecycle</a></li>
+<li><a href="#from-a-loop-to-a-durable-workflow" id="toc-from-a-loop-to-a-durable-workflow">From a Loop to a Durable
+Workflow</a></li>
 <li><a href="#concrete-example-a-customer-support-agent" id="toc-concrete-example-a-customer-support-agent">Concrete Example: A
 Customer Support Agent</a></li>
 </ul></li>
@@ -561,8 +565,8 @@ Patterns</a></li>
 Recovery</a></li>
 <li><a href="#the-execution-loop-implementation" id="toc-the-execution-loop-implementation">The Execution Loop
 Implementation</a></li>
-<li><a href="#frameworks-late-july-2026-snapshot" id="toc-frameworks-late-july-2026-snapshot">Frameworks (Late-July 2026
-Snapshot)</a></li>
+<li><a href="#frameworks-sdks-and-runtimes-september-2026-snapshot" id="toc-frameworks-sdks-and-runtimes-september-2026-snapshot">Frameworks,
+SDKs, and Runtimes (September 2026 Snapshot)</a></li>
 </ul></li>
 <li><a href="#key-challenges" id="toc-key-challenges">Key Challenges</a>
 <ul>
@@ -605,7 +609,8 @@ Iterate</a></li>
 </ul></li>
 <li><a href="#conclusion" id="toc-conclusion">Conclusion</a>
 <ul>
-<li><a href="#current-limitations-2026" id="toc-current-limitations-2026">Current Limitations (2026)</a></li>
+<li><a href="#current-limitations-september-2026" id="toc-current-limitations-september-2026">Current Limitations
+(September 2026)</a></li>
 <li><a href="#emerging-patterns" id="toc-emerging-patterns">Emerging
 Patterns</a></li>
 </ul></li>
@@ -635,11 +640,11 @@ engineering in isolation from agentic execution. If you want a survey of
 agent frameworks without implementation depth, this is probably not the
 right starting point — this primer assumes you intend to build
 something.</p>
-<p><strong>Freshness note (July 31, 2026):</strong> This is a conceptual
-and implementation primer, but some details in the ecosystem move
-monthly (framework capabilities, provider SDK features, model pricing,
-and benchmark rankings). Treat specific product/version references as
-dated snapshots and re-check official docs when implementing.</p>
+<p><strong>Freshness note (September 10, 2026):</strong> This is a
+conceptual and implementation primer, but framework capabilities,
+provider SDK features, model pricing, and benchmark rankings move
+monthly. Treat product and protocol references as dated guidance and
+re-check the linked official docs before implementation.</p>
 <p>When you hear about AI agents doing autonomous work—making API calls,
 retrieving data, making decisions, and executing complex
 workflows—you’re likely hearing about a fascinating but often
@@ -796,6 +801,28 @@ later in this primer assumes it.</p>
 <p>Same pattern, different domain: an expense-audit agent can fetch a
 report, compare each line item to policy, request missing receipts, then
 approve or escalate. Same loop, different tools.</p>
+<h3 id="the-tool-boundary-is-a-trust-boundary">The Tool Boundary Is a
+Trust Boundary</h3>
+<p>The model proposes an action; application code decides whether that
+action is allowed and performs the side effect. Keep those
+responsibilities separate. Tool schemas constrain shape, but they do not
+provide authorization. A valid <code>delete_customer</code> call can
+still be the wrong action for the current user, tenant, policy, or
+workflow state.</p>
+<p>Treat retrieved pages, emails, documents, and tool results as
+untrusted data. They may contain prompt-injection text that looks like
+an instruction. Put authorization, tenant checks, rate limits,
+idempotency keys, and approval gates in the tool or service layer, where
+they cannot be bypassed by a persuasive model response. For irreversible
+actions, pause before execution and show the human the exact arguments,
+target, and expected consequence.</p>
+<p>The current ecosystem exposes this boundary through several
+converging interfaces: provider SDKs offer guardrails, handoffs,
+tracing, and sometimes sandboxed execution; <a href="https://modelcontextprotocol.io/specification/2025-06-18">Model
+Context Protocol (MCP)</a> standardizes tool and resource connections;
+and <a href="https://a2a-protocol.org/latest/">Agent2Agent (A2A)</a>
+addresses communication between independently deployed agents. These are
+integration layers, not replacements for application authorization.</p>
 <h3 id="why-this-works">Why This Works</h3>
 <p>LLMs have learned from millions of examples of:</p>
 <ul>
@@ -817,6 +844,23 @@ It can take one step, observe reality, and adapt.</p>
 <p>In production, each iteration should be observable. Log the prompt
 summary, chosen action, tool arguments, result, and elapsed time. That
 one habit makes debugging dramatically easier.</p>
+<h3 id="from-a-loop-to-a-durable-workflow">From a Loop to a Durable
+Workflow</h3>
+<p>A short interactive loop can keep state in memory. A long-running or
+approval-gated agent needs durable state outside the process. Persist a
+workflow identifier, current step, tool-call status, model/prompt
+versions, and the minimum data needed to resume. Make side effects
+idempotent or record an idempotency key before retrying them; otherwise
+a crash after a successful payment or email can cause a duplicate when
+the agent resumes.</p>
+<p>Checkpointing also changes the design of human review. The agent
+should pause with a reviewable action request, not merely ask the
+language model to “be careful.” The reviewer can approve, edit, or
+reject the exact call, and the workflow resumes from saved state. <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph
+persistence</a> and <a href="https://docs.langchain.com/oss/python/langgraph/interrupts">interrupts</a>
+are concrete examples of this pattern; the same separation can be
+implemented with a database-backed state machine or a durable workflow
+engine.</p>
 <h3 id="concrete-example-a-customer-support-agent">Concrete Example: A
 Customer Support Agent</h3>
 <p>Let’s walk through a real example to see this in action.</p>
@@ -1149,8 +1193,12 @@ Thought: Now that I know [what I learned], I should...
 
 Action: [Next tool call or completion]
 ...&quot;</code></pre>
-<p>This pattern makes the LLM’s reasoning <strong>transparent and
-auditable</strong>. You can see exactly why it chose each action.</p>
+<p>This pattern makes the agent’s <strong>action trace</strong>
+auditable: you can see the tool calls, arguments, observations, and
+outcomes. Do not require or expose a hidden chain-of-thought dump as an
+observability strategy. Record concise decision summaries and structured
+events instead; they are safer to retain and usually more useful for
+debugging.</p>
 <p>Transparency only helps if traces stay readable. Prefer concise
 reasoning summaries over giant free-form dumps.</p>
 <h3 id="planning-patterns">Planning Patterns</h3>
@@ -1230,27 +1278,27 @@ in practice:</p>
 <span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> state.result</span>
 <span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> state.result_with_status(<span class="st">&quot;max_iterations_reached&quot;</span>)</span></code></pre></div>
-<h3 id="frameworks-late-july-2026-snapshot">Frameworks (Late-July 2026
-Snapshot)</h3>
+<h3 id="frameworks-sdks-and-runtimes-september-2026-snapshot">Frameworks,
+SDKs, and Runtimes (September 2026 Snapshot)</h3>
 <p>Before you lock in a framework, treat this section as a decision
 starting point, not a permanent ranking. Framework strengths move
 quickly as maintainers add state management, tracing, eval hooks, and
 human-in-the-loop controls.</p>
-<p><strong>Pydantic AI</strong> (Recommended for type safety)</p>
+<p><strong>Pydantic AI</strong></p>
 <ul>
 <li>Built on Pydantic models</li>
 <li>Type-safe tool definitions</li>
 <li>Excellent for Python projects</li>
 <li>Modern, actively developed</li>
 </ul>
-<p><strong>LangGraph</strong> (Recommended for complex flows)</p>
+<p><strong>LangGraph</strong></p>
 <ul>
 <li>Graph-based agent definitions</li>
 <li>Excellent for multi-agent systems</li>
 <li>Supports human-in-the-loop</li>
 <li>Built by LangChain team</li>
 </ul>
-<p><strong>CrewAI</strong> (Recommended for multi-agent teams)</p>
+<p><strong>CrewAI</strong></p>
 <ul>
 <li>Role-based agent design</li>
 <li>Built-in agent personas</li>
@@ -1266,16 +1314,56 @@ transitions are central.</li>
 <li>Choose CrewAI when role-based collaboration is the main design
 pattern.</li>
 </ul>
-<p>Worth knowing before you pick one of these: all major providers now
-also ship official first-party agent SDKs — Anthropic’s Claude Agent
-SDK, OpenAI’s Agents SDK, and Google’s Agent Development Kit (ADK) among
-them — converging on similar primitives (tools, delegation/handoff
-between sub-agents, guardrails, tracing). They’re vendor-native
-alternatives to the frameworks above rather than replacements for the
-concepts in this primer, and worth evaluating alongside the third-party
-options if you’re committed to a single provider. SDK names and package
-surfaces change quickly, so verify current package names and feature
-support from provider docs before implementation.</p>
+<p>All major providers now also ship first-party agent SDKs. <a href="https://openai.github.io/openai-agents-python/">OpenAI’s Agents
+SDK</a> documents tools, handoffs, guardrails, tracing, sessions, and
+sandbox agents; Anthropic’s <a href="https://code.claude.com/docs/en/agent-sdk/overview">Claude Agent
+SDK</a> and Google’s <a href="https://google.github.io/adk-docs/">Agent
+Development Kit (ADK)</a> provide comparable provider-native paths.
+These SDKs are sensible when you are committed to one provider and want
+its newest features. They are less portable than a thin model adapter
+plus explicit application state.</p>
+<p>The important distinction is between layers:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Examples</th>
+<th>Main responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model/provider SDK</td>
+<td>OpenAI Agents SDK, Claude Agent SDK, Google ADK</td>
+<td>Model calls, tools, handoffs, provider-native controls</td>
+</tr>
+<tr>
+<td>Agent framework</td>
+<td>Pydantic AI, LangChain agents, CrewAI</td>
+<td>Agent definitions, typed tools, common loop abstractions</td>
+</tr>
+<tr>
+<td>Orchestration runtime</td>
+<td>LangGraph, Temporal, Inngest</td>
+<td>Durable state, retries, pause/resume, scheduling</td>
+</tr>
+<tr>
+<td>Interoperability</td>
+<td>MCP, A2A</td>
+<td>Connections between tools, resources, and agents</td>
+</tr>
+</tbody>
+</table>
+<p>Do not choose a framework before choosing the failure semantics you
+need. A single request/response assistant may need only a provider SDK
+and a few functions. A workflow that can wait for a human, survive a
+deploy, or retry a side effect needs persistence and explicit resume
+behavior regardless of the framework name.</p>
 <p>A practical framework-selection checklist:</p>
 <ol type="1">
 <li>Tooling ergonomics: How hard is it to define and validate tools with
@@ -1284,8 +1372,8 @@ strict schemas?</li>
 or hide them in prompt text?</li>
 <li>Observability: Can you inspect traces, tool calls, and failure paths
 without custom plumbing?</li>
-<li>Safety controls: Can you gate risky actions and enforce approvals
-where needed?</li>
+<li>Safety controls: Can you gate risky actions, enforce approvals, and
+isolate execution where needed?</li>
 <li>Portability: How tightly does it lock you into one provider or
 orchestration runtime?</li>
 </ol>
@@ -1561,7 +1649,8 @@ one.</p>
 </ul>
 <p>That is already a meaningful business win.</p>
 <h2 id="conclusion">Conclusion</h2>
-<h3 id="current-limitations-2026">Current Limitations (2026)</h3>
+<h3 id="current-limitations-september-2026">Current Limitations
+(September 2026)</h3>
 <ol type="1">
 <li><p><strong>LLMs aren’t perfect reasoners</strong> - They work
 through learned pattern matching, not logical deduction. Complex
@@ -1612,6 +1701,13 @@ practice, MCP is becoming the portability layer for tool access:
 filesystem, databases, HTTP services, source control, docs/search
 endpoints, and custom internal systems can all be exposed through the
 same model-facing pattern rather than bespoke per-vendor adapters.</p>
+<p><strong>Agent-to-Agent (A2A):</strong> A complementary protocol for
+agent-to-agent communication. Use it when an agent needs to delegate to
+an independently deployed specialist with its own identity, endpoint,
+lifecycle, and task status. Do not use multi-agent protocols to hide a
+workflow that would be clearer as ordinary functions or durable workflow
+steps; every extra agent adds latency, state, and another trust
+boundary.</p>
 <p>Autonomous AI agents are not magical. They’re engineered systems
 combining:</p>
 <ol type="1">
@@ -1651,11 +1747,19 @@ Reinforcement Learning” (Shinn et al., 2023)<br />
 Simulacra of Human Behavior” (Park et al., 2023)</li>
 <li><strong>Tool Use:</strong> “Toolformer: Language Models Can Teach
 Themselves to Use Tools” (Schick et al., 2023)</li>
-<li><strong>Framework Docs:</strong> Pydantic AI, LangGraph, CrewAI
-official documentation</li>
+<li><strong>Framework Docs:</strong> <a href="https://ai.pydantic.dev/">Pydantic AI</a>, <a href="https://docs.langchain.com/oss/python/langgraph/">LangGraph</a>,
+and <a href="https://docs.crewai.com/">CrewAI</a> official
+documentation</li>
+<li><strong>Provider-native agent tooling:</strong> <a href="https://openai.github.io/openai-agents-python/">OpenAI Agents
+SDK</a>, <a href="https://code.claude.com/docs/en/agent-sdk/overview">Claude Agent
+SDK</a>, and <a href="https://google.github.io/adk-docs/">Google
+ADK</a></li>
+<li><strong>Interoperability:</strong> <a href="https://modelcontextprotocol.io/specification/2025-06-18">MCP
+specification</a> and <a href="https://a2a-protocol.org/latest/">A2A
+protocol</a></li>
 </ul>
 <hr />
-<p><em>Created: May 20, 2026. Last updated: July 31, 2026.</em></p>
+<p><em>Created: May 20, 2026. Last updated: September 10, 2026.</em></p>
     </main>
 
   </div>
@@ -1752,6 +1856,7 @@ official documentation</li>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = 'mathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -1760,8 +1865,13 @@ official documentation</li>
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {

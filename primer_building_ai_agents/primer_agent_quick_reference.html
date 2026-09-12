@@ -476,7 +476,7 @@ padding-top: 1.25rem;
 
 code span.fu { color: #c792ea !important; } 
 </style>
-  
+
 </head>
 <body>
 
@@ -484,7 +484,7 @@ code span.fu { color: #c792ea !important; }
     <span class="navbar-brand">Agent Implementation Quick
 Reference</span>
 
-    <span class="navbar-meta">July 2026</span>
+    <span class="navbar-meta">September 2026</span>
 
   </nav>
 
@@ -512,6 +512,8 @@ Orchestration (CrewAI Crews)</a></li>
 </ul></li>
 <li><a href="#tool-integration-patterns" id="toc-tool-integration-patterns">Tool Integration Patterns</a>
 <ul>
+<li><a href="#approval-boundary-for-side-effects" id="toc-approval-boundary-for-side-effects">Approval Boundary for Side
+Effects</a></li>
 <li><a href="#synchronous-tool-execution" id="toc-synchronous-tool-execution">Synchronous Tool Execution</a></li>
 <li><a href="#parallel-tool-execution" id="toc-parallel-tool-execution">Parallel Tool Execution</a></li>
 <li><a href="#tool-validation-retry" id="toc-tool-validation-retry">Tool
@@ -528,7 +530,8 @@ Validation &amp; Retry</a></li>
 Strategies</a></li>
 <li><a href="#reflection-template" id="toc-reflection-template">Reflection Template</a></li>
 </ul></li>
-<li><a href="#framework-selection-matrix" id="toc-framework-selection-matrix">Framework Selection Matrix</a></li>
+<li><a href="#framework-and-runtime-selection-matrix" id="toc-framework-and-runtime-selection-matrix">Framework and Runtime
+Selection Matrix</a></li>
 <li><a href="#evaluation-metrics-definitions" id="toc-evaluation-metrics-definitions">Evaluation Metrics
 Definitions</a>
 <ul>
@@ -600,10 +603,12 @@ Architecture Quick Reference &amp; Decision Frameworks</h1>
 fact verification) - Need interpretable decision traces - User-facing
 applications requiring transparency</p>
 <p><strong>Execution Model:</strong></p>
-<pre><code>Thought → Action → Observation → (loop)</code></pre>
-<p><strong>Pros:</strong> Interpretable, self-correcting, reduces
-hallucination <strong>Cons:</strong> Verbose, sequential (no
-parallelism), requires clean action space</p>
+<pre><code>Decision summary → Action → Observation → (loop)</code></pre>
+<p><strong>Pros:</strong> Observable action trace, self-correcting,
+reduces hallucination when tools ground claims <strong>Cons:</strong>
+Sequential by default, can be verbose, requires a clean action space</p>
+<p>Do not depend on exposing hidden chain-of-thought. Log tool calls,
+arguments, observations, outcomes, and concise decision summaries.</p>
 <p><strong>Code Pattern:</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>agent_loop:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  thought <span class="op">=</span> llm.think(context)</span>
@@ -619,7 +624,8 @@ path uncertain</p>
 <pre><code>LLM → Tool Calls → Append Results → Loop Until Done</code></pre>
 <p><strong>Pros:</strong> Flexible, general-purpose, handles complex
 scenarios <strong>Cons:</strong> Can hit maximum iterations, hard to
-reason about long-term outcomes</p>
+reason about long-term outcomes, requires explicit authorization around
+side effects</p>
 <p><strong>Code Pattern (Pydantic AI):</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@agent.tool</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> search(query: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
@@ -655,9 +661,46 @@ Complex workflows with delegation - Team-like collaboration required</p>
 <pre><code>Task → Agent Selection → Execution → Next Task</code></pre>
 <p><strong>Pros:</strong> Natural role assignment, clear
 responsibilities, easy to extend <strong>Cons:</strong> Coordination
-overhead, harder to debug</p>
+overhead, harder to debug, more trust boundaries</p>
 <hr />
 <h2 id="tool-integration-patterns">Tool Integration Patterns</h2>
+<h3 id="approval-boundary-for-side-effects">Approval Boundary for Side
+Effects</h3>
+<p>Classify tools before wiring them into an agent:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Risk tier</th>
+<th>Examples</th>
+<th>Default execution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read-only</td>
+<td>Search, retrieve order, inspect logs</td>
+<td>Automatic, with least-privilege credentials</td>
+</tr>
+<tr>
+<td>Reversible write</td>
+<td>Draft email, create ticket, stage file change</td>
+<td>Automatic only if the user can undo it; otherwise review</td>
+</tr>
+<tr>
+<td>Irreversible or high-impact</td>
+<td>Send email, delete data, issue refund, change access</td>
+<td>Pause and require explicit approval</td>
+</tr>
+</tbody>
+</table>
+<p>Authorization belongs in the tool/service layer, not only in the
+prompt. Validate the user, tenant, target, policy, and idempotency key
+immediately before the side effect.</p>
 <h3 id="synchronous-tool-execution">Synchronous Tool Execution</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple: one tool call at a time</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tools_results <span class="op">=</span> []</span>
@@ -675,7 +718,9 @@ overhead, harder to debug</p>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>[execute_tool(tc) <span class="cf">for</span> tc <span class="kw">in</span> response.tool_calls]</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><strong>Pros:</strong> Fast for independent tools
-<strong>Cons:</strong> Non-deterministic ordering, harder to debug</p>
+<strong>Cons:</strong> Non-deterministic completion order, harder to
+debug; never parallelize calls with ordering or shared-state
+dependencies</p>
 <hr />
 <h3 id="tool-validation-retry">Tool Validation &amp; Retry</h3>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> execute_tool_with_retry(tool_call, max_retries<span class="op">=</span><span class="dv">2</span>):</span>
@@ -787,53 +832,59 @@ Example reflection:
    requires cross-referencing multiple sources. Try combining results 
    from at least 3 different sources before synthesizing answer.&quot;</code></pre>
 <hr />
-<h2 id="framework-selection-matrix">Framework Selection Matrix</h2>
+<h2 id="framework-and-runtime-selection-matrix">Framework and Runtime
+Selection Matrix</h2>
 <table>
 <colgroup>
-<col style="width: 32%" />
-<col style="width: 38%" />
-<col style="width: 29%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
 </colgroup>
 <thead>
 <tr>
-<th>Dimension</th>
-<th>Best Option</th>
-<th>Trade-off</th>
+<th>Need</th>
+<th>Start with</th>
+<th>Why</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Simplicity</strong></td>
+<td>Typed Python tools and fast implementation</td>
 <td>Pydantic AI</td>
-<td>Less advanced orchestration</td>
+<td>Strong schemas and a small abstraction surface</td>
 </tr>
 <tr>
-<td><strong>Multi-agent</strong></td>
-<td>CrewAI</td>
-<td>Higher overhead</td>
-</tr>
-<tr>
-<td><strong>Workflow control</strong></td>
+<td>Explicit state, pause/resume, and durable execution</td>
 <td>LangGraph</td>
-<td>More boilerplate</td>
+<td>Checkpointing, interrupts, persistence, and workflow control</td>
 </tr>
 <tr>
-<td><strong>Type safety</strong></td>
-<td>Pydantic AI</td>
-<td>Python-only</td>
+<td>Role-based multi-agent collaboration</td>
+<td>CrewAI</td>
+<td>Convenient delegation model; accept coordination overhead</td>
 </tr>
 <tr>
-<td><strong>Observability</strong></td>
-<td>Pydantic AI + Logfire</td>
-<td>Proprietary (not required)</td>
+<td>One-provider features and fastest access to its SDK</td>
+<td>Provider-native SDK</td>
+<td>OpenAI Agents SDK, Claude Agent SDK, or Google ADK; lower
+portability</td>
 </tr>
 <tr>
-<td><strong>Cost optimization</strong></td>
-<td>LangGraph (more control)</td>
-<td>Requires manual tuning</td>
+<td>Interoperable tool connections</td>
+<td>MCP</td>
+<td>Standard tool/resource boundary; still apply local
+authorization</td>
+</tr>
+<tr>
+<td>Independent agent-to-agent delegation</td>
+<td>A2A</td>
+<td>Useful when agents have separate endpoints and lifecycles</td>
 </tr>
 </tbody>
 </table>
+<p>Choose the smallest layer that provides the failure semantics you
+need. Do not add multi-agent orchestration when ordinary functions or a
+durable workflow would make the path clearer.</p>
 <hr />
 <h2 id="evaluation-metrics-definitions">Evaluation Metrics
 Definitions</h2>
@@ -948,8 +999,9 @@ Optimization:
 </tr>
 <tr>
 <td><strong>Drift over time</strong></td>
-<td>Quality degrades in production</td>
-<td>Monitor human eval samples; retrain on recent data</td>
+<td>Quality degrades after a model, prompt, tool, or data change</td>
+<td>Version every dependency; run regression evals and review sampled
+traces before rollout</td>
 </tr>
 <tr>
 <td><strong>Model version mismatch</strong></td>
@@ -962,7 +1014,7 @@ Optimization:
 <h2 id="quick-implementation-checklist">Quick Implementation
 Checklist</h2>
 <h3 id="mvp-agent-week-1">MVP Agent (Week 1)</h3>
-<pre><code>☐ Choose model (a current mid-tier frontier model, e.g. Claude Sonnet 5, is a reasonable default — check current pricing/capability docs before committing)
+<pre><code>☐ Choose model and record its exact model identifier, provider, and limits
 ☐ Define 3-5 core tools
 ☐ Write system prompt
 ☐ Implement basic agentic loop
@@ -974,10 +1026,12 @@ Checklist</h2>
 ☐ Add conversation history management
 ☐ Integrate vector store for memory
 ☐ Set up structured logging
-☐ Create basic dashboard</code></pre>
+☐ Create basic dashboard
+☐ Add prompt-injection and malformed-tool-output tests</code></pre>
 <h3 id="production-ready-week-4">Production Ready (Week 4+)</h3>
 <pre><code>☐ Implement rate limiting &amp; quotas
 ☐ Add human-in-the-loop for critical actions
+☐ Persist state and make side effects idempotent
 ☐ Set up comprehensive monitoring
 ☐ Create incident response runbooks
 ☐ Establish SLA metrics
@@ -1101,10 +1155,16 @@ pattern learning</p>
 (get result) → Repeat</p>
 <p><strong>MRKL:</strong> Modular reasoning system routing tasks to
 specialized expert tools</p>
-<p><strong>A2A:</strong> Agent-to-Agent communication protocol for
-inter-agent coordination</p>
-<p><strong>MCP:</strong> Model Context Protocol for standardized
-agent-tool interfaces</p>
+<p><strong>A2A:</strong> Agent-to-Agent protocol for communication
+between independently deployed agents; use it when separate identity,
+endpoint, and task lifecycle matter</p>
+<p><strong>MCP:</strong> Model Context Protocol for standardized tool
+and resource interfaces</p>
+<p><strong>Idempotency key:</strong> A caller-supplied identifier that
+lets a service recognize a retried request and avoid repeating a side
+effect</p>
+<p><strong>Durable execution:</strong> Persisted workflow execution that
+can survive failure, pause for input, and resume from saved state</p>
     </main>
 
   </div>
@@ -1201,6 +1261,7 @@ agent-tool interfaces</p>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = 'mathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -1209,8 +1270,13 @@ agent-tool interfaces</p>
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {
