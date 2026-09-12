@@ -1,5 +1,6 @@
 [tools]
 agy = "latest"
+codex = "latest"
 copilot = "latest"
 just = "latest"
 python = "latest"
