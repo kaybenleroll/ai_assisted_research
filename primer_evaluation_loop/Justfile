@@ -1,7 +1,7 @@
 SOURCE_MD   := "primer_evaluation_loop.md"
 PROJECT_DIR := "primer_evaluation_loop"
 TITLE       := "The Evaluation Loop: How AI Systems Learn to Improve"
-AUTHOR      := "June 2026"
+AUTHOR      := "September 2026"
 HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 

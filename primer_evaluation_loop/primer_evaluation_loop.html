@@ -484,7 +484,7 @@ code span.fu { color: #c792ea !important; }
     <span class="navbar-brand">The Evaluation Loop: How AI Systems Learn
 to Improve</span>
 
-    <span class="navbar-meta">June 2026</span>
+    <span class="navbar-meta">September 2026</span>
 
   </nav>
 
@@ -584,6 +584,12 @@ Resources</a></li>
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
     <main class="content">
+<p><em>Research snapshot · September 10, 2026</em></p>
+<p>The conceptual argument is durable; benchmark scores, framework APIs,
+and vendor safety practices are not. Claims about current systems in
+this primer are dated research snapshots. Re-check the primary source
+and reproduce the measurement before using a current score, leaderboard
+position, or API example as an engineering decision.</p>
 <h1 data-number="1" id="the-core-idea-measure-it-then-optimise-it"><span class="header-section-number">1</span> The Core Idea: Measure It, Then
 Optimise It</h1>
 <p>Here is the thing nobody tells you when you start building with AI:
@@ -2189,6 +2195,16 @@ multi-step credit assignment across long episodes, and robust harness
 isolation so the agent cannot attack the evaluator instead of the task.
 All three are harder and more expensive than running a pairwise
 comparison or reading a judge’s log-probabilities.</p>
+<p>The practical tooling is catching up to this distinction. Current
+agent platforms expose trace-level evaluation: a run can be graded on
+the final answer, tool choice, arguments, latency, cost, and policy
+violations rather than collapsed into one opaque score. For example, the
+<a href="https://developers.openai.com/api/docs/guides/agent-evals">OpenAI
+agent-evaluation guidance</a> treats workflow traces as the evaluation
+unit. This does not solve credit assignment or evaluator gaming, but it
+gives teams the right raw material: a versioned trajectory, a
+reproducible test case, and graders that can be inspected
+separately.</p>
 <p>The SWE-bench trajectory — from single digits to a successor
 benchmark near-saturated within two years — looks like rapid capability
 gain, and on the verifiable coding task it genuinely is. But the METR

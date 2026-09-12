@@ -1,5 +1,13 @@
 # The Evaluation Loop: How AI Systems Learn to Improve
 
+*Research snapshot · September 10, 2026*
+
+The conceptual argument is durable; benchmark scores, framework APIs, and
+vendor safety practices are not. Claims about current systems in this primer
+are dated research snapshots. Re-check the primary source and reproduce the
+measurement before using a current score, leaderboard position, or API example
+as an engineering decision.
+
 ## The Core Idea: Measure It, Then Optimise It
 
 Here is the thing nobody tells you when you start building with AI: the model is often the easy part. You can download a strong open-weight model this afternoon, or call a frontier one over an API in three lines of code. What separates a system that gets better every month from one that plateaus on day one is whether you have built a loop that turns mistakes into the next improvement signal — and whether, somewhere in that loop, you can attach a defensible number or checklist to "how good was that?"
@@ -711,6 +719,16 @@ The sharpest evidence for the gap between benchmark progress and real-world impa
 ### What This Means for the Loop
 
 Evaluating agents requires three things that single-turn output evaluation does not: process-level visibility into intermediate steps, multi-step credit assignment across long episodes, and robust harness isolation so the agent cannot attack the evaluator instead of the task. All three are harder and more expensive than running a pairwise comparison or reading a judge's log-probabilities.
+
+The practical tooling is catching up to this distinction. Current agent
+platforms expose trace-level evaluation: a run can be graded on the final
+answer, tool choice, arguments, latency, cost, and policy violations rather
+than collapsed into one opaque score. For example, the [OpenAI agent-evaluation
+guidance](https://developers.openai.com/api/docs/guides/agent-evals) treats
+workflow traces as the evaluation unit. This does not solve credit assignment
+or evaluator gaming, but it gives teams the right raw material: a versioned
+trajectory, a reproducible test case, and graders that can be inspected
+separately.
 
 The SWE-bench trajectory — from single digits to a successor benchmark near-saturated within two years — looks like rapid capability gain, and on the verifiable coding task it genuinely is. But the METR RCT finding sits alongside that number as a check: experienced developers 19% slower in production, believing they are 20% faster. The eval step is even more load-bearing for agents than for single-turn outputs, and more fragile. More of what can go wrong with it is invisible to outcome-only scoring, more of the gaming surface is structural rather than statistical, and the cost of building a good harness is higher. The thermometer problem does not get easier when the thing you are measuring has fifty steps and can read the thermometer.
 
