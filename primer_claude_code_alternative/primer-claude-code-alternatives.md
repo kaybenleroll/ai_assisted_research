@@ -941,7 +941,7 @@ OpenRouter is a unified API gateway that provides access to hundreds of models f
 | SWE-agent | Partial | Typically direct Claude/OpenAI; OpenRouter-capable but not the primary pathway. |
 | OpenHands | Partial | Via litellm provider abstraction; not a first-class named provider in docs surfaced this round. |
 | GitHub Copilot | Partial | Local BYOK exists in several clients; enterprise-managed custom models are a separate path. OpenRouter and feature coverage depend on client, plan, and policy. |
-| GitHub Copilot CLI | Partial\* | Model picker spans Claude/GPT/Gemini; explicit OpenRouter support unconfirmed. |
+| GitHub Copilot CLI | Partial | Official BYOK covers only the `openai`, `azure`, and `anthropic` provider types (`openai` = any OpenAI Chat Completions-compatible endpoint); OpenRouter is not named as a supported provider, so it is reachable only unofficially via the generic `openai`-compatible path. |
 | Grok Bot | No | Managed product; do not confuse xAI API access to Grok models with Grok Bot's product surface. |
 | Zed AI | **Yes (was Partial)** | Explicitly listed alongside 10+ other providers (Bedrock, DeepSeek, Copilot, LM Studio, Mistral, Ollama, Vercel). |
 | Google Antigravity 2.0 | No | Current plans do not offer BYOK/custom endpoints for extending account quotas; third-party model availability is product/plan-specific. |
@@ -953,8 +953,6 @@ OpenRouter is a unified API gateway that provides access to hundreds of models f
 | AWS Kiro IDE | No | AWS-native model routing. |
 | JetBrains AI Assistant | No | Tied to JetBrains' own model rotation, not user-configurable OpenRouter. |
 | Tabnine | No | Own models plus a fixed provider list. |
-
-\* Unverified -- not independently confirmed by this refresh's sourced research; treat as an open question rather than a confirmed capability.
 
 **Conclusion:** For OpenRouter flexibility, the open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, and Goose) remain the clearest options. Amp supports provider keys but does not document OpenRouter as a named first-class integration. Zed AI also lists OpenRouter among its supported providers. OpenAI's Codex CLI supports local/OSS models via `--oss`, but OpenRouter is not its primary path. GitHub Copilot now has local BYOK in several clients and enterprise-managed custom models, but availability and feature coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok Bot remain managed products rather than OpenRouter-style routing layers; Grok Bot's cross-application computer use should not be confused with provider flexibility.
 
@@ -969,7 +967,7 @@ Running models locally eliminates API costs entirely, but not hardware, electric
 | OpenCode | Yes | Yes | Provider-agnostic architecture. |
 | Continue.dev | Yes | Yes | localhost:11434 default. |
 | Goose | Yes | Partial | On-device philosophy is core; MCP-configurable local providers. |
-| Amp (Sourcegraph) | No | Unverified | Local CLI execution does not mean local model inference; current docs describe hosted models and provider keys, not Ollama/LM Studio. |
+| Amp (Sourcegraph) | No | No | Confirmed no local inference: Amp's Security Reference states inference always runs on Sourcegraph-documented hosted providers (Anthropic, OpenAI, Google, etc.); running the CLI locally is client/orchestration only. No official mention of Ollama, LM Studio, llama.cpp, or any local endpoint anywhere in Amp's docs (Cody, a separate Sourcegraph product, has experimental Ollama support -- not applicable to Amp). |
 | OpenAI Codex CLI | Yes | Yes | Via `--oss` flag; documented local providers are Ollama and LM Studio. |
 | Plandex | Partial | Partial | Via OpenAI-compatible API config. |
 | OpenHands | Yes | Yes | Via litellm; Agent Canvas can be self-hosted. |
@@ -1065,7 +1063,7 @@ The matrix spans 17 tools, too many to render legibly as one table at this page 
 | **Agentic file editing** | Yes (full, sandboxed) | Yes (computer-use) | Yes (full) |
 | **Multi-file context** | Yes | Yes (persistent cloud computer) | Yes (Enterprise) |
 | **Shell execution** | Yes (sandboxed) | Yes (cloud computer) | Yes |
-| **Web search** | Unverified | Yes (browser/search) | Yes |
+| **Web search** | Yes (agentic browser tool)‖ | Yes (browser/search) | Yes |
 | **Browser use** | Yes | Yes | No |
 | **MCP support** | Yes | Yes (connectors/custom MCP) | Yes |
 | **Custom hooks** | Limited | Routines / skills / Auto Review | Limited |
@@ -1095,7 +1093,7 @@ The matrix spans 17 tools, too many to render legibly as one table at this page 
 | **Cost model** | $20-200/mo (credits) | Free (individuals) |
 | **Self-hosted option** | No | Partial (SDK/enterprise paths) |
 
-Product details vary by plan or surface. † Gemini CLI's 1M-token context window is a model-level feature; product quotas still apply. ‡ Claude Code's browser access is via MCP servers (e.g. Playwright) or WebFetch, not a built-in browser. § Goose's MCP support is a confirmed core architectural pillar with documented extensions and broad MCP ecosystem compatibility. ¶ Google's transition announcement and current Gemini CLI authentication pages conflict on consumer access; verify the sign-in path before standardising on it. Grok Bot's browser, MCP, and computer-use capabilities are product-level features; do not infer equivalent capabilities for the xAI API from this row.
+Product details vary by plan or surface. † Gemini CLI's 1M-token context window is a model-level feature; product quotas still apply. ‡ Claude Code's browser access is via MCP servers (e.g. Playwright) or WebFetch, not a built-in browser. § Goose's MCP support is a confirmed core architectural pillar with documented extensions and broad MCP ecosystem compatibility. ¶ Google's transition announcement and current Gemini CLI authentication pages conflict on consumer access; verify the sign-in path before standardising on it. Grok Bot's browser, MCP, and computer-use capabilities are product-level features; do not infer equivalent capabilities for the xAI API from this row. ‖ Devin's web search is not a separately branded feature -- it is the agentic cloud browser tool proactively looking up documentation and solutions during a task. This is distinct from "Devin Search," a separately documented codebase-search feature; do not conflate the two.
 
 ---
 
@@ -1216,7 +1214,7 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | OpenCode + DeepSeek v4-flash | $0 tool + API | ~$25/mo | N/A | OpenCode's current provider path supports DeepSeek; this estimate uses the current V4-Flash direct rates before any gateway markup. |
 | OpenCode (ChatGPT-native) | $0 tool + ChatGPT subscription | Bundled -- see Codex CLI row (same OpenAI subscription tiers apply since the Jan 2026 OpenAI partnership) | N/A | New row. |
 | Cline + OpenRouter (model varies) | $0 tool + API | Varies by provider/model | N/A | Route cheaply via OpenRouter; use current provider pricing. |
-| Amp (Sourcegraph) | $20/mo or pay-as-you-go | $20 Megawatt / $200 Gigawatt included agent usage plus separately metered Orbs; pay-as-you-go also available | No / unverified | Current pricing documents model credits and Orb compute separately; no model markup for individual workspaces. |
+| Amp (Sourcegraph) | Free (Hobby, pay-as-you-go) or $20/mo (Individual) | Individual $20/mo includes 45,000 minutes of orb time; Teams and Enterprise are pooled-credit, no fixed per-seat platform charge (as of 2026-09-12) | No | Self-hosted is confirmed unavailable at any tier, including Enterprise (which adds SCIM/audit logs/IP allowlisting but stays SaaS). No markup over provider API prices for individual/non-enterprise plans; orb compute is metered separately by the minute with auto-pause. |
 | Gemini CLI (individual) | Not applicable | Not applicable after the June 18, 2026 consumer transition | N/A | Use Antigravity CLI for individual Google-account access. Gemini CLI remains available through enterprise/API/Vertex paths. |
 | Gemini CLI (teams/API) | Varies | Google Developer Program, AI Studio, and Vertex AI paths differ | N/A | Choose based on identity, privacy, quota, and billing requirements. |
 | Google Antigravity 2.0 | $0 individual tier | $0 individual tier with weekly limits; Google AI Pro/Ultra raise limits; enterprise is consumption-priced | No | Direct migration target for individual Gemini CLI users; exact limits and model availability vary. |
