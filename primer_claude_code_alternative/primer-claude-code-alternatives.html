@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claude Code Alternatives: A Comprehensive Survey of AI Coding
-Agents in 2026 (August 31 Refresh)</title>
+Agents in 2026 (September 9 Refresh)</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -483,9 +483,9 @@ code span.fu { color: #c792ea !important; }
 
   <nav class="navbar">
     <span class="navbar-brand">Claude Code Alternatives: A Comprehensive
-Survey of AI Coding Agents in 2026 (August 31 Refresh)</span>
+Survey of AI Coding Agents in 2026 (September 9 Refresh)</span>
 
-    <span class="navbar-meta">August 31, 2026</span>
+    <span class="navbar-meta">September 9, 2026</span>
 
   </nav>
 
@@ -532,9 +532,10 @@ Cognition AI)</a></li>
 </ul></li>
 <li><a href="#cloud-and-web-platform-agents" id="toc-cloud-and-web-platform-agents"><span class="toc-section-number">6</span> Cloud and Web Platform Agents</a>
 <ul>
-<li><a href="#openhands-formerly-opendevin" id="toc-openhands-formerly-opendevin"><span class="toc-section-number">6.1</span> OpenHands (formerly
+<li><a href="#grok-bot-xai" id="toc-grok-bot-xai"><span class="toc-section-number">6.1</span> Grok Bot (xAI)</a></li>
+<li><a href="#openhands-formerly-opendevin" id="toc-openhands-formerly-opendevin"><span class="toc-section-number">6.2</span> OpenHands (formerly
 OpenDevin)</a></li>
-<li><a href="#devin-by-cognition-ai" id="toc-devin-by-cognition-ai"><span class="toc-section-number">6.2</span> Devin (by Cognition AI)</a></li>
+<li><a href="#devin-by-cognition-ai" id="toc-devin-by-cognition-ai"><span class="toc-section-number">6.3</span> Devin (by Cognition AI)</a></li>
 </ul></li>
 <li><a href="#commercial-ai-coding-assistants" id="toc-commercial-ai-coding-assistants"><span class="toc-section-number">7</span> Commercial AI Coding Assistants</a>
 <ul>
@@ -585,11 +586,13 @@ experience to Claude Code</a></li>
 IDE-integrated alternative</a></li>
 <li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">9.3</span> If cost is the primary
 constraint</a></li>
-<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">9.4</span> If MCP server investments are
+<li><a href="#if-you-need-persistent-cross-application-or-asynchronous-work" id="toc-if-you-need-persistent-cross-application-or-asynchronous-work"><span class="toc-section-number">9.4</span> If you need persistent
+cross-application or asynchronous work</a></li>
+<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">9.5</span> If MCP server investments are
 critical</a></li>
-<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">9.5</span> If you need extensibility similar
+<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">9.6</span> If you need extensibility similar
 to Claude Code’s skills+hooks</a></li>
-<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">9.6</span> Migration strategy</a></li>
+<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">9.7</span> Migration strategy</a></li>
 </ul></li>
 <li><a href="#references" id="toc-references"><span class="toc-section-number">10</span> References</a></li>
 </ul></div>
@@ -614,7 +617,7 @@ across Claude, Claude Code, and Claude Desktop. The plan landscape for
 AI tools changes rapidly, and a prudent engineer should understand the
 full landscape of alternatives before needing them.</p>
 <p>This document surveys the landscape of AI coding agents available as
-of <strong>August 31, 2026</strong>: open-source CLI tools, IDE
+of <strong>September 9, 2026</strong>: open-source CLI tools, IDE
 extensions, dedicated AI IDEs, cloud platform agents, and commercial
 assistants. For each, it covers architecture, provider flexibility,
 MCP/extensibility support, and realistic cost.</p>
@@ -626,9 +629,11 @@ volatile claims against first-party product pages, including Claude and
 Codex limits, Amp’s subscription and Orb pricing, Cline’s
 terminal/plugin/hook support, Goose’s current repository, Kiro’s unified
 IDE/CLI/Web architecture, Gemini CLI’s transition status, and current
-DeepSeek pricing. Dated facts carry a date at the point where the
-distinction matters, with corresponding sources in the References
-section.</p>
+DeepSeek pricing. The September 9 pass added Grok Bot and checked its
+launch, architecture, controls, privacy requirements, and current access
+against first-party xAI pages. Dated facts carry a date at the point
+where the distinction matters, with corresponding sources in the
+References section.</p>
 <p><strong>Freshness note:</strong> In this field, some sections can age
 in weeks, not quarters. Treat pricing, benchmark rankings, and
 model-version statements as snapshots tied to their stated dates.</p>
@@ -638,7 +643,7 @@ and the <a href="#recommendations">Recommendations</a>. The deep-dive
 sections are there for when you need to evaluate a specific tool
 seriously.</p>
 <p>This survey covers tools that were verifiable and actively maintained
-as of August 2026. It does not cover tools no longer in active
+as of September 2026. It does not cover tools no longer in active
 development, purely GUI-based editors with no API or CLI surface, or
 general-purpose LLM interfaces that happen to accept code. Cloud IDE
 platforms (Replit, Gitpod, etc.) are out of scope unless they offer a
@@ -667,10 +672,12 @@ integration than an extension permits (Zed is the exception, built from
 scratch in Rust). Members: Cursor, Windsurf (now Devin Desktop,
 Cognition AI), Zed AI, AWS Kiro IDE, Google Antigravity 2.0.</p>
 <p><strong>Cloud Platform Agents</strong> run primarily in the cloud or
-a sandboxed environment (Docker). They expose a web UI or API and are
-designed for longer-running autonomous tasks, often with their own
-execution environments. Members: OpenHands, Devin, Manus, Jules,
-Genie.</p>
+a sandboxed environment (Docker). They expose a web or app-based
+interface and are designed for longer-running autonomous tasks, often
+with their own execution environments. Members: Grok Bot, OpenHands,
+Devin, Manus, Jules, Genie. Grok Bot sits at the broadest edge of this
+category: it is a persistent cross-application computer-use agent that
+can do coding work, not a coding-specific terminal agent.</p>
 <p>A Claude Code user primarily cares about the CLI tools category, but
 the IDE and cloud categories contain tools capable enough to be worth
 understanding as alternatives – especially if your workflow includes
@@ -1608,7 +1615,77 @@ established IDEs; verify regional model access and feature
 availability</p>
 <h1 data-number="6" id="cloud-and-web-platform-agents"><span class="header-section-number">6</span> Cloud and Web Platform
 Agents</h1>
-<h2 data-number="6.1" id="openhands-formerly-opendevin"><span class="header-section-number">6.1</span> OpenHands (formerly
+<h2 data-number="6.1" id="grok-bot-xai"><span class="header-section-number">6.1</span> Grok Bot (xAI)</h2>
+<p><strong>What it is:</strong> Grok Bot is xAI’s commercial, hosted
+computer-use agent. xAI launched it in beta on <strong>August 11,
+2026</strong> as a set of persistent AI teammates rather than as another
+chat session. A Bot has a name, a job, its own conversation and working
+context, and can turn a repeatable workflow into a skill or routine.
+Coding is one workload – xAI describes engineering Bots reproducing bugs
+and handing fixes to other Bots – but the product is aimed at work that
+crosses applications, websites, inboxes, documents, and business
+systems.</p>
+<p><strong>Architecture:</strong> The desktop and mobile applications
+are thin clients for chat, review, and approvals. The work runs on a
+persistent cloud computer with a browser, filesystem, and terminal. Bots
+can operate applications and websites directly, including services
+without a clean API or Model Context Protocol (MCP) integration. This
+makes Grok Bot materially different from an API-only agent: it can use
+the same graphical interfaces a human uses. All Bots belonging to one
+user share that user’s cloud computer, including its files, browser
+sessions, and app logins; separate Bots are therefore not separate
+security boundaries.</p>
+<p><strong>Agentic workflow:</strong> You message a Bot like a
+colleague, give it a task and access to the required tools or files, and
+let it work asynchronously. Bots can remember stable preferences, run
+recurring routines, collaborate through handoffs, and return when they
+need approval. The product is closer to a persistent operations teammate
+than to a terminal REPL. It is not a drop-in replacement for Claude
+Code’s local repository workflow: its execution environment is hosted,
+and its strongest differentiator is cross-application computer use
+rather than terminal-native editing.</p>
+<p><strong>Access and cost (September 9, 2026 snapshot):</strong> Grok
+Bot launched for eligible SuperGrok and Cursor subscribers and later
+expanded to SuperGrok, paid Cursor, and Cursor Teams plans; enterprise
+rollout is handled through the Cursor account team. xAI’s August 26
+announcement says Bot usage is separate from existing Grok and Cursor
+usage, while the current team documentation describes plan-specific
+allowances. Treat access, quotas, and billing as volatile and check the
+live plan matrix before budgeting. Grok Bot is a product-level service;
+access to Grok models through the xAI API is a separate integration
+path.</p>
+<p><strong>Security and privacy:</strong> Consequential actions can
+pause for approval, with Auto Review available to inspect computer and
+tool actions before execution. Passwords, passkeys, two-factor codes,
+CAPTCHAs, and payment confirmations are handed back to the user through
+computer takeover rather than entered into ordinary chat. Grok Bot
+requires cloud data storage and does not support Cursor’s Legacy Privacy
+Mode. Optional execution on the user’s local computer is separate from
+the shared cloud computer and asks for approval by default. Start with
+read-only tasks, least-privilege connectors, and explicit approval
+boundaries for sending, publishing, purchasing, deletion, permission
+changes, and production changes.</p>
+<p><strong>Strengths:</strong></p>
+<ul>
+<li>Persistent cloud execution that continues while you are away</li>
+<li>Direct browser and desktop-style interaction across applications,
+including systems without APIs or MCP servers</li>
+<li>Durable Bots, routines, memory, and Bot-to-Bot handoffs for
+repeatable operational work</li>
+<li>Approval and credential handoff controls for consequential or
+sensitive actions</li>
+</ul>
+<p><strong>Weaknesses:</strong></p>
+<ul>
+<li>Proprietary, hosted, and dependent on xAI/Cursor product access and
+policy</li>
+<li>Requires cloud storage; the shared computer means one Bot’s files
+and sessions can be available to the user’s other Bots</li>
+<li>Not a local-model, self-hosted, or OpenRouter-oriented workflow</li>
+<li>Beta product with rapidly changing plan eligibility, quotas, and
+administrative controls</li>
+</ul>
+<h2 data-number="6.2" id="openhands-formerly-opendevin"><span class="header-section-number">6.2</span> OpenHands (formerly
 OpenDevin)</h2>
 <p><strong>What it is:</strong> OpenHands is a highly capable
 open-source AI software engineer designed to solve complex software
@@ -1678,7 +1755,7 @@ tools - Primarily a cloud/web platform – less suitable for quick
 interactive sessions - Slower to start up than CLI tools (Docker
 container spin-up) - Not a terminal-first tool despite having a CLI
 option</p>
-<h2 data-number="6.2" id="devin-by-cognition-ai"><span class="header-section-number">6.2</span> Devin (by Cognition AI)</h2>
+<h2 data-number="6.3" id="devin-by-cognition-ai"><span class="header-section-number">6.3</span> Devin (by Cognition AI)</h2>
 <p><strong>What it is:</strong> Devin was the first high-profile “AI
 software engineer” capable of autonomously solving complex GitHub issues
 end-to-end. It is a commercial cloud product from Cognition AI.</p>
@@ -1966,6 +2043,12 @@ client, plan, and policy.</td>
 unconfirmed.</td>
 </tr>
 <tr>
+<td>Grok Bot</td>
+<td>No</td>
+<td>Managed product; do not confuse xAI API access to Grok models with
+Grok Bot’s product surface.</td>
+</tr>
+<tr>
 <td>Zed AI</td>
 <td><strong>Yes (was Partial)</strong></td>
 <td>Explicitly listed alongside 10+ other providers (Bedrock, DeepSeek,
@@ -2034,8 +2117,10 @@ lists OpenRouter among its supported providers. OpenAI’s Codex CLI
 supports local/OSS models via <code>--oss</code>, but OpenRouter is not
 its primary path. GitHub Copilot now has local BYOK in several clients
 and enterprise-managed custom models, but availability and feature
-coverage vary by client and plan. Cursor and Devin Desktop remain closed
-ecosystems for OpenRouter-style routing.</p>
+coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok
+Bot remain managed products rather than OpenRouter-style routing layers;
+Grok Bot’s cross-application computer use should not be confused with
+provider flexibility.</p>
 <h3 data-number="8.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">8.1.2</span> Local LLM Support (Ollama /
 LM Studio)</h3>
 <p>Running models locally eliminates API costs entirely, but not
@@ -2156,6 +2241,13 @@ execution, not local LLM inference.</td>
 execution with local model support.</td>
 </tr>
 <tr>
+<td>Grok Bot</td>
+<td>No</td>
+<td>No</td>
+<td>Hosted computer-use product; xAI API model access is a separate
+path.</td>
+</tr>
+<tr>
 <td>Cursor</td>
 <td>No</td>
 <td>No</td>
@@ -2218,8 +2310,8 @@ quantization-dependent starting point, not a guarantee. Test the model
 at the context length and latency your workflow requires.</li>
 </ul>
 <h2 data-number="8.2" id="feature-comparison-matrix"><span class="header-section-number">8.2</span> Feature Comparison Matrix</h2>
-<p>The matrix spans 16 tools, too many to render legibly as one table at
-this page width – split below into four groups of four.</p>
+<p>The matrix spans 17 tools, too many to render legibly as one table at
+this page width – split below into five groups.</p>
 <p><strong>Group 1: Claude Code, Aider, OpenCode, Cline</strong></p>
 <table>
 <colgroup>
@@ -2578,98 +2670,85 @@ OpenHands</strong></p>
 </tr>
 </tbody>
 </table>
-<p><strong>Group 4: Devin, Copilot, Kiro, Antigravity</strong></p>
+<p><strong>Group 4: Devin, Grok Bot, Copilot</strong></p>
 <table>
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
 </colgroup>
 <thead>
 <tr>
 <th>Feature</th>
 <th>Devin</th>
+<th>Grok Bot</th>
 <th>Copilot</th>
-<th>Kiro</th>
-<th>Antigravity</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Interface</strong></td>
 <td>Cloud / Web UI</td>
+<td>Cloud desktop/mobile app</td>
 <td>IDE + Cloud</td>
-<td>IDE + CLI + Web</td>
-<td>Desktop + CLI + IDE integrations</td>
 </tr>
 <tr>
 <td><strong>Agentic file editing</strong></td>
 <td>Yes (full, sandboxed)</td>
-<td>Yes (full)</td>
-<td>Yes (full)</td>
+<td>Yes (computer-use)</td>
 <td>Yes (full)</td>
 </tr>
 <tr>
 <td><strong>Multi-file context</strong></td>
 <td>Yes</td>
+<td>Yes (persistent cloud computer)</td>
 <td>Yes (Enterprise)</td>
-<td>Yes</td>
-<td>Yes</td>
 </tr>
 <tr>
 <td><strong>Shell execution</strong></td>
 <td>Yes (sandboxed)</td>
-<td>Yes</td>
-<td>Yes</td>
+<td>Yes (cloud computer)</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td><strong>Web search</strong></td>
 <td>Unverified</td>
-<td>Yes</td>
-<td>Yes</td>
+<td>Yes (browser/search)</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td><strong>Browser use</strong></td>
 <td>Yes</td>
-<td>No</td>
-<td>No</td>
 <td>Yes</td>
+<td>No</td>
 </tr>
 <tr>
 <td><strong>MCP support</strong></td>
 <td>Yes</td>
-<td>Yes</td>
-<td>Yes (full)</td>
+<td>Yes (connectors/custom MCP)</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td><strong>Custom hooks</strong></td>
 <td>Limited</td>
+<td>Routines / skills / Auto Review</td>
 <td>Limited</td>
-<td>Hooks + steering + skills</td>
-<td>Hooks + skills + plugins</td>
 </tr>
 <tr>
 <td><strong>OpenRouter</strong></td>
 <td>No</td>
+<td>No</td>
 <td>Partial</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
 <td><strong>Local LLMs</strong></td>
 <td>No</td>
+<td>No</td>
 <td>Yes</td>
-<td>No</td>
-<td>No</td>
 </tr>
 <tr>
 <td><strong>Open source</strong></td>
-<td>No</td>
 <td>No</td>
 <td>No</td>
 <td>No</td>
@@ -2677,21 +2756,105 @@ OpenHands</strong></p>
 <tr>
 <td><strong>Git integration</strong></td>
 <td>Yes</td>
-<td>Yes</td>
-<td>Yes</td>
+<td>Yes (via cloud computer)</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td><strong>Cost model</strong></td>
 <td>Free / $20 / $200 + usage</td>
+<td>Eligible plan + separate Bot usage</td>
 <td>$10-100/mo indiv.</td>
-<td>$20-200/mo (credits)</td>
-<td>Free (individuals)</td>
 </tr>
 <tr>
 <td><strong>Self-hosted option</strong></td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Group 5: Kiro, Antigravity</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Kiro</th>
+<th>Antigravity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Interface</strong></td>
+<td>IDE + CLI + Web</td>
+<td>Desktop + CLI + IDE integrations</td>
+</tr>
+<tr>
+<td><strong>Agentic file editing</strong></td>
+<td>Yes (full)</td>
+<td>Yes (full)</td>
+</tr>
+<tr>
+<td><strong>Multi-file context</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Shell execution</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Web search</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Browser use</strong></td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>MCP support</strong></td>
+<td>Yes (full)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Custom hooks</strong></td>
+<td>Hooks + steering + skills</td>
+<td>Hooks + skills + plugins</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Local LLMs</strong></td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Open source</strong></td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Git integration</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Cost model</strong></td>
+<td>$20-200/mo (credits)</td>
+<td>Free (individuals)</td>
+</tr>
+<tr>
+<td><strong>Self-hosted option</strong></td>
 <td>No</td>
 <td>Partial (SDK/enterprise paths)</td>
 </tr>
@@ -2704,7 +2867,9 @@ WebFetch, not a built-in browser. § Goose’s MCP support is a confirmed
 core architectural pillar with documented extensions and broad MCP
 ecosystem compatibility. ¶ Google’s transition announcement and current
 Gemini CLI authentication pages conflict on consumer access; verify the
-sign-in path before standardising on it.</p>
+sign-in path before standardising on it. Grok Bot’s browser, MCP, and
+computer-use capabilities are product-level features; do not infer
+equivalent capabilities for the xAI API from this row.</p>
 <hr />
 <h2 data-number="8.3" id="extensibility-deep-dive"><span class="header-section-number">8.3</span> Extensibility Deep Dive</h2>
 <p>One of Claude Code’s most powerful features is its extensibility
@@ -2777,6 +2942,12 @@ transport types (SSE, Streamable HTTP, stdio) – a proxy approach
 Configuration is required; MCP tools are not auto-discovered. Limited
 hook/automation equivalent otherwise. <em>Weakest extensibility story
 among the actively-developed alternatives.</em></p>
+<p><strong>Grok Bot:</strong> Supports built-in connectors and custom
+MCP connectors, alongside skills, routines, Bot handoffs, and approval
+rules. MCP is optional rather than foundational: the Bot can use a
+browser and hosted computer directly when a service has no MCP server.
+Its routines and Auto Review controls are product-specific and are not
+compatible with Claude Code hooks or other agents’ skill formats.</p>
 <h3 data-number="8.3.3" id="the-agents.md-open-standard"><span class="header-section-number">8.3.3</span> The AGENTS.md Open
 Standard</h3>
 <p>Alongside MCP, a second cross-cutting convention has emerged that
@@ -3091,6 +3262,14 @@ allowance</td>
 <td>Replaces the legacy ACU/Core and $500 team-plan descriptions.</td>
 </tr>
 <tr>
+<td>Grok Bot</td>
+<td>Eligible SuperGrok/Cursor/Teams plan</td>
+<td>Plan-dependent plus separate Bot usage allowance</td>
+<td>N/A</td>
+<td>Beta product; access, quotas, and billing vary by plan and change
+quickly.</td>
+</tr>
+<tr>
 <td>GitHub Copilot – Individual Free</td>
 <td>$0/mo</td>
 <td>$0 (2,000 completions/mo cap)</td>
@@ -3361,16 +3540,32 @@ includes usage allowances, but extra work is purchased as on-demand
 credits at API pricing. That is clearer than the legacy ACU model, but
 it still means heavy users can spend beyond the subscription. Devin
 competes on autonomy and capability, not guaranteed low cost.</p>
-<h2 data-number="9.4" id="if-mcp-server-investments-are-critical"><span class="header-section-number">9.4</span> If MCP server investments are
+<h2 data-number="9.4" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">9.4</span> If you need persistent
+cross-application or asynchronous work</h2>
+<p><strong>Primary:</strong> Grok Bot – if the task crosses websites,
+inboxes, documents, and business applications and can continue while you
+are away. Its persistent cloud computer and computer-use interface can
+reach systems that lack clean APIs or MCP servers. It is a poor fit when
+local repository control, local models, self-hosting, or strict no-cloud
+handling is the main requirement.</p>
+<p><strong>Coding-focused alternatives:</strong> Devin remains the
+better comparison for GitHub-centred autonomous software engineering,
+while OpenHands is the better comparison when you want an open-source,
+self-hostable cloud-agent stack. Claude Code remains the better fit for
+interactive terminal-native work.</p>
+<h2 data-number="9.5" id="if-mcp-server-investments-are-critical"><span class="header-section-number">9.5</span> If MCP server investments are
 critical</h2>
 <p>Tools with confirmed MCP support: Claude Code (native), OpenCode,
 Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural
 pillar with documented extensions and broad ecosystem compatibility),
-OpenHands (config, multiple transports), Amp, and Kiro. Of these,
+OpenHands (config, multiple transports), Amp, Kiro, and Grok Bot
+(connectors and custom MCP, alongside direct computer use). Of these,
 OpenCode, Cline, and Kiro have the strongest current combination of
 agentic execution and extensibility; Goose remains worth a closer look
-when on-device execution and MCP portability matter.</p>
-<h2 data-number="9.5" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">9.5</span> If you need extensibility
+when on-device execution and MCP portability matter. Grok Bot is the
+better fit when MCP is unavailable but browser or desktop computer use
+can bridge the gap.</p>
+<h2 data-number="9.6" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">9.6</span> If you need extensibility
 similar to Claude Code’s skills+hooks</h2>
 <p>The honest answer: no alternative is drop-in compatible with Claude
 Code’s skills+hooks system. The closest approximations: - <strong>Skills
@@ -3385,7 +3580,7 @@ equivalents:</strong> if per-tool rule files (rather than MCP servers)
 are your bigger migration cost, AGENTS.md is now adopted across tens of
 thousands of projects and is a better consolidation target than any
 single vendor’s format</p>
-<h2 data-number="9.6" id="migration-strategy"><span class="header-section-number">9.6</span> Migration strategy</h2>
+<h2 data-number="9.7" id="migration-strategy"><span class="header-section-number">9.7</span> Migration strategy</h2>
 <p>Rather than a hard switch, a practical migration path:</p>
 <ol type="1">
 <li><strong>Set up Aider</strong> as a Claude Code complement today. Get
@@ -3411,7 +3606,9 @@ projects and is a lower-maintenance way to keep project instructions
 portable than maintaining one file per vendor.</li>
 </ol>
 <h1 data-number="10" id="references"><span class="header-section-number">10</span> References</h1>
-<p>First-party sources checked on <strong>August 31, 2026</strong>:</p>
+<p>First-party sources checked on <strong>August 31, 2026</strong> for
+the main survey snapshot. Grok Bot sources were checked on
+<strong>September 9, 2026</strong>:</p>
 <ul>
 <li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Anthropic
 Max plan and usage limits</a></li>
@@ -3485,6 +3682,16 @@ Q IDE end-of-support scope</a></li>
 <li><a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek
 API pricing</a> and <a href="https://api-docs.deepseek.com/news/news260813/">V4 release
 note</a></li>
+<li><a href="https://x.ai/news/introducing-grok-bot">Introducing Grok
+Bot</a></li>
+<li><a href="https://docs.x.ai/grok-bot/overview">Grok Bot
+overview</a></li>
+<li><a href="https://docs.x.ai/grok-bot/approvals-security-and-privacy">Grok
+Bot approvals, security, and privacy</a></li>
+<li><a href="https://docs.x.ai/grok-bot/teams-and-enterprises">Grok Bot
+for teams and enterprises</a></li>
+<li><a href="https://x.ai/news/grok-bot-more-plans">Grok Bot access
+expansion</a></li>
 <li><a href="https://github.com/Aider-AI/aider">Aider repository</a> and
 <a href="https://aider.chat/docs/more/edit-formats.html">Aider edit
 formats</a></li>

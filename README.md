@@ -17,7 +17,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [OpenClaw Primer](primer_openclaw/primer_openclaw.html) | Podman-first guide to the OpenClaw framework |
 | [Hermes Server Primer](primer_hermes_server/primer_hermes_server.html) | Guide to the Hermes Server framework |
 | [Running LLMs Locally](primer_research_local_llms/primer-running-llms-locally.html) | Landscape of options for running language models on local hardware |
-| [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) | Survey of AI coding agents, mid-2026 refresh |
+| [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) | Survey of AI coding agents, September 2026 refresh |
 | [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) | Practical guide to running Codex alongside Claude Code in one repository |
 | [The Evaluation Loop](primer_evaluation_loop/primer_evaluation_loop.html) | Turning subjective AI task quality into numeric evals: the four moves, verifiable rewards, RLHF/DSPy, Goodhart failure modes, agent evaluation |
 | [Python for Expert R Users](primer_python_for_r_users/primer_python_for_r_users.html) | Comprehensive migration guide for experienced tidyverse, purrr, and furrr users, with deep ggplot2 replacement strategy |
