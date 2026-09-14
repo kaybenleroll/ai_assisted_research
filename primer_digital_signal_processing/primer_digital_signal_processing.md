@@ -40,7 +40,9 @@ Every arrow can lose information or introduce error. A low-pass filter before an
 
 The central DSP question is therefore not “which transform should I call?” It is “what information is present, what information do I need, and what operations preserve or deliberately discard it?”
 
-## Signals, Systems, and Representations
+## Signals, Systems, and Convolution
+
+Start with the objects DSP operates on: sequences, systems, impulses, recurrences, and the convolution and correlation operations that connect them.
 
 ### What Is a Signal?
 
@@ -170,7 +172,142 @@ where $^*$ denotes complex conjugation. Autocorrelation sets $x=y$ and measures 
 
 This distinction matters in detection. A matched filter uses a time-reversed, conjugated copy of the expected waveform, so the output peaks when the waveform is aligned. Calling every correlation a convolution produces the wrong phase and often the wrong lag sign.
 
-## Sampling: From Continuous Time to Numbers
+### Difference Equations
+
+Many digital filters are described by a linear constant-coefficient difference equation:
+
+$$
+y[n]+a_1y[n-1]+\cdots+a_Ny[n-N]
+=b_0x[n]+b_1x[n-1]+\cdots+b_Mx[n-M].
+$$
+
+The $b_k$ coefficients form the feed-forward path and the $a_k$ coefficients form feedback. If all feedback coefficients are zero, the filter is FIR. If feedback is present, the impulse response generally continues indefinitely and the filter is IIR.
+
+The equation is a computational specification only after initial conditions are defined. For a stream, the previous input and output states come from the preceding block. For a finite record, setting all states to zero creates a startup transient; setting them to a steady-state value can reduce the transient for particular inputs. A block implementation that silently resets state at every block is not equivalent to one continuous stream.
+
+### Causality, Stability, and Poles in the Time Domain
+
+An IIR recurrence can look harmless and still be unstable. The first-order system
+
+$$
+y[n]=0.99y[n-1]+x[n]
+$$
+
+is a stable smoother; replacing $0.99$ with $1.01$ causes the homogeneous response to grow as $1.01^n$. The distinction is visible directly from the pole location: the pole is at $z=0.99$ or $z=1.01$.
+
+In a finite-precision implementation, a pole theoretically inside the unit circle can still behave badly if coefficient quantisation moves it outside, if internal states overflow, or if denormal values cause unacceptable performance. Stability analysis must cover both the mathematical transfer function and the chosen realisation.
+
+## Fourier Representations and Frequency Response
+
+Once the time-domain model is in place, Fourier representations provide a second coordinate system. The same operations can then be understood as changes in amplitude, phase, and frequency.
+
+### Complex Exponentials Are Eigenfunctions of LTI Systems
+
+For an LTI system with frequency response $H(e^{j\omega})$, a complex exponential input $x[n]=e^{j\omega n}$ produces
+
+$$
+y[n]=\sum_k h[k]e^{j\omega(n-k)}
+=e^{j\omega n}\sum_k h[k]e^{-j\omega k}
+=H(e^{j\omega})e^{j\omega n}.
+$$
+
+The system changes only amplitude and phase; it does not create new frequencies. This is why frequency response is so useful. A real sinusoid is the sum of positive- and negative-frequency complex exponentials, and real filters preserve the conjugate symmetry needed to produce a real output.
+
+### The Discrete-Time Fourier Transform
+
+The discrete-time Fourier transform (DTFT) of $x[n]$ is
+
+$$
+X(e^{j\omega})=\sum_{n=-\infty}^{\infty}x[n]e^{-j\omega n},
+$$
+
+with inverse
+
+$$
+x[n]=\frac{1}{2\pi}\int_{-\pi}^{\pi}
+X(e^{j\omega})e^{j\omega n}\,d\omega.
+$$
+
+The DTFT is continuous in $\omega$ but periodic with period $2\pi$. Normalized frequency $\omega$ is radians per sample. If the sample rate is $f_s$, physical frequency is $f=\omega f_s/(2\pi)$, and the interval $[-\pi,\pi)$ corresponds to $[-f_s/2,f_s/2)$.
+
+For an LTI system,
+
+$$
+y[n]=x[n]*h[n]
+\quad\Longleftrightarrow\quad
+Y(e^{j\omega})=X(e^{j\omega})H(e^{j\omega}).
+$$
+
+The convolution theorem is the mathematical basis for filtering in the frequency domain. It also explains why a frequency-domain filter is not merely “delete bins”: if $X$ is a finite-record DFT, multiplying by a smooth frequency response corresponds to circular convolution in the finite-dimensional model unless overlap-save or overlap-add is used correctly.
+
+### Fourier Series and the Continuous-Time Transform
+
+The Fourier series represents a periodic continuous-time signal as harmonics of its fundamental frequency:
+
+$$
+x(t)=\sum_{k=-\infty}^{\infty}c_ke^{jk\omega_0t},
+\qquad
+c_k=\frac{1}{T_0}\int_{T_0}x(t)e^{-jk\omega_0t}\,dt.
+$$
+
+The continuous-time Fourier transform (CTFT) generalises this to aperiodic signals:
+
+$$
+X(f)=\int_{-\infty}^{\infty}x(t)e^{-j2\pi ft}\,dt,
+\qquad
+x(t)=\int_{-\infty}^{\infty}X(f)e^{j2\pi ft}\,df.
+$$
+
+The four Fourier representations differ in what is discrete, periodic, finite, or continuous. Confusing them causes unit and scaling errors:
+
+| Representation | Time/domain index | Frequency/domain index | Frequency periodic? |
+|---|---|---|---|
+| Fourier series | continuous and periodic | discrete harmonics | no, discrete set |
+| CTFT | continuous and aperiodic | continuous | no |
+| DTFT | discrete and generally aperiodic | continuous | yes, $2\pi$ |
+| DFT | finite discrete record | finite discrete bins | implicit periodic extension |
+
+### Time and Frequency Shifts
+
+The DTFT shift property follows directly:
+
+$$
+x[n-n_0]\quad\Longleftrightarrow\quad
+e^{-j\omega n_0}X(e^{j\omega}).
+$$
+
+The magnitude is unchanged; the phase gains a linear term. This is why delay can be measured from phase slope, and why a pure delay is all-pass in magnitude. For a noninteger delay, the ideal response is $e^{-j\omega D}$, but a finite causal filter can only approximate it over a specified band.
+
+Modulation and convolution form a dual pair. Multiplying a signal by a sinusoid shifts its spectrum; convolving in time with a short pulse smooths or shapes the spectrum according to the pulse's transform. These properties let you predict a filter's output before simulating it.
+
+### Differentiation and Integration
+
+The backward difference filter has
+
+$$
+H(e^{j\omega})=1-e^{-j\omega}
+=2j e^{-j\omega/2}\sin(\omega/2).
+$$
+
+At low frequencies its magnitude is approximately $|\omega|$, so it approximates a derivative. At high frequencies it amplifies relative high-frequency content and has a zero at DC. The accumulator has a pole at $z=1$, so it integrates but is not BIBO stable: a bounded nonzero-mean input can produce an unbounded ramp.
+
+In numerical work, differentiation amplifies measurement noise and integration accumulates bias. A high-pass filter or detrending may be needed before differentiation; leakage control, drift removal, or a physical reference may be needed before integration. Choosing a discrete approximation without considering the noise spectrum is a common source of false dynamics.
+
+### Why the Moving Average Is Not an Ideal Filter
+
+For a length-$M$ moving average,
+
+$$
+H(e^{j\omega})=\frac{1}{M}\sum_{k=0}^{M-1}e^{-j\omega k}
+=e^{-j\omega(M-1)/2}
+\frac{\sin(M\omega/2)}{M\sin(\omega/2)}.
+$$
+
+The magnitude has a main lobe and sidelobes. It attenuates high frequencies but also passes some stopband frequencies through sidelobes. Increasing $M$ narrows the main lobe and increases delay. This one formula is a useful antidote to the phrase “averaging removes noise”: averaging suppresses components according to a known response, and the response has trade-offs.
+
+## Sampling, Reconstruction, and Acquisition Limits
+
+Sampling is where the physical signal chain meets discrete-time mathematics. The following chapter treats aliasing, reconstruction, quantisation, and timing error as acquisition constraints, not as details to repair later.
 
 ### Sampling Is Multiplication by an Impulse Train
 
@@ -263,124 +400,22 @@ $$
 
 where $\sigma_t$ is the RMS timing uncertainty. This is why a converter can have enough nominal bits but still fail at radio frequencies: the clock may be the limiting component.
 
-## Discrete-Time Systems in the Time Domain
+## The DFT, FFT, and Fast Convolution
 
-### Difference Equations
+The DTFT is continuous in frequency; real programs operate on finite records. This chapter develops the finite transform, its geometry and calibration, the FFT algorithm, and the boundary rules needed for fast convolution.
 
-Many digital filters are described by a linear constant-coefficient difference equation:
+### Orthogonality of the DFT Basis
 
-$$
-y[n]+a_1y[n-1]+\cdots+a_Ny[n-N]
-=b_0x[n]+b_1x[n-1]+\cdots+b_Mx[n-M].
-$$
-
-The $b_k$ coefficients form the feed-forward path and the $a_k$ coefficients form feedback. If all feedback coefficients are zero, the filter is FIR. If feedback is present, the impulse response generally continues indefinitely and the filter is IIR.
-
-The equation is a computational specification only after initial conditions are defined. For a stream, the previous input and output states come from the preceding block. For a finite record, setting all states to zero creates a startup transient; setting them to a steady-state value can reduce the transient for particular inputs. A block implementation that silently resets state at every block is not equivalent to one continuous stream.
-
-### Causality, Stability, and Poles in the Time Domain
-
-An IIR recurrence can look harmless and still be unstable. The first-order system
+Let $W_N=e^{-j2\pi/N}$. The DFT basis vector for bin $k$ has entries $W_N^{kn}$. For bins $k$ and $r$,
 
 $$
-y[n]=0.99y[n-1]+x[n]
+\sum_{n=0}^{N-1}W_N^{kn}(W_N^{rn})^*
+=\sum_{n=0}^{N-1}e^{j2\pi(r-k)n/N}.
 $$
 
-is a stable smoother; replacing $0.99$ with $1.01$ causes the homogeneous response to grow as $1.01^n$. The distinction is visible directly from the pole location: the pole is at $z=0.99$ or $z=1.01$.
+If $r=k$, the sum is $N$. If $r\ne k$, it is a finite geometric series whose numerator is $1-e^{j2\pi(r-k)}=0$ while the denominator is nonzero, so the sum is zero. The DFT coefficient is the projection of the data onto one of these orthogonal basis vectors.
 
-In a finite-precision implementation, a pole theoretically inside the unit circle can still behave badly if coefficient quantisation moves it outside, if internal states overflow, or if denormal values cause unacceptable performance. Stability analysis must cover both the mathematical transfer function and the chosen realisation.
-
-### FIR Linear Phase
-
-A real FIR filter with symmetric coefficients,
-
-$$
-h[n]=h[M-n],\qquad 0\le n\le M,
-$$
-
-has a frequency response whose phase is linear apart from sign changes. Its group delay is approximately $M/2$ samples. Antisymmetric coefficients provide other linear-phase responses useful for differentiators and Hilbert transformers. Linear phase means all frequencies experience the same delay; it does not mean zero delay.
-
-The causal, exact, zero-phase ideal low-pass filter has a two-sided sinc impulse response and therefore cannot run in real time. Offline forward-backward filtering can cancel phase, but it squares the magnitude response and introduces edge-handling choices. “Zero phase” is a property of an offline procedure, not a free causal filter design.
-
-### Why the Moving Average Is Not an Ideal Filter
-
-For a length-$M$ moving average,
-
-$$
-H(e^{j\omega})=\frac{1}{M}\sum_{k=0}^{M-1}e^{-j\omega k}
-=e^{-j\omega(M-1)/2}
-\frac{\sin(M\omega/2)}{M\sin(\omega/2)}.
-$$
-
-The magnitude has a main lobe and sidelobes. It attenuates high frequencies but also passes some stopband frequencies through sidelobes. Increasing $M$ narrows the main lobe and increases delay. This one formula is a useful antidote to the phrase “averaging removes noise”: averaging suppresses components according to a known response, and the response has trade-offs.
-
-## Fourier Analysis: Choosing a Frequency Coordinate System
-
-### Complex Exponentials Are Eigenfunctions of LTI Systems
-
-For an LTI system with frequency response $H(e^{j\omega})$, a complex exponential input $x[n]=e^{j\omega n}$ produces
-
-$$
-y[n]=\sum_k h[k]e^{j\omega(n-k)}
-=e^{j\omega n}\sum_k h[k]e^{-j\omega k}
-=H(e^{j\omega})e^{j\omega n}.
-$$
-
-The system changes only amplitude and phase; it does not create new frequencies. This is why frequency response is so useful. A real sinusoid is the sum of positive- and negative-frequency complex exponentials, and real filters preserve the conjugate symmetry needed to produce a real output.
-
-### The Discrete-Time Fourier Transform
-
-The discrete-time Fourier transform (DTFT) of $x[n]$ is
-
-$$
-X(e^{j\omega})=\sum_{n=-\infty}^{\infty}x[n]e^{-j\omega n},
-$$
-
-with inverse
-
-$$
-x[n]=\frac{1}{2\pi}\int_{-\pi}^{\pi}
-X(e^{j\omega})e^{j\omega n}\,d\omega.
-$$
-
-The DTFT is continuous in $\omega$ but periodic with period $2\pi$. Normalized frequency $\omega$ is radians per sample. If the sample rate is $f_s$, physical frequency is $f=\omega f_s/(2\pi)$, and the interval $[-\pi,\pi)$ corresponds to $[-f_s/2,f_s/2)$.
-
-For an LTI system,
-
-$$
-y[n]=x[n]*h[n]
-\quad\Longleftrightarrow\quad
-Y(e^{j\omega})=X(e^{j\omega})H(e^{j\omega}).
-$$
-
-The convolution theorem is the mathematical basis for filtering in the frequency domain. It also explains why a frequency-domain filter is not merely “delete bins”: if $X$ is a finite-record DFT, multiplying by a smooth frequency response corresponds to circular convolution in the finite-dimensional model unless overlap-save or overlap-add is used correctly.
-
-### Fourier Series and the Continuous-Time Transform
-
-The Fourier series represents a periodic continuous-time signal as harmonics of its fundamental frequency:
-
-$$
-x(t)=\sum_{k=-\infty}^{\infty}c_ke^{jk\omega_0t},
-\qquad
-c_k=\frac{1}{T_0}\int_{T_0}x(t)e^{-jk\omega_0t}\,dt.
-$$
-
-The continuous-time Fourier transform (CTFT) generalises this to aperiodic signals:
-
-$$
-X(f)=\int_{-\infty}^{\infty}x(t)e^{-j2\pi ft}\,dt,
-\qquad
-x(t)=\int_{-\infty}^{\infty}X(f)e^{j2\pi ft}\,df.
-$$
-
-The four Fourier representations differ in what is discrete, periodic, finite, or continuous. Confusing them causes unit and scaling errors:
-
-| Representation | Time/domain index | Frequency/domain index | Frequency periodic? |
-|---|---|---|---|
-| Fourier series | continuous and periodic | discrete harmonics | no, discrete set |
-| CTFT | continuous and aperiodic | continuous | no |
-| DTFT | discrete and generally aperiodic | continuous | yes, $2\pi$ |
-| DFT | finite discrete record | finite discrete bins | implicit periodic extension |
+This explains exact bin alignment. A bin-centred sinusoid is orthogonal to every other bin's basis vector over the record. An off-bin sinusoid is not, so its projection is distributed across the basis. Leakage is a geometry problem before it is a window problem.
 
 ### The DFT
 
@@ -456,8 +491,6 @@ Suppose $f_s=1000$ Hz and you record $N=1000$ samples. The bin spacing is 1 Hz. 
 
 The correct response depends on the question. If you need to estimate a known sinusoid's amplitude and frequency, fit a sinusoidal model or use an estimator designed for that task. If you need a robust view of broadband noise, use a windowed PSD estimate. If you need to inspect transients, a single long FFT hides their timing and a short-time method is more appropriate.
 
-## The FFT: Computing the DFT Efficiently
-
 ### Why the Naive DFT Is Expensive
 
 The direct DFT evaluates $N$ sums, each with $N$ terms, for $O(N^2)$ complex operations. For $N=1,048,576$, that is on the order of a trillion pairwise contributions. The FFT computes the same mathematical DFT in roughly $O(N\log_2N)$ operations by reusing subexpressions.
@@ -528,7 +561,30 @@ Floating-point FFTs accumulate roundoff. The error is normally small relative to
 
 Performance depends on factorisation, memory layout, cache, SIMD, threading, and whether real-input routines can be used. Powers of two are convenient but not mandatory; modern libraries handle mixed-radix lengths well. Padding to a convenient length can improve speed or visual interpolation, but it changes the transform grid and record length used in scaling.
 
-## The $z$-Transform and System Structure
+### Parseval, Inner Products, and Matched Filters
+
+The DFT is a change of orthogonal coordinates. With the unitary normalization, the inner product is preserved:
+
+$$
+\langle x,y\rangle=\sum_nx[n]y^*[n]
+=\sum_kX[k]Y^*[k].
+$$
+
+Correlation with a template is therefore a projection onto shifted template vectors. Matched filtering is not a mysterious “pattern recognizer”; it is a projection weighted according to the noise geometry. If the noise covariance is $R$, the relevant inner product is $x^HR^{-1}y$. Whitening transforms that inner product back into the ordinary Euclidean one.
+
+### Toeplitz and Circulant Operators
+
+Linear convolution by a fixed finite sequence can be written as multiplication by a Toeplitz matrix. The matrix is banded for a short FIR. Circular convolution is multiplication by a circulant matrix, and the DFT diagonalises every circulant matrix:
+
+$$
+C=F^{-1}\Lambda F.
+$$
+
+This is the linear-algebra reason FFT convolution works. The input and filter must be embedded into a large enough circulant system to reproduce the desired Toeplitz multiplication. Padding is not a cosmetic implementation detail; it changes which operator you are applying.
+
+## The Z-Transform, Poles, Zeros, and Stability
+
+The Fourier transform describes steady-state frequency behaviour. The $z$-transform adds growth and decay, making causality, transients, stability, and invertibility explicit.
 
 ### Definition and Region of Convergence
 
@@ -591,7 +647,21 @@ A causal stable system with all zeros inside the unit circle is minimum phase. A
 
 Exact inversion is safe only when the inverse is stable and the signal does not contain frequencies where the original response is near zero. Deconvolution that divides by tiny spectral values amplifies noise. Regularisation is often the correct answer: replace a fragile inverse with a controlled estimate.
 
-## Digital Filter Design
+## Designing Digital Filters
+
+A filter design is an approximation problem with requirements for magnitude, phase, delay, transients, and resource use. Start with those requirements, then choose FIR or IIR and a design method.
+
+### FIR Linear Phase
+
+A real FIR filter with symmetric coefficients,
+
+$$
+h[n]=h[M-n],\qquad 0\le n\le M,
+$$
+
+has a frequency response whose phase is linear apart from sign changes. Its group delay is approximately $M/2$ samples. Antisymmetric coefficients provide other linear-phase responses useful for differentiators and Hilbert transformers. Linear phase means all frequencies experience the same delay; it does not mean zero delay.
+
+The causal, exact, zero-phase ideal low-pass filter has a two-sided sinc impulse response and therefore cannot run in real time. Offline forward-backward filtering can cancel phase, but it squares the magnitude response and introduces edge-handling choices. “Zero phase” is a property of an offline procedure, not a free causal filter design.
 
 ### Start with a Specification
 
@@ -710,7 +780,9 @@ $$
 
 The zeros force exact cancellation at the target frequency in exact arithmetic. The nearby poles restore gain around the notch and determine selectivity. In finite precision, the zero angle and coefficient values are quantised, so the measured notch depth may be much shallower than the mathematical one. Normalize $K$ at the frequency where unity gain matters; do not assume the unscaled numerator has the desired passband gain.
 
-## Realisation: Making the Mathematics Run
+## Implementing Filters: State, Precision, and Real-Time Constraints
+
+A transfer function is not yet a production implementation. Realisations, state management, coefficient formats, and deadlines determine whether the mathematical filter survives contact with a stream and a processor.
 
 ### Direct Forms and Biquad Cascades
 
@@ -774,7 +846,62 @@ Forward-backward filtering applies a causal filter to the record and then applie
 
 Use it only when future samples are genuinely available and when the changed magnitude response is accounted for. It is not an acceptable substitute for specifying the latency of a real-time filter.
 
-## Sampling-Rate Conversion and Multirate Systems
+### Real-Time Constraints Are Deadlines
+
+A real-time DSP process does not merely need a low average runtime. It must finish each block before the next block's deadline. If the audio callback receives 128 samples at 48 kHz, the nominal deadline is 2.667 ms, minus scheduling and I/O margin. One occasional 20 ms execution is a glitch even if the mean runtime is tiny.
+
+Budget separately:
+
+* **latency:** time from an input event to the corresponding output;
+* **throughput:** sustained samples or frames per second;
+* **memory:** coefficient, state, buffers, and temporary workspace;
+* **jitter:** variation in execution or sampling time;
+* **energy:** important for battery and thermally constrained devices;
+* **precision:** enough bits for the required dynamic range and noise floor.
+
+An FFT with good throughput can still violate latency if its block is too long. A sample-by-sample IIR can have tiny algorithmic latency but poor cache behaviour or an unstable fixed-point state. Profile the deployed structure and worst-case inputs.
+
+### Fixed-Point Representation
+
+A signed fixed-point value with $I$ integer bits and $F$ fractional bits represents multiples of $2^{-F}$ over a finite range. Multiplying two such values produces a value with $2F$ fractional bits and a wider integer range; an implementation must choose where to round and how to rescale. The discarded low bits become quantisation noise, while discarded high bits become overflow or saturation.
+
+Use guard bits in accumulators. A sum of $K$ aligned values can require approximately $\lceil\log_2K\rceil$ extra bits in the worst case. Random noise may not achieve the worst-case sum, but a production system should not rely on statistical cancellation when an adversarial or full-scale input is possible.
+
+Saturation is usually safer than wraparound for signal amplitudes because it limits the error to a bounded excursion. It is nonlinear: once saturation occurs, superposition and spectral predictions no longer apply. Count and report saturation events rather than silently clipping.
+
+### Quantisation of Filter Coefficients
+
+Suppose a second-order denominator is
+
+$$
+1+a_1z^{-1}+a_2z^{-2}.
+$$
+
+Its pole locations are roots of $z^2+a_1z+a_2=0$. Quantising $a_1$ and $a_2$ perturbs those roots. For poles near the unit circle, a one-LSB coefficient change can move the resonance frequency or radius enough to alter bandwidth and decay time. Quantise first, then measure the actual response.
+
+A coefficient set that looks well behaved in floating-point Python may be unusable on a 16-bit device. Export the quantised coefficients, run the same impulse and swept-sine tests through a bit-accurate model, and compare the pole-zero plot and internal-state ranges. The bit-accurate model is part of the design, not merely a test after deployment.
+
+### SIMD, Vectorisation, and Memory Layout
+
+DSP is dominated by regular arithmetic and often benefits from single-instruction, multiple-data (SIMD) operations. The algorithm's mathematical complexity is only one part of performance. Contiguous memory, aligned loads, predictable branches, fused multiply-add, and avoiding unnecessary copies can matter more than a small algebraic simplification.
+
+Array libraries vectorise across samples, channels, or filter sections differently. Check axis conventions before comparing performance. A vectorised operation over a two-dimensional array may allocate a temporary larger than the signal itself. On an embedded target, a hand-written circular-buffer kernel may be appropriate; on a workstation, a library implementation may use a more efficient blocked algorithm.
+
+### Block Processing and Partitioned Convolution
+
+Long FIR filters are often implemented with overlap-save. Let the FFT size be $N$, the filter length be $M$, and the useful input block length be $L=N-M+1$. Prepend the last $M-1$ input samples to each block, transform, multiply by the filter transform, inverse-transform, and discard the first $M-1$ output samples. The discarded samples are the circular-wrap portion; the remaining $L$ samples agree with linear convolution.
+
+Partitioned convolution splits a long impulse response into shorter partitions. Early partitions can use short FFTs to keep latency low, while later partitions use longer FFTs for efficiency. This is common for room impulse responses and long equalisation filters. The partition schedule is an engineering compromise among CPU load, memory, and latency.
+
+### Numerical Summation
+
+An FIR output is a dot product. Adding many values with different magnitudes can lose small contributions in floating point. Pairwise summation or compensated summation improves accuracy when the dynamic range is large. In a typical audio filter, ordinary double precision is sufficient; in a long accumulation, high-order quadrature, or calibrated instrumentation path, the summation error may be comparable to the signal being measured.
+
+Do not use a numerically elaborate summation method without measuring its cost and effect. Do use a known difficult test—alternating large and small terms, long white-noise records, and a reference computed at higher precision—when the error budget makes it relevant.
+
+## Sampling-Rate Conversion and Filter Banks
+
+Changing the sample rate is itself a filtering problem. This chapter derives decimation, interpolation, rational conversion, polyphase efficiency, and the role of alias cancellation in filter banks.
 
 ### Decimation and Interpolation
 
@@ -829,7 +956,9 @@ An analysis filter bank splits a signal into subbands; a synthesis bank recombin
 
 This is the structural idea behind subband coding, wavelet filter banks, quadrature mirror filters, and many audio codecs. The deep lesson is that aliasing introduced inside a subband can cancel at the synthesis output if the bank's algebra is designed for it; this does not make uncontrolled acquisition aliasing recoverable.
 
-## Random Signals, Noise, and Statistical Filtering
+## Random Signals and Spectral Measurement
+
+For noisy or nonstationary data, a spectrum is an estimate, not a direct property read from an array. Start with the stochastic model, then define the PSD, window calibration, averaging, and uncertainty.
 
 ### Processes and Realisations
 
@@ -882,32 +1011,6 @@ $$
 $$
 
 for a finite impulse response with nonzero DC gain, using the usual hertz scaling. This explains why two filters with the same nominal cutoff can pass different amounts of white noise. A narrow-looking frequency response is not enough; integrate $|H|^2$.
-
-### Wiener Filtering
-
-Suppose $d[n]$ is a desired signal and $x[n]$ is an observed input. A linear estimator
-
-$$
-\hat d[n]=\sum_{k=0}^{M}w_kx[n-k]
-$$
-
-can be chosen to minimise mean-square error $\mathbb{E}|d[n]-\hat d[n]|^2$. Differentiating with respect to the coefficient vector gives the Wiener–Hopf equations
-
-$$
-R_{xx}w=p_{xd},
-$$
-
-where $R_{xx}=\mathbb{E}[xx^H]$ and $p_{xd}=\mathbb{E}[x d^*]$. The solution is $w=R_{xx}^{-1}p_{xd}$ when the correlation matrix is nonsingular. In practice, estimate these quantities from finite data and solve the system without explicitly forming an inverse. Regularisation may be required if $R_{xx}$ is ill-conditioned.
-
-The Wiener filter is optimal only for the stated linear, mean-square objective and the assumed joint statistics. It is not universally optimal for perceptual quality, outlier robustness, or nonstationary signals.
-
-### Matched Filtering
-
-For a known deterministic pulse $s[n]$ in additive white Gaussian noise, the matched filter has impulse response proportional to $s^*[-n]$. Its output samples the correlation of the data with the expected pulse. The peak gives the candidate delay, and the peak-to-noise distribution determines a detection threshold.
-
-In coloured noise, a plain correlation is not generally optimal. Whiten the noise first or use a filter whose frequency response weights the template by the inverse noise PSD. A strong periodic interferer can create multiple correlation peaks; a high peak is evidence only relative to the noise and template model.
-
-## Spectral Estimation and Measurement
 
 ### What a Spectrum Estimate Means
 
@@ -977,41 +1080,33 @@ $$
 
 under valid PSD estimates. High coherence says that a linear relationship is stable across the averaged segments; it does not establish causation. Low coherence can mean nonlinear coupling, nonstationarity, independent noise, or inadequate signal-to-noise ratio.
 
-## Time-Frequency and Analytic-Signal Methods
+## Estimation, Detection, and Inverse Problems
 
-### The Short-Time Fourier Transform
+Filtering can transform a signal, but it can also estimate an unknown quantity, detect a template, identify a system, or undo a measurement response. Those are objective- and noise-model-dependent problems.
 
-The short-time Fourier transform (STFT) applies a window around each time position:
+### Wiener Filtering
 
-$$
-X(m,\omega)=\sum_nx[n]w[n-mR]e^{-j\omega n},
-$$
-
-where $R$ is the hop size. The spectrogram is usually $|X(m,\omega)|^2$. A long window gives fine frequency discrimination and poor timing; a short window gives better transient timing and broader frequency lobes. This is a consequence of the time-frequency uncertainty trade-off, not a software limitation.
-
-The window, hop, FFT length, centering convention, and boundary padding all affect the picture. FFT zero-padding can make each frame's displayed frequency curve smoother without improving the window's ability to separate nearby components.
-
-For reconstruction, analysis and synthesis windows must satisfy an overlap-add condition. A spectrogram is not automatically invertible just because it looks plausible. Libraries may normalise or pad frames differently; test reconstruction with an impulse, a constant signal, and a chirp.
-
-### Analytic Signals and the Hilbert Transform
-
-The analytic signal associated with a real signal $x[n]$ is
+Suppose $d[n]$ is a desired signal and $x[n]$ is an observed input. A linear estimator
 
 $$
-z[n]=x[n]+j\,\mathcal{H}\{x[n]\},
+\hat d[n]=\sum_{k=0}^{M}w_kx[n-k]
 $$
 
-where the Hilbert transform shifts positive and negative frequency components by opposite phases and, in the ideal construction, removes negative frequencies from the complex result. The envelope is $|z[n]|$ and a wrapped instantaneous phase is $\arg z[n]$.
+can be chosen to minimise mean-square error $\mathbb{E}|d[n]-\hat d[n]|^2$. Differentiating with respect to the coefficient vector gives the Wiener–Hopf equations
 
-Instantaneous frequency from an unwrapped phase derivative is meaningful for a narrowband or well-separated-component signal. For a sum of unrelated tones, the envelope can approach zero and the phase can jump; the derivative then has no simple physical interpretation. The analytic signal is a tool with conditions, not a universal way to label every oscillation.
+$$
+R_{xx}w=p_{xd},
+$$
 
-### Chirps and Transients
+where $R_{xx}=\mathbb{E}[xx^H]$ and $p_{xd}=\mathbb{E}[x d^*]$. The solution is $w=R_{xx}^{-1}p_{xd}$ when the correlation matrix is nonsingular. In practice, estimate these quantities from finite data and solve the system without explicitly forming an inverse. Regularisation may be required if $R_{xx}$ is ill-conditioned.
 
-A chirp whose frequency changes over time spreads along a curve in a spectrogram. A transient contains broad frequency content for a short time, so a narrowband long-window spectrogram smears it. Use a collection of window lengths or a transform designed for the signal's structure, and state whether the output is qualitative or used for measurement.
+The Wiener filter is optimal only for the stated linear, mean-square objective and the assumed joint statistics. It is not universally optimal for perceptual quality, outlier robustness, or nonstationary signals.
 
-For a detection problem, a matched filter or time-domain template may be more interpretable than a spectrogram. For a slowly varying harmonic process, an STFT or sinusoidal tracker may be appropriate. Method selection follows the signal model.
+### Matched Filtering
 
-## Adaptive Filtering and Inverse Problems
+For a known deterministic pulse $s[n]$ in additive white Gaussian noise, the matched filter has impulse response proportional to $s^*[-n]$. Its output samples the correlation of the data with the expected pulse. The peak gives the candidate delay, and the peak-to-noise distribution determines a detection threshold.
+
+In coloured noise, a plain correlation is not generally optimal. Whiten the noise first or use a filter whose frequency response weights the template by the inverse noise PSD. A strong periodic interferer can create multiple correlation peaks; a high peak is evidence only relative to the noise and template model.
 
 ### Deconvolution
 
@@ -1049,7 +1144,117 @@ To identify an unknown LTI system, excite it with a signal whose spectrum covers
 
 The experiment must separate excitation from noise and account for delay, sensor dynamics, clipping, and nonstationarity. Fitting a high-order model to a quiet, narrowband record can produce a model that predicts the record but says little about the system outside it.
 
-## Multidimensional and Image DSP
+### Stable Inversion as Regularised Projection
+
+If a filter strongly attenuates a subspace of signals, inversion cannot recover that subspace robustly. In a least-squares formulation,
+
+$$
+\hat x=\arg\min_x\|Hx-y\|_2^2+\lambda\|Lx\|_2^2,
+$$
+
+where $L$ encodes a smoothness or prior penalty. The normal equations are
+
+$$
+(H^HH+\lambda L^HL)\hat x=H^Hy.
+$$
+
+This is the DSP form of regularisation encountered in numerical analysis. The parameter $\lambda$ controls bias-variance trade-off; choose it from a noise model, validation experiment, discrepancy principle, or an explicitly stated engineering criterion.
+
+## Applications: Time-Varying, Complex, and Spatial Signals
+
+The core machinery transfers to signals that are local in time, naturally complex, or indexed over space. These are applications of the same models, not separate kinds of mathematics.
+
+### The Short-Time Fourier Transform
+
+The short-time Fourier transform (STFT) applies a window around each time position:
+
+$$
+X(m,\omega)=\sum_nx[n]w[n-mR]e^{-j\omega n},
+$$
+
+where $R$ is the hop size. The spectrogram is usually $|X(m,\omega)|^2$. A long window gives fine frequency discrimination and poor timing; a short window gives better transient timing and broader frequency lobes. This is a consequence of the time-frequency uncertainty trade-off, not a software limitation.
+
+The window, hop, FFT length, centering convention, and boundary padding all affect the picture. FFT zero-padding can make each frame's displayed frequency curve smoother without improving the window's ability to separate nearby components.
+
+For reconstruction, analysis and synthesis windows must satisfy an overlap-add condition. A spectrogram is not automatically invertible just because it looks plausible. Libraries may normalise or pad frames differently; test reconstruction with an impulse, a constant signal, and a chirp.
+
+### Analytic Signals and the Hilbert Transform
+
+The analytic signal associated with a real signal $x[n]$ is
+
+$$
+z[n]=x[n]+j\,\mathcal{H}\{x[n]\},
+$$
+
+where the Hilbert transform shifts positive and negative frequency components by opposite phases and, in the ideal construction, removes negative frequencies from the complex result. The envelope is $|z[n]|$ and a wrapped instantaneous phase is $\arg z[n]$.
+
+Instantaneous frequency from an unwrapped phase derivative is meaningful for a narrowband or well-separated-component signal. For a sum of unrelated tones, the envelope can approach zero and the phase can jump; the derivative then has no simple physical interpretation. The analytic signal is a tool with conditions, not a universal way to label every oscillation.
+
+### Example: Chirps and Transients
+
+A chirp whose frequency changes over time spreads along a curve in a spectrogram. A transient contains broad frequency content for a short time, so a narrowband long-window spectrogram smears it. Use a collection of window lengths or a transform designed for the signal's structure, and state whether the output is qualitative or used for measurement.
+
+For a detection problem, a matched filter or time-domain template may be more interpretable than a spectrogram. For a slowly varying harmonic process, an STFT or sinusoidal tracker may be appropriate. Method selection follows the signal model.
+
+### Why Complex Signals Appear
+
+Complex-valued sequences are not a claim that a sensor measures imaginary voltage. They are a compact representation of two real channels, or of amplitude and phase relative to a reference oscillator. In a quadrature receiver, the in-phase (I) and quadrature (Q) components are mixed down with cosine and sine local oscillators and then low-pass filtered. The complex baseband sequence
+
+$$
+z[n]=I[n]+jQ[n]
+$$
+
+retains signed frequency information: a positive-frequency component and a negative-frequency component rotate in opposite directions in the complex plane. A real low-pass signal cannot distinguish those directions because its spectrum is conjugate symmetric; I/Q sampling can.
+
+The representation only works if the I and Q paths are calibrated. Gain mismatch, phase error, local-oscillator leakage, and timing skew create an unwanted image on the opposite side of baseband. A complex signal can therefore make a receiver's failure modes more visible, not make them disappear.
+
+### Modulation as Frequency Translation
+
+Multiplying by a complex exponential shifts a spectrum:
+
+$$
+x[n]e^{j\omega_0 n}
+\quad\Longleftrightarrow\quad
+X(e^{j(\omega-\omega_0)}).
+$$
+
+Multiplying a real signal by a cosine creates two shifted copies, one at $+\omega_0$ and one at $-\omega_0$. Multiplying by a complex exponential creates one directional shift. A receiver mixes a bandpass signal down to a lower intermediate frequency or to baseband, filters the desired band, and may decimate after the band has been isolated.
+
+The order matters. If the input is sampled at 100 MHz and contains a wanted 10 MHz-wide band around 20 MHz, mixing it to baseband is not enough: the low-pass filter still has to reject neighbouring channels before decimation. Decimating first may alias the neighbouring channels into the wanted band.
+
+### Amplitude, Phase, and Frequency Modulation
+
+In amplitude modulation, information changes the envelope of a carrier. In phase modulation, it changes the carrier's phase; in frequency modulation, the instantaneous frequency changes. These descriptions are related through differentiation and integration of phase, but the demodulator's noise and filter requirements differ.
+
+For a complex envelope $a[n]e^{j\phi[n]}$, amplitude is $a[n]$ and phase is $\phi[n]$. An envelope detector based on $|z[n]|$ fails when the signal has multiple components or when the analytic-signal assumption does not hold. Phase demodulation requires unwrapping or a differential phase operation, and large phase jumps can be indistinguishable from rapid frequency changes without a bandwidth constraint.
+
+### Matched Filtering and Detection Thresholds
+
+Let the observation be
+
+$$
+y[n]=\alpha s[n-n_0]+v[n],
+$$
+
+where $s$ is a known template, $\alpha$ is an unknown amplitude, and $v$ is noise. The matched-filter output at lag $\ell$ is proportional to
+
+$$
+r_{sy}[\ell]=\sum_n s^*[n]y[n+\ell].
+$$
+
+Under white Gaussian noise, the output signal-to-noise ratio is maximised when the filter is matched to the template. If the noise covariance is not proportional to the identity, the optimum metric weights the observation by the inverse covariance, which is equivalent to whitening before correlation.
+
+Detection requires a threshold and a decision policy. A threshold chosen by looking at the same data being tested produces optimistic false-alarm estimates. Estimate the noise distribution from a clean reference or use a held-out time interval. For a search over many lags, the maximum of many noise-only correlation values has a larger false-alarm probability than one individual value; the multiple-comparisons effect must be included.
+
+### IQ Imbalance and Image Rejection
+
+An ideal complex mixer produces $I$ and $Q$ with exactly 90 degrees of phase difference and equal gain. Let the gain and phase errors be small. The resulting complex signal can be approximated as
+
+$$
+z_{\mathrm{meas}}[n]\approx \alpha z[n]+\beta z^*[n].
+$$
+
+The conjugated term is the image. Calibration can estimate $\alpha$ and $\beta$ using a known complex tone and compensate them, but the compensation itself must be stable across frequency and temperature. Inspect image rejection with a tone whose positive- and negative-frequency locations are unambiguous.
 
 ### Two-Dimensional Convolution
 
@@ -1073,7 +1278,39 @@ The separability and convolution theorem extend to dimensions, but so do the tra
 
 Image aliasing appears as moiré, jagged edges, and false textures when spatial frequencies exceed the pixel grid's representable band. Anti-aliasing during resizing requires low-pass filtering before decimation in each dimension. Sharpening before downsampling can make aliasing worse; filtering after downsampling cannot generally recover the lost distinction.
 
-## Numerical Limits and Verification
+## Building and Verifying a DSP Pipeline
+
+Close with the engineering loop: define the question, choose a method, quantify errors, test invariants, and compare a controlled pipeline with the deployed one.
+
+### First Questions
+
+Before choosing an FFT, filter, or resampler, answer:
+
+* What is measured, and in what physical units?
+* Which frequencies or time events carry the information?
+* Is the signal stationary over the record or only locally?
+* Is future data available?
+* What error, latency, throughput, and memory limits apply?
+* Is the output for display, estimation, control, detection, storage, or reconstruction?
+* Which assumptions are testable from the data and metadata?
+
+If the answer is “I need to see what is there,” start with a calibrated, windowed exploratory spectrum and a time-domain plot, but label it exploratory. If the answer is “estimate power,” use a PSD method and integrate it. If the answer is “remove a known band,” design a filter against explicit edges and attenuation. If the answer is “detect a known waveform,” begin with correlation or matched filtering and model the noise.
+
+### Method Selection Heuristics
+
+| Need | First method to evaluate | Main risk |
+|---|---|---|
+| Smooth sensor display | low-order FIR or IIR low-pass | hidden latency and edge/startup transients |
+| Calibrated phase/amplitude | linear-phase FIR or characterised IIR | delay, order, and passband calibration |
+| Narrow known interference | notch or band-stop | ringing, pole sensitivity, drifting interference |
+| Large convolution | overlap-save/overlap-add FFT | circular-boundary errors and block latency |
+| Lower sample rate | anti-alias FIR plus polyphase conversion | insufficient stopband rejection |
+| Broadband noise level | Welch or multitaper PSD | incorrect units and estimator uncertainty |
+| Known pulse in noise | matched filter/correlation | coloured noise and ambiguous peaks |
+| Time-varying frequency | STFT or model-based tracker | window-dependent resolution |
+| Unknown system response | designed excitation plus system identification | poor excitation coverage |
+
+These are starting points. Measure against the real acceptance criterion and keep the simplest method that meets it.
 
 ### A DSP Error Budget
 
@@ -1114,7 +1351,25 @@ Record the sample rate, units, channel order, time origin, filter coefficients, 
 
 An output named `spectrum.png` is not a reproducible result. A reproducible result includes the input, code, parameters, and interpretation needed to regenerate its axes and units.
 
-## End-to-End Worked Pipeline
+### Common Failure Patterns
+
+**Filtering after aliasing.** The digital filter is applied after an ADC has already folded out-of-band energy into the signal band. Fix the acquisition chain or sample faster with appropriate analogue filtering.
+
+**Calling bin spacing resolution.** A zero-padded FFT has more plotted bins but not a longer observation. Use a longer record, a suitable estimator, or a model-based frequency estimator if the application needs better discrimination.
+
+**Using raw FFT magnitude as a PSD.** The result lacks window, sample-rate, sidedness, and amplitude calibration. State the desired units and use a tested scaling formula or library method.
+
+**Resetting IIR state at block boundaries.** The output contains repeated startup transients. Carry state, or explicitly discard and overlap enough samples to make the boundary policy part of the design.
+
+**Implementing a high-order IIR with one polynomial.** Coefficient rounding and cancellation move poles and amplify roundoff. Use second-order sections and inspect the quantised structure.
+
+**Assuming `filtfilt` is a real-time filter.** It uses future samples, doubles the magnitude response, and depends on edge padding. Use a causal design when the output must be available online.
+
+**Treating a smooth spectrum as proof.** Smoothing can suppress variance and hide narrow features. Report segment length, window, overlap, resolution, and uncertainty.
+
+**Using one window for every objective.** Windows optimise different leakage, resolution, amplitude, and noise-bandwidth compromises. Choose and calibrate one for the measurement.
+
+**Ignoring units.** Radians per sample, hertz, samples, seconds, amplitude, power, and density are not interchangeable. Put units on axes and in variable names.
 
 The following example estimates a vibration spectrum, removes a known electrical interference, and checks its output in both time and frequency. The numerical values are illustrative; an engineering analysis must substitute the sensor calibration and acceptance limits.
 
@@ -1200,243 +1455,11 @@ print("causal output length:", len(y_causal))
 
 Do not compare `y_causal` sample-for-sample with `y`, because one is causal and phase-distorting while the other is noncausal and zero-phase. Compare the metric each path is intended to preserve: notch attenuation, tone amplitude, latency, edge behaviour, and accepted phase response.
 
-## Communications and Complex Baseband DSP
+## Reference Appendix
 
-### Why Complex Signals Appear
+Use this section when implementing or reviewing a pipeline. The main chapters explain the ideas; these tables and checklists collect the details most often omitted in practice.
 
-Complex-valued sequences are not a claim that a sensor measures imaginary voltage. They are a compact representation of two real channels, or of amplitude and phase relative to a reference oscillator. In a quadrature receiver, the in-phase (I) and quadrature (Q) components are mixed down with cosine and sine local oscillators and then low-pass filtered. The complex baseband sequence
-
-$$
-z[n]=I[n]+jQ[n]
-$$
-
-retains signed frequency information: a positive-frequency component and a negative-frequency component rotate in opposite directions in the complex plane. A real low-pass signal cannot distinguish those directions because its spectrum is conjugate symmetric; I/Q sampling can.
-
-The representation only works if the I and Q paths are calibrated. Gain mismatch, phase error, local-oscillator leakage, and timing skew create an unwanted image on the opposite side of baseband. A complex signal can therefore make a receiver's failure modes more visible, not make them disappear.
-
-### Modulation as Frequency Translation
-
-Multiplying by a complex exponential shifts a spectrum:
-
-$$
-x[n]e^{j\omega_0 n}
-\quad\Longleftrightarrow\quad
-X(e^{j(\omega-\omega_0)}).
-$$
-
-Multiplying a real signal by a cosine creates two shifted copies, one at $+\omega_0$ and one at $-\omega_0$. Multiplying by a complex exponential creates one directional shift. A receiver mixes a bandpass signal down to a lower intermediate frequency or to baseband, filters the desired band, and may decimate after the band has been isolated.
-
-The order matters. If the input is sampled at 100 MHz and contains a wanted 10 MHz-wide band around 20 MHz, mixing it to baseband is not enough: the low-pass filter still has to reject neighbouring channels before decimation. Decimating first may alias the neighbouring channels into the wanted band.
-
-### Amplitude, Phase, and Frequency Modulation
-
-In amplitude modulation, information changes the envelope of a carrier. In phase modulation, it changes the carrier's phase; in frequency modulation, the instantaneous frequency changes. These descriptions are related through differentiation and integration of phase, but the demodulator's noise and filter requirements differ.
-
-For a complex envelope $a[n]e^{j\phi[n]}$, amplitude is $a[n]$ and phase is $\phi[n]$. An envelope detector based on $|z[n]|$ fails when the signal has multiple components or when the analytic-signal assumption does not hold. Phase demodulation requires unwrapping or a differential phase operation, and large phase jumps can be indistinguishable from rapid frequency changes without a bandwidth constraint.
-
-### Matched Filtering and Detection Thresholds
-
-Let the observation be
-
-$$
-y[n]=\alpha s[n-n_0]+v[n],
-$$
-
-where $s$ is a known template, $\alpha$ is an unknown amplitude, and $v$ is noise. The matched-filter output at lag $\ell$ is proportional to
-
-$$
-r_{sy}[\ell]=\sum_n s^*[n]y[n+\ell].
-$$
-
-Under white Gaussian noise, the output signal-to-noise ratio is maximised when the filter is matched to the template. If the noise covariance is not proportional to the identity, the optimum metric weights the observation by the inverse covariance, which is equivalent to whitening before correlation.
-
-Detection requires a threshold and a decision policy. A threshold chosen by looking at the same data being tested produces optimistic false-alarm estimates. Estimate the noise distribution from a clean reference or use a held-out time interval. For a search over many lags, the maximum of many noise-only correlation values has a larger false-alarm probability than one individual value; the multiple-comparisons effect must be included.
-
-### IQ Imbalance and Image Rejection
-
-An ideal complex mixer produces $I$ and $Q$ with exactly 90 degrees of phase difference and equal gain. Let the gain and phase errors be small. The resulting complex signal can be approximated as
-
-$$
-z_{\mathrm{meas}}[n]\approx \alpha z[n]+\beta z^*[n].
-$$
-
-The conjugated term is the image. Calibration can estimate $\alpha$ and $\beta$ using a known complex tone and compensate them, but the compensation itself must be stable across frequency and temperature. Inspect image rejection with a tone whose positive- and negative-frequency locations are unambiguous.
-
-## Embedded DSP, Latency, and Resource Budgets
-
-### Real-Time Constraints Are Deadlines
-
-A real-time DSP process does not merely need a low average runtime. It must finish each block before the next block's deadline. If the audio callback receives 128 samples at 48 kHz, the nominal deadline is 2.667 ms, minus scheduling and I/O margin. One occasional 20 ms execution is a glitch even if the mean runtime is tiny.
-
-Budget separately:
-
-* **latency:** time from an input event to the corresponding output;
-* **throughput:** sustained samples or frames per second;
-* **memory:** coefficient, state, buffers, and temporary workspace;
-* **jitter:** variation in execution or sampling time;
-* **energy:** important for battery and thermally constrained devices;
-* **precision:** enough bits for the required dynamic range and noise floor.
-
-An FFT with good throughput can still violate latency if its block is too long. A sample-by-sample IIR can have tiny algorithmic latency but poor cache behaviour or an unstable fixed-point state. Profile the deployed structure and worst-case inputs.
-
-### Fixed-Point Representation
-
-A signed fixed-point value with $I$ integer bits and $F$ fractional bits represents multiples of $2^{-F}$ over a finite range. Multiplying two such values produces a value with $2F$ fractional bits and a wider integer range; an implementation must choose where to round and how to rescale. The discarded low bits become quantisation noise, while discarded high bits become overflow or saturation.
-
-Use guard bits in accumulators. A sum of $K$ aligned values can require approximately $\lceil\log_2K\rceil$ extra bits in the worst case. Random noise may not achieve the worst-case sum, but a production system should not rely on statistical cancellation when an adversarial or full-scale input is possible.
-
-Saturation is usually safer than wraparound for signal amplitudes because it limits the error to a bounded excursion. It is nonlinear: once saturation occurs, superposition and spectral predictions no longer apply. Count and report saturation events rather than silently clipping.
-
-### Quantisation of Filter Coefficients
-
-Suppose a second-order denominator is
-
-$$
-1+a_1z^{-1}+a_2z^{-2}.
-$$
-
-Its pole locations are roots of $z^2+a_1z+a_2=0$. Quantising $a_1$ and $a_2$ perturbs those roots. For poles near the unit circle, a one-LSB coefficient change can move the resonance frequency or radius enough to alter bandwidth and decay time. Quantise first, then measure the actual response.
-
-A coefficient set that looks well behaved in floating-point Python may be unusable on a 16-bit device. Export the quantised coefficients, run the same impulse and swept-sine tests through a bit-accurate model, and compare the pole-zero plot and internal-state ranges. The bit-accurate model is part of the design, not merely a test after deployment.
-
-### SIMD, Vectorisation, and Memory Layout
-
-DSP is dominated by regular arithmetic and often benefits from single-instruction, multiple-data (SIMD) operations. The algorithm's mathematical complexity is only one part of performance. Contiguous memory, aligned loads, predictable branches, fused multiply-add, and avoiding unnecessary copies can matter more than a small algebraic simplification.
-
-Array libraries vectorise across samples, channels, or filter sections differently. Check axis conventions before comparing performance. A vectorised operation over a two-dimensional array may allocate a temporary larger than the signal itself. On an embedded target, a hand-written circular-buffer kernel may be appropriate; on a workstation, a library implementation may use a more efficient blocked algorithm.
-
-### Block Processing and Partitioned Convolution
-
-Long FIR filters are often implemented with overlap-save. Let the FFT size be $N$, the filter length be $M$, and the useful input block length be $L=N-M+1$. Prepend the last $M-1$ input samples to each block, transform, multiply by the filter transform, inverse-transform, and discard the first $M-1$ output samples. The discarded samples are the circular-wrap portion; the remaining $L$ samples agree with linear convolution.
-
-Partitioned convolution splits a long impulse response into shorter partitions. Early partitions can use short FFTs to keep latency low, while later partitions use longer FFTs for efficiency. This is common for room impulse responses and long equalisation filters. The partition schedule is an engineering compromise among CPU load, memory, and latency.
-
-### Numerical Summation
-
-An FIR output is a dot product. Adding many values with different magnitudes can lose small contributions in floating point. Pairwise summation or compensated summation improves accuracy when the dynamic range is large. In a typical audio filter, ordinary double precision is sufficient; in a long accumulation, high-order quadrature, or calibrated instrumentation path, the summation error may be comparable to the signal being measured.
-
-Do not use a numerically elaborate summation method without measuring its cost and effect. Do use a known difficult test—alternating large and small terms, long white-noise records, and a reference computed at higher precision—when the error budget makes it relevant.
-
-## Deeper Transform Identities and Their Consequences
-
-### Time and Frequency Shifts
-
-The DTFT shift property follows directly:
-
-$$
-x[n-n_0]\quad\Longleftrightarrow\quad
-e^{-j\omega n_0}X(e^{j\omega}).
-$$
-
-The magnitude is unchanged; the phase gains a linear term. This is why delay can be measured from phase slope, and why a pure delay is all-pass in magnitude. For a noninteger delay, the ideal response is $e^{-j\omega D}$, but a finite causal filter can only approximate it over a specified band.
-
-Modulation and convolution form a dual pair. Multiplying a signal by a sinusoid shifts its spectrum; convolving in time with a short pulse smooths or shapes the spectrum according to the pulse's transform. These properties let you predict a filter's output before simulating it.
-
-### Differentiation and Integration
-
-The backward difference filter has
-
-$$
-H(e^{j\omega})=1-e^{-j\omega}
-=2j e^{-j\omega/2}\sin(\omega/2).
-$$
-
-At low frequencies its magnitude is approximately $|\omega|$, so it approximates a derivative. At high frequencies it amplifies relative high-frequency content and has a zero at DC. The accumulator has a pole at $z=1$, so it integrates but is not BIBO stable: a bounded nonzero-mean input can produce an unbounded ramp.
-
-In numerical work, differentiation amplifies measurement noise and integration accumulates bias. A high-pass filter or detrending may be needed before differentiation; leakage control, drift removal, or a physical reference may be needed before integration. Choosing a discrete approximation without considering the noise spectrum is a common source of false dynamics.
-
-### Parseval, Inner Products, and Matched Filters
-
-The DFT is a change of orthogonal coordinates. With the unitary normalization, the inner product is preserved:
-
-$$
-\langle x,y\rangle=\sum_nx[n]y^*[n]
-=\sum_kX[k]Y^*[k].
-$$
-
-Correlation with a template is therefore a projection onto shifted template vectors. Matched filtering is not a mysterious “pattern recognizer”; it is a projection weighted according to the noise geometry. If the noise covariance is $R$, the relevant inner product is $x^HR^{-1}y$. Whitening transforms that inner product back into the ordinary Euclidean one.
-
-### Toeplitz and Circulant Operators
-
-Linear convolution by a fixed finite sequence can be written as multiplication by a Toeplitz matrix. The matrix is banded for a short FIR. Circular convolution is multiplication by a circulant matrix, and the DFT diagonalises every circulant matrix:
-
-$$
-C=F^{-1}\Lambda F.
-$$
-
-This is the linear-algebra reason FFT convolution works. The input and filter must be embedded into a large enough circulant system to reproduce the desired Toeplitz multiplication. Padding is not a cosmetic implementation detail; it changes which operator you are applying.
-
-### Stable Inversion as Regularised Projection
-
-If a filter strongly attenuates a subspace of signals, inversion cannot recover that subspace robustly. In a least-squares formulation,
-
-$$
-\hat x=\arg\min_x\|Hx-y\|_2^2+\lambda\|Lx\|_2^2,
-$$
-
-where $L$ encodes a smoothness or prior penalty. The normal equations are
-
-$$
-(H^HH+\lambda L^HL)\hat x=H^Hy.
-$$
-
-This is the DSP form of regularisation encountered in numerical analysis. The parameter $\lambda$ controls bias-variance trade-off; choose it from a noise model, validation experiment, discrepancy principle, or an explicitly stated engineering criterion.
-
-## Choosing Methods in Practice
-
-### First Questions
-
-Before choosing an FFT, filter, or resampler, answer:
-
-* What is measured, and in what physical units?
-* Which frequencies or time events carry the information?
-* Is the signal stationary over the record or only locally?
-* Is future data available?
-* What error, latency, throughput, and memory limits apply?
-* Is the output for display, estimation, control, detection, storage, or reconstruction?
-* Which assumptions are testable from the data and metadata?
-
-If the answer is “I need to see what is there,” start with a calibrated, windowed exploratory spectrum and a time-domain plot, but label it exploratory. If the answer is “estimate power,” use a PSD method and integrate it. If the answer is “remove a known band,” design a filter against explicit edges and attenuation. If the answer is “detect a known waveform,” begin with correlation or matched filtering and model the noise.
-
-### Method Selection Heuristics
-
-| Need | First method to evaluate | Main risk |
-|---|---|---|
-| Smooth sensor display | low-order FIR or IIR low-pass | hidden latency and edge/startup transients |
-| Calibrated phase/amplitude | linear-phase FIR or characterised IIR | delay, order, and passband calibration |
-| Narrow known interference | notch or band-stop | ringing, pole sensitivity, drifting interference |
-| Large convolution | overlap-save/overlap-add FFT | circular-boundary errors and block latency |
-| Lower sample rate | anti-alias FIR plus polyphase conversion | insufficient stopband rejection |
-| Broadband noise level | Welch or multitaper PSD | incorrect units and estimator uncertainty |
-| Known pulse in noise | matched filter/correlation | coloured noise and ambiguous peaks |
-| Time-varying frequency | STFT or model-based tracker | window-dependent resolution |
-| Unknown system response | designed excitation plus system identification | poor excitation coverage |
-
-These are starting points. Measure against the real acceptance criterion and keep the simplest method that meets it.
-
-### Common Failure Patterns
-
-**Filtering after aliasing.** The digital filter is applied after an ADC has already folded out-of-band energy into the signal band. Fix the acquisition chain or sample faster with appropriate analogue filtering.
-
-**Calling bin spacing resolution.** A zero-padded FFT has more plotted bins but not a longer observation. Use a longer record, a suitable estimator, or a model-based frequency estimator if the application needs better discrimination.
-
-**Using raw FFT magnitude as a PSD.** The result lacks window, sample-rate, sidedness, and amplitude calibration. State the desired units and use a tested scaling formula or library method.
-
-**Resetting IIR state at block boundaries.** The output contains repeated startup transients. Carry state, or explicitly discard and overlap enough samples to make the boundary policy part of the design.
-
-**Implementing a high-order IIR with one polynomial.** Coefficient rounding and cancellation move poles and amplify roundoff. Use second-order sections and inspect the quantised structure.
-
-**Assuming `filtfilt` is a real-time filter.** It uses future samples, doubles the magnitude response, and depends on edge padding. Use a causal design when the output must be available online.
-
-**Treating a smooth spectrum as proof.** Smoothing can suppress variance and hide narrow features. Report segment length, window, overlap, resolution, and uncertainty.
-
-**Using one window for every objective.** Windows optimise different leakage, resolution, amplitude, and noise-bandwidth compromises. Choose and calibrate one for the measurement.
-
-**Ignoring units.** Radians per sample, hertz, samples, seconds, amplitude, power, and density are not interchangeable. Put units on axes and in variable names.
-
-## Appendix A. Mathematics and Units You Will Use Repeatedly
-
-### A.1 Complex Arithmetic Without Mysticism
+### Complex Arithmetic Without Mysticism
 
 Write a complex number as $z=a+jb$, where $j^2=-1$. Its conjugate is $z^*=a-jb$, magnitude is $|z|=\sqrt{a^2+b^2}$, and phase is $\arg z$. The product of two complex numbers multiplies magnitudes and adds phases. Euler's identity,
 
@@ -1448,20 +1471,7 @@ turns sinusoidal algebra into multiplication. The real part of $Ae^{j\theta}$ is
 
 Complex conjugation in a transform is not optional notation. For complex data, the energy is $|x[n]|^2=x[n]x^*[n]$, not $x[n]^2$. Inner products conjugate one argument, and correlation conjugates the template. Accidentally using a transpose instead of a conjugate transpose produces wrong power and often wrong negative-frequency behaviour.
 
-### A.2 Orthogonality of the DFT Basis
-
-Let $W_N=e^{-j2\pi/N}$. The DFT basis vector for bin $k$ has entries $W_N^{kn}$. For bins $k$ and $r$,
-
-$$
-\sum_{n=0}^{N-1}W_N^{kn}(W_N^{rn})^*
-=\sum_{n=0}^{N-1}e^{j2\pi(r-k)n/N}.
-$$
-
-If $r=k$, the sum is $N$. If $r\ne k$, it is a finite geometric series whose numerator is $1-e^{j2\pi(r-k)}=0$ while the denominator is nonzero, so the sum is zero. The DFT coefficient is the projection of the data onto one of these orthogonal basis vectors.
-
-This explains exact bin alignment. A bin-centred sinusoid is orthogonal to every other bin's basis vector over the record. An off-bin sinusoid is not, so its projection is distributed across the basis. Leakage is a geometry problem before it is a window problem.
-
-### A.3 Decibels and Reference Quantities
+### Decibels and Reference Quantities
 
 For a power or power-like ratio,
 
@@ -1479,7 +1489,7 @@ The denominator is part of the measurement. “−60 dB” is meaningless withou
 
 RMS amplitude of a zero-mean sinusoid of peak amplitude $A$ is $A/\sqrt{2}$. A one-sided amplitude spectrum doubles positive-frequency interior components, while a one-sided power spectrum doubles power. Applying both a power and an amplitude doubling is a common 3 dB error.
 
-### A.4 Frequency Units
+### Frequency Units
 
 The same frequency can be expressed as:
 
@@ -1492,9 +1502,7 @@ $$
 
 The digital frequency response is periodic in $\omega$ with period $2\pi$ and in $\nu$ with period 1. A filter specified at 2 kHz has no meaning until the sample rate is known. A normalised cutoff of 0.2 in a library may mean 0.2 times the Nyquist frequency, 0.2 cycles/sample, or radians/sample depending on the API. Prefer passing `fs=` where supported and label all plots.
 
-## Appendix B. Filter-Design Reference
-
-### B.1 Converting Ripple and Attenuation to Linear Values
+### Converting Ripple and Attenuation to Linear Values
 
 If the passband magnitude must lie within $R_p$ dB of unity, the lower linear bound is
 
@@ -1510,7 +1518,7 @@ $$
 
 The exact order formula depends on the filter family and frequency transformation, but the design process always compares a desired response to an achieved response in a specified norm. Convert dB constraints carefully; a 6 dB amplitude error is roughly a factor of two, while a 6 dB power error is also roughly a factor of four in power.
 
-### B.2 FIR Order Intuition
+### FIR Order Intuition
 
 For a windowed-sinc FIR, order grows approximately inversely with normalized transition width. If the sample rate doubles while the physical transition width stays fixed, the normalized transition narrows and the required number of taps rises. This is why multirate systems often filter after an early rate reduction when the signal band permits it.
 
@@ -1522,7 +1530,7 @@ $$
 
 where $A$ is desired attenuation in dB and $\Delta\omega$ is transition width in radians/sample. The estimate is a starting point, not the achieved specification. Evaluate `freqz` on a sufficiently dense grid and measure the actual extrema. A coarse grid can miss a narrow ripple peak and falsely certify a filter.
 
-### B.3 IIR Order and Warp Checks
+### IIR Order and Warp Checks
 
 An analogue prototype order function usually works with prewarped passband and stopband frequencies. The resulting digital response must still be measured after the bilinear transform. At low normalized frequencies the tangent mapping is nearly linear; near Nyquist it is strongly warped. A design that looks correct in an analogue frequency table can miss its digital edge if the conversion is applied incorrectly.
 
@@ -1535,7 +1543,7 @@ Always check:
 5. pole radii after quantisation;
 6. response, delay, and impulse/step behaviour at the deployed sample rate.
 
-### B.4 Filter Diagnostics
+### Filter Diagnostics
 
 Use several diagnostics because no one view catches every problem:
 
@@ -1549,8 +1557,6 @@ Use several diagnostics because no one view catches every problem:
 * max internal state under full-scale and crest-factor-heavy signals.
 
 The diagnostics should be run on the exact coefficient format and exact structure used in production. A floating-point transfer function is not a substitute for a fixed-point cascade test.
-
-## Appendix C. Spectral and Resampling Checklist
 
 Before publishing a spectrum, record:
 
