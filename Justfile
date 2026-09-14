@@ -87,6 +87,15 @@ deep-learning-all:
   cd primer_deep_learning && just html-variants
   cd primer_deep_learning && just all
 
+digital-signal-processing-html:
+  cd primer_digital_signal_processing && just html
+
+digital-signal-processing-pdf:
+  cd primer_digital_signal_processing && just pdf
+
+digital-signal-processing-all:
+  cd primer_digital_signal_processing && just all
+
 eval-loop-html:
   cd primer_evaluation_loop && just html
 
@@ -142,11 +151,11 @@ containerization-all:
   cd primer_containerization && just all
 
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html
+html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all
+html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -161,6 +170,7 @@ clean-generated:
   cd gaming_silo_rpg && just silo-clobber
   cd article_info_theory && just clobber
   cd primer_deep_learning && just clobber
+  cd primer_digital_signal_processing && just clobber
   cd primer_evaluation_loop && just clobber
   cd primer_military_structure && just clobber
   cd primer_ohmyzsh && just clobber

@@ -1,0 +1,8 @@
+SOURCE_MD   := "primer_digital_signal_processing.md"
+PROJECT_DIR := "primer_digital_signal_processing"
+TITLE       := "Digital Signal Processing: A Technical Primer"
+AUTHOR      := "September 2026"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
+
+import '../_shared/common.just'
