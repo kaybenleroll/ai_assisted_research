@@ -4,5 +4,22 @@ TITLE       := "Digital Signal Processing: A Technical Primer"
 AUTHOR      := "September 2026"
 HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
+ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
+
+plots:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{ROCKER}} \
+    Rscript --vanilla generate_plots.R
+
+plots-check:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{ROCKER}} \
+    Rscript --vanilla generate_plots.R --check
+
+full: plots plots-check html pdf
 
 import '../_shared/common.just'

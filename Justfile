@@ -94,7 +94,7 @@ digital-signal-processing-pdf:
   cd primer_digital_signal_processing && just pdf
 
 digital-signal-processing-all:
-  cd primer_digital_signal_processing && just all
+  cd primer_digital_signal_processing && just full
 
 eval-loop-html:
   cd primer_evaluation_loop && just html
