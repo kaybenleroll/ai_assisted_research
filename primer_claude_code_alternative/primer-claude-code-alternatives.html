@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claude Code Alternatives: A Comprehensive Survey of AI Coding
-Agents in 2026 (September 9 Refresh)</title>
+Agents in 2026 (September 16 Refresh)</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -205,8 +205,25 @@ transform: rotate(0deg);
 .content {
 flex: 1;
 min-width: 0;
-padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
-max-width: 860px;
+
+padding: 2.5rem clamp(1.25rem, 3vw, 3rem);
+max-width: 1400px;
+}
+.content-inner {
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+}
+.content-inner > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote) {
+max-width: 100ch;
+}
+.content-inner > :where(pre, .code-tabs, .code-details, div.sourceCode) {
+width: 100%;
+max-width: none;
+}
+.content-inner > :where(table, .broad-table, .compact-table) {
+align-self: flex-start;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -233,7 +250,8 @@ margin: 2.5rem 0;
 }
 
 table {
-width: 100%;
+width: fit-content;
+max-width: 100%;
 border-collapse: collapse;
 font-size: .88rem;
 margin: 1.5rem 0;
@@ -242,64 +260,101 @@ border-radius: var(--radius);
 overflow: hidden;
 box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
-th {
-background: #f3f4f6;
-font-weight: 650;
-text-align: left;
-padding: .6rem .9rem;
-border-bottom: 2px solid var(--border);
-white-space: nowrap;
-}
-td {
-padding: .55rem .9rem;
-border-bottom: 1px solid var(--border);
-vertical-align: top;
-}
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f9fafb; }
 
-code {
-font-family: var(--font-mono);
-font-size: .85em;
-background: #f3f4f6;
-color: #be185d;
-padding: .15em .4em;
-border-radius: 3px;
+.content-inner > :where(table:has(tr > :nth-child(4)), .broad-table) {
+width: 100%;
+max-width: none;
 }
-pre {
-background: var(--code-bg);
-color: #cdd6f4;
-border-radius: var(--radius);
-padding: 1.1rem 1.25rem;
-overflow-x: auto;
-margin: 1.25rem 0;
-font-size: .83rem;
-line-height: 1.6;
-box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+.broad-table > table {
+width: 100%;
+max-width: none;
 }
-pre code {
-background: transparent;
-color: inherit;
-padding: 0;
-font-size: inherit;
-}
+/* Pandoc derives <col> percentages from Markdown separator widths. */
+    .compact-table {
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+    }
 
-blockquote {
-border-left: 4px solid var(--accent);
-margin: 1.5rem 0;
-padding: .75rem 1.25rem;
-background: #eff6ff;
-border-radius: 0 var(--radius) var(--radius) 0;
-color: #1e3a5f;
-font-style: italic;
-}
+    .compact-table > table {
+      width: max-content;
+      max-width: none;
+      table-layout: auto;
+    }
 
-ul, ol {
-padding-left: 1.75rem;
-margin-bottom: 1rem;
-}
-li { margin-bottom: .3rem; }
+    .compact-table > table colgroup > col {
+      width: auto !important;
+    }
 
+    th {
+      background: #f3f4f6;
+      font-weight: 650;
+      text-align: left;
+      padding: .6rem .9rem;
+      border-bottom: 2px solid var(--border);
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    td {
+      padding: .55rem .9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    /* ── Code ──────────────────────────────────────────────────────── */
+    code {
+      font-family: var(--font-mono);
+      font-size: .85em;
+      background: #f3f4f6;
+      color: #be185d;
+      padding: .15em .4em;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #cdd6f4;
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: .83rem;
+      line-height: 1.6;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* ── Blockquotes ───────────────────────────────────────────────── */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 1.5rem 0;
+      padding: .75rem 1.25rem;
+      background: #eff6ff;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #1e3a5f;
+      font-style: italic;
+    }
+
+    /* ── Lists ─────────────────────────────────────────────────────── */
+    ul, ol {
+      padding-left: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    li { margin-bottom: .3rem; }
+
+    /* ── Syntax highlight overrides (tango theme base) ─────────────── */
 html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -316,176 +371,234 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-{ counter-reset: source-line 0; }
+  { counter-reset: source-line 0; }
 pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
+  { position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-background-color: #232629;
-color: #7a7c7d;
-}
-pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d; padding-left: 4px; }
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #232629;
+    color: #7a7c7d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d;  padding-left: 4px; }
 div.sourceCode
-{ color: #cfcfc2; background-color: #232629; }
+  { color: #cfcfc2; background-color: #232629; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span { color: #cfcfc2; } 
-code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } 
-code span.an { color: #3f8058; } 
-code span.at { color: #2980b9; } 
-code span.bn { color: #f67400; } 
-code span.bu { color: #7f8c8d; } 
-code span.cf { color: #fdbc4b; font-weight: bold; } 
-code span.ch { color: #3daee9; } 
-code span.cn { color: #27aeae; font-weight: bold; } 
-code span.co { color: #7a7c7d; } 
-code span.cv { color: #7f8c8d; } 
-code span.do { color: #a43340; } 
-code span.dt { color: #2980b9; } 
-code span.dv { color: #f67400; } 
-code span.er { color: #da4453; text-decoration: underline; } 
-code span.ex { color: #0099ff; font-weight: bold; } 
-code span.fl { color: #f67400; } 
-code span.fu { color: #8e44ad; } 
-code span.im { color: #27ae60; } 
-code span.in { color: #c45b00; } 
-code span.kw { color: #cfcfc2; font-weight: bold; } 
-code span.op { color: #cfcfc2; } 
-code span.ot { color: #27ae60; } 
-code span.pp { color: #27ae60; } 
-code span.re { color: #2980b9; background-color: #153042; } 
-code span.sc { color: #3daee9; } 
-code span.ss { color: #da4453; } 
-code span.st { color: #f44f4f; } 
-code span.va { color: #27aeae; } 
-code span.vs { color: #da4453; } 
-code span.wa { color: #da4453; } 
+code span { color: #cfcfc2; } /* Normal */
+code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+code span.an { color: #3f8058; } /* Annotation */
+code span.at { color: #2980b9; } /* Attribute */
+code span.bn { color: #f67400; } /* BaseN */
+code span.bu { color: #7f8c8d; } /* BuiltIn */
+code span.cf { color: #fdbc4b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #3daee9; } /* Char */
+code span.cn { color: #27aeae; font-weight: bold; } /* Constant */
+code span.co { color: #7a7c7d; } /* Comment */
+code span.cv { color: #7f8c8d; } /* CommentVar */
+code span.do { color: #a43340; } /* Documentation */
+code span.dt { color: #2980b9; } /* DataType */
+code span.dv { color: #f67400; } /* DecVal */
+code span.er { color: #da4453; text-decoration: underline; } /* Error */
+code span.ex { color: #0099ff; font-weight: bold; } /* Extension */
+code span.fl { color: #f67400; } /* Float */
+code span.fu { color: #8e44ad; } /* Function */
+code span.im { color: #27ae60; } /* Import */
+code span.in { color: #c45b00; } /* Information */
+code span.kw { color: #cfcfc2; font-weight: bold; } /* Keyword */
+code span.op { color: #cfcfc2; } /* Operator */
+code span.ot { color: #27ae60; } /* Other */
+code span.pp { color: #27ae60; } /* Preprocessor */
+code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #da4453; } /* SpecialString */
+code span.st { color: #f44f4f; } /* String */
+code span.va { color: #27aeae; } /* Variable */
+code span.vs { color: #da4453; } /* VerbatimString */
+code span.wa { color: #da4453; } /* Warning */
 
-.code-tabs {
-margin: 1.25rem 0;
-border-radius: var(--radius);
-overflow: hidden;
-border: 1px solid rgba(255,255,255,.08);
-}
-.code-tab-bar {
-display: flex;
-background: #16161f;
-border-bottom: 1px solid rgba(255,255,255,.08);
-padding: 0 .5rem;
-gap: .15rem;
-}
-.code-tab-btn {
-padding: .45rem 1rem;
-background: transparent;
-border: none;
-border-bottom: 2px solid transparent;
-color: #9399b2;
-font-family: var(--font-mono);
-font-size: .78rem;
-cursor: pointer;
-transition: color .15s, border-color .15s;
-white-space: nowrap;
-}
-.code-tab-btn:hover { color: #cdd6f4; }
-.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
-.code-tab-panel { display: none; }
-.code-tab-panel.active { display: block; }
-.code-tab-panel > div.sourceCode > pre {
-margin: 0;
-border-radius: 0;
-box-shadow: none;
-}
+    /* ── Code tabs ─────────────────────────────────────────────────── */
+    .code-tabs {
+      margin: 1.25rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+    }
 
-.code-details {
-margin: 1.25rem 0;
-}
-.code-details > div.sourceCode {
-margin: 0;
-}
-.code-details > div.sourceCode > pre {
-margin: 0;
-border-radius: 0 0 var(--radius) var(--radius);
-box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
-}
-.code-summary {
-display: flex;
-align-items: center;
-gap: .5rem;
-padding: .4rem .85rem;
-background: #16161f;
-color: #9399b2;
-font-family: var(--font-mono);
-font-size: .78rem;
-cursor: pointer;
-border-radius: var(--radius) var(--radius) 0 0;
-list-style: none;
-user-select: none;
-}
-.code-summary::-webkit-details-marker { display: none; }
-.code-summary::before {
-content: '▶';
-font-size: .6rem;
-transition: transform .15s;
-flex-shrink: 0;
-}
-details[open] .code-summary::before { transform: rotate(90deg); }
-details:not([open]) .code-details > div.sourceCode > pre {
-border-radius: 0;
-}
+    .code-tab-bar {
+      display: flex;
+      background: #16161f;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 0 .5rem;
+      gap: .15rem;
+    }
 
-@media (max-width: 768px) {
-.layout {
-display: block;
-}
-.sidebar {
-display: block;
-position: static;
-width: 100%;
-min-width: 0;
-max-width: none;
-height: auto;
-border-right: none;
-border-bottom: 1px solid var(--border);
-padding: .75rem 0;
-}
-.sidebar-heading {
-padding-bottom: .25rem;
-}
-#TOC a {
-padding-top: .4rem;
-padding-bottom: .4rem;
-}
-.sidebar-resizer { display: none; }
-.navbar-meta { display: none; }
-.content {
-max-width: 100%;
-padding-top: 1.25rem;
-}
-}
+    .code-tab-btn {
+      padding: .45rem 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #9399b2;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+      white-space: nowrap;
+    }
 
-@media print {
-.navbar, .sidebar, .sidebar-resizer { display: none; }
-.content { padding: 0; max-width: 100%; }
-}
+    .code-tab-btn:hover { color: #cdd6f4; }
+    .code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
 
-code span.fu { color: #c792ea !important; } 
-</style>
+    .code-tab-btn:focus-visible, .code-tab-panel:focus-visible {
+      outline: 2px solid #89b4fa;
+      outline-offset: -2px;
+    }
+
+    .code-tab-panel[hidden] { display: none; }
+    .code-tabs .code-tab-label { display: none; }
+
+    .code-tab-panel > div.sourceCode > pre {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    /* ── Collapsible single code blocks ─────────────────────────────── */
+    .code-details {
+      margin: 1.25rem 0;
+    }
+
+    .code-details > div.sourceCode {
+      margin: 0;
+    }
+
+    .code-details > div.sourceCode > pre {
+      margin: 0;
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    .code-summary {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .4rem .85rem;
+      background: #16161f;
+      color: #9399b2;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      cursor: pointer;
+      border-radius: var(--radius) var(--radius) 0 0;
+      list-style: none;
+      user-select: none;
+    }
+
+    .code-summary::-webkit-details-marker { display: none; }
+
+    .code-summary::before {
+      content: '▶';
+      font-size: .6rem;
+      transition: transform .15s;
+      flex-shrink: 0;
+    }
+
+    details[open] .code-summary::before { transform: rotate(90deg); }
+
+    details:not([open]) .code-details > div.sourceCode > pre {
+      border-radius: 0;
+    }
+
+    /* ── Responsive: convert sidebar to top TOC on small screens ────── */
+    @media (max-width: 768px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: block;
+        position: static;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: .75rem 0;
+      }
+
+      .sidebar-heading {
+        padding-bottom: .25rem;
+      }
+
+      #TOC a {
+        padding-top: .4rem;
+        padding-bottom: .4rem;
+      }
+
+      .sidebar-resizer { display: none; }
+      .navbar-meta { display: none; }
+
+      .content {
+        max-width: 100%;
+        padding-top: 1.25rem;
+      }
+      .content-inner > :where(table, .broad-table, .compact-table) {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .content-inner > .broad-table > table {
+        min-width: 48rem;
+      }
+      .content-inner > .compact-table > table {
+        width: max-content;
+      }
+      .code-tab-bar {
+        overflow-x: auto;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .sidebar {
+        width: 260px;
+        min-width: 220px;
+      }
+    }
+
+    /* ── Print ─────────────────────────────────────────────────────── */
+    @media print {
+      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .content { padding: 0; max-width: 100%; }
+      .code-tab-bar { display: none; }
+      .code-tabs { overflow: visible; border: 0; }
+      .code-tabs .code-tab-panel { display: block !important; }
+      .code-tabs .code-tab-label {
+        display: block;
+        color: #000;
+        margin: 1rem 0 .5rem;
+        break-after: avoid;
+      }
+    }
+
+    /* ── Custom code color overrides for readability ── */
+    code span.fu { color: #c792ea !important; } /* function names: lighter purple */
+  </style>
 
 </head>
 <body>
 
   <nav class="navbar">
     <span class="navbar-brand">Claude Code Alternatives: A Comprehensive
-Survey of AI Coding Agents in 2026 (September 9 Refresh)</span>
+Survey of AI Coding Agents in 2026 (September 16 Refresh)</span>
 
-    <span class="navbar-meta">September 9, 2026</span>
+    <span class="navbar-meta">September 16, 2026</span>
 
   </nav>
 
@@ -500,101 +613,150 @@ Survey of AI Coding Agents in 2026 (September 9 Refresh)</span>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
 <li><a href="#the-ai-coding-agent-taxonomy" id="toc-the-ai-coding-agent-taxonomy"><span class="toc-section-number">2</span> The AI Coding Agent
 Taxonomy</a></li>
-<li><a href="#cli-native-tools" id="toc-cli-native-tools"><span class="toc-section-number">3</span> CLI-Native Tools</a>
+<li><a href="#model-alternatives-for-coding-agents" id="toc-model-alternatives-for-coding-agents"><span class="toc-section-number">3</span> Model Alternatives for Coding
+Agents</a>
 <ul>
-<li><a href="#aider" id="toc-aider"><span class="toc-section-number">3.1</span> Aider</a></li>
-<li><a href="#opencode" id="toc-opencode"><span class="toc-section-number">3.2</span> OpenCode</a></li>
-<li><a href="#goose-by-block" id="toc-goose-by-block"><span class="toc-section-number">3.3</span> Goose (by Block)</a></li>
-<li><a href="#gemini-cli-by-google" id="toc-gemini-cli-by-google"><span class="toc-section-number">3.4</span> Gemini CLI (by Google)</a></li>
-<li><a href="#plandex" id="toc-plandex"><span class="toc-section-number">3.5</span> Plandex</a></li>
-<li><a href="#swe-agent" id="toc-swe-agent"><span class="toc-section-number">3.6</span> SWE-agent</a></li>
-<li><a href="#openai-codex-cli" id="toc-openai-codex-cli"><span class="toc-section-number">3.7</span> OpenAI Codex CLI</a></li>
-<li><a href="#amp-sourcegraph" id="toc-amp-sourcegraph"><span class="toc-section-number">3.8</span> Amp (Sourcegraph)</a></li>
-<li><a href="#deprecated-and-unverified-tools" id="toc-deprecated-and-unverified-tools"><span class="toc-section-number">3.9</span> Deprecated and Unverified
-Tools</a></li>
-<li><a href="#mentat" id="toc-mentat"><span class="toc-section-number">3.10</span> Mentat</a></li>
-<li><a href="#qwen-code-and-kimi-cli" id="toc-qwen-code-and-kimi-cli"><span class="toc-section-number">3.11</span> Qwen Code and Kimi CLI</a></li>
+<li><a href="#model-provider-and-agent-harness" id="toc-model-provider-and-agent-harness"><span class="toc-section-number">3.1</span> Model, Provider, and Agent
+Harness</a></li>
+<li><a href="#what-matters-for-agentic-coding" id="toc-what-matters-for-agentic-coding"><span class="toc-section-number">3.2</span> What Matters for Agentic
+Coding</a></li>
+<li><a href="#candidate-families-against-the-claude-baseline" id="toc-candidate-families-against-the-claude-baseline"><span class="toc-section-number">3.3</span> Candidate Families Against the
+Claude Baseline</a></li>
+<li><a href="#closed-weight-models" id="toc-closed-weight-models"><span class="toc-section-number">3.4</span> Closed-Weight Models</a>
+<ul>
+<li><a href="#anthropic-claude-baseline" id="toc-anthropic-claude-baseline"><span class="toc-section-number">3.4.1</span> Anthropic / Claude
+Baseline</a></li>
+<li><a href="#openai-gpt-and-codex-models" id="toc-openai-gpt-and-codex-models"><span class="toc-section-number">3.4.2</span> OpenAI / GPT and Codex
+Models</a></li>
+<li><a href="#google-gemini" id="toc-google-gemini"><span class="toc-section-number">3.4.3</span> Google / Gemini</a></li>
+<li><a href="#xai-grok" id="toc-xai-grok"><span class="toc-section-number">3.4.4</span> xAI / Grok</a></li>
+<li><a href="#other-vendors-and-product-specific-models" id="toc-other-vendors-and-product-specific-models"><span class="toc-section-number">3.4.5</span> Other Vendors and
+Product-Specific Models</a></li>
 </ul></li>
-<li><a href="#ide-extensions-and-hybrid-tools" id="toc-ide-extensions-and-hybrid-tools"><span class="toc-section-number">4</span> IDE Extensions and Hybrid Tools</a>
+<li><a href="#open-weight-models" id="toc-open-weight-models"><span class="toc-section-number">3.5</span> Open-Weight Models</a>
 <ul>
-<li><a href="#cline-formerly-claude-dev" id="toc-cline-formerly-claude-dev"><span class="toc-section-number">4.1</span> Cline (formerly Claude
+<li><a href="#qwen" id="toc-qwen"><span class="toc-section-number">3.5.1</span> Qwen</a></li>
+<li><a href="#deepseek" id="toc-deepseek"><span class="toc-section-number">3.5.2</span> DeepSeek</a></li>
+<li><a href="#z.ai-glm" id="toc-z.ai-glm"><span class="toc-section-number">3.5.3</span> Z.AI / GLM</a></li>
+<li><a href="#moonshot-kimi" id="toc-moonshot-kimi"><span class="toc-section-number">3.5.4</span> Moonshot / Kimi</a></li>
+<li><a href="#mistral-devstral" id="toc-mistral-devstral"><span class="toc-section-number">3.5.5</span> Mistral / Devstral</a></li>
+<li><a href="#openai-gpt-oss" id="toc-openai-gpt-oss"><span class="toc-section-number">3.5.6</span> OpenAI / gpt-oss</a></li>
+<li><a href="#meta-llama-and-google-gemma" id="toc-meta-llama-and-google-gemma"><span class="toc-section-number">3.5.7</span> Meta / Llama and Google /
+Gemma</a></li>
+<li><a href="#other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi" id="toc-other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="toc-section-number">3.5.8</span> Other Families: MiniMax, NVIDIA
+Nemotron, IBM Granite, Microsoft Phi</a></li>
+</ul></li>
+<li><a href="#deployment-fit-workstation-server-or-hosted-endpoint" id="toc-deployment-fit-workstation-server-or-hosted-endpoint"><span class="toc-section-number">3.6</span> Deployment Fit: Workstation,
+Server, or Hosted Endpoint</a></li>
+<li><a href="#evidence-and-evaluation" id="toc-evidence-and-evaluation"><span class="toc-section-number">3.7</span> Evidence and Evaluation</a></li>
+<li><a href="#choosing-a-replacement" id="toc-choosing-a-replacement"><span class="toc-section-number">3.8</span> Choosing a Replacement</a></li>
+</ul></li>
+<li><a href="#cli-native-tools" id="toc-cli-native-tools"><span class="toc-section-number">4</span> CLI-Native Tools</a>
+<ul>
+<li><a href="#aider" id="toc-aider"><span class="toc-section-number">4.1</span> Aider</a></li>
+<li><a href="#opencode" id="toc-opencode"><span class="toc-section-number">4.2</span> OpenCode</a></li>
+<li><a href="#goose-by-block" id="toc-goose-by-block"><span class="toc-section-number">4.3</span> Goose (by Block)</a></li>
+<li><a href="#gemini-cli-by-google" id="toc-gemini-cli-by-google"><span class="toc-section-number">4.4</span> Gemini CLI (by Google)</a></li>
+<li><a href="#plandex" id="toc-plandex"><span class="toc-section-number">4.5</span> Plandex</a></li>
+<li><a href="#swe-agent" id="toc-swe-agent"><span class="toc-section-number">4.6</span> SWE-agent</a></li>
+<li><a href="#openai-codex-cli" id="toc-openai-codex-cli"><span class="toc-section-number">4.7</span> OpenAI Codex CLI</a></li>
+<li><a href="#amp-sourcegraph" id="toc-amp-sourcegraph"><span class="toc-section-number">4.8</span> Amp (Sourcegraph)</a></li>
+<li><a href="#deprecated-and-unverified-tools" id="toc-deprecated-and-unverified-tools"><span class="toc-section-number">4.9</span> Deprecated and Unverified
+Tools</a>
+<ul>
+<li><a href="#mentat" id="toc-mentat"><span class="toc-section-number">4.9.1</span> Mentat</a></li>
+</ul></li>
+<li><a href="#qwen-code-and-kimi-cli" id="toc-qwen-code-and-kimi-cli"><span class="toc-section-number">4.10</span> Qwen Code and Kimi CLI</a></li>
+</ul></li>
+<li><a href="#ide-extensions-and-hybrid-tools" id="toc-ide-extensions-and-hybrid-tools"><span class="toc-section-number">5</span> IDE Extensions and Hybrid Tools</a>
+<ul>
+<li><a href="#cline-formerly-claude-dev" id="toc-cline-formerly-claude-dev"><span class="toc-section-number">5.1</span> Cline (formerly Claude
 Dev)</a></li>
-<li><a href="#continue.dev" id="toc-continue.dev"><span class="toc-section-number">4.2</span> Continue.dev</a></li>
+<li><a href="#continue.dev" id="toc-continue.dev"><span class="toc-section-number">5.2</span> Continue.dev</a></li>
 </ul></li>
-<li><a href="#dedicated-ai-ides" id="toc-dedicated-ai-ides"><span class="toc-section-number">5</span> Dedicated AI IDEs</a>
+<li><a href="#dedicated-ai-ides" id="toc-dedicated-ai-ides"><span class="toc-section-number">6</span> Dedicated AI IDEs</a>
 <ul>
-<li><a href="#cursor" id="toc-cursor"><span class="toc-section-number">5.1</span> Cursor</a></li>
-<li><a href="#windsurf-now-devin-desktop-cognition-ai" id="toc-windsurf-now-devin-desktop-cognition-ai"><span class="toc-section-number">5.2</span> Windsurf (now Devin Desktop,
+<li><a href="#cursor" id="toc-cursor"><span class="toc-section-number">6.1</span> Cursor</a></li>
+<li><a href="#windsurf-now-devin-desktop-cognition-ai" id="toc-windsurf-now-devin-desktop-cognition-ai"><span class="toc-section-number">6.2</span> Windsurf (now Devin Desktop,
 Cognition AI)</a></li>
-<li><a href="#zed-ai" id="toc-zed-ai"><span class="toc-section-number">5.3</span> Zed AI</a></li>
-<li><a href="#google-antigravity" id="toc-google-antigravity"><span class="toc-section-number">5.4</span> Google Antigravity</a></li>
-<li><a href="#aws-kiro-ide-and-cli" id="toc-aws-kiro-ide-and-cli"><span class="toc-section-number">5.5</span> AWS Kiro IDE and CLI</a></li>
+<li><a href="#zed-ai" id="toc-zed-ai"><span class="toc-section-number">6.3</span> Zed AI</a></li>
+<li><a href="#google-antigravity" id="toc-google-antigravity"><span class="toc-section-number">6.4</span> Google Antigravity</a></li>
+<li><a href="#aws-kiro-ide-and-cli" id="toc-aws-kiro-ide-and-cli"><span class="toc-section-number">6.5</span> AWS Kiro IDE and CLI</a></li>
 </ul></li>
-<li><a href="#cloud-and-web-platform-agents" id="toc-cloud-and-web-platform-agents"><span class="toc-section-number">6</span> Cloud and Web Platform Agents</a>
+<li><a href="#cloud-and-web-platform-agents" id="toc-cloud-and-web-platform-agents"><span class="toc-section-number">7</span> Cloud and Web Platform Agents</a>
 <ul>
-<li><a href="#grok-bot-xai" id="toc-grok-bot-xai"><span class="toc-section-number">6.1</span> Grok Bot (xAI)</a></li>
-<li><a href="#openhands-formerly-opendevin" id="toc-openhands-formerly-opendevin"><span class="toc-section-number">6.2</span> OpenHands (formerly
+<li><a href="#grok-bot-xai" id="toc-grok-bot-xai"><span class="toc-section-number">7.1</span> Grok Bot (xAI)</a></li>
+<li><a href="#openhands-formerly-opendevin" id="toc-openhands-formerly-opendevin"><span class="toc-section-number">7.2</span> OpenHands (formerly
 OpenDevin)</a></li>
-<li><a href="#devin-by-cognition-ai" id="toc-devin-by-cognition-ai"><span class="toc-section-number">6.3</span> Devin (by Cognition AI)</a></li>
+<li><a href="#devin-by-cognition-ai" id="toc-devin-by-cognition-ai"><span class="toc-section-number">7.3</span> Devin (by Cognition AI)</a></li>
 </ul></li>
-<li><a href="#commercial-ai-coding-assistants" id="toc-commercial-ai-coding-assistants"><span class="toc-section-number">7</span> Commercial AI Coding Assistants</a>
+<li><a href="#commercial-ai-coding-assistants" id="toc-commercial-ai-coding-assistants"><span class="toc-section-number">8</span> Commercial AI Coding Assistants</a>
 <ul>
-<li><a href="#github-copilot-with-agent-mode" id="toc-github-copilot-with-agent-mode"><span class="toc-section-number">7.1</span> GitHub Copilot with Agent
+<li><a href="#github-copilot-with-agent-mode" id="toc-github-copilot-with-agent-mode"><span class="toc-section-number">8.1</span> GitHub Copilot with Agent
 Mode</a></li>
-<li><a href="#amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro" id="toc-amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="toc-section-number">7.2</span> Amazon Q Developer (formerly
+<li><a href="#amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro" id="toc-amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="toc-section-number">8.2</span> Amazon Q Developer (formerly
 CodeWhisperer) – IDE transition to Kiro</a></li>
-<li><a href="#jetbrains-ai-assistant" id="toc-jetbrains-ai-assistant"><span class="toc-section-number">7.3</span> JetBrains AI Assistant</a></li>
-<li><a href="#tabnine" id="toc-tabnine"><span class="toc-section-number">7.4</span> Tabnine</a></li>
-<li><a href="#supermaven-discontinued-folded-into-cursor" id="toc-supermaven-discontinued-folded-into-cursor"><span class="toc-section-number">7.5</span> Supermaven – discontinued, folded
+<li><a href="#jetbrains-ai-assistant" id="toc-jetbrains-ai-assistant"><span class="toc-section-number">8.3</span> JetBrains AI Assistant</a></li>
+<li><a href="#tabnine" id="toc-tabnine"><span class="toc-section-number">8.4</span> Tabnine</a></li>
+<li><a href="#supermaven-discontinued-folded-into-cursor" id="toc-supermaven-discontinued-folded-into-cursor"><span class="toc-section-number">8.5</span> Supermaven – discontinued, folded
 into Cursor</a></li>
 </ul></li>
-<li><a href="#cross-cutting-analysis" id="toc-cross-cutting-analysis"><span class="toc-section-number">8</span> Cross-Cutting Analysis</a>
+<li><a href="#cross-cutting-analysis" id="toc-cross-cutting-analysis"><span class="toc-section-number">9</span> Cross-Cutting Analysis</a>
 <ul>
-<li><a href="#provider-flexibility-analysis" id="toc-provider-flexibility-analysis"><span class="toc-section-number">8.1</span> Provider Flexibility Analysis</a>
+<li><a href="#provider-flexibility-analysis" id="toc-provider-flexibility-analysis"><span class="toc-section-number">9.1</span> Provider Flexibility Analysis</a>
 <ul>
-<li><a href="#openrouter-compatibility" id="toc-openrouter-compatibility"><span class="toc-section-number">8.1.1</span> OpenRouter
+<li><a href="#openrouter-compatibility" id="toc-openrouter-compatibility"><span class="toc-section-number">9.1.1</span> OpenRouter
 Compatibility</a></li>
-<li><a href="#local-llm-support-ollama-lm-studio" id="toc-local-llm-support-ollama-lm-studio"><span class="toc-section-number">8.1.2</span> Local LLM Support (Ollama / LM
+<li><a href="#local-llm-support-ollama-lm-studio" id="toc-local-llm-support-ollama-lm-studio"><span class="toc-section-number">9.1.2</span> Local LLM Support (Ollama / LM
 Studio)</a></li>
 </ul></li>
-<li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">8.2</span> Feature Comparison Matrix</a></li>
-<li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">8.3</span> Extensibility Deep Dive</a>
+<li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">9.2</span> Feature Comparison Matrix</a></li>
+<li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">9.3</span> Extensibility Deep Dive</a>
 <ul>
-<li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">8.3.1</span> Claude Code’s Extension
+<li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">9.3.1</span> Claude Code’s Extension
 Architecture</a></li>
-<li><a href="#how-alternatives-compare" id="toc-how-alternatives-compare"><span class="toc-section-number">8.3.2</span> How Alternatives
+<li><a href="#how-alternatives-compare" id="toc-how-alternatives-compare"><span class="toc-section-number">9.3.2</span> How Alternatives
 Compare</a></li>
-<li><a href="#the-agents.md-open-standard" id="toc-the-agents.md-open-standard"><span class="toc-section-number">8.3.3</span> The AGENTS.md Open
+<li><a href="#the-agents.md-open-standard" id="toc-the-agents.md-open-standard"><span class="toc-section-number">9.3.3</span> The AGENTS.md Open
 Standard</a></li>
-<li><a href="#what-this-means-for-migration" id="toc-what-this-means-for-migration"><span class="toc-section-number">8.3.4</span> What This Means for
+<li><a href="#what-this-means-for-migration" id="toc-what-this-means-for-migration"><span class="toc-section-number">9.3.4</span> What This Means for
 Migration</a></li>
 </ul></li>
-<li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">8.4</span> Cost Analysis</a>
+<li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">9.4</span> Cost Analysis</a>
 <ul>
-<li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">8.4.1</span> Defining “Heavy Usage”</a></li>
-<li><a href="#api-cost-estimates-direct-provider-as-of-august-31-2026" id="toc-api-cost-estimates-direct-provider-as-of-august-31-2026"><span class="toc-section-number">8.4.2</span> API Cost Estimates (Direct
-Provider, as of August 31, 2026)</a></li>
-<li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">8.4.3</span> Per-Tool Cost Summary</a></li>
-<li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">8.4.4</span> Cost Migration Strategy</a></li>
+<li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">9.4.1</span> Defining “Heavy Usage”</a></li>
+<li><a href="#api-cost-estimates-direct-provider-as-of-september-16-2026" id="toc-api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="toc-section-number">9.4.2</span> API Cost Estimates (Direct
+Provider, as of September 16, 2026)</a></li>
+<li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">9.4.3</span> Per-Tool Cost Summary</a></li>
+<li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">9.4.4</span> Cost Migration Strategy</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#recommendations" id="toc-recommendations"><span class="toc-section-number">9</span> Recommendations</a>
+<li><a href="#recommendations" id="toc-recommendations"><span class="toc-section-number">10</span> Recommendations</a>
 <ul>
-<li><a href="#if-you-want-the-closest-cli-experience-to-claude-code" id="toc-if-you-want-the-closest-cli-experience-to-claude-code"><span class="toc-section-number">9.1</span> If you want the closest CLI
+<li><a href="#if-you-want-the-closest-cli-experience-to-claude-code" id="toc-if-you-want-the-closest-cli-experience-to-claude-code"><span class="toc-section-number">10.1</span> If you want the closest CLI
 experience to Claude Code</a></li>
-<li><a href="#if-you-want-the-best-ide-integrated-alternative" id="toc-if-you-want-the-best-ide-integrated-alternative"><span class="toc-section-number">9.2</span> If you want the best
+<li><a href="#if-you-want-the-best-ide-integrated-alternative" id="toc-if-you-want-the-best-ide-integrated-alternative"><span class="toc-section-number">10.2</span> If you want the best
 IDE-integrated alternative</a></li>
-<li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">9.3</span> If cost is the primary
+<li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">10.3</span> If cost is the primary
 constraint</a></li>
-<li><a href="#if-you-need-persistent-cross-application-or-asynchronous-work" id="toc-if-you-need-persistent-cross-application-or-asynchronous-work"><span class="toc-section-number">9.4</span> If you need persistent
+<li><a href="#if-you-need-persistent-cross-application-or-asynchronous-work" id="toc-if-you-need-persistent-cross-application-or-asynchronous-work"><span class="toc-section-number">10.4</span> If you need persistent
 cross-application or asynchronous work</a></li>
-<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">9.5</span> If MCP server investments are
+<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">10.5</span> If MCP server investments are
 critical</a></li>
-<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">9.6</span> If you need extensibility similar
+<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">10.6</span> If you need extensibility similar
 to Claude Code’s skills+hooks</a></li>
-<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">9.7</span> Migration strategy</a></li>
+<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">10.7</span> Migration strategy</a></li>
 </ul></li>
-<li><a href="#references" id="toc-references"><span class="toc-section-number">10</span> References</a></li>
+<li><a href="#references" id="toc-references"><span class="toc-section-number">11</span> References</a>
+<ul>
+<li><a href="#model-documentation-and-licences" id="toc-model-documentation-and-licences"><span class="toc-section-number">11.1</span> Model Documentation and
+Licences</a></li>
+<li><a href="#model-evaluations-and-practitioner-reports" id="toc-model-evaluations-and-practitioner-reports"><span class="toc-section-number">11.2</span> Model Evaluations and
+Practitioner Reports</a></li>
+<li><a href="#tool-and-pricing-documentation" id="toc-tool-and-pricing-documentation"><span class="toc-section-number">11.3</span> Tool and Pricing
+Documentation</a></li>
+<li><a href="#secondary-background" id="toc-secondary-background"><span class="toc-section-number">11.4</span> Secondary Background</a></li>
+</ul></li>
 </ul></div>
 
     </aside>
@@ -602,6 +764,7 @@ to Claude Code’s skills+hooks</a></li>
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
     <main class="content">
+      <div class="content-inner">
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
 <p>Claude Code has established itself as one of the most capable agentic
 coding tools available: it runs in the terminal and supported editors,
@@ -617,37 +780,48 @@ across Claude, Claude Code, and Claude Desktop. The plan landscape for
 AI tools changes rapidly, and a prudent engineer should understand the
 full landscape of alternatives before needing them.</p>
 <p>This document surveys the landscape of AI coding agents available as
-of <strong>September 9, 2026</strong>: open-source CLI tools, IDE
+of <strong>September 16, 2026</strong>: open-source CLI tools, IDE
 extensions, dedicated AI IDEs, cloud platform agents, and commercial
 assistants. For each, it covers architecture, provider flexibility,
-MCP/extensibility support, and realistic cost.</p>
+MCP/extensibility support, realistic cost, and the model capabilities
+that determine whether a tool can replace a Claude Code workflow.
+Choosing the agent harness and choosing the model are related but
+separate decisions: the same model can behave differently under
+different context, editing, permission, and recovery machinery.</p>
 <p><strong>A note on methodology and provenance:</strong> This document
 was originally drafted from an AI model’s training-data snapshot
 (accurate as of approximately August 2025), then refreshed via live web
-research in July and August 2026. The August 31 pass rechecked the most
-volatile claims against first-party product pages, including Claude and
-Codex limits, Amp’s subscription and Orb pricing, Cline’s
-terminal/plugin/hook support, Goose’s current repository, Kiro’s unified
-IDE/CLI/Web architecture, Gemini CLI’s transition status, and current
+research in July, August, and September 2026. The August 31 pass
+rechecked the most volatile claims against first-party product pages,
+including Claude and Codex limits, Amp’s subscription and Orb pricing,
+Cline’s terminal/plugin/hook support, Goose’s current repository, Kiro’s
+unified IDE/CLI/Web architecture, Gemini CLI’s transition status, and
 DeepSeek pricing. The September 9 pass added Grok Bot and checked its
 launch, architecture, controls, privacy requirements, and current access
-against first-party xAI pages. Dated facts carry a date at the point
-where the distinction matters, with corresponding sources in the
-References section.</p>
+against first-party xAI pages. The September 16 pass rechecked the
+current Claude, OpenAI, Gemini, DeepSeek, and Z.AI model lineups and
+added practitioner reports about model routing and agent-harness
+reliability. Dated facts carry a date at the point where the distinction
+matters, with corresponding sources in the References section.</p>
 <p><strong>Freshness note:</strong> In this field, some sections can age
 in weeks, not quarters. Treat pricing, benchmark rankings, and
 model-version statements as snapshots tied to their stated dates.</p>
 <p><strong>How to read this document:</strong> If you want the fastest
-path to a conclusion, jump to the <a href="#feature-comparison-matrix">Feature Comparison Matrix</a>, the <a href="#provider-flexibility-analysis">Provider Flexibility Analysis</a>,
-and the <a href="#recommendations">Recommendations</a>. The deep-dive
-sections are there for when you need to evaluate a specific tool
-seriously.</p>
+path to a conclusion, start with <a href="#model-alternatives-for-coding-agents">Model Alternatives for
+Coding Agents</a> to choose a capability and deployment shortlist, then
+use the <a href="#feature-comparison-matrix">Feature Comparison
+Matrix</a>, <a href="#provider-flexibility-analysis">Provider
+Flexibility Analysis</a>, and <a href="#recommendations">Recommendations</a> to choose the harness and
+operating policy. The deep-dive sections are there for when you need to
+evaluate a specific tool seriously.</p>
 <p>This survey covers tools that were verifiable and actively maintained
 as of September 2026. It does not cover tools no longer in active
 development, purely GUI-based editors with no API or CLI surface, or
-general-purpose LLM interfaces that happen to accept code. Cloud IDE
-platforms (Replit, Gitpod, etc.) are out of scope unless they offer a
-dedicated coding-agent mode. Where a claim could not be verified, it is
+general-purpose LLM interfaces that happen to accept code. The model
+section is a coding- and agent-workflow survey, not a catalogue of every
+chat, image, embedding, or research model. Cloud IDE platforms (Replit,
+Gitpod, etc.) are out of scope unless they offer a dedicated
+coding-agent mode. Where a claim could not be verified, it is
 flagged.</p>
 <hr />
 <h1 data-number="2" id="the-ai-coding-agent-taxonomy"><span class="header-section-number">2</span> The AI Coding Agent Taxonomy</h1>
@@ -683,8 +857,695 @@ the IDE and cloud categories contain tools capable enough to be worth
 understanding as alternatives – especially if your workflow includes
 time in an editor.</p>
 <hr />
-<h1 data-number="3" id="cli-native-tools"><span class="header-section-number">3</span> CLI-Native Tools</h1>
-<h2 data-number="3.1" id="aider"><span class="header-section-number">3.1</span> Aider</h2>
+<h1 data-number="3" id="model-alternatives-for-coding-agents"><span class="header-section-number">3</span> Model Alternatives for Coding
+Agents</h1>
+<p>Choosing an agent and choosing its model are separate decisions. You
+can preserve a familiar editing workflow while changing the inference
+endpoint, or keep the model while changing how the agent gathers context
+and executes work. This section is the model survey for the
+<strong>September 16, 2026</strong> snapshot; the tool profiles that
+follow describe the surrounding products. The objective is to identify
+candidates for your workload, not to translate every Claude name into
+another vendor’s tier.</p>
+<h2 data-number="3.1" id="model-provider-and-agent-harness"><span class="header-section-number">3.1</span> Model, Provider, and Agent
+Harness</h2>
+<p>The <strong>model</strong> is the learned set of numerical weights; a
+<strong>checkpoint</strong> is a particular saved version of those
+weights. Training, architecture, and post-training determine what it can
+infer and the kinds of responses it can produce. A family name alone
+does not specify the checkpoint, reasoning setting, input modalities, or
+serving configuration you will actually use.</p>
+<p>The <strong>inference provider</strong> runs the model and returns
+its output. A gateway such as OpenRouter can add another routing layer
+between your agent and that provider. Providers can differ in model
+revisions, context limits, supported request fields, availability,
+retention, and inference speed. An API-compatible endpoint can accept a
+request while interpreting some fields differently; matching the API
+shape is not proof of equivalent behaviour.</p>
+<p>The <strong>agent harness</strong> supplies repository context,
+presents tool definitions, applies edits, enforces permissions, executes
+commands, and handles retries, compaction, and recovery. The model
+proposes a tool call; the harness or a provider service executes it.
+Shell access, apply-patch execution, and Model Context Protocol (MCP)
+connections are harness or product capabilities, not facilities embedded
+in model weights. A model must still generate valid arguments and
+interpret the results correctly. Diagnose failures at the right layer
+before replacing the model.</p>
+<p>For example, if a patch targets an outdated file fragment, the model
+may have misunderstood the code, the harness may have retained stale
+context, or the edit adapter may have rejected an otherwise useful
+change. Record the attempted edit and tool response: a final answer
+saying “fixed” does not identify which layer failed.</p>
+<h2 data-number="3.2" id="what-matters-for-agentic-coding"><span class="header-section-number">3.2</span> What Matters for Agentic
+Coding</h2>
+<p>Start with <strong>edit correctness</strong>: does the change satisfy
+the task, preserve unrelated behaviour, and respect repository
+conventions? Test <strong>tool-call validity</strong> separately: valid
+schemas, real paths, appropriate commands, and correct handling of tool
+results. Then test <strong>multi-step recovery</strong> by giving the
+agent a failed build, rejected patch, missing dependency, or interrupted
+session. An agent that repeatedly applies the same failing fix is not
+reliable merely because its first code sample was convincing.</p>
+<p><strong>Effective context</strong> is the material the model can use
+coherently, not the maximum token count an endpoint accepts. A token is
+a unit of encoded text or other input; context includes instructions,
+source, tool results, and conversation history. Test whether constraints
+survive a long session and its compaction into a shorter summary.
+<strong>Modality</strong> matters when the task depends on screenshots
+or diagrams: the checkpoint, provider, and harness must all support the
+relevant input. Text-only models can still work with extracted text, but
+cannot inspect the original visual evidence.</p>
+<p>Measure <strong>latency and cost per accepted task</strong>,
+including retries and human correction. A low token price can lose its
+advantage after repeated failed edits. <strong>Reasoning
+controls</strong> change how much inference work the model spends before
+responding; effort names and budgets are not comparable units across
+vendors. Test settings with a fixed task budget rather than assuming
+that every “high” setting behaves alike.</p>
+<p><strong>Operational privacy</strong> follows the entire data path. A
+local terminal can send source to a hosted model, and a local model can
+sit inside a harness that sends telemetry or invokes remote tools.
+Decide whether repository contents may leave the workstation, an
+internal server, or an approved hosted boundary. Check the provider and
+gateway’s applicable retention and access controls as well as the
+harness configuration.</p>
+<p>Use four operational roles: <strong>bounded support</strong> for
+inventory, summaries, log triage, and small constrained transformations;
+<strong>normal implementation</strong> for the edit-test loop;
+<strong>hard diagnosis</strong> for uncertain causes and repeated
+failures; and <strong>independent review</strong> for checking a
+proposed change against evidence. These roles specify work and
+authority. They are not universal Haiku, Sonnet, Opus, or Fable
+equivalents.</p>
+<h2 data-number="3.3" id="candidate-families-against-the-claude-baseline"><span class="header-section-number">3.3</span> Candidate Families Against the
+Claude Baseline</h2>
+<p>Use this <strong>September 16, 2026</strong> shortlist to decide what
+to test against your existing Claude configuration. Rows select
+representative checkpoints, not equivalent vendor tiers. Coding and
+recovery suggestions are <strong>qualitative synthesis</strong>;
+context, input support, and prices are <strong>documented
+specifications</strong>, not measured task performance. The later <a href="#evidence-and-evaluation">evaluation discussion</a> separates
+benchmark results from practitioner reports. The profiles below explain
+each family’s qualifications.</p>
+<p>Price pairs mean <strong>USD per million uncached input / output
+tokens</strong>, for the named direct API and standard service unless
+stated otherwise. They are cost anchors, not subscription prices or cost
+per completed task. Context figures are advertised limits; they do not
+measure how well instructions survive a long session.</p>
+<div class="broad-table">
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 27%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Family / example</th>
+<th>Coding / recovery focus</th>
+<th>Context / visual input</th>
+<th>Cost / deployment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://platform.claude.com/docs/en/models/overview">Claude
+baseline</a></td>
+<td>Pin model and effort; measure edits, calls, and recovery</td>
+<td>Sonnet 5: 1M; images</td>
+<td>Hosted; Sonnet 5 <a href="https://platform.claude.com/docs/en/about-claude/pricing">$2 /
+$10</a></td>
+</tr>
+<tr>
+<td><a href="https://developers.openai.com/api/docs/models">GPT / Codex
+models</a></td>
+<td>Reasoning and function calls; test difficult fixes</td>
+<td>GPT-5.6/6: 1.05M; images</td>
+<td>Hosted; Terra <a href="https://developers.openai.com/api/docs/pricing">$2 / $12</a>,
+short context</td>
+</tr>
+<tr>
+<td><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash">Gemini
+3.8 Flash</a></td>
+<td>Tool-driven implementation; test long-session recovery</td>
+<td>~1M input; images, video, audio, PDFs</td>
+<td>Hosted; <a href="https://ai.google.dev/gemini-api/docs/pricing">$0.75 / $3.75</a>,
+promotional</td>
+</tr>
+<tr>
+<td><a href="https://docs.x.ai/developers/models/grok-4.6">Grok
+4.6</a></td>
+<td>Reasoning and function calls; test edit-loop reliability</td>
+<td>500K; images</td>
+<td>Hosted; $2 / $6 at up to 200K context</td>
+</tr>
+<tr>
+<td><a href="https://qwenlm.github.io/blog/qwen3-coder/">Qwen /
+Qwen3-Coder</a></td>
+<td>Coding-specialized tools; test patch correctness</td>
+<td>Coder: 256K native; vision varies by checkpoint</td>
+<td>Open; large Coder needs servers; smaller variants offer local
+experiments</td>
+</tr>
+<tr>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek
+V4.1 Flash</a></td>
+<td>Thinking and tool calls; test failed-fix recovery</td>
+<td>1M; images</td>
+<td>Open/server or API; $0.30 / $1.20 peak; half off-peak</td>
+</tr>
+<tr>
+<td><a href="https://docs.z.ai/guides/llm/glm-5">Z.AI / GLM-5</a></td>
+<td>Engineering and tool use; test planning through execution</td>
+<td>200K; text only for GLM-5</td>
+<td>Open/server or hosted; coding-plan quotas differ from API
+billing</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/moonshotai/Kimi-K3">Kimi K3</a></td>
+<td>Long implementation and visual tasks; test reasoning-state
+continuity</td>
+<td>1M; images and video</td>
+<td>Open; hosted or substantial cluster; release-specific licence</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512">Devstral
+Small 2</a></td>
+<td>Code-focused multi-file edits; test recovery after rejected
+patches</td>
+<td>256K; images</td>
+<td>Open, Apache 2.0; 24B local candidate, with runtime/context
+costs</td>
+</tr>
+<tr>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-oss-20b">gpt-oss-20b
+/ 120b</a></td>
+<td>General reasoning and calls; test tool-format compatibility</td>
+<td>~131K; text only</td>
+<td>Open, Apache 2.0; 20b local candidate; 120b needs much more
+memory</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Cost and evidence limits:</strong> Gemini’s quoted promotion
+runs through December 31, 2026; OpenAI and Grok charge more for
+long-context requests. Caching, reasoning output, provider tools, and
+retries change the bill. Self-hosting replaces API charges with
+hardware, energy, and serving work; open weights do not imply lower
+total cost or unrestricted licensing. Compare accepted changes, elapsed
+time, and correction effort with the same Claude baseline before
+claiming parity or savings. This table supplies no measured ranking,
+guaranteed workstation fit, or proven Fable substitute.</p>
+<h2 data-number="3.4" id="closed-weight-models"><span class="header-section-number">3.4</span> Closed-Weight Models</h2>
+<p>Closed-weight models are available through services without
+downloadable weights for independent deployment. Their model
+documentation establishes advertised capabilities; your subscription or
+endpoint determines actual access. Keep a known Claude configuration as
+a baseline when testing alternatives.</p>
+<h3 data-number="3.4.1" id="anthropic-claude-baseline"><span class="header-section-number">3.4.1</span> Anthropic / Claude
+Baseline</h3>
+<p>Anthropic’s current catalogue lists Haiku 4.5, Sonnet 5, Opus 5, and
+Fable 5.1. It positions Haiku around speed, Sonnet around the
+speed/capability balance, Opus as a starting point for most workloads,
+and Fable for demanding reasoning and extended agentic work. Those are
+vendor positions, not fixed task classes. The documented context and
+reasoning controls differ, so record the exact model and effort used in
+your baseline. See the <a href="https://platform.claude.com/docs/en/models/overview">Anthropic
+model overview</a>.</p>
+<p>A replacement should be compared with the Claude configuration you
+actually use on the same repository tasks. Reproducing a result from
+Claude Code may require preserving context selection and edit tooling as
+well as changing the model. No evidence presented here establishes a
+proven Fable equivalent.</p>
+<h3 data-number="3.4.2" id="openai-gpt-and-codex-models"><span class="header-section-number">3.4.2</span> OpenAI / GPT and Codex
+Models</h3>
+<p>OpenAI’s hosted catalogue includes GPT-6 Astra and GPT-5.6 Sol,
+Terra, and Luna. OpenAI positions Astra for its hardest reasoning and
+coding work, Sol for complex professional work, Terra for balancing
+capability and cost, and Luna for cost-sensitive workloads. These are
+useful shortlist distinctions; they do not establish equivalence to
+Anthropic tiers. Check each model’s supported modalities, context,
+function calling, and reasoning settings in the <a href="https://developers.openai.com/api/docs/models">OpenAI model
+catalogue</a>. Treat OpenAI’s comparative coding scores as vendor
+evaluations.</p>
+<p><strong>Codex is also a product and access path</strong>, not a
+synonym for one immutable model. Codex-branded model releases and the
+models available inside Codex can change independently of API
+availability. A Codex subscription, hosted GPT API usage, and a
+self-hosted checkpoint are different arrangements; see the <a href="https://learn.chatgpt.com/docs/models">current product model
+documentation</a> and the <a href="#openai-codex-cli">Codex CLI
+profile</a> for the product layer. An API listing shell, apply-patch, or
+MCP support describes integration with those tools, not a model
+executing them unaided.</p>
+<p>OpenAI’s <strong>gpt-oss-20b and gpt-oss-120b</strong> are a separate
+open-weight family, covered below. They are not downloadable versions of
+GPT-5.6 or GPT-6, and an open-source Codex client does not make the
+hosted GPT weights open.</p>
+<h3 data-number="3.4.3" id="google-gemini"><span class="header-section-number">3.4.3</span> Google / Gemini</h3>
+<p>Google’s catalogue spans Pro, Flash, and Flash-Lite models. In this
+snapshot, Gemini 3.1 Pro remains a preview option, while Gemini 3.8
+Flash is listed as stable and aimed at long software-engineering and
+agent tasks; Gemini 3.5 Flash-Lite targets throughput. Confirm lifecycle
+status and input support in the <a href="https://ai.google.dev/gemini-api/docs/models">Gemini model
+catalogue</a>, rather than treating “Pro” as an automatic coding
+winner.</p>
+<p>Gemini merits evaluation when code must be interpreted alongside
+screenshots, documents, or other supported media. Large advertised
+context windows make repository-scale experiments possible, but do not
+establish constraint retention or recovery quality. Test those directly.
+Gemini CLI and Antigravity access, tools, and quotas belong to their
+tool profiles; neither is a property of the underlying Gemini
+checkpoint.</p>
+<h3 data-number="3.4.4" id="xai-grok"><span class="header-section-number">3.4.4</span> xAI / Grok</h3>
+<p>Grok belongs in the model shortlist independently of Grok Bot. xAI’s
+<a href="https://docs.x.ai/developers/models/grok-4.6">Grok 4.6
+documentation</a> describes a hosted frontier model for coding and
+agentic tasks with function calling, structured output, reasoning,
+text/image input, and a 500K context window. Those specifications
+justify testing function-call correctness and recovery in your chosen
+coding harness; xAI’s quality claims do not establish performance on
+your repository.</p>
+<p>Check the exact endpoint’s reasoning controls, image support, and
+context limits. Search services and a persistent cloud computer belong
+to provider tools or products. In particular, access to a Grok API model
+does not supply Grok Bot’s execution environment. Earlier downloadable
+Grok releases also do not establish that the current hosted model has
+downloadable weights.</p>
+<h3 data-number="3.4.5" id="other-vendors-and-product-specific-models"><span class="header-section-number">3.4.5</span> Other Vendors and
+Product-Specific Models</h3>
+<p>A managed coding product may select private models, fine-tunes, or
+several vendors behind its interface. Evaluate the resulting product if
+it is useful, but do not infer a portable model choice from its brand
+name or a successful demo. Without a documented checkpoint or selectable
+endpoint, its results cannot answer whether the same behaviour will
+transfer to another harness. The existing commercial-tool profiles cover
+those product decisions.</p>
+<h2 data-number="3.5" id="open-weight-models"><span class="header-section-number">3.5</span> Open-Weight Models</h2>
+<p><strong>Open weights</strong> means that you can obtain the model’s
+learned parameters and run them yourself under the release’s licence. It
+does not necessarily mean unrestricted use, published training data, or
+a fully reproducible training process. Check the licence for the exact
+checkpoint. Many open-weight families also have hosted endpoints:
+downloadable weights and local deployment are separate facts.</p>
+<p>Several families use a <strong>mixture-of-experts (MoE)</strong>
+architecture: a router activates only a subset of expert networks for
+each token. Active parameters help explain computation per token; the
+full collection of weights still needs storage and an effective way to
+reach the processors. <strong>Quantization</strong> stores weights or
+intermediate values at reduced numerical precision, lowering memory
+demand and sometimes compute cost, with accuracy and runtime-support
+tradeoffs. A quantized checkpoint is a configuration to evaluate, not a
+guarantee of unchanged tool-use reliability.</p>
+<h3 data-number="3.5.1" id="qwen"><span class="header-section-number">3.5.1</span> Qwen</h3>
+<p>Qwen includes coding-specific and general-purpose models. Qwen3-Coder
+explicitly targets multi-turn software-engineering work with tool
+feedback. Its documented 480B-total/35B-active variant has 256K native
+context and an extended-context option; Qwen’s reported coding results
+are vendor evaluations. That variant belongs on a server or
+hosted-endpoint shortlist, not a conventional single-GPU workstation
+shortlist. See the <a href="https://qwenlm.github.io/blog/qwen3-coder/">Qwen3-Coder
+release</a>.</p>
+<p>For a workstation experiment, the existing <a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B model
+card</a> documents a general multimodal model with reasoning controls.
+It is not the same checkpoint or specialization as Qwen3-Coder. A
+quantized 27B model is a plausible 24GB-class experiment at controlled
+context, subject to runtime overhead. Smaller Qwen checkpoints offer
+more memory margin; verify their own tool format and coding results.
+Qwen Code is the harness discussed later, not a capability inherited by
+every Qwen model.</p>
+<h3 data-number="3.5.2" id="deepseek"><span class="header-section-number">3.5.2</span> DeepSeek</h3>
+<p>DeepSeek V4.1 Flash is available as an open-weight release as well as
+through the hosted <code>deepseek-flash</code> endpoint. The <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">model
+card</a> describes a multimodal MoE with a 552B-parameter backbone plus
+additional components, long context, and controllable reasoning. “Flash”
+does not make this a workstation model: low active compute does not
+remove its large weight-storage requirement.</p>
+<p>Use the <a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek API
+documentation</a> to identify the hosted route and current limits, and
+the checkpoint’s deployment instructions for self-hosting. The two
+routes need separate validation. Published coding and terminal scores
+are vendor results with specified harnesses; they do not prove recovery
+quality in yours. Smaller DeepSeek-derived or distilled checkpoints are
+separate models, not compact deployments of the full V4.1 system, and
+need their own evaluations.</p>
+<h3 data-number="3.5.3" id="z.ai-glm"><span class="header-section-number">3.5.3</span> Z.AI / GLM</h3>
+<p>Z.AI positions <a href="https://docs.z.ai/guides/llm/glm-5">GLM-5</a>
+for agentic engineering, including planning, refactoring, and debugging.
+Its documented 744B total parameters versus 40B active make the
+deployment distinction concrete: this is a server-scale model despite
+its much smaller active computation. The published 200K context window
+is a specification; completion rates and long-task reliability remain
+evaluation questions.</p>
+<p>The <a href="https://autoclaw.z.ai/blog/model/glm-5.3-flash/">GLM-5.3-Flash
+announcement</a>, dated September 16, describes native multimodal input
+and reduced inference requirements, but still lists 320B total
+parameters. Treat its performance comparisons as launch claims and
+verify checkpoint availability, serving support, and tool parsing before
+adoption. Smaller GLM variants may fit local experiments; neither the
+GLM name nor a coding-plan subscription establishes that a particular
+model fits your workstation.</p>
+<h3 data-number="3.5.4" id="moonshot-kimi"><span class="header-section-number">3.5.4</span> Moonshot / Kimi</h3>
+<p>Moonshot’s <a href="https://www.kimi.ai/blog/kimi-k3">Kimi K3
+technical account</a> describes a 2.8-trillion-parameter model with
+native vision and a million-token context window; <a href="https://huggingface.co/moonshotai/Kimi-K3">released weights have
+their own model card</a>. Its scale makes it a hosted-endpoint or
+substantial server-cluster candidate. Moonshot recommends large
+accelerator deployments, so it is not a practical workstation
+replacement even with reduced-precision weights.</p>
+<p>Kimi is relevant to long implementation sessions and visually
+informed work such as frontend debugging. Test whether the selected
+endpoint preserves reasoning state and tool results across turns, and
+whether its reasoning mode meets your latency budget. The <a href="https://platform.kimi.ai/docs/guide/kimi-k3-quickstart">K3
+developer guide</a> describes the API contract; launch demos and vendor
+benchmarks do not establish independent-review accuracy. Kimi CLI
+remains a separate harness choice.</p>
+<h3 data-number="3.5.5" id="mistral-devstral"><span class="header-section-number">3.5.5</span> Mistral / Devstral</h3>
+<p>Devstral is Mistral’s coding-agent family, trained for repository
+exploration and multi-file software-engineering work. Its smaller
+downloadable variants offer a more realistic workstation experiment than
+the largest MoE families: Mistral’s <a href="https://mistral.ai/news/devstral-2-vibe-cli/">Devstral release</a>
+describes a 24B small model as well as the larger model. Quantization,
+context allocation, and the serving stack still determine whether your
+machine can sustain an agent loop.</p>
+<p>Separate those checkpoints from hosted lifecycle status. Mistral
+currently marks the <a href="https://docs.mistral.ai/models/devstral-2-25-12">Devstral 2
+endpoint deprecated</a> and points new integrations to <a href="https://docs.mistral.ai/models/mistral-medium-3-5-26-04">Mistral
+Medium 3.5</a>, a multimodal model optimized for coding and agentic use
+with 256K context and open weights under a Modified MIT licence. That
+does not invalidate an existing local Devstral checkpoint, nor establish
+that Medium fits the same hardware. Evaluate the exact release, licence,
+and deployment instructions.</p>
+<h3 data-number="3.5.6" id="openai-gpt-oss"><span class="header-section-number">3.5.6</span> OpenAI / gpt-oss</h3>
+<p><a href="https://developers.openai.com/api/docs/models/gpt-oss-20b">OpenAI
+gpt-oss-20b</a> and <a href="https://developers.openai.com/api/docs/models/gpt-oss-120b">gpt-oss-120b</a>
+are text-only open-weight reasoning models under Apache 2.0. They
+support configurable reasoning effort and function-call generation, but
+are general reasoning models rather than downloadable versions of the
+hosted Codex/GPT coding stack. The names round their total parameter
+counts: OpenAI documents about 21B/3.6B total/active for the smaller
+model and 117B/5.1B for the larger.</p>
+<p>OpenAI’s <a href="https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama">local
+Ollama guide</a> describes supplied MXFP4 reduced-precision weights and
+a 16GB-or-more memory starting point for 20b; the 120b model is an
+approximately 80GB accelerator-class candidate with room depending on
+runtime and context. These are deployment starting points, not measured
+capacity for your workload. Preserve the required Harmony conversation
+format, including reasoning and tool boundaries, through the serving
+adapter. Test malformed calls, long-context recovery, and reasoning
+latency before giving either model write authority. Screenshots require
+a separate visual-processing path.</p>
+<h3 data-number="3.5.7" id="meta-llama-and-google-gemma"><span class="header-section-number">3.5.7</span> Meta / Llama and Google /
+Gemma</h3>
+<p>Llama offers downloadable general-purpose checkpoints with an
+established deployment ecosystem, but the family name does not imply
+code specialization. Meta’s <a href="https://github.com/meta-llama/llama-models/blob/main/README.md">model
+repository</a> separates releases and their prompt formats; its
+full-precision Llama 4 examples require multiple GPUs. Smaller releases
+can be useful local baselines for summaries, retrieval over code, and
+bounded changes. Do not transfer results between generations, base and
+instruction-tuned checkpoints, or third-party coding fine-tunes.</p>
+<p><a href="https://ai.google.dev/gemma/docs/core">Google’s Gemma
+overview</a> likewise describes a general-purpose open-weight family,
+distinct from hosted Gemini. Its current catalogue includes small
+deployment-oriented models and larger dense and MoE options, with
+modality varying by checkpoint. Gemma is useful when local memory limits
+or visual input drive the experiment, but a supported function-call
+format does not establish dependable autonomous coding. Check the exact
+release’s licence, input support, and edit-test behaviour before moving
+beyond bounded support.</p>
+<h3 data-number="3.5.8" id="other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="header-section-number">3.5.8</span> Other Families: MiniMax,
+NVIDIA Nemotron, IBM Granite, Microsoft Phi</h3>
+<p><a href="https://github.com/MiniMax-AI/MiniMax-M2">MiniMax’s coding
+and agent releases</a> merit a hosted or server evaluation; their sparse
+active computation can obscure large total weights. <a href="https://research.nvidia.com/labs/nemotron/Nemotron-3/">NVIDIA
+Nemotron</a> spans general reasoning and agent workloads across
+different deployment sizes. Its optimized runtime ecosystem may matter
+to an existing NVIDIA installation, but the family is not exclusively
+code-specialized and its larger variants are not workstation
+defaults.</p>
+<p><a href="https://github.com/ibm-granite/granite-code-models">IBM
+Granite Code</a> provides explicitly code-oriented checkpoints;
+distinguish code completion and instruction variants from general
+Granite models when evaluating an agent loop. <a href="https://huggingface.co/microsoft/Phi-4-mini-instruct">Microsoft
+Phi</a> offers small general instruction/reasoning models suitable for
+constrained local experiments. For these smaller models, start with
+extraction, summaries, and tightly scoped edits. Compact size alone says
+nothing about reliable multi-file recovery.</p>
+<h2 data-number="3.6" id="deployment-fit-workstation-server-or-hosted-endpoint"><span class="header-section-number">3.6</span> Deployment Fit: Workstation,
+Server, or Hosted Endpoint</h2>
+<p>Size the deployment for the actual checkpoint and workload. GPU video
+memory (VRAM), shared system memory, and memory spread across several
+devices are not interchangeable performance budgets. CPU offload can
+make a model load while slowing every agent step; multiple GPUs require
+runtime support and sufficiently fast communication. The classes below
+are starting points for testing, not guaranteed fits.</p>
+<div class="broad-table">
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 42%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Available accelerator memory</th>
+<th>Candidate deployment class</th>
+<th>Main constraint to measure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>~16GB class</td>
+<td>Small quantized Qwen, Gemma, Llama, Phi, or Granite checkpoints;
+gpt-oss-20b at the lower bound with a supported runtime</td>
+<td>This is a 16GB-or-more starting point, not a sub-16GB guarantee;
+weight overhead and context cache can exhaust the margin</td>
+</tr>
+<tr>
+<td>24GB</td>
+<td>Quantized models around 20–30B, such as smaller Devstral or
+Qwen3.8-27B; gpt-oss-20b with more headroom</td>
+<td>Long context and simultaneous sessions may consume the margin</td>
+</tr>
+<tr>
+<td>~80GB</td>
+<td>gpt-oss-120b or selected quantized larger dense models</td>
+<td>The advertised fit may leave insufficient room for your context or
+serving batch</td>
+</tr>
+<tr>
+<td>Multi-GPU / server</td>
+<td>Large Qwen3-Coder, DeepSeek, GLM, Kimi, and other large MoE
+checkpoints</td>
+<td>Total weight storage, interconnect bandwidth, runtime support, and
+concurrency</td>
+</tr>
+<tr>
+<td>Hosted endpoint</td>
+<td>Any offered model that meets your data-boundary policy</td>
+<td>Provider limits, queueing, request compatibility, and retention</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <strong>key/value (KV) cache</strong> stores attention state for
+previously processed tokens. Its size depends on architecture,
+precision, sequence length, and simultaneous sequences. Full-attention,
+sliding-window, and compressed-cache architectures have different
+requirements. Active parameters alone therefore cannot determine memory
+capacity; neither can a downloaded weight-file size.</p>
+<p>For a small worked example, assume a hypothetical dense
+14-billion-parameter model, ideal four-bit weight storage, 1 GiB of
+additional weight/quantization overhead, and a 2 GiB runtime reserve.
+Assume full attention with 32 layers, eight KV heads per layer, 128
+values per head, two-byte cache values, one sequence, and no cache
+sharing or compression. GiB here means 2^30 bytes. At 8,192 resident
+tokens, including generated tokens, the estimate is:</p>
+<pre class="text"><code>Weight payload = 14,000,000,000 × 4 / 8 bytes ~= 6.52 GiB
+KV cache       = 32 × 8,192 × 2 (key and value) × 8 × 128 × 2 bytes
+               = 1 GiB
+Total          ~= 6.52 + 1 + 2 + 1 = 10.52 GiB</code></pre>
+<p>At 32,768 tokens, that cache becomes 4 GiB and the estimate rises to
+13.52 GiB. Two independent sequences of that length need about 8 GiB of
+cache, bringing the estimate to 17.52 GiB before any extra batching
+overhead: too much for a 16 GiB budget. This is capacity arithmetic, not
+a benchmark or a prediction for the named models above. Measure actual
+peak allocation and latency. Hardware purchase, electricity, and
+administration costs belong in <a href="#cost-analysis">Cost
+Analysis</a>.</p>
+<h2 data-number="3.7" id="evidence-and-evaluation"><span class="header-section-number">3.7</span> Evidence and Evaluation</h2>
+<p>Keep four evidence types separate. <strong>Vendor specifications and
+claims</strong> establish intended formats, supported settings,
+licences, and published limits; vendor benchmark results show
+performance under that vendor’s evaluation conditions.
+<strong>Common-harness snapshots</strong> reduce some comparison
+differences but still depend on tasks, budgets, prompts, and model
+adapters. <strong>Practitioner reports</strong> reveal failure modes
+worth reproducing, not population-level success rates. <strong>Local
+deployment measurements</strong> establish whether your selected
+quantization, runtime, hardware, and concurrency meet your
+requirements.</p>
+<p>As one common-harness snapshot, the <a href="https://deepswe.datacurve.ai/">DeepSWE v1.1 leaderboard</a> labels
+its update September 3, 2026 and reports 113 long-horizon tasks using
+<code>mini-swe-agent</code>. Selected rows:</p>
+<div class="compact-table">
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model and setting</th>
+<th style="text-align: right;">Resolution rate</th>
+<th style="text-align: right;">Average cost</th>
+<th>Notes / scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-6 Astra, xhigh</td>
+<td style="text-align: right;">74% ±3%</td>
+<td style="text-align: right;">$6.52/task</td>
+<td>xhigh setting</td>
+</tr>
+<tr>
+<td>Gemini 3.8 Flash, high</td>
+<td style="text-align: right;">74% ±1%</td>
+<td style="text-align: right;">$2.36/task</td>
+<td>166 average agent steps</td>
+</tr>
+<tr>
+<td>Claude Opus 5, max</td>
+<td style="text-align: right;">74% ±4%</td>
+<td style="text-align: right;">$11.84/task</td>
+<td>max setting</td>
+</tr>
+<tr>
+<td>Claude Fable 5, xhigh</td>
+<td style="text-align: right;">70% ±3%</td>
+<td style="text-align: right;">$13.41/task</td>
+<td>Fable 5, not 5.1</td>
+</tr>
+<tr>
+<td>GPT-5.6 Luna, max</td>
+<td style="text-align: right;">67% ±4%</td>
+<td style="text-align: right;">$0.61/task</td>
+<td>No interactive-latency measurement</td>
+</tr>
+<tr>
+<td>DeepSeek V4 Pro, max</td>
+<td style="text-align: right;">63% ±6%</td>
+<td style="text-align: right;">$1.67/task</td>
+<td>Not V4.1 Flash</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The uncertainty bands are reproduced as displayed. Overlap, differing
+effort settings, and benchmark-specific cost accounting preclude a
+universal ordering. This snapshot does not establish permission safety
+or performance in another harness.</p>
+<p>The linked practitioner material includes <a href="https://github.com/openai/codex/issues/23807">Codex long-task
+stalls</a>, <a href="https://github.com/anomalyco/opencode/issues/11314">OpenCode
+context-coherence concerns</a>, and <a href="https://github.com/anthropics/claude-code/issues/44976">requests
+for Claude routing</a>. Use those reports to design interruption,
+context, and escalation tests. They do not establish that one vendor
+fails more often. Community comparisons in the References are similarly
+leads for evaluation, not a substitute for controlled runs.</p>
+<p>For a local comparison, start with 20–30 representative repository
+tasks across the four roles, including tasks with known acceptance
+criteria and deliberately failing commands or patches. Run each
+candidate from the same initial revision under the intended permissions
+and budget. Record the checkpoint or API identifier, provider, harness
+version, reasoning setting, context policy, and, when self-hosting,
+quantization and runtime. Repeat ambiguous cases; do not hide retries
+behind a final success rate.</p>
+<p>Measure accepted task outcomes, regressions, invalid calls, recovery
+attempts, elapsed time, human correction time, and cost. For local
+serving, also record peak memory, time to first token, generation speed,
+and failures at the intended context and concurrency. This survey does
+not supply measured workstation results; the capacity example above is
+explicitly an estimate.</p>
+<h2 data-number="3.8" id="choosing-a-replacement"><span class="header-section-number">3.8</span> Choosing a Replacement</h2>
+<p>Start with your deployment boundary and the consequences of an
+incorrect autonomous action, then shortlist models for a task role. The
+table supplies experiments, not winners. Keep the Claude baseline where
+its use is permitted, and compare actual accepted changes rather than
+the confidence of the final explanation.</p>
+<div class="broad-table">
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 34%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Task role</th>
+<th>Autonomy risk</th>
+<th>Deployment boundary and evaluation shortlist</th>
+<th>What to test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bounded support</td>
+<td>Low when read-only; rises with writes</td>
+<td>Approved hosted: Luna, Gemini Flash-Lite, DeepSeek Flash;
+workstation: smaller Qwen, Gemma, Phi, or gpt-oss-20b</td>
+<td>Extraction accuracy, constrained edit correctness, valid calls,
+response latency</td>
+</tr>
+<tr>
+<td>Normal implementation</td>
+<td>Moderate; changes multiple files</td>
+<td>Approved hosted: Terra, Gemini Pro/Flash, Grok; self-hosted:
+Qwen3-Coder or Devstral sized to available hardware</td>
+<td>Edit-test completion, unrelated-change avoidance, rejected-patch
+recovery</td>
+</tr>
+<tr>
+<td>Hard diagnosis</td>
+<td>High when uncertain conclusions trigger broad changes</td>
+<td>Approved hosted: Astra, Sol, Claude baseline; hosted open-weight or
+internal server: GLM, Kimi, DeepSeek</td>
+<td>Evidence-backed root cause, regression tests, recovery from failed
+hypotheses, stopping within budget</td>
+</tr>
+<tr>
+<td>Independent review</td>
+<td>Read-only, but false assurance can conceal defects</td>
+<td>A different family from the implementer, through a boundary
+permitted for the diff and source</td>
+<td>Reproducible findings, missed defects, false positives, and whether
+evidence supports approval</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Routing is a <strong>policy to validate on your repository</strong>.
+One starting policy is to allow bounded support without writes, assign
+ordinary changes to a tested implementation configuration, and escalate
+repeated failures or uncertain causes to diagnosis. Define an escalation
+trigger, such as two failed repair attempts, and a total time or spend
+limit. A more capable model does not automatically receive broader
+permissions.</p>
+<p>For review, provide the task contract, diff, relevant source, test
+results, and unresolved questions. A different family may expose
+different assumptions, but does not guarantee statistical independence
+or detect every shared blind spot. Keep review findings tied to
+reproducible evidence. The model survey identifies what to test; <a href="#provider-flexibility-analysis">Provider Flexibility Analysis</a>
+and the tool profiles establish which harnesses can deliver the chosen
+policy.</p>
+<hr />
+<h1 data-number="4" id="cli-native-tools"><span class="header-section-number">4</span> CLI-Native Tools</h1>
+<h2 data-number="4.1" id="aider"><span class="header-section-number">4.1</span> Aider</h2>
 <p><strong>What it is:</strong> Aider is the most mature and
 architecturally similar open-source alternative to Claude Code. It is a
 terminal-based pair-programming tool that works directly with your
@@ -718,9 +1579,9 @@ plans the changes and a second cheaper model applies them, reducing
 cost</li>
 </ul>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install aider-chat</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or with uv</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install aider-chat</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install aider-chat</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or with uv</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install aider-chat</span></code></pre></div>
 <p><strong>LLM provider support:</strong> Aider supports all major
 providers via litellm, including:</p>
 <ul>
@@ -739,17 +1600,17 @@ Studio)</li>
 <li>Groq, Mistral, Cohere, and many others</li>
 </ul>
 <p><strong>OpenRouter setup (verified):</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">OPENROUTER_API_KEY</span><span class="op">=</span>sk-or-...</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/anthropic/claude-sonnet-5</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or any OpenRouter-hosted model:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/deepseek/deepseek-v4-pro</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/google/gemini-3.1-pro-preview</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">OPENROUTER_API_KEY</span><span class="op">=</span>sk-or-...</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/anthropic/claude-sonnet-5</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or any OpenRouter-hosted model:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/deepseek/deepseek-v4-pro</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/google/gemini-3.1-pro-preview</span></code></pre></div>
 <p><strong>Local LLM setup (Ollama):</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start Ollama with a coding model first (example tag; verify the current model catalogue)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen2.5-coder:7b</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Then run Aider</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> ollama/qwen2.5-coder:7b</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start Ollama with a coding model first (example tag; verify the current model catalogue)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen2.5-coder:7b</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Then run Aider</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> ollama/qwen2.5-coder:7b</span></code></pre></div>
 <p><strong>Agentic capabilities:</strong> Aider can run shell commands
 via the <code>/run</code> command and in <code>--auto-run</code> mode
 will execute suggested commands automatically. It maintains a context of
@@ -801,7 +1662,7 @@ explicitly <code>/add</code> files) - Less capable at long multi-step
 autonomous tasks compared to Claude Code - No built-in web search or
 browser use - Development cadence has slowed relative to faster-moving
 competitors</p>
-<h2 data-number="3.2" id="opencode"><span class="header-section-number">3.2</span> OpenCode</h2>
+<h2 data-number="4.2" id="opencode"><span class="header-section-number">4.2</span> OpenCode</h2>
 <p><strong>What it is:</strong> OpenCode is an open-source coding agent
 with a rich terminal UI (TUI), a client/server architecture, and support
 for a very wide range of LLM providers.</p>
@@ -824,11 +1685,11 @@ intelligence, meaning it can provide type-aware, semantically accurate
 code context rather than just raw file contents. Multi-session support
 allows you to maintain separate contexts for different tasks.</p>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># via npm (cross-platform)</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> opencode-ai</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># or directly via binary release</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://opencode.ai/install <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># via npm (cross-platform)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> opencode-ai</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># or directly via binary release</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://opencode.ai/install <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> OpenCode supports 75+ LLM
 providers (verified) including:</p>
 <ul>
@@ -882,7 +1743,7 @@ the old bundled plugin route is prohibited by Anthropic and is no longer
 shipped - Org/rebrand churn (<code>sst/opencode</code> →
 <code>anomalyco/opencode</code>) means older documentation and links may
 be stale</p>
-<h2 data-number="3.3" id="goose-by-block"><span class="header-section-number">3.3</span> Goose (by Block)</h2>
+<h2 data-number="4.3" id="goose-by-block"><span class="header-section-number">4.3</span> Goose (by Block)</h2>
 <p><strong>What it is:</strong> Goose is an open-source, on-device AI
 coding agent developed by Block (formerly Square, the company associated
 with Jack Dorsey). It is available as a CLI, a desktop application, and
@@ -902,8 +1763,8 @@ tool, not a bolted-on integration. Goose documents 70+ extensions and
 broad compatibility with the MCP ecosystem, so existing MCP investments
 generally carry over directly.</p>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># macOS, Linux, or Windows</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># macOS, Linux, or Windows</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> Goose is model-agnostic and
 supports multiple provider configurations simultaneously, with 15+
 documented provider integrations including Anthropic, OpenAI, Google,
@@ -937,7 +1798,7 @@ ecosystem</p>
 desktop app orientation means some rough edges in headless terminal use
 - Younger MCP ecosystem integration story than Claude Code’s, despite
 the architecture being sound</p>
-<h2 data-number="3.4" id="gemini-cli-by-google"><span class="header-section-number">3.4</span> Gemini CLI (by Google)</h2>
+<h2 data-number="4.4" id="gemini-cli-by-google"><span class="header-section-number">4.4</span> Gemini CLI (by Google)</h2>
 <p><strong>What it is:</strong> Gemini CLI is Google’s open-source
 terminal AI agent, released in mid-2025. It is powered by the Gemini
 model family. Google announced a transition to Antigravity CLI: from
@@ -957,12 +1818,13 @@ large context window – among the largest of any CLI coding tool. This
 means you can load entire codebases into context rather than managing
 file additions manually.</p>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @google/gemini-cli</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gemini</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @google/gemini-cli</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gemini</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> Gemini CLI is primarily
-designed for Google’s Gemini models
-(<code>gemini-3.1-pro-preview</code>, <code>gemini-3.5-flash</code>, and
-the model aliases exposed by the installed release). It is not
+designed for Google’s Gemini models; exact aliases exposed by the
+installed release change as Google migrates the consumer path toward
+Antigravity CLI. The current Gemini API catalogue includes Gemini 3.8
+Flash, 3.7 Flash, 3.5 Flash-Lite, and 3.1 Pro Preview. It is not
 model-agnostic in the same way as Aider or OpenCode.</p>
 <p><strong>Access and quotas:</strong> Google’s transition announcement
 says individual free, Pro, and Ultra access moved to Antigravity CLI on
@@ -997,7 +1859,7 @@ no longer the supported Gemini CLI path; migrate to Antigravity CLI -
 Gemini models, while capable, may not match Claude’s code quality for
 your specific use cases - Less battle-tested than Aider - Node.js
 dependency</p>
-<h2 data-number="3.5" id="plandex"><span class="header-section-number">3.5</span> Plandex</h2>
+<h2 data-number="4.5" id="plandex"><span class="header-section-number">4.5</span> Plandex</h2>
 <p><strong>What it is:</strong> Plandex is an open-source CLI agent with
 a distinctive planning-first approach. Rather than immediately executing
 changes, it plans multi-file, multi-step tasks and builds up pending
@@ -1014,14 +1876,14 @@ working tree. This makes Plandex the most review-oriented tool in the
 category – it assumes you want to understand what’s happening before it
 happens.</p>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install client</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sL</span> https://plandex.ai/install.sh <span class="kw">|</span> <span class="fu">bash</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cloud server (free tier available)</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">plandex</span> sign-in</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Or self-host the server</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker-compose</span> up <span class="at">-d</span>  <span class="co"># with the plandex-server repo</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install client</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sL</span> https://plandex.ai/install.sh <span class="kw">|</span> <span class="fu">bash</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cloud server (free tier available)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">plandex</span> sign-in</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Or self-host the server</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">docker-compose</span> up <span class="at">-d</span>  <span class="co"># with the plandex-server repo</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> Plandex supports OpenAI models
 directly and OpenAI-compatible APIs, which includes many providers.
 OpenRouter support via the OpenAI-compatible endpoint is possible.</p>
@@ -1040,7 +1902,7 @@ multi-file tasks</p>
 quick edits - Less interactive than Aider or OpenCode - Client-server
 architecture adds complexity - LLM provider support less broad than
 Aider/OpenCode - Smaller community</p>
-<h2 data-number="3.6" id="swe-agent"><span class="header-section-number">3.6</span> SWE-agent</h2>
+<h2 data-number="4.6" id="swe-agent"><span class="header-section-number">4.6</span> SWE-agent</h2>
 <p><strong>What it is:</strong> SWE-agent is a research tool from
 Princeton NLP lab, designed primarily for automated software engineering
 on GitHub issues. It achieves high scores on the SWE-bench benchmark. It
@@ -1070,7 +1932,7 @@ not interactive - Research-oriented design means rough UX edges - Slower
 than interactive tools - Not designed for the ad-hoc, exploratory coding
 sessions that Claude Code excels at - Primary development momentum has
 moved to mini-swe-agent; SWE-agent proper sees less active iteration</p>
-<h2 data-number="3.7" id="openai-codex-cli"><span class="header-section-number">3.7</span> OpenAI Codex CLI</h2>
+<h2 data-number="4.7" id="openai-codex-cli"><span class="header-section-number">4.7</span> OpenAI Codex CLI</h2>
 <p><strong>What it is:</strong> Codex CLI is OpenAI’s open-source
 terminal coding agent, open-sourced April 16, 2025. It is OpenAI’s
 direct answer to Claude Code and Gemini CLI: a terminal-native agent
@@ -1086,15 +1948,18 @@ a fast startup and low overhead compared to Node.js- or Python-based
 competitors. It defaults to OpenAI’s own hosted models but also supports
 local model backends.</p>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @openai/codex</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or via the standalone Rust binary release</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @openai/codex</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or via the standalone Rust binary release</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span></span></code></pre></div>
 <p><strong>Model support:</strong> The current Codex subscription lineup
 is the GPT-5.6 family: Sol, Terra, and Luna. Sol is the high-capability
 choice, Terra balances capability and allowance, and Luna stretches
 usage furthest. Available models depend on plan and may change, so
 <code>/model</code> and <code>/status</code> are more reliable than a
 hard-coded model name in a long-lived guide.</p>
+<p>The GPT-6 Astra model is also available in the current OpenAI model
+catalogue; use the installed Codex <code>/model</code> listing rather
+than assuming every plan exposes every model.</p>
 <p><strong>Local model support:</strong> Codex CLI can run against local
 models via an <code>--oss</code> flag, with documented Ollama and LM
 Studio providers. This gives it a genuine offline/local-only mode,
@@ -1126,7 +1991,7 @@ own models and ChatGPT plans; using it as a purely model-agnostic tool
 is a secondary use case - Newer than Aider/OpenCode as a CLI-first
 product, despite OpenAI’s scale - Model availability and usage
 allowances change quickly, making static comparisons easy to age</p>
-<h2 data-number="3.8" id="amp-sourcegraph"><span class="header-section-number">3.8</span> Amp (Sourcegraph)</h2>
+<h2 data-number="4.8" id="amp-sourcegraph"><span class="header-section-number">4.8</span> Amp (Sourcegraph)</h2>
 <p><strong>What it is:</strong> Amp is Sourcegraph’s hybrid
 CLI-plus-cloud coding agent. It pairs a local CLI with cloud-hosted
 “Orbs” for offloading longer-running or parallel work. Orbs are remote
@@ -1138,6 +2003,13 @@ cloud-side Orbs for longer-running or parallel work. Sourcegraph
 heritage informs the product, but this survey does not assume that every
 Sourcegraph code-intelligence feature is available inside Amp. The CLI
 handles local interactive work; Orbs handle cloud-side execution.</p>
+<p><strong>Deployment boundary:</strong> Enterprise customers can now
+run self-hosted Orbs in their own AWS, Google Cloud, or Azure account
+and network. That keeps the repository checkout, build output, and
+paused Orb files in the customer’s cloud account, but it does not make
+Amp self-contained: the Amp service still runs the conversation, and
+file contents, command output, and code changes may travel through Amp
+and the selected model provider.</p>
 <p><strong>LLM provider support:</strong> Multi-model, with supported
 provider-key configuration and plugin/skill/hook extensibility. It is
 flexible, but “model-agnostic” overstates the default curated product
@@ -1161,10 +2033,11 @@ skills, and hooks - No markup on individual pay-as-you-go pricing</p>
 separate meters, so a subscription is not an all-in fixed-cost plan -
 Newer product identity means less accumulated community track record
 than Sourcegraph’s older Cody product - Cloud “Orbs” component means it
-is not a purely local/offline tool in the way Aider or Goose can be</p>
-<h2 data-number="3.9" id="deprecated-and-unverified-tools"><span class="header-section-number">3.9</span> Deprecated and Unverified
+is not a purely local/offline tool in the way Aider or Goose can be;
+self-hosted Orbs still depend on Amp’s hosted control plane</p>
+<h2 data-number="4.9" id="deprecated-and-unverified-tools"><span class="header-section-number">4.9</span> Deprecated and Unverified
 Tools</h2>
-<h2 data-number="3.10" id="mentat"><span class="header-section-number">3.10</span> Mentat</h2>
+<h3 data-number="4.9.1" id="mentat"><span class="header-section-number">4.9.1</span> Mentat</h3>
 <p><strong>What it is:</strong> Mentat was a Python-based CLI coding
 tool and an early entrant in the space, taking a conversational approach
 to code editing with explicit context management.</p>
@@ -1183,7 +2056,7 @@ archived on May 15, 2026 and is now read-only. The project has publicly
 directed users to alternatives such as Cline and ZooCode. There is no
 live “current tool” entry for Roo Code in this document – by the time of
 this refresh it is itself historical.</p>
-<h2 data-number="3.11" id="qwen-code-and-kimi-cli"><span class="header-section-number">3.11</span> Qwen Code and Kimi CLI</h2>
+<h2 data-number="4.10" id="qwen-code-and-kimi-cli"><span class="header-section-number">4.10</span> Qwen Code and Kimi CLI</h2>
 <p><strong>What they are:</strong> These are CLI coding agents from
 Chinese AI labs – Qwen Code from Alibaba’s Qwen team and Kimi CLI from
 Moonshot AI. Both are classified alongside Claude Code and Aider as CLI
@@ -1198,9 +2071,9 @@ CLI uses Kimi’s models with a very long context window.</p>
 <p><strong>Note:</strong> These tools were not covered by this round’s
 research refresh. Treat specific capability claims with appropriate
 scepticism until you test them directly.</p>
-<h1 data-number="4" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">4</span> IDE Extensions and Hybrid
+<h1 data-number="5" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">5</span> IDE Extensions and Hybrid
 Tools</h1>
-<h2 data-number="4.1" id="cline-formerly-claude-dev"><span class="header-section-number">4.1</span> Cline (formerly Claude
+<h2 data-number="5.1" id="cline-formerly-claude-dev"><span class="header-section-number">5.1</span> Cline (formerly Claude
 Dev)</h2>
 <p><strong>What it is:</strong> Cline is an open-source autonomous
 coding agent that operates primarily as a VS Code extension. It is
@@ -1298,7 +2171,7 @@ CLI)</p>
 workflows, and platform support is not uniform - Browser use capability
 means it can have unintended side effects if not supervised - Less
 scriptable than pure CLI tools</p>
-<h2 data-number="4.2" id="continue.dev"><span class="header-section-number">4.2</span> Continue.dev</h2>
+<h2 data-number="5.2" id="continue.dev"><span class="header-section-number">5.2</span> Continue.dev</h2>
 <p><strong>What it is:</strong> Continue.dev is an open-source AI coding
 assistant for VS Code and JetBrains IDEs. It combines autocomplete,
 chat, and agent capabilities in a single extension, with deep
@@ -1339,13 +2212,13 @@ via <code>apiBase</code>)</li>
 <li>Self-hosted models via any OpenAI-compatible endpoint</li>
 </ul>
 <p><strong>Ollama setup (verified):</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.continue/config.yaml</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Local coding model&quot;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen2.5-coder:7b</span><span class="co">  # verify the current Ollama model tag</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    # For remote Ollama:</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    # apiBase: http://192.168.1.100:11434</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.continue/config.yaml</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Local coding model&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen2.5-coder:7b</span><span class="co">  # verify the current Ollama model tag</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">    # For remote Ollama:</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">    # apiBase: http://192.168.1.100:11434</span></span></code></pre></div>
 <p><strong>Agent mode:</strong> Continue.dev’s agent mode allows it to
 make multi-file edits based on instructions. Tool support depends on the
 underlying model – models must support function/tool calling. Note: some
@@ -1367,8 +2240,8 @@ CLI is supplementary, not a terminal-first redesign - Agent mode quality
 depends heavily on the model’s tool-calling capabilities - Less capable
 at long agentic chains than Cline or Claude Code - JetBrains support is
 less mature than VS Code</p>
-<h1 data-number="5" id="dedicated-ai-ides"><span class="header-section-number">5</span> Dedicated AI IDEs</h1>
-<h2 data-number="5.1" id="cursor"><span class="header-section-number">5.1</span> Cursor</h2>
+<h1 data-number="6" id="dedicated-ai-ides"><span class="header-section-number">6</span> Dedicated AI IDEs</h1>
+<h2 data-number="6.1" id="cursor"><span class="header-section-number">6.1</span> Cursor</h2>
 <p><strong>What it is:</strong> Cursor is a VS Code fork with deep AI
 integration baked into every layer of the editor. It has become one of
 the most widely adopted commercial AI coding tools, with a large user
@@ -1445,7 +2318,7 @@ support - Proprietary – you are dependent on Anysphere remaining a going
 concern and maintaining pricing - Heavier than a terminal tool –
 requires a full VS Code instance - Usage-based credit pricing makes
 monthly cost less predictable than the old flat-request model</p>
-<h2 data-number="5.2" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">5.2</span> Windsurf (now Devin Desktop,
+<h2 data-number="6.2" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">6.2</span> Windsurf (now Devin Desktop,
 Cognition AI)</h2>
 <p><strong>What it is:</strong> Windsurf was an AI-first IDE built by
 Codeium, positioned as a direct competitor to Cursor. Its standout
@@ -1492,7 +2365,7 @@ long-term - Less model flexibility than Cursor - Smaller community than
 Cursor; documentation is still catching up to the rebrand - Easy to
 confuse with Cognition’s separate cloud Devin product, which has
 different pricing and a different execution model</p>
-<h2 data-number="5.3" id="zed-ai"><span class="header-section-number">5.3</span> Zed AI</h2>
+<h2 data-number="6.3" id="zed-ai"><span class="header-section-number">6.3</span> Zed AI</h2>
 <p><strong>What it is:</strong> Zed is a high-performance code editor
 written in Rust, designed for speed and minimal latency. Its AI
 integration (Zed AI) brings Claude as the default model into this fast
@@ -1532,7 +2405,7 @@ on Zed’s own agent</p>
 less mature than Cursor’s or Devin Desktop’s - Windows is supported
 alongside macOS and Linux - Token-based overage billing can be less
 predictable than a flat monthly fee for heavy users</p>
-<h2 data-number="5.4" id="google-antigravity"><span class="header-section-number">5.4</span> Google Antigravity</h2>
+<h2 data-number="6.4" id="google-antigravity"><span class="header-section-number">6.4</span> Google Antigravity</h2>
 <p><strong>What it is:</strong> Google Antigravity is Google’s
 agent-first development platform. It includes Antigravity CLI, the
 Antigravity 2.0 desktop application, IDE integrations, an SDK, and
@@ -1570,7 +2443,7 @@ open-weight models - Under active development by Google</p>
 battle-tested - Product and pricing details remain volatile across
 surfaces - No general BYOK/OpenRouter path for extending account
 quotas</p>
-<h2 data-number="5.5" id="aws-kiro-ide-and-cli"><span class="header-section-number">5.5</span> AWS Kiro IDE and CLI</h2>
+<h2 data-number="6.5" id="aws-kiro-ide-and-cli"><span class="header-section-number">6.5</span> AWS Kiro IDE and CLI</h2>
 <p><strong>What it is:</strong> Kiro is AWS’s agentic development
 environment, available as a VS Code-based desktop IDE, terminal-native
 CLI, web surface, and mobile companion. These surfaces share one agent
@@ -1614,9 +2487,9 @@ model and task, so heavy-use cost is not a flat subscription - Closed
 source and tied to AWS’s product and model availability - Newer than the
 established IDEs; verify regional model access and feature
 availability</p>
-<h1 data-number="6" id="cloud-and-web-platform-agents"><span class="header-section-number">6</span> Cloud and Web Platform
+<h1 data-number="7" id="cloud-and-web-platform-agents"><span class="header-section-number">7</span> Cloud and Web Platform
 Agents</h1>
-<h2 data-number="6.1" id="grok-bot-xai"><span class="header-section-number">6.1</span> Grok Bot (xAI)</h2>
+<h2 data-number="7.1" id="grok-bot-xai"><span class="header-section-number">7.1</span> Grok Bot (xAI)</h2>
 <p><strong>What it is:</strong> Grok Bot is xAI’s commercial, hosted
 computer-use agent. xAI launched it in beta on <strong>August 11,
 2026</strong> as a set of persistent AI teammates rather than as another
@@ -1686,7 +2559,7 @@ and sessions can be available to the user’s other Bots</li>
 <li>Beta product with rapidly changing plan eligibility, quotas, and
 administrative controls</li>
 </ul>
-<h2 data-number="6.2" id="openhands-formerly-opendevin"><span class="header-section-number">6.2</span> OpenHands (formerly
+<h2 data-number="7.2" id="openhands-formerly-opendevin"><span class="header-section-number">7.2</span> OpenHands (formerly
 OpenDevin)</h2>
 <p><strong>What it is:</strong> OpenHands is a highly capable
 open-source AI software engineer designed to solve complex software
@@ -1720,28 +2593,28 @@ browser-based UI for interacting with the agent</li>
 integration</li>
 </ul>
 <p><strong>Installation:</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Via Docker (recommended; the registry&#39;s default tag tracks the current runtime)</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull docker.all-hands.dev/all-hands-ai/runtime</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lightweight CLI binary (for terminal-first use)</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install openhands-cli</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Via Docker (recommended; the registry&#39;s default tag tracks the current runtime)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull docker.all-hands.dev/all-hands-ai/runtime</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lightweight CLI binary (for terminal-first use)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install openhands-cli</span></code></pre></div>
 <p><strong>LLM provider support:</strong> OpenHands supports multiple
 LLM providers via litellm, including Anthropic, OpenAI, Google, and
 others.</p>
 <p><strong>MCP support:</strong> OpenHands supports MCP server
 configuration across three transport types – SSE, Streamable HTTP, and
 stdio:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fetch&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uvx&quot;</span><span class="fu">,</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mcp-server-fetch&quot;</span><span class="ot">]</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;notion&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;https://mcp.notion.com/mcp&quot;</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fetch&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;uvx&quot;</span><span class="fu">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mcp-server-fetch&quot;</span><span class="ot">]</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;notion&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;https://mcp.notion.com/mcp&quot;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>For stdio servers, a proxy approach (SuperGateway/FastMCP) is
 recommended over direct stdio for reliability. Note: the claim that
 OpenHands “natively discovers MCP tools automatically” remains refuted –
@@ -1756,7 +2629,7 @@ tools - Primarily a cloud/web platform – less suitable for quick
 interactive sessions - Slower to start up than CLI tools (Docker
 container spin-up) - Not a terminal-first tool despite having a CLI
 option</p>
-<h2 data-number="6.3" id="devin-by-cognition-ai"><span class="header-section-number">6.3</span> Devin (by Cognition AI)</h2>
+<h2 data-number="7.3" id="devin-by-cognition-ai"><span class="header-section-number">7.3</span> Devin (by Cognition AI)</h2>
 <p><strong>What it is:</strong> Devin was the first high-profile “AI
 software engineer” capable of autonomously solving complex GitHub issues
 end-to-end. It is a commercial cloud product from Cognition AI.</p>
@@ -1782,9 +2655,9 @@ levels</p>
 still make heavy-use costs less predictable than a simple flat
 subscription - Fully proprietary – no control over the stack - Not a CLI
 tool</p>
-<h1 data-number="7" id="commercial-ai-coding-assistants"><span class="header-section-number">7</span> Commercial AI Coding
+<h1 data-number="8" id="commercial-ai-coding-assistants"><span class="header-section-number">8</span> Commercial AI Coding
 Assistants</h1>
-<h2 data-number="7.1" id="github-copilot-with-agent-mode"><span class="header-section-number">7.1</span> GitHub Copilot with Agent
+<h2 data-number="8.1" id="github-copilot-with-agent-mode"><span class="header-section-number">8.1</span> GitHub Copilot with Agent
 Mode</h2>
 <p><strong>What it is:</strong> GitHub Copilot is Microsoft/GitHub’s AI
 coding assistant. It now spans autocomplete, chat, an in-IDE “Agent
@@ -1837,7 +2710,7 @@ enterprise-managed custom models are different paths - Agent Mode and
 Copilot Coding Agent are two separate mental models to learn, with
 different sync/async execution semantics - Less suited for non-GitHub
 workflows</p>
-<h2 data-number="7.2" id="amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="header-section-number">7.2</span> Amazon Q Developer (formerly
+<h2 data-number="8.2" id="amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="header-section-number">8.2</span> Amazon Q Developer (formerly
 CodeWhisperer) – IDE transition to Kiro</h2>
 <p><strong>What it is:</strong> Amazon Q Developer is AWS’s AI coding
 assistant, with deep integration into the AWS ecosystem (rebranded from
@@ -1870,7 +2743,7 @@ mode is now genuinely general-purpose, not AWS-console-limited</p>
 closed - AWS-focused – less useful for non-AWS codebases - Provider
 choice limited to Claude via Bedrock/CLI; no OpenRouter or broad
 model-agnosticism</p>
-<h2 data-number="7.3" id="jetbrains-ai-assistant"><span class="header-section-number">7.3</span> JetBrains AI Assistant</h2>
+<h2 data-number="8.3" id="jetbrains-ai-assistant"><span class="header-section-number">8.3</span> JetBrains AI Assistant</h2>
 <p><strong>What it is:</strong> JetBrains AI Assistant is integrated
 into IntelliJ IDEA, PyCharm, WebStorm, GoLand, and all other JetBrains
 IDEs. It provides chat, completion, and an autonomous multi-step agent
@@ -1906,7 +2779,7 @@ agent mode or Cline on complex multi-file tasks - Pricing and
 entitlements vary between standalone AI plans, IDE bundles, and
 external-agent paths, adding cost-tracking overhead - JetBrains IDEs
 remain heavier than VS Code</p>
-<h2 data-number="7.4" id="tabnine"><span class="header-section-number">7.4</span> Tabnine</h2>
+<h2 data-number="8.4" id="tabnine"><span class="header-section-number">8.4</span> Tabnine</h2>
 <p><strong>What it is:</strong> Tabnine is an AI coding assistant with a
 long history (one of the first serious AI coding tools), historically
 focused on fast, high-quality inline completions. It has since pivoted
@@ -1935,7 +2808,7 @@ $39/$59/month) – no longer the budget completions option it once was -
 Agentic capability is newer and less proven than Cursor, Cline, or
 Claude Code - Being overtaken by Cursor/Windsurf on raw completion
 quality</p>
-<h2 data-number="7.5" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">7.5</span> Supermaven – discontinued,
+<h2 data-number="8.5" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">8.5</span> Supermaven – discontinued,
 folded into Cursor</h2>
 <p><strong>What it is:</strong> Supermaven was a VS Code-focused
 autocomplete tool with a very large context window for completions (300k
@@ -1947,22 +2820,23 @@ absorbed the team and technology, and Cursor has integrated Supermaven’s
 completion engine into its tab-completion feature. If Supermaven was
 your tool of choice, Cursor is its direct successor; there is no
 standalone Supermaven product to evaluate separately.</p>
-<h1 data-number="8" id="cross-cutting-analysis"><span class="header-section-number">8</span> Cross-Cutting Analysis</h1>
-<h2 data-number="8.1" id="provider-flexibility-analysis"><span class="header-section-number">8.1</span> Provider Flexibility
+<h1 data-number="9" id="cross-cutting-analysis"><span class="header-section-number">9</span> Cross-Cutting Analysis</h1>
+<h2 data-number="9.1" id="provider-flexibility-analysis"><span class="header-section-number">9.1</span> Provider Flexibility
 Analysis</h2>
 <p>A critical factor for Claude Code users concerned about API costs is
 whether an alternative tool is model-agnostic – allowing you to route
 requests to cheaper models, local models, or whichever provider has the
 best current pricing.</p>
-<h3 data-number="8.1.1" id="openrouter-compatibility"><span class="header-section-number">8.1.1</span> OpenRouter Compatibility</h3>
+<h3 data-number="9.1.1" id="openrouter-compatibility"><span class="header-section-number">9.1.1</span> OpenRouter Compatibility</h3>
 <p>OpenRouter is a unified API gateway that provides access to hundreds
 of models from dozens of providers under a single API key, with
 pay-per-token pricing and no monthly subscription.</p>
+<div class="broad-table">
 <table>
 <colgroup>
-<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
 <col style="width: 60%" />
-<col style="width: 21%" />
 </colgroup>
 <thead>
 <tr>
@@ -2110,6 +2984,7 @@ OpenRouter.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Conclusion:</strong> For OpenRouter flexibility, the
 open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, and Goose)
 remain the clearest options. Amp supports provider keys but does not
@@ -2122,18 +2997,19 @@ coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok
 Bot remain managed products rather than OpenRouter-style routing layers;
 Grok Bot’s cross-application computer use should not be confused with
 provider flexibility.</p>
-<h3 data-number="8.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">8.1.2</span> Local LLM Support (Ollama /
+<h3 data-number="9.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">9.1.2</span> Local LLM Support (Ollama /
 LM Studio)</h3>
 <p>Running models locally eliminates API costs entirely, but not
 hardware, electricity, or operational costs. Quality and hardware fit
 vary by model, quantization, context length, and runtime; validate the
 exact model/workload combination before standardising on it.</p>
+<div class="broad-table">
 <table>
 <colgroup>
-<col style="width: 18%" />
-<col style="width: 25%" />
-<col style="width: 34%" />
-<col style="width: 21%" />
+<col style="width: 20%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+<col style="width: 57%" />
 </colgroup>
 <thead>
 <tr>
@@ -2178,13 +3054,9 @@ exact model/workload combination before standardising on it.</p>
 <td>Amp (Sourcegraph)</td>
 <td>No</td>
 <td>No</td>
-<td>Confirmed no local inference: Amp’s Security Reference states
-inference always runs on Sourcegraph-documented hosted providers
-(Anthropic, OpenAI, Google, etc.); running the CLI locally is
-client/orchestration only. No official mention of Ollama, LM Studio,
-llama.cpp, or any local endpoint anywhere in Amp’s docs (Cody, a
-separate Sourcegraph product, has experimental Ollama support – not
-applicable to Amp).</td>
+<td>Local CLI and self-hosted Orb execution are available, but inference
+remains on hosted providers; self-hosted execution is an Enterprise
+deployment option, not local model inference.</td>
 </tr>
 <tr>
 <td>OpenAI Codex CLI</td>
@@ -2297,6 +3169,7 @@ BYOK or custom endpoint for additional quota.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Best tools for local LLMs:</strong> Aider, Cline, OpenCode,
 Continue.dev, Goose, and JetBrains AI Assistant remain the clearest
 options for local model use. OpenAI’s Codex CLI supports local models
@@ -2305,19 +3178,16 @@ providers. Amp’s local CLI is not evidence of local inference; its
 current documentation describes hosted models and provider keys. Devin
 Desktop’s local-machine execution should not be treated as local model
 support without explicit provider documentation.</p>
-<p><strong>Recommended local models for coding (late-July 2026
-snapshot):</strong></p>
-<ul>
-<li><strong>Current small coding models</strong> – choose from the model
-catalog supported by Ollama or LM Studio; exact model names,
-quantizations, and hardware requirements change quickly</li>
-<li><strong>Hardware</strong> – treat 16GB VRAM as a workload- and
-quantization-dependent starting point, not a guarantee. Test the model
-at the context length and latency your workflow requires.</li>
-</ul>
-<h2 data-number="8.2" id="feature-comparison-matrix"><span class="header-section-number">8.2</span> Feature Comparison Matrix</h2>
-<p>The matrix spans 17 tools, too many to render legibly as one table at
-this page width – split below into five groups.</p>
+<p>For checkpoint choices and memory sizing, see <a href="#model-alternatives-for-coding-agents">Model Alternatives for
+Coding Agents</a>, especially <a href="#deployment-fit-workstation-server-or-hosted-endpoint">Deployment
+Fit</a>. The tables above describe provider compatibility; model quality
+and hardware feasibility require separate evaluation.</p>
+<h2 data-number="9.2" id="feature-comparison-matrix"><span class="header-section-number">9.2</span> Feature Comparison Matrix</h2>
+<p>The matrix is a shortlist rather than a complete catalogue; it spans
+17 representative tools and is split below into five groups for
+legibility. Products and model surfaces change faster than this table,
+so read it with the dated product profiles and model section.</p>
+<div class="broad-table">
 <p><strong>Group 1: Claude Code, Aider, OpenCode, Cline</strong></p>
 <table>
 <colgroup>
@@ -2673,7 +3543,7 @@ credits</td>
 <td>No</td>
 <td>No</td>
 <td>No</td>
-<td>No</td>
+<td>Partial: self-hosted Orbs on Enterprise</td>
 </tr>
 </tbody>
 </table>
@@ -2780,7 +3650,9 @@ credits</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Group 5: Kiro, Antigravity</strong></p>
+<div class="compact-table">
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -2867,6 +3739,7 @@ credits</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p>Product details vary by plan or surface. † Gemini CLI’s 1M-token
 context window is a model-level feature; product quotas still apply. ‡
 Claude Code’s browser access is via MCP servers (e.g. Playwright) or
@@ -2882,7 +3755,7 @@ browser tool proactively looking up documentation and solutions during a
 task. This is distinct from “Devin Search,” a separately documented
 codebase-search feature; do not conflate the two.</p>
 <hr />
-<h2 data-number="8.3" id="extensibility-deep-dive"><span class="header-section-number">8.3</span> Extensibility Deep Dive</h2>
+<h2 data-number="9.3" id="extensibility-deep-dive"><span class="header-section-number">9.3</span> Extensibility Deep Dive</h2>
 <p>One of Claude Code’s most powerful features is its extensibility
 system: Skills (reusable, discoverable workflow packages that can be
 invoked directly or selected by the agent), hooks (commands that fire on
@@ -2890,7 +3763,7 @@ events like tool calls or session start), and MCP servers (external
 tools exposed via a standard protocol). This combination allows you to
 build a highly personalised, automated coding workflow. How do the
 alternatives compare?</p>
-<h3 data-number="8.3.1" id="claude-codes-extension-architecture"><span class="header-section-number">8.3.1</span> Claude Code’s Extension
+<h3 data-number="9.3.1" id="claude-codes-extension-architecture"><span class="header-section-number">9.3.1</span> Claude Code’s Extension
 Architecture</h3>
 <p>For context, Claude Code’s three-layer system works as follows:</p>
 <ol type="1">
@@ -2912,7 +3785,7 @@ of its reasoning (read from a database, query an external API, access
 browser dev tools, etc.). Any MCP server in the ecosystem
 works.</p></li>
 </ol>
-<h3 data-number="8.3.2" id="how-alternatives-compare"><span class="header-section-number">8.3.2</span> How Alternatives Compare</h3>
+<h3 data-number="9.3.2" id="how-alternatives-compare"><span class="header-section-number">9.3.2</span> How Alternatives Compare</h3>
 <p><strong>Aider:</strong> No equivalent to skills or hooks. No MCP
 support. Configuration via <code>.aider.conf.yml</code> covers model
 settings and preferences but not custom workflows. <em>Least extensible
@@ -2959,7 +3832,7 @@ rules. MCP is optional rather than foundational: the Bot can use a
 browser and hosted computer directly when a service has no MCP server.
 Its routines and Auto Review controls are product-specific and are not
 compatible with Claude Code hooks or other agents’ skill formats.</p>
-<h3 data-number="8.3.3" id="the-agents.md-open-standard"><span class="header-section-number">8.3.3</span> The AGENTS.md Open
+<h3 data-number="9.3.3" id="the-agents.md-open-standard"><span class="header-section-number">9.3.3</span> The AGENTS.md Open
 Standard</h3>
 <p>Alongside MCP, a second cross-cutting convention has emerged that
 matters for anyone comparing extensibility stories:
@@ -2981,13 +3854,15 @@ per-tool rule files (<code>.clinerules</code>,
 <code>.cursorrules</code>, <code>CLAUDE.md</code>), AGENTS.md is worth
 tracking as a potential single source of truth that many tools can read
 natively, reducing the duplication of instructions across tools.</p>
-<h3 data-number="8.3.4" id="what-this-means-for-migration"><span class="header-section-number">8.3.4</span> What This Means for
+<h3 data-number="9.3.4" id="what-this-means-for-migration"><span class="header-section-number">9.3.4</span> What This Means for
 Migration</h3>
 <p>If you have heavily invested in Claude Code’s extensibility system
 (skills, hooks, MCPs), a complete migration requires rebuilding your
 workflow on whatever alternative you choose. The good news: MCP server
-investments are portable to any MCP-compatible tool (Cline, OpenCode,
-Gemini CLI, Goose, OpenHands, Amp, Antigravity, and Kiro). OpenCode,
+investments are often portable to any MCP-compatible tool (Cline,
+OpenCode, Gemini CLI, Goose, OpenHands, Amp, Antigravity, and Kiro), but
+transports, authentication, roots, sampling, approvals, environment
+variables, and client-specific behaviour still need testing. OpenCode,
 Cursor, Cline, Antigravity, and Kiro now have their own
 skills/hooks/plugin surfaces, but formats and event semantics differ.
 The hooks system is still the hardest part to reproduce faithfully –
@@ -2996,7 +3871,7 @@ hooks. If your per-tool instruction files (rather than MCP servers) are
 the bigger migration cost, look at consolidating onto AGENTS.md – it is
 now adopted across tens of thousands of projects, and Claude Code can
 import it into <code>CLAUDE.md</code>.</p>
-<h2 data-number="8.4" id="cost-analysis"><span class="header-section-number">8.4</span> Cost Analysis</h2>
+<h2 data-number="9.4" id="cost-analysis"><span class="header-section-number">9.4</span> Cost Analysis</h2>
 <p>If you are a heavy Claude Code user currently on a Max plan, what
 would the same usage cost on each alternative? Note first that
 “unlimited usage” is not an accurate description of the Max plan: Max 5x
@@ -3005,7 +3880,7 @@ limit and a separate weekly limit, with further caps and model-specific
 effects possible. Anthropic’s live help page is the authority for the
 current limits; do not convert them into a fixed message count because
 message capacity depends on model, context, and workload.</p>
-<h3 data-number="8.4.1" id="defining-heavy-usage"><span class="header-section-number">8.4.1</span> Defining “Heavy Usage”</h3>
+<h3 data-number="9.4.1" id="defining-heavy-usage"><span class="header-section-number">9.4.1</span> Defining “Heavy Usage”</h3>
 <p>For this analysis, heavy usage means: - ~4-8 hours of active coding
 per day - Typical session: long context (50k-200k tokens input), many
 file edits, running tests - Estimated: ~100-200 million input tokens per
@@ -3013,8 +3888,8 @@ month, 10-20 million output tokens per month</p>
 <p>These are rough estimates – actual token consumption varies
 enormously by workflow and model. The worked examples below use the
 midpoints (~150M input / ~15M output tokens per month).</p>
-<h3 data-number="8.4.2" id="api-cost-estimates-direct-provider-as-of-august-31-2026"><span class="header-section-number">8.4.2</span> API Cost Estimates (Direct
-Provider, as of August 31, 2026)</h3>
+<h3 data-number="9.4.2" id="api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="header-section-number">9.4.2</span> API Cost Estimates (Direct
+Provider, as of September 16, 2026)</h3>
 <p>Pricing changes frequently; treat these as ballpark figures using
 current published rates, not guarantees.</p>
 <p><strong>Anthropic Claude Sonnet 5:</strong></p>
@@ -3069,17 +3944,20 @@ reduced quotas, but heavy usage as defined here will exceed it. Gemini
 CLI’s individual Google-account path moved to Antigravity CLI on June
 18, 2026.</em></li>
 </ul>
-<p><strong>DeepSeek V4 Flash (illustrative direct-API rates; gateway
-rates differ):</strong></p>
+<p><strong>DeepSeek V4.1 Flash (<code>deepseek-flash</code>;
+illustrative direct-API rates; gateway rates differ):</strong></p>
 <ul>
-<li>Input: $0.14/million tokens</li>
-<li>Output: $0.28/million tokens</li>
-<li>Heavy usage estimate: <strong>~$25/month</strong> at the stated
-rates and workload</li>
-<li><em>Still dramatically cheaper than frontier models. Rates vary by
-provider and may include cache-hit, peak/off-peak, or gateway-specific
-pricing; this is an illustrative direct-API calculation, not a universal
-rate.</em></li>
+<li>Context: 1M tokens; maximum output 384K; tool calls, Responses API,
+and vision supported</li>
+<li>Input: $0.15/million off-peak or $0.30/million peak (cache-hit input
+is lower)</li>
+<li>Output: $0.60/million off-peak or $1.20/million peak</li>
+<li>Heavy usage estimate: <strong>~$32/month off-peak or ~$63/month
+peak</strong> at the stated workload</li>
+<li><em>Still dramatically cheaper than frontier models. DeepSeek
+retired the V4 Flash model on September 10 and now routes the old name
+to V4.1 Flash; rates vary by provider, peak/off-peak schedule, cache
+status, and gateway markup.</em></li>
 </ul>
 <p><strong>Local model via Ollama or LM Studio:</strong></p>
 <ul>
@@ -3088,14 +3966,15 @@ rate.</em></li>
 length, and runtime; validate the actual workload rather than relying on
 a generic VRAM threshold</li>
 </ul>
-<h3 data-number="8.4.3" id="per-tool-cost-summary"><span class="header-section-number">8.4.3</span> Per-Tool Cost Summary</h3>
+<h3 data-number="9.4.3" id="per-tool-cost-summary"><span class="header-section-number">9.4.3</span> Per-Tool Cost Summary</h3>
+<div class="broad-table">
 <table>
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
+<col style="width: 18%" />
+<col style="width: 15%" />
+<col style="width: 27%" />
+<col style="width: 13%" />
+<col style="width: 27%" />
 </colgroup>
 <thead>
 <tr>
@@ -3124,7 +4003,7 @@ workload.</td>
 scenario.</td>
 </tr>
 <tr>
-<td>Aider + DeepSeek v4-flash (OpenRouter)</td>
+<td>Aider + DeepSeek <code>deepseek-flash</code> (OpenRouter)</td>
 <td>$0 tool + API</td>
 <td>Provider/model-dependent</td>
 <td>N/A</td>
@@ -3148,12 +4027,12 @@ quote as universal.</td>
 quantization/context fit.</td>
 </tr>
 <tr>
-<td>OpenCode + DeepSeek v4-flash</td>
+<td>OpenCode + DeepSeek <code>deepseek-flash</code></td>
 <td>$0 tool + API</td>
-<td>~$25/mo</td>
+<td>~$32–$63/mo</td>
 <td>N/A</td>
-<td>OpenCode’s current provider path supports DeepSeek; this estimate
-uses the current V4-Flash direct rates before any gateway markup.</td>
+<td>Uses DeepSeek V4.1 Flash direct rates for the stated off-peak/peak
+workload before any gateway markup.</td>
 </tr>
 <tr>
 <td>OpenCode (ChatGPT-native)</td>
@@ -3177,10 +4056,10 @@ since the Jan 2026 OpenAI partnership)</td>
 Enterprise are pooled-credit, no fixed per-seat platform charge (as of
 2026-09-12)</td>
 <td>No</td>
-<td>Self-hosted is confirmed unavailable at any tier, including
-Enterprise (which adds SCIM/audit logs/IP allowlisting but stays SaaS).
-No markup over provider API prices for individual/non-enterprise plans;
-orb compute is metered separately by the minute with auto-pause.</td>
+<td>Enterprise supports self-hosted Orbs in AWS, Google Cloud, or Azure,
+but the Amp control plane and model traffic remain hosted. No markup
+over provider API prices for individual/non-enterprise plans; orb
+compute is metered separately by the minute with auto-pause.</td>
 </tr>
 <tr>
 <td>Gemini CLI (individual)</td>
@@ -3277,7 +4156,7 @@ allowance</td>
 </tr>
 <tr>
 <td>Grok Bot</td>
-<td>Eligible SuperGrok/Cursor/Teams plan</td>
+<td>Eligible SuperGrok / Cursor / Teams plan</td>
 <td>Plan-dependent plus separate Bot usage allowance</td>
 <td>N/A</td>
 <td>Beta product; access, quotas, and billing vary by plan and change
@@ -3448,9 +4327,10 @@ vary.</td>
 <td>OpenAI Codex CLI</td>
 <td>Bundled in ChatGPT plan</td>
 <td>Free ($0), Go ($8/mo), Plus ($20/mo), Pro ($100/mo) – plan allowance
-and purchasable credits vary by tier; local <code>--oss</code> mode is
-$0</td>
-<td>$0 via <code>--oss</code> (Ollama/LM Studio)</td>
+and purchasable credits vary by tier; local <code>--oss</code> mode has
+no API charge</td>
+<td>Hardware, electricity, and administration costs still apply to local
+<code>--oss</code> (Ollama/LM Studio)</td>
 <td>Usage limits and included credits change by plan.</td>
 </tr>
 <tr>
@@ -3462,7 +4342,8 @@ $0</td>
 </tr>
 </tbody>
 </table>
-<h3 data-number="8.4.4" id="cost-migration-strategy"><span class="header-section-number">8.4.4</span> Cost Migration Strategy</h3>
+</div>
+<h3 data-number="9.4.4" id="cost-migration-strategy"><span class="header-section-number">9.4.4</span> Cost Migration Strategy</h3>
 <p><strong>Scenario 1: Keep Claude-quality results, accept higher
 costs</strong> Use Aider or Cline with direct Anthropic API. Cost:
 roughly $450/month for the heavy-usage workload defined here at Sonnet
@@ -3491,8 +4372,8 @@ Google’s current transition announcement conflicts with some Gemini CLI
 authentication pages, so test the live sign-in path before making it a
 dependency. API-key and Vertex use have their own quota, billing, and
 data-use terms.</p>
-<h1 data-number="9" id="recommendations"><span class="header-section-number">9</span> Recommendations</h1>
-<h2 data-number="9.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">9.1</span> If you want the closest CLI
+<h1 data-number="10" id="recommendations"><span class="header-section-number">10</span> Recommendations</h1>
+<h2 data-number="10.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">10.1</span> If you want the closest CLI
 experience to Claude Code</h2>
 <p><strong>Primary:</strong> Aider – mature, reliable, git-native,
 OpenRouter-supported, local LLM support. Start here. The absence of MCP
@@ -3513,7 +4394,7 @@ with local-model support via <code>--oss</code> for Ollama and LM
 Studio. Amp offers a hybrid local-CLI-plus-cloud-Orbs model with
 $20/$200 subscriptions or pay-as-you-go billing; model inference and Orb
 compute are separate meters.</p>
-<h2 data-number="9.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">9.2</span> If you want the best
+<h2 data-number="10.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">10.2</span> If you want the best
 IDE-integrated alternative</h2>
 <p><strong>Primary:</strong> Cline – model-agnostic,
 OpenRouter-supported, browser use, MCP-compatible, Plan/Act mode, and
@@ -3535,17 +4416,17 @@ agent mode – autonomous execution is called “Agent mode.” Current Cursor
 supports multiple parallel agents, but exact concurrency and branch
 limits are plan-dependent; it remains OpenRouter- and
 local-model-incompatible.</p>
-<h2 data-number="9.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">9.3</span> If cost is the primary
+<h2 data-number="10.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">10.3</span> If cost is the primary
 constraint</h2>
 <p><strong>Free option:</strong> Antigravity CLI has an official $0
 individual tier authenticated with a Google Account. It is the simplest
 zero-subscription starting point in this survey, though weekly quotas
 and Google’s model ecosystem still matter.</p>
 <p><strong>Ultra-cheap option:</strong> Aider or OpenCode with a current
-low-cost model via OpenRouter. DeepSeek V4 Flash is one candidate, but
-quote its current provider/model rate card at the time of purchase; the
-older <code>deepseek-chat</code>/<code>deepseek-reasoner</code> API
-names are sunset.</p>
+low-cost model via OpenRouter. DeepSeek V4.1 Flash is one candidate, but
+quote its current provider/model rate card at the time of purchase; use
+<code>deepseek-flash</code>, not the retired <code>deepseek-chat</code>,
+<code>deepseek-reasoner</code>, or legacy V4 Flash names.</p>
 <p><strong>Zero API cost:</strong> Any Ollama- or LM Studio-compatible
 tool plus a local coding model – hardware and latency depend on the
 model, quantization, context, and workload.</p>
@@ -3554,7 +4435,7 @@ includes usage allowances, but extra work is purchased as on-demand
 credits at API pricing. That is clearer than the legacy ACU model, but
 it still means heavy users can spend beyond the subscription. Devin
 competes on autonomy and capability, not guaranteed low cost.</p>
-<h2 data-number="9.4" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">9.4</span> If you need persistent
+<h2 data-number="10.4" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">10.4</span> If you need persistent
 cross-application or asynchronous work</h2>
 <p><strong>Primary:</strong> Grok Bot – if the task crosses websites,
 inboxes, documents, and business applications and can continue while you
@@ -3567,7 +4448,7 @@ better comparison for GitHub-centred autonomous software engineering,
 while OpenHands is the better comparison when you want an open-source,
 self-hostable cloud-agent stack. Claude Code remains the better fit for
 interactive terminal-native work.</p>
-<h2 data-number="9.5" id="if-mcp-server-investments-are-critical"><span class="header-section-number">9.5</span> If MCP server investments are
+<h2 data-number="10.5" id="if-mcp-server-investments-are-critical"><span class="header-section-number">10.5</span> If MCP server investments are
 critical</h2>
 <p>Tools with confirmed MCP support: Claude Code (native), OpenCode,
 Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural
@@ -3579,7 +4460,7 @@ agentic execution and extensibility; Goose remains worth a closer look
 when on-device execution and MCP portability matter. Grok Bot is the
 better fit when MCP is unavailable but browser or desktop computer use
 can bridge the gap.</p>
-<h2 data-number="9.6" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">9.6</span> If you need extensibility
+<h2 data-number="10.6" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">10.6</span> If you need extensibility
 similar to Claude Code’s skills+hooks</h2>
 <p>The honest answer: no alternative is drop-in compatible with Claude
 Code’s skills+hooks system. The closest approximations: - <strong>Skills
@@ -3594,7 +4475,7 @@ equivalents:</strong> if per-tool rule files (rather than MCP servers)
 are your bigger migration cost, AGENTS.md is now adopted across tens of
 thousands of projects and is a better consolidation target than any
 single vendor’s format</p>
-<h2 data-number="9.7" id="migration-strategy"><span class="header-section-number">9.7</span> Migration strategy</h2>
+<h2 data-number="10.7" id="migration-strategy"><span class="header-section-number">10.7</span> Migration strategy</h2>
 <p>Rather than a hard switch, a practical migration path:</p>
 <ol type="1">
 <li><strong>Set up Aider</strong> as a Claude Code complement today. Get
@@ -3607,9 +4488,10 @@ use an Anthropic API key or another documented provider path.</li>
 <li><strong>Test your free-tier fallback</strong> – Antigravity CLI is
 free for individuals within product quotas. Run your own representative
 workload before relying on that allowance for daily work.</li>
-<li><strong>Invest in OpenRouter</strong> – get an API key. With
-OpenRouter, you’re never locked to a single model again. As model prices
-drop (historically, they do), your costs drop automatically.</li>
+<li><strong>Invest in OpenRouter</strong> – get an API key if its
+routing breadth is useful. It reduces model lock-in, but adds a gateway
+dependency and does not automatically migrate you to cheaper models;
+select and re-evaluate models explicitly.</li>
 <li><strong>Protect your MCP investments</strong> – build MCP servers in
 preference to tool-specific plugins wherever possible. MCP compatibility
 is growing across the ecosystem. <strong>Do the same for
@@ -3619,104 +4501,153 @@ AGENTS.md</strong> if you maintain per-tool instruction/rule files
 projects and is a lower-maintenance way to keep project instructions
 portable than maintaining one file per vendor.</li>
 </ol>
-<h1 data-number="10" id="references"><span class="header-section-number">10</span> References</h1>
-<p>First-party sources checked on <strong>August 31, 2026</strong> for
-the main survey snapshot. Grok Bot sources were checked on
-<strong>September 9, 2026</strong>:</p>
+<h1 data-number="11" id="references"><span class="header-section-number">11</span> References</h1>
+<p>First-party sources checked on <strong>September 16, 2026</strong>
+for the current model and pricing snapshot. Grok Bot sources were
+checked on <strong>September 9, 2026</strong>. Model names, prices,
+quotas, and product boundaries can change independently; the date is
+part of each claim.</p>
+<h2 data-number="11.1" id="model-documentation-and-licences"><span class="header-section-number">11.1</span> Model Documentation and
+Licences</h2>
+<ul>
+<li><a href="https://platform.claude.com/docs/en/models/overview">Anthropic
+model overview</a>, <a href="https://www.anthropic.com/claude/fable">Fable 5.1</a>, and <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1">Fable 5.1
+announcement</a></li>
+<li><a href="https://developers.openai.com/api/docs/models">OpenAI API
+models</a>, <a href="https://openai.com/index/gpt-5-6/">GPT-5.6
+announcement</a>, and <a href="https://openai.com/index/introducing-gpt-oss/">OpenAI gpt-oss
+introduction</a></li>
+<li><a href="https://developers.openai.com/api/docs/models/gpt-oss-20b">OpenAI
+gpt-oss-20b</a>, <a href="https://developers.openai.com/api/docs/models/gpt-oss-120b">gpt-oss-120b</a>,
+<a href="https://help.openai.com/en/articles/11870455">OpenAI
+open-weight model guidance</a>, and <a href="https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama">local
+Ollama guide</a></li>
+<li><a href="https://ai.google.dev/gemini-api/docs/models">Gemini API
+model catalogue</a>, <a href="https://deepmind.google/models/model-cards/gemini-3-1-pro">Gemini
+3.1 Pro model card</a>, and <a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash">Gemini
+3.8 Flash specifications</a></li>
+<li><a href="https://ai.google.dev/gemma/docs/core">Gemma model
+overview</a>, <a href="https://ai.google.dev/gemma/docs/core/model_card_3">Gemma 3 model
+card</a>, and <a href="https://ai.google.dev/gemma/docs/get_started">Gemma deployment
+guide</a></li>
+<li><a href="https://docs.x.ai/developers/models/grok-4.6">xAI Grok 4.6
+documentation</a></li>
+<li><a href="https://qwenlm.github.io/blog/qwen3-coder/">Qwen3-Coder
+announcement</a>, <a href="https://qwenlm.github.io/qwen-code-docs/en/users/configuration/model-providers/">Qwen
+Code model providers</a>, and <a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B model
+card</a></li>
+<li><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">DeepSeek
+V4.1 Flash model card</a>, <a href="https://api-docs.deepseek.com/updates/">V4.1 release
+information</a>, and <a href="https://api-docs.deepseek.com/api/create-response/">Responses
+API</a></li>
+<li><a href="https://docs.z.ai/guides/llm/glm-5">Z.AI GLM-5
+documentation</a> and <a href="https://autoclaw.z.ai/blog/model/glm-5.3-flash/">GLM-5.3-Flash
+release</a></li>
+<li><a href="https://platform.kimi.ai/">Kimi model catalogue</a>, <a href="https://platform.kimi.ai/docs/guide/kimi-k3-quickstart">Kimi K3
+developer guide</a>, <a href="https://www.kimi.ai/blog/kimi-k3">Kimi K3
+technical blog</a>, and <a href="https://huggingface.co/moonshotai/Kimi-K3">Kimi K3 model card and
+licence link</a></li>
+<li><a href="https://docs.mistral.ai/vibe/code/cli/offline-models">Mistral
+Devstral offline-model guidance</a>, <a href="https://mistral.ai/news/devstral-2-vibe-cli/">Devstral
+release</a>, <a href="https://docs.mistral.ai/models/devstral-2-25-12">Devstral 2
+deprecation</a>, and <a href="https://docs.mistral.ai/models/mistral-medium-3-5-26-04">Mistral
+Medium 3.5</a></li>
+<li><a href="https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512">Devstral
+Small 2 model card, deployment guidance, and Apache 2.0 licence</a></li>
+<li><a href="https://ai.meta.com/llama/get-started/">Meta Llama
+developer resources</a> and <a href="https://github.com/meta-llama/llama-models/blob/main/README.md">Llama
+model repository</a></li>
+<li><a href="https://github.com/MiniMax-AI/MiniMax-M2">MiniMax M2</a>,
+<a href="https://research.nvidia.com/labs/nemotron/Nemotron-3/">NVIDIA
+Nemotron</a>, <a href="https://github.com/ibm-granite/granite-code-models">IBM Granite
+Code</a>, and <a href="https://huggingface.co/microsoft/Phi-4-mini-instruct">Microsoft
+Phi-4 mini</a></li>
+</ul>
+<h2 data-number="11.2" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">11.2</span> Model Evaluations and
+Practitioner Reports</h2>
+<ul>
+<li><a href="https://deepswe.datacurve.ai/">DeepSWE v1.1 common-harness
+leaderboard</a>, <a href="https://deepswe.datacurve.ai/blog/deepswe">methodology</a>, and <a href="https://github.com/SWE-agent/mini-swe-agent">mini-SWE-agent
+harness</a></li>
+<li><a href="https://github.com/anthropics/claude-code/issues/44976">Claude
+Code request for automatic model routing</a></li>
+<li><a href="https://github.com/openai/codex/issues/23807">Codex
+long-task stall report</a></li>
+<li><a href="https://github.com/anomalyco/opencode/issues/11314">OpenCode
+context-coherence discussion</a></li>
+<li><a href="https://www.reddit.com/r/GeminiCLI/comments/1t0raoe/cli_gemini_vs_claude_code_vs_codex/">Claude
+Code community comparison of Claude, Codex, and Gemini</a></li>
+<li><a href="https://www.reddit.com/r/claude/comments/1uvzlh1/sonnet_is_the_new_haiku_opus_is_the_new_sonnet/">Claude
+community discussion of Fable/Opus/Sonnet/Haiku role changes</a></li>
+<li><a href="https://arxiv.org/abs/2603.20847">Engineering pitfalls in
+Claude Code, Codex, and Gemini CLI</a></li>
+<li><a href="https://arxiv.org/abs/2607.21656">Cross-model LLM code
+review study</a></li>
+</ul>
+<h2 data-number="11.3" id="tool-and-pricing-documentation"><span class="header-section-number">11.3</span> Tool and Pricing
+Documentation</h2>
 <ul>
 <li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Anthropic
-Max plan and usage limits</a></li>
-<li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Claude
-Code with Pro or Max</a></li>
-<li><a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic
+Max plan and usage limits</a>, <a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Claude
+Code with Pro or Max</a>, and <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic
 API pricing</a></li>
 <li><a href="https://chatgpt.com/codex/pricing/">OpenAI Codex
-pricing</a></li>
-<li><a href="https://developers.openai.com/api/docs/models">OpenAI API
-models and pricing</a></li>
-<li><a href="https://github.com/openai/codex">Codex repository and
-current CLI distribution</a></li>
-<li><a href="https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/">Google’s
-Gemini CLI to Antigravity CLI transition announcement</a></li>
-<li><a href="https://geminicli.com/docs/get-started/authentication/">Gemini CLI
-authentication</a></li>
-<li><a href="https://ai.google.dev/gemini-api/docs/pricing">Gemini API
-pricing</a></li>
-<li><a href="https://antigravity.google/pricing">Antigravity plans and
-pricing</a></li>
-<li><a href="https://antigravity.google/docs/overview?app=antigravity">Antigravity
-overview</a></li>
-<li><a href="https://antigravity.google/docs/cli/install/">Antigravity
-CLI installation</a></li>
-<li><a href="https://antigravity.google/docs/mcp">Antigravity MCP
+pricing</a>, <a href="https://learn.chatgpt.com/docs/models">Codex model
+documentation</a>, and <a href="https://github.com/openai/codex">Codex
+repository/current CLI distribution</a></li>
+<li><a href="https://developers.openai.com/api/docs/pricing">OpenAI API
+pricing: service tiers and short/long-context rates</a></li>
+<li><a href="https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/">Gemini
+CLI to Antigravity CLI transition</a>, <a href="https://geminicli.com/docs/get-started/authentication/">Gemini CLI
+authentication</a>, <a href="https://ai.google.dev/gemini-api/docs/pricing">Gemini API
+pricing</a>, <a href="https://antigravity.google/pricing">Antigravity
+plans</a>, <a href="https://antigravity.google/docs/overview?app=antigravity">Antigravity
+overview</a>, <a href="https://antigravity.google/docs/cli/install/">CLI
+installation</a>, and <a href="https://antigravity.google/docs/mcp">MCP
 documentation</a></li>
-<li><a href="https://ampcode.com/docs/pricing">Amp pricing</a></li>
-<li><a href="https://ampcode.com/docs">Amp documentation</a></li>
-<li><a href="https://ampcode.com/docs/customize/skills">Amp skills and
-plugins</a> and <a href="https://ampcode.com/plugin-api">plugin
-API</a></li>
+<li><a href="https://ampcode.com/docs/pricing">Amp pricing</a>, <a href="https://ampcode.com/docs/orbs/self-hosted">self-hosted Orbs</a>,
+<a href="https://ampcode.com/docs">documentation</a>, <a href="https://ampcode.com/docs/customize/skills">skills and plugins</a>,
+and <a href="https://ampcode.com/plugin-api">plugin API</a></li>
 <li><a href="https://docs.cline.bot/cli/cli-reference">Cline CLI
-reference</a></li>
-<li><a href="https://docs.cline.bot/getting-started/installing-cline">Cline
-installation and supported surfaces</a></li>
-<li><a href="https://docs.cline.bot/provider-config/openrouter">Cline
-OpenRouter provider</a></li>
-<li><a href="https://opencode.ai/docs/providers/">OpenCode providers</a>
-and <a href="https://dev.opencode.ai/docs/providers/">developer
-providers</a></li>
-<li><a href="https://github.com/anomalyco/opencode">OpenCode
-repository</a></li>
-<li><a href="https://github.com/aaif-goose/goose">Goose
-repository</a></li>
-<li><a href="https://docs.openhands.dev/sdk/guides/mcp">OpenHands MCP
-guide</a> and <a href="https://docs.openhands.dev/openhands/usage/settings/mcp-settings">MCP
-settings</a></li>
+reference</a>, <a href="https://docs.cline.bot/getting-started/installing-cline">installation
+and supported surfaces</a>, and <a href="https://docs.cline.bot/provider-config/openrouter">OpenRouter
+provider</a></li>
+<li><a href="https://opencode.ai/docs/providers/">OpenCode
+providers</a>, <a href="https://dev.opencode.ai/docs/providers/">developer providers</a>,
+and <a href="https://github.com/anomalyco/opencode">repository</a></li>
+<li><a href="https://github.com/aaif-goose/goose">Goose repository</a>,
+<a href="https://docs.openhands.dev/sdk/guides/mcp">OpenHands MCP
+guide</a>, and <a href="https://docs.openhands.dev/openhands/usage/settings/mcp-settings">OpenHands
+MCP settings</a></li>
 <li><a href="https://cursor.com/pricing">Cursor pricing</a> and <a href="https://prod.cursor.com/help/customization/rules">Cursor
 rules</a></li>
-<li><a href="https://devin.ai/desktop">Devin Desktop</a></li>
-<li><a href="https://devin.ai/blog/windsurfs-next-chapter">Cognition’s
-Windsurf acquisition announcement</a></li>
-<li><a href="https://devin.ai/pricing">Devin pricing</a> and <a href="https://docs.devin.ai/admin/billing/self-serve">self-serve
+<li><a href="https://devin.ai/desktop">Devin Desktop</a>, <a href="https://devin.ai/blog/windsurfs-next-chapter">Cognition’s Windsurf
+acquisition</a>, <a href="https://devin.ai/pricing">Devin pricing</a>,
+and <a href="https://docs.devin.ai/admin/billing/self-serve">self-serve
 billing</a></li>
-<li><a href="https://zed.dev/pricing">Zed pricing and providers</a> and
-<a href="https://zed.dev/blog/zed-for-windows-is-here">Windows
+<li><a href="https://zed.dev/pricing">Zed pricing/providers</a> and <a href="https://zed.dev/blog/zed-for-windows-is-here">Windows
 availability</a></li>
-<li><a href="https://kiro.dev/pricing">Kiro pricing</a> and <a href="https://kiro.dev/docs/">Kiro documentation</a></li>
-<li><a href="https://kiro.dev/docs/steering/">Kiro steering</a>, <a href="https://kiro.dev/docs/hooks/types/">hooks</a>, and <a href="https://kiro.dev/docs/cli/mcp/">MCP</a></li>
+<li><a href="https://kiro.dev/pricing">Kiro pricing</a>, <a href="https://kiro.dev/docs/">documentation</a>, <a href="https://kiro.dev/docs/steering/">steering</a>, <a href="https://kiro.dev/docs/hooks/types/">hooks</a>, and <a href="https://kiro.dev/docs/cli/mcp/">MCP</a></li>
 <li><a href="https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html">JetBrains
-AI plans and usage</a>, <a href="https://www.jetbrains.com/help/ai-assistant/supported-llms.html">supported
+AI plans</a>, <a href="https://www.jetbrains.com/help/ai-assistant/supported-llms.html">supported
 models</a>, and <a href="https://www.jetbrains.com/help/ai-assistant/agents.html">agents</a></li>
 <li><a href="https://www.tabnine.com/pricing/">Tabnine pricing</a> and
-<a href="https://www.tabnine.com/blog/category/announcements/">Tabnine
-acquisition announcement archive</a></li>
+<a href="https://www.tabnine.com/blog/category/announcements/">acquisition
+announcements</a></li>
 <li><a href="https://docs.github.com/en/copilot/concepts/models/bring-your-own-key">GitHub
 Copilot BYOK</a> and <a href="https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing">models/pricing</a></li>
 <li><a href="https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html">Amazon
-Q IDE end-of-support scope</a></li>
-<li><a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek
-API pricing</a> and <a href="https://api-docs.deepseek.com/news/news260813/">V4 release
-note</a></li>
-<li><a href="https://x.ai/news/introducing-grok-bot">Introducing Grok
-Bot</a></li>
-<li><a href="https://docs.x.ai/grok-bot/overview">Grok Bot
-overview</a></li>
-<li><a href="https://docs.x.ai/grok-bot/approvals-security-and-privacy">Grok
-Bot approvals, security, and privacy</a></li>
-<li><a href="https://docs.x.ai/grok-bot/teams-and-enterprises">Grok Bot
-for teams and enterprises</a></li>
-<li><a href="https://x.ai/news/grok-bot-more-plans">Grok Bot access
-expansion</a></li>
+Q IDE end-of-support scope</a>, <a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek API
+pricing</a>, and <a href="https://openai.com/index/agentic-ai-foundation/">OpenAI Agentic AI
+Foundation announcement</a></li>
 <li><a href="https://github.com/Aider-AI/aider">Aider repository</a> and
-<a href="https://aider.chat/docs/more/edit-formats.html">Aider edit
+<a href="https://aider.chat/docs/more/edit-formats.html">edit
 formats</a></li>
 <li><a href="https://openrouter.ai/works-with-openrouter">OpenRouter
-works-with-openrouter</a></li>
-<li><a href="https://docs.continue.dev/guides/ollama-guide">Continue
-Ollama guide</a></li>
-<li><a href="https://agents.md/">AGENTS.md</a> and <a href="https://openai.com/index/agentic-ai-foundation/">OpenAI’s Agentic
-AI Foundation announcement</a></li>
+works-with-openrouter</a>, <a href="https://docs.continue.dev/guides/ollama-guide">Continue Ollama
+guide</a>, and <a href="https://agents.md/">AGENTS.md</a></li>
 </ul>
-<p>Secondary sources used only for background:</p>
+<h2 data-number="11.4" id="secondary-background"><span class="header-section-number">11.4</span> Secondary Background</h2>
 <ul>
 <li><a href="https://artificialanalysis.ai/agents/coding">Artificial
 Analysis coding-agent taxonomy</a></li>
@@ -3725,6 +4656,7 @@ Coding Agents</a></li>
 <li><a href="https://morphllm.com/comparisons/claude-code-alternatives">MorphLLM’s
 Claude Code alternatives comparison</a></li>
 </ul>
+      </div>
     </main>
 
   </div>
@@ -3948,7 +4880,8 @@ Claude Code alternatives comparison</a></li>
         return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
       }
 
-      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      // Sibling blocks may have whitespace or labels between them. Fenced .code-group
+      // wrappers bound explicit groups; unwrapped automatic groups still work as before.
       function areConsecutive(a, b) {
         var node = a.nextSibling;
         while (node) {
@@ -3974,40 +4907,109 @@ Claude Code alternatives comparison</a></li>
         return groups;
       }
 
-      function makeTabs(run) {
+      var tabGroups = [];
+      var nextTabId = 0;
+
+      function uniqueId() {
+        var id;
+        do { id = 'code-tab-' + (++nextTabId); } while (document.getElementById(id));
+        return id;
+      }
+
+      function makeTabs(run, labels) {
         var wrapper = document.createElement('div');
         wrapper.className = 'code-tabs';
 
         var tabBar = document.createElement('div');
         tabBar.className = 'code-tab-bar';
+        tabBar.setAttribute('role', 'tablist');
+        tabBar.setAttribute('aria-label', 'Code examples by language');
         wrapper.appendChild(tabBar);
 
+        var buttons = [];
+        var panels = [];
+
+        function activate(index, focus) {
+          buttons.forEach(function (button, i) {
+            var selected = i === index;
+            button.classList.toggle('active', selected);
+            button.setAttribute('aria-selected', String(selected));
+            button.tabIndex = selected ? 0 : -1;
+            panels[i].hidden = !selected;
+          });
+          if (focus) buttons[index].focus();
+        }
+
         run.forEach(function (div, idx) {
+          // Keep authored labels (and any fragment IDs); create labels for automatic groups.
+          var label = labels[idx];
+          if (!label) {
+            label = document.createElement('p');
+            var strong = document.createElement('strong');
+            strong.textContent = getLang(div);
+            label.appendChild(strong);
+          }
+          label.classList.add('code-tab-label');
+
           var btn = document.createElement('button');
-          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.type = 'button';
+          btn.id = uniqueId();
+          btn.className = 'code-tab-btn';
           btn.textContent = getLang(div);
-          btn.setAttribute('data-idx', String(idx));
+          btn.setAttribute('role', 'tab');
           tabBar.appendChild(btn);
+          buttons.push(btn);
 
           var panel = document.createElement('div');
-          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
-          panel.setAttribute('data-idx', String(idx));
+          panel.id = uniqueId();
+          panel.className = 'code-tab-panel';
+          panel.setAttribute('role', 'tabpanel');
+          panel.setAttribute('aria-labelledby', btn.id);
+          panel.tabIndex = 0;
+          btn.setAttribute('aria-controls', panel.id);
+          panel.appendChild(label);
           panel.appendChild(div);
           wrapper.appendChild(panel);
+          panels.push(panel);
+
+          btn.addEventListener('click', function () { activate(idx, false); });
+          btn.addEventListener('keydown', function (e) {
+            var index;
+            if (e.key === 'ArrowRight') index = (idx + 1) % run.length;
+            else if (e.key === 'ArrowLeft') index = (idx + run.length - 1) % run.length;
+            else if (e.key === 'Home') index = 0;
+            else if (e.key === 'End') index = run.length - 1;
+            else return;
+            e.preventDefault();
+            activate(index, true);
+          });
         });
 
-        tabBar.addEventListener('click', function (e) {
-          var btn = e.target;
-          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
-          if (!btn) return;
-          var idx = btn.getAttribute('data-idx');
-          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
-          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
-          btn.classList.add('active');
-          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
-        });
-
+        activate(0, false);
+        tabGroups.push({ buttons: buttons, panels: panels, activate: activate });
         return wrapper;
+      }
+
+      function revealFragment(hash, scroll) {
+        if (!hash) return;
+        var id;
+        try { id = decodeURIComponent(hash.slice(1)); } catch (e) { return; }
+        var target = document.getElementById(id);
+        if (!target) return;
+        var scrollTarget = target;
+        tabGroups.forEach(function (group) {
+          group.panels.forEach(function (panel, index) {
+            if (panel.contains(target) || group.buttons[index] === target) {
+              group.activate(index, false);
+              // Authored language labels are hidden on screen after enhancement.
+              if (target.closest('.code-tab-label')) scrollTarget = panel;
+            }
+          });
+        });
+        for (var ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+          if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+        }
+        if (scroll) scrollTarget.scrollIntoView();
       }
 
       function makeCollapsible(div) {
@@ -4028,28 +5030,19 @@ Claude Code alternatives comparison</a></li>
         var parent = run[0].parentNode;
 
         // Collect lang-label <p> nodes immediately preceding each code block in the run
-        var toRemove = [];
-        run.forEach(function (div) {
+        var labels = run.map(function (div) {
           var prev = div.previousSibling;
           while (prev && isWhitespace(prev)) prev = prev.previousSibling;
-          if (prev && isLangLabel(prev)) toRemove.push(prev);
+          return isLangLabel(prev) ? prev : null;
         });
 
         // Insertion point: the label before the first block (if it exists), else the first block
-        var insertionPoint = run[0];
-        if (toRemove.length > 0) {
-          var firstLabel = toRemove[0];
-          // Use firstLabel only if it genuinely precedes run[0]
-          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
-            insertionPoint = firstLabel;
-          }
-        }
+        var insertionPoint = labels[0] || run[0];
 
         var placeholder = document.createTextNode('');
         parent.insertBefore(placeholder, insertionPoint);
-        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
 
-        var widget = makeTabs(run);
+        var widget = makeTabs(run, labels);
         parent.replaceChild(widget, placeholder);
       }
 
@@ -4063,6 +5056,21 @@ Claude Code alternatives comparison</a></li>
             applyTabs(run);
           } else {
             makeCollapsible(run[0]);
+          }
+        });
+        revealFragment(window.location.hash, true);
+        window.addEventListener('hashchange', function () {
+          revealFragment(window.location.hash, true);
+        });
+        // Also reveal an already-current fragment after its panel has been switched away.
+        document.addEventListener('click', function (e) {
+          var link = e.target.closest('a[href]');
+          if (!link || e.defaultPrevented || e.button !== 0 ||
+              e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+          var url = new URL(link.href, window.location.href);
+          if (url.origin === window.location.origin && url.pathname === window.location.pathname &&
+              url.search === window.location.search && url.hash) {
+            revealFragment(url.hash, true);
           }
         });
       });
