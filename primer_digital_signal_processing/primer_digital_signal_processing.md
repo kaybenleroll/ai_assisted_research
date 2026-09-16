@@ -423,7 +423,12 @@ An undersampling ADC must still acquire a 90 MHz waveform. Its analogue input ba
 
 Consider a 7 kHz tone sampled at 10 kHz. Its aliases appear at frequencies equivalent modulo 10 kHz; in the baseband it appears at $|7-10|=3$ kHz. A later digital low-pass filter can remove a 3 kHz tone only by also removing genuine 3 kHz content. The filter cannot determine whether the sample sequence came from a 3 kHz or 7 kHz analogue sinusoid.
 
-You can see the irreversibility directly from the samples:
+You can see the irreversibility directly from the samples. The R version
+uses the base `cos` and vectorised arithmetic:
+
+::: {.code-group}
+
+**Python**
 
 ```python
 import numpy as np
@@ -434,7 +439,7 @@ x_3k = np.cos(2 * np.pi * 3_000 / 10_000 * n)
 print(np.max(np.abs(x_7k - x_3k)))  # approximately 0
 ```
 
-The same check in R uses the base `cos` and vectorised arithmetic:
+**R**
 
 ```r
 n <- 0:11
@@ -442,6 +447,8 @@ x_7k <- cos(2 * pi * 7000 / 10000 * n)
 x_3k <- cos(2 * pi * 3000 / 10000 * n)
 print(max(abs(x_7k - x_3k)))  # approximately 0
 ```
+
+:::
 
 The two analogue explanations produce the same real-valued sequence. Once the ADC has emitted those numbers, no digital filter can choose the correct explanation.
 
@@ -650,6 +657,14 @@ It is 1 Hz for this rectangular record and 1.5 Hz for the periodic Hann. Multipl
 
 This implementation separates actual window length from FFT length, handles odd and even endpoint conventions, and checks the exact weighted-record Parseval identity.
 
+The equivalent R version uses `fft`, whose forward transform has the same
+unnormalised convention as NumPy's forward FFT. The slice keeps the
+nonnegative frequencies for this real-valued record:
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -674,9 +689,7 @@ assert np.isclose(psd.sum() * df, weighted_mean_square)
 assert np.isclose(peak_amplitude[np.argmin(abs(f - 50))], 0.8)
 ```
 
-The equivalent R version uses `fft`, whose forward transform has the same
-unnormalised convention as NumPy's forward FFT. The slice keeps the
-nonnegative frequencies for this real-valued record:
+**R**
 
 ```r
 fs <- 1000.0
@@ -697,6 +710,8 @@ weighted_mean_square <- sum((w * x)^2) / sum(w^2)
 stopifnot(abs(sum(psd) * df - weighted_mean_square) < 1e-12)
 stopifnot(abs(peak_amplitude[which.min(abs(f - 50))] - 0.8) < 1e-12)
 ```
+
+:::
 
 The exact discrete identity uses $\sum_k\hat S[k]\Delta f$. Trapezoidal integration halves endpoint contributions and can differ substantially for DC or Nyquist energy. It is useful for approximating a continuous band integral on a smooth curve, but it is not the exact discrete Parseval check. Report whether a band power uses whole bins, interpolated boundaries, or a line-spectrum model. The [SciPy periodogram documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.periodogram.html) distinguishes density and squared-spectrum scaling explicitly.
 
@@ -783,6 +798,12 @@ The FFT is not an approximation to the DFT. Apart from roundoff and implementati
 
 Libraries choose conventions for sign, normalization, array ordering, and treatment of real input. Check them. In NumPy, `fft` returns the unnormalised forward transform and `ifft` applies the $\frac{1}{N}$ scaling; `rfft` exploits Hermitian symmetry for real input. `fftfreq` returns signed bin frequencies, while `rfftfreq` returns the nonnegative frequencies corresponding to `rfft`.
 
+The same FFT conventions can be made explicit in base R:
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 
@@ -803,7 +824,7 @@ peak_frequency = f[np.argmax(amplitude)]
 print(f"peak ~= {peak_frequency:.1f} Hz")
 ```
 
-The same FFT conventions can be made explicit in base R:
+**R**
 
 ```r
 fs <- 2000.0
@@ -823,6 +844,8 @@ amplitude[c(1, length(amplitude))] <-
 peak_frequency <- f[which.max(amplitude)]
 cat(sprintf("peak ~= %.1f Hz\n", peak_frequency))
 ```
+
+:::
 
 The code uses an exactly on-bin sinusoid and a periodic Hann window. If the input frequency is not aligned with a bin, the maximum bin is only a quantised estimate of the peak and remains subject to scalloping after coherent-gain correction. Interpolating nearby bins may improve a frequency estimate for a clean sinusoid, but it is not a general cure for leakage.
 
@@ -1081,6 +1104,15 @@ Magnitude and phase are separate requirements. A filter can have an excellent ma
 
 Complete the 4 kHz/6 kHz example with a candidate you can actually accept. Use 181 taps, a 5 kHz midpoint cutoff, and a Kaiser window with $\beta=9$. The 90-sample delay is 1.875 ms, below the 2 ms limit. Define the passband level tolerance as $-0.05$ to $+0.05$ dB in addition to the 0.10 dB peak-to-peak ripple requirement; ripple alone would accept a perfectly flat response at the wrong gain. For startup, require a constant input to settle to its final output within $10^{-12}$ in normalised floating-point units after 180 samples, with zero prehistory. This is a finite-support settling test, not an assertion that every waveform is undistorted.
 
+This base R version constructs the same windowed-sinc candidate directly,
+then evaluates its response on a dense grid. For a symmetric FIR, the group
+delay is known from its length; measuring it from the unwrapped phase is also
+appropriate when the production coefficients are not exactly symmetric.
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -1117,10 +1149,7 @@ print(pass_db.min(), pass_db.max(), ripple_db, attenuation_db,
       delay_ms.min(), delay_ms.max())
 ```
 
-This base R version constructs the same windowed-sinc candidate directly,
-then evaluates its response on a dense grid. For a symmetric FIR, the group
-delay is known from its length; measuring it from the unwrapped phase is also
-appropriate when the production coefficients are not exactly symmetric.
+**R**
 
 ```r
 fs_design <- 48000.0
@@ -1160,6 +1189,8 @@ stopifnot(max(abs(step[181:1000] - 1.0)) < 1e-12)
 print(c(min(pass_db), max(pass_db), ripple_db, attenuation_db, delay_ms))
 ```
 
+:::
+
 The rounded measured passband extrema are approximately $-0.000177$ and $+0.000184$ dB; peak-to-peak ripple is 0.00036 dB, worst stopband attenuation is about 92.2 dB, and group delay is 1.875 ms throughout the passband within numerical precision. Every stated magnitude and delay criterion passes. A dense grid is a numerical acceptance check, not a symbolic bound between grid points; refine local extrema if a candidate approaches a limit. This candidate has enough margin that small grid refinement does not decide acceptance. Do not infer an optimal tap count from this result: the window design buys comfortable margin at a known computational cost.
 
 To test the implementation rather than just its coefficients, filter 3 kHz and 7 kHz sinusoids separately, discard the first 180 outputs, and fit sine and cosine components at each known frequency. Their fitted gains should match direct evaluation of $H$ to the selected numeric tolerance. The 7 kHz test avoids mistaking startup energy for stopband leakage, while a test at 6 kHz exercises the actual specified edge. For the FIR, an impulse returns the coefficients and the last nonzero output is at index 180. That predicts both the startup horizon and how many zeros a finite-record implementation must append to emit the full tail. A live application normally returns one output per input and preserves the tail in state until later samples arrive.
@@ -1194,6 +1225,13 @@ $$
 
 Truncation causes Gibbs-like ripples. The window controls the compromise between transition width and sidelobe height. A Kaiser window is useful when you want a continuously adjustable parameter rather than a fixed named window. This method is transparent and often good enough; it does not produce the minimax-optimal filter for arbitrary weighted bands.
 
+The corresponding base R calculation uses the same transparent
+windowed-sinc construction and a zero-padded FFT for the response grid:
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -1215,8 +1253,7 @@ print("passband ripple (dB):", 20 * np.log10(passband.max() / passband.min()))
 print("stopband attenuation (dB):", -20 * np.log10(stopband.max()))
 ```
 
-The corresponding base R calculation uses the same transparent
-windowed-sinc construction and a zero-padded FFT for the response grid:
+**R**
 
 ```r
 fs <- 48000.0
@@ -1236,6 +1273,8 @@ stopband <- Mod(H[w >= 10000])
 cat("passband ripple (dB):", 20 * log10(max(passband) / min(passband)), "\n")
 cat("stopband attenuation (dB):", -20 * log10(max(stopband)), "\n")
 ```
+
+:::
 
 The measured edges in this example are deliberately different from the design cutoff. A filter whose nominal cutoff is 8 kHz is not a brick wall at 8 kHz. Always measure the response against the actual passband and stopband limits.
 
@@ -1320,6 +1359,16 @@ The biquad is the natural unit because complex poles and zeros occur in conjugat
 
 For a streaming filter, the internal delay elements are state. Processing an array in one call and processing the same array in chunks should produce the same output if the state is carried between chunks. Resetting the state at every callback changes the system and often produces clicks, blocks of transient response, or incorrect low-frequency levels.
 
+Python uses a sixth-order Butterworth low-pass; R uses a self-contained
+first-order low-pass to keep the example dependency-free. These filters have
+different responses, but demonstrate the same state hand-off. A production
+R implementation can replace the recurrence with a biquad cascade without
+changing the streaming pattern.
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -1350,10 +1399,7 @@ print("max batch/stream difference:", np.max(np.abs(y_batch - y_stream)))
 np.testing.assert_allclose(y_stream, y_batch, atol=1e-12, rtol=1e-12)
 ```
 
-In R, the important part is the same state hand-off. This self-contained
-first-order low-pass keeps the example dependency-free; a production
-implementation can replace the recurrence with a biquad cascade without
-changing the streaming pattern.
+**R**
 
 ```r
 fs <- 48000.0
@@ -1390,6 +1436,8 @@ while (start <= length(x)) {
 cat("max batch/stream difference:", max(abs(batch$y - y_stream)), "\n")
 stopifnot(max(abs(y_stream - batch$y)) < 1e-12)
 ```
+
+:::
 
 Both paths now use the same initial state, so the comparison tests block partitioning rather than accidentally comparing a steady-state-start batch path with a zero-state batch path. The state initialisation approximates steady state for a nonzero first sample. For a signal that is known to start at zero, zero state may be correct. There is no universally correct startup state; it encodes a model of what happened before the record began.
 
@@ -1550,6 +1598,16 @@ This timing view also explains why a resampler needs a low-pass prototype even w
 
 For 48 kHz to 44.1 kHz, use $\frac{L}{M}=\frac{147}{160}$. A direct implementation at the 7.056 MHz intermediate rate is wasteful; polyphase conversion performs roughly the necessary work at the input/output rates. In practice, a library such as `scipy.signal.resample_poly` designs or accepts an FIR window and applies the polyphase structure.
 
+This base R reference makes the anti-alias step visible before changing the
+time grid, then uses linear interpolation. It is deliberately not an optimised
+polyphase implementation and does not reproduce Python's filter response or
+boundary handling. Production code should use a tested polyphase routine and
+inspect its boundary convention and response.
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -1561,10 +1619,7 @@ x = np.zeros(48_000)  # one second of illustrative input at fs_in
 y = signal.resample_poly(x, up=147, down=160, window=("kaiser", 8.6))
 ```
 
-This base R reference makes the anti-alias step visible before changing the
-time grid. It is deliberately not an optimised polyphase implementation;
-production code should use a tested polyphase routine and inspect its
-boundary convention and response.
+**R**
 
 ```r
 fs_in <- 48000.0
@@ -1589,6 +1644,8 @@ valid <- !is.na(x_filtered)
 y <- approx(t_in[valid], x_filtered[valid], xout = t_out, rule = 2)$y
 stopifnot(length(y) %in% c(44100, 44101))
 ```
+
+:::
 
 The conversion filter's passband and stopband must be specified relative to the lower of the two relevant Nyquist limits. Inspect the response and a swept-sine or multitone test; do not infer quality from the output length alone.
 
@@ -1748,6 +1805,14 @@ The variance can be reduced by averaging estimates from shorter, often overlappi
 
 Welch's method divides a record into windowed segments, computes a modified periodogram for each, and averages them. Averaging reduces the random fluctuations of the estimate and makes broad noise-floor comparisons much more stable. A 50% overlap is common for Hann windows because it recovers much of the data while maintaining useful averaging, but it is not a theorem that 50% is always optimal.
 
+Here is a base R implementation of the same Welch calculation. It makes the
+segment loop and the one-sided PSD normalisation visible instead of hiding
+them behind a package default:
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -1773,9 +1838,7 @@ print("peak tone frequency:", f[tone_band][np.argmax(psd[tone_band])])
 print("noise power in selected bins:", psd[noise_band].sum() * (f[1] - f[0]))
 ```
 
-Here is a base R implementation of the same Welch calculation. It makes the
-segment loop and the one-sided PSD normalisation visible instead of hiding
-them behind a package default:
+**R**
 
 ```r
 fs <- 10000.0
@@ -1811,6 +1874,8 @@ cat("peak tone frequency:", f[tone_band][which.max(psd[tone_band])], "\n")
 cat("noise power in selected bins:",
     sum(psd[noise_band]) * (f[2] - f[1]), "\n")
 ```
+
+:::
 
 The result has units of the squared input unit per hertz when `scaling="density"`. Integrating over a frequency band estimates mean-square power in that band, subject to leakage and estimator bias. Summing raw PSD bins without multiplying by bin width mixes power-per-hertz with power-per-bin.
 
@@ -2093,6 +2158,14 @@ For real-valued reconstruction, retaining only nonnegative-frequency bins is saf
 
 An executable round trip makes the window-product denominator and boundary coverage explicit. This uses the same periodic Hann for analysis and synthesis, zero extension before and after the record, and an FFT length equal to window length. The denominator is strictly positive over the original record even though it can be zero at the outermost padded sample.
 
+The R version uses the full complex FFT so the inverse operation is
+explicit. `fft(..., inverse = TRUE)` is divided by the frame length because
+R leaves the inverse-transform normalisation to the caller.
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -2116,9 +2189,7 @@ x_roundtrip = accum[keep] / denom[keep]
 np.testing.assert_allclose(x_roundtrip, x_stft, atol=1e-12, rtol=0)
 ```
 
-The R version uses the full complex FFT so the inverse operation is
-explicit. `fft(..., inverse = TRUE)` is divided by the frame length because
-R leaves the inverse-transform normalisation to the caller.
+**R**
 
 ```r
 set.seed(31)
@@ -2144,6 +2215,8 @@ stopifnot(min(denom[keep]) > 0)
 x_roundtrip <- accum[keep] / denom[keep]
 stopifnot(max(abs(x_roundtrip - x_stft)) < 1e-12)
 ```
+
+:::
 
 For a consistency test, regard analysis as an operator $A$ and this overlap-normalised synthesis as an operator $B$. On supported original samples, $BA=I$. An arbitrary edited coefficient array $C$ need not satisfy $AB C=C$. Synthesis returns $BC$, and analysing that waveform returns $AB C$, a compatible array which can differ from the requested edit. For the usual matched-window least-squares inverse, this is a projection onto the range of the analysis operator. A magnitude mask can therefore change the output waveform's phase relationships indirectly even if it retains the old coefficient phases explicitly. Evaluate the reanalysed output and waveform residual, not only the edited spectrogram.
 
@@ -2334,6 +2407,13 @@ The following example estimates a vibration spectrum, removes a known electrical
 
 ### Generate a Controlled Test Signal
 
+Both versions generate the same tones and noise distribution; their random
+number generators produce different noise samples despite the shared seed.
+
+::: {.code-group}
+
+**Python**
+
 ```python
 import numpy as np
 from scipy import signal
@@ -2351,7 +2431,7 @@ x = (
 )
 ```
 
-The same controlled signal in R is:
+**R**
 
 ```r
 set.seed(2026)
@@ -2365,9 +2445,22 @@ x <- 0.8 * sin(2 * pi * 730.0 * t) +
   0.08 * rnorm(length(t))
 ```
 
+:::
+
 The test has known truth: 730 Hz and 2.4 kHz tones, plus noise with known variance. It is deliberately not an integer number of cycles in every likely segment, so the spectral estimator has to handle leakage.
 
 ### Design and Apply a Notch
+
+This R version writes the notch as a normalised second-order recurrence.
+Its coefficients differ from SciPy's `iirnotch` parameterisation, and its
+explicit forward/reverse pass uses zero initial state without SciPy's edge
+padding. Both illustrate offline zero-phase filtering, but their responses
+and edge transients differ. A live path should call `iir_filter` once and
+carry its returned state across blocks.
+
+::: {.code-group}
+
+**Python**
 
 ```python
 f0 = 2_400.0
@@ -2379,10 +2472,7 @@ sos = signal.tf2sos(b, a)
 y = signal.sosfiltfilt(sos, x)
 ```
 
-This R version writes the notch as a normalised second-order recurrence.
-The forward/reverse pass is an intentionally explicit equivalent of an
-offline zero-phase operation; a live path should call `iir_filter` once and
-carry its returned state across blocks.
+**R**
 
 ```r
 f0 <- 2400.0
@@ -2408,9 +2498,17 @@ forward <- iir_filter(x, b, a)$y
 y <- rev(iir_filter(rev(forward), b, a)$y)
 ```
 
+:::
+
 The notch is narrow, so it will not remove broadband noise around the interference. `sosfiltfilt` removes interior phase distortion but has edge behaviour and a squared magnitude response. For a causal monitoring path, use `sosfilt`, carry its state across blocks, and document the group delay.
 
 ### Estimate and Integrate the PSD
+
+Reuse the `welch_psd` helper from the Welch section for the R calculation:
+
+::: {.code-group}
+
+**Python**
 
 ```python
 f, pxx = signal.welch(
@@ -2434,7 +2532,7 @@ print("total estimated mean square:", pxx.sum() * (f[1] - f[0]))
 print("time-domain variance:", np.var(y))
 ```
 
-Reuse the `welch_psd` helper from the Welch section for the R calculation:
+**R**
 
 ```r
 estimate <- welch_psd(y, fs, nperseg = 16384, noverlap = 8192)
@@ -2452,9 +2550,18 @@ cat("total estimated mean square:", sum(pxx) * (f[2] - f[1]), "\n")
 cat("time-domain variance:", var(y), "\n")
 ```
 
+:::
+
 The bin-summed Welch PSD and time-domain variance should be close, subject to segment detrending, window weighting, and the fact that `sosfiltfilt` changes the record at its boundaries. They are not an exact identity for this pipeline. The 2.4 kHz band should be substantially reduced, but “zero” is not expected: the notch has finite numerical depth, the tone is not necessarily exactly represented by the estimator's bins, and surrounding noise remains. The selected-bin band convention includes a whole bin if its centre falls within the stated band, so changing FFT length can move a boundary bin in or out.
 
 ### Validate Against a Causal Block Path
+
+The R streaming check uses the same recurrence and carries its two state
+values from one block to the next:
+
+::: {.code-group}
+
+**Python**
 
 ```python
 initial_state = signal.sosfilt_zi(sos) * x[0]
@@ -2480,8 +2587,7 @@ np.testing.assert_allclose(y_causal, y_causal_batch, atol=1e-12, rtol=1e-12)
 np.testing.assert_allclose(state, final_batch_state, atol=1e-12, rtol=1e-12)
 ```
 
-The R streaming check uses the same recurrence and carries its two state
-values from one block to the next:
+**R**
 
 ```r
 initial <- c(0, 0)
@@ -2506,9 +2612,24 @@ stopifnot(max(abs(y_causal - y_causal_batch$y)) < 1e-12)
 stopifnot(max(abs(state - y_causal_batch$state)) < 1e-12)
 ```
 
+:::
+
 Do not compare `y_causal` sample-for-sample with `y`, because one is causal and phase-distorting while the other is noncausal and zero-phase. Compare the metric each path is intended to preserve: notch attenuation, tone amplitude, latency, edge behaviour, and accepted phase response.
 
 The seeded noisy example is reproducible, but its finite-record noise power is not exactly the ensemble variance. Add a deterministic reference case whose expected answers come from algebra. At 12 kHz, a one-second record contains integer cycles of both tones. Orthogonality makes the mean square $\frac{0.8^2}{2}+\frac{0.25^2}{2}=0.35125$ in squared input units. The separate tone powers are 0.32 and 0.03125. A rectangular, non-detrended periodogram puts each power on its exact bin and its bin sum obeys Parseval to roundoff. This checks amplitude, sidedness, density, and units without a random-noise tolerance.
+
+The R reference version checks the same deterministic powers and the
+frequency response of the second-order notch. The filter coefficients differ
+slightly from SciPy's `iirnotch` parameterisation, so the response assertions
+are written against the R coefficients actually used above.
+
+::: {.code-group}
+
+```{=latex}
+\newpage
+```
+
+**Python**
 
 ```python
 # Deterministic reference; reuse fs and sos from the notch example.
@@ -2544,10 +2665,7 @@ assert abs(H_ref[0]) > 10**(-0.01 / 20)  # Wanted-tone loss below 0.01 dB.
 assert abs(H_ref[1]) < 1e-10             # Exact-frequency notch reference.
 ```
 
-The R reference version checks the same deterministic powers and the
-frequency response of the second-order notch. The filter coefficients differ
-slightly from SciPy's `iirnotch` parameterisation, so the response assertions
-are written against the R coefficients actually used above.
+**R**
 
 ```r
 # Deterministic reference; reuse fs, b, and a from the notch example.
@@ -2574,6 +2692,8 @@ H_ref <- transfer(c(730.0, 2400.0))
 stopifnot(Mod(H_ref[1]) > 10^(-0.01 / 20))
 stopifnot(Mod(H_ref[2]) < 1e-10)
 ```
+
+:::
 
 The code warms the causal filter with three seconds of preceding signal and measures its fourth second; it does not initialise the filter to an exact analytical sinusoidal state. For this notch, that warm-up makes the residual startup negligible at the $10^{-10}$ gain tolerance. Verify settling again if you change quality factor or pole radius. The notch assertion applies at exactly 2.4 kHz; detuning by a few hertz can greatly weaken attenuation. A production specification should test the allowed interference-frequency range rather than promise this exact-frequency result for a drifting source.
 

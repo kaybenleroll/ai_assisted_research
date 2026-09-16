@@ -1,23 +1,23 @@
 ---
-title: "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (September 9 Refresh)"
-author: "September 9, 2026"
+title: "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (September 16 Refresh)"
+author: "September 16, 2026"
 ---
 
-# Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (September 9 Refresh)
+# Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (September 16 Refresh)
 
 ## Introduction
 
 Claude Code has established itself as one of the most capable agentic coding tools available: it runs in the terminal and supported editors, takes high-level natural-language instructions, autonomously edits multiple files, executes shell commands, runs tests, and iterates until the task is done. Its extensibility system -- skills, hooks, and MCP server support -- allows deep customisation of its workflow. For heavy users, a Max plan (**$100/month for Max 5x, $200/month for Max 20x**) can be good value relative to metered API pricing, but it is not unlimited: Max has a five-hour session limit and a separate weekly limit, and Anthropic may apply additional caps. Limits are shared across Claude, Claude Code, and Claude Desktop. The plan landscape for AI tools changes rapidly, and a prudent engineer should understand the full landscape of alternatives before needing them.
 
-This document surveys the landscape of AI coding agents available as of **September 9, 2026**: open-source CLI tools, IDE extensions, dedicated AI IDEs, cloud platform agents, and commercial assistants. For each, it covers architecture, provider flexibility, MCP/extensibility support, and realistic cost.
+This document surveys the landscape of AI coding agents available as of **September 16, 2026**: open-source CLI tools, IDE extensions, dedicated AI IDEs, cloud platform agents, and commercial assistants. For each, it covers architecture, provider flexibility, MCP/extensibility support, realistic cost, and the model capabilities that determine whether a tool can replace a Claude Code workflow. Choosing the agent harness and choosing the model are related but separate decisions: the same model can behave differently under different context, editing, permission, and recovery machinery.
 
-**A note on methodology and provenance:** This document was originally drafted from an AI model's training-data snapshot (accurate as of approximately August 2025), then refreshed via live web research in July and August 2026. The August 31 pass rechecked the most volatile claims against first-party product pages, including Claude and Codex limits, Amp's subscription and Orb pricing, Cline's terminal/plugin/hook support, Goose's current repository, Kiro's unified IDE/CLI/Web architecture, Gemini CLI's transition status, and current DeepSeek pricing. The September 9 pass added Grok Bot and checked its launch, architecture, controls, privacy requirements, and current access against first-party xAI pages. Dated facts carry a date at the point where the distinction matters, with corresponding sources in the References section.
+**A note on methodology and provenance:** This document was originally drafted from an AI model's training-data snapshot (accurate as of approximately August 2025), then refreshed via live web research in July, August, and September 2026. The August 31 pass rechecked the most volatile claims against first-party product pages, including Claude and Codex limits, Amp's subscription and Orb pricing, Cline's terminal/plugin/hook support, Goose's current repository, Kiro's unified IDE/CLI/Web architecture, Gemini CLI's transition status, and DeepSeek pricing. The September 9 pass added Grok Bot and checked its launch, architecture, controls, privacy requirements, and current access against first-party xAI pages. The September 16 pass rechecked the current Claude, OpenAI, Gemini, DeepSeek, and Z.AI model lineups and added practitioner reports about model routing and agent-harness reliability. Dated facts carry a date at the point where the distinction matters, with corresponding sources in the References section.
 
 **Freshness note:** In this field, some sections can age in weeks, not quarters. Treat pricing, benchmark rankings, and model-version statements as snapshots tied to their stated dates.
 
-**How to read this document:** If you want the fastest path to a conclusion, jump to the [Feature Comparison Matrix](#feature-comparison-matrix), the [Provider Flexibility Analysis](#provider-flexibility-analysis), and the [Recommendations](#recommendations). The deep-dive sections are there for when you need to evaluate a specific tool seriously.
+**How to read this document:** If you want the fastest path to a conclusion, start with [Model Alternatives for Coding Agents](#model-alternatives-for-coding-agents) to choose a capability and deployment shortlist, then use the [Feature Comparison Matrix](#feature-comparison-matrix), [Provider Flexibility Analysis](#provider-flexibility-analysis), and [Recommendations](#recommendations) to choose the harness and operating policy. The deep-dive sections are there for when you need to evaluate a specific tool seriously.
 
-This survey covers tools that were verifiable and actively maintained as of September 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Where a claim could not be verified, it is flagged.
+This survey covers tools that were verifiable and actively maintained as of September 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. The model section is a coding- and agent-workflow survey, not a catalogue of every chat, image, embedding, or research model. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Where a claim could not be verified, it is flagged.
 
 ---
 
@@ -34,6 +34,222 @@ Before comparing tools, it helps to understand the four distinct categories that
 **Cloud Platform Agents** run primarily in the cloud or a sandboxed environment (Docker). They expose a web or app-based interface and are designed for longer-running autonomous tasks, often with their own execution environments. Members: Grok Bot, OpenHands, Devin, Manus, Jules, Genie. Grok Bot sits at the broadest edge of this category: it is a persistent cross-application computer-use agent that can do coding work, not a coding-specific terminal agent.
 
 A Claude Code user primarily cares about the CLI tools category, but the IDE and cloud categories contain tools capable enough to be worth understanding as alternatives -- especially if your workflow includes time in an editor.
+
+---
+
+## Model Alternatives for Coding Agents
+
+Choosing an agent and choosing its model are separate decisions. You can preserve a familiar editing workflow while changing the inference endpoint, or keep the model while changing how the agent gathers context and executes work. This section is the model survey for the **September 16, 2026** snapshot; the tool profiles that follow describe the surrounding products. The objective is to identify candidates for your workload, not to translate every Claude name into another vendor's tier.
+
+### Model, Provider, and Agent Harness
+
+The **model** is the learned set of numerical weights; a **checkpoint** is a particular saved version of those weights. Training, architecture, and post-training determine what it can infer and the kinds of responses it can produce. A family name alone does not specify the checkpoint, reasoning setting, input modalities, or serving configuration you will actually use.
+
+The **inference provider** runs the model and returns its output. A gateway such as OpenRouter can add another routing layer between your agent and that provider. Providers can differ in model revisions, context limits, supported request fields, availability, retention, and inference speed. An API-compatible endpoint can accept a request while interpreting some fields differently; matching the API shape is not proof of equivalent behaviour.
+
+The **agent harness** supplies repository context, presents tool definitions, applies edits, enforces permissions, executes commands, and handles retries, compaction, and recovery. The model proposes a tool call; the harness or a provider service executes it. Shell access, apply-patch execution, and Model Context Protocol (MCP) connections are harness or product capabilities, not facilities embedded in model weights. A model must still generate valid arguments and interpret the results correctly. Diagnose failures at the right layer before replacing the model.
+
+For example, if a patch targets an outdated file fragment, the model may have misunderstood the code, the harness may have retained stale context, or the edit adapter may have rejected an otherwise useful change. Record the attempted edit and tool response: a final answer saying "fixed" does not identify which layer failed.
+
+### What Matters for Agentic Coding
+
+Start with **edit correctness**: does the change satisfy the task, preserve unrelated behaviour, and respect repository conventions? Test **tool-call validity** separately: valid schemas, real paths, appropriate commands, and correct handling of tool results. Then test **multi-step recovery** by giving the agent a failed build, rejected patch, missing dependency, or interrupted session. An agent that repeatedly applies the same failing fix is not reliable merely because its first code sample was convincing.
+
+**Effective context** is the material the model can use coherently, not the maximum token count an endpoint accepts. A token is a unit of encoded text or other input; context includes instructions, source, tool results, and conversation history. Test whether constraints survive a long session and its compaction into a shorter summary. **Modality** matters when the task depends on screenshots or diagrams: the checkpoint, provider, and harness must all support the relevant input. Text-only models can still work with extracted text, but cannot inspect the original visual evidence.
+
+Measure **latency and cost per accepted task**, including retries and human correction. A low token price can lose its advantage after repeated failed edits. **Reasoning controls** change how much inference work the model spends before responding; effort names and budgets are not comparable units across vendors. Test settings with a fixed task budget rather than assuming that every "high" setting behaves alike.
+
+**Operational privacy** follows the entire data path. A local terminal can send source to a hosted model, and a local model can sit inside a harness that sends telemetry or invokes remote tools. Decide whether repository contents may leave the workstation, an internal server, or an approved hosted boundary. Check the provider and gateway's applicable retention and access controls as well as the harness configuration.
+
+Use four operational roles: **bounded support** for inventory, summaries, log triage, and small constrained transformations; **normal implementation** for the edit-test loop; **hard diagnosis** for uncertain causes and repeated failures; and **independent review** for checking a proposed change against evidence. These roles specify work and authority. They are not universal Haiku, Sonnet, Opus, or Fable equivalents.
+
+### Candidate Families Against the Claude Baseline
+
+Use this **September 16, 2026** shortlist to decide what to test against your existing Claude configuration. Rows select representative checkpoints, not equivalent vendor tiers. Coding and recovery suggestions are **qualitative synthesis**; context, input support, and prices are **documented specifications**, not measured task performance. The later [evaluation discussion](#evidence-and-evaluation) separates benchmark results from practitioner reports. The profiles below explain each family's qualifications.
+
+Price pairs mean **USD per million uncached input / output tokens**, for the named direct API and standard service unless stated otherwise. They are cost anchors, not subscription prices or cost per completed task. Context figures are advertised limits; they do not measure how well instructions survive a long session.
+
+::: {.broad-table}
+
+| Family / example | Coding / recovery focus | Context / visual input | Cost / deployment |
+|--------------------|----------------------------|------------------------|------------------------------|
+| [Claude baseline](https://platform.claude.com/docs/en/models/overview) | Pin model and effort; measure edits, calls, and recovery | Sonnet 5: 1M; images | Hosted; Sonnet 5 [\$2 / \$10](https://platform.claude.com/docs/en/about-claude/pricing) |
+| [GPT / Codex models](https://developers.openai.com/api/docs/models) | Reasoning and function calls; test difficult fixes | GPT-5.6/6: 1.05M; images | Hosted; Terra [\$2 / \$12](https://developers.openai.com/api/docs/pricing), short context |
+| [Gemini 3.8 Flash](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash) | Tool-driven implementation; test long-session recovery | ~1M input; images, video, audio, PDFs | Hosted; [\$0.75 / \$3.75](https://ai.google.dev/gemini-api/docs/pricing), promotional |
+| [Grok 4.6](https://docs.x.ai/developers/models/grok-4.6) | Reasoning and function calls; test edit-loop reliability | 500K; images | Hosted; \$2 / \$6 at up to 200K context |
+| [Qwen / Qwen3-Coder](https://qwenlm.github.io/blog/qwen3-coder/) | Coding-specialized tools; test patch correctness | Coder: 256K native; vision varies by checkpoint | Open; large Coder needs servers; smaller variants offer local experiments |
+| [DeepSeek V4.1 Flash](https://api-docs.deepseek.com/quick_start/pricing) | Thinking and tool calls; test failed-fix recovery | 1M; images | Open/server or API; \$0.30 / \$1.20 peak; half off-peak |
+| [Z.AI / GLM-5](https://docs.z.ai/guides/llm/glm-5) | Engineering and tool use; test planning through execution | 200K; text only for GLM-5 | Open/server or hosted; coding-plan quotas differ from API billing |
+| [Kimi K3](https://huggingface.co/moonshotai/Kimi-K3) | Long implementation and visual tasks; test reasoning-state continuity | 1M; images and video | Open; hosted or substantial cluster; release-specific licence |
+| [Devstral Small 2](https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512) | Code-focused multi-file edits; test recovery after rejected patches | 256K; images | Open, Apache 2.0; 24B local candidate, with runtime/context costs |
+| [gpt-oss-20b / 120b](https://developers.openai.com/api/docs/models/gpt-oss-20b) | General reasoning and calls; test tool-format compatibility | ~131K; text only | Open, Apache 2.0; 20b local candidate; 120b needs much more memory |
+
+:::
+
+**Cost and evidence limits:** Gemini's quoted promotion runs through December 31, 2026; OpenAI and Grok charge more for long-context requests. Caching, reasoning output, provider tools, and retries change the bill. Self-hosting replaces API charges with hardware, energy, and serving work; open weights do not imply lower total cost or unrestricted licensing. Compare accepted changes, elapsed time, and correction effort with the same Claude baseline before claiming parity or savings. This table supplies no measured ranking, guaranteed workstation fit, or proven Fable substitute.
+
+### Closed-Weight Models
+
+Closed-weight models are available through services without downloadable weights for independent deployment. Their model documentation establishes advertised capabilities; your subscription or endpoint determines actual access. Keep a known Claude configuration as a baseline when testing alternatives.
+
+#### Anthropic / Claude Baseline
+
+Anthropic's current catalogue lists Haiku 4.5, Sonnet 5, Opus 5, and Fable 5.1. It positions Haiku around speed, Sonnet around the speed/capability balance, Opus as a starting point for most workloads, and Fable for demanding reasoning and extended agentic work. Those are vendor positions, not fixed task classes. The documented context and reasoning controls differ, so record the exact model and effort used in your baseline. See the [Anthropic model overview](https://platform.claude.com/docs/en/models/overview).
+
+A replacement should be compared with the Claude configuration you actually use on the same repository tasks. Reproducing a result from Claude Code may require preserving context selection and edit tooling as well as changing the model. No evidence presented here establishes a proven Fable equivalent.
+
+#### OpenAI / GPT and Codex Models
+
+OpenAI's hosted catalogue includes GPT-6 Astra and GPT-5.6 Sol, Terra, and Luna. OpenAI positions Astra for its hardest reasoning and coding work, Sol for complex professional work, Terra for balancing capability and cost, and Luna for cost-sensitive workloads. These are useful shortlist distinctions; they do not establish equivalence to Anthropic tiers. Check each model's supported modalities, context, function calling, and reasoning settings in the [OpenAI model catalogue](https://developers.openai.com/api/docs/models). Treat OpenAI's comparative coding scores as vendor evaluations.
+
+**Codex is also a product and access path**, not a synonym for one immutable model. Codex-branded model releases and the models available inside Codex can change independently of API availability. A Codex subscription, hosted GPT API usage, and a self-hosted checkpoint are different arrangements; see the [current product model documentation](https://learn.chatgpt.com/docs/models) and the [Codex CLI profile](#openai-codex-cli) for the product layer. An API listing shell, apply-patch, or MCP support describes integration with those tools, not a model executing them unaided.
+
+OpenAI's **gpt-oss-20b and gpt-oss-120b** are a separate open-weight family, covered below. They are not downloadable versions of GPT-5.6 or GPT-6, and an open-source Codex client does not make the hosted GPT weights open.
+
+#### Google / Gemini
+
+Google's catalogue spans Pro, Flash, and Flash-Lite models. In this snapshot, Gemini 3.1 Pro remains a preview option, while Gemini 3.8 Flash is listed as stable and aimed at long software-engineering and agent tasks; Gemini 3.5 Flash-Lite targets throughput. Confirm lifecycle status and input support in the [Gemini model catalogue](https://ai.google.dev/gemini-api/docs/models), rather than treating "Pro" as an automatic coding winner.
+
+Gemini merits evaluation when code must be interpreted alongside screenshots, documents, or other supported media. Large advertised context windows make repository-scale experiments possible, but do not establish constraint retention or recovery quality. Test those directly. Gemini CLI and Antigravity access, tools, and quotas belong to their tool profiles; neither is a property of the underlying Gemini checkpoint.
+
+#### xAI / Grok
+
+Grok belongs in the model shortlist independently of Grok Bot. xAI's [Grok 4.6 documentation](https://docs.x.ai/developers/models/grok-4.6) describes a hosted frontier model for coding and agentic tasks with function calling, structured output, reasoning, text/image input, and a 500K context window. Those specifications justify testing function-call correctness and recovery in your chosen coding harness; xAI's quality claims do not establish performance on your repository.
+
+Check the exact endpoint's reasoning controls, image support, and context limits. Search services and a persistent cloud computer belong to provider tools or products. In particular, access to a Grok API model does not supply Grok Bot's execution environment. Earlier downloadable Grok releases also do not establish that the current hosted model has downloadable weights.
+
+#### Other Vendors and Product-Specific Models
+
+A managed coding product may select private models, fine-tunes, or several vendors behind its interface. Evaluate the resulting product if it is useful, but do not infer a portable model choice from its brand name or a successful demo. Without a documented checkpoint or selectable endpoint, its results cannot answer whether the same behaviour will transfer to another harness. The existing commercial-tool profiles cover those product decisions.
+
+### Open-Weight Models
+
+**Open weights** means that you can obtain the model's learned parameters and run them yourself under the release's licence. It does not necessarily mean unrestricted use, published training data, or a fully reproducible training process. Check the licence for the exact checkpoint. Many open-weight families also have hosted endpoints: downloadable weights and local deployment are separate facts.
+
+Several families use a **mixture-of-experts (MoE)** architecture: a router activates only a subset of expert networks for each token. Active parameters help explain computation per token; the full collection of weights still needs storage and an effective way to reach the processors. **Quantization** stores weights or intermediate values at reduced numerical precision, lowering memory demand and sometimes compute cost, with accuracy and runtime-support tradeoffs. A quantized checkpoint is a configuration to evaluate, not a guarantee of unchanged tool-use reliability.
+
+#### Qwen
+
+Qwen includes coding-specific and general-purpose models. Qwen3-Coder explicitly targets multi-turn software-engineering work with tool feedback. Its documented 480B-total/35B-active variant has 256K native context and an extended-context option; Qwen's reported coding results are vendor evaluations. That variant belongs on a server or hosted-endpoint shortlist, not a conventional single-GPU workstation shortlist. See the [Qwen3-Coder release](https://qwenlm.github.io/blog/qwen3-coder/).
+
+For a workstation experiment, the existing [Qwen3.8-27B model card](https://huggingface.co/Qwen/Qwen3.8-27B) documents a general multimodal model with reasoning controls. It is not the same checkpoint or specialization as Qwen3-Coder. A quantized 27B model is a plausible 24GB-class experiment at controlled context, subject to runtime overhead. Smaller Qwen checkpoints offer more memory margin; verify their own tool format and coding results. Qwen Code is the harness discussed later, not a capability inherited by every Qwen model.
+
+#### DeepSeek
+
+DeepSeek V4.1 Flash is available as an open-weight release as well as through the hosted `deepseek-flash` endpoint. The [model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) describes a multimodal MoE with a 552B-parameter backbone plus additional components, long context, and controllable reasoning. "Flash" does not make this a workstation model: low active compute does not remove its large weight-storage requirement.
+
+Use the [DeepSeek API documentation](https://api-docs.deepseek.com/quick_start/pricing) to identify the hosted route and current limits, and the checkpoint's deployment instructions for self-hosting. The two routes need separate validation. Published coding and terminal scores are vendor results with specified harnesses; they do not prove recovery quality in yours. Smaller DeepSeek-derived or distilled checkpoints are separate models, not compact deployments of the full V4.1 system, and need their own evaluations.
+
+#### Z.AI / GLM
+
+Z.AI positions [GLM-5](https://docs.z.ai/guides/llm/glm-5) for agentic engineering, including planning, refactoring, and debugging. Its documented 744B total parameters versus 40B active make the deployment distinction concrete: this is a server-scale model despite its much smaller active computation. The published 200K context window is a specification; completion rates and long-task reliability remain evaluation questions.
+
+The [GLM-5.3-Flash announcement](https://autoclaw.z.ai/blog/model/glm-5.3-flash/), dated September 16, describes native multimodal input and reduced inference requirements, but still lists 320B total parameters. Treat its performance comparisons as launch claims and verify checkpoint availability, serving support, and tool parsing before adoption. Smaller GLM variants may fit local experiments; neither the GLM name nor a coding-plan subscription establishes that a particular model fits your workstation.
+
+#### Moonshot / Kimi
+
+Moonshot's [Kimi K3 technical account](https://www.kimi.ai/blog/kimi-k3) describes a 2.8-trillion-parameter model with native vision and a million-token context window; [released weights have their own model card](https://huggingface.co/moonshotai/Kimi-K3). Its scale makes it a hosted-endpoint or substantial server-cluster candidate. Moonshot recommends large accelerator deployments, so it is not a practical workstation replacement even with reduced-precision weights.
+
+Kimi is relevant to long implementation sessions and visually informed work such as frontend debugging. Test whether the selected endpoint preserves reasoning state and tool results across turns, and whether its reasoning mode meets your latency budget. The [K3 developer guide](https://platform.kimi.ai/docs/guide/kimi-k3-quickstart) describes the API contract; launch demos and vendor benchmarks do not establish independent-review accuracy. Kimi CLI remains a separate harness choice.
+
+#### Mistral / Devstral
+
+Devstral is Mistral's coding-agent family, trained for repository exploration and multi-file software-engineering work. Its smaller downloadable variants offer a more realistic workstation experiment than the largest MoE families: Mistral's [Devstral release](https://mistral.ai/news/devstral-2-vibe-cli/) describes a 24B small model as well as the larger model. Quantization, context allocation, and the serving stack still determine whether your machine can sustain an agent loop.
+
+Separate those checkpoints from hosted lifecycle status. Mistral currently marks the [Devstral 2 endpoint deprecated](https://docs.mistral.ai/models/devstral-2-25-12) and points new integrations to [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04), a multimodal model optimized for coding and agentic use with 256K context and open weights under a Modified MIT licence. That does not invalidate an existing local Devstral checkpoint, nor establish that Medium fits the same hardware. Evaluate the exact release, licence, and deployment instructions.
+
+#### OpenAI / gpt-oss
+
+[OpenAI gpt-oss-20b](https://developers.openai.com/api/docs/models/gpt-oss-20b) and [gpt-oss-120b](https://developers.openai.com/api/docs/models/gpt-oss-120b) are text-only open-weight reasoning models under Apache 2.0. They support configurable reasoning effort and function-call generation, but are general reasoning models rather than downloadable versions of the hosted Codex/GPT coding stack. The names round their total parameter counts: OpenAI documents about 21B/3.6B total/active for the smaller model and 117B/5.1B for the larger.
+
+OpenAI's [local Ollama guide](https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama) describes supplied MXFP4 reduced-precision weights and a 16GB-or-more memory starting point for 20b; the 120b model is an approximately 80GB accelerator-class candidate with room depending on runtime and context. These are deployment starting points, not measured capacity for your workload. Preserve the required Harmony conversation format, including reasoning and tool boundaries, through the serving adapter. Test malformed calls, long-context recovery, and reasoning latency before giving either model write authority. Screenshots require a separate visual-processing path.
+
+#### Meta / Llama and Google / Gemma
+
+Llama offers downloadable general-purpose checkpoints with an established deployment ecosystem, but the family name does not imply code specialization. Meta's [model repository](https://github.com/meta-llama/llama-models/blob/main/README.md) separates releases and their prompt formats; its full-precision Llama 4 examples require multiple GPUs. Smaller releases can be useful local baselines for summaries, retrieval over code, and bounded changes. Do not transfer results between generations, base and instruction-tuned checkpoints, or third-party coding fine-tunes.
+
+[Google's Gemma overview](https://ai.google.dev/gemma/docs/core) likewise describes a general-purpose open-weight family, distinct from hosted Gemini. Its current catalogue includes small deployment-oriented models and larger dense and MoE options, with modality varying by checkpoint. Gemma is useful when local memory limits or visual input drive the experiment, but a supported function-call format does not establish dependable autonomous coding. Check the exact release's licence, input support, and edit-test behaviour before moving beyond bounded support.
+
+#### Other Families: MiniMax, NVIDIA Nemotron, IBM Granite, Microsoft Phi
+
+[MiniMax's coding and agent releases](https://github.com/MiniMax-AI/MiniMax-M2) merit a hosted or server evaluation; their sparse active computation can obscure large total weights. [NVIDIA Nemotron](https://research.nvidia.com/labs/nemotron/Nemotron-3/) spans general reasoning and agent workloads across different deployment sizes. Its optimized runtime ecosystem may matter to an existing NVIDIA installation, but the family is not exclusively code-specialized and its larger variants are not workstation defaults.
+
+[IBM Granite Code](https://github.com/ibm-granite/granite-code-models) provides explicitly code-oriented checkpoints; distinguish code completion and instruction variants from general Granite models when evaluating an agent loop. [Microsoft Phi](https://huggingface.co/microsoft/Phi-4-mini-instruct) offers small general instruction/reasoning models suitable for constrained local experiments. For these smaller models, start with extraction, summaries, and tightly scoped edits. Compact size alone says nothing about reliable multi-file recovery.
+
+### Deployment Fit: Workstation, Server, or Hosted Endpoint
+
+Size the deployment for the actual checkpoint and workload. GPU video memory (VRAM), shared system memory, and memory spread across several devices are not interchangeable performance budgets. CPU offload can make a model load while slowing every agent step; multiple GPUs require runtime support and sufficiently fast communication. The classes below are starting points for testing, not guaranteed fits.
+
+::: {.broad-table}
+
+| Available accelerator memory | Candidate deployment class | Main constraint to measure |
+|------------------|------------------------------------------|----------------------------------------|
+| ~16GB class | Small quantized Qwen, Gemma, Llama, Phi, or Granite checkpoints; gpt-oss-20b at the lower bound with a supported runtime | This is a 16GB-or-more starting point, not a sub-16GB guarantee; weight overhead and context cache can exhaust the margin |
+| 24GB | Quantized models around 20–30B, such as smaller Devstral or Qwen3.8-27B; gpt-oss-20b with more headroom | Long context and simultaneous sessions may consume the margin |
+| ~80GB | gpt-oss-120b or selected quantized larger dense models | The advertised fit may leave insufficient room for your context or serving batch |
+| Multi-GPU / server | Large Qwen3-Coder, DeepSeek, GLM, Kimi, and other large MoE checkpoints | Total weight storage, interconnect bandwidth, runtime support, and concurrency |
+| Hosted endpoint | Any offered model that meets your data-boundary policy | Provider limits, queueing, request compatibility, and retention |
+
+:::
+
+The **key/value (KV) cache** stores attention state for previously processed tokens. Its size depends on architecture, precision, sequence length, and simultaneous sequences. Full-attention, sliding-window, and compressed-cache architectures have different requirements. Active parameters alone therefore cannot determine memory capacity; neither can a downloaded weight-file size.
+
+For a small worked example, assume a hypothetical dense 14-billion-parameter model, ideal four-bit weight storage, 1 GiB of additional weight/quantization overhead, and a 2 GiB runtime reserve. Assume full attention with 32 layers, eight KV heads per layer, 128 values per head, two-byte cache values, one sequence, and no cache sharing or compression. GiB here means 2^30 bytes. At 8,192 resident tokens, including generated tokens, the estimate is:
+
+```text
+Weight payload = 14,000,000,000 × 4 / 8 bytes ~= 6.52 GiB
+KV cache       = 32 × 8,192 × 2 (key and value) × 8 × 128 × 2 bytes
+               = 1 GiB
+Total          ~= 6.52 + 1 + 2 + 1 = 10.52 GiB
+```
+
+At 32,768 tokens, that cache becomes 4 GiB and the estimate rises to 13.52 GiB. Two independent sequences of that length need about 8 GiB of cache, bringing the estimate to 17.52 GiB before any extra batching overhead: too much for a 16 GiB budget. This is capacity arithmetic, not a benchmark or a prediction for the named models above. Measure actual peak allocation and latency. Hardware purchase, electricity, and administration costs belong in [Cost Analysis](#cost-analysis).
+
+### Evidence and Evaluation
+
+Keep four evidence types separate. **Vendor specifications and claims** establish intended formats, supported settings, licences, and published limits; vendor benchmark results show performance under that vendor's evaluation conditions. **Common-harness snapshots** reduce some comparison differences but still depend on tasks, budgets, prompts, and model adapters. **Practitioner reports** reveal failure modes worth reproducing, not population-level success rates. **Local deployment measurements** establish whether your selected quantization, runtime, hardware, and concurrency meet your requirements.
+
+As one common-harness snapshot, the [DeepSWE v1.1 leaderboard](https://deepswe.datacurve.ai/) labels its update September 3, 2026 and reports 113 long-horizon tasks using `mini-swe-agent`. Selected rows:
+
+::: {.compact-table}
+
+| Model and setting | Resolution rate | Average cost | Notes / scope |
+|---|---:|---:|---|
+| GPT-6 Astra, xhigh | 74% ±3% | $6.52/task | xhigh setting |
+| Gemini 3.8 Flash, high | 74% ±1% | $2.36/task | 166 average agent steps |
+| Claude Opus 5, max | 74% ±4% | $11.84/task | max setting |
+| Claude Fable 5, xhigh | 70% ±3% | $13.41/task | Fable 5, not 5.1 |
+| GPT-5.6 Luna, max | 67% ±4% | $0.61/task | No interactive-latency measurement |
+| DeepSeek V4 Pro, max | 63% ±6% | $1.67/task | Not V4.1 Flash |
+
+:::
+
+The uncertainty bands are reproduced as displayed. Overlap, differing effort settings, and benchmark-specific cost accounting preclude a universal ordering. This snapshot does not establish permission safety or performance in another harness.
+
+The linked practitioner material includes [Codex long-task stalls](https://github.com/openai/codex/issues/23807), [OpenCode context-coherence concerns](https://github.com/anomalyco/opencode/issues/11314), and [requests for Claude routing](https://github.com/anthropics/claude-code/issues/44976). Use those reports to design interruption, context, and escalation tests. They do not establish that one vendor fails more often. Community comparisons in the References are similarly leads for evaluation, not a substitute for controlled runs.
+
+For a local comparison, start with 20–30 representative repository tasks across the four roles, including tasks with known acceptance criteria and deliberately failing commands or patches. Run each candidate from the same initial revision under the intended permissions and budget. Record the checkpoint or API identifier, provider, harness version, reasoning setting, context policy, and, when self-hosting, quantization and runtime. Repeat ambiguous cases; do not hide retries behind a final success rate.
+
+Measure accepted task outcomes, regressions, invalid calls, recovery attempts, elapsed time, human correction time, and cost. For local serving, also record peak memory, time to first token, generation speed, and failures at the intended context and concurrency. This survey does not supply measured workstation results; the capacity example above is explicitly an estimate.
+
+### Choosing a Replacement
+
+Start with your deployment boundary and the consequences of an incorrect autonomous action, then shortlist models for a task role. The table supplies experiments, not winners. Keep the Claude baseline where its use is permitted, and compare actual accepted changes rather than the confidence of the final explanation.
+
+::: {.broad-table}
+
+| Task role | Autonomy risk | Deployment boundary and evaluation shortlist | What to test |
+|----------------|----------------------|----------------------------------|----------------------------|
+| Bounded support | Low when read-only; rises with writes | Approved hosted: Luna, Gemini Flash-Lite, DeepSeek Flash; workstation: smaller Qwen, Gemma, Phi, or gpt-oss-20b | Extraction accuracy, constrained edit correctness, valid calls, response latency |
+| Normal implementation | Moderate; changes multiple files | Approved hosted: Terra, Gemini Pro/Flash, Grok; self-hosted: Qwen3-Coder or Devstral sized to available hardware | Edit-test completion, unrelated-change avoidance, rejected-patch recovery |
+| Hard diagnosis | High when uncertain conclusions trigger broad changes | Approved hosted: Astra, Sol, Claude baseline; hosted open-weight or internal server: GLM, Kimi, DeepSeek | Evidence-backed root cause, regression tests, recovery from failed hypotheses, stopping within budget |
+| Independent review | Read-only, but false assurance can conceal defects | A different family from the implementer, through a boundary permitted for the diff and source | Reproducible findings, missed defects, false positives, and whether evidence supports approval |
+
+:::
+
+Routing is a **policy to validate on your repository**. One starting policy is to allow bounded support without writes, assign ordinary changes to a tested implementation configuration, and escalate repeated failures or uncertain causes to diagnosis. Define an escalation trigger, such as two failed repair attempts, and a total time or spend limit. A more capable model does not automatically receive broader permissions.
+
+For review, provide the task contract, diff, relevant source, test results, and unresolved questions. A different family may expose different assumptions, but does not guarantee statistical independence or detect every shared blind spot. Keep review findings tied to reproducible evidence. The model survey identifies what to test; [Provider Flexibility Analysis](#provider-flexibility-analysis) and the tool profiles establish which harnesses can deliver the chosen policy.
 
 ---
 
@@ -244,7 +460,7 @@ npm install -g @google/gemini-cli
 gemini
 ```
 
-**LLM provider support:** Gemini CLI is primarily designed for Google's Gemini models (`gemini-3.1-pro-preview`, `gemini-3.5-flash`, and the model aliases exposed by the installed release). It is not model-agnostic in the same way as Aider or OpenCode.
+**LLM provider support:** Gemini CLI is primarily designed for Google's Gemini models; exact aliases exposed by the installed release change as Google migrates the consumer path toward Antigravity CLI. The current Gemini API catalogue includes Gemini 3.8 Flash, 3.7 Flash, 3.5 Flash-Lite, and 3.1 Pro Preview. It is not model-agnostic in the same way as Aider or OpenCode.
 
 **Access and quotas:** Google's transition announcement says individual free, Pro, and Ultra access moved to Antigravity CLI on June 18, 2026. Enterprise Gemini Code Assist licences remain supported, and Gemini CLI remains available through API-key and Vertex AI authentication. A Gemini CLI plans page still displays a legacy-looking individual free tier, so treat that page as inconsistent with the transition announcement and test the actual sign-in path before relying on Gemini CLI for individual use.
 
@@ -350,6 +566,8 @@ codex
 
 **Model support:** The current Codex subscription lineup is the GPT-5.6 family: Sol, Terra, and Luna. Sol is the high-capability choice, Terra balances capability and allowance, and Luna stretches usage furthest. Available models depend on plan and may change, so `/model` and `/status` are more reliable than a hard-coded model name in a long-lived guide.
 
+The GPT-6 Astra model is also available in the current OpenAI model catalogue; use the installed Codex `/model` listing rather than assuming every plan exposes every model.
+
 **Local model support:** Codex CLI can run against local models via an `--oss` flag, with documented Ollama and LM Studio providers. This gives it a genuine offline/local-only mode, something Gemini CLI lacks entirely.
 
 **Bundled pricing:** Codex is included in ChatGPT Free, Go, Plus, Pro, Business, and Enterprise plans. Allowances vary by plan and model; the official pricing page publishes five-hour local-message limits and notes that additional weekly limits may apply. Users who exhaust an allowance can buy credits on eligible plans or run additional local tasks with an API key at standard API rates. This mirrors Claude Code's subscription bundling more closely than a pay-per-token CLI tool like Aider.
@@ -379,6 +597,8 @@ codex
 
 **Architecture:** Amp combines a local CLI with cloud-side Orbs for longer-running or parallel work. Sourcegraph heritage informs the product, but this survey does not assume that every Sourcegraph code-intelligence feature is available inside Amp. The CLI handles local interactive work; Orbs handle cloud-side execution.
 
+**Deployment boundary:** Enterprise customers can now run self-hosted Orbs in their own AWS, Google Cloud, or Azure account and network. That keeps the repository checkout, build output, and paused Orb files in the customer's cloud account, but it does not make Amp self-contained: the Amp service still runs the conversation, and file contents, command output, and code changes may travel through Amp and the selected model provider.
+
 **LLM provider support:** Multi-model, with supported provider-key configuration and plugin/skill/hook extensibility. It is flexible, but “model-agnostic” overstates the default curated product surface.
 
 **Cost model:** Amp has a free Hobby tier (pay-as-you-go orbs, no token fees or limits), a $20/month Individual tier (45,000 orb minutes, unlimited repos), a Teams tier (pooled credits, no extra platform charge on top of members' own plans), and a custom-priced Enterprise tier (pooled credits only, plus SCIM/audit logs/IP allowlisting) (as of 2026-09-12). Individual and non-enterprise workspaces do not pay a model markup; Orb compute is metered separately by the minute with automatic pause for idle instances. Check the live pricing page before budgeting: Amp's model and compute rates are usage-based and have changed structure before.
@@ -392,10 +612,10 @@ codex
 **Weaknesses:**
 - Orb compute and agent inference are separate meters, so a subscription is not an all-in fixed-cost plan
 - Newer product identity means less accumulated community track record than Sourcegraph's older Cody product
-- Cloud "Orbs" component means it is not a purely local/offline tool in the way Aider or Goose can be
+- Cloud "Orbs" component means it is not a purely local/offline tool in the way Aider or Goose can be; self-hosted Orbs still depend on Amp's hosted control plane
 
 ### Deprecated and Unverified Tools
-### Mentat
+#### Mentat
 
 **What it is:** Mentat was a Python-based CLI coding tool and an early entrant in the space, taking a conversational approach to code editing with explicit context management.
 
@@ -928,8 +1148,10 @@ A critical factor for Claude Code users concerned about API costs is whether an 
 
 OpenRouter is a unified API gateway that provides access to hundreds of models from dozens of providers under a single API key, with pay-per-token pricing and no monthly subscription.
 
+::: {.broad-table}
+
 | Tool | OpenRouter Support | Notes |
-|------|--------------------|-------|
+|----------|----------|------------------------------|
 | Aider | Yes (verified) | Full setup at aider.chat/docs/llms/openrouter.html; via litellm. |
 | Cline | Yes (verified) | Listed on openrouter.ai/works-with-openrouter. |
 | OpenCode | Yes (verified) | 75+ providers incl. OpenRouter; do not use the prohibited Claude Pro/Max plugin route. |
@@ -954,20 +1176,24 @@ OpenRouter is a unified API gateway that provides access to hundreds of models f
 | JetBrains AI Assistant | No | Tied to JetBrains' own model rotation, not user-configurable OpenRouter. |
 | Tabnine | No | Own models plus a fixed provider list. |
 
+:::
+
 **Conclusion:** For OpenRouter flexibility, the open-source CLI tools (Aider, Cline, OpenCode, Continue.dev, and Goose) remain the clearest options. Amp supports provider keys but does not document OpenRouter as a named first-class integration. Zed AI also lists OpenRouter among its supported providers. OpenAI's Codex CLI supports local/OSS models via `--oss`, but OpenRouter is not its primary path. GitHub Copilot now has local BYOK in several clients and enterprise-managed custom models, but availability and feature coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok Bot remain managed products rather than OpenRouter-style routing layers; Grok Bot's cross-application computer use should not be confused with provider flexibility.
 
 #### Local LLM Support (Ollama / LM Studio)
 
 Running models locally eliminates API costs entirely, but not hardware, electricity, or operational costs. Quality and hardware fit vary by model, quantization, context length, and runtime; validate the exact model/workload combination before standardising on it.
 
+::: {.broad-table}
+
 | Tool | Ollama | LM Studio | Notes |
-|------|--------|-----------|-------|
+|--------------------|----------|------------|----------------------------------------------------------|
 | Aider | Yes | Yes | Via litellm. |
 | Cline | Yes | Yes | Native provider options. |
 | OpenCode | Yes | Yes | Provider-agnostic architecture. |
 | Continue.dev | Yes | Yes | localhost:11434 default. |
 | Goose | Yes | Partial | On-device philosophy is core; MCP-configurable local providers. |
-| Amp (Sourcegraph) | No | No | Confirmed no local inference: Amp's Security Reference states inference always runs on Sourcegraph-documented hosted providers (Anthropic, OpenAI, Google, etc.); running the CLI locally is client/orchestration only. No official mention of Ollama, LM Studio, llama.cpp, or any local endpoint anywhere in Amp's docs (Cody, a separate Sourcegraph product, has experimental Ollama support -- not applicable to Amp). |
+| Amp (Sourcegraph) | No | No | Local CLI and self-hosted Orb execution are available, but inference remains on hosted providers; self-hosted execution is an Enterprise deployment option, not local model inference. |
 | OpenAI Codex CLI | Yes | Yes | Via `--oss` flag; documented local providers are Ollama and LM Studio. |
 | Plandex | Partial | Partial | Via OpenAI-compatible API config. |
 | OpenHands | Yes | Yes | Via litellm; Agent Canvas can be self-hosted. |
@@ -985,17 +1211,18 @@ Running models locally eliminates API costs entirely, but not hardware, electric
 | Tabnine | No | No | Cloud/on-prem/air-gapped deployment options exist, but not consumer local-model tools like Ollama. |
 | Google Antigravity 2.0 | No | No | Google-managed models and quotas; the current plans page says no BYOK or custom endpoint for additional quota. |
 
+:::
+
 
 **Best tools for local LLMs:** Aider, Cline, OpenCode, Continue.dev, Goose, and JetBrains AI Assistant remain the clearest options for local model use. OpenAI's Codex CLI supports local models through `--oss` with documented Ollama and LM Studio providers. Amp's local CLI is not evidence of local inference; its current documentation describes hosted models and provider keys. Devin Desktop's local-machine execution should not be treated as local model support without explicit provider documentation.
 
-**Recommended local models for coding (late-July 2026 snapshot):**
-
-- **Current small coding models** -- choose from the model catalog supported by Ollama or LM Studio; exact model names, quantizations, and hardware requirements change quickly
-- **Hardware** -- treat 16GB VRAM as a workload- and quantization-dependent starting point, not a guarantee. Test the model at the context length and latency your workflow requires.
+For checkpoint choices and memory sizing, see [Model Alternatives for Coding Agents](#model-alternatives-for-coding-agents), especially [Deployment Fit](#deployment-fit-workstation-server-or-hosted-endpoint). The tables above describe provider compatibility; model quality and hardware feasibility require separate evaluation.
 
 ### Feature Comparison Matrix
 
-The matrix spans 17 tools, too many to render legibly as one table at this page width -- split below into five groups.
+The matrix is a shortlist rather than a complete catalogue; it spans 17 representative tools and is split below into five groups for legibility. Products and model surfaces change faster than this table, so read it with the dated product profiles and model section.
+
+::: {.broad-table}
 
 **Group 1: Claude Code, Aider, OpenCode, Cline**
 
@@ -1052,7 +1279,7 @@ The matrix spans 17 tools, too many to render legibly as one table at this page 
 | **Open source** | No | No | Yes | No |
 | **Git integration** | Yes | Yes | Yes | Yes |
 | **Cost model** | $20-200/mo + API | Free / $20 / $200 / Teams | Bundled ChatGPT | Free / $20 Individual (orb minutes) / Teams+Enterprise pooled credits |
-| **Self-hosted option** | No | No | No | No |
+| **Self-hosted option** | No | No | No | Partial: self-hosted Orbs on Enterprise |
 
 **Group 4: Devin, Grok Bot, Copilot**
 
@@ -1073,7 +1300,11 @@ The matrix spans 17 tools, too many to render legibly as one table at this page 
 | **Cost model** | Free / $20 / $200 + usage | Eligible plan + separate Bot usage | $10-100/mo indiv. |
 | **Self-hosted option** | No | No | No |
 
+:::
+
 **Group 5: Kiro, Antigravity**
+
+::: {.compact-table}
 
 | Feature | Kiro | Antigravity |
 |---|---|---|
@@ -1091,6 +1322,8 @@ The matrix spans 17 tools, too many to render legibly as one table at this page 
 | **Git integration** | Yes | Yes |
 | **Cost model** | $20-200/mo (credits) | Free (individuals) |
 | **Self-hosted option** | No | Partial (SDK/enterprise paths) |
+
+:::
 
 Product details vary by plan or surface. † Gemini CLI's 1M-token context window is a model-level feature; product quotas still apply. ‡ Claude Code's browser access is via MCP servers (e.g. Playwright) or WebFetch, not a built-in browser. § Goose's MCP support is a confirmed core architectural pillar with documented extensions and broad MCP ecosystem compatibility. ¶ Google's transition announcement and current Gemini CLI authentication pages conflict on consumer access; verify the sign-in path before standardising on it. Grok Bot's browser, MCP, and computer-use capabilities are product-level features; do not infer equivalent capabilities for the xAI API from this row. ‖ Devin's web search is not a separately branded feature -- it is the agentic cloud browser tool proactively looking up documentation and solutions during a task. This is distinct from "Devin Search," a separately documented codebase-search feature; do not conflate the two.
 
@@ -1136,7 +1369,7 @@ The distinction from MCP matters: MCP standardises *tool/capability* portability
 
 #### What This Means for Migration
 
-If you have heavily invested in Claude Code's extensibility system (skills, hooks, MCPs), a complete migration requires rebuilding your workflow on whatever alternative you choose. The good news: MCP server investments are portable to any MCP-compatible tool (Cline, OpenCode, Gemini CLI, Goose, OpenHands, Amp, Antigravity, and Kiro). OpenCode, Cursor, Cline, Antigravity, and Kiro now have their own skills/hooks/plugin surfaces, but formats and event semantics differ. The hooks system is still the hardest part to reproduce faithfully -- alternatives require their own plugin model, shell wrappers, or git hooks. If your per-tool instruction files (rather than MCP servers) are the bigger migration cost, look at consolidating onto AGENTS.md -- it is now adopted across tens of thousands of projects, and Claude Code can import it into `CLAUDE.md`.
+If you have heavily invested in Claude Code's extensibility system (skills, hooks, MCPs), a complete migration requires rebuilding your workflow on whatever alternative you choose. The good news: MCP server investments are often portable to any MCP-compatible tool (Cline, OpenCode, Gemini CLI, Goose, OpenHands, Amp, Antigravity, and Kiro), but transports, authentication, roots, sampling, approvals, environment variables, and client-specific behaviour still need testing. OpenCode, Cursor, Cline, Antigravity, and Kiro now have their own skills/hooks/plugin surfaces, but formats and event semantics differ. The hooks system is still the hardest part to reproduce faithfully -- alternatives require their own plugin model, shell wrappers, or git hooks. If your per-tool instruction files (rather than MCP servers) are the bigger migration cost, look at consolidating onto AGENTS.md -- it is now adopted across tens of thousands of projects, and Claude Code can import it into `CLAUDE.md`.
 
 ### Cost Analysis
 
@@ -1151,7 +1384,7 @@ For this analysis, heavy usage means:
 
 These are rough estimates -- actual token consumption varies enormously by workflow and model. The worked examples below use the midpoints (~150M input / ~15M output tokens per month).
 
-#### API Cost Estimates (Direct Provider, as of August 31, 2026)
+#### API Cost Estimates (Direct Provider, as of September 16, 2026)
 
 Pricing changes frequently; treat these as ballpark figures using current published rates, not guarantees.
 
@@ -1187,12 +1420,13 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 - Heavy usage estimate: approximately **$480/month** at <=200k context, approximately **$870/month** above it
 - *Gemini 3.5 Flash ($1.50/$9.00) has a separate API free tier with reduced quotas, but heavy usage as defined here will exceed it. Gemini CLI's individual Google-account path moved to Antigravity CLI on June 18, 2026.*
 
-**DeepSeek V4 Flash (illustrative direct-API rates; gateway rates differ):**
+**DeepSeek V4.1 Flash (`deepseek-flash`; illustrative direct-API rates; gateway rates differ):**
 
-- Input: $0.14/million tokens
-- Output: $0.28/million tokens
-- Heavy usage estimate: **~$25/month** at the stated rates and workload
-- *Still dramatically cheaper than frontier models. Rates vary by provider and may include cache-hit, peak/off-peak, or gateway-specific pricing; this is an illustrative direct-API calculation, not a universal rate.*
+- Context: 1M tokens; maximum output 384K; tool calls, Responses API, and vision supported
+- Input: $0.15/million off-peak or $0.30/million peak (cache-hit input is lower)
+- Output: $0.60/million off-peak or $1.20/million peak
+- Heavy usage estimate: **~$32/month off-peak or ~$63/month peak** at the stated workload
+- *Still dramatically cheaper than frontier models. DeepSeek retired the V4 Flash model on September 10 and now routes the old name to V4.1 Flash; rates vary by provider, peak/off-peak schedule, cache status, and gateway markup.*
 
 **Local model via Ollama or LM Studio:**
 
@@ -1203,17 +1437,19 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 
 \small
 
+::: {.broad-table}
+
 | Scenario | Min Monthly | Heavy Usage (Cloud) | Heavy Usage (Local) | Notes |
-|---|---|---|---|---|
+|------------------|---------------|---------------------------|-------------|---------------------------|
 | Aider + Claude Sonnet 5 | $0 tool + API | ~$450/mo ($2/$10 standard pricing) | N/A | Illustrative calculation for the stated 150M input / 15M output workload. |
 | Aider + Claude Haiku 4.5 | $0 tool + API | ~$225/mo | N/A | Cheaper same-vendor fallback; the "reduce cost, stay on Claude" scenario. |
-| Aider + DeepSeek v4-flash (OpenRouter) | $0 tool + API | Provider/model-dependent | N/A | Current gateway pricing can differ from direct DeepSeek pricing and may include cache or peak/off-peak rates. |
+| Aider + DeepSeek `deepseek-flash` (OpenRouter) | $0 tool + API | Provider/model-dependent | N/A | Current gateway pricing can differ from direct DeepSeek pricing and may include cache or peak/off-peak rates. |
 | Aider + a low-cost OpenRouter model | $0 tool + API | Provider/model-dependent | N/A | Use the provider's live rate card; do not treat a single gateway quote as universal. |
 | Aider + Ollama (local) | $0 | $0 | GPU hardware cost only | Choose a currently supported local coding model and validate its quantization/context fit. |
-| OpenCode + DeepSeek v4-flash | $0 tool + API | ~$25/mo | N/A | OpenCode's current provider path supports DeepSeek; this estimate uses the current V4-Flash direct rates before any gateway markup. |
+| OpenCode + DeepSeek `deepseek-flash` | $0 tool + API | ~$32–$63/mo | N/A | Uses DeepSeek V4.1 Flash direct rates for the stated off-peak/peak workload before any gateway markup. |
 | OpenCode (ChatGPT-native) | $0 tool + ChatGPT subscription | Bundled -- see Codex CLI row (same OpenAI subscription tiers apply since the Jan 2026 OpenAI partnership) | N/A | New row. |
 | Cline + OpenRouter (model varies) | $0 tool + API | Varies by provider/model | N/A | Route cheaply via OpenRouter; use current provider pricing. |
-| Amp (Sourcegraph) | Free (Hobby, pay-as-you-go) or $20/mo (Individual) | Individual $20/mo includes 45,000 minutes of orb time; Teams and Enterprise are pooled-credit, no fixed per-seat platform charge (as of 2026-09-12) | No | Self-hosted is confirmed unavailable at any tier, including Enterprise (which adds SCIM/audit logs/IP allowlisting but stays SaaS). No markup over provider API prices for individual/non-enterprise plans; orb compute is metered separately by the minute with auto-pause. |
+| Amp (Sourcegraph) | Free (Hobby, pay-as-you-go) or $20/mo (Individual) | Individual $20/mo includes 45,000 minutes of orb time; Teams and Enterprise are pooled-credit, no fixed per-seat platform charge (as of 2026-09-12) | No | Enterprise supports self-hosted Orbs in AWS, Google Cloud, or Azure, but the Amp control plane and model traffic remain hosted. No markup over provider API prices for individual/non-enterprise plans; orb compute is metered separately by the minute with auto-pause. |
 | Gemini CLI (individual) | Not applicable | Not applicable after the June 18, 2026 consumer transition | N/A | Use Antigravity CLI for individual Google-account access. Gemini CLI remains available through enterprise/API/Vertex paths. |
 | Gemini CLI (teams/API) | Varies | Google Developer Program, AI Studio, and Vertex AI paths differ | N/A | Choose based on identity, privacy, quota, and billing requirements. |
 | Google Antigravity 2.0 | $0 individual tier | $0 individual tier with weekly limits; Google AI Pro/Ultra raise limits; enterprise is consumption-priced | No | Direct migration target for individual Gemini CLI users; exact limits and model availability vary. |
@@ -1226,7 +1462,7 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | Devin (cloud agent, Pro) | $20/mo | $20/mo plus on-demand credits at API pricing | N/A | Current plan; daily and weekly usage allowances apply. |
 | Devin (cloud agent, Max) | $200/mo | $200/mo plus on-demand credits at API pricing | N/A | Current power-user plan with a larger weekly allowance and no daily cap. |
 | Devin (cloud agent, Teams) | $80/mo minimum + $40/full seat | Shared on-demand credits; full seats include their own allowance | N/A | Replaces the legacy ACU/Core and $500 team-plan descriptions. |
-| Grok Bot | Eligible SuperGrok/Cursor/Teams plan | Plan-dependent plus separate Bot usage allowance | N/A | Beta product; access, quotas, and billing vary by plan and change quickly. |
+| Grok Bot | Eligible SuperGrok / Cursor / Teams plan | Plan-dependent plus separate Bot usage allowance | N/A | Beta product; access, quotas, and billing vary by plan and change quickly. |
 | GitHub Copilot -- Individual Free | $0/mo | $0 (2,000 completions/mo cap) | N/A | New tier detail. |
 | GitHub Copilot -- Individual Pro | $10/mo | $10 + variable consumption after included AI credits | N/A | AI-credit consumption varies by model and workload; code completions have a separate allowance. |
 | GitHub Copilot -- Individual Pro+ | $39/mo | $39 + overage ($70 credits included) | N/A | New tier, includes premium models (Claude Opus access). |
@@ -1249,8 +1485,10 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | Zed AI -- Personal | $0/mo | $0 (2,000 edit predictions/mo) | N/A | Replaces old doc's vague "free tier and credits system." |
 | Zed AI -- Pro | $10/mo | $10 + token overage at API list price +10% ($5 tokens included) | N/A | New precise figure. |
 | Zed AI -- Business | $30/user/mo | $30/user/mo | N/A | New tier. |
-| OpenAI Codex CLI | Bundled in ChatGPT plan | Free ($0), Go ($8/mo), Plus ($20/mo), Pro ($100/mo) -- plan allowance and purchasable credits vary by tier; local `--oss` mode is $0 | $0 via `--oss` (Ollama/LM Studio) | Usage limits and included credits change by plan. |
+| OpenAI Codex CLI | Bundled in ChatGPT plan | Free ($0), Go ($8/mo), Plus ($20/mo), Pro ($100/mo) -- plan allowance and purchasable credits vary by tier; local `--oss` mode has no API charge | Hardware, electricity, and administration costs still apply to local `--oss` (Ollama/LM Studio) | Usage limits and included credits change by plan. |
 | OpenHands | $0 tool + API | Varies by chosen provider/model | N/A | Docker overhead is a hardware/time cost, not a monthly fee. |
+
+:::
 
 \normalsize
 
@@ -1293,7 +1531,7 @@ Antigravity CLI is the announced first-party migration path for individual Googl
 
 **Free option:** Antigravity CLI has an official $0 individual tier authenticated with a Google Account. It is the simplest zero-subscription starting point in this survey, though weekly quotas and Google's model ecosystem still matter.
 
-**Ultra-cheap option:** Aider or OpenCode with a current low-cost model via OpenRouter. DeepSeek V4 Flash is one candidate, but quote its current provider/model rate card at the time of purchase; the older `deepseek-chat`/`deepseek-reasoner` API names are sunset.
+**Ultra-cheap option:** Aider or OpenCode with a current low-cost model via OpenRouter. DeepSeek V4.1 Flash is one candidate, but quote its current provider/model rate card at the time of purchase; use `deepseek-flash`, not the retired `deepseek-chat`, `deepseek-reasoner`, or legacy V4 Flash names.
 
 **Zero API cost:** Any Ollama- or LM Studio-compatible tool plus a local coding model -- hardware and latency depend on the model, quantization, context, and workload.
 
@@ -1324,59 +1562,63 @@ Rather than a hard switch, a practical migration path:
 1. **Set up Aider** as a Claude Code complement today. Get comfortable with it. It is free to try with Haiku (cheap) or Ollama (free).
 2. **Test OpenCode** -- its MCP support and provider flexibility make it a strong candidate for a full Claude Code replacement. Treat the old Claude Pro/Max plugin route as unsupported; use an Anthropic API key or another documented provider path.
 3. **Test your free-tier fallback** -- Antigravity CLI is free for individuals within product quotas. Run your own representative workload before relying on that allowance for daily work.
-4. **Invest in OpenRouter** -- get an API key. With OpenRouter, you're never locked to a single model again. As model prices drop (historically, they do), your costs drop automatically.
+4. **Invest in OpenRouter** -- get an API key if its routing breadth is useful. It reduces model lock-in, but adds a gateway dependency and does not automatically migrate you to cheaper models; select and re-evaluate models explicitly.
 5. **Protect your MCP investments** -- build MCP servers in preference to tool-specific plugins wherever possible. MCP compatibility is growing across the ecosystem. **Do the same for AGENTS.md** if you maintain per-tool instruction/rule files (`.clinerules`, `.cursorrules`, `CLAUDE.md`) -- it is now adopted across tens of thousands of projects and is a lower-maintenance way to keep project instructions portable than maintaining one file per vendor.
 
 ## References
 
-First-party sources checked on **August 31, 2026** for the main survey snapshot. Grok Bot sources were checked on **September 9, 2026**:
+First-party sources checked on **September 16, 2026** for the current model and pricing snapshot. Grok Bot sources were checked on **September 9, 2026**. Model names, prices, quotas, and product boundaries can change independently; the date is part of each claim.
 
-- [Anthropic Max plan and usage limits](https://support.claude.com/en/articles/11049741-what-is-the-max-plan)
-- [Claude Code with Pro or Max](https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan)
-- [Anthropic API pricing](https://platform.claude.com/docs/en/about-claude/pricing)
-- [OpenAI Codex pricing](https://chatgpt.com/codex/pricing/)
-- [OpenAI API models and pricing](https://developers.openai.com/api/docs/models)
-- [Codex repository and current CLI distribution](https://github.com/openai/codex)
-- [Google's Gemini CLI to Antigravity CLI transition announcement](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/)
-- [Gemini CLI authentication](https://geminicli.com/docs/get-started/authentication/)
-- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)
-- [Antigravity plans and pricing](https://antigravity.google/pricing)
-- [Antigravity overview](https://antigravity.google/docs/overview?app=antigravity)
-- [Antigravity CLI installation](https://antigravity.google/docs/cli/install/)
-- [Antigravity MCP documentation](https://antigravity.google/docs/mcp)
-- [Amp pricing](https://ampcode.com/docs/pricing)
-- [Amp documentation](https://ampcode.com/docs)
-- [Amp skills and plugins](https://ampcode.com/docs/customize/skills) and [plugin API](https://ampcode.com/plugin-api)
-- [Cline CLI reference](https://docs.cline.bot/cli/cli-reference)
-- [Cline installation and supported surfaces](https://docs.cline.bot/getting-started/installing-cline)
-- [Cline OpenRouter provider](https://docs.cline.bot/provider-config/openrouter)
-- [OpenCode providers](https://opencode.ai/docs/providers/) and [developer providers](https://dev.opencode.ai/docs/providers/)
-- [OpenCode repository](https://github.com/anomalyco/opencode)
-- [Goose repository](https://github.com/aaif-goose/goose)
-- [OpenHands MCP guide](https://docs.openhands.dev/sdk/guides/mcp) and [MCP settings](https://docs.openhands.dev/openhands/usage/settings/mcp-settings)
+### Model Documentation and Licences
+
+- [Anthropic model overview](https://platform.claude.com/docs/en/models/overview), [Fable 5.1](https://www.anthropic.com/claude/fable), and [Fable 5.1 announcement](https://www.anthropic.com/claude-fable-and-mythos-5-1)
+- [OpenAI API models](https://developers.openai.com/api/docs/models), [GPT-5.6 announcement](https://openai.com/index/gpt-5-6/), and [OpenAI gpt-oss introduction](https://openai.com/index/introducing-gpt-oss/)
+- [OpenAI gpt-oss-20b](https://developers.openai.com/api/docs/models/gpt-oss-20b), [gpt-oss-120b](https://developers.openai.com/api/docs/models/gpt-oss-120b), [OpenAI open-weight model guidance](https://help.openai.com/en/articles/11870455), and [local Ollama guide](https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama)
+- [Gemini API model catalogue](https://ai.google.dev/gemini-api/docs/models), [Gemini 3.1 Pro model card](https://deepmind.google/models/model-cards/gemini-3-1-pro), and [Gemini 3.8 Flash specifications](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash)
+- [Gemma model overview](https://ai.google.dev/gemma/docs/core), [Gemma 3 model card](https://ai.google.dev/gemma/docs/core/model_card_3), and [Gemma deployment guide](https://ai.google.dev/gemma/docs/get_started)
+- [xAI Grok 4.6 documentation](https://docs.x.ai/developers/models/grok-4.6)
+- [Qwen3-Coder announcement](https://qwenlm.github.io/blog/qwen3-coder/), [Qwen Code model providers](https://qwenlm.github.io/qwen-code-docs/en/users/configuration/model-providers/), and [Qwen3.8-27B model card](https://huggingface.co/Qwen/Qwen3.8-27B)
+- [DeepSeek V4.1 Flash model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash), [V4.1 release information](https://api-docs.deepseek.com/updates/), and [Responses API](https://api-docs.deepseek.com/api/create-response/)
+- [Z.AI GLM-5 documentation](https://docs.z.ai/guides/llm/glm-5) and [GLM-5.3-Flash release](https://autoclaw.z.ai/blog/model/glm-5.3-flash/)
+- [Kimi model catalogue](https://platform.kimi.ai/), [Kimi K3 developer guide](https://platform.kimi.ai/docs/guide/kimi-k3-quickstart), [Kimi K3 technical blog](https://www.kimi.ai/blog/kimi-k3), and [Kimi K3 model card and licence link](https://huggingface.co/moonshotai/Kimi-K3)
+- [Mistral Devstral offline-model guidance](https://docs.mistral.ai/vibe/code/cli/offline-models), [Devstral release](https://mistral.ai/news/devstral-2-vibe-cli/), [Devstral 2 deprecation](https://docs.mistral.ai/models/devstral-2-25-12), and [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04)
+- [Devstral Small 2 model card, deployment guidance, and Apache 2.0 licence](https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512)
+- [Meta Llama developer resources](https://ai.meta.com/llama/get-started/) and [Llama model repository](https://github.com/meta-llama/llama-models/blob/main/README.md)
+- [MiniMax M2](https://github.com/MiniMax-AI/MiniMax-M2), [NVIDIA Nemotron](https://research.nvidia.com/labs/nemotron/Nemotron-3/), [IBM Granite Code](https://github.com/ibm-granite/granite-code-models), and [Microsoft Phi-4 mini](https://huggingface.co/microsoft/Phi-4-mini-instruct)
+
+### Model Evaluations and Practitioner Reports
+
+- [DeepSWE v1.1 common-harness leaderboard](https://deepswe.datacurve.ai/), [methodology](https://deepswe.datacurve.ai/blog/deepswe), and [mini-SWE-agent harness](https://github.com/SWE-agent/mini-swe-agent)
+- [Claude Code request for automatic model routing](https://github.com/anthropics/claude-code/issues/44976)
+- [Codex long-task stall report](https://github.com/openai/codex/issues/23807)
+- [OpenCode context-coherence discussion](https://github.com/anomalyco/opencode/issues/11314)
+- [Claude Code community comparison of Claude, Codex, and Gemini](https://www.reddit.com/r/GeminiCLI/comments/1t0raoe/cli_gemini_vs_claude_code_vs_codex/)
+- [Claude community discussion of Fable/Opus/Sonnet/Haiku role changes](https://www.reddit.com/r/claude/comments/1uvzlh1/sonnet_is_the_new_haiku_opus_is_the_new_sonnet/)
+- [Engineering pitfalls in Claude Code, Codex, and Gemini CLI](https://arxiv.org/abs/2603.20847)
+- [Cross-model LLM code review study](https://arxiv.org/abs/2607.21656)
+
+### Tool and Pricing Documentation
+
+- [Anthropic Max plan and usage limits](https://support.claude.com/en/articles/11049741-what-is-the-max-plan), [Claude Code with Pro or Max](https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan), and [Anthropic API pricing](https://platform.claude.com/docs/en/about-claude/pricing)
+- [OpenAI Codex pricing](https://chatgpt.com/codex/pricing/), [Codex model documentation](https://learn.chatgpt.com/docs/models), and [Codex repository/current CLI distribution](https://github.com/openai/codex)
+- [OpenAI API pricing: service tiers and short/long-context rates](https://developers.openai.com/api/docs/pricing)
+- [Gemini CLI to Antigravity CLI transition](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/), [Gemini CLI authentication](https://geminicli.com/docs/get-started/authentication/), [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [Antigravity plans](https://antigravity.google/pricing), [Antigravity overview](https://antigravity.google/docs/overview?app=antigravity), [CLI installation](https://antigravity.google/docs/cli/install/), and [MCP documentation](https://antigravity.google/docs/mcp)
+- [Amp pricing](https://ampcode.com/docs/pricing), [self-hosted Orbs](https://ampcode.com/docs/orbs/self-hosted), [documentation](https://ampcode.com/docs), [skills and plugins](https://ampcode.com/docs/customize/skills), and [plugin API](https://ampcode.com/plugin-api)
+- [Cline CLI reference](https://docs.cline.bot/cli/cli-reference), [installation and supported surfaces](https://docs.cline.bot/getting-started/installing-cline), and [OpenRouter provider](https://docs.cline.bot/provider-config/openrouter)
+- [OpenCode providers](https://opencode.ai/docs/providers/), [developer providers](https://dev.opencode.ai/docs/providers/), and [repository](https://github.com/anomalyco/opencode)
+- [Goose repository](https://github.com/aaif-goose/goose), [OpenHands MCP guide](https://docs.openhands.dev/sdk/guides/mcp), and [OpenHands MCP settings](https://docs.openhands.dev/openhands/usage/settings/mcp-settings)
 - [Cursor pricing](https://cursor.com/pricing) and [Cursor rules](https://prod.cursor.com/help/customization/rules)
-- [Devin Desktop](https://devin.ai/desktop)
-- [Cognition's Windsurf acquisition announcement](https://devin.ai/blog/windsurfs-next-chapter)
-- [Devin pricing](https://devin.ai/pricing) and [self-serve billing](https://docs.devin.ai/admin/billing/self-serve)
-- [Zed pricing and providers](https://zed.dev/pricing) and [Windows availability](https://zed.dev/blog/zed-for-windows-is-here)
-- [Kiro pricing](https://kiro.dev/pricing) and [Kiro documentation](https://kiro.dev/docs/)
-- [Kiro steering](https://kiro.dev/docs/steering/), [hooks](https://kiro.dev/docs/hooks/types/), and [MCP](https://kiro.dev/docs/cli/mcp/)
-- [JetBrains AI plans and usage](https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html), [supported models](https://www.jetbrains.com/help/ai-assistant/supported-llms.html), and [agents](https://www.jetbrains.com/help/ai-assistant/agents.html)
-- [Tabnine pricing](https://www.tabnine.com/pricing/) and [Tabnine acquisition announcement archive](https://www.tabnine.com/blog/category/announcements/)
+- [Devin Desktop](https://devin.ai/desktop), [Cognition's Windsurf acquisition](https://devin.ai/blog/windsurfs-next-chapter), [Devin pricing](https://devin.ai/pricing), and [self-serve billing](https://docs.devin.ai/admin/billing/self-serve)
+- [Zed pricing/providers](https://zed.dev/pricing) and [Windows availability](https://zed.dev/blog/zed-for-windows-is-here)
+- [Kiro pricing](https://kiro.dev/pricing), [documentation](https://kiro.dev/docs/), [steering](https://kiro.dev/docs/steering/), [hooks](https://kiro.dev/docs/hooks/types/), and [MCP](https://kiro.dev/docs/cli/mcp/)
+- [JetBrains AI plans](https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html), [supported models](https://www.jetbrains.com/help/ai-assistant/supported-llms.html), and [agents](https://www.jetbrains.com/help/ai-assistant/agents.html)
+- [Tabnine pricing](https://www.tabnine.com/pricing/) and [acquisition announcements](https://www.tabnine.com/blog/category/announcements/)
 - [GitHub Copilot BYOK](https://docs.github.com/en/copilot/concepts/models/bring-your-own-key) and [models/pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
-- [Amazon Q IDE end-of-support scope](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html)
-- [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing) and [V4 release note](https://api-docs.deepseek.com/news/news260813/)
-- [Introducing Grok Bot](https://x.ai/news/introducing-grok-bot)
-- [Grok Bot overview](https://docs.x.ai/grok-bot/overview)
-- [Grok Bot approvals, security, and privacy](https://docs.x.ai/grok-bot/approvals-security-and-privacy)
-- [Grok Bot for teams and enterprises](https://docs.x.ai/grok-bot/teams-and-enterprises)
-- [Grok Bot access expansion](https://x.ai/news/grok-bot-more-plans)
-- [Aider repository](https://github.com/Aider-AI/aider) and [Aider edit formats](https://aider.chat/docs/more/edit-formats.html)
-- [OpenRouter works-with-openrouter](https://openrouter.ai/works-with-openrouter)
-- [Continue Ollama guide](https://docs.continue.dev/guides/ollama-guide)
-- [AGENTS.md](https://agents.md/) and [OpenAI's Agentic AI Foundation announcement](https://openai.com/index/agentic-ai-foundation/)
+- [Amazon Q IDE end-of-support scope](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html), [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing), and [OpenAI Agentic AI Foundation announcement](https://openai.com/index/agentic-ai-foundation/)
+- [Aider repository](https://github.com/Aider-AI/aider) and [edit formats](https://aider.chat/docs/more/edit-formats.html)
+- [OpenRouter works-with-openrouter](https://openrouter.ai/works-with-openrouter), [Continue Ollama guide](https://docs.continue.dev/guides/ollama-guide), and [AGENTS.md](https://agents.md/)
 
-Secondary sources used only for background:
+### Secondary Background
 
 - [Artificial Analysis coding-agent taxonomy](https://artificialanalysis.ai/agents/coding)
 - [Awesome CLI Coding Agents](https://github.com/bradAGI/awesome-cli-coding-agents)

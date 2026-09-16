@@ -428,8 +428,8 @@ Use this checklist to run a single improvement cycle on a skill. Copy it, fill i
 Copy and paste this line into a skill-changelog file (e.g., `.scratch/skill_wording_log.md`):
 
 ```text
-skill=SKILLNAME | date=YYYY-MM-DD | change="DESCRIBE THE REWRITE" | 
-sample=N sessions | anchor1_delta=±Npp | anchor2_delta=±Npp | 
+skill=SKILLNAME | date=YYYY-MM-DD | change="DESCRIBE THE REWRITE" |
+sample=N sessions | anchor1_delta=±Npp | anchor2_delta=±Npp |
 anchor3_delta=±Npp | decision=KEEP/REVERT | notes="ANYTHING INTERESTING"
 ```
 

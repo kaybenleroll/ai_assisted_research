@@ -205,8 +205,25 @@ transform: rotate(0deg);
 .content {
 flex: 1;
 min-width: 0;
-padding: 2.5rem clamp(1.25rem, 5vw, 3.5rem);
-max-width: 860px;
+
+padding: 2.5rem clamp(1.25rem, 3vw, 3rem);
+max-width: 1400px;
+}
+.content-inner {
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+}
+.content-inner > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote) {
+max-width: 100ch;
+}
+.content-inner > :where(pre, .code-tabs, .code-details, div.sourceCode) {
+width: 100%;
+max-width: none;
+}
+.content-inner > :where(table, .broad-table, .compact-table) {
+align-self: flex-start;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -233,7 +250,8 @@ margin: 2.5rem 0;
 }
 
 table {
-width: 100%;
+width: fit-content;
+max-width: 100%;
 border-collapse: collapse;
 font-size: .88rem;
 margin: 1.5rem 0;
@@ -242,175 +260,271 @@ border-radius: var(--radius);
 overflow: hidden;
 box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
-th {
-background: #f3f4f6;
-font-weight: 650;
-text-align: left;
-padding: .6rem .9rem;
-border-bottom: 2px solid var(--border);
-white-space: nowrap;
-}
-td {
-padding: .55rem .9rem;
-border-bottom: 1px solid var(--border);
-vertical-align: top;
-}
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f9fafb; }
 
-code {
-font-family: var(--font-mono);
-font-size: .85em;
-background: #f3f4f6;
-color: #be185d;
-padding: .15em .4em;
-border-radius: 3px;
-}
-pre {
-background: var(--code-bg);
-color: #cdd6f4;
-border-radius: var(--radius);
-padding: 1.1rem 1.25rem;
-overflow-x: auto;
-margin: 1.25rem 0;
-font-size: .83rem;
-line-height: 1.6;
-box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
-}
-pre code {
-background: transparent;
-color: inherit;
-padding: 0;
-font-size: inherit;
-}
-
-blockquote {
-border-left: 4px solid var(--accent);
-margin: 1.5rem 0;
-padding: .75rem 1.25rem;
-background: #eff6ff;
-border-radius: 0 var(--radius) var(--radius) 0;
-color: #1e3a5f;
-font-style: italic;
-}
-
-ul, ol {
-padding-left: 1.75rem;
-margin-bottom: 1rem;
-}
-li { margin-bottom: .3rem; }
-
-
-.code-tabs {
-margin: 1.25rem 0;
-border-radius: var(--radius);
-overflow: hidden;
-border: 1px solid rgba(255,255,255,.08);
-}
-.code-tab-bar {
-display: flex;
-background: #16161f;
-border-bottom: 1px solid rgba(255,255,255,.08);
-padding: 0 .5rem;
-gap: .15rem;
-}
-.code-tab-btn {
-padding: .45rem 1rem;
-background: transparent;
-border: none;
-border-bottom: 2px solid transparent;
-color: #9399b2;
-font-family: var(--font-mono);
-font-size: .78rem;
-cursor: pointer;
-transition: color .15s, border-color .15s;
-white-space: nowrap;
-}
-.code-tab-btn:hover { color: #cdd6f4; }
-.code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
-.code-tab-panel { display: none; }
-.code-tab-panel.active { display: block; }
-.code-tab-panel > div.sourceCode > pre {
-margin: 0;
-border-radius: 0;
-box-shadow: none;
-}
-
-.code-details {
-margin: 1.25rem 0;
-}
-.code-details > div.sourceCode {
-margin: 0;
-}
-.code-details > div.sourceCode > pre {
-margin: 0;
-border-radius: 0 0 var(--radius) var(--radius);
-box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
-}
-.code-summary {
-display: flex;
-align-items: center;
-gap: .5rem;
-padding: .4rem .85rem;
-background: #16161f;
-color: #9399b2;
-font-family: var(--font-mono);
-font-size: .78rem;
-cursor: pointer;
-border-radius: var(--radius) var(--radius) 0 0;
-list-style: none;
-user-select: none;
-}
-.code-summary::-webkit-details-marker { display: none; }
-.code-summary::before {
-content: '▶';
-font-size: .6rem;
-transition: transform .15s;
-flex-shrink: 0;
-}
-details[open] .code-summary::before { transform: rotate(90deg); }
-details:not([open]) .code-details > div.sourceCode > pre {
-border-radius: 0;
-}
-
-@media (max-width: 768px) {
-.layout {
-display: block;
-}
-.sidebar {
-display: block;
-position: static;
+.content-inner > :where(table:has(tr > :nth-child(4)), .broad-table) {
 width: 100%;
-min-width: 0;
 max-width: none;
-height: auto;
-border-right: none;
-border-bottom: 1px solid var(--border);
-padding: .75rem 0;
 }
-.sidebar-heading {
-padding-bottom: .25rem;
+.broad-table > table {
+width: 100%;
+max-width: none;
 }
-#TOC a {
-padding-top: .4rem;
-padding-bottom: .4rem;
-}
-.sidebar-resizer { display: none; }
-.navbar-meta { display: none; }
-.content {
-max-width: 100%;
-padding-top: 1.25rem;
-}
-}
+/* Pandoc derives <col> percentages from Markdown separator widths. */
+    .compact-table {
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+    }
 
-@media print {
-.navbar, .sidebar, .sidebar-resizer { display: none; }
-.content { padding: 0; max-width: 100%; }
-}
+    .compact-table > table {
+      width: max-content;
+      max-width: none;
+      table-layout: auto;
+    }
 
-code span.fu { color: #c792ea !important; } 
-</style>
-  
+    .compact-table > table colgroup > col {
+      width: auto !important;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 650;
+      text-align: left;
+      padding: .6rem .9rem;
+      border-bottom: 2px solid var(--border);
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    td {
+      padding: .55rem .9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    /* ── Code ──────────────────────────────────────────────────────── */
+    code {
+      font-family: var(--font-mono);
+      font-size: .85em;
+      background: #f3f4f6;
+      color: #be185d;
+      padding: .15em .4em;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #cdd6f4;
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: .83rem;
+      line-height: 1.6;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* ── Blockquotes ───────────────────────────────────────────────── */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 1.5rem 0;
+      padding: .75rem 1.25rem;
+      background: #eff6ff;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #1e3a5f;
+      font-style: italic;
+    }
+
+    /* ── Lists ─────────────────────────────────────────────────────── */
+    ul, ol {
+      padding-left: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    li { margin-bottom: .3rem; }
+
+    /* ── Syntax highlight overrides (tango theme base) ─────────────── */
+
+
+    /* ── Code tabs ─────────────────────────────────────────────────── */
+    .code-tabs {
+      margin: 1.25rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .code-tab-bar {
+      display: flex;
+      background: #16161f;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 0 .5rem;
+      gap: .15rem;
+    }
+
+    .code-tab-btn {
+      padding: .45rem 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #9399b2;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+      white-space: nowrap;
+    }
+
+    .code-tab-btn:hover { color: #cdd6f4; }
+    .code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+
+    .code-tab-btn:focus-visible, .code-tab-panel:focus-visible {
+      outline: 2px solid #89b4fa;
+      outline-offset: -2px;
+    }
+
+    .code-tab-panel[hidden] { display: none; }
+    .code-tabs .code-tab-label { display: none; }
+
+    .code-tab-panel > div.sourceCode > pre {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    /* ── Collapsible single code blocks ─────────────────────────────── */
+    .code-details {
+      margin: 1.25rem 0;
+    }
+
+    .code-details > div.sourceCode {
+      margin: 0;
+    }
+
+    .code-details > div.sourceCode > pre {
+      margin: 0;
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    .code-summary {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .4rem .85rem;
+      background: #16161f;
+      color: #9399b2;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      cursor: pointer;
+      border-radius: var(--radius) var(--radius) 0 0;
+      list-style: none;
+      user-select: none;
+    }
+
+    .code-summary::-webkit-details-marker { display: none; }
+
+    .code-summary::before {
+      content: '▶';
+      font-size: .6rem;
+      transition: transform .15s;
+      flex-shrink: 0;
+    }
+
+    details[open] .code-summary::before { transform: rotate(90deg); }
+
+    details:not([open]) .code-details > div.sourceCode > pre {
+      border-radius: 0;
+    }
+
+    /* ── Responsive: convert sidebar to top TOC on small screens ────── */
+    @media (max-width: 768px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: block;
+        position: static;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: .75rem 0;
+      }
+
+      .sidebar-heading {
+        padding-bottom: .25rem;
+      }
+
+      #TOC a {
+        padding-top: .4rem;
+        padding-bottom: .4rem;
+      }
+
+      .sidebar-resizer { display: none; }
+      .navbar-meta { display: none; }
+
+      .content {
+        max-width: 100%;
+        padding-top: 1.25rem;
+      }
+      .content-inner > :where(table, .broad-table, .compact-table) {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .content-inner > .broad-table > table {
+        min-width: 48rem;
+      }
+      .content-inner > .compact-table > table {
+        width: max-content;
+      }
+      .code-tab-bar {
+        overflow-x: auto;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .sidebar {
+        width: 260px;
+        min-width: 220px;
+      }
+    }
+
+    /* ── Print ─────────────────────────────────────────────────────── */
+    @media print {
+      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .content { padding: 0; max-width: 100%; }
+      .code-tab-bar { display: none; }
+      .code-tabs { overflow: visible; border: 0; }
+      .code-tabs .code-tab-panel { display: block !important; }
+      .code-tabs .code-tab-label {
+        display: block;
+        color: #000;
+        margin: 1rem 0 .5rem;
+        break-after: avoid;
+      }
+    }
+
+    /* ── Custom code color overrides for readability ── */
+    code span.fu { color: #c792ea !important; } /* function names: lighter purple */
+  </style>
+
 </head>
 <body>
 
@@ -694,6 +808,7 @@ Sudden Shortages (d10)</a></li>
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
     <main class="content">
+      <div class="content-inner">
 <h1 id="silo-system-comprehensive-world-bible-encyclopedic-edition">SILO
 SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)</h1>
 <p><strong>RESTRICTED ACCESS // GM REFERENCE MANUAL</strong> <em>(This
@@ -3241,6 +3356,7 @@ was arrested, or was selected as an informant.</td>
 </table>
 <hr />
 <p><strong>[END OF COMPREHENSIVE WORLD BIBLE]</strong></p>
+      </div>
     </main>
 
   </div>
@@ -3337,6 +3453,7 @@ was arrested, or was selected as an informant.</td>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
+      var defaultMathRenderer = 'mathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
@@ -3345,8 +3462,13 @@ was arrested, or was selected as an informant.</td>
         targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
         label = 'Switch to MathML';
       } else if (path.endsWith('.html')) {
-        targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
+        if (defaultMathRenderer === 'mathml') {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
+          label = 'Switch to MathJax';
+        } else {
+          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
+          label = 'Switch to MathML';
+        }
       }
 
       if (!targetPath) {
@@ -3458,7 +3580,8 @@ was arrested, or was selected as an informant.</td>
         return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
       }
 
-      // Two .sourceCode divs are consecutive if only whitespace or lang-label <p> nodes lie between them
+      // Sibling blocks may have whitespace or labels between them. Fenced .code-group
+      // wrappers bound explicit groups; unwrapped automatic groups still work as before.
       function areConsecutive(a, b) {
         var node = a.nextSibling;
         while (node) {
@@ -3484,40 +3607,109 @@ was arrested, or was selected as an informant.</td>
         return groups;
       }
 
-      function makeTabs(run) {
+      var tabGroups = [];
+      var nextTabId = 0;
+
+      function uniqueId() {
+        var id;
+        do { id = 'code-tab-' + (++nextTabId); } while (document.getElementById(id));
+        return id;
+      }
+
+      function makeTabs(run, labels) {
         var wrapper = document.createElement('div');
         wrapper.className = 'code-tabs';
 
         var tabBar = document.createElement('div');
         tabBar.className = 'code-tab-bar';
+        tabBar.setAttribute('role', 'tablist');
+        tabBar.setAttribute('aria-label', 'Code examples by language');
         wrapper.appendChild(tabBar);
 
+        var buttons = [];
+        var panels = [];
+
+        function activate(index, focus) {
+          buttons.forEach(function (button, i) {
+            var selected = i === index;
+            button.classList.toggle('active', selected);
+            button.setAttribute('aria-selected', String(selected));
+            button.tabIndex = selected ? 0 : -1;
+            panels[i].hidden = !selected;
+          });
+          if (focus) buttons[index].focus();
+        }
+
         run.forEach(function (div, idx) {
+          // Keep authored labels (and any fragment IDs); create labels for automatic groups.
+          var label = labels[idx];
+          if (!label) {
+            label = document.createElement('p');
+            var strong = document.createElement('strong');
+            strong.textContent = getLang(div);
+            label.appendChild(strong);
+          }
+          label.classList.add('code-tab-label');
+
           var btn = document.createElement('button');
-          btn.className = 'code-tab-btn' + (idx === 0 ? ' active' : '');
+          btn.type = 'button';
+          btn.id = uniqueId();
+          btn.className = 'code-tab-btn';
           btn.textContent = getLang(div);
-          btn.setAttribute('data-idx', String(idx));
+          btn.setAttribute('role', 'tab');
           tabBar.appendChild(btn);
+          buttons.push(btn);
 
           var panel = document.createElement('div');
-          panel.className = 'code-tab-panel' + (idx === 0 ? ' active' : '');
-          panel.setAttribute('data-idx', String(idx));
+          panel.id = uniqueId();
+          panel.className = 'code-tab-panel';
+          panel.setAttribute('role', 'tabpanel');
+          panel.setAttribute('aria-labelledby', btn.id);
+          panel.tabIndex = 0;
+          btn.setAttribute('aria-controls', panel.id);
+          panel.appendChild(label);
           panel.appendChild(div);
           wrapper.appendChild(panel);
+          panels.push(panel);
+
+          btn.addEventListener('click', function () { activate(idx, false); });
+          btn.addEventListener('keydown', function (e) {
+            var index;
+            if (e.key === 'ArrowRight') index = (idx + 1) % run.length;
+            else if (e.key === 'ArrowLeft') index = (idx + run.length - 1) % run.length;
+            else if (e.key === 'Home') index = 0;
+            else if (e.key === 'End') index = run.length - 1;
+            else return;
+            e.preventDefault();
+            activate(index, true);
+          });
         });
 
-        tabBar.addEventListener('click', function (e) {
-          var btn = e.target;
-          while (btn && !btn.classList.contains('code-tab-btn')) btn = btn.parentElement;
-          if (!btn) return;
-          var idx = btn.getAttribute('data-idx');
-          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-btn'), function (b) { b.classList.remove('active'); });
-          Array.prototype.forEach.call(wrapper.querySelectorAll('.code-tab-panel'), function (p) { p.classList.remove('active'); });
-          btn.classList.add('active');
-          wrapper.querySelector('.code-tab-panel[data-idx="' + idx + '"]').classList.add('active');
-        });
-
+        activate(0, false);
+        tabGroups.push({ buttons: buttons, panels: panels, activate: activate });
         return wrapper;
+      }
+
+      function revealFragment(hash, scroll) {
+        if (!hash) return;
+        var id;
+        try { id = decodeURIComponent(hash.slice(1)); } catch (e) { return; }
+        var target = document.getElementById(id);
+        if (!target) return;
+        var scrollTarget = target;
+        tabGroups.forEach(function (group) {
+          group.panels.forEach(function (panel, index) {
+            if (panel.contains(target) || group.buttons[index] === target) {
+              group.activate(index, false);
+              // Authored language labels are hidden on screen after enhancement.
+              if (target.closest('.code-tab-label')) scrollTarget = panel;
+            }
+          });
+        });
+        for (var ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+          if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+        }
+        if (scroll) scrollTarget.scrollIntoView();
       }
 
       function makeCollapsible(div) {
@@ -3538,28 +3730,19 @@ was arrested, or was selected as an informant.</td>
         var parent = run[0].parentNode;
 
         // Collect lang-label <p> nodes immediately preceding each code block in the run
-        var toRemove = [];
-        run.forEach(function (div) {
+        var labels = run.map(function (div) {
           var prev = div.previousSibling;
           while (prev && isWhitespace(prev)) prev = prev.previousSibling;
-          if (prev && isLangLabel(prev)) toRemove.push(prev);
+          return isLangLabel(prev) ? prev : null;
         });
 
         // Insertion point: the label before the first block (if it exists), else the first block
-        var insertionPoint = run[0];
-        if (toRemove.length > 0) {
-          var firstLabel = toRemove[0];
-          // Use firstLabel only if it genuinely precedes run[0]
-          if (firstLabel.compareDocumentPosition(run[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
-            insertionPoint = firstLabel;
-          }
-        }
+        var insertionPoint = labels[0] || run[0];
 
         var placeholder = document.createTextNode('');
         parent.insertBefore(placeholder, insertionPoint);
-        toRemove.forEach(function (el) { el.parentNode.removeChild(el); });
 
-        var widget = makeTabs(run);
+        var widget = makeTabs(run, labels);
         parent.replaceChild(widget, placeholder);
       }
 
@@ -3573,6 +3756,21 @@ was arrested, or was selected as an informant.</td>
             applyTabs(run);
           } else {
             makeCollapsible(run[0]);
+          }
+        });
+        revealFragment(window.location.hash, true);
+        window.addEventListener('hashchange', function () {
+          revealFragment(window.location.hash, true);
+        });
+        // Also reveal an already-current fragment after its panel has been switched away.
+        document.addEventListener('click', function (e) {
+          var link = e.target.closest('a[href]');
+          if (!link || e.defaultPrevented || e.button !== 0 ||
+              e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+          var url = new URL(link.href, window.location.href);
+          if (url.origin === window.location.origin && url.pathname === window.location.pathname &&
+              url.search === window.location.search && url.hash) {
+            revealFragment(url.hash, true);
           }
         });
       });
