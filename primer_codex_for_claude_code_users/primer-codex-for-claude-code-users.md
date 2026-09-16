@@ -946,13 +946,59 @@ A second agent can be particularly useful as a reviewer because it approaches th
 
 Use a clean review context when the task is complex. Continuing in the same session preserves useful context, but it also preserves the assumptions that produced the patch. A fresh session or a second harness can expose a missed edge case precisely because it has to reconstruct the reasoning from the repository and diff.
 
-### Continuation: preserve state deliberately
+### Sessions, history, compaction, and hand-off
 
-“Continue” is not one operation. It can mean continue in the same conversation, resume after a command failure, pick up an unfinished plan, or hand work to a different harness. Each form has a different context budget and a different risk of carrying forward a bad assumption.
+“Continue” is not one operation. It can mean continue in the same conversation,
+resume a saved Codex chat, recover after a command failure, continue after
+context compaction, or hand work to a different harness. These mechanisms have
+different storage, context, and failure boundaries.
 
-Within one session, continuation is efficient when the agent has already inspected the right files and the next step is a direct consequence of the previous one. State the new checkpoint explicitly: what is complete, what failed, and what must happen next. Do not assume that a previous summary proves the repository still has the same state; files may have changed, tests may have produced generated artifacts, or another agent may have edited the branch.
+| Layer | What persists | What it does not mean |
+| --- | --- | --- |
+| Codex CLI history | Saved chats and local session metadata; the official CLI exposes `codex resume` and `/resume` | A Claude Code transcript or a repository checkpoint |
+| Local Codex storage | On the installation checked for this edition, this may include JSONL history/index files and SQLite thread/log databases under `$CODEX_HOME` | A stable public export format; exact names, schema, retention, and search behaviour may change |
+| ChatGPT Codex chats | The Help Center documents account-retained chats for the ChatGPT app | The same retention or deletion rules for local CLI data or API state |
+| Responses/Conversations API | Server-side conversation state, chained with `previous_response_id` or a durable Conversations API identifier | Codex CLI history, or state that Claude Code can read automatically |
 
-When handing off from Claude Code to Codex, or the reverse, write a small hand-off note in the prompt rather than relying on hidden conversational context:
+The current [Codex CLI documentation](https://learn.chatgpt.com/docs/codex/cli)
+describes `codex resume` as a way to reopen a recent chat or search older local
+chats. The [developer command reference](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
+documents `codex resume --last` for the most recent chat in the current working
+directory and `--all` for sessions beyond that directory. A local Codex
+installation therefore has persistent
+application state. Treat `$CODEX_HOME` as an implementation boundary, not as a
+portable transcript store: do not copy its databases into a repository or make
+another agent depend on their filenames or schema.
+
+This is separate from API conversation state. The [OpenAI API conversation-state
+guide](https://developers.openai.com/api/docs/guides/conversation-state) describes
+manual chaining with `previous_response_id` and durable Conversations API
+objects that can be reused across sessions, devices, or jobs. That is API state,
+not proof that a Codex CLI session is available to Claude Code. The [ChatGPT
+Codex chat guidance](https://help.openai.com/en/articles/20001333-how-to-archive-and-delete-chats-in-codex)
+also has account-specific retention and deletion rules; do not generalise them
+to every Codex surface.
+
+Context compaction is different again. At the API level, the [OpenAI compaction
+guide](https://developers.openai.com/api/docs/guides/compaction) describes a
+compressed, opaque item that carries task-relevant prior state into the next
+context window. API compaction keeps an active task moving; it is not a delete
+operation on the saved conversation. Its summary can still omit an exact
+command, path, test result, or caveat, so verify important facts against the
+working tree and restate unresolved work after compaction. The exact automatic
+compaction behaviour is interface- and release-specific; do not infer the CLI
+experience from the API endpoint.
+
+When resuming, inspect `git status`, the diff, generated files, and the last
+relevant test result before acting. A resumed chat restores conversational
+context, not a guaranteed repository state. If another process, agent, branch,
+or build changed the tree, the files and tests outrank the old conversation.
+
+Codex and Claude Code do not share conversational state by default. A reliable
+cross-harness hand-off therefore contains two parts: the repository state and a
+short explicit note. The repository state is the source, diff, tests, and build
+outputs. The note records what is complete, what failed, the remaining
+contract, and the next allowed action:
 
 ```text
 The previous agent implemented the change in the current working tree.
@@ -962,9 +1008,17 @@ Please inspect the diff before doing anything else. The intended contract is
 and make only necessary corrections.
 ```
 
-This makes the working tree the primary state and the prompt a map to it. It also prevents a dangerous hand-off pattern: telling the second agent that the first agent “finished” when the only evidence is a conversational claim.
+This hand-off works even when the next agent cannot open the first agent's
+session. It also prevents the common mistake of treating a conversational
+claim that “the task is finished” as evidence about the files.
 
-Context compaction or summarisation introduces another reason to use checkpoints. Keep durable facts in files that belong in the repository, such as plans, issue notes, test output, or a hand-off document, only when the project benefits from that record. Otherwise include the essential facts in the next prompt. A compact checkpoint should name the current diff, the last successful command, the unresolved failure, and the next allowed action.
+Within one session, continuation is efficient when the agent has already
+inspected the right files and the next step follows directly. State a checkpoint
+explicitly: what is complete, what failed, and what must happen next. Keep
+durable facts in repository files only when the project benefits from that
+record; otherwise put the essential facts in the next prompt. A compact
+checkpoint should name the current diff, the last successful command, the
+unresolved failure, and the next allowed action.
 
 ### Git: use the working tree as the contract
 
@@ -1019,12 +1073,14 @@ The model is the underlying system generating decisions, tool calls, and text. M
 
 Reasoning effort is a control over how much internal computation or deliberation the system allocates before producing an answer or taking the next action. The labels and exact behaviour depend on the product surface. Conceptually, lower effort favors speed and throughput; higher effort gives difficult tasks more room for decomposition, checking, and alternative consideration. It does not guarantee correctness, and increasing it can make a poor prompt more expensive without making it more precise.
 
-In the current CLI model picker, the documented reasoning choices include Low,
-Medium, High, Extra High, Max, and Ultra. Other surfaces use different labels.
-Max gives one selected model more time for a difficult task; Ultra is a
-separate delegation mode that can use subagents for work that divides cleanly.
-Do not describe Max and Ultra as merely two points on one universal effort
-slider.
+Reasoning controls are surface- and model-specific. The current Codex CLI guide
+describes Low, Medium, High, Extra High, Max, and Ultra; its documentation
+defines Ultra as a mode that can use automatic task delegation. The Astra API
+page lists `low`, `medium`, `high`, `xhigh`, and `max` for
+`reasoning.effort`. Do not assume that CLI “Extra High” is a universal alias
+for API `xhigh`, or describe Ultra as merely another point on one effort
+slider. In every surface, higher effort can improve difficult work but takes
+longer and uses more tokens.
 
 Context is the third control people often overlook. The model can only reason over the instructions, conversation, files, tool results, and other material available in the current context. More context is not automatically better: irrelevant logs and giant generated files can bury the contract and the code that matters. Curate context by pointing to the relevant paths, asking for targeted inspection, and preserving durable decisions in the repository when appropriate.
 
@@ -1032,35 +1088,39 @@ Execution capability is separate again. A model may be able to propose a correct
 
 ### A dated snapshot of the current Codex models
 
-The official [Codex model guidance](https://learn.chatgpt.com/docs/models)
-currently describes an Astra model alongside the GPT-5.6 family and previous-
-generation models. The following is a snapshot checked on 10 September 2026,
-not a promise that every
-model is available to every account, interface, or authentication method.
+The official [Codex model guidance](https://learn.chatgpt.com/docs/models) now
+lists Astra alongside the GPT-5.6 family. The [GPT-6 Astra model
+documentation](https://developers.openai.com/api/docs/models/gpt-6-astra)
+describes Astra as OpenAI's most capable model for complex reasoning, coding,
+computer use, research, and document creation. The following is a snapshot
+checked on 16 September 2026. It combines that public guidance with the model
+entries visible in the local Codex installation used for this edition; it is
+not a promise that every model is available to every account, interface, or
+authentication method.
 
 | Model | Practical orientation | Good starting use |
 | --- | --- | --- |
 | `gpt-6-astra` (Astra) | Highest-capability model for complex work across code, apps, and research | Hardest end-to-end tasks that need sustained reasoning and judgment |
-| `gpt-5.6-sol` (Sol) | Highest-capability model in the current family | Ambiguous, high-value, multi-step coding, research, or security work |
-| `gpt-5.6-terra` (Terra) | Balanced everyday model | Routine implementation, debugging, and repository work |
-| `gpt-5.6-luna` (Luna) | Fast, lower-cost model in the family | Clear, repeatable transformations, extraction, and structured tasks |
-| `gpt-5.3-codex-spark` (Codex Spark) | Text-only research preview focused on near-instant iteration | Very fast, narrowly scoped coding loops when the surface exposes it |
-| `gpt-5.5` | Previous-generation frontier model | Existing configurations or tasks that specifically require it |
-| `gpt-5.4` and `gpt-5.4-mini` | Previous-generation models approaching retirement in ChatGPT-authenticated Codex | Do not start new long-lived configuration around them without checking the retirement notice |
+| `gpt-5.6-sol` (Sol) | Most capable GPT-5.6 model for complex coding, computer use, research, and cybersecurity | Ambiguous, high-value, multi-step coding, research, or security work |
+| `gpt-5.6-terra` (Terra) | Balanced GPT-5.6 model for everyday work | Routine implementation, debugging, and repository work |
+| `gpt-5.6-luna` (Luna) | Fast, affordable GPT-5.6 model | Clear, repeatable transformations, extraction, and structured tasks |
+| `gpt-5.5` | Previous-generation model; scheduled to retire from ChatGPT-authenticated Codex on 14 October 2026 | Existing configurations that need it temporarily; migrate new work to Sol |
 
-The same documentation says that GPT-5.4 and GPT-5.4 Mini retire from Codex
-with ChatGPT sign-in on 31 August 2026, while API-authenticated use is not
-affected by that specific retirement. Treat that as a dated operational note:
-model names, availability, and migration advice belong in a maintained reference
-section, not in permanent repository instructions.
+GPT-5.4 and GPT-5.4 Mini retired from Codex with ChatGPT sign-in on 31 August
+2026. That specific retirement does not affect the OpenAI API or Codex
+authenticated with an API key. The official page still lists GPT-5.3 Codex
+Spark as a text-only Pro preview, but it is not in the local model cache checked
+for this edition; treat it as surface-dependent rather than as a local default.
+Model names, availability, retirement dates, and migration advice belong in a
+maintained reference section, not in permanent repository instructions.
 
-The practical selection rule is simpler than the catalogue. Start with Terra
-for ordinary work, move to Sol when ambiguity or the cost of a wrong decision
-justifies more capability, and choose Astra for the hardest end-to-end work
-across multiple tools or surfaces. Use Luna for clear high-volume tasks. Treat
-Spark as a specialised preview rather than the default for a long, open-ended
-task.
-Then choose reasoning effort independently.
+The practical selection rule is simpler than the catalogue. Keep Luna for clear,
+mechanical, high-volume work. Start with Terra for ordinary implementation and
+debugging. Move to Sol when ambiguity, research depth, or the cost of a wrong
+decision justifies more capability. Use Astra for the hardest end-to-end tasks
+spanning code, tools, research, or sustained judgment. Then choose reasoning
+effort independently, starting with the lowest setting that reliably meets the
+acceptance criteria and increasing it when the failure is genuinely about depth.
 
 ### Choose by task shape
 
@@ -2432,7 +2492,13 @@ names and controls change.
 ## References
 
 - [Codex CLI documentation](https://learn.chatgpt.com/docs/codex/cli)
+- [Codex CLI developer commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 - [Codex model and reasoning guidance](https://learn.chatgpt.com/docs/models)
+- [OpenAI API model guidance](https://developers.openai.com/api/docs/guides/latest-model)
+- [GPT-6 Astra model documentation](https://developers.openai.com/api/docs/models/gpt-6-astra)
+- [OpenAI API conversation state](https://developers.openai.com/api/docs/guides/conversation-state)
+- [OpenAI API compaction](https://developers.openai.com/api/docs/guides/compaction)
+- [ChatGPT Codex chat history and deletion](https://help.openai.com/en/articles/20001333-how-to-archive-and-delete-chats-in-codex)
 - [Codex project instructions with AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 - [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
 - [Codex skills](https://learn.chatgpt.com/docs/build-skills/)
