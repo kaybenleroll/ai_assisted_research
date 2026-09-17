@@ -1580,13 +1580,14 @@ OpenCode can select a main model and a smaller model explicitly. A project confi
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "openrouter/<provider>/<frontier-model>",
-  "small_model": "openrouter/<provider>/<fast-model>",
+  "model": "openrouter/deepseek/deepseek-v4-pro-0813",
+  "small_model": "openrouter/z-ai/glm-5.3-flash",
   "provider": {
     "openrouter": {
       "models": {
-        "<provider>/<frontier-model>": {},
-        "<provider>/<fast-model>": {}
+        "deepseek/deepseek-v4-pro-0813": {},
+        "z-ai/glm-5.3-flash": {},
+        "qwen/qwen3-coder-next": {}
       }
     },
     "ollama": {
@@ -1601,45 +1602,48 @@ OpenCode can select a main model and a smaller model explicitly. A project confi
 }
 ```
 
-The angle-bracket values are placeholders, not tested model names. Authenticate through OpenCode's credential flow, environment variables, or the provider's credential store. Do not put an API key in `opencode.json`, commit it in a repository, or assume that an OpenAI-compatible endpoint provides reliable tool calls, long context, structured output, or reasoning controls. OpenCode's provider, configuration, and model documentation are the relevant setup references. Do not revive an old Claude Pro/Max plugin or OAuth route because it appears in a forum post or an older installation: use only a currently documented subscription integration or an Anthropic API key, and verify the policy and account path first.
+These are concrete examples, not permanent defaults. Authenticate through OpenCode's credential flow, environment variables, or the provider's credential store. Do not put an API key in `opencode.json`, commit it in a repository, or assume that an OpenAI-compatible endpoint provides reliable tool calls, long context, structured output, or reasoning controls. OpenCode's provider, configuration, and model documentation are the relevant setup references. The exact provider route is part of the experiment: pin a provider when a long tool-use session needs stable latency, or permit fallbacks when availability matters more than reproducibility.
 
 ### Model allocation by task
 
 Use a role-based policy that you can inspect and override. A wrapper script or shell alias is enough; automatic model switching that the user cannot see is not.
 
-| Role | Default choice | When to use it |
+| Role | Open-weight starting choice | When to use it |
 | --- | --- | --- |
-| Plan and architecture | Frontier model A | Design, threat modelling, migrations, and changes whose wrong abstraction will be expensive |
-| Implement and debug | Frontier model B | Multi-file edits, tests, debugging, and integration work |
-| Routine work | Fast, low-cost model | Summaries, small edits, documentation, and test-output triage |
-| Sensitive or offline work | Local coding model | Data that must stay on the workstation, provided the task fits the model's context and tool ability |
-| Independent review | A different provider/model | High-risk changes where correlated model mistakes are costly |
+| Plan and architecture | DeepSeek V4 Pro 0813 (`deepseek/deepseek-v4-pro-0813`) | Hard design, migrations, threat modelling, and changes whose wrong abstraction will be expensive |
+| Implement and debug | GLM 5.3 (`z-ai/glm-5.3`) or Qwen3 Coder Next (`qwen/qwen3-coder-next`) | Multi-file edits, tests, debugging, and tool-driven repository work; use GLM when reasoning depth matters and Qwen when coding throughput and cost matter |
+| Routine work | GLM 5.3 Flash (`z-ai/glm-5.3-flash`) or Qwen3 Coder Next | Summaries, small edits, documentation, test-output triage, and short refactors |
+| Sensitive or offline work | Devstral Small 2 24B or a Qwen3-Coder checkpoint via Ollama, LM Studio, vLLM, or llama.cpp | Data that must stay on the workstation, after testing the checkpoint's context and tool behaviour |
+| Independent review | Kimi K3 or GLM 5.3 through a different provider route | High-risk changes where correlated model mistakes are costly; use the expensive Kimi route selectively |
 | Asynchronous execution | OpenHands or Devin in an isolated workspace | Explicitly bounded work that can run away from the interactive session and still receive human approval before merge |
 
-For the frontier roles, use a currently supported model such as GPT-5.6, Claude Sonnet 5, or Gemini 3.1 Pro only after checking the live catalogue and the applicable provider terms. Do not use the same provider for implementation and independent review when independence matters. For routine work, Gemini 3.8 Flash and DeepSeek V4.1 Flash were candidate examples at the checkpoint, not guarantees of current names, price, or availability.
+At the September 17, 2026 checkpoint, OpenRouter listed DeepSeek V4 Pro 0813 at about $0.66 per million input tokens and $1.98 per million output tokens, GLM 5.3 at about $1.00/$3.41, GLM 5.3 Flash at about $0.075/$0.25, and Qwen3 Coder Next at about $0.12/$0.80. DeepSeek V4.1 Flash was another inexpensive long-context option at about $0.15/$0.60, but its endpoint did not advertise enforced JSON Schema output; use client-side validation when that matters. Qwen3 Coder 30B A3B Instruct was about $0.07/$0.27 and is a good bounded-edit or structured-output tier. Treat these as list-price snapshots, not a cost estimate: cached input, provider choice, routing, retries, reasoning tokens, and output length change the bill. GLM 5.3 always reasons and supports selectable reasoning effort; Qwen3 Coder Next is a non-thinking coding model, so do not compare their raw token prices without comparing the work they complete.
 
-For local work, Qwen3-Coder, Devstral Small 2, and gpt-oss-20b/120b are candidates to benchmark through Ollama or LM Studio, not interchangeable workstation defaults. Record the exact checkpoint, quantization, runtime, context budget, and tool-call settings; large Qwen variants and gpt-oss-120b may require server-class hardware, with the latter roughly an 80 GB deployment. Hardware, quantization, context length, and tool-call support determine whether they are useful. Keep a local model in the routine/offline tier until it passes representative repository tasks; local availability is not evidence of frontier parity.
+For local work, benchmark Devstral Small 2 24B, Qwen3-Coder-30B-A3B, and GLM-4.7-Flash first. Devstral Small 2 is an Apache-licensed coding checkpoint; Qwen3-Coder-30B-A3B is the smaller coding specialist; and GLM-4.7-Flash is a compact agent model. Serve them through Ollama for a quick single-user trial, or vLLM/SGLang when reliable tool parsing and shared serving matter. Qwen3-Coder and Devstral need their model-specific tool/parser configuration in some runtimes. Record the exact checkpoint, quantization, runtime, context budget, and tool-call settings; a model that fits in memory may still fail at long-context retrieval or tool-call formatting. Hardware, quantization, context length, and tool-call support determine whether a local model is useful. Keep it in the routine/offline tier until it passes representative repository tasks; local availability is not evidence of frontier parity.
 
 The routing policy should remain legible in the workflow:
 
 ```bash
-# Examples only: confirm the live IDs before running them.
-opencode --model openrouter/<provider>/<frontier-model>
+# Examples from the September 17, 2026 checkpoint; confirm live IDs first.
+opencode --model openrouter/deepseek/deepseek-v4-pro-0813
+opencode --model openrouter/z-ai/glm-5.3
+opencode --model openrouter/qwen/qwen3-coder-next
+opencode --model openrouter/qwen/qwen3-coder-30b-a3b-instruct
 opencode --model ollama/<local-model>
 
 # Aider is the deliberately smaller fallback.
-aider --model openrouter/<provider>/<implementation-model> \
-      --weak-model openrouter/<provider>/<fast-model>
+aider --model openrouter/qwen/qwen3-coder-next \
+      --weak-model openrouter/z-ai/glm-5.3-flash
 ```
 
 ### Setup: CLI-first
 
-Install OpenCode and connect the providers you have approved. Put repository-wide instructions in `AGENTS.md`; keep `opencode.json` focused on model and provider adapters. Begin with one frontier model and one fast model, then add a local endpoint after verifying context and tool behaviour. For a minimal Aider fallback, use a repository-level `.aider.conf.yml` with no secrets:
+Install OpenCode and connect the providers you have approved. Put repository-wide instructions in `AGENTS.md`; keep `opencode.json` focused on model and provider adapters. Begin with DeepSeek V4 Pro for hard tasks, GLM 5.3 Flash for cheap routine work, and Qwen3 Coder Next or Qwen3 Coder 30B A3B for the coding-focused middle tier. Add a local endpoint after verifying context and tool behaviour. Direct DeepSeek, Mistral, Z.ai, Qwen, Together, Fireworks, NVIDIA NIM, and Groq endpoints are alternatives to OpenRouter when you need a different billing, region, or data-retention boundary; the same model name does not imply the same tool implementation. For a minimal Aider fallback, use a repository-level `.aider.conf.yml` with no secrets:
 
 ```yaml
 # .aider.conf.yml -- do not store secrets here
-model: openrouter/<provider>/<implementation-model>
-weak-model: openrouter/<provider>/<fast-model>
+model: openrouter/qwen/qwen3-coder-next
+weak-model: openrouter/z-ai/glm-5.3-flash
 edit-format: diff
 auto-commits: false
 ```
@@ -1648,7 +1652,7 @@ Aider's model metadata can describe context limits, costs, edit format, and a we
 
 ### Setup: agentic editor
 
-Use Cline when the editor is the primary surface and you want Plan/Act review, browser and MCP access, and a visual diff loop. Configure the provider in the extension or CLI, use the implementation model for Act mode, and reserve the cheaper model for bounded tasks. Cline can use the same provider and model IDs through OpenRouter, but that does not imply behavioural equivalence: test the full harness/provider/model/context/tool-schema/reasoning-settings tuple, and remember that approval semantics remain Cline-specific.
+Use Cline when the editor is the primary surface and you want Plan/Act review, browser and MCP access, and a visual diff loop. Configure OpenRouter with GLM 5.3 for difficult Act-mode changes, Qwen3 Coder Next for ordinary implementation, and GLM 5.3 Flash for bounded tasks. Cline can use the same provider and model IDs through OpenRouter, but that does not imply behavioural equivalence: test the full harness/provider/model/context/tool-schema/reasoning-settings tuple, and remember that approval semantics remain Cline-specific.
 
 Use Continue.dev instead when local Ollama or LM Studio inference and IDE context matter more than autonomous tool breadth. It is a lower-risk editor choice for sensitive code if the endpoint, telemetry, context providers, and extensions are all reviewed. In either editor, keep the plan reviewable, require approval before writes with external consequences, and do not assume that importing an `AGENTS.md` file reproduces Claude Code's full instruction or hook behaviour.
 
@@ -1685,11 +1689,97 @@ Promote a model to a broader role only after it passes that task set with the pe
 
 Multiple models do not remove the need for good repository instructions, tests, observability, or human judgement. A second model can repeat the first model's mistake, especially when both rely on the same provider, training data, or misleading project context. OpenRouter does not make every provider equivalent, and a local endpoint does not make sensitive data safe if the harness or an MCP server sends it elsewhere. MCP portability still varies by transport, authentication, filesystem roots, approvals, and client behaviour; skills and hooks are not drop-in portable. `AGENTS.md` can consolidate instructions, but it does not standardise permissions or tool execution. An asynchronous agent does not become trustworthy merely because it works in the cloud or reports success.
 
-The concrete recommendation is therefore: begin with OpenCode plus OpenRouter for provider breadth, add one local Ollama model for routine or offline work, keep Cline as the editor surface if that matches how you work, and retain Aider as the minimal fallback. Use explicit model selection, a different provider for high-risk review, and isolated worktrees for asynchronous agents. Refresh the model IDs, prices, quotas, authentication path, and provider policies immediately before adoption.
+The concrete recommendation is therefore: begin with OpenCode plus OpenRouter, use DeepSeek V4 Pro 0813 for the small number of hard tasks, GLM 5.3 or Qwen3 Coder Next for implementation, GLM 5.3 Flash for routine work, and Devstral Small 2 or a sized Qwen checkpoint locally when data must stay on the workstation. Keep Cline as the editor surface if that matches how you work, and retain Aider as the minimal fallback. Use a different provider route for high-risk review, and refresh model IDs, prices, quotas, authentication paths, and provider policies immediately before adoption.
+
+## Pi as an Additional Harness
+
+Pi is worth adding to the comparison because it takes a different position from the full-featured alternatives above. It is a minimal terminal coding harness: the core provides the agent loop, a small set of file and shell tools, model selection, sessions, and a TUI, while extensions, skills, prompt templates, themes, and packages supply the workflow-specific parts. Pi's design deliberately leaves out several features that other harnesses bundle. That makes it useful as an additional, inspectable harness for experimentation and focused interactive work, but it does not make it a drop-in replacement for Claude Code.
+
+This section describes Pi as documented on **September 17, 2026**. The project has had package and repository-scope changes, so verify the current package name, release, provider catalogue, authentication path, and documentation before installing. The current official site uses the `@earendil-works/pi-coding-agent` package; older examples may use the `@mariozechner` scope.
+
+### What Pi adds to a multi-harness setup
+
+Pi is a useful third surface when you want to hold the harness constant enough to compare models, but keep the harness itself easy to inspect and extend. Its interactive session supports switching models and thinking levels during a task, automatic session persistence, branching and forking, context compaction, and direct access to the repository. Its print/JSON modes support one-shot or machine-readable runs, while RPC mode and the TypeScript SDK make it possible to embed Pi in a wrapper or another application. The practical low-cost pairing is OpenRouter for hosted open-weight models and `llama.cpp`, Ollama, or another local provider for offline work; Pi's provider documentation includes OpenRouter, DeepSeek, Mistral, NVIDIA, Together, Fireworks, and custom compatible endpoints. A compatible endpoint is only a transport: Pi still needs the model's correct context, reasoning, developer-role, and tool-call settings.
+
+That combination creates several practical roles:
+
+- Use Pi for exploratory repository work where a low-friction terminal loop and mid-session model switching matter more than a built-in plan or approval workflow.
+- Use Pi as a model-harness experiment: run the same task contract, repository revision, permissions, and acceptance checks through Pi and OpenCode or Claude Code, then compare accepted changes, recovery, latency, and cost.
+- Use Pi as a custom workflow host when a small TypeScript extension can express the required tool, command, approval, or context behaviour more clearly than a large product configuration.
+- Use Pi's print, JSON, RPC, or SDK surfaces for bounded automation, provided the caller supplies its own authorization, timeout, logging, and merge gates.
+
+Do not use Pi merely because it can call the same underlying model. A model's behaviour depends on the complete tuple of harness, provider, model ID, context policy, tool schemas, thinking settings, retries, and permissions. A successful Pi run does not prove that the same model will behave the same way in OpenCode, Cline, or Claude Code.
+
+### Installation and a first controlled run
+
+The current official quick start offers an installer or a global npm installation. Pin the version in a reproducible environment where the harness itself matters, and inspect the package source before granting it access to sensitive repositories:
+
+```bash
+# Verify the current command and package version before installing.
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+pi --version
+
+# Start from a disposable branch or worktree.
+pi
+```
+
+Authenticate with `/login` when a documented subscription or provider login is appropriate, or use the provider's environment variable or Pi credential store for API-key access. Do not copy an old OAuth or subscription workaround from a forum into a production workflow. A subscription login is an access path with its own terms; it is not evidence that every model or feature is available through every provider.
+
+Pi's default loop gives the model `read`, `write`, `edit`, and `bash`; `grep`, `find`, and `ls` are available as additional read-only tools through tool options. Start with a bounded request and explicit checks:
+
+```bash
+pi -p "Inspect the repository instructions. Do not edit files. \
+Report the test command, build command, and three likely failure points."
+```
+
+For a write task, create a branch or worktree first, give Pi the repository contract, require tests, and inspect the diff yourself. Pi runs with the permissions of the user who starts it, so the working directory and shell account are part of the authorization boundary.
+
+### Project context, settings, and extensions
+
+Pi can load `AGENTS.md` and `CLAUDE.md` context files, which makes it a useful consumer of portable repository instructions. Keep those files about repository invariants, commands, tests, and safety rules. Do not treat them as a permission system. Project-local Pi resources live under `.pi/` and can include settings, extensions, skills, prompts, and themes; global resources live below `~/.pi/agent/`.
+
+For example, a project settings file can select a documented startup model and restrict the initial built-in tools:
+
+```json
+{
+  "defaultProvider": "openrouter",
+  "defaultModel": "deepseek/deepseek-v4-pro-0813",
+  "defaultThinkingLevel": "medium",
+  "defaultTools": ["read", "grep", "find", "ls"]
+}
+```
+
+The model ID is a September 17, 2026 starting point, not a permanent default. For a cheaper Pi profile, switch to `z-ai/glm-5.3-flash` for summaries and small edits, `qwen/qwen3-coder-30b-a3b-instruct` for structured bounded changes, or `qwen/qwen3-coder-next` for routine code work. For hard interactive work, compare `deepseek/deepseek-v4-pro-0813` with `z-ai/glm-5.3`; for offline work, select `Devstral-Small-2-24B-Instruct-2512`, `Qwen3-Coder-30B-A3B`, or `GLM-4.7-Flash` through a configured llama.cpp/Ollama/vLLM provider. Project settings and resources require a project-trust decision in interactive use. Trust controls whether Pi loads project-local resources; it is not a sandbox. Non-interactive modes need an explicit trust choice or a suitable `--approve`/`--no-approve` policy, and an unattended run must not inherit a permissive setting accidentally.
+
+Extensions are TypeScript modules that can register custom tools, commands, UI, event handlers, and tool-call interception. They can implement approval prompts, policy checks, custom compaction, or an MCP adapter, but that flexibility moves security responsibility to the extension author. Pi packages can bundle extensions, skills, prompt templates, and themes from npm, Git, URLs, or local paths. Official documentation warns that extensions execute arbitrary code and skills can instruct the model to perform actions, so review and pin third-party packages before enabling them. Do not install an unreviewed package in a repository containing credentials or production access.
+
+### What Pi does not provide by default
+
+Pi's minimal core intentionally does not provide built-in MCP, plan mode, subagents, permission popups, background bash, or a built-in to-do system. That is a design choice, not an unfinished claim of parity. You can add some of these through extensions, packages, scripts, tmux, or a wrapper, but the result becomes your workflow and must be tested as a new harness configuration.
+
+The absence of built-in approval popups is the sharpest operational difference. For local experiments, a disposable worktree and container boundary may be enough. For a shared repository, add an approval extension or put Pi behind a wrapper that allowlists commands, blocks destructive operations, records tool calls, and stops before merge. Do not infer safety from the project-trust prompt: Pi's own security guidance says trust does not restrict what tools can do after the run is trusted.
+
+The absence of built-in MCP also changes migration cost. Existing MCP servers are not automatically available in Pi. An extension can bridge them, or a CLI tool with a stable interface can be invoked through `bash`, but transport, authentication, roots, result size, approval, and failure-recovery behaviour all need separate validation. If MCP is central to the workflow, OpenCode or Cline remains the more direct additional harness. The model choice does not repair this gap: GLM, DeepSeek, and Qwen can all emit tool calls, but Pi still owns the tool schema, approval policy, retries, and result handling.
+
+### Sessions and cross-harness handoff
+
+Pi automatically saves sessions and supports continuing the most recent session, browsing older sessions, opening a session by path or ID, branching, forking, cloning, and compaction. This is valuable for interactive exploration, but Pi session files are not a portable continuation format for Claude Code, OpenCode, or Cline. A durable handoff should contain the repository revision, task contract, changed files, diff, tests and results, model/provider identifiers, unresolved questions, and any approval decisions. The shared state is the worktree plus written checkpoint, not the private transcript.
+
+A practical handoff from Pi to the main harness looks like this: Pi explores the repository and records a short plan in the issue or checkpoint file; OpenCode or Claude Code implements the approved change in a dedicated worktree; a different provider receives the contract, diff, relevant source, and test results for review; CI and a human own the merge. The reverse direction works for investigation or a small follow-up, but do not carry hidden assumptions across the boundary.
+
+### How to evaluate Pi fairly
+
+Add Pi as another row in the existing 20-30-task pilot, not as an anecdotal alternative. Use the same initial revision, task contract, context files, permission envelope, model/provider tuple, thinking level, retry policy, and acceptance checks. Record Pi's version, package scope, provider, model ID, context and session settings, extension/package versions, local runtime and quantization where relevant, tool failures, latency, cost, accepted changes, missed defects, false positives, and human correction time.
+
+Include at least one task that needs repository exploration, one multi-file implementation, one failing-test diagnosis, one documentation edit, one long-session continuation, and one tool-integration task. For the last two, test compaction, session resume, malformed tool results, and interruption recovery. If Pi needs an extension or wrapper to supply a capability that OpenCode has in its core, record that configuration as part of Pi's harness identity and measure its maintenance burden.
+
+### Recommendation
+
+Add Pi when you value a small terminal core, explicit model switching, inspectable session state, or TypeScript-level customisation. Keep it beside OpenCode rather than underneath it: use OpenCode for the multi-provider/MCP-heavy default described above, Pi with DeepSeek V4 Pro or GLM 5.3 for difficult interactive work, Pi with GLM 5.3 Flash or Qwen3 Coder Next for cheap routine work, and Pi with Devstral Small 2 or Qwen locally for offline work. Use Cline for an editor-first Plan/Act surface and Aider for the minimal git-native fallback. Use a disposable worktree or container for initial trials, review extensions and packages as code, and never let Pi's model choice silently expand shell, file, network, or merge permissions.
 
 ## References
 
-First-party sources checked on **September 16, 2026** for the current model and pricing snapshot. Grok Bot sources were checked on **September 9, 2026**. Model names, prices, quotas, and product boundaries can change independently; the date is part of each claim.
+First-party sources checked on **September 16, 2026** for the current model and pricing snapshot. Pi sources and setup documentation were checked on **September 17, 2026**. Grok Bot sources were checked on **September 9, 2026**. Model names, prices, quotas, and product boundaries can change independently; the date is part of each claim.
 
 ### Model Documentation and Licences
 
@@ -1700,8 +1790,11 @@ First-party sources checked on **September 16, 2026** for the current model and 
 - [Gemma model overview](https://ai.google.dev/gemma/docs/core), [Gemma 3 model card](https://ai.google.dev/gemma/docs/core/model_card_3), and [Gemma deployment guide](https://ai.google.dev/gemma/docs/get_started)
 - [xAI Grok 4.6 documentation](https://docs.x.ai/developers/models/grok-4.6)
 - [Qwen3-Coder announcement](https://qwenlm.github.io/blog/qwen3-coder/), [Qwen Code model providers](https://qwenlm.github.io/qwen-code-docs/en/users/configuration/model-providers/), and [Qwen3.8-27B model card](https://huggingface.co/Qwen/Qwen3.8-27B)
+- [Qwen3-Coder runtime guidance](https://github.com/QwenLM/Qwen3-Coder), [Qwen3 Coder 30B A3B on OpenRouter](https://openrouter.ai/qwen/qwen3-coder-30b-a3b-instruct), and [Qwen3 Coder Next on OpenRouter](https://openrouter.ai/qwen/qwen3-coder-next/api)
 - [DeepSeek V4.1 Flash model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash), [V4.1 release information](https://api-docs.deepseek.com/updates/), and [Responses API](https://api-docs.deepseek.com/api/create-response/)
+- [DeepSeek V4 Pro 0813 on OpenRouter](https://openrouter.ai/deepseek/deepseek-v4-pro-0813) and [DeepSeek V4 Pro model card](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813)
 - [Z.AI GLM-5 documentation](https://docs.z.ai/guides/llm/glm-5) and [GLM-5.3-Flash release](https://autoclaw.z.ai/blog/model/glm-5.3-flash/)
+- [GLM 5.3 on OpenRouter](https://openrouter.ai/z-ai/glm-5.3), [GLM 5.3 Flash on OpenRouter](https://openrouter.ai/z-ai/glm-5.3-flash-20260826/), and [GLM-4.7-Flash model card](https://huggingface.co/zai-org/GLM-4.7-Flash)
 - [Kimi model catalogue](https://platform.kimi.ai/), [Kimi K3 developer guide](https://platform.kimi.ai/docs/guide/kimi-k3-quickstart), [Kimi K3 technical blog](https://www.kimi.ai/blog/kimi-k3), and [Kimi K3 model card and licence link](https://huggingface.co/moonshotai/Kimi-K3)
 - [Mistral Devstral offline-model guidance](https://docs.mistral.ai/vibe/code/cli/offline-models), [Devstral release](https://mistral.ai/news/devstral-2-vibe-cli/), [Devstral 2 deprecation](https://docs.mistral.ai/models/devstral-2-25-12), and [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04)
 - [Devstral Small 2 model card, deployment guidance, and Apache 2.0 licence](https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512)
@@ -1738,6 +1831,7 @@ First-party sources checked on **September 16, 2026** for the current model and 
 - [GitHub Copilot BYOK](https://docs.github.com/en/copilot/concepts/models/bring-your-own-key) and [models/pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 - [Amazon Q IDE end-of-support scope](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html), [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing), and [OpenAI Agentic AI Foundation announcement](https://openai.com/index/agentic-ai-foundation/)
 - [Aider configuration](https://aider.chat/docs/config.html), [repository](https://github.com/Aider-AI/aider), [advanced model settings](https://aider.chat/docs/config/adv-model-settings.html), and [edit formats](https://aider.chat/docs/more/edit-formats.html)
+- [Pi documentation](https://pi.dev/docs/latest), [quick start](https://pi.dev/docs/latest/quickstart), [providers](https://pi.dev/docs/latest/providers), [usage and CLI modes](https://pi.dev/docs/latest/usage), [settings and project trust](https://pi.dev/docs/latest/settings), [extensions](https://pi.dev/docs/latest/extensions), [skills](https://pi.dev/docs/latest/skills), [sessions](https://pi.dev/docs/latest/sessions), [RPC](https://pi.dev/docs/latest/rpc), [SDK](https://pi.dev/docs/latest/sdk), and [security](https://pi.dev/docs/latest/security)
 - [OpenRouter works-with-openrouter](https://openrouter.ai/works-with-openrouter), [Continue Ollama guide](https://docs.continue.dev/guides/ollama-guide), and [AGENTS.md](https://agents.md/)
 
 ### Secondary Background
