@@ -1565,6 +1565,128 @@ Rather than a hard switch, a practical migration path:
 4. **Invest in OpenRouter** -- get an API key if its routing breadth is useful. It reduces model lock-in, but adds a gateway dependency and does not automatically migrate you to cheaper models; select and re-evaluate models explicitly.
 5. **Protect your MCP investments** -- build MCP servers in preference to tool-specific plugins wherever possible. MCP compatibility is growing across the ecosystem. **Do the same for AGENTS.md** if you maintain per-tool instruction/rule files (`.clinerules`, `.cursorrules`, `CLAUDE.md`) -- it is now adopted across tens of thousands of projects and is a lower-maintenance way to keep project instructions portable than maintaining one file per vendor.
 
+## A Concrete Multi-Model Alternative Setup
+
+The survey above helps you choose a tool. It does not tell you how to run a real repository when no single model is best at every task. A useful alternative to Claude Code is a small, explicit routing policy: keep the harness stable, assign models to roles, and make escalation visible in the command or configuration. That gives you model diversity without hiding important cost, privacy, and quality decisions behind automatic routing.
+
+This is an operating design, not a claim that these products or models are interchangeable. The model and provider examples below reflect a **September 17, 2026** research checkpoint. Model IDs, prices, quotas, authentication methods, and tool support can change independently. Replace every example ID with one confirmed in the live provider catalogue before adoption.
+
+### The recommended default: OpenCode plus explicit model tiers
+
+For this multi-provider, MCP-heavy design, start with OpenCode. Its MCP support, project configuration, local-model options, and broad provider catalogue make it a better centre of gravity than Aider when one workflow needs several providers and tool integrations. This is narrower than the single-tool recommendation above: use Aider as the minimal git-native fallback when you want a small editing loop and do not need MCP or an IDE planning surface.
+
+OpenCode can select a main model and a smaller model explicitly. A project configuration can also describe an OpenAI-compatible local endpoint, but it must not become a place to store credentials:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openrouter/<provider>/<frontier-model>",
+  "small_model": "openrouter/<provider>/<fast-model>",
+  "provider": {
+    "openrouter": {
+      "models": {
+        "<provider>/<frontier-model>": {},
+        "<provider>/<fast-model>": {}
+      }
+    },
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": { "baseURL": "http://localhost:11434/v1" },
+      "models": {
+        "<local-model>": { "name": "Local coding model" }
+      }
+    }
+  }
+}
+```
+
+The angle-bracket values are placeholders, not tested model names. Authenticate through OpenCode's credential flow, environment variables, or the provider's credential store. Do not put an API key in `opencode.json`, commit it in a repository, or assume that an OpenAI-compatible endpoint provides reliable tool calls, long context, structured output, or reasoning controls. OpenCode's provider, configuration, and model documentation are the relevant setup references. Do not revive an old Claude Pro/Max plugin or OAuth route because it appears in a forum post or an older installation: use only a currently documented subscription integration or an Anthropic API key, and verify the policy and account path first.
+
+### Model allocation by task
+
+Use a role-based policy that you can inspect and override. A wrapper script or shell alias is enough; automatic model switching that the user cannot see is not.
+
+| Role | Default choice | When to use it |
+| --- | --- | --- |
+| Plan and architecture | Frontier model A | Design, threat modelling, migrations, and changes whose wrong abstraction will be expensive |
+| Implement and debug | Frontier model B | Multi-file edits, tests, debugging, and integration work |
+| Routine work | Fast, low-cost model | Summaries, small edits, documentation, and test-output triage |
+| Sensitive or offline work | Local coding model | Data that must stay on the workstation, provided the task fits the model's context and tool ability |
+| Independent review | A different provider/model | High-risk changes where correlated model mistakes are costly |
+| Asynchronous execution | OpenHands or Devin in an isolated workspace | Explicitly bounded work that can run away from the interactive session and still receive human approval before merge |
+
+For the frontier roles, use a currently supported model such as GPT-5.6, Claude Sonnet 5, or Gemini 3.1 Pro only after checking the live catalogue and the applicable provider terms. Do not use the same provider for implementation and independent review when independence matters. For routine work, Gemini 3.8 Flash and DeepSeek V4.1 Flash were candidate examples at the checkpoint, not guarantees of current names, price, or availability.
+
+For local work, Qwen3-Coder, Devstral Small 2, and gpt-oss-20b/120b are candidates to benchmark through Ollama or LM Studio, not interchangeable workstation defaults. Record the exact checkpoint, quantization, runtime, context budget, and tool-call settings; large Qwen variants and gpt-oss-120b may require server-class hardware, with the latter roughly an 80 GB deployment. Hardware, quantization, context length, and tool-call support determine whether they are useful. Keep a local model in the routine/offline tier until it passes representative repository tasks; local availability is not evidence of frontier parity.
+
+The routing policy should remain legible in the workflow:
+
+```bash
+# Examples only: confirm the live IDs before running them.
+opencode --model openrouter/<provider>/<frontier-model>
+opencode --model ollama/<local-model>
+
+# Aider is the deliberately smaller fallback.
+aider --model openrouter/<provider>/<implementation-model> \
+      --weak-model openrouter/<provider>/<fast-model>
+```
+
+### Setup: CLI-first
+
+Install OpenCode and connect the providers you have approved. Put repository-wide instructions in `AGENTS.md`; keep `opencode.json` focused on model and provider adapters. Begin with one frontier model and one fast model, then add a local endpoint after verifying context and tool behaviour. For a minimal Aider fallback, use a repository-level `.aider.conf.yml` with no secrets:
+
+```yaml
+# .aider.conf.yml -- do not store secrets here
+model: openrouter/<provider>/<implementation-model>
+weak-model: openrouter/<provider>/<fast-model>
+edit-format: diff
+auto-commits: false
+```
+
+Aider's model metadata can describe context limits, costs, edit format, and a weak model when a provider's model is not already known to it. That is useful for reproducibility, but it is still local client configuration, not a guarantee that the remote model supports the advertised capabilities. Choose Aider when the small git-native loop is the requirement; do not describe it as an equivalent replacement for Claude Code's MCP, skills, and hooks architecture.
+
+### Setup: agentic editor
+
+Use Cline when the editor is the primary surface and you want Plan/Act review, browser and MCP access, and a visual diff loop. Configure the provider in the extension or CLI, use the implementation model for Act mode, and reserve the cheaper model for bounded tasks. Cline can use the same provider and model IDs through OpenRouter, but that does not imply behavioural equivalence: test the full harness/provider/model/context/tool-schema/reasoning-settings tuple, and remember that approval semantics remain Cline-specific.
+
+Use Continue.dev instead when local Ollama or LM Studio inference and IDE context matter more than autonomous tool breadth. It is a lower-risk editor choice for sensitive code if the endpoint, telemetry, context providers, and extensions are all reviewed. In either editor, keep the plan reviewable, require approval before writes with external consequences, and do not assume that importing an `AGENTS.md` file reproduces Claude Code's full instruction or hook behaviour.
+
+### Repository configuration and security boundaries
+
+Treat the harness, provider, model, repository, and external tools as separate trust boundaries. MCP standardises tool access; it does not standardise permissions, data retention, or approval policy. A gateway such as OpenRouter is a provider-boundary decision, not merely a convenient billing layer.
+
+Keep secrets in the provider credential store or environment variables. Never commit them in `opencode.json`, `.aider.conf.yml`, editor settings, or `AGENTS.md`. Keep local-only data on a local model or an approved endpoint, and remember that prompts, retrieved files, tool results, and telemetry can cross the boundary even when the model itself is not hosted by the tool vendor.
+
+Require explicit review before destructive commands, migrations, credential access, external messages, and merges. The model can propose an action; the harness, shell policy, branch protections, and CI must enforce authorization. A practical starting permission matrix is:
+
+\newpage
+
+| Role | Read/write | Shell | Browser/MCP | Destructive actions | Merge |
+| --- | --- | --- | --- | --- | --- |
+| Plan and architecture | Read; no writes | No | No by default | No | No |
+| Implement and debug | Read/write branch | Approved commands | Approved servers only | Confirmation required | No |
+| Routine work | Read/write scoped files | Tests and formatters only | No by default | No | No |
+| Sensitive / offline | Local only | Local allowlist | Approved local | No | No |
+| Independent review | Read-only fresh checkout/diff | Tests in a sandbox | No by default | No | No |
+| Asynchronous agent | Isolated worktree | Least privilege | Explicitly approved connectors | No automatic approval | No |
+
+Model selection must not silently expand these permissions. For OpenHands or Devin, distinguish execution isolation from data isolation: a Docker sandbox can still send source through a hosted model or MCP service, while Devin is a managed cloud boundary. Use a separate branch or worktree with least-privilege credentials and a clean handoff containing the task contract, diff, relevant source, tests, and unresolved questions. Human approval remains the integration gate.
+
+### A staged rollout and evaluation loop
+
+Start with a pilot of roughly 20-30 representative tasks from the repository, including a new feature, multi-file refactor, failing-test diagnosis, documentation edit, and tool or MCP task. Run each task with the proposed frontier, fast, local, and independent-review routes where they apply. Record the harness and model IDs, provider, permissions, reasoning settings, context and quantization, retries, successful completion, missed defects, false positives, review burden, latency, cost, tool failures, and data-boundary exceptions. A model that finishes quickly but creates a large review burden is not cheap in practice.
+
+An independent review needs fresh context, not just a second opinion in the original conversation. Give the reviewer the task contract, diff, relevant source, test results, and unresolved questions; measure both missed defects and false positives. A different provider reduces one source of correlated error, but it does not create statistical independence by itself.
+
+Promote a model to a broader role only after it passes that task set with the permissions it will actually receive. Re-run the benchmark when a provider, model ID, quantization, context setting, harness version, or major project instruction changes. Keep representative prompts and expected checks in the repository's normal evaluation workflow so the result is reproducible rather than anecdotal.
+
+### What this setup does not solve
+
+Multiple models do not remove the need for good repository instructions, tests, observability, or human judgement. A second model can repeat the first model's mistake, especially when both rely on the same provider, training data, or misleading project context. OpenRouter does not make every provider equivalent, and a local endpoint does not make sensitive data safe if the harness or an MCP server sends it elsewhere. MCP portability still varies by transport, authentication, filesystem roots, approvals, and client behaviour; skills and hooks are not drop-in portable. `AGENTS.md` can consolidate instructions, but it does not standardise permissions or tool execution. An asynchronous agent does not become trustworthy merely because it works in the cloud or reports success.
+
+The concrete recommendation is therefore: begin with OpenCode plus OpenRouter for provider breadth, add one local Ollama model for routine or offline work, keep Cline as the editor surface if that matches how you work, and retain Aider as the minimal fallback. Use explicit model selection, a different provider for high-risk review, and isolated worktrees for asynchronous agents. Refresh the model IDs, prices, quotas, authentication path, and provider policies immediately before adoption.
+
 ## References
 
 First-party sources checked on **September 16, 2026** for the current model and pricing snapshot. Grok Bot sources were checked on **September 9, 2026**. Model names, prices, quotas, and product boundaries can change independently; the date is part of each claim.
@@ -1605,7 +1727,7 @@ First-party sources checked on **September 16, 2026** for the current model and 
 - [Gemini CLI to Antigravity CLI transition](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/), [Gemini CLI authentication](https://geminicli.com/docs/get-started/authentication/), [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [Antigravity plans](https://antigravity.google/pricing), [Antigravity overview](https://antigravity.google/docs/overview?app=antigravity), [CLI installation](https://antigravity.google/docs/cli/install/), and [MCP documentation](https://antigravity.google/docs/mcp)
 - [Amp pricing](https://ampcode.com/docs/pricing), [self-hosted Orbs](https://ampcode.com/docs/orbs/self-hosted), [documentation](https://ampcode.com/docs), [skills and plugins](https://ampcode.com/docs/customize/skills), and [plugin API](https://ampcode.com/plugin-api)
 - [Cline CLI reference](https://docs.cline.bot/cli/cli-reference), [installation and supported surfaces](https://docs.cline.bot/getting-started/installing-cline), and [OpenRouter provider](https://docs.cline.bot/provider-config/openrouter)
-- [OpenCode providers](https://opencode.ai/docs/providers/), [developer providers](https://dev.opencode.ai/docs/providers/), and [repository](https://github.com/anomalyco/opencode)
+- [OpenCode providers](https://opencode.ai/docs/providers/), [configuration](https://dev.opencode.ai/docs/config/), [models](https://opencode.ai/v2/docs/models), [developer providers](https://dev.opencode.ai/docs/providers/), and [repository](https://github.com/anomalyco/opencode)
 - [Goose repository](https://github.com/aaif-goose/goose), [OpenHands MCP guide](https://docs.openhands.dev/sdk/guides/mcp), and [OpenHands MCP settings](https://docs.openhands.dev/openhands/usage/settings/mcp-settings)
 - [Cursor pricing](https://cursor.com/pricing) and [Cursor rules](https://prod.cursor.com/help/customization/rules)
 - [Devin Desktop](https://devin.ai/desktop), [Cognition's Windsurf acquisition](https://devin.ai/blog/windsurfs-next-chapter), [Devin pricing](https://devin.ai/pricing), and [self-serve billing](https://docs.devin.ai/admin/billing/self-serve)
@@ -1615,7 +1737,7 @@ First-party sources checked on **September 16, 2026** for the current model and 
 - [Tabnine pricing](https://www.tabnine.com/pricing/) and [acquisition announcements](https://www.tabnine.com/blog/category/announcements/)
 - [GitHub Copilot BYOK](https://docs.github.com/en/copilot/concepts/models/bring-your-own-key) and [models/pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 - [Amazon Q IDE end-of-support scope](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html), [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing), and [OpenAI Agentic AI Foundation announcement](https://openai.com/index/agentic-ai-foundation/)
-- [Aider repository](https://github.com/Aider-AI/aider) and [edit formats](https://aider.chat/docs/more/edit-formats.html)
+- [Aider configuration](https://aider.chat/docs/config.html), [repository](https://github.com/Aider-AI/aider), [advanced model settings](https://aider.chat/docs/config/adv-model-settings.html), and [edit formats](https://aider.chat/docs/more/edit-formats.html)
 - [OpenRouter works-with-openrouter](https://openrouter.ai/works-with-openrouter), [Continue Ollama guide](https://docs.continue.dev/guides/ollama-guide), and [AGENTS.md](https://agents.md/)
 
 ### Secondary Background
