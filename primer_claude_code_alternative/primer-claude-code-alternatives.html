@@ -747,15 +747,30 @@ critical</a></li>
 to Claude Code’s skills+hooks</a></li>
 <li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">10.7</span> Migration strategy</a></li>
 </ul></li>
-<li><a href="#references" id="toc-references"><span class="toc-section-number">11</span> References</a>
+<li><a href="#a-concrete-multi-model-alternative-setup" id="toc-a-concrete-multi-model-alternative-setup"><span class="toc-section-number">11</span> A Concrete Multi-Model Alternative
+Setup</a>
 <ul>
-<li><a href="#model-documentation-and-licences" id="toc-model-documentation-and-licences"><span class="toc-section-number">11.1</span> Model Documentation and
+<li><a href="#the-recommended-default-opencode-plus-explicit-model-tiers" id="toc-the-recommended-default-opencode-plus-explicit-model-tiers"><span class="toc-section-number">11.1</span> The recommended default: OpenCode
+plus explicit model tiers</a></li>
+<li><a href="#model-allocation-by-task" id="toc-model-allocation-by-task"><span class="toc-section-number">11.2</span> Model allocation by task</a></li>
+<li><a href="#setup-cli-first" id="toc-setup-cli-first"><span class="toc-section-number">11.3</span> Setup: CLI-first</a></li>
+<li><a href="#setup-agentic-editor" id="toc-setup-agentic-editor"><span class="toc-section-number">11.4</span> Setup: agentic editor</a></li>
+<li><a href="#repository-configuration-and-security-boundaries" id="toc-repository-configuration-and-security-boundaries"><span class="toc-section-number">11.5</span> Repository configuration and
+security boundaries</a></li>
+<li><a href="#a-staged-rollout-and-evaluation-loop" id="toc-a-staged-rollout-and-evaluation-loop"><span class="toc-section-number">11.6</span> A staged rollout and evaluation
+loop</a></li>
+<li><a href="#what-this-setup-does-not-solve" id="toc-what-this-setup-does-not-solve"><span class="toc-section-number">11.7</span> What this setup does not
+solve</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references"><span class="toc-section-number">12</span> References</a>
+<ul>
+<li><a href="#model-documentation-and-licences" id="toc-model-documentation-and-licences"><span class="toc-section-number">12.1</span> Model Documentation and
 Licences</a></li>
-<li><a href="#model-evaluations-and-practitioner-reports" id="toc-model-evaluations-and-practitioner-reports"><span class="toc-section-number">11.2</span> Model Evaluations and
+<li><a href="#model-evaluations-and-practitioner-reports" id="toc-model-evaluations-and-practitioner-reports"><span class="toc-section-number">12.2</span> Model Evaluations and
 Practitioner Reports</a></li>
-<li><a href="#tool-and-pricing-documentation" id="toc-tool-and-pricing-documentation"><span class="toc-section-number">11.3</span> Tool and Pricing
+<li><a href="#tool-and-pricing-documentation" id="toc-tool-and-pricing-documentation"><span class="toc-section-number">12.3</span> Tool and Pricing
 Documentation</a></li>
-<li><a href="#secondary-background" id="toc-secondary-background"><span class="toc-section-number">11.4</span> Secondary Background</a></li>
+<li><a href="#secondary-background" id="toc-secondary-background"><span class="toc-section-number">12.4</span> Secondary Background</a></li>
 </ul></li>
 </ul></div>
 
@@ -4501,13 +4516,326 @@ AGENTS.md</strong> if you maintain per-tool instruction/rule files
 projects and is a lower-maintenance way to keep project instructions
 portable than maintaining one file per vendor.</li>
 </ol>
-<h1 data-number="11" id="references"><span class="header-section-number">11</span> References</h1>
+<h1 data-number="11" id="a-concrete-multi-model-alternative-setup"><span class="header-section-number">11</span> A Concrete Multi-Model
+Alternative Setup</h1>
+<p>The survey above helps you choose a tool. It does not tell you how to
+run a real repository when no single model is best at every task. A
+useful alternative to Claude Code is a small, explicit routing policy:
+keep the harness stable, assign models to roles, and make escalation
+visible in the command or configuration. That gives you model diversity
+without hiding important cost, privacy, and quality decisions behind
+automatic routing.</p>
+<p>This is an operating design, not a claim that these products or
+models are interchangeable. The model and provider examples below
+reflect a <strong>September 17, 2026</strong> research checkpoint. Model
+IDs, prices, quotas, authentication methods, and tool support can change
+independently. Replace every example ID with one confirmed in the live
+provider catalogue before adoption.</p>
+<h2 data-number="11.1" id="the-recommended-default-opencode-plus-explicit-model-tiers"><span class="header-section-number">11.1</span> The recommended default:
+OpenCode plus explicit model tiers</h2>
+<p>For this multi-provider, MCP-heavy design, start with OpenCode. Its
+MCP support, project configuration, local-model options, and broad
+provider catalogue make it a better centre of gravity than Aider when
+one workflow needs several providers and tool integrations. This is
+narrower than the single-tool recommendation above: use Aider as the
+minimal git-native fallback when you want a small editing loop and do
+not need MCP or an IDE planning surface.</p>
+<p>OpenCode can select a main model and a smaller model explicitly. A
+project configuration can also describe an OpenAI-compatible local
+endpoint, but it must not become a place to store credentials:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;$schema&quot;</span><span class="fu">:</span> <span class="st">&quot;https://opencode.ai/config.json&quot;</span><span class="fu">,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;model&quot;</span><span class="fu">:</span> <span class="st">&quot;openrouter/&lt;provider&gt;/&lt;frontier-model&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;small_model&quot;</span><span class="fu">:</span> <span class="st">&quot;openrouter/&lt;provider&gt;/&lt;fast-model&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;provider&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;openrouter&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;&lt;provider&gt;/&lt;frontier-model&gt;&quot;</span><span class="fu">:</span> <span class="fu">{},</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;&lt;provider&gt;/&lt;fast-model&gt;&quot;</span><span class="fu">:</span> <span class="fu">{}</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ollama&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;npm&quot;</span><span class="fu">:</span> <span class="st">&quot;@ai-sdk/openai-compatible&quot;</span><span class="fu">,</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Ollama (local)&quot;</span><span class="fu">,</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;options&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;baseURL&quot;</span><span class="fu">:</span> <span class="st">&quot;http://localhost:11434/v1&quot;</span> <span class="fu">},</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;&lt;local-model&gt;&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Local coding model&quot;</span> <span class="fu">}</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>The angle-bracket values are placeholders, not tested model names.
+Authenticate through OpenCode’s credential flow, environment variables,
+or the provider’s credential store. Do not put an API key in
+<code>opencode.json</code>, commit it in a repository, or assume that an
+OpenAI-compatible endpoint provides reliable tool calls, long context,
+structured output, or reasoning controls. OpenCode’s provider,
+configuration, and model documentation are the relevant setup
+references. Do not revive an old Claude Pro/Max plugin or OAuth route
+because it appears in a forum post or an older installation: use only a
+currently documented subscription integration or an Anthropic API key,
+and verify the policy and account path first.</p>
+<h2 data-number="11.2" id="model-allocation-by-task"><span class="header-section-number">11.2</span> Model allocation by task</h2>
+<p>Use a role-based policy that you can inspect and override. A wrapper
+script or shell alias is enough; automatic model switching that the user
+cannot see is not.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Role</th>
+<th>Default choice</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan and architecture</td>
+<td>Frontier model A</td>
+<td>Design, threat modelling, migrations, and changes whose wrong
+abstraction will be expensive</td>
+</tr>
+<tr>
+<td>Implement and debug</td>
+<td>Frontier model B</td>
+<td>Multi-file edits, tests, debugging, and integration work</td>
+</tr>
+<tr>
+<td>Routine work</td>
+<td>Fast, low-cost model</td>
+<td>Summaries, small edits, documentation, and test-output triage</td>
+</tr>
+<tr>
+<td>Sensitive or offline work</td>
+<td>Local coding model</td>
+<td>Data that must stay on the workstation, provided the task fits the
+model’s context and tool ability</td>
+</tr>
+<tr>
+<td>Independent review</td>
+<td>A different provider/model</td>
+<td>High-risk changes where correlated model mistakes are costly</td>
+</tr>
+<tr>
+<td>Asynchronous execution</td>
+<td>OpenHands or Devin in an isolated workspace</td>
+<td>Explicitly bounded work that can run away from the interactive
+session and still receive human approval before merge</td>
+</tr>
+</tbody>
+</table>
+<p>For the frontier roles, use a currently supported model such as
+GPT-5.6, Claude Sonnet 5, or Gemini 3.1 Pro only after checking the live
+catalogue and the applicable provider terms. Do not use the same
+provider for implementation and independent review when independence
+matters. For routine work, Gemini 3.8 Flash and DeepSeek V4.1 Flash were
+candidate examples at the checkpoint, not guarantees of current names,
+price, or availability.</p>
+<p>For local work, Qwen3-Coder, Devstral Small 2, and gpt-oss-20b/120b
+are candidates to benchmark through Ollama or LM Studio, not
+interchangeable workstation defaults. Record the exact checkpoint,
+quantization, runtime, context budget, and tool-call settings; large
+Qwen variants and gpt-oss-120b may require server-class hardware, with
+the latter roughly an 80 GB deployment. Hardware, quantization, context
+length, and tool-call support determine whether they are useful. Keep a
+local model in the routine/offline tier until it passes representative
+repository tasks; local availability is not evidence of frontier
+parity.</p>
+<p>The routing policy should remain legible in the workflow:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples only: confirm the live IDs before running them.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">opencode</span> <span class="at">--model</span> openrouter/<span class="op">&lt;</span>provider<span class="op">&gt;</span>/<span class="op">&lt;</span>frontier-model<span class="op">&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">opencode</span> <span class="at">--model</span> ollama/<span class="op">&lt;</span>local-model<span class="op">&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Aider is the deliberately smaller fallback.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/<span class="op">&lt;</span>provider<span class="op">&gt;</span>/<span class="op">&lt;</span>implementation-model<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">--weak-model</span> openrouter/<span class="op">&lt;</span>provider<span class="op">&gt;</span>/<span class="op">&lt;</span>fast-model<span class="op">&gt;</span></span></code></pre></div>
+<h2 data-number="11.3" id="setup-cli-first"><span class="header-section-number">11.3</span> Setup: CLI-first</h2>
+<p>Install OpenCode and connect the providers you have approved. Put
+repository-wide instructions in <code>AGENTS.md</code>; keep
+<code>opencode.json</code> focused on model and provider adapters. Begin
+with one frontier model and one fast model, then add a local endpoint
+after verifying context and tool behaviour. For a minimal Aider
+fallback, use a repository-level <code>.aider.conf.yml</code> with no
+secrets:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .aider.conf.yml -- do not store secrets here</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> openrouter/&lt;provider&gt;/&lt;implementation-model&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">weak-model</span><span class="kw">:</span><span class="at"> openrouter/&lt;provider&gt;/&lt;fast-model&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">edit-format</span><span class="kw">:</span><span class="at"> diff</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">auto-commits</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
+<p>Aider’s model metadata can describe context limits, costs, edit
+format, and a weak model when a provider’s model is not already known to
+it. That is useful for reproducibility, but it is still local client
+configuration, not a guarantee that the remote model supports the
+advertised capabilities. Choose Aider when the small git-native loop is
+the requirement; do not describe it as an equivalent replacement for
+Claude Code’s MCP, skills, and hooks architecture.</p>
+<h2 data-number="11.4" id="setup-agentic-editor"><span class="header-section-number">11.4</span> Setup: agentic editor</h2>
+<p>Use Cline when the editor is the primary surface and you want
+Plan/Act review, browser and MCP access, and a visual diff loop.
+Configure the provider in the extension or CLI, use the implementation
+model for Act mode, and reserve the cheaper model for bounded tasks.
+Cline can use the same provider and model IDs through OpenRouter, but
+that does not imply behavioural equivalence: test the full
+harness/provider/model/context/tool-schema/reasoning-settings tuple, and
+remember that approval semantics remain Cline-specific.</p>
+<p>Use Continue.dev instead when local Ollama or LM Studio inference and
+IDE context matter more than autonomous tool breadth. It is a lower-risk
+editor choice for sensitive code if the endpoint, telemetry, context
+providers, and extensions are all reviewed. In either editor, keep the
+plan reviewable, require approval before writes with external
+consequences, and do not assume that importing an <code>AGENTS.md</code>
+file reproduces Claude Code’s full instruction or hook behaviour.</p>
+<h2 data-number="11.5" id="repository-configuration-and-security-boundaries"><span class="header-section-number">11.5</span> Repository configuration and
+security boundaries</h2>
+<p>Treat the harness, provider, model, repository, and external tools as
+separate trust boundaries. MCP standardises tool access; it does not
+standardise permissions, data retention, or approval policy. A gateway
+such as OpenRouter is a provider-boundary decision, not merely a
+convenient billing layer.</p>
+<p>Keep secrets in the provider credential store or environment
+variables. Never commit them in <code>opencode.json</code>,
+<code>.aider.conf.yml</code>, editor settings, or
+<code>AGENTS.md</code>. Keep local-only data on a local model or an
+approved endpoint, and remember that prompts, retrieved files, tool
+results, and telemetry can cross the boundary even when the model itself
+is not hosted by the tool vendor.</p>
+<p>Require explicit review before destructive commands, migrations,
+credential access, external messages, and merges. The model can propose
+an action; the harness, shell policy, branch protections, and CI must
+enforce authorization. A practical starting permission matrix is:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Role</th>
+<th>Read/write</th>
+<th>Shell</th>
+<th>Browser/MCP</th>
+<th>Destructive actions</th>
+<th>Merge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan and architecture</td>
+<td>Read; no writes</td>
+<td>No</td>
+<td>No by default</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Implement and debug</td>
+<td>Read/write branch</td>
+<td>Approved commands</td>
+<td>Approved servers only</td>
+<td>Confirmation required</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Routine work</td>
+<td>Read/write scoped files</td>
+<td>Tests and formatters only</td>
+<td>No by default</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Sensitive / offline</td>
+<td>Local only</td>
+<td>Local allowlist</td>
+<td>Approved local</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Independent review</td>
+<td>Read-only fresh checkout/diff</td>
+<td>Tests in a sandbox</td>
+<td>No by default</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Asynchronous agent</td>
+<td>Isolated worktree</td>
+<td>Least privilege</td>
+<td>Explicitly approved connectors</td>
+<td>No automatic approval</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Model selection must not silently expand these permissions. For
+OpenHands or Devin, distinguish execution isolation from data isolation:
+a Docker sandbox can still send source through a hosted model or MCP
+service, while Devin is a managed cloud boundary. Use a separate branch
+or worktree with least-privilege credentials and a clean handoff
+containing the task contract, diff, relevant source, tests, and
+unresolved questions. Human approval remains the integration gate.</p>
+<h2 data-number="11.6" id="a-staged-rollout-and-evaluation-loop"><span class="header-section-number">11.6</span> A staged rollout and
+evaluation loop</h2>
+<p>Start with a pilot of roughly 20-30 representative tasks from the
+repository, including a new feature, multi-file refactor, failing-test
+diagnosis, documentation edit, and tool or MCP task. Run each task with
+the proposed frontier, fast, local, and independent-review routes where
+they apply. Record the harness and model IDs, provider, permissions,
+reasoning settings, context and quantization, retries, successful
+completion, missed defects, false positives, review burden, latency,
+cost, tool failures, and data-boundary exceptions. A model that finishes
+quickly but creates a large review burden is not cheap in practice.</p>
+<p>An independent review needs fresh context, not just a second opinion
+in the original conversation. Give the reviewer the task contract, diff,
+relevant source, test results, and unresolved questions; measure both
+missed defects and false positives. A different provider reduces one
+source of correlated error, but it does not create statistical
+independence by itself.</p>
+<p>Promote a model to a broader role only after it passes that task set
+with the permissions it will actually receive. Re-run the benchmark when
+a provider, model ID, quantization, context setting, harness version, or
+major project instruction changes. Keep representative prompts and
+expected checks in the repository’s normal evaluation workflow so the
+result is reproducible rather than anecdotal.</p>
+<h2 data-number="11.7" id="what-this-setup-does-not-solve"><span class="header-section-number">11.7</span> What this setup does not
+solve</h2>
+<p>Multiple models do not remove the need for good repository
+instructions, tests, observability, or human judgement. A second model
+can repeat the first model’s mistake, especially when both rely on the
+same provider, training data, or misleading project context. OpenRouter
+does not make every provider equivalent, and a local endpoint does not
+make sensitive data safe if the harness or an MCP server sends it
+elsewhere. MCP portability still varies by transport, authentication,
+filesystem roots, approvals, and client behaviour; skills and hooks are
+not drop-in portable. <code>AGENTS.md</code> can consolidate
+instructions, but it does not standardise permissions or tool execution.
+An asynchronous agent does not become trustworthy merely because it
+works in the cloud or reports success.</p>
+<p>The concrete recommendation is therefore: begin with OpenCode plus
+OpenRouter for provider breadth, add one local Ollama model for routine
+or offline work, keep Cline as the editor surface if that matches how
+you work, and retain Aider as the minimal fallback. Use explicit model
+selection, a different provider for high-risk review, and isolated
+worktrees for asynchronous agents. Refresh the model IDs, prices,
+quotas, authentication path, and provider policies immediately before
+adoption.</p>
+<h1 data-number="12" id="references"><span class="header-section-number">12</span> References</h1>
 <p>First-party sources checked on <strong>September 16, 2026</strong>
 for the current model and pricing snapshot. Grok Bot sources were
 checked on <strong>September 9, 2026</strong>. Model names, prices,
 quotas, and product boundaries can change independently; the date is
 part of each claim.</p>
-<h2 data-number="11.1" id="model-documentation-and-licences"><span class="header-section-number">11.1</span> Model Documentation and
+<h2 data-number="12.1" id="model-documentation-and-licences"><span class="header-section-number">12.1</span> Model Documentation and
 Licences</h2>
 <ul>
 <li><a href="https://platform.claude.com/docs/en/models/overview">Anthropic
@@ -4563,7 +4891,7 @@ Nemotron</a>, <a href="https://github.com/ibm-granite/granite-code-models">IBM G
 Code</a>, and <a href="https://huggingface.co/microsoft/Phi-4-mini-instruct">Microsoft
 Phi-4 mini</a></li>
 </ul>
-<h2 data-number="11.2" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">11.2</span> Model Evaluations and
+<h2 data-number="12.2" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">12.2</span> Model Evaluations and
 Practitioner Reports</h2>
 <ul>
 <li><a href="https://deepswe.datacurve.ai/">DeepSWE v1.1 common-harness
@@ -4584,7 +4912,7 @@ Claude Code, Codex, and Gemini CLI</a></li>
 <li><a href="https://arxiv.org/abs/2607.21656">Cross-model LLM code
 review study</a></li>
 </ul>
-<h2 data-number="11.3" id="tool-and-pricing-documentation"><span class="header-section-number">11.3</span> Tool and Pricing
+<h2 data-number="12.3" id="tool-and-pricing-documentation"><span class="header-section-number">12.3</span> Tool and Pricing
 Documentation</h2>
 <ul>
 <li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Anthropic
@@ -4613,7 +4941,7 @@ reference</a>, <a href="https://docs.cline.bot/getting-started/installing-cline"
 and supported surfaces</a>, and <a href="https://docs.cline.bot/provider-config/openrouter">OpenRouter
 provider</a></li>
 <li><a href="https://opencode.ai/docs/providers/">OpenCode
-providers</a>, <a href="https://dev.opencode.ai/docs/providers/">developer providers</a>,
+providers</a>, <a href="https://dev.opencode.ai/docs/config/">configuration</a>, <a href="https://opencode.ai/v2/docs/models">models</a>, <a href="https://dev.opencode.ai/docs/providers/">developer providers</a>,
 and <a href="https://github.com/anomalyco/opencode">repository</a></li>
 <li><a href="https://github.com/aaif-goose/goose">Goose repository</a>,
 <a href="https://docs.openhands.dev/sdk/guides/mcp">OpenHands MCP
@@ -4640,14 +4968,15 @@ Copilot BYOK</a> and <a href="https://docs.github.com/en/copilot/reference/copil
 Q IDE end-of-support scope</a>, <a href="https://api-docs.deepseek.com/quick_start/pricing">DeepSeek API
 pricing</a>, and <a href="https://openai.com/index/agentic-ai-foundation/">OpenAI Agentic AI
 Foundation announcement</a></li>
-<li><a href="https://github.com/Aider-AI/aider">Aider repository</a> and
-<a href="https://aider.chat/docs/more/edit-formats.html">edit
+<li><a href="https://aider.chat/docs/config.html">Aider
+configuration</a>, <a href="https://github.com/Aider-AI/aider">repository</a>, <a href="https://aider.chat/docs/config/adv-model-settings.html">advanced
+model settings</a>, and <a href="https://aider.chat/docs/more/edit-formats.html">edit
 formats</a></li>
 <li><a href="https://openrouter.ai/works-with-openrouter">OpenRouter
 works-with-openrouter</a>, <a href="https://docs.continue.dev/guides/ollama-guide">Continue Ollama
 guide</a>, and <a href="https://agents.md/">AGENTS.md</a></li>
 </ul>
-<h2 data-number="11.4" id="secondary-background"><span class="header-section-number">11.4</span> Secondary Background</h2>
+<h2 data-number="12.4" id="secondary-background"><span class="header-section-number">12.4</span> Secondary Background</h2>
 <ul>
 <li><a href="https://artificialanalysis.ai/agents/coding">Artificial
 Analysis coding-agent taxonomy</a></li>
