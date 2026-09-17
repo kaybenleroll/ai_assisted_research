@@ -1569,7 +1569,7 @@ Rather than a hard switch, a practical migration path:
 
 The survey above helps you choose a tool. It does not tell you how to run a real repository when no single model is best at every task. A useful alternative to Claude Code is a small, explicit routing policy: keep the harness stable, assign models to roles, and make escalation visible in the command or configuration. That gives you model diversity without hiding important cost, privacy, and quality decisions behind automatic routing.
 
-This is an operating design, not a claim that these products or models are interchangeable. The model and provider examples below reflect a **September 17, 2026** research checkpoint. Model IDs, prices, quotas, authentication methods, and tool support can change independently. Replace every example ID with one confirmed in the live provider catalogue before adoption.
+This is an operating design, not a claim that these products or models are interchangeable. The model, provider, pricing, and policy examples below reflect a **September 18, 2026** research checkpoint. Model IDs, prices, quotas, authentication methods, and tool support can change independently. Replace every example ID with one confirmed in the live provider catalogue before adoption.
 
 ### The recommended default: OpenCode plus explicit model tiers
 
@@ -1604,27 +1604,84 @@ OpenCode can select a main model and a smaller model explicitly. A project confi
 
 These are concrete examples, not permanent defaults. Authenticate through OpenCode's credential flow, environment variables, or the provider's credential store. Do not put an API key in `opencode.json`, commit it in a repository, or assume that an OpenAI-compatible endpoint provides reliable tool calls, long context, structured output, or reasoning controls. OpenCode's provider, configuration, and model documentation are the relevant setup references. The exact provider route is part of the experiment: pin a provider when a long tool-use session needs stable latency, or permit fallbacks when availability matters more than reproducibility.
 
+### Provider accounts, credits, and data boundaries
+
+Create one separate API key for this coding harness, give it a small spending limit, and keep it in the shell environment or the harness credential store. Do not use a personal, unlimited production key while evaluating models. The following are practical provider choices for the open-weight roster:
+
+| Provider | Account and credential setup | Good use in this design | Data-retention position |
+| --- | --- | --- | --- |
+| **OpenRouter** (recommended default) | Create an account, buy prepaid credits (the current minimum top-up is $5 and unused credits can expire after 365 days), create a project/key, and set a daily or monthly key limit. Use `OPENROUTER_API_KEY`; Pi also supports `/login openrouter`. | One endpoint for DeepSeek, GLM, Qwen, Kimi, Mistral, and other open-weight models; model and provider fallbacks; one usage view. | OpenRouter says it does not retain prompts unless you enable prompt logging, but the selected inference endpoint has its own policy. Enable ZDR and `data_collection: deny`, and inspect the endpoint list before sending sensitive code. Automatic fallback can otherwise move a request to a different provider. |
+| **DeepSeek direct** | Create a DeepSeek API account, top up its balance, and export `DEEPSEEK_API_KEY`. The direct API has its own model aliases and peak/off-peak pricing. | Lowest-cost direct access to DeepSeek V4 Pro and Flash when price and model-specific throughput matter more than a single gateway. | DeepSeek's privacy policy says it collects prompts and may use personal data for research, development, and foundation-model training, retaining it as needed for those purposes. Do not send confidential repositories without an approved organisational basis. |
+| **Z.ai direct** | Create an API account/key and store `ZAI_API_KEY`; verify the current GLM API endpoint and model ID in the account documentation. | GLM 5.3/Flash when you want a direct commercial relationship, a different provider failure domain, or a second review route. | Z.ai's API DPA states that customer content is not stored on its servers for the API service, while other account and service data may be retained and processing is generally in Singapore. Confirm the applicable contract and region before relying on this for regulated data. |
+| **Qwen / Alibaba Model Studio (DashScope)** | Create a region-specific Alibaba Model Studio account, activate the service, create a key, and use `DASHSCOPE_API_KEY`. Billing, endpoints, quotas, and model names vary by region; coding plans and metered API billing are separate products. | Qwen3 Coder Plus/Flash/Next when you want the model owner's endpoint, regional routing, or a direct price comparison against OpenRouter. | Treat the region's current Alibaba terms and data controls as authoritative. Do not assume that a China-region free quota, an OpenRouter endpoint policy, and a US/EU Model Studio account have the same retention or training terms. |
+| **Mistral direct** | Activate Mistral Studio, create a key, and export `MISTRAL_API_KEY`. Free mode is suitable for a smoke test; paid usage uses API credits/pay-as-you-go. Use the EU endpoint when regional processing is required and supported. | Devstral and Mistral's open-weight coding models, especially when EU processing, direct support, or predictable regional routing matters. | Mistral's paid API policy describes up to 30 rolling days of retention for abuse monitoring unless ZDR is enabled; ZDR requires an eligible paid organisation and approval. Training opt-out and ZDR are separate controls. |
+| **Together AI** | Open an account, purchase prepaid credits, create a scoped key, and use `TOGETHER_API_KEY`. Together currently requires at least $5 in credits for API keys and supports auto-recharge. | Shared or dedicated inference for Qwen, DeepSeek, and other open checkpoints when throughput, hardware, or provider-specific pricing beats the gateway. | Treat retention as provider-specific; the current public material does not establish a ZDR guarantee sufficient for sensitive repositories. Review the current contract before use. |
+| **Fireworks** | Create an account and `FIREWORKS_API_KEY`; the hosted serverless API is a direct endpoint, while dedicated deployments have separate billing. | Fast serverless testing of Qwen, DeepSeek, Kimi, and other open models, with a different provider failure domain from OpenRouter. | Fireworks documents no persistent prompt/generation logging unless you opt in, but its Responses API stores conversations by default for up to 30 days; set `store=false` and verify the endpoint mode. |
+| **Groq or Cerebras** | Create a project/key and use `GROQ_API_KEY` or `CEREBRAS_API_KEY`. Groq has free/developer limits and paid monthly caps; Cerebras offers a free key and separate paid channels. | Very fast supplementary routes for bounded work, triage, and review; coverage is narrower than OpenRouter. | Groq documents no customer-content retention by default but can retain reliability/abuse logs unless ZDR is enabled. Cerebras states that prompts, outputs, and request/response logs are not retained, while operational and billing metrics remain. Verify current terms before treating either as a regulated-data route. |
+| **NVIDIA NIM or local serving** | Use a Developer Program key for prototyping or an `NGC_API_KEY` to pull self-hosted containers; local Ollama, vLLM, SGLang, or llama.cpp needs no hosted credit account. | Shared GPU inference or full local control for Qwen, DeepSeek, Devstral, GLM, and other checkpoints. | Self-hosting can keep prompts local, but the NVIDIA hosted developer service has non-production restrictions. Local serving does not prevent telemetry or external MCP/editor integrations from exporting data. |
+| **Local Ollama, vLLM, SGLang, or llama.cpp** | Download the exact checkpoint, configure the local server, and use a loopback base URL. No hosted API credits or provider key are required. | Devstral Small 2, Qwen3-Coder-30B-A3B, or GLM-4.7-Flash for repositories that must stay on the workstation. | The inference request can remain local, but telemetry, extensions, model downloads, remote MCP servers, and editor integrations can still send data elsewhere. Audit the whole path. |
+
+Use OpenRouter as the starting point unless you have a clear reason to use a direct provider. It reduces account and integration work while retaining model choice, but it adds a gateway and does not erase the upstream provider's data policy. Set a modest initial balance—OpenRouter's performance guidance suggests keeping roughly $10–20 available to avoid low-balance interruptions—then set a lower key or workspace budget such as $25/month for the pilot. Use a separate key for experiments, an allowlist containing only the model/provider combinations you intend to test, and automatic top-up only after the first month's actual usage is understood.
+
+For sensitive work, prefer a local runtime. If hosted inference is necessary, use Mistral's approved ZDR path or OpenRouter with ZDR, `data_collection: deny`, an allowed regional endpoint, and a provider allowlist. DeepSeek direct is a price recommendation, not a privacy recommendation. The model weights being openly available says nothing about what a hosted endpoint logs or trains on.
+
+The credential flow should be explicit:
+
+```bash
+# OpenRouter: use a scoped key, never a key committed to the repository.
+export OPENROUTER_API_KEY="..."
+
+# Direct-provider alternatives; set only the one being tested.
+export DEEPSEEK_API_KEY="..."
+export ZAI_API_KEY="..."
+export MISTRAL_API_KEY="..."
+
+# Smoke-test the selected route without asking an agent to edit files.
+opencode --model openrouter/deepseek/deepseek-v4-pro-0813
+```
+
+The shell exports are examples; use a password manager, `direnv` with a non-committed file, or the harness's credential store in real use. Rotate a key after exposing it in a terminal capture, CI log, screen recording, or issue. A `401` usually means the wrong key/provider or an expired login; `402` usually means missing credits or a provider account limit; a `429` usually means rate limiting; and a tool-call or context error can mean that the selected endpoint does not implement the model capability advertised by the catalogue.
+
+For OpenCode's current v1 configuration, enter the interactive client and use `/connect` for the providers it knows, then `/models` to select a model. It stores credentials outside the repository; `opencode auth list` helps separate an authentication failure from a model or endpoint failure. Keep the project `opencode.json` limited to provider and model metadata. OpenCode's v2 configuration is a different schema, so do not copy a v2 `providers`/`settings` example into a v1 `provider`/`options` file.
+
+Pi's provider flow is similar but more explicit. Run `pi`, use `/login openrouter` for the browser or headless authorization flow, then `/model`; or export `OPENROUTER_API_KEY`. Pi also maps direct keys such as `DEEPSEEK_API_KEY`, `MISTRAL_API_KEY`, `ZAI_API_KEY`, and `DASHSCOPE_API_KEY` when the corresponding provider is configured. Stored credentials live in `~/.pi/agent/auth.json` with restrictive permissions and take precedence over environment variables. Local Ollama, vLLM, and llama.cpp providers normally belong in Pi's `models.json` and OpenCode's custom-provider configuration; bind them to `127.0.0.1` and use the model's required tool parser.
+
+### Rough cost planning
+
+For a simple planning estimate, assume one month contains 2 million input tokens and 500,000 output tokens. At the September 18, 2026 snapshot, the model-only arithmetic is approximately:
+
+| Model route | Approximate monthly token cost at that workload |
+| --- | ---: |
+| DeepSeek V4 Pro 0813 | $2.31 |
+| GLM 5.3 | $3.71 |
+| Qwen3 Coder Next | $0.64 |
+| DeepSeek V4.1 Flash | $0.60 |
+| GLM 5.3 Flash | $0.28 |
+| Qwen3 Coder 30B A3B | $0.28 |
+
+This is a budgeting example, not a bill. Agent sessions often resend repository instructions, file contents, tool results, and summaries, so a long debugging session can consume many times the tokens of the visible conversation. Reasoning tokens, cache-hit rates, provider routing, retries, minimum charges, and any gateway or BYOK fee also change the result. Start with a $10–25 cap, record actual usage by model and provider, and raise the limit only when the task pilot justifies it. Local inference replaces token billing with hardware, electricity, setup, and maintenance costs; count failed runs and operator time rather than calling it free.
+
 ### Model allocation by task
 
 Use a role-based policy that you can inspect and override. A wrapper script or shell alias is enough; automatic model switching that the user cannot see is not.
 
 | Role | Open-weight starting choice | When to use it |
 | --- | --- | --- |
-| Plan and architecture | DeepSeek V4 Pro 0813 (`deepseek/deepseek-v4-pro-0813`) | Hard design, migrations, threat modelling, and changes whose wrong abstraction will be expensive |
-| Implement and debug | GLM 5.3 (`z-ai/glm-5.3`) or Qwen3 Coder Next (`qwen/qwen3-coder-next`) | Multi-file edits, tests, debugging, and tool-driven repository work; use GLM when reasoning depth matters and Qwen when coding throughput and cost matter |
-| Routine work | GLM 5.3 Flash (`z-ai/glm-5.3-flash`) or Qwen3 Coder Next | Summaries, small edits, documentation, test-output triage, and short refactors |
+| Plan and architecture | DeepSeek V4 Pro 0813 | Hard design, migrations, threat modelling, and changes whose wrong abstraction will be expensive |
+| Implement and debug | GLM 5.3 or Qwen3 Coder Next | Multi-file edits, tests, debugging, and tool-driven repository work; use GLM when reasoning depth matters and Qwen when coding throughput and cost matter |
+| Routine work | GLM 5.3 Flash or Qwen3 Coder Next | Summaries, small edits, documentation, test-output triage, and short refactors |
 | Sensitive or offline work | Devstral Small 2 24B or a Qwen3-Coder checkpoint via Ollama, LM Studio, vLLM, or llama.cpp | Data that must stay on the workstation, after testing the checkpoint's context and tool behaviour |
 | Independent review | Kimi K3 or GLM 5.3 through a different provider route | High-risk changes where correlated model mistakes are costly; use the expensive Kimi route selectively |
 | Asynchronous execution | OpenHands or Devin in an isolated workspace | Explicitly bounded work that can run away from the interactive session and still receive human approval before merge |
 
-At the September 17, 2026 checkpoint, OpenRouter listed DeepSeek V4 Pro 0813 at about $0.66 per million input tokens and $1.98 per million output tokens, GLM 5.3 at about $1.00/$3.41, GLM 5.3 Flash at about $0.075/$0.25, and Qwen3 Coder Next at about $0.12/$0.80. DeepSeek V4.1 Flash was another inexpensive long-context option at about $0.15/$0.60, but its endpoint did not advertise enforced JSON Schema output; use client-side validation when that matters. Qwen3 Coder 30B A3B Instruct was about $0.07/$0.27 and is a good bounded-edit or structured-output tier. Treat these as list-price snapshots, not a cost estimate: cached input, provider choice, routing, retries, reasoning tokens, and output length change the bill. GLM 5.3 always reasons and supports selectable reasoning effort; Qwen3 Coder Next is a non-thinking coding model, so do not compare their raw token prices without comparing the work they complete.
+At the September 18, 2026 checkpoint, OpenRouter listed DeepSeek V4 Pro 0813 at about $0.66 per million input tokens and $1.98 per million output tokens, GLM 5.3 at about $1.00/$3.41, GLM 5.3 Flash at about $0.075/$0.25, and Qwen3 Coder Next at about $0.12/$0.80. DeepSeek V4.1 Flash was another inexpensive long-context option at about $0.15/$0.60 on OpenRouter; its direct API documents Flash/Pro input-cache-miss rates of $0.15/$0.66 off-peak or $0.30/$1.32 peak, and output rates of $0.60/$1.98 off-peak or $1.20/$3.96 peak. Compare the actual route rather than copying one number. Qwen3 Coder 30B A3B Instruct was about $0.07/$0.27 and is a good bounded-edit or structured-output tier. Treat these as list-price snapshots, not a cost estimate: cached input, provider choice, routing, retries, reasoning tokens, and output length change the bill. GLM 5.3 always reasons and supports selectable reasoning effort; Qwen3 Coder Next is a non-thinking coding model, so do not compare their raw token prices without comparing the work they complete.
 
 For local work, benchmark Devstral Small 2 24B, Qwen3-Coder-30B-A3B, and GLM-4.7-Flash first. Devstral Small 2 is an Apache-licensed coding checkpoint; Qwen3-Coder-30B-A3B is the smaller coding specialist; and GLM-4.7-Flash is a compact agent model. Serve them through Ollama for a quick single-user trial, or vLLM/SGLang when reliable tool parsing and shared serving matter. Qwen3-Coder and Devstral need their model-specific tool/parser configuration in some runtimes. Record the exact checkpoint, quantization, runtime, context budget, and tool-call settings; a model that fits in memory may still fail at long-context retrieval or tool-call formatting. Hardware, quantization, context length, and tool-call support determine whether a local model is useful. Keep it in the routine/offline tier until it passes representative repository tasks; local availability is not evidence of frontier parity.
 
 The routing policy should remain legible in the workflow:
 
 ```bash
-# Examples from the September 17, 2026 checkpoint; confirm live IDs first.
+# Examples from the September 18, 2026 checkpoint; confirm live IDs first.
 opencode --model openrouter/deepseek/deepseek-v4-pro-0813
 opencode --model openrouter/z-ai/glm-5.3
 opencode --model openrouter/qwen/qwen3-coder-next
@@ -1695,7 +1752,7 @@ The concrete recommendation is therefore: begin with OpenCode plus OpenRouter, u
 
 Pi is worth adding to the comparison because it takes a different position from the full-featured alternatives above. It is a minimal terminal coding harness: the core provides the agent loop, a small set of file and shell tools, model selection, sessions, and a TUI, while extensions, skills, prompt templates, themes, and packages supply the workflow-specific parts. Pi's design deliberately leaves out several features that other harnesses bundle. That makes it useful as an additional, inspectable harness for experimentation and focused interactive work, but it does not make it a drop-in replacement for Claude Code.
 
-This section describes Pi as documented on **September 17, 2026**. The project has had package and repository-scope changes, so verify the current package name, release, provider catalogue, authentication path, and documentation before installing. The current official site uses the `@earendil-works/pi-coding-agent` package; older examples may use the `@mariozechner` scope.
+This section describes Pi as documented on **September 18, 2026**. The project has had package and repository-scope changes, so verify the current package name, release, provider catalogue, authentication path, and documentation before installing. The current official site uses the `@earendil-works/pi-coding-agent` package; older examples may use the `@mariozechner` scope.
 
 ### What Pi adds to a multi-harness setup
 
@@ -1723,7 +1780,7 @@ pi --version
 pi
 ```
 
-Authenticate with `/login` when a documented subscription or provider login is appropriate, or use the provider's environment variable or Pi credential store for API-key access. Do not copy an old OAuth or subscription workaround from a forum into a production workflow. A subscription login is an access path with its own terms; it is not evidence that every model or feature is available through every provider.
+For the recommended open-weight path, run `/login openrouter`, add credits in the OpenRouter dashboard, select the OpenRouter provider, and choose a versioned model ID with `/model`. On a headless host, paste the final redirect URL or authorization code as Pi documents. Alternatively, export `OPENROUTER_API_KEY`. Direct-provider examples are `DEEPSEEK_API_KEY`, `ZAI_API_KEY`, `MISTRAL_API_KEY`, and `DASHSCOPE_API_KEY`; the key, endpoint, region, and model catalogue must match. Do not copy an old OAuth or subscription workaround from a forum into a production workflow. A subscription login is an access path with its own terms; it is not evidence that every model or feature is available through every provider.
 
 Pi's default loop gives the model `read`, `write`, `edit`, and `bash`; `grep`, `find`, and `ls` are available as additional read-only tools through tool options. Start with a bounded request and explicit checks:
 
@@ -1779,7 +1836,7 @@ Add Pi when you value a small terminal core, explicit model switching, inspectab
 
 ## References
 
-First-party sources checked on **September 16, 2026** for the current model and pricing snapshot. Pi sources and setup documentation were checked on **September 17, 2026**. Grok Bot sources were checked on **September 9, 2026**. Model names, prices, quotas, and product boundaries can change independently; the date is part of each claim.
+First-party sources checked on **September 18, 2026** for the current model, provider, pricing, and policy snapshot. Pi sources and setup documentation were checked on **September 18, 2026**. Grok Bot sources were checked on **September 9, 2026**. Model names, prices, quotas, and product boundaries can change independently; the date is part of each claim.
 
 ### Model Documentation and Licences
 
@@ -1821,6 +1878,7 @@ First-party sources checked on **September 16, 2026** for the current model and 
 - [Amp pricing](https://ampcode.com/docs/pricing), [self-hosted Orbs](https://ampcode.com/docs/orbs/self-hosted), [documentation](https://ampcode.com/docs), [skills and plugins](https://ampcode.com/docs/customize/skills), and [plugin API](https://ampcode.com/plugin-api)
 - [Cline CLI reference](https://docs.cline.bot/cli/cli-reference), [installation and supported surfaces](https://docs.cline.bot/getting-started/installing-cline), and [OpenRouter provider](https://docs.cline.bot/provider-config/openrouter)
 - [OpenCode providers](https://opencode.ai/docs/providers/), [configuration](https://dev.opencode.ai/docs/config/), [models](https://opencode.ai/v2/docs/models), [developer providers](https://dev.opencode.ai/docs/providers/), and [repository](https://github.com/anomalyco/opencode)
+- [OpenCode releases](https://github.com/anomalyco/opencode/releases), [v1-to-v2 configuration migration](https://opencode.ai/v2/docs/migrate-v1), and [OpenCode authentication](https://opencode.ai/docs/providers/)
 - [Goose repository](https://github.com/aaif-goose/goose), [OpenHands MCP guide](https://docs.openhands.dev/sdk/guides/mcp), and [OpenHands MCP settings](https://docs.openhands.dev/openhands/usage/settings/mcp-settings)
 - [Cursor pricing](https://cursor.com/pricing) and [Cursor rules](https://prod.cursor.com/help/customization/rules)
 - [Devin Desktop](https://devin.ai/desktop), [Cognition's Windsurf acquisition](https://devin.ai/blog/windsurfs-next-chapter), [Devin pricing](https://devin.ai/pricing), and [self-serve billing](https://docs.devin.ai/admin/billing/self-serve)
@@ -1830,6 +1888,13 @@ First-party sources checked on **September 16, 2026** for the current model and 
 - [Tabnine pricing](https://www.tabnine.com/pricing/) and [acquisition announcements](https://www.tabnine.com/blog/category/announcements/)
 - [GitHub Copilot BYOK](https://docs.github.com/en/copilot/concepts/models/bring-your-own-key) and [models/pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 - [Amazon Q IDE end-of-support scope](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html), [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing), and [OpenAI Agentic AI Foundation announcement](https://openai.com/index/agentic-ai-foundation/)
+- [OpenRouter credits and API keys](https://openrouter.ai/terms), [API-key limits](https://openrouter.ai/docs/api/api-reference/api-keys/create-keys), [BYOK](https://openrouter.ai/docs/guides/overview/auth/byok), [ZDR](https://openrouter.ai/docs/guides/features/zdr), [guardrails](https://openrouter.ai/docs/guides/features/guardrails/overview), and [model fallbacks](https://openrouter.ai/docs/guides/routing/model-fallbacks)
+- [DeepSeek API pricing and top-ups](https://api-docs.deepseek.com/quick_start/pricing) and [DeepSeek privacy policy](https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html)
+- [Z.AI API quick start](https://docs.z.ai/guides/overview/quick-start), [Z.AI pricing](https://z.ai/pricing), and [Z.AI API privacy/DPA](https://chat.z.ai/legal-agreement/privacy-policy)
+- [Alibaba Model Studio API-key setup](https://help.aliyun.com/en/model-studio/get-api-key), [regional base URLs](https://help.aliyun.com/en/model-studio/base-url), and [model pricing](https://help.aliyun.com/en/model-studio/model-pricing)
+- [Mistral Studio API-key setup](https://docs.mistral.ai/getting-started/quickstarts/studio/activate-and-generate-api-key), [API pricing](https://mistral.ai/pricing/api/), [ZDR](https://docs.mistral.ai/admin/monitor-comply/zero-data-retention), [privacy policy](https://legal.mistral.ai/terms/privacy-policy/), and [regional inference](https://docs.mistral.ai/inference/regional-inference)
+- [Together AI credits and billing](https://support.together.ai/articles/1862638756-changes-to-free-tier-and-billing-july-2025), [API-key setup](https://support.together.ai/articles/4999040689-where-to-find-your-api-key), [Fireworks pricing](https://fireworks.ai/pricing), and [Fireworks data handling](https://docs.fireworks.ai/guides/security_compliance/data_handling)
+- [Groq models and pricing](https://console.groq.com/docs/models), [Groq data controls](https://console.groq.com/docs/your-data), [Cerebras authentication](https://inference-docs.cerebras.ai/api-reference/authentication), and [Cerebras data retention](https://support.cerebras.net/articles/1811589793-does-cerebras-retain-my-data)
 - [Aider configuration](https://aider.chat/docs/config.html), [repository](https://github.com/Aider-AI/aider), [advanced model settings](https://aider.chat/docs/config/adv-model-settings.html), and [edit formats](https://aider.chat/docs/more/edit-formats.html)
 - [Pi documentation](https://pi.dev/docs/latest), [quick start](https://pi.dev/docs/latest/quickstart), [providers](https://pi.dev/docs/latest/providers), [usage and CLI modes](https://pi.dev/docs/latest/usage), [settings and project trust](https://pi.dev/docs/latest/settings), [extensions](https://pi.dev/docs/latest/extensions), [skills](https://pi.dev/docs/latest/skills), [sessions](https://pi.dev/docs/latest/sessions), [RPC](https://pi.dev/docs/latest/rpc), [SDK](https://pi.dev/docs/latest/sdk), and [security](https://pi.dev/docs/latest/security)
 - [OpenRouter works-with-openrouter](https://openrouter.ai/works-with-openrouter), [Continue Ollama guide](https://docs.continue.dev/guides/ollama-guide), and [AGENTS.md](https://agents.md/)
