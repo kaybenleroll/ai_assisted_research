@@ -1,0 +1,134 @@
+[
+  {
+    "name": "P0: critical",
+    "category": "priority",
+    "color": "b60205",
+    "description": "Build broken or published content wrong/harmful"
+  },
+  {
+    "name": "P1: high",
+    "category": "priority",
+    "color": "d93f0b",
+    "description": "Factual error or broken render in a published document"
+  },
+  {
+    "name": "P2: medium",
+    "category": "priority",
+    "color": "fbca04",
+    "description": "Planned improvement or new content"
+  },
+  {
+    "name": "P3: backlog",
+    "category": "priority",
+    "color": "c2e0c6",
+    "description": "Nice to have"
+  },
+  {
+    "name": "type: bug",
+    "category": "type",
+    "color": "0e8a16",
+    "description": "Broken build, render or link"
+  },
+  {
+    "name": "type: feature",
+    "category": "type",
+    "color": "0e8a16",
+    "description": "New primer or major section"
+  },
+  {
+    "name": "type: enhancement",
+    "category": "type",
+    "color": "0e8a16",
+    "description": "Improve existing content"
+  },
+  {
+    "name": "type: tech-debt",
+    "category": "type",
+    "color": "0e8a16",
+    "description": "Cleanup, drift, consistency"
+  },
+  {
+    "name": "type: docs",
+    "category": "type",
+    "color": "0e8a16",
+    "description": "Repo docs and conventions"
+  },
+  {
+    "name": "type: research",
+    "category": "type",
+    "color": "0e8a16",
+    "description": "Verification, refresh, investigation"
+  },
+  {
+    "name": "area: agents",
+    "category": "area",
+    "color": "1d76db",
+    "description": "Agent and coding-tool primers"
+  },
+  {
+    "name": "area: devtools",
+    "category": "area",
+    "color": "1d76db",
+    "description": "Developer tooling primers"
+  },
+  {
+    "name": "area: quant",
+    "category": "area",
+    "color": "1d76db",
+    "description": "Quantitative primers and articles"
+  },
+  {
+    "name": "area: society",
+    "category": "area",
+    "color": "1d76db",
+    "description": "Society and institutions primers"
+  },
+  {
+    "name": "area: gaming",
+    "category": "area",
+    "color": "1d76db",
+    "description": "Silo RPG materials"
+  },
+  {
+    "name": "area: workbook",
+    "category": "area",
+    "color": "1d76db",
+    "description": "Quarto catmodel workbook"
+  },
+  {
+    "name": "area: build",
+    "category": "area",
+    "color": "1d76db",
+    "description": "_shared, Justfiles, pandoc container, filters, CI, Pages"
+  },
+  {
+    "name": "effort: XS",
+    "category": "effort",
+    "color": "5319e7",
+    "description": "Effort XS"
+  },
+  {
+    "name": "effort: S",
+    "category": "effort",
+    "color": "5319e7",
+    "description": "Effort S"
+  },
+  {
+    "name": "effort: M",
+    "category": "effort",
+    "color": "5319e7",
+    "description": "Effort M"
+  },
+  {
+    "name": "effort: L",
+    "category": "effort",
+    "color": "5319e7",
+    "description": "Effort L"
+  },
+  {
+    "name": "effort: XL",
+    "category": "effort",
+    "color": "5319e7",
+    "description": "Effort XL"
+  }
+]
