@@ -16,6 +16,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [The Evaluation Loop](primer_evaluation_loop/primer_evaluation_loop.html) · [PDF](primer_evaluation_loop/primer_evaluation_loop.pdf) | Sep 2026 | Turning subjective AI task quality into numeric evals: verifiable rewards, RLHF/DSPy, and Goodhart failure modes |
 | [Hermes Agent Server](primer_hermes_server/primer_hermes_server.html) · [PDF](primer_hermes_server/primer_hermes_server.pdf) | Aug 2026 | Guide to the Hermes Server framework |
 | [OpenClaw](primer_openclaw/primer-openclaw.html) · [PDF](primer_openclaw/primer-openclaw.pdf) | Aug 2026 | Podman-first guide to the OpenClaw framework |
+| [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | Sep 2026 | Practical primer on Pi’s architecture, local and hosted models, web research, extensions, and coding-agent comparisons |
 | [Running LLMs Locally](primer_research_local_llms/primer-running-llms-locally.html) · [PDF](primer_research_local_llms/primer-running-llms-locally.pdf) | Sep 2026 | Landscape of options for running language models on local hardware |
 
 ## Developer Tooling

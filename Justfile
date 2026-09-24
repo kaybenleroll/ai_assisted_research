@@ -150,12 +150,21 @@ containerization-pdf:
 containerization-all:
   cd primer_containerization && just all
 
+pi-agent-html:
+  cd primer_pi_coding_agent && just html
+
+pi-agent-pdf:
+  cd primer_pi_coding_agent && just pdf
+
+pi-agent-all:
+  cd primer_pi_coding_agent && just all
+
 # Common daily build across active document projects
-html-dev: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html info-theory-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all
+html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all info-theory-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -175,4 +184,5 @@ clean-generated:
   cd primer_military_structure && just clobber
   cd primer_ohmyzsh && just clobber
   cd primer_containerization && just clobber
+  cd primer_pi_coding_agent && just clobber
   @echo "✓ Generated artifacts cleaned"

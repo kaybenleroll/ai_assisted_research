@@ -8,7 +8,7 @@ AI-generated technical primers rendered to HTML + PDF via pandoc, orchestrated w
 
 ## Document Classes
 
-**Pandoc primers** — source → HTML + PDF via `localhost/primers-pandoc:latest`; each has a thin `Justfile` importing `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_containerization`, `primer_deep_learning`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`.
+**Pandoc primers** — source → HTML + PDF via `localhost/primers-pandoc:latest`; each has a thin `Justfile` importing `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_containerization`, `primer_deep_learning`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_pi_coding_agent`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`.
 
 **Gaming materials** — `gaming_silo_rpg/` uses the same Pandoc infrastructure but keeps a `gaming_` prefix for its documents.
 
