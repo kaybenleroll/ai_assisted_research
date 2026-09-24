@@ -95,7 +95,8 @@ Work is issue-first.
 - **One issue per PR.** Every PR body opens with `Closes #N`. Unrelated changes (e.g. config tweaks already sitting on a branch) go in their own PR.
 - **Branch names:** `<type>/<issue#>-<slug>`, e.g. `docs/88-issue-first-workflow`. Never commit to `main`.
 - **Issue titles** carry a document prefix in brackets: `[pi]`, `[openclaw]`, `[infra]`, etc. Use the primer's short name (directory minus `primer_`).
-- **Labels** follow the canonical scheme enforced by the issue hook: 1 Priority (`P0`–`P3`) + 1 Type + 1+ Area + 1 Effort. Primers are usually `area: ai-agent` (agent/coding-tool primers) or `area: devops` (build, infra, tooling).
+- **Labels** are defined in `.github/labels.json` (the issue-label hook reads it): 1 Priority (`P0`–`P3`) + 1 Type + 1+ Area + 1 Effort. Areas: `agents`, `devtools`, `quant`, `society`, `gaming`, `workbook`, `build`.
+- **The area list will grow.** When a new document class or category appears, add its `area:` entry to `.github/labels.json` in the same PR that introduces it, then sync the repo label (`gh label create ... --force` from the JSON). Keep the README's section headings and the area list aligned.
 - **Tracking issues:** each primer that needs ongoing upkeep gets one `type: research` tracking issue (e.g. verification and refresh cadence); sub-work is filed as separate issues linked to it.
 - **Cross-primer sweeps** (e.g. a fix applied to every primer) get one issue with a per-primer checklist.
 - **PR-only exceptions:** typos and single-line fixes may skip the issue.
