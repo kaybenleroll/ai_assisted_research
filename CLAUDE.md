@@ -99,6 +99,7 @@ Work is issue-first.
 - **The area list will grow.** When a new document class or category appears, add its `area:` entry to `.github/labels.json` in the same PR that introduces it, then sync the repo label (`gh label create ... --force` from the JSON). Keep the README's section headings and the area list aligned.
 - **Tracking issues:** each primer that needs ongoing upkeep gets one `type: research` tracking issue (e.g. verification and refresh cadence); sub-work is filed as separate issues linked to it.
 - **Cross-primer sweeps** (e.g. a fix applied to every primer) get one issue with a per-primer checklist.
+- **Merge method:** default is squash (`gh pr merge --squash`): PR title as the commit subject, `Closes #N` in the body, one commit per issue on `main`. Other methods stay enabled on the repo; use a merge commit instead where preserving individual commits or a stacked-PR chain matters, and say so in the PR.
 - **PR-only exceptions:** typos and single-line fixes may skip the issue.
 - **Adding a primer** still follows the checklist above; the README row and top-level `Justfile` targets belong in the same PR as the primer.
 
