@@ -614,94 +614,104 @@ Primer</span>
 <li><a href="#what-you-will-learn" id="toc-what-you-will-learn"><span class="toc-section-number">1.1</span> What you will learn</a></li>
 <li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.2</span> What this primer is not</a></li>
 </ul></li>
-<li><a href="#pi-is-a-harness-not-a-model" id="toc-pi-is-a-harness-not-a-model"><span class="toc-section-number">2</span> Pi is a harness, not a
+<li><a href="#how-pi-works" id="toc-how-pi-works"><span class="toc-section-number">2</span> How Pi works</a>
+<ul>
+<li><a href="#pi-is-a-harness-not-a-model" id="toc-pi-is-a-harness-not-a-model"><span class="toc-section-number">2.1</span> Pi is a harness, not a
 model</a></li>
-<li><a href="#what-pi-provides" id="toc-what-pi-provides"><span class="toc-section-number">3</span> What Pi provides</a></li>
-<li><a href="#why-pi-is-built-this-way" id="toc-why-pi-is-built-this-way"><span class="toc-section-number">4</span> Why Pi is built this way</a></li>
-<li><a href="#coming-from-claude-code" id="toc-coming-from-claude-code"><span class="toc-section-number">5</span> Coming from Claude Code</a></li>
-<li><a href="#installation-and-first-run" id="toc-installation-and-first-run"><span class="toc-section-number">6</span> Installation and first run</a>
+<li><a href="#what-pi-provides" id="toc-what-pi-provides"><span class="toc-section-number">2.2</span> What Pi provides</a></li>
+<li><a href="#why-pi-is-built-this-way" id="toc-why-pi-is-built-this-way"><span class="toc-section-number">2.3</span> Why Pi is built this way</a></li>
+<li><a href="#coming-from-claude-code" id="toc-coming-from-claude-code"><span class="toc-section-number">2.4</span> Coming from Claude Code</a></li>
+</ul></li>
+<li><a href="#installation-and-first-run" id="toc-installation-and-first-run"><span class="toc-section-number">3</span> Installation and first run</a>
 <ul>
-<li><a href="#a-controlled-first-session" id="toc-a-controlled-first-session"><span class="toc-section-number">6.1</span> A controlled first
+<li><a href="#a-controlled-first-session" id="toc-a-controlled-first-session"><span class="toc-section-number">3.1</span> A controlled first
 session</a></li>
-<li><a href="#working-in-the-terminal" id="toc-working-in-the-terminal"><span class="toc-section-number">6.2</span> Working in the terminal</a></li>
-<li><a href="#the-starter-suite-install-by-need" id="toc-the-starter-suite-install-by-need"><span class="toc-section-number">6.3</span> The starter suite: install by
-need</a></li>
-<li><a href="#hosted-authentication" id="toc-hosted-authentication"><span class="toc-section-number">6.4</span> Hosted authentication</a></li>
+<li><a href="#working-in-the-terminal" id="toc-working-in-the-terminal"><span class="toc-section-number">3.2</span> Working in the terminal</a></li>
 </ul></li>
-<li><a href="#hosted-and-local-models" id="toc-hosted-and-local-models"><span class="toc-section-number">7</span> Hosted and local models</a>
+<li><a href="#models-and-authentication" id="toc-models-and-authentication"><span class="toc-section-number">4</span> Models and authentication</a>
 <ul>
-<li><a href="#openai-compatible-local-servers" id="toc-openai-compatible-local-servers"><span class="toc-section-number">7.1</span> OpenAI-compatible local
+<li><a href="#hosted-authentication" id="toc-hosted-authentication"><span class="toc-section-number">4.1</span> Hosted authentication</a></li>
+<li><a href="#hosted-and-local-models" id="toc-hosted-and-local-models"><span class="toc-section-number">4.2</span> Hosted and local models</a>
+<ul>
+<li><a href="#openai-compatible-local-servers" id="toc-openai-compatible-local-servers"><span class="toc-section-number">4.2.1</span> OpenAI-compatible local
 servers</a></li>
-<li><a href="#llama.cpp" id="toc-llama.cpp"><span class="toc-section-number">7.2</span> llama.cpp</a></li>
+<li><a href="#llama.cpp" id="toc-llama.cpp"><span class="toc-section-number">4.2.2</span> llama.cpp</a></li>
 </ul></li>
-<li><a href="#running-pi-non-interactively" id="toc-running-pi-non-interactively"><span class="toc-section-number">8</span> Running Pi
+</ul></li>
+<li><a href="#running-pi-non-interactively" id="toc-running-pi-non-interactively"><span class="toc-section-number">5</span> Running Pi
 non-interactively</a></li>
-<li><a href="#web-research-assemble-the-missing-capability" id="toc-web-research-assemble-the-missing-capability"><span class="toc-section-number">9</span> Web research: assemble the missing
-capability</a>
-<ul>
-<li><a href="#plain-http-and-git-are-good-for-static-sources" id="toc-plain-http-and-git-are-good-for-static-sources"><span class="toc-section-number">9.1</span> Plain HTTP and git are good for
-static sources</a></li>
-<li><a href="#plain-http-is-not-web-research-infrastructure" id="toc-plain-http-is-not-web-research-infrastructure"><span class="toc-section-number">9.2</span> Plain HTTP is not web research
-infrastructure</a></li>
-<li><a href="#start-with-a-maintained-search-skill" id="toc-start-with-a-maintained-search-skill"><span class="toc-section-number">9.3</span> Start with a maintained search
-skill</a></li>
-<li><a href="#add-a-browser-only-when-needed" id="toc-add-a-browser-only-when-needed"><span class="toc-section-number">9.4</span> Add a browser only when
-needed</a></li>
-<li><a href="#search-github-and-forums-directly" id="toc-search-github-and-forums-directly"><span class="toc-section-number">9.5</span> Search GitHub and forums
-directly</a></li>
-</ul></li>
-<li><a href="#customisation-use-the-smallest-layer-that-works" id="toc-customisation-use-the-smallest-layer-that-works"><span class="toc-section-number">10</span> Customisation: use the smallest
+<li><a href="#customisation-use-the-smallest-layer-that-works" id="toc-customisation-use-the-smallest-layer-that-works"><span class="toc-section-number">6</span> Customisation: use the smallest
 layer that works</a>
 <ul>
-<li><a href="#context-files-and-prompt-templates" id="toc-context-files-and-prompt-templates"><span class="toc-section-number">10.1</span> Context files and prompt
+<li><a href="#context-files-and-prompt-templates" id="toc-context-files-and-prompt-templates"><span class="toc-section-number">6.1</span> Context files and prompt
 templates</a></li>
-<li><a href="#skills" id="toc-skills"><span class="toc-section-number">10.2</span> Skills</a></li>
-<li><a href="#extensions" id="toc-extensions"><span class="toc-section-number">10.3</span> Extensions</a></li>
-<li><a href="#packages" id="toc-packages"><span class="toc-section-number">10.4</span> Packages</a></li>
-<li><a href="#mcp-and-subagents" id="toc-mcp-and-subagents"><span class="toc-section-number">10.5</span> MCP and subagents</a></li>
+<li><a href="#skills" id="toc-skills"><span class="toc-section-number">6.2</span> Skills</a></li>
+<li><a href="#extensions" id="toc-extensions"><span class="toc-section-number">6.3</span> Extensions</a></li>
+<li><a href="#packages" id="toc-packages"><span class="toc-section-number">6.4</span> Packages</a></li>
+<li><a href="#mcp-and-subagents" id="toc-mcp-and-subagents"><span class="toc-section-number">6.5</span> MCP and subagents</a></li>
+<li><a href="#the-starter-suite-install-by-need" id="toc-the-starter-suite-install-by-need"><span class="toc-section-number">6.6</span> The starter suite: install by
+need</a></li>
 </ul></li>
-<li><a href="#sessions-and-hand-off" id="toc-sessions-and-hand-off"><span class="toc-section-number">11</span> Sessions and hand-off</a></li>
-<li><a href="#safety-and-containment" id="toc-safety-and-containment"><span class="toc-section-number">12</span> Safety and containment</a>
+<li><a href="#web-research-assemble-the-missing-capability" id="toc-web-research-assemble-the-missing-capability"><span class="toc-section-number">7</span> Web research: assemble the missing
+capability</a>
 <ul>
-<li><a href="#project-trust" id="toc-project-trust"><span class="toc-section-number">12.1</span> Project trust</a></li>
-<li><a href="#isolation-options" id="toc-isolation-options"><span class="toc-section-number">12.2</span> Isolation options</a></li>
-<li><a href="#prompt-injection-telemetry-and-reporting" id="toc-prompt-injection-telemetry-and-reporting"><span class="toc-section-number">12.3</span> Prompt injection, telemetry, and
+<li><a href="#plain-http-and-git-are-good-for-static-sources" id="toc-plain-http-and-git-are-good-for-static-sources"><span class="toc-section-number">7.1</span> Plain HTTP and git are good for
+static sources</a></li>
+<li><a href="#plain-http-is-not-web-research-infrastructure" id="toc-plain-http-is-not-web-research-infrastructure"><span class="toc-section-number">7.2</span> Plain HTTP is not web research
+infrastructure</a></li>
+<li><a href="#start-with-a-maintained-search-skill" id="toc-start-with-a-maintained-search-skill"><span class="toc-section-number">7.3</span> Start with a maintained search
+skill</a></li>
+<li><a href="#add-a-browser-only-when-needed" id="toc-add-a-browser-only-when-needed"><span class="toc-section-number">7.4</span> Add a browser only when
+needed</a></li>
+<li><a href="#search-github-and-forums-directly" id="toc-search-github-and-forums-directly"><span class="toc-section-number">7.5</span> Search GitHub and forums
+directly</a></li>
+</ul></li>
+<li><a href="#sessions-hand-off-and-workflow" id="toc-sessions-hand-off-and-workflow"><span class="toc-section-number">8</span> Sessions, hand-off and workflow</a>
+<ul>
+<li><a href="#sessions-and-compaction" id="toc-sessions-and-compaction"><span class="toc-section-number">8.1</span> Sessions and compaction</a></li>
+<li><a href="#sharing-and-hand-off" id="toc-sharing-and-hand-off"><span class="toc-section-number">8.2</span> Sharing and hand-off</a></li>
+<li><a href="#a-practical-workflow" id="toc-a-practical-workflow"><span class="toc-section-number">8.3</span> A practical workflow</a></li>
+</ul></li>
+<li><a href="#safety-and-containment" id="toc-safety-and-containment"><span class="toc-section-number">9</span> Safety and containment</a>
+<ul>
+<li><a href="#project-trust" id="toc-project-trust"><span class="toc-section-number">9.1</span> Project trust</a></li>
+<li><a href="#isolation-options" id="toc-isolation-options"><span class="toc-section-number">9.2</span> Isolation options</a></li>
+<li><a href="#prompt-injection-telemetry-and-reporting" id="toc-prompt-injection-telemetry-and-reporting"><span class="toc-section-number">9.3</span> Prompt injection, telemetry, and
 reporting</a></li>
 </ul></li>
-<li><a href="#pi-compared-with-other-coding-agents" id="toc-pi-compared-with-other-coding-agents"><span class="toc-section-number">13</span> Pi compared with other coding
+<li><a href="#pi-compared-with-other-coding-agents" id="toc-pi-compared-with-other-coding-agents"><span class="toc-section-number">10</span> Pi compared with other coding
 agents</a>
 <ul>
-<li><a href="#pi-versus-opencode-and-aider" id="toc-pi-versus-opencode-and-aider"><span class="toc-section-number">13.1</span> Pi versus OpenCode and
+<li><a href="#pi-versus-opencode-and-aider" id="toc-pi-versus-opencode-and-aider"><span class="toc-section-number">10.1</span> Pi versus OpenCode and
 Aider</a></li>
-<li><a href="#pi-versus-claude-code-and-codex" id="toc-pi-versus-claude-code-and-codex"><span class="toc-section-number">13.2</span> Pi versus Claude Code and
+<li><a href="#pi-versus-claude-code-and-codex" id="toc-pi-versus-claude-code-and-codex"><span class="toc-section-number">10.2</span> Pi versus Claude Code and
 Codex</a></li>
-<li><a href="#forks-and-derivatives" id="toc-forks-and-derivatives"><span class="toc-section-number">13.3</span> Forks and derivatives</a></li>
+<li><a href="#forks-and-derivatives" id="toc-forks-and-derivatives"><span class="toc-section-number">10.3</span> Forks and derivatives</a></li>
 </ul></li>
-<li><a href="#a-practical-workflow" id="toc-a-practical-workflow"><span class="toc-section-number">14</span> A practical workflow</a></li>
-<li><a href="#worked-example-a-reproducible-data-science-project-with-pi-and-rocker" id="toc-worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="toc-section-number">15</span> Worked example: a reproducible
+<li><a href="#worked-example-a-reproducible-data-science-project-with-pi-and-rocker" id="toc-worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="toc-section-number">11</span> Worked example: a reproducible
 data-science project with Pi and Rocker</a>
 <ul>
-<li><a href="#project-goal-and-contract" id="toc-project-goal-and-contract"><span class="toc-section-number">15.1</span> Project goal and
+<li><a href="#project-goal-and-contract" id="toc-project-goal-and-contract"><span class="toc-section-number">11.1</span> Project goal and
 contract</a></li>
-<li><a href="#give-pi-bounded-tasks" id="toc-give-pi-bounded-tasks"><span class="toc-section-number">15.2</span> Give Pi bounded tasks</a></li>
-<li><a href="#build-a-digest-pinned-rocker-image" id="toc-build-a-digest-pinned-rocker-image"><span class="toc-section-number">15.3</span> Build a digest-pinned Rocker
+<li><a href="#give-pi-bounded-tasks" id="toc-give-pi-bounded-tasks"><span class="toc-section-number">11.2</span> Give Pi bounded tasks</a></li>
+<li><a href="#build-a-digest-pinned-rocker-image" id="toc-build-a-digest-pinned-rocker-image"><span class="toc-section-number">11.3</span> Build a digest-pinned Rocker
 image</a></li>
-<li><a href="#run-it-with-rootless-podman" id="toc-run-it-with-rootless-podman"><span class="toc-section-number">15.4</span> Run it with rootless
+<li><a href="#run-it-with-rootless-podman" id="toc-run-it-with-rootless-podman"><span class="toc-section-number">11.4</span> Run it with rootless
 Podman</a></li>
-<li><a href="#verify-the-result-independently" id="toc-verify-the-result-independently"><span class="toc-section-number">15.5</span> Verify the result
+<li><a href="#verify-the-result-independently" id="toc-verify-the-result-independently"><span class="toc-section-number">11.5</span> Verify the result
 independently</a></li>
 </ul></li>
-<li><a href="#operational-reference" id="toc-operational-reference"><span class="toc-section-number">16</span> Operational reference</a>
+<li><a href="#reference" id="toc-reference"><span class="toc-section-number">12</span> Reference</a>
 <ul>
-<li><a href="#troubleshooting-order" id="toc-troubleshooting-order"><span class="toc-section-number">16.1</span> Troubleshooting order</a></li>
-<li><a href="#configuration-map" id="toc-configuration-map"><span class="toc-section-number">16.2</span> Configuration map</a></li>
-<li><a href="#recommended-starting-stack" id="toc-recommended-starting-stack"><span class="toc-section-number">16.3</span> Recommended starting
+<li><a href="#troubleshooting-order" id="toc-troubleshooting-order"><span class="toc-section-number">12.1</span> Troubleshooting order</a></li>
+<li><a href="#configuration-map" id="toc-configuration-map"><span class="toc-section-number">12.2</span> Configuration map</a></li>
+<li><a href="#recommended-starting-stack" id="toc-recommended-starting-stack"><span class="toc-section-number">12.3</span> Recommended starting
 stack</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">12.4</span> Further reading</a></li>
 </ul></li>
-<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">17</span> Further reading</a></li>
-<li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">18</span> Closing perspective</a>
+<li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">13</span> Closing perspective</a>
 <ul>
-<li><a href="#where-to-go-next" id="toc-where-to-go-next"><span class="toc-section-number">18.1</span> Where to go next</a></li>
+<li><a href="#where-to-go-next" id="toc-where-to-go-next"><span class="toc-section-number">13.1</span> Where to go next</a></li>
 </ul></li>
 </ul></div>
 
@@ -739,14 +749,14 @@ authoritative.</p>
 <ol type="1">
 <li>Why Pi is built the way it is, and how it maps onto Claude
 Code.</li>
-<li>Installing Pi, a controlled first run, and a minimal starter
-setup.</li>
+<li>Installing Pi and a controlled first run.</li>
 <li>Authentication, and hosted, compatible, and local models.</li>
 <li>Running Pi non-interactively and embedding it.</li>
+<li>Choosing between a skill, extension, package, or separate service,
+and a minimal starter setup.</li>
 <li>Giving Pi a reliable web and forum research path.</li>
-<li>Choosing between a skill, extension, package, or separate
-service.</li>
-<li>Sessions: branching, compaction, and hand-off.</li>
+<li>Sessions: branching, compaction, hand-off, and a working
+routine.</li>
 <li>What project trust and containment do, and do not, protect.</li>
 <li>How Pi compares with OpenCode, Aider, Claude Code, and Codex.</li>
 <li>A worked data-science project using Pi, Podman, and Rocker.</li>
@@ -763,7 +773,12 @@ Familiarity with Claude Code (<code>CLAUDE.md</code>, skills, slash
 commands) is assumed. You do not need to know Pi or write TypeScript;
 the extension section assumes only that you can read a little of it when
 reviewing code.</p>
-<h1 data-number="2" id="pi-is-a-harness-not-a-model"><span class="header-section-number">2</span> Pi is a harness, not a model</h1>
+<h1 data-number="2" id="how-pi-works"><span class="header-section-number">2</span> How Pi works</h1>
+<p>Before installing anything, it helps to know what Pi is, what it
+leaves out on purpose, and where a Claude Code habit will or will not
+carry over. The four subsections below take those in turn.</p>
+<h2 data-number="2.1" id="pi-is-a-harness-not-a-model"><span class="header-section-number">2.1</span> Pi is a harness, not a
+model</h2>
 <p>An AI coding system has four separable parts:</p>
 <ol type="1">
 <li><strong>Model:</strong> predicts text and tool calls. It may be
@@ -793,7 +808,7 @@ execution primitive, not a research system.</p>
   -&gt; model continues</code></pre>
 <p>The model decides what it wants to do, Pi executes the request, and
 the operating system decides what the process may actually do.</p>
-<h1 data-number="3" id="what-pi-provides"><span class="header-section-number">3</span> What Pi provides</h1>
+<h2 data-number="2.2" id="what-pi-provides"><span class="header-section-number">2.2</span> What Pi provides</h2>
 <p>Pi supplies a terminal UI, provider and model selection, context-file
 discovery, persistent sessions, and a small default tool set. Pi enables
 four tools by default: <code>read</code>, <code>bash</code>,
@@ -811,7 +826,7 @@ session.</p>
 <p>Pi runs interactively, prints one-shot output, emits JSON events,
 communicates over RPC, or is embedded through its TypeScript SDK, so it
 is both a terminal program and a component of larger applications.</p>
-<h1 data-number="4" id="why-pi-is-built-this-way"><span class="header-section-number">4</span> Why Pi is built this way</h1>
+<h2 data-number="2.3" id="why-pi-is-built-this-way"><span class="header-section-number">2.3</span> Why Pi is built this way</h2>
 <p>The design is an argument, not an accident. The author’s essay <a href="https://mariozechner.at/posts/2025-11-30-pi-coding-agent/">What I
 learned building an opinionated and minimal coding agent</a> (November
 2025) makes it in five moves:</p>
@@ -839,7 +854,7 @@ trade-off is that you supply the workflow yourself. On licensing, the
 author states that Pi’s core “will stay MIT licensed”, while some future
 commercial features may be <a href="https://mariozechner.at/posts/2026-04-08-ive-sold-out/">Fair
 Source or proprietary</a>.</p>
-<h1 data-number="5" id="coming-from-claude-code"><span class="header-section-number">5</span> Coming from Claude Code</h1>
+<h2 data-number="2.4" id="coming-from-claude-code"><span class="header-section-number">2.4</span> Coming from Claude Code</h2>
 <p>An existing Claude Code repository half-works on first run: Pi loads
 <code>CLAUDE.md</code> as a context file and implements the same Agent
 Skills format that Claude Code skills use, but it does not scan
@@ -956,7 +971,7 @@ package</td>
 <code>~/.pi/agent/</code>, not <code>~/.claude</code>. Because it does
 not ask before each tool call, the safety habits you built on Claude
 Code’s prompts do not transfer; see “Safety and containment”.</p>
-<h1 data-number="6" id="installation-and-first-run"><span class="header-section-number">6</span> Installation and first run</h1>
+<h1 data-number="3" id="installation-and-first-run"><span class="header-section-number">3</span> Installation and first run</h1>
 <p>Pi is a Node.js package. The npm route needs Node.js 22.19 or newer;
 the installer checks for Node and offers to install it. The two routes
 are alternatives, not a sequence:</p>
@@ -984,7 +999,7 @@ install, run
 <code>npm uninstall -g @earendil-works/pi-coding-agent</code>; that
 leaves <code>~/.pi/agent/</code> (credentials, sessions, settings) in
 place.</p>
-<h2 data-number="6.1" id="a-controlled-first-session"><span class="header-section-number">6.1</span> A controlled first session</h2>
+<h2 data-number="3.1" id="a-controlled-first-session"><span class="header-section-number">3.1</span> A controlled first session</h2>
 <p>The first session should prove the complete control loop, not
 demonstrate how much work Pi can do unattended. Use a disposable
 project:</p>
@@ -996,9 +1011,9 @@ project:</p>
 <ol type="1">
 <li><strong>Authenticate and choose one model.</strong> Use
 <code>/login</code> or one environment variable (see “Hosted
-authentication”), then <code>/model</code>. Start with one tool-capable
-hosted model or one already-tested local model. Do not add routing or
-fallbacks before the basic loop works.</li>
+authentication” in the next section), then <code>/model</code>. Start
+with one tool-capable hosted model or one already-tested local model. Do
+not add routing or fallbacks before the basic loop works.</li>
 <li><strong>Orient read-only.</strong> Start Pi with
 <code>pi --tools read,grep,find,ls</code> so it cannot edit files or run
 commands, then send the prompt below. The tool restriction enforces the
@@ -1019,7 +1034,7 @@ revert the change on evidence, not on Pi’s confidence.</li>
 </ol>
 <pre class="text"><code>Inspect this repository. Report the files, likely project type,
 and three useful next checks.</code></pre>
-<h2 data-number="6.2" id="working-in-the-terminal"><span class="header-section-number">6.2</span> Working in the terminal</h2>
+<h2 data-number="3.2" id="working-in-the-terminal"><span class="header-section-number">3.2</span> Working in the terminal</h2>
 <p>You can send input while Pi works. <code>Enter</code> sends a
 steering message, which guides the next response once the current tool
 calls finish; <code>Alt+Enter</code> queues a follow-up that waits until
@@ -1029,7 +1044,339 @@ Pi has finished all pending work; <code>Escape</code> aborts.
 model, <code>!!git status</code> runs it without sending the output,
 <code>/model</code> and <code>/thinking</code> change the model and its
 reasoning level, and <code>Shift+Enter</code> adds a line break.</p>
-<h2 data-number="6.3" id="the-starter-suite-install-by-need"><span class="header-section-number">6.3</span> The starter suite: install by
+<h1 data-number="4" id="models-and-authentication"><span class="header-section-number">4</span> Models and authentication</h1>
+<p>Pi reaches a model through a provider. This section covers signing in
+to a hosted provider first, then compatible and local models.</p>
+<h2 data-number="4.1" id="hosted-authentication"><span class="header-section-number">4.1</span> Hosted authentication</h2>
+<p>Either export an API key, or sign in from inside Pi. These are
+alternatives:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ANTHROPIC_API_KEY</span><span class="op">=</span><span class="st">&#39;&lt;your-api-key&gt;&#39;</span>   <span class="co"># environment variable: suits ephemeral runs</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span></span></code></pre></div>
+<pre class="text"><code>/login</code></pre>
+<p><code>/login</code> stores an API key or, for some providers, a
+subscription credential in <code>~/.pi/agent/auth.json</code>. Protect
+that file, and keep secrets out of settings files, prompts, skills, and
+committed scripts. When several sources exist, Pi uses a
+<code>--api-key</code> flag first, then <code>auth.json</code>, then a
+<code>models.json</code> <code>apiKey</code>, then environment
+variables, so a stale stored login beats a freshly exported variable.
+<code>pi auth check --provider &lt;name&gt;</code> reports
+<code>ready</code>, <code>not_ready</code>, or <code>invalid</code>
+without printing a secret. Run <code>/model</code> afterwards to select
+a model.</p>
+<p><strong>Claude subscriptions need a caution.</strong> Claude Code
+readers will reach for the subscription they already pay for. What is
+confirmed: when Anthropic subscription authentication is active, Pi
+warns that third-party harness usage draws from “extra usage” billed per
+token, not from your plan limits, and added a
+<code>warnings.anthropicExtraUsage</code> setting to silence the warning
+(<a href="https://github.com/earendil-works/pi/issues/3808">issue
+#3808</a>, April 2026, closed as completed). What is not settled:
+Anthropic’s <a href="https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan">support
+page on Agent SDK usage</a> says a planned change was paused on 15 June
+2026 and that Agent SDK, <code>claude -p</code>, and third-party app
+usage still draw from subscription limits, while a contributor in the
+same issue thread reports that OAuth use by harnesses such as Pi is
+still billed as extra usage. This primer found no Anthropic page that
+resolves the conflict. An API key is the unambiguous route; check
+Anthropic’s current terms before signing in with a subscription.</p>
+<p>Pi’s built-in catalogue covers more than 15 providers, including
+Anthropic, OpenAI, Google Gemini, Azure OpenAI, Vertex, Bedrock,
+OpenRouter, Mistral, Groq, xAI, DeepSeek, and GitHub Copilot. It is
+bundled and refreshed from pi.dev (<code>pi update --models</code>
+forces a refresh), so use <code>/model</code> or the <a href="https://pi.dev/models">model catalogue</a> for current IDs and
+prices rather than copying an old model ID.</p>
+<h2 data-number="4.2" id="hosted-and-local-models"><span class="header-section-number">4.2</span> Hosted and local models</h2>
+<p>Provider flexibility is not the same as model interchangeability.
+Tool calling, streaming, context length, authentication, image support,
+and reasoning controls vary. A model that answers chat questions may
+still be a poor coding-agent model if it produces unreliable tool
+calls.</p>
+<h3 data-number="4.2.1" id="openai-compatible-local-servers"><span class="header-section-number">4.2.1</span> OpenAI-compatible local
+servers</h3>
+<p>Ollama, LM Studio, vLLM, and SGLang (inference servers) can expose
+OpenAI-compatible endpoints. Pi reads them from
+<code>~/.pi/agent/models.json</code>, with no code:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;providers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ollama&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;baseUrl&quot;</span><span class="fu">:</span> <span class="st">&quot;http://127.0.0.1:11434/v1&quot;</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;api&quot;</span><span class="fu">:</span> <span class="st">&quot;openai-completions&quot;</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;apiKey&quot;</span><span class="fu">:</span> <span class="st">&quot;ollama&quot;</span><span class="fu">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;qwen2.5-coder:7b&quot;</span> <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>The <code>apiKey</code> is a dummy: Pi needs a key to treat the model
+as available, and Ollama ignores it. The model ID is a placeholder; a 7B
+model is a weak choice for agentic tool calling. Check the context
+window the server allocates before blaming Pi for a lost instruction,
+because the server sets it. The <a href="https://pi.dev/docs/latest/models">models documentation</a> is
+current.</p>
+<p>A useful arrangement is a local model for routine exploration, with a
+hosted model as an explicit, per-task fallback for code you are willing
+to send to that provider. A local model does not make all data local: a
+search extension, browser, provider gateway, or external API can still
+receive content. Pi itself sends anonymous install and update telemetry
+by default (see “Safety and containment”).</p>
+<h3 data-number="4.2.2" id="llama.cpp"><span class="header-section-number">4.2.2</span> llama.cpp</h3>
+<p>Pi has a dedicated integration with <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>’s router
+server, which discovers several GGUF files (llama.cpp’s model file
+format) and loads them on demand. Start <code>llama-server</code>
+without <code>--model</code>, <code>-m</code>, or <code>-hf</code>;
+passing a model starts single-model mode, and Pi’s router integration
+then fails. It needs a llama.cpp build with router support.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--models-dir</span> ~/models <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--no-models-autoload</span> <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--jinja</span> <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--host</span> 127.0.0.1 <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--port</span> 8080 <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-ngl</span> 999 <span class="dt">\</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-c</span> 32768</span></code></pre></div>
+<p><code>--models-dir</code> is where the GGUF files live,
+<code>--no-models-autoload</code> keeps loading explicit,
+<code>-ngl 999</code> offloads all layers to the GPU, and
+<code>-c 32768</code> sets the context per loaded model (omit it for the
+model’s native context, which may need much more memory). The
+<code>--jinja</code> flag enables the model’s chat template and tool
+calling; without it, tool calls are unreliable.</p>
+<p>In Pi, run <code>/login llama.cpp</code> (default URL
+<code>http://127.0.0.1:8080</code>), then <code>/llama</code> to load a
+model, then <code>/model</code> to select it.
+<code>LLAMA_BASE_URL</code> and <code>LLAMA_API_KEY</code> configure the
+same connection without <code>/login</code>. Check the server with
+<code>curl http://127.0.0.1:8080/health</code> and
+<code>curl http://127.0.0.1:8080/models</code>.</p>
+<p>Test the layers in order: health check, ordinary chat, streaming,
+Pi-compatible tool calls, and finally Pi executing a tool and feeding
+the result back. Keep one known-good hosted fallback while you stabilise
+the local path.</p>
+<h1 data-number="5" id="running-pi-non-interactively"><span class="header-section-number">5</span> Running Pi non-interactively</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Way to run Pi</th>
+<th>Interface</th>
+<th>Use it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interactive</td>
+<td>Terminal UI</td>
+<td>A person is working with Pi</td>
+</tr>
+<tr>
+<td>Print (<code>--print</code>, <code>-p</code>)</td>
+<td>Final assistant text on stdout, then exit</td>
+<td>A script needs the answer</td>
+</tr>
+<tr>
+<td>JSON (<code>--mode json</code>)</td>
+<td>JSON Lines (one JSON event per line) on stdout, then exit</td>
+<td>A program needs structured progress</td>
+</tr>
+<tr>
+<td>RPC (<code>--mode rpc</code>)</td>
+<td>JSON Lines commands on stdin, responses and events on stdout,
+long-lived</td>
+<td>Another program drives Pi (RPC is remote procedure call: commands
+and replies over a pipe)</td>
+</tr>
+<tr>
+<td>SDK</td>
+<td>TypeScript library inside your Node.js or Bun process</td>
+<td>You embed Pi in an application</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--print</span> <span class="st">&#39;Summarize this repository without editing it&#39;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--no-ext-diff</span> <span class="kw">|</span> <span class="ex">pi</span> <span class="at">--print</span> <span class="st">&#39;Review this diff. Return findings only.&#39;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--no-session</span> <span class="at">--print</span> <span class="st">&#39;Explain this directory&#39;</span>     <span class="co"># in-memory session, nothing saved</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--mode</span> json <span class="st">&#39;Inspect the repository and report its test commands&#39;</span> <span class="op">&gt;</span> pi-events.jsonl</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--mode</span> rpc <span class="at">--no-session</span>   <span class="co"># driven by another program; not interactive</span></span></code></pre></div>
+<p>When stdin or stdout is redirected and no mode is chosen, Pi uses
+print mode, and piped stdin is prepended to the prompt. For read-only
+review, restrict the tools:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--tools</span> read,grep,find,ls <span class="at">--print</span> <span class="st">&#39;Review without changing files&#39;</span></span></code></pre></div>
+<p><code>--tools</code> takes an allowlist of built-in, extension, and
+custom tools; the <a href="https://pi.dev/docs/latest/cli">CLI
+reference</a> lists every flag. To embed Pi in TypeScript, the <a href="https://pi.dev/docs/latest/sdk">SDK</a> creates a session in your
+own process; RPC is the language-independent alternative.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createAgentSession } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { session } <span class="op">=</span> <span class="cf">await</span> <span class="fu">createAgentSession</span>()<span class="op">;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> session<span class="op">.</span><span class="fu">prompt</span>(<span class="st">&quot;What files are in the current directory?&quot;</span>)<span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(session<span class="op">.</span><span class="fu">getLastAssistantText</span>())<span class="op">;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">finally</span> {</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  session<span class="op">.</span><span class="fu">dispose</span>()<span class="op">;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h1 data-number="6" id="customisation-use-the-smallest-layer-that-works"><span class="header-section-number">6</span> Customisation: use the smallest
+layer that works</h1>
+<p>Pi’s customisation layers run from plain instructions to executable
+code, and each step up adds power and review burden. The subsections
+below go through the layers in that order, then turn the choice into a
+table and a starter set.</p>
+<h2 data-number="6.1" id="context-files-and-prompt-templates"><span class="header-section-number">6.1</span> Context files and prompt
+templates</h2>
+<p><code>AGENTS.md</code> and <code>CLAUDE.md</code> suit durable
+repository guidance: test commands, style, directory boundaries, and
+review requirements. Pi loads either from <code>~/.pi/agent</code>, the
+working directory, and its parents. <code>AGENTS.override.md</code>
+replaces them in the same directory only. <code>SYSTEM.md</code>
+replaces Pi’s default system prompt and <code>APPEND_SYSTEM.md</code>
+extends it, at user or project level. Keep credentials and volatile
+provider details out of all of them.</p>
+<p>Prompt templates play the role of Claude Code’s custom slash
+commands. A Markdown file in <code>~/.pi/agent/prompts/</code> or
+<code>.pi/prompts/</code> becomes a command named after the file, and
+<code>$1</code>, <code>$@</code>, and <code>${1:-default}</code>
+substitute arguments. This one, saved as <code>review.md</code>, gives
+you <code>/review</code> and <code>/review concurrency</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Review staged git changes</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> &quot;[focus]&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>Review the staged changes. Focus on ${1:-correctness, security, and error handling}.</span></code></pre></div>
+<p>Run <code>/reload</code> after editing a template in an active
+session.</p>
+<h2 data-number="6.2" id="skills"><span class="header-section-number">6.2</span> Skills</h2>
+<p>A skill is on-demand instructions with optional scripts, references,
+and assets. Pi implements the open <a href="https://agentskills.io/specification">Agent Skills
+specification</a>, the format Claude Code skills use, so a Claude Code
+skill directory generally works unchanged. Pi does not scan
+<code>~/.claude/skills</code>: copy the directory into
+<code>~/.pi/agent/skills/</code> or <code>~/.agents/skills/</code>, or
+point Pi at it with <code>--skill &lt;path&gt;</code> or the
+<code>skills</code> setting. Only each skill’s name, description, and
+path sit in the prompt; the model reads the full <code>SKILL.md</code>
+when a task matches, or when you force it with <code>/skill:name</code>.
+Setting <code>disable-model-invocation: true</code> restricts a skill to
+that explicit command.</p>
+<p>A project skill is a directory such as
+<code>.pi/skills/web-research/</code> holding a <code>SKILL.md</code>,
+plus optional <code>scripts/</code> and <code>references/</code>. The
+<code>SKILL.md</code> stays a short procedure:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> web-research</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Research a question from dated primary sources. Use for current docs and releases.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># Web research</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>Follow references/source-policy.md. Run scripts/search.sh &quot;<span class="dt">&lt;</span><span class="kw">query</span><span class="dt">&gt;</span>&quot;.</span></code></pre></div>
+<p>If a skill needs a model-callable tool, it is becoming an extension.
+Project skills load only after you trust the project.</p>
+<h2 data-number="6.3" id="extensions"><span class="header-section-number">6.3</span> Extensions</h2>
+<p>Extensions are TypeScript modules executed inside Pi, which runs them
+directly with no build step. They can register tools, slash commands,
+lifecycle handlers, custom UI, provider adapters, and context or
+compaction behaviour. For a Claude Code user, one mechanism covers
+hooks, custom tools, and plugin code.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--extension</span> ./my-extension.ts     <span class="co"># or -e; repeatable</span></span></code></pre></div>
+<pre class="text"><code>~/.pi/agent/extensions/       # global
+.pi/extensions/               # project-local; loads only after you trust the project</code></pre>
+<p>A subdirectory containing <code>index.ts</code> also loads, and
+<code>/reload</code> picks up changes. The <code>project_trust</code>
+event can be handled only by personal and command-line extensions.</p>
+<p>A custom tool has a name, a parameter schema, and an
+<code>execute</code> function. This one counts the words in a string,
+adapted from Pi’s <code>hello.ts</code> example:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { Type } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-ai&quot;</span><span class="op">;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { defineTool<span class="op">,</span> <span class="kw">type</span> ExtensionAPI } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> countWords <span class="op">=</span> <span class="fu">defineTool</span>({</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  name<span class="op">:</span> <span class="st">&quot;count_words&quot;</span><span class="op">,</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  label<span class="op">:</span> <span class="st">&quot;Count words&quot;</span><span class="op">,</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  description<span class="op">:</span> <span class="st">&quot;Count the words in a piece of text.&quot;</span><span class="op">,</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  parameters<span class="op">:</span> Type<span class="op">.</span><span class="fu">Object</span>({</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    text<span class="op">:</span> Type<span class="op">.</span><span class="fu">String</span>({ description<span class="op">:</span> <span class="st">&quot;The text to count&quot;</span> })<span class="op">,</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  })<span class="op">,</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">async</span> <span class="fu">execute</span>(_toolCallId<span class="op">,</span> params<span class="op">,</span> _signal<span class="op">,</span> _onUpdate<span class="op">,</span> _ctx) {</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> n <span class="op">=</span> params<span class="op">.</span><span class="at">text</span><span class="op">.</span><span class="fu">split</span>(<span class="ss">/</span><span class="sc">\s+</span><span class="ss">/</span>)<span class="op">.</span><span class="fu">filter</span>(<span class="bu">Boolean</span>)<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>      content<span class="op">:</span> [{ type<span class="op">:</span> <span class="st">&quot;text&quot;</span><span class="op">,</span> text<span class="op">:</span> <span class="vs">`</span><span class="sc">${</span>n<span class="sc">}</span><span class="vs"> words`</span> }]<span class="op">,</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>      details<span class="op">:</span> { words<span class="op">:</span> n }<span class="op">,</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> (pi<span class="op">:</span> ExtensionAPI) {</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  pi<span class="op">.</span><span class="fu">registerTool</span>(countWords)<span class="op">;</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Throwing from <code>execute</code> is how a tool reports failure;
+returning an object does not mark an error. A tool that touches the
+filesystem must validate its inputs, because it lets the model reach
+anything the user can.</p>
+<p>The counterpart to Claude Code’s permission prompts is a
+<code>tool_call</code> handler, which can change a call’s input or block
+it. This gate, trimmed from the shipped <code>permission-gate.ts</code>,
+asks before a dangerous shell command and blocks it when there is no UI
+to ask (print and JSON modes; an RPC client can answer the dialog):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="im">type</span> { ExtensionAPI } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> (pi<span class="op">:</span> ExtensionAPI) {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  pi<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;tool_call&quot;</span><span class="op">,</span> <span class="kw">async</span> (<span class="bu">event</span><span class="op">,</span> ctx) <span class="kw">=&gt;</span> {</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">event</span><span class="op">.</span><span class="at">toolName</span> <span class="op">!==</span> <span class="st">&quot;bash&quot;</span>) <span class="cf">return</span> <span class="kw">undefined</span><span class="op">;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> command <span class="op">=</span> <span class="bu">event</span><span class="op">.</span><span class="at">input</span><span class="op">.</span><span class="at">command</span> <span class="im">as</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="ss">/</span><span class="sc">\b</span><span class="ss">rm</span><span class="sc">\s+(</span><span class="ss">-rf</span><span class="sc">?|</span><span class="ss">--recursive</span><span class="sc">)|\b</span><span class="ss">sudo</span><span class="sc">\b</span><span class="ss">/i</span><span class="op">.</span><span class="fu">test</span>(command)) {</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">!</span>ctx<span class="op">.</span><span class="at">hasUI</span>) <span class="cf">return</span> { block<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> reason<span class="op">:</span> <span class="st">&quot;Dangerous command blocked&quot;</span> }<span class="op">;</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> choice <span class="op">=</span> <span class="cf">await</span> ctx<span class="op">.</span><span class="at">ui</span><span class="op">.</span><span class="fu">select</span>(<span class="vs">`Allow this command?</span><span class="sc">\n\n</span><span class="vs">  </span><span class="sc">${</span>command<span class="sc">}</span><span class="vs">`</span><span class="op">,</span> [<span class="st">&quot;Yes&quot;</span><span class="op">,</span> <span class="st">&quot;No&quot;</span>])<span class="op">;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (choice <span class="op">!==</span> <span class="st">&quot;Yes&quot;</span>) <span class="cf">return</span> { block<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> reason<span class="op">:</span> <span class="st">&quot;Blocked by user&quot;</span> }<span class="op">;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">undefined</span><span class="op">;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Start from the <a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions">shipped
+examples</a> rather than from scratch: <code>permission-gate.ts</code>,
+<code>protected-paths.ts</code> (blocks writes to <code>.env</code>,
+<code>.git/</code>, and <code>node_modules/</code>),
+<code>confirm-destructive.ts</code>, <code>plan-mode/</code>,
+<code>subagent/</code>, <code>todo.ts</code>, <code>handoff.ts</code>,
+and <code>claude-rules.ts</code>. From a checkout of the repository,
+<code>pi -e packages/coding-agent/examples/extensions/permission-gate.ts</code>
+gives you the gate above. These are prompts inside the Pi process, not a
+security boundary: a regular expression is easy to evade, and the
+extension runs with your permissions. An extension can read credentials,
+alter prompts, intercept tool calls, and start child processes. Review
+it like application code.</p>
+<h2 data-number="6.4" id="packages"><span class="header-section-number">6.4</span> Packages</h2>
+<p>A package bundles extensions, skills, prompt templates, and themes
+(JSON colour files) for distribution through npm or Git; it is the
+counterpart of a Claude Code plugin. The <a href="https://pi.dev/packages">package catalogue</a> lists packages that
+carry the <code>pi-package</code> npm keyword. It is for discovery, not
+a security review.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> install npm:@scope/package@1.2.3      <span class="co"># scoped npm package, version-pinned</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> install git:github.com/vendor/repo@<span class="op">&lt;</span>reviewed-commit<span class="op">&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> install <span class="at">-l</span> npm:@scope/package@1.2.3   <span class="co"># project scope; read only after trust</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">-e</span> npm:@scope/package                  <span class="co"># try for one run, without installing</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> list</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> config                                 <span class="co"># enable or disable resources</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> remove npm:@scope/package@1.2.3</span></code></pre></div>
+<p>Versioned npm specifications, Git tags, and commits are pinned:
+<code>pi update --extensions</code> reconciles installations but does
+not move a configured ref. Read the source, installation scripts, and
+network calls before installing, and test third-party packages in a
+disposable project. A package declares its resources through
+conventional <code>extensions/</code>, <code>skills/</code>,
+<code>prompts/</code>, and <code>themes/</code> directories or a
+<code>pi</code> key in <code>package.json</code>.</p>
+<h2 data-number="6.5" id="mcp-and-subagents"><span class="header-section-number">6.5</span> MCP and subagents</h2>
+<p>Pi has neither in core, by design. If you depend on MCP servers, the
+community <code>pi-mcp-adapter</code> package bridges them through one
+small proxy tool, which addresses the context cost the author objects
+to. For subagents, use the <code>subagent/</code> example, the
+<code>pi-subagents</code> package, or further Pi processes in
+<code>tmux</code>. Avoid both on day one.</p>
+<h2 data-number="6.6" id="the-starter-suite-install-by-need"><span class="header-section-number">6.6</span> The starter suite: install by
 need</h2>
 <p>There is no universally correct add-on bundle. Pi’s quickstart says
 to start with the least powerful mechanism that meets your need, and its
@@ -1076,7 +1423,8 @@ the model may obey) or data leakage.</p>
 <tr>
 <td>JavaScript-heavy or authenticated pages</td>
 <td><code>browser-tools</code> from <code>pi-skills</code></td>
-<td>You need screenshots or frontend QA (see the caveats below)</td>
+<td>You need screenshots or frontend QA (see the caveats in “Add a
+browser only when needed”)</td>
 </tr>
 <tr>
 <td>New model or endpoint</td>
@@ -1103,10 +1451,10 @@ locations recursively and puts every discovered skill’s name and
 description in the system prompt, so cloning the whole repository into a
 skills directory advertises its Gmail, Drive, and Calendar clients to
 the model.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/badlogic/pi-skills ~/src/pi-skills</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> ~/src/pi-skills checkout <span class="op">&lt;</span>reviewed-commit<span class="op">&gt;</span>          <span class="co"># pin what you reviewed</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="bu">cd</span> ~/src/pi-skills/brave-search <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install <span class="at">--ignore-scripts</span><span class="kw">)</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--skill</span> ~/src/pi-skills/brave-search                    <span class="co"># load it for this run only</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/badlogic/pi-skills ~/src/pi-skills</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> ~/src/pi-skills checkout <span class="op">&lt;</span>reviewed-commit<span class="op">&gt;</span>          <span class="co"># pin what you reviewed</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="bu">cd</span> ~/src/pi-skills/brave-search <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install <span class="at">--ignore-scripts</span><span class="kw">)</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--skill</span> ~/src/pi-skills/brave-search                    <span class="co"># load it for this run only</span></span></code></pre></div>
 <p>To load it in every session, copy the skill directory into
 <code>~/.pi/agent/skills/</code> or add its path to the
 <code>skills</code> setting.</p>
@@ -1130,192 +1478,21 @@ opt-in (<code>allowBrowserCookies: true</code> or
 planning overlay, or large “everything” bundle on day one. Add each when
 you can name the recurring problem it solves and the boundary it
 requires.</p>
-<h2 data-number="6.4" id="hosted-authentication"><span class="header-section-number">6.4</span> Hosted authentication</h2>
-<p>Either export an API key, or sign in from inside Pi. These are
-alternatives:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ANTHROPIC_API_KEY</span><span class="op">=</span><span class="st">&#39;&lt;your-api-key&gt;&#39;</span>   <span class="co"># environment variable: suits ephemeral runs</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span></span></code></pre></div>
-<pre class="text"><code>/login</code></pre>
-<p><code>/login</code> stores an API key or, for some providers, a
-subscription credential in <code>~/.pi/agent/auth.json</code>. Protect
-that file, and keep secrets out of settings files, prompts, skills, and
-committed scripts. When several sources exist, Pi uses a
-<code>--api-key</code> flag first, then <code>auth.json</code>, then a
-<code>models.json</code> <code>apiKey</code>, then environment
-variables, so a stale stored login beats a freshly exported variable.
-<code>pi auth check --provider &lt;name&gt;</code> reports
-<code>ready</code>, <code>not_ready</code>, or <code>invalid</code>
-without printing a secret. Run <code>/model</code> afterwards to select
-a model.</p>
-<p><strong>Claude subscriptions need a caution.</strong> Claude Code
-readers will reach for the subscription they already pay for. What is
-confirmed: when Anthropic subscription authentication is active, Pi
-warns that third-party harness usage draws from “extra usage” billed per
-token, not from your plan limits, and added a
-<code>warnings.anthropicExtraUsage</code> setting to silence the warning
-(<a href="https://github.com/earendil-works/pi/issues/3808">issue
-#3808</a>, April 2026, closed as completed). What is not settled:
-Anthropic’s <a href="https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan">support
-page on Agent SDK usage</a> says a planned change was paused on 15 June
-2026 and that Agent SDK, <code>claude -p</code>, and third-party app
-usage still draw from subscription limits, while a contributor in the
-same issue thread reports that OAuth use by harnesses such as Pi is
-still billed as extra usage. This primer found no Anthropic page that
-resolves the conflict. An API key is the unambiguous route; check
-Anthropic’s current terms before signing in with a subscription.</p>
-<p>Pi’s built-in catalogue covers more than 15 providers, including
-Anthropic, OpenAI, Google Gemini, Azure OpenAI, Vertex, Bedrock,
-OpenRouter, Mistral, Groq, xAI, DeepSeek, and GitHub Copilot. It is
-bundled and refreshed from pi.dev (<code>pi update --models</code>
-forces a refresh), so use <code>/model</code> or the <a href="https://pi.dev/models">model catalogue</a> for current IDs and
-prices rather than copying an old model ID.</p>
-<h1 data-number="7" id="hosted-and-local-models"><span class="header-section-number">7</span> Hosted and local models</h1>
-<p>Provider flexibility is not the same as model interchangeability.
-Tool calling, streaming, context length, authentication, image support,
-and reasoning controls vary. A model that answers chat questions may
-still be a poor coding-agent model if it produces unreliable tool
-calls.</p>
-<h2 data-number="7.1" id="openai-compatible-local-servers"><span class="header-section-number">7.1</span> OpenAI-compatible local
-servers</h2>
-<p>Ollama, LM Studio, vLLM, and SGLang (inference servers) can expose
-OpenAI-compatible endpoints. Pi reads them from
-<code>~/.pi/agent/models.json</code>, with no code:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;providers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ollama&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;baseUrl&quot;</span><span class="fu">:</span> <span class="st">&quot;http://127.0.0.1:11434/v1&quot;</span><span class="fu">,</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;api&quot;</span><span class="fu">:</span> <span class="st">&quot;openai-completions&quot;</span><span class="fu">,</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;apiKey&quot;</span><span class="fu">:</span> <span class="st">&quot;ollama&quot;</span><span class="fu">,</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;qwen2.5-coder:7b&quot;</span> <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
-<p>The <code>apiKey</code> is a dummy: Pi needs a key to treat the model
-as available, and Ollama ignores it. The model ID is a placeholder; a 7B
-model is a weak choice for agentic tool calling. Check the context
-window the server allocates before blaming Pi for a lost instruction,
-because the server sets it. The <a href="https://pi.dev/docs/latest/models">models documentation</a> is
-current.</p>
-<p>A useful arrangement is a local model for routine exploration, with a
-hosted model as an explicit, per-task fallback for code you are willing
-to send to that provider. A local model does not make all data local: a
-search extension, browser, provider gateway, or external API can still
-receive content. Pi itself sends anonymous install and update telemetry
-by default (see “Safety and containment”).</p>
-<h2 data-number="7.2" id="llama.cpp"><span class="header-section-number">7.2</span> llama.cpp</h2>
-<p>Pi has a dedicated integration with <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>’s router
-server, which discovers several GGUF files (llama.cpp’s model file
-format) and loads them on demand. Start <code>llama-server</code>
-without <code>--model</code>, <code>-m</code>, or <code>-hf</code>;
-passing a model starts single-model mode, and Pi’s router integration
-then fails. It needs a llama.cpp build with router support.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">llama-server</span> <span class="dt">\</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--models-dir</span> ~/models <span class="dt">\</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--no-models-autoload</span> <span class="dt">\</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--jinja</span> <span class="dt">\</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--host</span> 127.0.0.1 <span class="dt">\</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--port</span> 8080 <span class="dt">\</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-ngl</span> 999 <span class="dt">\</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-c</span> 32768</span></code></pre></div>
-<p><code>--models-dir</code> is where the GGUF files live,
-<code>--no-models-autoload</code> keeps loading explicit,
-<code>-ngl 999</code> offloads all layers to the GPU, and
-<code>-c 32768</code> sets the context per loaded model (omit it for the
-model’s native context, which may need much more memory). The
-<code>--jinja</code> flag enables the model’s chat template and tool
-calling; without it, tool calls are unreliable.</p>
-<p>In Pi, run <code>/login llama.cpp</code> (default URL
-<code>http://127.0.0.1:8080</code>), then <code>/llama</code> to load a
-model, then <code>/model</code> to select it.
-<code>LLAMA_BASE_URL</code> and <code>LLAMA_API_KEY</code> configure the
-same connection without <code>/login</code>. Check the server with
-<code>curl http://127.0.0.1:8080/health</code> and
-<code>curl http://127.0.0.1:8080/models</code>.</p>
-<p>Test the layers in order: health check, ordinary chat, streaming,
-Pi-compatible tool calls, and finally Pi executing a tool and feeding
-the result back. Keep one known-good hosted fallback while you stabilise
-the local path.</p>
-<h1 data-number="8" id="running-pi-non-interactively"><span class="header-section-number">8</span> Running Pi non-interactively</h1>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th>Way to run Pi</th>
-<th>Interface</th>
-<th>Use it when</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Interactive</td>
-<td>Terminal UI</td>
-<td>A person is working with Pi</td>
-</tr>
-<tr>
-<td>Print (<code>--print</code>, <code>-p</code>)</td>
-<td>Final assistant text on stdout, then exit</td>
-<td>A script needs the answer</td>
-</tr>
-<tr>
-<td>JSON (<code>--mode json</code>)</td>
-<td>JSON Lines (one JSON event per line) on stdout, then exit</td>
-<td>A program needs structured progress</td>
-</tr>
-<tr>
-<td>RPC (<code>--mode rpc</code>)</td>
-<td>JSON Lines commands on stdin, responses and events on stdout,
-long-lived</td>
-<td>Another program drives Pi (RPC is remote procedure call: commands
-and replies over a pipe)</td>
-</tr>
-<tr>
-<td>SDK</td>
-<td>TypeScript library inside your Node.js or Bun process</td>
-<td>You embed Pi in an application</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--print</span> <span class="st">&#39;Summarize this repository without editing it&#39;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--no-ext-diff</span> <span class="kw">|</span> <span class="ex">pi</span> <span class="at">--print</span> <span class="st">&#39;Review this diff. Return findings only.&#39;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--no-session</span> <span class="at">--print</span> <span class="st">&#39;Explain this directory&#39;</span>     <span class="co"># in-memory session, nothing saved</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--mode</span> json <span class="st">&#39;Inspect the repository and report its test commands&#39;</span> <span class="op">&gt;</span> pi-events.jsonl</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--mode</span> rpc <span class="at">--no-session</span>   <span class="co"># driven by another program; not interactive</span></span></code></pre></div>
-<p>When stdin or stdout is redirected and no mode is chosen, Pi uses
-print mode, and piped stdin is prepended to the prompt. For read-only
-review, restrict the tools:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--tools</span> read,grep,find,ls <span class="at">--print</span> <span class="st">&#39;Review without changing files&#39;</span></span></code></pre></div>
-<p><code>--tools</code> takes an allowlist of built-in, extension, and
-custom tools; the <a href="https://pi.dev/docs/latest/cli">CLI
-reference</a> lists every flag. To embed Pi in TypeScript, the <a href="https://pi.dev/docs/latest/sdk">SDK</a> creates a session in your
-own process; RPC is the language-independent alternative.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createAgentSession } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { session } <span class="op">=</span> <span class="cf">await</span> <span class="fu">createAgentSession</span>()<span class="op">;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> session<span class="op">.</span><span class="fu">prompt</span>(<span class="st">&quot;What files are in the current directory?&quot;</span>)<span class="op">;</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(session<span class="op">.</span><span class="fu">getLastAssistantText</span>())<span class="op">;</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">finally</span> {</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  session<span class="op">.</span><span class="fu">dispose</span>()<span class="op">;</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<h1 data-number="9" id="web-research-assemble-the-missing-capability"><span class="header-section-number">9</span> Web research: assemble the
+<h1 data-number="7" id="web-research-assemble-the-missing-capability"><span class="header-section-number">7</span> Web research: assemble the
 missing capability</h1>
 <p>Pi ships no browser and no search tool, so a coding task that needs
 current documentation has nothing to reach for except <code>curl</code>
 through <code>bash</code>.</p>
-<h2 data-number="9.1" id="plain-http-and-git-are-good-for-static-sources"><span class="header-section-number">9.1</span> Plain HTTP and git are good for
+<h2 data-number="7.1" id="plain-http-and-git-are-good-for-static-sources"><span class="header-section-number">7.1</span> Plain HTTP and git are good for
 static sources</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> <span class="at">-o</span> extensions.md <span class="dt">\</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v0.87.1/packages/coding-agent/docs/extensions.md</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://api.github.com/repos/earendil-works/pi/releases/latest</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span> 1 <span class="at">--branch</span> v0.87.1 https://github.com/earendil-works/pi.git ~/src/pi</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> <span class="at">-o</span> extensions.md <span class="dt">\</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v0.87.1/packages/coding-agent/docs/extensions.md</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://api.github.com/repos/earendil-works/pi/releases/latest</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span> 1 <span class="at">--branch</span> v0.87.1 https://github.com/earendil-works/pi.git ~/src/pi</span></code></pre></div>
 <p>This suits raw Markdown, JSON APIs, release metadata, and source
 trees. Pin a tag or commit rather than <code>main</code> when you need
 the same bytes next week.</p>
-<h2 data-number="9.2" id="plain-http-is-not-web-research-infrastructure"><span class="header-section-number">9.2</span> Plain HTTP is not web research
+<h2 data-number="7.2" id="plain-http-is-not-web-research-infrastructure"><span class="header-section-number">7.2</span> Plain HTTP is not web research
 infrastructure</h2>
 <p>A plain HTTP request does not search, render JavaScript, keep
 signed-in sessions, click through consent banners, or extract readable
@@ -1324,7 +1501,7 @@ application shell: the near-empty HTML page that a JavaScript
 single-page app fills in later. Do not ask Pi to “search the web” and
 accept model-memory guesses; give it an explicit tool, source policy,
 evidence format, and stop condition.</p>
-<h2 data-number="9.3" id="start-with-a-maintained-search-skill"><span class="header-section-number">9.3</span> Start with a maintained search
+<h2 data-number="7.3" id="start-with-a-maintained-search-skill"><span class="header-section-number">7.3</span> Start with a maintained search
 skill</h2>
 <p>The <a href="https://github.com/badlogic/pi-skills"><code>pi-skills</code></a>
 repository, kept by Pi’s original author under his own account (last
@@ -1333,7 +1510,7 @@ Brave web search, Chrome DevTools browser automation, Google Calendar,
 Drive, and Gmail clients, Groq speech-to-text, VS Code diffs, and
 YouTube transcripts. They also work in Claude Code, Codex CLI, Amp, and
 Droid. Installation, pinning, and the Brave key are under “The starter
-suite”.</p>
+suite”, in the Customisation section.</p>
 <p><code>/skill:name</code> forces a skill to load, which matters
 because a model can fail to load a relevant skill on its own; text after
 the command is appended as your request (the same pattern as Claude
@@ -1347,11 +1524,11 @@ claim record URL, date, source type, and confidence. Do not install packages or
 modify files. Return a source table before the synthesis.</code></pre>
 <p>These are the helper scripts the skill tells the model to run; run
 them yourself to test your key:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~/src/pi-skills/brave-search/search.js</span> <span class="dt">\</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Pi extension registerTool&#39;</span> <span class="at">-n</span> 10 <span class="at">--content</span> <span class="at">--freshness</span> pm</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">~/src/pi-skills/brave-search/content.js</span> <span class="dt">\</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v0.87.1/packages/coding-agent/docs/extensions.md</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~/src/pi-skills/brave-search/search.js</span> <span class="dt">\</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Pi extension registerTool&#39;</span> <span class="at">-n</span> 10 <span class="at">--content</span> <span class="at">--freshness</span> pm</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">~/src/pi-skills/brave-search/content.js</span> <span class="dt">\</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v0.87.1/packages/coding-agent/docs/extensions.md</span></code></pre></div>
 <p><code>-n</code> sets the result count (default 5, maximum 20),
 <code>--content</code> fetches each page as Markdown,
 <code>--freshness</code> filters by <code>pd</code>, <code>pw</code>,
@@ -1365,7 +1542,7 @@ whose <a href="https://radius.earendil.com/docs">documentation</a> lists
 web search among its tools: a first-party alternative to assembling
 search yourself, with the data-path questions any hosted service
 raises.</p>
-<h2 data-number="9.4" id="add-a-browser-only-when-needed"><span class="header-section-number">9.4</span> Add a browser only when
+<h2 data-number="7.4" id="add-a-browser-only-when-needed"><span class="header-section-number">7.4</span> Add a browser only when
 needed</h2>
 <p>For JavaScript-heavy documentation, authenticated forums, or frontend
 verification, <code>browser-tools</code> drives Chrome through the
@@ -1428,15 +1605,15 @@ terms of service on authenticated forums.</li>
 </tr>
 </tbody>
 </table>
-<h2 data-number="9.5" id="search-github-and-forums-directly"><span class="header-section-number">9.5</span> Search GitHub and forums
+<h2 data-number="7.5" id="search-github-and-forums-directly"><span class="header-section-number">7.5</span> Search GitHub and forums
 directly</h2>
 <p><code>gh</code> is the GitHub command-line client; run
 <code>gh auth login</code> first, because code search needs
 authentication.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> search code registerTool <span class="at">--repo</span> earendil-works/pi</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> search issues <span class="st">&#39;MCP&#39;</span> <span class="at">--repo</span> earendil-works/pi</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> api repos/earendil-works/pi/discussions <span class="dt">\</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--jq</span> <span class="st">&#39;.[] | &quot;\(.number)\t\(.title)\t\(.html_url)&quot;&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> search code registerTool <span class="at">--repo</span> earendil-works/pi</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> search issues <span class="st">&#39;MCP&#39;</span> <span class="at">--repo</span> earendil-works/pi</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> api repos/earendil-works/pi/discussions <span class="dt">\</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--jq</span> <span class="st">&#39;.[] | &quot;\(.number)\t\(.title)\t\(.html_url)&quot;&#39;</span></span></code></pre></div>
 <p>Search results are leads, not evidence: read the issue, check its
 date and status, and distinguish a maintainer statement from a user
 workaround. A useful research brief states the decision it must support,
@@ -1454,161 +1631,12 @@ the documentation describes none. That is a design decision rather than
 a gap. Community packages do exist, which is the confusion this brief
 guards against: mistaking a community package for a core feature, or an
 old forum answer for current behaviour.</p>
-<h1 data-number="10" id="customisation-use-the-smallest-layer-that-works"><span class="header-section-number">10</span> Customisation: use the smallest
-layer that works</h1>
-<h2 data-number="10.1" id="context-files-and-prompt-templates"><span class="header-section-number">10.1</span> Context files and prompt
-templates</h2>
-<p><code>AGENTS.md</code> and <code>CLAUDE.md</code> suit durable
-repository guidance: test commands, style, directory boundaries, and
-review requirements. Pi loads either from <code>~/.pi/agent</code>, the
-working directory, and its parents. <code>AGENTS.override.md</code>
-replaces them in the same directory only. <code>SYSTEM.md</code>
-replaces Pi’s default system prompt and <code>APPEND_SYSTEM.md</code>
-extends it, at user or project level. Keep credentials and volatile
-provider details out of all of them.</p>
-<p>Prompt templates play the role of Claude Code’s custom slash
-commands. A Markdown file in <code>~/.pi/agent/prompts/</code> or
-<code>.pi/prompts/</code> becomes a command named after the file, and
-<code>$1</code>, <code>$@</code>, and <code>${1:-default}</code>
-substitute arguments. This one, saved as <code>review.md</code>, gives
-you <code>/review</code> and <code>/review concurrency</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Review staged git changes</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> &quot;[focus]&quot;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>Review the staged changes. Focus on ${1:-correctness, security, and error handling}.</span></code></pre></div>
-<p>Run <code>/reload</code> after editing a template in an active
-session.</p>
-<h2 data-number="10.2" id="skills"><span class="header-section-number">10.2</span> Skills</h2>
-<p>A skill is on-demand instructions with optional scripts, references,
-and assets. Pi implements the open <a href="https://agentskills.io/specification">Agent Skills
-specification</a>, the format Claude Code skills use, so a Claude Code
-skill directory generally works unchanged. Pi does not scan
-<code>~/.claude/skills</code>: copy the directory into
-<code>~/.pi/agent/skills/</code> or <code>~/.agents/skills/</code>, or
-point Pi at it with <code>--skill &lt;path&gt;</code> or the
-<code>skills</code> setting. Only each skill’s name, description, and
-path sit in the prompt; the model reads the full <code>SKILL.md</code>
-when a task matches, or when you force it with <code>/skill:name</code>.
-Setting <code>disable-model-invocation: true</code> restricts a skill to
-that explicit command.</p>
-<p>A project skill is a directory such as
-<code>.pi/skills/web-research/</code> holding a <code>SKILL.md</code>,
-plus optional <code>scripts/</code> and <code>references/</code>. The
-<code>SKILL.md</code> stays a short procedure:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> web-research</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Research a question from dated primary sources. Use for current docs and releases.</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># Web research</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>Follow references/source-policy.md. Run scripts/search.sh &quot;<span class="dt">&lt;</span><span class="kw">query</span><span class="dt">&gt;</span>&quot;.</span></code></pre></div>
-<p>If a skill needs a model-callable tool, it is becoming an extension.
-Project skills load only after you trust the project.</p>
-<h2 data-number="10.3" id="extensions"><span class="header-section-number">10.3</span> Extensions</h2>
-<p>Extensions are TypeScript modules executed inside Pi, which runs them
-directly with no build step. They can register tools, slash commands,
-lifecycle handlers, custom UI, provider adapters, and context or
-compaction behaviour. For a Claude Code user, one mechanism covers
-hooks, custom tools, and plugin code.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--extension</span> ./my-extension.ts     <span class="co"># or -e; repeatable</span></span></code></pre></div>
-<pre class="text"><code>~/.pi/agent/extensions/       # global
-.pi/extensions/               # project-local; loads only after you trust the project</code></pre>
-<p>A subdirectory containing <code>index.ts</code> also loads, and
-<code>/reload</code> picks up changes. The <code>project_trust</code>
-event can be handled only by personal and command-line extensions.</p>
-<p>A custom tool has a name, a parameter schema, and an
-<code>execute</code> function. This one counts the words in a string,
-adapted from Pi’s <code>hello.ts</code> example:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { Type } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-ai&quot;</span><span class="op">;</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { defineTool<span class="op">,</span> <span class="kw">type</span> ExtensionAPI } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> countWords <span class="op">=</span> <span class="fu">defineTool</span>({</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  name<span class="op">:</span> <span class="st">&quot;count_words&quot;</span><span class="op">,</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  label<span class="op">:</span> <span class="st">&quot;Count words&quot;</span><span class="op">,</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  description<span class="op">:</span> <span class="st">&quot;Count the words in a piece of text.&quot;</span><span class="op">,</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  parameters<span class="op">:</span> Type<span class="op">.</span><span class="fu">Object</span>({</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    text<span class="op">:</span> Type<span class="op">.</span><span class="fu">String</span>({ description<span class="op">:</span> <span class="st">&quot;The text to count&quot;</span> })<span class="op">,</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  })<span class="op">,</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">async</span> <span class="fu">execute</span>(_toolCallId<span class="op">,</span> params<span class="op">,</span> _signal<span class="op">,</span> _onUpdate<span class="op">,</span> _ctx) {</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> n <span class="op">=</span> params<span class="op">.</span><span class="at">text</span><span class="op">.</span><span class="fu">split</span>(<span class="ss">/</span><span class="sc">\s+</span><span class="ss">/</span>)<span class="op">.</span><span class="fu">filter</span>(<span class="bu">Boolean</span>)<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>      content<span class="op">:</span> [{ type<span class="op">:</span> <span class="st">&quot;text&quot;</span><span class="op">,</span> text<span class="op">:</span> <span class="vs">`</span><span class="sc">${</span>n<span class="sc">}</span><span class="vs"> words`</span> }]<span class="op">,</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>      details<span class="op">:</span> { words<span class="op">:</span> n }<span class="op">,</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> (pi<span class="op">:</span> ExtensionAPI) {</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  pi<span class="op">.</span><span class="fu">registerTool</span>(countWords)<span class="op">;</span></span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>Throwing from <code>execute</code> is how a tool reports failure;
-returning an object does not mark an error. A tool that touches the
-filesystem must validate its inputs, because it lets the model reach
-anything the user can.</p>
-<p>The counterpart to Claude Code’s permission prompts is a
-<code>tool_call</code> handler, which can change a call’s input or block
-it. This gate, trimmed from the shipped <code>permission-gate.ts</code>,
-asks before a dangerous shell command and blocks it when there is no UI
-to ask (print and JSON modes; an RPC client can answer the dialog):</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="im">type</span> { ExtensionAPI } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> (pi<span class="op">:</span> ExtensionAPI) {</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  pi<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;tool_call&quot;</span><span class="op">,</span> <span class="kw">async</span> (<span class="bu">event</span><span class="op">,</span> ctx) <span class="kw">=&gt;</span> {</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">event</span><span class="op">.</span><span class="at">toolName</span> <span class="op">!==</span> <span class="st">&quot;bash&quot;</span>) <span class="cf">return</span> <span class="kw">undefined</span><span class="op">;</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> command <span class="op">=</span> <span class="bu">event</span><span class="op">.</span><span class="at">input</span><span class="op">.</span><span class="at">command</span> <span class="im">as</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="ss">/</span><span class="sc">\b</span><span class="ss">rm</span><span class="sc">\s+(</span><span class="ss">-rf</span><span class="sc">?|</span><span class="ss">--recursive</span><span class="sc">)|\b</span><span class="ss">sudo</span><span class="sc">\b</span><span class="ss">/i</span><span class="op">.</span><span class="fu">test</span>(command)) {</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">!</span>ctx<span class="op">.</span><span class="at">hasUI</span>) <span class="cf">return</span> { block<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> reason<span class="op">:</span> <span class="st">&quot;Dangerous command blocked&quot;</span> }<span class="op">;</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> choice <span class="op">=</span> <span class="cf">await</span> ctx<span class="op">.</span><span class="at">ui</span><span class="op">.</span><span class="fu">select</span>(<span class="vs">`Allow this command?</span><span class="sc">\n\n</span><span class="vs">  </span><span class="sc">${</span>command<span class="sc">}</span><span class="vs">`</span><span class="op">,</span> [<span class="st">&quot;Yes&quot;</span><span class="op">,</span> <span class="st">&quot;No&quot;</span>])<span class="op">;</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (choice <span class="op">!==</span> <span class="st">&quot;Yes&quot;</span>) <span class="cf">return</span> { block<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> reason<span class="op">:</span> <span class="st">&quot;Blocked by user&quot;</span> }<span class="op">;</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">undefined</span><span class="op">;</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>Start from the <a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions">shipped
-examples</a> rather than from scratch: <code>permission-gate.ts</code>,
-<code>protected-paths.ts</code> (blocks writes to <code>.env</code>,
-<code>.git/</code>, and <code>node_modules/</code>),
-<code>confirm-destructive.ts</code>, <code>plan-mode/</code>,
-<code>subagent/</code>, <code>todo.ts</code>, <code>handoff.ts</code>,
-and <code>claude-rules.ts</code>. From a checkout of the repository,
-<code>pi -e packages/coding-agent/examples/extensions/permission-gate.ts</code>
-gives you the gate above. These are prompts inside the Pi process, not a
-security boundary: a regular expression is easy to evade, and the
-extension runs with your permissions. An extension can read credentials,
-alter prompts, intercept tool calls, and start child processes. Review
-it like application code.</p>
-<h2 data-number="10.4" id="packages"><span class="header-section-number">10.4</span> Packages</h2>
-<p>A package bundles extensions, skills, prompt templates, and themes
-(JSON colour files) for distribution through npm or Git; it is the
-counterpart of a Claude Code plugin. The <a href="https://pi.dev/packages">package catalogue</a> lists packages that
-carry the <code>pi-package</code> npm keyword. It is for discovery, not
-a security review.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> install npm:@scope/package@1.2.3      <span class="co"># scoped npm package, version-pinned</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> install git:github.com/vendor/repo@<span class="op">&lt;</span>reviewed-commit<span class="op">&gt;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> install <span class="at">-l</span> npm:@scope/package@1.2.3   <span class="co"># project scope; read only after trust</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">-e</span> npm:@scope/package                  <span class="co"># try for one run, without installing</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> list</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> config                                 <span class="co"># enable or disable resources</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> remove npm:@scope/package@1.2.3</span></code></pre></div>
-<p>Versioned npm specifications, Git tags, and commits are pinned:
-<code>pi update --extensions</code> reconciles installations but does
-not move a configured ref. Read the source, installation scripts, and
-network calls before installing, and test third-party packages in a
-disposable project. A package declares its resources through
-conventional <code>extensions/</code>, <code>skills/</code>,
-<code>prompts/</code>, and <code>themes/</code> directories or a
-<code>pi</code> key in <code>package.json</code>.</p>
-<h2 data-number="10.5" id="mcp-and-subagents"><span class="header-section-number">10.5</span> MCP and subagents</h2>
-<p>Pi has neither in core, by design. If you depend on MCP servers, the
-community <code>pi-mcp-adapter</code> package bridges them through one
-small proxy tool, which addresses the context cost the author objects
-to. For subagents, use the <code>subagent/</code> example, the
-<code>pi-subagents</code> package, or further Pi processes in
-<code>tmux</code>. Avoid both on day one.</p>
-<h1 data-number="11" id="sessions-and-hand-off"><span class="header-section-number">11</span> Sessions and hand-off</h1>
+<h1 data-number="8" id="sessions-hand-off-and-workflow"><span class="header-section-number">8</span> Sessions, hand-off and
+workflow</h1>
+<p>This section covers how Pi stores and branches conversations, how to
+carry work from one session to the next, and a five-step routine that
+fits sessions into a task.</p>
+<h2 data-number="8.1" id="sessions-and-compaction"><span class="header-section-number">8.1</span> Sessions and compaction</h2>
 <p>Pi sessions are persistent conversation records stored as JSON Lines
 files under <code>~/.pi/agent/sessions/</code>, grouped by working
 directory. Override the location with <code>--session-dir</code>,
@@ -1661,6 +1689,7 @@ the session file. What degrades is what the model sees on later
 requests, so check what the summary dropped before relying on an old
 detail. Run <code>/compact &lt;instructions&gt;</code> to steer what is
 kept.</p>
+<h2 data-number="8.2" id="sharing-and-hand-off"><span class="header-section-number">8.2</span> Sharing and hand-off</h2>
 <p>Sessions may contain source code, prompts, command output, URLs, tool
 arguments, and accidental secrets. Treat them as sensitive data.
 <code>/share</code> uploads the whole session and returns a viewer link
@@ -1676,7 +1705,26 @@ next safe step</code></pre>
 <p>The shipped <code>handoff.ts</code> example extension does this in
 one step: <code>/handoff &lt;next task&gt;</code> creates a new session
 with a generated prompt for you to review.</p>
-<h1 data-number="12" id="safety-and-containment"><span class="header-section-number">12</span> Safety and containment</h1>
+<h2 data-number="8.3" id="a-practical-workflow"><span class="header-section-number">8.3</span> A practical workflow</h2>
+<ol type="1">
+<li><strong>Map the repository.</strong> Use a read-only prompt to
+identify instructions, build commands, tests, generated files, and the
+smallest safe change.</li>
+<li><strong>Research in a separate session.</strong> Use a search skill
+or API. Require dated sources and separate facts from inferences.</li>
+<li><strong>Hand off evidence.</strong> Write a short reviewed research
+note with URLs, dates, excerpts, and unresolved uncertainty.</li>
+<li><strong>Implement in a branch or worktree.</strong> Give Pi one
+bounded change, explicit file ownership, and proof commands.</li>
+<li><strong>Verify independently.</strong> Run formatter, tests, static
+checks, and rendering outside the model’s narrative. Review the diff and
+working-tree state.</li>
+</ol>
+<p>Name each session (<code>--name</code> or <code>/name</code>) so
+hand-off notes can refer to it. This keeps research context from
+overwhelming implementation context and makes the result auditable, if
+not reproducible.</p>
+<h1 data-number="9" id="safety-and-containment"><span class="header-section-number">9</span> Safety and containment</h1>
 <p>Pi is not a sandbox and has no built-in permission boundary for
 filesystem, process, network, or credential access. It runs with the
 launching user’s permissions. Bash, extensions, package installers,
@@ -1693,7 +1741,7 @@ exposed.</li>
 <li>The operating system, container, VM, or sandbox controls what the
 process can touch.</li>
 </ul>
-<h2 data-number="12.1" id="project-trust"><span class="header-section-number">12.1</span> Project trust</h2>
+<h2 data-number="9.1" id="project-trust"><span class="header-section-number">9.1</span> Project trust</h2>
 <p>Trust exists to stop a folder silently loading executable extensions.
 Pi asks for a decision when the working directory holds any of these:
 <code>.pi/settings.json</code>; <code>.pi/extensions</code>,
@@ -1719,7 +1767,7 @@ resources unless a saved decision or <code>--approve</code> applies: a
 CI script that expects a <code>.pi/</code> extension to load silently
 will not load it. Trust is not containment: after startup, enabled tools
 still use the process’s operating-system permissions.</p>
-<h2 data-number="12.2" id="isolation-options"><span class="header-section-number">12.2</span> Isolation options</h2>
+<h2 data-number="9.2" id="isolation-options"><span class="header-section-number">9.2</span> Isolation options</h2>
 <p>For untrusted repositories, unattended runs, production credentials,
 or browser profiles, use a container or VM. A container is only as
 strong as its mounts, environment variables, network access, and user
@@ -1794,7 +1842,7 @@ instead would expose your real credentials, extensions, and sessions. Do
 not mount the whole host home directory or a real browser profile, and
 give research extensions only the keys and network routes they
 require.</p>
-<h2 data-number="12.3" id="prompt-injection-telemetry-and-reporting"><span class="header-section-number">12.3</span> Prompt injection, telemetry,
+<h2 data-number="9.3" id="prompt-injection-telemetry-and-reporting"><span class="header-section-number">9.3</span> Prompt injection, telemetry,
 and reporting</h2>
 <p>Prompt injection can come from a README, issue, web page, command
 output, or model response; treat external text as untrusted input. Pi’s
@@ -1808,7 +1856,7 @@ default (<code>enableInstallTelemetry</code>); turn them off with
 <code>PI_TELEMETRY=0</code>. The model catalogue refreshes from pi.dev.
 <code>pi --offline</code> (or <code>PI_OFFLINE=1</code>) disables
 automatic network activity, including that refresh.</p>
-<h1 data-number="13" id="pi-compared-with-other-coding-agents"><span class="header-section-number">13</span> Pi compared with other coding
+<h1 data-number="10" id="pi-compared-with-other-coding-agents"><span class="header-section-number">10</span> Pi compared with other coding
 agents</h1>
 <p>The useful comparison is not a feature checklist. Ask where the
 product puts workflow decisions and what the default execution boundary
@@ -1876,7 +1924,7 @@ policies built in</td>
 </tr>
 </tbody>
 </table>
-<h2 data-number="13.1" id="pi-versus-opencode-and-aider"><span class="header-section-number">13.1</span> Pi versus OpenCode and
+<h2 data-number="10.1" id="pi-versus-opencode-and-aider"><span class="header-section-number">10.1</span> Pi versus OpenCode and
 Aider</h2>
 <p>OpenCode feels like a complete coding application; Pi starts smaller
 and asks you to assemble the workflow. Choose OpenCode for a richer
@@ -1887,7 +1935,7 @@ selected editable files, a repository map, and a reviewable Git edit
 loop. Pi can reproduce that loop but can also become a research tool,
 browser bridge, or application component; choose Aider for focused
 supervised edits.</p>
-<h2 data-number="13.2" id="pi-versus-claude-code-and-codex"><span class="header-section-number">13.2</span> Pi versus Claude Code and
+<h2 data-number="10.2" id="pi-versus-claude-code-and-codex"><span class="header-section-number">10.2</span> Pi versus Claude Code and
 Codex</h2>
 <p>Claude Code and Codex supply the surrounding workflow themselves:
 permission prompts, sandbox options, web search, and established
@@ -1900,7 +1948,7 @@ you want while gaining full process access. The sibling primers cover
 the <a href="../primer_claude_code_alternative/primer-claude-code-alternatives.html">alternatives
 to Claude Code</a> and <a href="../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html">Codex
 for Claude Code users</a> in more depth.</p>
-<h2 data-number="13.3" id="forks-and-derivatives"><span class="header-section-number">13.3</span> Forks and derivatives</h2>
+<h2 data-number="10.3" id="forks-and-derivatives"><span class="header-section-number">10.3</span> Forks and derivatives</h2>
 <p>Because Pi is MIT-licensed and embeddable, others build on it.
 <code>oh-my-pi</code> (Stencil Labs, MIT) is, by its own README, a fork
 that adds subagents, IDE (LSP) integration, and browser tooling.
@@ -1909,26 +1957,7 @@ described in January 2026 as having Pi “under the hood” (<a href="https://lu
 current documentation says only <code>@earendil-works/pi-tui</code>, the
 terminal-UI toolkit, remains a dependency. A claim that a project “runs
 on Pi” needs a date.</p>
-<h1 data-number="14" id="a-practical-workflow"><span class="header-section-number">14</span> A practical workflow</h1>
-<ol type="1">
-<li><strong>Map the repository.</strong> Use a read-only prompt to
-identify instructions, build commands, tests, generated files, and the
-smallest safe change.</li>
-<li><strong>Research in a separate session.</strong> Use a search skill
-or API. Require dated sources and separate facts from inferences.</li>
-<li><strong>Hand off evidence.</strong> Write a short reviewed research
-note with URLs, dates, excerpts, and unresolved uncertainty.</li>
-<li><strong>Implement in a branch or worktree.</strong> Give Pi one
-bounded change, explicit file ownership, and proof commands.</li>
-<li><strong>Verify independently.</strong> Run formatter, tests, static
-checks, and rendering outside the model’s narrative. Review the diff and
-working-tree state.</li>
-</ol>
-<p>Name each session (<code>--name</code> or <code>/name</code>) so
-hand-off notes can refer to it. This keeps research context from
-overwhelming implementation context and makes the result auditable, if
-not reproducible.</p>
-<h1 data-number="15" id="worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="header-section-number">15</span> Worked example: a reproducible
+<h1 data-number="11" id="worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="header-section-number">11</span> Worked example: a reproducible
 data-science project with Pi and Rocker</h1>
 <p>This project makes the boundary between an agent and an analysis
 runtime concrete. Pi runs on the host and helps inspect the repository,
@@ -1951,7 +1980,7 @@ host. A <strong>digest</strong> is a content hash
 (<code>sha256:...</code>) identifying an exact image, where a tag is a
 movable label. <strong><code>renv</code></strong> is R’s dependency
 lockfile tool.</p>
-<h2 data-number="15.1" id="project-goal-and-contract"><span class="header-section-number">15.1</span> Project goal and contract</h2>
+<h2 data-number="11.1" id="project-goal-and-contract"><span class="header-section-number">11.1</span> Project goal and contract</h2>
 <p>Build a small “daily temperature quality” project. The input is a
 fictional CSV of station readings; two independent implementations, one
 in R and one in Python, must produce the same summary. Do not call
@@ -2025,7 +2054,7 @@ each row with the expected file (exact keys and counts,
 <code>mean_temp_c</code> within the tolerance), and exits non-zero on
 any difference. Row-by-row comparison against a sorted file also checks
 the sort order.</p>
-<h2 data-number="15.2" id="give-pi-bounded-tasks"><span class="header-section-number">15.2</span> Give Pi bounded tasks</h2>
+<h2 data-number="11.2" id="give-pi-bounded-tasks"><span class="header-section-number">11.2</span> Give Pi bounded tasks</h2>
 <p>Use a separate, named session for each phase. The fixture, expected
 output, and comparison script are committed before the implementation
 task starts.</p>
@@ -2043,7 +2072,7 @@ Python csv handling, and pytest. Return URLs and version constraints only.
 Do not modify the repository.</code></pre>
 <p>Phase 3 is implementation in a fresh session,
 <code>pi --name implement</code>, with the research hand-off note pasted
-in (see “Sessions and hand-off”):</p>
+in (see “Sharing and hand-off”):</p>
 <pre class="text"><code>Implement the R and Python cleaners from the checked-in contract. Add tests
 for missing values, unknown flags, malformed dates, and cross-language
 agreement. Use `just qa` (defined below) and stop if the contract is ambiguous.</code></pre>
@@ -2051,7 +2080,7 @@ agreement. Use `just qa` (defined below) and stop if the contract is ambiguous.<
 build, and comparison decide whether it is correct. Pi also writes some
 tests, so review them: a test written to match the model’s own output
 proves nothing.</p>
-<h2 data-number="15.3" id="build-a-digest-pinned-rocker-image"><span class="header-section-number">15.3</span> Build a digest-pinned Rocker
+<h2 data-number="11.3" id="build-a-digest-pinned-rocker-image"><span class="header-section-number">11.3</span> Build a digest-pinned Rocker
 image</h2>
 <p>Rocker’s versioned tags are not immutable: the images are rebuilt
 periodically, so <code>4.6.1</code> today is not byte-identical to
@@ -2119,7 +2148,7 @@ host user whatever <code>USER</code> says; <code>USER rstudio</code>
 <code>!requirements.txt</code> and <code>!renv.lock</code>), because the
 build context includes everything not ignored.</li>
 </ul>
-<h2 data-number="15.4" id="run-it-with-rootless-podman"><span class="header-section-number">15.4</span> Run it with rootless
+<h2 data-number="11.4" id="run-it-with-rootless-podman"><span class="header-section-number">11.4</span> Run it with rootless
 Podman</h2>
 <p>A small <code>Justfile</code> exposes the workflow without hiding the
 container boundary. These recipes were built and run against a toy
@@ -2172,7 +2201,7 @@ fetch anything.</p>
 <code>--user &quot;$(id -u):$(id -g)&quot;</code> instead and drop <code>:Z</code>
 unless the host uses SELinux. Never mount the repository parent, home
 directory, SSH agent, cloud credentials, or a container socket.</p>
-<h2 data-number="15.5" id="verify-the-result-independently"><span class="header-section-number">15.5</span> Verify the result
+<h2 data-number="11.5" id="verify-the-result-independently"><span class="header-section-number">11.5</span> Verify the result
 independently</h2>
 <p>Pi should run <code>just qa</code> and report its output, but its
 report of its own run is not evidence. Run <code>just qa</code> yourself
@@ -2202,8 +2231,10 @@ read-only. Do not give Pi access to sensitive datasets or credentials
 merely because the analysis container can read them. This example
 teaches reproducibility and review; it does not make Pi a trusted
 data-processing authority.</p>
-<h1 data-number="16" id="operational-reference"><span class="header-section-number">16</span> Operational reference</h1>
-<h2 data-number="16.1" id="troubleshooting-order"><span class="header-section-number">16.1</span> Troubleshooting order</h2>
+<h1 data-number="12" id="reference"><span class="header-section-number">12</span> Reference</h1>
+<p>Look-up material for when something breaks, when you need to find a
+file, and when you want the next document to read.</p>
+<h2 data-number="12.1" id="troubleshooting-order"><span class="header-section-number">12.1</span> Troubleshooting order</h2>
 <p>Work from the process outwards: each step only makes sense if the
 previous one is green.</p>
 <ol type="1">
@@ -2236,7 +2267,7 @@ context.</li>
 </ol>
 <p>Do not install another extension until you know which layer
 failed.</p>
-<h2 data-number="16.2" id="configuration-map"><span class="header-section-number">16.2</span> Configuration map</h2>
+<h2 data-number="12.2" id="configuration-map"><span class="header-section-number">12.2</span> Configuration map</h2>
 <pre class="text"><code>~/.pi/agent/                    agent directory (override: PI_CODING_AGENT_DIR)
   settings.json                 user settings, defaults, package declarations
   models.json                   custom providers and models
@@ -2252,7 +2283,7 @@ failed.</p>
   settings.json  extensions/  skills/  prompts/  themes/  SYSTEM.md  APPEND_SYSTEM.md
 .agents/skills/                 portable project skills (also trust-gated)
 AGENTS.md | CLAUDE.md           project instructions (loaded regardless of trust)</code></pre>
-<h2 data-number="16.3" id="recommended-starting-stack"><span class="header-section-number">16.3</span> Recommended starting
+<h2 data-number="12.3" id="recommended-starting-stack"><span class="header-section-number">12.3</span> Recommended starting
 stack</h2>
 <p>This is an order of adoption, not a day-one install. In the first
 week, take items 1, 2, and 4; add the rest when a concrete need
@@ -2269,7 +2300,7 @@ worktree limits accidental edits, not what Pi can access.</li>
 </ol>
 <p>Add one capability at a time, test it, record its permissions, and
 keep it only if it solves a recurring problem.</p>
-<h1 data-number="17" id="further-reading"><span class="header-section-number">17</span> Further reading</h1>
+<h2 data-number="12.4" id="further-reading"><span class="header-section-number">12.4</span> Further reading</h2>
 <p><strong>Pi documentation</strong></p>
 <ul>
 <li><a href="https://github.com/earendil-works/pi">Pi repository</a>, <a href="https://pi.dev/docs/latest">documentation index</a>, <a href="https://pi.dev/docs/latest/quickstart">quickstart</a>, and <a href="https://pi.dev/docs/latest/how-pi-works">how Pi works</a>: start
@@ -2329,7 +2360,7 @@ hash-checking</a>, and the <a href="https://just.systems/man/en/"><code>just</co
 Code alternatives primer</a>, <a href="../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html">Codex
 for Claude Code users primer</a>, and <a href="../primer_openclaw/primer_openclaw.html">OpenClaw primer</a>.</li>
 </ul>
-<h1 data-number="18" id="closing-perspective"><span class="header-section-number">18</span> Closing perspective</h1>
+<h1 data-number="13" id="closing-perspective"><span class="header-section-number">13</span> Closing perspective</h1>
 <p>Pi’s distinctive feature is not that it has no browser. It is that
 the browser, search engine, MCP client, approval system, model router,
 planning workflow, and subagent strategy are not fused into the core. Pi
@@ -2343,7 +2374,7 @@ Pi’s small core is not a safety property: it runs with your permissions
 and asks for nothing, so put a container or VM around anything untrusted
 or unattended, and review every extension and package as code you are
 about to execute.</p>
-<h2 data-number="18.1" id="where-to-go-next"><span class="header-section-number">18.1</span> Where to go next</h2>
+<h2 data-number="13.1" id="where-to-go-next"><span class="header-section-number">13.1</span> Where to go next</h2>
 <p>A sensible first week: install Pi and check
 <code>pi --version</code>; run the read-only orientation from “A
 controlled first session” on a repository you know; add one skill; then
