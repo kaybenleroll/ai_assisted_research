@@ -4,11 +4,11 @@
 
 ## The short version
 
-If you have used Claude Code, Pi feels oddly bare on first contact: no plan mode, no subagents, no MCP servers, no permission prompts, no web search. That is deliberate. Pi is a small, programmable harness (the program around the model that runs the agent loop) that you extend, not a product with those features built in. The official documentation is reference-style, and most third-party write-ups still use package names that have since changed. This primer is the orientation in between, written for someone who already knows Claude Code.
+If you have used Claude Code, Pi feels oddly bare on first contact: no plan mode, no subagents, no MCP servers (external tool servers), no permission prompts, no web search. That is deliberate. Pi is a small, programmable harness (the program around the model that runs the agent loop) that you extend, not a product with those features built in. The official documentation is reference-style, and most third-party write-ups still use package names that have since changed. This primer is the orientation in between, written for someone who already knows Claude Code.
 
 Pi is a terminal coding agent and an agent toolkit. It gives a language model four tools (`read`, `write`, `edit`, and `bash`), persistent sessions, a terminal UI, and several ways to add your own behaviour: skills, prompt templates, TypeScript extensions, and packages. You can add a search skill, browser bridge, approval gate, subagent workflow, or local-model provider without forking the program.
 
-Pi was created by Mario Zechner and is MIT-licensed. Since April 2026 the project has been owned by the company Earendil, and the repository lives in the `earendil-works` GitHub organisation. This primer was checked against Pi 0.87.1 (22 September 2026). Pi is pre-1.0, so flags and settings move; the [official documentation](https://pi.dev/docs/latest) is authoritative.
+Pi was created by Mario Zechner and is MIT-licensed. Since April 2026 the project has been owned by the company Earendil, and the repository lives in the `earendil-works` GitHub organisation. Pi is pre-1.0 (0.87.1, released 22 September 2026, at the time of writing), so flags and settings move; the [official documentation](https://pi.dev/docs/latest) is authoritative.
 
 ### What you will learn
 
@@ -75,7 +75,7 @@ Pi runs interactively, prints one-shot output, emits JSON events, communicates o
 The design is an argument, not an accident. The author's essay [What I learned building an opinionated and minimal coding agent](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) (November 2025) makes it in five moves:
 
 - **A tiny prompt.** The system prompt plus tool definitions come in below 1,000 tokens, and, the author argues, four tools suffice for coding work.
-- **No MCP in core.** The Model Context Protocol (MCP) is the standard for plugging external tool servers into an agent. The essay measures Playwright MCP at 21 tools and 13.7k tokens, and Chrome DevTools MCP at 26 tools and 18k tokens, "7-9% of your context window gone before you even start working". Its alternative is CLI tools with a README the model reads on demand.
+- **No MCP in core.** The Model Context Protocol (MCP) is the standard for plugging such servers into an agent. The essay measures Playwright MCP at 21 tools and 13.7k tokens, and Chrome DevTools MCP at 26 tools and 18k tokens, "7-9% of your context window gone before you even start working". Its alternative is CLI tools with a README the model reads on demand.
 - **No built-in subagents, plan mode, or to-dos.** Subagents hide what the delegate did; plans and task lists belong in files you can read and edit.
 - **No background bash.** The `bash` tool runs synchronously; use `tmux` for long-running processes.
 - **YOLO by default.** Pi asks no permission before file operations or commands, and expects you to contain it externally.
@@ -84,7 +84,7 @@ The essay also reports a complete Terminal-Bench run as evidence. Treat that as 
 
 ## Coming from Claude Code
 
-An existing Claude Code repository works on first run: Pi loads `CLAUDE.md` as a context file, and Pi implements the same Agent Skills format that Claude Code skills use. Most other concepts have a Pi counterpart, though often as an example or package rather than a built-in.
+An existing Claude Code repository half-works on first run: Pi loads `CLAUDE.md` as a context file and implements the same Agent Skills format that Claude Code skills use, but it does not scan `.claude/skills`, so skills must be copied or pointed at. Most other concepts have a Pi counterpart, though often as an example or package rather than a built-in.
 
 | Claude Code | Pi | Where it lives |
 | -------------- | ------------------------------------------------ | ------------ |
@@ -95,7 +95,7 @@ An existing Claude Code repository works on first run: Pi loads `CLAUDE.md` as a
 | Plugins | Pi packages, installed with `pi install` | Core |
 | `claude -p` | `pi -p` (`--print`) | Core |
 | `--continue`, `--resume`, `/compact` | Same names | Core |
-| Rewind and branching | `/tree`, `/fork`, `/clone` branch the conversation | Core |
+| Rewind and branching (`/rewind`, `/branch`) | `/tree`, `/fork`, `/clone` branch the conversation; none of them rolls back file changes (the `git-checkpoint.ts` example does) | Core |
 | `settings.json` | `~/.pi/agent/settings.json` and `.pi/settings.json` | Core |
 | Permission prompts and modes | None; the `permission-gate.ts` example extension, or a container | Example extension |
 | Plan mode | None; the `plan-mode/` example extension, or write plans to files | Example extension |
@@ -204,7 +204,7 @@ pi
 
 `/login` stores an API key or, for some providers, a subscription credential in `~/.pi/agent/auth.json`. Protect that file, and keep secrets out of settings files, prompts, skills, and committed scripts. When several sources exist, Pi uses a `--api-key` flag first, then `auth.json`, then a `models.json` `apiKey`, then environment variables, so a stale stored login beats a freshly exported variable. `pi auth check --provider <name>` reports `ready`, `not_ready`, or `invalid` without printing a secret. Run `/model` afterwards to select a model.
 
-**Claude subscriptions need a caution.** Claude Code readers will reach for the subscription they already pay for. What is confirmed: when Anthropic subscription authentication is active, Pi warns that third-party harness usage draws from "extra usage" billed per token, not from your plan limits, and added a `warnings.anthropicExtraUsage` setting to silence the warning ([issue #3808](https://github.com/earendil-works/pi/issues/3808), April 2026, closed as completed). What is not settled: Anthropic's [support page on Agent SDK usage](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan) says a planned change was paused on 15 June 2026 and that Agent SDK, `claude -p`, and third-party app usage still draw from subscription limits, while a user in the same issue thread reports that OAuth use by harnesses such as Pi is still billed as extra usage. This primer found no Anthropic page that resolves the conflict. An API key is the unambiguous route; check Anthropic's current terms before signing in with a subscription.
+**Claude subscriptions need a caution.** Claude Code readers will reach for the subscription they already pay for. What is confirmed: when Anthropic subscription authentication is active, Pi warns that third-party harness usage draws from "extra usage" billed per token, not from your plan limits, and added a `warnings.anthropicExtraUsage` setting to silence the warning ([issue #3808](https://github.com/earendil-works/pi/issues/3808), April 2026, closed as completed). What is not settled: Anthropic's [support page on Agent SDK usage](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan) says a planned change was paused on 15 June 2026 and that Agent SDK, `claude -p`, and third-party app usage still draw from subscription limits, while a contributor in the same issue thread reports that OAuth use by harnesses such as Pi is still billed as extra usage. This primer found no Anthropic page that resolves the conflict. An API key is the unambiguous route; check Anthropic's current terms before signing in with a subscription.
 
 Pi's built-in catalogue covers more than 15 providers, including Anthropic, OpenAI, Google Gemini, Azure OpenAI, Vertex, Bedrock, OpenRouter, Mistral, Groq, xAI, DeepSeek, and GitHub Copilot. It is bundled and refreshed from pi.dev (`pi update --models` forces a refresh), so use `/model` or the [model catalogue](https://pi.dev/models) for current IDs and prices rather than copying an old model ID.
 
@@ -294,7 +294,7 @@ try {
 
 ## Web research: assemble the missing capability
 
-Pi ships no browser and no search tool, so a coding task that needs current documentation has nothing to reach for except `curl` through `bash`. `curl` is useful, but it is not a browser, a search engine, or an evidence-management system.
+Pi ships no browser and no search tool, so a coding task that needs current documentation has nothing to reach for except `curl` through `bash`.
 
 ### Plain HTTP and git are good for static sources
 
@@ -464,7 +464,7 @@ export default function (pi: ExtensionAPI) {
 
 Throwing from `execute` is how a tool reports failure; returning an object does not mark an error. A tool that touches the filesystem must validate its inputs, because it lets the model reach anything the user can.
 
-The counterpart to Claude Code's permission prompts is a `tool_call` handler, which can change a call's input or block it. This gate, trimmed from the shipped `permission-gate.ts`, asks before a dangerous shell command and blocks it when there is no UI to ask (print, JSON, and RPC modes):
+The counterpart to Claude Code's permission prompts is a `tool_call` handler, which can change a call's input or block it. This gate, trimmed from the shipped `permission-gate.ts`, asks before a dangerous shell command and blocks it when there is no UI to ask (print and JSON modes; an RPC client can answer the dialog):
 
 ~~~typescript
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
@@ -483,7 +483,7 @@ export default function (pi: ExtensionAPI) {
 }
 ~~~
 
-Start from the [shipped examples](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions) rather than from scratch: `permission-gate.ts`, `protected-paths.ts` (blocks writes to `.env` and `.git/`), `confirm-destructive.ts`, `plan-mode/`, `subagent/`, `todo.ts`, `handoff.ts`, and `claude-rules.ts`. From a checkout of the repository, `pi -e packages/coding-agent/examples/extensions/permission-gate.ts` gives you the gate above. These are prompts inside the Pi process, not a security boundary: a regular expression is easy to evade, and the extension runs with your permissions. An extension can read credentials, alter prompts, intercept tool calls, and start child processes. Review it like application code.
+Start from the [shipped examples](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions) rather than from scratch: `permission-gate.ts`, `protected-paths.ts` (blocks writes to `.env`, `.git/`, and `node_modules/`), `confirm-destructive.ts`, `plan-mode/`, `subagent/`, `todo.ts`, `handoff.ts`, and `claude-rules.ts`. From a checkout of the repository, `pi -e packages/coding-agent/examples/extensions/permission-gate.ts` gives you the gate above. These are prompts inside the Pi process, not a security boundary: a regular expression is easy to evade, and the extension runs with your permissions. An extension can read credentials, alter prompts, intercept tool calls, and start child processes. Review it like application code.
 
 ### Packages
 
@@ -555,7 +555,7 @@ Trust exists to stop a folder silently loading executable extensions. Pi asks fo
 
 Context files are not gated. `AGENTS.md`, `CLAUDE.md`, and `AGENTS.override.md` load regardless of trust unless you pass `-nc`, so a hostile repository can still steer the model through them even if you decline trust. One documented gap: the project `sessionDir` setting is read before trust is resolved.
 
-You decide interactively, save a decision with `/trust` (stored in `~/.pi/agent/trust.json`), or override for one process with `--approve` (`-a`) or `--no-approve` (`-na`). The `defaultProjectTrust` setting is `ask` (the default), `always`, or `never`. Print, JSON, and RPC modes cannot prompt, so under `ask` they skip protected resources unless you pass `--approve`: a CI script that expects a `.pi/` extension to load silently will not load it. Trust is not containment: after startup, enabled tools still use the process's operating-system permissions.
+You decide interactively, save a decision with `/trust` (stored in `~/.pi/agent/trust.json`), or override for one process with `--approve` (`-a`) or `--no-approve` (`-na`). The `defaultProjectTrust` setting is `ask` (the default), `always`, or `never`. Print, JSON, and RPC modes cannot prompt, so under `ask` they skip protected resources unless a saved decision or `--approve` applies: a CI script that expects a `.pi/` extension to load silently will not load it. Trust is not containment: after startup, enabled tools still use the process's operating-system permissions.
 
 ### Isolation options
 
@@ -611,15 +611,15 @@ The useful comparison is not a feature checklist. Ask where the product puts wor
 
 ### Pi versus OpenCode and Aider
 
-OpenCode feels like a complete coding application; Pi starts smaller and asks you to assemble the workflow. Choose OpenCode for a richer day-one experience (its `websearch` tool is switched on by the `OPENCODE_ENABLE_EXA` or `OPENCODE_ENABLE_PARALLEL` environment variable, or by using the OpenCode provider). Choose Pi when the agent loop itself must be programmable, when you want a narrow, provider-neutral harness, or when you are building an embedded agent. Aider's centre is the repository, selected editable files, a repository map, and a reviewable Git edit loop. Pi can reproduce that loop but can also become a research tool, browser bridge, or application component; choose Aider for focused supervised edits.
+OpenCode feels like a complete coding application; Pi starts smaller and asks you to assemble the workflow. Choose OpenCode for a richer day-one experience. Choose Pi when the agent loop itself must be programmable, when you want a narrow, provider-neutral harness, or when you are building an embedded agent. Aider's centre is the repository, selected editable files, a repository map, and a reviewable Git edit loop. Pi can reproduce that loop but can also become a research tool, browser bridge, or application component; choose Aider for focused supervised edits.
 
 ### Pi versus Claude Code and Codex
 
-Claude Code and Codex supply the surrounding workflow themselves: permission prompts, sandboxing, web search, and established instruction systems. The mapping table in "Coming from Claude Code" shows where Pi leaves each of those to you: you select the model, assemble research access, review extensions, and define containment. That flexibility is not automatically cheaper or safer. Local models add hardware and quality costs; extensions can add exactly the capability you want while gaining full process access. The sibling primers cover the [alternatives to Claude Code](../primer_claude_code_alternative/primer-claude-code-alternatives.html) and [Codex for Claude Code users](../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) in more depth.
+Claude Code and Codex supply the surrounding workflow themselves: permission prompts, sandbox options, web search, and established instruction systems. The mapping table in "Coming from Claude Code" shows where Pi leaves each of those to you: you select the model, assemble research access, review extensions, and define containment. That flexibility is not automatically cheaper or safer. Local models add hardware and quality costs; extensions can add exactly the capability you want while gaining full process access. The sibling primers cover the [alternatives to Claude Code](../primer_claude_code_alternative/primer-claude-code-alternatives.html) and [Codex for Claude Code users](../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) in more depth.
 
 ### Forks and derivatives
 
-Because Pi is MIT-licensed and embeddable, others build on it. `oh-my-pi` (Stencil Labs, MIT) is, by its own README, a fork that adds subagents, IDE integration, MCP, and browser tooling. OpenClaw (see the [OpenClaw primer](../primer_openclaw/primer_openclaw.html)) was described in early 2026 as embedding Pi through its SDK; its current documentation says only `@earendil-works/pi-tui`, the terminal-UI toolkit, remains a dependency. A claim that a project "runs on Pi" needs a date.
+Because Pi is MIT-licensed and embeddable, others build on it. `oh-my-pi` (Stencil Labs, MIT) is, by its own README, a fork that adds subagents, IDE (LSP) integration, and browser tooling. OpenClaw (see the [OpenClaw primer](../primer_openclaw/primer_openclaw.html)) was described in January 2026 as having Pi "under the hood" ([Armin Ronacher](https://lucumr.pocoo.org/2026/1/31/pi/)); its current documentation says only `@earendil-works/pi-tui`, the terminal-UI toolkit, remains a dependency. A claim that a project "runs on Pi" needs a date.
 
 ## A practical workflow
 
