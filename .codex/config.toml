@@ -1,2 +1,9 @@
 # Use the repository's Claude Code instructions when AGENTS.md is absent.
 project_doc_fallback_filenames = ["CLAUDE.md"]
+
+# Show reasoning content in the CLI when the active model provides it.
+show_raw_agent_reasoning = true
+
+# Keep CLI output in normal terminal scrollback instead of the alternate screen.
+[tui]
+alternate_screen = "never"
