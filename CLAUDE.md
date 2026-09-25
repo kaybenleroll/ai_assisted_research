@@ -97,7 +97,7 @@ Work is issue-first.
 - **Issue titles** carry a document prefix in brackets: `[pi]`, `[openclaw]`, `[infra]`, etc. Use the primer's short name (directory minus `primer_`).
 - **Labels** are defined in `.github/labels.json` (the issue-label hook reads it): 1 Priority (`P0`–`P3`) + 1 Type + 1+ Area + 1 Effort. Areas: `agents`, `devtools`, `quant`, `society`, `gaming`, `workbook`, `build`.
 - **The area list will grow.** When a new document class or category appears, add its `area:` entry to `.github/labels.json` in the same PR that introduces it, then sync the repo label (`gh label create ... --force` from the JSON). Keep the README's section headings and the area list aligned.
-- **Tracking issues:** each primer that needs ongoing upkeep gets one `type: research` tracking issue (e.g. verification and refresh cadence); sub-work is filed as separate issues linked to it.
+- **Issues are specific, defined tasks that close on completion.** No open-ended tracking issues (upkeep, cadence, "keep X accurate"): file an issue only when a concrete task exists.
 - **Cross-primer sweeps** (e.g. a fix applied to every primer) get one issue with a per-primer checklist.
 - **Merge method:** default is squash (`gh pr merge --squash`): PR title as the commit subject, `Closes #N` in the body, one commit per issue on `main`. Other methods stay enabled on the repo; use a merge commit instead where preserving individual commits or a stacked-PR chain matters, and say so in the PR.
 - **PR-only exceptions:** typos and single-line fixes may skip the issue.
