@@ -1,6 +1,6 @@
 SOURCE_MD   := "primer_numerical_analysis.md"
 PROJECT_DIR := "primer_numerical_analysis"
-TITLE       := "Numerical Analysis Primer: A Practical Guide for Practitioners"
+TITLE       := "Numerical Analysis Primer: Practical, Detailed, and Friendly"
 AUTHOR      := "June 2026"
 HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--lua-filter=filters/mermaid-to-image.lua --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
@@ -26,7 +26,7 @@ html-mathml:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o primer_numerical_analysis.mathml.html \
-    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml \
+    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml --lua-filter=filters/mermaid-to-image.lua \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}"
@@ -37,7 +37,7 @@ html-mathjax:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o primer_numerical_analysis.mathjax.html \
-    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax \
+    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax --lua-filter=filters/mermaid-to-image.lua \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}"
