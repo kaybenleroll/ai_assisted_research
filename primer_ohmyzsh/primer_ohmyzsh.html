@@ -698,8 +698,8 @@ Auditing a Real OMZ Setup</a>
 This Setup Has</a></li>
 <li><a href="#whats-missing" id="toc-whats-missing">What’s
 Missing</a></li>
-<li><a href="#features-commonly-underused" id="toc-features-commonly-underused">Features Commonly
-Underused</a></li>
+<li><a href="#verify-existing-plugins-are-actually-used" id="toc-verify-existing-plugins-are-actually-used">Verify Existing
+Plugins Are Actually Used</a></li>
 <li><a href="#small-additions-worth-considering" id="toc-small-additions-worth-considering">Small Additions Worth
 Considering</a></li>
 <li><a href="#self-audit-checklist" id="toc-self-audit-checklist">Self-Audit Checklist</a></li>
@@ -823,19 +823,19 @@ four flags; in ZSH it’s a glob modifier.</p>
 <h3 id="parameter-expansion">Parameter Expansion</h3>
 <p>ZSH extends Bash’s already capable parameter expansion with
 additional flags:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">path</span><span class="op">=</span><span class="st">&quot;/home/mcooney/workspace/ai_assisted_research/primer_ohmyzsh/primer_ohmyzsh.md&quot;</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">path</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects/example-project/notes.md&quot;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Bash-compatible: get filename without path</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">##</span><span class="pp">*</span><span class="st">/</span><span class="va">}</span>          <span class="co"># primer_ohmyzsh.md</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">##</span><span class="pp">*</span><span class="st">/</span><span class="va">}</span>          <span class="co"># notes.md</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ZSH-only: split on delimiter and get last element</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">t}</span>            <span class="co"># primer_ohmyzsh.md</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">t}</span>            <span class="co"># notes.md</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Strip extension</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">t</span><span class="op">:</span><span class="va">r}</span>          <span class="co"># primer_ohmyzsh</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">t</span><span class="op">:</span><span class="va">r}</span>          <span class="co"># notes</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Directory part</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">h}</span>            <span class="co"># /home/mcooney/workspace/ai_assisted_research/primer_ohmyzsh</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">${path</span><span class="op">:</span><span class="va">h}</span>            <span class="co"># your projects/example-project directory</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Uppercase</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="va">str</span><span class="op">=</span><span class="st">&quot;hello world&quot;</span></span>
@@ -873,12 +873,12 @@ not because you need to add it yourself.</p>
 <h3 id="named-directories">Named Directories</h3>
 <p>ZSH lets you name directories and use them like variables in
 paths:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> work=/home/mcooney/workspace</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> proj=/home/mcooney/workspace/ai_assisted_research</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> work=<span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> proj=<span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects/example-project&quot;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Now you can use ~work and ~proj anywhere</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="pp">~</span>proj</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">~</span>work/some_other_thing</span></code></pre></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">~</span>work/another-project</span></code></pre></div>
 <p>Put these in your <code>.zshrc</code> and they persist. It’s the
 equivalent of shell aliases for paths, except they work in any context
 where a path is accepted.</p>
@@ -1050,18 +1050,32 @@ levels deep.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview files while browsing</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fzf</span> <span class="at">--preview</span> <span class="st">&#39;cat {}&#39;</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kill a process by fuzzy-searching running processes</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="va">$(</span><span class="fu">ps</span> aux <span class="kw">|</span> <span class="ex">fzf</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{print $2}&#39;</span><span class="va">)</span>   <span class="co"># plain TERM first; add -9 only if it won&#39;t die</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Open a recent git branch</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="va">$(</span><span class="fu">git</span> branch <span class="kw">|</span> <span class="ex">fzf</span><span class="va">)</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Select from command history and re-run</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="va">$(</span><span class="bu">history</span> <span class="kw">|</span> <span class="ex">fzf</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{$1=&quot;&quot;; print}&#39;</span><span class="va">)</span></span></code></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select one of *your* processes, then send the normal TERM signal.</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cancel or an empty selection does nothing. Review the command before running it.</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="va">selected_pid</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ps</span> <span class="at">-u</span> <span class="st">&quot;</span><span class="va">$USER</span><span class="st">&quot;</span> <span class="at">-o</span> pid=,command= <span class="kw">|</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fzf</span> <span class="at">--prompt</span><span class="op">=</span><span class="st">&#39;process&gt; &#39;</span> <span class="kw">|</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">awk</span> <span class="st">&#39;{print $1}&#39;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$selected_pid</span><span class="st">&quot;</span> <span class="kw">]]</span> <span class="kw">&amp;&amp;</span> <span class="bu">kill</span> <span class="at">--</span> <span class="st">&quot;</span><span class="va">$selected_pid</span><span class="st">&quot;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Open a selected local branch; canceling leaves the current branch unchanged.</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="va">selected_branch</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> branch <span class="at">--format</span><span class="op">=</span><span class="st">&#39;%(refname:short)&#39;</span> <span class="kw">|</span> <span class="ex">fzf</span> <span class="at">--prompt</span><span class="op">=</span><span class="st">&#39;branch&gt; &#39;</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$selected_branch</span><span class="st">&quot;</span> <span class="kw">]]</span> <span class="kw">&amp;&amp;</span> <span class="fu">git</span> switch <span class="at">--</span> <span class="st">&quot;</span><span class="va">$selected_branch</span><span class="st">&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Put a selected history entry on the command line for review; it does not run yet.</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="va">selected_command</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="bu">history</span> <span class="kw">|</span> <span class="ex">fzf</span> <span class="at">--prompt</span><span class="op">=</span><span class="st">&#39;history&gt; &#39;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;{$1=&quot;&quot;; sub(/^ /, &quot;&quot;); print}&#39;</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$selected_command</span><span class="st">&quot;</span> <span class="kw">]]</span> <span class="kw">&amp;&amp;</span> <span class="bu">print</span> <span class="at">-z</span> <span class="at">--</span> <span class="st">&quot;</span><span class="va">$selected_command</span><span class="st">&quot;</span></span></code></pre></div>
 <p>The underlying tool accepts any input on stdin and returns the
 selected line on stdout, so it composes with everything. The OMZ plugin
 just provides the shell integration; learning <code>fzf</code>’s flags
-unlocks the full power.</p>
+unlocks the full power. Treat a process picker as a destructive
+operation: inspect the selected command, start with the normal
+<code>TERM</code> signal, and reserve <code>kill -9</code> for a process
+that has not responded. Do not use <code>eval</code> to re-run
+fuzzy-selected history: loading the command with <code>print -z</code>
+gives you a final chance to inspect or edit it before pressing
+Enter.</p>
 <h3 id="zsh-autosuggestions">zsh-autosuggestions</h3>
 <p>This plugin shows a greyed-out suggestion as you type, based on your
 history. The plugin’s model splits into two groups of key bindings:
@@ -1228,7 +1242,10 @@ polyglot version manager, formerly <code>rtx</code>) and enables its
 completions. It runs <code>mise activate zsh</code> during shell startup
 so that tool versions are correctly set in every shell session. Without
 this, you’d need to call <code>eval &quot;$(mise activate zsh)&quot;</code>
-manually in your <code>.zshrc</code>.</p>
+manually in your <code>.zshrc</code>. That <code>eval</code> is
+appropriate only for initialization code emitted by a locally installed,
+trusted executable; never adapt the pattern to execute output fetched
+from the network.</p>
 <h3 id="gh">gh</h3>
 <p>Completions for the GitHub CLI (<code>gh</code>). The plugin runs
 <code>gh completion --shell zsh</code> and caches the result, so you get
@@ -1310,7 +1327,7 @@ the same user on the same machine), show timestamps on every line (the
 to render.</p>
 <h3 id="robbyrussell">robbyrussell</h3>
 <p>The default theme. Clean, minimal:</p>
-<pre class="text"><code>➜  ai_assisted_research git:(main) ✗</code></pre>
+<pre class="text"><code>➜  example-project git:(main) ✗</code></pre>
 <p>Shows directory and git branch. The <code>✗</code> indicates there
 are uncommitted changes. It’s good for its simplicity, but it doesn’t
 show whether changes are staged vs unstaged, doesn’t show remote
@@ -1318,7 +1335,7 @@ divergence, and gives no indication of exit status.</p>
 <h3 id="agnoster">agnoster</h3>
 <p>A powerline-style theme that uses special Unicode characters to
 create a segmented prompt:</p>
-<pre class="text"><code>mcooney@hostname  ~/workspace  main ✘</code></pre>
+<pre class="text"><code>you@hostname  ~/projects/example-project  main ✘</code></pre>
 <p>(The segments have colored backgrounds in the actual terminal.) Shows
 user, host, path, git branch, and git state. More information than
 robbyrussell. Requires a Nerd Font or Powerline-patched font; without
@@ -1420,10 +1437,12 @@ and survive OMZ updates:</p>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ll=<span class="st">&#39;ls -lAh --color=auto&#39;</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ports=<span class="st">&#39;ss -tlnp&#39;</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> myip=<span class="st">&#39;curl -s ifconfig.me&#39;</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> reload=<span class="st">&#39;source ~/.zshrc&#39;</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ...=<span class="st">&#39;cd ../..&#39;</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ....=<span class="st">&#39;cd ../../..&#39;</span></span></code></pre></div>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># This contacts a third party, which sees your public IP address and request metadata.</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Do not use it from a network where that disclosure is sensitive.</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> myip=<span class="st">&#39;curl --fail --silent --show-error https://api.ipify.org&#39;</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> reload=<span class="st">&#39;source ~/.zshrc&#39;</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ...=<span class="st">&#39;cd ../..&#39;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ....=<span class="st">&#39;cd ../../..&#39;</span></span></code></pre></div>
 <p>Functions go in the same place or their own file:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~/.oh-my-zsh/custom/functions.zsh</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1454,36 +1473,38 @@ enable it:</p>
 <p>With this set, typing a directory name alone (without
 <code>cd</code>) changes into it:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Without AUTO_CD:</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/workspace/ai_assisted_research</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/example-project</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># With AUTO_CD:</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="ex">~/workspace/ai_assisted_research</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="ex">~/projects/example-project</span></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># or if it&#39;s in CDPATH:</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ai_assisted_research</span></span></code></pre></div>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ex">example-project</span></span></code></pre></div>
 <p>Combine with <code>CDPATH</code> to jump to frequently used
 directories:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="va">CDPATH</span><span class="op">=</span>.:<span class="pp">~</span>:<span class="pp">~</span>/workspace</span></code></pre></div>
-<p>With this set, typing <code>ai_assisted_research</code> from anywhere
-searches <code>.</code>, <code>~</code>, and <code>~/workspace</code>
-for that directory name and changes into it if found.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="va">CDPATH</span><span class="op">=</span>.:<span class="pp">~</span>:<span class="pp">~</span>/projects</span></code></pre></div>
+<p>With this set, typing <code>example-project</code> from anywhere
+searches <code>.</code>, <code>~</code>, and <code>~/projects</code> for
+that directory name and changes into it if found.</p>
 <h3 id="z-smarter-directory-jumping"><code>z</code> — Smarter Directory
 Jumping</h3>
 <p>The <code>z</code> plugin (bundled with OMZ) tracks which directories
 you visit and lets you jump to them by partial name, ranked by how often
 and how recently you’ve been there:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After you&#39;ve visited ~/workspace/ai_assisted_research a few times:</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> ai_assisted   <span class="co"># cd&#39;s to ~/workspace/ai_assisted_research</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> research      <span class="co"># same</span></span>
+<div class="sourceCode" id="cb34"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After you&#39;ve visited ~/projects/example-project a few times:</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> example       <span class="co"># cd&#39;s to ~/projects/example-project</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> project       <span class="co"># same</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># It picks the highest-ranked match for the pattern</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> num           <span class="co"># might jump to ~/workspace/ai_assisted_research/primer_numerical_analysis</span></span></code></pre></div>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> notes         <span class="co"># might jump to ~/projects/example-project/notes</span></span></code></pre></div>
 <p>The ranking function (“frecency”) is frequency × recency —
 directories you go to often and recently rank highest. For codebases you
 navigate daily, <code>z</code> eliminates most explicit <code>cd</code>
 commands.</p>
 <p><code>zoxide</code> is a faster modern alternative with the same
 concept. It integrates with OMZ via a plugin and can be configured to
-replace <code>cd</code> entirely:</p>
+replace <code>cd</code> entirely. As with other shell initialization
+snippets, only <code>eval</code> output from a locally installed
+executable you trust:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install zoxide, then add to .zshrc:</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">zoxide</span> init zsh <span class="at">--cmd</span> cd<span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Now &#39;cd&#39; uses zoxide&#39;s frecency ranking</span></span></code></pre></div>
@@ -1645,12 +1666,12 @@ troubleshooting.</li>
 <hr />
 <h2 id="worked-example-auditing-a-real-omz-setup">Worked Example:
 Auditing a Real OMZ Setup</h2>
-<p>This is an audit of one real configuration (the author’s). Read it as
+<p>This is an audit of a representative real configuration. Read it as
 an example process you can replicate, not as a claim that every OMZ
 setup should look the same.</p>
 <h3 id="what-this-setup-has">What This Setup Has</h3>
 <p>Active plugins in this example:</p>
-<pre><code>git  ssh-agent  colored-man-pages  command-not-found  extract  history
+<pre class="text"><code>git  ssh-agent  colored-man-pages  command-not-found  extract  history
 docker  timer  sudo  gh  podman  systemd  chezmoi  rsync  fzf
 mise  zsh-autosuggestions  zsh-claude-code-shell</code></pre>
 <p>This is a well-considered list. The <code>timer</code>,
@@ -1695,29 +1716,24 @@ worth re-evaluating periodically. A newline layout is easier to scan in
 deep paths, and p10k gives much richer git state visibility (staged,
 unstaged, untracked, ahead/behind) with a quick
 <code>p10k configure</code> run.</p>
-<h3 id="features-commonly-underused">Features Commonly Underused</h3>
-<p><strong><code>fzf</code> beyond Ctrl+R.</strong></p>
-<p>Many setups have <code>fzf</code> installed but only use Ctrl+R. Try:
-- <code>Ctrl+T</code> while typing a command to fuzzy-find a file
-argument - <code>Alt+C</code> to fuzzy-jump into a subdirectory</p>
-<p>Both of these are wired up by the <code>fzf</code> OMZ plugin and
-work out of the box.</p>
-<p><strong>The <code>sudo</code> plugin’s Esc Esc.</strong></p>
-<p>If this reflex is not already muscle memory, it removes one of the
-most common annoyances: running a command, getting “permission denied,”
-and retyping it with <code>sudo</code>. Press <code>Esc Esc</code> after
-the failed command and it prepends <code>sudo</code>.</p>
-<p><strong><code>extract</code> / the <code>x</code>
-command.</strong></p>
-<p>If you still type <code>tar -xzf</code> or look up whether bz2 wants
-<code>-xjf</code>, the <code>extract</code> plugin’s <code>x</code>
-command handles archive formats uniformly. Use
-<code>x archive.tar.gz</code> and stop memorizing flags.</p>
-<p><strong>History grep.</strong></p>
-<p>The <code>history</code> plugin gives <code>hs</code> and
-<code>hsi</code> for grepping history. If you type
-<code>history | grep docker</code> to find last week’s run command,
-<code>hs docker</code> does the same thing in fewer keystrokes.</p>
+<h3 id="verify-existing-plugins-are-actually-used">Verify Existing
+Plugins Are Actually Used</h3>
+<p>Before adding another plugin, exercise the high-value ones already
+installed in this setup:</p>
+<ul>
+<li><code>fzf</code>: use <code>Ctrl+T</code> for file arguments and
+<code>Alt+C</code> for directory jumping, not only
+<code>Ctrl+R</code>.</li>
+<li><code>sudo</code>: press <code>Esc Esc</code> after a failed command
+to put <code>sudo</code> in front of it.</li>
+<li><code>extract</code>: use <code>x archive.tar.gz</code> instead of
+memorizing archive-specific flags.</li>
+<li><code>history</code>: use <code>hs docker</code> instead of typing
+<code>history | grep docker</code>.</li>
+</ul>
+<p>The earlier plugin sections explain these capabilities in detail;
+this audit is checking that they have become habits, not recommending
+more plugins.</p>
 <h3 id="small-additions-worth-considering">Small Additions Worth
 Considering</h3>
 <p>A few things that are low-effort and pay off quickly:</p>
@@ -1745,26 +1761,27 @@ the History section earlier are already set by OMZ’s
 <h3 id="self-audit-checklist">Self-Audit Checklist</h3>
 <p>Use this checklist against your own shell every few months:</p>
 <ol type="1">
-<li>Does every enabled plugin remove regular friction, or is it leftover
-experimentation?</li>
-<li>Is startup still fast (<code>time zsh -i -c exit</code>) after the
-latest plugin/theme additions?</li>
-<li>Are high-impact basics present (<code>fzf</code>,
+<li><p>Does every enabled plugin remove regular friction, or is it
+leftover experimentation?</p></li>
+<li><p>Is startup still fast (<code>time zsh -i -c exit</code>) after
+the latest plugin/theme additions?</p></li>
+<li><p>Are high-impact basics present (<code>fzf</code>,
 <code>zsh-autosuggestions</code>, <code>zsh-syntax-highlighting</code>,
-<code>z</code>)?</li>
-<li>Is your prompt giving useful state (branch, dirty state, exit code)
-without visual noise?</li>
-<li>Are aliases/functions in <code>custom/</code> so updates do not
-overwrite your work?</li>
-<li>Is PATH order intentional, with no duplicate manager shims?</li>
-<li>Do key bindings match your editing mode (<code>emacs</code> or
-<code>vi</code>) without surprises?</li>
-<li>Are all critical custom files actually sourced (not just present on
-disk)?</li>
-<li>Do duplicated settings (like SSH key lifetimes) match across
-aliases, plugins, and helper scripts?</li>
-<li>Are tool completions generated once instead of re-generated on every
-shell startup?</li>
+<code>z</code>)?</p></li>
+<li><p>Is your prompt giving useful state (branch, dirty state, exit
+code) without visual noise?</p></li>
+<li><p>Are aliases/functions in <code>custom/</code> so updates do not
+overwrite your work?</p></li>
+<li><p>Is PATH order intentional, with no duplicate manager
+shims?</p></li>
+<li><p>Do key bindings match your editing mode (<code>emacs</code> or
+<code>vi</code>) without surprises?</p></li>
+<li><p>Are all critical custom files actually sourced (not just present
+on disk)?</p></li>
+<li><p>Do duplicated settings (like SSH key lifetimes) match across
+aliases, plugins, and helper scripts?</p></li>
+<li><p>Are tool completions generated once instead of re-generated on
+every shell startup?</p></li>
 </ol>
 <p>If two or more answers are “no,” you likely have a configuration debt
 cleanup worth doing.</p>

@@ -69,19 +69,19 @@ The glob qualifiers (the characters inside `(...)`) filter on file metadata: typ
 ZSH extends Bash's already capable parameter expansion with additional flags:
 
 ```zsh
-path="/home/mcooney/workspace/ai_assisted_research/primer_ohmyzsh/primer_ohmyzsh.md"
+path="$HOME/projects/example-project/notes.md"
 
 # Bash-compatible: get filename without path
-echo ${path##*/}          # primer_ohmyzsh.md
+echo ${path##*/}          # notes.md
 
 # ZSH-only: split on delimiter and get last element
-echo ${path:t}            # primer_ohmyzsh.md
+echo ${path:t}            # notes.md
 
 # Strip extension
-echo ${path:t:r}          # primer_ohmyzsh
+echo ${path:t:r}          # notes
 
 # Directory part
-echo ${path:h}            # /home/mcooney/workspace/ai_assisted_research/primer_ohmyzsh
+echo ${path:h}            # your projects/example-project directory
 
 # Uppercase
 str="hello world"
@@ -116,12 +116,12 @@ Worth knowing before you go copy these into your `.zshrc`: OMZ's `lib/history.zs
 ZSH lets you name directories and use them like variables in paths:
 
 ```zsh
-hash -d work=/home/mcooney/workspace
-hash -d proj=/home/mcooney/workspace/ai_assisted_research
+hash -d work="$HOME/projects"
+hash -d proj="$HOME/projects/example-project"
 
 # Now you can use ~work and ~proj anywhere
 cd ~proj
-ls ~work/some_other_thing
+ls ~work/another-project
 ```
 
 Put these in your `.zshrc` and they persist. It's the equivalent of shell aliases for paths, except they work in any context where a path is accepted.
@@ -289,17 +289,25 @@ Most people know Ctrl+R for history. The other two are underused. `Ctrl+T` is fa
 # Preview files while browsing
 fzf --preview 'cat {}'
 
-# Kill a process by fuzzy-searching running processes
-kill $(ps aux | fzf | awk '{print $2}')   # plain TERM first; add -9 only if it won't die
+# Select one of *your* processes, then send the normal TERM signal.
+# Cancel or an empty selection does nothing. Review the command before running it.
+selected_pid="$(
+  ps -u "$USER" -o pid=,command= |
+    fzf --prompt='process> ' |
+    awk '{print $1}'
+)"
+[[ -n "$selected_pid" ]] && kill -- "$selected_pid"
 
-# Open a recent git branch
-git checkout $(git branch | fzf)
+# Open a selected local branch; canceling leaves the current branch unchanged.
+selected_branch="$(git branch --format='%(refname:short)' | fzf --prompt='branch> ')"
+[[ -n "$selected_branch" ]] && git switch -- "$selected_branch"
 
-# Select from command history and re-run
-eval $(history | fzf | awk '{$1=""; print}')
+# Put a selected history entry on the command line for review; it does not run yet.
+selected_command="$(history | fzf --prompt='history> ' | awk '{$1=""; sub(/^ /, ""); print}')"
+[[ -n "$selected_command" ]] && print -z -- "$selected_command"
 ```
 
-The underlying tool accepts any input on stdin and returns the selected line on stdout, so it composes with everything. The OMZ plugin just provides the shell integration; learning `fzf`'s flags unlocks the full power.
+The underlying tool accepts any input on stdin and returns the selected line on stdout, so it composes with everything. The OMZ plugin just provides the shell integration; learning `fzf`'s flags unlocks the full power. Treat a process picker as a destructive operation: inspect the selected command, start with the normal `TERM` signal, and reserve `kill -9` for a process that has not responded. Do not use `eval` to re-run fuzzy-selected history: loading the command with `print -z` gives you a final chance to inspect or edit it before pressing Enter.
 
 ### zsh-autosuggestions
 
@@ -474,7 +482,7 @@ If you interact with systemd services regularly, these cut down the typing consi
 
 ### mise
 
-The `mise` plugin initializes `mise` (the polyglot version manager, formerly `rtx`) and enables its completions. It runs `mise activate zsh` during shell startup so that tool versions are correctly set in every shell session. Without this, you'd need to call `eval "$(mise activate zsh)"` manually in your `.zshrc`.
+The `mise` plugin initializes `mise` (the polyglot version manager, formerly `rtx`) and enables its completions. It runs `mise activate zsh` during shell startup so that tool versions are correctly set in every shell session. Without this, you'd need to call `eval "$(mise activate zsh)"` manually in your `.zshrc`. That `eval` is appropriate only for initialization code emitted by a locally installed, trusted executable; never adapt the pattern to execute output fetched from the network.
 
 ### gh
 
@@ -528,7 +536,7 @@ What a prompt should not do: show things that never change (always the same user
 The default theme. Clean, minimal:
 
 ```text
-➜  ai_assisted_research git:(main) ✗
+➜  example-project git:(main) ✗
 ```
 
 Shows directory and git branch. The `✗` indicates there are uncommitted changes. It's good for its simplicity, but it doesn't show whether changes are staged vs unstaged, doesn't show remote divergence, and gives no indication of exit status.
@@ -538,7 +546,7 @@ Shows directory and git branch. The `✗` indicates there are uncommitted change
 A powerline-style theme that uses special Unicode characters to create a segmented prompt:
 
 ```text
-mcooney@hostname  ~/workspace  main ✘
+you@hostname  ~/projects/example-project  main ✘
 ```
 
 (The segments have colored backgrounds in the actual terminal.) Shows user, host, path, git branch, and git state. More information than robbyrussell. Requires a Nerd Font or Powerline-patched font; without one, the segment characters render as boxes.
@@ -592,7 +600,9 @@ Any `.zsh` file in `~/.oh-my-zsh/custom/` is sourced automatically. This means y
 
 alias ll='ls -lAh --color=auto'
 alias ports='ss -tlnp'
-alias myip='curl -s ifconfig.me'
+# This contacts a third party, which sees your public IP address and request metadata.
+# Do not use it from a network where that disclosure is sensitive.
+alias myip='curl --fail --silent --show-error https://api.ipify.org'
 alias reload='source ~/.zshrc'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -641,38 +651,38 @@ With this set, typing a directory name alone (without `cd`) changes into it:
 
 ```zsh
 # Without AUTO_CD:
-cd ~/workspace/ai_assisted_research
+cd ~/projects/example-project
 
 # With AUTO_CD:
-~/workspace/ai_assisted_research
+~/projects/example-project
 # or if it's in CDPATH:
-ai_assisted_research
+example-project
 ```
 
 Combine with `CDPATH` to jump to frequently used directories:
 
 ```zsh
-CDPATH=.:~:~/workspace
+CDPATH=.:~:~/projects
 ```
 
-With this set, typing `ai_assisted_research` from anywhere searches `.`, `~`, and `~/workspace` for that directory name and changes into it if found.
+With this set, typing `example-project` from anywhere searches `.`, `~`, and `~/projects` for that directory name and changes into it if found.
 
 ### `z` — Smarter Directory Jumping
 
 The `z` plugin (bundled with OMZ) tracks which directories you visit and lets you jump to them by partial name, ranked by how often and how recently you've been there:
 
 ```zsh
-# After you've visited ~/workspace/ai_assisted_research a few times:
-z ai_assisted   # cd's to ~/workspace/ai_assisted_research
-z research      # same
+# After you've visited ~/projects/example-project a few times:
+z example       # cd's to ~/projects/example-project
+z project       # same
 
 # It picks the highest-ranked match for the pattern
-z num           # might jump to ~/workspace/ai_assisted_research/primer_numerical_analysis
+z notes         # might jump to ~/projects/example-project/notes
 ```
 
 The ranking function ("frecency") is frequency × recency — directories you go to often and recently rank highest. For codebases you navigate daily, `z` eliminates most explicit `cd` commands.
 
-`zoxide` is a faster modern alternative with the same concept. It integrates with OMZ via a plugin and can be configured to replace `cd` entirely:
+`zoxide` is a faster modern alternative with the same concept. It integrates with OMZ via a plugin and can be configured to replace `cd` entirely. As with other shell initialization snippets, only `eval` output from a locally installed executable you trust:
 
 ```zsh
 # Install zoxide, then add to .zshrc:
@@ -791,13 +801,13 @@ These are small checks that often catch real issues quickly:
 
 ## Worked Example: Auditing a Real OMZ Setup
 
-This is an audit of one real configuration (the author's). Read it as an example process you can replicate, not as a claim that every OMZ setup should look the same.
+This is an audit of a representative real configuration. Read it as an example process you can replicate, not as a claim that every OMZ setup should look the same.
 
 ### What This Setup Has
 
 Active plugins in this example:
 
-```
+```text
 git  ssh-agent  colored-man-pages  command-not-found  extract  history
 docker  timer  sudo  gh  podman  systemd  chezmoi  rsync  fzf
 mise  zsh-autosuggestions  zsh-claude-code-shell
@@ -839,27 +849,16 @@ plugins=(... z ...)
 
 This example has `agnoster-timestamp-newline` available but uses `robbyrussell`. That may be intentional, but it is worth re-evaluating periodically. A newline layout is easier to scan in deep paths, and p10k gives much richer git state visibility (staged, unstaged, untracked, ahead/behind) with a quick `p10k configure` run.
 
-### Features Commonly Underused
+### Verify Existing Plugins Are Actually Used
 
-**`fzf` beyond Ctrl+R.**
+Before adding another plugin, exercise the high-value ones already installed in this setup:
 
-Many setups have `fzf` installed but only use Ctrl+R. Try:
-- `Ctrl+T` while typing a command to fuzzy-find a file argument
-- `Alt+C` to fuzzy-jump into a subdirectory
+- `fzf`: use `Ctrl+T` for file arguments and `Alt+C` for directory jumping, not only `Ctrl+R`.
+- `sudo`: press `Esc Esc` after a failed command to put `sudo` in front of it.
+- `extract`: use `x archive.tar.gz` instead of memorizing archive-specific flags.
+- `history`: use `hs docker` instead of typing `history | grep docker`.
 
-Both of these are wired up by the `fzf` OMZ plugin and work out of the box.
-
-**The `sudo` plugin's Esc Esc.**
-
-If this reflex is not already muscle memory, it removes one of the most common annoyances: running a command, getting "permission denied," and retyping it with `sudo`. Press `Esc Esc` after the failed command and it prepends `sudo`.
-
-**`extract` / the `x` command.**
-
-If you still type `tar -xzf` or look up whether bz2 wants `-xjf`, the `extract` plugin's `x` command handles archive formats uniformly. Use `x archive.tar.gz` and stop memorizing flags.
-
-**History grep.**
-
-The `history` plugin gives `hs` and `hsi` for grepping history. If you type `history | grep docker` to find last week's run command, `hs docker` does the same thing in fewer keystrokes.
+The earlier plugin sections explain these capabilities in detail; this audit is checking that they have become habits, not recommending more plugins.
 
 ### Small Additions Worth Considering
 
@@ -895,14 +894,23 @@ setopt CORRECT          # suggest corrections for mistyped commands
 Use this checklist against your own shell every few months:
 
 1. Does every enabled plugin remove regular friction, or is it leftover experimentation?
+
 2. Is startup still fast (`time zsh -i -c exit`) after the latest plugin/theme additions?
+
 3. Are high-impact basics present (`fzf`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `z`)?
+
 4. Is your prompt giving useful state (branch, dirty state, exit code) without visual noise?
+
 5. Are aliases/functions in `custom/` so updates do not overwrite your work?
+
 6. Is PATH order intentional, with no duplicate manager shims?
+
 7. Do key bindings match your editing mode (`emacs` or `vi`) without surprises?
+
 8. Are all critical custom files actually sourced (not just present on disk)?
+
 9. Do duplicated settings (like SSH key lifetimes) match across aliases, plugins, and helper scripts?
+
 10. Are tool completions generated once instead of re-generated on every shell startup?
 
 If two or more answers are "no," you likely have a configuration debt cleanup worth doing.
