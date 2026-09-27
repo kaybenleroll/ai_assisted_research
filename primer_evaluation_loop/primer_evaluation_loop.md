@@ -31,22 +31,26 @@ The organising principle underneath all of it is one more Karpathy line, and it 
 
 Which is exactly why the evaluate step is load-bearing, and why it gets a whole primer to itself. Think of the data engine as a control loop, the kind that runs a thermostat: it senses a value, compares it to a target, and acts to close the gap. A thermostat without a thermometer is just a heater with no off switch. The evaluate step is the thermometer. It is the only place in the loop where open-ended performance gets converted into a number, and without that number, nothing downstream can move. Training has no gradient to follow. Deployment has no bar to clear. Telemetry has nothing to compare against. The loop does not slow down — it stops. Every other box in the diagram is plumbing; evaluate is the sensor, and a control loop is only ever as good as its sensor.
 
-So the deep problem of this primer is not only "how do we train models." It is the prior question: when the thing you care about is subjective — clarity, helpfulness, taste, judgment — how do you manufacture an evaluation signal trustworthy enough to optimise against? Sometimes that signal is a scalar score for weight updates; sometimes it is a behavioural rubric for instruction and skill wording. That is the question the rest of these pages take apart.
+So the deep problem of this primer is not only "how do we train models." It is the prior question: when the thing you care about is subjective — clarity, helpfulness, taste, judgment — how do you manufacture an evaluation signal trustworthy enough to optimise against? The main narrative answers it for model evaluation and post-training. A separate, optional companion applies the same measurement discipline to low-volume instruction and workflow wording, where a scalar training signal is the wrong tool.
 
 ### What This Primer Covers
 
 - The data engine loop and why evaluation is its load-bearing step.
-- A practical fork in the loop: improving model weights at scale versus improving instruction and skill wording at low volume.
+- The main reading path: subjective measurement, verifiable rewards, and the post-training systems that optimise against those signals.
 - Why open-ended quality resists measurement, and why reference-overlap metrics like BLEU and ROUGE fail on it.
 - The generator-discriminator gap: why judging is easier than producing, and why that asymmetry rescues evaluation.
 - The four moves that turn subjective quality into a usable score: Decompose, Compare, Aggregate, Automate.
-- The lightweight instruction loop: rubric-driven transcript inspection for iterative skill wording improvements.
+- An optional companion on the lightweight instruction loop: rubric-driven transcript inspection for iterative workflow wording improvements.
 - Behaviourally-anchored rubrics as a replacement for vague quality scales.
 - Pairwise comparison and large-scale human preference collection (Chatbot Arena).
 - Aggregating comparisons into latent ratings via Elo and the Bradley-Terry model, with the mathematics worked through.
 - G-Eval and reading a judge's log-probabilities to recover a continuous score.
 - The bridge from a fitted Bradley-Terry model to the RLHF reward model — the same operation at a different scale.
 - Reinforcement Learning with Verifiable Rewards (RLVR), the SWE-bench trajectory, and the hard boundary where verifiable rewards stop helping.
+
+### Reading Routes
+
+The main path runs from the subjectivity problem and the four moves through **Escaping Subjectivity: Verifiable Rewards** and **Closing the Loop: From Number Back to Model**, then continues through the limits and deployment sections. When the navigation reaches **Optional Companion: Evaluating Low-Volume Instruction and Workflow Wording**, skip directly to **Escaping Subjectivity: Verifiable Rewards** unless you are maintaining prompts or reusable agent workflows from a small number of transcripts. Nothing in the main narrative depends on the companion.
 
 ### What This Primer Is Not
 
@@ -208,11 +212,11 @@ Two cheap mitigations take the worst of that bias off the table before you trust
 
 These four moves are not specific to chatbots. Take an insurance company evaluating how well an LLM summarises complex policy documents for claimants. The moves apply identically: **Decompose** "good summary" into accuracy, coverage, plain-language score, and a missing-information penalty; **Compare** two candidate summaries pairwise; **Aggregate** the comparisons into a latent quality rating; **Automate** with an LLM judge that reads the policy and the summary together. Different domain, same machine — and the same toll, four times over: every number it produces is a correlated shadow of quality, never quality itself.
 
-## The Lightweight Loop: When You Are Editing Instructions, Not Weights
+## Optional Companion: Evaluating Low-Volume Instruction and Workflow Wording
 
-The four moves described above — and the rest of this primer from here onward — assume you have something you can retrain. The loop spins because you can collect failures, label them, and push a gradient through parameters. But there is a second, growing class of practitioners who are iterating on AI systems and have no weights to adjust at all: they are editing instruction text. A system prompt. A workflow definition. A skill file that tells an agent to diagnose a bug by working through five specific phases in order before touching any code. The model itself is fixed; the thing being changed is what it is told to do.
+This specialised companion is for practitioners who are editing instruction text rather than retraining model weights: a system prompt, a workflow definition, or a reusable agent instruction. Here, *skill* means only that last kind of reusable workflow instruction; it does not refer to a named feature of any particular agent framework. The model itself is fixed; the thing being changed is what it is told to do. This material is useful at low volume, but it is not a prerequisite for the main route, which resumes at **Escaping Subjectivity: Verifiable Rewards**.
 
-This looks like the same problem. It has the same feel — change something, observe whether the system behaves better, change it again. But the feedback mechanism is structurally different, and applying the full four-move apparatus to it produces the wrong tool for the job. It is worth making this distinction explicit before the primer moves into reward models and RLHF, because the instruction-editing case is where most practitioners first encounter the question "how do I measure this?" — and where the machinery in the next sections is most likely to mislead by appearing applicable when it is not.
+This looks like the same problem. It has the same feel — change something, observe whether the system behaves better, change it again. But the feedback mechanism is structurally different, and applying the full four-move apparatus to it produces the wrong tool for the job. The instruction-editing case is where most practitioners first encounter the question "how do I measure this?" — and where large-scale machinery can mislead by appearing applicable when it is not.
 
 ### What Changes, and What Does Not
 
@@ -243,9 +247,9 @@ The collect step is invoking the instruction in real work. The label step is che
 
 A practical note on volume: the statistical methods from §3 — Elo, Bradley-Terry, G-Eval — require enough comparisons to converge to a stable estimate. For a collection of twenty or thirty skill files, each invoked a handful of times per month, that threshold is never reached. Inspection-and-revision works better at this scale than scoring-and-aggregating, for the same reason that you would not run a clinical trial on a sample of four. The quantitative machinery is not wrong; it is simply inappropriate to the data volume available.
 
-### Worked Example: Improving `grill-me` Wording with a Karpathy-Style Loop
+### Worked Example: Improving a Discovery-First Workflow Instruction
 
-Take a real workflow skill such as `grill-me`. The goal is not to improve the model's latent reasoning ability; it is to reduce instruction ambiguity so execution is more consistent. The loop is the same shape as Karpathy's data engine, but each stage is lightweight and text-driven.
+Take a workflow instruction that requires an agent to inspect repository evidence before asking the user questions. The goal is not to improve the model's latent reasoning ability; it is to reduce instruction ambiguity so execution is more consistent. The loop is the same shape as Karpathy's data engine, but each stage is lightweight and text-driven.
 
 Start with a concrete failure pattern you can observe in transcripts:
 
@@ -301,9 +305,9 @@ This is Karpathy's loop in miniature:
 
 No gradients, no reward model, no Elo required. The loop still qualifies as an evaluation engine because it converts fuzzy dissatisfaction ("this skill feels off") into a repeatable update rule over observed behaviour.
 
-### Worked Example: Improving `diagnose` Wording Without Touching Weights
+### Worked Example: Improving a Diagnostic Workflow Instruction Without Touching Weights
 
-The same method applies to a process-heavy skill such as `diagnose`, where the central requirement is to establish a reproducible feedback loop before hypothesising. In practice, this skill often drifts in exactly one direction: the agent starts proposing causes before it has built a deterministic reproducer. That drift is not a model-capability failure. It is a wording-permission failure.
+The same method applies to a process-heavy diagnostic workflow instruction, where the central requirement is to establish a reproducible feedback loop before hypothesising. In practice, this kind of instruction often drifts in exactly one direction: the agent starts proposing causes before it has built a deterministic reproducer. That drift is not a model-capability failure. It is a wording-permission failure.
 
 Suppose you review five recent sessions and see this pattern:
 
@@ -365,7 +369,7 @@ Use this protocol:
 A useful logging format is a one-line changelog per iteration:
 
 ```text
-skill=diagnose | change=add repro hard gate | sample=6 sessions |
+workflow=diagnostic-repro | change=add repro hard gate | sample=6 sessions |
 repro_gate +50pp | loop_quality +17pp | transition_discipline +33pp | keep
 ```
 
@@ -381,9 +385,9 @@ When people say "this skill feels off," they are usually detecting one of three 
 
 That is the practical payoff of importing Karpathy's loop into instruction design. You are not pretending to run frontier post-training on a handful of sessions. You are building a disciplined measurement-and-revision habit that is proportionate to the scale of skill files and still grounded in evaluation, not intuition alone.
 
-### Operating Checklist: Evaluate and Improve One Skill Wording
+### Companion Checklist: Evaluate and Improve One Workflow Instruction
 
-Use this checklist to run a single improvement cycle on a skill. Copy it, fill it in, file the result, and repeat. Over time the one-line logs from step 7 become your skill-wording audit trail.
+This is a reference checklist, not part of the main narrative. Use it to run a single improvement cycle on a workflow instruction. Copy it, fill it in, file the result, and repeat. Over time the one-line logs from step 7 become your instruction-wording audit trail.
 
 **1. Identify the failure pattern**
 
@@ -425,10 +429,10 @@ Use this checklist to run a single improvement cycle on a skill. Copy it, fill i
 
 **7. Log the result**
 
-Copy and paste this line into a skill-changelog file (e.g., `.scratch/skill_wording_log.md`):
+Copy and paste this line into an instruction-wording changelog:
 
 ```text
-skill=SKILLNAME | date=YYYY-MM-DD | change="DESCRIBE THE REWRITE" |
+workflow=WORKFLOW_NAME | date=YYYY-MM-DD | change="DESCRIBE THE REWRITE" |
 sample=N sessions | anchor1_delta=±Npp | anchor2_delta=±Npp |
 anchor3_delta=±Npp | decision=KEEP/REVERT | notes="ANYTHING INTERESTING"
 ```
@@ -436,7 +440,7 @@ anchor3_delta=±Npp | decision=KEEP/REVERT | notes="ANYTHING INTERESTING"
 Example:
 
 ```text
-skill=diagnose | date=2026-06-18 | change="add repro hard gate: 'before any hypothesis, execute repro twice with matching failure'" |
+workflow=diagnostic-repro | date=2026-06-18 | change="add repro hard gate: 'before any hypothesis, execute repro twice with matching failure'" |
 sample=6 sessions | repro_gate=+50pp | loop_quality=+17pp | transition_discipline=+33pp | decision=KEEP | notes="transitions still delayed on one complex session, not regression, will monitor"
 ```
 
@@ -444,19 +448,19 @@ sample=6 sessions | repro_gate=+50pp | loop_quality=+17pp | transition_disciplin
 
 - [ ] If you logged a KEEP, let it run for another 5–10 sessions to check for side effects.
 - [ ] If you logged a REVERT, file a note of what didn't work so you don't try the same edit again.
-- [ ] Pick the next skill with the clearest failure pattern and repeat from step 1.
+- [ ] Pick the next workflow instruction with the clearest failure pattern and repeat from step 1.
 
-### Prompt Template: Copy and Paste to Evaluate a Skill
+### Companion Prompt Template: Copy and Paste to Evaluate a Workflow Instruction
 
-If you want to run a skill-wording evaluation loop with agent assistance, copy the template below into a Claude Code session (or similar) and fill in the bracketed sections. This prompt will guide a subagent through the measurement and revision steps.
+This copy-paste prompt is a companion tool, not required reading for the main path. If you want to run an instruction-wording evaluation loop with agent assistance, copy it into a compatible agent session and fill in the bracketed sections. It guides an assistant through the measurement and revision steps.
 
 ```text
-I want to improve the wording of a Claude Code skill to reduce execution failures.
+I want to improve the wording of a reusable workflow instruction to reduce execution failures.
 
-## Skill to Evaluate
+## Workflow Instruction to Evaluate
 
-Skill name: [SKILLNAME]
-Skill file path: [PATH/TO/SKILL.md]
+Workflow name: [WORKFLOW_NAME]
+Instruction location: [PATH/TO/INSTRUCTION]
 
 ## Known Failure Pattern
 
@@ -474,7 +478,7 @@ Observed frequency: [1-2 sessions / 3-5 sessions / most sessions]
 1. Review the transcripts and confirm the failure pattern.
 2. Write 2-4 behavioural anchors (binary pass/fail criteria) that would detect this failure.
    For each anchor, state explicit pass and fail conditions.
-3. Read the skill file and identify the narrowest phrase most likely to permit this failure.
+3. Read the workflow instruction and identify the narrowest phrase most likely to permit this failure.
    (It should be one sentence or clause, not a paragraph.)
 4. Rewrite that phrase to make pass/fail observable in the transcript.
    Use explicit evidence requirements, not adjectives or vibes.
@@ -533,7 +537,7 @@ So RLVR does not solve the subjectivity problem. It routes around it. It narrows
 
 ## Closing the Loop: From Number Back to Model
 
-So follow that shadow forward. One of the four moves — Aggregate — does not stop at the leaderboard; pushed back into training, the number it produces becomes the engine of the entire modern post-training stack. In §3, the Aggregate step fitted a Bradley-Terry model over pairwise comparisons and produced a latent strength score for each response. That operation — take a labelled set of "A beat B" pairs, fit a model whose parameters encode the probability of each outcome — is the RLHF reward model. Not analogous to it. Not a simplified sketch of it. The same thing, at a different scale, applied at training time instead of leaderboard time. A reward model is a Bradley-Terry fitter where the "items" are not fixed candidates but arbitrary model outputs, the "latent strength" function is a neural network rather than a lookup table, and the fitted parameters flow directly into a gradient update rather than into a rankings page. §3 manufactured a number. §5 is about what happens when that number runs through a backpropagation graph.
+So follow that shadow forward. One of the four moves — Aggregate — does not stop at the leaderboard; pushed back into training, the number it produces becomes the engine of the entire modern post-training stack. In §3, the Aggregate step fitted a Bradley-Terry model over pairwise comparisons and produced a latent strength score for each response. That operation — take a labelled set of "A beat B" pairs, fit a model whose parameters encode the probability of each outcome — is the RLHF reward model. Not analogous to it. Not a simplified sketch of it. The same thing, at a different scale, applied at training time instead of leaderboard time. A reward model is a Bradley-Terry fitter where the "items" are not fixed candidates but arbitrary model outputs, the "latent strength" function is a neural network rather than a lookup table, and the fitted parameters flow directly into a gradient update rather than into a rankings page. §3 manufactured a number. §6 is about what happens when that number runs through a backpropagation graph.
 
 ### Reward Model Training
 

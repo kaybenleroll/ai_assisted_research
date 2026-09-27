@@ -613,7 +613,8 @@ to Improve</span>
 Optimise It</a>
 <ul>
 <li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1.1</span> What This Primer Covers</a></li>
-<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.2</span> What This Primer Is Not</a></li>
+<li><a href="#reading-routes" id="toc-reading-routes"><span class="toc-section-number">1.2</span> Reading Routes</a></li>
+<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.3</span> What This Primer Is Not</a></li>
 </ul></li>
 <li><a href="#the-subjectivity-problem-stated-plainly" id="toc-the-subjectivity-problem-stated-plainly"><span class="toc-section-number">2</span> The Subjectivity Problem, Stated
 Plainly</a></li>
@@ -625,26 +626,26 @@ Moves</a>
 <li><a href="#aggregate" id="toc-aggregate"><span class="toc-section-number">3.3</span> Aggregate</a></li>
 <li><a href="#automate" id="toc-automate"><span class="toc-section-number">3.4</span> Automate</a></li>
 </ul></li>
-<li><a href="#the-lightweight-loop-when-you-are-editing-instructions-not-weights" id="toc-the-lightweight-loop-when-you-are-editing-instructions-not-weights"><span class="toc-section-number">4</span> The Lightweight Loop: When You Are
-Editing Instructions, Not Weights</a>
+<li><a href="#optional-companion-evaluating-low-volume-instruction-and-workflow-wording" id="toc-optional-companion-evaluating-low-volume-instruction-and-workflow-wording"><span class="toc-section-number">4</span> Optional Companion: Evaluating
+Low-Volume Instruction and Workflow Wording</a>
 <ul>
 <li><a href="#what-changes-and-what-does-not" id="toc-what-changes-and-what-does-not"><span class="toc-section-number">4.1</span> What Changes, and What Does
 Not</a></li>
 <li><a href="#quality-means-something-different-here" id="toc-quality-means-something-different-here"><span class="toc-section-number">4.2</span> Quality Means Something Different
 Here</a></li>
 <li><a href="#the-lightweight-loop" id="toc-the-lightweight-loop"><span class="toc-section-number">4.3</span> The Lightweight Loop</a></li>
-<li><a href="#worked-example-improving-grill-me-wording-with-a-karpathy-style-loop" id="toc-worked-example-improving-grill-me-wording-with-a-karpathy-style-loop"><span class="toc-section-number">4.4</span> Worked Example: Improving
-<code>grill-me</code> Wording with a Karpathy-Style Loop</a></li>
-<li><a href="#worked-example-improving-diagnose-wording-without-touching-weights" id="toc-worked-example-improving-diagnose-wording-without-touching-weights"><span class="toc-section-number">4.5</span> Worked Example: Improving
-<code>diagnose</code> Wording Without Touching Weights</a></li>
+<li><a href="#worked-example-improving-a-discovery-first-workflow-instruction" id="toc-worked-example-improving-a-discovery-first-workflow-instruction"><span class="toc-section-number">4.4</span> Worked Example: Improving a
+Discovery-First Workflow Instruction</a></li>
+<li><a href="#worked-example-improving-a-diagnostic-workflow-instruction-without-touching-weights" id="toc-worked-example-improving-a-diagnostic-workflow-instruction-without-touching-weights"><span class="toc-section-number">4.5</span> Worked Example: Improving a
+Diagnostic Workflow Instruction Without Touching Weights</a></li>
 <li><a href="#a-reusable-micro-protocol-for-any-skill-wording-edit" id="toc-a-reusable-micro-protocol-for-any-skill-wording-edit"><span class="toc-section-number">4.6</span> A Reusable Micro-Protocol for Any
 Skill Wording Edit</a></li>
 <li><a href="#from-fuzzy-intuition-to-controlled-iteration" id="toc-from-fuzzy-intuition-to-controlled-iteration"><span class="toc-section-number">4.7</span> From Fuzzy Intuition to Controlled
 Iteration</a></li>
-<li><a href="#operating-checklist-evaluate-and-improve-one-skill-wording" id="toc-operating-checklist-evaluate-and-improve-one-skill-wording"><span class="toc-section-number">4.8</span> Operating Checklist: Evaluate and
-Improve One Skill Wording</a></li>
-<li><a href="#prompt-template-copy-and-paste-to-evaluate-a-skill" id="toc-prompt-template-copy-and-paste-to-evaluate-a-skill"><span class="toc-section-number">4.9</span> Prompt Template: Copy and Paste to
-Evaluate a Skill</a></li>
+<li><a href="#companion-checklist-evaluate-and-improve-one-workflow-instruction" id="toc-companion-checklist-evaluate-and-improve-one-workflow-instruction"><span class="toc-section-number">4.8</span> Companion Checklist: Evaluate and
+Improve One Workflow Instruction</a></li>
+<li><a href="#companion-prompt-template-copy-and-paste-to-evaluate-a-workflow-instruction" id="toc-companion-prompt-template-copy-and-paste-to-evaluate-a-workflow-instruction"><span class="toc-section-number">4.9</span> Companion Prompt Template: Copy
+and Paste to Evaluate a Workflow Instruction</a></li>
 <li><a href="#what-you-can-and-cannot-measure" id="toc-what-you-can-and-cannot-measure"><span class="toc-section-number">4.10</span> What You Can and Cannot
 Measure</a></li>
 <li><a href="#where-the-primers-machinery-switches-back-on" id="toc-where-the-primers-machinery-switches-back-on"><span class="toc-section-number">4.11</span> Where the Primer’s Machinery
@@ -773,23 +774,25 @@ ever as good as its sensor.</p>
 models.” It is the prior question: when the thing you care about is
 subjective — clarity, helpfulness, taste, judgment — how do you
 manufacture an evaluation signal trustworthy enough to optimise against?
-Sometimes that signal is a scalar score for weight updates; sometimes it
-is a behavioural rubric for instruction and skill wording. That is the
-question the rest of these pages take apart.</p>
+The main narrative answers it for model evaluation and post-training. A
+separate, optional companion applies the same measurement discipline to
+low-volume instruction and workflow wording, where a scalar training
+signal is the wrong tool.</p>
 <h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
 <ul>
 <li>The data engine loop and why evaluation is its load-bearing
 step.</li>
-<li>A practical fork in the loop: improving model weights at scale
-versus improving instruction and skill wording at low volume.</li>
+<li>The main reading path: subjective measurement, verifiable rewards,
+and the post-training systems that optimise against those signals.</li>
 <li>Why open-ended quality resists measurement, and why
 reference-overlap metrics like BLEU and ROUGE fail on it.</li>
 <li>The generator-discriminator gap: why judging is easier than
 producing, and why that asymmetry rescues evaluation.</li>
 <li>The four moves that turn subjective quality into a usable score:
 Decompose, Compare, Aggregate, Automate.</li>
-<li>The lightweight instruction loop: rubric-driven transcript
-inspection for iterative skill wording improvements.</li>
+<li>An optional companion on the lightweight instruction loop:
+rubric-driven transcript inspection for iterative workflow wording
+improvements.</li>
 <li>Behaviourally-anchored rubrics as a replacement for vague quality
 scales.</li>
 <li>Pairwise comparison and large-scale human preference collection
@@ -804,7 +807,18 @@ model — the same operation at a different scale.</li>
 trajectory, and the hard boundary where verifiable rewards stop
 helping.</li>
 </ul>
-<h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
+<h2 data-number="1.2" id="reading-routes"><span class="header-section-number">1.2</span> Reading Routes</h2>
+<p>The main path runs from the subjectivity problem and the four moves
+through <strong>Escaping Subjectivity: Verifiable Rewards</strong> and
+<strong>Closing the Loop: From Number Back to Model</strong>, then
+continues through the limits and deployment sections. When the
+navigation reaches <strong>Optional Companion: Evaluating Low-Volume
+Instruction and Workflow Wording</strong>, skip directly to
+<strong>Escaping Subjectivity: Verifiable Rewards</strong> unless you
+are maintaining prompts or reusable agent workflows from a small number
+of transcripts. Nothing in the main narrative depends on the
+companion.</p>
+<h2 data-number="1.3" id="what-this-primer-is-not"><span class="header-section-number">1.3</span> What This Primer Is Not</h2>
 <p>This is not a machine-learning textbook, and it proves nothing —
 there are no convergence theorems here, no gradient-descent derivations,
 no statistical guarantees about when a rating system is consistent. It
@@ -1165,27 +1179,24 @@ latent quality rating; <strong>Automate</strong> with an LLM judge that
 reads the policy and the summary together. Different domain, same
 machine — and the same toll, four times over: every number it produces
 is a correlated shadow of quality, never quality itself.</p>
-<h1 data-number="4" id="the-lightweight-loop-when-you-are-editing-instructions-not-weights"><span class="header-section-number">4</span> The Lightweight Loop: When You
-Are Editing Instructions, Not Weights</h1>
-<p>The four moves described above — and the rest of this primer from
-here onward — assume you have something you can retrain. The loop spins
-because you can collect failures, label them, and push a gradient
-through parameters. But there is a second, growing class of
-practitioners who are iterating on AI systems and have no weights to
-adjust at all: they are editing instruction text. A system prompt. A
-workflow definition. A skill file that tells an agent to diagnose a bug
-by working through five specific phases in order before touching any
-code. The model itself is fixed; the thing being changed is what it is
-told to do.</p>
+<h1 data-number="4" id="optional-companion-evaluating-low-volume-instruction-and-workflow-wording"><span class="header-section-number">4</span> Optional Companion: Evaluating
+Low-Volume Instruction and Workflow Wording</h1>
+<p>This specialised companion is for practitioners who are editing
+instruction text rather than retraining model weights: a system prompt,
+a workflow definition, or a reusable agent instruction. Here,
+<em>skill</em> means only that last kind of reusable workflow
+instruction; it does not refer to a named feature of any particular
+agent framework. The model itself is fixed; the thing being changed is
+what it is told to do. This material is useful at low volume, but it is
+not a prerequisite for the main route, which resumes at <strong>Escaping
+Subjectivity: Verifiable Rewards</strong>.</p>
 <p>This looks like the same problem. It has the same feel — change
 something, observe whether the system behaves better, change it again.
 But the feedback mechanism is structurally different, and applying the
-full four-move apparatus to it produces the wrong tool for the job. It
-is worth making this distinction explicit before the primer moves into
-reward models and RLHF, because the instruction-editing case is where
-most practitioners first encounter the question “how do I measure this?”
-— and where the machinery in the next sections is most likely to mislead
-by appearing applicable when it is not.</p>
+full four-move apparatus to it produces the wrong tool for the job. The
+instruction-editing case is where most practitioners first encounter the
+question “how do I measure this?” — and where large-scale machinery can
+mislead by appearing applicable when it is not.</p>
 <h2 data-number="4.1" id="what-changes-and-what-does-not"><span class="header-section-number">4.1</span> What Changes, and What Does
 Not</h2>
 <p>Model training changes what a system <em>knows</em> — parameters
@@ -1252,10 +1263,11 @@ Inspection-and-revision works better at this scale than
 scoring-and-aggregating, for the same reason that you would not run a
 clinical trial on a sample of four. The quantitative machinery is not
 wrong; it is simply inappropriate to the data volume available.</p>
-<h2 data-number="4.4" id="worked-example-improving-grill-me-wording-with-a-karpathy-style-loop"><span class="header-section-number">4.4</span> Worked Example: Improving
-<code>grill-me</code> Wording with a Karpathy-Style Loop</h2>
-<p>Take a real workflow skill such as <code>grill-me</code>. The goal is
-not to improve the model’s latent reasoning ability; it is to reduce
+<h2 data-number="4.4" id="worked-example-improving-a-discovery-first-workflow-instruction"><span class="header-section-number">4.4</span> Worked Example: Improving a
+Discovery-First Workflow Instruction</h2>
+<p>Take a workflow instruction that requires an agent to inspect
+repository evidence before asking the user questions. The goal is not to
+improve the model’s latent reasoning ability; it is to reduce
 instruction ambiguity so execution is more consistent. The loop is the
 same shape as Karpathy’s data engine, but each stage is lightweight and
 text-driven.</p>
@@ -1339,14 +1351,15 @@ sessions.</li>
 qualifies as an evaluation engine because it converts fuzzy
 dissatisfaction (“this skill feels off”) into a repeatable update rule
 over observed behaviour.</p>
-<h2 data-number="4.5" id="worked-example-improving-diagnose-wording-without-touching-weights"><span class="header-section-number">4.5</span> Worked Example: Improving
-<code>diagnose</code> Wording Without Touching Weights</h2>
-<p>The same method applies to a process-heavy skill such as
-<code>diagnose</code>, where the central requirement is to establish a
-reproducible feedback loop before hypothesising. In practice, this skill
-often drifts in exactly one direction: the agent starts proposing causes
-before it has built a deterministic reproducer. That drift is not a
-model-capability failure. It is a wording-permission failure.</p>
+<h2 data-number="4.5" id="worked-example-improving-a-diagnostic-workflow-instruction-without-touching-weights"><span class="header-section-number">4.5</span> Worked Example: Improving a
+Diagnostic Workflow Instruction Without Touching Weights</h2>
+<p>The same method applies to a process-heavy diagnostic workflow
+instruction, where the central requirement is to establish a
+reproducible feedback loop before hypothesising. In practice, this kind
+of instruction often drifts in exactly one direction: the agent starts
+proposing causes before it has built a deterministic reproducer. That
+drift is not a model-capability failure. It is a wording-permission
+failure.</p>
 <p>Suppose you review five recent sessions and see this pattern:</p>
 <ul>
 <li>In three sessions, hypotheses appeared before any runnable failing
@@ -1434,7 +1447,7 @@ evidence.</li>
 <li>Keep or revert based on anchor deltas, then log the result.</li>
 </ol>
 <p>A useful logging format is a one-line changelog per iteration:</p>
-<pre class="text"><code>skill=diagnose | change=add repro hard gate | sample=6 sessions |
+<pre class="text"><code>workflow=diagnostic-repro | change=add repro hard gate | sample=6 sessions |
 repro_gate +50pp | loop_quality +17pp | transition_discipline +33pp | keep</code></pre>
 <p>Those one-line records become your low-volume dataset. They are
 small, but over time they let you answer practical questions that
@@ -1460,11 +1473,12 @@ instruction design. You are not pretending to run frontier post-training
 on a handful of sessions. You are building a disciplined
 measurement-and-revision habit that is proportionate to the scale of
 skill files and still grounded in evaluation, not intuition alone.</p>
-<h2 data-number="4.8" id="operating-checklist-evaluate-and-improve-one-skill-wording"><span class="header-section-number">4.8</span> Operating Checklist: Evaluate
-and Improve One Skill Wording</h2>
-<p>Use this checklist to run a single improvement cycle on a skill. Copy
-it, fill it in, file the result, and repeat. Over time the one-line logs
-from step 7 become your skill-wording audit trail.</p>
+<h2 data-number="4.8" id="companion-checklist-evaluate-and-improve-one-workflow-instruction"><span class="header-section-number">4.8</span> Companion Checklist: Evaluate
+and Improve One Workflow Instruction</h2>
+<p>This is a reference checklist, not part of the main narrative. Use it
+to run a single improvement cycle on a workflow instruction. Copy it,
+fill it in, file the result, and repeat. Over time the one-line logs
+from step 7 become your instruction-wording audit trail.</p>
 <p><strong>1. Identify the failure pattern</strong></p>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Review 3–5 recent transcripts of
@@ -1529,13 +1543,12 @@ phrase, or run more sessions if you have fewer than three per
 condition.</label></li>
 </ul>
 <p><strong>7. Log the result</strong></p>
-<p>Copy and paste this line into a skill-changelog file (e.g.,
-<code>.scratch/skill_wording_log.md</code>):</p>
-<pre class="text"><code>skill=SKILLNAME | date=YYYY-MM-DD | change=&quot;DESCRIBE THE REWRITE&quot; |
+<p>Copy and paste this line into an instruction-wording changelog:</p>
+<pre class="text"><code>workflow=WORKFLOW_NAME | date=YYYY-MM-DD | change=&quot;DESCRIBE THE REWRITE&quot; |
 sample=N sessions | anchor1_delta=±Npp | anchor2_delta=±Npp |
 anchor3_delta=±Npp | decision=KEEP/REVERT | notes=&quot;ANYTHING INTERESTING&quot;</code></pre>
 <p>Example:</p>
-<pre class="text"><code>skill=diagnose | date=2026-06-18 | change=&quot;add repro hard gate: &#39;before any hypothesis, execute repro twice with matching failure&#39;&quot; |
+<pre class="text"><code>workflow=diagnostic-repro | date=2026-06-18 | change=&quot;add repro hard gate: &#39;before any hypothesis, execute repro twice with matching failure&#39;&quot; |
 sample=6 sessions | repro_gate=+50pp | loop_quality=+17pp | transition_discipline=+33pp | decision=KEEP | notes=&quot;transitions still delayed on one complex session, not regression, will monitor&quot;</code></pre>
 <p><strong>8. Move to the next skill or repeat</strong></p>
 <ul class="task-list">
@@ -1543,21 +1556,22 @@ sample=6 sessions | repro_gate=+50pp | loop_quality=+17pp | transition_disciplin
 another 5–10 sessions to check for side effects.</label></li>
 <li><label><input type="checkbox"></input>If you logged a REVERT, file a note
 of what didn’t work so you don’t try the same edit again.</label></li>
-<li><label><input type="checkbox"></input>Pick the next skill with the
-clearest failure pattern and repeat from step 1.</label></li>
+<li><label><input type="checkbox"></input>Pick the next workflow instruction
+with the clearest failure pattern and repeat from step 1.</label></li>
 </ul>
-<h2 data-number="4.9" id="prompt-template-copy-and-paste-to-evaluate-a-skill"><span class="header-section-number">4.9</span> Prompt Template: Copy and Paste
-to Evaluate a Skill</h2>
-<p>If you want to run a skill-wording evaluation loop with agent
-assistance, copy the template below into a Claude Code session (or
-similar) and fill in the bracketed sections. This prompt will guide a
-subagent through the measurement and revision steps.</p>
-<pre class="text"><code>I want to improve the wording of a Claude Code skill to reduce execution failures.
+<h2 data-number="4.9" id="companion-prompt-template-copy-and-paste-to-evaluate-a-workflow-instruction"><span class="header-section-number">4.9</span> Companion Prompt Template: Copy
+and Paste to Evaluate a Workflow Instruction</h2>
+<p>This copy-paste prompt is a companion tool, not required reading for
+the main path. If you want to run an instruction-wording evaluation loop
+with agent assistance, copy it into a compatible agent session and fill
+in the bracketed sections. It guides an assistant through the
+measurement and revision steps.</p>
+<pre class="text"><code>I want to improve the wording of a reusable workflow instruction to reduce execution failures.
 
-## Skill to Evaluate
+## Workflow Instruction to Evaluate
 
-Skill name: [SKILLNAME]
-Skill file path: [PATH/TO/SKILL.md]
+Workflow name: [WORKFLOW_NAME]
+Instruction location: [PATH/TO/INSTRUCTION]
 
 ## Known Failure Pattern
 
@@ -1575,7 +1589,7 @@ Observed frequency: [1-2 sessions / 3-5 sessions / most sessions]
 1. Review the transcripts and confirm the failure pattern.
 2. Write 2-4 behavioural anchors (binary pass/fail criteria) that would detect this failure.
    For each anchor, state explicit pass and fail conditions.
-3. Read the skill file and identify the narrowest phrase most likely to permit this failure.
+3. Read the workflow instruction and identify the narrowest phrase most likely to permit this failure.
    (It should be one sentence or clause, not a paragraph.)
 4. Rewrite that phrase to make pass/fail observable in the transcript.
    Use explicit evidence requirements, not adjectives or vibes.
@@ -1786,7 +1800,7 @@ leaderboard time. A reward model is a Bradley-Terry fitter where the
 “items” are not fixed candidates but arbitrary model outputs, the
 “latent strength” function is a neural network rather than a lookup
 table, and the fitted parameters flow directly into a gradient update
-rather than into a rankings page. §3 manufactured a number. §5 is about
+rather than into a rankings page. §3 manufactured a number. §6 is about
 what happens when that number runs through a backpropagation graph.</p>
 <h2 data-number="6.1" id="reward-model-training"><span class="header-section-number">6.1</span> Reward Model Training</h2>
 <p>The reward model is typically a smaller transformer initialised from
