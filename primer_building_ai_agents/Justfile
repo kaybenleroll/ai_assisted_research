@@ -54,6 +54,7 @@ main-html-mathjax: html-mathjax
 main-pdf: pdf
 pdf-unicode: pdf
 docs: quick-html
-all-docs: docs
+all-retained: html pdf html-variants quick-html
+all-docs: all-retained
 ref-html: quick-html
-rebuild: clean all docs
+rebuild: clean all-retained

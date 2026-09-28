@@ -612,6 +612,8 @@ Reference</span>
 <li><a href="#agent-architecture-quick-reference-decision-frameworks" id="toc-agent-architecture-quick-reference-decision-frameworks">Agent
 Architecture Quick Reference &amp; Decision Frameworks</a>
 <ul>
+<li><a href="#scope-and-relationship-to-the-comprehensive-primer" id="toc-scope-and-relationship-to-the-comprehensive-primer">Scope and
+Relationship to the Comprehensive Primer</a></li>
 <li><a href="#pattern-selection-guide" id="toc-pattern-selection-guide">Pattern Selection Guide</a>
 <ul>
 <li><a href="#react-reasoning-acting" id="toc-react-reasoning-acting">ReAct (Reasoning + Acting)</a></li>
@@ -711,13 +713,26 @@ Evaluation</a></li>
       <div class="content-inner">
 <h1 id="agent-architecture-quick-reference-decision-frameworks">Agent
 Architecture Quick Reference &amp; Decision Frameworks</h1>
+<h2 id="scope-and-relationship-to-the-comprehensive-primer">Scope and
+Relationship to the Comprehensive Primer</h2>
+<p>This is a companion reference for someone implementing or reviewing
+the default production path in the comprehensive primer. Use it for
+pattern selection, tool contracts, memory and error-handling snippets,
+evaluation, monitoring, deployment, and checklists after reading the
+narrative sections that explain why those controls matter.</p>
+<p>It is intentionally a compressed lookup document, not a replacement
+for the comprehensive primer. It does not contain the full conceptual
+explanations, framework/runtime discussion, challenges, or either
+customer-support walkthrough. When a choice is high-risk or the quick
+rule conflicts with a domain policy, follow the detailed treatment and
+the application’s authorization layer.</p>
 <h2 id="pattern-selection-guide">Pattern Selection Guide</h2>
 <h3 id="react-reasoning-acting">ReAct (Reasoning + Acting)</h3>
 <p><strong>When to use:</strong> - Knowledge-intensive tasks (Q&amp;A,
 fact verification) - Need interpretable decision traces - User-facing
 applications requiring transparency</p>
 <p><strong>Execution Model:</strong></p>
-<pre><code>Decision summary → Action → Observation → (loop)</code></pre>
+<pre class="text"><code>Decision summary → Action → Observation → (loop)</code></pre>
 <p><strong>Pros:</strong> Observable action trace, self-correcting,
 reduces hallucination when tools ground claims <strong>Cons:</strong>
 Sequential by default, can be verbose, requires a clean action space</p>
@@ -735,7 +750,7 @@ arguments, observations, outcomes, and concise decision summaries.</p>
 dependencies - Open-ended environments - When success criteria clear but
 path uncertain</p>
 <p><strong>Execution Model:</strong></p>
-<pre><code>LLM → Tool Calls → Append Results → Loop Until Done</code></pre>
+<pre class="text"><code>LLM → Tool Calls → Append Results → Loop Until Done</code></pre>
 <p><strong>Pros:</strong> Flexible, general-purpose, handles complex
 scenarios <strong>Cons:</strong> Can hit maximum iterations, hard to
 reason about long-term outcomes, requires explicit authorization around
@@ -753,7 +768,7 @@ side effects</p>
 preconditions - Robotics/structured domains - When long-horizon planning
 critical</p>
 <p><strong>Execution Model:</strong></p>
-<pre><code>LLM → Translate to PDDL → Symbolic Planner → LLM → Execute</code></pre>
+<pre class="text"><code>LLM → Translate to PDDL → Symbolic Planner → LLM → Execute</code></pre>
 <p><strong>Pros:</strong> Better long-horizon planning, less
 hallucination on action sequencing <strong>Cons:</strong> Requires
 domain knowledge (PDDL), inflexible for novel domains</p>
@@ -762,7 +777,7 @@ domain knowledge (PDDL), inflexible for novel domains</p>
 <p><strong>When to use:</strong> - Iterative problem-solving tasks -
 When failure patterns predictable - Learning from mistakes important</p>
 <p><strong>Execution Model:</strong></p>
-<pre><code>Execute → Evaluate → Reflect → Retry with Reflection</code></pre>
+<pre class="text"><code>Execute → Evaluate → Reflect → Retry with Reflection</code></pre>
 <p><strong>Pros:</strong> Improves over multiple attempts, automatic
 failure detection <strong>Cons:</strong> Slower (multiple attempts),
 requires reliable evaluator</p>
@@ -772,7 +787,7 @@ Orchestration (CrewAI Crews)</h3>
 <p><strong>When to use:</strong> - Need specialized agent roles -
 Complex workflows with delegation - Team-like collaboration required</p>
 <p><strong>Execution Model:</strong></p>
-<pre><code>Task → Agent Selection → Execution → Next Task</code></pre>
+<pre class="text"><code>Task → Agent Selection → Execution → Next Task</code></pre>
 <p><strong>Pros:</strong> Natural role assignment, clear
 responsibilities, easy to extend <strong>Cons:</strong> Coordination
 overhead, harder to debug, more trust boundaries</p>
@@ -884,7 +899,7 @@ Successful action sequences - Common failure modes + solutions</p>
 <p><strong>Scoring function</strong> (illustrative — the equal-weighted
 1/3-1/3-1/3 version is what Generative Agents used; the weights below
 are just a starting point, tune per your data):</p>
-<pre><code>score = 0.4 * recency + 0.4 * relevance + 0.2 * importance</code></pre>
+<pre class="text"><code>score = 0.4 * recency + 0.4 * relevance + 0.2 * importance</code></pre>
 <hr />
 <h2 id="error-handling-recovery">Error Handling &amp; Recovery</h2>
 <h3 id="failure-detection-strategies">Failure Detection Strategies</h3>
@@ -935,7 +950,7 @@ are just a starting point, tune per your data):</p>
 </tbody>
 </table>
 <h3 id="reflection-template">Reflection Template</h3>
-<pre><code>If max_iterations reached without success:
+<pre class="text"><code>If max_iterations reached without success:
   1. Show agent failed trajectory
   2. Ask: &quot;Why did this approach fail?&quot;
   3. Generate reflection instruction
@@ -1003,7 +1018,7 @@ durable workflow would make the path clearer.</p>
 <h2 id="evaluation-metrics-definitions">Evaluation Metrics
 Definitions</h2>
 <h3 id="task-success-rate">Task Success Rate</h3>
-<pre><code>= (completed_successfully / total_attempted) * 100%
+<pre class="text"><code>= (completed_successfully / total_attempted) * 100%
 
 Threshold (illustrative starting points, not industry benchmarks — set your
 own bar from baseline data and business risk tolerance):
@@ -1011,22 +1026,22 @@ own bar from baseline data and business risk tolerance):
   - Production: &gt;90%
   - Enterprise: &gt;95%</code></pre>
 <h3 id="average-steps-to-success">Average Steps to Success</h3>
-<pre><code>= sum(steps_for_successful_tasks) / count(successful)
+<pre class="text"><code>= sum(steps_for_successful_tasks) / count(successful)
 
 Benchmark: 5-10 steps typical for complex tasks
 Optimization: Reduce redundant tool calls</code></pre>
 <h3 id="hallucination-rate">Hallucination Rate</h3>
-<pre><code>= (claims_without_tool_backing / total_claims) * 100%
+<pre class="text"><code>= (claims_without_tool_backing / total_claims) * 100%
 
 Acceptable: &lt;5% (illustrative starting point — calibrate to your domain&#39;s risk)
 Detection: Analyze final output for unsourced claims</code></pre>
 <h3 id="tool-use-accuracy">Tool Use Accuracy</h3>
-<pre><code>= (correct_argument_calls / total_tool_calls) * 100%
+<pre class="text"><code>= (correct_argument_calls / total_tool_calls) * 100%
 
 Target: &gt;95%
 Improvement: Better instruction + schema validation</code></pre>
 <h3 id="cost-per-task">Cost per Task</h3>
-<pre><code>= (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
+<pre class="text"><code>= (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
 
 Note: input and output tokens are priced separately, and output is typically
 priced several times higher than input (e.g. 5x for Claude-class models) — a
@@ -1128,14 +1143,14 @@ traces before rollout</td>
 <h2 id="quick-implementation-checklist">Quick Implementation
 Checklist</h2>
 <h3 id="mvp-agent-week-1">MVP Agent (Week 1)</h3>
-<pre><code>☐ Choose model and record its exact model identifier, provider, and limits
+<pre class="text"><code>☐ Choose model and record its exact model identifier, provider, and limits
 ☐ Define 3-5 core tools
 ☐ Write system prompt
 ☐ Implement basic agentic loop
 ☐ Test with 10 sample tasks
 ☐ Manual success rate measurement</code></pre>
 <h3 id="enhanced-agent-week-2-3">Enhanced Agent (Week 2-3)</h3>
-<pre><code>☐ Add tool error handling &amp; retries
+<pre class="text"><code>☐ Add tool error handling &amp; retries
 ☐ Implement reflection on failures
 ☐ Add conversation history management
 ☐ Integrate vector store for memory
@@ -1143,7 +1158,7 @@ Checklist</h2>
 ☐ Create basic dashboard
 ☐ Add prompt-injection and malformed-tool-output tests</code></pre>
 <h3 id="production-ready-week-4">Production Ready (Week 4+)</h3>
-<pre><code>☐ Implement rate limiting &amp; quotas
+<pre class="text"><code>☐ Implement rate limiting &amp; quotas
 ☐ Add human-in-the-loop for critical actions
 ☐ Persist state and make side effects idempotent
 ☐ Set up comprehensive monitoring
@@ -1154,7 +1169,7 @@ Checklist</h2>
 <hr />
 <h2 id="cost-estimation-framework">Cost Estimation Framework</h2>
 <h3 id="per-task-cost-calculation">Per-Task Cost Calculation</h3>
-<pre><code>Base cost = (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
+<pre class="text"><code>Base cost = (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
 
 Example (illustrative pricing for a mid-tier frontier model — check current
 provider rate cards for actual numbers):
@@ -1162,7 +1177,7 @@ provider rate cards for actual numbers):
   Output: 500 tokens ($0.015 per 1k) = $0.0075
   Total: $0.0135 per task</code></pre>
 <h3 id="monthly-budget-projection">Monthly Budget Projection</h3>
-<pre><code>Monthly = tasks_per_day * avg_cost_per_task * 30 * growth_factor
+<pre class="text"><code>Monthly = tasks_per_day * avg_cost_per_task * 30 * growth_factor
 
 Example:
   1000 tasks/day * $0.015 * 30 = $450/month base
@@ -1170,7 +1185,7 @@ Example:
   $450 * 1.2^k for k=0..11, not $450 * 1.2^12 (that&#39;s just month 12&#39;s cost,
   ~$4,013). The correct twelve-month sum is ~$18k/year.</code></pre>
 <h3 id="optimization-roi">Optimization ROI</h3>
-<pre><code>Compression savings = (original_tokens - compressed_tokens) * price_per_token * tasks_per_month
+<pre class="text"><code>Compression savings = (original_tokens - compressed_tokens) * price_per_token * tasks_per_month
 
 If saving 500 tokens per task:
   500 * $0.000003 * 30,000 tasks/month = $45/month = $540/year</code></pre>
@@ -1209,7 +1224,7 @@ If saving 500 tokens per task:
 <span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    success_rate <span class="op">=</span> run_trials(agent, task, n<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> success_rate <span class="op">&gt;=</span> threshold</span></code></pre></div>
 <h3 id="human-evaluation">Human Evaluation</h3>
-<pre><code>Sample 5-10% of production runs weekly
+<pre class="text"><code>Sample 5-10% of production runs weekly
 Rate on: Correctness, Completeness, Efficiency, Clarity
 Pass/fail: Average rating &gt;= 4/5</code></pre>
 <hr />
