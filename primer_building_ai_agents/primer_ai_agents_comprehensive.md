@@ -12,6 +12,23 @@ This is not a guide to training or fine-tuning LLMs. It is not a benchmark compa
 
 **Freshness note (September 10, 2026):** This is a conceptual and implementation primer, but framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
 
+### The Default Production Path
+
+Use this primer as one end-to-end path when you are building an agent for a
+real workflow. Read the numbered sections in order: define the agent and its
+trust boundary, understand the model/tool decision boundary, design the
+execution loop, define narrow tools, manage state and memory, account for
+failure modes, and then implement and operate the production path. The
+customer-support walkthrough in the execution-loop section is the running
+example; the second support walkthrough in the build section turns that
+example into an implementation plan.
+
+The section titled **Reference branch** contains useful alternatives—ReAct,
+planning variants, multi-agent coordination, provider SDKs, MCP, and A2A—but
+those are branches from the default single-agent, tool-grounded workflow.
+Choose one only when its additional state, latency, trust boundary, or
+operational complexity solves a problem that the default path cannot.
+
 When you hear about AI agents doing autonomous work—making API calls, retrieving data, making decisions, and executing complex workflows—you're likely hearing about a fascinating but often misunderstood technology. The core confusion typically stems from a simple question: *if AI systems like large language models (LLMs) are trained to generate text, how do they become agents that actually do things?*
 
 The answer is elegantly simple: **LLMs don't become agents by themselves. Instead, they become the reasoning engine inside a larger system that combines their decision-making capabilities with tools, memory, and structured processes.** This primer explains how that system works, why it's powerful, and what you need to understand to build one.
@@ -22,7 +39,7 @@ We'll keep this practical and conversational. The goal here is not to bury you i
 
 ---
 
-## Fundamentals
+## Foundations and Agent Boundaries
 
 ### What Is an Autonomous AI Agent?
 
@@ -71,7 +88,7 @@ Mini example: an IT access agent receives "Grant dashboard access." It checks us
 
 ---
 
-## How LLMs Enable Autonomous Behavior
+## The Model and Tool Boundary
 
 ### The Misconception: LLMs as Black Boxes
 
@@ -167,7 +184,7 @@ This also explains why loop-based agents often outperform one giant prompt. The 
 
 ---
 
-## The Execution Loop
+## The Production Execution Loop
 
 ### The Agent Lifecycle
 
@@ -552,7 +569,12 @@ A practical default policy:
 
 ---
 
-## Design Patterns, Architectures, and Frameworks
+## Reference branch: Alternative Patterns, Architectures, and Frameworks
+
+This is the first deliberate branch from the default path. Use it to choose
+an execution pattern or runtime after you understand the baseline loop, tool
+boundary, and state model above. The alternatives below remain valuable, but
+they are not prerequisites for the production path later in this primer.
 
 ### ReAct Pattern (Reasoning + Acting)
 
@@ -733,7 +755,7 @@ A practical framework-selection checklist:
 
 ---
 
-## Key Challenges
+## Production Risks and Failure Modes
 
 ### Challenge 1: Hallucination
 
@@ -826,7 +848,12 @@ Debug one failed trajectory at a time. Root-cause certainty beats broad guesswor
 
 ---
 
-## Building Agents
+## Build the Production Path
+
+The following steps are the implementation path. They turn the concepts and
+constraints above into one narrow agent that can be tested, rolled out, and
+operated. The alternative patterns remain reference branches; do not add one
+until a measured requirement calls for it.
 
 ### Start Simple
 
@@ -904,7 +931,7 @@ Let's make this concrete with a full use case: **an inbound customer support tri
 
 Goal: automatically classify incoming tickets, gather missing details, propose a resolution path, and escalate only when needed.
 
-### Step 1: Define Scope and Guardrails
+### Path step 1: Define Scope and Guardrails
 
 Start with narrow scope for v1:
 
@@ -914,7 +941,7 @@ Start with narrow scope for v1:
 
 If scope is fuzzy, quality and safety both collapse.
 
-### Step 2: Define Success Metrics Before Coding
+### Path step 2: Define Success Metrics Before Coding
 
 Pick measurable outcomes:
 
@@ -925,7 +952,7 @@ Pick measurable outcomes:
 
 No metrics means no reliable way to improve.
 
-### Step 3: Design Tool Contracts
+### Path step 3: Design Tool Contracts
 
 Create small, explicit tools:
 
@@ -937,7 +964,7 @@ Create small, explicit tools:
 
 Keep input and output structured. Avoid mixed free-form returns for core tools.
 
-### Step 4: Write the System Prompt Like an Operating Manual
+### Path step 4: Write the System Prompt Like an Operating Manual
 
 Include:
 
@@ -948,7 +975,7 @@ Include:
 
 Think behavior spec, not marketing copy.
 
-### Step 5: Implement the Execution Loop with Hard Stops
+### Path step 5: Implement the Execution Loop with Hard Stops
 
 Use deterministic boundaries:
 
@@ -958,7 +985,7 @@ Use deterministic boundaries:
 
 Unlimited loops are a failure mode, not a feature.
 
-### Step 6: Build a Realistic Test Suite
+### Path step 6: Build a Realistic Test Suite
 
 Use labeled test sets covering:
 
@@ -969,7 +996,7 @@ Use labeled test sets covering:
 
 Your goal is decision quality under stress, not just successful code execution.
 
-### Step 7: Add Human-in-the-Loop for Sensitive Paths
+### Path step 7: Add Human-in-the-Loop for Sensitive Paths
 
 Require approval for:
 
@@ -979,7 +1006,7 @@ Require approval for:
 
 This is how you ship value quickly without pretending the agent is flawless.
 
-### Step 8: Roll Out Gradually
+### Path step 8: Roll Out Gradually
 
 Recommended rollout pattern:
 
@@ -989,7 +1016,7 @@ Recommended rollout pattern:
 
 Slow rollout catches real-world edge cases early.
 
-### Step 9: Operate, Observe, Iterate
+### Path step 9: Operate, Observe, Iterate
 
 Weekly quality loop:
 
@@ -1025,7 +1052,7 @@ That is already a meaningful business win.
 
 5. **Interpretability** - Why did the agent choose action X instead of Y? Sometimes unclear.
 
-### Emerging Patterns
+### Reference branch: Emerging Patterns
 
 **Multi-Agent Systems:** Instead of one agent doing everything, multiple specialized agents collaborate:
 

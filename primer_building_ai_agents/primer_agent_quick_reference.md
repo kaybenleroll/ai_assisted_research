@@ -1,5 +1,20 @@
 # Agent Architecture Quick Reference & Decision Frameworks
 
+## Scope and Relationship to the Comprehensive Primer
+
+This is a companion reference for someone implementing or reviewing the
+default production path in the comprehensive primer. Use it for pattern
+selection, tool contracts, memory and error-handling snippets, evaluation,
+monitoring, deployment, and checklists after reading the narrative sections
+that explain why those controls matter.
+
+It is intentionally a compressed lookup document, not a replacement for the
+comprehensive primer. It does not contain the full conceptual explanations,
+framework/runtime discussion, challenges, or either customer-support
+walkthrough. When a choice is high-risk or the quick rule conflicts with a
+domain policy, follow the detailed treatment and the application's
+authorization layer.
+
 ## Pattern Selection Guide
 
 ### ReAct (Reasoning + Acting)
@@ -9,7 +24,7 @@
 - User-facing applications requiring transparency
 
 **Execution Model:**
-```
+```text
 Decision summary → Action → Observation → (loop)
 ```
 
@@ -37,7 +52,7 @@ agent_loop:
 - When success criteria clear but path uncertain
 
 **Execution Model:**
-```
+```text
 LLM → Tool Calls → Append Results → Loop Until Done
 ```
 
@@ -64,7 +79,7 @@ result = await agent.run("Find info about X", deps=deps)
 - When long-horizon planning critical
 
 **Execution Model:**
-```
+```text
 LLM → Translate to PDDL → Symbolic Planner → LLM → Execute
 ```
 
@@ -80,7 +95,7 @@ LLM → Translate to PDDL → Symbolic Planner → LLM → Execute
 - Learning from mistakes important
 
 **Execution Model:**
-```
+```text
 Execute → Evaluate → Reflect → Retry with Reflection
 ```
 
@@ -96,7 +111,7 @@ Execute → Evaluate → Reflect → Retry with Reflection
 - Team-like collaboration required
 
 **Execution Model:**
-```
+```text
 Task → Agent Selection → Execution → Next Task
 ```
 
@@ -217,7 +232,7 @@ for memory in relevant_memories:
 **Scoring function** (illustrative — the equal-weighted 1/3-1/3-1/3 version is
 what Generative Agents used; the weights below are just a starting point, tune
 per your data):
-```
+```text
 score = 0.4 * recency + 0.4 * relevance + 0.2 * importance
 ```
 
@@ -237,7 +252,7 @@ score = 0.4 * recency + 0.4 * relevance + 0.2 * importance
 | API rate limit | 429 response | Exponential backoff, queue |
 
 ### Reflection Template
-```
+```text
 If max_iterations reached without success:
   1. Show agent failed trajectory
   2. Ask: "Why did this approach fail?"
@@ -272,7 +287,7 @@ would make the path clearer.
 ## Evaluation Metrics Definitions
 
 ### Task Success Rate
-```
+```text
 = (completed_successfully / total_attempted) * 100%
 
 Threshold (illustrative starting points, not industry benchmarks — set your
@@ -283,7 +298,7 @@ own bar from baseline data and business risk tolerance):
 ```
 
 ### Average Steps to Success
-```
+```text
 = sum(steps_for_successful_tasks) / count(successful)
 
 Benchmark: 5-10 steps typical for complex tasks
@@ -291,7 +306,7 @@ Optimization: Reduce redundant tool calls
 ```
 
 ### Hallucination Rate
-```
+```text
 = (claims_without_tool_backing / total_claims) * 100%
 
 Acceptable: <5% (illustrative starting point — calibrate to your domain's risk)
@@ -299,7 +314,7 @@ Detection: Analyze final output for unsourced claims
 ```
 
 ### Tool Use Accuracy
-```
+```text
 = (correct_argument_calls / total_tool_calls) * 100%
 
 Target: >95%
@@ -307,7 +322,7 @@ Improvement: Better instruction + schema validation
 ```
 
 ### Cost per Task
-```
+```text
 = (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
 
 Note: input and output tokens are priced separately, and output is typically
@@ -384,7 +399,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 ## Quick Implementation Checklist
 
 ### MVP Agent (Week 1)
-```
+```text
 ☐ Choose model and record its exact model identifier, provider, and limits
 ☐ Define 3-5 core tools
 ☐ Write system prompt
@@ -394,7 +409,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 ```
 
 ### Enhanced Agent (Week 2-3)
-```
+```text
 ☐ Add tool error handling & retries
 ☐ Implement reflection on failures
 ☐ Add conversation history management
@@ -405,7 +420,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 ```
 
 ### Production Ready (Week 4+)
-```
+```text
 ☐ Implement rate limiting & quotas
 ☐ Add human-in-the-loop for critical actions
 ☐ Persist state and make side effects idempotent
@@ -421,7 +436,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 ## Cost Estimation Framework
 
 ### Per-Task Cost Calculation
-```
+```text
 Base cost = (input_tokens * input_price_per_1k + output_tokens * output_price_per_1k) / 1000
 
 Example (illustrative pricing for a mid-tier frontier model — check current
@@ -432,7 +447,7 @@ provider rate cards for actual numbers):
 ```
 
 ### Monthly Budget Projection
-```
+```text
 Monthly = tasks_per_day * avg_cost_per_task * 30 * growth_factor
 
 Example:
@@ -443,7 +458,7 @@ Example:
 ```
 
 ### Optimization ROI
-```
+```text
 Compression savings = (original_tokens - compressed_tokens) * price_per_token * tasks_per_month
 
 If saving 500 tokens per task:
@@ -496,7 +511,7 @@ for task, threshold in test_cases:
 ```
 
 ### Human Evaluation
-```
+```text
 Sample 5-10% of production runs weekly
 Rate on: Correctness, Completeness, Efficiency, Clarity
 Pass/fail: Average rating >= 4/5
