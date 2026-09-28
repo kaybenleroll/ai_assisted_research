@@ -15,9 +15,54 @@ This document surveys the landscape of AI coding agents available as of **Septem
 
 **Freshness note:** In this field, some sections can age in weeks, not quarters. Treat pricing, benchmark rankings, and model-version statements as snapshots tied to their stated dates.
 
-**How to read this document:** If you want the fastest path to a conclusion, start with [Model Alternatives for Coding Agents](#model-alternatives-for-coding-agents) to choose a capability and deployment shortlist, then use the [Feature Comparison Matrix](#feature-comparison-matrix), [Provider Flexibility Analysis](#provider-flexibility-analysis), and [Recommendations](#recommendations) to choose the harness and operating policy. The deep-dive sections are there for when you need to evaluate a specific tool seriously.
+**How to read this document:** If you want the fastest path to a conclusion, start with [Capability-led selection and adoption](#capability-led-selection-and-adoption) for the short decision, staged rollout, and command-safety contract. Then use [Model Alternatives for Coding Agents](#model-alternatives-for-coding-agents), the [Feature Comparison Matrix](#feature-comparison-matrix), [Provider Flexibility Analysis](#provider-flexibility-analysis), and [Detailed recommendations](#recommendations) as evidence. The deep-dive profiles, concrete multi-model setup, and Pi section remain reference material for an evaluation you can reproduce.
 
 This survey covers tools that were verifiable and actively maintained as of September 2026. It does not cover tools no longer in active development, purely GUI-based editors with no API or CLI surface, or general-purpose LLM interfaces that happen to accept code. The model section is a coding- and agent-workflow survey, not a catalogue of every chat, image, embedding, or research model. Cloud IDE platforms (Replit, Gitpod, etc.) are out of scope unless they offer a dedicated coding-agent mode. Where a claim could not be verified, it is flagged.
+
+---
+
+## Capability-led Selection and Adoption
+
+The shortest useful answer is to choose the operating boundary first, then choose a model inside it. Do not start by translating Claude model names into another vendor's names: the harness, provider, context policy, tools, permissions, and recovery loop are part of the system you are evaluating.
+
+### Choose a capability lane
+
+Use the first row that matches the constraint that matters most. The named tools are starting points, not claims of universal superiority; the dated profiles and matrix below explain the evidence and the exceptions.
+
+| Primary requirement | Start here | Why this is the default | Main reason to choose another lane |
+| --- | --- | --- | --- |
+| Terminal-native, multi-provider work with MCP | **OpenCode** with an approved provider; keep **Aider** as the small git-native fallback | OpenCode combines a terminal surface, broad provider choice, LSP, MCP, and multi-session work; Aider is simpler and automatically git-oriented | Choose Aider when minimalism and predictable git edits matter more than MCP; choose Goose when on-device execution and MCP portability are the priority |
+| Editor-first Plan/Act work | **Cline**; consider **Continue.dev** for local inference or **Cursor** for a polished commercial IDE | Cline provides a model-agnostic editor workflow with reviewable planning, browser/MCP access, and a CLI; Continue prioritises local models | Choose a CLI when scripting or headless operation is primary; choose Cursor only when its hosted, VS Code-derived boundary is acceptable |
+| Sensitive or offline routine work | **A local model through OpenCode, Continue.dev, Aider, or Pi** | The inference request can remain on the workstation when the full tool and extension path is audited | A local model does not protect data sent by telemetry, remote MCP, extensions, model downloads, or editor integrations |
+| Long-running cloud or cross-application work | **OpenHands** for an open/self-hostable coding stack; **Devin** or **Grok Bot** when a managed cloud computer is acceptable | These products address asynchronous execution and broader computer or repository boundaries | Use a local terminal harness when local source control, data locality, or interactive approval is the central requirement |
+| Small, inspectable experimental harness | **Pi** beside OpenCode, not underneath it | Pi makes model switching, session state, and TypeScript-level workflow customisation explicit | Use OpenCode or Cline when MCP, plan/approval features, or a richer default tool surface is required |
+
+For model allocation, begin with four roles rather than four permanent model names: a frontier route for hard diagnosis, a normal implementation route, a fast/bounded route, and an independent-review route. The [candidate-family shortlist](#candidate-families-against-the-claude-baseline) supplies dated examples. The concrete setup later turns those roles into OpenCode/OpenRouter, direct-provider, local, Aider, Cline, and Pi configurations. A model choice never grants additional shell, file, network, credential, or merge authority.
+
+### A staged adoption path
+
+Treat migration as an evaluation programme. Keep the existing Claude workflow as the baseline and promote alternatives only when the complete harness/provider/model configuration passes the same acceptance checks.
+
+1. **Define the boundary and baseline.** Record the repository revision, task contract, Claude harness and model, permissions, provider, context policy, acceptance checks, cost, latency, retries, and human correction. Decide whether source may leave the workstation. Create a disposable branch or worktree for any write-capable trial.
+2. **Run a read-only smoke test.** Verify installation, version, authentication, model listing, provider route, and repository instructions with an inventory or test-plan request that must not edit files. Stop on an unknown endpoint, unexpected credential path, or data-boundary mismatch.
+3. **Pilot the lanes.** Run roughly 20--30 representative tasks: bounded support, ordinary implementation, hard diagnosis, documentation, a failing test, a multi-file change, and an MCP/tool task where relevant. Compare accepted changes, missed defects, false positives, recovery, review burden, elapsed time, tool failures, and spend—not just whether the final response says it succeeded.
+4. **Add diversity deliberately.** Use a different provider or local route for high-risk review when the data policy permits it. Add Pi as a harness comparison using the same task contract, revision, permissions, model tuple, and checks; record any extension or wrapper as part of Pi's identity. Do not call two sessions independent merely because their model names differ.
+5. **Promote narrowly and re-evaluate on change.** Give a candidate only the role and permissions it passed. Re-run the pilot when the provider, model ID, quantization, context setting, harness version, project instructions, or retention terms change. Human review and CI remain the merge gate.
+
+The recommended starting configuration is therefore **OpenCode plus a scoped OpenRouter project/key**, with an explicit hard/normal/bounded/review allocation and a local route for data that must stay on the workstation. Keep Aider as the minimal fallback, Cline as the editor-first option, and Pi as the inspectable harness experiment. Prefer direct providers or self-hosting when they provide a required regional, contractual, or data boundary; OpenRouter is a convenient routing layer, not a privacy guarantee. The provider-specific retention distinctions later in this document are part of the decision, not footnotes.
+
+### Command contract for every example
+
+The installation, authentication, configuration, and launch commands throughout this document are illustrative recipes. Before retaining or running any one of them, apply the following contract to that command and record the result in the pilot notes. A command is not authorised merely because it appears in a profile.
+
+| Requirement | What the operator must establish before running the command |
+| --- | --- |
+| **Prerequisites** | The supported operating system/runtime, package manager or container engine, repository/worktree, version pin, network access, and any required service account or credits. Verify the live project documentation because these facts are dated. |
+| **Authority and credentials** | Which user, branch/worktree, shell permissions, provider account, API key, OAuth session, MCP token, or local endpoint the command uses. Scope keys and permissions to the pilot; never put secrets in tracked configuration or command captures. |
+| **Verification** | A non-destructive version/status/model/provider check, then the expected file, process, diff, test, or API result. Record the exact harness, model, provider, and settings; a successful login does not prove tool-call or retention compatibility. |
+| **Rollback** | How to stop the process, revoke or rotate credentials, remove only the installed/configured component, discard or reset the disposable worktree, restore configuration, and undo generated changes. Do not use a broad reset or deletion command when a targeted reversal is sufficient. |
+
+For commands that install software or start a server, verify the package/source and release before execution. For commands that export credentials, prefer a password manager, the harness credential store, or a non-committed environment file; clear captured secrets and rotate exposed keys. For commands that grant write or shell access, begin read-only, use least privilege, require approval for destructive or external actions, and inspect the diff and test results before integration. The individual setup sections below add provider- and product-specific checks; if a section cannot satisfy one of these four fields, treat the command as unverified rather than silently copying it.
 
 ---
 

@@ -611,185 +611,195 @@ Survey of AI Coding Agents in 2026 (September 16 Refresh)</span>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#the-ai-coding-agent-taxonomy" id="toc-the-ai-coding-agent-taxonomy"><span class="toc-section-number">2</span> The AI Coding Agent
+<li><a href="#capability-led-selection-and-adoption" id="toc-capability-led-selection-and-adoption"><span class="toc-section-number">2</span> Capability-led Selection and
+Adoption</a>
+<ul>
+<li><a href="#choose-a-capability-lane" id="toc-choose-a-capability-lane"><span class="toc-section-number">2.1</span> Choose a capability lane</a></li>
+<li><a href="#a-staged-adoption-path" id="toc-a-staged-adoption-path"><span class="toc-section-number">2.2</span> A staged adoption path</a></li>
+<li><a href="#command-contract-for-every-example" id="toc-command-contract-for-every-example"><span class="toc-section-number">2.3</span> Command contract for every
+example</a></li>
+</ul></li>
+<li><a href="#the-ai-coding-agent-taxonomy" id="toc-the-ai-coding-agent-taxonomy"><span class="toc-section-number">3</span> The AI Coding Agent
 Taxonomy</a></li>
-<li><a href="#model-alternatives-for-coding-agents" id="toc-model-alternatives-for-coding-agents"><span class="toc-section-number">3</span> Model Alternatives for Coding
+<li><a href="#model-alternatives-for-coding-agents" id="toc-model-alternatives-for-coding-agents"><span class="toc-section-number">4</span> Model Alternatives for Coding
 Agents</a>
 <ul>
-<li><a href="#model-provider-and-agent-harness" id="toc-model-provider-and-agent-harness"><span class="toc-section-number">3.1</span> Model, Provider, and Agent
+<li><a href="#model-provider-and-agent-harness" id="toc-model-provider-and-agent-harness"><span class="toc-section-number">4.1</span> Model, Provider, and Agent
 Harness</a></li>
-<li><a href="#what-matters-for-agentic-coding" id="toc-what-matters-for-agentic-coding"><span class="toc-section-number">3.2</span> What Matters for Agentic
+<li><a href="#what-matters-for-agentic-coding" id="toc-what-matters-for-agentic-coding"><span class="toc-section-number">4.2</span> What Matters for Agentic
 Coding</a></li>
-<li><a href="#candidate-families-against-the-claude-baseline" id="toc-candidate-families-against-the-claude-baseline"><span class="toc-section-number">3.3</span> Candidate Families Against the
+<li><a href="#candidate-families-against-the-claude-baseline" id="toc-candidate-families-against-the-claude-baseline"><span class="toc-section-number">4.3</span> Candidate Families Against the
 Claude Baseline</a></li>
-<li><a href="#closed-weight-models" id="toc-closed-weight-models"><span class="toc-section-number">3.4</span> Closed-Weight Models</a>
+<li><a href="#closed-weight-models" id="toc-closed-weight-models"><span class="toc-section-number">4.4</span> Closed-Weight Models</a>
 <ul>
-<li><a href="#anthropic-claude-baseline" id="toc-anthropic-claude-baseline"><span class="toc-section-number">3.4.1</span> Anthropic / Claude
+<li><a href="#anthropic-claude-baseline" id="toc-anthropic-claude-baseline"><span class="toc-section-number">4.4.1</span> Anthropic / Claude
 Baseline</a></li>
-<li><a href="#openai-gpt-and-codex-models" id="toc-openai-gpt-and-codex-models"><span class="toc-section-number">3.4.2</span> OpenAI / GPT and Codex
+<li><a href="#openai-gpt-and-codex-models" id="toc-openai-gpt-and-codex-models"><span class="toc-section-number">4.4.2</span> OpenAI / GPT and Codex
 Models</a></li>
-<li><a href="#google-gemini" id="toc-google-gemini"><span class="toc-section-number">3.4.3</span> Google / Gemini</a></li>
-<li><a href="#xai-grok" id="toc-xai-grok"><span class="toc-section-number">3.4.4</span> xAI / Grok</a></li>
-<li><a href="#other-vendors-and-product-specific-models" id="toc-other-vendors-and-product-specific-models"><span class="toc-section-number">3.4.5</span> Other Vendors and
+<li><a href="#google-gemini" id="toc-google-gemini"><span class="toc-section-number">4.4.3</span> Google / Gemini</a></li>
+<li><a href="#xai-grok" id="toc-xai-grok"><span class="toc-section-number">4.4.4</span> xAI / Grok</a></li>
+<li><a href="#other-vendors-and-product-specific-models" id="toc-other-vendors-and-product-specific-models"><span class="toc-section-number">4.4.5</span> Other Vendors and
 Product-Specific Models</a></li>
 </ul></li>
-<li><a href="#open-weight-models" id="toc-open-weight-models"><span class="toc-section-number">3.5</span> Open-Weight Models</a>
+<li><a href="#open-weight-models" id="toc-open-weight-models"><span class="toc-section-number">4.5</span> Open-Weight Models</a>
 <ul>
-<li><a href="#qwen" id="toc-qwen"><span class="toc-section-number">3.5.1</span> Qwen</a></li>
-<li><a href="#deepseek" id="toc-deepseek"><span class="toc-section-number">3.5.2</span> DeepSeek</a></li>
-<li><a href="#z.ai-glm" id="toc-z.ai-glm"><span class="toc-section-number">3.5.3</span> Z.AI / GLM</a></li>
-<li><a href="#moonshot-kimi" id="toc-moonshot-kimi"><span class="toc-section-number">3.5.4</span> Moonshot / Kimi</a></li>
-<li><a href="#mistral-devstral" id="toc-mistral-devstral"><span class="toc-section-number">3.5.5</span> Mistral / Devstral</a></li>
-<li><a href="#openai-gpt-oss" id="toc-openai-gpt-oss"><span class="toc-section-number">3.5.6</span> OpenAI / gpt-oss</a></li>
-<li><a href="#meta-llama-and-google-gemma" id="toc-meta-llama-and-google-gemma"><span class="toc-section-number">3.5.7</span> Meta / Llama and Google /
+<li><a href="#qwen" id="toc-qwen"><span class="toc-section-number">4.5.1</span> Qwen</a></li>
+<li><a href="#deepseek" id="toc-deepseek"><span class="toc-section-number">4.5.2</span> DeepSeek</a></li>
+<li><a href="#z.ai-glm" id="toc-z.ai-glm"><span class="toc-section-number">4.5.3</span> Z.AI / GLM</a></li>
+<li><a href="#moonshot-kimi" id="toc-moonshot-kimi"><span class="toc-section-number">4.5.4</span> Moonshot / Kimi</a></li>
+<li><a href="#mistral-devstral" id="toc-mistral-devstral"><span class="toc-section-number">4.5.5</span> Mistral / Devstral</a></li>
+<li><a href="#openai-gpt-oss" id="toc-openai-gpt-oss"><span class="toc-section-number">4.5.6</span> OpenAI / gpt-oss</a></li>
+<li><a href="#meta-llama-and-google-gemma" id="toc-meta-llama-and-google-gemma"><span class="toc-section-number">4.5.7</span> Meta / Llama and Google /
 Gemma</a></li>
-<li><a href="#other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi" id="toc-other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="toc-section-number">3.5.8</span> Other Families: MiniMax, NVIDIA
+<li><a href="#other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi" id="toc-other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="toc-section-number">4.5.8</span> Other Families: MiniMax, NVIDIA
 Nemotron, IBM Granite, Microsoft Phi</a></li>
 </ul></li>
-<li><a href="#deployment-fit-workstation-server-or-hosted-endpoint" id="toc-deployment-fit-workstation-server-or-hosted-endpoint"><span class="toc-section-number">3.6</span> Deployment Fit: Workstation,
+<li><a href="#deployment-fit-workstation-server-or-hosted-endpoint" id="toc-deployment-fit-workstation-server-or-hosted-endpoint"><span class="toc-section-number">4.6</span> Deployment Fit: Workstation,
 Server, or Hosted Endpoint</a></li>
-<li><a href="#evidence-and-evaluation" id="toc-evidence-and-evaluation"><span class="toc-section-number">3.7</span> Evidence and Evaluation</a></li>
-<li><a href="#choosing-a-replacement" id="toc-choosing-a-replacement"><span class="toc-section-number">3.8</span> Choosing a Replacement</a></li>
+<li><a href="#evidence-and-evaluation" id="toc-evidence-and-evaluation"><span class="toc-section-number">4.7</span> Evidence and Evaluation</a></li>
+<li><a href="#choosing-a-replacement" id="toc-choosing-a-replacement"><span class="toc-section-number">4.8</span> Choosing a Replacement</a></li>
 </ul></li>
-<li><a href="#cli-native-tools" id="toc-cli-native-tools"><span class="toc-section-number">4</span> CLI-Native Tools</a>
+<li><a href="#cli-native-tools" id="toc-cli-native-tools"><span class="toc-section-number">5</span> CLI-Native Tools</a>
 <ul>
-<li><a href="#aider" id="toc-aider"><span class="toc-section-number">4.1</span> Aider</a></li>
-<li><a href="#opencode" id="toc-opencode"><span class="toc-section-number">4.2</span> OpenCode</a></li>
-<li><a href="#goose-by-block" id="toc-goose-by-block"><span class="toc-section-number">4.3</span> Goose (by Block)</a></li>
-<li><a href="#gemini-cli-by-google" id="toc-gemini-cli-by-google"><span class="toc-section-number">4.4</span> Gemini CLI (by Google)</a></li>
-<li><a href="#plandex" id="toc-plandex"><span class="toc-section-number">4.5</span> Plandex</a></li>
-<li><a href="#swe-agent" id="toc-swe-agent"><span class="toc-section-number">4.6</span> SWE-agent</a></li>
-<li><a href="#openai-codex-cli" id="toc-openai-codex-cli"><span class="toc-section-number">4.7</span> OpenAI Codex CLI</a></li>
-<li><a href="#amp-sourcegraph" id="toc-amp-sourcegraph"><span class="toc-section-number">4.8</span> Amp (Sourcegraph)</a></li>
-<li><a href="#deprecated-and-unverified-tools" id="toc-deprecated-and-unverified-tools"><span class="toc-section-number">4.9</span> Deprecated and Unverified
+<li><a href="#aider" id="toc-aider"><span class="toc-section-number">5.1</span> Aider</a></li>
+<li><a href="#opencode" id="toc-opencode"><span class="toc-section-number">5.2</span> OpenCode</a></li>
+<li><a href="#goose-by-block" id="toc-goose-by-block"><span class="toc-section-number">5.3</span> Goose (by Block)</a></li>
+<li><a href="#gemini-cli-by-google" id="toc-gemini-cli-by-google"><span class="toc-section-number">5.4</span> Gemini CLI (by Google)</a></li>
+<li><a href="#plandex" id="toc-plandex"><span class="toc-section-number">5.5</span> Plandex</a></li>
+<li><a href="#swe-agent" id="toc-swe-agent"><span class="toc-section-number">5.6</span> SWE-agent</a></li>
+<li><a href="#openai-codex-cli" id="toc-openai-codex-cli"><span class="toc-section-number">5.7</span> OpenAI Codex CLI</a></li>
+<li><a href="#amp-sourcegraph" id="toc-amp-sourcegraph"><span class="toc-section-number">5.8</span> Amp (Sourcegraph)</a></li>
+<li><a href="#deprecated-and-unverified-tools" id="toc-deprecated-and-unverified-tools"><span class="toc-section-number">5.9</span> Deprecated and Unverified
 Tools</a>
 <ul>
-<li><a href="#mentat" id="toc-mentat"><span class="toc-section-number">4.9.1</span> Mentat</a></li>
+<li><a href="#mentat" id="toc-mentat"><span class="toc-section-number">5.9.1</span> Mentat</a></li>
 </ul></li>
-<li><a href="#qwen-code-and-kimi-cli" id="toc-qwen-code-and-kimi-cli"><span class="toc-section-number">4.10</span> Qwen Code and Kimi CLI</a></li>
+<li><a href="#qwen-code-and-kimi-cli" id="toc-qwen-code-and-kimi-cli"><span class="toc-section-number">5.10</span> Qwen Code and Kimi CLI</a></li>
 </ul></li>
-<li><a href="#ide-extensions-and-hybrid-tools" id="toc-ide-extensions-and-hybrid-tools"><span class="toc-section-number">5</span> IDE Extensions and Hybrid Tools</a>
+<li><a href="#ide-extensions-and-hybrid-tools" id="toc-ide-extensions-and-hybrid-tools"><span class="toc-section-number">6</span> IDE Extensions and Hybrid Tools</a>
 <ul>
-<li><a href="#cline-formerly-claude-dev" id="toc-cline-formerly-claude-dev"><span class="toc-section-number">5.1</span> Cline (formerly Claude
+<li><a href="#cline-formerly-claude-dev" id="toc-cline-formerly-claude-dev"><span class="toc-section-number">6.1</span> Cline (formerly Claude
 Dev)</a></li>
-<li><a href="#continue.dev" id="toc-continue.dev"><span class="toc-section-number">5.2</span> Continue.dev</a></li>
+<li><a href="#continue.dev" id="toc-continue.dev"><span class="toc-section-number">6.2</span> Continue.dev</a></li>
 </ul></li>
-<li><a href="#dedicated-ai-ides" id="toc-dedicated-ai-ides"><span class="toc-section-number">6</span> Dedicated AI IDEs</a>
+<li><a href="#dedicated-ai-ides" id="toc-dedicated-ai-ides"><span class="toc-section-number">7</span> Dedicated AI IDEs</a>
 <ul>
-<li><a href="#cursor" id="toc-cursor"><span class="toc-section-number">6.1</span> Cursor</a></li>
-<li><a href="#windsurf-now-devin-desktop-cognition-ai" id="toc-windsurf-now-devin-desktop-cognition-ai"><span class="toc-section-number">6.2</span> Windsurf (now Devin Desktop,
+<li><a href="#cursor" id="toc-cursor"><span class="toc-section-number">7.1</span> Cursor</a></li>
+<li><a href="#windsurf-now-devin-desktop-cognition-ai" id="toc-windsurf-now-devin-desktop-cognition-ai"><span class="toc-section-number">7.2</span> Windsurf (now Devin Desktop,
 Cognition AI)</a></li>
-<li><a href="#zed-ai" id="toc-zed-ai"><span class="toc-section-number">6.3</span> Zed AI</a></li>
-<li><a href="#google-antigravity" id="toc-google-antigravity"><span class="toc-section-number">6.4</span> Google Antigravity</a></li>
-<li><a href="#aws-kiro-ide-and-cli" id="toc-aws-kiro-ide-and-cli"><span class="toc-section-number">6.5</span> AWS Kiro IDE and CLI</a></li>
+<li><a href="#zed-ai" id="toc-zed-ai"><span class="toc-section-number">7.3</span> Zed AI</a></li>
+<li><a href="#google-antigravity" id="toc-google-antigravity"><span class="toc-section-number">7.4</span> Google Antigravity</a></li>
+<li><a href="#aws-kiro-ide-and-cli" id="toc-aws-kiro-ide-and-cli"><span class="toc-section-number">7.5</span> AWS Kiro IDE and CLI</a></li>
 </ul></li>
-<li><a href="#cloud-and-web-platform-agents" id="toc-cloud-and-web-platform-agents"><span class="toc-section-number">7</span> Cloud and Web Platform Agents</a>
+<li><a href="#cloud-and-web-platform-agents" id="toc-cloud-and-web-platform-agents"><span class="toc-section-number">8</span> Cloud and Web Platform Agents</a>
 <ul>
-<li><a href="#grok-bot-xai" id="toc-grok-bot-xai"><span class="toc-section-number">7.1</span> Grok Bot (xAI)</a></li>
-<li><a href="#openhands-formerly-opendevin" id="toc-openhands-formerly-opendevin"><span class="toc-section-number">7.2</span> OpenHands (formerly
+<li><a href="#grok-bot-xai" id="toc-grok-bot-xai"><span class="toc-section-number">8.1</span> Grok Bot (xAI)</a></li>
+<li><a href="#openhands-formerly-opendevin" id="toc-openhands-formerly-opendevin"><span class="toc-section-number">8.2</span> OpenHands (formerly
 OpenDevin)</a></li>
-<li><a href="#devin-by-cognition-ai" id="toc-devin-by-cognition-ai"><span class="toc-section-number">7.3</span> Devin (by Cognition AI)</a></li>
+<li><a href="#devin-by-cognition-ai" id="toc-devin-by-cognition-ai"><span class="toc-section-number">8.3</span> Devin (by Cognition AI)</a></li>
 </ul></li>
-<li><a href="#commercial-ai-coding-assistants" id="toc-commercial-ai-coding-assistants"><span class="toc-section-number">8</span> Commercial AI Coding Assistants</a>
+<li><a href="#commercial-ai-coding-assistants" id="toc-commercial-ai-coding-assistants"><span class="toc-section-number">9</span> Commercial AI Coding Assistants</a>
 <ul>
-<li><a href="#github-copilot-with-agent-mode" id="toc-github-copilot-with-agent-mode"><span class="toc-section-number">8.1</span> GitHub Copilot with Agent
+<li><a href="#github-copilot-with-agent-mode" id="toc-github-copilot-with-agent-mode"><span class="toc-section-number">9.1</span> GitHub Copilot with Agent
 Mode</a></li>
-<li><a href="#amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro" id="toc-amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="toc-section-number">8.2</span> Amazon Q Developer (formerly
+<li><a href="#amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro" id="toc-amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="toc-section-number">9.2</span> Amazon Q Developer (formerly
 CodeWhisperer) – IDE transition to Kiro</a></li>
-<li><a href="#jetbrains-ai-assistant" id="toc-jetbrains-ai-assistant"><span class="toc-section-number">8.3</span> JetBrains AI Assistant</a></li>
-<li><a href="#tabnine" id="toc-tabnine"><span class="toc-section-number">8.4</span> Tabnine</a></li>
-<li><a href="#supermaven-discontinued-folded-into-cursor" id="toc-supermaven-discontinued-folded-into-cursor"><span class="toc-section-number">8.5</span> Supermaven – discontinued, folded
+<li><a href="#jetbrains-ai-assistant" id="toc-jetbrains-ai-assistant"><span class="toc-section-number">9.3</span> JetBrains AI Assistant</a></li>
+<li><a href="#tabnine" id="toc-tabnine"><span class="toc-section-number">9.4</span> Tabnine</a></li>
+<li><a href="#supermaven-discontinued-folded-into-cursor" id="toc-supermaven-discontinued-folded-into-cursor"><span class="toc-section-number">9.5</span> Supermaven – discontinued, folded
 into Cursor</a></li>
 </ul></li>
-<li><a href="#cross-cutting-analysis" id="toc-cross-cutting-analysis"><span class="toc-section-number">9</span> Cross-Cutting Analysis</a>
+<li><a href="#cross-cutting-analysis" id="toc-cross-cutting-analysis"><span class="toc-section-number">10</span> Cross-Cutting Analysis</a>
 <ul>
-<li><a href="#provider-flexibility-analysis" id="toc-provider-flexibility-analysis"><span class="toc-section-number">9.1</span> Provider Flexibility Analysis</a>
+<li><a href="#provider-flexibility-analysis" id="toc-provider-flexibility-analysis"><span class="toc-section-number">10.1</span> Provider Flexibility Analysis</a>
 <ul>
-<li><a href="#openrouter-compatibility" id="toc-openrouter-compatibility"><span class="toc-section-number">9.1.1</span> OpenRouter
+<li><a href="#openrouter-compatibility" id="toc-openrouter-compatibility"><span class="toc-section-number">10.1.1</span> OpenRouter
 Compatibility</a></li>
-<li><a href="#local-llm-support-ollama-lm-studio" id="toc-local-llm-support-ollama-lm-studio"><span class="toc-section-number">9.1.2</span> Local LLM Support (Ollama / LM
+<li><a href="#local-llm-support-ollama-lm-studio" id="toc-local-llm-support-ollama-lm-studio"><span class="toc-section-number">10.1.2</span> Local LLM Support (Ollama / LM
 Studio)</a></li>
 </ul></li>
-<li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">9.2</span> Feature Comparison Matrix</a></li>
-<li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">9.3</span> Extensibility Deep Dive</a>
+<li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">10.2</span> Feature Comparison
+Matrix</a></li>
+<li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">10.3</span> Extensibility Deep Dive</a>
 <ul>
-<li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">9.3.1</span> Claude Code’s Extension
+<li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">10.3.1</span> Claude Code’s Extension
 Architecture</a></li>
-<li><a href="#how-alternatives-compare" id="toc-how-alternatives-compare"><span class="toc-section-number">9.3.2</span> How Alternatives
+<li><a href="#how-alternatives-compare" id="toc-how-alternatives-compare"><span class="toc-section-number">10.3.2</span> How Alternatives
 Compare</a></li>
-<li><a href="#the-agents.md-open-standard" id="toc-the-agents.md-open-standard"><span class="toc-section-number">9.3.3</span> The AGENTS.md Open
+<li><a href="#the-agents.md-open-standard" id="toc-the-agents.md-open-standard"><span class="toc-section-number">10.3.3</span> The AGENTS.md Open
 Standard</a></li>
-<li><a href="#what-this-means-for-migration" id="toc-what-this-means-for-migration"><span class="toc-section-number">9.3.4</span> What This Means for
+<li><a href="#what-this-means-for-migration" id="toc-what-this-means-for-migration"><span class="toc-section-number">10.3.4</span> What This Means for
 Migration</a></li>
 </ul></li>
-<li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">9.4</span> Cost Analysis</a>
+<li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">10.4</span> Cost Analysis</a>
 <ul>
-<li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">9.4.1</span> Defining “Heavy Usage”</a></li>
-<li><a href="#api-cost-estimates-direct-provider-as-of-september-16-2026" id="toc-api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="toc-section-number">9.4.2</span> API Cost Estimates (Direct
+<li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">10.4.1</span> Defining “Heavy Usage”</a></li>
+<li><a href="#api-cost-estimates-direct-provider-as-of-september-16-2026" id="toc-api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="toc-section-number">10.4.2</span> API Cost Estimates (Direct
 Provider, as of September 16, 2026)</a></li>
-<li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">9.4.3</span> Per-Tool Cost Summary</a></li>
-<li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">9.4.4</span> Cost Migration Strategy</a></li>
+<li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">10.4.3</span> Per-Tool Cost Summary</a></li>
+<li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">10.4.4</span> Cost Migration
+Strategy</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#recommendations" id="toc-recommendations"><span class="toc-section-number">10</span> Recommendations</a>
+<li><a href="#recommendations" id="toc-recommendations"><span class="toc-section-number">11</span> Recommendations</a>
 <ul>
-<li><a href="#if-you-want-the-closest-cli-experience-to-claude-code" id="toc-if-you-want-the-closest-cli-experience-to-claude-code"><span class="toc-section-number">10.1</span> If you want the closest CLI
+<li><a href="#if-you-want-the-closest-cli-experience-to-claude-code" id="toc-if-you-want-the-closest-cli-experience-to-claude-code"><span class="toc-section-number">11.1</span> If you want the closest CLI
 experience to Claude Code</a></li>
-<li><a href="#if-you-want-the-best-ide-integrated-alternative" id="toc-if-you-want-the-best-ide-integrated-alternative"><span class="toc-section-number">10.2</span> If you want the best
+<li><a href="#if-you-want-the-best-ide-integrated-alternative" id="toc-if-you-want-the-best-ide-integrated-alternative"><span class="toc-section-number">11.2</span> If you want the best
 IDE-integrated alternative</a></li>
-<li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">10.3</span> If cost is the primary
+<li><a href="#if-cost-is-the-primary-constraint" id="toc-if-cost-is-the-primary-constraint"><span class="toc-section-number">11.3</span> If cost is the primary
 constraint</a></li>
-<li><a href="#if-you-need-persistent-cross-application-or-asynchronous-work" id="toc-if-you-need-persistent-cross-application-or-asynchronous-work"><span class="toc-section-number">10.4</span> If you need persistent
+<li><a href="#if-you-need-persistent-cross-application-or-asynchronous-work" id="toc-if-you-need-persistent-cross-application-or-asynchronous-work"><span class="toc-section-number">11.4</span> If you need persistent
 cross-application or asynchronous work</a></li>
-<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">10.5</span> If MCP server investments are
+<li><a href="#if-mcp-server-investments-are-critical" id="toc-if-mcp-server-investments-are-critical"><span class="toc-section-number">11.5</span> If MCP server investments are
 critical</a></li>
-<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">10.6</span> If you need extensibility similar
+<li><a href="#if-you-need-extensibility-similar-to-claude-codes-skillshooks" id="toc-if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="toc-section-number">11.6</span> If you need extensibility similar
 to Claude Code’s skills+hooks</a></li>
-<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">10.7</span> Migration strategy</a></li>
+<li><a href="#migration-strategy" id="toc-migration-strategy"><span class="toc-section-number">11.7</span> Migration strategy</a></li>
 </ul></li>
-<li><a href="#a-concrete-multi-model-alternative-setup" id="toc-a-concrete-multi-model-alternative-setup"><span class="toc-section-number">11</span> A Concrete Multi-Model Alternative
+<li><a href="#a-concrete-multi-model-alternative-setup" id="toc-a-concrete-multi-model-alternative-setup"><span class="toc-section-number">12</span> A Concrete Multi-Model Alternative
 Setup</a>
 <ul>
-<li><a href="#the-recommended-default-opencode-plus-explicit-model-tiers" id="toc-the-recommended-default-opencode-plus-explicit-model-tiers"><span class="toc-section-number">11.1</span> The recommended default: OpenCode
+<li><a href="#the-recommended-default-opencode-plus-explicit-model-tiers" id="toc-the-recommended-default-opencode-plus-explicit-model-tiers"><span class="toc-section-number">12.1</span> The recommended default: OpenCode
 plus explicit model tiers</a></li>
-<li><a href="#provider-accounts-credits-and-data-boundaries" id="toc-provider-accounts-credits-and-data-boundaries"><span class="toc-section-number">11.2</span> Provider accounts, credits, and
+<li><a href="#provider-accounts-credits-and-data-boundaries" id="toc-provider-accounts-credits-and-data-boundaries"><span class="toc-section-number">12.2</span> Provider accounts, credits, and
 data boundaries</a></li>
-<li><a href="#rough-cost-planning" id="toc-rough-cost-planning"><span class="toc-section-number">11.3</span> Rough cost planning</a></li>
-<li><a href="#model-allocation-by-task" id="toc-model-allocation-by-task"><span class="toc-section-number">11.4</span> Model allocation by task</a></li>
-<li><a href="#setup-cli-first" id="toc-setup-cli-first"><span class="toc-section-number">11.5</span> Setup: CLI-first</a></li>
-<li><a href="#setup-agentic-editor" id="toc-setup-agentic-editor"><span class="toc-section-number">11.6</span> Setup: agentic editor</a></li>
-<li><a href="#repository-configuration-and-security-boundaries" id="toc-repository-configuration-and-security-boundaries"><span class="toc-section-number">11.7</span> Repository configuration and
+<li><a href="#rough-cost-planning" id="toc-rough-cost-planning"><span class="toc-section-number">12.3</span> Rough cost planning</a></li>
+<li><a href="#model-allocation-by-task" id="toc-model-allocation-by-task"><span class="toc-section-number">12.4</span> Model allocation by task</a></li>
+<li><a href="#setup-cli-first" id="toc-setup-cli-first"><span class="toc-section-number">12.5</span> Setup: CLI-first</a></li>
+<li><a href="#setup-agentic-editor" id="toc-setup-agentic-editor"><span class="toc-section-number">12.6</span> Setup: agentic editor</a></li>
+<li><a href="#repository-configuration-and-security-boundaries" id="toc-repository-configuration-and-security-boundaries"><span class="toc-section-number">12.7</span> Repository configuration and
 security boundaries</a></li>
-<li><a href="#a-staged-rollout-and-evaluation-loop" id="toc-a-staged-rollout-and-evaluation-loop"><span class="toc-section-number">11.8</span> A staged rollout and evaluation
+<li><a href="#a-staged-rollout-and-evaluation-loop" id="toc-a-staged-rollout-and-evaluation-loop"><span class="toc-section-number">12.8</span> A staged rollout and evaluation
 loop</a></li>
-<li><a href="#what-this-setup-does-not-solve" id="toc-what-this-setup-does-not-solve"><span class="toc-section-number">11.9</span> What this setup does not
+<li><a href="#what-this-setup-does-not-solve" id="toc-what-this-setup-does-not-solve"><span class="toc-section-number">12.9</span> What this setup does not
 solve</a></li>
 </ul></li>
-<li><a href="#pi-as-an-additional-harness" id="toc-pi-as-an-additional-harness"><span class="toc-section-number">12</span> Pi as an Additional Harness</a>
+<li><a href="#pi-as-an-additional-harness" id="toc-pi-as-an-additional-harness"><span class="toc-section-number">13</span> Pi as an Additional Harness</a>
 <ul>
-<li><a href="#what-pi-adds-to-a-multi-harness-setup" id="toc-what-pi-adds-to-a-multi-harness-setup"><span class="toc-section-number">12.1</span> What Pi adds to a multi-harness
+<li><a href="#what-pi-adds-to-a-multi-harness-setup" id="toc-what-pi-adds-to-a-multi-harness-setup"><span class="toc-section-number">13.1</span> What Pi adds to a multi-harness
 setup</a></li>
-<li><a href="#installation-and-a-first-controlled-run" id="toc-installation-and-a-first-controlled-run"><span class="toc-section-number">12.2</span> Installation and a first
+<li><a href="#installation-and-a-first-controlled-run" id="toc-installation-and-a-first-controlled-run"><span class="toc-section-number">13.2</span> Installation and a first
 controlled run</a></li>
-<li><a href="#project-context-settings-and-extensions" id="toc-project-context-settings-and-extensions"><span class="toc-section-number">12.3</span> Project context, settings, and
+<li><a href="#project-context-settings-and-extensions" id="toc-project-context-settings-and-extensions"><span class="toc-section-number">13.3</span> Project context, settings, and
 extensions</a></li>
-<li><a href="#what-pi-does-not-provide-by-default" id="toc-what-pi-does-not-provide-by-default"><span class="toc-section-number">12.4</span> What Pi does not provide by
+<li><a href="#what-pi-does-not-provide-by-default" id="toc-what-pi-does-not-provide-by-default"><span class="toc-section-number">13.4</span> What Pi does not provide by
 default</a></li>
-<li><a href="#sessions-and-cross-harness-handoff" id="toc-sessions-and-cross-harness-handoff"><span class="toc-section-number">12.5</span> Sessions and cross-harness
+<li><a href="#sessions-and-cross-harness-handoff" id="toc-sessions-and-cross-harness-handoff"><span class="toc-section-number">13.5</span> Sessions and cross-harness
 handoff</a></li>
-<li><a href="#how-to-evaluate-pi-fairly" id="toc-how-to-evaluate-pi-fairly"><span class="toc-section-number">12.6</span> How to evaluate Pi
+<li><a href="#how-to-evaluate-pi-fairly" id="toc-how-to-evaluate-pi-fairly"><span class="toc-section-number">13.6</span> How to evaluate Pi
 fairly</a></li>
-<li><a href="#recommendation" id="toc-recommendation"><span class="toc-section-number">12.7</span> Recommendation</a></li>
+<li><a href="#recommendation" id="toc-recommendation"><span class="toc-section-number">13.7</span> Recommendation</a></li>
 </ul></li>
-<li><a href="#references" id="toc-references"><span class="toc-section-number">13</span> References</a>
+<li><a href="#references" id="toc-references"><span class="toc-section-number">14</span> References</a>
 <ul>
-<li><a href="#model-documentation-and-licences" id="toc-model-documentation-and-licences"><span class="toc-section-number">13.1</span> Model Documentation and
+<li><a href="#model-documentation-and-licences" id="toc-model-documentation-and-licences"><span class="toc-section-number">14.1</span> Model Documentation and
 Licences</a></li>
-<li><a href="#model-evaluations-and-practitioner-reports" id="toc-model-evaluations-and-practitioner-reports"><span class="toc-section-number">13.2</span> Model Evaluations and
+<li><a href="#model-evaluations-and-practitioner-reports" id="toc-model-evaluations-and-practitioner-reports"><span class="toc-section-number">14.2</span> Model Evaluations and
 Practitioner Reports</a></li>
-<li><a href="#tool-and-pricing-documentation" id="toc-tool-and-pricing-documentation"><span class="toc-section-number">13.3</span> Tool and Pricing
+<li><a href="#tool-and-pricing-documentation" id="toc-tool-and-pricing-documentation"><span class="toc-section-number">14.3</span> Tool and Pricing
 Documentation</a></li>
-<li><a href="#secondary-background" id="toc-secondary-background"><span class="toc-section-number">13.4</span> Secondary Background</a></li>
+<li><a href="#secondary-background" id="toc-secondary-background"><span class="toc-section-number">14.4</span> Secondary Background</a></li>
 </ul></li>
 </ul></div>
 
@@ -841,13 +851,15 @@ matters, with corresponding sources in the References section.</p>
 in weeks, not quarters. Treat pricing, benchmark rankings, and
 model-version statements as snapshots tied to their stated dates.</p>
 <p><strong>How to read this document:</strong> If you want the fastest
-path to a conclusion, start with <a href="#model-alternatives-for-coding-agents">Model Alternatives for
-Coding Agents</a> to choose a capability and deployment shortlist, then
-use the <a href="#feature-comparison-matrix">Feature Comparison
-Matrix</a>, <a href="#provider-flexibility-analysis">Provider
-Flexibility Analysis</a>, and <a href="#recommendations">Recommendations</a> to choose the harness and
-operating policy. The deep-dive sections are there for when you need to
-evaluate a specific tool seriously.</p>
+path to a conclusion, start with <a href="#capability-led-selection-and-adoption">Capability-led selection
+and adoption</a> for the short decision, staged rollout, and
+command-safety contract. Then use <a href="#model-alternatives-for-coding-agents">Model Alternatives for
+Coding Agents</a>, the <a href="#feature-comparison-matrix">Feature
+Comparison Matrix</a>, <a href="#provider-flexibility-analysis">Provider
+Flexibility Analysis</a>, and <a href="#recommendations">Detailed
+recommendations</a> as evidence. The deep-dive profiles, concrete
+multi-model setup, and Pi section remain reference material for an
+evaluation you can reproduce.</p>
 <p>This survey covers tools that were verifiable and actively maintained
 as of September 2026. It does not cover tools no longer in active
 development, purely GUI-based editors with no API or CLI surface, or
@@ -858,7 +870,201 @@ Gitpod, etc.) are out of scope unless they offer a dedicated
 coding-agent mode. Where a claim could not be verified, it is
 flagged.</p>
 <hr />
-<h1 data-number="2" id="the-ai-coding-agent-taxonomy"><span class="header-section-number">2</span> The AI Coding Agent Taxonomy</h1>
+<h1 data-number="2" id="capability-led-selection-and-adoption"><span class="header-section-number">2</span> Capability-led Selection and
+Adoption</h1>
+<p>The shortest useful answer is to choose the operating boundary first,
+then choose a model inside it. Do not start by translating Claude model
+names into another vendor’s names: the harness, provider, context
+policy, tools, permissions, and recovery loop are part of the system you
+are evaluating.</p>
+<h2 data-number="2.1" id="choose-a-capability-lane"><span class="header-section-number">2.1</span> Choose a capability lane</h2>
+<p>Use the first row that matches the constraint that matters most. The
+named tools are starting points, not claims of universal superiority;
+the dated profiles and matrix below explain the evidence and the
+exceptions.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Primary requirement</th>
+<th>Start here</th>
+<th>Why this is the default</th>
+<th>Main reason to choose another lane</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Terminal-native, multi-provider work with MCP</td>
+<td><strong>OpenCode</strong> with an approved provider; keep
+<strong>Aider</strong> as the small git-native fallback</td>
+<td>OpenCode combines a terminal surface, broad provider choice, LSP,
+MCP, and multi-session work; Aider is simpler and automatically
+git-oriented</td>
+<td>Choose Aider when minimalism and predictable git edits matter more
+than MCP; choose Goose when on-device execution and MCP portability are
+the priority</td>
+</tr>
+<tr>
+<td>Editor-first Plan/Act work</td>
+<td><strong>Cline</strong>; consider <strong>Continue.dev</strong> for
+local inference or <strong>Cursor</strong> for a polished commercial
+IDE</td>
+<td>Cline provides a model-agnostic editor workflow with reviewable
+planning, browser/MCP access, and a CLI; Continue prioritises local
+models</td>
+<td>Choose a CLI when scripting or headless operation is primary; choose
+Cursor only when its hosted, VS Code-derived boundary is acceptable</td>
+</tr>
+<tr>
+<td>Sensitive or offline routine work</td>
+<td><strong>A local model through OpenCode, Continue.dev, Aider, or
+Pi</strong></td>
+<td>The inference request can remain on the workstation when the full
+tool and extension path is audited</td>
+<td>A local model does not protect data sent by telemetry, remote MCP,
+extensions, model downloads, or editor integrations</td>
+</tr>
+<tr>
+<td>Long-running cloud or cross-application work</td>
+<td><strong>OpenHands</strong> for an open/self-hostable coding stack;
+<strong>Devin</strong> or <strong>Grok Bot</strong> when a managed cloud
+computer is acceptable</td>
+<td>These products address asynchronous execution and broader computer
+or repository boundaries</td>
+<td>Use a local terminal harness when local source control, data
+locality, or interactive approval is the central requirement</td>
+</tr>
+<tr>
+<td>Small, inspectable experimental harness</td>
+<td><strong>Pi</strong> beside OpenCode, not underneath it</td>
+<td>Pi makes model switching, session state, and TypeScript-level
+workflow customisation explicit</td>
+<td>Use OpenCode or Cline when MCP, plan/approval features, or a richer
+default tool surface is required</td>
+</tr>
+</tbody>
+</table>
+<p>For model allocation, begin with four roles rather than four
+permanent model names: a frontier route for hard diagnosis, a normal
+implementation route, a fast/bounded route, and an independent-review
+route. The <a href="#candidate-families-against-the-claude-baseline">candidate-family
+shortlist</a> supplies dated examples. The concrete setup later turns
+those roles into OpenCode/OpenRouter, direct-provider, local, Aider,
+Cline, and Pi configurations. A model choice never grants additional
+shell, file, network, credential, or merge authority.</p>
+<h2 data-number="2.2" id="a-staged-adoption-path"><span class="header-section-number">2.2</span> A staged adoption path</h2>
+<p>Treat migration as an evaluation programme. Keep the existing Claude
+workflow as the baseline and promote alternatives only when the complete
+harness/provider/model configuration passes the same acceptance
+checks.</p>
+<ol type="1">
+<li><strong>Define the boundary and baseline.</strong> Record the
+repository revision, task contract, Claude harness and model,
+permissions, provider, context policy, acceptance checks, cost, latency,
+retries, and human correction. Decide whether source may leave the
+workstation. Create a disposable branch or worktree for any
+write-capable trial.</li>
+<li><strong>Run a read-only smoke test.</strong> Verify installation,
+version, authentication, model listing, provider route, and repository
+instructions with an inventory or test-plan request that must not edit
+files. Stop on an unknown endpoint, unexpected credential path, or
+data-boundary mismatch.</li>
+<li><strong>Pilot the lanes.</strong> Run roughly 20–30 representative
+tasks: bounded support, ordinary implementation, hard diagnosis,
+documentation, a failing test, a multi-file change, and an MCP/tool task
+where relevant. Compare accepted changes, missed defects, false
+positives, recovery, review burden, elapsed time, tool failures, and
+spend—not just whether the final response says it succeeded.</li>
+<li><strong>Add diversity deliberately.</strong> Use a different
+provider or local route for high-risk review when the data policy
+permits it. Add Pi as a harness comparison using the same task contract,
+revision, permissions, model tuple, and checks; record any extension or
+wrapper as part of Pi’s identity. Do not call two sessions independent
+merely because their model names differ.</li>
+<li><strong>Promote narrowly and re-evaluate on change.</strong> Give a
+candidate only the role and permissions it passed. Re-run the pilot when
+the provider, model ID, quantization, context setting, harness version,
+project instructions, or retention terms change. Human review and CI
+remain the merge gate.</li>
+</ol>
+<p>The recommended starting configuration is therefore <strong>OpenCode
+plus a scoped OpenRouter project/key</strong>, with an explicit
+hard/normal/bounded/review allocation and a local route for data that
+must stay on the workstation. Keep Aider as the minimal fallback, Cline
+as the editor-first option, and Pi as the inspectable harness
+experiment. Prefer direct providers or self-hosting when they provide a
+required regional, contractual, or data boundary; OpenRouter is a
+convenient routing layer, not a privacy guarantee. The provider-specific
+retention distinctions later in this document are part of the decision,
+not footnotes.</p>
+<h2 data-number="2.3" id="command-contract-for-every-example"><span class="header-section-number">2.3</span> Command contract for every
+example</h2>
+<p>The installation, authentication, configuration, and launch commands
+throughout this document are illustrative recipes. Before retaining or
+running any one of them, apply the following contract to that command
+and record the result in the pilot notes. A command is not authorised
+merely because it appears in a profile.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>What the operator must establish before running the command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prerequisites</strong></td>
+<td>The supported operating system/runtime, package manager or container
+engine, repository/worktree, version pin, network access, and any
+required service account or credits. Verify the live project
+documentation because these facts are dated.</td>
+</tr>
+<tr>
+<td><strong>Authority and credentials</strong></td>
+<td>Which user, branch/worktree, shell permissions, provider account,
+API key, OAuth session, MCP token, or local endpoint the command uses.
+Scope keys and permissions to the pilot; never put secrets in tracked
+configuration or command captures.</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>A non-destructive version/status/model/provider check, then the
+expected file, process, diff, test, or API result. Record the exact
+harness, model, provider, and settings; a successful login does not
+prove tool-call or retention compatibility.</td>
+</tr>
+<tr>
+<td><strong>Rollback</strong></td>
+<td>How to stop the process, revoke or rotate credentials, remove only
+the installed/configured component, discard or reset the disposable
+worktree, restore configuration, and undo generated changes. Do not use
+a broad reset or deletion command when a targeted reversal is
+sufficient.</td>
+</tr>
+</tbody>
+</table>
+<p>For commands that install software or start a server, verify the
+package/source and release before execution. For commands that export
+credentials, prefer a password manager, the harness credential store, or
+a non-committed environment file; clear captured secrets and rotate
+exposed keys. For commands that grant write or shell access, begin
+read-only, use least privilege, require approval for destructive or
+external actions, and inspect the diff and test results before
+integration. The individual setup sections below add provider- and
+product-specific checks; if a section cannot satisfy one of these four
+fields, treat the command as unverified rather than silently copying
+it.</p>
+<hr />
+<h1 data-number="3" id="the-ai-coding-agent-taxonomy"><span class="header-section-number">3</span> The AI Coding Agent Taxonomy</h1>
 <p>Before comparing tools, it helps to understand the four distinct
 categories that have emerged. This taxonomy comes from Artificial
 Analysis’s coding agent classification (verified):</p>
@@ -891,7 +1097,7 @@ the IDE and cloud categories contain tools capable enough to be worth
 understanding as alternatives – especially if your workflow includes
 time in an editor.</p>
 <hr />
-<h1 data-number="3" id="model-alternatives-for-coding-agents"><span class="header-section-number">3</span> Model Alternatives for Coding
+<h1 data-number="4" id="model-alternatives-for-coding-agents"><span class="header-section-number">4</span> Model Alternatives for Coding
 Agents</h1>
 <p>Choosing an agent and choosing its model are separate decisions. You
 can preserve a familiar editing workflow while changing the inference
@@ -901,7 +1107,7 @@ and executes work. This section is the model survey for the
 follow describe the surrounding products. The objective is to identify
 candidates for your workload, not to translate every Claude name into
 another vendor’s tier.</p>
-<h2 data-number="3.1" id="model-provider-and-agent-harness"><span class="header-section-number">3.1</span> Model, Provider, and Agent
+<h2 data-number="4.1" id="model-provider-and-agent-harness"><span class="header-section-number">4.1</span> Model, Provider, and Agent
 Harness</h2>
 <p>The <strong>model</strong> is the learned set of numerical weights; a
 <strong>checkpoint</strong> is a particular saved version of those
@@ -930,7 +1136,7 @@ may have misunderstood the code, the harness may have retained stale
 context, or the edit adapter may have rejected an otherwise useful
 change. Record the attempted edit and tool response: a final answer
 saying “fixed” does not identify which layer failed.</p>
-<h2 data-number="3.2" id="what-matters-for-agentic-coding"><span class="header-section-number">3.2</span> What Matters for Agentic
+<h2 data-number="4.2" id="what-matters-for-agentic-coding"><span class="header-section-number">4.2</span> What Matters for Agentic
 Coding</h2>
 <p>Start with <strong>edit correctness</strong>: does the change satisfy
 the task, preserve unrelated behaviour, and respect repository
@@ -971,7 +1177,7 @@ failures; and <strong>independent review</strong> for checking a
 proposed change against evidence. These roles specify work and
 authority. They are not universal Haiku, Sonnet, Opus, or Fable
 equivalents.</p>
-<h2 data-number="3.3" id="candidate-families-against-the-claude-baseline"><span class="header-section-number">3.3</span> Candidate Families Against the
+<h2 data-number="4.3" id="candidate-families-against-the-claude-baseline"><span class="header-section-number">4.3</span> Candidate Families Against the
 Claude Baseline</h2>
 <p>Use this <strong>September 16, 2026</strong> shortlist to decide what
 to test against your existing Claude configuration. Rows select
@@ -1092,13 +1298,13 @@ total cost or unrestricted licensing. Compare accepted changes, elapsed
 time, and correction effort with the same Claude baseline before
 claiming parity or savings. This table supplies no measured ranking,
 guaranteed workstation fit, or proven Fable substitute.</p>
-<h2 data-number="3.4" id="closed-weight-models"><span class="header-section-number">3.4</span> Closed-Weight Models</h2>
+<h2 data-number="4.4" id="closed-weight-models"><span class="header-section-number">4.4</span> Closed-Weight Models</h2>
 <p>Closed-weight models are available through services without
 downloadable weights for independent deployment. Their model
 documentation establishes advertised capabilities; your subscription or
 endpoint determines actual access. Keep a known Claude configuration as
 a baseline when testing alternatives.</p>
-<h3 data-number="3.4.1" id="anthropic-claude-baseline"><span class="header-section-number">3.4.1</span> Anthropic / Claude
+<h3 data-number="4.4.1" id="anthropic-claude-baseline"><span class="header-section-number">4.4.1</span> Anthropic / Claude
 Baseline</h3>
 <p>Anthropic’s current catalogue lists Haiku 4.5, Sonnet 5, Opus 5, and
 Fable 5.1. It positions Haiku around speed, Sonnet around the
@@ -1113,7 +1319,7 @@ actually use on the same repository tasks. Reproducing a result from
 Claude Code may require preserving context selection and edit tooling as
 well as changing the model. No evidence presented here establishes a
 proven Fable equivalent.</p>
-<h3 data-number="3.4.2" id="openai-gpt-and-codex-models"><span class="header-section-number">3.4.2</span> OpenAI / GPT and Codex
+<h3 data-number="4.4.2" id="openai-gpt-and-codex-models"><span class="header-section-number">4.4.2</span> OpenAI / GPT and Codex
 Models</h3>
 <p>OpenAI’s hosted catalogue includes GPT-6 Astra and GPT-5.6 Sol,
 Terra, and Luna. OpenAI positions Astra for its hardest reasoning and
@@ -1137,7 +1343,7 @@ executing them unaided.</p>
 open-weight family, covered below. They are not downloadable versions of
 GPT-5.6 or GPT-6, and an open-source Codex client does not make the
 hosted GPT weights open.</p>
-<h3 data-number="3.4.3" id="google-gemini"><span class="header-section-number">3.4.3</span> Google / Gemini</h3>
+<h3 data-number="4.4.3" id="google-gemini"><span class="header-section-number">4.4.3</span> Google / Gemini</h3>
 <p>Google’s catalogue spans Pro, Flash, and Flash-Lite models. In this
 snapshot, Gemini 3.1 Pro remains a preview option, while Gemini 3.8
 Flash is listed as stable and aimed at long software-engineering and
@@ -1152,7 +1358,7 @@ establish constraint retention or recovery quality. Test those directly.
 Gemini CLI and Antigravity access, tools, and quotas belong to their
 tool profiles; neither is a property of the underlying Gemini
 checkpoint.</p>
-<h3 data-number="3.4.4" id="xai-grok"><span class="header-section-number">3.4.4</span> xAI / Grok</h3>
+<h3 data-number="4.4.4" id="xai-grok"><span class="header-section-number">4.4.4</span> xAI / Grok</h3>
 <p>Grok belongs in the model shortlist independently of Grok Bot. xAI’s
 <a href="https://docs.x.ai/developers/models/grok-4.6">Grok 4.6
 documentation</a> describes a hosted frontier model for coding and
@@ -1167,7 +1373,7 @@ to provider tools or products. In particular, access to a Grok API model
 does not supply Grok Bot’s execution environment. Earlier downloadable
 Grok releases also do not establish that the current hosted model has
 downloadable weights.</p>
-<h3 data-number="3.4.5" id="other-vendors-and-product-specific-models"><span class="header-section-number">3.4.5</span> Other Vendors and
+<h3 data-number="4.4.5" id="other-vendors-and-product-specific-models"><span class="header-section-number">4.4.5</span> Other Vendors and
 Product-Specific Models</h3>
 <p>A managed coding product may select private models, fine-tunes, or
 several vendors behind its interface. Evaluate the resulting product if
@@ -1176,7 +1382,7 @@ name or a successful demo. Without a documented checkpoint or selectable
 endpoint, its results cannot answer whether the same behaviour will
 transfer to another harness. The existing commercial-tool profiles cover
 those product decisions.</p>
-<h2 data-number="3.5" id="open-weight-models"><span class="header-section-number">3.5</span> Open-Weight Models</h2>
+<h2 data-number="4.5" id="open-weight-models"><span class="header-section-number">4.5</span> Open-Weight Models</h2>
 <p><strong>Open weights</strong> means that you can obtain the model’s
 learned parameters and run them yourself under the release’s licence. It
 does not necessarily mean unrestricted use, published training data, or
@@ -1192,7 +1398,7 @@ intermediate values at reduced numerical precision, lowering memory
 demand and sometimes compute cost, with accuracy and runtime-support
 tradeoffs. A quantized checkpoint is a configuration to evaluate, not a
 guarantee of unchanged tool-use reliability.</p>
-<h3 data-number="3.5.1" id="qwen"><span class="header-section-number">3.5.1</span> Qwen</h3>
+<h3 data-number="4.5.1" id="qwen"><span class="header-section-number">4.5.1</span> Qwen</h3>
 <p>Qwen includes coding-specific and general-purpose models. Qwen3-Coder
 explicitly targets multi-turn software-engineering work with tool
 feedback. Its documented 480B-total/35B-active variant has 256K native
@@ -1209,7 +1415,7 @@ context, subject to runtime overhead. Smaller Qwen checkpoints offer
 more memory margin; verify their own tool format and coding results.
 Qwen Code is the harness discussed later, not a capability inherited by
 every Qwen model.</p>
-<h3 data-number="3.5.2" id="deepseek"><span class="header-section-number">3.5.2</span> DeepSeek</h3>
+<h3 data-number="4.5.2" id="deepseek"><span class="header-section-number">4.5.2</span> DeepSeek</h3>
 <p>DeepSeek V4.1 Flash is available as an open-weight release as well as
 through the hosted <code>deepseek-flash</code> endpoint. The <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">model
 card</a> describes a multimodal MoE with a 552B-parameter backbone plus
@@ -1224,7 +1430,7 @@ are vendor results with specified harnesses; they do not prove recovery
 quality in yours. Smaller DeepSeek-derived or distilled checkpoints are
 separate models, not compact deployments of the full V4.1 system, and
 need their own evaluations.</p>
-<h3 data-number="3.5.3" id="z.ai-glm"><span class="header-section-number">3.5.3</span> Z.AI / GLM</h3>
+<h3 data-number="4.5.3" id="z.ai-glm"><span class="header-section-number">4.5.3</span> Z.AI / GLM</h3>
 <p>Z.AI positions <a href="https://docs.z.ai/guides/llm/glm-5">GLM-5</a>
 for agentic engineering, including planning, refactoring, and debugging.
 Its documented 744B total parameters versus 40B active make the
@@ -1240,7 +1446,7 @@ verify checkpoint availability, serving support, and tool parsing before
 adoption. Smaller GLM variants may fit local experiments; neither the
 GLM name nor a coding-plan subscription establishes that a particular
 model fits your workstation.</p>
-<h3 data-number="3.5.4" id="moonshot-kimi"><span class="header-section-number">3.5.4</span> Moonshot / Kimi</h3>
+<h3 data-number="4.5.4" id="moonshot-kimi"><span class="header-section-number">4.5.4</span> Moonshot / Kimi</h3>
 <p>Moonshot’s <a href="https://www.kimi.ai/blog/kimi-k3">Kimi K3
 technical account</a> describes a 2.8-trillion-parameter model with
 native vision and a million-token context window; <a href="https://huggingface.co/moonshotai/Kimi-K3">released weights have
@@ -1255,7 +1461,7 @@ whether its reasoning mode meets your latency budget. The <a href="https://platf
 developer guide</a> describes the API contract; launch demos and vendor
 benchmarks do not establish independent-review accuracy. Kimi CLI
 remains a separate harness choice.</p>
-<h3 data-number="3.5.5" id="mistral-devstral"><span class="header-section-number">3.5.5</span> Mistral / Devstral</h3>
+<h3 data-number="4.5.5" id="mistral-devstral"><span class="header-section-number">4.5.5</span> Mistral / Devstral</h3>
 <p>Devstral is Mistral’s coding-agent family, trained for repository
 exploration and multi-file software-engineering work. Its smaller
 downloadable variants offer a more realistic workstation experiment than
@@ -1271,7 +1477,7 @@ with 256K context and open weights under a Modified MIT licence. That
 does not invalidate an existing local Devstral checkpoint, nor establish
 that Medium fits the same hardware. Evaluate the exact release, licence,
 and deployment instructions.</p>
-<h3 data-number="3.5.6" id="openai-gpt-oss"><span class="header-section-number">3.5.6</span> OpenAI / gpt-oss</h3>
+<h3 data-number="4.5.6" id="openai-gpt-oss"><span class="header-section-number">4.5.6</span> OpenAI / gpt-oss</h3>
 <p><a href="https://developers.openai.com/api/docs/models/gpt-oss-20b">OpenAI
 gpt-oss-20b</a> and <a href="https://developers.openai.com/api/docs/models/gpt-oss-120b">gpt-oss-120b</a>
 are text-only open-weight reasoning models under Apache 2.0. They
@@ -1290,7 +1496,7 @@ format, including reasoning and tool boundaries, through the serving
 adapter. Test malformed calls, long-context recovery, and reasoning
 latency before giving either model write authority. Screenshots require
 a separate visual-processing path.</p>
-<h3 data-number="3.5.7" id="meta-llama-and-google-gemma"><span class="header-section-number">3.5.7</span> Meta / Llama and Google /
+<h3 data-number="4.5.7" id="meta-llama-and-google-gemma"><span class="header-section-number">4.5.7</span> Meta / Llama and Google /
 Gemma</h3>
 <p>Llama offers downloadable general-purpose checkpoints with an
 established deployment ecosystem, but the family name does not imply
@@ -1309,7 +1515,7 @@ or visual input drive the experiment, but a supported function-call
 format does not establish dependable autonomous coding. Check the exact
 release’s licence, input support, and edit-test behaviour before moving
 beyond bounded support.</p>
-<h3 data-number="3.5.8" id="other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="header-section-number">3.5.8</span> Other Families: MiniMax,
+<h3 data-number="4.5.8" id="other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="header-section-number">4.5.8</span> Other Families: MiniMax,
 NVIDIA Nemotron, IBM Granite, Microsoft Phi</h3>
 <p><a href="https://github.com/MiniMax-AI/MiniMax-M2">MiniMax’s coding
 and agent releases</a> merit a hosted or server evaluation; their sparse
@@ -1327,7 +1533,7 @@ Phi</a> offers small general instruction/reasoning models suitable for
 constrained local experiments. For these smaller models, start with
 extraction, summaries, and tightly scoped edits. Compact size alone says
 nothing about reliable multi-file recovery.</p>
-<h2 data-number="3.6" id="deployment-fit-workstation-server-or-hosted-endpoint"><span class="header-section-number">3.6</span> Deployment Fit: Workstation,
+<h2 data-number="4.6" id="deployment-fit-workstation-server-or-hosted-endpoint"><span class="header-section-number">4.6</span> Deployment Fit: Workstation,
 Server, or Hosted Endpoint</h2>
 <p>Size the deployment for the actual checkpoint and workload. GPU video
 memory (VRAM), shared system memory, and memory spread across several
@@ -1409,7 +1615,7 @@ a benchmark or a prediction for the named models above. Measure actual
 peak allocation and latency. Hardware purchase, electricity, and
 administration costs belong in <a href="#cost-analysis">Cost
 Analysis</a>.</p>
-<h2 data-number="3.7" id="evidence-and-evaluation"><span class="header-section-number">3.7</span> Evidence and Evaluation</h2>
+<h2 data-number="4.7" id="evidence-and-evaluation"><span class="header-section-number">4.7</span> Evidence and Evaluation</h2>
 <p>Keep four evidence types separate. <strong>Vendor specifications and
 claims</strong> establish intended formats, supported settings,
 licences, and published limits; vendor benchmark results show
@@ -1505,7 +1711,7 @@ serving, also record peak memory, time to first token, generation speed,
 and failures at the intended context and concurrency. This survey does
 not supply measured workstation results; the capacity example above is
 explicitly an estimate.</p>
-<h2 data-number="3.8" id="choosing-a-replacement"><span class="header-section-number">3.8</span> Choosing a Replacement</h2>
+<h2 data-number="4.8" id="choosing-a-replacement"><span class="header-section-number">4.8</span> Choosing a Replacement</h2>
 <p>Start with your deployment boundary and the consequences of an
 incorrect autonomous action, then shortlist models for a task role. The
 table supplies experiments, not winners. Keep the Claude baseline where
@@ -1578,8 +1784,8 @@ reproducible evidence. The model survey identifies what to test; <a href="#provi
 and the tool profiles establish which harnesses can deliver the chosen
 policy.</p>
 <hr />
-<h1 data-number="4" id="cli-native-tools"><span class="header-section-number">4</span> CLI-Native Tools</h1>
-<h2 data-number="4.1" id="aider"><span class="header-section-number">4.1</span> Aider</h2>
+<h1 data-number="5" id="cli-native-tools"><span class="header-section-number">5</span> CLI-Native Tools</h1>
+<h2 data-number="5.1" id="aider"><span class="header-section-number">5.1</span> Aider</h2>
 <p><strong>What it is:</strong> Aider is the most mature and
 architecturally similar open-source alternative to Claude Code. It is a
 terminal-based pair-programming tool that works directly with your
@@ -1696,7 +1902,7 @@ explicitly <code>/add</code> files) - Less capable at long multi-step
 autonomous tasks compared to Claude Code - No built-in web search or
 browser use - Development cadence has slowed relative to faster-moving
 competitors</p>
-<h2 data-number="4.2" id="opencode"><span class="header-section-number">4.2</span> OpenCode</h2>
+<h2 data-number="5.2" id="opencode"><span class="header-section-number">5.2</span> OpenCode</h2>
 <p><strong>What it is:</strong> OpenCode is an open-source coding agent
 with a rich terminal UI (TUI), a client/server architecture, and support
 for a very wide range of LLM providers.</p>
@@ -1777,7 +1983,7 @@ the old bundled plugin route is prohibited by Anthropic and is no longer
 shipped - Org/rebrand churn (<code>sst/opencode</code> →
 <code>anomalyco/opencode</code>) means older documentation and links may
 be stale</p>
-<h2 data-number="4.3" id="goose-by-block"><span class="header-section-number">4.3</span> Goose (by Block)</h2>
+<h2 data-number="5.3" id="goose-by-block"><span class="header-section-number">5.3</span> Goose (by Block)</h2>
 <p><strong>What it is:</strong> Goose is an open-source, on-device AI
 coding agent developed by Block (formerly Square, the company associated
 with Jack Dorsey). It is available as a CLI, a desktop application, and
@@ -1832,7 +2038,7 @@ ecosystem</p>
 desktop app orientation means some rough edges in headless terminal use
 - Younger MCP ecosystem integration story than Claude Code’s, despite
 the architecture being sound</p>
-<h2 data-number="4.4" id="gemini-cli-by-google"><span class="header-section-number">4.4</span> Gemini CLI (by Google)</h2>
+<h2 data-number="5.4" id="gemini-cli-by-google"><span class="header-section-number">5.4</span> Gemini CLI (by Google)</h2>
 <p><strong>What it is:</strong> Gemini CLI is Google’s open-source
 terminal AI agent, released in mid-2025. It is powered by the Gemini
 model family. Google announced a transition to Antigravity CLI: from
@@ -1893,7 +2099,7 @@ no longer the supported Gemini CLI path; migrate to Antigravity CLI -
 Gemini models, while capable, may not match Claude’s code quality for
 your specific use cases - Less battle-tested than Aider - Node.js
 dependency</p>
-<h2 data-number="4.5" id="plandex"><span class="header-section-number">4.5</span> Plandex</h2>
+<h2 data-number="5.5" id="plandex"><span class="header-section-number">5.5</span> Plandex</h2>
 <p><strong>What it is:</strong> Plandex is an open-source CLI agent with
 a distinctive planning-first approach. Rather than immediately executing
 changes, it plans multi-file, multi-step tasks and builds up pending
@@ -1936,7 +2142,7 @@ multi-file tasks</p>
 quick edits - Less interactive than Aider or OpenCode - Client-server
 architecture adds complexity - LLM provider support less broad than
 Aider/OpenCode - Smaller community</p>
-<h2 data-number="4.6" id="swe-agent"><span class="header-section-number">4.6</span> SWE-agent</h2>
+<h2 data-number="5.6" id="swe-agent"><span class="header-section-number">5.6</span> SWE-agent</h2>
 <p><strong>What it is:</strong> SWE-agent is a research tool from
 Princeton NLP lab, designed primarily for automated software engineering
 on GitHub issues. It achieves high scores on the SWE-bench benchmark. It
@@ -1966,7 +2172,7 @@ not interactive - Research-oriented design means rough UX edges - Slower
 than interactive tools - Not designed for the ad-hoc, exploratory coding
 sessions that Claude Code excels at - Primary development momentum has
 moved to mini-swe-agent; SWE-agent proper sees less active iteration</p>
-<h2 data-number="4.7" id="openai-codex-cli"><span class="header-section-number">4.7</span> OpenAI Codex CLI</h2>
+<h2 data-number="5.7" id="openai-codex-cli"><span class="header-section-number">5.7</span> OpenAI Codex CLI</h2>
 <p><strong>What it is:</strong> Codex CLI is OpenAI’s open-source
 terminal coding agent, open-sourced April 16, 2025. It is OpenAI’s
 direct answer to Claude Code and Gemini CLI: a terminal-native agent
@@ -2025,7 +2231,7 @@ own models and ChatGPT plans; using it as a purely model-agnostic tool
 is a secondary use case - Newer than Aider/OpenCode as a CLI-first
 product, despite OpenAI’s scale - Model availability and usage
 allowances change quickly, making static comparisons easy to age</p>
-<h2 data-number="4.8" id="amp-sourcegraph"><span class="header-section-number">4.8</span> Amp (Sourcegraph)</h2>
+<h2 data-number="5.8" id="amp-sourcegraph"><span class="header-section-number">5.8</span> Amp (Sourcegraph)</h2>
 <p><strong>What it is:</strong> Amp is Sourcegraph’s hybrid
 CLI-plus-cloud coding agent. It pairs a local CLI with cloud-hosted
 “Orbs” for offloading longer-running or parallel work. Orbs are remote
@@ -2069,9 +2275,9 @@ Newer product identity means less accumulated community track record
 than Sourcegraph’s older Cody product - Cloud “Orbs” component means it
 is not a purely local/offline tool in the way Aider or Goose can be;
 self-hosted Orbs still depend on Amp’s hosted control plane</p>
-<h2 data-number="4.9" id="deprecated-and-unverified-tools"><span class="header-section-number">4.9</span> Deprecated and Unverified
+<h2 data-number="5.9" id="deprecated-and-unverified-tools"><span class="header-section-number">5.9</span> Deprecated and Unverified
 Tools</h2>
-<h3 data-number="4.9.1" id="mentat"><span class="header-section-number">4.9.1</span> Mentat</h3>
+<h3 data-number="5.9.1" id="mentat"><span class="header-section-number">5.9.1</span> Mentat</h3>
 <p><strong>What it is:</strong> Mentat was a Python-based CLI coding
 tool and an early entrant in the space, taking a conversational approach
 to code editing with explicit context management.</p>
@@ -2090,7 +2296,7 @@ archived on May 15, 2026 and is now read-only. The project has publicly
 directed users to alternatives such as Cline and ZooCode. There is no
 live “current tool” entry for Roo Code in this document – by the time of
 this refresh it is itself historical.</p>
-<h2 data-number="4.10" id="qwen-code-and-kimi-cli"><span class="header-section-number">4.10</span> Qwen Code and Kimi CLI</h2>
+<h2 data-number="5.10" id="qwen-code-and-kimi-cli"><span class="header-section-number">5.10</span> Qwen Code and Kimi CLI</h2>
 <p><strong>What they are:</strong> These are CLI coding agents from
 Chinese AI labs – Qwen Code from Alibaba’s Qwen team and Kimi CLI from
 Moonshot AI. Both are classified alongside Claude Code and Aider as CLI
@@ -2105,9 +2311,9 @@ CLI uses Kimi’s models with a very long context window.</p>
 <p><strong>Note:</strong> These tools were not covered by this round’s
 research refresh. Treat specific capability claims with appropriate
 scepticism until you test them directly.</p>
-<h1 data-number="5" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">5</span> IDE Extensions and Hybrid
+<h1 data-number="6" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">6</span> IDE Extensions and Hybrid
 Tools</h1>
-<h2 data-number="5.1" id="cline-formerly-claude-dev"><span class="header-section-number">5.1</span> Cline (formerly Claude
+<h2 data-number="6.1" id="cline-formerly-claude-dev"><span class="header-section-number">6.1</span> Cline (formerly Claude
 Dev)</h2>
 <p><strong>What it is:</strong> Cline is an open-source autonomous
 coding agent that operates primarily as a VS Code extension. It is
@@ -2205,7 +2411,7 @@ CLI)</p>
 workflows, and platform support is not uniform - Browser use capability
 means it can have unintended side effects if not supervised - Less
 scriptable than pure CLI tools</p>
-<h2 data-number="5.2" id="continue.dev"><span class="header-section-number">5.2</span> Continue.dev</h2>
+<h2 data-number="6.2" id="continue.dev"><span class="header-section-number">6.2</span> Continue.dev</h2>
 <p><strong>What it is:</strong> Continue.dev is an open-source AI coding
 assistant for VS Code and JetBrains IDEs. It combines autocomplete,
 chat, and agent capabilities in a single extension, with deep
@@ -2274,8 +2480,8 @@ CLI is supplementary, not a terminal-first redesign - Agent mode quality
 depends heavily on the model’s tool-calling capabilities - Less capable
 at long agentic chains than Cline or Claude Code - JetBrains support is
 less mature than VS Code</p>
-<h1 data-number="6" id="dedicated-ai-ides"><span class="header-section-number">6</span> Dedicated AI IDEs</h1>
-<h2 data-number="6.1" id="cursor"><span class="header-section-number">6.1</span> Cursor</h2>
+<h1 data-number="7" id="dedicated-ai-ides"><span class="header-section-number">7</span> Dedicated AI IDEs</h1>
+<h2 data-number="7.1" id="cursor"><span class="header-section-number">7.1</span> Cursor</h2>
 <p><strong>What it is:</strong> Cursor is a VS Code fork with deep AI
 integration baked into every layer of the editor. It has become one of
 the most widely adopted commercial AI coding tools, with a large user
@@ -2352,7 +2558,7 @@ support - Proprietary – you are dependent on Anysphere remaining a going
 concern and maintaining pricing - Heavier than a terminal tool –
 requires a full VS Code instance - Usage-based credit pricing makes
 monthly cost less predictable than the old flat-request model</p>
-<h2 data-number="6.2" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">6.2</span> Windsurf (now Devin Desktop,
+<h2 data-number="7.2" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">7.2</span> Windsurf (now Devin Desktop,
 Cognition AI)</h2>
 <p><strong>What it is:</strong> Windsurf was an AI-first IDE built by
 Codeium, positioned as a direct competitor to Cursor. Its standout
@@ -2399,7 +2605,7 @@ long-term - Less model flexibility than Cursor - Smaller community than
 Cursor; documentation is still catching up to the rebrand - Easy to
 confuse with Cognition’s separate cloud Devin product, which has
 different pricing and a different execution model</p>
-<h2 data-number="6.3" id="zed-ai"><span class="header-section-number">6.3</span> Zed AI</h2>
+<h2 data-number="7.3" id="zed-ai"><span class="header-section-number">7.3</span> Zed AI</h2>
 <p><strong>What it is:</strong> Zed is a high-performance code editor
 written in Rust, designed for speed and minimal latency. Its AI
 integration (Zed AI) brings Claude as the default model into this fast
@@ -2439,7 +2645,7 @@ on Zed’s own agent</p>
 less mature than Cursor’s or Devin Desktop’s - Windows is supported
 alongside macOS and Linux - Token-based overage billing can be less
 predictable than a flat monthly fee for heavy users</p>
-<h2 data-number="6.4" id="google-antigravity"><span class="header-section-number">6.4</span> Google Antigravity</h2>
+<h2 data-number="7.4" id="google-antigravity"><span class="header-section-number">7.4</span> Google Antigravity</h2>
 <p><strong>What it is:</strong> Google Antigravity is Google’s
 agent-first development platform. It includes Antigravity CLI, the
 Antigravity 2.0 desktop application, IDE integrations, an SDK, and
@@ -2477,7 +2683,7 @@ open-weight models - Under active development by Google</p>
 battle-tested - Product and pricing details remain volatile across
 surfaces - No general BYOK/OpenRouter path for extending account
 quotas</p>
-<h2 data-number="6.5" id="aws-kiro-ide-and-cli"><span class="header-section-number">6.5</span> AWS Kiro IDE and CLI</h2>
+<h2 data-number="7.5" id="aws-kiro-ide-and-cli"><span class="header-section-number">7.5</span> AWS Kiro IDE and CLI</h2>
 <p><strong>What it is:</strong> Kiro is AWS’s agentic development
 environment, available as a VS Code-based desktop IDE, terminal-native
 CLI, web surface, and mobile companion. These surfaces share one agent
@@ -2521,9 +2727,9 @@ model and task, so heavy-use cost is not a flat subscription - Closed
 source and tied to AWS’s product and model availability - Newer than the
 established IDEs; verify regional model access and feature
 availability</p>
-<h1 data-number="7" id="cloud-and-web-platform-agents"><span class="header-section-number">7</span> Cloud and Web Platform
+<h1 data-number="8" id="cloud-and-web-platform-agents"><span class="header-section-number">8</span> Cloud and Web Platform
 Agents</h1>
-<h2 data-number="7.1" id="grok-bot-xai"><span class="header-section-number">7.1</span> Grok Bot (xAI)</h2>
+<h2 data-number="8.1" id="grok-bot-xai"><span class="header-section-number">8.1</span> Grok Bot (xAI)</h2>
 <p><strong>What it is:</strong> Grok Bot is xAI’s commercial, hosted
 computer-use agent. xAI launched it in beta on <strong>August 11,
 2026</strong> as a set of persistent AI teammates rather than as another
@@ -2593,7 +2799,7 @@ and sessions can be available to the user’s other Bots</li>
 <li>Beta product with rapidly changing plan eligibility, quotas, and
 administrative controls</li>
 </ul>
-<h2 data-number="7.2" id="openhands-formerly-opendevin"><span class="header-section-number">7.2</span> OpenHands (formerly
+<h2 data-number="8.2" id="openhands-formerly-opendevin"><span class="header-section-number">8.2</span> OpenHands (formerly
 OpenDevin)</h2>
 <p><strong>What it is:</strong> OpenHands is a highly capable
 open-source AI software engineer designed to solve complex software
@@ -2663,7 +2869,7 @@ tools - Primarily a cloud/web platform – less suitable for quick
 interactive sessions - Slower to start up than CLI tools (Docker
 container spin-up) - Not a terminal-first tool despite having a CLI
 option</p>
-<h2 data-number="7.3" id="devin-by-cognition-ai"><span class="header-section-number">7.3</span> Devin (by Cognition AI)</h2>
+<h2 data-number="8.3" id="devin-by-cognition-ai"><span class="header-section-number">8.3</span> Devin (by Cognition AI)</h2>
 <p><strong>What it is:</strong> Devin was the first high-profile “AI
 software engineer” capable of autonomously solving complex GitHub issues
 end-to-end. It is a commercial cloud product from Cognition AI.</p>
@@ -2689,9 +2895,9 @@ levels</p>
 still make heavy-use costs less predictable than a simple flat
 subscription - Fully proprietary – no control over the stack - Not a CLI
 tool</p>
-<h1 data-number="8" id="commercial-ai-coding-assistants"><span class="header-section-number">8</span> Commercial AI Coding
+<h1 data-number="9" id="commercial-ai-coding-assistants"><span class="header-section-number">9</span> Commercial AI Coding
 Assistants</h1>
-<h2 data-number="8.1" id="github-copilot-with-agent-mode"><span class="header-section-number">8.1</span> GitHub Copilot with Agent
+<h2 data-number="9.1" id="github-copilot-with-agent-mode"><span class="header-section-number">9.1</span> GitHub Copilot with Agent
 Mode</h2>
 <p><strong>What it is:</strong> GitHub Copilot is Microsoft/GitHub’s AI
 coding assistant. It now spans autocomplete, chat, an in-IDE “Agent
@@ -2744,7 +2950,7 @@ enterprise-managed custom models are different paths - Agent Mode and
 Copilot Coding Agent are two separate mental models to learn, with
 different sync/async execution semantics - Less suited for non-GitHub
 workflows</p>
-<h2 data-number="8.2" id="amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="header-section-number">8.2</span> Amazon Q Developer (formerly
+<h2 data-number="9.2" id="amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="header-section-number">9.2</span> Amazon Q Developer (formerly
 CodeWhisperer) – IDE transition to Kiro</h2>
 <p><strong>What it is:</strong> Amazon Q Developer is AWS’s AI coding
 assistant, with deep integration into the AWS ecosystem (rebranded from
@@ -2777,7 +2983,7 @@ mode is now genuinely general-purpose, not AWS-console-limited</p>
 closed - AWS-focused – less useful for non-AWS codebases - Provider
 choice limited to Claude via Bedrock/CLI; no OpenRouter or broad
 model-agnosticism</p>
-<h2 data-number="8.3" id="jetbrains-ai-assistant"><span class="header-section-number">8.3</span> JetBrains AI Assistant</h2>
+<h2 data-number="9.3" id="jetbrains-ai-assistant"><span class="header-section-number">9.3</span> JetBrains AI Assistant</h2>
 <p><strong>What it is:</strong> JetBrains AI Assistant is integrated
 into IntelliJ IDEA, PyCharm, WebStorm, GoLand, and all other JetBrains
 IDEs. It provides chat, completion, and an autonomous multi-step agent
@@ -2813,7 +3019,7 @@ agent mode or Cline on complex multi-file tasks - Pricing and
 entitlements vary between standalone AI plans, IDE bundles, and
 external-agent paths, adding cost-tracking overhead - JetBrains IDEs
 remain heavier than VS Code</p>
-<h2 data-number="8.4" id="tabnine"><span class="header-section-number">8.4</span> Tabnine</h2>
+<h2 data-number="9.4" id="tabnine"><span class="header-section-number">9.4</span> Tabnine</h2>
 <p><strong>What it is:</strong> Tabnine is an AI coding assistant with a
 long history (one of the first serious AI coding tools), historically
 focused on fast, high-quality inline completions. It has since pivoted
@@ -2842,7 +3048,7 @@ $39/$59/month) – no longer the budget completions option it once was -
 Agentic capability is newer and less proven than Cursor, Cline, or
 Claude Code - Being overtaken by Cursor/Windsurf on raw completion
 quality</p>
-<h2 data-number="8.5" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">8.5</span> Supermaven – discontinued,
+<h2 data-number="9.5" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">9.5</span> Supermaven – discontinued,
 folded into Cursor</h2>
 <p><strong>What it is:</strong> Supermaven was a VS Code-focused
 autocomplete tool with a very large context window for completions (300k
@@ -2854,14 +3060,15 @@ absorbed the team and technology, and Cursor has integrated Supermaven’s
 completion engine into its tab-completion feature. If Supermaven was
 your tool of choice, Cursor is its direct successor; there is no
 standalone Supermaven product to evaluate separately.</p>
-<h1 data-number="9" id="cross-cutting-analysis"><span class="header-section-number">9</span> Cross-Cutting Analysis</h1>
-<h2 data-number="9.1" id="provider-flexibility-analysis"><span class="header-section-number">9.1</span> Provider Flexibility
+<h1 data-number="10" id="cross-cutting-analysis"><span class="header-section-number">10</span> Cross-Cutting Analysis</h1>
+<h2 data-number="10.1" id="provider-flexibility-analysis"><span class="header-section-number">10.1</span> Provider Flexibility
 Analysis</h2>
 <p>A critical factor for Claude Code users concerned about API costs is
 whether an alternative tool is model-agnostic – allowing you to route
 requests to cheaper models, local models, or whichever provider has the
 best current pricing.</p>
-<h3 data-number="9.1.1" id="openrouter-compatibility"><span class="header-section-number">9.1.1</span> OpenRouter Compatibility</h3>
+<h3 data-number="10.1.1" id="openrouter-compatibility"><span class="header-section-number">10.1.1</span> OpenRouter
+Compatibility</h3>
 <p>OpenRouter is a unified API gateway that provides access to hundreds
 of models from dozens of providers under a single API key, with
 pay-per-token pricing and no monthly subscription.</p>
@@ -3031,7 +3238,7 @@ coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok
 Bot remain managed products rather than OpenRouter-style routing layers;
 Grok Bot’s cross-application computer use should not be confused with
 provider flexibility.</p>
-<h3 data-number="9.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">9.1.2</span> Local LLM Support (Ollama /
+<h3 data-number="10.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">10.1.2</span> Local LLM Support (Ollama /
 LM Studio)</h3>
 <p>Running models locally eliminates API costs entirely, but not
 hardware, electricity, or operational costs. Quality and hardware fit
@@ -3216,7 +3423,7 @@ support without explicit provider documentation.</p>
 Coding Agents</a>, especially <a href="#deployment-fit-workstation-server-or-hosted-endpoint">Deployment
 Fit</a>. The tables above describe provider compatibility; model quality
 and hardware feasibility require separate evaluation.</p>
-<h2 data-number="9.2" id="feature-comparison-matrix"><span class="header-section-number">9.2</span> Feature Comparison Matrix</h2>
+<h2 data-number="10.2" id="feature-comparison-matrix"><span class="header-section-number">10.2</span> Feature Comparison Matrix</h2>
 <p>The matrix is a shortlist rather than a complete catalogue; it spans
 17 representative tools and is split below into five groups for
 legibility. Products and model surfaces change faster than this table,
@@ -3789,7 +3996,7 @@ browser tool proactively looking up documentation and solutions during a
 task. This is distinct from “Devin Search,” a separately documented
 codebase-search feature; do not conflate the two.</p>
 <hr />
-<h2 data-number="9.3" id="extensibility-deep-dive"><span class="header-section-number">9.3</span> Extensibility Deep Dive</h2>
+<h2 data-number="10.3" id="extensibility-deep-dive"><span class="header-section-number">10.3</span> Extensibility Deep Dive</h2>
 <p>One of Claude Code’s most powerful features is its extensibility
 system: Skills (reusable, discoverable workflow packages that can be
 invoked directly or selected by the agent), hooks (commands that fire on
@@ -3797,7 +4004,7 @@ events like tool calls or session start), and MCP servers (external
 tools exposed via a standard protocol). This combination allows you to
 build a highly personalised, automated coding workflow. How do the
 alternatives compare?</p>
-<h3 data-number="9.3.1" id="claude-codes-extension-architecture"><span class="header-section-number">9.3.1</span> Claude Code’s Extension
+<h3 data-number="10.3.1" id="claude-codes-extension-architecture"><span class="header-section-number">10.3.1</span> Claude Code’s Extension
 Architecture</h3>
 <p>For context, Claude Code’s three-layer system works as follows:</p>
 <ol type="1">
@@ -3819,7 +4026,8 @@ of its reasoning (read from a database, query an external API, access
 browser dev tools, etc.). Any MCP server in the ecosystem
 works.</p></li>
 </ol>
-<h3 data-number="9.3.2" id="how-alternatives-compare"><span class="header-section-number">9.3.2</span> How Alternatives Compare</h3>
+<h3 data-number="10.3.2" id="how-alternatives-compare"><span class="header-section-number">10.3.2</span> How Alternatives
+Compare</h3>
 <p><strong>Aider:</strong> No equivalent to skills or hooks. No MCP
 support. Configuration via <code>.aider.conf.yml</code> covers model
 settings and preferences but not custom workflows. <em>Least extensible
@@ -3866,7 +4074,7 @@ rules. MCP is optional rather than foundational: the Bot can use a
 browser and hosted computer directly when a service has no MCP server.
 Its routines and Auto Review controls are product-specific and are not
 compatible with Claude Code hooks or other agents’ skill formats.</p>
-<h3 data-number="9.3.3" id="the-agents.md-open-standard"><span class="header-section-number">9.3.3</span> The AGENTS.md Open
+<h3 data-number="10.3.3" id="the-agents.md-open-standard"><span class="header-section-number">10.3.3</span> The AGENTS.md Open
 Standard</h3>
 <p>Alongside MCP, a second cross-cutting convention has emerged that
 matters for anyone comparing extensibility stories:
@@ -3888,7 +4096,7 @@ per-tool rule files (<code>.clinerules</code>,
 <code>.cursorrules</code>, <code>CLAUDE.md</code>), AGENTS.md is worth
 tracking as a potential single source of truth that many tools can read
 natively, reducing the duplication of instructions across tools.</p>
-<h3 data-number="9.3.4" id="what-this-means-for-migration"><span class="header-section-number">9.3.4</span> What This Means for
+<h3 data-number="10.3.4" id="what-this-means-for-migration"><span class="header-section-number">10.3.4</span> What This Means for
 Migration</h3>
 <p>If you have heavily invested in Claude Code’s extensibility system
 (skills, hooks, MCPs), a complete migration requires rebuilding your
@@ -3905,7 +4113,7 @@ hooks. If your per-tool instruction files (rather than MCP servers) are
 the bigger migration cost, look at consolidating onto AGENTS.md – it is
 now adopted across tens of thousands of projects, and Claude Code can
 import it into <code>CLAUDE.md</code>.</p>
-<h2 data-number="9.4" id="cost-analysis"><span class="header-section-number">9.4</span> Cost Analysis</h2>
+<h2 data-number="10.4" id="cost-analysis"><span class="header-section-number">10.4</span> Cost Analysis</h2>
 <p>If you are a heavy Claude Code user currently on a Max plan, what
 would the same usage cost on each alternative? Note first that
 “unlimited usage” is not an accurate description of the Max plan: Max 5x
@@ -3914,7 +4122,7 @@ limit and a separate weekly limit, with further caps and model-specific
 effects possible. Anthropic’s live help page is the authority for the
 current limits; do not convert them into a fixed message count because
 message capacity depends on model, context, and workload.</p>
-<h3 data-number="9.4.1" id="defining-heavy-usage"><span class="header-section-number">9.4.1</span> Defining “Heavy Usage”</h3>
+<h3 data-number="10.4.1" id="defining-heavy-usage"><span class="header-section-number">10.4.1</span> Defining “Heavy Usage”</h3>
 <p>For this analysis, heavy usage means: - ~4-8 hours of active coding
 per day - Typical session: long context (50k-200k tokens input), many
 file edits, running tests - Estimated: ~100-200 million input tokens per
@@ -3922,7 +4130,7 @@ month, 10-20 million output tokens per month</p>
 <p>These are rough estimates – actual token consumption varies
 enormously by workflow and model. The worked examples below use the
 midpoints (~150M input / ~15M output tokens per month).</p>
-<h3 data-number="9.4.2" id="api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="header-section-number">9.4.2</span> API Cost Estimates (Direct
+<h3 data-number="10.4.2" id="api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="header-section-number">10.4.2</span> API Cost Estimates (Direct
 Provider, as of September 16, 2026)</h3>
 <p>Pricing changes frequently; treat these as ballpark figures using
 current published rates, not guarantees.</p>
@@ -4000,7 +4208,7 @@ status, and gateway markup.</em></li>
 length, and runtime; validate the actual workload rather than relying on
 a generic VRAM threshold</li>
 </ul>
-<h3 data-number="9.4.3" id="per-tool-cost-summary"><span class="header-section-number">9.4.3</span> Per-Tool Cost Summary</h3>
+<h3 data-number="10.4.3" id="per-tool-cost-summary"><span class="header-section-number">10.4.3</span> Per-Tool Cost Summary</h3>
 <div class="broad-table">
 <table>
 <colgroup>
@@ -4377,7 +4585,7 @@ no API charge</td>
 </tbody>
 </table>
 </div>
-<h3 data-number="9.4.4" id="cost-migration-strategy"><span class="header-section-number">9.4.4</span> Cost Migration Strategy</h3>
+<h3 data-number="10.4.4" id="cost-migration-strategy"><span class="header-section-number">10.4.4</span> Cost Migration Strategy</h3>
 <p><strong>Scenario 1: Keep Claude-quality results, accept higher
 costs</strong> Use Aider or Cline with direct Anthropic API. Cost:
 roughly $450/month for the heavy-usage workload defined here at Sonnet
@@ -4406,8 +4614,8 @@ Google’s current transition announcement conflicts with some Gemini CLI
 authentication pages, so test the live sign-in path before making it a
 dependency. API-key and Vertex use have their own quota, billing, and
 data-use terms.</p>
-<h1 data-number="10" id="recommendations"><span class="header-section-number">10</span> Recommendations</h1>
-<h2 data-number="10.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">10.1</span> If you want the closest CLI
+<h1 data-number="11" id="recommendations"><span class="header-section-number">11</span> Recommendations</h1>
+<h2 data-number="11.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">11.1</span> If you want the closest CLI
 experience to Claude Code</h2>
 <p><strong>Primary:</strong> Aider – mature, reliable, git-native,
 OpenRouter-supported, local LLM support. Start here. The absence of MCP
@@ -4428,7 +4636,7 @@ with local-model support via <code>--oss</code> for Ollama and LM
 Studio. Amp offers a hybrid local-CLI-plus-cloud-Orbs model with
 $20/$200 subscriptions or pay-as-you-go billing; model inference and Orb
 compute are separate meters.</p>
-<h2 data-number="10.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">10.2</span> If you want the best
+<h2 data-number="11.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">11.2</span> If you want the best
 IDE-integrated alternative</h2>
 <p><strong>Primary:</strong> Cline – model-agnostic,
 OpenRouter-supported, browser use, MCP-compatible, Plan/Act mode, and
@@ -4450,7 +4658,7 @@ agent mode – autonomous execution is called “Agent mode.” Current Cursor
 supports multiple parallel agents, but exact concurrency and branch
 limits are plan-dependent; it remains OpenRouter- and
 local-model-incompatible.</p>
-<h2 data-number="10.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">10.3</span> If cost is the primary
+<h2 data-number="11.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">11.3</span> If cost is the primary
 constraint</h2>
 <p><strong>Free option:</strong> Antigravity CLI has an official $0
 individual tier authenticated with a Google Account. It is the simplest
@@ -4469,7 +4677,7 @@ includes usage allowances, but extra work is purchased as on-demand
 credits at API pricing. That is clearer than the legacy ACU model, but
 it still means heavy users can spend beyond the subscription. Devin
 competes on autonomy and capability, not guaranteed low cost.</p>
-<h2 data-number="10.4" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">10.4</span> If you need persistent
+<h2 data-number="11.4" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">11.4</span> If you need persistent
 cross-application or asynchronous work</h2>
 <p><strong>Primary:</strong> Grok Bot – if the task crosses websites,
 inboxes, documents, and business applications and can continue while you
@@ -4482,7 +4690,7 @@ better comparison for GitHub-centred autonomous software engineering,
 while OpenHands is the better comparison when you want an open-source,
 self-hostable cloud-agent stack. Claude Code remains the better fit for
 interactive terminal-native work.</p>
-<h2 data-number="10.5" id="if-mcp-server-investments-are-critical"><span class="header-section-number">10.5</span> If MCP server investments are
+<h2 data-number="11.5" id="if-mcp-server-investments-are-critical"><span class="header-section-number">11.5</span> If MCP server investments are
 critical</h2>
 <p>Tools with confirmed MCP support: Claude Code (native), OpenCode,
 Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural
@@ -4494,7 +4702,7 @@ agentic execution and extensibility; Goose remains worth a closer look
 when on-device execution and MCP portability matter. Grok Bot is the
 better fit when MCP is unavailable but browser or desktop computer use
 can bridge the gap.</p>
-<h2 data-number="10.6" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">10.6</span> If you need extensibility
+<h2 data-number="11.6" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">11.6</span> If you need extensibility
 similar to Claude Code’s skills+hooks</h2>
 <p>The honest answer: no alternative is drop-in compatible with Claude
 Code’s skills+hooks system. The closest approximations: - <strong>Skills
@@ -4509,7 +4717,7 @@ equivalents:</strong> if per-tool rule files (rather than MCP servers)
 are your bigger migration cost, AGENTS.md is now adopted across tens of
 thousands of projects and is a better consolidation target than any
 single vendor’s format</p>
-<h2 data-number="10.7" id="migration-strategy"><span class="header-section-number">10.7</span> Migration strategy</h2>
+<h2 data-number="11.7" id="migration-strategy"><span class="header-section-number">11.7</span> Migration strategy</h2>
 <p>Rather than a hard switch, a practical migration path:</p>
 <ol type="1">
 <li><strong>Set up Aider</strong> as a Claude Code complement today. Get
@@ -4535,7 +4743,7 @@ AGENTS.md</strong> if you maintain per-tool instruction/rule files
 projects and is a lower-maintenance way to keep project instructions
 portable than maintaining one file per vendor.</li>
 </ol>
-<h1 data-number="11" id="a-concrete-multi-model-alternative-setup"><span class="header-section-number">11</span> A Concrete Multi-Model
+<h1 data-number="12" id="a-concrete-multi-model-alternative-setup"><span class="header-section-number">12</span> A Concrete Multi-Model
 Alternative Setup</h1>
 <p>The survey above helps you choose a tool. It does not tell you how to
 run a real repository when no single model is best at every task. A
@@ -4550,7 +4758,7 @@ examples below reflect a <strong>September 18, 2026</strong> research
 checkpoint. Model IDs, prices, quotas, authentication methods, and tool
 support can change independently. Replace every example ID with one
 confirmed in the live provider catalogue before adoption.</p>
-<h2 data-number="11.1" id="the-recommended-default-opencode-plus-explicit-model-tiers"><span class="header-section-number">11.1</span> The recommended default:
+<h2 data-number="12.1" id="the-recommended-default-opencode-plus-explicit-model-tiers"><span class="header-section-number">12.1</span> The recommended default:
 OpenCode plus explicit model tiers</h2>
 <p>For this multi-provider, MCP-heavy design, start with OpenCode. Its
 MCP support, project configuration, local-model options, and broad
@@ -4594,7 +4802,7 @@ configuration, and model documentation are the relevant setup
 references. The exact provider route is part of the experiment: pin a
 provider when a long tool-use session needs stable latency, or permit
 fallbacks when availability matters more than reproducibility.</p>
-<h2 data-number="11.2" id="provider-accounts-credits-and-data-boundaries"><span class="header-section-number">11.2</span> Provider accounts, credits,
+<h2 data-number="12.2" id="provider-accounts-credits-and-data-boundaries"><span class="header-section-number">12.2</span> Provider accounts, credits,
 and data boundaries</h2>
 <p>Create one separate API key for this coding harness, give it a small
 spending limit, and keep it in the shell environment or the harness
@@ -4804,7 +5012,7 @@ precedence over environment variables. Local Ollama, vLLM, and llama.cpp
 providers normally belong in Pi’s <code>models.json</code> and
 OpenCode’s custom-provider configuration; bind them to
 <code>127.0.0.1</code> and use the model’s required tool parser.</p>
-<h2 data-number="11.3" id="rough-cost-planning"><span class="header-section-number">11.3</span> Rough cost planning</h2>
+<h2 data-number="12.3" id="rough-cost-planning"><span class="header-section-number">12.3</span> Rough cost planning</h2>
 <p>For a simple planning estimate, assume one month contains 2 million
 input tokens and 500,000 output tokens. At the September 18, 2026
 snapshot, the model-only arithmetic is approximately:</p>
@@ -4853,7 +5061,7 @@ and provider, and raise the limit only when the task pilot justifies it.
 Local inference replaces token billing with hardware, electricity,
 setup, and maintenance costs; count failed runs and operator time rather
 than calling it free.</p>
-<h2 data-number="11.4" id="model-allocation-by-task"><span class="header-section-number">11.4</span> Model allocation by task</h2>
+<h2 data-number="12.4" id="model-allocation-by-task"><span class="header-section-number">12.4</span> Model allocation by task</h2>
 <p>Use a role-based policy that you can inspect and override. A wrapper
 script or shell alias is enough; automatic model switching that the user
 cannot see is not.</p>
@@ -4952,7 +5160,7 @@ parity.</p>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Aider is the deliberately smaller fallback.</span></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/qwen/qwen3-coder-next <span class="dt">\</span></span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">--weak-model</span> openrouter/z-ai/glm-5.3-flash</span></code></pre></div>
-<h2 data-number="11.5" id="setup-cli-first"><span class="header-section-number">11.5</span> Setup: CLI-first</h2>
+<h2 data-number="12.5" id="setup-cli-first"><span class="header-section-number">12.5</span> Setup: CLI-first</h2>
 <p>Install OpenCode and connect the providers you have approved. Put
 repository-wide instructions in <code>AGENTS.md</code>; keep
 <code>opencode.json</code> focused on model and provider adapters. Begin
@@ -4977,7 +5185,7 @@ configuration, not a guarantee that the remote model supports the
 advertised capabilities. Choose Aider when the small git-native loop is
 the requirement; do not describe it as an equivalent replacement for
 Claude Code’s MCP, skills, and hooks architecture.</p>
-<h2 data-number="11.6" id="setup-agentic-editor"><span class="header-section-number">11.6</span> Setup: agentic editor</h2>
+<h2 data-number="12.6" id="setup-agentic-editor"><span class="header-section-number">12.6</span> Setup: agentic editor</h2>
 <p>Use Cline when the editor is the primary surface and you want
 Plan/Act review, browser and MCP access, and a visual diff loop.
 Configure OpenRouter with GLM 5.3 for difficult Act-mode changes, Qwen3
@@ -4993,7 +5201,7 @@ providers, and extensions are all reviewed. In either editor, keep the
 plan reviewable, require approval before writes with external
 consequences, and do not assume that importing an <code>AGENTS.md</code>
 file reproduces Claude Code’s full instruction or hook behaviour.</p>
-<h2 data-number="11.7" id="repository-configuration-and-security-boundaries"><span class="header-section-number">11.7</span> Repository configuration and
+<h2 data-number="12.7" id="repository-configuration-and-security-boundaries"><span class="header-section-number">12.7</span> Repository configuration and
 security boundaries</h2>
 <p>Treat the harness, provider, model, repository, and external tools as
 separate trust boundaries. MCP standardises tool access; it does not
@@ -5088,7 +5296,7 @@ service, while Devin is a managed cloud boundary. Use a separate branch
 or worktree with least-privilege credentials and a clean handoff
 containing the task contract, diff, relevant source, tests, and
 unresolved questions. Human approval remains the integration gate.</p>
-<h2 data-number="11.8" id="a-staged-rollout-and-evaluation-loop"><span class="header-section-number">11.8</span> A staged rollout and
+<h2 data-number="12.8" id="a-staged-rollout-and-evaluation-loop"><span class="header-section-number">12.8</span> A staged rollout and
 evaluation loop</h2>
 <p>Start with a pilot of roughly 20-30 representative tasks from the
 repository, including a new feature, multi-file refactor, failing-test
@@ -5111,7 +5319,7 @@ a provider, model ID, quantization, context setting, harness version, or
 major project instruction changes. Keep representative prompts and
 expected checks in the repository’s normal evaluation workflow so the
 result is reproducible rather than anecdotal.</p>
-<h2 data-number="11.9" id="what-this-setup-does-not-solve"><span class="header-section-number">11.9</span> What this setup does not
+<h2 data-number="12.9" id="what-this-setup-does-not-solve"><span class="header-section-number">12.9</span> What this setup does not
 solve</h2>
 <p>Multiple models do not remove the need for good repository
 instructions, tests, observability, or human judgement. A second model
@@ -5134,7 +5342,7 @@ if that matches how you work, and retain Aider as the minimal fallback.
 Use a different provider route for high-risk review, and refresh model
 IDs, prices, quotas, authentication paths, and provider policies
 immediately before adoption.</p>
-<h1 data-number="12" id="pi-as-an-additional-harness"><span class="header-section-number">12</span> Pi as an Additional Harness</h1>
+<h1 data-number="13" id="pi-as-an-additional-harness"><span class="header-section-number">13</span> Pi as an Additional Harness</h1>
 <p>Pi is worth adding to the comparison because it takes a different
 position from the full-featured alternatives above. It is a minimal
 terminal coding harness: the core provides the agent loop, a small set
@@ -5152,7 +5360,7 @@ authentication path, and documentation before installing. The current
 official site uses the <code>@earendil-works/pi-coding-agent</code>
 package; older examples may use the <code>@mariozechner</code>
 scope.</p>
-<h2 data-number="12.1" id="what-pi-adds-to-a-multi-harness-setup"><span class="header-section-number">12.1</span> What Pi adds to a
+<h2 data-number="13.1" id="what-pi-adds-to-a-multi-harness-setup"><span class="header-section-number">13.1</span> What Pi adds to a
 multi-harness setup</h2>
 <p>Pi is a useful third surface when you want to hold the harness
 constant enough to compare models, but keep the harness itself easy to
@@ -5189,7 +5397,7 @@ model’s behaviour depends on the complete tuple of harness, provider,
 model ID, context policy, tool schemas, thinking settings, retries, and
 permissions. A successful Pi run does not prove that the same model will
 behave the same way in OpenCode, Cline, or Claude Code.</p>
-<h2 data-number="12.2" id="installation-and-a-first-controlled-run"><span class="header-section-number">12.2</span> Installation and a first
+<h2 data-number="13.2" id="installation-and-a-first-controlled-run"><span class="header-section-number">13.2</span> Installation and a first
 controlled run</h2>
 <p>The current official quick start offers an installer or a global npm
 installation. Pin the version in a reproducible environment where the
@@ -5225,7 +5433,7 @@ request and explicit checks:</p>
 repository contract, require tests, and inspect the diff yourself. Pi
 runs with the permissions of the user who starts it, so the working
 directory and shell account are part of the authorization boundary.</p>
-<h2 data-number="12.3" id="project-context-settings-and-extensions"><span class="header-section-number">12.3</span> Project context, settings, and
+<h2 data-number="13.3" id="project-context-settings-and-extensions"><span class="header-section-number">13.3</span> Project context, settings, and
 extensions</h2>
 <p>Pi can load <code>AGENTS.md</code> and <code>CLAUDE.md</code> context
 files, which makes it a useful consumer of portable repository
@@ -5268,7 +5476,7 @@ documentation warns that extensions execute arbitrary code and skills
 can instruct the model to perform actions, so review and pin third-party
 packages before enabling them. Do not install an unreviewed package in a
 repository containing credentials or production access.</p>
-<h2 data-number="12.4" id="what-pi-does-not-provide-by-default"><span class="header-section-number">12.4</span> What Pi does not provide by
+<h2 data-number="13.4" id="what-pi-does-not-provide-by-default"><span class="header-section-number">13.4</span> What Pi does not provide by
 default</h2>
 <p>Pi’s minimal core intentionally does not provide built-in MCP, plan
 mode, subagents, permission popups, background bash, or a built-in to-do
@@ -5293,7 +5501,7 @@ If MCP is central to the workflow, OpenCode or Cline remains the more
 direct additional harness. The model choice does not repair this gap:
 GLM, DeepSeek, and Qwen can all emit tool calls, but Pi still owns the
 tool schema, approval policy, retries, and result handling.</p>
-<h2 data-number="12.5" id="sessions-and-cross-harness-handoff"><span class="header-section-number">12.5</span> Sessions and cross-harness
+<h2 data-number="13.5" id="sessions-and-cross-harness-handoff"><span class="header-section-number">13.5</span> Sessions and cross-harness
 handoff</h2>
 <p>Pi automatically saves sessions and supports continuing the most
 recent session, browsing older sessions, opening a session by path or
@@ -5311,7 +5519,7 @@ in a dedicated worktree; a different provider receives the contract,
 diff, relevant source, and test results for review; CI and a human own
 the merge. The reverse direction works for investigation or a small
 follow-up, but do not carry hidden assumptions across the boundary.</p>
-<h2 data-number="12.6" id="how-to-evaluate-pi-fairly"><span class="header-section-number">12.6</span> How to evaluate Pi fairly</h2>
+<h2 data-number="13.6" id="how-to-evaluate-pi-fairly"><span class="header-section-number">13.6</span> How to evaluate Pi fairly</h2>
 <p>Add Pi as another row in the existing 20-30-task pilot, not as an
 anecdotal alternative. Use the same initial revision, task contract,
 context files, permission envelope, model/provider tuple, thinking
@@ -5327,7 +5535,7 @@ the last two, test compaction, session resume, malformed tool results,
 and interruption recovery. If Pi needs an extension or wrapper to supply
 a capability that OpenCode has in its core, record that configuration as
 part of Pi’s harness identity and measure its maintenance burden.</p>
-<h2 data-number="12.7" id="recommendation"><span class="header-section-number">12.7</span> Recommendation</h2>
+<h2 data-number="13.7" id="recommendation"><span class="header-section-number">13.7</span> Recommendation</h2>
 <p>Add Pi when you value a small terminal core, explicit model
 switching, inspectable session state, or TypeScript-level customisation.
 Keep it beside OpenCode rather than underneath it: use OpenCode for the
@@ -5339,14 +5547,14 @@ surface and Aider for the minimal git-native fallback. Use a disposable
 worktree or container for initial trials, review extensions and packages
 as code, and never let Pi’s model choice silently expand shell, file,
 network, or merge permissions.</p>
-<h1 data-number="13" id="references"><span class="header-section-number">13</span> References</h1>
+<h1 data-number="14" id="references"><span class="header-section-number">14</span> References</h1>
 <p>First-party sources checked on <strong>September 18, 2026</strong>
 for the current model, provider, pricing, and policy snapshot. Pi
 sources and setup documentation were checked on <strong>September 18,
 2026</strong>. Grok Bot sources were checked on <strong>September 9,
 2026</strong>. Model names, prices, quotas, and product boundaries can
 change independently; the date is part of each claim.</p>
-<h2 data-number="13.1" id="model-documentation-and-licences"><span class="header-section-number">13.1</span> Model Documentation and
+<h2 data-number="14.1" id="model-documentation-and-licences"><span class="header-section-number">14.1</span> Model Documentation and
 Licences</h2>
 <ul>
 <li><a href="https://platform.claude.com/docs/en/models/overview">Anthropic
@@ -5413,7 +5621,7 @@ Nemotron</a>, <a href="https://github.com/ibm-granite/granite-code-models">IBM G
 Code</a>, and <a href="https://huggingface.co/microsoft/Phi-4-mini-instruct">Microsoft
 Phi-4 mini</a></li>
 </ul>
-<h2 data-number="13.2" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">13.2</span> Model Evaluations and
+<h2 data-number="14.2" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">14.2</span> Model Evaluations and
 Practitioner Reports</h2>
 <ul>
 <li><a href="https://deepswe.datacurve.ai/">DeepSWE v1.1 common-harness
@@ -5434,7 +5642,7 @@ Claude Code, Codex, and Gemini CLI</a></li>
 <li><a href="https://arxiv.org/abs/2607.21656">Cross-model LLM code
 review study</a></li>
 </ul>
-<h2 data-number="13.3" id="tool-and-pricing-documentation"><span class="header-section-number">13.3</span> Tool and Pricing
+<h2 data-number="14.3" id="tool-and-pricing-documentation"><span class="header-section-number">14.3</span> Tool and Pricing
 Documentation</h2>
 <ul>
 <li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Anthropic
@@ -5535,7 +5743,7 @@ trust</a>, <a href="https://pi.dev/docs/latest/extensions">extensions</a>, <a hr
 works-with-openrouter</a>, <a href="https://docs.continue.dev/guides/ollama-guide">Continue Ollama
 guide</a>, and <a href="https://agents.md/">AGENTS.md</a></li>
 </ul>
-<h2 data-number="13.4" id="secondary-background"><span class="header-section-number">13.4</span> Secondary Background</h2>
+<h2 data-number="14.4" id="secondary-background"><span class="header-section-number">14.4</span> Secondary Background</h2>
 <ul>
 <li><a href="https://artificialanalysis.ai/agents/coding">Artificial
 Analysis coding-agent taxonomy</a></li>
