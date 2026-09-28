@@ -1374,6 +1374,8 @@ fit_cluster = smf.ols("y ~ x1 + x2 + C(region)", data=df).fit(
 
 This is especially important when panel-like dependence structures exist. The migration message is: do not stop at coefficient parity; carry over your inferential assumptions too.
 
+\newpage
+
 ### Classification Reports and Error Slicing
 
 Advanced modeling workflows should include segment-level error analysis rather than only global metrics.
