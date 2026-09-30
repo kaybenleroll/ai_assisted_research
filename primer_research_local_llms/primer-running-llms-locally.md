@@ -2,7 +2,7 @@
 
 From first prompt to a maintainable private AI stack
 
-*September 2026 · runtime and model references reviewed 10 September 2026*
+*September 2026 · runtime and model references reviewed 30 September 2026*
 
 You have used cloud AI tools.
 
@@ -179,6 +179,120 @@ The three settings that matter most:
 3. Repetition controls: avoid loops and overuse.
 
 For coding and precise factual tasks, run cooler. For brainstorming, increase controlled randomness.
+
+### Decision Models: When You Should Not Generate Text
+
+Many applications do not need an answer written for a person. They need a
+route, a score, a yes/no judgment, or the next item from a finite set. Using a
+generative LLM for that job creates an avoidable conversion layer: prompt the
+model, make it emit a string that resembles a schema, parse the string, handle
+invalid output, and then decide whether its confidence estimate means
+anything. A local classifier, natural-language-inference (NLI) model, or
+ordinary rules may be a better fit.
+
+Jev is the most visible recent example of a different interface. TypeSafe
+calls it a *System One model*: give it a state and typed questions, and receive
+structured values plus probability distributions. Its documented primitives
+are `choice` (select from options), `score` (select an ordered rubric), and
+`noul` (a yes/no probability). It does not generate a prose answer. The
+[TypeSafe introduction](https://docs.typesafe.ai/introduction) describes the
+wire-level contract; the [launch article](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
+describes the company's RLCD (Reinforcement Learning for Calibrated Decisions)
+training approach and performance claims.
+
+The useful mental model is a probabilistic function call:
+
+```text
+state + typed question(s) -> typed result(s) + probabilities
+```
+
+For example, a support workflow might pass the ticket text as `state` and ask
+which team should own it, whether the customer is angry, and how urgent it is.
+The surrounding program can route high-confidence tickets, send ambiguous
+ones to a larger model or a person, and combine several atomic scores with
+explicit business logic. That decomposition is important: a decision model
+is not a general autonomous reasoner, and its confidence does not prove that
+the question or option set was well designed.
+
+#### Jev is not the same as a classifier or structured output
+
+These tools overlap, but they are not interchangeable:
+
+| Tool | Input | Output | Best default use |
+|---|---|---|---|
+| Rules or supervised classifier | Features or fixed labels | Label or score | Stable task with labelled data |
+| NLI / zero-shot classifier | Text plus labels | Label scores | Small classification experiments |
+| Structured-output LLM | Context plus a schema | Constrained generated data | Open-ended reasoning with typed output |
+| Jev/System One-style model | State plus options or rubric | Typed result and probabilities | Fast, repeated software decisions |
+| Embedding model | Text, image, audio, or other content | Vector | Retrieval or similarity, not policy |
+
+The distinction is architectural rather than just a marketing label. A
+constrained LLM still performs token generation and can misunderstand the
+task while producing valid JSON. A decision model can make an incorrect
+choice while never producing malformed JSON. Type safety removes one failure
+class; it does not remove semantic error, distribution shift, bad labels,
+poor calibration, or prompt injection in the state. Treat the returned
+probability as a signal to validate on your own workload, not as a licence to
+skip evaluation.
+
+#### What can run locally
+
+Jev itself is a hosted, proprietary API at the time of this review. The local
+ecosystem is young and should be treated as a set of experiments, not as a
+settled compatibility layer. Examples include:
+
+* [Laya](https://huggingface.co/convaiinnovations/laya), an open-weight typed
+  decision model intended for local inference.
+* [OpenJev](https://huggingface.co/openjev/openjev), an independent
+  open-weight implementation with `choice`, `score`, and `noul`-style
+  questions.
+* [Decision-4B](https://huggingface.co/evalengine/decision-4b), an open-weight
+  adapter based on Qwen3.5-4B with a GGUF route documented for llama.cpp and
+  Ollama.
+* Small NLI or encoder classifiers, and a fine-tuned model trained on your
+  own labels, when the task is narrower than a general typed-decision model.
+
+“Open-weight Jev” is shorthand for a similar decision interface or training
+goal, not proof of equivalence to Jev. Check the model card, licence, maximum
+number of options, supported languages, input modalities, calibration results,
+and serving path. A model may expose a Jev-compatible endpoint while using
+ordinary autoregressive generation underneath; that can still be useful, but
+it changes the latency, memory, and output-reliability story. A model card
+that reports accuracy without calibration or abstention behaviour is not
+enough for confidence-gated automation.
+
+#### A practical local pattern
+
+Keep the decision model behind ordinary application code. Do not let it
+execute tools directly. Validate the question and option set, record the
+model revision and calibration threshold, and define what happens below that
+threshold:
+
+```text
+input -> local decision model
+      -> high confidence: ordinary deterministic branch
+      -> low confidence: larger LLM, human review, or explicit fallback
+```
+
+Start with a labelled hold-out set from the real workflow. Measure accuracy
+by class, confusion matrix, latency, throughput, and calibration (for example,
+whether predictions near 0.8 are correct roughly 80% of the time). Include
+ambiguous, adversarial, out-of-domain, and empty-input cases. Include an
+explicit `none`, `abstain`, or `review` option when the real task sometimes has
+no safe answer; forcing every input into a valid label produces clean-looking
+metrics and unsafe automation. If the task has only a few stable labels and
+enough historical data, a small supervised classifier will often be cheaper
+and easier to maintain. If the task needs changing natural-language criteria
+with little labelled data, a typed-decision model may be a useful middle layer
+between rules and a full generative LLM.
+
+The decision is therefore workload-shaped. Use a generative model when the
+system must explain, transform, plan, write code, or handle an open-ended
+conversation. Use a decision model when the output space is known and the
+application can express the policy around it. In many useful systems the two
+are combined: a local decision model handles cheap routing and guardrails,
+while a larger language model handles only the cases that require generation
+or deeper reasoning.
 
 ---
 
@@ -720,7 +834,8 @@ Do not choose by hype. Choose by workload.
 
 Use this sequence:
 
-1. Define the modality and workload shape.
+1. Define the modality and workload shape; if the output is a bounded decision,
+   test a classifier or typed-decision model before reaching for generation.
 2. Pick a family with a license that fits your use.
 3. Pick size for hardware, including encoders and KV cache.
 4. Pick a runtime and its supported format.
@@ -812,6 +927,14 @@ You protect future flexibility by designing around stable interfaces.
 ### Keep App Code on OpenAI-Compatible Calls
 
 Most local runtimes expose chat-completions-style APIs.
+
+Do not force every local model through a chat-completions abstraction. A
+typed-decision endpoint has a different contract: state, typed questions,
+probabilities, and calibration metadata rather than messages and generated
+tokens. Put it behind a small application adapter alongside the text-model
+client. This lets a workflow route simple cases locally and escalate only the
+cases that need a generative model, without pretending the two interfaces have
+the same semantics.
 
 If your app isolates model client config behind environment variables, you can switch backend without rewriting business logic.
 
@@ -1102,6 +1225,11 @@ vllm serve meta-llama/Llama-3.3-8B-Instruct
 - [SGLang docs](https://docs.sglang.ai)
 - [Open WebUI](https://github.com/open-webui/open-webui)
 - [Hugging Face model hub](https://huggingface.co/models)
+- [TypeSafe System One introduction](https://docs.typesafe.ai/introduction)
+- [TypeSafe: Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
+- [Laya open-weight model](https://huggingface.co/convaiinnovations/laya)
+- [OpenJev open-weight model](https://huggingface.co/openjev/openjev)
+- [Decision-4B open-weight model](https://huggingface.co/evalengine/decision-4b)
 - [LM Studio](https://lmstudio.ai)
 - [Jan](https://jan.ai)
 - [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL)
