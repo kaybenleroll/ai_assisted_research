@@ -350,6 +350,62 @@ This distinction prevents a common failed setup. A VLM such as Qwen3-VL can insp
 
 The same separation applies to audio and video. Transcribe with ASR, reason over the transcript with a language model, and synthesize speech or video only at the output stage when required.
 
+### Running Diffusion Language Models Locally
+
+Diffusion language models use the same broad idea as image diffusion — start from a noisy or masked state and refine it — but they need a different inference loop from an ordinary causal LLM. A model such as [LLaDA](https://github.com/lrbob/LLaDA) predicts masked token positions over several refinement steps. That means a normal “load a Transformers model and call `generate()`” recipe is not enough: you need the model's sampler, masking rules, and stopping logic as well as its weights and tokenizer.
+
+The software stack has four pieces:
+
+1. **Model checkpoint.** The official LLaDA releases use Hugging Face transformer checkpoints, usually Safetensors plus custom model code. Quantized local deployments may instead use GGUF. Do not assume that a GGUF made for a causal Llama model will work; the diffusion architecture and sampler must be supported by the runtime.
+2. **Diffusion-aware inference engine.** The official [LLaDA PyTorch implementation](https://github.com/lrbob/LLaDA) is the most direct reference path. Current [llama.cpp diffusion support](https://github.com/ggml-org/llama.cpp/blob/master/examples/diffusion/README.md) includes LLaDA and Dream examples, while [diffuse-cpp](https://github.com/iafiscal1212/diffuse-cpp) provides a portable C++ route for supported GGUF checkpoints.
+3. **Accelerator backend.** PyTorch normally uses CUDA on NVIDIA, ROCm on supported AMD cards, or Metal/MPS on Apple hardware. llama.cpp has its own CPU, CUDA, Metal, Vulkan, and other backend paths. A model working in one backend does not prove that its diffusion sampler works in another.
+4. **Optional server or UI.** Start with a CLI while validating the model. Add an OpenAI-compatible server only after you know how the runtime represents diffusion steps, maximum output length, batching, and cancellation. A chat UI can hide those details and make a slow or incorrect sampler look like a model-quality problem.
+
+#### A practical first experiment
+
+For a desktop or workstation, start with an 8B instruction-tuned checkpoint and a 4-bit GGUF. One published LLaDA Q4_K_M conversion is about 5.1 GB; its model card also lists an approximately 15 GB FP16 variant. The file size is only the first bound: leave room for the runtime, activations, tokenizer, context, and any cache or scratch buffers. A 4-bit checkpoint is a sensible starting point for a machine with roughly 8–16 GB of usable GPU memory, or more system RAM if running mostly on the CPU.
+
+After installing a current llama.cpp build with its diffusion executable and downloading a compatible GGUF, the shape of a first run is:
+
+```bash
+# Example model download; inspect the model card before accepting its licence.
+huggingface-cli download diffuse-cpp/LLaDA-8B-Instruct-GGUF \
+  llada-8b-q4km.gguf --local-dir ./models/llada-8b
+
+# Run the diffusion-specific CLI. The exact binary name can vary by build.
+llama-diffusion-cli \
+  -m ./models/llada-8b/llada-8b-q4km.gguf \
+  -p "Explain why a Kalman filter works" \
+  -ub 512 \
+  --diffusion-block-length 32 \
+  --diffusion-steps 128
+```
+
+The step count is not equivalent to “maximum new tokens.” It controls how many refinement passes the sampler makes; block length, confidence or entropy selection, temperature, and output length are separate controls. More steps can improve convergence but increase latency. Measure time to first usable answer, total completion time, tokens or positions per second, and peak memory rather than comparing only nominal parallelism.
+
+The official PyTorch route is useful when you want the reference implementation or intend to modify the sampler:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install torch transformers==4.38.2
+git clone https://github.com/lrbob/LLaDA
+cd LLaDA
+python chat.py
+```
+
+Use the repository's current instructions for checkpoint selection, CUDA or MPS installation, and model loading. BF16/FP16 inference for an 8B model generally wants a high-memory GPU; CPU execution is possible but usually much slower and may require substantial system RAM. Quantization reduces weight memory, not all working memory, and an MoE model's “active parameters” describe compute per step, not necessarily the total checkpoint that must be stored.
+
+For larger or newer families, use a runtime that explicitly names the model. [dInfer](https://github.com/inclusionAI/dInfer) supports LLaDA, LLaDA-MoE, and LLaDA2 through specialized inference paths, with vLLM and SGLang backends depending on the model family. This is a better fit for a CUDA workstation or multi-GPU server than for a first laptop experiment. Treat support as model-specific: LLaDA, LLaDA-MoE, LLaDA2, and Dream do not automatically share the same checkpoint format, sampler flags, or serving API.
+
+GPU memory has three separate costs:
+
+1. **Weights:** reduced by 4-bit or 8-bit quantization.
+2. **Working memory:** activations, temporary logits, tokenizer buffers, and the repeated denoising passes.
+3. **Context and batching:** attention/cache state and simultaneous requests; these grow with sequence length and batch size.
+
+Diffusion can do more positions in parallel, but it may run many full model evaluations. That can make it compute-bound where a causal LLM is limited by serial token generation or memory bandwidth. GPU offload helps only when the backend supports the architecture well; spilling layers to CPU can make a nominally fitting model unpleasantly slow. On Apple Silicon, unified memory can let the model fit without a discrete GPU, but the CPU and GPU share that memory. On AMD, Vulkan or ROCm support depends on the exact runtime and card. Validate the smallest supported checkpoint end to end before planning around a larger one.
+
 ### Multimodal Memory Costs
 
 Images, audio, and video become tokens or latent features before the language model sees them. A single high-resolution image or a sampled video can therefore consume more context and key-value (KV) cache than its file size suggests. Start with low resolution, short clips, and a small number of images; increase them only after measuring memory and latency. A model that fits text-only may fail once its vision tower, projector, audio encoder, or video loader is enabled.
