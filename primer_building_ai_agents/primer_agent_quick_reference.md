@@ -550,7 +550,7 @@ Pass/fail: Average rating >= 4/5
 
 **Tool Call:** Agent's request to execute external function (API, code, etc.)
 
-**Trajectory:** Full sequence of thoughts, actions, and observations for one task execution
+**Trajectory:** Observable sequence of inputs, tool calls, arguments, observations, decision summaries, and outcomes for one task execution; does not require access to hidden chain-of-thought
 
 **Reflection:** Self-analysis of failure mode to improve future attempts
 
@@ -562,7 +562,7 @@ Pass/fail: Average rating >= 4/5
 
 **Episodic Memory:** Storage of past task executions for pattern learning
 
-**ReAct:** Pattern: Reason (think) → Act (do) → Observe (get result) → Repeat
+**ReAct:** Pattern: Decision summary → Action → Observation → Repeat; summaries document decisions without exposing hidden chain-of-thought
 
 **MRKL:** Modular reasoning system routing tasks to specialized expert tools
 
@@ -573,3 +573,7 @@ Pass/fail: Average rating >= 4/5
 **Idempotency key:** A caller-supplied identifier that lets a service recognize a retried request and avoid repeating a side effect
 
 **Durable execution:** Persisted workflow execution that can survive failure, pause for input, and resume from saved state
+
+---
+
+*Last updated: October 7, 2026. Companion to the comprehensive primer's September 2026 framework and product snapshot.*

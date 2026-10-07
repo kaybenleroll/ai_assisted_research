@@ -4,6 +4,8 @@
 
 Ten European national electoral systems: how each converts votes into seats, how seats translate into governments, and how the design of each system shapes political outcomes in practice. The primer includes comparative analysis, worked numerical examples, and a framework for evaluating coalition risk.
 
+**Review date: 7 October 2026.** Election examples are dated historical outcomes, not live cabinet or parliamentary membership trackers. Denmark and Sweden's examples include their 2026 elections; government formation is discussed only where supported by the cited record.
+
 ## What This Is Not
 
 This is not a complete history of electoral-system evolution, and it makes no argument for which system is best. It is not a guide to voting as a citizen in any particular country. The EU Parliament election process is used as contextual scaffolding, but this primer is about domestic systems, not the EU legislature itself.
@@ -23,7 +25,7 @@ There are really four things that electoral systems keep juggling:
 3. Party control: does the party leadership decide who gets in, or do voters have real influence over candidates?
 4. Stability: does the system tend to produce single-party governments, or does it push parties into coalitions and bargaining?
 
-No system nails all four. Every design picks a flavor of trade-off. That is why the UK, France, Germany, Ireland, Spain, Italy, the Netherlands, Denmark, Sweden, and Romania all feel very different even though they are all democratic parliamentary systems in roughly the same part of the world.
+No system nails all four. Every design picks a flavor of trade-off. The UK, Germany, Ireland, Spain, Italy, the Netherlands, Denmark, and Sweden have parliamentary systems. France and Romania are **semi-presidential**: a directly elected president shares executive authority with a prime minister and a government accountable to parliament. That constitutional distinction is separate from the electoral formula: France uses two-round legislative contests, while Romania uses list PR. France's [constitutional framework](https://www.justice.gouv.fr/sites/default/files/2026-04/systeme_juridique_et_judiciaire_france.pdf) and Romania's [Constitution, Articles 81, 103, and 109](https://www.wipo.int/wipolex/en/legislation/details/3589) establish the respective executive arrangements.
 
 ## How The EU Layer Fits Above National Elections
 
@@ -147,6 +149,8 @@ The political effect is familiar: fewer parties, more tactical voting, and gover
 
 France is still winner-takes-all in spirit, but it adds a second round so that the final winner usually has broader support.
 
+France's semi-presidential system has two separate electoral mandates. The presidential election chooses the head of state; legislative elections choose the 577-member National Assembly. The president appoints the prime minister, but the government can be brought down by the Assembly. A presidential win therefore does not guarantee a legislative majority or a cabinet that can survive a censure vote.
+
 In presidential elections, if nobody gets an outright majority in round one, the top two go to a runoff. In legislative elections, the rule is a bit looser: candidates can qualify for round two if they clear a threshold tied to registered voters, which means local races can sometimes become three-way or even four-way contests before some candidates withdraw.
 
 That makes France feel less brutal than the UK system. You can vote sincerely in round one, then use round two to settle the real fight. In practice, round two often becomes a referendum on who should be blocked rather than a pure love letter to one candidate.
@@ -166,7 +170,7 @@ Nobody wins outright, so the top two or three relevant contenders move forward, 
 
 That is why French elections can get very political between rounds: the system creates a bargaining window, not just a counting process.
 
-What France optimizes for is not perfect proportionality. It is legitimacy through runoff majority and a built-in chance for voters to regroup after the first pass.
+The presidential runoff guarantees a majority of valid votes for the winner. A legislative second round can be won by plurality in a race with three or more candidates. Both give voters a chance to regroup after the first pass; neither guarantees proportional seats or a governing majority in the Assembly.
 
 ## Ireland: STV, or Ranked Choice With Actual Teeth
 
@@ -311,6 +315,8 @@ Sweden is more proportional than France or the UK, more open than Spain, and mor
 
 Romania currently uses closed-list proportional representation for its parliament. Parties submit lists, voters choose a list, and seats are allocated with thresholds that weed out the smallest parties.
 
+This parliamentary ballot sits within a semi-presidential constitution. Voters elect the president separately; the president designates a prime-ministerial candidate after consultations, and the proposed government needs parliament's confidence. The government is politically accountable to parliament. A presidential result and a parliamentary list result therefore answer different questions about who can govern.
+
 The important thing here is that Romania gives you a very classic list-PR shape, but with enough thresholds and district structure to keep things from fragmenting completely. National minorities also get special treatment in the system, which is a reminder that electoral design is often doing double duty: it is not just about arithmetic, it is also about political inclusion.
 
 Toy example:
@@ -331,7 +337,7 @@ Romania shows that PR does not automatically mean open candidate choice or endle
 
 ## Ten Mini Case Studies: How Votes Became Governments
 
-These are compact, high-level snapshots from recent election cycles. They are included to show translation logic, not to provide a full historical record.
+These are compact snapshots of specified election cycles, reviewed on 7 October 2026. Seat counts refer to the election outcome, before subsequent vacancies or changes of party. They illustrate translation logic; they do not establish that an electoral formula alone caused the eventual coalition choice.
 
 ### United Kingdom
 
@@ -339,7 +345,7 @@ In the 2024 general election, Labour converted a vote share in the low-to-mid 30
 
 ### France
 
-Recent cycles showed the two-round system producing strong strategic behavior between rounds, including withdrawals and tactical consolidation. The final Assembly outcome was fragmented rather than cleanly majoritarian. Governing consequence: higher bargaining costs and increased reliance on procedural coalition management.
+The legislative elections of 30 June and 7 July 2024 produced no absolute majority in the 577-seat Assembly: 289 seats were needed. The official electoral labels gave Union of the Left 178 seats, Ensemble 150, and National Rally 125; these labels differ from some media bloc totals and from the parliamentary groups formed later. Between-round withdrawals helped change local contests without creating a governing majority. Governing consequence: the president's power to appoint a prime minister could not supply the Assembly support needed for durable government. Sources: [Interior Ministry final results](https://www.interieur.gouv.fr/actualites/actualites-du-ministere/elections-legislatives-2024-resultats-definitifs) and [IPU election record](https://data.ipu.org/parliament/FR/FR-LC01/election/FR-LC01-E20240630/).
 
 ### Ireland
 
@@ -347,7 +353,9 @@ Ireland's November 2024 election again delivered a fragmented Dail: Fianna Fail 
 
 ### Germany
 
-Germany's snap election in February 2025, called after the SPD-Greens-FDP "traffic light" coalition collapsed, is the sharper illustration of party-vote proportionality constraining coalition options. The FDP polled 4.3 percent, missed the 5 percent threshold, and lost its seats entirely; the CDU/CSU led on 28.5 percent, with the AfD roughly doubling its 2021 result to take second place at 20.8 percent. None of that mattered for who governed: the seat math forced a CDU/CSU-SPD grand coalition, the only combination with a workable majority in the newly capped 630-seat Bundestag, agreed in April 2025 under Chancellor Friedrich Merz. Governing consequence: party-vote proportionality did its job of matching seats to votes, but it left the two largest mainstream blocs no option except to govern together, with the cap rule itself determining how many of the CDU/CSU's local wins actually converted into seats.
+Germany's 23 February 2025 election, following the collapse of the SPD-Greens-FDP "traffic light" coalition, shows proportionality and political exclusions working together. The FDP's 4.3 percent missed the 5 percent threshold; CDU/CSU won 28.5 percent and 208 seats, AfD 20.8 percent and 152, and SPD 120 seats in the capped 630-seat Bundestag. CDU/CSU and SPD together had 328 seats, above the 316 needed for a majority. That coalition was a political choice, not a mathematical necessity: CDU/CSU and AfD also had a numerical majority, but cooperation with AfD was excluded by CDU/CSU. Merz became chancellor on 6 May 2025, after the coalition agreement in April. Governing consequence: thresholds and the seat cap shaped the chamber, while parties' willingness to cooperate determined which majority became a government. Sources: [Federal Returning Officer's final result](https://www.bundeswahlleiterin.de/info/presse/mitteilungen/bundestagswahl-2025/29_25_endgueltiges-ergebnis.html) and [Bundestag chancellor election](https://www.bundestag.de/dokumente/textarchiv/2025/kw19-de-kanzlerwahl-1062470).
+
+The German coalition discussion also draws on [CDU's explicit pre-election rejection of cooperation with AfD](https://www.cdu.de/aktuelles/cdu-deutschlands/friedrich-merz-gemeinsam-mit-der-union-kaempfen/). This party statement documents a political constraint, not an electoral rule.
 
 ### Italy
 
@@ -359,36 +367,36 @@ The 2023 election produced no simple winner-takes-government outcome. Closed-lis
 
 ### Netherlands
 
-The October 2025 Dutch election, called after the PVV-led coalition collapsed, pushed the fragmentation point further than usual: D66 and the PVV tied for the most seats at 26 each, the first time two parties have tied for first place since 1956. Very low effective barriers to entry preserved broad representation and fragmented bargaining space, and every governing party from the outgoing coalition lost seats, with NSC wiped out entirely. Governing consequence: long coalition-formation timelines remained a structural feature, not an anomaly. Formation talks ran into 2026, and the resulting D66-VVD-CDA minority coalition under Prime Minister Rob Jetten excludes the PVV, which had led the outgoing government, showing how national PR can hand a party the largest vote share without any claim on power.
+The 29 October 2025 Dutch election followed the collapse of the Schoof coalition, in which PVV was the largest party. D66 and PVV each won 26 of 150 seats, but D66 had more votes: a seat tie is not a vote tie. The D66-VVD-CDA government under Rob Jetten was sworn in on 23 February 2026 with 66 seats, short of the 76 required for a majority. Governing consequence: proportional representation preserved a fragmented chamber, and the resulting minority cabinet needed support beyond its own parties. Winning the most votes did not itself supply a governing majority. Sources: [Kiesraad's final election record](https://www.kiesraad.nl/adviezen-en-publicaties/publicaties/2025/11/07/proces-verbaal-van-de-uitslag-van-de-verkiezing-van-de-tweede-kamer-2025-d.d.-7-november-2025) and [government's inauguration record](https://www.government.nl/latest/news/2026/02/23/jetten-government-sworn-in).
 
 ### Denmark
 
-The 2022 Danish election combined proportional representation with enough correction mechanisms to keep representation broad without pure fragmentation. A cross-bloc governing arrangement emerged from strategic coalition design rather than classic bloc closure. Governing consequence: wider governing base, but more internal policy balancing.
+In the 24 March 2026 election, Socialdemokratiet won 21.8 percent of votes and 38 of the 175 seats allocated in Denmark proper. SF won 20 seats, Venstre 18, and Moderaterne 14. The outgoing Socialdemokratiet-Venstre-Moderaterne combination thus held only 70 of those seats; the Folketing also includes four separately elected North Atlantic seats, for 179 in total. Governing consequence: PR with compensatory seats preserved broad representation but did not reproduce the outgoing coalition's majority. This is election arithmetic, not a claim about the eventual cabinet or its external support. Source: [official Statistics Denmark election tables](https://www.valg.im.dk/Media/639117581241830159/Danmarks%20Statistiks%20opgrelse%20af%20folketingsvalget%20den%2024.%20marts%202026.pdf), Tables 10 and 12.
 
 ### Sweden
 
-Sweden's recent cycle produced a right-leaning governing arrangement dependent on structured support from outside the cabinet core. Open-list proportional logic preserved party pluralism while bloc arithmetic drove executive formation. Governing consequence: coalition survival linked to disciplined inter-party coordination on migration, crime, and budget priorities.
+Sweden's 13 September 2026 election gave Socialdemokraterna 28.02 percent and 99 of 349 seats, Moderaterna 70, and Sverigedemokraterna 62. Vänsterpartiet, Centerpartiet, Kristdemokraterna, Miljöpartiet, and Liberalerna also won seats. The four parties supporting the outgoing government arrangement — Moderaterna, Sverigedemokraterna, Kristdemokraterna, and Liberalerna — totalled 173 seats; the other four totalled 176. That arithmetic does not itself prove a new coalition agreement. Governing consequence: list PR with preference votes produced a closely divided multiparty chamber; cabinet formation still depended on party negotiations and parliamentary confidence rules. Source: [Swedish Election Authority's final 2026 result](https://www.val.se/valresultat-och-statistik/riksdags--region--och-kommunval/valresultat-2026).
 
 ### Romania
 
-Recent Romanian cycles have shown closed-list PR with thresholds producing a manageable but politically fluid party system. Large parties remained central to government-making, while coalition structure shifted with leadership and credibility dynamics. Governing consequence: executive continuity often depends more on coalition maintenance than on electoral-system mechanics alone.
+Romania's 1 December 2024 parliamentary election gave PSD about 22 percent of the Chamber of Deputies vote and 86 of the 331 seats at that election. Seven parties won ordinary list seats, alongside 19 minority representatives; no party held a majority. The government formed after the election brought together PSD, PNL, and UDMR, with support from the minority group. Governing consequence: thresholds reduced the field without eliminating coalition bargaining; the separately elected presidency did not replace the need for parliamentary support. These are the 2024 election and formation figures, not the current composition of a later cabinet. Sources: [IPU's parliament-supplied seat record](https://data.ipu.org/parliament/RO/RO-LC01/election/RO-LC01-E20241201/) and [Radio România's report of the electoral authority's completed count](https://www.romania-actualitati.ro/news-in-english/centralization-of-parliamentary-election-votes-completed-id202704.html).
 
 ## Vote-To-Seat Snapshot Table (Illustrative, Rounded)
 
 The table below is intentionally approximate and decision-oriented. It is designed to anchor pattern recognition, not replace official electoral returns.
 
-| Country | Recent cycle | Largest bloc vote share | Largest bloc seat outcome | System translation pattern |
+| Country | Election cycle | Leading party / bloc vote share | Seat outcome at that election | System translation pattern |
 | --- | --- | ---: | ---: | --- |
 | UK | 2024 | low-to-mid 30s | large absolute Commons majority | Strong winner bonus under FPTP |
 | France | 2024 legislative | no bloc majority vote | fragmented Assembly | Two-round filtering with strategic withdrawals |
 | Ireland | 2024 | leading parties in low-mid 20s | no single-party majority | STV spreads representation across multiple parties |
-| Germany | 2025 | largest party high-20s | grand-coalition majority required | Party-vote proportionality plus seat cap constrains coalition options |
+| Germany | 2025 | CDU/CSU 28.5% | 208/630; with SPD 328 | Proportionality shapes arithmetic; political exclusions shape coalition choice |
 | Italy | 2022 | winning coalition in low-mid 40s combined | solid parliamentary majority | Mixed system rewards pre-election bloc coordination |
 | Spain | 2023 | largest party low-30s | no governing majority alone | Provincial PR plus regional pivots shape investiture math |
-| Netherlands | 2025 | largest parties tied around high teens | far from majority alone | National PR sustains high fragmentation |
-| Denmark | 2022 | largest party high-20s | coalition arithmetic still required | PR with correction seats moderates distortion |
-| Sweden | 2022 | bloc competition around mid-40s combined | narrow governing arrangement | PR plus bloc discipline determines executive outcome |
-| Romania | 2024 cycle context | largest bloc around low-20s to low-30s range | coalition-dependent majority formation | Closed-list PR with thresholds favors larger organized parties |
+| Netherlands | 2025 | D66 narrowly ahead of PVV, both about 17% | 26/150 each; D66-VVD-CDA total 66 | Seat tie differs from vote tie; minority coalition needs outside support |
+| Denmark | 2026 | Socialdemokratiet 21.8% (Denmark proper) | 38/175; former three-party combination 70 | Compensatory PR preserves representation without a coalition majority |
+| Sweden | 2026 | Socialdemokraterna 28.02% | 99/349; outgoing support parties total 173 | Party representation and support-bloc arithmetic are separate |
+| Romania | 2024 parliamentary | PSD about 22% (Chamber vote) | 86/331 at election | Closed-list PR with thresholds still requires coalition bargaining |
 
 Use this table as a quick conversion lens: when vote concentration is modest but seat concentration is high, the system is usually adding a governability bonus; when both remain fragmented, coalition negotiation is the real executive-selection mechanism.
 

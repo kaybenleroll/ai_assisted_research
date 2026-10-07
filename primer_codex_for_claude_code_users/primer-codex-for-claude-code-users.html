@@ -598,7 +598,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Codex for Claude Code Users: A Practical
 Guide to Running Two Coding Agents in One Repository</span>
 
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -859,7 +859,9 @@ setting</a></li>
 <p>This is a long-form, operational guide for Claude Code users who want
 Codex as a second coding-agent harness while keeping their existing
 repository workflow intact.</p>
-<p><em>Product snapshot · September 10, 2026</em></p>
+<p><em>Product snapshot · 7 October 2026. Model and execution-policy
+refresh; earlier instruction-system checks retain their stated
+dates.</em></p>
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
 <p>If you already use Claude Code, the first few minutes with Codex can
 be oddly confusing. The terminal looks familiar. Both tools can inspect
@@ -2301,14 +2303,17 @@ separate variables when diagnosing a failure.</p>
 <h2 data-number="6.2" id="a-dated-snapshot-of-the-current-codex-models"><span class="header-section-number">6.2</span> A dated snapshot of the current
 Codex models</h2>
 <p>The official <a href="https://learn.chatgpt.com/docs/models">Codex
-model guidance</a> now lists Astra alongside the GPT-5.6 family. The <a href="https://developers.openai.com/api/docs/models/gpt-6-astra">GPT-6
+model guidance</a> now recommends GPT-6.1 Sol for complex coding and
+GPT-6 Luna for focused work, with availability depending on the account
+and client. The <a href="https://developers.openai.com/api/docs/models/gpt-6-astra">GPT-6
 Astra model documentation</a> describes Astra as OpenAI’s most capable
 model for complex reasoning, coding, computer use, research, and
-document creation. The following is a snapshot checked on 16 September
-2026. It combines that public guidance with the model entries visible in
-the local Codex installation used for this edition; it is not a promise
-that every model is available to every account, interface, or
-authentication method.</p>
+document creation. The following is a snapshot checked on 7 October 2026
+against official documentation; it is not a promise that every model is
+available to every account, interface, or authentication method. GPT-6.1
+Sol’s launch includes eligible paid plans; Enterprise and Edu
+administrators must enable it, and Free and Go are not included at
+launch.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -2331,50 +2336,57 @@ research</td>
 judgment</td>
 </tr>
 <tr>
-<td><code>gpt-5.6-sol</code> (Sol)</td>
-<td>Most capable GPT-5.6 model for complex coding, computer use,
-research, and cybersecurity</td>
-<td>Ambiguous, high-value, multi-step coding, research, or security
-work</td>
+<td><code>gpt-6.1-sol</code> (6.1 Sol)</td>
+<td>Recommended for complex coding and agentic workflows; OpenAI
+describes near-Astra performance at lower cost</td>
+<td>Ordinary implementation through repeated, long-running work;
+evaluate against Astra on hard tasks</td>
 </tr>
 <tr>
-<td><code>gpt-5.6-terra</code> (Terra)</td>
-<td>Balanced GPT-5.6 model for everyday work</td>
-<td>Routine implementation, debugging, and repository work</td>
+<td><code>gpt-6-luna</code> (6 Luna)</td>
+<td>Efficient model for focused, high-volume tasks</td>
+<td>Clear transformations, extraction, summaries, and bounded
+coding</td>
 </tr>
 <tr>
-<td><code>gpt-5.6-luna</code> (Luna)</td>
-<td>Fast, affordable GPT-5.6 model</td>
-<td>Clear, repeatable transformations, extraction, and structured
-tasks</td>
+<td><code>gpt-6-sol</code> (6 Sol)</td>
+<td>Earlier GPT-6 Sol; named replacement in the GPT-5.5 retirement
+notice</td>
+<td>Migration where the account offers 6 Sol but not 6.1 Sol</td>
+</tr>
+<tr>
+<td><code>gpt-5.6-sol</code>, <code>gpt-5.6-terra</code>,
+<code>gpt-5.6-luna</code></td>
+<td>Previous family retained during the rollout</td>
+<td>Existing configurations; re-evaluate the available GPT-6 choices
+before changing defaults</td>
 </tr>
 <tr>
 <td><code>gpt-5.5</code></td>
-<td>Previous-generation model; scheduled to retire from
-ChatGPT-authenticated Codex on 14 October 2026</td>
-<td>Existing configurations that need it temporarily; migrate new work
-to Sol</td>
+<td>Retires from ChatGPT-authenticated Codex on 14 October 2026; API
+availability is separate</td>
+<td>Migrate saved settings, scripts, custom agents, and scheduled tasks
+before retirement</td>
 </tr>
 </tbody>
 </table>
 <p>GPT-5.4 and GPT-5.4 Mini retired from Codex with ChatGPT sign-in on
 31 August 2026. That specific retirement does not affect the OpenAI API
-or Codex authenticated with an API key. The official page still lists
-GPT-5.3 Codex Spark as a text-only Pro preview, but it is not in the
-local model cache checked for this edition; treat it as
-surface-dependent rather than as a local default. Model names,
-availability, retirement dates, and migration advice belong in a
-maintained reference section, not in permanent repository
-instructions.</p>
-<p>The practical selection rule is simpler than the catalogue. Keep Luna
-for clear, mechanical, high-volume work. Start with Terra for ordinary
-implementation and debugging. Move to Sol when ambiguity, research
-depth, or the cost of a wrong decision justifies more capability. Use
-Astra for the hardest end-to-end tasks spanning code, tools, research,
-or sustained judgment. Then choose reasoning effort independently,
-starting with the lowest setting that reliably meets the acceptance
-criteria and increasing it when the failure is genuinely about
-depth.</p>
+or Codex authenticated with an API key. GPT-5.3 Codex Spark retired on
+14 September 2026 from the desktop app, CLI, and IDE extension; it is no
+longer a preview option. GPT-5.2 and GPT-5.3 Codex are also deprecated
+with ChatGPT sign-in. Model names, availability, retirement dates, and
+migration advice belong in a maintained reference section, not in
+permanent repository instructions.</p>
+<p>The practical selection rule is simpler than the catalogue. Use GPT-6
+Luna for bounded work and GPT-6.1 Sol for implementation, debugging, and
+complex agent work when available. Keep Astra for the most demanding
+tasks. Choose effort separately: the product guide suggests High for
+Luna and Light (<code>low</code>) for Astra; start with the client’s
+default for 6.1 Sol. Re-evaluate on familiar tasks rather than carrying
+an old generation’s effort setting across unchanged. Luna supports Max
+but not Ultra; Ultra uses subagents, so it is also a workflow choice
+rather than just more reasoning time.</p>
 <h2 data-number="6.3" id="choose-by-task-shape"><span class="header-section-number">6.3</span> Choose by task shape</h2>
 <p>Use the least expensive configuration that can reliably satisfy the
 acceptance criteria, then increase capability when evidence says the
@@ -3176,11 +3188,15 @@ block:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[agents]</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="dt">enabled</span> <span class="op">=</span> <span class="cn">true</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="dt">max_concurrent_threads_per_session</span> <span class="op">=</span> <span class="dv">4</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="dt">default_subagent_model</span> <span class="op">=</span> <span class="st">&quot;gpt-5.6-terra&quot;</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="dt">default_subagent_reasoning_effort</span> <span class="op">=</span> <span class="st">&quot;medium&quot;</span></span></code></pre></div>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="dt">default_subagent_model</span> <span class="op">=</span> <span class="st">&quot;gpt-6-luna&quot;</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="dt">default_subagent_reasoning_effort</span> <span class="op">=</span> <span class="st">&quot;high&quot;</span></span></code></pre></div>
 <p><code>max_concurrent_threads_per_session</code> is the control that
 stops an enthusiastic main agent from fanning out further than you can
-review. Set it deliberately.</p>
+review. Set it deliberately. This example assigns bounded tasks to Luna;
+use an available Sol or Astra model for a delegate whose task needs more
+capability. Check the <a href="https://learn.chatgpt.com/docs/agent-configuration/subagents/">subagent
+configuration</a> and <a href="https://learn.chatgpt.com/docs/models">model availability</a>
+before copying it.</p>
 <h3 data-number="7.5.2" id="the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="header-section-number">7.5.2</span> The formats do not port, and
 one rough edge is unresolved</h3>
 <p>Claude Code subagents are Markdown files with YAML frontmatter in
@@ -3284,19 +3300,26 @@ tuned by a <code>[sandbox_workspace_write]</code> block carrying
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="dt">writable_roots</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;/home/dev/project&quot;</span><span class="op">,</span> <span class="st">&quot;/home/dev/.cache/project&quot;</span><span class="op">]</span></span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="dt">network_access</span> <span class="op">=</span> <span class="cn">false</span></span></code></pre></div>
 <p>That is enforced by the operating system, not by the agent: macOS
-Seatbelt, and Landlock with seccomp on Linux. A command that violates it
-fails the way any sandboxed process fails, regardless of what the model
-intended or what any instruction file said.</p>
+Seatbelt, the Linux/WSL2 sandbox using bubblewrap, and a native Windows
+sandbox. The <a href="https://learn.chatgpt.com/docs/sandboxing/">current sandbox
+guide</a> recommends installing the distribution’s
+<code>bubblewrap</code> package on Linux or WSL2; its bundled fallback
+still needs unprivileged user namespaces. A command that violates the
+sandbox fails the way any sandboxed process fails, regardless of what
+the model intended or what any instruction file said.</p>
 <p><code>approval_policy</code> is the second, independent field, and it
 controls how often Codex pauses to ask rather than what the sandbox
 permits. <code>&quot;never&quot;</code> and <code>&quot;on-request&quot;</code> are the
 simple values, and a more granular form exists:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dt">approval_policy</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">granular</span><span class="op"> =</span> <span class="op">{ </span><span class="dt">sandbox_approval</span><span class="op"> =</span> <span class="st">&quot;...&quot;</span><span class="op">, </span><span class="dt">rules</span><span class="op"> =</span> <span class="op">[], </span><span class="dt">request_permissions</span><span class="op"> =</span> <span class="st">&quot;...&quot;</span><span class="op">, </span><span class="dt">skill_approval</span><span class="op"> =</span> <span class="st">&quot;...&quot;</span><span class="op"> } }</span></span></code></pre></div>
-<p>Older sources also mention
-<code>approval_policy = &quot;untrusted&quot;</code>. That value is not confirmed
-on the current advanced-configuration documentation, so do not build on
-it without checking; earlier editions of this primer listed it without
-that caveat.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dt">approval_policy</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">granular</span><span class="op"> =</span> <span class="op">{ </span><span class="dt">sandbox_approval</span><span class="op"> =</span> <span class="cn">true</span><span class="op">, </span><span class="dt">rules</span><span class="op"> =</span> <span class="cn">true</span><span class="op">, </span><span class="dt">mcp_elicitations</span><span class="op"> =</span> <span class="cn">true</span><span class="op">, </span><span class="dt">request_permissions</span><span class="op"> =</span> <span class="cn">true</span><span class="op">, </span><span class="dt">skill_approval</span><span class="op"> =</span> <span class="cn">true</span><span class="op"> } }</span></span></code></pre></div>
+<p>These booleans control whether each category of approval prompt can
+appear; they do not grant the requested action. The <a href="https://learn.chatgpt.com/docs/config-file/config-reference">configuration
+reference</a> explicitly rejects
+<code>approval_policy = &quot;untrusted&quot;</code> and deprecates
+<code>&quot;on-failure&quot;</code>. Use <code>&quot;on-request&quot;</code>,
+<code>&quot;never&quot;</code>, or the supported granular form. Project
+<code>trust_level = &quot;untrusted&quot;</code> remains valid and is a different
+setting.</p>
 <p>The orthogonality is the part worth internalising. A session can be
 highly permissive about asking and still be unable to reach the network,
 or can be sandboxed generously and still stop for approval on every
@@ -3324,18 +3347,19 @@ it, and the answers have different fixes.</p>
 <tr>
 <td>Unit of control</td>
 <td>Pattern match on tool name or command</td>
-<td>Sandbox mode plus approval policy</td>
+<td>Sandbox mode, approval policy, and command rules</td>
 </tr>
 <tr>
 <td>Enforcement layer</td>
-<td>Application</td>
-<td>Operating system (Seatbelt, Landlock and seccomp) for the sandbox;
-application for approvals</td>
+<td>Application; optional shell sandbox is separate</td>
+<td>Platform sandbox for execution; application for approvals and
+command rules</td>
 </tr>
 <tr>
 <td>Per-command granularity</td>
 <td>Yes, by pattern</td>
-<td>No; granularity is the mode and the policy</td>
+<td>Command-prefix rules can allow, prompt, or forbid execution; sandbox
+limits still apply</td>
 </tr>
 <tr>
 <td>Filesystem scoping</td>
@@ -4329,15 +4353,15 @@ mechanisms, and Codex’s <code>requirements.toml</code> and
 Foundation announcement of 9 December 2025, with <code>AGENTS.md</code>
 and MCP as founding projects.</li>
 </ul>
-<p>Two claims in this primer are corroborated but not independently
-primary-confirmed, and are marked as such where they appear. The first
-is the reaction count on the GitHub feature request asking Claude Code
-to read <code>AGENTS.md</code>: it is well attested across secondary
+<p>One historical claim in this primer is corroborated but not
+independently primary-confirmed, and is marked as such where it appears:
+the reaction count on the GitHub feature request asking Claude Code to
+read <code>AGENTS.md</code>: it is well attested across secondary
 sources but was not verified from the issue page itself, so this primer
-does not quote a figure. The second is whether
-<code>approval_policy = &quot;untrusted&quot;</code> remains a valid Codex value;
-it appears in older sources but is not confirmed on the current
-advanced-configuration page.</p>
+does not quote a figure. The 7 October 2026 refresh separately checked
+model guidance, subagent defaults, sandboxing, and approval-policy
+syntax. <code>approval_policy = &quot;untrusted&quot;</code> is explicitly
+unsupported in the current official reference, not unresolved.</p>
 <p>What remains genuinely volatile, and should be rechecked before you
 rely on it:</p>
 <ul>
@@ -4374,6 +4398,10 @@ reasoning guidance</a></li>
 API model guidance</a></li>
 <li><a href="https://developers.openai.com/api/docs/models/gpt-6-astra">GPT-6
 Astra model documentation</a></li>
+<li><a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol">GPT-6.1
+Sol model documentation</a></li>
+<li><a href="https://developers.openai.com/api/docs/models/gpt-6-luna">GPT-6
+Luna model documentation</a></li>
 <li><a href="https://developers.openai.com/api/docs/guides/conversation-state">OpenAI
 API conversation state</a></li>
 <li><a href="https://developers.openai.com/api/docs/guides/compaction">OpenAI

@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Building Autonomous AI Agents: A
 Comprehensive Primer</span>
 
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -741,8 +741,9 @@ engineering in isolation from agentic execution. If you want a survey of
 agent frameworks without implementation depth, this is probably not the
 right starting point — this primer assumes you intend to build
 something.</p>
-<p><strong>Freshness note (September 10, 2026):</strong> This is a
-conceptual and implementation primer, but framework capabilities,
+<p><strong>Freshness note (October 7, 2026):</strong> The terminology
+and editorial review were updated on this date; the framework and
+product snapshot remains September 2026. Framework capabilities,
 provider SDK features, model pricing, and benchmark rankings move
 monthly. Treat product and protocol references as dated guidance and
 re-check the linked official docs before implementation.</p>
@@ -1319,12 +1320,13 @@ Thought: Now that I know [what I learned], I should...
 
 Action: [Next tool call or completion]
 ...&quot;</code></pre>
-<p>This pattern makes the agent’s <strong>action trace</strong>
-auditable: you can see the tool calls, arguments, observations, and
-outcomes. Do not require or expose a hidden chain-of-thought dump as an
-observability strategy. Record concise decision summaries and structured
-events instead; they are safer to retain and usually more useful for
-debugging.</p>
+<p>An agent’s <strong>trajectory</strong> is the observable sequence of
+inputs, tool calls, arguments, observations, decision summaries, and
+outcomes for one task execution. This <strong>action trace</strong>
+makes the run auditable. Do not require or expose a hidden
+chain-of-thought dump as an observability strategy. Record concise
+decision summaries and structured events instead; they are safer to
+retain and usually more useful for debugging.</p>
 <p>Transparency only helps if traces stay readable. Prefer concise
 reasoning summaries over giant free-form dumps.</p>
 <h2 data-number="7.2" id="planning-patterns"><span class="header-section-number">7.2</span> Planning Patterns</h2>
@@ -1895,7 +1897,8 @@ specification</a> and <a href="https://a2a-protocol.org/latest/">A2A
 protocol</a></li>
 </ul>
 <hr />
-<p><em>Created: May 20, 2026. Last updated: September 10, 2026.</em></p>
+<p><em>Created: May 20, 2026. Last updated: October 7, 2026. Framework
+and product snapshot: September 2026.</em></p>
       </div>
     </main>
 

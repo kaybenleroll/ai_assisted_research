@@ -644,7 +644,7 @@ Before diving into tools, anchor on one reality: parallelism is not a direct sub
 
 Use this sequence as your first-pass executor chooser:
 
-1. Identify the dominant bottleneck. For CPU-bound work, ask whether tasks are independent and heavy. If they are, start with `ProcessPoolExecutor` or `joblib`; otherwise, vectorize first and reconsider partitioning.
+1. Identify the dominant bottleneck. For CPU-bound work, vectorize first, then ask whether tasks are independent and heavy. On a standard GIL-enabled CPython build, start with `ProcessPoolExecutor` or `joblib` for Python-heavy tasks; benchmark threads when native code releases the GIL or you use a compatible free-threaded build.
 2. For I/O-bound work, use `ThreadPoolExecutor` or `asyncio` when concurrency justifies it.
 3. If memory is the constraint, use `dask` or a partition-by-file pipeline. If none of these constraints dominates, stay sequential and optimize the measured hotspots.
 4. Add `ray` only when you need distributed, stateful orchestration. Otherwise keep the process-based design simple.
@@ -664,9 +664,9 @@ In practice, most migration errors happen when a workflow is mislabeled here. A 
 
 ### The GIL in Practical Terms
 
-The global interpreter lock limits parallel execution of Python bytecode in threads. This does not mean "threads are useless." It means thread pools are best for waiting-heavy tasks, while CPU-heavy tasks generally need process pools or native extensions.
+In the standard CPython build, the global interpreter lock (GIL) limits parallel execution of Python bytecode in threads. Thread pools work well for waiting-heavy tasks and can also parallelize native computation that releases the GIL. Process pools remain a useful baseline for independent, Python-heavy CPU tasks.
 
-Do not treat this as trivia. It is one of the main reasons naive parallel ports underperform.
+As of October 7, 2026, Python 3.14's [free-threaded build is officially supported but still optional](https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported). With the GIL disabled, Python threads can run on multiple cores. Check dependency compatibility and benchmark your workload: an extension without free-threading support can re-enable the GIL, and shared mutable state still needs synchronization. After importing your dependencies, use `sys._is_gil_enabled()` to check the running process; [Python's free-threading guide](https://docs.python.org/3.14/howto/free-threading-python.html) explains the build and runtime checks. Installing Python 3.14 alone does not remove the GIL.
 
 ### `ProcessPoolExecutor` as a Baseline
 
@@ -681,12 +681,12 @@ def heavy_transform(chunk):
     return out
 
 
-chunks = [g for _, g in df.groupby("segment")]
-
-with ProcessPoolExecutor(max_workers=8) as ex:
-    parts = list(ex.map(heavy_transform, chunks, chunksize=2))
-
-result = pd.concat(parts, ignore_index=True)
+if __name__ == "__main__":
+    # Load df here in a script, then partition it for the workers.
+    chunks = [g for _, g in df.groupby("segment")]
+    with ProcessPoolExecutor(max_workers=8) as ex:
+        parts = list(ex.map(heavy_transform, chunks, chunksize=2))
+    result = pd.concat(parts, ignore_index=True)
 ```
 
 Key details that matter in real code:
@@ -694,6 +694,8 @@ Key details that matter in real code:
 - Task functions must be top-level importable functions for process pools.
 - Large object transfer is expensive; chunk size selection is a performance lever.
 - Worker startup overhead can dominate tiny tasks.
+
+Run process-pool examples from a script with importable worker functions. Keep data loading and pool startup under the `if __name__ == "__main__":` guard, including in the later examples; functions defined only in a notebook or interactive session are not a portable worker setup.
 
 ### `ThreadPoolExecutor` for I/O Bound Tasks
 
@@ -755,16 +757,20 @@ Mitigation strategies:
 
 ### Start Method Differences and Platform Behavior
 
-Python multiprocessing can use different start methods (`fork`, `spawn`, `forkserver`). Behavior and overhead differ by platform.
+Python multiprocessing can use different start methods (`fork`, `spawn`, `forkserver`). In [Python 3.14](https://docs.python.org/3.14/library/multiprocessing.html#contexts-and-start-methods), the defaults changed:
 
-- Linux often defaults to `fork`.
-- macOS and Windows commonly use `spawn` semantics in many contexts.
+- On eligible POSIX platforms such as Linux, the default is `forkserver`.
+- macOS and Windows default to `spawn`.
+- `fork` is no longer the default on any platform. Request it explicitly only when your application requires it; forking a multithreaded process is problematic.
 
-For portable code, assume stricter spawn-compatible patterns:
+For portable code, use patterns compatible with both `spawn` and `forkserver`:
 
 - top-level functions
 - import-safe module initialization
-- `if __name__ == "__main__":` guard where needed
+- an `if __name__ == "__main__":` guard around data loading and pool startup
+- picklable task arguments and results
+
+Inspect `multiprocessing.get_start_method()` rather than inferring the method from the operating system alone. When you need an explicit choice, pass `mp_context=multiprocessing.get_context("spawn")` (or another supported method) to [`ProcessPoolExecutor`](https://docs.python.org/3.14/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor); reusable libraries should let callers supply the context.
 
 ### joblib: Excellent Midpoint for Model Loops
 
@@ -894,7 +900,7 @@ This avoids false conclusions such as "parallel is slower" when the real issue i
 
 ### Decision Framework You Can Apply Quickly
 
-Start with sequential vectorized code and prove correctness first. Then move to process pools for CPU-heavy independent tasks where each unit of work is large enough to amortize overhead. Use thread pools or async for high-latency I/O where waiting dominates compute. Adopt joblib when the workflow is mostly model loops and you want straightforward ergonomics with stable defaults. Adopt dask when dataframe size or execution graph complexity pushes beyond comfortable single-process operation. Adopt ray when your problem stops looking like "parallel loops" and starts looking like distributed orchestration with persistent state and richer scheduling concerns.
+Start with sequential vectorized code and prove correctness first. Then move to process pools for CPU-heavy independent Python tasks on a GIL-enabled build, where each unit of work is large enough to amortize overhead. Benchmark threads for native code that releases the GIL or a compatible free-threaded build. Use thread pools or async for high-latency I/O where waiting dominates compute. Adopt joblib when the workflow is mostly model loops and you want straightforward ergonomics with stable defaults. Adopt dask when dataframe size or execution graph complexity pushes beyond comfortable single-process operation. Adopt ray when your problem stops looking like "parallel loops" and starts looking like distributed orchestration with persistent state and richer scheduling concerns.
 
 The most useful habit is to write down the reason for each escalation. A one-sentence note such as "moved from sequential to process pool because stage X consumed 82% runtime and each partition takes >2s" creates accountability and helps future maintainers avoid accidental over-engineering.
 
@@ -2308,11 +2314,11 @@ A more robust strategy is wave-based by workflow value. Wave 1 should target hig
 Each wave should produce shippable outcomes and update your migration playbook based on actual lessons learned.
 
 
-### Playbook 9: A 12-Week Intensive Program to Reach Stable Python Fluency
+### Playbook 8: A 12-Week Intensive Program to Reach Stable Python Fluency
 
 If your team wants a concrete, aggressive plan, structure it in six two-week phases. In Weeks 1 to 2, establish environment and repository standards, define the parity-testing harness, and port one medium-complexity wrangling pipeline. In Weeks 3 to 4, port one inference-style model with formula parity and one prediction pipeline with sklearn, then validate metric and threshold parity. In Weeks 5 to 6, port one multicore workload with a process-pool baseline, instrument logs and performance checkpoints, and implement failure bucketing with retry policy. In Weeks 7 to 8, port a high-value dashboard chart family with contract tests, establish shared plotting helpers and house style, and validate visual semantics against R outputs. In Weeks 9 to 10, harden CI checks for schema, parity, and runtime regressions, codify ownership and rollback protocols, and run at least one failure drill. In Weeks 11 to 12, migrate a second high-value workflow end-to-end using the refined playbook, publish internal templates and migration guidance, and choose next-wave candidates from measured outcomes.
 
-### Playbook 10: Closing Advice for Long Migrations
+### Playbook 9: Closing Advice for Long Migrations
 
 The biggest lesson across successful migrations is straightforward: do not optimize for ideological purity. Optimize for reliable outcomes, maintainable systems, and analyst trust.
 
@@ -2593,7 +2599,7 @@ Lastly, think about operator ergonomics. A run that is technically correct but o
 
 Teams trust pipelines they can observe.
 
-### Deep Dive 8: A Practical Field Checklist for Your Next 90 Days
+### Deep Dive 7: A Practical Field Checklist for Your Next 90 Days
 
 To close this chapter, here is a practical 90-day sequence you can operationalize immediately. In Week 1, pick one high-value workflow with manageable complexity, define parity metrics and tolerance thresholds, freeze a reference dataset with R baseline outputs, and scaffold a Python module with clear boundaries. In Week 2, port feature logic with explicit null and dtype policies, add parity tests for the most critical features, and establish one chart contract for a key output. In Week 3, port a baseline model in statsmodels formula style, produce tidy-like coefficient and confidence summaries, and compare diagnostics against the R baseline. In Week 4, implement a sklearn production variant, add cross-validation and calibration checks, and agree on threshold policy with stakeholders.
 
@@ -2605,7 +2611,7 @@ This is the real long-term win.
 
 ## Extended Worked Scenarios: From Analyst Workflow to Production Workflow
 
-The following scenarios connect the patterns to realistic migration decisions. Start with Scenario 1 for parity, Scenario 3 for ingestion, Scenario 6 for ongoing validation, or Scenario 9 for KPI governance.
+The following scenarios connect the patterns to realistic migration decisions. Start with Scenario 1 for parity, Scenario 3 for ingestion, Scenario 5 for ongoing validation, or Scenario 7 for KPI governance.
 
 ### Scenario 1: You Need a Monthly Churn Scorecard That Leadership Already Trusts
 
@@ -2768,7 +2774,7 @@ This prevents one audience from forcing all others into the wrong abstraction le
 
 Another tip: preserve naming continuity from legacy reports. If a metric has been called "At-Risk 30D" for years, keep that name unless there is a compelling reason to change it. Renaming during migration creates avoidable confusion.
 
-### Scenario 6: You Need Continuous Validation After Migration, Not Just at Cutover
+### Scenario 5: You Need Continuous Validation After Migration, Not Just at Cutover
 
 Many teams treat migration as done once outputs match at launch. That is risky. Data systems evolve, dependencies update, and behavior drifts.
 
@@ -2793,7 +2799,7 @@ As workflows grow, exact equality may be too strict for floating-point-heavy pat
 
 The long-term message is simple: migration quality is a sustained practice, not a one-time milestone.
 
-### Scenario 8: What to Do When You Genuinely Hit a Hard Edge
+### Scenario 6: What to Do When You Genuinely Hit a Hard Edge
 
 Sometimes migration friction is not a process issue. It is a real ecosystem edge: a specialized R package with no mature Python equivalent, a mixed-model structure that is hard to reproduce exactly, or a visualization extension with no direct analog.
 
@@ -2805,7 +2811,7 @@ For many teams, a hybrid architecture is the best near-term path. Keep rare spec
 
 This is not failure. It is disciplined engineering prioritization.
 
-### Scenario 9: Measuring Migration Success with the Right KPIs
+### Scenario 7: Measuring Migration Success with the Right KPIs
 
 If you do not define migration success metrics, progress assessments become opinion-based.
 

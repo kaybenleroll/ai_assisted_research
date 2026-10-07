@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Python for Expert R Users: A Practical
 Migration Primer</span>
 
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -858,9 +858,9 @@ Incident Response During Migration</a></li>
 Patterns That Prevent Drift</a></li>
 <li><a href="#playbook-7-migration-planning-by-wave-instead-of-by-technology-layer" id="toc-playbook-7-migration-planning-by-wave-instead-of-by-technology-layer"><span class="toc-section-number">12.7</span> Playbook 7: Migration Planning by
 Wave Instead of by Technology Layer</a></li>
-<li><a href="#playbook-9-a-12-week-intensive-program-to-reach-stable-python-fluency" id="toc-playbook-9-a-12-week-intensive-program-to-reach-stable-python-fluency"><span class="toc-section-number">12.8</span> Playbook 9: A 12-Week Intensive
+<li><a href="#playbook-8-a-12-week-intensive-program-to-reach-stable-python-fluency" id="toc-playbook-8-a-12-week-intensive-program-to-reach-stable-python-fluency"><span class="toc-section-number">12.8</span> Playbook 8: A 12-Week Intensive
 Program to Reach Stable Python Fluency</a></li>
-<li><a href="#playbook-10-closing-advice-for-long-migrations" id="toc-playbook-10-closing-advice-for-long-migrations"><span class="toc-section-number">12.9</span> Playbook 10: Closing Advice for
+<li><a href="#playbook-9-closing-advice-for-long-migrations" id="toc-playbook-9-closing-advice-for-long-migrations"><span class="toc-section-number">12.9</span> Playbook 9: Closing Advice for
 Long Migrations</a></li>
 </ul></li>
 <li><a href="#extended-deep-dives-the-stuff-that-usually-decides-whether-migration-succeeds" id="toc-extended-deep-dives-the-stuff-that-usually-decides-whether-migration-succeeds"><span class="toc-section-number">13</span> Extended Deep Dives: The Stuff That
@@ -878,7 +878,7 @@ the Usual Happy Path</a></li>
 Leakage, and Honest Backtesting</a></li>
 <li><a href="#deep-dive-6-productionizing-parallel-workflows-without-creating-ops-debt" id="toc-deep-dive-6-productionizing-parallel-workflows-without-creating-ops-debt"><span class="toc-section-number">13.6</span> Deep Dive 6: Productionizing
 Parallel Workflows Without Creating Ops Debt</a></li>
-<li><a href="#deep-dive-8-a-practical-field-checklist-for-your-next-90-days" id="toc-deep-dive-8-a-practical-field-checklist-for-your-next-90-days"><span class="toc-section-number">13.7</span> Deep Dive 8: A Practical Field
+<li><a href="#deep-dive-7-a-practical-field-checklist-for-your-next-90-days" id="toc-deep-dive-7-a-practical-field-checklist-for-your-next-90-days"><span class="toc-section-number">13.7</span> Deep Dive 7: A Practical Field
 Checklist for Your Next 90 Days</a></li>
 </ul></li>
 <li><a href="#extended-worked-scenarios-from-analyst-workflow-to-production-workflow" id="toc-extended-worked-scenarios-from-analyst-workflow-to-production-workflow"><span class="toc-section-number">14</span> Extended Worked Scenarios: From
@@ -892,11 +892,11 @@ Financial Reporting Workflow with Strict Auditability</a></li>
 API Ingestion with Downstream Modeling</a></li>
 <li><a href="#scenario-4-you-need-to-explain-model-decisions-to-non-technical-stakeholders" id="toc-scenario-4-you-need-to-explain-model-decisions-to-non-technical-stakeholders"><span class="toc-section-number">14.4</span> Scenario 4: You Need to Explain
 Model Decisions to Non-Technical Stakeholders</a></li>
-<li><a href="#scenario-6-you-need-continuous-validation-after-migration-not-just-at-cutover" id="toc-scenario-6-you-need-continuous-validation-after-migration-not-just-at-cutover"><span class="toc-section-number">14.5</span> Scenario 6: You Need Continuous
+<li><a href="#scenario-5-you-need-continuous-validation-after-migration-not-just-at-cutover" id="toc-scenario-5-you-need-continuous-validation-after-migration-not-just-at-cutover"><span class="toc-section-number">14.5</span> Scenario 5: You Need Continuous
 Validation After Migration, Not Just at Cutover</a></li>
-<li><a href="#scenario-8-what-to-do-when-you-genuinely-hit-a-hard-edge" id="toc-scenario-8-what-to-do-when-you-genuinely-hit-a-hard-edge"><span class="toc-section-number">14.6</span> Scenario 8: What to Do When You
+<li><a href="#scenario-6-what-to-do-when-you-genuinely-hit-a-hard-edge" id="toc-scenario-6-what-to-do-when-you-genuinely-hit-a-hard-edge"><span class="toc-section-number">14.6</span> Scenario 6: What to Do When You
 Genuinely Hit a Hard Edge</a></li>
-<li><a href="#scenario-9-measuring-migration-success-with-the-right-kpis" id="toc-scenario-9-measuring-migration-success-with-the-right-kpis"><span class="toc-section-number">14.7</span> Scenario 9: Measuring Migration
+<li><a href="#scenario-7-measuring-migration-success-with-the-right-kpis" id="toc-scenario-7-measuring-migration-success-with-the-right-kpis"><span class="toc-section-number">14.7</span> Scenario 7: Measuring Migration
 Success with the Right KPIs</a></li>
 <li><a href="#from-verb-centric-pipelines-to-boundary-centric-pipelines" id="toc-from-verb-centric-pipelines-to-boundary-centric-pipelines"><span class="toc-section-number">14.8</span> From Verb-Centric Pipelines to
 Boundary-Centric Pipelines</a></li>
@@ -1546,10 +1546,12 @@ are oversized, parallelism multiplies complexity and failure noise. Keep
 this framing in mind while reading every subsection below.</p>
 <p>Use this sequence as your first-pass executor chooser:</p>
 <ol type="1">
-<li>Identify the dominant bottleneck. For CPU-bound work, ask whether
-tasks are independent and heavy. If they are, start with
-<code>ProcessPoolExecutor</code> or <code>joblib</code>; otherwise,
-vectorize first and reconsider partitioning.</li>
+<li>Identify the dominant bottleneck. For CPU-bound work, vectorize
+first, then ask whether tasks are independent and heavy. On a standard
+GIL-enabled CPython build, start with <code>ProcessPoolExecutor</code>
+or <code>joblib</code> for Python-heavy tasks; benchmark threads when
+native code releases the GIL or you use a compatible free-threaded
+build.</li>
 <li>For I/O-bound work, use <code>ThreadPoolExecutor</code> or
 <code>asyncio</code> when concurrency justifies it.</li>
 <li>If memory is the constraint, use <code>dask</code> or a
@@ -1577,12 +1579,20 @@ that determines end-to-end runtime. Treat taxonomy as an empirical
 classification step, not a guess. Run a quick stage-level profile, then
 choose execution strategy.</p>
 <h2 data-number="5.2" id="the-gil-in-practical-terms"><span class="header-section-number">5.2</span> The GIL in Practical Terms</h2>
-<p>The global interpreter lock limits parallel execution of Python
-bytecode in threads. This does not mean “threads are useless.” It means
-thread pools are best for waiting-heavy tasks, while CPU-heavy tasks
-generally need process pools or native extensions.</p>
-<p>Do not treat this as trivia. It is one of the main reasons naive
-parallel ports underperform.</p>
+<p>In the standard CPython build, the global interpreter lock (GIL)
+limits parallel execution of Python bytecode in threads. Thread pools
+work well for waiting-heavy tasks and can also parallelize native
+computation that releases the GIL. Process pools remain a useful
+baseline for independent, Python-heavy CPU tasks.</p>
+<p>As of October 7, 2026, Python 3.14’s <a href="https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported">free-threaded
+build is officially supported but still optional</a>. With the GIL
+disabled, Python threads can run on multiple cores. Check dependency
+compatibility and benchmark your workload: an extension without
+free-threading support can re-enable the GIL, and shared mutable state
+still needs synchronization. After importing your dependencies, use
+<code>sys._is_gil_enabled()</code> to check the running process; <a href="https://docs.python.org/3.14/howto/free-threading-python.html">Python’s
+free-threading guide</a> explains the build and runtime checks.
+Installing Python 3.14 alone does not remove the GIL.</p>
 <h2 data-number="5.3" id="processpoolexecutor-as-a-baseline"><span class="header-section-number">5.3</span>
 <code>ProcessPoolExecutor</code> as a Baseline</h2>
 <div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ProcessPoolExecutor</span>
@@ -1595,12 +1605,12 @@ parallel ports underperform.</p>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>chunks <span class="op">=</span> [g <span class="cf">for</span> _, g <span class="kw">in</span> df.groupby(<span class="st">&quot;segment&quot;</span>)]</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ProcessPoolExecutor(max_workers<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> ex:</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> <span class="bu">list</span>(ex.<span class="bu">map</span>(heavy_transform, chunks, chunksize<span class="op">=</span><span class="dv">2</span>))</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.concat(parts, ignore_index<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load df here in a script, then partition it for the workers.</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    chunks <span class="op">=</span> [g <span class="cf">for</span> _, g <span class="kw">in</span> df.groupby(<span class="st">&quot;segment&quot;</span>)]</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ProcessPoolExecutor(max_workers<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> ex:</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        parts <span class="op">=</span> <span class="bu">list</span>(ex.<span class="bu">map</span>(heavy_transform, chunks, chunksize<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> pd.concat(parts, ignore_index<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
 <p>Key details that matter in real code:</p>
 <ul>
 <li>Task functions must be top-level importable functions for process
@@ -1609,6 +1619,11 @@ pools.</li>
 performance lever.</li>
 <li>Worker startup overhead can dominate tiny tasks.</li>
 </ul>
+<p>Run process-pool examples from a script with importable worker
+functions. Keep data loading and pool startup under the
+<code>if __name__ == &quot;__main__&quot;:</code> guard, including in the later
+examples; functions defined only in a notebook or interactive session
+are not a portable worker setup.</p>
 <h2 data-number="5.4" id="threadpoolexecutor-for-io-bound-tasks"><span class="header-section-number">5.4</span> <code>ThreadPoolExecutor</code>
 for I/O Bound Tasks</h2>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor</span>
@@ -1664,19 +1679,31 @@ for furrr users migrating to Python.</p>
 <h2 data-number="5.7" id="start-method-differences-and-platform-behavior"><span class="header-section-number">5.7</span> Start Method Differences and
 Platform Behavior</h2>
 <p>Python multiprocessing can use different start methods
-(<code>fork</code>, <code>spawn</code>, <code>forkserver</code>).
-Behavior and overhead differ by platform.</p>
+(<code>fork</code>, <code>spawn</code>, <code>forkserver</code>). In <a href="https://docs.python.org/3.14/library/multiprocessing.html#contexts-and-start-methods">Python
+3.14</a>, the defaults changed:</p>
 <ul>
-<li>Linux often defaults to <code>fork</code>.</li>
-<li>macOS and Windows commonly use <code>spawn</code> semantics in many
-contexts.</li>
+<li>On eligible POSIX platforms such as Linux, the default is
+<code>forkserver</code>.</li>
+<li>macOS and Windows default to <code>spawn</code>.</li>
+<li><code>fork</code> is no longer the default on any platform. Request
+it explicitly only when your application requires it; forking a
+multithreaded process is problematic.</li>
 </ul>
-<p>For portable code, assume stricter spawn-compatible patterns:</p>
+<p>For portable code, use patterns compatible with both
+<code>spawn</code> and <code>forkserver</code>:</p>
 <ul>
 <li>top-level functions</li>
 <li>import-safe module initialization</li>
-<li><code>if __name__ == &quot;__main__&quot;:</code> guard where needed</li>
+<li>an <code>if __name__ == &quot;__main__&quot;:</code> guard around data loading
+and pool startup</li>
+<li>picklable task arguments and results</li>
 </ul>
+<p>Inspect <code>multiprocessing.get_start_method()</code> rather than
+inferring the method from the operating system alone. When you need an
+explicit choice, pass
+<code>mp_context=multiprocessing.get_context(&quot;spawn&quot;)</code> (or another
+supported method) to <a href="https://docs.python.org/3.14/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor"><code>ProcessPoolExecutor</code></a>;
+reusable libraries should let callers supply the context.</p>
 <h2 data-number="5.8" id="joblib-excellent-midpoint-for-model-loops"><span class="header-section-number">5.8</span> joblib: Excellent Midpoint for
 Model Loops</h2>
 <div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
@@ -1787,15 +1814,17 @@ real issue is task granularity.</p>
 <h2 data-number="5.15" id="decision-framework-you-can-apply-quickly"><span class="header-section-number">5.15</span> Decision Framework You Can
 Apply Quickly</h2>
 <p>Start with sequential vectorized code and prove correctness first.
-Then move to process pools for CPU-heavy independent tasks where each
-unit of work is large enough to amortize overhead. Use thread pools or
-async for high-latency I/O where waiting dominates compute. Adopt joblib
-when the workflow is mostly model loops and you want straightforward
-ergonomics with stable defaults. Adopt dask when dataframe size or
-execution graph complexity pushes beyond comfortable single-process
-operation. Adopt ray when your problem stops looking like “parallel
-loops” and starts looking like distributed orchestration with persistent
-state and richer scheduling concerns.</p>
+Then move to process pools for CPU-heavy independent Python tasks on a
+GIL-enabled build, where each unit of work is large enough to amortize
+overhead. Benchmark threads for native code that releases the GIL or a
+compatible free-threaded build. Use thread pools or async for
+high-latency I/O where waiting dominates compute. Adopt joblib when the
+workflow is mostly model loops and you want straightforward ergonomics
+with stable defaults. Adopt dask when dataframe size or execution graph
+complexity pushes beyond comfortable single-process operation. Adopt ray
+when your problem stops looking like “parallel loops” and starts looking
+like distributed orchestration with persistent state and richer
+scheduling concerns.</p>
 <p>The most useful habit is to write down the reason for each
 escalation. A one-sentence note such as “moved from sequential to
 process pool because stage X consumed 82% runtime and each partition
@@ -3272,7 +3301,7 @@ Wave 3 should include low-value or legacy workflows only when
 maintenance burden clearly justifies the effort.</p>
 <p>Each wave should produce shippable outcomes and update your migration
 playbook based on actual lessons learned.</p>
-<h2 data-number="12.8" id="playbook-9-a-12-week-intensive-program-to-reach-stable-python-fluency"><span class="header-section-number">12.8</span> Playbook 9: A 12-Week
+<h2 data-number="12.8" id="playbook-8-a-12-week-intensive-program-to-reach-stable-python-fluency"><span class="header-section-number">12.8</span> Playbook 8: A 12-Week
 Intensive Program to Reach Stable Python Fluency</h2>
 <p>If your team wants a concrete, aggressive plan, structure it in six
 two-week phases. In Weeks 1 to 2, establish environment and repository
@@ -3290,8 +3319,8 @@ ownership and rollback protocols, and run at least one failure drill. In
 Weeks 11 to 12, migrate a second high-value workflow end-to-end using
 the refined playbook, publish internal templates and migration guidance,
 and choose next-wave candidates from measured outcomes.</p>
-<h2 data-number="12.9" id="playbook-10-closing-advice-for-long-migrations"><span class="header-section-number">12.9</span> Playbook 10: Closing Advice
-for Long Migrations</h2>
+<h2 data-number="12.9" id="playbook-9-closing-advice-for-long-migrations"><span class="header-section-number">12.9</span> Playbook 9: Closing Advice for
+Long Migrations</h2>
 <p>The biggest lesson across successful migrations is straightforward:
 do not optimize for ideological purity. Optimize for reliable outcomes,
 maintainable systems, and analyst trust.</p>
@@ -3602,7 +3631,7 @@ summaries automatically:</p>
 <li>output row counts</li>
 </ul>
 <p>Teams trust pipelines they can observe.</p>
-<h2 data-number="13.7" id="deep-dive-8-a-practical-field-checklist-for-your-next-90-days"><span class="header-section-number">13.7</span> Deep Dive 8: A Practical Field
+<h2 data-number="13.7" id="deep-dive-7-a-practical-field-checklist-for-your-next-90-days"><span class="header-section-number">13.7</span> Deep Dive 7: A Practical Field
 Checklist for Your Next 90 Days</h2>
 <p>To close this chapter, here is a practical 90-day sequence you can
 operationalize immediately. In Week 1, pick one high-value workflow with
@@ -3633,7 +3662,7 @@ code.” You will build a migration engine your team can reuse.</p>
 Analyst Workflow to Production Workflow</h1>
 <p>The following scenarios connect the patterns to realistic migration
 decisions. Start with Scenario 1 for parity, Scenario 3 for ingestion,
-Scenario 6 for ongoing validation, or Scenario 9 for KPI governance.</p>
+Scenario 5 for ongoing validation, or Scenario 7 for KPI governance.</p>
 <h2 data-number="14.1" id="scenario-1-you-need-a-monthly-churn-scorecard-that-leadership-already-trusts"><span class="header-section-number">14.1</span> Scenario 1: You Need a Monthly
 Churn Scorecard That Leadership Already Trusts</h2>
 <p>Leadership trusts the scorecard’s trends, thresholds, and visual
@@ -3801,7 +3830,7 @@ abstraction level.</p>
 metric has been called “At-Risk 30D” for years, keep that name unless
 there is a compelling reason to change it. Renaming during migration
 creates avoidable confusion.</p>
-<h2 data-number="14.5" id="scenario-6-you-need-continuous-validation-after-migration-not-just-at-cutover"><span class="header-section-number">14.5</span> Scenario 6: You Need
+<h2 data-number="14.5" id="scenario-5-you-need-continuous-validation-after-migration-not-just-at-cutover"><span class="header-section-number">14.5</span> Scenario 5: You Need
 Continuous Validation After Migration, Not Just at Cutover</h2>
 <p>Many teams treat migration as done once outputs match at launch. That
 is risky. Data systems evolve, dependencies update, and behavior
@@ -3830,7 +3859,7 @@ floating-point-heavy paths. In that case, move to tolerance-based
 comparisons with clear per-metric bounds.</p>
 <p>The long-term message is simple: migration quality is a sustained
 practice, not a one-time milestone.</p>
-<h2 data-number="14.6" id="scenario-8-what-to-do-when-you-genuinely-hit-a-hard-edge"><span class="header-section-number">14.6</span> Scenario 8: What to Do When
+<h2 data-number="14.6" id="scenario-6-what-to-do-when-you-genuinely-hit-a-hard-edge"><span class="header-section-number">14.6</span> Scenario 6: What to Do When
 You Genuinely Hit a Hard Edge</h2>
 <p>Sometimes migration friction is not a process issue. It is a real
 ecosystem edge: a specialized R package with no mature Python
@@ -3849,7 +3878,7 @@ integration-heavy components to Python. Over time, revisit as ecosystems
 evolve.</p>
 <p>This is not failure. It is disciplined engineering
 prioritization.</p>
-<h2 data-number="14.7" id="scenario-9-measuring-migration-success-with-the-right-kpis"><span class="header-section-number">14.7</span> Scenario 9: Measuring
+<h2 data-number="14.7" id="scenario-7-measuring-migration-success-with-the-right-kpis"><span class="header-section-number">14.7</span> Scenario 7: Measuring
 Migration Success with the Right KPIs</h2>
 <p>If you do not define migration success metrics, progress assessments
 become opinion-based.</p>

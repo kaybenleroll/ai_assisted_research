@@ -10,7 +10,7 @@ This primer covers how autonomous AI agents work at a technical level: the execu
 
 This is not a guide to training or fine-tuning LLMs. It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
 
-**Freshness note (September 10, 2026):** This is a conceptual and implementation primer, but framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
+**Freshness note (October 7, 2026):** The terminology and editorial review were updated on this date; the framework and product snapshot remains September 2026. Framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
 
 ### The Default Production Path
 
@@ -597,8 +597,9 @@ Action: [Next tool call or completion]
 ..."
 ```
 
-This pattern makes the agent's **action trace** auditable: you can see the
-tool calls, arguments, observations, and outcomes. Do not require or expose a
+An agent's **trajectory** is the observable sequence of inputs, tool calls,
+arguments, observations, decision summaries, and outcomes for one task
+execution. This **action trace** makes the run auditable. Do not require or expose a
 hidden chain-of-thought dump as an observability strategy. Record concise
 decision summaries and structured events instead; they are safer to retain and
 usually more useful for debugging.
@@ -1113,4 +1114,4 @@ If you remember one practical takeaway, make it this: treat agent development li
 
 ---
 
-*Created: May 20, 2026. Last updated: September 10, 2026.*
+*Created: May 20, 2026. Last updated: October 7, 2026. Framework and product snapshot: September 2026.*

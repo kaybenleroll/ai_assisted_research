@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claude Code Alternatives: A Comprehensive Survey of AI Coding
-Agents in 2026 (September 16 Refresh)</title>
+Agents in 2026 (October 7 Refresh)</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -596,9 +596,9 @@ code span.wa { color: #da4453; } /* Warning */
 
   <nav class="navbar">
     <span class="navbar-brand">Claude Code Alternatives: A Comprehensive
-Survey of AI Coding Agents in 2026 (September 16 Refresh)</span>
+Survey of AI Coding Agents in 2026 (October 7 Refresh)</span>
 
-    <span class="navbar-meta">September 16, 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -734,8 +734,8 @@ Migration</a></li>
 <li><a href="#cost-analysis" id="toc-cost-analysis"><span class="toc-section-number">10.4</span> Cost Analysis</a>
 <ul>
 <li><a href="#defining-heavy-usage" id="toc-defining-heavy-usage"><span class="toc-section-number">10.4.1</span> Defining “Heavy Usage”</a></li>
-<li><a href="#api-cost-estimates-direct-provider-as-of-september-16-2026" id="toc-api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="toc-section-number">10.4.2</span> API Cost Estimates (Direct
-Provider, as of September 16, 2026)</a></li>
+<li><a href="#api-cost-estimates-direct-provider-as-of-october-7-2026" id="toc-api-cost-estimates-direct-provider-as-of-october-7-2026"><span class="toc-section-number">10.4.2</span> API Cost Estimates (Direct
+Provider, as of October 7, 2026)</a></li>
 <li><a href="#per-tool-cost-summary" id="toc-per-tool-cost-summary"><span class="toc-section-number">10.4.3</span> Per-Tool Cost Summary</a></li>
 <li><a href="#cost-migration-strategy" id="toc-cost-migration-strategy"><span class="toc-section-number">10.4.4</span> Cost Migration
 Strategy</a></li>
@@ -824,7 +824,7 @@ across Claude, Claude Code, and Claude Desktop. The plan landscape for
 AI tools changes rapidly, and a prudent engineer should understand the
 full landscape of alternatives before needing them.</p>
 <p>This document surveys the landscape of AI coding agents available as
-of <strong>September 16, 2026</strong>: open-source CLI tools, IDE
+of <strong>October 7, 2026</strong>: open-source CLI tools, IDE
 extensions, dedicated AI IDEs, cloud platform agents, and commercial
 assistants. For each, it covers architecture, provider flexibility,
 MCP/extensibility support, realistic cost, and the model capabilities
@@ -861,7 +861,7 @@ recommendations</a> as evidence. The deep-dive profiles, concrete
 multi-model setup, and Pi section remain reference material for an
 evaluation you can reproduce.</p>
 <p>This survey covers tools that were verifiable and actively maintained
-as of September 2026. It does not cover tools no longer in active
+as of October 2026. It does not cover tools no longer in active
 development, purely GUI-based editors with no API or CLI surface, or
 general-purpose LLM interfaces that happen to accept code. The model
 section is a coding- and agent-workflow survey, not a catalogue of every
@@ -1103,8 +1103,8 @@ Agents</h1>
 can preserve a familiar editing workflow while changing the inference
 endpoint, or keep the model while changing how the agent gathers context
 and executes work. This section is the model survey for the
-<strong>September 16, 2026</strong> snapshot; the tool profiles that
-follow describe the surrounding products. The objective is to identify
+<strong>October 7, 2026</strong> snapshot; the tool profiles that follow
+describe the surrounding products. The objective is to identify
 candidates for your workload, not to translate every Claude name into
 another vendor’s tier.</p>
 <h2 data-number="4.1" id="model-provider-and-agent-harness"><span class="header-section-number">4.1</span> Model, Provider, and Agent
@@ -1179,8 +1179,8 @@ authority. They are not universal Haiku, Sonnet, Opus, or Fable
 equivalents.</p>
 <h2 data-number="4.3" id="candidate-families-against-the-claude-baseline"><span class="header-section-number">4.3</span> Candidate Families Against the
 Claude Baseline</h2>
-<p>Use this <strong>September 16, 2026</strong> shortlist to decide what
-to test against your existing Claude configuration. Rows select
+<p>Use this <strong>October 7, 2026</strong> shortlist to decide what to
+test against your existing Claude configuration. Rows select
 representative checkpoints, not equivalent vendor tiers. Coding and
 recovery suggestions are <strong>qualitative synthesis</strong>;
 context, input support, and prices are <strong>documented
@@ -1213,9 +1213,9 @@ measure how well instructions survive a long session.</p>
 <td><a href="https://platform.claude.com/docs/en/models/overview">Claude
 baseline</a></td>
 <td>Pin model and effort; measure edits, calls, and recovery</td>
-<td>Sonnet 5: 1M; images</td>
-<td>Hosted; Sonnet 5 <a href="https://platform.claude.com/docs/en/about-claude/pricing">$2 /
-$10</a></td>
+<td>Sonnet 5.5; images</td>
+<td>Hosted; verify current <a href="https://platform.claude.com/docs/en/about-claude/pricing">model
+pricing</a> before comparison</td>
 </tr>
 <tr>
 <td><a href="https://developers.openai.com/api/docs/models">GPT / Codex
@@ -1306,14 +1306,12 @@ endpoint determines actual access. Keep a known Claude configuration as
 a baseline when testing alternatives.</p>
 <h3 data-number="4.4.1" id="anthropic-claude-baseline"><span class="header-section-number">4.4.1</span> Anthropic / Claude
 Baseline</h3>
-<p>Anthropic’s current catalogue lists Haiku 4.5, Sonnet 5, Opus 5, and
-Fable 5.1. It positions Haiku around speed, Sonnet around the
-speed/capability balance, Opus as a starting point for most workloads,
-and Fable for demanding reasoning and extended agentic work. Those are
-vendor positions, not fixed task classes. The documented context and
-reasoning controls differ, so record the exact model and effort used in
-your baseline. See the <a href="https://platform.claude.com/docs/en/models/overview">Anthropic
-model overview</a>.</p>
+<p>This October refresh uses Anthropic’s current Sonnet 5.5 and Opus 5.5
+releases as the relevant Claude baseline; check the <a href="https://platform.claude.com/docs/en/models/overview">Anthropic
+model overview</a> for the exact catalogue and lifecycle status before
+reproducing a comparison. Anthropic’s capability positioning is a vendor
+claim, not a fixed task classification. Record the exact model, effort,
+context, and price used in your baseline.</p>
 <p>A replacement should be compared with the Claude configuration you
 actually use on the same repository tasks. Reproducing a result from
 Claude Code may require preserving context selection and edit tooling as
@@ -4130,32 +4128,34 @@ month, 10-20 million output tokens per month</p>
 <p>These are rough estimates – actual token consumption varies
 enormously by workflow and model. The worked examples below use the
 midpoints (~150M input / ~15M output tokens per month).</p>
-<h3 data-number="10.4.2" id="api-cost-estimates-direct-provider-as-of-september-16-2026"><span class="header-section-number">10.4.2</span> API Cost Estimates (Direct
-Provider, as of September 16, 2026)</h3>
+<h3 data-number="10.4.2" id="api-cost-estimates-direct-provider-as-of-october-7-2026"><span class="header-section-number">10.4.2</span> API Cost Estimates (Direct
+Provider, as of October 7, 2026)</h3>
 <p>Pricing changes frequently; treat these as ballpark figures using
 current published rates, not guarantees.</p>
-<p><strong>Anthropic Claude Sonnet 5:</strong></p>
+<p><strong>Anthropic Claude Sonnet 5.5:</strong></p>
 <ul>
-<li>Input: $2/million tokens (current standard price)</li>
-<li>Output: $10/million tokens (current standard price)</li>
-<li>Heavy usage estimate: (150M x $2 + 15M x $10) / 1M approximately
-<strong>$300 + $150 = ~$450/month</strong></li>
-<li><em>This is why a Max plan (5-hour and weekly caps notwithstanding)
-remains good value for genuinely heavy users, even though it isn’t the
-“unlimited” plan the old framing implied.</em></li>
+<li>Check the <a href="https://platform.claude.com/docs/en/about-claude/pricing">current
+Anthropic pricing</a> for the exact input, output, caching, and
+long-context rates before calculating a monthly estimate.</li>
+<li>Recompute the worked heavy-usage example from those published rates;
+do not carry forward the former Sonnet 5 price or the resulting
+<strong>~$450/month</strong> estimate.</li>
+<li><em>A Max plan may still be good value for genuinely heavy users,
+but compare its current caps and included usage with the current metered
+rates rather than relying on this historical example.</em></li>
 </ul>
-<p>Pricing note: Anthropic’s current pricing page says the $2/$10 Sonnet
-5 launch price is now standard; the previously announced September 1
-increase will not occur.</p>
+<p>Pricing note: pricing is volatile and model-specific. Verify
+Anthropic’s current pricing page immediately before comparing providers;
+this refresh intentionally avoids carrying forward the superseded Sonnet
+5 price claim.</p>
 <p><strong>Anthropic Claude Haiku 4.5:</strong></p>
 <ul>
 <li>Input: $1/million tokens</li>
 <li>Output: $5/million tokens</li>
 <li>Heavy usage estimate: approximately <strong>$225/month</strong></li>
-<li><em>Cheaper and faster than Sonnet 5, though the fastest/cheapest
-current Claude tier is no longer as dramatically cheap as the old Haiku
-3 figures ($0.25/$1.25) this document previously cited – Anthropic’s
-tiering has shifted upward across the board.</em></li>
+<li><em>Cheaper and faster than the Sonnet tier in many workloads, but
+verify current tier pricing and caps before treating that as a
+purchasing recommendation.</em></li>
 </ul>
 <p><strong>OpenAI GPT-5.6 Terra (current balanced tier):</strong></p>
 <ul>
