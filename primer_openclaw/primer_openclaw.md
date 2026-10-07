@@ -2,7 +2,7 @@
 
 ---
 
-*Long-form edition · 22 August 2026*
+*Long-form edition · 7 October 2026. Runtime requirements rechecked against official documentation.*
 
 ---
 
@@ -136,7 +136,7 @@ The target posture is a rootless Gateway container, host-controlled state, loopb
 
 ### Prerequisites
 
-You need rootless Podman and the OpenClaw CLI on the host. Current OpenClaw documentation recommends Node 26 and supports Node 22.22.3+, 24.15+, or 25.9+; Node 23 is not a supported floor. The installer can handle Node installation. `systemd --user` is optional for Quadlet-managed startup.
+You need rootless Podman and the OpenClaw CLI on the host. As checked on 7 October 2026, the [Node guide](https://docs.openclaw.ai/install/node) requires Node 24.16+ or 26.1+ with a WAL-reset-safe linked SQLite library; Node 26 is recommended. Node 22, 23, and 25 are unsupported. The [compatibility guide](https://docs.openclaw.ai/install/node-compatibility) explains the SQLite safety checks: a version number alone is insufficient for a distro build linked to a different SQLite library. Upgrade the runtime before updating OpenClaw. The installer can provision a compatible runtime. `systemd --user` is optional for Quadlet-managed startup.
 
 ### Install and verify the host CLI
 
@@ -147,6 +147,11 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 openclaw --version
 openclaw doctor
 ```
+
+Also check `node --version` for a manually managed install. Keep the host CLI's
+runtime and the Gateway image's runtime compatible with the selected release;
+upgrading host Node does not upgrade a running container. The [Podman guide](https://docs.openclaw.ai/install/podman)
+documents rebuilding or pulling the image and restarting the Gateway.
 
 If you want a checkout-based installation, follow the repository's current install instructions. Do not assume that an old `pnpm` or Node version from an earlier guide remains supported.
 

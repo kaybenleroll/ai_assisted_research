@@ -555,7 +555,7 @@ A common `agnoster` variant, `agnoster-timestamp-newline`, adds a timestamp and 
 
 ### Powerlevel10k (p10k)
 
-Powerlevel10k is stable and still widely used. Active development has slowed, but it remains reliable. It is not bundled with OMZ and is one of the most common third-party theme choices. If you want something more actively evolving, Starship and Pure are worth a look, though neither matches p10k's specific combination of instant prompt and a configuration wizard.
+Powerlevel10k is a third-party theme, not bundled with OMZ. As of October 7, 2026, its [upstream README](https://github.com/romkatv/powerlevel10k#powerlevel10k) explicitly warns of very limited support: no new features are planned, most bugs will remain unfixed, and help requests will be ignored. An existing setup can still work well, but do not assume that future compatibility problems will be fixed. For a new setup, compare its features with [Starship](https://starship.rs/) and [Pure](https://github.com/sindresorhus/pure) before accepting that maintenance constraint.
 
 What makes p10k different:
 
@@ -564,7 +564,7 @@ What makes p10k different:
 - **Async segments** — git status and other slow segments render asynchronously so they don't block input.
 - **Transient prompt** — old prompts in the scroll buffer collapse to a minimal form, keeping the terminal cleaner.
 
-For a full git-aware, multi-context prompt (git state, virtualenv, node version, exit status, command timing) without visible startup lag, p10k is the practical choice.
+For a full git-aware, multi-context prompt (git state, virtualenv, node version, exit status, command timing), p10k's instant prompt and configuration wizard remain useful features. Choose it if those features justify the limited support for your setup.
 
 Install:
 
@@ -583,7 +583,7 @@ If you are deciding between common options, this is the short version:
 |---|---|---|---|
 | `robbyrussell` | Minimal, no setup | Limited status detail | Simple prompt, low cognitive load |
 | `agnoster` | Denser git/path signal | Needs patched font, can feel busy | Users who want always-visible context |
-| `powerlevel10k` | Rich status, fast rendering, wizard | Extra config file and knobs | Heavy terminal users across many repos |
+| `powerlevel10k` | Rich status, fast rendering, wizard | Very limited upstream support; extra config | Users who accept the maintenance constraint |
 | `pure` | Clean async prompt | Less built-in segment breadth | People who want modern and minimal |
 | `starship` | Cross-shell consistency | External binary and separate config | Mixed-shell workflows |
 
@@ -997,5 +997,5 @@ In order of impact:
 
 - **OMZ repository** — `~/.oh-my-zsh/` itself: `plugins/<name>/<name>.plugin.zsh` files are the source of truth for what each plugin does and what commands/aliases it provides.
 - **ZSH manual** — `man zsh` is the definitive reference. The sections on parameter expansion, globbing qualifiers, and ZLE are particularly worth having open.
-- **Powerlevel10k** — the configuration wizard at `p10k configure` is unusually good documentation in interactive form.
+- **[Powerlevel10k](https://github.com/romkatv/powerlevel10k#powerlevel10k)** — read the support notice before installing; `p10k configure` documents the available prompt options interactively.
 - **ZSH Users mailing list / r/zsh** — for real-world configuration questions; the OMZ wiki has gotten stale in places.

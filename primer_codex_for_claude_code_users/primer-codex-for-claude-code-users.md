@@ -2,7 +2,7 @@
 
 This is a long-form, operational guide for Claude Code users who want Codex as a second coding-agent harness while keeping their existing repository workflow intact.
 
-*Product snapshot · September 10, 2026*
+*Product snapshot · 7 October 2026. Model and execution-policy refresh; earlier instruction-system checks retain their stated dates.*
 
 ## Introduction
 
@@ -1089,38 +1089,41 @@ Execution capability is separate again. A model may be able to propose a correct
 ### A dated snapshot of the current Codex models
 
 The official [Codex model guidance](https://learn.chatgpt.com/docs/models) now
-lists Astra alongside the GPT-5.6 family. The [GPT-6 Astra model
+recommends GPT-6.1 Sol for complex coding and GPT-6 Luna for focused work,
+with availability depending on the account and client. The [GPT-6 Astra model
 documentation](https://developers.openai.com/api/docs/models/gpt-6-astra)
 describes Astra as OpenAI's most capable model for complex reasoning, coding,
 computer use, research, and document creation. The following is a snapshot
-checked on 16 September 2026. It combines that public guidance with the model
-entries visible in the local Codex installation used for this edition; it is
-not a promise that every model is available to every account, interface, or
-authentication method.
+checked on 7 October 2026 against official documentation; it is not a promise
+that every model is available to every account, interface, or authentication
+method. GPT-6.1 Sol's launch includes eligible paid plans; Enterprise and Edu
+administrators must enable it, and Free and Go are not included at launch.
 
 | Model | Practical orientation | Good starting use |
 | --- | --- | --- |
 | `gpt-6-astra` (Astra) | Highest-capability model for complex work across code, apps, and research | Hardest end-to-end tasks that need sustained reasoning and judgment |
-| `gpt-5.6-sol` (Sol) | Most capable GPT-5.6 model for complex coding, computer use, research, and cybersecurity | Ambiguous, high-value, multi-step coding, research, or security work |
-| `gpt-5.6-terra` (Terra) | Balanced GPT-5.6 model for everyday work | Routine implementation, debugging, and repository work |
-| `gpt-5.6-luna` (Luna) | Fast, affordable GPT-5.6 model | Clear, repeatable transformations, extraction, and structured tasks |
-| `gpt-5.5` | Previous-generation model; scheduled to retire from ChatGPT-authenticated Codex on 14 October 2026 | Existing configurations that need it temporarily; migrate new work to Sol |
+| `gpt-6.1-sol` (6.1 Sol) | Recommended for complex coding and agentic workflows; OpenAI describes near-Astra performance at lower cost | Ordinary implementation through repeated, long-running work; evaluate against Astra on hard tasks |
+| `gpt-6-luna` (6 Luna) | Efficient model for focused, high-volume tasks | Clear transformations, extraction, summaries, and bounded coding |
+| `gpt-6-sol` (6 Sol) | Earlier GPT-6 Sol; named replacement in the GPT-5.5 retirement notice | Migration where the account offers 6 Sol but not 6.1 Sol |
+| `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` | Previous family retained during the rollout | Existing configurations; re-evaluate the available GPT-6 choices before changing defaults |
+| `gpt-5.5` | Retires from ChatGPT-authenticated Codex on 14 October 2026; API availability is separate | Migrate saved settings, scripts, custom agents, and scheduled tasks before retirement |
 
 GPT-5.4 and GPT-5.4 Mini retired from Codex with ChatGPT sign-in on 31 August
 2026. That specific retirement does not affect the OpenAI API or Codex
-authenticated with an API key. The official page still lists GPT-5.3 Codex
-Spark as a text-only Pro preview, but it is not in the local model cache checked
-for this edition; treat it as surface-dependent rather than as a local default.
+authenticated with an API key. GPT-5.3 Codex Spark retired on 14 September
+2026 from the desktop app, CLI, and IDE extension; it is no longer a preview
+option. GPT-5.2 and GPT-5.3 Codex are also deprecated with ChatGPT sign-in.
 Model names, availability, retirement dates, and migration advice belong in a
 maintained reference section, not in permanent repository instructions.
 
-The practical selection rule is simpler than the catalogue. Keep Luna for clear,
-mechanical, high-volume work. Start with Terra for ordinary implementation and
-debugging. Move to Sol when ambiguity, research depth, or the cost of a wrong
-decision justifies more capability. Use Astra for the hardest end-to-end tasks
-spanning code, tools, research, or sustained judgment. Then choose reasoning
-effort independently, starting with the lowest setting that reliably meets the
-acceptance criteria and increasing it when the failure is genuinely about depth.
+The practical selection rule is simpler than the catalogue. Use GPT-6 Luna for
+bounded work and GPT-6.1 Sol for implementation, debugging, and complex agent
+work when available. Keep Astra for the most demanding tasks. Choose effort
+separately: the product guide suggests High for Luna and Light (`low`) for
+Astra; start with the client's default for 6.1 Sol. Re-evaluate on familiar
+tasks rather than carrying an old generation's effort setting across unchanged.
+Luna supports Max but not Ultra; Ultra uses subagents, so it is also a workflow
+choice rather than just more reasoning time.
 
 ### Choose by task shape
 
@@ -1604,12 +1607,16 @@ Concurrency and defaults are set globally in an `[agents]` block:
 [agents]
 enabled = true
 max_concurrent_threads_per_session = 4
-default_subagent_model = "gpt-5.6-terra"
-default_subagent_reasoning_effort = "medium"
+default_subagent_model = "gpt-6-luna"
+default_subagent_reasoning_effort = "high"
 ```
 
 `max_concurrent_threads_per_session` is the control that stops an enthusiastic
 main agent from fanning out further than you can review. Set it deliberately.
+This example assigns bounded tasks to Luna; use an available Sol or Astra
+model for a delegate whose task needs more capability. Check the [subagent
+configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents/)
+and [model availability](https://learn.chatgpt.com/docs/models) before copying it.
 
 #### The formats do not port, and one rough edge is unresolved
 
@@ -1697,8 +1704,12 @@ writable_roots = ["/home/dev/project", "/home/dev/.cache/project"]
 network_access = false
 ```
 
-That is enforced by the operating system, not by the agent: macOS Seatbelt, and
-Landlock with seccomp on Linux. A command that violates it fails the way any
+That is enforced by the operating system, not by the agent: macOS Seatbelt,
+the Linux/WSL2 sandbox using bubblewrap, and a native Windows sandbox. The
+[current sandbox guide](https://learn.chatgpt.com/docs/sandboxing/) recommends
+installing the distribution's `bubblewrap` package on Linux or WSL2; its
+bundled fallback still needs unprivileged user namespaces. A command that
+violates the sandbox fails the way any
 sandboxed process fails, regardless of what the model intended or what any
 instruction file said.
 
@@ -1707,13 +1718,14 @@ Codex pauses to ask rather than what the sandbox permits. `"never"` and
 `"on-request"` are the simple values, and a more granular form exists:
 
 ```toml
-approval_policy = { granular = { sandbox_approval = "...", rules = [], request_permissions = "...", skill_approval = "..." } }
+approval_policy = { granular = { sandbox_approval = true, rules = true, mcp_elicitations = true, request_permissions = true, skill_approval = true } }
 ```
 
-Older sources also mention `approval_policy = "untrusted"`. That value is not
-confirmed on the current advanced-configuration documentation, so do not build
-on it without checking; earlier editions of this primer listed it without that
-caveat.
+These booleans control whether each category of approval prompt can appear;
+they do not grant the requested action. The [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
+explicitly rejects `approval_policy = "untrusted"` and deprecates `"on-failure"`.
+Use `"on-request"`, `"never"`, or the supported granular form. Project
+`trust_level = "untrusted"` remains valid and is a different setting.
 
 The orthogonality is the part worth internalising. A session can be highly
 permissive about asking and still be unable to reach the network, or can be
@@ -1724,9 +1736,9 @@ different fixes.
 | Concern | Claude Code | Codex CLI |
 | --- | --- | --- |
 | Where configured | `.claude/settings.json` | `config.toml` |
-| Unit of control | Pattern match on tool name or command | Sandbox mode plus approval policy |
-| Enforcement layer | Application | Operating system (Seatbelt, Landlock and seccomp) for the sandbox; application for approvals |
-| Per-command granularity | Yes, by pattern | No; granularity is the mode and the policy |
+| Unit of control | Pattern match on tool name or command | Sandbox mode, approval policy, and command rules |
+| Enforcement layer | Application; optional shell sandbox is separate | Platform sandbox for execution; application for approvals and command rules |
+| Per-command granularity | Yes, by pattern | Command-prefix rules can allow, prompt, or forbid execution; sandbox limits still apply |
 | Filesystem scoping | Expressed as patterns | `writable_roots` |
 | Network control | Expressed as patterns on the commands that use it | `network_access` flag |
 | Non-overridable org policy | Managed settings cover instructions and permissions | `requirements.toml` |
@@ -2458,14 +2470,14 @@ chapters rather than deferred to a checklist. Confirmed:
 - **Governance**: the Linux Foundation's Agentic AI Foundation announcement of
   9 December 2025, with `AGENTS.md` and MCP as founding projects.
 
-Two claims in this primer are corroborated but not independently
-primary-confirmed, and are marked as such where they appear. The first is the
+One historical claim in this primer is corroborated but not independently
+primary-confirmed, and is marked as such where it appears: the
 reaction count on the GitHub feature request asking Claude Code to read
 `AGENTS.md`: it is well attested across secondary sources but was not verified
-from the issue page itself, so this primer does not quote a figure. The second
-is whether `approval_policy = "untrusted"` remains a valid Codex value; it
-appears in older sources but is not confirmed on the current
-advanced-configuration page.
+from the issue page itself, so this primer does not quote a figure. The
+7 October 2026 refresh separately checked model guidance, subagent defaults,
+sandboxing, and approval-policy syntax. `approval_policy = "untrusted"` is
+explicitly unsupported in the current official reference, not unresolved.
 
 What remains genuinely volatile, and should be rechecked before you rely on it:
 
@@ -2496,6 +2508,8 @@ names and controls change.
 - [Codex model and reasoning guidance](https://learn.chatgpt.com/docs/models)
 - [OpenAI API model guidance](https://developers.openai.com/api/docs/guides/latest-model)
 - [GPT-6 Astra model documentation](https://developers.openai.com/api/docs/models/gpt-6-astra)
+- [GPT-6.1 Sol model documentation](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
+- [GPT-6 Luna model documentation](https://developers.openai.com/api/docs/models/gpt-6-luna)
 - [OpenAI API conversation state](https://developers.openai.com/api/docs/guides/conversation-state)
 - [OpenAI API compaction](https://developers.openai.com/api/docs/guides/compaction)
 - [ChatGPT Codex chat history and deletion](https://help.openai.com/en/articles/20001333-how-to-archive-and-delete-chats-in-codex)

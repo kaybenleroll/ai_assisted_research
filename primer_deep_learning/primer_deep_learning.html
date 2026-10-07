@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Deep Learning and Generative AI: A
 Technical Primer</span>
 
-    <span class="navbar-meta">June 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -4095,15 +4095,20 @@ kind of XLA-style optimisations that used to be JAX’s exclusive
 advantage. It narrows the performance gap substantially while keeping
 the ergonomic, eager-by-default API for everything else. The ecosystem
 around PyTorch is the deepest in the field: research papers almost
-universally ship PyTorch implementations, HuggingFace integration is
-first-class, and the production deployment story keeps moving:
-TorchScript and TorchServe were the long-standing answer, but
-TorchScript is now legacy (superseded by <code>torch.export</code> and
-AOTInductor) and TorchServe entered limited maintenance in 2024. For
-edge deployment the current path is ExecuTorch; for serving large
-models, purpose-built inference servers like vLLM have largely taken
-over from general-purpose model servers. Expect this toolchain to keep
-shifting faster than the modelling APIs above it.</p>
+universally ship PyTorch implementations and HuggingFace integration is
+first-class.</p>
+<p>For deployment, distinguish graph export, compiled runtimes, and
+serving infrastructure. As of October 7, 2026, <a href="https://docs.pytorch.org/docs/2.9/jit.html">TorchScript is
+deprecated in favour of <code>torch.export</code></a>; <a href="https://docs.pytorch.org/docs/2.9/torch.compiler_aot_inductor.html">AOTInductor</a>
+compiles exported models for deployment outside Python, while <a href="https://docs.pytorch.org/executorch/stable/intro-how-it-works.html">ExecuTorch</a>
+targets edge devices. <a href="https://docs.pytorch.org/serve/">TorchServe’s maintenance
+notice</a> says it is no longer actively maintained and has no planned
+updates, bug fixes, or security patches, so avoid it for new
+deployments. For supported large language models, <a href="https://docs.vllm.ai/en/latest/serving/online_serving/">vLLM</a>
+provides a dedicated inference server. These tools serve different
+purposes; choose a path that supports your model’s operators and target
+hardware, then validate the exported model’s outputs and
+performance.</p>
 <h2 data-number="11.2" id="tensorflow-and-keras"><span class="header-section-number">11.2</span> TensorFlow and Keras</h2>
 <p>TensorFlow arrived first, from Google Brain in 2015, and its original
 design was the opposite of PyTorch’s. Computation graphs were static:
@@ -4118,28 +4123,32 @@ meant reasoning about a graph you could not simply step through.
 TensorFlow 2.0, released in 2019, switched to eager execution by default
 and adopted Keras as its high-level API, which was a large ergonomic
 improvement and closed much of the usability gap with PyTorch.</p>
-<p>Keras started life as a standalone library and is now the friendly
-face of TensorFlow. It gives you the sklearn-style training loop —
-<code>Model.compile()</code> to configure the optimiser and loss,
-<code>Model.fit()</code> to train, <code>Model.evaluate()</code> to
-score — that makes the common case trivial. For most production models
-you never need to drop below this level, and Keras carries far less
-boilerplate than writing a raw PyTorch training loop by hand. The trade
-is the usual one: the high-level API is wonderfully concise until you
-need to do something it did not anticipate, at which point you are
-reaching under the abstraction.</p>
-<p>Where TensorFlow still leads is the production story, which is the
-strongest in the field. TF Serving handles model deployment behind a
-stable API; TensorFlow Lite targets mobile and edge devices where memory
-and compute are tight; TensorFlow.js runs models directly in the
-browser. The SavedModel format gives you a portable,
-language-independent serialisation of a trained model. And XLA —
-Accelerated Linear Algebra, the compiler that fuses and optimises
-operations for specific hardware — originated here, though it is now
-shared with JAX. The current balance is clear enough: PyTorch has
-largely won research, while TensorFlow and Keras hold ground in
-production, particularly in Google-adjacent stacks, and remain unusually
-friendly for beginners.</p>
+<p>Keras started life as a standalone library and remains TensorFlow’s
+high-level API, but <a href="https://keras.io/keras_3/">Keras 3 also
+supports JAX and PyTorch backends</a>. It gives you the sklearn-style
+training loop — <code>Model.compile()</code> to configure the optimiser
+and loss, <code>Model.fit()</code> to train,
+<code>Model.evaluate()</code> to score — that makes the common case
+trivial. Built-in layers and custom components written with
+<code>keras.ops</code> can work across these backends; backend-specific
+code still needs review when you switch. Keras carries far less
+boilerplate than writing a raw training loop by hand. The trade is the
+usual one: the high-level API is wonderfully concise until you need to
+do something it did not anticipate, at which point you are reaching
+under the abstraction.</p>
+<p>TensorFlow has established deployment options: <a href="https://www.tensorflow.org/tfx/guide/serving">TensorFlow
+Serving</a> serves models behind inference APIs, and <a href="https://www.tensorflow.org/js">TensorFlow.js</a> runs models in
+browsers and Node.js. For mobile and edge deployment, use the current
+name <a href="https://developers.google.com/edge/litert">LiteRT</a>, the
+successor to TensorFlow Lite. LiteRT supports conversion from
+TensorFlow, PyTorch, and JAX, so an edge runtime is no longer an
+exclusive reason to choose TensorFlow for training. The SavedModel
+format gives you a portable, language-independent serialisation of a
+trained TensorFlow model. And XLA — Accelerated Linear Algebra, the
+compiler that fuses and optimises operations for specific hardware —
+originated here, though it is now shared with JAX. Choose the training
+framework and deployment runtime together, based on model compatibility
+and measured performance.</p>
 <h2 data-number="11.3" id="jax"><span class="header-section-number">11.3</span> JAX</h2>
 <p>JAX, from Google Research in 2018, is the odd one out, and the most
 interesting if your work strays off the beaten path. It is not really a
@@ -4211,13 +4220,14 @@ Now it is two lines:</p>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoModelForSequenceClassification.from_pretrained(<span class="st">&quot;bert-base-uncased&quot;</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(<span class="st">&quot;bert-base-uncased&quot;</span>)</span></code></pre></div>
 <h2 data-number="11.5" id="choosing-between-them"><span class="header-section-number">11.5</span> Choosing Between Them</h2>
-<p>The three frameworks line up cleanly along a few axes, and the table
-below is the quick reference. The short version: PyTorch is the default
-for research and an increasingly strong choice for production;
-TensorFlow and Keras win when production deployment to mobile, edge, or
-browser is the priority; JAX wins when you need composable
-transformations or peak TPU performance and can pay the learning-curve
-tax.</p>
+<p>The three frameworks line up along a few axes, and the table below is
+the quick reference. PyTorch is a practical default for research and
+production; TensorFlow has established Serving and JavaScript paths; JAX
+is a strong choice when you need composable transformations and can pay
+the learning-curve tax. For mobile and edge deployment, compare
+ExecuTorch and LiteRT against your actual model and hardware rather than
+assuming the training framework decides the runtime. Keras 3’s
+high-level API spans all three backends.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -4254,10 +4264,10 @@ tax.</p>
 </tr>
 <tr>
 <td>Production deployment</td>
-<td><code>torch.export</code>/ExecuTorch, vLLM-class serving (shifting
-toolchain)</td>
-<td>TF Serving, TFLite, TF.js</td>
-<td>Less mature</td>
+<td><code>torch.export</code> + AOTInductor, ExecuTorch; vLLM for
+supported LLMs</td>
+<td>TensorFlow Serving, LiteRT, TensorFlow.js</td>
+<td>Model-specific export/serving stack; LiteRT conversion</td>
 </tr>
 <tr>
 <td>Hardware</td>
@@ -4267,9 +4277,9 @@ toolchain)</td>
 </tr>
 <tr>
 <td>High-level API</td>
-<td><code>torch.nn</code>, Lightning</td>
-<td>Keras</td>
-<td>Flax, Haiku</td>
+<td><code>torch.nn</code>, Lightning, Keras 3</td>
+<td>Keras 3</td>
+<td>Flax, Haiku, Keras 3</td>
 </tr>
 <tr>
 <td>Learning curve</td>

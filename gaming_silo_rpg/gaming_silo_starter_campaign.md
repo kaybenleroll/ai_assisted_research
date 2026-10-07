@@ -1,6 +1,6 @@
 # SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES
 
-This document provides a structured starting point for a tabletop campaign. It contains detailed Player Character (PC) archetypes designed for the Silo setting, mechanics for binding the party together, and four fully fleshed-out "Starter Campaigns" estimated to take 3–4 sessions (8–12 hours) each.
+This document provides a structured starting point for a tabletop campaign. It contains detailed Player Character (PC) archetypes designed for the Silo setting, mechanics for binding the party together, and ten fully fleshed-out "Starter Campaigns" estimated to take 3–4 sessions (8–12 hours) each.
 
 ---
 

@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">OpenClaw: A Comprehensive, Podman-First
 Guide</span>
 
-    <span class="navbar-meta">22 August 2026</span>
+    <span class="navbar-meta">7 October 2026</span>
 
   </nav>
 
@@ -700,7 +700,8 @@ Containment</a></li>
     <main class="content">
       <div class="content-inner">
 <hr />
-<p><em>Long-form edition · 22 August 2026</em></p>
+<p><em>Long-form edition · 7 October 2026. Runtime requirements
+rechecked against official documentation.</em></p>
 <hr />
 <h1 data-number="1" id="why-this-primer-exists"><span class="header-section-number">1</span> Why This Primer Exists</h1>
 <p>OpenClaw is easy to describe badly. Calling it a chatbot hides the
@@ -913,17 +914,27 @@ and <code>openclaw onboard</code> instead.</p>
 state, loopback-only published ports, user-level restart management when
 needed, and a separate tool sandbox policy for non-main sessions.</p>
 <h2 data-number="6.2" id="prerequisites"><span class="header-section-number">6.2</span> Prerequisites</h2>
-<p>You need rootless Podman and the OpenClaw CLI on the host. Current
-OpenClaw documentation recommends Node 26 and supports Node 22.22.3+,
-24.15+, or 25.9+; Node 23 is not a supported floor. The installer can
-handle Node installation. <code>systemd --user</code> is optional for
-Quadlet-managed startup.</p>
+<p>You need rootless Podman and the OpenClaw CLI on the host. As checked
+on 7 October 2026, the <a href="https://docs.openclaw.ai/install/node">Node guide</a> requires
+Node 24.16+ or 26.1+ with a WAL-reset-safe linked SQLite library; Node
+26 is recommended. Node 22, 23, and 25 are unsupported. The <a href="https://docs.openclaw.ai/install/node-compatibility">compatibility
+guide</a> explains the SQLite safety checks: a version number alone is
+insufficient for a distro build linked to a different SQLite library.
+Upgrade the runtime before updating OpenClaw. The installer can
+provision a compatible runtime. <code>systemd --user</code> is optional
+for Quadlet-managed startup.</p>
 <h2 data-number="6.3" id="install-and-verify-the-host-cli"><span class="header-section-number">6.3</span> Install and verify the host
 CLI</h2>
 <p>The installer is the shortest path for a normal host install:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://openclaw.ai/install.sh <span class="kw">|</span> <span class="fu">bash</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--version</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> doctor</span></code></pre></div>
+<p>Also check <code>node --version</code> for a manually managed
+install. Keep the host CLI’s runtime and the Gateway image’s runtime
+compatible with the selected release; upgrading host Node does not
+upgrade a running container. The <a href="https://docs.openclaw.ai/install/podman">Podman guide</a>
+documents rebuilding or pulling the image and restarting the
+Gateway.</p>
 <p>If you want a checkout-based installation, follow the repository’s
 current install instructions. Do not assume that an old
 <code>pnpm</code> or Node version from an earlier guide remains

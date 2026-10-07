@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Oh My Zsh: A Practical Guide to Your
 Shell</span>
 
-    <span class="navbar-meta">Mick Cooney — June 2026</span>
+    <span class="navbar-meta">Mick Cooney — October 7, 2026</span>
 
   </nav>
 
@@ -1344,12 +1344,14 @@ one, the segment characters render as boxes.</p>
 <code>agnoster-timestamp-newline</code>, adds a timestamp and puts
 command input on its own line, which makes long paths more readable.</p>
 <h3 id="powerlevel10k-p10k">Powerlevel10k (p10k)</h3>
-<p>Powerlevel10k is stable and still widely used. Active development has
-slowed, but it remains reliable. It is not bundled with OMZ and is one
-of the most common third-party theme choices. If you want something more
-actively evolving, Starship and Pure are worth a look, though neither
-matches p10k’s specific combination of instant prompt and a
-configuration wizard.</p>
+<p>Powerlevel10k is a third-party theme, not bundled with OMZ. As of
+October 7, 2026, its <a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">upstream
+README</a> explicitly warns of very limited support: no new features are
+planned, most bugs will remain unfixed, and help requests will be
+ignored. An existing setup can still work well, but do not assume that
+future compatibility problems will be fixed. For a new setup, compare
+its features with <a href="https://starship.rs/">Starship</a> and <a href="https://github.com/sindresorhus/pure">Pure</a> before accepting
+that maintenance constraint.</p>
 <p>What makes p10k different:</p>
 <ul>
 <li><strong>Configuration wizard</strong> — runs
@@ -1365,8 +1367,9 @@ render asynchronously so they don’t block input.</li>
 collapse to a minimal form, keeping the terminal cleaner.</li>
 </ul>
 <p>For a full git-aware, multi-context prompt (git state, virtualenv,
-node version, exit status, command timing) without visible startup lag,
-p10k is the practical choice.</p>
+node version, exit status, command timing), p10k’s instant prompt and
+configuration wizard remain useful features. Choose it if those features
+justify the limited support for your setup.</p>
 <p>Install:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span><span class="op">=</span>1 https://github.com/romkatv/powerlevel10k.git <span class="dt">\</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">${ZSH_CUSTOM</span><span class="op">:-</span><span class="va">$HOME</span>/.oh-my-zsh/custom<span class="va">}</span>/themes/powerlevel10k</span></code></pre></div>
@@ -1406,8 +1409,8 @@ version:</p>
 <tr>
 <td><code>powerlevel10k</code></td>
 <td>Rich status, fast rendering, wizard</td>
-<td>Extra config file and knobs</td>
-<td>Heavy terminal users across many repos</td>
+<td>Very limited upstream support; extra config</td>
+<td>Users who accept the maintenance constraint</td>
 </tr>
 <tr>
 <td><code>pure</code></td>
@@ -1885,9 +1888,9 @@ provides.</li>
 <li><strong>ZSH manual</strong> — <code>man zsh</code> is the definitive
 reference. The sections on parameter expansion, globbing qualifiers, and
 ZLE are particularly worth having open.</li>
-<li><strong>Powerlevel10k</strong> — the configuration wizard at
-<code>p10k configure</code> is unusually good documentation in
-interactive form.</li>
+<li><strong><a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">Powerlevel10k</a></strong>
+— read the support notice before installing; <code>p10k configure</code>
+documents the available prompt options interactively.</li>
 <li><strong>ZSH Users mailing list / r/zsh</strong> — for real-world
 configuration questions; the OMZ wiki has gotten stale in places.</li>
 </ul>

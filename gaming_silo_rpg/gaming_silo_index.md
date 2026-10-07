@@ -17,27 +17,26 @@ This file serves as a routing map for LLMs and GMs to quickly locate specific lo
 
 ## 2. COMPREHENSIVE WORLD BIBLE
 **File:** `gaming_silo_comprehensive_bible.md`
-**Purpose:** The core GM reference manual for the daily, micro-simulation of the Silo. No macro-lore (Operation 50) is in this file.
+**Purpose:** The core GM reference manual for the daily, micro-simulation of the Silo. Route Operation Fifty and endgame macro-lore to the GM secrets file. This bible is not spoiler-free: Chapter 23 reveals the Cleaning suit's deception and failing heat-tape.
 
 *   **Chapter 1: The Architecture & The Grind**
-    *   `1.1 The Physical Reality:` Stairs mechanics, acoustics, 'The Drop', sensory deprivation.
-    *   `1.2 The Economy of Survival:` Chits vs. Ledgers, rations (soy, rabbit, fruit), the scrap/barter economy.
-    *   `1.3 Bureaucracy of the Life Cycle:` The Lottery, birth control implants, Shadowing (apprenticeships), marriage/cohabitation permits, death and composting.
+    *   `1.1 The Anatomy of the Cylinder:` Stairs mechanics, acoustics, 'The Drop', sensory deprivation.
+    *   `1.2 The Closed-Loop Economy:` Chits vs. Ledgers, rations (soy, rabbit, fruit), the scrap/barter economy.
+    *   `1.3 The Life Cycle & The Bureaucracy:` The Lottery, birth control implants, Shadowing (apprenticeships), marriage/cohabitation permits, death and composting.
 *   **Chapter 2: The Law & The Panopticon**
-    *   `2.1 The Sheriff:` Peacekeepers, non-lethal weapons, public face of law.
-    *   `2.2 Judicial:` Shadow government, the true power, harsh sentences.
-    *   `2.3 The Justice Process:` Holding cells (Level 1 psychological torture), trials without juries, The Mines (hard labor).
-    *   `2.4 Surveillance Mechanics:` Overt vs. Covert cameras, the "Panopticon Roll" mechanic, deep dive on "Friends of the Silo" informants.
-    *   `2.5 Taboos:` Definition of Relics, the ultimate crime of Sedition ("I want to go outside").
+    *   `2.1 The Two Faces of Order:` `2.1.1 The Sheriff (The Peacekeeper)` covers the public face of law; `2.1.2 Judicial (The Warden)` covers the shadow bureaucracy and "Friends of the Silo" informants.
+    *   `2.2 The Justice Process:` Holding cells (Level 1 psychological torture), trials without juries, The Mines (hard labor).
+    *   `2.3 Surveillance: The All-Seeing Eye:` Overt vs. covert cameras and `2.3.2 Game Mechanics: The Panopticon Roll`.
+    *   `2.4 Taboos and Capital Offenses:` Definition of Relics, the ultimate crime of Sedition ("I want to go outside").
 *   **Chapter 3: The Departments**
     *   Deep dives on culture, location, and political leverage of: `3.1 IT`, `3.2 Mechanical`, `3.3 Supply`, `3.4 Medical`, `3.5 Hydroponics`.
 *   **Chapter 4: The 144 Levels (Gazetteer)**
-    *   Block-by-block mapping of the entire Silo. (e.g., Hospital is 30-32, Farms are 60-80, Generator is 144).
-*   **Chapter 5: Culture, Cults, and Sub-factions**
-    *   `5.1 Dialects:` The Drawl (Up Top), The Hustle (Mids), Deep Talk (Down Deep).
-    *   `5.2 The Porters' Union:` Neutrality, the code, the rumor mill.
-    *   `5.3 Holidays:` Lottery Day, The Cleaning, Rest Days.
-    *   `5.4 Shadow Cults:` The Flame Watchers (utopian rebels), Scrap Syndicates (organized crime), Shadow Doctors (illegal medicine).
+    *   Sector overview and selected landmarks (e.g., Hospital is 30-32, Farms are 60-80, Generator is 144). Use **Chapter 13: The Complete Level Gazetteer (1 - 144)** for the fuller level crosswalk.
+*   **Chapter 5: Culture, Rituals, and Sub-factions**
+    *   `5.1 The Dialects of Depth:` High Speak (Up Top), Chit-Talk (Mids), Deep Talk (Down Deep).
+    *   `5.2 Cultural Rituals:` The Cleaning holiday and Naming Day.
+    *   `5.3 Illegal Sub-factions:` The Flame Watchers, Scrap Syndicates, Shadow Doctors.
+    *   Calendar and daily routines are in **Chapter 9: The Daily Simulation (Routines and Calendars)**; the Porters' Union faction sheet is in **Chapter 32**, not Chapter 5.
 *   **Chapter 30: GM Quick-Reference Sheets**
     *   Travel times, security-response cheat sheets, typical bribes, and punishment summaries.
 *   **Chapter 31: Core Play Procedure**
@@ -51,12 +50,27 @@ This file serves as a routing map for LLMs and GMs to quickly locate specific lo
 
 ## 3. STARTER CAMPAIGNS & PLAYER ARCHETYPES
 **File:** `gaming_silo_starter_campaign.md`
-**Purpose:** Launch-ready campaign support for the first 3-12 sessions of play.
+**Purpose:** Ten starter arcs, each planned for 3-4 sessions (8-12 hours), playable individually or linked in the source's suggested order.
 **Contents:**
 *   **Player Archetypes:** Job-rooted citizens with gear, secrets, and desires.
 *   **Party Bonds:** Reasons the PCs already trust, need, or owe each other.
-*   **Eight Starter Campaigns:** Four conspiracy-forward arcs and four slice-of-life survival arcs.
-*   **Quick Kits:** Key NPCs, clue chains, escalation clocks, and fail-forward guidance for each campaign.
+*   **Ten Starter Campaigns (Part 2):** Six explicitly labelled mundane slice-of-life arcs (1-4, 6-7) and four other arcs (5, 8-10) involving contamination, disappearance, lottery manipulation, and deep-earth secrets. All ten have matching quick kits in Part 3.
+*   **Campaign Crosswalk:** The numbers and titles below match both the Part 2 premises and Part 3 quick kits.
+
+| Campaign | Title | Source label / focus |
+| --- | --- | --- |
+| 1 | The Partition War | Mundane slice-of-life |
+| 2 | The Chit-Poor Harvest | Mundane slice-of-life |
+| 3 | The Flickering Dark | Mundane slice-of-life |
+| 4 | The Down-Shift Transfer | Mundane slice-of-life |
+| 5 | The Rust in the Reclamation | Contamination and moral ambiguity |
+| 6 | The Ghost in the Ledger | Mundane slice-of-life |
+| 7 | The Tier Inheritance | Mundane slice-of-life |
+| 8 | The Missing Porter | Disappearance |
+| 9 | The Lottery Swap | Lottery manipulation |
+| 10 | The Generator Hammer | Industrial terror and deep-earth secrets |
+
+The starter document's introduction and its ten numbered premises now agree on the campaign count.
 
 ---
 

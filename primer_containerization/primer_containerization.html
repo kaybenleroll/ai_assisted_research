@@ -598,7 +598,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Containerization: Docker, Podman, and How
 Kubernetes Fits In</span>
 
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -1536,15 +1536,19 @@ to get restart-on-failure is a large amount of accidental complexity for
 a feature <code>systemd</code> has had for over a decade.</p>
 <h2 data-number="6.4" id="compose-desktop-and-kubernetes-yaml"><span class="header-section-number">6.4</span> Compose, Desktop, and
 Kubernetes YAML</h2>
-<p>Podman covers the Compose workflow two ways.
-<code>podman-compose</code> is an external tool that interprets Compose
-files and translates them into Podman operations, and recent Podman
-versions support the Compose specification more natively, including
-running Docker’s own Compose implementation against Podman’s API socket.
-Most straightforward Compose files work; complex ones that rely on
-Docker-specific behaviour occasionally need adjustment, and this is one
-of the few places where you will still hit genuine compatibility
-gaps.</p>
+<p>Podman’s <a href="https://docs.podman.io/en/latest/markdown/podman-compose.1.html"><code>podman compose</code></a>
+command is a thin wrapper around an external Compose provider, such as
+Docker Compose (<code>docker-compose</code>) or
+<code>podman-compose</code>. The provider implements Compose; Podman
+sets up the environment and passes the command through. Docker Compose
+can communicate with Podman’s API socket, while
+<code>podman-compose</code> translates Compose files into Podman
+operations. If both providers are installed, <code>docker-compose</code>
+takes precedence by default; select one explicitly with
+<code>PODMAN_COMPOSE_PROVIDER</code> or <code>compose_providers</code>
+in <code>containers.conf</code>. Compatibility depends on the provider
+and workload, so test your Compose file with the provider you will use,
+especially when it relies on Docker-specific behaviour.</p>
 <p><strong>Podman Desktop</strong> is Red Hat’s graphical equivalent to
 Docker Desktop — container and image management, Compose support,
 Kubernetes integration, and extensions — and it is actively developed.

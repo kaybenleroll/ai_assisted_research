@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Pi Coding Agent: A Practical
 Primer</span>
 
-    <span class="navbar-meta">24 September 2026</span>
+    <span class="navbar-meta">7 October 2026</span>
 
   </nav>
 
@@ -721,30 +721,35 @@ stack</a></li>
 
     <main class="content">
       <div class="content-inner">
-<p><em>24 September 2026. Checked against Pi 0.87.1.</em></p>
+<p><em>7 October 2026. Refreshed against Pi 1.0.4 and official
+documentation; earlier community-package checks retain their
+dates.</em></p>
 <h1 data-number="1" id="the-short-version"><span class="header-section-number">1</span> The short version</h1>
-<p>If you have used Claude Code, Pi feels oddly bare on first contact:
-no plan mode, no subagents, no MCP servers (external tool servers), no
-permission prompts, no web search. That is deliberate. Pi is a small,
+<p>If you have used Claude Code, Pi still feels sparse on first contact:
+no built-in plan mode, subagent workflow, per-tool permission prompts,
+or general web search. But the old claim that it has no MCP client is
+now wrong: Pi 1.0 includes built-in support for MCP servers (external
+tool servers) and codemode for composing tool calls. Pi remains a
 programmable harness (the program around the model that runs the agent
-loop) that you extend, not a product with those features built in. The
-official documentation is reference-style, and most third-party
-write-ups still use package names that have since changed. This primer
-is the orientation in between, written for someone who already knows
-Claude Code.</p>
-<p>Pi is a terminal coding agent and an agent toolkit. It gives a
-language model four tools (<code>read</code>, <code>write</code>,
-<code>edit</code>, and <code>bash</code>), persistent sessions, a
-terminal UI, and several ways to add your own behaviour: skills, prompt
-templates, TypeScript extensions, and packages. You can add a search
-skill, browser bridge, approval gate, subagent workflow, or local-model
-provider without forking the program.</p>
+loop) that you extend. The official documentation is reference-style,
+and third-party write-ups can describe an earlier package or feature
+set. This primer is the orientation in between, written for someone who
+already knows Claude Code.</p>
+<p>Pi is a terminal coding agent and an agent toolkit. Its default tools
+are <code>read</code>, <code>write</code>, <code>edit</code>, and
+<code>bash</code>; optional built-in tools and MCP can expand that set.
+It provides persistent sessions, a terminal UI, and several ways to add
+your own behaviour: skills, prompt templates, TypeScript extensions, and
+packages. You can add a search skill, browser bridge, approval gate,
+subagent workflow, or local-model provider without forking the
+program.</p>
 <p>Pi was created by Mario Zechner and is MIT-licensed. Since April 2026
 the project has been owned by the company Earendil, and the repository
-lives in the <code>earendil-works</code> GitHub organisation. Pi is
-pre-1.0 (0.87.1, released 22 September 2026, at the time of writing), so
-flags and settings move; the <a href="https://pi.dev/docs/latest">official documentation</a> is
-authoritative.</p>
+lives in the <code>earendil-works</code> GitHub organisation. The <a href="https://pi.dev/changelog">official changelog</a> records 1.0.0 on
+1 October and 1.0.4 on 5 October 2026. This edition uses that release
+baseline; the <a href="https://pi.dev/docs/latest">official
+documentation</a> remains authoritative for changing flags and
+settings.</p>
 <h2 data-number="1.1" id="what-you-will-learn"><span class="header-section-number">1.1</span> What you will learn</h2>
 <ol type="1">
 <li>Why Pi is built the way it is, and how it maps onto Claude
@@ -818,28 +823,35 @@ unless you allow them with <code>--tools</code> or the
 <code>defaultTools</code> setting.</p>
 <p>That is enough for:</p>
 <pre class="text"><code>inspect repository -&gt; edit file -&gt; run tests -&gt; inspect failure -&gt; edit again</code></pre>
-<p>Pi does not prescribe a planning mode, subagent system, browser, MCP
-client, or general web-search provider in its core. These are workflow
-choices. You can install a package, write an extension, create a skill,
-or keep the capability outside Pi and feed the results into the
-session.</p>
+<p>Pi includes an MCP client as a built-in extension, while planning,
+subagents, browser automation, and general web search remain workflow
+choices. Optional <code>codemode</code> lets the model compose tool
+calls in JavaScript; it is off by default unless selected or enabled by
+an MCP server. See the <a href="https://pi.dev/docs/latest/cli">CLI tool
+reference</a> and <a href="https://pi.dev/docs/latest/codemode">codemode
+reference</a>. You can install a package, write an extension, create a
+skill, or keep other capabilities outside Pi and feed their results into
+the session.</p>
 <p>Pi runs interactively, prints one-shot output, emits JSON events,
 communicates over RPC, or is embedded through its TypeScript SDK, so it
 is both a terminal program and a component of larger applications.</p>
 <h2 data-number="2.3" id="why-pi-is-built-this-way"><span class="header-section-number">2.3</span> Why Pi is built this way</h2>
 <p>The design is an argument, not an accident. The author’s essay <a href="https://mariozechner.at/posts/2025-11-30-pi-coding-agent/">What I
 learned building an opinionated and minimal coding agent</a> (November
-2025) makes it in five moves:</p>
+2025) made it in five moves. Read these as the original design
+rationale, not a current feature list:</p>
 <ul>
 <li><strong>A tiny prompt.</strong> The system prompt plus tool
 definitions come in below 1,000 tokens, and, the author argues, four
 tools suffice for coding work.</li>
-<li><strong>No MCP in core.</strong> The Model Context Protocol (MCP) is
-the standard for plugging such servers into an agent. The essay measures
-Playwright MCP at 21 tools and 13.7k tokens, and Chrome DevTools MCP at
-26 tools and 18k tokens, “7-9% of your context window gone before you
-even start working”. Its alternative is CLI tools with a README the
-model reads on demand.</li>
+<li><strong>No MCP in the original core design.</strong> The Model
+Context Protocol (MCP) is the standard for plugging such servers into an
+agent. The essay measured Playwright MCP at 21 tools and 13.7k tokens,
+and Chrome DevTools MCP at 26 tools and 18k tokens, “7-9% of your
+context window gone before you even start working”. Pi 1.0 now ships a
+built-in MCP client with selective tool exposure; the essay remains
+useful as historical design rationale, not as a current feature
+list.</li>
 <li><strong>No built-in subagents, plan mode, or to-dos.</strong>
 Subagents hide what the delegate did; plans and task lists belong in
 files you can read and edit.</li>
@@ -850,9 +862,11 @@ operations or commands, and expects you to contain it externally.</li>
 </ul>
 <p>The essay also reports a complete Terminal-Bench run as evidence.
 Treat that as the author’s argument, not a neutral benchmark; the
-trade-off is that you supply the workflow yourself. On licensing, the
-author states that Pi’s core “will stay MIT licensed”, while some future
-commercial features may be <a href="https://mariozechner.at/posts/2026-04-08-ive-sold-out/">Fair
+trade-off is that you supply much of the workflow yourself. The MCP
+position has since changed: <a href="https://pi.dev/docs/latest/mcp">current built-in MCP support</a>
+uses selective tool exposure rather than requiring every server schema
+in every prompt. On licensing, the author states that Pi’s core “will
+stay MIT licensed”, while some future commercial features may be <a href="https://mariozechner.at/posts/2026-04-08-ive-sold-out/">Fair
 Source or proprietary</a>.</p>
 <h2 data-number="2.4" id="coming-from-claude-code"><span class="header-section-number">2.4</span> Coming from Claude Code</h2>
 <p>An existing Claude Code repository half-works on first run: Pi loads
@@ -956,9 +970,15 @@ to files</td>
 </tr>
 <tr>
 <td>MCP servers</td>
-<td>None, by design; the community <code>pi-mcp-adapter</code>
-package</td>
-<td>Package</td>
+<td>Built-in stdio and Streamable HTTP client; <code>mcp.json</code>,
+<code>pi mcp</code>, and <code>/mcp</code></td>
+<td>Built-in extension</td>
+</tr>
+<tr>
+<td>Tool-call composition</td>
+<td>Optional <code>codemode</code> JavaScript tool; selective discovery
+through <code>tool_search</code></td>
+<td>Built-in extensions</td>
 </tr>
 <tr>
 <td><code>WebFetch</code> and <code>WebSearch</code></td>
@@ -973,8 +993,10 @@ not ask before each tool call, the safety habits you built on Claude
 Code’s prompts do not transfer; see “Safety and containment”.</p>
 <h1 data-number="3" id="installation-and-first-run"><span class="header-section-number">3</span> Installation and first run</h1>
 <p>Pi is a Node.js package. The npm route needs Node.js 22.19 or newer;
-the installer checks for Node and offers to install it. The two routes
-are alternatives, not a sequence:</p>
+the installer checks for Node and offers to install it. The <a href="https://pi.dev/docs/latest/quickstart">quickstart</a>
+distinguishes the managed installer, which pins dependencies, from npm,
+which no longer pins transitive dependencies. The two routes are
+alternatives, not a sequence:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Option A: the installer (macOS and Linux). Download and read it before running.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://pi.dev/install.sh <span class="at">-o</span> pi-install.sh</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="st">&#39;npm install\|curl&#39;</span> pi-install.sh   <span class="co"># ~1,700 lines; find what it runs</span></span>
@@ -993,8 +1015,14 @@ and frozen at 0.73.1; new releases exist only as
 lives at <code>earendil-works/pi</code>. Some companion repositories,
 including <code>badlogic/pi-skills</code>, still sit under the original
 account.</p>
-<p><code>pi update</code> updates Pi itself
-(<code>pi update --extensions</code> updates packages). To remove an npm
+<p><code>pi update</code> updates a managed Pi installation
+(<code>pi update --extensions</code> updates packages). In 1.0.1 and
+later, a global npm installation recommends migrating to the managed
+installer; follow your installation method’s update instructions. Pi 1.0
+also defaults to a fullscreen terminal UI;
+<code>pi --tui-mode regular</code> or <code>tuiMode: &quot;regular&quot;</code>
+preserves normal terminal scrollback. These changes are documented in
+the <a href="https://pi.dev/changelog">changelog</a>. To remove an npm
 install, run
 <code>npm uninstall -g @earendil-works/pi-coding-agent</code>; that
 leaves <code>~/.pi/agent/</code> (credentials, sessions, settings) in
@@ -1014,10 +1042,13 @@ project:</p>
 authentication” in the next section), then <code>/model</code>. Start
 with one tool-capable hosted model or one already-tested local model. Do
 not add routing or fallbacks before the basic loop works.</li>
-<li><strong>Orient read-only.</strong> Start Pi with
-<code>pi --tools read,grep,find,ls</code> so it cannot edit files or run
-commands, then send the prompt below. The tool restriction enforces the
-boundary; a prompt sentence such as “do not edit files” does not.</li>
+<li><strong>Orient with restricted tools.</strong> Start Pi with
+<code>pi --no-mcp --tools read,grep,find,ls</code>, then send the prompt
+below. This removes editing and shell tools and disables built-in MCP
+for the run; <code>--tools</code> alone now keeps MCP tools unless it
+explicitly filters them. Loaded extensions still execute with your
+permissions, so this is a tool-selection check, not operating-system
+containment.</li>
 <li><strong>Check what Pi loaded.</strong> The working directory is the
 project: Pi discovers instructions and configuration from it and groups
 sessions by it. The startup header lists the context files and skills
@@ -1103,15 +1134,16 @@ OpenAI-compatible endpoints. Pi reads them from
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;baseUrl&quot;</span><span class="fu">:</span> <span class="st">&quot;http://127.0.0.1:11434/v1&quot;</span><span class="fu">,</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;api&quot;</span><span class="fu">:</span> <span class="st">&quot;openai-completions&quot;</span><span class="fu">,</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;apiKey&quot;</span><span class="fu">:</span> <span class="st">&quot;ollama&quot;</span><span class="fu">,</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;qwen2.5-coder:7b&quot;</span> <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;installed-model-id&gt;&quot;</span> <span class="fu">}</span><span class="ot">]</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>The <code>apiKey</code> is a dummy: Pi needs a key to treat the model
-as available, and Ollama ignores it. The model ID is a placeholder; a 7B
-model is a weak choice for agentic tool calling. Check the context
-window the server allocates before blaming Pi for a lost instruction,
-because the server sets it. The <a href="https://pi.dev/docs/latest/models">models documentation</a> is
+as available, and Ollama ignores it. Replace the placeholder with the
+exact model ID served by your installation, then test its tool calling;
+a small model’s ability to answer chat questions is insufficient. Check
+the context window the server allocates before blaming Pi for a lost
+instruction, because the server sets it. The <a href="https://pi.dev/docs/latest/models">models documentation</a> is
 current.</p>
 <p>A useful arrangement is a local model for routine exploration, with a
 hosted model as an explicit, per-task fallback for code you are willing
@@ -1204,10 +1236,12 @@ and replies over a pipe)</td>
 <p>When stdin or stdout is redirected and no mode is chosen, Pi uses
 print mode, and piped stdin is prepended to the prompt. For read-only
 review, restrict the tools:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--tools</span> read,grep,find,ls <span class="at">--print</span> <span class="st">&#39;Review without changing files&#39;</span></span></code></pre></div>
-<p><code>--tools</code> takes an allowlist of built-in, extension, and
-custom tools; the <a href="https://pi.dev/docs/latest/cli">CLI
-reference</a> lists every flag. To embed Pi in TypeScript, the <a href="https://pi.dev/docs/latest/sdk">SDK</a> creates a session in your
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pi</span> <span class="at">--no-mcp</span> <span class="at">--tools</span> read,grep,find,ls <span class="at">--print</span> <span class="st">&#39;Review without changing files&#39;</span></span></code></pre></div>
+<p><code>--tools</code> selects built-in, extension, and custom tools,
+but retains MCP unless an entry begins with <code>mcp__</code>. Use
+<code>--no-mcp</code> to disable the built-in MCP client for this
+review; a replacement extension needs its own controls. The <a href="https://pi.dev/docs/latest/cli">CLI reference</a> lists every
+flag. To embed Pi in TypeScript, the <a href="https://pi.dev/docs/latest/sdk">SDK</a> creates a session in your
 own process; RPC is the language-independent alternative.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createAgentSession } <span class="im">from</span> <span class="st">&quot;@earendil-works/pi-coding-agent&quot;</span><span class="op">;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1370,12 +1404,22 @@ conventional <code>extensions/</code>, <code>skills/</code>,
 <code>prompts/</code>, and <code>themes/</code> directories or a
 <code>pi</code> key in <code>package.json</code>.</p>
 <h2 data-number="6.5" id="mcp-and-subagents"><span class="header-section-number">6.5</span> MCP and subagents</h2>
-<p>Pi has neither in core, by design. If you depend on MCP servers, the
-community <code>pi-mcp-adapter</code> package bridges them through one
-small proxy tool, which addresses the context cost the author objects
-to. For subagents, use the <code>subagent/</code> example, the
-<code>pi-subagents</code> package, or further Pi processes in
-<code>tmux</code>. Avoid both on day one.</p>
+<p>Pi now has <a href="https://pi.dev/docs/latest/mcp">built-in MCP
+support</a> over stdio and Streamable HTTP. User servers live in
+<code>~/.pi/agent/mcp.json</code>; project servers live in
+<code>.pi/mcp.json</code> and require project trust. Inspect them with
+<code>pi mcp list</code> or <code>/mcp</code>. Default
+<code>codemode</code> exposure lets scripts discover and call tools
+without declaring every schema; <code>direct</code>,
+<code>deferred</code>, and <code>hidden</code> exposure serve different
+needs. OAuth and bearer authentication are documented there. Start with
+one read-only server and verify its credentials, scope, and outputs
+before adding write tools.</p>
+<p>The community <code>pi-mcp-adapter</code> is now an alternative
+implementation, not a prerequisite; avoid loading competing clients
+accidentally. Subagents remain an example or package workflow: use
+<code>subagent/</code>, <code>pi-subagents</code>, or further Pi
+processes in <code>tmux</code> when needed.</p>
 <h2 data-number="6.6" id="the-starter-suite-install-by-need"><span class="header-section-number">6.6</span> The starter suite: install by
 need</h2>
 <p>There is no universally correct add-on bundle. Pi’s quickstart says
@@ -1474,21 +1518,22 @@ fetched page text to a different provider. Browser-cookie access is
 opt-in (<code>allowBrowserCookies: true</code> or
 <code>PI_ALLOW_BROWSER_COOKIES=1</code>), and settings live in
 <code>~/.pi/agent/web-search.json</code>.</p>
-<p>Do not install an MCP adapter, subagent framework, memory system,
-planning overlay, or large “everything” bundle on day one. Add each when
-you can name the recurring problem it solves and the boundary it
-requires.</p>
+<p>Start with the built-in MCP client if you need MCP; do not install a
+second adapter by habit. Add a subagent framework, memory system,
+planning overlay, or larger bundle only when you can name the recurring
+problem it solves and the boundary it requires.</p>
 <h1 data-number="7" id="web-research-assemble-the-missing-capability"><span class="header-section-number">7</span> Web research: assemble the
 missing capability</h1>
-<p>Pi ships no browser and no search tool, so a coding task that needs
-current documentation has nothing to reach for except <code>curl</code>
-through <code>bash</code>.</p>
+<p>Pi ships no general browser or web-search tool. A task that needs
+current documentation can use <code>curl</code> through
+<code>bash</code>, a skill, or a configured MCP search service; the MCP
+client does not itself supply a search backend.</p>
 <h2 data-number="7.1" id="plain-http-and-git-are-good-for-static-sources"><span class="header-section-number">7.1</span> Plain HTTP and git are good for
 static sources</h2>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> <span class="at">-o</span> extensions.md <span class="dt">\</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v0.87.1/packages/coding-agent/docs/extensions.md</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v1.0.4/packages/coding-agent/docs/extensions.md</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://api.github.com/repos/earendil-works/pi/releases/latest</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span> 1 <span class="at">--branch</span> v0.87.1 https://github.com/earendil-works/pi.git ~/src/pi</span></code></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span> 1 <span class="at">--branch</span> v1.0.4 https://github.com/earendil-works/pi.git ~/src/pi</span></code></pre></div>
 <p>This suits raw Markdown, JSON APIs, release metadata, and source
 trees. Pin a tag or commit rather than <code>main</code> when you need
 the same bytes next week.</p>
@@ -1528,7 +1573,7 @@ them yourself to test your key:</p>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Pi extension registerTool&#39;</span> <span class="at">-n</span> 10 <span class="at">--content</span> <span class="at">--freshness</span> pm</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">~/src/pi-skills/brave-search/content.js</span> <span class="dt">\</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v0.87.1/packages/coding-agent/docs/extensions.md</span></code></pre></div>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  https://raw.githubusercontent.com/earendil-works/pi/v1.0.4/packages/coding-agent/docs/extensions.md</span></code></pre></div>
 <p><code>-n</code> sets the result count (default 5, maximum 20),
 <code>--content</code> fetches each page as Markdown,
 <code>--freshness</code> filters by <code>pd</code>, <code>pw</code>,
@@ -1626,11 +1671,12 @@ Search the official repository and docs first, then issues and the package
 catalogue. Do not infer core support from an extension. Return URL, date,
 source type, exact claim, and confidence. Stop after the current README, docs
 index, source tree, and five relevant issues or package entries.</code></pre>
-<p>The answer, as of 0.87.1, is no: Pi has no built-in MCP client, and
-the documentation describes none. That is a design decision rather than
-a gap. Community packages do exist, which is the confusion this brief
-guards against: mistaking a community package for a core feature, or an
-old forum answer for current behaviour.</p>
+<p>The answer as of 1.0.4 is yes: the <a href="https://pi.dev/docs/latest/mcp">official MCP documentation</a>
+describes the built-in client, configuration, transports, and tool
+exposure. Older material correctly described earlier releases without
+it. This brief guards against treating an old design essay or forum
+answer as current behaviour, and against confusing a community adapter
+with the shipped client.</p>
 <h1 data-number="8" id="sessions-hand-off-and-workflow"><span class="header-section-number">8</span> Sessions, hand-off and
 workflow</h1>
 <p>This section covers how Pi stores and branches conversations, how to
@@ -1736,20 +1782,22 @@ documentation says to use one of the isolation patterns below.</p>
 <p>Three controls are easy to confuse:</p>
 <ul>
 <li>Project trust controls whether project-local resources load.</li>
-<li>Tool restrictions (<code>--tools</code>) control which Pi tools are
-exposed.</li>
+<li>Tool selection and MCP exposure control which tools are callable;
+<code>--tools</code> alone does not remove MCP tools.</li>
 <li>The operating system, container, VM, or sandbox controls what the
 process can touch.</li>
 </ul>
 <h2 data-number="9.1" id="project-trust"><span class="header-section-number">9.1</span> Project trust</h2>
-<p>Trust exists to stop a folder silently loading executable extensions.
-Pi asks for a decision when the working directory holds any of these:
-<code>.pi/settings.json</code>; <code>.pi/extensions</code>,
+<p>Trust exists to stop a folder silently loading executable extensions
+or project MCP servers. Pi asks for a decision when the working
+directory holds any of these: <code>.pi/settings.json</code> or
+<code>.pi/mcp.json</code>; <code>.pi/extensions</code>,
 <code>.pi/skills</code>, <code>.pi/prompts</code>, or
 <code>.pi/themes</code>; <code>.pi/SYSTEM.md</code> or
 <code>.pi/APPEND_SYSTEM.md</code>; or <code>.agents/skills</code> in the
 working directory or an ancestor. A bare <code>.pi</code> directory
-needs no decision. Declining skips those resources.</p>
+needs no decision. Declining skips those resources. The <a href="https://pi.dev/docs/latest/security">security guide</a> describes
+the complete loading boundary.</p>
 <p>Context files are not gated. <code>AGENTS.md</code>,
 <code>CLAUDE.md</code>, and <code>AGENTS.override.md</code> load
 regardless of trust unless you pass <code>-nc</code>, so a hostile
@@ -1881,12 +1929,11 @@ is.</p>
 <tbody>
 <tr>
 <td><strong>Pi</strong></td>
-<td>Small terminal harness and embeddable runtime (MIT)</td>
+<td>Programmable terminal harness and embeddable runtime (MIT)</td>
 <td>Broad providers plus compatible and local endpoints</td>
-<td>None built in; add a skill, extension, package, or shell
-workflow</td>
-<td>Deep TypeScript extensions; minimal core; no built-in permission
-system</td>
+<td>Add a skill, MCP service, extension, package, or shell workflow</td>
+<td>TypeScript extensions, built-in MCP and optional codemode; no
+per-tool approval system</td>
 </tr>
 <tr>
 <td><strong>OpenCode</strong></td>
@@ -2058,8 +2105,8 @@ the sort order.</p>
 <p>Use a separate, named session for each phase. The fixture, expected
 output, and comparison script are committed before the implementation
 task starts.</p>
-<p>Phase 1 is read-only:
-<code>pi --name contract --tools read,grep,find,ls</code>.</p>
+<p>Phase 1 restricts tools:
+<code>pi --name contract --no-mcp --tools read,grep,find,ls</code>.</p>
 <pre class="text"><code>Inspect the repository rules and propose the file contract for this project.
 Do not write files or install packages. Identify assumptions and test cases.</code></pre>
 <p>Phase 2 needs a search skill and <code>bash</code>:
@@ -2305,6 +2352,10 @@ keep it only if it solves a recurring problem.</p>
 <ul>
 <li><a href="https://github.com/earendil-works/pi">Pi repository</a>, <a href="https://pi.dev/docs/latest">documentation index</a>, <a href="https://pi.dev/docs/latest/quickstart">quickstart</a>, and <a href="https://pi.dev/docs/latest/how-pi-works">how Pi works</a>: start
 here.</li>
+<li><a href="https://pi.dev/changelog">Pi changelog</a> and <a href="https://github.com/earendil-works/pi/releases/tag/v1.0.4">1.0.4
+release</a>: the October 2026 baseline.</li>
+<li><a href="https://pi.dev/docs/latest/mcp">Built-in MCP</a> and <a href="https://pi.dev/docs/latest/codemode">codemode</a>: server
+configuration, exposure, and tool-call composition.</li>
 <li><a href="https://pi.dev/docs/latest/security">Security</a> and <a href="https://pi.dev/docs/latest/containerization">isolated
 environments</a>: project trust, and Docker, Docker Sandboxes,
 OpenShell, and Gondolin.</li>
@@ -2361,19 +2412,19 @@ Code alternatives primer</a>, <a href="../primer_codex_for_claude_code_users/pri
 for Claude Code users primer</a>, and <a href="../primer_openclaw/primer_openclaw.html">OpenClaw primer</a>.</li>
 </ul>
 <h1 data-number="13" id="closing-perspective"><span class="header-section-number">13</span> Closing perspective</h1>
-<p>Pi’s distinctive feature is not that it has no browser. It is that
-the browser, search engine, MCP client, approval system, model router,
-planning workflow, and subagent strategy are not fused into the core. Pi
-gives you a small, inspectable loop and lets you decide what belongs
-around it.</p>
+<p>Pi’s distinctive feature is its programmable loop and selective tool
+exposure. Built-in MCP and optional codemode now supply tool integration
+and composition; you still decide which browser, search service,
+approval policy, planning workflow, and subagent strategy belong around
+it.</p>
 <p>Pi suits you if you want a loop you can program: a provider-neutral
 harness, an embeddable runtime, a research workflow you assemble
-yourself. It suits you less if you want approvals, subagents, MCP, and
-web search ready on day one; Claude Code and OpenCode provide those.
-Pi’s small core is not a safety property: it runs with your permissions
-and asks for nothing, so put a container or VM around anything untrusted
-or unattended, and review every extension and package as code you are
-about to execute.</p>
+yourself. It suits you less if you want bundled per-tool approvals,
+subagents, and web search on day one. MCP is now supplied, but its
+servers still need configuration and review. Pi runs with your
+permissions, so put a container or VM around anything untrusted or
+unattended, and review extensions, packages, and MCP servers as code you
+are about to execute.</p>
 <h2 data-number="13.1" id="where-to-go-next"><span class="header-section-number">13.1</span> Where to go next</h2>
 <p>A sensible first week: install Pi and check
 <code>pi --version</code>; run the read-only orientation from “A
