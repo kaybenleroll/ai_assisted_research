@@ -35,6 +35,7 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 | [Deep Learning and Generative AI](primer_deep_learning/primer_deep_learning.html) · [PDF](primer_deep_learning/primer_deep_learning.pdf) | 2026-10-07 | Neural networks, transformers, LLMs, and generative AI — architecture, training, and practical use |
 | [Digital Signal Processing](primer_digital_signal_processing/primer_digital_signal_processing.html) · [PDF](primer_digital_signal_processing/primer_digital_signal_processing.pdf) | 2026-09-16 | Sampling, Fourier analysis, filtering, spectral estimation, multirate systems, and practical DSP workflows |
 | [Information Theory Series](article_info_theory/information_theory_series_combined.html) · [PDF](article_info_theory/information_theory_series_combined.pdf) | 2026-10-07 | *Article series.* Entropy, mutual information, channel capacity, and their applications |
+| [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | 2026-10-08 | Holomorphic functions, contour integration, residues, conformal maps, harmonic functions, applications, and computation |
 | [Numerical Analysis](primer_numerical_analysis/primer_numerical_analysis.html) · [PDF](primer_numerical_analysis/primer_numerical_analysis.pdf) | 2026-08-31 | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
 
 ## Society and Institutions

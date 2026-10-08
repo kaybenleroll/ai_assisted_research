@@ -1,0 +1,33 @@
+SOURCE_MD   := "primer_complex_analysis.md"
+PROJECT_DIR := "primer_complex_analysis"
+TITLE       := "Complex Analysis: A Technical Primer"
+AUTHOR      := "October 2026"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
+
+import '../_shared/common.just'
+
+html-variants:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o primer_complex_analysis.mathml.html \
+    {{HTML_FLAGS_BASE}} --mathml --metadata mathrenderer=mathml \
+    --number-sections --shift-heading-level-by=-1 \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o primer_complex_analysis.mathjax.html \
+    {{HTML_FLAGS_BASE}} --mathjax --metadata mathrenderer=mathjax \
+    --number-sections --shift-heading-level-by=-1 \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+full: html-variants html pdf
