@@ -5,6 +5,8 @@ Complex analysis looks like a narrow extension of calculus until its central fac
 
 ## Orientation, prerequisites, and complex-plane geometry
 
+This opening section establishes the language used throughout the primer. It reviews the real-analysis ideas that control limits, convergence, and interchange of operations, then treats the complex plane as both an algebraic system and a geometric domain. The aim is not to repeat a full real-analysis course, but to make explicit which background results the later holomorphic and contour arguments use.
+
 ### Why a second plane changes calculus
 
 A real differentiable function can behave almost arbitrarily away from the point where you differentiate it. A complex differentiable function has much less freedom. Once it has a complex derivative throughout an open region, its values on a small circle determine every value inside that circle. It has derivatives of every order and a convergent power series nearby. Contour integrals then connect local behavior at singularities to global quantities such as definite integrals and zero counts. This is the useful surprise of complex analysis: a stronger definition of derivative produces stronger tools.
