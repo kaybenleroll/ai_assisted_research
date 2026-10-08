@@ -3,6 +3,10 @@ set shell := ["bash", "-c"]
 default:
   @just --list
 
+# Refresh the cross-category recent-documents block in README.md
+readme-recent:
+  python3 scripts/update_readme_recent.py
+
 # Build the shared pandoc image used by all primer projects
 build-image:
   cd primer_building_ai_agents && just build-image

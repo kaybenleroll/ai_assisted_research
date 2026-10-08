@@ -6,6 +6,25 @@ Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll
 
 ---
 
+<!-- BEGIN RECENTLY UPDATED -->
+## Recently updated
+
+These are the five most recently edited primary documents across the catalogue. Dates come from Git history for each document's canonical source file.
+
+| Document | Category | Last updated |
+|----------|----------|--------------|
+| [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | Quantitative Foundations | 2026-10-08 |
+| [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | AI Agents and Coding Tools | 2026-10-07 |
+| [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | AI Agents and Coding Tools | 2026-10-07 |
+| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-10-07 |
+| [Containerization](primer_containerization/primer_containerization.html) · [PDF](primer_containerization/primer_containerization.pdf) | Developer Tooling | 2026-10-07 |
+
+<!-- END RECENTLY UPDATED -->
+
+## Browse by subject
+
+[AI agents and coding tools](#ai-agents-and-coding-tools) · [Developer tooling](#developer-tooling) · [Quantitative foundations](#quantitative-foundations) · [Society and institutions](#society-and-institutions) · [Silo RPG materials](#silo-rpg-materials) · [Build](#build)
+
 ## AI Agents and Coding Tools
 
 | Document | Last updated | Description |
