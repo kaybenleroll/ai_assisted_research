@@ -74,6 +74,18 @@ One early picture is worth keeping in mind. A domain-coloring plot assigns hue t
 
 You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ray at angle $\theta$ maps to a ray at $2\theta$ while its radius is squared. The first quadrant maps onto the upper half-plane, and a small circle around zero wraps around its image twice. Under $z\mapsto1/z$, circles of radius $r$ become circles of radius $1/r$ with orientation reversed if you follow the angle parameter through the map. Under $z\mapsto e^z$, vertical translation by $2\pi i$ repeats the same values. Domain coloring makes these rules visible, but the algebra tells you which features are structural and which are artifacts of sampling or a hue discontinuity.
 
+![The complex plane with polar coordinates, concentric modulus circles, and argument rays](figures/complex_plane_geometry.png)
+
+*Figure: Modulus is radial distance and argument is angular position. The polar picture is not an optional interpretation: multiplication and branch choices act directly on these two coordinates.*
+
+![Multiplication by a complex number as rotation and scaling](figures/complex_multiplication.png)
+
+*Figure: Multiplication changes a vector's length and angle together. The same geometric rule underlies the local approximation $f(z_0+h)\approx f(z_0)+f'(z_0)h$ for a holomorphic map.*
+
+![A square map takes a circular and radial grid to another conformal grid](figures/conformal_grid_square.png)
+
+*Figure: Away from the critical point at zero, $z\mapsto z^2$ preserves the crossing angle of the two grid families while doubling arguments and changing scale.*
+
 ## Complex functions and analyticity
 
 Complex analysis begins by asking what it means for a derivative to be independent of direction. The Cauchy–Riemann equations give a practical test, while elementary examples show why that test needs the right hypotheses. Exponentials, logarithms, and analytic continuation then expose how a local derivative interacts with global choices such as branches.
@@ -228,6 +240,10 @@ It counts net counterclockwise turns and is an integer. One way to see the integ
 
 The index is stable as long as a contour moves without crossing $a$. Imagine pulling a rubber band around a nail: deformation changes its shape but not the number of wraps. If the band crosses the nail, the index may change. This intuition becomes rigorous through contour deformation, but it already tells you why “moving the contour” always needs a singularity check. It also tells you why the residue theorem sums only the poles inside the chosen path. A contour integral is sensitive to how its path sits relative to excluded points, not just to the formulas at its endpoints.
 
+![A directed contour with points of different winding number](figures/contour_winding.png)
+
+*Figure: The same directed contour has index $1$ about points inside it and index $0$ about points outside it. The arrows matter: reversing the path changes every index's sign.*
+
 ### Winding is a directed count
 
 The winding number has two descriptions that should agree in any calculation. One is the integral of $1/(z-a)$. The other is the net change of a continuously tracked angle along the curve, divided by $2\pi$. To see the link, suppose $\gamma(t)-a=\rho(t)e^{i\theta(t)}$ along a closed piecewise smooth contour, with $\rho(t)>0$ and a continuously *unwrapped* angle $\theta(t)$. On each smooth piece,
@@ -367,6 +383,10 @@ For $n>m$, the right side tends to zero as $R\to\infty$. Thus every derivative a
 
 Cauchy's formula also proves uniqueness from boundary values with little effort. If $f$ and $g$ are holomorphic on a neighborhood of a closed disk and agree at every point of its boundary circle, apply the formula to $f-g$. Every interior value is an integral of zero, so $f=g$ throughout the disk. You do not need to check derivatives or invoke the identity theorem. The result is stronger than a numerical interpolation statement: infinitely many interior values are forced simultaneously. It also explains why a supposed compactly supported holomorphic “bump” cannot exist on a connected region. Outside its support it vanishes on an open set; analytic continuation then forces it to vanish everywhere.
 
+![Cauchy's formula connects boundary values to an interior point](figures/cauchy_integral_formula.png)
+
+*Figure: The interior value at $a$ is assembled from values around the boundary circle, with the kernel $(z-a)^{-1}$ recording how the boundary surrounds the point.*
+
 The filled-region hypothesis is easy to test with a counterexample. Set $f(z)=1/z$ and integrate $f(z)/(z-a)$ around $|z|=2$ for a point $a$ with $0<|a|<2$. The integrand has poles at both $a$ and zero. If you apply Cauchy's formula as though $f$ were holomorphic throughout the disk, you predict $2\pi i/a$. But partial fractions give $1/[z(z-a)]=(1/a)[1/(z-a)-1/z]$, and the two contour integrals cancel. The actual result is zero. Cauchy's formula does not fail; its hypothesis on the interior fails. The example is useful because $f$ is perfectly holomorphic near the *contour*, so checking only the boundary would miss the problem.
 
 ## Series and singularities
@@ -447,6 +467,10 @@ $$
 =-\sum_{n=2}^{\infty}z^{-n}.
 $$
 The region of convergence is part of each statement. Writing down a Laurent formula without its annulus can silently change which poles are enclosed and even which coefficient is the residue.
+
+![Three Laurent annuli separated by singularity circles](figures/laurent_annuli.png)
+
+*Figure: A Laurent expansion belongs to an annulus. Crossing a singularity changes the available expansion, even when the underlying rational formula looks unchanged.*
 
 ### Three Laurent annuli in one calculation
 
@@ -780,6 +804,10 @@ The ML estimate uses the maximum of the modulus on each arc and its length $2\pi
 
 This derivation offers three practical checks. First, write the branch and argument interval before evaluating either bank. Second, orient both banks from the contour, not from memory: one travels outward and the other inward. Third, estimate the small and large arcs separately, because their dominant powers differ. As a quick independent check, $x=t^2$ transforms the original integral into $2\int_0^\infty(1+t^2)^{-1}dt=\pi$. That substitution verifies the value, while the keyhole calculation explains how the branch jump creates it.
 
+![A keyhole contour following both banks of a branch cut](figures/keyhole_contour.png)
+
+*Figure: The two straight banks are separate directed paths. Their different boundary values are the source of the phase factor in a keyhole calculation.*
+
 For a general exponent $0<\alpha<1$, the same contour with $z^{\alpha-1}$ and the cut on the positive axis has bank values in ratio $e^{2\pi i(\alpha-1)}=e^{2\pi i\alpha}$. The origin arc is of order $\varepsilon^\alpha$, and the outer arc is of order $R^{\alpha-1}$. Both vanish precisely in this range. The pole at $-1$ contributes a phase determined by the selected branch. This is a template, not a license to substitute arbitrary complex exponents: convergence, branch values, and arc estimates must all be revisited when the exponent changes.
 
 It is useful to separate a branch cut from the obstruction that makes a global branch impossible. For $z^{-1/2}$, the positive axis is a convenient seam chosen to suit this contour. We could rotate the seam and repeat the calculation, but we could not remove the seam from every loop around zero. Continuing the square root once around zero changes its sign; continuing twice returns the original value. A branch on a simply connected slit domain resolves this ambiguity by specifying which continuation is used. In a contour proof, the two banks are therefore not duplicate copies of one continuous boundary value: they are limits of the chosen branch from different sides.
@@ -879,6 +907,10 @@ $$
 \frac1{2\pi i}\int_{|z|=3/2}\frac{f'(z)}{f(z)}\,dz=2-1=1.
 $$
 The image of the circle winds once around the origin, even though $f$ has two zeros inside. A phase plot that seems to show “one turn” is therefore not inconsistent with a double zero; the enclosed pole subtracts one turn. This example is why the argument principle counts zeros *minus* poles, and why one should list both before interpreting a winding plot.
+
+![A contour and the image curve used by the argument principle](figures/argument_principle_winding.png)
+
+*Figure: The argument principle converts the winding of $f(C)$ around zero into a zero-minus-pole count inside $C$. The image curve is the object being counted, not merely the original contour.*
 
 For a polynomial, there are no finite poles, so the principle counts all its roots inside a contour. For a rational function, cancellations can make a suspected zero and pole removable; reduce or factor locally first. For a numerical implementation, sampled values of $f(C)$ may suggest a winding number, but the count is only reliable if the continuous image does not pass through zero between samples. The theorem supplies an exact answer when the boundary condition can be proved.
 
@@ -1001,6 +1033,10 @@ M(z)=\frac{az+b}{cz+d},\qquad ad-bc\ne0.
 $$
 On the Riemann sphere $\widehat{\mathbb C}=\mathbb C\cup\{\infty\}$, each is a bijection with a Möbius inverse. In the finite plane it has a pole at $z=-d/c$ when $c\ne0$, and its derivative is $(ad-bc)/(cz+d)^2$ wherever defined. Möbius maps send generalized circles—ordinary circles and straight lines, with a line regarded as a circle through $\infty$—to generalized circles. Translation, rotation/scaling, and inversion $z\mapsto1/z$ generate their basic geometry.
 
+![A grid in the upper half-plane and its image in the unit disk](figures/mobius_half_plane_disk.png)
+
+*Figure: The Möbius map $(z-i)/(z+i)$ sends the upper half-plane to the unit disk and carries boundary geometry to the unit circle.*
+
 The sphere language accounts cleanly for poles and infinity. When $c\ne0$, $M(-d/c)=\infty$ and $M(\infty)=a/c$; if $c=0$, the map is affine and fixes infinity. A Euclidean line becomes a circle through $M(\infty)$ unless that image is infinity. This observation often predicts a boundary image before any algebra. The real axis is a generalized circle, for example, and $M(z)=(z-i)/(z+i)$ sends it to the unit circle. Which side maps to the disk is decided by testing one point, such as $z=i$.
 
 An explicit canonical map is
@@ -1067,6 +1103,10 @@ because $V$ depends linearly on $\theta$ only. At $\theta=0$, it is 0; at $\thet
 
 For a concrete right-angle wedge, set $\alpha=\pi/2$. Then $\zeta=z^2$, the potential is $2V_0\theta/\pi$, and the field magnitude is $2V_0/(\pi r)$. The map doubles polar arguments about the corner, taking the wedge opening from $\pi/2$ to $\pi$; at every nonzero point it remains conformal, so it preserves local angles there. The quadrant's boundary rays at angles 0 and $\pi/2$ become the two real rays at angles 0 and $\pi$. A boundary condition that was posed on a corner-shaped region has become the familiar angular potential in a half-plane. This example is especially helpful because it makes branch choice visible. If one uses a power without restricting the argument, the same point in the image plane may correspond to more than one preimage, and the proposed map is no longer a single-valued coordinate on the chosen region.
 
+![A wedge grid straightened by a power map](figures/wedge_map.png)
+
+*Figure: The power $z^{\pi/\alpha}$ sends the two wedge faces to the two real rays. The grid is a visual check on the branch and one-to-one restriction, not a replacement for them.*
+
 The solution is unique among bounded harmonic functions on the open wedge that extend continuously to each open face $r>0$ and take the prescribed constant values there. The conformal map sends any two such solutions to bounded harmonic functions in the upper half-plane with the same boundary values everywhere except the image of the vertex; bounded harmonic functions are determined by their boundary values almost everywhere. No value at the vertex or at infinity is required in this class. Boundedness matters: $r^{\pi/\alpha}\sin(\pi\theta/\alpha)$ is harmonic and vanishes on both faces, but adding it gives an unbounded solution with the same face data.
 
 The field's corner exponent has a useful interpretation beyond this one wedge. The inverse map is $z=\zeta^{\alpha/\pi}$, and its derivative has magnitude proportional to $|\zeta|^{\alpha/\pi-1}$. Uniform field in the mapped half-plane therefore becomes a field whose size scales like $r^{\pi/\alpha-1}$ in the wedge. For $\alpha=\pi/2$, this is $r^1$ for a uniform mapped field, while the particular angular-potential boundary data above produces $1/r$ because its mapped potential is an angle function with a boundary singularity at the origin. These are different mapped problems: the map alone does not determine the field; the transformed boundary data do. This distinction is a good safeguard against memorizing one corner exponent and applying it to every electrode arrangement.
@@ -1092,6 +1132,10 @@ $$
 F(z)=U\left(z+\frac{a^2}{z}\right),\qquad |z|>a.
 $$
 On $z=ae^{i\theta}$, the complex potential is $2Ua\cos\theta$, which is real, so the cylinder surface is a streamline. Differentiating gives $F'(z)=U(1-a^2/z^2)$; the two surface stagnation points occur at $z=\pm a$. This is an exact solution of the inviscid potential-flow model, not a model of viscous boundary layers, separation, or turbulent wake formation. MIT's notes develop complex potentials for two-dimensional hydrodynamics, while the University of Virginia notes work through electrostatic conformal maps and boundary problems ([MIT 18.04, hydrodynamics and complex potentials](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/mit18_04s18_topic6/); [University of Virginia, conformal mapping](https://galileoandeinstein.phys.virginia.edu/Elec_Mag/2022_Lectures/EM_16_Conformal_Mapping.html)).
+
+![Streamlines and equipotentials for a complex potential](figures/complex_potential_flow.png)
+
+*Figure: Level curves of $\operatorname{Im}F$ and $\operatorname{Re}F$ form orthogonal families away from the singularity. The circular boundary is a streamline for the ideal cylinder-flow model.*
 
 ### A jump in boundary data
 
@@ -1142,6 +1186,10 @@ where the argument is chosen in $(0,\pi)$ for the inverse image in the upper hal
 
 The map makes the boundary discontinuity visually simple, but it does not remove it. Near the two jump points on the circle, the solution changes rapidly. The Poisson integral remains bounded between zero and one, and its interior values are smooth. This is a useful distinction in applied work: a conformal change of coordinates can simplify geometry and preserve harmonicity, while the regularity of the boundary data remains a separate issue.
 
+![Poisson kernels concentrating near their boundary point](figures/poisson_kernel.png)
+
+*Figure: As $r\uparrow1$, the Poisson kernel concentrates near $\theta=0$. This is the approximate-identity mechanism behind boundary recovery at continuity points.*
+
 ### A transform integral reduced to one residue
 
 Residues can turn a real transform integral into a finite algebraic calculation. For $a>0$, evaluate
@@ -1160,6 +1208,10 @@ $$
 The sign of $a$ determines the decaying half-plane. A frequent error is to keep the upper contour for negative $a$, where the exponential grows. The decay estimate and the contour orientation are part of the argument, not bookkeeping to omit.
 
 Here are the hypotheses behind that calculation. The real integral is absolutely convergent because $(1+x^2)^{-1}$ is integrable and $|e^{iax}|=1$ for real $x$. For fixed $a>0$, take the contour consisting of the segment from $-R$ to $R$ and the upper semicircle, oriented counterclockwise. Its only pole is $i$, and no pole lies on the contour. On the semicircle, $|z^2+1|\geq ||z|^2-1|=R^2-1$, while $|e^{iaz}|=e^{-a\operatorname{Im}z}\leq1$. The arc length is $\pi R$, so the modulus of the arc integral is at most $\pi R/(R^2-1)$, which tends to zero. The residue theorem applies for every $R>1$; letting $R\to\infty$ gives the asserted improper integral. For $a=0$, the same formula follows directly from $\int (1+x^2)^{-1}dx=\pi$, or by continuity. For $a<0$, the lower semicircle gives exponential decay and clockwise orientation; its negative sign cancels the sign change in the residue contribution. No principal-value interpretation is needed because the integrand has no real pole.
+
+![A semicircle contour selected by exponential decay](figures/semicircle_contour.png)
+
+*Figure: For $a>0$, the upper semicircle keeps $e^{iaz}$ bounded while enclosing the pole at $i$. The real segment and the arc have different roles and orientations.*
 
 This example is a Fourier transform under the convention $\widehat f(a)=\int_{\mathbb R}f(x)e^{iax}\,dx$. A different convention may put a minus sign in the exponential or a factor of $1/\sqrt{2\pi}$ in the definition, so transform tables cannot be compared until conventions match. The contour argument works because the rational decay beats the arc length and the exponential is non-growing in the chosen half-plane. In other problems, a slower-decaying rational function or an exponential that grows along part of the arc requires a different contour or a more refined estimate, such as Jordan's lemma.
 
@@ -1191,6 +1243,10 @@ g(x_0)e^{-\lambda f(x_0)}\sqrt{\frac{2\pi}{\lambda f''(x_0)}}.
 $$
 One standard sufficient setting is a real integral over a fixed interval or the real line, a unique interior global minimum, $f$ at least four times continuously differentiable near $x_0$, $f''(x_0)>0$, and a smooth amplitude with adequate integrability; outside every fixed neighborhood of $x_0$, assume the phase is separated from its minimum enough that the tail is exponentially smaller. Under routine stronger smoothness and tail conditions, the leading term has relative error $O(1/\lambda)$. If the amplitude vanishes at the minimum, the leading power changes. Equal-depth minima contribute a sum; a boundary minimum gives a different scaling; if $f''(x_0)=0$, the quadratic Gaussian model fails. This is the real Laplace method, closely related to saddle-point approximations. Complex contour steepest descent is a broader theory, and should not be inferred from this one real-variable estimate.
 
+![Laplace concentration near a non-degenerate minimum](figures/laplace_method.png)
+
+*Figure: Increasing $\lambda$ concentrates $e^{-\lambda f(x)}$ near the minimum. The picture motivates the local scaling argument, but the asymptotic error still depends on smoothness and tail hypotheses.*
+
 
 ## Computational Complex Analysis
 
@@ -1200,6 +1256,10 @@ Numerical experiments can make branches, mapped grids, residues, and contour int
 
 
 Numerical work is most useful here as a way to inspect geometry, test a derivation, and find mistakes in signs or branches. It does not establish analyticity or prove that a contour encloses all singularities. Python is the canonical language in these examples. The arrays below represent a rectangular grid in the complex plane; the hue records argument and brightness records modulus.
+
+::: {.code-group}
+
+**Python**
 
 ```python
 import numpy as np
@@ -1230,6 +1290,26 @@ plt.ylabel("Im z")
 plt.title("Domain coloring of the principal logarithm")
 plt.show()
 ```
+
+**R**
+
+```r
+x <- seq(-2, 2, length.out = 501)
+y <- seq(-2, 2, length.out = 501)
+z <- outer(x, 1i * y, `+`)
+f <- matrix(NA_complex_, nrow = length(x), ncol = length(y))
+valid <- Mod(z) > 0
+f[valid] <- log(z[valid])
+phase <- Im(f)
+
+hue <- (phase + pi) / (2 * pi)
+palette <- hcl(h = seq(0, 360, length.out = 257)[-257], c = 80, l = 55)
+image(x, y, matrix(hue, nrow = length(x)), col = palette, zlim = c(0, 1),
+      xlab = "Re z", ylab = "Im z", asp = 1,
+      main = "Phase of the principal logarithm")
+```
+
+:::
 
 The picture should show a discontinuity across the negative real axis, the chosen branch cut. The origin is excluded because the logarithm is singular there. The mask excludes only zero, so NumPy still returns pointwise principal values for sampled negative real inputs on the cut (normally the value approached from above; a negative signed zero in the imaginary part selects the lower side). The holomorphic principal branch itself is defined on $\mathbb C\setminus(-\infty,0]$ and excludes those cut points. Grid coloring can make a jump look like a steep but continuous transition, and a finite plot cannot certify the location or nature of a singularity. Check the numerical convention when comparing formulas or libraries ([NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html)).
 
@@ -1271,25 +1351,7 @@ plt.show()
 
 The radial lines remain radial while their angles double; the circular arcs remain circular but their radii become $r^2$. A numerical power operation on complex arrays uses the principal branch, which agrees with the selected branch on this quarter-plane. For a noninteger power, crossing its branch cut can produce a seam; this integer-power example has no such branch ambiguity.
 
-An idiomatic base R equivalent can display the phase of the principal logarithm without requiring a plotting package. It evaluates a regular grid, converts the phase to a cyclic hue, and uses `image()` to draw the raster. `outer()` constructs the matrix with one axis for each coordinate vector; R's `image()` convention expects `nrow(z) == length(x)` and `ncol(z) == length(y)`, which is why the matrix is passed without a transpose.
-
-```r
-x <- seq(-2, 2, length.out = 501)
-y <- seq(-2, 2, length.out = 501)
-z <- outer(x, 1i * y, `+`)
-f <- matrix(NA_complex_, nrow = length(x), ncol = length(y))
-valid <- Mod(z) > 0
-f[valid] <- log(z[valid])
-phase <- Im(f)
-
-hue <- (phase + pi) / (2 * pi)
-palette <- hcl(h = seq(0, 360, length.out = 257)[-257], c = 80, l = 55)
-image(x, y, matrix(hue, nrow = length(x)), col = palette, zlim = c(0, 1),
-      xlab = "Re z", ylab = "Im z", asp = 1,
-      main = "Phase of the principal logarithm")
-```
-
-For a publication-quality or interactive figure, construct a stable color scale explicitly rather than relying on the set of colors present in each grid; the code emphasizes the complex-array operations and branch behavior. As in the Python plot, the hue seam reflects the principal argument convention, not a defect in the plotting library. The grid includes zero, where `log(0)` is not finite, so that point is excluded before evaluation.
+The R tab uses the same branch convention without requiring a plotting package. `outer()` constructs the rectangular complex grid and `image()` draws a stable cyclic phase scale. As in the Python plot, the hue seam reflects the principal argument convention, not a defect in the plotting library. The grid includes zero, where `log(0)` is not finite, so that point is excluded before evaluation.
 
 ### Symbolic residues and contour quadrature
 
@@ -1309,7 +1371,11 @@ print(sp.simplify(residue_at_i))  # -I*exp(-a)/2
 
 This computes the residue at the requested point; it does not choose a contour, check whether other poles are enclosed, or justify a vanishing arc. Those are mathematical decisions outside the symbolic command.
 
-For a numerical contour check, parameterize the circle $z(t)=Re^{it}$, so $dz=iRe^{it}dt$. The following integrates counterclockwise around $|z|=2$ and should return $2\pi i$ for $1/(z-i)$:
+For a numerical contour check, parameterize the circle $z(t)=Re^{it}$, so $dz=iRe^{it}dt$. The following two tabs integrate counterclockwise around $|z|=2$ and should return $2\pi i$ for $1/(z-i)$:
+
+::: {.code-group}
+
+**Python**
 
 ```python
 import mpmath as mp
@@ -1326,11 +1392,7 @@ value = mp.quad(integrand_on_circle, [0, 2 * mp.pi])
 print(value)
 ```
 
-This block is self-contained once `mpmath` is installed. It evaluates one exact example with one simple pole and no near-boundary conditioning problem: the pole at $i$ is one unit from the circle. For a useful numerical diagnostic, compare the computed value with the theorem's prediction and then vary both precision and quadrature subdivision. If the answer changes with subdivisions but not precision, sampling is the likely limitation; if it changes with precision at a stable subdivision, rounding may matter. These checks help diagnose an implementation but do not certify an arbitrary integrand.
-
-The orientation is encoded by increasing $t$; reversing the limits changes the sign. A pole on the path makes ordinary contour quadrature ill-posed, and a pole close to the path can make adaptive sampling unreliable. Split the parameter interval if the integrand changes rapidly, and compare with an analytic residue calculation. Increasing precision reduces rounding error, but it does not repair inadequate sampling or a wrong contour.
-
-R has native complex arithmetic and is convenient for a compact contour computation. Here a midpoint sum approximates the same circle integral; vectorizing the parameter values makes the code idiomatic R, and `sum()` performs the quadrature accumulation.
+**R**
 
 ```r
 n <- 200000L
@@ -1344,7 +1406,17 @@ value <- sum(dz_dt / (z - 1i)) * dt
 print(value)  # approximately 0+6.283185i
 ```
 
-This is a discretization, not an exact integral. Doubling `n` and checking convergence is a useful diagnostic; it still cannot certify that an unobserved singularity was handled correctly. R's `integrate()` is designed for real-valued integrands, so for complex line integrals split into real and imaginary parts and integrate each component, or use an explicit complex quadrature rule. See the [R `integrate` documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html).
+:::
+
+This block is self-contained once `mpmath` is installed. It evaluates one exact example with one simple pole and no near-boundary conditioning problem: the pole at $i$ is one unit from the circle. For a useful numerical diagnostic, compare the computed value with the theorem's prediction and then vary both precision and quadrature subdivision. If the answer changes with subdivisions but not precision, sampling is the likely limitation; if it changes with precision at a stable subdivision, rounding may matter. These checks help diagnose an implementation but do not certify an arbitrary integrand.
+
+The orientation is encoded by increasing $t$; reversing the limits changes the sign. A pole on the path makes ordinary contour quadrature ill-posed, and a pole close to the path can make adaptive sampling unreliable. Split the parameter interval if the integrand changes rapidly, and compare with an analytic residue calculation. Increasing precision reduces rounding error, but it does not repair inadequate sampling or a wrong contour.
+
+The R tab uses a midpoint sum rather than `integrate()`, which is designed for real-valued functions. This is a discretization, not an exact integral: doubling `n` and checking convergence is a useful diagnostic, but it cannot certify that an unobserved singularity was handled correctly. For general complex integrals, split real and imaginary parts or use an explicit complex quadrature rule. See the [R `integrate` documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html).
+
+![Periodic contour quadrature converges differently when the pole is inside or outside](figures/contour_quadrature_convergence.png)
+
+*Figure: For analytic periodic integrands, the trapezoidal rule can converge rapidly, but the target value still depends on which singularities lie inside the contour.*
 
 Several numerical traps recur across these examples. Principal arguments jump at branch cuts, so a sampled phase plot can create false discontinuities or hide a chosen branch. A contour that passes too close to a pole produces large, rapidly varying values; a coarse grid may miss the pole entirely. Finite differences near a singularity amplify cancellation, and a residue computation can be exact while its contour selection is wrong. Always state the parameterization and orientation, inspect the singularities analytically, refine the discretization, and distinguish precision error from discretization error. For conformal-map plots, draw a grid and its image, but remember that a coarse mesh can hide crowding near a boundary or a critical point where the derivative vanishes.
 

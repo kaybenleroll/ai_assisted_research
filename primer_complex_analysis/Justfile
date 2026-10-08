@@ -4,8 +4,17 @@ TITLE       := "Complex Analysis: A Technical Primer"
 AUTHOR      := "October 2026"
 HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
+ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
 
 import '../_shared/common.just'
+
+# Generate reproducible R figures before rendering the primer.
+plots:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{ROCKER}} \
+    Rscript generate_plots.R
 
 html-variants:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -30,4 +39,4 @@ html-variants:
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}"
 
-full: html-variants html pdf
+full: plots html-variants html pdf
