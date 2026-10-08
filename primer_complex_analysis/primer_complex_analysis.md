@@ -94,8 +94,8 @@ You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ra
 
 Try these before moving on. Full outline solutions are in Appendix B; use Appendix A only when you need a nudge.
 
-1. Let $f_n(x)=x^n$ on $[0,1]$. Show that $f_n\to f$ pointwise but not uniformly, and explain why the same sequence converges uniformly on $[0,r]$ for every $r<1$. Identify the theorem that would be contradicted by uniform convergence on $[0,1]$.
-2. A contour $\gamma$ has length $L$ and $|f_n(z)-f(z)|\le M_n$ on $\gamma$. Prove an explicit bound for $\left|\int_\gamma(f_n-f)\,dz\right|$ and state a sufficient condition on $M_n$ for convergence.
+1. Let $f_n(x)=x^n$ on $[0,1]$. Show that $f_n\to f$ pointwise but not uniformly, and explain why the same sequence converges uniformly on $[0,r]$ for every $r<1$. Identify the theorem that would be contradicted by uniform convergence on $[0,1]$. ([Solution 1](#solution-1))
+2. A contour $\gamma$ has length $L$ and $|f_n(z)-f(z)|\le M_n$ on $\gamma$. Prove an explicit bound for $\left|\int_\gamma(f_n-f)\,dz\right|$ and state a sufficient condition on $M_n$ for convergence. ([Solution 2](#solution-2))
 
 See [Appendix B, Solutions 1–2](#appendix-b-outline-solutions).
 
@@ -214,9 +214,9 @@ There is a useful direction to the correspondence. If you can identify a holomor
 
 ### Practice
 
-3. Test the claim that $f(z)=\overline z$ is complex differentiable at $0$ but nowhere else. Use the difference quotient and explain what the Cauchy–Riemann equations can and cannot establish at a single point.
-4. Suppose $f$ has continuous first partial derivatives and its components satisfy the Cauchy–Riemann equations on a region. State what follows and why the regularity assumption matters. Give a counterexample to the claim that the equations at one point alone imply differentiability there.
-5. Let $u(x,y)=x^2-y^2$. Find every harmonic conjugate and the resulting analytic functions. Contrast this with $u=\log|z|$ on the punctured plane.
+3. Test the claim that $f(z)=\overline z$ is complex differentiable at $0$ but nowhere else. Use the difference quotient and explain what the Cauchy–Riemann equations can and cannot establish at a single point. ([Solution 3](#solution-3))
+4. Suppose $f$ has continuous first partial derivatives and its components satisfy the Cauchy–Riemann equations on a region. State what follows and why the regularity assumption matters. Give a counterexample to the claim that the equations at one point alone imply differentiability there. ([Solution 4](#solution-4))
+5. Let $u(x,y)=x^2-y^2$. Find every harmonic conjugate and the resulting analytic functions. Contrast this with $u=\log|z|$ on the punctured plane. ([Solution 5](#solution-5))
 
 See [Appendix B, Solutions 3–5](#appendix-b-outline-solutions).
 
@@ -416,8 +416,8 @@ The filled-region hypothesis is easy to test with a counterexample. Set $f(z)=1/
 
 ### Practice
 
-6. A student claims that $1/z$ has an antiderivative on $\mathbb C\setminus\{0\}$ because it is holomorphic there. Identify the error using a closed-contour integral, and give a topological condition that guarantees primitives.
-7. Use Cauchy's formula to evaluate $\oint_{|z|=2}e^z/(z-1)^3\,dz$. State every hypothesis you use and explain why the derivative order is two.
+6. A student claims that $1/z$ has an antiderivative on $\mathbb C\setminus\{0\}$ because it is holomorphic there. Identify the error using a closed-contour integral, and give a topological condition that guarantees primitives. ([Solution 6](#solution-6))
+7. Use Cauchy's formula to evaluate $\oint_{|z|=2}e^z/(z-1)^3\,dz$. State every hypothesis you use and explain why the derivative order is two. ([Solution 7](#solution-7))
 
 See [Appendix B, Solutions 6–7](#appendix-b-outline-solutions).
 
@@ -616,9 +616,9 @@ Do not infer the type of an isolated singularity from one approach path. The fun
 
 ### Practice
 
-8. Find the Laurent series of $z/(z-1)$ about zero on $0<|z|<1$ and on $|z|>1$. Give the convergence region of each and explain why the expansions differ.
-9. Find the residue of $g(z)=\exp(1/z)/z^2$ at zero and classify the singularity. Explain why a finite residue does not imply a pole.
-10. Expand $z/(z-1)$ on the annulus $|z|>1$ and use the coefficient of $1/z$ to evaluate $\oint_{|z|=2}(z^2+1)/(z(z-1))\,dz$.
+8. Find the Laurent series of $z/(z-1)$ about zero on $0<|z|<1$ and on $|z|>1$. Give the convergence region of each and explain why the expansions differ. ([Solution 8](#solution-8))
+9. Find the coefficient of $z^{-1}$ in the Laurent expansion of $g(z)=\exp(1/z)/z^2$ at zero, then give it its usual name and classify the singularity. Explain why a zero value of this coefficient does not imply a regular point. ([Solution 9](#solution-9))
+10. Expand $z/(z-1)$ on the annulus $|z|>1$ and use the coefficient of $1/z$ to evaluate $\oint_{|z|=2}(z^2+1)/(z(z-1))\,dz$. ([Solution 10](#solution-10))
 
 See [Appendix B, Solutions 8–10](#appendix-b-outline-solutions).
 
@@ -910,11 +910,9 @@ The numerical experiment is especially clean here because the parametrised integ
 
 ### Practice
 
-11. Classify the finite singularities of $e^z/(z^2+1)$, calculate both residues, and separately use a semicircular contour to evaluate $\int_{-\infty}^{\infty}(x^2+1)^{-1}\,dx$. State which function is integrated on the contour and why the arc vanishes.
-12. Use Rouché's theorem to count the zeros of $p(z)=z^5+3z+1$ in $|z|<1$, in $|z|<2$, and in $1<|z|<2$. Verify the strict inequality on each circle.
-13. Apply the argument principle to $f(z)=z^2+1$ on $|z|=2$ and $|z|=1/2$. Evaluate the change in argument and explain the zero count.
+11. Classify the finite singularities of $e^z/(z^2+1)$, calculate both residues, and separately use a semicircular contour to evaluate $\int_{-\infty}^{\infty}(x^2+1)^{-1}\,dx$. State which function is integrated on the contour and why the arc vanishes. ([Solution 11](#solution-11))
 
-See [Appendix B, Solutions 11–13](#appendix-b-outline-solutions).
+See [Appendix B, Solution 11](#appendix-b-outline-solutions).
 
 ## Global theorems and geometric structure
 
@@ -1107,15 +1105,19 @@ The six sections now form one chain. Complex differentiation restricts local beh
 
 ### Practice
 
-14. Find a Möbius transformation mapping the upper half-plane to the unit disk and sending $i$ to $0$. Locate the images of $0,1,\infty$ and explain which side maps to the interior.
-15. Describe the image of $0<\operatorname{Re}z<1$ under $w=e^{\pi z}$. Is the map one-to-one? Identify the period.
-16. Let $f$ be holomorphic near $z_0$ with $f'(z_0)\ne0$. Explain local conformality and give an example of a conformal map that is not globally one-to-one.
+12. Use Rouché's theorem to count the zeros of $p(z)=z^5+3z+1$ in $|z|<1$, in $|z|<2$, and in $1<|z|<2$. Verify the strict inequality on each circle. ([Solution 12](#solution-12))
+13. Apply the argument principle to $f(z)=z^2+1$ on $|z|=2$ and $|z|=1/2$. Evaluate the change in argument and explain the zero count. ([Solution 13](#solution-13))
+14. Find a Möbius transformation mapping the upper half-plane to the unit disk and sending $i$ to $0$. Locate the images of $0,1,\infty$ and explain which side maps to the interior. ([Solution 14](#solution-14))
+15. Describe the image of $0<\operatorname{Re}z<1$ under $w=e^{\pi z}$. Is the map one-to-one? Identify the period. ([Solution 15](#solution-15))
+16. Let $f$ be holomorphic near $z_0$ with $f'(z_0)\ne0$. Explain local conformality and give an example of a conformal map that is not globally one-to-one. ([Solution 16](#solution-16))
 
-See [Appendix B, Solutions 14–16](#appendix-b-outline-solutions).
+See [Appendix B, Solutions 12–16](#appendix-b-outline-solutions).
 
 ## Harmonic Functions and Applications
 
 Harmonic functions connect the abstract theory to potentials, boundary data, and transforms. A holomorphic function packages a harmonic function together with its conjugate, while conformal maps can simplify the geometry of a boundary-value problem. The examples also show where those tools stop: boundary behavior, branch choices, and contour hypotheses still need separate attention.
+
+A *Dirichlet problem* asks for a harmonic function $u$ on a domain whose boundary values are prescribed: $u=g$ on $\partial D$. For a bounded domain, the usual uniqueness argument assumes that $u$ extends continuously to the closure $\overline D$ and that the boundary data are continuous. The maximum principle then says that two solutions with the same boundary data must agree. It does not by itself construct a solution; the conformal-map examples below separate this uniqueness statement from the existence and representation questions.
 
 ### A boundary-value problem made simple by a conformal map
 
@@ -1306,10 +1308,10 @@ One standard sufficient setting is a real integral over a fixed interval or the 
 
 ### Practice
 
-17. State the maximum principle for a harmonic function on a bounded domain and explain what it implies for uniqueness of a Dirichlet problem. Why does it not prove existence?
-18. For $F(z)=Uz+a/z$, with real $U,a>0$, find the stagnation points and derive the nontrivial streamline. Explain the physical idealisations.
-19. Explain how a conformal map transfers a Dirichlet problem to a disk and back. State what is preserved, what is rescaled, and why the method does not automatically produce an explicit solution.
-20. Consider $I(\lambda)=\int_{-\infty}^{\infty}e^{-\lambda x^2}\,dx$ for real $\lambda>0$. Explain the real-variable derivation and what complex analysis contributes when the exponent or contour is generalized. Name one condition needed before moving a contour.
+17. State the maximum principle for a harmonic function on a bounded domain and explain what it implies for uniqueness of a Dirichlet problem. Why does it not prove existence? ([Solution 17](#solution-17))
+18. For $F(z)=Uz+a/z$, with real $U,a>0$, find the stagnation points and derive the nontrivial streamline. Explain the physical idealisations. ([Solution 18](#solution-18))
+19. Explain how a conformal map transfers a Dirichlet problem to a disk and back. State what is preserved, what is rescaled, and why the method does not automatically produce an explicit solution. ([Solution 19](#solution-19))
+20. Consider $I(\lambda)=\int_{-\infty}^{\infty}e^{-\lambda x^2}\,dx$ for real $\lambda>0$. Explain the real-variable derivation and what complex analysis contributes when the exponent or contour is generalized. Name one condition needed before moving a contour. ([Solution 20](#solution-20))
 
 See [Appendix B, Solutions 17–20](#appendix-b-outline-solutions).
 
@@ -1512,9 +1514,9 @@ Domain coloring and mapped grids are similarly diagnostic. A phase seam can be t
 
 ### Practice
 
-21. Parameterise $\gamma_R(t)=Re^{it}$ and approximate $\oint_{\gamma_R}dz/(z-1)$ with the periodic trapezoidal rule for $R=2$ and $R=1/2$. Use arbitrary precision or observable values of $N$, compare with the exact answers, and explain the geometric error.
-22. Plot the real and imaginary parts of the principal logarithm on $[-2,2]^2$, masking the negative real axis and the origin. Mark the branch jump and choose a simply connected subregion with a continuous argument.
-23. Use a computer algebra system to expand $\sin z/z^3$ at zero and compute its residue. Compare with a hand derivation and identify the variable and centre supplied to the software.
+21. Parameterise $\gamma_R(t)=Re^{it}$ and approximate $\oint_{\gamma_R}dz/(z-1)$ with the periodic trapezoidal rule for $R=2$ and $R=1/2$. Use arbitrary precision or observable values of $N$, compare with the exact answers, and explain the geometric error. ([Solution 21](#solution-21))
+22. Plot the real and imaginary parts of the principal logarithm on $[-2,2]^2$, masking the negative real axis and the origin. Mark the branch jump and choose a simply connected subregion with a continuous argument. ([Solution 22](#solution-22))
+23. Use a computer algebra system to expand $\sin z/z^3$ at zero and compute its residue. Compare with a hand derivation and identify the variable and centre supplied to the software. ([Solution 23](#solution-23))
 
 See [Appendix B, Solutions 21–23](#appendix-b-outline-solutions).
 
@@ -1532,55 +1534,124 @@ Use the following only after attempting the corresponding local practice problem
 - **Exercises 1–2:** For uniform convergence, inspect the supremum on the stated set. For the contour estimate, parameterise the curve and bound the integral by the supremum times its length.
 - **Exercises 3–5:** Test two increment directions for $\overline z$. For a harmonic conjugate, integrate the Cauchy–Riemann equations and retain the additive constant. Pointwise Cauchy–Riemann equations do not control the full two-variable remainder.
 - **Exercises 6–7:** Integrate $1/z$ around the unit circle. For Cauchy's derivative formula, match $(z-a)^{-3}$ with the second derivative and check that the pole lies inside while the function is holomorphic on the enclosing disk.
-- **Exercises 8–10:** Rewrite the rational factor as a geometric series in either $z$ or $1/z$. The residue of $e^{1/z}/z^2$ is the coefficient of $z^{-1}$. For the contour integral, identify the $z^{-1}$ coefficient on the annulus containing the circle.
-- **Exercises 11–13:** Separate the two contour problems before computing. On each circle, compare the dominant term with the remainder and check strictness on the entire boundary.
+- **Exercises 8–10:** Rewrite the rational factor as a geometric series in either $z$ or $1/z$. For Exercise 9, first identify the $z^{-1}$ coefficient in the Laurent expansion of $e^{1/z}/z^2$ and then classify the remaining negative powers. For Exercise 10, identify the $z^{-1}$ coefficient on the annulus containing the circle.
+- **Exercise 11:** Separate the singularity calculation from the real contour problem. On the semicircle, compare the $O(R^{-2})$ integrand with the $O(R)$ arc length.
+- **Exercises 12–13:** On each circle, compare the dominant term with the remainder and check strictness on the entire boundary. For the argument principle, count poles as well as zeros.
 - **Exercises 14–16:** Start with $(z-i)/(z+i)$ for the half-plane. For the exponential image, use modulus and periodicity separately. A nonzero derivative gives local, not global, injectivity.
 - **Exercises 17–19:** Distinguish uniqueness from existence. For the flow problem, take the imaginary part of $F$. Under a conformal map, harmonicity survives but lengths and normal derivatives acquire scale factors.
-- **Exercises 20–23:** For the Gaussian, separate the real-variable identity from later contour deformations. Keep orientation and the enclosed singularity explicit. In the logarithm plot, show real and imaginary parts rather than the phase of the logarithm itself. A symbolic residue command must receive the intended variable and centre.
+- **Exercise 20:** For the Gaussian, separate the real-variable identity from later contour deformations. Keep the contour hypotheses and the chosen branch explicit.
+- **Exercises 21–23:** Keep orientation and the enclosed singularity explicit. In the logarithm plot, show real and imaginary parts rather than the phase of the logarithm itself. A symbolic residue command must receive the intended variable and centre.
 
 ### Appendix B: Outline solutions
 
-1. On $[0,1]$, $x^n\to0$ for every $x<1$ but $f_n(1)=1$, so the pointwise limit is discontinuous. Uniform convergence would preserve continuity, so it cannot occur. On $[0,r]$ with $r<1$, $\sup|x^n|=r^n\to0$.
-2. Parameterising $\gamma$ gives
+##### Solution 1 {.unnumbered #solution-1}
+
+On $[0,1]$, $x^n\to0$ for every $x<1$ but $f_n(1)=1$, so the pointwise limit is discontinuous. Uniform convergence would preserve continuity, so it cannot occur. On $[0,r]$ with $r<1$, $\sup|x^n|=r^n\to0$. The pointwise limit is $f(x)=0$ for $0\le x<1$ and $f(1)=1$, which makes the continuity contradiction explicit.
+
+##### Solution 2 {.unnumbered #solution-2}
+
+Parameterising $\gamma$ gives
 $$
 \left|\int_\gamma(f_n-f)\,dz\right|\le L\sup_{z\in\gamma}|f_n(z)-f(z)|\le LM_n.
 $$
 Thus $M_n\to0$ is sufficient. This is the precise estimate behind interchanging a uniformly convergent limit with a fixed finite-length contour integral.
 
-3. At every point, the difference quotient of $\overline z$ is $\overline h/h$. Taking $h$ real gives $1$, while taking $h$ purely imaginary gives $-1$, so there is no limit. Equivalently, for $f=u+iv=x-iy$, CR fails everywhere. The equations are necessary for differentiability; satisfaction at one point is not generally sufficient. For a counterexample, define the real-valued function $f$ by $f(0)=0$ and
+##### Solution 3 {.unnumbered #solution-3}
+
+At every point, the difference quotient of $\overline z$ is $\overline h/h$. Taking $h$ real gives $1$, while taking $h$ purely imaginary gives $-1$, so there is no limit. In particular, the claim that it is differentiable at zero is already false. Equivalently, for $f=u+iv=x-iy$, CR fails everywhere. The equations are necessary for differentiability; satisfaction at one point is not generally sufficient. For a counterexample, define the real-valued function $f$ by $f(0)=0$ and
 $$
 f(x+iy)=\frac{x^2y}{x^4+y^2}\quad\text{when }(x,y)\ne(0,0).
 $$
 Both first partial derivatives at zero exist and are zero, so CR holds there. Along the path $y=x^2$, however, $f=1/2$, and $f(z)/z$ does not approach a finite limit. Continuously differentiable components satisfying CR on a neighbourhood do imply holomorphy.
-4. Continuous first partial derivatives plus CR imply complex differentiability throughout the region. Continuity controls the first-order real differentiability remainder in the complex difference quotient. Without that regularity, pointwise equations do not control the remainder; the function in Exercise 3 has zero first partials at the origin but an unbounded difference quotient along $y=x^2$.
-5. CR gives $v_y=2x$, $v_x=2y$, hence $v=2xy+C$ and $f(z)=z^2+iC$. For $u=\log|z|$, local conjugates are branches of $\arg z$. Continuation once around zero changes the argument by $2\pi$, so there is no globally single-valued conjugate on the punctured plane. The obstruction is topological, not a failure of local harmonicity.
-6. A primitive would make every closed-curve integral zero, but the unit circle gives $\oint dz/z=2\pi i$. Holomorphy is local; simple connectivity is a standard sufficient condition for a primitive. More generally, all closed-curve integrals must vanish.
-7. Cauchy's derivative formula gives
+
+##### Solution 4 {.unnumbered #solution-4}
+
+Continuous first partial derivatives plus CR imply complex differentiability throughout the region. Continuity controls the first-order real differentiability remainder in the complex difference quotient. Without that regularity, pointwise equations do not control the remainder; the counterexample displayed in Solution 3 has zero first partials at the origin but an unbounded difference quotient along $y=x^2$. Thus the hypothesis is a neighbourhood hypothesis, not merely a pair of equalities checked at the target point.
+
+##### Solution 5 {.unnumbered #solution-5}
+
+CR gives $v_y=2x$, $v_x=2y$, hence $v=2xy+C$ and $f(z)=z^2+iC$. For $u=\log|z|$, local conjugates are branches of $\arg z$. Continuation once around zero changes the argument by $2\pi$, so there is no globally single-valued conjugate on the punctured plane. The obstruction is topological, not a failure of local harmonicity. On any simply connected slit region avoiding zero, one branch of the argument supplies a valid conjugate.
+
+##### Solution 6 {.unnumbered #solution-6}
+
+A primitive would make every closed-curve integral zero, but the unit circle gives $\oint dz/z=2\pi i$. Holomorphy is local; simple connectivity is a standard sufficient condition for a primitive. More generally, all closed-curve integrals must vanish. The punctured plane fails the topological condition because the unit circle cannot be contracted without crossing the missing origin.
+
+##### Solution 7 {.unnumbered #solution-7}
+
+Cauchy's derivative formula gives
 $$
 \oint_{|z|=2}\frac{e^z}{(z-1)^3}\,dz=\frac{2\pi i}{2!}e^1=\pi i e,
 $$
 because $e^z$ is holomorphic on and inside the circle and the denominator is $(z-1)^{2+1}$.
-8. For $|z|<1$, $z/(z-1)=-z/(1-z)=-\sum_{n=1}^{\infty}z^n$. For $|z|>1$, $z/(z-1)=1/(1-1/z)=\sum_{n=0}^{\infty}z^{-n}$. The geometric series have distinct convergence regions separated by the pole at $1$. A Laurent expansion belongs to an annulus of analyticity, so the same center can support different expansions on different annuli.
-9. Expand $g(z)=\sum_{n=0}^{\infty}z^{-(n+2)}/n!$. No $z^{-1}$ term appears, so the residue is zero. Infinitely many negative powers occur, hence the singularity is essential. The residue is only one Laurent coefficient; it does not determine the rest of the principal part.
-10. Partial fractions give $(z^2+1)/(z(z-1))=1-1/z+2/(z-1)$. The enclosed residues at zero and one are $-1$ and $2$, summing to $1$, so the integral is $2\pi i$. On $|z|>1$, expand $1/(z-1)=z^{-1}(1-z^{-1})^{-1}$; the coefficient of $z^{-1}$ in the full expression is $1$, giving the same answer. The coefficient method applies because the contour lies in that annulus.
-11. The simple poles of $e^z/(z^2+1)$ are $i,-i$. The residues are $e^i/(2i)$ and $-e^{-i}/(2i)$. For the real integral, instead integrate $1/(z^2+1)$ over the real segment and upper semicircle. Only $i$ is enclosed; its residue is $1/(2i)$, so the closed integral is $\pi$. On the arc $|z|=R$, the integrand is $O(R^{-2})$ and the arc length is $\pi R$; the arc integral is $O(R^{-1})\to0$.
-12. On $|z|=1$, compare $3z$ with $z^5+1$: $|3z|=3$ and $|z^5+1|\le2$. Rouché gives one zero. On $|z|=2$, compare $z^5$ with $3z+1$: $|z^5|=32$ and $|3z+1|\le7$. Thus there are five zeros inside radius two and four in the annulus. The inequalities are strict on the complete boundary circles.
-13. The argument principle gives $N-P=(2\pi i)^{-1}\oint f'/f\,dz$. For $z^2+1$, both zeros $\pm i$ lie inside radius two and neither lies inside radius one-half; the net argument changes are $4\pi$ and $0$, respectively.
-14. $w=(z-i)/(z+i)$ works. It sends $i\mapsto0$, $0\mapsto-1$, $1\mapsto-i$, and $\infty\mapsto1$. For real $x$, numerator and denominator have equal modulus, so the real axis maps to $|w|=1$. In the upper half-plane $|z-i|<|z+i|$, so the image lies inside the circle.
-15. Since $|e^{\pi z}|=e^{\pi\operatorname{Re}z}$, the image is $1<|w|<e^\pi$. The map is not injective: $e^{\pi(z+2i)}=e^{\pi z}$, and both points remain in the strip. The lines $\operatorname{Re}z=0,1$ map to the unit circle and the circle of radius $e^\pi$, each covered repeatedly as the imaginary part varies.
-16. The real Jacobian at $z_0$ is rotation and uniform scaling by $|f'(z_0)|$ to first order. Thus angles are preserved locally, and an orthogonal grid remains locally orthogonal, though its scale and orientation may vary with position. Yet $e^z$ is conformal everywhere and not injective on the whole plane because it has period $2\pi i$. Nonzero derivative gives local, not global, one-to-one behavior.
-17. The maximum principle says a nonconstant harmonic function cannot attain an interior maximum or minimum. A continuous harmonic function on a bounded domain therefore takes its extrema on the boundary. This gives uniqueness for a Dirichlet problem: the difference of two solutions has zero boundary values and hence is identically zero. It does not prove existence or give a formula; those require separate construction or an existence theorem.
-18. $F'(z)=U-a/z^2$, so the stagnation points are $z=\pm\sqrt{a/U}$. For $z=x+iy$, $\operatorname{Im}(a/z)=-ay/(x^2+y^2)$; hence $\operatorname{Im}F=y(U-a/(x^2+y^2))$. Besides the axis, the circle $x^2+y^2=a/U$ is a streamline passing through both stagnation points. It models uniform flow past a circular cylinder in ideal potential flow. The assumptions omit viscosity, turbulence, compressibility, and time dependence; the doublet singularity lies inside the excluded cylinder.
-19. Let $\phi$ map the disk conformally to the physical domain. Composition $u\circ\phi$ is harmonic because the two-dimensional Laplacian transforms by $|\phi'|^2$. Dirichlet boundary values transfer by composition, and uniqueness transfers when the usual boundary hypotheses hold. Angles and harmonicity persist, while lengths and normal derivatives acquire scale factors. The Riemann mapping theorem supplies existence for proper simply connected domains, not an elementary formula; boundary regularity, multiply connected regions, and non-Dirichlet conditions require extra work.
-20. Squaring the integral and using polar coordinates gives $I(\lambda)^2=\pi/\lambda$, and positivity selects $I(\lambda)=\sqrt{\pi/\lambda}$. Complex analysis helps with oscillatory or complex parameters, where contour deformation can expose decay or residues. A contour move requires holomorphy in the swept region (and accounting for any crossed poles); parameter limits also need domination or another interchange justification.
-21. With $t_k=2\pi k/N$, use
+
+##### Solution 8 {.unnumbered #solution-8}
+
+For $|z|<1$, $z/(z-1)=-z/(1-z)=-\sum_{n=1}^{\infty}z^n$. For $|z|>1$, $z/(z-1)=1/(1-1/z)=\sum_{n=0}^{\infty}z^{-n}$. The geometric series have distinct convergence regions separated by the pole at $1$. A Laurent expansion belongs to an annulus of analyticity, so the same center can support different expansions on different annuli. Neither expansion may be extended across the pole merely because its algebraic formula looks the same.
+
+##### Solution 9 {.unnumbered #solution-9}
+
+Expand $g(z)=\sum_{n=0}^{\infty}z^{-(n+2)}/n!$. No $z^{-1}$ term appears, so the residue is zero. Infinitely many negative powers occur, hence the singularity is essential. The residue is only one Laurent coefficient; it does not determine the rest of the principal part. In particular, “residue zero” does not mean “removable” or “regular.”
+
+##### Solution 10 {.unnumbered #solution-10}
+
+Partial fractions give $(z^2+1)/(z(z-1))=1-1/z+2/(z-1)$. The enclosed residues at zero and one are $-1$ and $2$, summing to $1$, so the integral is $2\pi i$. On $|z|>1$, expand $1/(z-1)=z^{-1}(1-z^{-1})^{-1}$; the coefficient of $z^{-1}$ in the full expression is $1$, giving the same answer. The coefficient method applies because the contour lies in that annulus.
+
+##### Solution 11 {.unnumbered #solution-11}
+
+The simple poles of $e^z/(z^2+1)$ are $i,-i$. The residues are $e^i/(2i)$ and $-e^{-i}/(2i)$. For the real integral, instead integrate $1/(z^2+1)$ over the real segment and upper semicircle; the factor $e^z$ belongs to the separate singularity-classification question and is not the contour integrand for the real integral. Only $i$ is enclosed; its residue is $1/(2i)$, so the closed integral is $\pi$. On the arc $|z|=R$, the integrand is $O(R^{-2})$ and the arc length is $\pi R$; the arc integral is $O(R^{-1})\to0$.
+
+##### Solution 12 {.unnumbered #solution-12}
+
+On $|z|=1$, compare $3z$ with $z^5+1$: $|3z|=3$ and $|z^5+1|\le2$. Rouché gives one zero. On $|z|=2$, compare $z^5$ with $3z+1$: $|z^5|=32$ and $|3z+1|\le7$. Thus there are five zeros inside radius two and four in the annulus. The inequalities are strict on the complete boundary circles, so no boundary-zero ambiguity remains.
+
+##### Solution 13 {.unnumbered #solution-13}
+
+The argument principle gives $N-P=(2\pi i)^{-1}\oint f'/f\,dz$. For $z^2+1$, both zeros $\pm i$ lie inside radius two and neither lies inside radius one-half; the net argument changes are $4\pi$ and $0$, respectively. There are no poles, so these winding counts are exactly the zero counts.
+
+##### Solution 14 {.unnumbered #solution-14}
+
+$w=(z-i)/(z+i)$ works. It sends $i\mapsto0$, $0\mapsto-1$, $1\mapsto-i$, and $\infty\mapsto1$. For real $x$, numerator and denominator have equal modulus, so the real axis maps to $|w|=1$. In the upper half-plane $|z-i|<|z+i|$, so the image lies inside the circle. The strict inequality follows by comparing squared distances: $|z+i|^2-|z-i|^2=4\operatorname{Im}z>0$.
+
+##### Solution 15 {.unnumbered #solution-15}
+
+Since $|e^{\pi z}|=e^{\pi\operatorname{Re}z}$, the image is $1<|w|<e^\pi$. The map is not injective: $e^{\pi(z+2i)}=e^{\pi z}$, and both points remain in the strip. The lines $\operatorname{Re}z=0,1$ map to the unit circle and the circle of radius $e^\pi$, each covered repeatedly as the imaginary part varies. The image is an annulus, not a disk, because the strip's two vertical boundary lines become two distinct modulus boundaries.
+
+##### Solution 16 {.unnumbered #solution-16}
+
+The real Jacobian at $z_0$ is rotation and uniform scaling by $|f'(z_0)|$ to first order. Thus angles are preserved locally, and an orthogonal grid remains locally orthogonal, though its scale and orientation may vary with position. Yet $e^z$ is conformal everywhere and not injective on the whole plane because it has period $2\pi i$. Nonzero derivative gives local, not global, one-to-one behavior; global injectivity requires additional information about the domain and the map.
+
+##### Solution 17 {.unnumbered #solution-17}
+
+The maximum principle says a nonconstant harmonic function cannot attain an interior maximum or minimum. A continuous harmonic function on a bounded domain therefore takes its extrema on the boundary. This gives uniqueness for a Dirichlet problem: the difference of two solutions has zero boundary values and hence is identically zero. It does not prove existence or give a formula; those require separate construction or an existence theorem. This distinction is important: a uniqueness argument rules out two different solutions, but it does not produce even one solution.
+
+##### Solution 18 {.unnumbered #solution-18}
+
+$F'(z)=U-a/z^2$, so the stagnation points are $z=\pm\sqrt{a/U}$. For $z=x+iy$, $\operatorname{Im}(a/z)=-ay/(x^2+y^2)$; hence $\operatorname{Im}F=y(U-a/(x^2+y^2))$. Besides the axis, the circle $x^2+y^2=a/U$ is a streamline passing through both stagnation points. It models uniform flow past a circular cylinder in ideal potential flow. The assumptions omit viscosity, turbulence, compressibility, and time dependence; the doublet singularity lies inside the excluded cylinder, so the formula is used only outside the physical boundary.
+
+##### Solution 19 {.unnumbered #solution-19}
+
+Let $\phi$ map the disk conformally to the physical domain. Composition $u\circ\phi$ is harmonic because the two-dimensional Laplacian transforms by $|\phi'|^2$. Dirichlet boundary values transfer by composition, and uniqueness transfers when the usual boundary hypotheses hold. Angles and harmonicity persist, while lengths and normal derivatives acquire scale factors. The Riemann mapping theorem supplies existence for proper simply connected domains, not an elementary formula; boundary regularity, multiply connected regions, and non-Dirichlet conditions require extra work. In practice, the disk solution must still be evaluated and composed with $\phi^{-1}$, so the theorem and the computational solution are separate steps.
+
+##### Solution 20 {.unnumbered #solution-20}
+
+Squaring the integral and using polar coordinates gives $I(\lambda)^2=\pi/\lambda$, and positivity selects $I(\lambda)=\sqrt{\pi/\lambda}$. Complex analysis helps with oscillatory or complex parameters, where contour deformation can expose decay or residues. A contour move requires holomorphy in the swept region (and accounting for any crossed poles); parameter limits also need domination or another interchange justification. For a complex Gaussian, the chosen branch of $\sqrt{\lambda}$ and the direction in which the contour can be rotated are additional data.
+
+##### Solution 21 {.unnumbered #solution-21}
+
+With $t_k=2\pi k/N$, use
 $$
 S_N=\frac{2\pi}{N}\sum_{k=0}^{N-1}
 \frac{iR e^{it_k}}{Re^{it_k}-1}.
 $$
 The exact values are $2\pi i$ for $R=2$ and $0$ for $R=1/2$, by the residue theorem or winding number. In exact arithmetic, $S_N=2\pi i/(1-2^{-N})$ for $R=2$, while $S_N=-2\pi i\,2^{-N}/(1-2^{-N})$ for $R=1/2$. Both errors decay geometrically; for the smaller circle the finite sum is not exactly zero. The nearest singularity in the complexified parameter controls trapezoidal convergence. Refining the mesh never changes which pole is enclosed.
-22. The principal logarithm has real part $\log|z|$ and imaginary part $\operatorname{Arg}z\in(-\pi,\pi]$. Its phase jumps across the negative real axis, while zero is a logarithmic singularity; mask both. Any simply connected region avoiding zero admits a continuous logarithm, possibly with a different argument interval. The jump expresses the inability to choose a global continuous argument around zero, so a finer grid can only sample it more sharply.
-23. The expansion is $\sin z/z^3=z^{-2}-1/6+z^2/120-\cdots$. The singularity is a pole of order two and its residue, the coefficient of $z^{-1}$, is zero. A symbolic residue command takes a specified variable and center; check both, along with branch assumptions and simplifications. Correct output can still answer the wrong question if the point or variable was supplied incorrectly.
+
+##### Solution 22 {.unnumbered #solution-22}
+
+The principal logarithm has real part $\log|z|$ and imaginary part $\operatorname{Arg}z\in(-\pi,\pi]$. Its phase jumps across the negative real axis, while zero is a logarithmic singularity; mask both. Any simply connected region avoiding zero admits a continuous logarithm, possibly with a different argument interval. The jump expresses the inability to choose a global continuous argument around zero, so a finer grid can only sample it more sharply. For example, the slit plane $\mathbb C\setminus(-\infty,0]$ supports the standard principal branch.
+
+##### Solution 23 {.unnumbered #solution-23}
+
+The expansion is $\sin z/z^3=z^{-2}-1/6+z^2/120-\cdots$. The singularity is a pole of order two and its residue, the coefficient of $z^{-1}$, is zero. A symbolic residue command takes a specified variable and center; check both, along with branch assumptions and simplifications. Correct output can still answer the wrong question if the point or variable was supplied incorrectly. The hand expansion is the audit trail: it makes the zero residue and pole order visible rather than treating the software result as a proof.
 
 ### Further reading and references
 
