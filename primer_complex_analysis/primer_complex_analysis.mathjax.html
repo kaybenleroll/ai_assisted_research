@@ -689,7 +689,6 @@ forbids</a></li>
 zero</a></li>
 <li><a href="#conformal-maps-and-their-limits" id="toc-conformal-maps-and-their-limits"><span class="toc-section-number">6.6</span> Conformal maps and their
 limits</a></li>
-<li><a href="#source-note" id="toc-source-note"><span class="toc-section-number">6.7</span> Source note</a></li>
 </ul></li>
 <li><a href="#harmonic-functions-and-applications" id="toc-harmonic-functions-and-applications"><span class="toc-section-number">7</span> Harmonic Functions and
 Applications</a>
@@ -704,9 +703,14 @@ example</a></li>
 </ul></li>
 <li><a href="#computational-complex-analysis" id="toc-computational-complex-analysis"><span class="toc-section-number">8</span> Computational Complex Analysis</a>
 <ul>
-<li><a href="#numerical-margins-for-zero-counts" id="toc-numerical-margins-for-zero-counts"><span class="toc-section-number">8.1</span> Numerical margins for zero
-counts</a></li>
-<li><a href="#source-notes" id="toc-source-notes"><span class="toc-section-number">8.2</span> Source notes</a></li>
+<li><a href="#visualizing-functions-and-maps" id="toc-visualizing-functions-and-maps"><span class="toc-section-number">8.1</span> Visualizing functions and
+maps</a></li>
+<li><a href="#symbolic-residues-and-contour-quadrature" id="toc-symbolic-residues-and-contour-quadrature"><span class="toc-section-number">8.2</span> Symbolic residues and contour
+quadrature</a></li>
+<li><a href="#numerical-margins-and-reliability" id="toc-numerical-margins-and-reliability"><span class="toc-section-number">8.3</span> Numerical margins and
+reliability</a></li>
+<li><a href="#computational-source-notes" id="toc-computational-source-notes"><span class="toc-section-number">8.4</span> Computational source
+notes</a></li>
 </ul></li>
 <li><a href="#exercises-outline-solutions-and-further-reading" id="toc-exercises-outline-solutions-and-further-reading"><span class="toc-section-number">9</span> Exercises, Outline Solutions, and
 Further Reading</a>
@@ -977,6 +981,12 @@ which features are structural and which are artifacts of sampling or a
 hue discontinuity.</p>
 <h1 data-number="2" id="complex-functions-and-analyticity"><span class="header-section-number">2</span> Complex functions and
 analyticity</h1>
+<p>Complex analysis begins by asking what it means for a derivative to
+be independent of direction. The Cauchy–Riemann equations give a
+practical test, while elementary examples show why that test needs the
+right hypotheses. Exponentials, logarithms, and analytic continuation
+then expose how a local derivative interacts with global choices such as
+branches.</p>
 <h2 data-number="2.1" id="the-derivative-must-ignore-direction"><span class="header-section-number">2.1</span> The derivative must ignore
 direction</h2>
 <p>For <span class="math inline">\(f:D\to\mathbb C\)</span>, continuity
@@ -1257,6 +1267,12 @@ physics, one must also check what <span class="math inline">\(u\)</span>
 and <span class="math inline">\(v\)</span> represent and what
 assumptions make a potential description valid.</p>
 <h1 data-number="3" id="contours-and-cauchy-theory"><span class="header-section-number">3</span> Contours and Cauchy theory</h1>
+<p>Contour integration makes the geometry of a domain matter:
+orientation records direction, winding records how a path surrounds
+points, and holes can obstruct primitives. Cauchy’s theorem and formula
+turn these path integrals into strong statements about values inside a
+contour. The section builds from parametrisation to those interior
+consequences.</p>
 <h2 data-number="3.1" id="integrating-along-a-directed-curve"><span class="header-section-number">3.1</span> Integrating along a directed
 curve</h2>
 <p>A <em>contour</em> <span class="math inline">\(\gamma:[a,b]\to
@@ -1699,6 +1715,12 @@ is useful because <span class="math inline">\(f\)</span> is perfectly
 holomorphic near the <em>contour</em>, so checking only the boundary
 would miss the problem.</p>
 <h1 data-number="4" id="series-and-singularities"><span class="header-section-number">4</span> Series and singularities</h1>
+<p>Cauchy’s formula supplies the expansions that make local behavior
+calculable. Taylor series describe regular points, while Laurent series
+distinguish removable singularities, poles, and essential singularities
+on punctured neighborhoods. The examples emphasize convergence regions
+as well as coefficients, since both determine what an expansion can
+establish.</p>
 <h2 data-number="4.1" id="taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="header-section-number">4.1</span> Taylor series come from a
 contour, not a smoothness guess</h2>
 <p>Suppose <span class="math inline">\(f\)</span> is holomorphic on an
@@ -1733,6 +1755,17 @@ M_R/R^n\)</span> gives <span class="math display">\[
 convergence alone would not justify taking the limit through the contour
 integral, nor would it give a uniform error guarantee across the smaller
 disk.</p>
+<p>The same idea gives a useful closure theorem: if holomorphic
+functions <span class="math inline">\(f_j\)</span> converge <em>locally
+uniformly</em> on a domain <span class="math inline">\(D\)</span>
+(uniformly on every compact subset), their limit <span class="math inline">\(f\)</span> is holomorphic. The limit is
+continuous, and uniform convergence on each triangular contour inside
+<span class="math inline">\(D\)</span> lets us pass to the limit in
+<span class="math inline">\(\int_{\partial T}f_j(z)\,dz=0\)</span>.
+<em>Morera’s theorem</em> supplies the converse step: a continuous
+function whose integral around every such triangle vanishes is
+holomorphic. Pointwise convergence lacks the contour control needed for
+this argument.</p>
 <p>One useful consequence is <em>uniqueness of analytic
 continuation</em>. If two holomorphic functions agree on a small open
 disk inside a connected domain, their Taylor coefficients agree there.
@@ -1898,10 +1931,14 @@ ring between those circles, so the integral on the outer circle equals
 the integral on the inner circle with positive circular orientation.
 Consequently the coefficient <span class="math inline">\(c_k\)</span> is
 independent of <span class="math inline">\(\rho\)</span> as long as the
-circle stays within that annulus. If a pole lies between the radii, this
-deformation hypothesis fails and the two coefficient integrals can
-differ by its residue. Thus “the Laurent coefficient” is well-defined
-only after the annular region has been specified.</p>
+circle stays within that annulus. If poles lie between radii in
+different annuli, the difference between the outer and inner coefficient
+integrals, each divided by <span class="math inline">\(2\pi i\)</span>,
+equals the sum of the residues of <span class="math inline">\(G(z)z^{-k-1}\)</span> at those poles. It need not
+equal the sum of the residues of <span class="math inline">\(G\)</span>
+unless <span class="math inline">\(k=-1\)</span>, and it may even vanish
+by cancellation. Thus “the Laurent coefficient” is well-defined only
+after the annular region has been specified.</p>
 <p>The annulus boundaries also identify the convergence limit without
 summing a series. The middle expansion cannot converge on <span class="math inline">\(|z|=1\)</span> or <span class="math inline">\(|z|=2\)</span> as a normally convergent Laurent
 series on a neighborhood of either boundary: those circles contain
@@ -2064,6 +2101,11 @@ complicated but you can prove it bounded on a punctured disk, the
 removable-singularity theorem settles the issue without a full series
 expansion.</p>
 <h1 data-number="5" id="residues-and-contour-methods"><span class="header-section-number">5</span> Residues and contour methods</h1>
+<p>Residues extract the one Laurent coefficient that survives
+integration around a small loop. The residue theorem carries that local
+information to larger contours, where a good choice of path can evaluate
+real integrals and transforms. The worked examples make contour
+selection, orientation, and estimates on added arcs explicit.</p>
 <h2 data-number="5.1" id="one-laurent-coefficient-survives-a-loop"><span class="header-section-number">5.1</span> One Laurent coefficient
 survives a loop</h2>
 <p>If <span class="math inline">\(f\)</span> has an isolated singularity
@@ -2570,6 +2612,11 @@ minimum distance from the path to each singularity, not just the final
 printed number.</p>
 <h1 data-number="6" id="global-theorems-and-geometric-structure"><span class="header-section-number">6</span> Global theorems and geometric
 structure</h1>
+<p>The local theory now yields statements about whole regions.
+Factorisation and the argument principle turn zeros into winding counts;
+maximum-modulus results constrain possible values; and conformal maps
+transfer geometry while preserving angles and harmonicity. Together
+these theorems explain how local rigidity governs global shape.</p>
 <h2 data-number="6.1" id="local-factorisation-turns-zeros-into-integers"><span class="header-section-number">6.1</span> Local factorisation turns zeros
 into integers</h2>
 <p>Let <span class="math inline">\(f\)</span> be holomorphic on a
@@ -3026,17 +3073,14 @@ structure into geometry. Applications and computation can use this
 chain, but they also have to respect its hypotheses: the domain, its
 holes, the contour orientation, the location of singularities, and the
 branch of any multivalued function.</p>
-<h2 data-number="6.7" id="source-note"><span class="header-section-number">6.7</span> Source note</h2>
-<p>The proof sequence, examples, and theorem formulations were checked
-against <a href="https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/">MIT
-OpenCourseWare 18.04, <em>Complex Variables with Applications</em>,
-lecture notes</a> (especially Topics 1–5 and 7–11), <a href="https://ocw.mit.edu/courses/18-112-functions-of-a-complex-variable-fall-2008/resources/lecture-notes/">MIT
-OpenCourseWare 18.112, <em>Functions of a Complex Variable</em>, lecture
-notes</a> (especially Lectures 9–16 and 20), and the <a href="https://www.math.ucdavis.edu/~hunter/m185a/m185a.html">UC Davis
-Math 185A complex-analysis course outline</a> for theorem scope and
-ordering. This draft uses its own exposition and worked examples.</p>
 <h1 data-number="7" id="harmonic-functions-and-applications"><span class="header-section-number">7</span> Harmonic Functions and
 Applications</h1>
+<p>Harmonic functions connect the abstract theory to potentials,
+boundary data, and transforms. A holomorphic function packages a
+harmonic function together with its conjugate, while conformal maps can
+simplify the geometry of a boundary-value problem. The examples also
+show where those tools stop: boundary behavior, branch choices, and
+contour hypotheses still need separate attention.</p>
 <h2 data-number="7.1" id="a-boundary-value-problem-made-simple-by-a-conformal-map"><span class="header-section-number">7.1</span> A boundary-value problem made
 simple by a conformal map</h2>
 <p>Electrostatics gives a concrete reason to care that harmonic
@@ -3074,13 +3118,14 @@ travel by composition: if a source boundary point <span class="math inline">\(\z
 an easy way to solve the wrong boundary problem.</p>
 <p>Consider an ideal conducting wedge with opening angle <span class="math inline">\(\alpha\)</span>, with <span class="math inline">\(0&lt;\alpha&lt;2\pi\)</span>, and with its two
 straight faces held at potentials 0 and <span class="math inline">\(V_0\)</span>. Take polar coordinates with the
-wedge described by <span class="math inline">\(r&gt;0\)</span> and <span class="math inline">\(0&lt;\theta&lt;\alpha\)</span>. The map <span class="math display">\[
+wedge <span class="math inline">\(W=\{re^{i\theta}:r&gt;0,\
+0&lt;\theta&lt;\alpha\}\)</span>. The map <span class="math display">\[
 \zeta=z^{\pi/\alpha}
-\]</span> sends the wedge to the upper half-plane. This power is defined
-using a chosen logarithm, <span class="math inline">\(z^{\pi/\alpha}=\exp((\pi/\alpha)\operatorname{Log}
-z)\)</span>, with the branch of <span class="math inline">\(\operatorname{Log}\)</span> whose argument lies in
-<span class="math inline">\((0,\alpha)\)</span> inside the wedge.
-Indeed, it multiplies arguments by <span class="math inline">\(\pi/\alpha\)</span>, so <span class="math inline">\(0&lt;\arg z&lt;\alpha\)</span> becomes <span class="math inline">\(0&lt;\arg\zeta&lt;\pi\)</span>. Positive points on
+\]</span> sends the wedge to the upper half-plane. On this wedge define
+<span class="math inline">\(\log_W z=\log r+i\theta\)</span> with <span class="math inline">\(0&lt;\theta&lt;\alpha\)</span>, and set <span class="math inline">\(z^{\pi/\alpha}=\exp((\pi/\alpha)\log_W
+z)\)</span>. This is a holomorphic logarithm branch on the wedge; it is
+distinct from the principal branch <span class="math inline">\(\operatorname{Log}\)</span> when the wedge crosses
+the principal cut. It multiplies arguments by <span class="math inline">\(\pi/\alpha\)</span>, so <span class="math inline">\(0&lt;\theta&lt;\alpha\)</span> becomes <span class="math inline">\(0&lt;\arg\zeta&lt;\pi\)</span>. Positive points on
 the lower face map to the positive real axis; points on the upper face
 map to the negative real axis. The two electrodes therefore become the
 two halves of the real boundary, with the same constant values assigned
@@ -3118,16 +3163,16 @@ choice visible. If one uses a power without restricting the argument,
 the same point in the image plane may correspond to more than one
 preimage, and the proposed map is no longer a single-valued coordinate
 on the chosen region.</p>
-<p>The boundary-value problem is also unique under the usual
-bounded-domain Dirichlet assumptions: two harmonic solutions with the
-same continuous boundary values have a harmonic difference that vanishes
-on the boundary, and the maximum principle forces that difference to
-vanish inside. The wedge is unbounded and has a corner, so one states
-the relevant boundedness or growth condition and treats the vertex
-separately; uniqueness does not follow merely from writing down a
-plausible harmonic function. The ideal solution above is the natural
-bounded angular solution on each annular truncation with compatible
-outer data, and is the standard local model near the corner.</p>
+<p>The solution is unique among bounded harmonic functions on the open
+wedge that extend continuously to each open face <span class="math inline">\(r&gt;0\)</span> and take the prescribed constant
+values there. The conformal map sends any two such solutions to bounded
+harmonic functions in the upper half-plane with the same boundary values
+everywhere except the image of the vertex; bounded harmonic functions
+are determined by their boundary values almost everywhere. No value at
+the vertex or at infinity is required in this class. Boundedness
+matters: <span class="math inline">\(r^{\pi/\alpha}\sin(\pi\theta/\alpha)\)</span> is
+harmonic and vanishes on both faces, but adding it gives an unbounded
+solution with the same face data.</p>
 <p>The field’s corner exponent has a useful interpretation beyond this
 one wedge. The inverse map is <span class="math inline">\(z=\zeta^{\alpha/\pi}\)</span>, and its derivative
 has magnitude proportional to <span class="math inline">\(|\zeta|^{\alpha/\pi-1}\)</span>. Uniform field in
@@ -3231,11 +3276,24 @@ U(x,0)=\begin{cases}
 0,&amp;x&lt;0,\\
 1,&amp;x&gt;0.
 \end{cases}
-\]</span> The value at <span class="math inline">\(x=0\)</span> is
-deliberately unspecified. A jump there prevents a continuous boundary
-extension, although a bounded harmonic solution exists in the upper
-half-plane. The Poisson integral for these data is the harmonic measure
-of the positive half-axis: <span class="math display">\[
+\]</span> For reusable boundary data <span class="math inline">\(g\)</span> on the real line, the upper-half-plane
+Poisson kernel gives <span class="math display">\[
+P[g](x,y)=\frac1\pi\int_{-\infty}^{\infty}
+\frac{y\,g(t)}{(x-t)^2+y^2}\,dt,\qquad y&gt;0.
+\]</span> If <span class="math inline">\(g\)</span> is bounded and
+measurable, this integral defines a bounded harmonic function. It
+approaches <span class="math inline">\(g(t)\)</span> non-tangentially at
+almost every boundary point: <span class="math inline">\((x,y)\to(t,0)\)</span> with <span class="math inline">\(y&gt;0\)</span> and <span class="math inline">\(|x-t|\le Cy\)</span> for a fixed <span class="math inline">\(C\)</span>. In particular, it approaches the
+stated value at each continuity point of bounded piecewise-continuous
+data. Within the class of bounded harmonic functions, these
+almost-everywhere boundary limits determine the solution uniquely;
+dropping boundedness permits extra terms such as <span class="math inline">\(y\)</span>, which has zero boundary values.</p>
+<p>The value at <span class="math inline">\(x=0\)</span> is deliberately
+unspecified. A jump there prevents a continuous boundary extension,
+although a bounded harmonic solution exists in the upper half-plane.
+Taking <span class="math inline">\(g(t)=\mathbf
+1_{(0,\infty)}(t)\)</span> in the general formula, the Poisson integral
+is the harmonic measure of the positive half-axis: <span class="math display">\[
 U(x,y)=\frac1\pi\int_0^\infty
 \frac{y}{(x-t)^2+y^2}\,dt,
 \qquad y&gt;0.
@@ -3385,6 +3443,14 @@ broader theory, and should not be inferred from this one real-variable
 estimate.</p>
 <h1 data-number="8" id="computational-complex-analysis"><span class="header-section-number">8</span> Computational Complex
 Analysis</h1>
+<p>Numerical experiments can make branches, mapped grids, residues, and
+contour integrals easier to inspect. They are diagnostic companions to
+the proofs: finite samples cannot establish holomorphy, rule out unseen
+singularities, or certify a zero count. The examples proceed from
+visualizing functions and maps to symbolic and numerical contour checks,
+then collect practical guidance on error and reliability.</p>
+<h2 data-number="8.1" id="visualizing-functions-and-maps"><span class="header-section-number">8.1</span> Visualizing functions and
+maps</h2>
 <p>Numerical work is most useful here as a way to inspect geometry, test
 a derivation, and find mistakes in signs or branches. It does not
 establish analyticity or prove that a contour encloses all
@@ -3399,7 +3465,7 @@ records argument and brightness records modulus.</p>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> X <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> Y</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Principal logarithm: the branch cut lies on the negative real axis.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Show principal values even on the cut; the holomorphic branch excludes it.</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>valid <span class="op">=</span> np.<span class="bu">abs</span>(Z) <span class="op">&gt;</span> <span class="dv">0</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.full(Z.shape, np.nan <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> np.nan, dtype<span class="op">=</span><span class="bu">complex</span>)</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>F[valid] <span class="op">=</span> np.log(Z[valid])</span>
@@ -3420,21 +3486,27 @@ records argument and brightness records modulus.</p>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p>The picture should show a discontinuity across the negative real
 axis, the chosen branch cut. The origin is excluded because the
-logarithm is singular there. Grid coloring can make a jump look like a
+logarithm is singular there. The mask excludes only zero, so NumPy still
+returns pointwise principal values for sampled negative real inputs on
+the cut (normally the value approached from above; a negative signed
+zero in the imaginary part selects the lower side). The holomorphic
+principal branch itself is defined on <span class="math inline">\(\mathbb C\setminus(-\infty,0]\)</span> and
+excludes those cut points. Grid coloring can make a jump look like a
 steep but continuous transition, and a finite plot cannot certify the
-location or nature of a singularity. NumPy defines complex
-<code>log</code> using the principal branch and documents its
-negative-real-axis cut; check the convention when comparing formulas or
-libraries (<a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html">NumPy
+location or nature of a singularity. Check the numerical convention when
+comparing formulas or libraries (<a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html">NumPy
 <code>log</code></a>).</p>
-<p>The code is intentionally explicit about the grid and the branch. The
-plotted phase is <span class="math inline">\(\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi]\)</span>,
-so it jumps at the argument cut. Masking the origin before evaluation
-avoids asking a floating-point routine to assign a finite logarithm to
-zero. The contour lines display levels of <span class="math inline">\(|F|\)</span>, not additional phase information. A
-denser mesh can make the image smoother but cannot remove the branch
-discontinuity; changing the branch convention moves the cut and changes
-the displayed function while leaving its local derivative <span class="math inline">\(1/z\)</span> unchanged.</p>
+<p>The code is intentionally explicit about the grid and the branch.
+Away from the cut, the plotted phase is <span class="math inline">\(\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi)\)</span>,
+so it jumps across the cut; numerical values on the cut use NumPy’s side
+convention. Masking the origin before evaluation avoids asking a
+floating-point routine to assign a finite logarithm to zero. The contour
+lines display levels of <span class="math inline">\(|F|\)</span>, not
+additional phase information. A denser mesh can make the image smoother
+but cannot remove the branch discontinuity; changing the branch
+convention moves the cut and changes the displayed function while
+leaving its local derivative <span class="math inline">\(1/z\)</span>
+unchanged.</p>
 <p>Here is a second, geometric visualization that directly uses the
 wedge map. It samples radial and angular lines in the quarter-plane and
 plots their images under <span class="math inline">\(z\mapsto
@@ -3504,6 +3576,12 @@ branch behavior. As in the Python plot, the hue seam reflects the
 principal argument convention, not a defect in the plotting library. The
 grid includes zero, where <code>log(0)</code> is not finite, so that
 point is excluded before evaluation.</p>
+<h2 data-number="8.2" id="symbolic-residues-and-contour-quadrature"><span class="header-section-number">8.2</span> Symbolic residues and contour
+quadrature</h2>
+<p>The following examples share a contour-integral workflow: symbolic
+algebra checks a local residue, and numerical quadrature checks a
+parametrised contour integral. The analytic choice of contour and its
+hypotheses remain part of the mathematical argument.</p>
 <p>For a symbolic residue, SymPy can verify the local algebra:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy <span class="im">as</span> sp</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -3611,8 +3689,8 @@ holomorphic in the region swept out. If the computed answer changes
 substantially under a harmless contour deformation, the discrepancy is
 evidence about numerical error or a singularity that was not accounted
 for. It is not evidence that residues depend on the contour’s shape.</p>
-<h2 data-number="8.1" id="numerical-margins-for-zero-counts"><span class="header-section-number">8.1</span> Numerical margins for zero
-counts</h2>
+<h2 data-number="8.3" id="numerical-margins-and-reliability"><span class="header-section-number">8.3</span> Numerical margins and
+reliability</h2>
 <p>For the argument principle, sample the image curve <span class="math inline">\(f(z(t))\)</span> and unwrap its phase. A net
 change close to <span class="math inline">\(2\pi k\)</span> suggests
 winding number <span class="math inline">\(k\)</span>. But phase
@@ -3643,7 +3721,7 @@ vanishing derivative, as with <span class="math inline">\(z^2\)</span>
 at zero, is qualitatively different: local angle preservation fails
 there. Plot refinement can reveal a missed feature, but it cannot turn
 samples into a theorem.</p>
-<h2 data-number="8.2" id="source-notes"><span class="header-section-number">8.2</span> Source notes</h2>
+<h2 data-number="8.4" id="computational-source-notes"><span class="header-section-number">8.4</span> Computational source notes</h2>
 <ul>
 <li>The wedge mapping and complex-potential framing follow the applied
 boundary-value and hydrodynamics treatments in <a href="https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/mit18_04s18_topic6/">MIT
@@ -3909,6 +3987,14 @@ incorrectly.</li>
 </ol>
 <h2 data-number="9.3" id="further-reading-and-references"><span class="header-section-number">9.3</span> Further reading and
 references</h2>
+<p>The proof sequence, examples, and theorem formulations were checked
+against <a href="https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/">MIT
+OpenCourseWare 18.04, <em>Complex Variables with Applications</em>,
+lecture notes</a> (especially Topics 1–5 and 7–11), <a href="https://ocw.mit.edu/courses/18-112-functions-of-a-complex-variable-fall-2008/resources/lecture-notes/">MIT
+OpenCourseWare 18.112, <em>Functions of a Complex Variable</em>, lecture
+notes</a> (especially Lectures 9–16 and 20), and the <a href="https://www.math.ucdavis.edu/~hunter/m185a/m185a.html">UC Davis
+Math 185A complex-analysis course outline</a> for theorem scope and
+ordering. This draft uses its own exposition and worked examples.</p>
 <h3 data-number="9.3.1" id="foundational-texts-and-course-notes"><span class="header-section-number">9.3.1</span> Foundational texts and course
 notes</h3>
 <ul>
