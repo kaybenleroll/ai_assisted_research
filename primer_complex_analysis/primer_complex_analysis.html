@@ -711,22 +711,25 @@ counts</a></li>
 <li><a href="#exercises-outline-solutions-and-further-reading" id="toc-exercises-outline-solutions-and-further-reading"><span class="toc-section-number">9</span> Exercises, Outline Solutions, and
 Further Reading</a>
 <ul>
-<li><a href="#exercises" id="toc-exercises"><span class="toc-section-number">9.0.1</span> Exercises</a></li>
-<li><a href="#conceptual" id="toc-conceptual"><span class="toc-section-number">9.0.2</span> Conceptual</a></li>
-<li><a href="#analytic" id="toc-analytic"><span class="toc-section-number">9.0.3</span> Analytic</a></li>
-<li><a href="#geometric" id="toc-geometric"><span class="toc-section-number">9.0.4</span> Geometric</a></li>
-<li><a href="#applications" id="toc-applications"><span class="toc-section-number">9.0.5</span> Applications</a></li>
-<li><a href="#computational" id="toc-computational"><span class="toc-section-number">9.0.6</span> Computational</a></li>
-<li><a href="#outline-solutions" id="toc-outline-solutions"><span class="toc-section-number">9.0.7</span> Outline solutions</a></li>
-<li><a href="#further-reading-and-references" id="toc-further-reading-and-references"><span class="toc-section-number">9.0.8</span> Further reading and
-references</a></li>
-<li><a href="#foundational-texts-and-course-notes" id="toc-foundational-texts-and-course-notes"><span class="toc-section-number">9.0.9</span> Foundational texts and course
+<li><a href="#exercises" id="toc-exercises"><span class="toc-section-number">9.1</span> Exercises</a>
+<ul>
+<li><a href="#conceptual" id="toc-conceptual"><span class="toc-section-number">9.1.1</span> Conceptual</a></li>
+<li><a href="#analytic" id="toc-analytic"><span class="toc-section-number">9.1.2</span> Analytic</a></li>
+<li><a href="#geometric" id="toc-geometric"><span class="toc-section-number">9.1.3</span> Geometric</a></li>
+<li><a href="#applications" id="toc-applications"><span class="toc-section-number">9.1.4</span> Applications</a></li>
+<li><a href="#computational" id="toc-computational"><span class="toc-section-number">9.1.5</span> Computational</a></li>
+</ul></li>
+<li><a href="#outline-solutions" id="toc-outline-solutions"><span class="toc-section-number">9.2</span> Outline solutions</a></li>
+<li><a href="#further-reading-and-references" id="toc-further-reading-and-references"><span class="toc-section-number">9.3</span> Further reading and references</a>
+<ul>
+<li><a href="#foundational-texts-and-course-notes" id="toc-foundational-texts-and-course-notes"><span class="toc-section-number">9.3.1</span> Foundational texts and course
 notes</a></li>
-<li><a href="#applications-and-special-topics" id="toc-applications-and-special-topics"><span class="toc-section-number">9.0.10</span> Applications and special
+<li><a href="#applications-and-special-topics" id="toc-applications-and-special-topics"><span class="toc-section-number">9.3.2</span> Applications and special
 topics</a></li>
-<li><a href="#history-and-context" id="toc-history-and-context"><span class="toc-section-number">9.0.11</span> History and context</a></li>
-<li><a href="#software-documentation" id="toc-software-documentation"><span class="toc-section-number">9.0.12</span> Software documentation</a></li>
-<li><a href="#choosing-a-next-step" id="toc-choosing-a-next-step"><span class="toc-section-number">9.0.13</span> Choosing a next step</a></li>
+<li><a href="#history-and-context" id="toc-history-and-context"><span class="toc-section-number">9.3.3</span> History and context</a></li>
+<li><a href="#software-documentation" id="toc-software-documentation"><span class="toc-section-number">9.3.4</span> Software documentation</a></li>
+<li><a href="#choosing-a-next-step" id="toc-choosing-a-next-step"><span class="toc-section-number">9.3.5</span> Choosing a next step</a></li>
+</ul></li>
 </ul></li>
 </ul></div>
 
@@ -2360,16 +2363,13 @@ so a proof must account for those short regions too. Saying “the
 exponential decays in the upper half-plane” without handling the
 endpoints is an incomplete argument.</p>
 <p>Laplace transforms use a closely related exponential with a different
-geometry. For <span class="math inline">\(t\ge0\)</span> and <span class="math inline">\(\Re s&gt;0\)</span>, direct integration gives
-<span class="math display">\[
-\int_0^\infty e^{-st}\sin t\,dt
-=\Im\!\int_0^\infty e^{-(s-i)t}\,dt
+geometry. For real <span class="math inline">\(s&gt;0\)</span>, direct
+integration gives <span class="math display">\[
+\int_0^\infty e^{-su}\sin u\,du
+=\Im\!\int_0^\infty e^{-(s-i)u}\,du
 =\frac1{s^2+1}
-\]</span> when <span class="math inline">\(s\)</span> is real and
-positive; the final rational expression then extends analytically to
-<span class="math inline">\(\Re s&gt;0\)</span>. Inverting a Laplace
-transform by a Bromwich contour is a separate residue application: for
-<span class="math inline">\(F(s)=1/(s+a)\)</span> with <span class="math inline">\(a&gt;0\)</span>, a vertical line <span class="math inline">\(\Re s=\gamma&gt;-a\)</span> and <span class="math inline">\(t&gt;0\)</span> can be closed to the left under a
+\]</span> The rational expression then extends analytically to <span class="math inline">\(\Re s&gt;0\)</span>. Inverting a Laplace transform
+by a Bromwich contour is a separate residue application: for <span class="math inline">\(F(s)=1/(s+a)\)</span> with <span class="math inline">\(a&gt;0\)</span>, a vertical line <span class="math inline">\(\Re s=\gamma&gt;-a\)</span> and <span class="math inline">\(t&gt;0\)</span> can be closed to the left under a
 suitable vanishing-arc estimate, giving <span class="math inline">\(e^{-at}\)</span> from the pole <span class="math inline">\(s=-a\)</span>. The line’s placement relative to
 every singularity, growth of <span class="math inline">\(F\)</span>
 along the closing arc, and the sign of <span class="math inline">\(t\)</span> are essential hypotheses. A formal
@@ -2409,9 +2409,10 @@ I=\int_0^\infty \frac{x^{-1/2}}{1+x}\,dx
 \]</span> is a compact example in which all three choices matter. The
 integral converges: near zero its integrand is comparable to <span class="math inline">\(x^{-1/2}\)</span>, which is integrable, and at
 infinity it is comparable to <span class="math inline">\(x^{-3/2}\)</span>, also integrable. To use
-residues, extend the power to a slit plane with <span class="math display">\[
-z^{-1/2}=\exp\!\left(-\tfrac12\operatorname{Log} z\right),
-\qquad 0&lt;\arg z&lt;2\pi.
+residues, extend the power to a slit plane with the branch <span class="math display">\[
+L_+(z)=\ln|z|+i\arg_+(z),\qquad 0&lt;\arg_+(z)&lt;2\pi,
+\]</span> and define <span class="math display">\[
+z^{-1/2}=\exp\!\left(-\tfrac12L_+(z)\right).
 \]</span> This is a branch cut along the positive real axis. The upper
 bank has argument <span class="math inline">\(0\)</span> and value <span class="math inline">\(x^{-1/2}\)</span>. The lower bank has argument
 <span class="math inline">\(2\pi\)</span> and value <span class="math inline">\(e^{-\pi i}x^{-1/2}=-x^{-1/2}\)</span>. The sign
@@ -2428,17 +2429,18 @@ around the slit annulus. The upper bank runs from <span class="math inline">\(\v
 =-\int_R^\varepsilon\frac{x^{-1/2}}{1+x}\,dx
 =\int_\varepsilon^R\frac{x^{-1/2}}{1+x}\,dx.
 \]</span> The two banks therefore contribute twice the truncated real
-integral, not zero. The only pole in the slit annulus is <span class="math inline">\(z=-1\)</span>, where this chosen branch has <span class="math inline">\(\arg(-1)=\pi\)</span> and hence <span class="math inline">\((-1)^{-1/2}=e^{-i\pi/2}=-i\)</span>. Its residue
+integral, not zero. The only pole in the slit annulus is <span class="math inline">\(z=-1\)</span>, where this chosen branch has <span class="math inline">\(\arg_+(-1)=\pi\)</span> and hence <span class="math inline">\((-1)^{-1/2}=e^{-i\pi/2}=-i\)</span>. Its residue
 is <span class="math display">\[
 \operatorname{Res}\left(\frac{z^{-1/2}}{1+z},-1\right)=-i.
 \]</span> The residue theorem gives a total contour integral of <span class="math inline">\(2\pi i(-i)=2\pi\)</span>. To identify the real
 integral with that limit, the circular pieces must vanish. On the outer
-circle, for <span class="math inline">\(R&gt;1\)</span>, <span class="math display">\[
-\left|\int_{|z|=R}\frac{z^{-1/2}}{1+z}\,dz\right|
+keyhole arc <span class="math inline">\(C_R^{\mathrm{out}}\)</span>, for
+<span class="math inline">\(R&gt;1\)</span>, <span class="math display">\[
+\left|\int_{C_R^{\mathrm{out}}}\frac{z^{-1/2}}{1+z}\,dz\right|
 \le 2\pi R\frac{R^{-1/2}}{R-1}
 =\frac{2\pi R^{1/2}}{R-1}\longrightarrow0.
-\]</span> On the inner circle, for <span class="math inline">\(0&lt;\varepsilon&lt;1\)</span>, <span class="math display">\[
-\left|\int_{|z|=\varepsilon}\frac{z^{-1/2}}{1+z}\,dz\right|
+\]</span> On the inner keyhole arc <span class="math inline">\(C_\varepsilon^{\mathrm{in}}\)</span>, for <span class="math inline">\(0&lt;\varepsilon&lt;1\)</span>, <span class="math display">\[
+\left|\int_{C_\varepsilon^{\mathrm{in}}}\frac{z^{-1/2}}{1+z}\,dz\right|
 \le 2\pi\varepsilon\frac{\varepsilon^{-1/2}}{1-\varepsilon}
 =\frac{2\pi\varepsilon^{1/2}}{1-\varepsilon}\longrightarrow0.
 \]</span> The ML estimate uses the maximum of the modulus on each arc
@@ -3070,9 +3072,9 @@ V(\zeta)=V(g(\zeta))\)</span> is harmonic in the source region. In fact,
 the zero of the Laplacian away from critical points. Boundary values
 travel by composition: if a source boundary point <span class="math inline">\(\zeta\)</span> maps to <span class="math inline">\(z=g(\zeta)\)</span>, the value assigned at <span class="math inline">\(z\)</span> becomes the value at <span class="math inline">\(\zeta\)</span>. Forgetting this correspondence is
 an easy way to solve the wrong boundary problem.</p>
-<p>Consider an ideal conducting wedge with opening angle <span class="math inline">\(\alpha\)</span>, with its two straight faces held
-at potentials 0 and <span class="math inline">\(V_0\)</span>. Take polar
-coordinates with the wedge described by <span class="math inline">\(r&gt;0\)</span> and <span class="math inline">\(0&lt;\theta&lt;\alpha\)</span>. The map <span class="math display">\[
+<p>Consider an ideal conducting wedge with opening angle <span class="math inline">\(\alpha\)</span>, with <span class="math inline">\(0&lt;\alpha&lt;2\pi\)</span>, and with its two
+straight faces held at potentials 0 and <span class="math inline">\(V_0\)</span>. Take polar coordinates with the
+wedge described by <span class="math inline">\(r&gt;0\)</span> and <span class="math inline">\(0&lt;\theta&lt;\alpha\)</span>. The map <span class="math display">\[
 \zeta=z^{\pi/\alpha}
 \]</span> sends the wedge to the upper half-plane. This power is defined
 using a chosen logarithm, <span class="math inline">\(z^{\pi/\alpha}=\exp((\pi/\alpha)\operatorname{Log}
@@ -3106,14 +3108,16 @@ substituting into the differential equation and checking the boundary
 data verifies the result.</p>
 <p>For a concrete right-angle wedge, set <span class="math inline">\(\alpha=\pi/2\)</span>. Then <span class="math inline">\(\zeta=z^2\)</span>, the potential is <span class="math inline">\(2V_0\theta/\pi\)</span>, and the field magnitude
 is <span class="math inline">\(2V_0/(\pi r)\)</span>. The map doubles
-every interior angle: the quadrant’s boundary rays at angles 0 and <span class="math inline">\(\pi/2\)</span> become the two real rays at angles
-0 and <span class="math inline">\(\pi\)</span>. A boundary condition
-that was posed on a corner-shaped region has become the familiar angular
-potential in a half-plane. This example is especially helpful because it
-makes branch choice visible. If one uses a power without restricting the
-argument, the same point in the image plane may correspond to more than
-one preimage, and the proposed map is no longer a single-valued
-coordinate on the chosen region.</p>
+polar arguments about the corner, taking the wedge opening from <span class="math inline">\(\pi/2\)</span> to <span class="math inline">\(\pi\)</span>; at every nonzero point it remains
+conformal, so it preserves local angles there. The quadrant’s boundary
+rays at angles 0 and <span class="math inline">\(\pi/2\)</span> become
+the two real rays at angles 0 and <span class="math inline">\(\pi\)</span>. A boundary condition that was posed
+on a corner-shaped region has become the familiar angular potential in a
+half-plane. This example is especially helpful because it makes branch
+choice visible. If one uses a power without restricting the argument,
+the same point in the image plane may correspond to more than one
+preimage, and the proposed map is no longer a single-valued coordinate
+on the chosen region.</p>
 <p>The boundary-value problem is also unique under the usual
 bounded-domain Dirichlet assumptions: two harmonic solutions with the
 same continuous boundary values have a harmonic difference that vanishes
@@ -3396,22 +3400,24 @@ records argument and brightness records modulus.</p>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> X <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> Y</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Principal logarithm: the branch cut lies on the negative real axis.</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.log(Z)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>phase <span class="op">=</span> np.angle(F)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>brightness <span class="op">=</span> np.tanh(np.<span class="bu">abs</span>(F) <span class="op">/</span> <span class="fl">3.0</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.imshow(</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    phase, extent<span class="op">=</span>[x.<span class="bu">min</span>(), x.<span class="bu">max</span>(), y.<span class="bu">min</span>(), y.<span class="bu">max</span>()], origin<span class="op">=</span><span class="st">&quot;lower&quot;</span>,</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    cmap<span class="op">=</span><span class="st">&quot;twilight&quot;</span>, vmin<span class="op">=-</span>np.pi, vmax<span class="op">=</span>np.pi,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>plt.contour(X, Y, brightness, levels<span class="op">=</span>np.linspace(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dv">9</span>),</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            colors<span class="op">=</span><span class="st">&quot;white&quot;</span>, linewidths<span class="op">=</span><span class="fl">0.35</span>)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">&quot;black&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">&quot;equal&quot;</span>)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Re z&quot;</span>)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Im z&quot;</span>)</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Domain coloring of the principal logarithm&quot;</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>valid <span class="op">=</span> np.<span class="bu">abs</span>(Z) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.full(Z.shape, np.nan <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> np.nan, dtype<span class="op">=</span><span class="bu">complex</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>F[valid] <span class="op">=</span> np.log(Z[valid])</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>phase <span class="op">=</span> np.imag(F)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>brightness <span class="op">=</span> np.tanh(np.<span class="bu">abs</span>(F) <span class="op">/</span> <span class="fl">3.0</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.imshow(</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    phase, extent<span class="op">=</span>[x.<span class="bu">min</span>(), x.<span class="bu">max</span>(), y.<span class="bu">min</span>(), y.<span class="bu">max</span>()], origin<span class="op">=</span><span class="st">&quot;lower&quot;</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    cmap<span class="op">=</span><span class="st">&quot;twilight&quot;</span>, vmin<span class="op">=-</span>np.pi, vmax<span class="op">=</span>np.pi,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.contour(X, Y, brightness, levels<span class="op">=</span>np.linspace(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dv">9</span>),</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            colors<span class="op">=</span><span class="st">&quot;white&quot;</span>, linewidths<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">&quot;black&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">&quot;equal&quot;</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Re z&quot;</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Im z&quot;</span>)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Domain coloring of the principal logarithm&quot;</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p>The picture should show a discontinuity across the negative real
 axis, the chosen branch cut. The origin is excluded because the
 logarithm is singular there. Grid coloring can make a jump look like a
@@ -3421,10 +3427,11 @@ location or nature of a singularity. NumPy defines complex
 negative-real-axis cut; check the convention when comparing formulas or
 libraries (<a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html">NumPy
 <code>log</code></a>).</p>
-<p>The code is intentionally explicit about the grid and the branch.
-<code>np.angle</code> returns values in <span class="math inline">\((-\pi,\pi]\)</span>, so hue wraps at the argument
-cut. Masking the origin avoids asking a floating-point routine to assign
-a finite logarithm to zero. The contour lines display levels of <span class="math inline">\(|F|\)</span>, not additional phase information. A
+<p>The code is intentionally explicit about the grid and the branch. The
+plotted phase is <span class="math inline">\(\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi]\)</span>,
+so it jumps at the argument cut. Masking the origin before evaluation
+avoids asking a floating-point routine to assign a finite logarithm to
+zero. The contour lines display levels of <span class="math inline">\(|F|\)</span>, not additional phase information. A
 denser mesh can make the image smoother but cannot remove the branch
 discontinuity; changing the branch convention moves the cut and changes
 the displayed function while leaving its local derivative <span class="math inline">\(1/z\)</span> unchanged.</p>
@@ -3466,9 +3473,9 @@ problem.</p>
 <p>The radial lines remain radial while their angles double; the
 circular arcs remain circular but their radii become <span class="math inline">\(r^2\)</span>. A numerical power operation on
 complex arrays uses the principal branch, which agrees with the selected
-branch on this quarter-plane. If the sampled angular interval crossed a
-branch cut, the same expression could produce a visually unexpected
-seam.</p>
+branch on this quarter-plane. For a noninteger power, crossing its
+branch cut can produce a seam; this integer-power example has no such
+branch ambiguity.</p>
 <p>An idiomatic base R equivalent can display the phase of the principal
 logarithm without requiring a plotting package. It evaluates a regular
 grid, converts the phase to a cyclic hue, and uses <code>image()</code>
@@ -3480,30 +3487,31 @@ without a transpose.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> y, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">log</span>(z)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>phase <span class="ot">&lt;-</span> <span class="fu">Arg</span>(f)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>phase[<span class="fu">Mod</span>(z) <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="cn">NA_real_</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>hue <span class="ot">&lt;-</span> (phase <span class="sc">+</span> pi) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> pi)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>palette <span class="ot">&lt;-</span> <span class="fu">hcl</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="at">length.out =</span> <span class="dv">257</span>)[<span class="sc">-</span><span class="dv">257</span>], <span class="at">c =</span> <span class="dv">80</span>, <span class="at">l =</span> <span class="dv">55</span>)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(x, y, <span class="fu">matrix</span>(hue, <span class="at">nrow =</span> <span class="fu">length</span>(x)), <span class="at">col =</span> palette, <span class="at">zlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;Re z&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Im z&quot;</span>, <span class="at">asp =</span> <span class="dv">1</span>,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">&quot;Phase of the principal logarithm&quot;</span>)</span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_complex_</span>, <span class="at">nrow =</span> <span class="fu">length</span>(x), <span class="at">ncol =</span> <span class="fu">length</span>(y))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>valid <span class="ot">&lt;-</span> <span class="fu">Mod</span>(z) <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>f[valid] <span class="ot">&lt;-</span> <span class="fu">log</span>(z[valid])</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>phase <span class="ot">&lt;-</span> <span class="fu">Im</span>(f)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>hue <span class="ot">&lt;-</span> (phase <span class="sc">+</span> pi) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> pi)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>palette <span class="ot">&lt;-</span> <span class="fu">hcl</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="at">length.out =</span> <span class="dv">257</span>)[<span class="sc">-</span><span class="dv">257</span>], <span class="at">c =</span> <span class="dv">80</span>, <span class="at">l =</span> <span class="dv">55</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(x, y, <span class="fu">matrix</span>(hue, <span class="at">nrow =</span> <span class="fu">length</span>(x)), <span class="at">col =</span> palette, <span class="at">zlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;Re z&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Im z&quot;</span>, <span class="at">asp =</span> <span class="dv">1</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">&quot;Phase of the principal logarithm&quot;</span>)</span></code></pre></div>
 <p>For a publication-quality or interactive figure, construct a stable
 color scale explicitly rather than relying on the set of colors present
 in each grid; the code emphasizes the complex-array operations and
 branch behavior. As in the Python plot, the hue seam reflects the
 principal argument convention, not a defect in the plotting library. The
 grid includes zero, where <code>log(0)</code> is not finite, so that
-point is masked after evaluation; warnings about the expected singular
-value can be avoided by excluding zero before taking the logarithm.</p>
+point is excluded before evaluation.</p>
 <p>For a symbolic residue, SymPy can verify the local algebra:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy <span class="im">as</span> sp</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>z, a <span class="op">=</span> sp.symbols(<span class="st">&quot;z a&quot;</span>, positive<span class="op">=</span><span class="va">True</span>, real<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> sp.exp(sp.I <span class="op">*</span> a <span class="op">*</span> z) <span class="op">/</span> (z<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>residue_at_i <span class="op">=</span> sp.residue(f, z, sp.I)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sp.simplify(residue_at_i))  <span class="co"># -I*exp(-a)/2</span></span></code></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> sp.symbols(<span class="st">&quot;z&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> sp.symbols(<span class="st">&quot;a&quot;</span>, positive<span class="op">=</span><span class="va">True</span>, real<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> sp.exp(sp.I <span class="op">*</span> a <span class="op">*</span> z) <span class="op">/</span> (z<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>residue_at_i <span class="op">=</span> sp.residue(f, z, sp.I)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sp.simplify(residue_at_i))  <span class="co"># -I*exp(-a)/2</span></span></code></pre></div>
 <p>This computes the residue at the requested point; it does not choose
 a contour, check whether other poles are enclosed, or justify a
 vanishing arc. Those are mathematical decisions outside the symbolic
@@ -3658,8 +3666,8 @@ are positively oriented, zeros are counted with multiplicity, and a
 “domain” is open and connected. Give hypotheses and explain contour
 choices. Computations and plots are useful diagnostics, never
 proofs.</p>
-<h3 data-number="9.0.1" id="exercises"><span class="header-section-number">9.0.1</span> Exercises</h3>
-<h3 data-number="9.0.2" id="conceptual"><span class="header-section-number">9.0.2</span> Conceptual</h3>
+<h2 data-number="9.1" id="exercises"><span class="header-section-number">9.1</span> Exercises</h2>
+<h3 data-number="9.1.1" id="conceptual"><span class="header-section-number">9.1.1</span> Conceptual</h3>
 <ol type="1">
 <li>A classmate claims that <span class="math inline">\(f(z)=\overline
 z\)</span> is complex differentiable at <span class="math inline">\(0\)</span>, but nowhere else. Test the claim using
@@ -3684,7 +3692,7 @@ follows and why the regularity assumption matters. Give a counterexample
 to the claim that the equations at one point alone imply complex
 differentiability there.</li>
 </ol>
-<h3 data-number="9.0.3" id="analytic"><span class="header-section-number">9.0.3</span> Analytic</h3>
+<h3 data-number="9.1.2" id="analytic"><span class="header-section-number">9.1.2</span> Analytic</h3>
 <ol start="5" type="1">
 <li>Classify the finite singularities of <span class="math inline">\(f(z)=e^z/(z^2+1)\)</span>, and calculate both
 residues. Separately use a semicircular contour to evaluate <span class="math display">\[
@@ -3707,7 +3715,7 @@ contour’s exterior annulus.</li>
 of <span class="math inline">\(f(z)\)</span> around each circle and
 explain how it gives the zero count.</li>
 </ol>
-<h3 data-number="9.0.4" id="geometric"><span class="header-section-number">9.0.4</span> Geometric</h3>
+<h3 data-number="9.1.3" id="geometric"><span class="header-section-number">9.1.3</span> Geometric</h3>
 <ol start="11" type="1">
 <li>Find a Möbius transformation mapping the upper half-plane to the
 unit disk and sending <span class="math inline">\(i\)</span> to <span class="math inline">\(0\)</span>. Locate the images of <span class="math inline">\(0,1,\infty\)</span>. Explain why the real axis
@@ -3725,7 +3733,7 @@ domain and continuous on its closure. State the maximum principle for
 a Dirichlet problem with specified boundary values. Why does this
 theorem not by itself construct the solution?</li>
 </ol>
-<h3 data-number="9.0.5" id="applications"><span class="header-section-number">9.0.5</span> Applications</h3>
+<h3 data-number="9.1.4" id="applications"><span class="header-section-number">9.1.4</span> Applications</h3>
 <ol start="15" type="1">
 <li>In two-dimensional incompressible, irrotational flow, take the
 complex potential <span class="math inline">\(F(z)=Uz+a/z\)</span>, with
@@ -3746,7 +3754,7 @@ analysis contributes when the exponent or contour is generalized. Name
 one condition needed before moving a contour in a parameter-dependent
 integral.</li>
 </ol>
-<h3 data-number="9.0.6" id="computational"><span class="header-section-number">9.0.6</span> Computational</h3>
+<h3 data-number="9.1.5" id="computational"><span class="header-section-number">9.1.5</span> Computational</h3>
 <ol start="18" type="1">
 <li>Parameterise <span class="math inline">\(\gamma_R(t)=Re^{it}\)</span>, <span class="math inline">\(0\le t\le2\pi\)</span>, and approximate <span class="math inline">\(\oint_{\gamma_R} dz/(z-1)\)</span> by the periodic
 trapezoidal rule for <span class="math inline">\(R=2\)</span> and <span class="math inline">\(R=1/2\)</span>, using <span class="math inline">\(N=32,128,512\)</span>. Compare with the exact
@@ -3763,7 +3771,7 @@ identify what the software is taking as the expansion variable and
 center. State one reason a correct symbolic output could still
 mislead.</li>
 </ol>
-<h3 data-number="9.0.7" id="outline-solutions"><span class="header-section-number">9.0.7</span> Outline solutions</h3>
+<h2 data-number="9.2" id="outline-solutions"><span class="header-section-number">9.2</span> Outline solutions</h2>
 <ol type="1">
 <li>At every point, the difference quotient of <span class="math inline">\(\overline z\)</span> is <span class="math inline">\(\overline h/h\)</span>. Taking <span class="math inline">\(h\)</span> real gives <span class="math inline">\(1\)</span>, while taking <span class="math inline">\(h\)</span> purely imaginary gives <span class="math inline">\(-1\)</span>, so there is no limit. Equivalently,
 for <span class="math inline">\(f=u+iv=x-iy\)</span>, CR fails
@@ -3899,9 +3907,9 @@ branch assumptions and simplifications. Correct output can still answer
 the wrong question if the point or variable was supplied
 incorrectly.</li>
 </ol>
-<h3 data-number="9.0.8" id="further-reading-and-references"><span class="header-section-number">9.0.8</span> Further reading and
-references</h3>
-<h3 data-number="9.0.9" id="foundational-texts-and-course-notes"><span class="header-section-number">9.0.9</span> Foundational texts and course
+<h2 data-number="9.3" id="further-reading-and-references"><span class="header-section-number">9.3</span> Further reading and
+references</h2>
+<h3 data-number="9.3.1" id="foundational-texts-and-course-notes"><span class="header-section-number">9.3.1</span> Foundational texts and course
 notes</h3>
 <ul>
 <li><strong>Accessible undergraduate text — Saff and Snider,
@@ -3946,7 +3954,7 @@ traditional undergraduate text for readers who want a complete course
 sequence with exercises. The Open Textbook Initiative lists it as an
 approved text; its first half covers analytic and harmonic functions and
 contour integration. <a href="https://complexanalysis.org/">Book
-site</a> · <a href="https://textbooks-dev.aimath.org/textbooks/approved-textbooks/howell/">Open
+site</a> · <a href="https://textbooks.aimath.org/textbooks/approved-textbooks/beck-marchesi-pixton-sabalka/">Open
 Textbook Initiative listing</a>.</li>
 <li><strong>Advanced classical text — J. B. Conway, <em>Functions of One
 Complex Variable I</em>, 2nd ed.</strong> A systematic and
@@ -3954,7 +3962,7 @@ proof-intensive treatment, including conformal mapping and the Riemann
 mapping theorem. <a href="https://link.springer.com/book/10.1007/978-1-4612-6313-5">Springer
 record</a>.</li>
 </ul>
-<h3 data-number="9.0.10" id="applications-and-special-topics"><span class="header-section-number">9.0.10</span> Applications and special
+<h3 data-number="9.3.2" id="applications-and-special-topics"><span class="header-section-number">9.3.2</span> Applications and special
 topics</h3>
 <ul>
 <li><strong>Potential flow — MIT OCW 18.04, Topic 6, “Two-Dimensional
@@ -3982,7 +3990,7 @@ the Riemann mapping theorem provide a rigorous route beyond the
 canonical examples; existence alone does not give a convenient
 computational map.</li>
 </ul>
-<h3 data-number="9.0.11" id="history-and-context"><span class="header-section-number">9.0.11</span> History and context</h3>
+<h3 data-number="9.3.3" id="history-and-context"><span class="header-section-number">9.3.3</span> History and context</h3>
 <ul>
 <li><strong>History of analysis — Jeremy Gray, <em>The Real and the
 Complex: A History of Analysis in the 19th Century</em>.</strong> Places
@@ -3994,7 +4002,7 @@ Analysis</em> (above).</strong> Particularly effective for seeing how
 geometric interpretations illuminate the subject, though it is a
 mathematical exposition rather than a documentary history.</li>
 </ul>
-<h3 data-number="9.0.12" id="software-documentation"><span class="header-section-number">9.0.12</span> Software documentation</h3>
+<h3 data-number="9.3.4" id="software-documentation"><span class="header-section-number">9.3.4</span> Software documentation</h3>
 <ul>
 <li><strong>Arrays and branch conventions — NumPy, logarithms and
 complex routines.</strong> Documents principal-value behavior and
@@ -4027,7 +4035,7 @@ stats::integrate expects a real-valued function, so split complex
 integrals into real and imaginary components. <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/complex.html">Complex
 numbers</a> · <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html">Integration</a>.</li>
 </ul>
-<h3 data-number="9.0.13" id="choosing-a-next-step"><span class="header-section-number">9.0.13</span> Choosing a next step</h3>
+<h3 data-number="9.3.5" id="choosing-a-next-step"><span class="header-section-number">9.3.5</span> Choosing a next step</h3>
 <p>For a first pass through the subject, pair the primer with MIT 18.04
 or Saff and Snider: both keep applications visible while supplying
 additional worked examples. If a proof feels compressed, Romik’s notes

@@ -703,13 +703,13 @@ This half-line formula does not require a new contour: parity gives the factor o
 
 For $t>0$, the bound $|e^{itz}|\le1$ on the upper arc was enough because the rational factor already gave $R^{-2}$. For an integrand with only $R^{-1}$ decay, the exponential's stronger angular damping may still make the arc vanish; a result such as Jordan's lemma formalises that estimate under suitable hypotheses. Near the arc's endpoints, however, $\Im z$ is small, so a proof must account for those short regions too. Saying “the exponential decays in the upper half-plane” without handling the endpoints is an incomplete argument.
 
-Laplace transforms use a closely related exponential with a different geometry. For $t\ge0$ and $\Re s>0$, direct integration gives
+Laplace transforms use a closely related exponential with a different geometry. For real $s>0$, direct integration gives
 $$
-\int_0^\infty e^{-st}\sin t\,dt
-=\Im\!\int_0^\infty e^{-(s-i)t}\,dt
+\int_0^\infty e^{-su}\sin u\,du
+=\Im\!\int_0^\infty e^{-(s-i)u}\,du
 =\frac1{s^2+1}
 $$
-when $s$ is real and positive; the final rational expression then extends analytically to $\Re s>0$. Inverting a Laplace transform by a Bromwich contour is a separate residue application: for $F(s)=1/(s+a)$ with $a>0$, a vertical line $\Re s=\gamma>-a$ and $t>0$ can be closed to the left under a suitable vanishing-arc estimate, giving $e^{-at}$ from the pole $s=-a$. The line's placement relative to every singularity, growth of $F$ along the closing arc, and the sign of $t$ are essential hypotheses. A formal instruction to “sum the poles” without those checks can give the wrong inverse.
+The rational expression then extends analytically to $\Re s>0$. Inverting a Laplace transform by a Bromwich contour is a separate residue application: for $F(s)=1/(s+a)$ with $a>0$, a vertical line $\Re s=\gamma>-a$ and $t>0$ can be closed to the left under a suitable vanishing-arc estimate, giving $e^{-at}$ from the pole $s=-a$. The line's placement relative to every singularity, growth of $F$ along the closing arc, and the sign of $t$ are essential hypotheses. A formal instruction to “sum the poles” without those checks can give the wrong inverse.
 
 More explicitly, with the common forward-transform convention
 $$
@@ -729,10 +729,13 @@ A branch is not decoration added after the algebra. It determines the function b
 $$
 I=\int_0^\infty \frac{x^{-1/2}}{1+x}\,dx
 $$
-is a compact example in which all three choices matter. The integral converges: near zero its integrand is comparable to $x^{-1/2}$, which is integrable, and at infinity it is comparable to $x^{-3/2}$, also integrable. To use residues, extend the power to a slit plane with
+is a compact example in which all three choices matter. The integral converges: near zero its integrand is comparable to $x^{-1/2}$, which is integrable, and at infinity it is comparable to $x^{-3/2}$, also integrable. To use residues, extend the power to a slit plane with the branch
 $$
-z^{-1/2}=\exp\!\left(-\tfrac12\operatorname{Log} z\right),
-\qquad 0<\arg z<2\pi.
+L_+(z)=\ln|z|+i\arg_+(z),\qquad 0<\arg_+(z)<2\pi,
+$$
+and define
+$$
+z^{-1/2}=\exp\!\left(-\tfrac12L_+(z)\right).
 $$
 This is a branch cut along the positive real axis. The upper bank has argument $0$ and value $x^{-1/2}$. The lower bank has argument $2\pi$ and value $e^{-\pi i}x^{-1/2}=-x^{-1/2}$. The sign change is the point of the branch choice; using the principal branch cut on the negative real axis would put the discontinuity somewhere else and require a different contour accounting.
 
@@ -745,19 +748,19 @@ $$
 =-\int_R^\varepsilon\frac{x^{-1/2}}{1+x}\,dx
 =\int_\varepsilon^R\frac{x^{-1/2}}{1+x}\,dx.
 $$
-The two banks therefore contribute twice the truncated real integral, not zero. The only pole in the slit annulus is $z=-1$, where this chosen branch has $\arg(-1)=\pi$ and hence $(-1)^{-1/2}=e^{-i\pi/2}=-i$. Its residue is
+The two banks therefore contribute twice the truncated real integral, not zero. The only pole in the slit annulus is $z=-1$, where this chosen branch has $\arg_+(-1)=\pi$ and hence $(-1)^{-1/2}=e^{-i\pi/2}=-i$. Its residue is
 $$
 \operatorname{Res}\left(\frac{z^{-1/2}}{1+z},-1\right)=-i.
 $$
-The residue theorem gives a total contour integral of $2\pi i(-i)=2\pi$. To identify the real integral with that limit, the circular pieces must vanish. On the outer circle, for $R>1$,
+The residue theorem gives a total contour integral of $2\pi i(-i)=2\pi$. To identify the real integral with that limit, the circular pieces must vanish. On the outer keyhole arc $C_R^{\mathrm{out}}$, for $R>1$,
 $$
-\left|\int_{|z|=R}\frac{z^{-1/2}}{1+z}\,dz\right|
+\left|\int_{C_R^{\mathrm{out}}}\frac{z^{-1/2}}{1+z}\,dz\right|
 \le 2\pi R\frac{R^{-1/2}}{R-1}
 =\frac{2\pi R^{1/2}}{R-1}\longrightarrow0.
 $$
-On the inner circle, for $0<\varepsilon<1$,
+On the inner keyhole arc $C_\varepsilon^{\mathrm{in}}$, for $0<\varepsilon<1$,
 $$
-\left|\int_{|z|=\varepsilon}\frac{z^{-1/2}}{1+z}\,dz\right|
+\left|\int_{C_\varepsilon^{\mathrm{in}}}\frac{z^{-1/2}}{1+z}\,dz\right|
 \le 2\pi\varepsilon\frac{\varepsilon^{-1/2}}{1-\varepsilon}
 =\frac{2\pi\varepsilon^{1/2}}{1-\varepsilon}\longrightarrow0.
 $$
@@ -1028,7 +1031,7 @@ $$
 $$
 The map changes lengths by the local factor $|g'|$ and rotates directions by $\arg g'$, but it preserves angles and the zero of the Laplacian away from critical points. Boundary values travel by composition: if a source boundary point $\zeta$ maps to $z=g(\zeta)$, the value assigned at $z$ becomes the value at $\zeta$. Forgetting this correspondence is an easy way to solve the wrong boundary problem.
 
-Consider an ideal conducting wedge with opening angle $\alpha$, with its two straight faces held at potentials 0 and $V_0$. Take polar coordinates with the wedge described by $r>0$ and $0<\theta<\alpha$. The map
+Consider an ideal conducting wedge with opening angle $\alpha$, with $0<\alpha<2\pi$, and with its two straight faces held at potentials 0 and $V_0$. Take polar coordinates with the wedge described by $r>0$ and $0<\theta<\alpha$. The map
 $$
 \zeta=z^{\pi/\alpha}
 $$
@@ -1052,7 +1055,7 @@ $$
 $$
 because $V$ depends linearly on $\theta$ only. At $\theta=0$, it is 0; at $\theta=\alpha$, it is $V_0$. Its radial derivative is zero and its angular derivative is $V_0/\alpha$, giving the stated field. This direct check is valuable: mapping supplies a construction, while substituting into the differential equation and checking the boundary data verifies the result.
 
-For a concrete right-angle wedge, set $\alpha=\pi/2$. Then $\zeta=z^2$, the potential is $2V_0\theta/\pi$, and the field magnitude is $2V_0/(\pi r)$. The map doubles every interior angle: the quadrant's boundary rays at angles 0 and $\pi/2$ become the two real rays at angles 0 and $\pi$. A boundary condition that was posed on a corner-shaped region has become the familiar angular potential in a half-plane. This example is especially helpful because it makes branch choice visible. If one uses a power without restricting the argument, the same point in the image plane may correspond to more than one preimage, and the proposed map is no longer a single-valued coordinate on the chosen region.
+For a concrete right-angle wedge, set $\alpha=\pi/2$. Then $\zeta=z^2$, the potential is $2V_0\theta/\pi$, and the field magnitude is $2V_0/(\pi r)$. The map doubles polar arguments about the corner, taking the wedge opening from $\pi/2$ to $\pi$; at every nonzero point it remains conformal, so it preserves local angles there. The quadrant's boundary rays at angles 0 and $\pi/2$ become the two real rays at angles 0 and $\pi$. A boundary condition that was posed on a corner-shaped region has become the familiar angular potential in a half-plane. This example is especially helpful because it makes branch choice visible. If one uses a power without restricting the argument, the same point in the image plane may correspond to more than one preimage, and the proposed map is no longer a single-valued coordinate on the chosen region.
 
 The boundary-value problem is also unique under the usual bounded-domain Dirichlet assumptions: two harmonic solutions with the same continuous boundary values have a harmonic difference that vanishes on the boundary, and the maximum principle forces that difference to vanish inside. The wedge is unbounded and has a corner, so one states the relevant boundedness or growth condition and treats the vertex separately; uniqueness does not follow merely from writing down a plausible harmonic function. The ideal solution above is the natural bounded angular solution on each annular truncation with compatible outer data, and is the standard local model near the corner.
 
@@ -1188,8 +1191,10 @@ X, Y = np.meshgrid(x, y)
 Z = X + 1j * Y
 
 # Principal logarithm: the branch cut lies on the negative real axis.
-F = np.log(Z)
-phase = np.angle(F)
+valid = np.abs(Z) > 0
+F = np.full(Z.shape, np.nan + 1j * np.nan, dtype=complex)
+F[valid] = np.log(Z[valid])
+phase = np.imag(F)
 brightness = np.tanh(np.abs(F) / 3.0)
 
 plt.imshow(
@@ -1208,7 +1213,7 @@ plt.show()
 
 The picture should show a discontinuity across the negative real axis, the chosen branch cut. The origin is excluded because the logarithm is singular there. Grid coloring can make a jump look like a steep but continuous transition, and a finite plot cannot certify the location or nature of a singularity. NumPy defines complex `log` using the principal branch and documents its negative-real-axis cut; check the convention when comparing formulas or libraries ([NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html)).
 
-The code is intentionally explicit about the grid and the branch. `np.angle` returns values in $(-\pi,\pi]$, so hue wraps at the argument cut. Masking the origin avoids asking a floating-point routine to assign a finite logarithm to zero. The contour lines display levels of $|F|$, not additional phase information. A denser mesh can make the image smoother but cannot remove the branch discontinuity; changing the branch convention moves the cut and changes the displayed function while leaving its local derivative $1/z$ unchanged.
+The code is intentionally explicit about the grid and the branch. The plotted phase is $\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi]$, so it jumps at the argument cut. Masking the origin before evaluation avoids asking a floating-point routine to assign a finite logarithm to zero. The contour lines display levels of $|F|$, not additional phase information. A denser mesh can make the image smoother but cannot remove the branch discontinuity; changing the branch convention moves the cut and changes the displayed function while leaving its local derivative $1/z$ unchanged.
 
 Here is a second, geometric visualization that directly uses the wedge map. It samples radial and angular lines in the quarter-plane and plots their images under $z\mapsto z^2$. The image should be a half-disk with straightened boundary rays. This is a plotting aid, not the solution of a new boundary-value problem.
 
@@ -1244,7 +1249,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-The radial lines remain radial while their angles double; the circular arcs remain circular but their radii become $r^2$. A numerical power operation on complex arrays uses the principal branch, which agrees with the selected branch on this quarter-plane. If the sampled angular interval crossed a branch cut, the same expression could produce a visually unexpected seam.
+The radial lines remain radial while their angles double; the circular arcs remain circular but their radii become $r^2$. A numerical power operation on complex arrays uses the principal branch, which agrees with the selected branch on this quarter-plane. For a noninteger power, crossing its branch cut can produce a seam; this integer-power example has no such branch ambiguity.
 
 An idiomatic base R equivalent can display the phase of the principal logarithm without requiring a plotting package. It evaluates a regular grid, converts the phase to a cyclic hue, and uses `image()` to draw the raster. `outer()` constructs the matrix with one axis for each coordinate vector; R's `image()` convention expects `nrow(z) == length(x)` and `ncol(z) == length(y)`, which is why the matrix is passed without a transpose.
 
@@ -1252,9 +1257,10 @@ An idiomatic base R equivalent can display the phase of the principal logarithm 
 x <- seq(-2, 2, length.out = 501)
 y <- seq(-2, 2, length.out = 501)
 z <- outer(x, 1i * y, `+`)
-f <- log(z)
-phase <- Arg(f)
-phase[Mod(z) == 0] <- NA_real_
+f <- matrix(NA_complex_, nrow = length(x), ncol = length(y))
+valid <- Mod(z) > 0
+f[valid] <- log(z[valid])
+phase <- Im(f)
 
 hue <- (phase + pi) / (2 * pi)
 palette <- hcl(h = seq(0, 360, length.out = 257)[-257], c = 80, l = 55)
@@ -1263,14 +1269,15 @@ image(x, y, matrix(hue, nrow = length(x)), col = palette, zlim = c(0, 1),
       main = "Phase of the principal logarithm")
 ```
 
-For a publication-quality or interactive figure, construct a stable color scale explicitly rather than relying on the set of colors present in each grid; the code emphasizes the complex-array operations and branch behavior. As in the Python plot, the hue seam reflects the principal argument convention, not a defect in the plotting library. The grid includes zero, where `log(0)` is not finite, so that point is masked after evaluation; warnings about the expected singular value can be avoided by excluding zero before taking the logarithm.
+For a publication-quality or interactive figure, construct a stable color scale explicitly rather than relying on the set of colors present in each grid; the code emphasizes the complex-array operations and branch behavior. As in the Python plot, the hue seam reflects the principal argument convention, not a defect in the plotting library. The grid includes zero, where `log(0)` is not finite, so that point is excluded before evaluation.
 
 For a symbolic residue, SymPy can verify the local algebra:
 
 ```python
 import sympy as sp
 
-z, a = sp.symbols("z a", positive=True, real=True)
+z = sp.symbols("z")
+a = sp.symbols("a", positive=True, real=True)
 f = sp.exp(sp.I * a * z) / (z**2 + 1)
 residue_at_i = sp.residue(f, z, sp.I)
 print(sp.simplify(residue_at_i))  # -I*exp(-a)/2
@@ -1348,7 +1355,7 @@ Domain coloring and mapped grids are similarly diagnostic. A phase seam can be t
 
 These problems ask you to choose and justify a complex-analytic tool, not just execute a familiar formula. Unless stated otherwise, contours are positively oriented, zeros are counted with multiplicity, and a “domain” is open and connected. Give hypotheses and explain contour choices. Computations and plots are useful diagnostics, never proofs.
 
-#### Exercises
+### Exercises
 
 #### Conceptual
 
@@ -1389,7 +1396,7 @@ State which function is integrated on the contour, which pole is enclosed, and w
 19. Plot the principal logarithm on $[-2,2]^2$, masking a narrow band around the negative real axis and the origin. Show modulus and phase separately, mark the branch jump, then choose a simply connected subregion on which a continuous argument exists. Explain why increasing pixel resolution cannot remove the branch cut.
 20. Use a computer algebra system to expand $\sin z/z^3$ at zero and compute its residue there. Compare the symbolic result with a hand derivation and identify what the software is taking as the expansion variable and center. State one reason a correct symbolic output could still mislead.
 
-#### Outline solutions
+### Outline solutions
 
 1. At every point, the difference quotient of $\overline z$ is $\overline h/h$. Taking $h$ real gives $1$, while taking $h$ purely imaginary gives $-1$, so there is no limit. Equivalently, for $f=u+iv=x-iy$, CR fails everywhere. The equations are necessary for differentiability; satisfaction at one point is not generally sufficient. For a counterexample, define the real-valued function $f$ by $f(0)=0$ and
 $$
@@ -1421,7 +1428,7 @@ The exact values are $2\pi i$ for $R=2$ and $0$ for $R=1/2$, by the residue theo
 19. The principal logarithm has real part $\log|z|$ and imaginary part $\operatorname{Arg}z\in(-\pi,\pi]$. Its phase jumps across the negative real axis, while zero is a logarithmic singularity; mask both. Any simply connected region avoiding zero admits a continuous logarithm, possibly with a different argument interval. The jump expresses the inability to choose a global continuous argument around zero, so a finer grid can only sample it more sharply.
 20. The expansion is $\sin z/z^3=z^{-2}-1/6+z^2/120-\cdots$. The singularity is a pole of order two and its residue, the coefficient of $z^{-1}$, is zero. A symbolic residue command takes a specified variable and center; check both, along with branch assumptions and simplifications. Correct output can still answer the wrong question if the point or variable was supplied incorrectly.
 
-#### Further reading and references
+### Further reading and references
 
 #### Foundational texts and course notes
 
@@ -1432,7 +1439,7 @@ The exact values are $2\pi i$ for $R=2$ and $0$ for $R=1/2$, by the residue theo
 - **Analytic viewpoint — Stein and Shakarchi, *Complex Analysis*, Princeton Lectures in Analysis II.** Connects one-variable theory to harmonic analysis and broader analytic ideas; a good next step after a first course. [Princeton University Press](https://press.princeton.edu/books/paperback/9780691113852/complex-analysis).
 - **Free applied course — MIT OpenCourseWare 18.04, *Complex Variables with Applications*.** Topic-organized notes, problem sets, and solutions cover Cauchy theory, harmonic functions, hydrodynamics, residues, transforms, and conformal maps. [Lecture notes](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/).
 - **Free proof-focused notes — Dan Romik, UC Davis, *Complex Analysis*.** A compact sequence emphasizing precise theorem statements, residues, the argument principle, Rouché’s theorem, and introductory asymptotics. [PDF notes](https://www.math.ucdavis.edu/~romik/data/uploads/notes/complex-analysis.pdf).
-- **Open textbook — Beck, Marchesi, Pixton, and Sabalka, *A First Course in Complex Analysis*.** A freely available, traditional undergraduate text for readers who want a complete course sequence with exercises. The Open Textbook Initiative lists it as an approved text; its first half covers analytic and harmonic functions and contour integration. [Book site](https://complexanalysis.org/) · [Open Textbook Initiative listing](https://textbooks-dev.aimath.org/textbooks/approved-textbooks/howell/).
+- **Open textbook — Beck, Marchesi, Pixton, and Sabalka, *A First Course in Complex Analysis*.** A freely available, traditional undergraduate text for readers who want a complete course sequence with exercises. The Open Textbook Initiative lists it as an approved text; its first half covers analytic and harmonic functions and contour integration. [Book site](https://complexanalysis.org/) · [Open Textbook Initiative listing](https://textbooks.aimath.org/textbooks/approved-textbooks/beck-marchesi-pixton-sabalka/).
 - **Advanced classical text — J. B. Conway, *Functions of One Complex Variable I*, 2nd ed.** A systematic and proof-intensive treatment, including conformal mapping and the Riemann mapping theorem. [Springer record](https://link.springer.com/book/10.1007/978-1-4612-6313-5).
 
 #### Applications and special topics
