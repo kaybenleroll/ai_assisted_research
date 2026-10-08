@@ -3,7 +3,7 @@
 Complex analysis looks like a narrow extension of calculus until its central fact becomes visible: requiring a derivative to be independent of direction forces an extraordinary amount of structure. Holomorphic functions are rigid, contour integrals encode local singularities, and geometric maps turn difficult boundary problems into simpler ones. This primer develops that chain with enough theory to use it, enough geometry to see it, and enough computation to test your understanding without confusing a numerical picture for a proof.
 
 
-## 1. Orientation, prerequisites, and complex-plane geometry
+## Orientation, prerequisites, and complex-plane geometry
 
 ### Why a second plane changes calculus
 
@@ -72,7 +72,7 @@ One early picture is worth keeping in mind. A domain-coloring plot assigns hue t
 
 You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ray at angle $\theta$ maps to a ray at $2\theta$ while its radius is squared. The first quadrant maps onto the upper half-plane, and a small circle around zero wraps around its image twice. Under $z\mapsto1/z$, circles of radius $r$ become circles of radius $1/r$ with orientation reversed if you follow the angle parameter through the map. Under $z\mapsto e^z$, vertical translation by $2\pi i$ repeats the same values. Domain coloring makes these rules visible, but the algebra tells you which features are structural and which are artifacts of sampling or a hue discontinuity.
 
-## 2. Complex functions and analyticity
+## Complex functions and analyticity
 
 ### The derivative must ignore direction
 
@@ -179,7 +179,7 @@ Integrating this form once around $|z|=1$ gives $2\pi$, so no globally single-va
 
 There is a useful direction to the correspondence. If you can identify a holomorphic $f=u+iv$, you get two harmonic functions at once. Conversely, solving $\Delta u=0$ in a region gives a local route to a holomorphic function, which can simplify a potential or flow problem. But a harmonic function by itself does not specify the conjugate's global behavior or boundary conditions. Even on a simply connected region, adding a constant to $v$ changes no derivatives; on a multiply connected region, periods around holes can prevent a single-valued $v$ altogether. When applying this to physics, one must also check what $u$ and $v$ represent and what assumptions make a potential description valid.
 
-## 3. Contours and Cauchy theory
+## Contours and Cauchy theory
 
 ### Integrating along a directed curve
 
@@ -363,7 +363,7 @@ Cauchy's formula also proves uniqueness from boundary values with little effort.
 
 The filled-region hypothesis is easy to test with a counterexample. Set $f(z)=1/z$ and integrate $f(z)/(z-a)$ around $|z|=2$ for a point $a$ with $0<|a|<2$. The integrand has poles at both $a$ and zero. If you apply Cauchy's formula as though $f$ were holomorphic throughout the disk, you predict $2\pi i/a$. But partial fractions give $1/[z(z-a)]=(1/a)[1/(z-a)-1/z]$, and the two contour integrals cancel. The actual result is zero. Cauchy's formula does not fail; its hypothesis on the interior fails. The example is useful because $f$ is perfectly holomorphic near the *contour*, so checking only the boundary would miss the problem.
 
-## 4. Series and singularities
+## Series and singularities
 
 ### Taylor series come from a contour, not a smoothness guess
 
@@ -548,7 +548,7 @@ Along positive real $z\to0$, the modulus blows up; along negative real $z\to0$, 
 
 Do not infer the type of an isolated singularity from one approach path. The function $e^{1/z}$ grows along one ray and shrinks along another, while a pole satisfies $|f(z)|\to\infty$ along *every* approach to its center. Nor does a bounded-looking plot prove removability: finite resolution can miss a narrow growth direction. The Laurent principal part or a theorem with verified hypotheses supplies the classification. Conversely, if a symbolic expression seems complicated but you can prove it bounded on a punctured disk, the removable-singularity theorem settles the issue without a full series expansion.
 
-## 5. Residues and contour methods
+## Residues and contour methods
 
 ### One Laurent coefficient survives a loop
 
@@ -825,7 +825,7 @@ The denominator never vanishes on this circle, and increasing $n$ should drive t
 
 The numerical experiment is especially clean here because the parametrised integrand simplifies algebraically: $dz/d\theta=i(z-1)$, so $[e^z/(z-1)](dz/d\theta)=ie^z$. This cancellation shows the sampled function is smooth and periodic in $\theta$, which helps the trapezoidal rule. It also gives an independent way to debug the code if an estimate has the wrong sign: $dz/d\theta$ should contain $+i$ for counterclockwise travel. A clockwise parametrisation would contain $-i$ and return $-2\pi i e$. Numerical contour integration is most trustworthy when you inspect the parametrised integrand and the minimum distance from the path to each singularity, not just the final printed number.
 
-## 6. Global theorems and geometric structure
+## Global theorems and geometric structure
 
 ### Local factorisation turns zeros into integers
 
@@ -1009,7 +1009,7 @@ The six sections now form one chain. Complex differentiation restricts local beh
 The proof sequence, examples, and theorem formulations were checked against [MIT OpenCourseWare 18.04, *Complex Variables with Applications*, lecture notes](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/) (especially Topics 1–5 and 7–11), [MIT OpenCourseWare 18.112, *Functions of a Complex Variable*, lecture notes](https://ocw.mit.edu/courses/18-112-functions-of-a-complex-variable-fall-2008/resources/lecture-notes/) (especially Lectures 9–16 and 20), and the [UC Davis Math 185A complex-analysis course outline](https://www.math.ucdavis.edu/~hunter/m185a/m185a.html) for theorem scope and ordering. This draft uses its own exposition and worked examples.
 
 
-## 7. Harmonic Functions and Applications
+## Harmonic Functions and Applications
 
 
 ### A boundary-value problem made simple by a conformal map
@@ -1172,7 +1172,7 @@ $$
 One standard sufficient setting is a real integral over a fixed interval or the real line, a unique interior global minimum, $f$ at least four times continuously differentiable near $x_0$, $f''(x_0)>0$, and a smooth amplitude with adequate integrability; outside every fixed neighborhood of $x_0$, assume the phase is separated from its minimum enough that the tail is exponentially smaller. Under routine stronger smoothness and tail conditions, the leading term has relative error $O(1/\lambda)$. If the amplitude vanishes at the minimum, the leading power changes. Equal-depth minima contribute a sum; a boundary minimum gives a different scaling; if $f''(x_0)=0$, the quadratic Gaussian model fails. This is the real Laplace method, closely related to saddle-point approximations. Complex contour steepest descent is a broader theory, and should not be inferred from this one real-variable estimate.
 
 
-## 8. Computational Complex Analysis
+## Computational Complex Analysis
 
 
 
@@ -1343,7 +1343,7 @@ Domain coloring and mapped grids are similarly diagnostic. A phase seam can be t
 - Real-valued numerical integration in R: [R `integrate`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html). Asymptotic methods: [NIST DLMF, Chapter 2](https://dlmf.nist.gov/2).
 
 
-## 9. Exercises, Outline Solutions, and Further Reading
+## Exercises, Outline Solutions, and Further Reading
 
 
 These problems ask you to choose and justify a complex-analytic tool, not just execute a familiar formula. Unless stated otherwise, contours are positively oriented, zeros are counted with multiplicity, and a “domain” is open and connected. Give hypotheses and explain contour choices. Computations and plots are useful diagnostics, never proofs.
