@@ -74,6 +74,8 @@ You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ra
 
 ## Complex functions and analyticity
 
+Complex analysis begins by asking what it means for a derivative to be independent of direction. The Cauchy–Riemann equations give a practical test, while elementary examples show why that test needs the right hypotheses. Exponentials, logarithms, and analytic continuation then expose how a local derivative interacts with global choices such as branches.
+
 ### The derivative must ignore direction
 
 For $f:D\to\mathbb C$, continuity and limits use the modulus just as they do for functions $\mathbb R^2\to\mathbb R^2$. Complex differentiability at $z_0\in D$ asks for the stronger limit
@@ -180,6 +182,8 @@ Integrating this form once around $|z|=1$ gives $2\pi$, so no globally single-va
 There is a useful direction to the correspondence. If you can identify a holomorphic $f=u+iv$, you get two harmonic functions at once. Conversely, solving $\Delta u=0$ in a region gives a local route to a holomorphic function, which can simplify a potential or flow problem. But a harmonic function by itself does not specify the conjugate's global behavior or boundary conditions. Even on a simply connected region, adding a constant to $v$ changes no derivatives; on a multiply connected region, periods around holes can prevent a single-valued $v$ altogether. When applying this to physics, one must also check what $u$ and $v$ represent and what assumptions make a potential description valid.
 
 ## Contours and Cauchy theory
+
+Contour integration makes the geometry of a domain matter: orientation records direction, winding records how a path surrounds points, and holes can obstruct primitives. Cauchy's theorem and formula turn these path integrals into strong statements about values inside a contour. The section builds from parametrisation to those interior consequences.
 
 ### Integrating along a directed curve
 
@@ -365,6 +369,8 @@ The filled-region hypothesis is easy to test with a counterexample. Set $f(z)=1/
 
 ## Series and singularities
 
+Cauchy's formula supplies the expansions that make local behavior calculable. Taylor series describe regular points, while Laurent series distinguish removable singularities, poles, and essential singularities on punctured neighborhoods. The examples emphasize convergence regions as well as coefficients, since both determine what an expansion can establish.
+
 ### Taylor series come from a contour, not a smoothness guess
 
 Suppose $f$ is holomorphic on an open disk $|z-a|<R_0$. Choose $0<R<R_0$. Cauchy's formula on the circle $|\zeta-a|=R$ says that for $|z-a|<R$,
@@ -390,6 +396,8 @@ $$
 \le M_R\frac{(r/R)^{N+1}}{1-r/R}.
 $$
 Uniform convergence is doing real work here. Pointwise convergence alone would not justify taking the limit through the contour integral, nor would it give a uniform error guarantee across the smaller disk.
+
+The same idea gives a useful closure theorem: if holomorphic functions $f_j$ converge *locally uniformly* on a domain $D$ (uniformly on every compact subset), their limit $f$ is holomorphic. The limit is continuous, and uniform convergence on each triangular contour inside $D$ lets us pass to the limit in $\int_{\partial T}f_j(z)\,dz=0$. *Morera's theorem* supplies the converse step: a continuous function whose integral around every such triangle vanishes is holomorphic. Pointwise convergence lacks the contour control needed for this argument.
 
 One useful consequence is *uniqueness of analytic continuation*. If two holomorphic functions agree on a small open disk inside a connected domain, their Taylor coefficients agree there. The identity theorem then propagates equality through overlapping disks across the connected domain. More generally, agreement on a set with an accumulation point inside the domain is enough. This does not mean a Taylor series around one center converges across the whole domain; it means the function, if continued holomorphically along a route, has no freedom to change values arbitrarily. The distinction between uniqueness of continuation and radius of convergence becomes important when singularities lie between one center and another.
 
@@ -487,7 +495,7 @@ The region restrictions can be read directly from the geometric series. The expa
 
 There is also a topological reading. As a centered contour expands past radius one, its integral changes from zero to $-2\pi i$. It does not change while the contour moves within $1<|z|<2$. Expanding past radius two adds $2\pi i$ and returns the integral to zero. Since the contour integral of a Laurent series is $2\pi i$ times its $z^{-1}$ coefficient, the three coefficient values $0,-1,0$ encode exactly these changes. The power-series algebra and residue theorem are two descriptions of the same contour behavior.
 
-One can see the same stability directly from the coefficient integral. Fix an integer $k$ and let $\rho_1,\rho_2$ be two radii in the same annulus. The integrand $G(z)z^{-k-1}$ is holomorphic on the closed ring between those circles, so the integral on the outer circle equals the integral on the inner circle with positive circular orientation. Consequently the coefficient $c_k$ is independent of $\rho$ as long as the circle stays within that annulus. If a pole lies between the radii, this deformation hypothesis fails and the two coefficient integrals can differ by its residue. Thus “the Laurent coefficient” is well-defined only after the annular region has been specified.
+One can see the same stability directly from the coefficient integral. Fix an integer $k$ and let $\rho_1,\rho_2$ be two radii in the same annulus. The integrand $G(z)z^{-k-1}$ is holomorphic on the closed ring between those circles, so the integral on the outer circle equals the integral on the inner circle with positive circular orientation. Consequently the coefficient $c_k$ is independent of $\rho$ as long as the circle stays within that annulus. If poles lie between radii in different annuli, the difference between the outer and inner coefficient integrals, each divided by $2\pi i$, equals the sum of the residues of $G(z)z^{-k-1}$ at those poles. It need not equal the sum of the residues of $G$ unless $k=-1$, and it may even vanish by cancellation. Thus “the Laurent coefficient” is well-defined only after the annular region has been specified.
 
 The annulus boundaries also identify the convergence limit without summing a series. The middle expansion cannot converge on $|z|=1$ or $|z|=2$ as a normally convergent Laurent series on a neighborhood of either boundary: those circles contain singularities of the represented function. For general holomorphic functions, the maximal annulus of convergence is bounded by the nearest singularity on each side, though continuation may still define the function beyond one side through a different expansion. In this rational example the poles sit exactly on the boundary circles, making the two radii transparent.
 
@@ -549,6 +557,8 @@ Along positive real $z\to0$, the modulus blows up; along negative real $z\to0$, 
 Do not infer the type of an isolated singularity from one approach path. The function $e^{1/z}$ grows along one ray and shrinks along another, while a pole satisfies $|f(z)|\to\infty$ along *every* approach to its center. Nor does a bounded-looking plot prove removability: finite resolution can miss a narrow growth direction. The Laurent principal part or a theorem with verified hypotheses supplies the classification. Conversely, if a symbolic expression seems complicated but you can prove it bounded on a punctured disk, the removable-singularity theorem settles the issue without a full series expansion.
 
 ## Residues and contour methods
+
+Residues extract the one Laurent coefficient that survives integration around a small loop. The residue theorem carries that local information to larger contours, where a good choice of path can evaluate real integrals and transforms. The worked examples make contour selection, orientation, and estimates on added arcs explicit.
 
 ### One Laurent coefficient survives a loop
 
@@ -830,6 +840,8 @@ The numerical experiment is especially clean here because the parametrised integ
 
 ## Global theorems and geometric structure
 
+The local theory now yields statements about whole regions. Factorisation and the argument principle turn zeros into winding counts; maximum-modulus results constrain possible values; and conformal maps transfer geometry while preserving angles and harmonicity. Together these theorems explain how local rigidity governs global shape.
+
 ### Local factorisation turns zeros into integers
 
 Let $f$ be holomorphic on a connected domain $D$ and not identically zero. Its zeros are isolated. Indeed, at a zero $a$, Taylor's theorem gives a first nonzero coefficient unless every coefficient vanishes. If every coefficient vanishes, $f$ vanishes on a disk; by propagating overlapping Taylor disks through the connected domain, the *identity theorem* then makes $f$ identically zero, contrary to assumption. Thus for a unique positive integer $m$,
@@ -1007,13 +1019,9 @@ An advanced existence theorem says these examples are part of a broad pattern. T
 
 The six sections now form one chain. Complex differentiation restricts local behavior; Cauchy's formula turns that restriction into convergent series; Laurent coefficients identify singularities; residues turn singularities into contour integrals; and the argument principle turns those integrals into global counts. Conformal maps carry the same structure into geometry. Applications and computation can use this chain, but they also have to respect its hypotheses: the domain, its holes, the contour orientation, the location of singularities, and the branch of any multivalued function.
 
-### Source note
-
-The proof sequence, examples, and theorem formulations were checked against [MIT OpenCourseWare 18.04, *Complex Variables with Applications*, lecture notes](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/) (especially Topics 1–5 and 7–11), [MIT OpenCourseWare 18.112, *Functions of a Complex Variable*, lecture notes](https://ocw.mit.edu/courses/18-112-functions-of-a-complex-variable-fall-2008/resources/lecture-notes/) (especially Lectures 9–16 and 20), and the [UC Davis Math 185A complex-analysis course outline](https://www.math.ucdavis.edu/~hunter/m185a/m185a.html) for theorem scope and ordering. This draft uses its own exposition and worked examples.
-
-
 ## Harmonic Functions and Applications
 
+Harmonic functions connect the abstract theory to potentials, boundary data, and transforms. A holomorphic function packages a harmonic function together with its conjugate, while conformal maps can simplify the geometry of a boundary-value problem. The examples also show where those tools stop: boundary behavior, branch choices, and contour hypotheses still need separate attention.
 
 ### A boundary-value problem made simple by a conformal map
 
@@ -1031,11 +1039,11 @@ $$
 $$
 The map changes lengths by the local factor $|g'|$ and rotates directions by $\arg g'$, but it preserves angles and the zero of the Laplacian away from critical points. Boundary values travel by composition: if a source boundary point $\zeta$ maps to $z=g(\zeta)$, the value assigned at $z$ becomes the value at $\zeta$. Forgetting this correspondence is an easy way to solve the wrong boundary problem.
 
-Consider an ideal conducting wedge with opening angle $\alpha$, with $0<\alpha<2\pi$, and with its two straight faces held at potentials 0 and $V_0$. Take polar coordinates with the wedge described by $r>0$ and $0<\theta<\alpha$. The map
+Consider an ideal conducting wedge with opening angle $\alpha$, with $0<\alpha<2\pi$, and with its two straight faces held at potentials 0 and $V_0$. Take polar coordinates with the wedge $W=\{re^{i\theta}:r>0,\ 0<\theta<\alpha\}$. The map
 $$
 \zeta=z^{\pi/\alpha}
 $$
-sends the wedge to the upper half-plane. This power is defined using a chosen logarithm, $z^{\pi/\alpha}=\exp((\pi/\alpha)\operatorname{Log} z)$, with the branch of $\operatorname{Log}$ whose argument lies in $(0,\alpha)$ inside the wedge. Indeed, it multiplies arguments by $\pi/\alpha$, so $0<\arg z<\alpha$ becomes $0<\arg\zeta<\pi$. Positive points on the lower face map to the positive real axis; points on the upper face map to the negative real axis. The two electrodes therefore become the two halves of the real boundary, with the same constant values assigned to their corresponding points.
+sends the wedge to the upper half-plane. On this wedge define $\log_W z=\log r+i\theta$ with $0<\theta<\alpha$, and set $z^{\pi/\alpha}=\exp((\pi/\alpha)\log_W z)$. This is a holomorphic logarithm branch on the wedge; it is distinct from the principal branch $\operatorname{Log}$ when the wedge crosses the principal cut. It multiplies arguments by $\pi/\alpha$, so $0<\theta<\alpha$ becomes $0<\arg\zeta<\pi$. Positive points on the lower face map to the positive real axis; points on the upper face map to the negative real axis. The two electrodes therefore become the two halves of the real boundary, with the same constant values assigned to their corresponding points.
 
 In polar coordinates $\zeta=\rho e^{i\vartheta}$, the angle function $\arg\zeta=\vartheta$ is harmonic in the upper half-plane away from its boundary singularities. It takes value 0 on the positive real axis and $\pi$ on the negative real axis. Scaling it by $V_0/\pi$ produces the desired boundary values:
 $$
@@ -1057,7 +1065,7 @@ because $V$ depends linearly on $\theta$ only. At $\theta=0$, it is 0; at $\thet
 
 For a concrete right-angle wedge, set $\alpha=\pi/2$. Then $\zeta=z^2$, the potential is $2V_0\theta/\pi$, and the field magnitude is $2V_0/(\pi r)$. The map doubles polar arguments about the corner, taking the wedge opening from $\pi/2$ to $\pi$; at every nonzero point it remains conformal, so it preserves local angles there. The quadrant's boundary rays at angles 0 and $\pi/2$ become the two real rays at angles 0 and $\pi$. A boundary condition that was posed on a corner-shaped region has become the familiar angular potential in a half-plane. This example is especially helpful because it makes branch choice visible. If one uses a power without restricting the argument, the same point in the image plane may correspond to more than one preimage, and the proposed map is no longer a single-valued coordinate on the chosen region.
 
-The boundary-value problem is also unique under the usual bounded-domain Dirichlet assumptions: two harmonic solutions with the same continuous boundary values have a harmonic difference that vanishes on the boundary, and the maximum principle forces that difference to vanish inside. The wedge is unbounded and has a corner, so one states the relevant boundedness or growth condition and treats the vertex separately; uniqueness does not follow merely from writing down a plausible harmonic function. The ideal solution above is the natural bounded angular solution on each annular truncation with compatible outer data, and is the standard local model near the corner.
+The solution is unique among bounded harmonic functions on the open wedge that extend continuously to each open face $r>0$ and take the prescribed constant values there. The conformal map sends any two such solutions to bounded harmonic functions in the upper half-plane with the same boundary values everywhere except the image of the vertex; bounded harmonic functions are determined by their boundary values almost everywhere. No value at the vertex or at infinity is required in this class. Boundedness matters: $r^{\pi/\alpha}\sin(\pi\theta/\alpha)$ is harmonic and vanishes on both faces, but adding it gives an unbounded solution with the same face data.
 
 The field's corner exponent has a useful interpretation beyond this one wedge. The inverse map is $z=\zeta^{\alpha/\pi}$, and its derivative has magnitude proportional to $|\zeta|^{\alpha/\pi-1}$. Uniform field in the mapped half-plane therefore becomes a field whose size scales like $r^{\pi/\alpha-1}$ in the wedge. For $\alpha=\pi/2$, this is $r^1$ for a uniform mapped field, while the particular angular-potential boundary data above produces $1/r$ because its mapped potential is an angle function with a boundary singularity at the origin. These are different mapped problems: the map alone does not determine the field; the transformed boundary data do. This distinction is a good safeguard against memorizing one corner exponent and applying it to every electrode arrangement.
 
@@ -1092,7 +1100,14 @@ U(x,0)=\begin{cases}
 1,&x>0.
 \end{cases}
 $$
-The value at $x=0$ is deliberately unspecified. A jump there prevents a continuous boundary extension, although a bounded harmonic solution exists in the upper half-plane. The Poisson integral for these data is the harmonic measure of the positive half-axis:
+For reusable boundary data $g$ on the real line, the upper-half-plane Poisson kernel gives
+$$
+P[g](x,y)=\frac1\pi\int_{-\infty}^{\infty}
+\frac{y\,g(t)}{(x-t)^2+y^2}\,dt,\qquad y>0.
+$$
+If $g$ is bounded and measurable, this integral defines a bounded harmonic function. It approaches $g(t)$ non-tangentially at almost every boundary point: $(x,y)\to(t,0)$ with $y>0$ and $|x-t|\le Cy$ for a fixed $C$. In particular, it approaches the stated value at each continuity point of bounded piecewise-continuous data. Within the class of bounded harmonic functions, these almost-everywhere boundary limits determine the solution uniquely; dropping boundedness permits extra terms such as $y$, which has zero boundary values.
+
+The value at $x=0$ is deliberately unspecified. A jump there prevents a continuous boundary extension, although a bounded harmonic solution exists in the upper half-plane. Taking $g(t)=\mathbf 1_{(0,\infty)}(t)$ in the general formula, the Poisson integral is the harmonic measure of the positive half-axis:
 $$
 U(x,y)=\frac1\pi\int_0^\infty
 \frac{y}{(x-t)^2+y^2}\,dt,
@@ -1177,6 +1192,9 @@ One standard sufficient setting is a real integral over a fixed interval or the 
 
 ## Computational Complex Analysis
 
+Numerical experiments can make branches, mapped grids, residues, and contour integrals easier to inspect. They are diagnostic companions to the proofs: finite samples cannot establish holomorphy, rule out unseen singularities, or certify a zero count. The examples proceed from visualizing functions and maps to symbolic and numerical contour checks, then collect practical guidance on error and reliability.
+
+### Visualizing functions and maps
 
 
 Numerical work is most useful here as a way to inspect geometry, test a derivation, and find mistakes in signs or branches. It does not establish analyticity or prove that a contour encloses all singularities. Python is the canonical language in these examples. The arrays below represent a rectangular grid in the complex plane; the hue records argument and brightness records modulus.
@@ -1190,7 +1208,7 @@ y = np.linspace(-2.0, 2.0, 801)
 X, Y = np.meshgrid(x, y)
 Z = X + 1j * Y
 
-# Principal logarithm: the branch cut lies on the negative real axis.
+# Show principal values even on the cut; the holomorphic branch excludes it.
 valid = np.abs(Z) > 0
 F = np.full(Z.shape, np.nan + 1j * np.nan, dtype=complex)
 F[valid] = np.log(Z[valid])
@@ -1211,9 +1229,9 @@ plt.title("Domain coloring of the principal logarithm")
 plt.show()
 ```
 
-The picture should show a discontinuity across the negative real axis, the chosen branch cut. The origin is excluded because the logarithm is singular there. Grid coloring can make a jump look like a steep but continuous transition, and a finite plot cannot certify the location or nature of a singularity. NumPy defines complex `log` using the principal branch and documents its negative-real-axis cut; check the convention when comparing formulas or libraries ([NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html)).
+The picture should show a discontinuity across the negative real axis, the chosen branch cut. The origin is excluded because the logarithm is singular there. The mask excludes only zero, so NumPy still returns pointwise principal values for sampled negative real inputs on the cut (normally the value approached from above; a negative signed zero in the imaginary part selects the lower side). The holomorphic principal branch itself is defined on $\mathbb C\setminus(-\infty,0]$ and excludes those cut points. Grid coloring can make a jump look like a steep but continuous transition, and a finite plot cannot certify the location or nature of a singularity. Check the numerical convention when comparing formulas or libraries ([NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html)).
 
-The code is intentionally explicit about the grid and the branch. The plotted phase is $\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi]$, so it jumps at the argument cut. Masking the origin before evaluation avoids asking a floating-point routine to assign a finite logarithm to zero. The contour lines display levels of $|F|$, not additional phase information. A denser mesh can make the image smoother but cannot remove the branch discontinuity; changing the branch convention moves the cut and changes the displayed function while leaving its local derivative $1/z$ unchanged.
+The code is intentionally explicit about the grid and the branch. Away from the cut, the plotted phase is $\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi)$, so it jumps across the cut; numerical values on the cut use NumPy's side convention. Masking the origin before evaluation avoids asking a floating-point routine to assign a finite logarithm to zero. The contour lines display levels of $|F|$, not additional phase information. A denser mesh can make the image smoother but cannot remove the branch discontinuity; changing the branch convention moves the cut and changes the displayed function while leaving its local derivative $1/z$ unchanged.
 
 Here is a second, geometric visualization that directly uses the wedge map. It samples radial and angular lines in the quarter-plane and plots their images under $z\mapsto z^2$. The image should be a half-disk with straightened boundary rays. This is a plotting aid, not the solution of a new boundary-value problem.
 
@@ -1270,6 +1288,10 @@ image(x, y, matrix(hue, nrow = length(x)), col = palette, zlim = c(0, 1),
 ```
 
 For a publication-quality or interactive figure, construct a stable color scale explicitly rather than relying on the set of colors present in each grid; the code emphasizes the complex-array operations and branch behavior. As in the Python plot, the hue seam reflects the principal argument convention, not a defect in the plotting library. The grid includes zero, where `log(0)` is not finite, so that point is excluded before evaluation.
+
+### Symbolic residues and contour quadrature
+
+The following examples share a contour-integral workflow: symbolic algebra checks a local residue, and numerical quadrature checks a parametrised contour integral. The analytic choice of contour and its hypotheses remain part of the mathematical argument.
 
 For a symbolic residue, SymPy can verify the local algebra:
 
@@ -1330,7 +1352,7 @@ There is one more subtlety in computation: agreement between independent impleme
 
 When a computed contour integral fails to approach its expected value, change one numerical control at a time. First verify the parameterization algebraically, including its derivative and orientation. Then keep the path fixed and increase the number of quadrature nodes or subdivide the parameter interval near rapid variation. Separately increase arithmetic precision. Finally move the contour slightly, while keeping the same enclosed poles, to see whether a near-pole conditioning problem dominates. A correct residue integral is invariant under such a deformation as long as the integrand remains holomorphic in the region swept out. If the computed answer changes substantially under a harmless contour deformation, the discrepancy is evidence about numerical error or a singularity that was not accounted for. It is not evidence that residues depend on the contour's shape.
 
-### Numerical margins for zero counts
+### Numerical margins and reliability
 
 For the argument principle, sample the image curve $f(z(t))$ and unwrap its phase. A net change close to $2\pi k$ suggests winding number $k$. But phase unwrapping assumes adjacent samples do not jump across an unresolved turn, and it becomes unstable if $f(z(t))$ approaches zero. Monitor the minimum sampled modulus as the mesh is refined. If it trends toward zero, the boundary may contain a zero or pass close to one; the theorem's nonvanishing boundary hypothesis is then numerically ill-conditioned. A reliable certified count needs a bound on the image between samples, interval arithmetic, or another validated method.
 
@@ -1342,13 +1364,12 @@ A positive certified lower bound proves strict dominance. A dense sample with po
 
 Domain coloring and mapped grids are similarly diagnostic. A phase seam can be the chosen branch cut, an actual zero, or a plotting wrap from $\pi$ to $-\pi$; inspect the formula and the domain before interpreting colors. Grid crowding under a conformal map often signals a large derivative or a boundary point mapped near infinity, but a finite grid cannot measure an extremal distortion reliably. A vanishing derivative, as with $z^2$ at zero, is qualitatively different: local angle preservation fails there. Plot refinement can reveal a missed feature, but it cannot turn samples into a theorem.
 
-### Source notes
+### Computational source notes
 
 - The wedge mapping and complex-potential framing follow the applied boundary-value and hydrodynamics treatments in [MIT OpenCourseWare 18.04, Topic 6](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/mit18_04s18_topic6/) and [University of Virginia, 2D electrostatics and conformal mapping](https://galileoandeinstein.phys.virginia.edu/Elec_Mag/2022_Lectures/EM_14_2D_Electrostatics_Complex_Var_1.html).
 - Complex logarithm branch behavior: [NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html). Plotting approach: [Matplotlib `contour`](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.contour.html).
 - Symbolic residues: [SymPy residue documentation](https://docs.sympy.org/latest/modules/series/series.html#sympy.series.residues.residue). Numerical contour quadrature: [mpmath quadrature](https://mpmath.org/doc/current/calculus/integration.html).
 - Real-valued numerical integration in R: [R `integrate`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html). Asymptotic methods: [NIST DLMF, Chapter 2](https://dlmf.nist.gov/2).
-
 
 ## Exercises, Outline Solutions, and Further Reading
 
@@ -1429,6 +1450,8 @@ The exact values are $2\pi i$ for $R=2$ and $0$ for $R=1/2$, by the residue theo
 20. The expansion is $\sin z/z^3=z^{-2}-1/6+z^2/120-\cdots$. The singularity is a pole of order two and its residue, the coefficient of $z^{-1}$, is zero. A symbolic residue command takes a specified variable and center; check both, along with branch assumptions and simplifications. Correct output can still answer the wrong question if the point or variable was supplied incorrectly.
 
 ### Further reading and references
+
+The proof sequence, examples, and theorem formulations were checked against [MIT OpenCourseWare 18.04, *Complex Variables with Applications*, lecture notes](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/) (especially Topics 1–5 and 7–11), [MIT OpenCourseWare 18.112, *Functions of a Complex Variable*, lecture notes](https://ocw.mit.edu/courses/18-112-functions-of-a-complex-variable-fall-2008/resources/lecture-notes/) (especially Lectures 9–16 and 20), and the [UC Davis Math 185A complex-analysis course outline](https://www.math.ucdavis.edu/~hunter/m185a/m185a.html) for theorem scope and ordering. This draft uses its own exposition and worked examples.
 
 #### Foundational texts and course notes
 
