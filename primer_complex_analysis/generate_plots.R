@@ -2,6 +2,12 @@
 # Reproducible figures for the complex-analysis primer.
 # Run inside the rocker/tidyverse container through Justfile: plots.
 
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(dplyr)
+  library(tidyr)
+})
+
 dir.create("figures", showWarnings = FALSE, recursive = TRUE)
 
 FIGDPI <- 150
@@ -26,9 +32,27 @@ save_png <- function(name, width = 900, height = 600) {
   png(file.path("figures", name), width = width, height = height, res = FIGDPI)
 }
 
+theme_primer <- function(base_size = 12) {
+  theme_minimal(base_size = base_size) +
+    theme(
+      plot.title = element_text(face = "bold", size = rel(1.12), margin = margin(b = 8)),
+      plot.subtitle = element_text(color = "#4d4d4d", margin = margin(b = 10)),
+      axis.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank(),
+      legend.position = "top",
+      legend.title = element_blank(),
+      plot.margin = margin(12, 16, 10, 12)
+    )
+}
+
+save_gg <- function(plot, name, width = 8.5, height = 5.6) {
+  ggsave(file.path("figures", name), plot, width = width, height = height,
+         dpi = FIGDPI, bg = "white")
+}
+
 # 1. The complex plane: modulus, argument, and polar geometry.
 save_png("complex_plane_geometry.png")
-par(mar = c(4.2, 4.2, 3, 1))
+par(mar = c(4.2, 4.2, 3, 1), pty = "s")
 plot(NA, xlim = c(-2.2, 2.2), ylim = c(-2.2, 2.2), asp = 1,
      xlab = "Re z", ylab = "Im z", main = "The complex plane is a geometric object")
 abline(h = 0, v = 0, col = GRID)
@@ -38,7 +62,7 @@ for (th in seq(0, 2 * pi - pi / 6, by = pi / 6))
 z <- c(1.35, .9)
 lines(c(0, z[1]), c(0, z[2]), col = RED, lwd = 2)
 points(z[1], z[2], pch = 19, col = RED)
-text(z[1] + .1, z[2] + .1, "z = r exp(i theta)", col = RED, adj = 0)
+text(z[1] + .08, z[2] + .1, "z", col = RED, adj = 0)
 text(1.52, -.12, "|z| = r", col = BLUE)
 text(.72, .27, "arg(z)", col = RED)
 dev.off()
@@ -46,20 +70,24 @@ dev.off()
 # 2. Multiplication by a complex number: rotation plus scaling.
 save_png("complex_multiplication.png")
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3, 1))
+z0 <- 1.2 + .5i
+multiplier <- 2 * exp(1i * pi / 3)
+z1 <- multiplier * z0
 for (which in 1:2) {
   plot(NA, xlim = c(-2.2, 2.2), ylim = c(-2.2, 2.2), asp = 1,
        xlab = "real", ylab = "imaginary",
-       main = if (which == 1) "Before multiplication" else "After multiplication")
+       main = if (which == 1) "Before: z" else "After: (2 exp(i pi/3)) z")
   abline(h = 0, v = 0, col = GRID)
-  a <- if (which == 1) c(1.2, .5) else c(.7, 1.2)
-  b <- if (which == 1) c(1.1, -.2) else c(1.1, .8)
-  circle(r = sqrt(sum(a^2)), col = adjustcolor(BLUE, .5), lty = 2)
-  arrow_line(c(0, a[1]), c(0, a[2]), BLUE, 2)
-  arrow_line(c(0, b[1]), c(0, b[2]), ORANGE, 2)
-  points(a[1], a[2], pch = 19, col = BLUE)
-  points(b[1], b[2], pch = 19, col = ORANGE)
-  text(a[1] + .08, a[2] + .1, if (which == 1) "z" else "z w", col = BLUE, adj = 0)
-  text(b[1] + .08, b[2] + .1, if (which == 1) "w" else "reference", col = ORANGE, adj = 0)
+  a <- if (which == 1) z0 else z1
+  circle(r = Mod(a), col = adjustcolor(BLUE, .5), lty = 2)
+  arrow_line(c(0, Re(a)), c(0, Im(a)), BLUE, 2)
+  points(Re(a), Im(a), pch = 19, col = BLUE)
+  text(Re(a) + .08, Im(a) + .1, if (which == 1) "z" else "wz", col = BLUE, adj = 0)
+  if (which == 1) {
+    arc <- seq(0, Arg(multiplier), length.out = 100)
+    lines(.55 * cos(arc), .55 * sin(arc), col = ORANGE, lwd = 2)
+    text(.55, .38, "60 deg", col = ORANGE, adj = 0)
+  } else text(-2.05, -1.95, "|wz| = 2|z|", col = BLUE, adj = 0)
 }
 dev.off()
 
@@ -85,7 +113,51 @@ for (which in 1:2) {
 }
 dev.off()
 
-# 4. A directed contour and its winding numbers.
+# 4. Domain colouring: phase is hue and magnitude is brightness.
+grid <- expand.grid(x = seq(-1.55, 1.55, length.out = 360),
+                    y = seq(-1.55, 1.55, length.out = 360))
+grid$z <- with(grid, x + 1i * y)
+grid$w <- grid$z^2
+grid$phase <- (Arg(grid$w) %% (2 * pi)) / (2 * pi)
+grid$brightness <- scales::rescale(log1p(Mod(grid$w)), to = c(.28, 1))
+grid$colour <- hsv(grid$phase, .82, grid$brightness)
+grid$colour[abs(grid$z) < .025] <- "#3d3d3d"
+domain_colouring <- ggplot(grid, aes(x, y, fill = colour)) +
+  geom_raster() +
+  scale_fill_identity() +
+  coord_fixed(xlim = c(-1.55, 1.55), ylim = c(-1.55, 1.55), expand = FALSE) +
+  labs(title = "Domain colouring makes phase winding visible",
+       subtitle = "For f(z) = z², one turn around the origin becomes two turns in phase") +
+  theme_void(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", size = 14, margin = margin(b = 5)),
+        plot.subtitle = element_text(color = "#4d4d4d", size = 10, margin = margin(b = 8)),
+        plot.margin = margin(12, 16, 10, 16))
+save_gg(domain_colouring, "domain_colouring_z2.png", 8, 6)
+
+# 5. Directional difference quotients reveal complex differentiability.
+theta <- seq(0, 2 * pi, length.out = 500)
+z0 <- .8 + .4i
+quotients <- expand.grid(theta = theta, rho = c(.8, .4, .15),
+                         function_name = c("f(z) = z²", "f(z) = conjugate(z)")) |>
+  mutate(h = rho * exp(1i * theta),
+         q = ifelse(function_name == "f(z) = z²",
+                    (z0 + h)^2 - z0^2,
+                    Conj(z0 + h) - Conj(z0)) / h,
+         radius = paste0("ρ = ", rho))
+quotient_plot <- ggplot(quotients, aes(Re(q), Im(q), colour = radius)) +
+  geom_path(linewidth = .8, alpha = .9) +
+  geom_point(data = tibble(x = Re(2 * z0), y = Im(2 * z0)),
+             aes(x, y), inherit.aes = FALSE, colour = "#2166ac", size = 2) +
+  facet_wrap(~ function_name, nrow = 1) +
+  coord_fixed() +
+  scale_colour_manual(values = c("ρ = 0.8" = "#f28e2b", "ρ = 0.4" = "#1b9e77", "ρ = 0.15" = "#2166ac")) +
+  labs(title = "The complex difference quotient must forget direction",
+       subtitle = "For z² the curves collapse to 2z₀; for conjugate(z) they remain a unit circle",
+       x = "Re Qρ", y = "Im Qρ") +
+  theme_primer() + theme(legend.position = "top", strip.text = element_text(face = "bold"))
+save_gg(quotient_plot, "difference_quotients.png", 9, 5.4)
+
+# 6. A directed contour and its winding numbers.
 save_png("contour_winding.png")
 par(mar = c(4.2, 4.2, 3, 1))
 plot(NA, xlim = c(-2.2, 2.2), ylim = c(-1.8, 1.8), asp = 1,
@@ -104,7 +176,7 @@ text(c(-.45, .5, 1.75), c(.25, -.35, .35) + .16,
 text(-1.9, 1.45, "counterclockwise", col = BLUE, adj = 0)
 dev.off()
 
-# 5. Cauchy's formula: the interior value is controlled by a boundary circle.
+# 6. Cauchy's formula: the interior value is controlled by a boundary circle.
 save_png("cauchy_integral_formula.png")
 par(mar = c(4.2, 4.2, 3, 1))
 plot(NA, xlim = c(-1.8, 1.8), ylim = c(-1.6, 1.6), asp = 1,
@@ -121,24 +193,23 @@ text(.35, .48, "a", col = RED)
 text(0, -1.42, "f(a) = (1 / 2 pi i) integral_C f(z)/(z-a) dz", col = BLUE)
 dev.off()
 
-# 6. Laurent annuli and the singularity at the centre.
+# 7. Laurent annuli and the singularities at radii 1 and 2.
 save_png("laurent_annuli.png")
-par(mfrow = c(1, 3), mar = c(3.2, 3.2, 2.8, .5))
-limits <- list(c(0, 1), c(1, 2), c(2, 3))
-titles <- c("0 < |z| < 1", "1 < |z| < 2", "|z| > 2")
-for (j in 1:3) {
-  plot(NA, xlim = c(-3, 3), ylim = c(-3, 3), asp = 1, axes = FALSE,
-       xlab = "", ylab = "", main = titles[j])
-  axis(1, labels = FALSE); axis(2, labels = FALSE)
-  circle(r = limits[[j]][1], col = if (j == 1) RED else GRID, lty = 2)
-  circle(r = limits[[j]][2], col = if (j < 3) BLUE else GRID, lty = 2)
-  points(0, 0, pch = 4, col = RED, lwd = 2, cex = 1.4)
-  if (j == 3) points(2.5, 0, pch = 19, col = BLUE)
-  text(0, -2.55, "series converges here", cex = .8)
-}
+par(mar = c(4.2, 4.2, 3, 1), pty = "s")
+plot(NA, xlim = c(-2.7, 2.7), ylim = c(-2.7, 2.7), asp = 1,
+     xlab = "Re z", ylab = "Im z", main = "Laurent expansions stop at the nearest singularity")
+abline(h = 0, v = 0, col = GRID)
+circle(r = 1, col = ORANGE, lty = 2, lwd = 2)
+circle(r = 2, col = BLUE, lty = 2, lwd = 2)
+points(c(1, 2), c(0, 0), pch = 4, col = RED, lwd = 2, cex = 1.5)
+text(1.08, .2, "pole 1", col = RED, adj = 0)
+text(2.05, -.22, "pole 2", col = RED, adj = 0)
+text(0, .42, "|z| < 1", col = ORANGE, font = 2)
+text(0, 1.45, "1 < |z| < 2", col = BLUE, font = 2)
+text(-2.3, -2.25, "|z| > 2", col = "#555555", font = 2, adj = 0)
 dev.off()
 
-# 7. Semicircle contour selected by exponential decay.
+# 8. Semicircle contour selected by exponential decay.
 save_png("semicircle_contour.png")
 par(mar = c(4.2, 4.2, 3, 1))
 plot(NA, xlim = c(-2.3, 2.3), ylim = c(-.35, 2.3), asp = 1,
@@ -147,48 +218,58 @@ th <- seq(pi, 0, length.out = 200)
 lines(2 * cos(th), 2 * sin(th), col = BLUE, lwd = 2)
 lines(seq(-2, 2, length.out = 200), rep(0, 200), col = BLUE, lwd = 2)
 arrows(-1.5, 0, -1.1, 0, col = BLUE, length = .1)
-arrows(1.5, 0, 1.1, 0, col = BLUE, length = .1)
-arrows(2 * cos(2.1), 2 * sin(2.1), 2 * cos(2.0), 2 * sin(2.0), col = BLUE, length = .1)
+arrows(1.1, 0, 1.5, 0, col = BLUE, length = .1)
+arrows(2 * cos(.8), 2 * sin(.8), 2 * cos(.68), 2 * sin(.68), col = BLUE, length = .1)
 points(0, 1, pch = 4, col = RED, lwd = 2, cex = 1.5)
 text(.15, 1, "pole", col = RED, adj = 0)
 text(-2.1, 2.15, "upper semicircle", col = BLUE, adj = 0)
 dev.off()
 
-# 8. Keyhole contour around a branch cut.
+# 9. Keyhole contour around a branch cut.
 save_png("keyhole_contour.png")
 par(mar = c(4.2, 4.2, 3, 1))
 plot(NA, xlim = c(-2.4, 2.4), ylim = c(-2.3, 2.3), asp = 1,
      xlab = "Re z", ylab = "Im z", main = "A keyhole contour has two banks of the cut")
-lines(seq(-2, -.35, length.out = 200), rep(.12, 200), col = BLUE, lwd = 2)
-lines(seq(-2, -.35, length.out = 200), rep(-.12, 200), col = BLUE, lwd = 2)
-th <- seq(pi, 0, length.out = 100)
-lines(.35 * cos(th), .35 * sin(th), col = BLUE, lwd = 2)
-th2 <- seq(0, -pi, length.out = 100)
-lines(2 * cos(th2), 2 * sin(th2), col = BLUE, lwd = 2)
-arrows(-1.6, .12, -1.3, .12, col = ORANGE, length = .1)
-arrows(-1.6, -.12, -1.9, -.12, col = ORANGE, length = .1)
+eps <- .35; R <- 2
+lines(seq(eps, R, length.out = 200), rep(.12, 200), col = BLUE, lwd = 2)
+lines(seq(R, eps, length.out = 200), rep(-.12, 200), col = BLUE, lwd = 2)
+th_outer <- seq(0, 2 * pi, length.out = 250)
+th_inner <- seq(2 * pi, 0, length.out = 120)
+lines(R * cos(th_outer), R * sin(th_outer), col = BLUE, lwd = 2)
+lines(eps * cos(th_inner), eps * sin(th_inner), col = BLUE, lwd = 2)
+arrows(1.1, .12, 1.45, .12, col = ORANGE, length = .1)
+arrows(1.45, -.12, 1.1, -.12, col = ORANGE, length = .1)
+arrows(R * cos(.7), R * sin(.7), R * cos(.82), R * sin(.82), col = ORANGE, length = .1)
 points(-.8, 0, pch = 4, col = RED, lwd = 2, cex = 1.4)
-text(-.65, .2, "branch cut", col = RED, adj = 0)
+text(-1.8, .35, "pole -1", col = RED, adj = 0)
 text(1.15, 1.25, "outer arc", col = BLUE)
-text(.42, -.45, "inner arc", col = BLUE)
+text(.55, -.55, "inner arc", col = BLUE)
+text(.85, .34, "upper bank", col = ORANGE)
+text(.85, -.34, "lower bank", col = ORANGE)
 dev.off()
 
-# 9. Argument principle: a boundary image winds around the origin.
+# 10. Argument principle: a boundary image winds around the origin.
 save_png("argument_principle_winding.png")
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3, 1))
 th <- seq(0, 2 * pi, length.out = 600)
-z <- exp(1i * th)
-fz <- z^3 - .35 * z
+z <- 1.5 * exp(1i * th)
+fz <- (z - 1)^2 / (z * (z - 2))
 plot(Re(z), Im(z), type = "l", asp = 1, col = BLUE, lwd = 2,
-     xlab = "Re z", ylab = "Im z", main = "Contour and image winding")
+     xlab = "Re z", ylab = "Im z", main = "Contour |z| = 3/2")
 abline(h = 0, v = 0, col = GRID)
+for (j in c(80, 280, 480)) arrow_line(c(Re(z[j]), Re(z[j + 4])),
+                                         c(Im(z[j]), Im(z[j + 4])), BLUE, 1.5)
+points(0, 0, pch = 4, col = RED, lwd = 2)
+points(1, 0, pch = 1, col = RED, lwd = 2)
 plot(Re(fz), Im(fz), type = "l", asp = 1, col = RED, lwd = 2,
-     xlab = "Re f(z)", ylab = "Im f(z)", main = "Its image winds around zero")
+     xlab = "Re f(z)", ylab = "Im f(z)", main = "Image winds once")
 abline(h = 0, v = 0, col = GRID)
+for (j in c(80, 280, 480)) arrow_line(c(Re(fz[j]), Re(fz[j + 4])),
+                                         c(Im(fz[j]), Im(fz[j + 4])), RED, 1.5)
 points(0, 0, pch = 4, col = "black", lwd = 2)
 dev.off()
 
-# 10. A Mobius map from the upper half-plane to the unit disk.
+# 11. A Mobius map from the upper half-plane to the unit disk.
 save_png("mobius_half_plane_disk.png")
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3, 1))
 xx <- seq(-3, 3, length.out = 300)
@@ -209,7 +290,7 @@ for (which in 1:2) {
 }
 dev.off()
 
-# 11. Wedge straightening by a power map.
+# 12. Wedge straightening by a power map.
 save_png("wedge_map.png")
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3, 1))
 alpha <- pi / 3
@@ -230,42 +311,43 @@ for (which in 1:2) {
 }
 dev.off()
 
-# 12. The Poisson kernel concentrates near the boundary point.
-save_png("poisson_kernel.png")
-par(mar = c(4.2, 4.2, 3, 1))
+# 13. The Poisson kernel concentrates near the boundary point.
 x <- seq(-pi, pi, length.out = 1000)
-for (r in c(.25, .6, .9)) {
-  P <- (1 - r^2) / (1 - 2 * r * cos(x) + r^2)
-  if (r == .25) plot(x, P, type = "l", lwd = 2, col = BLUE, ylim = c(0, 20),
-                      xlab = "boundary angle theta", ylab = "P_r(theta)",
-                      main = "Poisson kernels become concentrated")
-  else lines(x, P, lwd = 2, col = if (r == .6) ORANGE else RED)
-}
-abline(v = 0, col = GRID, lty = 2)
-legend("topright", legend = c("r = 0.25", "r = 0.60", "r = 0.90"),
-       col = c(BLUE, ORANGE, RED), lwd = 2, bty = "n")
-dev.off()
+poisson <- expand.grid(theta = x, r = c(.25, .60, .90)) |>
+  mutate(P = (1 - r^2) / (1 - 2 * r * cos(theta) + r^2),
+         radius = sprintf("r = %.2f", r))
+poisson_plot <- ggplot(poisson, aes(theta, P, colour = radius)) +
+  geom_line(linewidth = 1.05) +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "#777777") +
+  scale_colour_manual(values = c("#2166ac", "#f28e2b", "#d73027")) +
+  scale_x_continuous(breaks = c(-pi, -pi/2, 0, pi/2, pi),
+                     labels = c("−π", "−π/2", "0", "π/2", "π")) +
+  labs(title = "Poisson kernels concentrate at the boundary point",
+       subtitle = "As r approaches 1, the kernel becomes a sharper averaging window",
+       x = "boundary angle θ", y = "Pᵣ(θ)") +
+  theme_primer()
+save_gg(poisson_plot, "poisson_kernel.png")
 
-# 13. A complex potential and its streamlines.
+# 14. A complex potential and its streamlines.
 save_png("complex_potential_flow.png")
 par(mar = c(4.2, 4.2, 3, 1))
 xx <- seq(-2.2, 2.2, length.out = 350)
 yy <- seq(-2.2, 2.2, length.out = 350)
-zz <- outer(xx, 1i * yy, )
+zz <- outer(xx, yy, FUN = function(x, y) x + 1i * y)
 F <- zz + .7 / zz
+F[Mod(zz) <= sqrt(.7)] <- NA_complex_
 lev <- seq(-3, 3, length.out = 13)
 plot(NA, xlim = c(-2.2, 2.2), ylim = c(-2.2, 2.2), asp = 1,
      xlab = "Re z", ylab = "Im z", main = "Complex potential flow")
 contour(xx, yy, Im(F), levels = lev, drawlabels = FALSE, add = TRUE, col = BLUE)
 contour(xx, yy, Re(F), levels = lev, drawlabels = FALSE, add = TRUE, col = ORANGE, lty = 2)
 circle(r = sqrt(.7), col = RED, lty = 2)
+points(c(-sqrt(.7), sqrt(.7)), c(0, 0), pch = 19, col = RED)
 legend("topleft", legend = c("Im F: streamlines", "Re F: equipotentials"),
        col = c(BLUE, ORANGE), lty = c(1, 2), bty = "n")
 dev.off()
 
-# 14. Periodic trapezoidal convergence for a contour integral.
-save_png("contour_quadrature_convergence.png")
-par(mar = c(4.2, 4.8, 3, 1))
+# 15. Periodic trapezoidal convergence for a contour integral.
 N <- 2^(3:10)
 err_inside <- sapply(N, function(n) {
   th <- 2 * pi * (0:(n - 1)) / n
@@ -279,29 +361,43 @@ err_outside <- sapply(N, function(n) {
   val <- sum(exp(z) / (z - 1) * 1i * .5 * exp(1i * th)) * 2 * pi / n
   abs(val)
 })
-plot(N, err_inside, log = "xy", type = "b", pch = 19, col = BLUE,
-     xlab = "number of nodes N", ylab = "absolute error",
-     main = "Contour quadrature: singularity location matters",
-     ylim = range(c(err_inside, err_outside)))
-lines(N, err_outside, type = "b", pch = 17, col = RED)
-legend("bottomleft", legend = c("pole inside: exact value", "pole outside: zero"),
-       col = c(BLUE, RED), pch = c(19, 17), lty = 1, bty = "n")
-dev.off()
+quadrature <- tibble(
+  N = rep(N, 2),
+  error = c(err_inside, err_outside),
+  case = c(rep("pole inside: exact value", length(err_inside)),
+           rep("pole outside: zero", length(err_outside)))
+)
+quadrature_plot <- ggplot(quadrature, aes(N, error, colour = case, shape = case)) +
+  geom_line(linewidth = .9) + geom_point(size = 2.3) +
+  scale_x_continuous(trans = "log2", breaks = N, labels = N) + scale_y_log10() +
+  scale_colour_manual(values = c("#2166ac", "#d73027")) +
+  labs(title = "Contour quadrature: check the contour before trusting the limit",
+       subtitle = "Both valid contours converge rapidly, but they compute different residue-theorem values",
+       x = "number of nodes N", y = "absolute error") +
+  theme_primer() + theme(legend.position = "top")
+save_gg(quadrature_plot, "contour_quadrature_convergence.png")
 
-# 15. Laplace's method: the local quadratic region dominates.
-save_png("laplace_method.png")
-par(mar = c(4.2, 4.2, 3, 1))
+# 16. Laplace's method: separate the landscape from the concentration.
 x <- seq(-2.5, 2.5, length.out = 800)
 f <- x^2 / 2 + .08 * x^4
-plot(x, f, type = "l", lwd = 2, col = BLUE, xlab = "x", ylab = "f(x)",
-     main = "Laplace's method focuses on the minimum")
-for (lambda in c(1, 4, 12)) {
-  y <- exp(-lambda * f)
-  lines(x, y, lwd = 2, col = if (lambda == 1) ORANGE else if (lambda == 4) GREEN else RED, lty = 2)
-}
-abline(v = 0, col = GRID, lty = 2)
-legend("topright", legend = c("f(x)", "exp(-f)", "exp(-4f)", "exp(-12f)"),
-       col = c(BLUE, ORANGE, GREEN, RED), lty = c(1, 2, 2, 2), lwd = 2, bty = "n")
-dev.off()
+laplace <- expand.grid(x = x, lambda = c(1, 4, 12)) |>
+  mutate(f = x^2 / 2 + .08 * x^4,
+         weight = exp(-lambda * f),
+         lambda_label = paste0("λ = ", lambda))
+landscape <- tibble(x = x, value = f, panel = "landscape f(x)",
+                    lambda_label = "landscape")
+weights <- laplace |>
+  transmute(x, value = weight, panel = "normalised weight exp(−λf(x))",
+            lambda_label)
+laplace_data <- bind_rows(landscape, weights)
+laplace_plot <- ggplot(laplace_data, aes(x, value, colour = lambda_label)) +
+  geom_line(linewidth = 1.05) +
+  facet_grid(. ~ panel, scales = "free_y") +
+  scale_colour_manual(values = c("landscape" = "#2166ac", "λ = 1" = "#f28e2b", "λ = 4" = "#1b9e77", "λ = 12" = "#d73027")) +
+  labs(title = "Laplace's method is local near the minimiser",
+       subtitle = "The left panel shows the landscape; the right panel shows how increasing λ concentrates the weight",
+       x = "x", y = NULL) +
+  theme_primer() + theme(legend.position = "top", strip.text = element_text(face = "bold"))
+save_gg(laplace_plot, "laplace_method.png", 9, 5.8)
 
-cat("Generated 15 complex-analysis figures in figures/.\n")
+cat("Generated 16 complex-analysis figures in figures/.\n")

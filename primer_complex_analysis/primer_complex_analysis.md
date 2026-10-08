@@ -74,6 +74,10 @@ One early picture is worth keeping in mind. A domain-coloring plot assigns hue t
 
 You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ray at angle $\theta$ maps to a ray at $2\theta$ while its radius is squared. The first quadrant maps onto the upper half-plane, and a small circle around zero wraps around its image twice. Under $z\mapsto1/z$, circles of radius $r$ become circles of radius $1/r$ with orientation reversed if you follow the angle parameter through the map. Under $z\mapsto e^z$, vertical translation by $2\pi i$ repeats the same values. Domain coloring makes these rules visible, but the algebra tells you which features are structural and which are artifacts of sampling or a hue discontinuity.
 
+![Domain colouring for the square map](figures/domain_colouring_z2.png)
+
+*Figure: Hue records the phase of $z^2$ and brightness records its magnitude. Going once around the origin makes the hue cycle twice; the dark centre marks the zero where the phase is undefined.*
+
 ![The complex plane with polar coordinates, concentric modulus circles, and argument rays](figures/complex_plane_geometry.png)
 
 *Figure: Modulus is radial distance and argument is angular position. The polar picture is not an optional interpretation: multiplication and branch choices act directly on these two coordinates.*
@@ -118,6 +122,10 @@ $$
 Df(z)=\begin{pmatrix}u_x&u_y\\v_x&v_y\end{pmatrix}
 =\begin{pmatrix}a&-b\\b&a\end{pmatrix},\qquad f'(z)=a+ib.
 $$
+![Directional difference quotients for a holomorphic and a non-holomorphic function](figures/difference_quotients.png)
+
+*Figure: The difference quotient for $z^2$ approaches the single complex number $2z_0$ as the step radius shrinks. For $\overline z$, the quotient remains direction-dependent, tracing the unit circle instead of converging to one value.*
+
 This matrix rotates and scales infinitesimal vectors by $f'(z)$; its determinant is $|f'(z)|^2$. At a point where $f'(z)\ne0$, the map preserves oriented angles locally. At a critical point such as $z=0$ for $z^2$, this first-order picture collapses.
 
 The example $|z|^2$ deserves a second look because it exposes the difference between a derivative at a point and an open region of derivatives. With $f(z)=x^2+y^2$, its Cauchy–Riemann equations read $2x=0$ and $2y=0$, so they hold only at the origin. At that point
@@ -1416,7 +1424,7 @@ The R tab uses a midpoint sum rather than `integrate()`, which is designed for r
 
 ![Periodic contour quadrature converges differently when the pole is inside or outside](figures/contour_quadrature_convergence.png)
 
-*Figure: For analytic periodic integrands, the trapezoidal rule can converge rapidly, but the target value still depends on which singularities lie inside the contour.*
+*Figure: Both valid periodic contours converge rapidly, but the target value changes when a pole crosses the contour. Numerical convergence does not replace checking the contour's singularities and orientation.*
 
 Several numerical traps recur across these examples. Principal arguments jump at branch cuts, so a sampled phase plot can create false discontinuities or hide a chosen branch. A contour that passes too close to a pole produces large, rapidly varying values; a coarse grid may miss the pole entirely. Finite differences near a singularity amplify cancellation, and a residue computation can be exact while its contour selection is wrong. Always state the parameterization and orientation, inspect the singularities analytically, refine the discretization, and distinguish precision error from discretization error. For conformal-map plots, draw a grid and its image, but remember that a coarse mesh can hide crowding near a boundary or a critical point where the derivative vanishes.
 
