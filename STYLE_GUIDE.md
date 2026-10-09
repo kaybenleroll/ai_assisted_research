@@ -14,6 +14,19 @@ The primers in this collection are technically serious but not academically dry.
 - No hedging language: never write "it should be noted," "it is worth mentioning," or "one might argue."
 - No throat-clearing. Get to the point.
 
+Remove empty verbal padding, not genuine uncertainty. State when evidence is
+limited, a claim is conditional, interpretations differ, or behaviour depends
+on an implementation. Precision is more useful than false certainty.
+
+Prefer one main idea per sentence where that improves comprehension. Vary
+sentence length when the argument needs it; sentence-length targets are editing
+signals, not hard limits.
+
+Use a knowledgeable-colleague tone: conversational, respectful and serious.
+Address the reader as "you" when it helps, but do not turn every paragraph into
+an instruction. Avoid slogans, clichés, unexplained idioms and promotional
+language.
+
 ## Language Variant
 
 Use **UK English** for all repository-authored prose, including technical
@@ -59,6 +72,69 @@ usage that require review in context. The remaining prose cleanup is tracked
 separately so that it can be reviewed and rendered by document rather than
 applied as an opaque repository-wide substitution.
 
+## Plain Language Without Flattening the Subject
+
+Plain language removes needless friction; it does not remove technical depth.
+Keep precise terminology, hypotheses, exceptions, proofs and competing
+interpretations when they help the reader reason about the subject. Define
+unavoidable specialist terms at first meaningful use and use the chosen term
+consistently afterwards.
+
+Use examples deliberately. Worked examples are the default for technical
+concepts, but a proof, historical case, comparison, counterexample or failure
+case may teach another subject better. Pair abstract explanations with the
+kind of example that lets the reader apply or test the idea.
+
+Adapt the method to the subject. Code examples should be idiomatic; mathematical
+primers should state hypotheses and show reasoning; humanities primers should
+separate evidence, attribution and interpretation. Do not impose a single
+academic voice or citation system on every primer.
+
+## Structure, Navigation and Accessibility
+
+Use descriptive, sentence-case headings with a logical hierarchy. Choose
+heading levels for document structure, not visual appearance. Long primers
+should provide a contents or other clear navigation aid and should work for
+readers who consult individual sections out of order.
+
+Use meaningful link text rather than bare URLs or phrases such as "click here".
+Give tables and figures enough surrounding explanation to make their purpose
+clear, and do not rely on colour alone to convey meaning. Use notes, cautions
+and warnings sparingly: reserve warnings for material risk or an action the
+reader must not take.
+
+## Sources, Terminology and Freshness
+
+Link important or contestable claims to the strongest available source,
+preferring primary sources for product behaviour, standards and official data.
+Date claims that can change. Use an annotated References or Further Reading
+section where it helps the reader continue, but do not require formal
+author–date citations in every primer.
+
+Expand an acronym at first meaningful use. When a topic has competing
+definitions, state which definition the primer uses and, where useful, keep a
+short glossary or terminology note. Explain a general concept before giving a
+vendor or product's exact term.
+
+Prefer version-agnostic explanations where they remain accurate. When a claim
+is version-specific, name the relevant version or date and link to the primary
+documentation. Do not duplicate information across primers when a maintained
+shared explanation or authoritative source will do; link to it instead.
+
+## Editorial Authority
+
+Apply guidance in this order:
+
+1. The repository style guide and any primer-specific scope or terminology
+   contract.
+2. The subject's authoritative source, including exact product names, APIs,
+   standards, quotations and source-code identifiers.
+3. The principles in this guide: clear UK English, technically accurate
+   explanation, useful examples, accessible structure and maintainable sources.
+
+When a document needs to depart from the house style for a genuine subject or
+audience reason, make the choice explicit and apply it consistently.
+
 ---
 
 ## Technical Depth
@@ -101,7 +177,9 @@ Pick the specific confusion or gap your primer resolves and lead with it.
 
 ## Concrete Examples Over Abstract Descriptions
 
-**Always prefer worked examples.** Abstract descriptions are for textbooks that can't show code. These primers can.
+**Prefer worked examples when they clarify the idea.** Abstract descriptions
+alone are rarely enough for a technical primer, but proofs, cases, comparisons
+and counterexamples may be the right teaching device for other subjects.
 
 Do this:
 ```python
