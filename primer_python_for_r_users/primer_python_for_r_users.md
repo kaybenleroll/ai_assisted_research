@@ -9,9 +9,9 @@ You can read this document linearly, but many people use it by chapter:
 - If you are struggling with day-to-day wrangling translation, start with the wrangling chapter.
 - If your biggest fear is losing your functional coding style, read the functional chapter first.
 - If your current bottleneck is parallel execution, go straight to the multicore chapter.
-- If your anxiety centers on charting quality, the visualization chapter is where you should spend time.
+- If your anxiety centers on charting quality, the visualisation chapter is where you should spend time.
 
-Read each chapter as a decision aid, not a syntax catalog: preserve the analytical contract, identify where Python defaults differ, and choose the simplest implementation that remains testable and operable.
+Read each chapter as a decision aid, not a syntax catalogue: preserve the analytical contract, identify where Python defaults differ, and choose the simplest implementation that remains testable and operable.
 
 ### Migration Philosophy: Keep Your Standards, Change Your Surface Area
 
@@ -22,17 +22,17 @@ A better framing is this: keep your standards and migrate your surface area.
 Your standards include:
 
 - clear, auditable transformation logic
-- predictable missing-data behavior
+- predictable missing-data behaviour
 - composable functional abstractions
 - robust execution with explicit error handling
 - communication-quality visual output
 - reproducibility across machines and teammates
 
-These are not style preferences. They are system-level quality properties. Teams that preserve these properties during migration usually ship faster and with fewer incidents, even if the first Python version looks more verbose than the original R version. Teams that optimize mostly for quick translation often get a short-term speed boost followed by slow, expensive cleanup when implicit assumptions begin to fail in production.
+These are not style preferences. They are system-level quality properties. Teams that preserve these properties during migration usually ship faster and with fewer incidents, even if the first Python version looks more verbose than the original R version. Teams that optimise mostly for quick translation often get a short-term speed boost followed by slow, expensive cleanup when implicit assumptions begin to fail in production.
 
 Those standards transfer directly to Python. What changes is the shape of the tooling and the places where explicitness is expected.
 
-This primer covers the migration decisions that most affect analytical work: data frames and missing values, functional composition, parallel execution, statistical models, visualization, performance, reliability, and team delivery. It assumes that you already know R syntax and core tidyverse, purrr, and furrr ideas. It does not teach Python from first principles, survey every package, or replace package documentation and statistical texts. Use the examples as durable patterns and decision tests, not as a promise of one-to-one API equivalence.
+This primer covers the migration decisions that most affect analytical work: data frames and missing values, functional composition, parallel execution, statistical models, visualisation, performance, reliability, and team delivery. It assumes that you already know R syntax and core tidyverse, purrr, and furrr ideas. It does not teach Python from first principles, survey every package, or replace package documentation and statistical texts. Use the examples as durable patterns and decision tests, not as a promise of one-to-one API equivalence.
 
 ### Why Python Feels Different Even When Capability Is Similar
 
@@ -50,7 +50,7 @@ If you want a stable migration baseline, this stack works well for most analytic
 - seaborn plus matplotlib for most static charts
 - plotnine when grammar continuity with ggplot2 is strategically useful
 - altair for interaction-first browser outputs
-- scikit-learn and statsmodels for modeling pipelines
+- scikit-learn and statsmodels for modelling pipelines
 - concurrent.futures as a first-line parallel primitive
 
 Do not treat this as a law. Treat it as a starting point with good operational ergonomics.
@@ -76,7 +76,7 @@ The `.copy()` call is not only for technical correctness. It is also documentati
 
 ### Missing Data Semantics: NA vs NaN, None, and Nullable dtypes
 
-R users are used to a coherent `NA` story. Python historically had multiple null-like values (`None`, `NaN`) and now has improved consistency through nullable dtypes. If you ignore this topic, you will eventually get surprising behavior in joins, groupby operations, and type coercion.
+R users are used to a coherent `NA` story. Python historically had multiple null-like values (`None`, `NaN`) and now has improved consistency through nullable dtypes. If you ignore this topic, you will eventually get surprising behaviour in joins, groupby operations, and type coercion.
 
 A good baseline policy is:
 
@@ -95,7 +95,7 @@ missing = df["segment"].isna()
 
 The earlier you standardize this, the less cleanup you do later.
 
-### Index Behavior and Output Shapes
+### Index Behaviour and Output Shapes
 
 Tibbles de-emphasize row names. Pandas makes index state central. This is useful, but it creates output-shape surprises if you are not watching carefully.
 
@@ -157,7 +157,7 @@ Think of this style as "boring and durable." In production analytics, boring and
 
 A translation table is useful, but workflow examples teach more. This chapter focuses on realistic side-by-side patterns.
 
-As you read these examples, resist the urge to score them by line count alone. Some Python equivalents are longer, but they often expose assumptions that were implicit in the R version. That explicitness improves testability and incident response. A good migration mindset is to ask, for each translation: does this version make null handling, shape behavior, and join assumptions easier to verify?
+As you read these examples, resist the urge to score them by line count alone. Some Python equivalents are longer, but they often expose assumptions that were implicit in the R version. That explicitness improves testability and incident response. A good migration mindset is to ask, for each translation: does this version make null handling, shape behaviour, and join assumptions easier to verify?
 
 ### Example 1: Grouped Summary with Explicit Null Policy
 
@@ -405,7 +405,7 @@ This mirrors the spirit of purrr's safety helpers but adds operational details t
 
 ### Closures as First-Class Architecture Tools
 
-Closures are not only syntax tricks. They are a serious way to build configurable, testable behavior.
+Closures are not only syntax tricks. They are a serious way to build configurable, testable behaviour.
 
 Parameterizing transforms:
 
@@ -601,7 +601,7 @@ This gives you the same cognitive shape as chained dplyr verbs, while preserving
 
 ### Partial Application and Configurable Verb Families
 
-In R, you may use closures and anonymous functions to specialize behavior. In Python, `functools.partial` is often a clean way to produce configurable "verb families" without introducing framework complexity.
+In R, you may use closures and anonymous functions to specialize behaviour. In Python, `functools.partial` is often a clean way to produce configurable "verb families" without introducing framework complexity.
 
 ```python
 from functools import partial
@@ -634,11 +634,11 @@ The deeper point is architectural: functional decomposition is not only style. I
 
 ### Practical Functional Style Guidelines
 
-Prefer pure functions for transformation logic where feasible, and push side effects to clearly named boundaries such as I/O, logging, and persistence layers. Use closures for configuration and local state instead of scattering mutable globals through a codebase. Use decorators for cross-cutting concerns so behavior stays consistent across call sites and does not degrade into wrapper copy-paste. When a helper appears in multiple workflows, promote it into a shared module with tests and a short docstring contract. The deeper pattern is consistency: functional style helps most when it is applied as a team-level operating language rather than as a personal preference.
+Prefer pure functions for transformation logic where feasible, and push side effects to clearly named boundaries such as I/O, logging, and persistence layers. Use closures for configuration and local state instead of scattering mutable globals through a codebase. Use decorators for cross-cutting concerns so behaviour stays consistent across call sites and does not degrade into wrapper copy-paste. When a helper appears in multiple workflows, promote it into a shared module with tests and a short docstring contract. The deeper pattern is consistency: functional style helps most when it is applied as a team-level operating language rather than as a personal preference.
 
 ## Multicore and Parallelism: A Deep furrr-to-Python Guide
 
-This chapter is intentionally detailed because multicore behavior is where many migrations either succeed brilliantly or become brittle.
+This chapter is intentionally detailed because multicore behaviour is where many migrations either succeed brilliantly or become brittle.
 
 Before diving into tools, anchor on one reality: parallelism is not a direct substitute for good workload design. It is a multiplier. If the underlying task boundary is clean and data movement is controlled, parallelism multiplies throughput. If boundaries are muddy and payloads are oversized, parallelism multiplies complexity and failure noise. Keep this framing in mind while reading every subsection below.
 
@@ -646,7 +646,7 @@ Use this sequence as your first-pass executor chooser:
 
 1. Identify the dominant bottleneck. For CPU-bound work, vectorize first, then ask whether tasks are independent and heavy. On a standard GIL-enabled CPython build, start with `ProcessPoolExecutor` or `joblib` for Python-heavy tasks; benchmark threads when native code releases the GIL or you use a compatible free-threaded build.
 2. For I/O-bound work, use `ThreadPoolExecutor` or `asyncio` when concurrency justifies it.
-3. If memory is the constraint, use `dask` or a partition-by-file pipeline. If none of these constraints dominates, stay sequential and optimize the measured hotspots.
+3. If memory is the constraint, use `dask` or a partition-by-file pipeline. If none of these constraints dominates, stay sequential and optimise the measured hotspots.
 4. Add `ray` only when you need distributed, stateful orchestration. Otherwise keep the process-based design simple.
 
 ### Start with Workload Taxonomy
@@ -717,7 +717,7 @@ For API harvesting, this pattern is often both faster and simpler than multiproc
 
 ### `as_completed` for Control, Progress, and Partial Results
 
-`map` is concise. `as_completed` gives more control for production behavior.
+`map` is concise. `as_completed` gives more control for production behaviour.
 
 ```python
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -755,7 +755,7 @@ Mitigation strategies:
 - use memory-mapped arrays when appropriate
 - benchmark granularity before increasing worker count
 
-### Start Method Differences and Platform Behavior
+### Start Method Differences and Platform Behaviour
 
 Python multiprocessing can use different start methods (`fork`, `spawn`, `forkserver`). In [Python 3.14](https://docs.python.org/3.14/library/multiprocessing.html#contexts-and-start-methods), the defaults changed:
 
@@ -766,7 +766,7 @@ Python multiprocessing can use different start methods (`fork`, `spawn`, `forkse
 For portable code, use patterns compatible with both `spawn` and `forkserver`:
 
 - top-level functions
-- import-safe module initialization
+- import-safe module initialisation
 - an `if __name__ == "__main__":` guard around data loading and pool startup
 - picklable task arguments and results
 
@@ -791,7 +791,7 @@ coefs = Parallel(n_jobs=8, backend="loky")(
 )
 ```
 
-joblib is often the fastest path from sequential loops to stable multicore behavior in analytics code.
+joblib is often the fastest path from sequential loops to stable multicore behaviour in analytics code.
 
 ### dask: Scaling DataFrame Workloads
 
@@ -884,7 +884,7 @@ def task_seed(base_seed, task_idx):
     return base_seed + task_idx
 ```
 
-Use this seed inside each worker for reproducible simulation or model initialization.
+Use this seed inside each worker for reproducible simulation or model initialisation.
 
 ### Parallel Benchmarking Methodology
 
@@ -942,7 +942,7 @@ Why this is often better than one pool for everything:
 
 - threads hide I/O latency efficiently
 - processes exploit multicore CPU for heavy transforms
-- failure behavior is easier to localize by stage
+- failure behaviour is easier to localize by stage
 
 ### Advanced Multicore Pattern: Failure Bucketing and Retry Classes
 
@@ -974,9 +974,9 @@ For migration projects, performance claims should be evidence-based. Add lightwe
 
 Even simple CSV or JSONL run logs make postmortems dramatically faster and prevent debate about where runtime is actually going.
 
-## Statistical Modeling in Python for R Users
+## Statistical Modelling in Python for R Users
 
-For many R users, modeling is where migration confidence can either accelerate or stall. The good news is that Python has strong equivalents for both inference-first and prediction-first workflows. The key is understanding which stack maps to which R habit.
+For many R users, modelling is where migration confidence can either accelerate or stall. The good news is that Python has strong equivalents for both inference-first and prediction-first workflows. The key is understanding which stack maps to which R habit.
 
 At a high level:
 
@@ -984,28 +984,28 @@ At a high level:
 - if your workflow is primarily predictive and cross-validation-first, use `scikit-learn`
 - if you want R-like formula notation in Python, use `statsmodels` formula API (built on `patsy`)
 
-The migration risk in modeling is rarely that Python cannot fit the same model. The risk is that teams accidentally change split policy, null treatment, encoding choices, or threshold logic while focusing only on estimator syntax. Treat those surrounding decisions as first-class model components and parity becomes much more reliable.
+The migration risk in modelling is rarely that Python cannot fit the same model. The risk is that teams accidentally change split policy, null treatment, encoding choices, or threshold logic while focusing only on estimator syntax. Treat those surrounding decisions as first-class model components and parity becomes much more reliable.
 
 If you are skimming this chapter under time pressure, use this route: start with the decision table below, jump to the `lm()` and `glm()` sections for formula parity, then read the validation and calibration sections before touching deployment.
 
-### The Two Modeling Cultures in Python
+### The Two Modelling Cultures in Python
 
-R users often conflate "modeling" as one thing because base and tidy modeling workflows feel cohesive. In Python, there is a clearer split:
+R users often conflate "modelling" as one thing because base and tidy modelling workflows feel cohesive. In Python, there is a clearer split:
 
 - `statsmodels` is inference-oriented: formula syntax, rich summaries, standard errors, hypothesis tests, confidence intervals
 - `scikit-learn` is prediction-oriented: estimator API consistency, pipelines, preprocessing integration, model selection workflows
 
 Neither is better in general. They are better for different intents.
 
-### Not Everything Is `scikit-learn`: The Wider Modeling Ecosystem
+### Not Everything Is `scikit-learn`: The Wider Modelling Ecosystem
 
-This distinction is important enough to call out directly. Statistical modeling in Python is not all done through `scikit-learn`, and many teams get better outcomes when they choose libraries by modeling intent rather than by brand familiarity.
+This distinction is important enough to call out directly. Statistical modelling in Python is not all done through `scikit-learn`, and many teams get better outcomes when they choose libraries by modelling intent rather than by brand familiarity.
 
 Use `scikit-learn` when your primary goal is prediction workflows: robust preprocessing pipelines, cross-validation, hyperparameter tuning, and consistent deployment interfaces. Use `statsmodels` when your primary goal is inference and interpretation: explicit formulas, standard errors, p-values, confidence intervals, and classical diagnostics.
 
 Then layer in specialized libraries when the problem demands it. For Bayesian workflows, many teams use `PyMC` (or a Stan interface) to express hierarchical priors and full posterior uncertainty. For survival analysis, `lifelines` and `scikit-survival` cover common time-to-event patterns such as Cox models and competing-risk style workflows. For panel and econometric settings, `linearmodels` adds fixed-effects, random-effects, IV, and related estimators that are awkward to reproduce cleanly with generic ML tools.
 
-The practical takeaway is simple: Python is an ecosystem, not one modeling package. `scikit-learn` is central for predictive engineering, but it is only one part of the modeling stack. If your work looks more like classical statistics or domain-specific inference, you should reach for the tool that preserves the right assumptions and diagnostics rather than forcing everything into one API.
+The practical takeaway is simple: Python is an ecosystem, not one modelling package. `scikit-learn` is central for predictive engineering, but it is only one part of the modelling stack. If your work looks more like classical statistics or domain-specific inference, you should reach for the tool that preserves the right assumptions and diagnostics rather than forcing everything into one API.
 
 Quick chooser by question type:
 
@@ -1014,7 +1014,7 @@ Quick chooser by question type:
 | "What is the estimated effect, and how certain are we?" | `statsmodels` | Built-in inference outputs: SEs, p-values, confidence intervals, diagnostics |
 | "Which model predicts best on holdout data?" | `scikit-learn` | Pipeline-first CV, metrics, tuning, and production interfaces |
 | "What is full uncertainty under hierarchical assumptions?" | `PyMC` (or Stan interface) | Posterior inference, priors, and hierarchical model structure |
-| "What is time-to-event risk and hazard behavior?" | `lifelines` or `scikit-survival` | Survival-specific estimators and evaluation tools |
+| "What is time-to-event risk and hazard behaviour?" | `lifelines` or `scikit-survival` | Survival-specific estimators and evaluation tools |
 | "How do we model panel/econometric structures?" | `linearmodels` | Fixed effects, random effects, IV, and panel-oriented estimators |
 
 ### `lm()` Equivalent: OLS with Formula Notation
@@ -1116,11 +1116,11 @@ fit_pois = smf.glm(
 ).fit()
 ```
 
-The modeling ergonomics are very similar to R once you adopt formula syntax consistently.
+The modelling ergonomics are very similar to R once you adopt formula syntax consistently.
 
 ### Offsets, Exposure, and Weights in GLM
 
-Many applied modeling workflows in R rely on offsets/exposure terms (especially counts/rates). Python supports this too.
+Many applied modelling workflows in R rely on offsets/exposure terms (especially counts/rates). Python supports this too.
 
 ```python
 fit_rate = smf.glm(
@@ -1131,7 +1131,7 @@ fit_rate = smf.glm(
 ).fit()
 ```
 
-Equivalent conceptual pattern to modeling rates rather than raw counts.
+Equivalent conceptual pattern to modelling rates rather than raw counts.
 
 ### Prediction Workflows and Probability Outputs
 
@@ -1166,7 +1166,7 @@ clf.fit(train_df[num_cols + cat_cols], train_df["churned"])
 p = clf.predict_proba(test_df[num_cols + cat_cols])[:, 1]
 ```
 
-This is where Python shines operationally: explicit preprocessing + model object + reproducible pipeline behavior.
+This is where Python shines operationally: explicit preprocessing + model object + reproducible pipeline behaviour.
 
 ### Mixed Effects Models (`lmer`-style) in Python
 
@@ -1209,7 +1209,7 @@ fit_robust = fit.get_robustcov_results(cov_type="HC3")
 
 ### Formula Notation in `scikit-learn` Workflows
 
-`scikit-learn` does not use formula syntax natively, but you can still bridge formula-based design matrices when you need compatibility with R-style modeling specs.
+`scikit-learn` does not use formula syntax natively, but you can still bridge formula-based design matrices when you need compatibility with R-style modelling specs.
 
 ```python
 from patsy import dmatrices
@@ -1221,15 +1221,15 @@ reg = LinearRegression().fit(X, y.values.ravel())
 
 This gives formula-driven feature construction with sklearn estimator APIs.
 
-### Practical Modeling Guidance for Migration Teams
+### Practical Modelling Guidance for Migration Teams
 
-1. Start inference-heavy porting with `statsmodels` formulas to minimize conceptual friction.
+1. Start inference-heavy porting with `statsmodels` formulas to minimise conceptual friction.
 2. Keep categorical treatment explicit (`C(...)`) and document reference-level choices.
 3. Build tidy-like coefficient tables early so analysts can review models in familiar form.
 4. Move prediction and deployment-oriented models into sklearn pipelines once parity is verified.
 5. Keep a shared model-validation checklist across R and Python implementations.
 
-If you follow this flow, modeling migration becomes a controlled engineering process rather than an endless argument about package preferences.
+If you follow this flow, modelling migration becomes a controlled engineering process rather than an endless argument about package preferences.
 
 ### Model Validation Workflow: R Habits to Python Equivalents
 
@@ -1287,7 +1287,7 @@ pred_label = (p_cal >= threshold).astype(int)
 
 This maps well to mature R workflows where operating thresholds are policy decisions, not model defaults.
 
-### Regularization Equivalents (`glmnet` mindset)
+### Regularisation Equivalents (`glmnet` mindset)
 
 If your R stack uses `glmnet`, Python equivalents are straightforward in `scikit-learn`.
 
@@ -1307,7 +1307,7 @@ reg = LogisticRegressionCV(
 reg.fit(train_df[num_cols + cat_cols], train_df["churned"])
 ```
 
-For linear regression regularization, use `LassoCV`, `RidgeCV`, or `ElasticNetCV`. The conceptual translation from `glmnet` is direct: tune shrinkage by cross-validation, then inspect sparsity and stability.
+For linear regression regularisation, use `LassoCV`, `RidgeCV`, or `ElasticNetCV`. The conceptual translation from `glmnet` is direct: tune shrinkage by cross-validation, then inspect sparsity and stability.
 
 ### Robust and Clustered Standard Errors
 
@@ -1324,7 +1324,7 @@ This is especially important when panel-like dependence structures exist. The mi
 
 ### Classification Reports and Error Slicing
 
-Advanced modeling workflows should include segment-level error analysis rather than only global metrics.
+Advanced modelling workflows should include segment-level error analysis rather than only global metrics.
 
 ```python
 from sklearn.metrics import classification_report
@@ -1347,7 +1347,7 @@ This preserves the spirit of careful subgroup diagnostics that many expert R pra
 
 ### Time-Aware Validation for Sequential Data
 
-If your modeling data has temporal dependence, random folds can overstate performance.
+If your modelling data has temporal dependence, random folds can overstate performance.
 
 ```python
 from sklearn.model_selection import TimeSeriesSplit
@@ -1358,7 +1358,7 @@ tscv = TimeSeriesSplit(n_splits=5)
 
 Then evaluate only forward-in-time splits. This is analogous to disciplined rolling-origin validation in R forecasting workflows.
 
-### Recommended Modeling Review Checklist
+### Recommended Modelling Review Checklist
 
 Before accepting parity between R and Python implementations, verify:
 
@@ -1368,15 +1368,15 @@ Before accepting parity between R and Python implementations, verify:
 4. metric definition parity
 5. threshold policy parity
 6. calibration quality parity
-7. subgroup error behavior parity
+7. subgroup error behaviour parity
 
 Treat this checklist as part of migration quality assurance, not optional polish.
 
-## Visualization Migration for ggplot2-Heavy Workflows
+## Visualisation Migration for ggplot2-Heavy Workflows
 
-Visualization is often the emotional center of migration. The concern is legitimate: ggplot2 is exceptionally coherent. The good news is that Python can meet very high visual standards if you choose a layered strategy intentionally.
+Visualisation is often the emotional centre of migration. The concern is legitimate: ggplot2 is exceptionally coherent. The good news is that Python can meet very high visual standards if you choose a layered strategy intentionally.
 
-The practical mistake to avoid is treating plotting migration as a purely aesthetic task. Visualization parity is a decision-quality task. If axis transforms, faceting logic, and uncertainty communication drift during migration, business decisions drift too. That is why this section focuses on chart contracts and validation habits in addition to code snippets.
+The practical mistake to avoid is treating plotting migration as a purely aesthetic task. Visualisation parity is a decision-quality task. If axis transforms, faceting logic, and uncertainty communication drift during migration, business decisions drift too. That is why this section focuses on chart contracts and validation habits in addition to code snippets.
 
 ### Why One-to-One Replacement Is Usually the Wrong Goal
 
@@ -1500,9 +1500,9 @@ def validate_monthly_churn_contract(frame):
 
 ## Performance and Reliability Engineering
 
-Performance work is where intuition often misleads. The reliable method is profile first, optimize second.
+Performance work is where intuition often misleads. The reliable method is profile first, optimise second.
 
-For experienced R users, one subtle migration trap is carrying over optimization instincts that were correct in one runtime context but less effective in another. In Python, the biggest wins frequently come from changing execution shape (vectorization, memory layout, batching strategy) rather than micro-optimizing syntax.
+For experienced R users, one subtle migration trap is carrying over optimisation instincts that were correct in one runtime context but less effective in another. In Python, the biggest wins frequently come from changing execution shape (vectorisation, memory layout, batching strategy) rather than micro-optimising syntax.
 
 A practical way to think about performance in this ecosystem is:
 
@@ -1511,9 +1511,9 @@ A practical way to think about performance in this ecosystem is:
 - parallel execution third
 - low-level micro-tuning last
 
-This ordering keeps optimization effort aligned with likely payoff.
+This ordering keeps optimisation effort aligned with likely payoff.
 
-To make this chapter operational, use a repeated loop: profile, reshape work, re-measure, then harden. The "reshape work" step includes vectorization, reducing intermediate object churn, and improving partition boundaries. Only after those changes should you escalate to multicore orchestration. This sequence prevents the most common migration failure mode: adding concurrency to a workflow whose bottleneck was never identified.
+To make this chapter operational, use a repeated loop: profile, reshape work, re-measure, then harden. The "reshape work" step includes vectorisation, reducing intermediate object churn, and improving partition boundaries. Only after those changes should you escalate to multicore orchestration. This sequence prevents the most common migration failure mode: adding concurrency to a workflow whose bottleneck was never identified.
 
 ### Profile Before You Touch Code
 
@@ -1527,7 +1527,7 @@ with cProfile.Profile() as pr:
 pstats.Stats(pr).sort_stats("cumtime").print_stats(20)
 ```
 
-Use line-level profiling for hotspots and avoid broad unspecific optimization.
+Use line-level profiling for hotspots and avoid broad unspecific optimisation.
 
 In teams, it is useful to attach profile snapshots to pull requests when performance-sensitive code changes. That creates an evidence trail and prevents circular debates about whether a change actually improved anything.
 
@@ -1543,7 +1543,7 @@ This often beats naive multiprocessing with far less complexity.
 
 It also reduces failure surface area. Vectorized operations are usually deterministic, compact, and easier to test than parallel wrappers around row loops. If you can remove ten lines of bespoke iteration and replace them with two vectorized expressions, you usually gain speed and reliability at the same time.
 
-When vectorization is not obvious, a good intermediate strategy is to stage transformations column-by-column with explicit temporary features, then collapse them in a final projection. This approach is often easier to debug than complex one-liners and still leverages optimized kernels.
+When vectorisation is not obvious, a good intermediate strategy is to stage transformations column-by-column with explicit temporary features, then collapse them in a final projection. This approach is often easier to debug than complex one-liners and still leverages optimised kernels.
 
 ### Memory Is Often the Real Bottleneck
 
@@ -1551,7 +1551,7 @@ When vectorization is not obvious, a good intermediate strategy is to stage tran
 df.info(memory_usage="deep")
 ```
 
-Use dtype tuning, categorical conversion, and chunked I/O to stabilize memory behavior.
+Use dtype tuning, categorical conversion, and chunked I/O to stabilize memory behaviour.
 
 R users are often used to workflows where memory pressure appears later in the pipeline. In Python/pandas ecosystems, memory blowups can surface earlier because of intermediate object materialization, especially during joins and wide reshapes. You can reduce this risk by introducing explicit memory checkpoints at major boundaries.
 
@@ -1564,7 +1564,7 @@ def memory_checkpoint(name, frame):
 memory_checkpoint("post-join", joined)
 ```
 
-These checkpoints become very useful during migration because they quickly reveal where a Python implementation diverges from expected resource behavior.
+These checkpoints become very useful during migration because they quickly reveal where a Python implementation diverges from expected resource behaviour.
 
 ```python
 for chunk in pd.read_csv("large.csv", chunksize=200_000):
@@ -1609,7 +1609,7 @@ The goal is not to replace pandas everywhere. The goal is to identify workloads 
 
 ### Reliability Engineering Is Part of Performance Engineering
 
-In production analytics, "fast" is not enough. You also need predictable behavior under imperfect data and infrastructure conditions.
+In production analytics, "fast" is not enough. You also need predictable behaviour under imperfect data and infrastructure conditions.
 
 Practical guardrails:
 
@@ -1709,16 +1709,16 @@ Migration quality is much easier to sustain when those responsibilities are expl
 If you want this section to be actionable, define done status in three layers:
 
 1. Behavioral parity: key outputs, metric definitions, and chart semantics meet agreed tolerances.
-2. Operational readiness: runtime, memory, and failure-handling behavior are inside agreed envelopes.
+2. Operational readiness: runtime, memory, and failure-handling behaviour are inside agreed envelopes.
 3. Team readiness: ownership is assigned, runbook exists, and another teammate can execute from a clean environment.
 
 A workflow is done only when all three layers pass. That standard is demanding, but it is also what keeps migrated systems from becoming fragile hand-crafted artifacts.
 
 ## End-to-End Case Study: Monthly Retention Pipeline
 
-This case study combines wrangling, functional abstraction, multicore execution, and visualization into one operational flow.
+This case study combines wrangling, functional abstraction, multicore execution, and visualisation into one operational flow.
 
-Read this case study as a template you can adapt, not as a single canonical implementation. The sequence matters more than the exact code: define boundaries, enforce contracts, instrument behavior, and only then add complexity.
+Read this case study as a template you can adapt, not as a single canonical implementation. The sequence matters more than the exact code: define boundaries, enforce contracts, instrument behaviour, and only then add complexity.
 
 ### Step 1: Feature Engineering
 
@@ -1873,7 +1873,7 @@ Why this variant matters: many migrations stop at fitting and forget the probabi
 
 ### Variant C: Poisson Frequency Model with Exposure
 
-For event-count modeling (claims, incidents, contact frequency), exposure-aware GLM parity is critical.
+For event-count modelling (claims, incidents, contact frequency), exposure-aware GLM parity is critical.
 
 ```python
 fit_freq = smf.glm(
@@ -1886,11 +1886,11 @@ fit_freq = smf.glm(
 pred_rate = fit_freq.predict(model_df)
 ```
 
-Why this variant matters: it shows direct support for rate modeling patterns that are common in mature R analytical workflows.
+Why this variant matters: it shows direct support for rate modelling patterns that are common in mature R analytical workflows.
 
 ### What These Variants Demonstrate Together
 
-Taken together, the three variants show that Python modeling can preserve the full lifecycle that expert R users care about:
+Taken together, the three variants show that Python modelling can preserve the full lifecycle that expert R users care about:
 
 - formula-driven model specification
 - rigorous validation and diagnostics
@@ -1933,7 +1933,7 @@ Fix:
 - rewrite using vectorized expressions or grouped operations
 - profile before and after to validate gains
 
-Why this pattern survives migration is understandable: row loops feel familiar when translating imperative snippets. The cost is usually not just speed. Loop-heavy code often hides null behavior and creates difficult-to-review branching logic. If a row-wise algorithm is truly required, isolate it in one well-named function and document why vectorization is not feasible.
+Why this pattern survives migration is understandable: row loops feel familiar when translating imperative snippets. The cost is usually not just speed. Loop-heavy code often hides null behaviour and creates difficult-to-review branching logic. If a row-wise algorithm is truly required, isolate it in one well-named function and document why vectorisation is not feasible.
 
 ### Anti-Pattern 3: Treating pandas Index as an Implicit Key Contract
 
@@ -1957,7 +1957,7 @@ Symptom:
 
 Fix:
 
-- optimize execution shape first (vectorization, memory layout)
+- optimise execution shape first (vectorisation, memory layout)
 - then parallelize only measured hotspots
 
 Parallel-first migrations often create systems that are both slower and harder to operate. The overhead is paid in serialization, orchestration complexity, and noisy failures. Vectorization-first keeps architecture simple and usually uncovers the true hotspots that actually deserve concurrency.
@@ -1974,7 +1974,7 @@ Fix:
 - classify retryable vs deterministic failures
 - bucket and report them separately
 
-This classification changes operational behavior immediately. Deterministic failures should trigger data-quality or logic investigation, not repeated retries. Retryable failures should use capped retries with backoff and clear telemetry so incident responders can see failure pressure in real time.
+This classification changes operational behaviour immediately. Deterministic failures should trigger data-quality or logic investigation, not repeated retries. Retryable failures should use capped retries with backoff and clear telemetry so incident responders can see failure pressure in real time.
 
 ### Anti-Pattern 6: Losing Formula-Level Readability Too Early
 
@@ -1986,9 +1986,9 @@ Symptom:
 Fix:
 
 - start with `statsmodels` formulas for parity and readability
-- move to pipeline-oriented sklearn code once behavior is validated
+- move to pipeline-oriented sklearn code once behaviour is validated
 
-The core idea is sequencing. Preserve interpretability during parity work, then evolve toward production ergonomics once trust is established. Skipping that sequence often creates social resistance because stakeholders lose familiar review surfaces before they gain confidence in new ones.
+The core idea is sequencing. Preserve interpretability during parity work, then evolve towards production ergonomics once trust is established. Skipping that sequence often creates social resistance because stakeholders lose familiar review surfaces before they gain confidence in new ones.
 
 ### Anti-Pattern 7: Ignoring Calibration in Classification Workflows
 
@@ -2013,7 +2013,7 @@ Fix:
 
 - define workflow owner, SLO envelope, and rollback protocol at migration time
 
-When incidents happen, ambiguity about ownership is often more damaging than the original bug. Ownership and rollback clarity turn migration risk into manageable operational work instead of organizational confusion.
+When incidents happen, ambiguity about ownership is often more damaging than the original bug. Ownership and rollback clarity turn migration risk into manageable operational work instead of organisational confusion.
 
 ### Anti-Pattern 9: One Global "Python Way" Mandate Across All Workloads
 
@@ -2026,7 +2026,7 @@ Fix:
 - adopt layered stack rules by workload class
 - keep migration architecture flexible but explicit
 
-A single-tool mandate usually optimizes for consistency theater rather than real maintainability. A layered standard gives teams clarity without forcing poor fit decisions for specialized workloads.
+A single-tool mandate usually optimises for consistency theater rather than real maintainability. A layered standard gives teams clarity without forcing poor fit decisions for specialized workloads.
 
 ### Anti-Pattern 10: Confusing Notebook Convenience with Production Readiness
 
@@ -2060,14 +2060,14 @@ These playbooks turn the preceding patterns into execution mechanics, operationa
 
 ### Playbook 1: Building a Data Pipeline the Python Way Without Losing tidyverse Clarity
 
-One of the hardest things for experienced R users is not writing Python syntax. It is preserving the "pipeline clarity" you are used to. In tidyverse work, a well-written pipeline reads like a story: filter this, aggregate that, derive this feature, join to lookup, summarize outputs. A lot of novice Python code breaks this story into disjoint temporary variables, ad-hoc mutations, and unscoped helper snippets. The result feels messy, and teams conclude that Python itself is messy.
+One of the hardest things for experienced R users is not writing Python syntax. It is preserving the "pipeline clarity" you are used to. In tidyverse work, a well-written pipeline reads like a story: filter this, aggregate that, derive this feature, join to lookup, summarise outputs. A lot of novice Python code breaks this story into disjoint temporary variables, ad-hoc mutations, and unscoped helper snippets. The result feels messy, and teams conclude that Python itself is messy.
 
 The better mental model is this: Python asks you to make architectural boundaries explicit. If you do that well, readability can be excellent.
 
 A practical structure for a production-grade pipeline in Python is:
 
 1. ingestion boundary
-2. schema normalization boundary
+2. schema normalisation boundary
 3. transformation graph
 4. quality checks and invariants
 5. publish boundary
@@ -2130,11 +2130,11 @@ def schema_report(name, frame):
 
 A final note on pipeline readability: do not treat method chaining as a purity test. Some Python users over-index on chain length as an aesthetic marker. For migration teams, the best rule is simpler: chain when it improves local readability, break into named steps when it improves explainability. There is no prize for one-expression pipelines that nobody can maintain.
 
-### Playbook 2: Translating Analytical Modeling Workflows, Not Just Individual Models
+### Playbook 2: Translating Analytical Modelling Workflows, Not Just Individual Models
 
-Teams often believe modeling migration means "fit the same model in Python and compare coefficients." That is necessary and not sufficient. Real modeling workflows include data prep assumptions, leakage controls, split policies, calibration, threshold governance, and monitoring. If you do not port those behaviors too, you may get a model that matches in-sample numbers but fails in operations.
+Teams often believe modelling migration means "fit the same model in Python and compare coefficients." That is necessary and not sufficient. Real modelling workflows include data prep assumptions, leakage controls, split policies, calibration, threshold governance, and monitoring. If you do not port those behaviors too, you may get a model that matches in-sample numbers but fails in operations.
 
-A robust migration flow for an existing R modeling workflow usually looks like this:
+A robust migration flow for an existing R modelling workflow usually looks like this:
 
 1. establish baseline artifacts from R
 2. recreate feature table in Python with parity checks
@@ -2149,7 +2149,7 @@ For example, suppose your R process uses:
 
 - `glm(churn ~ features, family=binomial)`
 - cross-validated AUC
-- a business threshold tuned to call-center capacity
+- a business threshold tuned to call-centre capacity
 - monthly scorecard reporting by segment
 
 A Python migration with full parity should include all four pieces. You can start with formula parity:
@@ -2207,7 +2207,7 @@ Parallel migration tends to fail in one of two ways. Either teams over-paralleli
 A better path is staged:
 
 1. make sequential path correct and measurable
-2. optimize vectorization and memory layout
+2. optimise vectorisation and memory layout
 3. parallelize independent hotspots with simple executors
 4. introduce orchestration complexity only when justified
 
@@ -2257,11 +2257,11 @@ On async I/O, a realistic recommendation for most analytics teams is pragmatic: 
 
 A final point on multicore culture: establish performance SLOs for migrated workflows. It is much easier to argue constructively about architecture choices when teams agree on target envelopes (for example, "monthly job must finish under 30 minutes on standard build agent"). Without explicit targets, parallelization conversations drift into tool preference debates.
 
-### Playbook 4: Visualization Parity and Why "Looks Similar" Is Not Enough
+### Playbook 4: Visualisation Parity and Why "Looks Similar" Is Not Enough
 
-If your team uses visualization to drive decisions, the migration quality bar is higher than visual resemblance. You need semantic parity: the same metric definitions, the same subgroup structure, the same axis transforms and scales, the same annotation logic, and the same publication defaults. If any one of those drifts, people can make different decisions from charts that still look superficially similar.
+If your team uses visualisation to drive decisions, the migration quality bar is higher than visual resemblance. You need semantic parity: the same metric definitions, the same subgroup structure, the same axis transforms and scales, the same annotation logic, and the same publication defaults. If any one of those drifts, people can make different decisions from charts that still look superficially similar.
 
-One practical strategy is to define a chart contract for each high-value chart family. A useful contract specifies the input schema, metric function, grouping and faceting policy, formatting and labeling rules, and export settings such as dimensions and DPI. Once that contract exists, migration review shifts from "looks fine to me" toward objective checks against agreed chart behavior.
+One practical strategy is to define a chart contract for each high-value chart family. A useful contract specifies the input schema, metric function, grouping and faceting policy, formatting and labeling rules, and export settings such as dimensions and DPI. Once that contract exists, migration review shifts from "looks fine to me" towards objective checks against agreed chart behaviour.
 
 Then implement both R and Python versions against the same contract during migration validation.
 
@@ -2299,7 +2299,7 @@ These switches let developers reproduce issues locally without running the full 
 
 ### Playbook 6: Team Collaboration Patterns That Prevent Drift
 
-Migration is not a solo craft exercise. It is a team behavior problem. Two patterns help a lot. First, define coding agreements for migrated Python workflows early, including where transformation functions live, how naming maps from existing R vocabulary, what typing level is expected, which tests are mandatory, and how parity checks are documented. Second, enforce review rituals for migration PRs so reviewers explicitly confirm semantic parity evidence, join and null-policy safety, performance/profile evidence for major changes, and rollback readiness for production workflows.
+Migration is not a solo craft exercise. It is a team behaviour problem. Two patterns help a lot. First, define coding agreements for migrated Python workflows early, including where transformation functions live, how naming maps from existing R vocabulary, what typing level is expected, which tests are mandatory, and how parity checks are documented. Second, enforce review rituals for migration PRs so reviewers explicitly confirm semantic parity evidence, join and null-policy safety, performance/profile evidence for major changes, and rollback readiness for production workflows.
 
 These rituals are lightweight compared with the cost of post-deploy surprises.
 
@@ -2320,7 +2320,7 @@ If your team wants a concrete, aggressive plan, structure it in six two-week pha
 
 ### Playbook 9: Closing Advice for Long Migrations
 
-The biggest lesson across successful migrations is straightforward: do not optimize for ideological purity. Optimize for reliable outcomes, maintainable systems, and analyst trust.
+The biggest lesson across successful migrations is straightforward: do not optimise for ideological purity. Optimize for reliable outcomes, maintainable systems, and analyst trust.
 
 Keep the parts of your R practice that are genuinely strong, including disciplined transformation logic, clear naming and metric semantics, honest model validation, and communication-quality visuals. Then adopt the parts of Python that solve the problems you actually face: explicit contracts and interfaces, robust execution control, scalable packaging of reusable components, and production-oriented model and pipeline tooling.
 
@@ -2334,11 +2334,11 @@ These deep dives cover the execution details that determine whether a long migra
 
 Notebook exploration is productive, but migration often fails at the notebook-to-module boundary when workflow boundaries remain implicit.
 
-A good migration habit is to treat notebooks as hypothesis workspaces, not as ownership boundaries. As soon as a transformation or model behavior is stable enough that someone else depends on it, move it to a module with explicit inputs and outputs. Keep the notebook as a narrative and visual explanation layer, but let the reusable logic live in code that can be imported, tested, linted, and versioned.
+A good migration habit is to treat notebooks as hypothesis workspaces, not as ownership boundaries. As soon as a transformation or model behaviour is stable enough that someone else depends on it, move it to a module with explicit inputs and outputs. Keep the notebook as a narrative and visual explanation layer, but let the reusable logic live in code that can be imported, tested, linted, and versioned.
 
 Concretely, if a notebook cell does three things, split them:
 
-- data loading and normalization
+- data loading and normalisation
 - transformation and feature derivation
 - chart/model output generation
 
@@ -2368,7 +2368,7 @@ def make_churn_plot(frame):
     return ax
 ```
 
-One subtle but important difference from many R workflows is import behavior. In Python, module import side effects can create surprising runtime issues if code executes at import time. Keep module-level definitions lightweight and avoid heavy I/O or model loading outside explicit function calls. This becomes especially important for multiprocessing, where module import behavior is part of worker bootstrapping.
+One subtle but important difference from many R workflows is import behaviour. In Python, module import side effects can create surprising runtime issues if code executes at import time. Keep module-level definitions lightweight and avoid heavy I/O or model loading outside explicit function calls. This becomes especially important for multiprocessing, where module import behaviour is part of worker bootstrapping.
 
 A practical migration policy that works well is:
 
@@ -2432,19 +2432,19 @@ Finally, if you have multiple analysts adding features, define a lightweight fea
 
 - business meaning
 - mathematical definition
-- expected null behavior
+- expected null behaviour
 - expected range
 - known failure modes
 
 This is the analytics equivalent of API review. It sounds formal. It prevents chaos.
 
-### Deep Dive 3: Modeling Architecture Choices and Their Organizational Consequences
+### Deep Dive 3: Modelling Architecture Choices and Their Organisational Consequences
 
 Tool selection is never purely technical. It shapes who can review, maintain, and trust the system.
 
 For R-heavy teams, keep an inference-facing path in statsmodels and an operations-facing path in sklearn. The two paths serve different review and deployment needs.
 
-The inference-facing path helps analysts and statisticians evaluate coefficients, standard errors, and diagnostics in a language they recognize. The operations-facing path helps engineers deploy consistent preprocessing and scoring behavior with robust interfaces.
+The inference-facing path helps analysts and statisticians evaluate coefficients, standard errors, and diagnostics in a language they recognize. The operations-facing path helps engineers deploy consistent preprocessing and scoring behaviour with robust interfaces.
 
 You can even formalize the relationship between the two:
 
@@ -2456,12 +2456,12 @@ That approach lowers social friction between analyst and engineering groups.
 
 A common question is whether this creates maintenance overhead. It can, if unmanaged. The way to keep it sane is to share feature generation and data splits across both paths. The "dual path" should diverge only where model API needs diverge.
 
-Another often-overlooked choice is where to put preprocessing logic. In R workflows, some preprocessing lives in pipeline code and some inside modeling formulas. In Python, decide explicitly:
+Another often-overlooked choice is where to put preprocessing logic. In R workflows, some preprocessing lives in pipeline code and some inside modelling formulas. In Python, decide explicitly:
 
 - if you need reproducible deployment and scoring consistency, keep preprocessing inside sklearn pipelines
 - if you need high interpretability and formula transparency for review, keep transformation intent explicit in statsmodels data prep and formulas
 
-One more organizational consequence: model artifact lifecycle. Python teams often mature faster when they treat model artifacts (coefficients, encoders, thresholds, calibration objects) as versioned outputs with metadata. In R, this may already exist informally through scripts and saved RDS objects. During migration, make it explicit.
+One more organisational consequence: model artifact lifecycle. Python teams often mature faster when they treat model artifacts (coefficients, encoders, thresholds, calibration objects) as versioned outputs with metadata. In R, this may already exist informally through scripts and saved RDS objects. During migration, make it explicit.
 
 Artifact metadata worth storing:
 
@@ -2488,9 +2488,9 @@ leverage = influence.hat_matrix_diag
 cooks_d = influence.cooks_distance[0]
 ```
 
-This gives you direct handles for cases where a small subset of rows dominates parameter behavior.
+This gives you direct handles for cases where a small subset of rows dominates parameter behaviour.
 
-For GLMs and classification, calibration and subgroup behavior are often more important operationally than global summary metrics. A model with good global AUC can still underperform materially on specific segments that matter to the business.
+For GLMs and classification, calibration and subgroup behaviour are often more important operationally than global summary metrics. A model with good global AUC can still underperform materially on specific segments that matter to the business.
 
 A useful pattern is to compute metrics by segment and by score bands. This can reveal threshold brittleness quickly.
 
@@ -2524,7 +2524,7 @@ In short, diagnostics should be treated as migration scaffolding, not optional p
 
 ### Deep Dive 5: Temporal Data, Leakage, and Honest Backtesting
 
-Time-aware modeling is where migrations often accidentally overstate gains. It is very easy to create leakage when feature generation and split policy are not tightly controlled.
+Time-aware modelling is where migrations often accidentally overstate gains. It is very easy to create leakage when feature generation and split policy are not tightly controlled.
 
 In R, many teams have hard-earned intuition for this. Keep that discipline and make it explicit in Python code.
 
@@ -2576,7 +2576,7 @@ runs/
     manifest.json
 ```
 
-Then make workers idempotent by design. If a task output already exists and integrity checks pass, worker should skip rather than recompute. That single behavior often saves huge compute during retries.
+Then make workers idempotent by design. If a task output already exists and integrity checks pass, worker should skip rather than recompute. That single behaviour often saves huge compute during retries.
 
 Another concern is queue starvation and hot partition imbalance. If one partition is vastly larger, tail latency dominates. Add basic partition stats before dispatch and split oversized partitions proactively.
 
@@ -2603,7 +2603,7 @@ Teams trust pipelines they can observe.
 
 To close this chapter, here is a practical 90-day sequence you can operationalize immediately. In Week 1, pick one high-value workflow with manageable complexity, define parity metrics and tolerance thresholds, freeze a reference dataset with R baseline outputs, and scaffold a Python module with clear boundaries. In Week 2, port feature logic with explicit null and dtype policies, add parity tests for the most critical features, and establish one chart contract for a key output. In Week 3, port a baseline model in statsmodels formula style, produce tidy-like coefficient and confidence summaries, and compare diagnostics against the R baseline. In Week 4, implement a sklearn production variant, add cross-validation and calibration checks, and agree on threshold policy with stakeholders.
 
-In Week 5, profile sequential runtime and memory checkpoints, vectorize hotspots, and document measured performance envelopes. In Week 6, parallelize one measured hotspot with a process pool, add structured failure buckets, and add resumable run metadata and logs. In Week 7, run a side-by-side parity demo with stakeholders, capture open gaps, and assign owners. In Week 8, harden CI checks for schema, parity, and runtime thresholds, add a rollback runbook, and define support ownership. In Weeks 9 through 12, repeat the cycle with a second high-value workflow, extract reusable helpers from custom glue code, and update migration guidance from real production behavior.
+In Week 5, profile sequential runtime and memory checkpoints, vectorize hotspots, and document measured performance envelopes. In Week 6, parallelize one measured hotspot with a process pool, add structured failure buckets, and add resumable run metadata and logs. In Week 7, run a side-by-side parity demo with stakeholders, capture open gaps, and assign owners. In Week 8, harden CI checks for schema, parity, and runtime thresholds, add a rollback runbook, and define support ownership. In Weeks 9 through 12, repeat the cycle with a second high-value workflow, extract reusable helpers from custom glue code, and update migration guidance from real production behaviour.
 
 If you do this sequence with discipline, you will not just "port code." You will build a migration engine your team can reuse.
 
@@ -2661,7 +2661,7 @@ ax.set_ylabel("Churn Rate")
 ax.set_xlabel("Month")
 ```
 
-The key review question with stakeholders should be: "Does this chart support the same decision quality as before?" not "Does every hex color match?" If you preserve decision quality and explain intentional visual changes, trust usually holds.
+The key review question with stakeholders should be: "Does this chart support the same decision quality as before?" not "Does every hex colour match?" If you preserve decision quality and explain intentional visual changes, trust usually holds.
 
 Finally, add operational checks that legacy R workflows often had implicitly but not explicitly: row-count checkpoints at major joins, null-rate checks on critical features, threshold-drift warnings, and run metadata that records timestamp, input snapshot ID, and code version.
 
@@ -2709,11 +2709,11 @@ These manifests become the backbone of incident review and external assurance.
 
 One more practical lesson: keep human-readable reconciliation narrative. A short markdown summary per run that says "what changed and why" is often more useful than raw diff tables for decision-makers.
 
-### Scenario 3: You Need High-Volume API Ingestion with Downstream Modeling
+### Scenario 3: You Need High-Volume API Ingestion with Downstream Modelling
 
 Some R teams migrate because upstream data acquisition has outgrown current tooling comfort. Maybe you are pulling large API volumes daily, normalizing payloads, and feeding feature pipelines.
 
-Python can excel here, but only if you separate concerns cleanly across ingestion reliability, payload normalization, feature derivation, and model scoring.
+Python can excel here, but only if you separate concerns cleanly across ingestion reliability, payload normalisation, feature derivation, and model scoring.
 
 If these are entangled, retries and debugging become painful.
 
@@ -2744,9 +2744,9 @@ Now move into feature derivation. Do not put complex feature logic in the same m
 
 For scoring, batch at stable boundaries. If model scoring is CPU-heavy, hand off normalized batches to process pools. If scoring is lightweight but high-throughput, vectorized batch scoring in one process may outperform naive multiprocessing due to lower serialization overhead.
 
-A useful production check is ingestion-to-score latency by stage. Track median and p95 separately for fetch, normalize, feature build, score, and persist so optimization work stays evidence-driven.
+A useful production check is ingestion-to-score latency by stage. Track median and p95 separately for fetch, normalize, feature build, score, and persist so optimisation work stays evidence-driven.
 
-Without stage-level latency, you cannot optimize rationally.
+Without stage-level latency, you cannot optimise rationally.
 
 Finally, establish replayability. If a downstream bug is found, you should be able to replay from persisted normalized payloads without re-calling external APIs. This is one of the most practical reliability upgrades Python migrations can deliver.
 
@@ -2776,7 +2776,7 @@ Another tip: preserve naming continuity from legacy reports. If a metric has bee
 
 ### Scenario 5: You Need Continuous Validation After Migration, Not Just at Cutover
 
-Many teams treat migration as done once outputs match at launch. That is risky. Data systems evolve, dependencies update, and behavior drifts.
+Many teams treat migration as done once outputs match at launch. That is risky. Data systems evolve, dependencies update, and behaviour drifts.
 
 A mature migration posture includes ongoing validation checks after cutover.
 
@@ -2801,7 +2801,7 @@ The long-term message is simple: migration quality is a sustained practice, not 
 
 ### Scenario 6: What to Do When You Genuinely Hit a Hard Edge
 
-Sometimes migration friction is not a process issue. It is a real ecosystem edge: a specialized R package with no mature Python equivalent, a mixed-model structure that is hard to reproduce exactly, or a visualization extension with no direct analog.
+Sometimes migration friction is not a process issue. It is a real ecosystem edge: a specialized R package with no mature Python equivalent, a mixed-model structure that is hard to reproduce exactly, or a visualisation extension with no direct analog.
 
 When this happens, avoid ideological arguments and use a decision matrix: keep the component in R behind an interoperable boundary, re-implement approximately in Python with documented trade-offs, or replace the requirement with an alternative that still satisfies business outcomes.
 
@@ -2825,9 +2825,9 @@ A lightweight schema for KPI tracking can live in a single table with columns su
 
 ### From Verb-Centric Pipelines to Boundary-Centric Pipelines
 
-In tidyverse-heavy work, you often think in terms of clean verb flow: select, filter, mutate, summarize, join, arrange. The readability is in the sequence. In Python, readability often comes from boundaries: clear function names, explicit contracts, explicit shape changes, and explicit assignment points.
+In tidyverse-heavy work, you often think in terms of clean verb flow: select, filter, mutate, summarise, join, arrange. The readability is in the sequence. In Python, readability often comes from boundaries: clear function names, explicit contracts, explicit shape changes, and explicit assignment points.
 
-Neither is better by default. They optimize for different pressures. Verb-centric style shines for quick exploratory transformation reasoning. Boundary-centric style shines when many contributors must maintain logic over time.
+Neither is better by default. They optimise for different pressures. Verb-centric style shines for quick exploratory transformation reasoning. Boundary-centric style shines when many contributors must maintain logic over time.
 
 The practical migration move is not to abandon one for the other. It is to blend them. Use method chains where local clarity is high, then break out to named functions at boundaries where contracts matter.
 
@@ -2857,7 +2857,7 @@ This kind of explicit signature is easy to test and easy to reuse.
 
 ### From Flexible Type Coercion to Deliberate Type Contracts
 
-R users often develop strong intuition for coercion behavior through long practice. Python data workflows can be less forgiving when types are ambiguous, especially with object dtype columns and mixed values.
+R users often develop strong intuition for coercion behaviour through long practice. Python data workflows can be less forgiving when types are ambiguous, especially with object dtype columns and mixed values.
 
 A simple but important migration habit is to make type contracts explicit near ingest boundaries. Do not wait until downstream failures to discover that an ID column was read as float or string inconsistently.
 
@@ -2874,9 +2874,9 @@ df = df.astype(schema)
 
 Type contracts are one of the highest-leverage reliability tools you can adopt during migration.
 
-### From "One Statistical Culture" to "Two Complementary Modeling Cultures"
+### From "One Statistical Culture" to "Two Complementary Modelling Cultures"
 
-In R, many teams experience modeling and inference as one continuous culture, even when packages differ. In Python, the split between inference-oriented and prediction-oriented tooling is more explicit. That can feel fragmented until you realize it maps nicely to real organizational roles.
+In R, many teams experience modelling and inference as one continuous culture, even when packages differ. In Python, the split between inference-oriented and prediction-oriented tooling is more explicit. That can feel fragmented until you realize it maps nicely to real organisational roles.
 
 Use statsmodels when you need interpretability artifacts that analysts trust: formula notation, coefficient tables, robust SE options, and familiar summary objects.
 
@@ -2939,7 +2939,7 @@ Parallelism hurts when:
 - task payloads are tiny
 - serialization dominates runtime
 - observability is missing
-- retry behavior is naive
+- retry behaviour is naive
 
 Treat parallelism as an engineering design choice, not a checkbox.
 

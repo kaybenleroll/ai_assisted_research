@@ -22,7 +22,7 @@ The emphasis is on the operational boundary: what receives input, what chooses a
 
 ### What This Primer Is Not
 
-This is not a model benchmark, a complete catalog of every messaging adapter, or a replacement for provider documentation. Hermes Agent is not the same thing as the [Nous Hermes model family](https://huggingface.co/NousResearch); here, “Hermes” means the agent runtime and its server surfaces. The examples assume a technically literate operator who can read shell commands, YAML, and HTTP requests. They do not assume that a model can safely execute any action it proposes: tool policy, filesystem permissions, network exposure, and human approval remain your responsibility.
+This is not a model benchmark, a complete catalogue of every messaging adapter, or a replacement for provider documentation. Hermes Agent is not the same thing as the [Nous Hermes model family](https://huggingface.co/NousResearch); here, “Hermes” means the agent runtime and its server surfaces. The examples assume a technically literate operator who can read shell commands, YAML, and HTTP requests. They do not assume that a model can safely execute any action it proposes: tool policy, filesystem permissions, network exposure, and human approval remain your responsibility.
 
 ### What Hermes Agent is used for
 
@@ -184,7 +184,7 @@ The default Hermes home is `~/.hermes`. A profile changes the effective home thr
 
 The exact tree grows with enabled features. Desktop themes, desktop plugins, TUI widgets, browser caches, checkpoints, knowledge stores, and tool-specific state can also live below the Hermes home. Back up the actual home rather than relying on a hand-written list.
 
-Keep the separation simple: secrets belong in `.env` or the platform's secret mechanism; ordinary behavior belongs in `config.yaml`. Set restrictive permissions on the home and `.env`:
+Keep the separation simple: secrets belong in `.env` or the platform's secret mechanism; ordinary behaviour belongs in `config.yaml`. Set restrictive permissions on the home and `.env`:
 
 ```bash
 chmod 700 ~/.hermes
@@ -214,7 +214,7 @@ The provider and model are separate settings. Set both, or use `hermes model` an
 
 For local OpenAI-compatible servers, keep the endpoint on loopback until you have deliberately designed authentication and network access. LM Studio commonly uses `http://127.0.0.1:1234/v1`; vLLM and SGLang often use an OpenAI-shaped endpoint configured through `OPENAI_BASE_URL`. A placeholder API key may still be required by the client library even when the local server ignores it.
 
-Model selection affects more than prose quality. Tool-call formatting, context length, reasoning behavior, latency, cost, vision support, and provider rate limits all affect the agent loop. A model that looks good on a chat benchmark can still fail because it emits invalid tool arguments or loses the current working directory after a long tool trace.
+Model selection affects more than prose quality. Tool-call formatting, context length, reasoning behaviour, latency, cost, vision support, and provider rate limits all affect the agent loop. A model that looks good on a chat benchmark can still fail because it emits invalid tool arguments or loses the current working directory after a long tool trace.
 
 ### Provider fallback and model overrides
 
@@ -241,7 +241,7 @@ memory:
   write_approval: true
 ```
 
-With `write_approval: true`, foreground interactive writes can ask for approval and non-interactive or messaging writes can be staged for review. This is useful when memory is valuable but an unattended agent must not silently turn a transient instruction into durable behavior.
+With `write_approval: true`, foreground interactive writes can ask for approval and non-interactive or messaging writes can be staged for review. This is useful when memory is valuable but an unattended agent must not silently turn a transient instruction into durable behaviour.
 
 Hermes also supports external memory provider plugins. The [Memory Providers guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/) describes providers such as Honcho, Mem0, Hindsight, OpenViking, Holographic, RetainDB, ByteRover, and Supermemory. Only one external provider is active at a time, while built-in memory remains active alongside it. External memory creates another availability, privacy, and backup dependency; document where the data lives before enabling it.
 
@@ -357,7 +357,7 @@ Profile gateways need deliberate lifecycle and port planning. A deployment may r
 
 ### Messaging gateway: `hermes gateway`
 
-The [Messaging Gateway guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging) describes a single background gateway that can connect configured adapters such as Telegram, Discord, Slack, WhatsApp, Signal, Matrix, email, Home Assistant, Microsoft Teams, and many others. The gateway owns platform connections, per-chat sessions, typing/streaming behavior where supported, scheduled jobs, and outbound delivery.
+The [Messaging Gateway guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging) describes a single background gateway that can connect configured adapters such as Telegram, Discord, Slack, WhatsApp, Signal, Matrix, email, Home Assistant, Microsoft Teams, and many others. The gateway owns platform connections, per-chat sessions, typing/streaming behaviour where supported, scheduled jobs, and outbound delivery.
 
 Configure adapters through the wizard:
 
@@ -490,7 +490,7 @@ The image is intended to be upgraded independently of `/opt/data`. Keep the imag
 
 #### Podman
 
-Rootless Podman is a reasonable Docker-compatible runtime for the official image, but validate the exact image, networking, user namespace, and volume behavior in your environment. Use `podman` in place of `docker`, publish loopback addresses explicitly, and add `:Z` on SELinux systems when the host policy requires relabeling:
+Rootless Podman is a reasonable Docker-compatible runtime for the official image, but validate the exact image, networking, user namespace, and volume behaviour in your environment. Use `podman` in place of `docker`, publish loopback addresses explicitly, and add `:Z` on SELinux systems when the host policy requires relabeling:
 
 ```bash
 podman run -d \
@@ -562,7 +562,7 @@ Updates change both the runtime and bundled skills. Review the [CLI reference](h
 
 ## Backup, restore, and recover
 
-Hermes has two useful backup scopes. `hermes backup` captures the whole Hermes home, including profiles and credentials, while `hermes profile export` creates a portable single-profile archive with `.env` and `auth.json` excluded. The official [profile command reference](https://hermes-agent.nousresearch.com/docs/reference/profile-commands/) and [CLI reference](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md) describe the current behavior.
+Hermes has two useful backup scopes. `hermes backup` captures the whole Hermes home, including profiles and credentials, while `hermes profile export` creates a portable single-profile archive with `.env` and `auth.json` excluded. The official [profile command reference](https://hermes-agent.nousresearch.com/docs/reference/profile-commands/) and [CLI reference](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md) describe the current behaviour.
 
 #### Full machine backup
 
@@ -594,7 +594,7 @@ hermes doctor
 hermes profile list
 ```
 
-The exact import confirmation and path behavior can change; read `hermes import --help` before an overwrite. Re-authenticate providers or messaging platforms if tokens were intentionally excluded or invalidated. Start one profile at a time and verify that the restored API bind and gateway adapters are not colliding with an old process. Run `hermes doctor`, a tool-free prompt, an authenticated API health check, and a controlled channel smoke test before reconnecting unattended traffic. Keep `~/.hermes.before-restore` until those checks pass.
+The exact import confirmation and path behaviour can change; read `hermes import --help` before an overwrite. Re-authenticate providers or messaging platforms if tokens were intentionally excluded or invalidated. Start one profile at a time and verify that the restored API bind and gateway adapters are not colliding with an old process. Run `hermes doctor`, a tool-free prompt, an authenticated API health check, and a controlled channel smoke test before reconnecting unattended traffic. Keep `~/.hermes.before-restore` until those checks pass.
 
 #### Profile handoff
 
@@ -641,7 +641,7 @@ Choose OpenClaw when its gateway/channel orchestration, ecosystem integrations, 
 
 ### When they can be combined
 
-They can occupy different layers: OpenClaw can be the outward channel/control plane while Hermes or another backend supplies agent behavior, or Hermes can expose an API that a separate application consumes. A combined deployment adds network, authentication, session, and duplicate-tool risks. Define which system owns identity, model selection, memory, terminal execution, and outbound messaging before connecting them. Do not let both systems independently answer the same channel or write the same state directory.
+They can occupy different layers: OpenClaw can be the outward channel/control plane while Hermes or another backend supplies agent behaviour, or Hermes can expose an API that a separate application consumes. A combined deployment adds network, authentication, session, and duplicate-tool risks. Define which system owns identity, model selection, memory, terminal execution, and outbound messaging before connecting them. Do not let both systems independently answer the same channel or write the same state directory.
 
 ### Operational reference
 

@@ -10,7 +10,7 @@ Ten European national electoral systems: how each converts votes into seats, how
 
 This is not a complete history of electoral-system evolution, and it makes no argument for which system is best. It is not a guide to voting as a citizen in any particular country. The EU Parliament election process is used as contextual scaffolding, but this primer is about domestic systems, not the EU legislature itself.
 
-European voting systems are different ways of solving the same problem: turning votes into seats and seats into governments. They optimize for different priorities, including proportional fairness, local MP accountability, party control, and coalition stability. That is why systems that look similar on paper can produce very different political outcomes.
+European voting systems are different ways of solving the same problem: turning votes into seats and seats into governments. They optimise for different priorities, including proportional fairness, local MP accountability, party control, and coalition stability. That is why systems that look similar on paper can produce very different political outcomes.
 
 If you want the short version, the real argument underneath almost every European system is this: how much should the system reward a clear winner, and how much should it try to mirror the actual shape of the vote? Once you see that trade-off, the rest of the map gets easier to read.
 
@@ -78,7 +78,7 @@ Here is a realistic flow using an energy-transition file as an example.
 
 For analysis, this creates a simple rule: do not treat a national election as just a domestic event. It often changes both Council arithmetic and the parliamentary negotiation environment at EU level.
 
-The forecasting implication is concrete. If two or three medium-to-large member states all move toward similar fiscal or industrial-policy preferences, the odds of EU-level compromise rise. If they move in opposite directions, files stall, dilute, or split into partial deals.
+The forecasting implication is concrete. If two or three medium-to-large member states all move towards similar fiscal or industrial-policy preferences, the odds of EU-level compromise rise. If they move in opposite directions, files stall, dilute, or split into partial deals.
 
 ### Two end-to-end EU legislative pathway examples
 
@@ -162,11 +162,11 @@ Round 1:
 | Candidate | Votes |
 | --- | ---: |
 | Left | 31% |
-| Center | 24% |
+| Centre | 24% |
 | Hard Right | 29% |
 | Other | 16% |
 
-Nobody wins outright, so the top two or three relevant contenders move forward, depending on the election type. In legislative races, whether the third candidate here (Center, at 24%) actually qualifies for round two depends on turnout, since the threshold is measured against registered voters rather than votes cast, not against the other candidates' totals. Then the losing camps may negotiate, withdraw, or ask their supporters to consolidate around one side.
+Nobody wins outright, so the top two or three relevant contenders move forward, depending on the election type. In legislative races, whether the third candidate here (Centre, at 24%) actually qualifies for round two depends on turnout, since the threshold is measured against registered voters rather than votes cast, not against the other candidates' totals. Then the losing camps may negotiate, withdraw, or ask their supporters to consolidate around one side.
 
 That is why French elections can get very political between rounds: the system creates a bargaining window, not just a counting process.
 
@@ -287,7 +287,7 @@ Why this matters: Denmark combines high proportionality with a local district fe
 
 Toy example:
 
-Suppose Party A does very well in a few districts but not as well nationally. The district seats may temporarily overstate its strength. Then the leveling seats are used to pull the final seat total back toward its real vote share.
+Suppose Party A does very well in a few districts but not as well nationally. The district seats may temporarily overstate its strength. Then the leveling seats are used to pull the final seat total back towards its real vote share.
 
 That is the whole point of the system: local results first, proportional correction afterward.
 
@@ -331,7 +331,7 @@ Toy example:
 
 The parties above the threshold convert votes into seats through the list formula. Parties below the threshold get nothing, which is why thresholds matter so much in PR systems. They are the difference between a parliament with a long tail of tiny parties and a parliament that is merely crowded.
 
-Romania shows that PR does not automatically mean open candidate choice or endless fragmentation. Closed lists and thresholds can make PR feel centralized and party-driven.
+Romania shows that PR does not automatically mean open candidate choice or endless fragmentation. Closed lists and thresholds can make PR feel centralised and party-driven.
 
 # Comparative Lenses
 
@@ -359,7 +359,7 @@ The German coalition discussion also draws on [CDU's explicit pre-election rejec
 
 ### Italy
 
-In 2022, a coherent pre-election center-right bloc converted coalition coordination into a parliamentary majority. The mixed Rosatellum structure rewarded alliance discipline in single-member districts while list votes reinforced bloc advantage. Governing consequence: stronger initial executive control than Italy's fragmented party map might suggest.
+In 2022, a coherent pre-election centre-right bloc converted coalition coordination into a parliamentary majority. The mixed Rosatellum structure rewarded alliance discipline in single-member districts while list votes reinforced bloc advantage. Governing consequence: stronger initial executive control than Italy's fragmented party map might suggest.
 
 ### Spain
 
@@ -436,7 +436,7 @@ If you want a super blunt version:
 3. STV gives voters a lot of choice, but the count is harder to follow.
 4. MMP tries to have both local MPs and proportional results, but the machinery gets complicated fast.
 5. Closed-list PR makes seat allocation clean, but it gives parties a lot of control.
-6. Open-list PR gives voters more say, but it still keeps party logic at the center.
+6. Open-list PR gives voters more say, but it still keeps party logic at the centre.
 7. Leveling seats and adjustment seats are the system's way of saying, "Yes, that district result was a bit weird, let's fix it."
 
 That last idea is really the modern European theme. Very few systems are satisfied with pure winner-takes-all anymore. Even when they are not perfectly proportional, they usually try to patch the rough edges.
@@ -475,7 +475,7 @@ What to watch: whether regionally concentrated parties are mathematically pivota
 
 Why it matters: pivotal regional actors can extract asymmetric concessions that strain coalition coherence.
 
-Worsening signal: repeated government crises tied to center-periphery bargaining files.
+Worsening signal: repeated government crises tied to centre-periphery bargaining files.
 
 ### 5) Seat-vote distortion trend
 
@@ -603,7 +603,7 @@ Now imagine this exact vote distribution is processed by different rule sets.
 | Two-round majoritarian | A and B dominate runoffs; C and D become kingmakers between rounds |
 | Closed-list PR with D'Hondt and small districts | A and B gain modest bonus, C survives, D under-converts |
 | National PR with low threshold | Seat shares track vote shares much more closely |
-| MMP with compensatory list seats | District distortions are pulled back toward party-vote proportionality |
+| MMP with compensatory list seats | District distortions are pulled back towards party-vote proportionality |
 
 The key practical insight is not that one is morally superior. It is that each design encodes a political theory about governability versus representativeness.
 
@@ -689,4 +689,4 @@ The practical way to read the map is to ask three questions at once:
 
 Viewed that way, the country differences stop looking random. Majoritarian systems buy decisiveness at the cost of proportionality. Proportional systems buy representativeness at the cost of negotiation complexity. Hybrid systems split the difference and push trade-offs into institutional detail.
 
-For analysis, the useful endpoint is not choosing a "best" system. It is identifying which political behavior each design systematically rewards, and what that implies for policy stability, coalition durability, and EU negotiation outcomes.
+For analysis, the useful endpoint is not choosing a "best" system. It is identifying which political behaviour each design systematically rewards, and what that implies for policy stability, coalition durability, and EU negotiation outcomes.

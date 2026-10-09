@@ -6,13 +6,13 @@ Imagine visiting a synagogue on Shabbat, a mosque on Friday, a Catholic Mass, a 
 
 Comparative religion is easy to do badly. A survey can turn living traditions into a row of labels — one god, many gods, sacred book, priest, service — and make them look more alike than they are. It can also do the opposite: treat every tradition as so unique that comparison becomes impossible. This primer tries to hold the useful middle ground.
 
-It explains how seven major religious traditions organize authority, community, doctrine, practice, and worship. Judaism, Christianity, and Islam are the three traditions commonly called the “Religions of the Book,” although that label needs qualification. Hinduism, Sikhism, Buddhism, and Shinto have very different relationships among text, ritual, institution, lineage, and liberation.
+It explains how seven major religious traditions organise authority, community, doctrine, practice, and worship. Judaism, Christianity, and Islam are the three traditions commonly called the “Religions of the Book,” although that label needs qualification. Hinduism, Sikhism, Buddhism, and Shinto have very different relationships among text, ritual, institution, lineage, and liberation.
 
 The chapters use the same questions for every tradition. What counts as authoritative? What is the human problem religion addresses? What is the desired transformation or end? Who leads the community? What does ordinary worship look like? How do major internal branches disagree?
 
 ## What This Is Not
 
-This is not a catalogue of every denomination, sect, school, or local practice. Christianity alone contains thousands of named church bodies, and Hindu, Buddhist, and Shinto life cannot be mapped adequately through a single organizational chart. The goal is a working map of major structures and ideas, not an exhaustive census.
+This is not a catalogue of every denomination, sect, school, or local practice. Christianity alone contains thousands of named church bodies, and Hindu, Buddhist, and Shinto life cannot be mapped adequately through a single organisational chart. The goal is a working map of major structures and ideas, not an exhaustive census.
 
 This is also not a comparative theology book that decides which claims are true. The primer describes traditions from both outside and inside perspectives: outside, by comparing their structures and practices; inside, by explaining what those practices mean to adherents. A description such as “the Eucharist is a ritual meal” is not intended to reduce it to a meal. For many Christians it is also sacrament, sacrifice, thanksgiving, communion, and participation in Christ.
 
@@ -22,7 +22,7 @@ Finally, this is not a guide to borrowing rituals. A reader can learn what a pra
 
 Religions are not software packages with one release version. They are layered traditions: ancient texts, remembered founders, institutions, legal arguments, regional cultures, family habits, reform movements, and contemporary identities. “Judaism,” “Christianity,” “Islam,” “Hinduism,” “Sikhism,” “Buddhism,” and “Shinto” each contain internal argument.
 
-The word *doctrine* therefore means different things in different chapters. In Christianity it often points toward formally stated beliefs and creeds. In Judaism it is inseparable from covenant, law, practice, and interpretation. In Islam it includes creed, law, prophetic precedent, and theological schools. Hinduism has no single creed-setting institution, Buddhism has no creator-God doctrine shared across all schools, and Shinto often places ritual competence and relationship with the *kami* ahead of systematic belief.
+The word *doctrine* therefore means different things in different chapters. In Christianity it often points towards formally stated beliefs and creeds. In Judaism it is inseparable from covenant, law, practice, and interpretation. In Islam it includes creed, law, prophetic precedent, and theological schools. Hinduism has no single creed-setting institution, Buddhism has no creator-God doctrine shared across all schools, and Shinto often places ritual competence and relationship with the *kami* ahead of systematic belief.
 
 Transliterations vary. This primer uses familiar English forms where possible and gives a more precise term when the distinction matters. “God” is capitalized for the monotheistic traditions when referring to their own concept of the one God. “Kami,” “Brahman,” “Buddha,” and “Dharma” are not interchangeable translations of that word.
 
@@ -56,7 +56,7 @@ A useful comparison begins with five questions rather than a list of beliefs.
 
 Before the details, hold a rough pattern in mind. Judaism, Christianity, and Islam all inherit a world of scripture, prophecy, covenant, law, and worship of one God, but they do not treat scripture or community in the same way. Judaism makes covenant visible through Torah, peoplehood, argument, calendar, and practice. Christianity centres the person of Christ and the church’s memory of his death and resurrection. Islam makes revelation audible through Qur’anic recitation and builds daily life around submission to God.
 
-Hinduism, Sikhism, Buddhism, and Shinto do not fit that same pattern. Hindu traditions connect devotion, philosophy, household duty, temple ritual, and liberation without a single church. Sikhism makes remembrance of the Divine visible through scripture, music, equality, and service. Buddhism begins with a diagnosis of suffering and trains attention, conduct, and wisdom toward awakening. Shinto centres sacred presence, purification, place, ancestors, and festival rather than a universal creed.
+Hinduism, Sikhism, Buddhism, and Shinto do not fit that same pattern. Hindu traditions connect devotion, philosophy, household duty, temple ritual, and liberation without a single church. Sikhism makes remembrance of the Divine visible through scripture, music, equality, and service. Buddhism begins with a diagnosis of suffering and trains attention, conduct, and wisdom towards awakening. Shinto centres sacred presence, purification, place, ancestors, and festival rather than a universal creed.
 
 These are starting points, not definitions. A Jewish household, a Catholic parish, a Hindu temple, or a Buddhist monastery may embody the tradition differently from the summary above. Carry one question into the chapters: what does this tradition believe is wrong with human life, and what kind of community and practice can answer it?
 
@@ -79,7 +79,7 @@ On Saturday morning, the same pattern expands into the synagogue. People pray, h
 
 Judaism is a tradition of covenantal peoplehood as well as a religion. Jewish identity can involve ancestry, conversion, religious practice, language, history, culture, and connection to the Land and people of Israel. These dimensions overlap, but they are not identical. A person can be Jewish and secular; another can be deeply observant; another can belong to a liberal congregation with a highly adaptive approach to inherited practice.
 
-The basic local institution is the synagogue, or *beit knesset*, a house of assembly. It is a place of prayer, Torah reading, study, education, community organization, and life-cycle events. A rabbi is a teacher and interpreter of Jewish law and tradition, not a priest who alone can make worship valid. In many communities, lay participation is essential: public prayer, Torah reading, chanting, communal decisions, and charitable work depend on the congregation.
+The basic local institution is the synagogue, or *beit knesset*, a house of assembly. It is a place of prayer, Torah reading, study, education, community organisation, and life-cycle events. A rabbi is a teacher and interpreter of Jewish law and tradition, not a priest who alone can make worship valid. In many communities, lay participation is essential: public prayer, Torah reading, chanting, communal decisions, and charitable work depend on the congregation.
 
 Jewish institutions have changed as Jewish life has changed. The ancient Temple in Jerusalem was the centre of sacrifice and pilgrimage; after the Temple's destruction, rabbinic Judaism developed synagogue prayer, Torah study, legal interpretation, and household practice as the durable framework of Jewish life. This was not a simple replacement of ritual with belief. It was a reorganisation of sacred time, authority, and communal memory around text, prayer, study, and observance. Modern Jewish movements inherit this long history while disagreeing about how binding inherited law is and how much authority belongs to rabbis, communities, families, or individual conscience.
 
@@ -113,9 +113,9 @@ Orthodox communities treat halakha as binding and organise Jewish life through T
 
 Conservative or Masorti Judaism retains substantial continuity with traditional liturgy and halakhic practice while giving historical scholarship and communal legal decision-making a larger role in adaptation. Reform or Progressive Judaism treats Jewish tradition as a source of obligation and meaning, but does not generally regard one universally binding halakhic system as the sole measure of faithfulness. Prayer may use Hebrew and inherited melodies alongside vernacular language, creative liturgy, music, and explicit ethical themes.
 
-Reconstructionist Judaism describes Judaism as an evolving religious civilization. Inherited practices remain important, but communities reinterpret them as the changing language of a people rather than as commands fixed in one supernatural register. Sephardi and Mizrahi communities often organize religious life through inherited rite, local rabbinic authority, and communal custom rather than through the North American denominational labels used here. “Sephardi” and “Mizrahi” themselves describe broad historical and cultural formations, not one uniform theology.
+Reconstructionist Judaism describes Judaism as an evolving religious civilization. Inherited practices remain important, but communities reinterpret them as the changing language of a people rather than as commands fixed in one supernatural register. Sephardi and Mizrahi communities often organise religious life through inherited rite, local rabbinic authority, and communal custom rather than through the North American denominational labels used here. “Sephardi” and “Mizrahi” themselves describe broad historical and cultural formations, not one uniform theology.
 
-These are differences of authority, not merely differences of style. A Reform congregation using Hebrew and a traditional melody is not necessarily moving toward Orthodox theology. An Orthodox congregation using modern technology or a contemporary lecture is not necessarily Reform. External appearance is a poor classifier unless you understand the movement’s account of obligation.
+These are differences of authority, not merely differences of style. A Reform congregation using Hebrew and a traditional melody is not necessarily moving towards Orthodox theology. An Orthodox congregation using modern technology or a contemporary lecture is not necessarily Reform. External appearance is a poor classifier unless you understand the movement’s account of obligation.
 
 ## Shabbat in Practice
 
@@ -187,7 +187,7 @@ Eastern Orthodoxy is a communion of self-governing, or autocephalous, churches, 
 
 Orthodox theology emphasizes the continuity of the church’s worship, councils, icons, ascetic life, and sacramental mysteries. The Divine Liturgy of St John Chrysostom is the ordinary Eucharistic service; the Liturgy of St Basil is used on certain days. The service moves from gathering and Scripture to the offering of bread and wine, Eucharistic prayer, Communion, and dismissal. Vespers, Matins, the Hours, processions, fasting seasons, and the Paschal vigil create a dense liturgical rhythm around the Eucharist.
 
-Icons are not treated as decorative illustrations. They are venerated as windows into the sanctified order of creation, while worship in the strict sense is directed to God. Monasticism, especially the contemplative tradition associated with hesychasm, is an important source of spiritual authority, though most Orthodox Christians are lay people living family, professional, and civic lives. The aim of salvation is often described through healing, transformation, and participation in divine life, sometimes summarized by the term theosis.
+Icons are not treated as decorative illustrations. They are venerated as windows into the sanctified order of creation, while worship in the strict sense is directed to God. Monasticism, especially the contemplative tradition associated with hesychasm, is an important source of spiritual authority, though most Orthodox Christians are lay people living family, professional, and civic lives. The aim of salvation is often described through healing, transformation, and participation in divine life, sometimes summarised by the term theosis.
 
 The Orthodox world is also culturally broader than the word “Greek” suggests. Arabic-speaking Orthodox Christians in the Patriarchates of Antioch, Jerusalem, and Alexandria, Slavic churches, Romanians, Georgians, Albanians, and diaspora communities all inherit Byzantine forms while singing and preaching in local languages. Orthodox identity is therefore a theological and liturgical family, not a synonym for one ethnicity.
 
@@ -217,7 +217,7 @@ Africa was not a late mission field waiting for Christianity to arrive from Euro
 
 Christian communities also endured in Nubia and the medieval kingdoms along the Nile, while the Middle East retained Greek, Syriac, Armenian, Coptic, Maronite, Chaldean, Assyrian, and other Christian populations. Modern Christian life in the region includes ancient patriarchates, Catholic Eastern churches, Orthodox churches, Protestant communities, evangelical institutions, monastic communities, and diaspora congregations. “Middle Eastern Christianity” is therefore a region containing several families, not one denomination.
 
-Modern African Christianity adds further branches. Catholic and Protestant missions expanded dramatically from the nineteenth century, but African Christians also founded independent churches and movements. African Initiated or Instituted Churches, including Aladura, Zion, Kimbanguist, Ethiopianist, and many other traditions, often combine Christian scripture and baptism with prophetic leadership, healing, exorcism, disciplined prayer, indigenous languages, and local forms of community organization. Some have close relations with older denominations; others insist on their ecclesial independence. Their existence complicates any story in which Christianity simply travels from Europe to Africa unchanged.
+Modern African Christianity adds further branches. Catholic and Protestant missions expanded dramatically from the nineteenth century, but African Christians also founded independent churches and movements. African Initiated or Instituted Churches, including Aladura, Zion, Kimbanguist, Ethiopianist, and many other traditions, often combine Christian scripture and baptism with prophetic leadership, healing, exorcism, disciplined prayer, indigenous languages, and local forms of community organisation. Some have close relations with older denominations; others insist on their ecclesial independence. Their existence complicates any story in which Christianity simply travels from Europe to Africa unchanged.
 
 ## Protestant Families: History, Branches, and Contrasts
 
@@ -277,7 +277,7 @@ Pentecostal churches emerged from late nineteenth- and early twentieth-century h
 
 Worship may include extended praise, spontaneous prayer, testimony, healing ministry, an altar call, and preaching that expects an immediate response. Some Pentecostal churches use a bishop or superintendent and a denominational structure; others are independent congregations or loose apostolic networks. Many Pentecostal traditions distinguish conversion and baptism in the Holy Spirit; Holiness Pentecostals may also treat sanctification as a distinct work of grace. Churches disagree over whether speaking in tongues is necessary evidence of Spirit baptism.
 
-Charismatic movements also exist inside Catholic, Anglican, Lutheran, and other churches, with some local Orthodox contexts showing related renewal movements. They may introduce healing prayer, prophecy, contemporary music, and spiritual gifts without leaving an older liturgical or sacramental communion. Pentecostalism is not a single doctrine or organization. It includes classical denominations, independent churches, prosperity-oriented ministries, African and Latin American megachurches, Korean and Chinese movements, and communities whose social ethics and political commitments differ sharply.
+Charismatic movements also exist inside Catholic, Anglican, Lutheran, and other churches, with some local Orthodox contexts showing related renewal movements. They may introduce healing prayer, prophecy, contemporary music, and spiritual gifts without leaving an older liturgical or sacramental communion. Pentecostalism is not a single doctrine or organisation. It includes classical denominations, independent churches, prosperity-oriented ministries, African and Latin American megachurches, Korean and Chinese movements, and communities whose social ethics and political commitments differ sharply.
 
 ### Evangelical, Non-Denominational, and Global Independent Churches
 
@@ -293,7 +293,7 @@ In Catholic, Eastern Orthodox, and Oriental Orthodox churches, baptism normally 
 
 The Protestant families answer the same questions differently. Lutherans and Anglicans retain substantial liturgical forms and give Baptism and Communion a strong sacramental role. Reformed and Presbyterian churches place preaching, covenant, elder governance, and disciplined congregational life at the centre, while treating Communion as a profound participation in Christ in a different theological register. Baptists and many free churches make believer’s baptism a public confession and treat Communion primarily as remembrance and proclamation. Methodists join sacramental worship to conversion, holiness, small groups, and works of mercy.
 
-Anabaptist communities make baptism the entrance into a voluntary, disciplined way of life, while Adventist and restorationist churches organize Christian practice around distinctive readings of Scripture, prophecy, Sabbath, or the New Testament church. Pentecostal and charismatic Christians expect worship to include the present work of the Spirit through praise, healing, testimony, prophecy, or tongues. Evangelical and independent churches can combine several of these inheritances. A cathedral Anglican parish may look more like an Orthodox service than a small evangelical church; a non-denominational congregation may be Baptist in baptism, Reformed in preaching, Pentecostal in worship, and independent in governance.
+Anabaptist communities make baptism the entrance into a voluntary, disciplined way of life, while Adventist and restorationist churches organise Christian practice around distinctive readings of Scripture, prophecy, Sabbath, or the New Testament church. Pentecostal and charismatic Christians expect worship to include the present work of the Spirit through praise, healing, testimony, prophecy, or tongues. Evangelical and independent churches can combine several of these inheritances. A cathedral Anglican parish may look more like an Orthodox service than a small evangelical church; a non-denominational congregation may be Baptist in baptism, Reformed in preaching, Pentecostal in worship, and independent in governance.
 
 These are tendencies rather than rules for identifying every congregation. Church life changes when a tradition enters a new country, meets a different political system, or develops a new revival movement. The useful comparison is not a final label but a set of questions about authority, baptism, Communion, leadership, Scripture, and what the congregation expects worship to do.
 
@@ -325,13 +325,13 @@ The core doctrinal themes include God’s unity, angels, prophets, revealed book
 
 ## The Five Pillars and Ordinary Liturgy
 
-The *shahada* is the testimony of faith. *Salah* is the formal prayer performed five times each day, facing the Kaaba in Mecca. It includes intention, bodily purification where required, standing, Qur’anic recitation, bowing, prostration, sitting, and concluding salutations. Prayer turns the body toward a common centre and turns the day into a repeated pattern of remembrance.
+The *shahada* is the testimony of faith. *Salah* is the formal prayer performed five times each day, facing the Kaaba in Mecca. It includes intention, bodily purification where required, standing, Qur’anic recitation, bowing, prostration, sitting, and concluding salutations. Prayer turns the body towards a common centre and turns the day into a repeated pattern of remembrance.
 
 Friday congregational prayer, *Jumu‘ah*, includes a sermon or *khutbah* and a congregational prayer. The call to prayer, or *adhan*, makes worship audible in public space where that is permitted. Qur’anic recitation is central to prayer, and Arabic remains the liturgical language even when explanation and preaching occur in local languages.
 
 Zakat is obligatory almsgiving under conditions defined by Islamic law. Sawm is fasting during Ramadan from dawn to sunset, with exemptions and rules for illness, travel, pregnancy, and other circumstances. Hajj is pilgrimage to Mecca at least once for those who have the physical and financial ability. The two major festivals, Eid al-Fitr and Eid al-Adha, connect communal prayer, charity, family, sacrifice, and the rhythm of the Islamic lunar calendar.
 
-Other practices are equally important in lived religion. Muslims recite and memorize Qur’an, perform voluntary prayers, make *du‘a* (personal supplication), practice *dhikr* (remembrance), study hadith, visit graves, celebrate the Prophet’s birthday in some communities, and organize charitable work. Sufism, the broad family of Islamic mystical and devotional traditions, crosses Sunni and Shi‘a boundaries and adds distinctive forms of remembrance, poetry, music, spiritual direction, and saint veneration in some contexts.
+Other practices are equally important in lived religion. Muslims recite and memorize Qur’an, perform voluntary prayers, make *du‘a* (personal supplication), practice *dhikr* (remembrance), study hadith, visit graves, celebrate the Prophet’s birthday in some communities, and organise charitable work. Sufism, the broad family of Islamic mystical and devotional traditions, crosses Sunni and Shi‘a boundaries and adds distinctive forms of remembrance, poetry, music, spiritual direction, and saint veneration in some contexts.
 
 ## Sunni, Shi‘a, Ibadi, and Other Islamic Currents
 
@@ -389,7 +389,7 @@ Several concepts form a shared vocabulary, but their interpretation varies.
 
 *Dharma* can mean duty, moral order, religious law, right conduct, or the pattern that sustains a person, community, and cosmos. *Karma* means action and its consequences, especially within a moral and ritual order. *Saṃsāra* is the cycle of birth, death, and rebirth. *Moksha* is liberation from that cycle, although traditions disagree about what liberation reveals: union with or knowledge of Brahman, closeness to a personal deity, participation in divine reality, or release into a different mode of being.
 
-The relation between *ātman*, the self, and *Brahman*, ultimate reality, is central to many Upanishadic and Vedanta discussions. Advaita Vedanta emphasizes non-duality; Vishishtadvaita emphasizes qualified non-duality and the soul’s relation to God; Dvaita emphasizes a real distinction between God, souls, and matter. Other Hindu traditions do not organize their theology primarily around Vedanta metaphysics.
+The relation between *ātman*, the self, and *Brahman*, ultimate reality, is central to many Upanishadic and Vedanta discussions. Advaita Vedanta emphasizes non-duality; Vishishtadvaita emphasizes qualified non-duality and the soul’s relation to God; Dvaita emphasizes a real distinction between God, souls, and matter. Other Hindu traditions do not organise their theology primarily around Vedanta metaphysics.
 
 Hindu traditions often describe several *yogas*, or paths: *jnana yoga* (knowledge), *karma yoga* (disciplined action), *bhakti yoga* (devotion), and *raja* or meditative yoga. These are not four denominations. A single person may combine ritual duty, devotion, study, meditation, and service.
 
@@ -449,7 +449,7 @@ The opening of the Guru Granth Sahib begins with *Ik Onkar*, often translated as
 
 The central human problem is *haumai*, ego or self-centredness, which keeps people forgetful of the Divine and trapped in cycles of attachment. Sikhism accepts ideas of karma and rebirth but rejects caste hierarchy as a basis for spiritual worth. Liberation is associated with living in remembrance of God, aligning with *Hukam*, receiving grace, and acting truthfully in the world.
 
-The Sikh path is often summarized through remembering the Divine, earning an honest livelihood, sharing with others, and serving the community. Renunciation is not required. The ideal is a householder who combines devotion, courage, justice, and responsibility. The image of the *sant-sipahi*, the saint-soldier, expresses the integration of inner discipline and the defence of the vulnerable.
+The Sikh path is often summarised through remembering the Divine, earning an honest livelihood, sharing with others, and serving the community. Renunciation is not required. The ideal is a householder who combines devotion, courage, justice, and responsibility. The image of the *sant-sipahi*, the saint-soldier, expresses the integration of inner discipline and the defence of the vulnerable.
 
 ## Scripture and Liturgy
 
@@ -495,12 +495,12 @@ The relationship between monastics and laypeople is central to this history. Mon
 
 The Four Noble Truths turn that diagnosis into a path. They do not ask the reader to accept a pessimistic slogan about life; they ask what happens when craving, ignorance, and grasping are observed closely enough to be changed.
 
-The Buddha’s teaching is commonly summarized as the Four Noble Truths:
+The Buddha’s teaching is commonly summarised as the Four Noble Truths:
 
 1. *Dukkha*: conditioned life is marked by suffering, unsatisfactoriness, and instability.
 2. The arising of *dukkha*: craving, grasping, and ignorance generate suffering.
 3. The cessation of *dukkha*: liberation is possible when its causes cease.
-4. The path: the Noble Eightfold Path provides the training that leads toward liberation.
+4. The path: the Noble Eightfold Path provides the training that leads towards liberation.
 
 The Eightfold Path includes right view, intention, speech, action, livelihood, effort, mindfulness, and concentration. “Right” here means appropriate, skillful, or aligned with awakening, not merely morally self-congratulatory. The path is often grouped into ethical conduct, mental cultivation, and wisdom.
 
@@ -514,7 +514,7 @@ Buddhist liturgy often includes taking refuge in the Three Jewels, reciting prec
 
 The monastic community follows a Vinaya, a code of discipline. Laypeople commonly undertake five precepts — avoiding killing, stealing, sexual misconduct, false speech, and intoxicants — with stricter observances on special days. Monastics receive alms, teach, chant protective texts, conduct funerals, and preserve textual and meditative traditions. The relationship between lay and monastic communities differs by region, but mutual support is a recurring structure.
 
-Meditation takes many forms: mindfulness of breathing, insight practice, loving-kindness, Zen sitting, visualization, mantra, deity yoga, Pure Land recitation, and analytical meditation. “Meditation” is therefore not one universal technique. A Theravada insight retreat and a Tibetan deity-yoga practice belong to different doctrinal and ritual environments even when both are described in English as meditation.
+Meditation takes many forms: mindfulness of breathing, insight practice, loving-kindness, Zen sitting, visualisation, mantra, deity yoga, Pure Land recitation, and analytical meditation. “Meditation” is therefore not one universal technique. A Theravada insight retreat and a Tibetan deity-yoga practice belong to different doctrinal and ritual environments even when both are described in English as meditation.
 
 The major Buddhist families are not just regional labels. They carry different ideals of awakening, different scriptures, different ritual technologies, and different relationships between monastic and lay life. The simplest contrast is not “simple Buddhism” versus “elaborate Buddhism,” but different ways of organising the path.
 
@@ -532,13 +532,13 @@ Zen or Chan emphasizes direct practice, meditation, teacher-student transmission
 
 ## Vajrayana and Tibetan Buddhism
 
-Vajrayana uses tantric methods within a Mahayana framework. It may include initiation, mantra, mandala, visualization of deities, ritual implements, guru devotion, and highly structured meditative practice. “Deity” in this context does not simply mean worshipping a separate creator god. A deity practice can function as a method for transforming perception, cultivating awakened qualities, and realizing emptiness, though interpretations vary.
+Vajrayana uses tantric methods within a Mahayana framework. It may include initiation, mantra, mandala, visualisation of deities, ritual implements, guru devotion, and highly structured meditative practice. “Deity” in this context does not simply mean worshipping a separate creator god. A deity practice can function as a method for transforming perception, cultivating awakened qualities, and realizing emptiness, though interpretations vary.
 
 Tibetan Buddhism includes the major schools of Nyingma, Kagyu, Sakya, and Gelug, together with many lineages and institutions. The Dalai Lama is a major figure in the Gelug and wider Tibetan world, but no single person governs all Tibetan Buddhism. Monasteries, reincarnate lamas, scholars, householders, retreat centres, and local protectors all shape religious life.
 
 ## A Buddhist Ceremony
 
-A temple ceremony might begin with refuge and precepts, proceed through chanting, incense offering, bowing, meditation, a Dharma talk, and dedication of merit. A family ceremony might add offerings for ancestors, a memorial tablet, monks’ recitation, and food. A Zen service may be spare and silent; a Tibetan puja may be rich in chant, visualization, bells, drums, and ritual objects; a Theravada alms ceremony may centre generosity between laypeople and monks. “Buddhist worship” is therefore best understood as a family of practices for recollection, merit, compassion, and awakening.
+A temple ceremony might begin with refuge and precepts, proceed through chanting, incense offering, bowing, meditation, a Dharma talk, and dedication of merit. A family ceremony might add offerings for ancestors, a memorial tablet, monks’ recitation, and food. A Zen service may be spare and silent; a Tibetan puja may be rich in chant, visualisation, bells, drums, and ritual objects; a Theravada alms ceremony may centre generosity between laypeople and monks. “Buddhist worship” is therefore best understood as a family of practices for recollection, merit, compassion, and awakening.
 
 # Shinto: Kami, Purity, and the Shrine Way
 
@@ -550,7 +550,7 @@ Shinto, “the way of the *kami*,” is a Japanese tradition centred on sacred p
 
 Shinto has no single founder, universal creed, or canonical theology in the way that Christianity, Islam, or Buddhism have developed them. The Kojiki and Nihon Shoki preserve important mythic and imperial narratives, while shrine traditions, norito prayers, ritual manuals, local histories, and priestly training transmit practice. Buddhism, Confucianism, folk religion, and Shinto have influenced one another for centuries; modern religious life often remains more mixed than tidy labels imply.
 
-The shrine, or *jinja*, is the basic institution. A *kannushi* or Shinto priest performs rites; *miko* may assist with ritual and shrine activity. The Association of Shinto Shrines coordinates many shrines, but Shinto is not a single centrally standardized organization. Each shrine has its own enshrined kami, history, festival calendar, parish community, and local relationships.
+The shrine, or *jinja*, is the basic institution. A *kannushi* or Shinto priest performs rites; *miko* may assist with ritual and shrine activity. The Association of Shinto Shrines coordinates many shrines, but Shinto is not a single centrally standardised organisation. Each shrine has its own enshrined kami, history, festival calendar, parish community, and local relationships.
 
 Many shrines are ancient, but “Shinto” as a clearly bounded religion is partly a modern classification. Earlier Japanese religious life commonly combined kami worship with Buddhist temples, imported Chinese ideas, court ritual, and local customs. Shrine and temple institutions were formally separated during the nineteenth-century Meiji period, when the state recast shrine practice as a national tradition. That history explains why a shrine can be at once a sacred place, a neighbourhood institution, a heritage site, and a symbol whose political meanings have changed over time.
 
@@ -616,7 +616,7 @@ The category “weekly service” is a Christian-shaped comparison. It helps wit
 
 ## Entry, Inheritance, and Belonging
 
-Judaism treats conversion as possible but demanding, involving learning, ritual, and entry into a people. Christianity generally treats baptism as entry into the church, with infant and adult forms depending on tradition. Islam welcomes a person through the shahada, though cultural integration and learning continue afterward. Hindu traditions historically do not all organize themselves around conversion, although initiation into a lineage or modern movement may function as a form of religious entry. Sikhism is open to anyone who accepts the path, with Amrit initiation into the Khalsa as a distinct commitment. Buddhism accepts refuge and precepts, while monastic ordination marks a different level of commitment. Shinto usually works through place, family, shrine affiliation, and participation rather than a universal conversion ritual.
+Judaism treats conversion as possible but demanding, involving learning, ritual, and entry into a people. Christianity generally treats baptism as entry into the church, with infant and adult forms depending on tradition. Islam welcomes a person through the shahada, though cultural integration and learning continue afterward. Hindu traditions historically do not all organise themselves around conversion, although initiation into a lineage or modern movement may function as a form of religious entry. Sikhism is open to anyone who accepts the path, with Amrit initiation into the Khalsa as a distinct commitment. Buddhism accepts refuge and precepts, while monastic ordination marks a different level of commitment. Shinto usually works through place, family, shrine affiliation, and participation rather than a universal conversion ritual.
 
 ## Death, Memory, and the Future
 
@@ -683,7 +683,7 @@ The links below mix primary institutional explanations, teaching resources, and 
 - [Middle East Council of Churches](https://www.oikoumene.org/organization/middle-east-council-of-churches) — a directory showing the region’s Catholic, Orthodox, Oriental Orthodox, and evangelical communities.
 - [Assyrian Church of the East](https://assyrianchurch.org/) — institutional starting point for East Syriac Christianity and its modern communities.
 - [Anglican Communion: History of Anglicanism](https://www.anglicancommunion.org/history-of-anglicanism/) — English Reformation, bishops, Scripture, and the Book of Common Prayer.
-- [Assemblies of God: History](https://ag.org/Home/About/About-the-AG/History) — a denominational account of holiness roots, Azusa Street, and early Pentecostal organization.
+- [Assemblies of God: History](https://ag.org/Home/About/About-the-AG/History) — a denominational account of holiness roots, Azusa Street, and early Pentecostal organisation.
 - [Anglican Communion: What Anglicans Believe](https://www.anglicancommunion.org/what-anglicans-believe/) — Anglican account of Scripture, tradition, reason, sacraments, and global structure.
 - [Anglican Communion: The Sacraments](https://www.anglicancommunion.org/the-sacraments-signs-of-gods-grace/) — Anglican explanation of Baptism and Eucharist.
 - [World Council of Churches](https://www.oikoumene.org/) — ecumenical context and a directory of many Christian families.

@@ -128,7 +128,7 @@ At runtime, a single response loop is:
 4. Sample one token.
 5. Append token and repeat.
 
-This is why memory bandwidth and cache behavior matter so much. Even with good compute hardware, poor memory fit destroys throughput.
+This is why memory bandwidth and cache behaviour matter so much. Even with good compute hardware, poor memory fit destroys throughput.
 
 ### Server Layer
 
@@ -316,7 +316,7 @@ Do not assume that a model advertised as multimodal can generate every modality.
 
 ### What Changed Recently
 
-The September 2026 snapshot points toward smaller specialists, sparse larger
+The September 2026 snapshot points towards smaller specialists, sparse larger
 models, configurable reasoning, native tool calling, multimodal input, and
 long-context variants. [Qwen3.5](https://github.com/QwenLM/Qwen3.5),
 [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), and
@@ -345,7 +345,7 @@ generation remains a workstation-scale workload.
 This distinction prevents a common failed setup. A VLM such as Qwen3-VL can inspect a screenshot, read a receipt, or answer questions about a photograph. An image model such as FLUX.2 or Qwen-Image can synthesize or edit pixels. They may share a text encoder or appear in the same UI, but they are not interchangeable. For a private document pipeline, the usual sequence is:
 
 1. Use a VLM or OCR model to extract structure from the document.
-2. Use a text model to classify, summarize, or call tools.
+2. Use a text model to classify, summarise, or call tools.
 3. Use an image model only if the workflow needs a generated or edited image.
 
 The same separation applies to audio and video. Transcribe with ASR, reason over the transcript with a language model, and synthesize speech or video only at the output stage when required.
@@ -543,7 +543,7 @@ ollama run gemma4
 ollama serve
 ```
 
-Ollama keeps improving ergonomics and model catalog experience. It is not the most configurable engine, and its OpenAI-compatible surface is only a subset: base64 image data works, while remote image URLs and some tool controls do not. It remains the most productive default for a single user who wants to try text or vision models quickly.
+Ollama keeps improving ergonomics and model catalogue experience. It is not the most configurable engine, and its OpenAI-compatible surface is only a subset: base64 image data works, while remote image URLs and some tool controls do not. It remains the most productive default for a single user who wants to try text or vision models quickly.
 
 ### LocalAI
 
@@ -578,12 +578,12 @@ each modality separately.
 
 ### vLLM
 
-vLLM remains one of the leading choices for high-throughput serving with strong batching behavior and efficient cache management. Its supported-model surface now includes text, image, video, and audio inputs for selected architectures, with the exact combination depending on the model and backend.
+vLLM remains one of the leading choices for high-throughput serving with strong batching behaviour and efficient cache management. Its supported-model surface now includes text, image, video, and audio inputs for selected architectures, with the exact combination depending on the model and backend.
 
 Use it when you want:
 
 1. Better concurrent throughput than simple single-request loops
-2. Production-oriented serving behavior
+2. Production-oriented serving behaviour
 3. Strong support for modern large-model serving patterns
 
 ```bash
@@ -596,7 +596,7 @@ For local single-user chat, vLLM can be overkill. For multi-user APIs, it is oft
 
 ### SGLang
 
-SGLang is now a serious option for optimized LLM, multimodal, and diffusion serving, especially where structured generation and advanced decode/scheduling behavior matter. Its support is accelerator- and backend-specific, so verify the model's recipe before treating a claimed feature as portable.
+SGLang is now a serious option for optimised LLM, multimodal, and diffusion serving, especially where structured generation and advanced decode/scheduling behaviour matter. Its support is accelerator- and backend-specific, so verify the model's recipe before treating a claimed feature as portable.
 
 Use it when you want:
 
@@ -892,7 +892,7 @@ Use this sequence:
 
 1. Define the modality and workload shape; if the output is a bounded decision,
    test a classifier or typed-decision model before reaching for generation.
-2. Pick a family with a license that fits your use.
+2. Pick a family with a licence that fits your use.
 3. Pick size for hardware, including encoders and KV cache.
 4. Pick a runtime and its supported format.
 5. Pick quantization or an official compressed checkpoint.
@@ -946,12 +946,12 @@ Primary sources remain:
 
 Before downloading:
 
-1. Check license fit for your use case.
+1. Check licence fit for your use case.
 2. Choose instruct/chat variants unless you need base checkpoints.
 3. Confirm file format compatibility with your runtime.
 4. Record exact model identifiers used in your stack.
 
-For visual and audio models, also record the encoder/projector, pipeline version, resolution or clip length, and any safety or watermarking defaults. For voice cloning and image-generation checkpoints, record the usage restrictions separately from the code license.
+For visual and audio models, also record the encoder/projector, pipeline version, resolution or clip length, and any safety or watermarking defaults. For voice cloning and image-generation checkpoints, record the usage restrictions separately from the code licence.
 
 ### Minimal Local Eval Loop
 
@@ -960,7 +960,7 @@ Do not trust one impression prompt. Build a tiny repeatable eval set.
 Include 15-30 prompts that represent your real work:
 
 1. One-turn instruction following
-2. Multi-turn memory behavior
+2. Multi-turn memory behaviour
 3. Coding edits or debugging responses
 4. Tool-call formatting correctness
 5. Domain-specific reasoning checks
@@ -1092,7 +1092,7 @@ Use a simple release procedure:
 1. Pull new runtime/model in staging profile.
 2. Run your mini eval suite.
 3. Compare quality and latency against baseline.
-4. Promote only if metrics and behavior are acceptable.
+4. Promote only if metrics and behaviour are acceptable.
 
 Local stacks feel "small," but this discipline is still worth it.
 
@@ -1159,7 +1159,7 @@ Start with a small VLM or OCR specialist such as Qwen3-VL, Gemma 4, PaddleOCR-VL
 
 ### I need local transcription or speech generation
 
-Use Whisper/faster-whisper for broad transcription compatibility, Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS for speech synthesis. Voice cloning needs explicit speaker consent and a license review.
+Use Whisper/faster-whisper for broad transcription compatibility, Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS for speech synthesis. Voice cloning needs explicit speaker consent and a licence review.
 
 ### I need local video generation
 

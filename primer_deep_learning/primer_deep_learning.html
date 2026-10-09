@@ -946,7 +946,7 @@ sounding minor on its own — was collectively what made depth work.</p>
 <p>The first was the activation function. Early networks used sigmoid or
 tanh activations, both of which saturate: push their input far from zero
 and the output flattens, so the derivative goes to nearly zero. Stack
-many such layers and the gradients shrink toward nothing as they
+many such layers and the gradients shrink towards nothing as they
 propagate backward, leaving the early layers learning at a crawl. This
 is the vanishing gradient problem, derived fully in the training
 section. The fix was the rectified linear unit, ReLU, which is simply
@@ -1441,7 +1441,7 @@ each layer it is multiplied by a weight matrix and by an activation
 derivative. Repeat that multiplication across many layers and the
 gradient’s magnitude is the product of all those per-layer factors.
 Products of many numbers behave violently — if the factors are
-consistently below 1 the product collapses toward zero, and if they are
+consistently below 1 the product collapses towards zero, and if they are
 consistently above 1 it blows up.</p>
 <p>The vanishing gradient problem is the collapse case. Suppose each
 layer multiplies the gradient by a factor of about 0.01 — entirely
@@ -1540,7 +1540,7 @@ the second moment — note: this
 is Adam’s internal bookkeeping variable, not the momentum velocity from
 the previous subsection, despite the shared letter):</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒎</mi><mo>←</mo><msub><mi>β</mi><mn>1</mn></msub><mi mathvariant="bold-italic">𝒎</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>∇</mi><mi mathvariant="script">ℒ</mi><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝒗</mi><mo>←</mo><msub><mi>β</mi><mn>2</mn></msub><mi mathvariant="bold-italic">𝒗</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>∇</mi><mi mathvariant="script">ℒ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{m} \leftarrow \beta_1 \mathbf{m} + (1 - \beta_1) \nabla \mathcal{L}, \qquad \mathbf{v} \leftarrow \beta_2 \mathbf{v} + (1 - \beta_2)(\nabla \mathcal{L})^2.</annotation></semantics></math></p>
-<p>Both averages start at zero, which biases them toward zero in the
+<p>Both averages start at zero, which biases them towards zero in the
 early steps before enough gradients have accumulated. Adam corrects this
 with an explicit bias correction, dividing each by one minus the decay
 raised to the step count
@@ -1591,7 +1591,7 @@ initialisation keeps gradients alive from the very first step.</p>
 <p>The classical regularisers carry straight over. L2 weight decay
 (penalising the sum of squared weights) and L1 (penalising the sum of
 absolute weights) work exactly as they do in linear models, shrinking
-weights toward zero to control capacity. Deep learning adds two
+weights towards zero to control capacity. Deep learning adds two
 regularisers worth knowing well.</p>
 <p>Dropout is the signature technique. During training, on each forward
 pass, you randomly set a fraction
@@ -1684,7 +1684,7 @@ early instability that a large rate causes on a freshly initialised
 network — particularly important for large transformers and for Adam,
 whose adaptive rate estimates are unreliable before enough gradients
 have accumulated. Cosine decay handles the long tail. After warmup, the
-rate is decayed following a cosine curve from its peak down toward a
+rate is decayed following a cosine curve from its peak down towards a
 small minimum,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mi mathvariant="normal">min</mi></msub><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false" form="prefix">(</mo><msub><mi>η</mi><mi mathvariant="normal">max</mi></msub><mo>−</mo><msub><mi>η</mi><mi mathvariant="normal">min</mi></msub><mo stretchy="false" form="postfix">)</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi mathvariant="normal">cos</mi><mfrac><mrow><mi>π</mi><mi>t</mi></mrow><mi>T</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\eta_t = \eta_{\min} + \frac{1}{2}(\eta_{\max} - \eta_{\min})\left(1 + \cos\frac{\pi t}{T}\right),</annotation></semantics></math></p>
 <p>where
@@ -1955,7 +1955,7 @@ is the identity shortcut. Two things make this work. First, learning is
 easier: if the optimal transformation for a block is close to doing
 nothing — close to the identity — then the residual
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℱ</mi><annotation encoding="application/x-tex">\mathcal{F}</annotation></semantics></math>
-just needs to be close to zero, and driving a stack of weights toward
+just needs to be close to zero, and driving a stack of weights towards
 zero is far easier than coaxing them to reproduce the identity exactly.
 Second, and this is the deeper reason, the gradient gets a free path.
 During backpropagation the derivative of that
@@ -1963,7 +1963,7 @@ During backpropagation the derivative of that
 term passes the gradient straight through to the earlier layer with a
 coefficient of one, bypassing the chain of multiplications inside
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℱ</mi><annotation encoding="application/x-tex">\mathcal{F}</annotation></semantics></math>
-that would otherwise shrink it toward zero. The skip connection is a
+that would otherwise shrink it towards zero. The skip connection is a
 gradient highway, and it is the same trick you will see again in the
 residual connections of the transformer. With it, networks of 152 layers
 became trainable; ResNet-152 won ILSVRC 2015 with a top-5 error of
@@ -2213,7 +2213,7 @@ the recurrent weight matrix. Multiply
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
 such factors together and, unless they sit in a narrow band right around
 magnitude 1, the product moves exponentially: factors below 1 drive it
-toward zero (vanishing), factors above 1 blow it up (exploding). For a
+towards zero (vanishing), factors above 1 blow it up (exploding). For a
 sequence of length 100 you are multiplying roughly a hundred of these
 terms, and the result almost always vanishes.</p>
 <p>The practical consequence is sharp. The gradient that should teach
@@ -2234,7 +2234,7 @@ designed as a kind of conveyor belt that runs straight through time with
 only gentle, mostly additive modifications. Because the cell state is
 updated by addition rather than repeated matrix multiplication,
 gradients can travel along it across many steps without being squeezed
-toward zero.</p>
+towards zero.</p>
 <p>The LSTM controls what flows onto and off of that conveyor belt using
 three gates and a candidate update. Each gate is a small linear layer
 followed by a sigmoid
@@ -2946,7 +2946,7 @@ every single inference, forever. Since most of an LLM’s lifetime cost is
 inference, not training, this reframes the whole economics. The question
 stopped being “how big a model can we afford to train?” and became “what
 is the smallest model that hits our quality bar, trained on enough data
-to earn its parameters?” That shift is why the field moved toward
+to earn its parameters?” That shift is why the field moved towards
 smaller, longer-trained models for deployment even as the frontier kept
 pushing scale at the top end.</p>
 <h2 data-number="7.4" id="fine-tuning-adapting-without-retraining"><span class="header-section-number">7.4</span> Fine-tuning: adapting without
@@ -3238,7 +3238,7 @@ the original. The second term,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mrow><mi mathvariant="normal">KL</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒛</mi><mo>∣</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">∥</mo><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒛</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-\operatorname{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z}))</annotation></semantics></math>,
 is a <strong>regularisation</strong> term: it penalises the encoder for
 placing its codes anywhere the prior wouldn’t, pulling every per-input
-posterior toward the standard Gaussian. That second term is precisely
+posterior towards the standard Gaussian. That second term is precisely
 what ordinary autoencoders lacked. It forces the encoder to use the same
 region of latent space the decoder will be sampling from at generation
 time, so the holes close and sampling from the prior produces something
@@ -3391,19 +3391,19 @@ carries no information about
 and the decoder learns to ignore it entirely. You are left with a model
 whose latent code is dead weight. Blurriness and posterior collapse
 together are the main reasons the field looked past VAEs for
-high-fidelity generation — toward GANs and diffusion models, the next
+high-fidelity generation — towards GANs and diffusion models, the next
 two sections — even though the VAE’s structured, samplable latent space
 remains so useful that it reappears as a component inside latent
 diffusion at the end of this part.</p>
 <h1 data-number="9" id="generative-adversarial-networks"><span class="header-section-number">9</span> Generative Adversarial
 Networks</h1>
 <p>The VAE’s blurriness traces back to its objective: a likelihood-based
-loss that rewards hedging toward the average. GANs throw that objective
+loss that rewards hedging towards the average. GANs throw that objective
 out entirely. Instead of training a generator to maximise a likelihood,
 you train it to fool an adversary — a second network whose only job is
 to tell real data from the generator’s fakes. There is no explicit
 density, no reconstruction term averaging over possibilities, nothing
-pulling toward a blurry mean. The generator improves by being told,
+pulling towards a blurry mean. The generator improves by being told,
 repeatedly, exactly how it got caught. The payoff is sharpness; the
 price, as we’ll see, is that the training is genuinely hard to make
 converge.</p>
@@ -3428,9 +3428,9 @@ expression:</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">D_\phi</annotation></semantics></math>
 wants to <em>maximise</em> this: drive
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>ϕ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D_\phi(\mathbf{x})</annotation></semantics></math>
-toward 1 on real data (the first term) and drive
+towards 1 on real data (the first term) and drive
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>ϕ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>G</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒛</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D_\phi(G_\theta(\mathbf{z}))</annotation></semantics></math>
-toward 0 on fakes (the second term), correctly classifying both. The
+towards 0 on fakes (the second term), correctly classifying both. The
 generator wants to <em>minimise</em> it, and it only touches the second
 term — it has no influence over real data — so its goal is to make
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>ϕ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>G</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒛</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D_\phi(G_\theta(\mathbf{z}))</annotation></semantics></math>
@@ -3456,7 +3456,7 @@ and the generator’s distribution
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>G</mi></msub><annotation encoding="application/x-tex">p_G</annotation></semantics></math>.
 So in principle a GAN drives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>G</mi></msub><annotation encoding="application/x-tex">p_G</annotation></semantics></math>
-toward
+towards
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi></mrow></msub><annotation encoding="application/x-tex">p_{\mathrm{data}}</annotation></semantics></math>
 under a sensible divergence. That is the reassuring theory. The practice
 is where it gets difficult.</p>
@@ -3620,7 +3620,7 @@ wins.</p>
 no learned parameters; it is the same recipe for every image. Over
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
 steps it gradually adds Gaussian noise, each step nudging the image
-toward the noise distribution:</p>
+towards the noise distribution:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>∣</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi mathvariant="script">𝒩</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>;</mo><mspace width="0.167em"></mspace><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mi>β</mi><mi>t</mi></msub></mrow></msqrt><mspace width="0.167em"></mspace><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>β</mi><mi>t</mi></msub><mi mathvariant="bold-italic">𝑰</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\big(\mathbf{x}_t;\, \sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\, \beta_t \mathbf{I}\big).</annotation></semantics></math></p>
 <p>Each step scales the previous image down slightly by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mi>β</mi><mi>t</mi></msub></mrow></msqrt><annotation encoding="application/x-tex">\sqrt{1-\beta_t}</annotation></semantics></math>
@@ -3741,15 +3741,15 @@ the noise the network predicts is, up to a scale factor, the
 is equivalent to estimating
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi mathvariant="bold-italic">𝒙</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\nabla_\mathbf{x} \log p(\mathbf{x})</annotation></semantics></math>.
 So a diffusion model is a score-based model in disguise, and the
-denoising it learns is really an estimate of the direction toward higher
-data density at each noise level. This places diffusion inside the
-family of energy-based and score-based generative models, and the
+denoising it learns is really an estimate of the direction towards
+higher data density at each noise level. This places diffusion inside
+the family of energy-based and score-based generative models, and the
 equivalence is more than cosmetic — it is where a lot of the theory and
 the faster samplers come from. A close relative worth a name-check is
 <strong>flow matching</strong>, which trains a network to regress a
 velocity field along a chosen path from noise to data rather than a
 noise-prediction target. Sampling then integrates that learned vector
-field from the noise endpoint toward the data endpoint. The path and
+field from the noise endpoint towards the data endpoint. The path and
 numerical solver become part of the design, so flow matching is related
 to diffusion but is not simply “diffusion with a different name”; it
 offers another route to fast, high-quality continuous generation.</p>
@@ -3778,7 +3778,7 @@ it to the next (lower) level:</p>
 <p>Then re-noise that estimate at the next level down:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></msqrt><mspace width="0.167em"></mspace><msub><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>+</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></msqrt><mspace width="0.167em"></mspace><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 - \bar{\alpha}_{t-1}}\,\epsilon_\theta(\mathbf{x}_t, t).</annotation></semantics></math></p>
 <p>The first term uses the model’s current best guess at the fully
-denoised image; the second term pushes it partway back toward noise at
+denoised image; the second term pushes it partway back towards noise at
 the next level down. Because the process is deterministic given the
 starting noise, DDIM also gives you a clean latent-to-image map, which
 makes interpolation and editing in noise space possible — the same

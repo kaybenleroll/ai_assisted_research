@@ -26,7 +26,7 @@ You will learn:
 
 ### What This Primer Is Not
 
-This is not a catalogue of every channel plugin, a model benchmark, or a security certification. Provider names, model names, CLI flags, and plugin behavior change quickly; use the linked official documentation to verify a command before applying it to a production host. The examples are patterns you can adapt, not a claim that one configuration is safe for every environment.
+This is not a catalogue of every channel plugin, a model benchmark, or a security certification. Provider names, model names, CLI flags, and plugin behaviour change quickly; use the linked official documentation to verify a command before applying it to a production host. The examples are patterns you can adapt, not a claim that one configuration is safe for every environment.
 
 ## What OpenClaw Is Used For
 
@@ -70,7 +70,7 @@ Keep the initial policy narrow. Allow only known senders, require mentions in gr
 
 ### Pattern C: Local-first with hosted fallback
 
-A local model can be the default for privacy and cost while a hosted provider remains available for difficult requests or local-service outages. OpenClaw's fallback behavior has two stages: it rotates usable authentication profiles within the current provider, then tries the configured model fallbacks.
+A local model can be the default for privacy and cost while a hosted provider remains available for difficult requests or local-service outages. OpenClaw's fallback behaviour has two stages: it rotates usable authentication profiles within the current provider, then tries the configured model fallbacks.
 
 Fallbacks are not always applied to explicit user selections. A configured default can use `agents.defaults.model.fallbacks`; an explicit session model is strict unless that selection has its own fallback policy. When OpenClaw automatically moves to a fallback, that automatic state can persist across subsequent turns while the original primary is periodically reprobed; it is cleared when the primary recovers. Treat this as a reliability feature, not as permission to hide provider errors.
 
@@ -239,7 +239,7 @@ Channels are not just output formats. They are authenticated ingress paths into 
 
 The Control UI is useful for local administration because it gives you a direct view of sessions and configuration. Remote access should use an explicit access layer such as Tailscale or an authenticated proxy. A port that is reachable from a LAN is not “local” merely because the agent is personal.
 
-Sessions are the unit of conversational state. Main, group, channel, and agent-specific sessions can have different routing and sandbox behavior. Do not infer that two messages share context because they reached the same Gateway; inspect the session key and routing policy.
+Sessions are the unit of conversational state. Main, group, channel, and agent-specific sessions can have different routing and sandbox behaviour. Do not infer that two messages share context because they reached the same Gateway; inspect the session key and routing policy.
 
 ## Models, Providers, and Failover
 
@@ -289,7 +289,7 @@ For an agentic workload, evaluate more than tokens per second:
 - context window under accumulated tool results;
 - first-token latency and long-context prefill;
 - memory and VRAM pressure during key-value-cache growth;
-- recovery behavior when the model service restarts.
+- recovery behaviour when the model service restarts.
 
 Do not promise a fixed VRAM number for a model family. Quantisation, context length, vision support, batching, and backend version all change the footprint. Measure the exact model and settings on the hardware you intend to operate.
 
@@ -297,7 +297,7 @@ Do not promise a fixed VRAM number for a model family. Quantisation, context len
 
 Partial GPU offload can make a local model usable on a laptop that cannot hold the full model in VRAM. The tradeoff is lower throughput and a more complicated memory budget. The key-value cache can still consume significant VRAM as context grows even when model weights are split between GPU and CPU RAM.
 
-Start with a modest context window, measure memory during a long tool loop, and increase it only when the workload requires it. A nominal “64K context” setting is not free: it changes both latency and memory behavior.
+Start with a modest context window, measure memory during a long tool loop, and increase it only when the workload requires it. A nominal “64K context” setting is not free: it changes both latency and memory behaviour.
 
 ## OpenClaw and Hermes Agent Server
 

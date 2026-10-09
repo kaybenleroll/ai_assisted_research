@@ -597,7 +597,7 @@ code span.wa { color: #da4453; } /* Warning */
     <span class="navbar-brand">Agent Implementation Quick
 Reference</span>
 
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">October 7, 2026</span>
 
   </nav>
 
@@ -681,7 +681,7 @@ Checklist</a>
 <ul>
 <li><a href="#per-task-cost-calculation" id="toc-per-task-cost-calculation">Per-Task Cost Calculation</a></li>
 <li><a href="#monthly-budget-projection" id="toc-monthly-budget-projection">Monthly Budget Projection</a></li>
-<li><a href="#optimization-roi" id="toc-optimization-roi">Optimization
+<li><a href="#optimisation-roi" id="toc-optimisation-roi">Optimisation
 ROI</a></li>
 </ul></li>
 <li><a href="#testing-strategy" id="toc-testing-strategy">Testing
@@ -1134,7 +1134,7 @@ traces before rollout</td>
 </tr>
 <tr>
 <td><strong>Model version mismatch</strong></td>
-<td>Unexpected behavior changes</td>
+<td>Unexpected behaviour changes</td>
 <td>Pin model versions; maintain compatibility layer</td>
 </tr>
 </tbody>
@@ -1184,7 +1184,7 @@ Example:
   With 20% monthly growth compounding, year-one total is the sum of
   $450 * 1.2^k for k=0..11, not $450 * 1.2^12 (that&#39;s just month 12&#39;s cost,
   ~$4,013). The correct twelve-month sum is ~$18k/year.</code></pre>
-<h3 id="optimization-roi">Optimization ROI</h3>
+<h3 id="optimisation-roi">Optimisation ROI</h3>
 <pre class="text"><code>Compression savings = (original_tokens - compressed_tokens) * price_per_token * tasks_per_month
 
 If saving 500 tokens per task:
@@ -1268,8 +1268,9 @@ weeks</label></li>
 core, tools for action, memory for context</p>
 <p><strong>Tool Call:</strong> Agent’s request to execute external
 function (API, code, etc.)</p>
-<p><strong>Trajectory:</strong> Full sequence of thoughts, actions, and
-observations for one task execution</p>
+<p><strong>Trajectory:</strong> Observable sequence of inputs, tool
+calls, arguments, observations, decision summaries, and outcomes for one
+task execution; does not require access to hidden chain-of-thought</p>
 <p><strong>Reflection:</strong> Self-analysis of failure mode to improve
 future attempts</p>
 <p><strong>Hallucination:</strong> LLM generating false information not
@@ -1280,20 +1281,24 @@ input + output</p>
 similarity search</p>
 <p><strong>Episodic Memory:</strong> Storage of past task executions for
 pattern learning</p>
-<p><strong>ReAct:</strong> Pattern: Reason (think) → Act (do) → Observe
-(get result) → Repeat</p>
+<p><strong>ReAct:</strong> Pattern: Decision summary → Action →
+Observation → Repeat; summaries document decisions without exposing
+hidden chain-of-thought</p>
 <p><strong>MRKL:</strong> Modular reasoning system routing tasks to
 specialized expert tools</p>
 <p><strong>A2A:</strong> Agent-to-Agent protocol for communication
 between independently deployed agents; use it when separate identity,
 endpoint, and task lifecycle matter</p>
-<p><strong>MCP:</strong> Model Context Protocol for standardized tool
+<p><strong>MCP:</strong> Model Context Protocol for standardised tool
 and resource interfaces</p>
 <p><strong>Idempotency key:</strong> A caller-supplied identifier that
 lets a service recognize a retried request and avoid repeating a side
 effect</p>
 <p><strong>Durable execution:</strong> Persisted workflow execution that
 can survive failure, pause for input, and resume from saved state</p>
+<hr />
+<p><em>Last updated: October 7, 2026. Companion to the comprehensive
+primer’s September 2026 framework and product snapshot.</em></p>
       </div>
     </main>
 

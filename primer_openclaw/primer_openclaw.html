@@ -736,10 +736,10 @@ be combined.</li>
 <h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
 <p>This is not a catalogue of every channel plugin, a model benchmark,
 or a security certification. Provider names, model names, CLI flags, and
-plugin behavior change quickly; use the linked official documentation to
-verify a command before applying it to a production host. The examples
-are patterns you can adapt, not a claim that one configuration is safe
-for every environment.</p>
+plugin behaviour change quickly; use the linked official documentation
+to verify a command before applying it to a production host. The
+examples are patterns you can adapt, not a claim that one configuration
+is safe for every environment.</p>
 <h1 data-number="2" id="what-openclaw-is-used-for"><span class="header-section-number">2</span> What OpenClaw Is Used For</h1>
 <p>OpenClaw is a self-hosted assistant Gateway for developers and power
 users who want one agent reachable through several surfaces. The current
@@ -813,7 +813,7 @@ tailnet or authenticated proxy.</p>
 hosted fallback</h2>
 <p>A local model can be the default for privacy and cost while a hosted
 provider remains available for difficult requests or local-service
-outages. OpenClaw’s fallback behavior has two stages: it rotates usable
+outages. OpenClaw’s fallback behaviour has two stages: it rotates usable
 authentication profiles within the current provider, then tries the
 configured model fallbacks.</p>
 <p>Fallbacks are not always applied to explicit user selections. A
@@ -1023,7 +1023,7 @@ proxy. A port that is reachable from a LAN is not “local” merely because
 the agent is personal.</p>
 <p>Sessions are the unit of conversational state. Main, group, channel,
 and agent-specific sessions can have different routing and sandbox
-behavior. Do not infer that two messages share context because they
+behaviour. Do not infer that two messages share context because they
 reached the same Gateway; inspect the session key and routing
 policy.</p>
 <h1 data-number="8" id="models-providers-and-failover"><span class="header-section-number">8</span> Models, Providers, and
@@ -1094,7 +1094,7 @@ before trusting the integration.</p>
 <li>context window under accumulated tool results;</li>
 <li>first-token latency and long-context prefill;</li>
 <li>memory and VRAM pressure during key-value-cache growth;</li>
-<li>recovery behavior when the model service restarts.</li>
+<li>recovery behaviour when the model service restarts.</li>
 </ul>
 <p>Do not promise a fixed VRAM number for a model family. Quantisation,
 context length, vision support, batching, and backend version all change
@@ -1109,7 +1109,7 @@ between GPU and CPU RAM.</p>
 <p>Start with a modest context window, measure memory during a long tool
 loop, and increase it only when the workload requires it. A nominal “64K
 context” setting is not free: it changes both latency and memory
-behavior.</p>
+behaviour.</p>
 <h1 data-number="9" id="openclaw-and-hermes-agent-server"><span class="header-section-number">9</span> OpenClaw and Hermes Agent
 Server</h1>
 <p>OpenClaw and Hermes are frequently compared because both can power a
