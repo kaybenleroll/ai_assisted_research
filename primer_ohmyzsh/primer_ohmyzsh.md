@@ -351,7 +351,7 @@ This plugin is not in the default OMZ bundle — it requires a separate install.
 - Commands that don't exist: red
 - Strings and quoted arguments: yellow
 
-Options/flags and pipes/redirects/semicolons are recognized as distinct token types internally, but the default `main` highlighter styles leave them unstyled — no color unless you configure `ZSH_HIGHLIGHT_STYLES` yourself. If you want flags or separators to stand out visually, that's a `ZSH_HIGHLIGHT_STYLES` customization, not default behavior.
+Options/flags and pipes/redirects/semicolons are recognized as distinct token types internally, but the default `main` highlighter styles leave them unstyled — no colour unless you configure `ZSH_HIGHLIGHT_STYLES` yourself. If you want flags or separators to stand out visually, that's a `ZSH_HIGHLIGHT_STYLES` customization, not default behaviour.
 
 The value is catching typos before you press Enter. You type `pythno script.py` and the red highlight catches it immediately. You type `ls --recusrive` and it's red before you hit Enter. After using it for a week you will miss it in any shell that doesn't have it.
 
@@ -415,7 +415,7 @@ You never need to remember whether it's `tar -xzf` or `tar -xjf` or `unzip` or `
 
 ### colored-man-pages
 
-Makes `man` pages render with color instead of monochrome. The improvement is significant for readability, especially for long man pages with lots of structure. No configuration needed; just include it in your plugins list.
+Makes `man` pages render with colour instead of monochrome. The improvement is significant for readability, especially for long man pages with lots of structure. No configuration needed; just include it in your plugins list.
 
 ### command-not-found
 
@@ -482,7 +482,7 @@ If you interact with systemd services regularly, these cut down the typing consi
 
 ### mise
 
-The `mise` plugin initializes `mise` (the polyglot version manager, formerly `rtx`) and enables its completions. It runs `mise activate zsh` during shell startup so that tool versions are correctly set in every shell session. Without this, you'd need to call `eval "$(mise activate zsh)"` manually in your `.zshrc`. That `eval` is appropriate only for initialization code emitted by a locally installed, trusted executable; never adapt the pattern to execute output fetched from the network.
+The `mise` plugin initializes `mise` (the polyglot version manager, formerly `rtx`) and enables its completions. It runs `mise activate zsh` during shell startup so that tool versions are correctly set in every shell session. Without this, you'd need to call `eval "$(mise activate zsh)"` manually in your `.zshrc`. That `eval` is appropriate only for initialisation code emitted by a locally installed, trusted executable; never adapt the pattern to execute output fetched from the network.
 
 ### gh
 
@@ -682,7 +682,7 @@ z notes         # might jump to ~/projects/example-project/notes
 
 The ranking function ("frecency") is frequency × recency — directories you go to often and recently rank highest. For codebases you navigate daily, `z` eliminates most explicit `cd` commands.
 
-`zoxide` is a faster modern alternative with the same concept. It integrates with OMZ via a plugin and can be configured to replace `cd` entirely. As with other shell initialization snippets, only `eval` output from a locally installed executable you trust:
+`zoxide` is a faster modern alternative with the same concept. It integrates with OMZ via a plugin and can be configured to replace `cd` entirely. As with other shell initialisation snippets, only `eval` output from a locally installed executable you trust:
 
 ```zsh
 # Install zoxide, then add to .zshrc:
@@ -750,12 +750,12 @@ Stock zsh (not something OMZ adds) already ships a related trick: `push-line` (b
 Beyond plugins and themes, these settings often determine whether a shell feels excellent or annoying:
 
 1. **History policy**
-  - Validate `HISTSIZE`, `SAVEHIST`, and history sharing behavior against real usage.
+  - Validate `HISTSIZE`, `SAVEHIST`, and history sharing behaviour against real usage.
   - Keep `HIST_IGNORE_SPACE` active and use leading-space deliberately for sensitive commands.
 
-2. **Completion behavior and cache health**
+2. **Completion behaviour and cache health**
   - Slow completion is often stale cache or plugin overload.
-  - Revisit completion behavior after major toolchain changes.
+  - Revisit completion behaviour after major toolchain changes.
 
 3. **Editing mode and keymap consistency**
   - Pick `emacs` or `vi` intentionally and stay consistent.
@@ -786,8 +786,8 @@ These are small checks that often catch real issues quickly:
   - A correct file in the wrong location is still inactive.
 
 2. **Duplicate settings agree across files**
-  - If key behavior is configured in both plugins and aliases/functions (for example SSH key lifetime), align them.
-  - Inconsistent values create hard-to-explain behavior after reloads.
+  - If key behaviour is configured in both plugins and aliases/functions (for example SSH key lifetime), align them.
+  - Inconsistent values create hard-to-explain behaviour after reloads.
 
 3. **Generated completions are not rebuilt every shell start**
   - Prefer one-time generation for tools like `just` unless you truly need dynamic regeneration.
@@ -821,7 +821,7 @@ The history config is solid: 100k entries, persistent logging, session sharing. 
 
 **`zsh-syntax-highlighting` — highest-impact missing piece.**
 
-This is the gap with the most immediate impact. Every command is color-coded as you type it: green means the command exists, red means it does not. You catch typos before Enter, see unclosed quotes quickly, and generally get a more readable command line. It is off by default because it is third-party, but it is near-standard in mature ZSH setups.
+This is the gap with the most immediate impact. Every command is colour-coded as you type it: green means the command exists, red means it does not. You catch typos before Enter, see unclosed quotes quickly, and generally get a more readable command line. It is off by default because it is third-party, but it is near-standard in mature ZSH setups.
 
 ```zsh
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
@@ -949,7 +949,7 @@ Quick checks:
 
 If completion for one command is still missing, inspect that plugin's `.plugin.zsh` file and verify the completion function is actually loaded.
 
-### A Plugin Causes Weird Behavior
+### A Plugin Causes Weird Behaviour
 
 Run a temporary minimal profile:
 

@@ -165,7 +165,7 @@ primer_building_ai_agents/
 ### 1. **Agent ≠ Chatbot**
 Agents:
 - Take **actions** in the world, not just generate text
-- Operate autonomously toward goals
+- Operate autonomously towards goals
 - Learn from execution failures
 - Maintain persistent memory
 
@@ -200,7 +200,7 @@ Cost dynamics:
 
 **Where to mention:**
 - Framework selection (more efficient frameworks)
-- Optimization guide
+- Optimisation guide
 - Operational planning
 
 ---
@@ -366,14 +366,14 @@ Why:
 
 ### Elements That Need Adaptation
 - Diagrams (use as templates, adapt to your context)
-- Examples (customize for your domain)
+- Examples (customise for your domain)
 - Thresholds (tune based on your metrics)
 - Frameworks (highlight ones you support)
 
 ### Elements for Inspiration Only
 - Framework comparisons (add your choices)
 - Cost calculations (use your pricing)
-- Monitoring dashboards (customize to your stack)
+- Monitoring dashboards (customise to your stack)
 
 ---
 
@@ -381,7 +381,7 @@ Why:
 
 ### 1. Treating Agent = Chatbot
 ❌ "The agent responds to user queries"
-✅ "The agent takes actions toward user goals"
+✅ "The agent takes actions towards user goals"
 
 ### 2. Ignoring Hallucination Risk
 ❌ "The agent can search the web"
@@ -409,7 +409,7 @@ As you write, keep this guide updated with:
 - **Frameworks you support:** Update Framework Selection Matrix
 - **Your metrics:** Update Evaluation Metrics with your thresholds
 - **Your pitfalls:** Add to Common Pitfalls section
-- **Your checklists:** Customize Implementation Checklist
+- **Your checklists:** Customise Implementation Checklist
 
 ---
 
@@ -459,7 +459,7 @@ Alert Thresholds:
 
 1. **These materials are living documents.** As the agent field evolves, framework updates happen, new patterns emerge—revisit these guides quarterly.
 
-2. **Customize for your audience.** Non-technical stakeholders need "agent vs. chatbot" explained; architects need pattern trade-offs; operators need monitoring queries.
+2. **Customise for your audience.** Non-technical stakeholders need "agent vs. chatbot" explained; architects need pattern trade-offs; operators need monitoring queries.
 
 3. **Emphasize the practical.** The field is moving fast. Focus on what teams are actually building right now (2026), not speculative future directions.
 

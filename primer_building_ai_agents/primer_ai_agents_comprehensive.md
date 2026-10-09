@@ -52,7 +52,7 @@ An autonomous AI agent is a software system that:
 
 The crucial distinction: An agent is not just an LLM chatbot. A chatbot waits for human input and generates text in response. An **agent takes initiative**—it decides what actions to take without waiting for the human to specify every step.
 
-A quick litmus test: if the system can only respond with text, it's a chat assistant. If it can choose and execute actions toward a goal, it's agentic.
+A quick litmus test: if the system can only respond with text, it's a chat assistant. If it can choose and execute actions towards a goal, it's agentic.
 
 ### The Core Components
 
@@ -144,7 +144,7 @@ The tag-based example above works because you told the model to imitate a format
 
 Every major provider now ships a native tool-use API instead. You pass your tool definitions as structured schemas in the API request itself — not as prose in the system prompt — and the model returns a typed `tool_use` content block: a proper object with a name and arguments, not text you have to extract them from. You execute the tool and send the result back as a `tool_result` block, and the loop continues from there. Anthropic, OpenAI, and Google all support this shape, and the same pattern now appears across a broader set of providers as well; the `tool_use`/`tool_result` terminology above is Anthropic's, but the concept — schemas in, typed call out — is now broadly convergent. Models are also specifically trained against this interface, so the reliability gain isn't just "no parsing bugs," it's "the model is better at using tools when they're presented this way."
 
-The practical implication: skip the prompt-tag approach entirely unless you're working with a raw base model that has no tool-calling interface at all. For any current frontier model, define your tools through the API's native tools parameter and read `tool_use` blocks off the response. That's the standard mechanism, not an optimization layered on top of the standard mechanism — the pseudocode later in this primer assumes it.
+The practical implication: skip the prompt-tag approach entirely unless you're working with a raw base model that has no tool-calling interface at all. For any current frontier model, define your tools through the API's native tools parameter and read `tool_use` blocks off the response. That's the standard mechanism, not an optimisation layered on top of the standard mechanism — the pseudocode later in this primer assumes it.
 
 Same pattern, different domain: an expense-audit agent can fetch a report, compare each line item to policy, request missing receipts, then approve or escalate. Same loop, different tools.
 
@@ -397,7 +397,7 @@ Whenever possible, include one example value in descriptions. Tool calls get muc
 **3. Reliable and Deterministic**
 If the tool fails, it should fail in a predictable way that the agent can handle. If it succeeds, the output should be consistent.
 
-Inconsistent return shapes silently break agent behavior. If one response says `status=ok` and another says `result=success`, branch logic eventually drifts.
+Inconsistent return shapes silently break agent behaviour. If one response says `status=ok` and another says `result=success`, branch logic eventually drifts.
 
 **4. Proper Error Handling**
 When a tool fails (API timeout, database error, permission denied), it should return a clear error message the LLM can reason about:
@@ -430,9 +430,9 @@ Error text should guide decisions, not just developers. "Permission denied: role
 **Analysis Tools:** Process information
 
 - Parse documents
-- Analyze data, run calculations
+- Analyse data, run calculations
 - Generate reports
-- Summarize information
+- Summarise information
 
 Most production agents combine all three categories. Retrieval gets facts, analysis turns facts into judgment, and action commits that judgment into the world.
 
@@ -526,7 +526,7 @@ Memory design is ultimately product design. You're deciding what the agent remem
 
 ### Managing Memory in Practice
 
-**Summarization:** When context gets long, ask the LLM to summarize:
+**Summarization:** When context gets long, ask the LLM to summarise:
 ```text
 "So far you have:
 1. Found order #12345 (customer: john@example.com)
@@ -563,7 +563,7 @@ searching through 50 messages of history
 A practical default policy:
 
 1. Keep the last 8-12 turns raw.
-2. Summarize older context once the conversation passes ~20 messages (roughly every 10 actions) or context usage crosses 80% of the window, whichever comes first.
+2. Summarise older context once the conversation passes ~20 messages (roughly every 10 actions) or context usage crosses 80% of the window, whichever comes first.
 3. Persist only decision-relevant facts to long-term memory.
 4. Rehydrate memory per task, not globally.
 
@@ -743,7 +743,7 @@ The important distinction is between layers:
 Do not choose a framework before choosing the failure semantics you need. A
 single request/response assistant may need only a provider SDK and a few
 functions. A workflow that can wait for a human, survive a deploy, or retry a
-side effect needs persistence and explicit resume behavior regardless of the
+side effect needs persistence and explicit resume behaviour regardless of the
 framework name.
 
 A practical framework-selection checklist:
@@ -786,12 +786,12 @@ Add an explicit grounding rule in your system prompt, for example: "Do not make 
 
 **Solutions:**
 
-- Summarize history periodically
+- Summarise history periodically
 - Store data in external systems, retrieve as needed
 - Use sliding windows (only keep recent history)
 - Implement proper memory management
 
-If you need a short operating principle: summarize early, summarize often, and never summarize away critical state transitions.
+If you need a short operating principle: summarise early, summarise often, and never summarise away critical state transitions.
 
 ### Challenge 3: Cost and Latency
 
@@ -974,7 +974,7 @@ Include:
 - grounding rule: no factual claims without tool evidence
 - escalation policy: when to hand off to a human
 
-Think behavior spec, not marketing copy.
+Think behaviour spec, not marketing copy.
 
 ### Path step 5: Implement the Execution Loop with Hard Stops
 
@@ -1094,7 +1094,7 @@ Autonomous AI agents are not magical. They're engineered systems combining:
 4. **Execution loops** - Repeating the cycle of reason → act → learn
 5. **Error handling** - Recovering gracefully from inevitable failures
 
-The key insight is that **autonomy comes from putting the LLM in a loop**. Rather than asking for a final answer, you ask "what should I do next?" → execute that → ask again. This simple pattern, repeated, enables sophisticated behavior.
+The key insight is that **autonomy comes from putting the LLM in a loop**. Rather than asking for a final answer, you ask "what should I do next?" → execute that → ask again. This simple pattern, repeated, enables sophisticated behaviour.
 
 Understanding these components—and their limitations—is essential for building AI systems that actually work reliably in production. Start simple, test thoroughly, add complexity gradually, and always maintain observability into what your agent is doing.
 

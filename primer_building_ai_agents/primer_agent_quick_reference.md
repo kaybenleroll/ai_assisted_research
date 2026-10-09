@@ -392,7 +392,7 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 | **Hallucination** | False claims in output | Require tool backing; audit claims against tools |
 | **Slow execution** | Task takes >1 minute | Parallelize independent tool calls; use smaller model |
 | **Drift over time** | Quality degrades after a model, prompt, tool, or data change | Version every dependency; run regression evals and review sampled traces before rollout |
-| **Model version mismatch** | Unexpected behavior changes | Pin model versions; maintain compatibility layer |
+| **Model version mismatch** | Unexpected behaviour changes | Pin model versions; maintain compatibility layer |
 
 ---
 
@@ -457,7 +457,7 @@ Example:
   ~$4,013). The correct twelve-month sum is ~$18k/year.
 ```
 
-### Optimization ROI
+### Optimisation ROI
 ```text
 Compression savings = (original_tokens - compressed_tokens) * price_per_token * tasks_per_month
 
@@ -568,7 +568,7 @@ Pass/fail: Average rating >= 4/5
 
 **A2A:** Agent-to-Agent protocol for communication between independently deployed agents; use it when separate identity, endpoint, and task lifecycle matter
 
-**MCP:** Model Context Protocol for standardized tool and resource interfaces
+**MCP:** Model Context Protocol for standardised tool and resource interfaces
 
 **Idempotency key:** A caller-supplied identifier that lets a service recognize a retried request and avoid repeating a side effect
 

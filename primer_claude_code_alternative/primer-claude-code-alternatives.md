@@ -177,7 +177,7 @@ Several families use a **mixture-of-experts (MoE)** architecture: a router activ
 
 Qwen includes coding-specific and general-purpose models. Qwen3-Coder explicitly targets multi-turn software-engineering work with tool feedback. Its documented 480B-total/35B-active variant has 256K native context and an extended-context option; Qwen's reported coding results are vendor evaluations. That variant belongs on a server or hosted-endpoint shortlist, not a conventional single-GPU workstation shortlist. See the [Qwen3-Coder release](https://qwenlm.github.io/blog/qwen3-coder/).
 
-For a workstation experiment, the existing [Qwen3.8-27B model card](https://huggingface.co/Qwen/Qwen3.8-27B) documents a general multimodal model with reasoning controls. It is not the same checkpoint or specialization as Qwen3-Coder. A quantized 27B model is a plausible 24GB-class experiment at controlled context, subject to runtime overhead. Smaller Qwen checkpoints offer more memory margin; verify their own tool format and coding results. Qwen Code is the harness discussed later, not a capability inherited by every Qwen model.
+For a workstation experiment, the existing [Qwen3.8-27B model card](https://huggingface.co/Qwen/Qwen3.8-27B) documents a general multimodal model with reasoning controls. It is not the same checkpoint or specialisation as Qwen3-Coder. A quantized 27B model is a plausible 24GB-class experiment at controlled context, subject to runtime overhead. Smaller Qwen checkpoints offer more memory margin; verify their own tool format and coding results. Qwen Code is the harness discussed later, not a capability inherited by every Qwen model.
 
 #### DeepSeek
 
@@ -201,7 +201,7 @@ Kimi is relevant to long implementation sessions and visually informed work such
 
 Devstral is Mistral's coding-agent family, trained for repository exploration and multi-file software-engineering work. Its smaller downloadable variants offer a more realistic workstation experiment than the largest MoE families: Mistral's [Devstral release](https://mistral.ai/news/devstral-2-vibe-cli/) describes a 24B small model as well as the larger model. Quantization, context allocation, and the serving stack still determine whether your machine can sustain an agent loop.
 
-Separate those checkpoints from hosted lifecycle status. Mistral currently marks the [Devstral 2 endpoint deprecated](https://docs.mistral.ai/models/devstral-2-25-12) and points new integrations to [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04), a multimodal model optimized for coding and agentic use with 256K context and open weights under a Modified MIT licence. That does not invalidate an existing local Devstral checkpoint, nor establish that Medium fits the same hardware. Evaluate the exact release, licence, and deployment instructions.
+Separate those checkpoints from hosted lifecycle status. Mistral currently marks the [Devstral 2 endpoint deprecated](https://docs.mistral.ai/models/devstral-2-25-12) and points new integrations to [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04), a multimodal model optimised for coding and agentic use with 256K context and open weights under a Modified MIT licence. That does not invalidate an existing local Devstral checkpoint, nor establish that Medium fits the same hardware. Evaluate the exact release, licence, and deployment instructions.
 
 #### OpenAI / gpt-oss
 
@@ -211,13 +211,13 @@ OpenAI's [local Ollama guide](https://developers.openai.com/cookbook/articles/gp
 
 #### Meta / Llama and Google / Gemma
 
-Llama offers downloadable general-purpose checkpoints with an established deployment ecosystem, but the family name does not imply code specialization. Meta's [model repository](https://github.com/meta-llama/llama-models/blob/main/README.md) separates releases and their prompt formats; its full-precision Llama 4 examples require multiple GPUs. Smaller releases can be useful local baselines for summaries, retrieval over code, and bounded changes. Do not transfer results between generations, base and instruction-tuned checkpoints, or third-party coding fine-tunes.
+Llama offers downloadable general-purpose checkpoints with an established deployment ecosystem, but the family name does not imply code specialisation. Meta's [model repository](https://github.com/meta-llama/llama-models/blob/main/README.md) separates releases and their prompt formats; its full-precision Llama 4 examples require multiple GPUs. Smaller releases can be useful local baselines for summaries, retrieval over code, and bounded changes. Do not transfer results between generations, base and instruction-tuned checkpoints, or third-party coding fine-tunes.
 
 [Google's Gemma overview](https://ai.google.dev/gemma/docs/core) likewise describes a general-purpose open-weight family, distinct from hosted Gemini. Its current catalogue includes small deployment-oriented models and larger dense and MoE options, with modality varying by checkpoint. Gemma is useful when local memory limits or visual input drive the experiment, but a supported function-call format does not establish dependable autonomous coding. Check the exact release's licence, input support, and edit-test behaviour before moving beyond bounded support.
 
 #### Other Families: MiniMax, NVIDIA Nemotron, IBM Granite, Microsoft Phi
 
-[MiniMax's coding and agent releases](https://github.com/MiniMax-AI/MiniMax-M2) merit a hosted or server evaluation; their sparse active computation can obscure large total weights. [NVIDIA Nemotron](https://research.nvidia.com/labs/nemotron/Nemotron-3/) spans general reasoning and agent workloads across different deployment sizes. Its optimized runtime ecosystem may matter to an existing NVIDIA installation, but the family is not exclusively code-specialized and its larger variants are not workstation defaults.
+[MiniMax's coding and agent releases](https://github.com/MiniMax-AI/MiniMax-M2) merit a hosted or server evaluation; their sparse active computation can obscure large total weights. [NVIDIA Nemotron](https://research.nvidia.com/labs/nemotron/Nemotron-3/) spans general reasoning and agent workloads across different deployment sizes. Its optimised runtime ecosystem may matter to an existing NVIDIA installation, but the family is not exclusively code-specialized and its larger variants are not workstation defaults.
 
 [IBM Granite Code](https://github.com/ibm-granite/granite-code-models) provides explicitly code-oriented checkpoints; distinguish code completion and instruction variants from general Granite models when evaluating an agent loop. [Microsoft Phi](https://huggingface.co/microsoft/Phi-4-mini-instruct) offers small general instruction/reasoning models suitable for constrained local experiments. For these smaller models, start with extraction, summaries, and tightly scoped edits. Compact size alone says nothing about reliable multi-file recovery.
 
@@ -505,7 +505,7 @@ npm install -g @google/gemini-cli
 gemini
 ```
 
-**LLM provider support:** Gemini CLI is primarily designed for Google's Gemini models; exact aliases exposed by the installed release change as Google migrates the consumer path toward Antigravity CLI. The current Gemini API catalogue includes Gemini 3.8 Flash, 3.7 Flash, 3.5 Flash-Lite, and 3.1 Pro Preview. It is not model-agnostic in the same way as Aider or OpenCode.
+**LLM provider support:** Gemini CLI is primarily designed for Google's Gemini models; exact aliases exposed by the installed release change as Google migrates the consumer path towards Antigravity CLI. The current Gemini API catalogue includes Gemini 3.8 Flash, 3.7 Flash, 3.5 Flash-Lite, and 3.1 Pro Preview. It is not model-agnostic in the same way as Aider or OpenCode.
 
 **Access and quotas:** Google's transition announcement says individual free, Pro, and Ultra access moved to Antigravity CLI on June 18, 2026. Enterprise Gemini Code Assist licences remain supported, and Gemini CLI remains available through API-key and Vertex AI authentication. A Gemini CLI plans page still displays a legacy-looking individual free tier, so treat that page as inconsistent with the transition announcement and test the actual sign-in path before relying on Gemini CLI for individual use.
 
@@ -682,7 +682,7 @@ The GPT-6 Astra model is also available in the current OpenAI model catalogue; u
 
 ### Cline (formerly Claude Dev)
 
-**What it is:** Cline is an open-source autonomous coding agent that operates primarily as a VS Code extension. It is model-agnostic, OpenRouter-compatible, and one of the most capable agentic tools available for IDE-based workflows. It has since expanded well beyond VS Code and beyond the IDE entirely, moving it toward hybrid territory.
+**What it is:** Cline is an open-source autonomous coding agent that operates primarily as a VS Code extension. It is model-agnostic, OpenRouter-compatible, and one of the most capable agentic tools available for IDE-based workflows. It has since expanded well beyond VS Code and beyond the IDE entirely, moving it towards hybrid territory.
 
 **Author and licence:** Open source at `github.com/cline/cline`. MIT licence.
 
@@ -1064,7 +1064,7 @@ For stdio servers, a proxy approach (SuperGateway/FastMCP) is recommended over d
 
 **Pricing:** Devin now has Free ($0), Pro ($20/month), Max ($200/month), Teams ($80/month minimum plus $40/month per full seat), and custom Enterprise plans. Paid self-serve plans include daily and/or weekly usage allowances; extra usage is purchased as on-demand credits at API pricing. ACU terminology is legacy for self-serve but remains relevant to Enterprise billing. This makes the headline price easier to understand, but heavy usage can still exceed the subscription price.
 
-Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf, rebranded June 2026 after Cognition's acquisition of Windsurf) -- see the Windsurf/Devin Desktop entry for that product's separate pricing ladder. The two are distinct: Devin is the cloud autonomous-agent product with plan quotas and on-demand credits; Devin Desktop is an IDE and agent command center.
+Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf, rebranded June 2026 after Cognition's acquisition of Windsurf) -- see the Windsurf/Devin Desktop entry for that product's separate pricing ladder. The two are distinct: Devin is the cloud autonomous-agent product with plan quotas and on-demand credits; Devin Desktop is an IDE and agent command centre.
 
 **Strengths:**
 - Very capable for long-horizon autonomous tasks
@@ -1093,7 +1093,7 @@ Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf
 
 **LLM provider:** Copilot was never as OpenAI-locked as it appeared. The built-in model picker includes Claude, Gemini, Kimi, GPT, and other models, with availability varying by client and plan. GitHub now documents two BYOK paths: local BYOK in VS Code, JetBrains, Xcode, Copilot CLI, the Copilot app, and the SDK; and enterprise-managed custom models for Business/Enterprise. Local BYOK can work without a Copilot subscription and can target local or external providers, while enterprise BYOK is server-managed and remains in preview. BYOK and model availability vary by client and feature; code completions remain on their separate billing path and are not automatically covered by every BYOK configuration.
 
-**OpenRouter support:** Possible through a compatible local-BYOK/provider integration, but do not present it as one uniform Copilot feature. Client, plan, and organization policy determine whether a user can configure it; the enterprise custom-model path is still in public preview.
+**OpenRouter support:** Possible through a compatible local-BYOK/provider integration, but do not present it as one uniform Copilot feature. Client, plan, and organisation policy determine whether a user can configure it; the enterprise custom-model path is still in public preview.
 
 **Strengths:**
 - Deep GitHub integration -- issues, PRs, code review
@@ -1102,7 +1102,7 @@ Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf
 - Enterprise features and security compliance
 
 **Weaknesses:**
-- BYOK coverage depends on the client, feature, plan, and organization policy; local BYOK and enterprise-managed custom models are different paths
+- BYOK coverage depends on the client, feature, plan, and organisation policy; local BYOK and enterprise-managed custom models are different paths
 - Agent Mode and Copilot Coding Agent are two separate mental models to learn, with different sync/async execution semantics
 - Less suited for non-GitHub workflows
 
@@ -1157,7 +1157,7 @@ All Products Pack, dotUltimate, and some IDE licences can include AI entitlement
 
 ### Tabnine
 
-**What it is:** Tabnine is an AI coding assistant with a long history (one of the first serious AI coding tools), historically focused on fast, high-quality inline completions. It has since pivoted toward agentic workflows.
+**What it is:** Tabnine is an AI coding assistant with a long history (one of the first serious AI coding tools), historically focused on fast, high-quality inline completions. It has since pivoted towards agentic workflows.
 
 **Pricing (materially higher than before -- the old ~$12/month Pro tier was sunset in 2025):**
 
@@ -1511,7 +1511,7 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | GitHub Copilot -- Individual Pro | $10/mo | $10 + variable consumption after included AI credits | N/A | AI-credit consumption varies by model and workload; code completions have a separate allowance. |
 | GitHub Copilot -- Individual Pro+ | $39/mo | $39 + overage ($70 credits included) | N/A | New tier, includes premium models (Claude Opus access). |
 | GitHub Copilot -- Individual Max | $100/mo | $100 + overage ($200 credits included) | N/A | New tier. |
-| GitHub Copilot -- Business | $19/user/mo | $19/user/mo + policy-controlled model catalog | N/A | Unchanged from old doc. |
+| GitHub Copilot -- Business | $19/user/mo | $19/user/mo + policy-controlled model catalogue | N/A | Unchanged from old doc. |
 | GitHub Copilot -- Enterprise | $39/user/mo | $39/user/mo | N/A | Unchanged from old doc. |
 | GitHub Copilot CLI | Bundled -- inherits Copilot plan tiers above | Same | N/A | No standalone pricing found; open question whether it requires a specific plan tier. |
 | Amazon Q Developer -- Free | $0/mo | $0 (50 agentic requests/mo cap) | N/A | New row. |
@@ -1522,8 +1522,8 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | AWS Kiro -- Pro Max | $100/mo | $100 (5,000 credits) + overage | N/A | New row. |
 | AWS Kiro -- Power | $200/mo | $200 (10,000 credits) + overage | N/A | New row. |
 | JetBrains AI -- Free | $0/mo | $0 (3 credits/30 days) | N/A | Some IDE bundles include AI entitlements; external models/agents are also available. |
-| JetBrains AI -- Pro | $10/user/mo individual; $20 business | Included 10/20 credits per 30 days; eligible top-ups | N/A | AI Credits are the quota unit; bundle and organization rules vary. |
-| JetBrains AI -- Ultimate | $30/user/mo individual; $60 business | Included 35/70 credits per 30 days; eligible top-ups | N/A | AI Credits are the quota unit; bundle and organization rules vary. |
+| JetBrains AI -- Pro | $10/user/mo individual; $20 business | Included 10/20 credits per 30 days; eligible top-ups | N/A | AI Credits are the quota unit; bundle and organisation rules vary. |
+| JetBrains AI -- Ultimate | $30/user/mo individual; $60 business | Included 35/70 credits per 30 days; eligible top-ups | N/A | AI Credits are the quota unit; bundle and organisation rules vary. |
 | Tabnine -- Code Assistant | $39/user/mo (annual) | $39/user/mo plus provider-dependent inference/handling charges | N/A | Replaces old doc's "~$12/month Pro" -- that tier was sunset in 2025. |
 | Tabnine -- Agentic Platform | $59/user/mo (annual) | $59/user/mo plus provider-dependent inference/handling charges | N/A | Adds MCP integration, autonomous workflows, and CLI access. |
 | Zed AI -- Personal | $0/mo | $0 (2,000 edit predictions/mo) | N/A | Replaces old doc's vague "free tier and credits system." |
@@ -1919,7 +1919,7 @@ First-party sources checked on **September 18, 2026** for the current model, pro
 - [OpenAI Codex pricing](https://chatgpt.com/codex/pricing/), [Codex model documentation](https://learn.chatgpt.com/docs/models), and [Codex repository/current CLI distribution](https://github.com/openai/codex)
 - [OpenAI API pricing: service tiers and short/long-context rates](https://developers.openai.com/api/docs/pricing)
 - [Gemini CLI to Antigravity CLI transition](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/), [Gemini CLI authentication](https://geminicli.com/docs/get-started/authentication/), [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [Antigravity plans](https://antigravity.google/pricing), [Antigravity overview](https://antigravity.google/docs/overview?app=antigravity), [CLI installation](https://antigravity.google/docs/cli/install/), and [MCP documentation](https://antigravity.google/docs/mcp)
-- [Amp pricing](https://ampcode.com/docs/pricing), [self-hosted Orbs](https://ampcode.com/docs/orbs/self-hosted), [documentation](https://ampcode.com/docs), [skills and plugins](https://ampcode.com/docs/customize/skills), and [plugin API](https://ampcode.com/plugin-api)
+- [Amp pricing](https://ampcode.com/docs/pricing), [self-hosted Orbs](https://ampcode.com/docs/orbs/self-hosted), [documentation](https://ampcode.com/docs), [skills and plugins](https://ampcode.com/docs/customise/skills), and [plugin API](https://ampcode.com/plugin-api)
 - [Cline CLI reference](https://docs.cline.bot/cli/cli-reference), [installation and supported surfaces](https://docs.cline.bot/getting-started/installing-cline), and [OpenRouter provider](https://docs.cline.bot/provider-config/openrouter)
 - [OpenCode providers](https://opencode.ai/docs/providers/), [configuration](https://dev.opencode.ai/docs/config/), [models](https://opencode.ai/v2/docs/models), [developer providers](https://dev.opencode.ai/docs/providers/), and [repository](https://github.com/anomalyco/opencode)
 - [OpenCode releases](https://github.com/anomalyco/opencode/releases), [v1-to-v2 configuration migration](https://opencode.ai/v2/docs/migrate-v1), and [OpenCode authentication](https://opencode.ai/docs/providers/)

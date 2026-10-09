@@ -659,7 +659,7 @@ to Model</a>
 <li><a href="#reward-model-training" id="toc-reward-model-training"><span class="toc-section-number">6.1</span> Reward Model Training</a></li>
 <li><a href="#rlhf-via-ppo-with-a-kl-leash" id="toc-rlhf-via-ppo-with-a-kl-leash"><span class="toc-section-number">6.2</span> RLHF via PPO with a KL
 Leash</a></li>
-<li><a href="#direct-preference-optimisation-skipping-the-reward-model" id="toc-direct-preference-optimisation-skipping-the-reward-model"><span class="toc-section-number">6.3</span> Direct Preference Optimisation:
+<li><a href="#direct-preference-optimization-skipping-the-reward-model" id="toc-direct-preference-optimization-skipping-the-reward-model"><span class="toc-section-number">6.3</span> Direct Preference Optimization:
 Skipping the Reward Model</a></li>
 <li><a href="#constitutional-ai-and-rlaif" id="toc-constitutional-ai-and-rlaif"><span class="toc-section-number">6.4</span> Constitutional AI and
 RLAIF</a></li>
@@ -757,7 +757,7 @@ need you to be able to <em>check</em> an answer — to evaluate it — even
 when you could never have written the rules that produce it. You cannot
 specify, in code, what makes a good translation or a good summary or a
 good explanation. But if you can reliably judge one, you can optimise
-toward it.</p>
+towards it.</p>
 <p>Which is exactly why the evaluate step is load-bearing, and why it
 gets a whole primer to itself. Think of the data engine as a control
 loop, the kind that runs a thermostat: it senses a value, compares it to
@@ -915,8 +915,8 @@ people to assign an absolute quality score to a single LLM response,
 their inter-rater agreement typically lands somewhere in the 70–81%
 range, depending on the task and how tightly the annotation protocol is
 written. That range is itself instructive: tighten the protocol and the
-agreement climbs toward the top of the band; leave “good” undefined and
-it sinks toward the bottom. But it never reaches 100%, because
+agreement climbs towards the top of the band; leave “good” undefined and
+it sinks towards the bottom. But it never reaches 100%, because
 reasonable people genuinely disagree about what “good” means in
 isolation. That residual disagreement is the noise floor — the
 irreducible scatter you cannot annotate your way out of.</p>
@@ -1047,7 +1047,7 @@ Two equivalent framings dominate. <strong>Elo</strong>, borrowed from
 chess, assigns each item a rating and updates it after every match. The
 expected score for A against B is</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>A</mi></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mn>10</mn><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>R</mi><mi>B</mi></msub><mo>−</mo><msub><mi>R</mi><mi>A</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>400</mn></mrow></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_A = \frac{1}{1 + 10^{(R_B - R_A)/400}}</annotation></semantics></math></p>
-<p>and after a match the rating moves toward the surprise in the
+<p>and after a match the rating moves towards the surprise in the
 result:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>R</mi><mi>A</mi><mo>′</mo></msubsup><mo>=</mo><msub><mi>R</mi><mi>A</mi></msub><mo>+</mo><mi>K</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>S</mi><mi>A</mi></msub><mo>−</mo><msub><mi>E</mi><mi>A</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">R_A&#39; = R_A + K(S_A - E_A)</annotation></semantics></math></p>
 <p>where
@@ -1833,7 +1833,7 @@ Leash</h2>
 a reinforcement learning loop. The policy — the LLM you are trying to
 improve — generates a response. The reward model scores it. The score is
 the signal that drives a PPO (Proximal Policy Optimisation) gradient
-update, nudging the policy toward outputs the reward model rates
+update, nudging the policy towards outputs the reward model rates
 highly.</p>
 <p>There is one critical addition: a KL-divergence penalty that measures
 how far the updated policy has drifted from the original reference
@@ -1854,12 +1854,12 @@ human. The KL leash makes that drift expensive, keeping the policy in
 the neighbourhood of text that resembles its pre-RLHF distribution. The
 standard RLHF framing here follows InstructGPT (Ouyang et al.,
 2022).</p>
-<h2 data-number="6.3" id="direct-preference-optimisation-skipping-the-reward-model"><span class="header-section-number">6.3</span> Direct Preference Optimisation:
+<h2 data-number="6.3" id="direct-preference-optimization-skipping-the-reward-model"><span class="header-section-number">6.3</span> Direct Preference Optimization:
 Skipping the Reward Model</h2>
 <p>The PPO pipeline has three moving parts: fit a reward model on
 preference pairs, then run PPO to maximise its score, with the KL leash
 holding the policy near its starting distribution. Direct Preference
-Optimisation (Rafailov et al., 2023) collapses the first two into one.
+Optimization (Rafailov et al., 2023) collapses the first two into one.
 It never materialises a reward model. Instead it derives a loss directly
 on the preference pairs whose minimiser is the same optimum that the
 KL-constrained RLHF objective defines over the fitted reward model — not
@@ -2001,7 +2001,7 @@ blocked. No number, no ship.</p>
 <p>Close by naming what is actually happening across all of these
 mechanisms. The eval step manufactures a number. Training — whether via
 PPO on a reward model, RLAIF on AI-generated preferences, or DSPy prompt
-search on your own metric — optimises the system toward that number. As
+search on your own metric — optimises the system towards that number. As
 training moves the system, the number moves too: the policy gets
 stronger, the reward model’s blind spots come under different pressure,
 the eval distribution shifts. The eval and the model are locked in a
@@ -2107,9 +2107,9 @@ loop, which means it is subject to optimisation pressure. The model is
 not maliciously trying to fool the eval — it has no intentions — but
 gradient descent does not care about your intentions either. It will
 find whatever feature of the eval correlates with a higher score and
-push toward it, whether that feature is actual quality or an artefact of
-how you wrote the rubric. The better your optimiser, the faster it finds
-the artefact.</p>
+push towards it, whether that feature is actual quality or an artefact
+of how you wrote the rubric. The better your optimiser, the faster it
+finds the artefact.</p>
 <p><strong>Reward hacking</strong> is the collective name for what comes
 out the other side, and three forms of it are well-documented.</p>
 <p>The first is <strong>verbosity bias</strong>. Models trained against
@@ -2119,7 +2119,7 @@ length as thoroughness. So the model pads — adds caveats, restates
 conclusions, includes tangentially relevant context it would not
 otherwise include — because padding increases win probability.
 AlpacaEval’s verbosity problem became the canonical example. Responses
-from models trained on this signal drifted toward the verbose end, and
+from models trained on this signal drifted towards the verbose end, and
 length-controlled variants of AlpacaEval 2.0 were developed specifically
 to correct for it (Dubois et al., arXiv:2404.04475). The verbosity bias
 is Goodhart applied to pairwise comparison: the proxy for quality is
@@ -2459,7 +2459,7 @@ treats the same disagreement as signal: reasonable people hold genuinely
 different values about what a good answer looks like, and collapsing
 those differences into a majority vote encodes one demographic’s
 preference as universal quality. RLHF trained on majority-vote
-preference data might be optimising toward one group’s taste while
+preference data might be optimising towards one group’s taste while
 calling it helpfulness. This is not a hypothetical. Rater pools are not
 demographic mirrors of user populations; they are typically
 English-speaking, platform-accessible, and filtered for inter-annotator

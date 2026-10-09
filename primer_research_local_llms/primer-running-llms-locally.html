@@ -909,7 +909,7 @@ and sampling.</p>
 <li>Sample one token.</li>
 <li>Append token and repeat.</li>
 </ol>
-<p>This is why memory bandwidth and cache behavior matter so much. Even
+<p>This is why memory bandwidth and cache behaviour matter so much. Even
 with good compute hardware, poor memory fit destroys throughput.</p>
 <h2 data-number="2.3" id="server-layer"><span class="header-section-number">2.3</span> Server Layer</h2>
 <p>The server exposes the engine over HTTP and handles request
@@ -1227,9 +1227,9 @@ separately from the language model that writes the final response.</td>
 </tbody>
 </table>
 <h2 data-number="3.2" id="what-changed-recently"><span class="header-section-number">3.2</span> What Changed Recently</h2>
-<p>The September 2026 snapshot points toward smaller specialists, sparse
-larger models, configurable reasoning, native tool calling, multimodal
-input, and long-context variants. <a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5</a>, <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
+<p>The September 2026 snapshot points towards smaller specialists,
+sparse larger models, configurable reasoning, native tool calling,
+multimodal input, and long-context variants. <a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5</a>, <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
 4.2</a>, and <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>
 are useful examples, not a permanent shortlist. Parameter count alone is
 no longer a fit estimate: active parameters, modality encoders, context
@@ -1258,7 +1258,7 @@ the same UI, but they are not interchangeable. For a private document
 pipeline, the usual sequence is:</p>
 <ol type="1">
 <li>Use a VLM or OCR model to extract structure from the document.</li>
-<li>Use a text model to classify, summarize, or call tools.</li>
+<li>Use a text model to classify, summarise, or call tools.</li>
 <li>Use an image model only if the workflow needs a generated or edited
 image.</li>
 </ol>
@@ -1538,10 +1538,10 @@ Silicon, selected models can use an MLX-backed path.</p>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Start API service</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve</span></code></pre></div>
-<p>Ollama keeps improving ergonomics and model catalog experience. It is
-not the most configurable engine, and its OpenAI-compatible surface is
-only a subset: base64 image data works, while remote image URLs and some
-tool controls do not. It remains the most productive default for a
+<p>Ollama keeps improving ergonomics and model catalogue experience. It
+is not the most configurable engine, and its OpenAI-compatible surface
+is only a subset: base64 image data works, while remote image URLs and
+some tool controls do not. It remains the most productive default for a
 single user who wants to try text or vision models quickly.</p>
 <h2 data-number="5.4" id="localai"><span class="header-section-number">5.4</span> LocalAI</h2>
 <p>LocalAI is a broad local AI platform exposing OpenAI-style interfaces
@@ -1578,14 +1578,14 @@ for Python integration and reproducibility; use ComfyUI when you want to
 inspect and iterate on a graph interactively.</p>
 <h2 data-number="5.6" id="vllm"><span class="header-section-number">5.6</span> vLLM</h2>
 <p>vLLM remains one of the leading choices for high-throughput serving
-with strong batching behavior and efficient cache management. Its
+with strong batching behaviour and efficient cache management. Its
 supported-model surface now includes text, image, video, and audio
 inputs for selected architectures, with the exact combination depending
 on the model and backend.</p>
 <p>Use it when you want:</p>
 <ol type="1">
 <li>Better concurrent throughput than simple single-request loops</li>
-<li>Production-oriented serving behavior</li>
+<li>Production-oriented serving behaviour</li>
 <li>Strong support for modern large-model serving patterns</li>
 </ol>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python install route</span></span>
@@ -1598,9 +1598,9 @@ and quantized KV cache); GGUF support is experimental and requires the
 separate <a href="https://docs.vllm.ai/en/latest/features/quantization/gguf/">vLLM
 GGUF plugin</a>.</p>
 <h2 data-number="5.7" id="sglang"><span class="header-section-number">5.7</span> SGLang</h2>
-<p>SGLang is now a serious option for optimized LLM, multimodal, and
+<p>SGLang is now a serious option for optimised LLM, multimodal, and
 diffusion serving, especially where structured generation and advanced
-decode/scheduling behavior matter. Its support is accelerator- and
+decode/scheduling behaviour matter. Its support is accelerator- and
 backend-specific, so verify the model’s recipe before treating a claimed
 feature as portable.</p>
 <p>Use it when you want:</p>
@@ -1946,7 +1946,7 @@ Works</h2>
 <li>Define the modality and workload shape; if the output is a bounded
 decision, test a classifier or typed-decision model before reaching for
 generation.</li>
-<li>Pick a family with a license that fits your use.</li>
+<li>Pick a family with a licence that fits your use.</li>
 <li>Pick size for hardware, including encoders and KV cache.</li>
 <li>Pick a runtime and its supported format.</li>
 <li>Pick quantization or an official compressed checkpoint.</li>
@@ -2021,7 +2021,7 @@ path.</p>
 </ol>
 <p>Before downloading:</p>
 <ol type="1">
-<li>Check license fit for your use case.</li>
+<li>Check licence fit for your use case.</li>
 <li>Choose instruct/chat variants unless you need base checkpoints.</li>
 <li>Confirm file format compatibility with your runtime.</li>
 <li>Record exact model identifiers used in your stack.</li>
@@ -2030,14 +2030,14 @@ path.</p>
 pipeline version, resolution or clip length, and any safety or
 watermarking defaults. For voice cloning and image-generation
 checkpoints, record the usage restrictions separately from the code
-license.</p>
+licence.</p>
 <h2 data-number="8.6" id="minimal-local-eval-loop"><span class="header-section-number">8.6</span> Minimal Local Eval Loop</h2>
 <p>Do not trust one impression prompt. Build a tiny repeatable eval
 set.</p>
 <p>Include 15-30 prompts that represent your real work:</p>
 <ol type="1">
 <li>One-turn instruction following</li>
-<li>Multi-turn memory behavior</li>
+<li>Multi-turn memory behaviour</li>
 <li>Coding edits or debugging responses</li>
 <li>Tool-call formatting correctness</li>
 <li>Domain-specific reasoning checks</li>
@@ -2168,7 +2168,7 @@ Time</h1>
 <li>Pull new runtime/model in staging profile.</li>
 <li>Run your mini eval suite.</li>
 <li>Compare quality and latency against baseline.</li>
-<li>Promote only if metrics and behavior are acceptable.</li>
+<li>Promote only if metrics and behaviour are acceptable.</li>
 </ol>
 <p>Local stacks feel “small,” but this discipline is still worth it.</p>
 <h2 data-number="10.3" id="observability-that-actually-helps"><span class="header-section-number">10.3</span> Observability That Actually
@@ -2233,7 +2233,7 @@ speech generation</h2>
 <p>Use Whisper/faster-whisper for broad transcription compatibility,
 Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS
 for speech synthesis. Voice cloning needs explicit speaker consent and a
-license review.</p>
+licence review.</p>
 <h2 data-number="11.8" id="i-need-local-video-generation"><span class="header-section-number">11.8</span> I need local video
 generation</h2>
 <p>Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can

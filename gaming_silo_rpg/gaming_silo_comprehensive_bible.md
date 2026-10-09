@@ -69,7 +69,7 @@ In the Silo, nothing is ever "new." Everything is on its third, fourth, or fifth
 
 ### 1.3 The Life Cycle & The Bureaucracy
 
-The Silo is a managed population. Every individual is a resource to be optimized.
+The Silo is a managed population. Every individual is a resource to be optimised.
 
 #### 1.3.1 Birth and the Lottery Window
 The population is strictly capped at 10,000. 
@@ -173,7 +173,7 @@ The Silo’s stability depends on a controlled narrative. Anything that challeng
 
 #### 2.4.1 The Cult of the Before (Relics)
 Owning a "Relic" is the fastest way to The Cleaning. 
-*   **Why?** A relic is a tangible link to a world that the Founders say never existed—a world of abundance, color, and freedom. 
+*   **Why?** A relic is a tangible link to a world that the Founders say never existed—a world of abundance, colour, and freedom.
 *   **Types of Relics:** 
     *   *Tier 1 (Curiosities):* A plastic pen, a shiny coin, a scrap of synthetic lace. (Sentence: 5 years in the Mines).
     *   *Tier 2 (Narratives):* A photograph, a child’s toy, a magazine. (Sentence: The Cleaning).
@@ -839,7 +839,7 @@ To run a setting driven by political tension and scarcity, the GM needs a robust
     *   *The Secret:* She is not actually old; she is 30, but suffers from a rare aging disease that Medical refused to treat, fueling her hatred of the Up Top.
 *   **Mira Quell (The Savant):**
     *   *Role:* A mid-level mechanic, brilliant but insubordinate. Level 130.
-    *   *Appearance:* Intense, focused, always carrying a customized multi-tool.
+    *   *Appearance:* Intense, focused, always carrying a customised multi-tool.
     *   *Motivation:* Figuring out how things *really* work. She does not accept "Because The Pact says so" as an answer.
     *   *The Secret:* She has been quietly stealing high-grade wire and heat-tape to investigate why the Cleaning suits always fail.
 

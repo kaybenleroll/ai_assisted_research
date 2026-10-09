@@ -1407,7 +1407,7 @@ shortlist. See the <a href="https://qwenlm.github.io/blog/qwen3-coder/">Qwen3-Co
 release</a>.</p>
 <p>For a workstation experiment, the existing <a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B model
 card</a> documents a general multimodal model with reasoning controls.
-It is not the same checkpoint or specialization as Qwen3-Coder. A
+It is not the same checkpoint or specialisation as Qwen3-Coder. A
 quantized 27B model is a plausible 24GB-class experiment at controlled
 context, subject to runtime overhead. Smaller Qwen checkpoints offer
 more memory margin; verify their own tool format and coding results.
@@ -1470,7 +1470,7 @@ machine can sustain an agent loop.</p>
 <p>Separate those checkpoints from hosted lifecycle status. Mistral
 currently marks the <a href="https://docs.mistral.ai/models/devstral-2-25-12">Devstral 2
 endpoint deprecated</a> and points new integrations to <a href="https://docs.mistral.ai/models/mistral-medium-3-5-26-04">Mistral
-Medium 3.5</a>, a multimodal model optimized for coding and agentic use
+Medium 3.5</a>, a multimodal model optimised for coding and agentic use
 with 256K context and open weights under a Modified MIT licence. That
 does not invalidate an existing local Devstral checkpoint, nor establish
 that Medium fits the same hardware. Evaluate the exact release, licence,
@@ -1498,7 +1498,7 @@ a separate visual-processing path.</p>
 Gemma</h3>
 <p>Llama offers downloadable general-purpose checkpoints with an
 established deployment ecosystem, but the family name does not imply
-code specialization. Meta’s <a href="https://github.com/meta-llama/llama-models/blob/main/README.md">model
+code specialisation. Meta’s <a href="https://github.com/meta-llama/llama-models/blob/main/README.md">model
 repository</a> separates releases and their prompt formats; its
 full-precision Llama 4 examples require multiple GPUs. Smaller releases
 can be useful local baselines for summaries, retrieval over code, and
@@ -1519,7 +1519,7 @@ NVIDIA Nemotron, IBM Granite, Microsoft Phi</h3>
 and agent releases</a> merit a hosted or server evaluation; their sparse
 active computation can obscure large total weights. <a href="https://research.nvidia.com/labs/nemotron/Nemotron-3/">NVIDIA
 Nemotron</a> spans general reasoning and agent workloads across
-different deployment sizes. Its optimized runtime ecosystem may matter
+different deployment sizes. Its optimised runtime ecosystem may matter
 to an existing NVIDIA installation, but the family is not exclusively
 code-specialized and its larger variants are not workstation
 defaults.</p>
@@ -2060,7 +2060,7 @@ file additions manually.</p>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gemini</span></span></code></pre></div>
 <p><strong>LLM provider support:</strong> Gemini CLI is primarily
 designed for Google’s Gemini models; exact aliases exposed by the
-installed release change as Google migrates the consumer path toward
+installed release change as Google migrates the consumer path towards
 Antigravity CLI. The current Gemini API catalogue includes Gemini 3.8
 Flash, 3.7 Flash, 3.5 Flash-Lite, and 3.1 Pro Preview. It is not
 model-agnostic in the same way as Aider or OpenCode.</p>
@@ -2317,8 +2317,8 @@ Dev)</h2>
 coding agent that operates primarily as a VS Code extension. It is
 model-agnostic, OpenRouter-compatible, and one of the most capable
 agentic tools available for IDE-based workflows. It has since expanded
-well beyond VS Code and beyond the IDE entirely, moving it toward hybrid
-territory.</p>
+well beyond VS Code and beyond the IDE entirely, moving it towards
+hybrid territory.</p>
 <p><strong>Author and licence:</strong> Open source at
 <code>github.com/cline/cline</code>. MIT licence.</p>
 <p><strong>Community size:</strong> Roughly low-60k GitHub stars
@@ -2884,7 +2884,7 @@ Desktop</strong> (formerly Windsurf, rebranded June 2026 after
 Cognition’s acquisition of Windsurf) – see the Windsurf/Devin Desktop
 entry for that product’s separate pricing ladder. The two are distinct:
 Devin is the cloud autonomous-agent product with plan quotas and
-on-demand credits; Devin Desktop is an IDE and agent command center.</p>
+on-demand credits; Devin Desktop is an IDE and agent command centre.</p>
 <p><strong>Strengths:</strong> - Very capable for long-horizon
 autonomous tasks - Well-integrated with GitHub workflows - No longer
 prohibitively priced for individuals at light-to-moderate usage
@@ -2935,7 +2935,7 @@ their separate billing path and are not automatically covered by every
 BYOK configuration.</p>
 <p><strong>OpenRouter support:</strong> Possible through a compatible
 local-BYOK/provider integration, but do not present it as one uniform
-Copilot feature. Client, plan, and organization policy determine whether
+Copilot feature. Client, plan, and organisation policy determine whether
 a user can configure it; the enterprise custom-model path is still in
 public preview.</p>
 <p><strong>Strengths:</strong> - Deep GitHub integration – issues, PRs,
@@ -2943,7 +2943,7 @@ code review - Real provider flexibility now, not just a wide built-in
 model picker - $10/month remains the most affordable commercial
 completions tier - Enterprise features and security compliance</p>
 <p><strong>Weaknesses:</strong> - BYOK coverage depends on the client,
-feature, plan, and organization policy; local BYOK and
+feature, plan, and organisation policy; local BYOK and
 enterprise-managed custom models are different paths - Agent Mode and
 Copilot Coding Agent are two separate mental models to learn, with
 different sync/async execution semantics - Less suited for non-GitHub
@@ -3021,7 +3021,7 @@ remain heavier than VS Code</p>
 <p><strong>What it is:</strong> Tabnine is an AI coding assistant with a
 long history (one of the first serious AI coding tools), historically
 focused on fast, high-quality inline completions. It has since pivoted
-toward agentic workflows.</p>
+towards agentic workflows.</p>
 <p><strong>Pricing (materially higher than before – the old ~$12/month
 Pro tier was sunset in 2025):</strong></p>
 <ul>
@@ -4436,7 +4436,7 @@ have a separate allowance.</td>
 <tr>
 <td>GitHub Copilot – Business</td>
 <td>$19/user/mo</td>
-<td>$19/user/mo + policy-controlled model catalog</td>
+<td>$19/user/mo + policy-controlled model catalogue</td>
 <td>N/A</td>
 <td>Unchanged from old doc.</td>
 </tr>
@@ -4518,7 +4518,7 @@ also available.</td>
 <td>$10/user/mo individual; $20 business</td>
 <td>Included 10/20 credits per 30 days; eligible top-ups</td>
 <td>N/A</td>
-<td>AI Credits are the quota unit; bundle and organization rules
+<td>AI Credits are the quota unit; bundle and organisation rules
 vary.</td>
 </tr>
 <tr>
@@ -4526,7 +4526,7 @@ vary.</td>
 <td>$30/user/mo individual; $60 business</td>
 <td>Included 35/70 credits per 30 days; eligible top-ups</td>
 <td>N/A</td>
-<td>AI Credits are the quota unit; bundle and organization rules
+<td>AI Credits are the quota unit; bundle and organisation rules
 vary.</td>
 </tr>
 <tr>
@@ -5664,7 +5664,7 @@ overview</a>, <a href="https://antigravity.google/docs/cli/install/">CLI
 installation</a>, and <a href="https://antigravity.google/docs/mcp">MCP
 documentation</a></li>
 <li><a href="https://ampcode.com/docs/pricing">Amp pricing</a>, <a href="https://ampcode.com/docs/orbs/self-hosted">self-hosted Orbs</a>,
-<a href="https://ampcode.com/docs">documentation</a>, <a href="https://ampcode.com/docs/customize/skills">skills and plugins</a>,
+<a href="https://ampcode.com/docs">documentation</a>, <a href="https://ampcode.com/docs/customise/skills">skills and plugins</a>,
 and <a href="https://ampcode.com/plugin-api">plugin API</a></li>
 <li><a href="https://docs.cline.bot/cli/cli-reference">Cline CLI
 reference</a>, <a href="https://docs.cline.bot/getting-started/installing-cline">installation

@@ -750,9 +750,9 @@ and a comparison with OpenClaw.</p>
 what chooses a model, what can execute commands, what persists, and what
 must be protected.</p>
 <h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
-<p>This is not a model benchmark, a complete catalog of every messaging
-adapter, or a replacement for provider documentation. Hermes Agent is
-not the same thing as the <a href="https://huggingface.co/NousResearch">Nous Hermes model family</a>;
+<p>This is not a model benchmark, a complete catalogue of every
+messaging adapter, or a replacement for provider documentation. Hermes
+Agent is not the same thing as the <a href="https://huggingface.co/NousResearch">Nous Hermes model family</a>;
 here, “Hermes” means the agent runtime and its server surfaces. The
 examples assume a technically literate operator who can read shell
 commands, YAML, and HTTP requests. They do not assume that a model can
@@ -1013,7 +1013,7 @@ plugins, TUI widgets, browser caches, checkpoints, knowledge stores, and
 tool-specific state can also live below the Hermes home. Back up the
 actual home rather than relying on a hand-written list.</p>
 <p>Keep the separation simple: secrets belong in <code>.env</code> or
-the platform’s secret mechanism; ordinary behavior belongs in
+the platform’s secret mechanism; ordinary behaviour belongs in
 <code>config.yaml</code>. Set restrictive permissions on the home and
 <code>.env</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 700 ~/.hermes</span>
@@ -1056,7 +1056,7 @@ SGLang often use an OpenAI-shaped endpoint configured through
 required by the client library even when the local server ignores
 it.</p>
 <p>Model selection affects more than prose quality. Tool-call
-formatting, context length, reasoning behavior, latency, cost, vision
+formatting, context length, reasoning behaviour, latency, cost, vision
 support, and provider rate limits all affect the agent loop. A model
 that looks good on a chat benchmark can still fail because it emits
 invalid tool arguments or loses the current working directory after a
@@ -1104,7 +1104,7 @@ Memory guide</a> documents the current limits and controls.</p>
 can ask for approval and non-interactive or messaging writes can be
 staged for review. This is useful when memory is valuable but an
 unattended agent must not silently turn a transient instruction into
-durable behavior.</p>
+durable behaviour.</p>
 <p>Hermes also supports external memory provider plugins. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/">Memory
 Providers guide</a> describes providers such as Honcho, Mem0, Hindsight,
 OpenViking, Holographic, RetainDB, ByteRover, and Supermemory. Only one
@@ -1295,7 +1295,7 @@ Gateway guide</a> describes a single background gateway that can connect
 configured adapters such as Telegram, Discord, Slack, WhatsApp, Signal,
 Matrix, email, Home Assistant, Microsoft Teams, and many others. The
 gateway owns platform connections, per-chat sessions, typing/streaming
-behavior where supported, scheduled jobs, and outbound delivery.</p>
+behaviour where supported, scheduled jobs, and outbound delivery.</p>
 <p>Configure adapters through the wizard:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway setup</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> gateway start</span>
@@ -1469,7 +1469,7 @@ concurrently.</p>
 <h3 data-number="6.1.1" id="podman"><span class="header-section-number">6.1.1</span> Podman</h3>
 <p>Rootless Podman is a reasonable Docker-compatible runtime for the
 official image, but validate the exact image, networking, user
-namespace, and volume behavior in your environment. Use
+namespace, and volume behaviour in your environment. Use
 <code>podman</code> in place of <code>docker</code>, publish loopback
 addresses explicitly, and add <code>:Z</code> on SELinux systems when
 the host policy requires relabeling:</p>
@@ -1555,7 +1555,7 @@ while <code>hermes profile export</code> creates a portable
 single-profile archive with <code>.env</code> and <code>auth.json</code>
 excluded. The official <a href="https://hermes-agent.nousresearch.com/docs/reference/profile-commands/">profile
 command reference</a> and <a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md">CLI
-reference</a> describe the current behavior.</p>
+reference</a> describe the current behaviour.</p>
 <h3 data-number="8.0.1" id="full-machine-backup"><span class="header-section-number">8.0.1</span> Full machine backup</h3>
 <p>The full backup is appropriate for disaster recovery or moving the
 installation. It contains secrets, so protect the archive like a
@@ -1584,7 +1584,7 @@ preserving a copy of the destination home:</p>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> import /secure/location/hermes-full.zip</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> doctor</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hermes</span> profile list</span></code></pre></div>
-<p>The exact import confirmation and path behavior can change; read
+<p>The exact import confirmation and path behaviour can change; read
 <code>hermes import --help</code> before an overwrite. Re-authenticate
 providers or messaging platforms if tokens were intentionally excluded
 or invalidated. Start one profile at a time and verify that the restored
@@ -1709,7 +1709,7 @@ recovery model you actually use.</p>
 <h2 data-number="9.3" id="when-they-can-be-combined"><span class="header-section-number">9.3</span> When they can be combined</h2>
 <p>They can occupy different layers: OpenClaw can be the outward
 channel/control plane while Hermes or another backend supplies agent
-behavior, or Hermes can expose an API that a separate application
+behaviour, or Hermes can expose an API that a separate application
 consumes. A combined deployment adds network, authentication, session,
 and duplicate-tool risks. Define which system owns identity, model
 selection, memory, terminal execution, and outbound messaging before

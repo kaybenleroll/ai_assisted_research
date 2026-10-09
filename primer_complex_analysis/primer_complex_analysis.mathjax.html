@@ -769,7 +769,7 @@ function has much less freedom. Once it has a complex derivative
 throughout an open region, its values on a small circle determine every
 value inside that circle. It has derivatives of every order and a
 convergent power series nearby. Contour integrals then connect local
-behavior at singularities to global quantities such as definite
+behaviour at singularities to global quantities such as definite
 integrals and zero counts. This is the useful surprise of complex
 analysis: a stronger definition of derivative produces stronger
 tools.</p>
@@ -793,7 +793,7 @@ because <span class="math display">\[
 \left|\int_\gamma (f_n-f)(z)\,dz\right|
 \le
 \operatorname{length}(\gamma)\sup_{z\in\gamma}|f_n(z)-f(z)|\longrightarrow0.
-\]</span> It does not automatically license differentiation of arbitrary
+\]</span> It does not automatically licence differentiation of arbitrary
 series; power series receive a separate argument in Section 4. A set is
 <em>compact</em> in the plane if it is closed and bounded. A continuous
 function attains its maximum modulus on a compact set. More subtly, a
@@ -819,7 +819,7 @@ points. Along the real axis it equals <span class="math inline">\(1\)</span>; al
 its modulus is <span class="math inline">\(|z|\)</span>. The distinction
 matters when you inspect an apparent singularity: a formula that looks
 like <span class="math inline">\(0/0\)</span> may have a removable
-limit, a directional mismatch, or genuinely wild behavior. Algebraic
+limit, a directional mismatch, or genuinely wild behaviour. Algebraic
 appearance alone does not classify it.</p>
 <p>Uniform convergence often comes from the <em>Weierstrass M-test</em>.
 If functions <span class="math inline">\(g_n\)</span> on <span class="math inline">\(E\)</span> satisfy <span class="math inline">\(|g_n(z)|\le M_n\)</span> for all <span class="math inline">\(z\in E\)</span>, and the ordinary numerical series
@@ -905,7 +905,7 @@ not holomorphic on any open disk. The real smooth function <span class="math dis
 h(x)=\begin{cases}e^{-1/x^2},&amp;x\ne0,\\0,&amp;x=0\end{cases}
 \]</span> has every derivative at zero equal to zero, yet its Taylor
 series there is identically zero and does not recover the function away
-from zero. Complex holomorphy prevents that behavior: Cauchy’s formula
+from zero. Complex holomorphy prevents that behaviour: Cauchy’s formula
 proves that the Taylor series actually equals the function nearby. The
 implication is not a matter of notation; the requirement that the same
 derivative exist from every complex direction gives a contour identity
@@ -976,7 +976,7 @@ brightness or bands to <span class="math inline">\(|f(z)|\)</span>. For
 circle around zero makes the hue cycle twice. That twofold <em>phase
 winding</em> is the zero’s multiplicity, which we will recover without a
 plot using the argument principle. At the origin itself, the phase is
-undefined; any color placed there is a display convention. A plot can
+undefined; any colour placed there is a display convention. A plot can
 reveal a pattern and suggest a contour, but pixels cannot establish a
 zero count or prove continuity across a suspected branch cut.</p>
 <p>You can predict several pictures before drawing them. Under <span class="math inline">\(z\mapsto z^2\)</span>, a ray at angle <span class="math inline">\(\theta\)</span> maps to a ray at <span class="math inline">\(2\theta\)</span> while its radius is squared. The
@@ -1323,7 +1323,7 @@ identify a holomorphic <span class="math inline">\(f=u+iv\)</span>, you
 get two harmonic functions at once. Conversely, solving <span class="math inline">\(\Delta u=0\)</span> in a region gives a local
 route to a holomorphic function, which can simplify a potential or flow
 problem. But a harmonic function by itself does not specify the
-conjugate’s global behavior or boundary conditions. Even on a simply
+conjugate’s global behaviour or boundary conditions. Even on a simply
 connected region, adding a constant to <span class="math inline">\(v\)</span> changes no derivatives; on a multiply
 connected region, periods around holes can prevent a single-valued <span class="math inline">\(v\)</span> altogether. When applying this to
 physics, one must also check what <span class="math inline">\(u\)</span>
@@ -1823,7 +1823,7 @@ hypothesis you use and explain why the derivative order is two. (<a href="#solut
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 6–7</a>.</p>
 <h1 data-number="4" id="series-and-singularities"><span class="header-section-number">4</span> Series and singularities</h1>
-<p>Cauchy’s formula supplies the expansions that make local behavior
+<p>Cauchy’s formula supplies the expansions that make local behaviour
 calculable. Taylor series describe regular points, while Laurent series
 distinguish removable singularities, poles, and essential singularities
 on punctured neighborhoods. The examples emphasize convergence regions
@@ -1880,11 +1880,11 @@ disk inside a connected domain, their Taylor coefficients agree there.
 The identity theorem then propagates equality through overlapping disks
 across the connected domain. More generally, agreement on a set with an
 accumulation point inside the domain is enough. This does not mean a
-Taylor series around one center converges across the whole domain; it
+Taylor series around one centre converges across the whole domain; it
 means the function, if continued holomorphically along a route, has no
 freedom to change values arbitrarily. The distinction between uniqueness
 of continuation and radius of convergence becomes important when
-singularities lie between one center and another.</p>
+singularities lie between one centre and another.</p>
 <p>The coefficient bound also explains why a holomorphic function cannot
 have a Taylor series with a mysterious collection of coefficients
 unrelated to its derivatives. Once the function is fixed on any
@@ -1911,7 +1911,7 @@ example, <span class="math display">\[
 them: its pole at <span class="math inline">\(z=1\)</span> fixes radius
 <span class="math inline">\(1\)</span>. Recenter at <span class="math inline">\(a=2\)</span> and a new Taylor series works near
 <span class="math inline">\(2\)</span>. A series is a local
-representation with a specific center, not a global identity on every
+representation with a specific centre, not a global identity on every
 part of the function’s domain.</p>
 <p>The phrase “nearest singularity” needs its domain attached. A branch
 cut chosen for <span class="math inline">\(\operatorname{Log}\)</span>
@@ -1946,10 +1946,10 @@ compact-subannulus convergence permits termwise contour integration and
 differentiation.</p>
 <p>The negative powers record information hidden in the hole. If all
 negative coefficients vanish, the Laurent series becomes a Taylor series
-and extends across the center. If finitely many remain, the center is a
+and extends across the centre. If finitely many remain, the centre is a
 pole. If infinitely many remain, it is essential. The positive-power
 side is the ordinary holomorphic variation that would remain after
-subtracting the singular behavior. This division makes Laurent series
+subtracting the singular behaviour. This division makes Laurent series
 especially useful for local diagnosis: you can ask which term survives a
 contour integral without calculating the entire function elsewhere.</p>
 <p>For example, on <span class="math inline">\(0&lt;|z|&lt;1\)</span>,
@@ -2005,7 +2005,7 @@ G(z)
 is <span class="math inline">\(-1\)</span>, the residue at <span class="math inline">\(z=1\)</span>. A centered circle with radius in
 this annulus encloses that pole and excludes the pole at <span class="math inline">\(2\)</span>. Notice that the coefficient of <span class="math inline">\(z^0\)</span> is now <span class="math inline">\(-1/2\)</span>, not the value <span class="math inline">\(1/2\)</span> from the inner disk. Laurent
 coefficients are attached to the annulus and its contour integrals; they
-are not globally fixed by a formula and a center alone.</p>
+are not globally fixed by a formula and a centre alone.</p>
 <p>For <span class="math inline">\(|z|&gt;2\)</span>, expand both
 fractions in inverse powers: <span class="math display">\[
 \begin{aligned}
@@ -2018,7 +2018,7 @@ G(z)
 \qquad |z|&gt;2.
 \end{aligned}
 \]</span> Now the coefficient of <span class="math inline">\(z^{-1}\)</span> is <span class="math inline">\(2^0-1=0\)</span>: both poles are enclosed, and
-their residues <span class="math inline">\(-1\)</span> and <span class="math inline">\(+1\)</span> cancel. The coefficient of <span class="math inline">\(z^{-2}\)</span> is <span class="math inline">\(1\)</span>, consistent with the leading behavior
+their residues <span class="math inline">\(-1\)</span> and <span class="math inline">\(+1\)</span> cancel. The coefficient of <span class="math inline">\(z^{-2}\)</span> is <span class="math inline">\(1\)</span>, consistent with the leading behaviour
 <span class="math inline">\(G(z)\sim z^{-2}\)</span> at infinity. This
 is a useful consistency check: if the <span class="math inline">\(z^{-1}\)</span> term remained, the rational
 function would decay like <span class="math inline">\(1/z\)</span>,
@@ -2038,7 +2038,7 @@ of a Laurent series is <span class="math inline">\(2\pi i\)</span> times
 its <span class="math inline">\(z^{-1}\)</span> coefficient, the three
 coefficient values <span class="math inline">\(0,-1,0\)</span> encode
 exactly these changes. The power-series algebra and residue theorem are
-two descriptions of the same contour behavior.</p>
+two descriptions of the same contour behaviour.</p>
 <p>One can see the same stability directly from the coefficient
 integral. Fix an integer <span class="math inline">\(k\)</span> and let
 <span class="math inline">\(\rho_1,\rho_2\)</span> be two radii in the
@@ -2068,7 +2068,7 @@ radii transparent.</p>
 traps</h2>
 <p>Convergence regions are easier to understand if you derive each
 geometric expansion from its inequality. For a Taylor series, the
-nearest obstruction sets the convergence radius from its center, but the
+nearest obstruction sets the convergence radius from its centre, but the
 word “obstruction” is more accurate than blindly reading the distance to
 a marked cut. The function <span class="math inline">\(\operatorname{Log}(1+z)\)</span> near zero has an
 intrinsic branch point at <span class="math inline">\(-1\)</span>, so
@@ -2076,7 +2076,7 @@ radius <span class="math inline">\(1\)</span> is unavoidable. A chosen
 logarithm cut may extend leftward from <span class="math inline">\(-1\)</span>, yet its other points are not
 independent singularities; one can continue around them using another
 branch. For a rational function, by contrast, an actual pole nearest the
-center directly limits the series. If a displayed formula has a
+centre directly limits the series. If a displayed formula has a
 removable denominator zero, cancel it first; that point does not limit
 the Taylor expansion of the holomorphic extension.</p>
 <p>The coefficients themselves encode boundary control. If <span class="math inline">\(f\)</span> is holomorphic for <span class="math inline">\(|z-a|&lt;R_0\)</span>, fix <span class="math inline">\(R&lt;R_0\)</span> and let <span class="math inline">\(M_R\)</span> be its maximum on <span class="math inline">\(|z-a|=R\)</span>. Then <span class="math inline">\(|c_n|\le M_R/R^n\)</span>. Given <span class="math inline">\(r&lt;R\)</span>, the tail after degree <span class="math inline">\(N\)</span> is at most <span class="math inline">\(M_R(r/R)^{N+1}/(1-r/R)\)</span>. This is not just
@@ -2132,7 +2132,7 @@ alone would not automatically prove complex differentiability there.
 This logical distinction matters when you remove a singularity inside a
 larger argument and then apply Cauchy’s formula across the filled
 point.</p>
-<p>The behavior of <span class="math inline">\(\sin(1/z)\)</span> gives
+<p>The behaviour of <span class="math inline">\(\sin(1/z)\)</span> gives
 a useful counterpoint. It is holomorphic on every punctured disk about
 zero and has infinitely many negative Laurent terms, so zero is
 essential. Its zeros <span class="math inline">\(1/(n\pi)\)</span>
@@ -2157,7 +2157,7 @@ any boundary limit explicitly.</p>
 makes the radius issue concrete without a branch cut. The geometric
 expansion gives <span class="math display">\[
 \frac1{1+z^2}=\sum_{n=0}^{\infty}(-1)^nz^{2n},\qquad |z|&lt;1.
-\]</span> Its nearest singularities are the poles at <span class="math inline">\(i\)</span> and <span class="math inline">\(-i\)</span>, both at distance <span class="math inline">\(1\)</span> from the center. On <span class="math inline">\(|z|=1\)</span> the terms have modulus <span class="math inline">\(1\)</span>, so they do not even tend to zero and
+\]</span> Its nearest singularities are the poles at <span class="math inline">\(i\)</span> and <span class="math inline">\(-i\)</span>, both at distance <span class="math inline">\(1\)</span> from the centre. On <span class="math inline">\(|z|=1\)</span> the terms have modulus <span class="math inline">\(1\)</span>, so they do not even tend to zero and
 the series diverges at every boundary point. Yet the rational function
 is perfectly regular at many of those points, including <span class="math inline">\(z=1\)</span>. Recenter at <span class="math inline">\(1\)</span> and a different Taylor series describes
 it there. A failure of one centered series on its boundary is not a
@@ -2175,7 +2175,7 @@ obtain a holomorphic extension. For <span class="math inline">\(f(z)=\sin z/z\)<
 \]</span> so <span class="math inline">\(f(0)=1\)</span> removes the
 apparent defect. A useful equivalent test is local boundedness: a
 holomorphic function on a punctured disk that stays bounded near its
-center has a removable singularity. Cauchy’s coefficient formula on
+centre has a removable singularity. Cauchy’s coefficient formula on
 shrinking circles shows its negative coefficients are zero.</p>
 <p>Here is the coefficient argument in one line. If <span class="math inline">\(|f(z)|\le M\)</span> near <span class="math inline">\(a\)</span> and <span class="math inline">\(k\ge1\)</span>, integrate on <span class="math inline">\(|z-a|=\rho\)</span> to obtain <span class="math display">\[
 |c_{-k}|=\left|\frac1{2\pi i}\int_{|z-a|=\rho}
@@ -2200,16 +2200,18 @@ e^{1/z}=1+\frac1z+\frac1{2!z^2}+\cdots.
 \]</span> Along positive real <span class="math inline">\(z\to0\)</span>, the modulus blows up; along
 negative real <span class="math inline">\(z\to0\)</span>, it tends to
 zero; along imaginary approaches it oscillates. No value or finite-order
-pole can repair this behavior. A deeper result, the Casorati–Weierstrass
-theorem, says values of a function near an essential singularity are
-dense in <span class="math inline">\(\mathbb C\)</span>. We do not need
-that theorem for residue calculations, but it explains why essential
-singularities resist the simple pole picture. The classification assumes
-<em>isolation</em>: a cluster of singularities accumulating at <span class="math inline">\(a\)</span> requires a different analysis.</p>
+pole can repair this behaviour. A deeper result, the
+Casorati–Weierstrass theorem, says values of a function near an
+essential singularity are dense in <span class="math inline">\(\mathbb
+C\)</span>. We do not need that theorem for residue calculations, but it
+explains why essential singularities resist the simple pole picture. The
+classification assumes <em>isolation</em>: a cluster of singularities
+accumulating at <span class="math inline">\(a\)</span> requires a
+different analysis.</p>
 <p>Do not infer the type of an isolated singularity from one approach
 path. The function <span class="math inline">\(e^{1/z}\)</span> grows
 along one ray and shrinks along another, while a pole satisfies <span class="math inline">\(|f(z)|\to\infty\)</span> along <em>every</em>
-approach to its center. Nor does a bounded-looking plot prove
+approach to its centre. Nor does a bounded-looking plot prove
 removability: finite resolution can miss a narrow growth direction. The
 Laurent principal part or a theorem with verified hypotheses supplies
 the classification. Conversely, if a symbolic expression seems
@@ -2643,7 +2645,7 @@ positive axis has bank values in ratio <span class="math inline">\(e^{2\pi i(\al
 The origin arc is of order <span class="math inline">\(\varepsilon^\alpha\)</span>, and the outer arc is
 of order <span class="math inline">\(R^{\alpha-1}\)</span>. Both vanish
 precisely in this range. The pole at <span class="math inline">\(-1\)</span> contributes a phase determined by the
-selected branch. This is a template, not a license to substitute
+selected branch. This is a template, not a licence to substitute
 arbitrary complex exponents: convergence, branch values, and arc
 estimates must all be revisited when the exponent changes.</p>
 <p>It is useful to separate a branch cut from the obstruction that makes
@@ -2732,7 +2734,7 @@ rule:</p>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    estimate <span class="op">=</span> total <span class="op">*</span> (<span class="dv">2</span> <span class="op">*</span> math.pi <span class="op">/</span> n)</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    exact <span class="op">=</span> <span class="ot">2j</span> <span class="op">*</span> math.pi <span class="op">*</span> math.e</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(n, estimate, <span class="bu">abs</span>(estimate <span class="op">-</span> exact))</span></code></pre></div>
-<p>The denominator never vanishes on this circle, and increasing <span class="math inline">\(n\)</span> should drive the error down toward
+<p>The denominator never vanishes on this circle, and increasing <span class="math inline">\(n\)</span> should drive the error down towards
 floating-point limits. A stable sequence of approximations is evidence
 that the parametrisation and orientation were coded correctly. It is not
 a proof of the residue theorem: a grid could miss a narrow feature, a
@@ -2892,7 +2894,7 @@ Neither application tells us individual roots, but together they
 constrain where every root can be. This annular conclusion is a common
 way to use the theorem in practice.</p>
 <p>The strict inequality need hold only on the selected boundary, not
-throughout its interior. The functions can have complicated behavior
+throughout its interior. The functions can have complicated behaviour
 inside; that is the point of the theorem. If <span class="math inline">\(g\)</span> is larger than <span class="math inline">\(f\)</span> on the boundary, swap their roles if a
 useful inequality results. If no term dominates on a circle, try a
 different radius or a noncircular contour rather than forcing an invalid
@@ -3105,14 +3107,14 @@ matters: a function cannot touch the bound at an interior point and then
 behave differently elsewhere.</p>
 <p>You can use the same division trick when <span class="math inline">\(f\)</span> has a zero of order <span class="math inline">\(m\)</span> at the origin. If <span class="math inline">\(|f|\le1\)</span> on the unit circle and <span class="math inline">\(f(z)=z^mg(z)\)</span> with <span class="math inline">\(g\)</span> holomorphic on the disk, then <span class="math inline">\(|g|\le1\)</span> on the boundary and hence inside.
 Consequently <span class="math inline">\(|f(z)|\le|z|^m\)</span>. A
-higher multiplicity forces a stronger decay toward the center. This
+higher multiplicity forces a stronger decay towards the centre. This
 connects a local integer, the order of a zero, to a global boundary
 bound. If <span class="math inline">\(f\)</span> has other zeros, no
 part of the argument breaks; only the factor at the origin was
 needed.</p>
 <p>The maximum principle does not assert that <span class="math inline">\(|f|\)</span> is smallest on the boundary. The
 function <span class="math inline">\(f(z)=z\)</span> has a zero at the
-center, giving an interior minimum of zero. If <span class="math inline">\(f\)</span> has no zeros, <span class="math inline">\(1/f\)</span> is holomorphic and the same principle
+centre, giving an interior minimum of zero. If <span class="math inline">\(f\)</span> has no zeros, <span class="math inline">\(1/f\)</span> is holomorphic and the same principle
 applied to <span class="math inline">\(1/f\)</span> prevents a
 nonconstant interior minimum of <span class="math inline">\(|f|\)</span>. The nonvanishing hypothesis is
 essential. For instance, <span class="math inline">\(f(z)=z^2-1/4\)</span> on the unit disk has two
@@ -3146,7 +3148,7 @@ Multiplication by <span class="math inline">\(f&#39;(a)\)</span> rotates
 and scales, so a holomorphic map preserves angles between smooth curves
 through <span class="math inline">\(a\)</span>, including orientation.
 This is <em>local conformality</em>. It says nothing by itself about
-global one-to-one behavior. The exponential has nonzero derivative
+global one-to-one behaviour. The exponential has nonzero derivative
 everywhere but repeats values every <span class="math inline">\(2\pi
 i\)</span>; <span class="math inline">\(z^2\)</span> is locally
 conformal away from zero but identifies <span class="math inline">\(z\)</span> and <span class="math inline">\(-z\)</span> on many domains. At zero, <span class="math inline">\(z^2\)</span> has derivative zero, so even local
@@ -3227,7 +3229,7 @@ proof uses tools beyond this core narrative, including normal families.
 The MIT 18.112 lecture notes listed below provide a route into that
 proof.</p>
 <p>The six sections now form one chain. Complex differentiation
-restricts local behavior; Cauchy’s formula turns that restriction into
+restricts local behaviour; Cauchy’s formula turns that restriction into
 convergent series; Laurent coefficients identify singularities; residues
 turn singularities into contour integrals; and the argument principle
 turns those integrals into global counts. Conformal maps carry the same
@@ -3259,7 +3261,7 @@ Applications</h1>
 boundary data, and transforms. A holomorphic function packages a
 harmonic function together with its conjugate, while conformal maps can
 simplify the geometry of a boundary-value problem. The examples also
-show where those tools stop: boundary behavior, branch choices, and
+show where those tools stop: boundary behaviour, branch choices, and
 contour hypotheses still need separate attention.</p>
 <p>A <em>Dirichlet problem</em> asks for a harmonic function <span class="math inline">\(u\)</span> on a domain whose boundary values are
 prescribed: <span class="math inline">\(u=g\)</span> on <span class="math inline">\(\partial D\)</span>. For a bounded domain, the
@@ -3634,7 +3636,7 @@ e^{-\lambda f(x_0)}\sqrt{\frac{2\pi}{\lambda f&#39;&#39;(x_0)}}.
 domain and appropriate smoothness and growth assumptions; competing
 minima, endpoints, degenerate stationary points, and complex saddles
 change the analysis. The Gaussian example illustrates the scaling and
-normalization, not a universal recipe that can be applied by inspecting
+normalisation, not a universal recipe that can be applied by inspecting
 a plot. For broader asymptotic methods, the <a href="https://dlmf.nist.gov/2">NIST Digital Library of Mathematical
 Functions, §2</a> gives a careful reference.</p>
 <p>The mechanism is local concentration. If <span class="math inline">\(f\)</span> has a strict global minimum at <span class="math inline">\(x_0\)</span>, then values away from <span class="math inline">\(x_0\)</span> carry an exponentially smaller factor
@@ -3776,7 +3778,7 @@ but cannot remove the branch discontinuity; changing the branch
 convention moves the cut and changes the displayed function while
 leaving its local derivative <span class="math inline">\(1/z\)</span>
 unchanged.</p>
-<p>Here is a second, geometric visualization that directly uses the
+<p>Here is a second, geometric visualisation that directly uses the
 wedge map. It samples radial and angular lines in the quarter-plane and
 plots their images under <span class="math inline">\(z\mapsto
 z^2\)</span>. The image should be a half-disk with straightened boundary
@@ -3909,7 +3911,7 @@ discontinuities or hide a chosen branch. A contour that passes too close
 to a pole produces large, rapidly varying values; a coarse grid may miss
 the pole entirely. Finite differences near a singularity amplify
 cancellation, and a residue computation can be exact while its contour
-selection is wrong. Always state the parameterization and orientation,
+selection is wrong. Always state the parameterisation and orientation,
 inspect the singularities analytically, refine the discretization, and
 distinguish precision error from discretization error. For conformal-map
 plots, draw a grid and its image, but remember that a coarse mesh can
@@ -3930,12 +3932,12 @@ symbolic residue and a numerical contour sum can share the same mistaken
 pole choice if both were copied from the same derivation. A reliable
 workflow checks the analytic hypotheses first, then uses a symbolic
 system for local algebra, and finally uses numerical quadrature to test
-orientation, parameterization, and scale. When the result is sensitive,
-report the contour, precision, discretization, and convergence behavior
+orientation, parameterisation, and scale. When the result is sensitive,
+report the contour, precision, discretization, and convergence behaviour
 so someone else can reproduce the check.</p>
 <p>When a computed contour integral fails to approach its expected
 value, change one numerical control at a time. First verify the
-parameterization algebraically, including its derivative and
+parameterisation algebraically, including its derivative and
 orientation. Then keep the path fixed and increase the number of
 quadrature nodes or subdivide the parameter interval near rapid
 variation. Separately increase arithmetic precision. Finally move the
@@ -3953,7 +3955,7 @@ change close to <span class="math inline">\(2\pi k\)</span> suggests
 winding number <span class="math inline">\(k\)</span>. But phase
 unwrapping assumes adjacent samples do not jump across an unresolved
 turn, and it becomes unstable if <span class="math inline">\(f(z(t))\)</span> approaches zero. Monitor the
-minimum sampled modulus as the mesh is refined. If it trends toward
+minimum sampled modulus as the mesh is refined. If it trends towards
 zero, the boundary may contain a zero or pass close to one; the
 theorem’s nonvanishing boundary hypothesis is then numerically
 ill-conditioned. A reliable certified count needs a bound on the image
@@ -4127,7 +4129,7 @@ holomorphic on and inside the circle and the denominator is <span class="math in
 For <span class="math inline">\(|z|&gt;1\)</span>, <span class="math inline">\(z/(z-1)=1/(1-1/z)=\sum_{n=0}^{\infty}z^{-n}\)</span>.
 The geometric series have distinct convergence regions separated by the
 pole at <span class="math inline">\(1\)</span>. A Laurent expansion
-belongs to an annulus of analyticity, so the same center can support
+belongs to an annulus of analyticity, so the same centre can support
 different expansions on different annuli. Neither expansion may be
 extended across the pole merely because its algebraic formula looks the
 same.</p>
@@ -4188,7 +4190,7 @@ are preserved locally, and an orthogonal grid remains locally
 orthogonal, though its scale and orientation may vary with position. Yet
 <span class="math inline">\(e^z\)</span> is conformal everywhere and not
 injective on the whole plane because it has period <span class="math inline">\(2\pi i\)</span>. Nonzero derivative gives local,
-not global, one-to-one behavior; global injectivity requires additional
+not global, one-to-one behaviour; global injectivity requires additional
 information about the domain and the map.</p>
 <h4 class="unnumbered" id="solution-17">Solution 17</h4>
 <p>The maximum principle says a nonconstant harmonic function cannot
@@ -4258,7 +4260,7 @@ branch.</p>
 <p>The expansion is <span class="math inline">\(\sin
 z/z^3=z^{-2}-1/6+z^2/120-\cdots\)</span>. The singularity is a pole of
 order two and its residue, the coefficient of <span class="math inline">\(z^{-1}\)</span>, is zero. A symbolic residue
-command takes a specified variable and center; check both, along with
+command takes a specified variable and centre; check both, along with
 branch assumptions and simplifications. Correct output can still answer
 the wrong question if the point or variable was supplied incorrectly.
 The hand expansion is the audit trail: it makes the zero residue and
@@ -4293,7 +4295,7 @@ Academic</a>.</li>
 Analysis</em>, 3rd ed.</strong> Compact and proof-centered, with deeper
 treatment of analytic functions and conformal mapping than a first
 applied course. <a href="https://www.mheducation.com/highered/product/complex-analysis-ahlfors.html">McGraw
-Hill catalog</a>.</li>
+Hill catalogue</a>.</li>
 <li><strong>Broad undergraduate text — Marsden and Hoffman, <em>Basic
 Complex Analysis</em>, 3rd ed.</strong> Balances core theory and
 geometry and extends beyond residue-calculus techniques. <a href="https://link.springer.com/book/10.1007/978-1-4612-0585-0">Springer
@@ -4370,20 +4372,20 @@ mathematical exposition rather than a documentary history.</li>
 <h3 data-number="9.3.4" id="software-documentation"><span class="header-section-number">9.3.4</span> Software documentation</h3>
 <ul>
 <li><strong>Arrays and branch conventions — NumPy, logarithms and
-complex routines.</strong> Documents principal-value behavior and
+complex routines.</strong> Documents principal-value behaviour and
 vectorized complex arithmetic; check results near branch cuts and signed
 zeros. <a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html">numpy.log</a>
 · <a href="https://numpy.org/doc/stable/reference/routines.math.html">Mathematical
 functions</a>.</li>
 <li><strong>Plotting — Matplotlib contour and colormap
-normalization.</strong> Useful for magnitude/phase plots and domain
+normalisation.</strong> Useful for magnitude/phase plots and domain
 coloring. Use cyclic colors for phase and explicitly mask singularities
 and cuts. <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.contour.html">contour</a>
-· <a href="https://matplotlib.org/stable/users/explain/colors/colormapnorms.html">Color
-normalization</a>.</li>
+· <a href="https://matplotlib.org/stable/users/explain/colors/colormapnorms.html">Colour
+normalisation</a>.</li>
 <li><strong>Symbolic expansions — SymPy series and residue
 functions.</strong> Computes local series and Laurent coefficients;
-inspect variable, center, assumptions, and branch choices. <a href="https://docs.sympy.org/latest/modules/series/series.html">Series
+inspect variable, centre, assumptions, and branch choices. <a href="https://docs.sympy.org/latest/modules/series/series.html">Series
 documentation</a>.</li>
 <li><strong>Arbitrary precision — mpmath integration.</strong> Offers
 tanh-sinh and Gauss–Legendre quadrature. Extra precision cannot fix a

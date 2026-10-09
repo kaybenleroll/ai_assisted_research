@@ -2431,7 +2431,7 @@ gives its RMS-squared amplitude. Multiplying every PSD bin by
 and summing does not conserve total power: overlapping lobes would be
 counted repeatedly. A density integrates with frequency-grid spacing; an
 amplitude-calibrated squared spectrum uses a different
-normalization.</p>
+normalisation.</p>
 <p>This implementation separates actual window length from FFT length,
 handles odd and even endpoint conventions, and checks the exact
 weighted-record Parseval identity.</p>
@@ -2497,10 +2497,10 @@ scaling explicitly.</p>
 =\frac{1}{N}\sum_{k=0}^{N-1}|X[k]|^2.
 </annotation></semantics></math></p>
 <p>This is a conservation law for energy under the transform, subject to
-the chosen normalization. It is one of the best validation checks for
+the chosen normalisation. It is one of the best validation checks for
 custom FFT code, window corrections, and power calculations. If a
 spectrum’s integrated power does not agree with time-domain mean-square
-power after accounting for the window and normalization, do not trust
+power after accounting for the window and normalisation, do not trust
 the plot.</p>
 <h2 data-number="5.6" id="windowing-and-leakage"><span class="header-section-number">5.6</span> Windowing and Leakage</h2>
 <p>Multiplying a finite record by a window
@@ -2510,7 +2510,7 @@ to</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>w</mi></msub><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>X</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>*</mo><mi>W</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 X_w(e^{j\omega})=X(e^{j\omega})*W(e^{j\omega})
 </annotation></semantics></math></p>
-<p>up to the transform’s normalization. The window’s main lobe controls
+<p>up to the transform’s normalisation. The window’s main lobe controls
 how close two components can be before they merge; sidelobes control how
 much a strong component masks nearby weak components.</p>
 <p>Common windows encode different trade-offs:</p>
@@ -2530,7 +2530,7 @@ trade-off explicit.</li>
 <p>Use a window because you can state what trade-off you want, not
 because a plotting recipe says to. For amplitude measurement, correct
 for coherent gain. For power spectral density, use the window’s
-mean-square normalization and the sampling rate.</p>
+mean-square normalisation and the sampling rate.</p>
 <p>Coherent gain and scalloping loss are separate. Coherent gain is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><msup><mi>N</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>n</mi></msub><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">G=N^{-1}\sum_nw[n]</annotation></semantics></math>,
 the response to a tone evaluated at its own frequency. Scalloping is the
@@ -2901,7 +2901,7 @@ with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">|z|&lt;|a|</annotation></semantics></math>.
 Its samples live at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mi>−</mi><mn>1</mn><mo>,</mo><mi>−</mi><mn>2</mn><mo>,</mo><mi>…</mi></mrow><annotation encoding="application/x-tex">n=-1,-2,\ldots</annotation></semantics></math>,
-so the ROC extends inward toward
+so the ROC extends inward towards
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z=0</annotation></semantics></math>
 and includes the origin. The algebraic fraction is the same, but the
 time direction is not. A rational expression without its ROC is
@@ -3529,10 +3529,10 @@ Designs</h2>
 <p>Classical IIR designs begin with an analogue low-pass prototype and
 map it to a digital filter. Butterworth filters are maximally flat at
 DC: their magnitude has zero derivatives of the permitted orders at zero
-frequency, but the response still rolls off toward the cutoff and is not
-flat throughout the passband. Chebyshev type I trades passband ripple
-for a sharper transition. Type II puts ripple in the stopband. Elliptic
-filters ripple in both and achieve the smallest order for given
+frequency, but the response still rolls off towards the cutoff and is
+not flat throughout the passband. Chebyshev type I trades passband
+ripple for a sharper transition. Type II puts ripple in the stopband.
+Elliptic filters ripple in both and achieve the smallest order for given
 magnitude constraints, at the cost of more complicated phase and
 pole-zero geometry.</p>
 <p>The bilinear transform is</p>
@@ -3898,11 +3898,11 @@ insufficient. Take a zero-input recurrence
 on integer state codes with rounding to nearest. Starting at code one
 gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">round</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.9</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\operatorname{round}(0.9)=1</annotation></semantics></math>
-forever. The real-valued recurrence would decay toward zero, but the
+forever. The real-valued recurrence would decay towards zero, but the
 quantised version has a limit cycle at one LSB. Starting at code ten
 gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mo>,</mo><mn>9</mn><mo>,</mo><mn>8</mn><mo>,</mo><mn>7</mn><mo>,</mo><mn>6</mn><mo>,</mo><mn>5</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo>,</mo><mi>…</mi></mrow><annotation encoding="application/x-tex">10,9,8,7,6,5,4,4,\ldots</annotation></semantics></math>
-under the usual ties-to-even rule, trapping at four. Truncating toward
+under the usual ties-to-even rule, trapping at four. Truncating towards
 zero would remove these particular cycles while introducing a different
 bias. Dead bands, dither, and greater state precision change the
 behaviour; each is a design choice, not a repair to the pole plot.</p>
@@ -5149,8 +5149,8 @@ w[n+1]=(1-\mu\gamma)w[n]+\mu e^*[n]u[n],
 </annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
-is small and positive. The penalty biases weights toward zero, so it can
-prevent a long-lived accidental filter but also prevents exact
+is small and positive. The penalty biases weights towards zero, so it
+can prevent a long-lived accidental filter but also prevents exact
 convergence to a nonzero system if chosen too large. Use leakage when
 slow drift or finite precision is a real failure mode, and include its
 bias in the acceptance test. Recursive least squares converges faster
@@ -5889,7 +5889,7 @@ criterion and keep the simplest method that meets it.</p>
 <p>If a measured effect is smaller than the combined uncertainty,
 reporting many decimal places does not make it real. If two
 implementations disagree, first compare units, sample rate, window,
-delay, initial state, and normalization before comparing algorithms.</p>
+delay, initial state, and normalisation before comparing algorithms.</p>
 <h2 data-number="13.4" id="properties-worth-testing"><span class="header-section-number">13.4</span> Properties Worth Testing</h2>
 <p>For a custom implementation, test invariants rather than only a few
 expected arrays:</p>
@@ -5902,7 +5902,7 @@ expected arrays:</p>
 <li>time invariance away from explicitly tested boundaries;</li>
 <li>batch/streaming equivalence with irregular block lengths;</li>
 <li>Parseval energy agreement under the documented FFT
-normalization;</li>
+normalisation;</li>
 <li>reconstruction after upsample/filter/downsample or STFT
 analysis/synthesis;</li>
 <li>PSD integration against time-domain variance;</li>
@@ -6490,7 +6490,7 @@ applications”</a> — a substantial tutorial on multirate structures and
 filter banks.</li>
 <li><a href="https://numpy.org/doc/stable/reference/routines.fft.html">NumPy
 FFT reference</a> — array conventions, real transforms, frequency
-helpers, and normalization.</li>
+helpers, and normalisation.</li>
 <li><a href="https://docs.scipy.org/doc/scipy/reference/signal.html">SciPy
 signal reference</a> — filter design, filtering, resampling, spectral
 analysis, and analytic-signal routines.</li>

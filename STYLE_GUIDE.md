@@ -14,6 +14,51 @@ The primers in this collection are technically serious but not academically dry.
 - No hedging language: never write "it should be noted," "it is worth mentioning," or "one might argue."
 - No throat-clearing. Get to the point.
 
+## Language Variant
+
+Use **UK English** for all repository-authored prose, including technical
+explanations and headings. Prefer forms such as `optimisation`, `behaviour`,
+`modelling`, `organisation`, `organise`, `analyse`, `recognise`, `centre`,
+`colour`, `catalogue`, `licence`, and `towards`.
+
+Preserve the spelling required by:
+
+- product, project, package, API, command, and configuration names;
+- source-code identifiers, file names, and copied output;
+- quotations and titles whose original spelling matters; and
+- explicitly listed fixed technical terms whose spelling is part of the name.
+
+A technical concept alone is not an exception: explain it in UK English.
+
+Use `program`, `programming`, and related forms for software terminology. Use
+`licence` for the noun in ordinary prose and retain `license` when it is part
+of an API, command, product name, or quoted source. New primers should follow
+this policy from their first draft.
+
+### Audit baseline — 9 October 2026
+
+The initial word-boundary scan covered committed Markdown outside `.scratch/`.
+It found mixed usage rather than a single existing convention. The most
+significant pairs were:
+
+| US / UK spelling | US form | UK form |
+|------------------|---------:|--------:|
+| optimization / optimisation | 34 | 26 |
+| behavior / behaviour | 107 | 100 |
+| modeling / modelling | 36 | 5 |
+| organization / organisation | 12 | 33 |
+| center / centre | 26 | 43 |
+| color / colour | 19 | 8 |
+| catalog / catalogue | 8 | 31 |
+| license / licence | 6 | 30 |
+| toward / towards | 63 | 2 |
+
+These counts are triage evidence, not a mechanical replacement list: they
+include code examples, product terminology, quotations, and domain-specific
+usage that require review in context. The remaining prose cleanup is tracked
+separately so that it can be reviewed and rendered by document rather than
+applied as an opaque repository-wide substitution.
+
 ---
 
 ## Technical Depth
@@ -86,7 +131,7 @@ Do this:
 
 > A practical debugging model is to think in layers: gateway, agent, provider, execution, state. Most troubleshooting becomes easier when you identify the failing layer before changing configuration.
 >
-> The gateway layer handles ingress, routing, APIs, and session plumbing. The agent layer carries prompt context, model selection logic, and tool-call behavior...
+> The gateway layer handles ingress, routing, APIs, and session plumbing. The agent layer carries prompt context, model selection logic, and tool-call behaviour...
 
 Not this:
 
@@ -134,7 +179,7 @@ Do this:
 **2. Name what the reader will not get, not just what they will.**
 
 Not that:
-> This primer covers root finding, linear systems, interpolation, ODEs, and optimization.
+> This primer covers root finding, linear systems, interpolation, ODEs, and optimisation.
 
 Do this:
 > This is not a full proof-based textbook, and it makes no attempt to be one. If you want convergence proofs and spectral theory with all conditions stated precisely, the reading list at the end will point you to the right books.

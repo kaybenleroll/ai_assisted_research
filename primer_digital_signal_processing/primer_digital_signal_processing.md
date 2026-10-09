@@ -653,7 +653,7 @@ $$
 B_w=f_s\frac{\sum_nw^2[n]}{|\sum_nw[n]|^2}.
 $$
 
-It is 1 Hz for this rectangular record and 1.5 Hz for the periodic Hann. Multiplying an isolated on-bin tone's Hann centre PSD by $B_w$ gives its RMS-squared amplitude. Multiplying every PSD bin by $B_w$ and summing does not conserve total power: overlapping lobes would be counted repeatedly. A density integrates with frequency-grid spacing; an amplitude-calibrated squared spectrum uses a different normalization.
+It is 1 Hz for this rectangular record and 1.5 Hz for the periodic Hann. Multiplying an isolated on-bin tone's Hann centre PSD by $B_w$ gives its RMS-squared amplitude. Multiplying every PSD bin by $B_w$ and summing does not conserve total power: overlapping lobes would be counted repeatedly. A density integrates with frequency-grid spacing; an amplitude-calibrated squared spectrum uses a different normalisation.
 
 This implementation separates actual window length from FFT length, handles odd and even endpoint conventions, and checks the exact weighted-record Parseval identity.
 
@@ -724,7 +724,7 @@ $$
 =\frac{1}{N}\sum_{k=0}^{N-1}|X[k]|^2.
 $$
 
-This is a conservation law for energy under the transform, subject to the chosen normalization. It is one of the best validation checks for custom FFT code, window corrections, and power calculations. If a spectrum's integrated power does not agree with time-domain mean-square power after accounting for the window and normalization, do not trust the plot.
+This is a conservation law for energy under the transform, subject to the chosen normalisation. It is one of the best validation checks for custom FFT code, window corrections, and power calculations. If a spectrum's integrated power does not agree with time-domain mean-square power after accounting for the window and normalisation, do not trust the plot.
 
 ### Windowing and Leakage
 
@@ -734,7 +734,7 @@ $$
 X_w(e^{j\omega})=X(e^{j\omega})*W(e^{j\omega})
 $$
 
-up to the transform's normalization. The window's main lobe controls how close two components can be before they merge; sidelobes control how much a strong component masks nearby weak components.
+up to the transform's normalisation. The window's main lobe controls how close two components can be before they merge; sidelobes control how much a strong component masks nearby weak components.
 
 Common windows encode different trade-offs:
 
@@ -744,7 +744,7 @@ Common windows encode different trade-offs:
 * **Blackman:** stronger sidelobe suppression at the cost of wider peaks.
 * **Kaiser:** adjustable parameter that makes the trade-off explicit.
 
-Use a window because you can state what trade-off you want, not because a plotting recipe says to. For amplitude measurement, correct for coherent gain. For power spectral density, use the window's mean-square normalization and the sampling rate.
+Use a window because you can state what trade-off you want, not because a plotting recipe says to. For amplitude measurement, correct for coherent gain. For power spectral density, use the window's mean-square normalisation and the sampling rate.
 
 Coherent gain and scalloping loss are separate. Coherent gain is $G=N^{-1}\sum_nw[n]$, the response to a tone evaluated at its own frequency. Scalloping is the reduced response when that tone lies between the frequencies you evaluate. For an isolated complex tone offset by $\delta$ bins, the nearest-bin amplitude after coherent-gain correction is multiplied by
 
@@ -796,7 +796,7 @@ The FFT is not an approximation to the DFT. Apart from roundoff and implementati
 
 ### Practical FFT Details
 
-Libraries choose conventions for sign, normalization, array ordering, and treatment of real input. Check them. In NumPy, `fft` returns the unnormalised forward transform and `ifft` applies the $\frac{1}{N}$ scaling; `rfft` exploits Hermitian symmetry for real input. `fftfreq` returns signed bin frequencies, while `rfftfreq` returns the nonnegative frequencies corresponding to `rfft`.
+Libraries choose conventions for sign, normalisation, array ordering, and treatment of real input. Check them. In NumPy, `fft` returns the unnormalised forward transform and `ifft` applies the $\frac{1}{N}$ scaling; `rfft` exploits Hermitian symmetry for real input. `fftfreq` returns signed bin frequencies, while `rfftfreq` returns the nonnegative frequencies corresponding to `rfft`.
 
 The same FFT conventions can be made explicit in base R:
 
@@ -947,7 +947,7 @@ $$
 -\sum_{m=1}^{\infty}a^{-m}z^m=-\sum_{m=1}^{\infty}\left(\frac{z}{a}\right)^m,
 $$
 
-which converges when $|z|<|a|$. Its samples live at $n=-1,-2,\ldots$, so the ROC extends inward toward $z=0$ and includes the origin. The algebraic fraction is the same, but the time direction is not. A rational expression without its ROC is therefore incomplete information.
+which converges when $|z|<|a|$. Its samples live at $n=-1,-2,\ldots$, so the ROC extends inward towards $z=0$ and includes the origin. The algebraic fraction is the same, but the time direction is not. A rational expression without its ROC is therefore incomplete information.
 
 For a two-sided rational sequence, the ROC is usually an annulus between pole radii. For example, combining a right-sided term with a pole at radius $0.5$ and a left-sided term with a pole at radius $1.5$ gives an ROC of roughly $0.5<|z|<1.5$. It excludes the poles themselves because the corresponding geometric terms diverge there. The unit circle is inside this annulus, so the sequence can have a well-defined DTFT even though it is neither causal nor purely right-sided. In contrast, a causal system with outermost pole radius $0.9$ has ROC $|z|>0.9$, which includes the unit circle and is BIBO stable; a causal pole at radius $1.02$ gives an ROC outside $1.02$, excludes the unit circle, and has an impulse response that grows.
 
@@ -1298,7 +1298,7 @@ An FIR's step response reveals overshoot and settling behaviour. A filter with a
 
 ### Analog Prototypes and IIR Designs
 
-Classical IIR designs begin with an analogue low-pass prototype and map it to a digital filter. Butterworth filters are maximally flat at DC: their magnitude has zero derivatives of the permitted orders at zero frequency, but the response still rolls off toward the cutoff and is not flat throughout the passband. Chebyshev type I trades passband ripple for a sharper transition. Type II puts ripple in the stopband. Elliptic filters ripple in both and achieve the smallest order for given magnitude constraints, at the cost of more complicated phase and pole-zero geometry.
+Classical IIR designs begin with an analogue low-pass prototype and map it to a digital filter. Butterworth filters are maximally flat at DC: their magnitude has zero derivatives of the permitted orders at zero frequency, but the response still rolls off towards the cutoff and is not flat throughout the passband. Chebyshev type I trades passband ripple for a sharper transition. Type II puts ripple in the stopband. Elliptic filters ripple in both and achieve the smallest order for given magnitude constraints, at the cost of more complicated phase and pole-zero geometry.
 
 The bilinear transform is
 
@@ -1502,7 +1502,7 @@ Make the bit format explicit rather than relying on ambiguous Q names. Suppose s
 
 For a length-$K$ FIR with coefficient-rounding errors $|\epsilon_k|\le2^{-16}$ and input bound $A$, the output perturbation obeys $|\Delta y[n]|\le AK2^{-16}$ before final rounding. In frequency, $|\Delta H(e^{j\omega})|\le K2^{-16}$. With 181 taps, the loose bound is about 0.00276, much larger than the $10^{-4}$ maximum magnitude allowed by an 80 dB stopband. This does not prove that rounded coefficients fail; it proves that a generic coefficient-error bound cannot certify this requirement. Measure the quantised response. A wider coefficient format can be necessary even when 16-bit input samples meet the sensor's amplitude-noise budget.
 
-Small quantised feedback examples show why a pole-radius check is insufficient. Take a zero-input recurrence $q[n]=\operatorname{round}(0.9q[n-1])$ on integer state codes with rounding to nearest. Starting at code one gives $\operatorname{round}(0.9)=1$ forever. The real-valued recurrence would decay toward zero, but the quantised version has a limit cycle at one LSB. Starting at code ten gives $10,9,8,7,6,5,4,4,\ldots$ under the usual ties-to-even rule, trapping at four. Truncating toward zero would remove these particular cycles while introducing a different bias. Dead bands, dither, and greater state precision change the behaviour; each is a design choice, not a repair to the pole plot.
+Small quantised feedback examples show why a pole-radius check is insufficient. Take a zero-input recurrence $q[n]=\operatorname{round}(0.9q[n-1])$ on integer state codes with rounding to nearest. Starting at code one gives $\operatorname{round}(0.9)=1$ forever. The real-valued recurrence would decay towards zero, but the quantised version has a limit cycle at one LSB. Starting at code ten gives $10,9,8,7,6,5,4,4,\ldots$ under the usual ties-to-even rule, trapping at four. Truncating towards zero would remove these particular cycles while introducing a different bias. Dead bands, dither, and greater state precision change the behaviour; each is a design choice, not a repair to the pole plot.
 
 In a high-Q biquad, coefficient errors and arithmetic errors act in different places. Rounded coefficients change the intended dynamics; rounded feedback updates continually inject state error that the resonance can amplify. Test both effects separately by using rounded coefficients with high-precision arithmetic, then using the full bit-accurate arithmetic. Include DC, alternating full-scale samples, impulses, near-resonance tones, and zero input after an overload. Section ordering and scaling should bound internal states without sacrificing the final noise floor. Checking only that the final output fits a word misses an overflowing intermediate section.
 
@@ -2032,7 +2032,7 @@ $$
 w[n+1]=(1-\mu\gamma)w[n]+\mu e^*[n]u[n],
 $$
 
-where $\gamma$ is small and positive. The penalty biases weights toward zero, so it can prevent a long-lived accidental filter but also prevents exact convergence to a nonzero system if chosen too large. Use leakage when slow drift or finite precision is a real failure mode, and include its bias in the acceptance test. Recursive least squares converges faster for some problems but costs more and is more sensitive to numerical and forgetting-factor choices.
+where $\gamma$ is small and positive. The penalty biases weights towards zero, so it can prevent a long-lived accidental filter but also prevents exact convergence to a nonzero system if chosen too large. Use leakage when slow drift or finite precision is a real failure mode, and include its bias in the acceptance test. Recursive least squares converges faster for some problems but costs more and is more sensitive to numerical and forgetting-factor choices.
 
 ### System Identification
 
@@ -2300,7 +2300,7 @@ Boundary policy is part of the filter: zero padding creates dark or low-valued b
 
 The two-dimensional DFT decomposes an image into spatial frequencies. Low spatial frequencies describe broad illumination and smooth structure; high frequencies describe edges and fine texture. A circularly symmetric low-pass mask smooths but can ring near sharp edges because of the same finite-support trade-off as one-dimensional filters.
 
-The separability and convolution theorem extend to dimensions, but so do the traps: the transform origin, `fftshift`, normalization, frequency units per pixel, and boundary assumptions must be explicit. A visually pleasing filtered image is not evidence that the operation preserved photometric quantities.
+The separability and convolution theorem extend to dimensions, but so do the traps: the transform origin, `fftshift`, normalisation, frequency units per pixel, and boundary assumptions must be explicit. A visually pleasing filtered image is not evidence that the operation preserved photometric quantities.
 
 ### Sampling in Space
 
@@ -2357,7 +2357,7 @@ A reliable pipeline separates at least these error sources:
 7. floating-point or fixed-point arithmetic;
 8. boundary, state, and calibration errors.
 
-If a measured effect is smaller than the combined uncertainty, reporting many decimal places does not make it real. If two implementations disagree, first compare units, sample rate, window, delay, initial state, and normalization before comparing algorithms.
+If a measured effect is smaller than the combined uncertainty, reporting many decimal places does not make it real. If two implementations disagree, first compare units, sample rate, window, delay, initial state, and normalisation before comparing algorithms.
 
 ### Properties Worth Testing
 
@@ -2369,7 +2369,7 @@ For a custom implementation, test invariants rather than only a few expected arr
 * linearity with two inputs and arbitrary scalar coefficients;
 * time invariance away from explicitly tested boundaries;
 * batch/streaming equivalence with irregular block lengths;
-* Parseval energy agreement under the documented FFT normalization;
+* Parseval energy agreement under the documented FFT normalisation;
 * reconstruction after upsample/filter/downsample or STFT analysis/synthesis;
 * PSD integration against time-domain variance;
 * alias rejection using tones just inside and outside the intended band;
@@ -2842,7 +2842,7 @@ The following references cover the subject more fully and provide the derivation
 * [Cooley and Tukey, “An algorithm for the machine calculation of complex Fourier series”](https://doi.org/10.1090/S0025-5718-1965-0178586-1) — the classic FFT paper. The FFT computes the DFT; it does not define a new transform.
 * [Parks and McClellan, “Chebyshev approximation for nonrecursive digital filters with linear phase”](https://doi.org/10.1109/TCT.1972.1083419) — original reference for equiripple linear-phase FIR design.
 * [Vaidyanathan, “Multirate digital filters, filter banks, polyphase networks, and applications”](https://authors.library.caltech.edu/records/x720m-mr760) — a substantial tutorial on multirate structures and filter banks.
-* [NumPy FFT reference](https://numpy.org/doc/stable/reference/routines.fft.html) — array conventions, real transforms, frequency helpers, and normalization.
+* [NumPy FFT reference](https://numpy.org/doc/stable/reference/routines.fft.html) — array conventions, real transforms, frequency helpers, and normalisation.
 * [SciPy signal reference](https://docs.scipy.org/doc/scipy/reference/signal.html) — filter design, filtering, resampling, spectral analysis, and analytic-signal routines.
 * [Welch, “The use of fast Fourier transform for the estimation of power spectra”](https://doi.org/10.1109/TAU.1967.1161901) — original reference for the averaged modified-periodogram method.
 

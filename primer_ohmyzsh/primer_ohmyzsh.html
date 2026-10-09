@@ -712,8 +712,8 @@ Problems</a>
 Taking Effect</a></li>
 <li><a href="#completions-feel-broken-or-inconsistent" id="toc-completions-feel-broken-or-inconsistent">Completions Feel Broken
 or Inconsistent</a></li>
-<li><a href="#a-plugin-causes-weird-behavior" id="toc-a-plugin-causes-weird-behavior">A Plugin Causes Weird
-Behavior</a></li>
+<li><a href="#a-plugin-causes-weird-behaviour" id="toc-a-plugin-causes-weird-behaviour">A Plugin Causes Weird
+Behaviour</a></li>
 </ul></li>
 <li><a href="#when-omz-is-not-enough" id="toc-when-omz-is-not-enough">When OMZ Is Not Enough</a></li>
 <li><a href="#quick-reference-what-to-do-next" id="toc-quick-reference-what-to-do-next">Quick Reference: What to Do
@@ -1579,11 +1579,11 @@ sharing behavior against real usage.</li>
 deliberately for sensitive commands.</li>
 </ul>
 <ol start="2" type="1">
-<li><strong>Completion behavior and cache health</strong></li>
+<li><strong>Completion behaviour and cache health</strong></li>
 </ol>
 <ul>
 <li>Slow completion is often stale cache or plugin overload.</li>
-<li>Revisit completion behavior after major toolchain changes.</li>
+<li>Revisit completion behaviour after major toolchain changes.</li>
 </ul>
 <ol start="3" type="1">
 <li><strong>Editing mode and keymap consistency</strong></li>
@@ -1641,9 +1641,9 @@ host-execution guards), verify they are explicitly sourced.</li>
 <li><strong>Duplicate settings agree across files</strong></li>
 </ol>
 <ul>
-<li>If key behavior is configured in both plugins and aliases/functions
+<li>If key behaviour is configured in both plugins and aliases/functions
 (for example SSH key lifetime), align them.</li>
-<li>Inconsistent values create hard-to-explain behavior after
+<li>Inconsistent values create hard-to-explain behaviour after
 reloads.</li>
 </ul>
 <ol start="3" type="1">
@@ -1693,10 +1693,11 @@ commands disappear.</p>
 <p><strong><code>zsh-syntax-highlighting</code> — highest-impact missing
 piece.</strong></p>
 <p>This is the gap with the most immediate impact. Every command is
-color-coded as you type it: green means the command exists, red means it
-does not. You catch typos before Enter, see unclosed quotes quickly, and
-generally get a more readable command line. It is off by default because
-it is third-party, but it is near-standard in mature ZSH setups.</p>
+colour-coded as you type it: green means the command exists, red means
+it does not. You catch typos before Enter, see unclosed quotes quickly,
+and generally get a more readable command line. It is off by default
+because it is third-party, but it is near-standard in mature ZSH
+setups.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="dt">\</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span></code></pre></div>
 <p>Add <code>zsh-syntax-highlighting</code> to the plugins list, and put
@@ -1821,8 +1822,8 @@ stale.</li>
 <p>If completion for one command is still missing, inspect that plugin’s
 <code>.plugin.zsh</code> file and verify the completion function is
 actually loaded.</p>
-<h3 id="a-plugin-causes-weird-behavior">A Plugin Causes Weird
-Behavior</h3>
+<h3 id="a-plugin-causes-weird-behaviour">A Plugin Causes Weird
+Behaviour</h3>
 <p>Run a temporary minimal profile:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="va">plugins</span><span class="op">=</span><span class="va">(</span>git<span class="va">)</span></span></code></pre></div>
 <p>If the issue disappears, re-add plugins in small groups until it

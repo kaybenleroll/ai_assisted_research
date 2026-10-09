@@ -14,7 +14,7 @@ Crucially, **these secrets should not be the focus of the early or mid-game**. A
 The characters are not in the only Silo. They are in one of **fifty identical Silos** arranged in a massive subterranean grid beneath the ruins of Atlanta, Georgia.
 
 #### The Architects
-In the mid-21st century, a faction of scientists, intelligence operatives, and industrialists — operating inside the U.S. government but answerable to no elected body — concluded that human civilization was on a trajectory toward self-destruction within three generations. Climate collapse, resource wars, and the proliferation of engineered biological weapons made this, in their modeling, a near-certainty. They called themselves **the Pact**.
+In the mid-21st century, a faction of scientists, intelligence operatives, and industrialists — operating inside the U.S. government but answerable to no elected body — concluded that human civilization was on a trajectory towards self-destruction within three generations. Climate collapse, resource wars, and the proliferation of engineered biological weapons made this, in their modelling, a near-certainty. They called themselves **the Pact**.
 
 The Pact did not build the Silos as a response to disaster. They built the Silos, then *caused* one.
 
@@ -84,7 +84,7 @@ The surface is lethal. Any tunnel to another Silo would require boring through h
 
 **Why each Silo has its own Digger rather than one central machine:** The Pact did not trust a single point of failure. If any one tunnel collapses or a Silo's Digger malfunctions, the others still reach the Vault. It is redundancy engineering.
 
-**What this means for players:** The Digger was designed to bore *toward* the Seed Vault — but the boring direction is controlled by a guidance system locked behind the vault door. Nothing physically prevents it from being reprogrammed to bore *sideways* instead. A tunnel bored horizontally at depth, below the nanobot layer, could reach a neighbouring Silo in weeks. This is the most dangerous fact in the Silo. Silo 1 knows about this possibility and it is the primary reason Shift-Boss Rourke — Silo 1's covert asset in the Down Deep — has spent years ensuring no one credible ever gets near the vault door.
+**What this means for players:** The Digger was designed to bore *towards* the Seed Vault — but the boring direction is controlled by a guidance system locked behind the vault door. Nothing physically prevents it from being reprogrammed to bore *sideways* instead. A tunnel bored horizontally at depth, below the nanobot layer, could reach a neighbouring Silo in weeks. This is the most dangerous fact in the Silo. Silo 1 knows about this possibility and it is the primary reason Shift-Boss Rourke — Silo 1's covert asset in the Down Deep — has spent years ensuring no one credible ever gets near the vault door.
 
 ---
 
