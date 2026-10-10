@@ -75,7 +75,21 @@ Until `just new-primer` arrives in #162, create the project directory and its `<
 
 ## Linting and CI
 
-`just lint` is planned under #155; `just check` is planned under #157; the PR checks workflow is planned under #158. Until they exist, run the relevant render and manual QA steps above and report the exact commands in the PR.
+`just lint` is planned under #155; the PR checks workflow is planned under #158. Run the relevant render and manual QA steps above and report the exact commands in the PR.
+
+### Checks
+
+Run `just check` from the repository root. It uses the digest-pinned Python image from `_shared/images.just`, Python's standard library in isolated mode, and the `OCI` runtime setting. The default runtime is Podman when installed, otherwise Docker. The freshness check reads full Git history, so a shallow checkout is insufficient. Each check also has its own recipe:
+
+| Recipe | What it verifies | Negative test on a disposable copy |
+|---|---|---|
+| `check-meta` | Every built Markdown source has a fence-aware H1 matching its Justfile or per-recipe title; author is a name or team, and review date has day or month precision. Known title differences must have a reason in `lint/check-meta-known.txt`. | Change one `TITLE` word in a primer Justfile, then run `just check-meta`. |
+| `check-variants` | Each maths toggle has both variants and the Justfile opt-in; variants require maths outside code fences and inline code. | Remove one `.mathml.html` file, then run `just check-variants`. |
+| `check-mermaid` | Published HTML has no raw Mermaid and has one filter-produced image for each source Mermaid fence. The filter's image caption, carried into the HTML accessibility label, identifies its images without counting plots. | Add `graph LR` to an HTML text node, then run `just check-mermaid`. |
+| `check-fresh` | Each committed HTML and PDF output was last changed at or after its source in Git ancestry. The Building AI quick reference has HTML only. | Commit a one-word source edit without rendering, then run `just check-fresh`. |
+| `check-readme` | Generated README tables match the registry and review dates. | Change one README table cell by hand, then run `just check-readme`. |
+
+For negative tests, create a throwaway branch or copy under `.scratch/`, make only the named change, record the failed recipe and its message, and discard the disposable checkout. Do not run those mutations against the working branch. An empty known-mismatch file means there are no current exemptions; each future entry must use `source/path.md | reason`.
 
 ## Third-Party Content
 
