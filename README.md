@@ -89,3 +89,7 @@ cd primer_numerical_analysis && just full
 ```
 
 `workbook_catmodel_elt_documents/` uses its own Quarto + R + Python pipeline (see its `Justfile` and `Dockerfile`), not the pandoc infrastructure; rendered outputs live in `workbook_catmodel_elt_documents/outputs/`.
+
+## Licence
+
+Original material is released under the [MIT licence](LICENSE). Third-party material, including the setting of the Silo RPG documents, is governed by its own terms; see [NOTICE](NOTICE).
