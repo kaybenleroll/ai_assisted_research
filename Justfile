@@ -2,7 +2,7 @@ set shell := ["bash", "-c"]
 
 import '_shared/images.just'
 
-OCI := `command -v podman >/dev/null 2>&1 && echo podman || echo docker`
+OCI := env_var_or_default("OCI", `command -v podman >/dev/null 2>&1 && echo podman || echo docker`)
 PYTHON_OCI_FLAGS := if OCI == "podman" { "--userns=keep-id" } else { "--user=" + `id -u` + ":" + `id -g` }
 MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
 
@@ -15,7 +15,24 @@ readme:
 
 # Check README generation without changing files
 readme-check:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python scripts/update_readme_recent.py --check
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
+
+# Check committed metadata, renderer variants, Mermaid, freshness, and README generation
+check: check-meta check-variants check-mermaid check-fresh check-readme
+
+check-meta:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py meta
+
+check-variants:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py variants
+
+check-mermaid:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py mermaid
+
+check-fresh:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py fresh
+
+check-readme: readme-check
 
 # Build the shared pandoc image used by all primer projects
 build-image:
