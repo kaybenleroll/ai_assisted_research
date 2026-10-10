@@ -6,6 +6,7 @@ PROJECT_NAME   := "workbook_catmodel_elt_documents"
 PROJECT_TAG    := "latest"
 IMAGE_TAG      := PROJECT_USER + "/" + PROJECT_NAME + ":" + PROJECT_TAG
 CONTAINER_NAME := "catmodel-elt-docs"
+DATE           := "7 September 2026"
 PWD            := `pwd`
 
 OCI := `command -v podman >/dev/null 2>&1 && echo podman || echo docker`

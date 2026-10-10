@@ -3,7 +3,8 @@
 #   SOURCE_MD   — source markdown filename (e.g. "primer.md")
 #   PROJECT_DIR — project directory name   (e.g. "primer_numerical_analysis")
 #   TITLE       — document title
-#   AUTHOR      — author/date string
+#   AUTHOR      — author name
+#   DATE        — date of the last substantive review (content verified or revised)
 #   HTML_EXTRA  — per-project extra HTML pandoc flags (may be empty string "")
 #   PDF_EXTRA   — per-project extra PDF  pandoc flags (may be empty string "")
 
@@ -41,7 +42,8 @@ html:
     {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{DATE}}"
 
 pdf:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -52,7 +54,8 @@ pdf:
     {{PDF_FLAGS_BASE}} {{PDF_EXTRA}} \
     --include-in-header="{{COMPACT_LATEX}}" \
     --metadata title="{{TITLE}}" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{DATE}}"
 
 # Opt in by adding --metadata mathvariants=true to HTML_EXTRA.
 # Keep the renderer override after HTML_EXTRA so all structural flags are shared.
@@ -69,7 +72,8 @@ html-mathml: _require-mathvariants
     {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} --mathml --metadata mathrenderer=mathml --metadata mathvariants=true \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{DATE}}"
 
 html-mathjax: _require-mathvariants
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -80,7 +84,8 @@ html-mathjax: _require-mathvariants
     {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} --mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{DATE}}"
 
 html-variants: html-mathml html-mathjax
 

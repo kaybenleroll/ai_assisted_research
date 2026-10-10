@@ -40,7 +40,8 @@ No intermediates tracked in git.
 SOURCE_MD   := "<name>.md"
 PROJECT_DIR := "<project>"
 TITLE       := "Full Title String"
-AUTHOR      := "Month Year"
+AUTHOR      := "Mick Cooney"
+DATE        := "7 October 2026"
 HTML_EXTRA  := ""
 PDF_EXTRA   := ""
 

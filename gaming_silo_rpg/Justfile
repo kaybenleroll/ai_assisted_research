@@ -1,7 +1,12 @@
 SOURCE_MD   := "gaming_silo_index.md"
 PROJECT_DIR := "gaming_silo_rpg"
 TITLE       := "Silo RPG"
-AUTHOR      := "Silo RPG"
+AUTHOR      := "Mick Cooney"
+DATE        := "7 October 2026"
+PLAYER_DATE := "31 August 2026"
+GM_DATE     := "31 August 2026"
+BIBLE_DATE  := "31 August 2026"
+CAMPAIGN_DATE := "7 October 2026"
 HTML_EXTRA  := ""
 PDF_EXTRA   := ""
 
@@ -28,7 +33,8 @@ silo-index-html:
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
     --metadata title="SILO RPG DOCUMENT INDEX" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{DATE}}"
 
 silo-index-pdf:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -39,7 +45,8 @@ silo-index-pdf:
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
     --metadata title="SILO RPG DOCUMENT INDEX" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{DATE}}"
 
 silo-player-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -50,7 +57,8 @@ silo-player-html:
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
     --metadata title="SILO SYSTEM: PLAYER'S SURVIVAL GUIDE" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{PLAYER_DATE}}"
 
 silo-player-pdf:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -61,7 +69,8 @@ silo-player-pdf:
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
     --metadata title="SILO SYSTEM: PLAYER'S SURVIVAL GUIDE" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{PLAYER_DATE}}"
 
 silo-gm-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -72,7 +81,8 @@ silo-gm-html:
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
     --metadata title="SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{GM_DATE}}"
 
 silo-gm-pdf:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -83,7 +93,8 @@ silo-gm-pdf:
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
     --metadata title="SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{GM_DATE}}"
 
 silo-bible-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -94,7 +105,8 @@ silo-bible-html:
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
     --metadata title="SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{BIBLE_DATE}}"
 
 silo-bible-pdf:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -105,7 +117,8 @@ silo-bible-pdf:
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
     --metadata title="SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{BIBLE_DATE}}"
 
 silo-campaign-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -116,7 +129,8 @@ silo-campaign-html:
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
     --metadata title="SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{CAMPAIGN_DATE}}"
 
 silo-campaign-pdf:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -127,4 +141,5 @@ silo-campaign-pdf:
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
     --metadata title="SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES" \
-    --metadata author="{{AUTHOR}}"
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{CAMPAIGN_DATE}}"

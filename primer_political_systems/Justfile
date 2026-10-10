@@ -1,7 +1,8 @@
 SOURCE_MD   := "primer-european-electoral-systems.md"
 PROJECT_DIR := "primer_political_systems"
 TITLE       := "A Practical Primer On European Electoral Systems"
-AUTHOR      := "October 7, 2026"
+AUTHOR      := "Mick Cooney"
+DATE        := "7 October 2026"
 HTML_EXTRA  := "--number-sections --mathml --metadata mathrenderer=mathml --metadata mathvariants=true"
 PDF_EXTRA   := "--number-sections"
 
