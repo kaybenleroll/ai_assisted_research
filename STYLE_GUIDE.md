@@ -1,285 +1,106 @@
-# Style Guide — ai_assisted_research Primers
+# Style Guide — `ai_assisted_research` Primers
 
-This guide captures the house style for this collection. Use it as a system prompt when generating a new primer, or as a checklist when editing existing ones.
+This guide captures the house style for this collection. Use it when generating a new document or editing an existing one.
 
----
+## 0 Scope and Precedence
 
-## Voice and Tone
+Rule IDs are stable: L covers Language, V Voice, S Structure, E Exposition and Examples, and M Markup Mechanics. Keep existing IDs when moving or revising rules; do not reuse retired IDs. R and C are reserved for evidence and contested-subject rules in issue #142. N is reserved for the maths guide, `docs/math-notation.md`, in issue #146; that file is planned, not yet a link target. Build, date-maintenance, and naming processes belong in CONTRIBUTING.md (issue #143), rather than here.
 
-**Casual and direct. Address the reader as "you."**
+The table defines which rule groups apply to each document class; a subset names the applicable rule IDs.
 
-The primers in this collection are technically serious but not academically dry. Write as if explaining to a smart colleague who has not worked in this area yet — someone who wants real depth, not hand-waving, but also does not need it wrapped in formal language.
+| Class | L Language | V Voice | S Structure | E Exposition and Examples | M Markup Mechanics |
+|-------|------------|---------|-------------|---------------------------|--------------------|
+| Primers | All | All | All | All | All |
+| Article | Same as primers once repository-authored | Same as primers | Same as primers | Same as primers | Same as primers |
+| Silo | All | — | S1 heading case only | — | All, with the class exceptions below |
+| Workbook | All | — | — | — | M1 and M2 code rules only |
+| README.md | All | — | S1 heading case only | — | — |
 
-- Active voice over passive. "The agent calls the tool" not "the tool is called by the agent."
-- No hedging language: never write "it should be noted," "it is worth mentioning," or "one might argue."
-- No throat-clearing. Get to the point.
+Silo uses `*` bullets, permits manual heading numbers, and does not use `--number-sections`. These class exceptions take precedence over the corresponding general mechanics. Workbook heading case and structure remain governed by its separate Quarto system. The Article row describes the replacement repository-authored article; preserve the wording of third-party republications until that replacement.
 
-Remove empty verbal padding, not genuine uncertainty. State when evidence is
-limited, a claim is conditional, interpretations differ, or behaviour depends
-on an implementation. Precision is more useful than false certainty.
+Apply editorial authority in this order:
 
-Prefer one main idea per sentence where that improves comprehension. Vary
-sentence length when the argument needs it; sentence-length targets are editing
-signals, not hard limits.
+1. Subject authority for exact proper names, standards, APIs, identifiers, and quotations; see L2 for spelling boundaries.
+2. This guide, including its explicit class exceptions.
+3. A declared document-local exception for a genuine subject or audience reason, such as the digital signal processing primer's use of `j` for the imaginary unit.
 
-Use a knowledgeable-colleague tone: conversational, respectful and serious.
-Address the reader as "you" when it helps, but do not turn every paragraph into
-an instruction. Avoid slogans, clichés, unexplained idioms and promotional
-language.
+A local preference does not silently override the guide. Declare a necessary departure, record its reason in the document, and apply it consistently within that limited scope. Subject authority preserves exact names and quoted text; it does not impose the source's spelling or editorial style on repository-authored explanations.
 
-## Language Variant
+## Language
 
-Use **UK English** for all repository-authored prose, including technical
-explanations and headings. Prefer forms such as `optimisation`, `behaviour`,
-`modelling`, `organisation`, `organise`, `analyse`, `recognise`, `centre`,
-`colour`, `catalogue`, `licence`, and `towards`.
+**L1.** Use UK English for all repository-authored prose and headings: `optimisation`, `behaviour`, `modelling`, `organisation`, `organise`, `analyse`, `recognise`, `centre`, `colour`, `catalogue`, `licence`, and `towards`. Mixed historical US/UK usage does not establish an exception to this policy. Use `program` and `programming` for software; use `licence` as the noun and `license` as the verb. [check: review]
 
-Preserve the spelling required by:
+**L2.** Preserve exact proper names (including product, project, and package names), standards, APIs, paper titles, identifiers (including commands, configuration keys, file names, and directory names), copied output, and quotations. A technical concept alone is not an exception: concepts and repository-authored document titles take UK spelling, including domain colouring, quantisation, and neighbourhood. The machine allowlist belongs in `_typos.toml` (issue #155), not in a prose list of fixed technical terms. [check: review]
 
-- product, project, package, API, command, and configuration names;
-- source-code identifiers, file names, and copied output;
-- quotations and titles whose original spelling matters; and
-- explicitly listed fixed technical terms whose spelling is part of the name.
+**L3.** Write prose dates as `7 October 2026`. For an "as of" claim where a day would imply false precision, write `as of October 2026`. Use ISO dates such as `2026-10-07` only in README tables and machine-read fields; retain month-only precision as `2026-10` where that is all the evidence supports. [check: review]
 
-A technical concept alone is not an exception: explain it in UK English.
+## Voice
 
-Use `program`, `programming`, and related forms for software terminology. Use
-`licence` for the noun in ordinary prose and retain `license` when it is part
-of an API, command, product name, or quoted source. New primers should follow
-this policy from their first draft.
+**V1.** Address the reader as "you" by default when giving guidance, without turning every paragraph into an instruction. Use "we" in derivations and worked reasoning; do not use "I" in repository-authored exposition. Write as a knowledgeable colleague: conversational, respectful, direct, and technically serious. Prefer active voice and avoid slogans, unexplained idioms, and promotional language. [check: review]
 
-### Audit baseline — 9 October 2026
+**V2.** Treat these five empty hedge patterns as errors: "it should be noted"; "it is worth mentioning" or "it is worth noting"; "one might argue"; "needless to say"; and "it is important to note". Remove verbal padding while preserving the genuine uncertainty described in V3. [check: review]
 
-The initial word-boundary scan covered committed Markdown outside `.scratch/`.
-It found mixed usage rather than a single existing convention. The most
-significant pairs were:
+**V3.** State when evidence is limited, a claim is conditional, interpretations differ, or behaviour depends on an implementation. Precision is more useful than false certainty. Prefer one main idea per sentence where that improves comprehension, and vary sentence length to suit the argument. [check: review]
 
-| US / UK spelling | US form | UK form |
-|------------------|---------:|--------:|
-| optimization / optimisation | 34 | 26 |
-| behavior / behaviour | 107 | 100 |
-| modeling / modelling | 36 | 5 |
-| organization / organisation | 12 | 33 |
-| center / centre | 26 | 43 |
-| color / colour | 19 | 8 |
-| catalog / catalogue | 8 | 31 |
-| license / licence | 6 | 30 |
-| toward / towards | 63 | 2 |
+**V4.** Treat filler vocabulary as an editing suggestion, not a ban; its lists live only in Vale configuration (issue #159). More than two filler terms in a paragraph, or a document rate above 1.0 per 1,000 words, triggers review. Fix the cause, for example by replacing a significance claim with a concrete fact or source; do not merely swap synonyms. These thresholds may be tuned after the first sweep. [check: review]
 
-These counts are triage evidence, not a mechanical replacement list: they
-include code examples, product terminology, quotations, and domain-specific
-usage that require review in context. The remaining prose cleanup is tracked
-separately so that it can be reviewed and rendered by document rather than
-applied as an opaque repository-wide substitution.
+## Structure
 
-## Plain Language Without Flattening the Subject
+**S1.** Use descriptive Title Case headings consistently within each document. The 20 minor words are `a`, `an`, `the`, `and`, `but`, `or`, `nor`, `for`, `so`, `yet`, `as`, `at`, `by`, `in`, `of`, `on`, `per`, `to`, `via`, and `vs`; lowercase them except at the start or end of a heading or immediately after a colon or dash. Capitalise all other words, including `Off` and `Up` (for example "Setting Up a Server"). Capitalise each part of a hyphenated compound unless it is a minor word; leave code spans, identifiers, and proper nouns as written. [check: review]
 
-Plain language removes needless friction; it does not remove technical depth.
-Keep precise terminology, hypotheses, exceptions, proofs and competing
-interpretations when they help the reader reason about the subject. Define
-unavoidable specialist terms at first meaningful use and use the chosen term
-consistently afterwards.
+**S2.** Use one H1 as the canonical title, equal to the Justfile `TITLE`, with no refresh stamps in either. Sections start at `##`; do not skip heading levels or select levels for visual appearance. Normally stop at H4; use H5 only for exercise solutions or where a documented heading demotion requires it. For numbered Pandoc builds with a leading H1 and `##` sections, pass `--shift-heading-level-by=-1` with `--number-sections`, as specified in [CLAUDE.md](CLAUDE.md#primer-build-and-render-notes). [check: review]
 
-Use examples deliberately. Worked examples are the default for technical
-concepts, but a proof, historical case, comparison, counterexample or failure
-case may teach another subject better. Pair abstract explanations with the
-kind of example that lets the reader apply or test the idea.
+**S3.** Open with an orientation triad: what the document covers and which problem or gap it addresses, what it is not, and the assumed background. Make these explicit in introductory prose or subsections rather than requiring a fixed pair of headings. Include an annotated Further Reading section; maths primers also require a Notation section, with details assigned to issue #146. Exercises are optional; a glossary is optional and particularly useful above about 15 specialist terms. Learning objectives are not mandatory. New primers follow these requirements from their first draft; existing primers adopt them through their content-audit row in issue #138, and a maths primer's temporary Notation exemption ends when its row is finished. [check: review]
 
-Adapt the method to the subject. Code examples should be idiomatic; mathematical
-primers should state hypotheses and show reasoning; humanities primers should
-separate evidence, attribution and interpretation. Do not impose a single
-academic voice or citation system on every primer.
+**S4.** Give long documents a contents or another clear navigation aid, and make individual sections useful to readers consulting them out of order. Use headings to aid navigation without fragmenting continuous reasoning. [check: review]
 
-## Structure, Navigation and Accessibility
+**S5.** Write explanatory prose in paragraphs. Use lists for genuinely parallel items, sequences, options, or checklists, and tables for comparisons or mappings. A reference list can complement an explanation; it should not replace the reasoning that teaches the reader. [check: review]
 
-Use descriptive, sentence-case headings with a logical hierarchy. Choose
-heading levels for document structure, not visual appearance. Long primers
-should provide a contents or other clear navigation aid and should work for
-readers who consult individual sections out of order.
+## Exposition and Examples
 
-Use meaningful link text rather than bare URLs or phrases such as "click here".
-Give tables and figures enough surrounding explanation to make their purpose
-clear, and do not rely on colour alone to convey meaning. Use notes, cautions
-and warnings sparingly: reserve warnings for material risk or an action the
-reader must not take.
+**E1.** Keep real technical depth: precise terminology, hypotheses, exceptions, proofs, competing interpretations, and failure modes. Assume general technical literacy rather than domain expertise; explain what a condition number is, why it matters, and what goes wrong when it is ignored. Adapt the method to the subject: mathematical reasoning needs hypotheses, and humanities explanations distinguish evidence, attribution, and interpretation. [check: review]
 
-## Sources, Terminology and Freshness
+**E2.** Define unavoidable specialist terms and expand acronyms at first meaningful use, then use the chosen terminology consistently. Give a concept from another field a short grounding; explain a general concept before introducing a vendor's exact term. Where definitions compete, state which one the document uses. [check: review]
 
-Link important or contestable claims to the strongest available source,
-preferring primary sources for product behaviour, standards and official data.
-Date claims that can change. Use an annotated References or Further Reading
-section where it helps the reader continue, but do not require formal
-author–date citations in every primer.
+**E3.** Prefer worked examples for technical concepts, including small examples within a section, when they let the reader apply or test the idea. Use a proof, historical case, comparison, counterexample, or failure case when it teaches the subject better. Pair abstract explanation with the appropriate teaching device rather than replacing explanation with an example alone. [check: review]
 
-Expand an acronym at first meaningful use. When a topic has competing
-definitions, state which definition the primer uses and, where useful, keep a
-short glossary or terminology note. Explain a general concept before giving a
-vendor or product's exact term.
+For example, introduce Newton's method in prose, then show its iteration and error:
 
-Prefer version-agnostic explanations where they remain accurate. When a claim
-is version-specific, name the relevant version or date and link to the primary
-documentation. Do not duplicate information across primers when a maintained
-shared explanation or authoritative source will do; link to it instead.
-
-## Editorial Authority
-
-Apply guidance in this order:
-
-1. The repository style guide and any primer-specific scope or terminology
-   contract.
-2. The subject's authoritative source, including exact product names, APIs,
-   standards, quotations and source-code identifiers.
-3. The principles in this guide: clear UK English, technically accurate
-   explanation, useful examples, accessible structure and maintainable sources.
-
-When a document needs to depart from the house style for a genuine subject or
-audience reason, make the choice explicit and apply it consistently.
-
----
-
-## Technical Depth
-
-**Real depth. No soft-soaping.**
-
-Assume a technical reader — comfortable with code, familiar with general computing concepts — but not a specialist in the topic. You do not need to explain what a function is. You do need to explain what a conditioning number is, why it matters, and what goes wrong when you ignore it.
-
-When something can fail or go wrong, say so. Readers need to know the failure modes as much as they need the happy path.
-
----
-
-## Intro Structure — Set Scope and Expectations Explicitly
-
-Every primer should open with a clear statement of:
-
-1. What problem or gap this primer addresses (and why existing resources fall short)
-2. What you will and will not learn
-3. What level of background is assumed
-
-The numerical analysis primer does this well:
-
-> "Most introductions to numerical analysis land in one of two camps: short and hand-wavey, easy to read but hard to use, or rigorous and dense to the point where they become difficult to apply in real work. [...] This primer tries to sit in the middle."
-
-And then it has explicit "What This Primer Covers" and "What This Primer Is Not" subsections. Do the same. Make scope explicit; don't leave the reader guessing.
-
----
-
-## "What This Is / Is Not" Framing
-
-Always include it. Either as a subsection pair or woven into the intro. Examples from the collection:
-
-- The openclaw primer opens with the exact ambiguity it resolves: two different projects share the name; this document is explicitly about one of them.
-- The numerical analysis primer names two failure modes in existing resources, then explains how this one differs.
-- The AI agents primer opens with the core misconception ("if LLMs generate text, how do they do things?") and answers it in the first paragraph.
-
-Pick the specific confusion or gap your primer resolves and lead with it.
-
----
-
-## Concrete Examples Over Abstract Descriptions
-
-**Prefer worked examples when they clarify the idea.** Abstract descriptions
-alone are rarely enough for a technical primer, but proofs, cases, comparisons
-and counterexamples may be the right teaching device for other subjects.
-
-Do this:
 ```python
-# Root finding with Newton's method — explicit iteration trace
 x = 2.0
-for i in range(10):
+for step in range(10):
     fx = x**2 - 2
     fpx = 2 * x
     x = x - fx / fpx
-    print(f"step {i}: x={x:.10f}, error={abs(x - 2**0.5):.2e}")
+    print(f"step {step}: x={x:.10f}, error={abs(x - 2**0.5):.2e}")
 ```
 
-Not this:
-> Newton's method iteratively improves an estimate by subtracting the ratio of the function value to its derivative.
+**E4.** Keep conceptual grounding inline so a new reader can follow without outside reference; primers are long-form by design. Prefer accurate version-agnostic explanations, and link volatile product and version facts to maintained authoritative sources rather than duplicating them across primers. Link important or contestable claims to the strongest available source, preferring primary documentation, standards, and official data; identify the relevant version or date for claims that can change. Do not pad or compress away necessary reasoning, and do not impose one academic citation system on every subject. [check: review]
 
-The second sentence belongs in the paragraph before the example, as motivation. The example is what makes it stick.
+The following current passages illustrate clear problem framing and scope boundaries:
 
-Mini worked examples mid-section are encouraged. The AI agents primer uses this frequently: "Mini example: an IT access agent receives 'Grant dashboard access.' It checks user identity, checks role policy, files an access request, and sends a confirmation." Short, concrete, shows the pattern in action.
+> Most introductions to numerical analysis land in one of two camps: short and hand-wavey, easy to read but hard to use, or rigorous and dense to the point where they become difficult to apply in real work.
 
----
+Source: [primer_numerical_analysis/primer_numerical_analysis.md](primer_numerical_analysis/primer_numerical_analysis.md).
 
-## Section Structure — Narrative, Not Bullet Dumps
+> This is not a full proof-based textbook, and it makes no attempt to be one.
 
-**Write in paragraphs.** Use bullet lists only when the content is genuinely list-shaped (steps in a sequence, a set of independent options, a checklist). Do not turn explanatory prose into bullets.
+Source: [primer_numerical_analysis/primer_numerical_analysis.md](primer_numerical_analysis/primer_numerical_analysis.md).
 
-Do this:
+## Markup Mechanics
 
-> A practical debugging model is to think in layers: gateway, agent, provider, execution, state. Most troubleshooting becomes easier when you identify the failing layer before changing configuration.
->
-> The gateway layer handles ingress, routing, APIs, and session plumbing. The agent layer carries prompt context, model selection logic, and tool-call behaviour...
+**M1.** Use backtick code fences with a language tag: `bash` for shell commands, `python` or `r` for code, `toml` or `yaml` for configuration, `json` for structured output, and `text` for pseudocode or output when no more specific tag fits. Keep code lines about 90 characters or fewer where practical, and omit the `$` prompt from shell command blocks. [check: review]
 
-Not this:
+**M2.** Present each language implementation in its own idiomatic style; do not port Python to R line by line. [check: review]
 
-> Layers:
-> - Gateway: ingress, routing, APIs
-> - Agent: prompt context, model selection
-> - Provider: model endpoints
-> - Execution: tools
-> - State: config, auth, session
+**M3.** Write each prose paragraph on one source line, with blank lines between paragraphs and around headings, lists, tables, and code fences. Use `-` for unordered bullets (Silo uses `*`) and `*italic*` for emphasis. [check: review]
 
-The prose version teaches. The bullet list is a reference card. Know which you are writing.
+**M4.** Use straight double quotes as the primary quotation marks, single quotes only for nested quotations, and straight apostrophes in new and edited source text. Apply logical punctuation: full stops and commas go outside closing quotes unless a complete quoted sentence ends the sentence. For example, the label is "ready". A complete quotation is: "The agent calls the tool." Review punctuation in context. Existing curly quotes render identically under `+smart` and are not swept; legacy inside-quote punctuation is corrected per primer through issue #138. Preserve exact source quotations under L2. [check: review]
 
-Use headers to let readers navigate, not to fragment continuous reasoning into disconnected chunks.
+**M5.** Use a spaced em dash (` — `) for a prose break and an unspaced en dash for ranges; either `10--20` or `10–20` is accepted in source. Always use the serial comma. Write `e.g.` and `i.e.` with dots and no following comma; use forms such as `5%`, `1,234`, `8 GB`, and `vs`. [check: review]
 
----
+**M6.** Use meaningful link text rather than bare URLs or "click here". Give each image descriptive alt text and a surrounding text statement explaining its point; explain figures and tables sufficiently, and do not rely on colour alone to convey meaning. [check: review]
 
-## Code Blocks
+**M7.** Put a lead-in sentence before every table. Omit captions by default; use a Pandoc `Table:` caption only when referring to the table elsewhere. The four Silo reference sheets (`gaming_silo_rpg/gaming_silo_player_guide.md`, `gaming_silo_rpg/gaming_silo_gm_secrets.md`, `gaming_silo_rpg/gaming_silo_comprehensive_bible.md`, and `gaming_silo_rpg/gaming_silo_starter_campaign.md`) may place a table directly under its heading as a D16 layout exception, but the caption and accessibility rules still apply. [check: review]
 
-Always use a language tag:
-
-````markdown
-```python
-x = 1 + 1
-```
-````
-
-Never leave code blocks untagged. This applies to shell commands (`bash`), configuration (`toml`, `yaml`), structured output (`json`), and pseudocode (`text` if nothing else fits).
-
-When showing multiple language implementations of the same idea (as the numerical analysis primer does), present each in its own idiomatic style — do not port Python to R line-by-line.
-
----
-
-## Do This / Not That
-
-**1. Open with the real confusion, not a definition.**
-
-Not that:
-> Numerical analysis is the branch of mathematics concerned with numerical approximations of mathematical analysis.
-
-Do this:
-> Most introductions to numerical analysis land in one of two camps: short and hand-wavey, easy to read but hard to use, or rigorous and dense... This primer tries to sit in the middle.
-
----
-
-**2. Name what the reader will not get, not just what they will.**
-
-Not that:
-> This primer covers root finding, linear systems, interpolation, ODEs, and optimisation.
-
-Do this:
-> This is not a full proof-based textbook, and it makes no attempt to be one. If you want convergence proofs and spectral theory with all conditions stated precisely, the reading list at the end will point you to the right books.
-
----
-
-**3. Use a concrete mental model early, before the technical detail.**
-
-Not that:
-> An autonomous AI agent perceives its environment, reasons using an LLM, and acts to accomplish goals.
-
-Do this:
-> If you're coming from a software engineering background, a useful mental model is this: an agent is just a program with an LLM in the decision loop. If you're coming from product or operations, think of it as a very capable junior operator that can read instructions, use software tools, and report what it did.
-
----
-
-## Unexplained Jargon
-
-Introduce every term the first time it appears in the context of this document. You can assume general technical literacy; you cannot assume domain familiarity. If you use an acronym, expand it on first use. If you use a concept from another field, give a one-sentence grounding.
-
----
-
-## Length
-
-Primers in this collection are long-form by design. Do not pad, but do not compress past the point where a new reader can follow without outside reference. The goal is self-contained understanding, not a summary that requires the reader to go look things up. When in doubt, prefer the fuller treatment.
+**M8.** Use `> **Note:**` and `> **Warning:**` blockquotes for callouts, sparingly; reserve warnings for material risk or an action the reader must not take. The only allowed fenced-div classes are `.broad-table`, `.compact-table`, and `.code-group`, defined in [doc_template.html](doc_template.html). Use the existing template without adding CSS or filters for callouts. [check: review]
