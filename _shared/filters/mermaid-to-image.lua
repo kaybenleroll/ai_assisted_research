@@ -3,7 +3,8 @@
 local output_dir = os.getenv("MERMAID_OUTPUT_DIR") or ".build/mermaid"
 local theme = os.getenv("MERMAID_THEME") or "default"
 local scale = os.getenv("MERMAID_SCALE") or "2"
-local puppeteer_config = os.getenv("MERMAID_PUPPETEER_CONFIG") or "filters/puppeteer-config.json"
+local filter_dir = PANDOC_SCRIPT_FILE:match("^(.*)/") or "."
+local puppeteer_config = os.getenv("MERMAID_PUPPETEER_CONFIG") or (filter_dir .. "/puppeteer-config.json")
 
 local function shell_quote(value)
   return "'" .. tostring(value):gsub("'", "'\\''") .. "'"
