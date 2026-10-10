@@ -3,13 +3,19 @@ set shell := ["bash", "-c"]
 import '_shared/images.just'
 
 OCI := `command -v podman >/dev/null 2>&1 && echo podman || echo docker`
+PYTHON_OCI_FLAGS := if OCI == "podman" { "--userns=keep-id" } else { "--user=" + `id -u` + ":" + `id -g` }
+MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
 
 default:
   @just --list
 
-# Refresh the cross-category recent-documents block in README.md
-readme-recent:
-  python3 scripts/update_readme_recent.py
+# Generate the README document tables from Justfile review dates
+readme:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python scripts/update_readme_recent.py
+
+# Check README generation without changing files
+readme-check:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python scripts/update_readme_recent.py --check
 
 # Build the shared pandoc image used by all primer projects
 build-image:

@@ -8,6 +8,7 @@ The host needs Git, `just`, and a container runtime (Podman preferred; Docker al
 |---|---|---|---|
 | Pandoc renders | `localhost/primers-pandoc:latest`, built from `docker.io/pandoc/latex@sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8` | `IMAGE` | Verify the new base digest and Pandoc version, update `_shared/Dockerfile`, run `just setup`, and check sample renders. |
 | R figures | `docker.io/rocker/tidyverse:4.5.1@sha256:e58774bc0b3e15dd67d4eef5b3f7b77b1fd01b9a85e1ff5ecdd376bb06f74acc` | `ROCKER` | Verify the new digest and R version, update `_shared/images.just`, run `just setup`, and check plot recipes. |
+| README generation | `docker.io/library/python:3-slim@sha256:cfe2e24a75302a15934d37c2d86412893c0aa934dc3a97cbb439d04c01890ca9` | `PYTHON_IMAGE` | Verify the new digest, update `_shared/images.just`, then run `just readme-check`. |
 | Workbook | `docker.io/rocker/tidyverse@sha256:c38f0fea583e3aa82d89d0038e5bb559a04fa813881031f61f6191e683954cf2` | `WORKBOOK_IMAGE_ID` | Follow the separate image process in `workbook_catmodel_elt_documents/render.env` and its Dockerfile. |
 
 ## Layout and Naming
@@ -45,6 +46,8 @@ Run the command from the named directory (`cd <directory> && just <recipe>`). Th
 
 The root `Justfile` has selected project targets; use the directory recipes for complete project control. Root `html-dev` and `html-full` also run the workbook and may build PDFs through dependencies, so they are unsuitable for HTML-only sweeps. For those sweeps, run `html` per primer, `quick-html` for the Building AI companion, `html-variants` for the six opted-in maths primers, and `silo-html` for Silo.
 
+Run `just readme` to generate the README catalogue and Recently Updated block, then `just readme-check` to verify them. Edit document titles, descriptions, links, and row order in the registry in `scripts/update_readme_recent.py`; update the relevant Justfile `DATE` after a substantive review. Do not edit generated README rows directly.
+
 Use wrapper recipes such as `full` to chain shared targets; `just` does not override an imported recipe. Render plots through the Rocker container and commit the generation script with figure outputs. The Mermaid Lua filter and Puppeteer configuration live in `_shared/filters/`; generated PNGs remain project-local in `.build/mermaid`. Prefer Mermaid to ASCII diagrams where PDF font coverage is unreliable. Set DejaVu Sans Mono for code containing Greek, because the default monospaced font lacks those glyphs. With a leading body H1 and numbered `##` sections, pair `--number-sections` with `--shift-heading-level-by=-1` so sections number from 1.
 
 Maths variants use shared `html-mathml`, `html-mathjax`, and `html-variants` recipes. Opt in through `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants using the main page's structural flags. The opted-in primers are complex analysis, deep learning, digital signal processing, evaluation loop, numerical analysis, and political systems. Complex analysis defaults to MathJax; the other five default to MathML. A project without the opt-in cannot run `html-variants`.
@@ -64,7 +67,7 @@ Before renumbering or removing headings, search prose for embedded section refer
 
 ## Adding a Document
 
-Until `just new-primer` arrives in #162, create the project directory and its `<dir>.md` source, with an H1 equal to `TITLE`. Add a thin Justfile defining `SOURCE_MD`, `PROJECT_DIR`, `TITLE`, `AUTHOR`, `DATE`, `HTML_EXTRA`, and `PDF_EXTRA`, then import `../_shared/common.just`. Add appropriate root Justfile targets, register the source and outputs in `scripts/update_readme_recent.py`, and add the HTML/PDF links to the README catalogue. Add an `area:` label to `.github/labels.json` if the new document introduces a category, and synchronise that repository label. Render and commit the source, Justfile, and required HTML/PDF outputs in the same PR. Follow the style guide for prose and headings.
+Until `just new-primer` arrives in #162, create the project directory and its `<dir>.md` source, with an H1 equal to `TITLE`. Add a thin Justfile defining `SOURCE_MD`, `PROJECT_DIR`, `TITLE`, `AUTHOR`, `DATE`, `HTML_EXTRA`, and `PDF_EXTRA`, then import `../_shared/common.just`. Add appropriate root Justfile targets, register the source and outputs in `scripts/update_readme_recent.py`, and run `just readme` to update the catalogue. Add an `area:` label to `.github/labels.json` if the new document introduces a category, and synchronise that repository label. Render and commit the source, Justfile, and required HTML/PDF outputs in the same PR. Follow the style guide for prose and headings.
 
 ## Dates
 
