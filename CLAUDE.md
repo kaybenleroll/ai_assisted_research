@@ -12,7 +12,7 @@ AI-generated technical primers rendered to HTML + PDF via pandoc, orchestrated w
 
 **Gaming materials** — `gaming_silo_rpg/` uses the same Pandoc infrastructure but keeps a `gaming_` prefix for its documents.
 
-**Article** — `article_info_theory/` is an article series, not a primer.
+**Article** — A repository-authored information theory article is pending replacement in #163.
 
 **Exception** — `workbook_catmodel_elt_documents/`: Quarto + R + Python pipeline, not pandoc, not `_shared/common.just`. Treat as a separate build system. Its documents and render scripts use the `workbook_` prefix.
 
