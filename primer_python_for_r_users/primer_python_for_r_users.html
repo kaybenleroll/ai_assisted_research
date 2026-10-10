@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -606,7 +606,6 @@ Migration Primer</span>
     <aside class="sidebar">
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
-        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#how-to-use-this-primer" id="toc-how-to-use-this-primer"><span class="toc-section-number">1</span> How to Use This Primer</a>
@@ -4193,44 +4192,6 @@ interfaces, execution models, and failure handling.</p>
       initTOCWithRetries();
     }
 
-    // Math renderer toggle: switch between generated mathjax/mathml files.
-    (function initMathModeToggle() {
-      var btn = document.getElementById('math-mode-toggle');
-      if (!btn) {
-        return;
-      }
-
-      var path = window.location.pathname || '';
-      var targetPath = '';
-      var label = '';
-      var defaultMathRenderer = 'mathjax';
-
-      if (path.endsWith('.mathml.html')) {
-        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
-        label = 'Switch to MathJax';
-      } else if (path.endsWith('.mathjax.html')) {
-        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
-      } else if (path.endsWith('.html')) {
-        if (defaultMathRenderer === 'mathml') {
-          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
-          label = 'Switch to MathJax';
-        } else {
-          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-          label = 'Switch to MathML';
-        }
-      }
-
-      if (!targetPath) {
-        btn.style.display = 'none';
-        return;
-      }
-
-      btn.textContent = label;
-      btn.addEventListener('click', function () {
-        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
-      });
-    })();
 
       // Sidebar resizer logic (existing)
       var root = document.documentElement;

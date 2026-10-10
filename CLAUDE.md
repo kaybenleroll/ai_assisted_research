@@ -65,7 +65,9 @@ import '../_shared/common.just'
 - Configure DejaVu Sans Mono as monospace font when code blocks contain Greek — lmmono lacks Greek coverage
 - Grep xelatex output for `Error|Missing \$|Undefined control`; generic warning grep misses actual failures
 - Verify rendered PDF exists and has non-trivial file size before committing
-- `primer_building_ai_agents` and `primer_numerical_analysis` have `html-mathml`/`html-mathjax` variant targets that `html-full`/`html-dev` don't regenerate — rebuild them explicitly when applying a fix across primers, or they silently carry pre-existing drift.
+- Maths variants use the shared `html-mathml`, `html-mathjax` and `html-variants` recipes. Opt in with `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants with the main page's structural flags. Non-opted-in projects reject `html-variants`.
+- The opted-in primers are `primer_complex_analysis`, `primer_deep_learning`, `primer_digital_signal_processing`, `primer_evaluation_loop`, `primer_numerical_analysis` and `primer_political_systems`. Complex analysis keeps MathJax as its default; the other five keep MathML. `full` in complex analysis and numerical analysis also builds variants; DSP's `full` chains its figure checks and `all`.
+- For HTML-only sweeps, run `html` per primer, `quick-html` for the building AI companion, `html-variants` for the six opted-in primers and `silo-html` for Silo. Avoid top-level `html-full`/`html-dev` in such sweeps: they also render the workbook, and some dependencies build PDFs. The building AI `docs` alias renders only its quick reference; `all-retained` builds `html pdf quick-html`.
 - Grep prose for embedded section references before stripping or renumbering headings
 - Scan `text` code blocks before planning diagram replacement
 - Pre-share a notation contract with all parallel agents writing mathematical content

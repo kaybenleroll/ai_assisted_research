@@ -24,8 +24,8 @@ REPO_ROOT := justfile_directory() / ".."
 SOURCE_MD_STEM := file_stem(SOURCE_MD)
 
 # Pandoc flag sets
-HTML_FLAGS_BASE := "--standalone --embed-resources --toc --toc-depth=3 --syntax-highlighting=breezedark"
-PDF_FLAGS_BASE  := "--pdf-engine=xelatex --toc --toc-depth=3 -V geometry:margin=1.2in -V fontsize=11pt -V linestretch=1.25 -V colorlinks=true -V linkcolor=NavyBlue -V urlcolor=NavyBlue -V toc-title='Table of Contents'"
+HTML_FLAGS_BASE := "--standalone --embed-resources --toc --toc-depth=3 --syntax-highlighting=breezedark --metadata lang=en-GB"
+PDF_FLAGS_BASE  := "--pdf-engine=xelatex --toc --toc-depth=3 -V geometry:margin=1.2in -V fontsize=11pt -V linestretch=1.25 -V colorlinks=true -V linkcolor=NavyBlue -V urlcolor=NavyBlue -V toc-title='Table of Contents' --metadata lang=en-GB"
 
 default:
   @just --list
@@ -52,7 +52,38 @@ pdf:
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}"
 
+# Opt in by adding --metadata mathvariants=true to HTML_EXTRA.
+# Keep the renderer override after HTML_EXTRA so all structural flags are shared.
+[private]
+_require-mathvariants:
+  @{{if HTML_EXTRA =~ 'mathvariants=true' { ":" } else { "echo 'Maths variants require --metadata mathvariants=true in HTML_EXTRA' >&2; exit 1" }}}
+
+html-mathml: _require-mathvariants
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o {{SOURCE_MD_STEM}}.mathml.html \
+    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} --mathml --metadata mathrenderer=mathml --metadata mathvariants=true \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-mathjax: _require-mathvariants
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    {{SOURCE_MD}} -o {{SOURCE_MD_STEM}}.mathjax.html \
+    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} --mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{TITLE}}" \
+    --metadata author="{{AUTHOR}}"
+
+html-variants: html-mathml html-mathjax
+
 all: html pdf
+  @{{if HTML_EXTRA =~ 'mathvariants=true' { "just html-variants" } else { ":" }}}
 
 clean:
   @echo "No intermediate build files to clean in {{PROJECT_DIR}}"

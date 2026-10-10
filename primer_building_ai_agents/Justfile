@@ -10,31 +10,6 @@ import '../_shared/common.just'
 MERMAID_FILTER := "filters/mermaid-to-image.lua"
 REFERENCE_MD   := "primer_agent_quick_reference.md"
 
-# HTML math variants (different output filenames from shared html recipe)
-html-mathml:
-  {{OCI}} run --rm {{OCI_FLAGS}} \
-    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
-    -w "/repo/{{PROJECT_DIR}}" \
-    {{IMAGE}} \
-    {{SOURCE_MD}} -o primer_ai_agents_comprehensive.mathml.html \
-    {{HTML_FLAGS_BASE}} --mathml --lua-filter="{{MERMAID_FILTER}}" \
-    --template="{{TEMPLATE}}" \
-    --metadata title="{{TITLE}}" \
-    --metadata author="{{AUTHOR}}"
-
-html-mathjax:
-  {{OCI}} run --rm {{OCI_FLAGS}} \
-    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
-    -w "/repo/{{PROJECT_DIR}}" \
-    {{IMAGE}} \
-    {{SOURCE_MD}} -o primer_ai_agents_comprehensive.mathjax.html \
-    {{HTML_FLAGS_BASE}} --mathjax --lua-filter="{{MERMAID_FILTER}}" \
-    --template="{{TEMPLATE}}" \
-    --metadata title="{{TITLE}}" \
-    --metadata author="{{AUTHOR}}"
-
-html-variants: html-mathml html-mathjax
-
 # Companion quick reference document
 quick-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -49,12 +24,10 @@ quick-html:
 
 # Backward-compat aliases
 main-html: html
-main-html-mathml: html-mathml
-main-html-mathjax: html-mathjax
 main-pdf: pdf
 pdf-unicode: pdf
 docs: quick-html
-all-retained: html pdf html-variants quick-html
+all-retained: html pdf quick-html
 all-docs: all-retained
 ref-html: quick-html
 rebuild: clean all-retained
