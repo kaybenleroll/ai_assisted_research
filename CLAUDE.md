@@ -55,6 +55,14 @@ import '../_shared/common.just'
 
 ## Primer Build and Render Notes
 
+- Run `just setup` at the repository root to enable Git hooks, build the shared Pandoc image, and pull the R figure image. The command is safe to repeat. Set `IMAGE` or `ROCKER` in the environment to override the corresponding primer image.
+
+| Role | Image | Digest | Override variable | How to bump |
+|------|-------|--------|-------------------|-------------|
+| Pandoc render | `localhost/primers-pandoc:latest`, built from `docker.io/pandoc/latex` | `sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8` | `IMAGE` | Verify a new base digest and Pandoc version, update `_shared/Dockerfile`, then run `just setup` and check sample renders. |
+| R figures | `docker.io/rocker/tidyverse:4.5.1` | `sha256:e58774bc0b3e15dd67d4eef5b3f7b77b1fd01b9a85e1ff5ecdd376bb06f74acc` | `ROCKER` | Verify a new digest and R version, update `_shared/images.just`, then run `just setup` and check plot recipes. |
+| Workbook | `docker.io/rocker/tidyverse` | `sha256:c38f0fea583e3aa82d89d0038e5bb559a04fa813881031f61f6191e683954cf2` | `WORKBOOK_IMAGE_ID` | Follow the workbook's separate image update process in `workbook_catmodel_elt_documents/render.env` and its `Dockerfile`. |
+
 - All rendering must run in containers; never install libraries on the host
 - Use wrapper recipes (e.g. `full`) to chain `_shared/common.just` targets — `just` does not support recipe overrides
 - Add `--mathjax` to `HTML_EXTRA` for TeX math in HTML output
