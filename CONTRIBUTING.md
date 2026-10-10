@@ -83,7 +83,7 @@ Do not republish third-party material without a licence record; see `NOTICE` for
 
 ## Silo Reference Sheets
 
-A PR that changes a Silo bible's content updates its companion reference sheet in the same PR; purely mechanical sweeps are exempt.
+A PR that changes a Silo bible's content updates its companion reference sheet in the same PR; purely mechanical sweeps are exempt. See the [Silo RPG README](gaming_silo_rpg/README.md) for the document-class conventions.
 
 ## Pull Request Workflow
 
