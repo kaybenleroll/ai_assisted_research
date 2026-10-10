@@ -1,0 +1,17 @@
+ARG PYTHON_IMAGE=docker.io/library/python:3-slim@sha256:cfe2e24a75302a15934d37c2d86412893c0aa934dc3a97cbb439d04c01890ca9
+FROM ${PYTHON_IMAGE}
+
+# Official crate-ci release archives, verified against GitHub's asset digests.
+ARG TYPOS_VERSION=1.51.1
+RUN set -eu; \
+    arch="$(uname -m)"; \
+    case "$arch" in \
+      x86_64) checksum=93c301fd4120ff076e2cc2a6d6a61cab4a4bdb81899287c0938b452e56d1f454 ;; \
+      aarch64) checksum=2ac5e37b3236b3c07dec5cdf1527acf143aec4674a6089b0bf424d021b35e099 ;; \
+      *) echo "unsupported lint image architecture: $arch" >&2; exit 1 ;; \
+    esac; \
+    url="https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-${arch}-unknown-linux-musl.tar.gz"; \
+    python3 -c 'import sys, urllib.request; urllib.request.urlretrieve(sys.argv[1], "/tmp/typos.tar.gz")' "$url"; \
+    echo "$checksum  /tmp/typos.tar.gz" | sha256sum -c -; \
+    tar -xz -C /usr/local/bin -f /tmp/typos.tar.gz ./typos; \
+    rm /tmp/typos.tar.gz

@@ -9,6 +9,7 @@ The host needs Git, `just`, and a container runtime (Podman preferred; Docker al
 | Pandoc renders | `localhost/primers-pandoc:latest`, built from `docker.io/pandoc/latex@sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8` | `IMAGE` | Verify the new base digest and Pandoc version, update `_shared/Dockerfile`, run `just setup`, and check sample renders. |
 | R figures | `docker.io/rocker/tidyverse:4.5.1@sha256:e58774bc0b3e15dd67d4eef5b3f7b77b1fd01b9a85e1ff5ecdd376bb06f74acc` | `ROCKER` | Verify the new digest and R version, update `_shared/images.just`, run `just setup`, and check plot recipes. |
 | README generation | `docker.io/library/python:3-slim@sha256:cfe2e24a75302a15934d37c2d86412893c0aa934dc3a97cbb439d04c01890ca9` | `PYTHON_IMAGE` | Verify the new digest, update `_shared/images.just`, then run `just readme-check`. |
+| Spelling lint | `localhost/primers-lint:1.51.1`, built from the same digest-pinned `PYTHON_IMAGE` and checksum-verified `typos` 1.51.1 | `LINT_IMAGE` | Verify the release asset digest in `_shared/Dockerfile.lint`, run `just build-lint-image`, then probe and run `just lint`. |
 | Workbook | `docker.io/rocker/tidyverse@sha256:c38f0fea583e3aa82d89d0038e5bb559a04fa813881031f61f6191e683954cf2` | `WORKBOOK_IMAGE_ID` | Follow the separate image process in `workbook_catmodel_elt_documents/render.env` and its Dockerfile. |
 
 ## Layout and Naming
@@ -75,7 +76,11 @@ Until `just new-primer` arrives in #162, create the project directory and its `<
 
 ## Linting and CI
 
-`just lint` is planned under #155; the PR checks workflow is planned under #158. Run the relevant render and manual QA steps above and report the exact commands in the PR.
+`just build-lint-image` builds the spelling checker from the digest-pinned Python image and the checksum-verified `typos` 1.51.1 release. `just lint` checks the tracked primer Markdown, root README, and Silo Markdown. `just lint-spell <path.md>` checks only the named in-scope file; with no path it checks the full scope. `just lint-changed` checks Markdown added, modified, or renamed since `${BASE_REF:-origin/main}` using a three-dot diff. Set `OCI=podman` or `OCI=docker` to choose a container command; the default prefers Podman. Set `LINT_IMAGE` to use a different lint image. The PR checks workflow is planned under #158.
+
+Every finding is printed with `ENFORCED` or `ADVISORY` and a source line. `lint/enforced-spelling.txt` lists zero-finding documents whose future findings fail the command. A manifest entry must be a current repository-relative in-scope path; stale entries are errors. Silo files remain advisory until #166, including the two zero-finding Silo files recorded in the initial manifest. Each sweep PR adds its cleared document to the manifest. The summary reports checked files, both finding counts, and the number of `<!-- typos: ignore-line -->` markers. Review those markers manually.
+
+`_typos.toml` uses `en-gb` and ignores fenced code, inline code, maths, Markdown link targets, and explicitly marked lines because their spelling may be fixed by syntax or source material. The patterns cover ordinary Markdown forms; reviewers must still judge copied quotations, proper names, and unusual markup. An empty `[default.extend-words]` is intentional at the initial baseline: add an exception only for a verified proper name, standard, API, or paper title, with a reason comment. Do not exempt a technical concept merely because a source uses US spelling. The spelling scan does not change files, and advisory findings remain visible until the relevant sweep. Run the render and manual QA steps above where the PR changes published output.
 
 ### Checks
 

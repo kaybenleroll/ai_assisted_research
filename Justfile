@@ -34,6 +34,22 @@ check-fresh:
 
 check-readme: readme-check
 
+# Build the pinned spelling checker image
+build-lint-image:
+  {{OCI}} build --build-arg PYTHON_IMAGE={{PYTHON_IMAGE}} -t {{LINT_IMAGE}} -f _shared/Dockerfile.lint _shared/
+
+# Check every in-scope Markdown source; manifest entries are enforced
+lint:
+  bash scripts/lint.sh
+
+# Check Markdown files changed since BASE_REF (default: origin/main)
+lint-changed:
+  bash scripts/lint.sh --changed
+
+# Check all in-scope files, or only the named Markdown files
+lint-spell *FILES:
+  bash scripts/lint.sh {{FILES}}
+
 # Build the shared pandoc image used by all primer projects
 build-image:
   {{OCI}} build -t {{IMAGE}} -f _shared/Dockerfile _shared/
