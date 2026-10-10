@@ -2,6 +2,8 @@
 
 AI-assisted research and writing projects — long-form technical primers and reference material.
 
+Documents are drafted with AI assistance and reviewed by the author. Each shows the date of its last substantive review; check primary sources before relying on time-sensitive claims.
+
 Browse the documents below or visit the [GitHub Pages site](https://kaybenleroll.github.io/ai_assisted_research/).
 
 ---

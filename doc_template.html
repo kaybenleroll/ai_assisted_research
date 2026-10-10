@@ -256,6 +256,15 @@
     .content-inner > :where(table, .broad-table, .compact-table) {
       align-self: flex-start;
     }
+    .doc-disclosure {
+      width: 100%;
+      max-width: 100ch;
+      margin-top: 2rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .8rem;
+    }
 
     /* ── Typography ────────────────────────────────────────────────── */
     h1, h2, h3, h4, h5, h6 {
@@ -554,6 +563,7 @@ $highlighting-css$
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -595,6 +605,7 @@ $endif$
     <main class="content">
       <div class="content-inner">
 $body$
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author.$if(date)$ The document date is that of its last substantive review.$endif$</footer>
       </div>
     </main>
 
