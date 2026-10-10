@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -582,7 +582,9 @@ $if(word_count)$    <span class="navbar-meta">$word_count$ words</span>$endif$
     <aside class="sidebar">
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
+$if(mathvariants)$
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+$endif$
       </div>
 $if(toc)$      <div id="TOC" aria-label="Table of contents">$table-of-contents$</div>
 $endif$
@@ -680,6 +682,7 @@ $body$
       initTOCWithRetries();
     }
 
+$if(mathvariants)$
     // Math renderer toggle: switch between generated mathjax/mathml files.
     (function initMathModeToggle() {
       var btn = document.getElementById('math-mode-toggle');
@@ -718,6 +721,7 @@ $body$
         window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
       });
     })();
+$endif$
 
       // Sidebar resizer logic (existing)
       var root = document.documentElement;

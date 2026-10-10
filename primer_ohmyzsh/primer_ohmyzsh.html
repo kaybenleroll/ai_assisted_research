@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -606,7 +606,6 @@ Shell</span>
     <aside class="sidebar">
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
-        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#oh-my-zsh-a-practical-guide-to-your-shell" id="toc-oh-my-zsh-a-practical-guide-to-your-shell">Oh My Zsh: A
@@ -1122,11 +1121,11 @@ highlights commands in real time as you type:</p>
 </ul>
 <p>Options/flags and pipes/redirects/semicolons are recognized as
 distinct token types internally, but the default <code>main</code>
-highlighter styles leave them unstyled — no color unless you configure
+highlighter styles leave them unstyled — no colour unless you configure
 <code>ZSH_HIGHLIGHT_STYLES</code> yourself. If you want flags or
 separators to stand out visually, that’s a
 <code>ZSH_HIGHLIGHT_STYLES</code> customization, not default
-behavior.</p>
+behaviour.</p>
 <p>The value is catching typos before you press Enter. You type
 <code>pythno script.py</code> and the red highlight catches it
 immediately. You type <code>ls --recusrive</code> and it’s red before
@@ -1177,10 +1176,10 @@ format:</p>
 plugin detects the format and uses the right tool. It works as long as
 the relevant tool is installed on the system.</p>
 <h3 id="colored-man-pages">colored-man-pages</h3>
-<p>Makes <code>man</code> pages render with color instead of monochrome.
-The improvement is significant for readability, especially for long man
-pages with lots of structure. No configuration needed; just include it
-in your plugins list.</p>
+<p>Makes <code>man</code> pages render with colour instead of
+monochrome. The improvement is significant for readability, especially
+for long man pages with lots of structure. No configuration needed; just
+include it in your plugins list.</p>
 <h3 id="command-not-found">command-not-found</h3>
 <p>When you type a command that doesn’t exist, instead of a bare
 “command not found” error, the shell suggests the package you need to
@@ -1243,7 +1242,7 @@ completions. It runs <code>mise activate zsh</code> during shell startup
 so that tool versions are correctly set in every shell session. Without
 this, you’d need to call <code>eval &quot;$(mise activate zsh)&quot;</code>
 manually in your <code>.zshrc</code>. That <code>eval</code> is
-appropriate only for initialization code emitted by a locally installed,
+appropriate only for initialisation code emitted by a locally installed,
 trusted executable; never adapt the pattern to execute output fetched
 from the network.</p>
 <h3 id="gh">gh</h3>
@@ -1505,7 +1504,7 @@ navigate daily, <code>z</code> eliminates most explicit <code>cd</code>
 commands.</p>
 <p><code>zoxide</code> is a faster modern alternative with the same
 concept. It integrates with OMZ via a plugin and can be configured to
-replace <code>cd</code> entirely. As with other shell initialization
+replace <code>cd</code> entirely. As with other shell initialisation
 snippets, only <code>eval</code> output from a locally installed
 executable you trust:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install zoxide, then add to .zshrc:</span></span>
@@ -1574,7 +1573,7 @@ shell feels excellent or annoying:</p>
 </ol>
 <ul>
 <li>Validate <code>HISTSIZE</code>, <code>SAVEHIST</code>, and history
-sharing behavior against real usage.</li>
+sharing behaviour against real usage.</li>
 <li>Keep <code>HIST_IGNORE_SPACE</code> active and use leading-space
 deliberately for sensitive commands.</li>
 </ul>
@@ -1982,44 +1981,6 @@ configuration questions; the OMZ wiki has gotten stale in places.</li>
       initTOCWithRetries();
     }
 
-    // Math renderer toggle: switch between generated mathjax/mathml files.
-    (function initMathModeToggle() {
-      var btn = document.getElementById('math-mode-toggle');
-      if (!btn) {
-        return;
-      }
-
-      var path = window.location.pathname || '';
-      var targetPath = '';
-      var label = '';
-      var defaultMathRenderer = 'mathjax';
-
-      if (path.endsWith('.mathml.html')) {
-        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
-        label = 'Switch to MathJax';
-      } else if (path.endsWith('.mathjax.html')) {
-        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
-      } else if (path.endsWith('.html')) {
-        if (defaultMathRenderer === 'mathml') {
-          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
-          label = 'Switch to MathJax';
-        } else {
-          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-          label = 'Switch to MathML';
-        }
-      }
-
-      if (!targetPath) {
-        btn.style.display = 'none';
-        return;
-      }
-
-      btn.textContent = label;
-      btn.addEventListener('click', function () {
-        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
-      });
-    })();
 
       // Sidebar resizer logic (existing)
       var root = document.documentElement;

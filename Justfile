@@ -22,7 +22,7 @@ political-html:
   cd primer_political_systems && just html
 
 political-all:
-  cd primer_political_systems && just all-docs
+  cd primer_political_systems && just all
 
 numerical-html:
   cd primer_numerical_analysis && just html
@@ -82,7 +82,6 @@ deep-learning-pdf:
   cd primer_deep_learning && just pdf
 
 deep-learning-all:
-  cd primer_deep_learning && just html-variants
   cd primer_deep_learning && just all
 
 digital-signal-processing-html:
@@ -101,7 +100,7 @@ eval-loop-pdf:
   cd primer_evaluation_loop && just pdf
 
 eval-loop-all:
-  cd primer_evaluation_loop && just all-docs
+  cd primer_evaluation_loop && just all
 
 python-r-html:
   cd primer_python_for_r_users && just html
