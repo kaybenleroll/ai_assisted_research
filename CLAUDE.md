@@ -1,89 +1,43 @@
-# Claude Code — ai_assisted_research
+# Repository Guide
 
-## Repo Purpose
+## Purpose
 
-AI-generated technical primers rendered to HTML + PDF via pandoc, orchestrated with `just`. Source and outputs are both committed.
+This repository publishes technical primers and related documents. Sources and rendered HTML and PDF outputs are committed together. Read this guide as a route to the instructions for the task at hand.
 
----
+## Read Before You Edit
+
+| Task | Read |
+|---|---|
+| Repository process, setup, builds, render QA, or a new document | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Authored prose, headings, examples, or citations | [STYLE_GUIDE.md](STYLE_GUIDE.md) |
+| Catastrophe workbook | [Workbook README](workbook_catmodel_elt_documents/README.md), then its Justfile |
+| Silo RPG content | `gaming_silo_rpg/gaming_silo_index.md` first; see the mandate below |
 
 ## Document Classes
 
-**Pandoc primers** — source → HTML + PDF via `localhost/primers-pandoc:latest`; each has a thin `Justfile` importing `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_complex_analysis`, `primer_containerization`, `primer_deep_learning`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_pi_coding_agent`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`.
+- Pandoc primers use thin per-project Justfiles and `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_complex_analysis`, `primer_containerization`, `primer_deep_learning`, `primer_digital_signal_processing`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_pi_coding_agent`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`.
+- Gaming materials in `gaming_silo_rpg/` share the Pandoc infrastructure and retain their `gaming_` filenames.
+- A repository-authored information theory article is pending replacement in #163.
+- `workbook_catmodel_elt_documents/` uses Quarto, R, and Python, with its own build system and `workbook_` filenames.
 
-**Gaming materials** — `gaming_silo_rpg/` uses the same Pandoc infrastructure but keeps a `gaming_` prefix for its documents.
+## Repository Invariants
 
-**Article** — A repository-authored information theory article is pending replacement in #163.
+- Render in containers; do not install build libraries on the host.
+- Never commit or push directly to `main`.
+- Commit source documents and their required published outputs together; do not commit intermediate files.
+- Use UK English in repository-authored prose. Follow [STYLE_GUIDE.md](STYLE_GUIDE.md).
+- Use [CONTRIBUTING.md](CONTRIBUTING.md) for build and render commands. The Mermaid filter now lives in `_shared/filters/`.
 
-**Exception** — `workbook_catmodel_elt_documents/`: Quarto + R + Python pipeline, not pandoc, not `_shared/common.just`. Treat as a separate build system. Its documents and render scripts use the `workbook_` prefix.
+<a id="primer-build-and-render-notes"></a>
 
----
+## Issues and Pull Requests
 
-## Standard Primer Layout
+- Work issue-first, with one issue per PR. Branches follow `<type>/<issue#>-<slug>`.
+- `.github/labels.json` is the source of truth for priority, type, area, and effort labels. Use `[infra]` or the primer short name in issue titles.
+- Open the PR body with `Closes #N` for its issue. For a per-primer PR under a sweep issue, use `Refs #N`; only the owner-designated final PR uses `Closes #N` for the sweep.
+- Squash merge by default; use a merge commit when retaining a stacked chain or individual commits matters. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
-```
-<project>/
-  <name>.md          # sole markdown source
-  Justfile           # thin: vars + import '../_shared/common.just'
-  <name>.html        # committed output
-  <name>.pdf         # committed output
-```
-
-No intermediates tracked in git.
-
----
-
-## Adding a New Primer
-
-1. Create `<project>/Justfile`:
-
-```just
-SOURCE_MD   := "<name>.md"
-PROJECT_DIR := "<project>"
-TITLE       := "Full Title String"
-AUTHOR      := "Mick Cooney"
-DATE        := "7 October 2026"
-HTML_EXTRA  := ""
-PDF_EXTRA   := ""
-
-import '../_shared/common.just'
-```
-
-2. Add targets to the top-level `Justfile` (follow existing pattern).
-3. Commit only `.md`, `Justfile`, `.html`, `.pdf` — no intermediates.
-4. **Update `README.md`** — add a row linking the `.html` file. The README is the GitHub Pages landing page.
-
----
-
-## Primer Build and Render Notes
-
-- Run `just setup` at the repository root to enable Git hooks, build the shared Pandoc image, and pull the R figure image. The command is safe to repeat. Set `IMAGE` or `ROCKER` in the environment to override the corresponding primer image.
-
-| Role | Image | Digest | Override variable | How to bump |
-|------|-------|--------|-------------------|-------------|
-| Pandoc render | `localhost/primers-pandoc:latest`, built from `docker.io/pandoc/latex` | `sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8` | `IMAGE` | Verify a new base digest and Pandoc version, update `_shared/Dockerfile`, then run `just setup` and check sample renders. |
-| R figures | `docker.io/rocker/tidyverse:4.5.1` | `sha256:e58774bc0b3e15dd67d4eef5b3f7b77b1fd01b9a85e1ff5ecdd376bb06f74acc` | `ROCKER` | Verify a new digest and R version, update `_shared/images.just`, then run `just setup` and check plot recipes. |
-| Workbook | `docker.io/rocker/tidyverse` | `sha256:c38f0fea583e3aa82d89d0038e5bb559a04fa813881031f61f6191e683954cf2` | `WORKBOOK_IMAGE_ID` | Follow the workbook's separate image update process in `workbook_catmodel_elt_documents/render.env` and its `Dockerfile`. |
-
-- All rendering must run in containers; never install libraries on the host
-- Use wrapper recipes (e.g. `full`) to chain `_shared/common.just` targets — `just` does not support recipe overrides
-- Add `--mathjax` to `HTML_EXTRA` for TeX math in HTML output
-- Use `--number-sections` (and shift flags) consistently across all primers
-- Use `--shift-heading-level-by=-1` with `--number-sections` on docs with a body `# H1` + `##` sections — without the shift, `##` numbers as 1.1 not 1
-- Plots: use R via the rocker container (pandoc container has no pip); commit the generation script alongside figure outputs
-- Mermaid: uses a Lua filter in `_shared/` generating PNG intermediates; prefer Mermaid for PDF output (ASCII fails in xelatex font rendering)
-- Configure DejaVu Sans Mono as monospace font when code blocks contain Greek — lmmono lacks Greek coverage
-- Grep xelatex output for `Error|Missing \$|Undefined control`; generic warning grep misses actual failures
-- Verify rendered PDF exists and has non-trivial file size before committing
-- Maths variants use the shared `html-mathml`, `html-mathjax` and `html-variants` recipes. Opt in with `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants with the main page's structural flags. Non-opted-in projects reject `html-variants`.
-- The opted-in primers are `primer_complex_analysis`, `primer_deep_learning`, `primer_digital_signal_processing`, `primer_evaluation_loop`, `primer_numerical_analysis` and `primer_political_systems`. Complex analysis keeps MathJax as its default; the other five keep MathML. `full` in complex analysis and numerical analysis also builds variants; DSP's `full` chains its figure checks and `all`.
-- For HTML-only sweeps, run `html` per primer, `quick-html` for the building AI companion, `html-variants` for the six opted-in primers and `silo-html` for Silo. Avoid top-level `html-full`/`html-dev` in such sweeps: they also render the workbook, and some dependencies build PDFs. The building AI `docs` alias renders only its quick reference; `all-retained` builds `html pdf quick-html`.
-- Grep prose for embedded section references before stripping or renumbering headings
-- Scan `text` code blocks before planning diagram replacement
-- Pre-share a notation contract with all parallel agents writing mathematical content
-
----
-
-## Silo RPG — Context-Navigation Mandate
+## Silo RPG Context Navigation Mandate
 
 When asked anything about Silo RPG lore, rules, mechanics, setting, or campaign content:
 
@@ -97,24 +51,9 @@ Source documents:
 - `gaming_silo_comprehensive_bible.md` — full world reference
 - `gaming_silo_starter_campaign.md` — the introductory campaign
 
----
+## Definition of Done
 
-## Workflow — Issues and PRs
-
-Work is issue-first.
-
-- **One issue per PR.** Every PR body opens with `Closes #N`. Unrelated changes (e.g. config tweaks already sitting on a branch) go in their own PR.
-- **Branch names:** `<type>/<issue#>-<slug>`, e.g. `docs/88-issue-first-workflow`. Never commit to `main`.
-- **Issue titles** carry a document prefix in brackets: `[pi]`, `[openclaw]`, `[infra]`, etc. Use the primer's short name (directory minus `primer_`).
-- **Labels** are defined in `.github/labels.json` (the issue-label hook reads it): 1 Priority (`P0`–`P3`) + 1 Type + 1+ Area + 1 Effort. Areas: `agents`, `devtools`, `quant`, `society`, `gaming`, `workbook`, `build`.
-- **The area list will grow.** When a new document class or category appears, add its `area:` entry to `.github/labels.json` in the same PR that introduces it, then sync the repo label (`gh label create ... --force` from the JSON). Keep the README's section headings and the area list aligned.
-- **Cross-primer sweeps** (e.g. a fix applied to every primer) get one issue with a per-primer checklist.
-- **Merge method:** default is squash (`gh pr merge --squash`): PR title as the commit subject, `Closes #N` in the body, one commit per issue on `main`. Other methods stay enabled on the repo; use a merge commit instead where preserving individual commits or a stacked-PR chain matters, and say so in the PR.
-- **PR-only exceptions:** typos and single-line fixes may skip the issue.
-- **Adding a primer** still follows the checklist above; the README row and top-level `Justfile` targets belong in the same PR as the primer.
-
----
-
-## Writing Style
-
-See `STYLE_GUIDE.md` for house style when generating or editing primer content.
+1. Confirm the issue scope and inspect the affected source, companion documents, and build recipes.
+2. Run the relevant commands in [CONTRIBUTING.md](CONTRIBUTING.md): recipe checks, container renders where outputs change, render QA, and repository checks appropriate to the change.
+3. Check links, committed outputs, `git diff --check`, and the exact changed-path scope before opening the PR.
+4. State the commands run, results, and any limitations in the PR. Link or reference the issue as above.
