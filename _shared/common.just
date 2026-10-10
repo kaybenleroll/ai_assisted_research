@@ -7,13 +7,14 @@
 #   HTML_EXTRA  — per-project extra HTML pandoc flags (may be empty string "")
 #   PDF_EXTRA   — per-project extra PDF  pandoc flags (may be empty string "")
 
+import 'images.just'
+
 # OCI runtime detection (podman preferred, fall back to docker)
 OCI := `command -v podman >/dev/null 2>&1 && echo podman || echo docker`
 OCI_FLAGS := if OCI == "podman" { "--userns=keep-id" } else { "" }
 MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
 
 # Shared image and container-internal paths
-IMAGE         := "localhost/primers-pandoc:latest"
 TEMPLATE      := "/repo/doc_template.html"
 COMPACT_LATEX := "/repo/_shared/pandoc-compact-code.latex"
 MERMAID_FILTER := "/repo/_shared/filters/mermaid-to-image.lua"
@@ -91,6 +92,3 @@ clean:
 
 clobber:
   rm -fv {{SOURCE_MD_STEM}}.html {{SOURCE_MD_STEM}}.pdf
-
-build-image:
-  {{OCI}} build -t {{IMAGE}} -f {{REPO_ROOT}}/_shared/Dockerfile {{REPO_ROOT}}/_shared/

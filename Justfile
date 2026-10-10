@@ -1,5 +1,9 @@
 set shell := ["bash", "-c"]
 
+import '_shared/images.just'
+
+OCI := `command -v podman >/dev/null 2>&1 && echo podman || echo docker`
+
 default:
   @just --list
 
@@ -9,7 +13,13 @@ readme-recent:
 
 # Build the shared pandoc image used by all primer projects
 build-image:
-  cd primer_building_ai_agents && just build-image
+  {{OCI}} build -t {{IMAGE}} -f _shared/Dockerfile _shared/
+
+# Configure hooks and fetch the two images used by primer builds
+setup:
+  git config core.hooksPath .githooks
+  just build-image
+  {{OCI}} pull {{ROCKER}}
 
 # Per-project render targets
 building-ai-html:

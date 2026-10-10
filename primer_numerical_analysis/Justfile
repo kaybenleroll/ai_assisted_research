@@ -4,7 +4,6 @@ TITLE       := "Numerical Analysis Primer: Practical, Detailed, and Friendly"
 AUTHOR      := "June 2026"
 HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "--lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
-ROCKER      := "docker.io/rocker/tidyverse:4.5.1"
 
 # Generate R figures (inside rocker container)
 plots:
