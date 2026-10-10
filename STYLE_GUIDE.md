@@ -4,19 +4,21 @@ This guide captures the house style for this collection. Use it when generating 
 
 ## 0 Scope and Precedence
 
-Rule IDs are stable: L covers Language, V Voice, S Structure, E Exposition and Examples, and M Markup Mechanics. Keep existing IDs when moving or revising rules; do not reuse retired IDs. R and C are reserved for evidence and contested-subject rules in issue #142. N is reserved for the maths guide, `docs/math-notation.md`, in issue #146; that file is planned, not yet a link target. Build, date-maintenance, and naming processes belong in CONTRIBUTING.md (issue #143), rather than here.
+Rule IDs are stable: L covers Language, V Voice, S Structure, E Exposition and Examples, M Markup Mechanics, R Evidence and Sources, and C Contested Subjects. Keep existing IDs when moving or revising rules; do not reuse retired IDs. N is reserved for the maths guide, `docs/math-notation.md`, in issue #146; that file is planned, not yet a link target. Build, date-maintenance, and naming processes belong in CONTRIBUTING.md (issue #143), rather than here.
 
 The table defines which rule groups apply to each document class; a subset names the applicable rule IDs.
 
-| Class | L Language | V Voice | S Structure | E Exposition and Examples | M Markup Mechanics |
-|-------|------------|---------|-------------|---------------------------|--------------------|
-| Primers | All | All | All | All | All |
-| Article | Same as primers once repository-authored | Same as primers | Same as primers | Same as primers | Same as primers |
-| Silo | All | — | S1 heading case only | — | All, with the class exceptions below |
-| Workbook | All | — | — | — | M1 and M2 code rules only |
-| README.md | All | — | S1 heading case only | — | — |
+| Class | L Language | V Voice | S Structure | E Exposition and Examples | M Markup Mechanics | R Evidence and Sources | C Contested Subjects |
+|-------|------------|---------|-------------|---------------------------|--------------------|------------------------|----------------------|
+| Primers | All | All | All | All | All | All factual claims | Selected primers (see below) |
+| Article | Same as primers once repository-authored | Same as primers | Same as primers | Same as primers | Same as primers | All factual claims | — |
+| Silo | All | — | S1 heading case only | — | All, with the class exceptions below | All factual claims | — |
+| Workbook | All | — | — | — | M1 and M2 code rules only | All factual claims | — |
+| README.md | All | — | S1 heading case only | — | — | All factual claims | — |
 
 Silo uses `*` bullets, permits manual heading numbers, and does not use `--number-sections`. These class exceptions take precedence over the corresponding general mechanics. Workbook heading case and structure remain governed by its separate Quarto system. The Article row describes the replacement repository-authored article; preserve the wording of third-party republications until that replacement.
+
+The C rules apply only to `primer_comparative_religion`, `primer_political_systems`, and `primer_military_structure`. R applies wherever a document makes factual claims.
 
 Apply editorial authority in this order:
 
@@ -104,3 +106,29 @@ Source: [primer_numerical_analysis/primer_numerical_analysis.md](primer_numerica
 **M7.** Put a lead-in sentence before every table. Omit captions by default; use a Pandoc `Table:` caption only when referring to the table elsewhere. The four Silo reference sheets (`gaming_silo_rpg/gaming_silo_player_guide.md`, `gaming_silo_rpg/gaming_silo_gm_secrets.md`, `gaming_silo_rpg/gaming_silo_comprehensive_bible.md`, and `gaming_silo_rpg/gaming_silo_starter_campaign.md`) may place a table directly under its heading as a D16 layout exception, but the caption and accessibility rules still apply. [check: review]
 
 **M8.** Use `> **Note:**` and `> **Warning:**` blockquotes for callouts, sparingly; reserve warnings for material risk or an action the reader must not take. The only allowed fenced-div classes are `.broad-table`, `.compact-table`, and `.code-group`, defined in [doc_template.html](doc_template.html). Use the existing template without adding CSS or filters for callouts. [check: review]
+
+## Evidence and Sources
+
+**R1.** Cite the strongest available source for an important factual claim; prefer primary documentation, standards, and official data, and use a paper when it is the strongest evidence. [check: review]
+
+**R2.** Link to the specific source page that supports the claim, not a site homepage; identify papers with a DOI or arXiv identifier. [check: review]
+
+**R3.** Date claims that can change with `as of Month YYYY`, and avoid relative-time wording such as "currently" or "recently". [check: review]
+
+**R4.** State evidence strength separately from likelihood: never combine a confidence term and a likelihood term in one sentence, and do not impose a fixed scale. [check: review]
+
+**R5.** Apply E4's duplicate-versus-self-contained tie-break: link volatile product and version facts, but keep conceptual grounding inline. [check: review]
+
+**R6.** A primer needs a one-line verification note when it contains time-sensitive claims, including named products or versions, prices, limits, benchmark figures, current office-holders, or statements about the current state of a field; decide and record this per primer during its sources pass, without naming a fixed set of primers. Write the note only after checking the sources, leave it undated, and place it directly after the orientation block: *Verified against primary sources for sections X–Y; unverified claims are flagged inline.* Replace X–Y with the verified section range or "all sections". Mechanical passes do not add or edit this note. [check: review]
+
+## Contested Subjects
+
+**C1.** Attribute opinions, distinguish facts from interpretations, give views weight in proportion to their evidential support and acceptance, and label fringe views as such rather than giving every position equal weight. [check: review]
+
+**C2.** Use contentious labels only when attributed to a source or group that uses them, and explain relevant terminology without adopting a party's framing as neutral description. [check: review]
+
+**C3.** Keep descriptive accounts distinct from analytical claims: describe what a community holds as a descriptive statement, and attribute scholarly interpretations as analysis. [check: review]
+
+**C4.** Include a terminology and transliteration note that identifies the conventions used and explains significant alternatives. Where national terminology differs for equivalent institutions, roles, or equipment, give a comparison table; military structure coverage compares NATO, UK, and US terms. [check: review]
+
+**C5.** Date claims about office-holders and doctrine when they can change; use ICD 203 tradecraft (alternatives, indicators, and linchpin assumptions) only within forecasting passages. [check: review]
