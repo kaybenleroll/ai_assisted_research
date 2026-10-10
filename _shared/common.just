@@ -16,6 +16,7 @@ MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
 IMAGE         := "localhost/primers-pandoc:latest"
 TEMPLATE      := "/repo/doc_template.html"
 COMPACT_LATEX := "/repo/_shared/pandoc-compact-code.latex"
+MERMAID_FILTER := "/repo/_shared/filters/mermaid-to-image.lua"
 
 # Repo root: justfile_directory() is the calling project dir (one level below repo root)
 REPO_ROOT := justfile_directory() / ".."
