@@ -1,0 +1,16 @@
+The MIT licence in LICENSE covers the original material in this
+repository: the text written for it, the build scripts, templates and
+configuration, and the rendered HTML and PDF outputs of that material.
+
+It does not cover third-party material that appears in the repository
+or in its documents: quotations and excerpts, images, trademarks and
+product names, and fictional settings. That material remains the
+property of its owners and is governed by their terms; nothing in this
+repository grants rights in it. Where a document links to or summarises
+a third-party source, the source's own terms govern any reuse.
+
+In particular, the Silo RPG materials in gaming_silo_rpg/ are
+unofficial, non-commercial game aids set in the world of Hugh Howey's
+Silo novels (Wool, Shift and Dust). The setting, its names and its story
+remain the property of their rights-holders; only the game text and
+mechanics written for this repository are covered by the MIT licence.
