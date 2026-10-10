@@ -1,0 +1,5 @@
+# Add a document only when its baseline is clear and its owner accepts enforcement.
+gaming_silo_rpg/README.md
+gaming_silo_rpg/gaming_reference_silo_index.md
+primer_deep_learning/primer_deep_learning.md
+primer_pi_coding_agent/primer_pi_coding_agent.md

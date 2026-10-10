@@ -1,0 +1,19 @@
+[default]
+locale = "en-gb"
+check-filename = false
+# Markdown code fences contain copied commands and identifiers, not authored prose.
+# Inline code likewise preserves exact API names and shell syntax.
+# Maths notation is symbolic and may contain identifiers that look like words.
+# Markdown link targets are URLs or paths and must retain their spelling.
+# An explicit ignore-line marker marks copied text for human review.
+extend-ignore-re = [
+  '''(?ms)^\s*```[^\n]*\n.*?^\s*```[^\n]*''',
+  '''(?ms)^\s*~~~[^\n]*\n.*?^\s*~~~[^\n]*''',
+  '''`[^`\n]+`''',
+  '''(?s)\$\$.*?\$\$''',
+  '''\$[^$\n]+\$''',
+  '''\]\([^)\n]+\)''',
+  '''(?m)^.*<!-- typos: ignore-line -->.*$''',
+]
+
+[default.extend-words]
