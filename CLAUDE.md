@@ -10,6 +10,7 @@ This repository publishes technical primers and related documents. Sources and r
 |---|---|
 | Repository process, setup, builds, render QA, or a new document | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Authored prose, headings, examples, or citations | [STYLE_GUIDE.md](STYLE_GUIDE.md) |
+| Mathematical notation, theorem format, or maths rendering policy | [docs/math-notation.md](docs/math-notation.md) |
 | Content review passes and visual QA | [docs/review-checklist.md](docs/review-checklist.md) |
 | Catastrophe workbook | [Workbook README](workbook_catmodel_elt_documents/README.md), then its Justfile |
 | Silo RPG content | `gaming_silo_rpg/gaming_silo_index.md` first; see the mandate below |

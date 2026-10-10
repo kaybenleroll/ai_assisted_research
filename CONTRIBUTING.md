@@ -60,6 +60,7 @@ Before renumbering or removing headings, search prose for embedded section refer
 | Review Task | Procedure |
 |---|---|
 | Content passes and visual QA | Follow the [review checklist](docs/review-checklist.md); use this guide's Render QA section as the single source for build checks. |
+| Mathematical notation and writing | Follow the [maths and notation guide](docs/math-notation.md) for symbols, theorem format, and renderer policy. |
 
 ## Adding a Document
 
