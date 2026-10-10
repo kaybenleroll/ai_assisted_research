@@ -57,6 +57,10 @@ For Mermaid changes, first render a small subset that exercises every new syntax
 
 Before renumbering or removing headings, search prose for embedded section references. When planning diagram replacements, inspect `text` code blocks. Agree a notation contract before parallel writers change mathematical content. When checking Markdown H1s, exclude fenced code blocks: `#` inside a fence may be a shell comment.
 
+| Review Task | Procedure |
+|---|---|
+| Content passes and visual QA | Follow the [review checklist](docs/review-checklist.md); use this guide's Render QA section as the single source for build checks. |
+
 ## Adding a Document
 
 Until `just new-primer` arrives in #162, create the project directory and its `<dir>.md` source, with an H1 equal to `TITLE`. Add a thin Justfile defining `SOURCE_MD`, `PROJECT_DIR`, `TITLE`, `AUTHOR`, `DATE`, `HTML_EXTRA`, and `PDF_EXTRA`, then import `../_shared/common.just`. Add appropriate root Justfile targets, register the source and outputs in `scripts/update_readme_recent.py`, and add the HTML/PDF links to the README catalogue. Add an `area:` label to `.github/labels.json` if the new document introduces a category, and synchronise that repository label. Render and commit the source, Justfile, and required HTML/PDF outputs in the same PR. Follow the style guide for prose and headings.
