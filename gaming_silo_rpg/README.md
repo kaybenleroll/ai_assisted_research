@@ -59,4 +59,4 @@ A pull request that changes a bible's content also updates its companion referen
 
 ## Current Build
 
-Run `cd gaming_silo_rpg && just silo-all` to build the five Silo documents currently in the build. The reference sheets join the build under issue #165, which will update this note.
+Run `cd gaming_silo_rpg && just silo-all` to build all nine Silo documents as HTML and PDF, including the four reference sheets. Use `silo-html` or `silo-pdf` for one format and `silo-clobber` to remove all 18 outputs.

@@ -104,7 +104,7 @@ About **50 stairs** sit between official levels.
 * Every level has a fixer, a gossip, and someone suspected of informing.
 * Strange light pulses mean something bad or official is happening.
 * Porters know routes, Mechanical knows faults, Supply knows lies, Medical knows desperation, and IT knows too much.
-* Children are given ancestor names at age five in a Gifting ceremony.
+* On their fifth birthday, surviving children are "Gifted" the name of a dead ancestor.
 
 ## What a Normal Day Feels Like
 
@@ -141,7 +141,7 @@ About **50 stairs** sit between official levels.
 
 ## Party Bonds
 
-Roll or choose:
+Roll or choose a bond from Part 1 of the starter campaign:
 
 | d6 | Bond |
 | :--- | :--- |

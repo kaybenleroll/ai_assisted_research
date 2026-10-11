@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -511,6 +520,7 @@ max-width: none;
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -529,8 +539,8 @@ max-width: none;
 
   <nav class="navbar">
     <span class="navbar-brand">SILO RPG DOCUMENT INDEX</span>
-
-    <span class="navbar-meta">Silo RPG</span>
+    <span class="navbar-meta">11 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -550,6 +560,8 @@ PLAYER INTRODUCTION</a></li>
 PLAYER ARCHETYPES</a></li>
 <li><a href="#game-masters-secrets-macro-lore" id="toc-game-masters-secrets-macro-lore">4. GAME MASTER’S SECRETS &amp;
 MACRO-LORE</a></li>
+<li><a href="#table-use-reference-sheets" id="toc-table-use-reference-sheets">5. TABLE-USE REFERENCE
+SHEETS</a></li>
 </ul></li>
 </ul></div>
 
@@ -752,6 +764,27 @@ elevator, amnesiac drugs in the water supply, the massive Digger parked
 beneath Level 144. * <strong>Part 3: Campaign Pacing Guide:</strong> A
 4-phase guide on how to keep the campaign focused on daily survival
 before introducing the macro-lore.</p>
+<hr />
+<h2 id="table-use-reference-sheets">5. TABLE-USE REFERENCE SHEETS</h2>
+<p><strong>Purpose:</strong> Condensed companions for quick use at the
+table; consult the source documents above for full context. The <a href="https://github.com/kaybenleroll/ai_assisted_research/blob/main/gaming_silo_rpg/README.md">Silo
+document-class README</a> explains audience boundaries and how to keep
+the sheets in sync.</p>
+<p><strong>Contents:</strong></p>
+<ul>
+<li><strong><code>gaming_reference_silo_index.md</code>:</strong> Routes
+GMs to the other three sheets and full documents; GM-only.</li>
+<li><strong><code>gaming_reference_silo_player.md</code>:</strong>
+Citizen knowledge, sectors, roles, slang, and party prompts from the
+player guide, with bonds from the starter campaign; player-safe.</li>
+<li><strong><code>gaming_reference_silo_gm.md</code>:</strong> Travel,
+security, adjudication, factions, and daily-life generators from
+Chapters 30–33 of the comprehensive bible; GM-only.</li>
+<li><strong><code>gaming_reference_silo_campaign.md</code>:</strong>
+Party bonds and ten campaign quick kits from the starter campaign;
+GM-only.</li>
+</ul>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 

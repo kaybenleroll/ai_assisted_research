@@ -44,7 +44,7 @@ Run the command from the named directory (`cd <directory> && just <recipe>`). Th
 | `primer_political_systems` | `html` | `pdf` | `all` includes both maths variants |
 | `primer_python_for_r_users` | `html` | `pdf` | `all` |
 | `primer_research_local_llms` | `html` | `pdf` | `all` |
-| `gaming_silo_rpg` | `silo-html` | `silo-pdf` | `silo-all` builds the index and four source documents |
+| `gaming_silo_rpg` | `silo-html` | `silo-pdf` | `silo-all` builds the index, four source documents, and four reference sheets |
 | `workbook_catmodel_elt_documents` | `render-dev-container` | — | `render-full-container` renders the full Quarto package |
 
 The root `Justfile` has selected project targets; use the directory recipes for complete project control. Root `html-dev` and `html-full` also run the workbook and may build PDFs through dependencies, so they are unsuitable for HTML-only sweeps. For those sweeps, run `html` per primer, `quick-html` for the Building AI companion, `html-variants` for the six opted-in maths primers, and `silo-html` for Silo.

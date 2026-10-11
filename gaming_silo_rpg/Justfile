@@ -2,19 +2,23 @@ SOURCE_MD   := "gaming_silo_index.md"
 PROJECT_DIR := "gaming_silo_rpg"
 TITLE       := "Silo RPG"
 AUTHOR      := "Mick Cooney"
-DATE        := "7 October 2026"
+DATE        := "11 October 2026"
 PLAYER_DATE := "31 August 2026"
 GM_DATE     := "31 August 2026"
 BIBLE_DATE  := "31 August 2026"
 CAMPAIGN_DATE := "7 October 2026"
+REF_INDEX_DATE := "11 October 2026"
+REF_PLAYER_DATE := "11 October 2026"
+REF_GM_DATE := "11 October 2026"
+REF_CAMPAIGN_DATE := "11 October 2026"
 HTML_EXTRA  := ""
 PDF_EXTRA   := ""
 
 import '../_shared/common.just'
 
 # Multi-doc orchestration (shared html/pdf/all act on gaming_silo_index only)
-silo-html: silo-index-html silo-player-html silo-gm-html silo-bible-html silo-campaign-html
-silo-pdf: silo-index-pdf silo-player-pdf silo-gm-pdf silo-bible-pdf silo-campaign-pdf
+silo-html: silo-index-html silo-player-html silo-gm-html silo-bible-html silo-campaign-html silo-ref-index-html silo-ref-player-html silo-ref-gm-html silo-ref-campaign-html
+silo-pdf: silo-index-pdf silo-player-pdf silo-gm-pdf silo-bible-pdf silo-campaign-pdf silo-ref-index-pdf silo-ref-player-pdf silo-ref-gm-pdf silo-ref-campaign-pdf
 silo-all: silo-html silo-pdf
 
 silo-clobber:
@@ -22,7 +26,61 @@ silo-clobber:
          gaming_silo_player_guide.html gaming_silo_player_guide.pdf \
          gaming_silo_gm_secrets.html gaming_silo_gm_secrets.pdf \
          gaming_silo_comprehensive_bible.html gaming_silo_comprehensive_bible.pdf \
-         gaming_silo_starter_campaign.html gaming_silo_starter_campaign.pdf
+         gaming_silo_starter_campaign.html gaming_silo_starter_campaign.pdf \
+         gaming_reference_silo_index.html gaming_reference_silo_index.pdf \
+         gaming_reference_silo_player.html gaming_reference_silo_player.pdf \
+         gaming_reference_silo_gm.html gaming_reference_silo_gm.pdf \
+         gaming_reference_silo_campaign.html gaming_reference_silo_campaign.pdf
+
+# The four compact sheets share a render command and retain per-sheet titles and dates.
+silo-ref-html stem title date:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    gaming_reference_silo_{{stem}}.md -o gaming_reference_silo_{{stem}}.html \
+    {{HTML_FLAGS_BASE}} \
+    --template="{{TEMPLATE}}" \
+    --metadata title="{{title}}" \
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{date}}"
+
+silo-ref-pdf stem title date:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{IMAGE}} \
+    gaming_reference_silo_{{stem}}.md -o gaming_reference_silo_{{stem}}.pdf \
+    {{PDF_FLAGS_BASE}} \
+    -V geometry:margin=1in \
+    --include-in-header="{{COMPACT_LATEX}}" \
+    --metadata title="{{title}}" \
+    --metadata author="{{AUTHOR}}" \
+    --metadata date="{{date}}"
+
+silo-ref-index-html:
+  just silo-ref-html index "SILO RPG REFERENCE INDEX" "{{REF_INDEX_DATE}}"
+
+silo-ref-player-html:
+  just silo-ref-html player "SILO RPG PLAYER REFERENCE" "{{REF_PLAYER_DATE}}"
+
+silo-ref-gm-html:
+  just silo-ref-html gm "SILO RPG GM REFERENCE" "{{REF_GM_DATE}}"
+
+silo-ref-campaign-html:
+  just silo-ref-html campaign "SILO RPG CAMPAIGN REFERENCE" "{{REF_CAMPAIGN_DATE}}"
+
+silo-ref-index-pdf:
+  just silo-ref-pdf index "SILO RPG REFERENCE INDEX" "{{REF_INDEX_DATE}}"
+
+silo-ref-player-pdf:
+  just silo-ref-pdf player "SILO RPG PLAYER REFERENCE" "{{REF_PLAYER_DATE}}"
+
+silo-ref-gm-pdf:
+  just silo-ref-pdf gm "SILO RPG GM REFERENCE" "{{REF_GM_DATE}}"
+
+silo-ref-campaign-pdf:
+  just silo-ref-pdf campaign "SILO RPG CAMPAIGN REFERENCE" "{{REF_CAMPAIGN_DATE}}"
 
 silo-index-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \

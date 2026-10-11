@@ -81,3 +81,16 @@ The starter document's introduction and its ten numbered premises now agree on t
 *   **Part 1: The True Reality:** Operation Fifty (the grid of 50 silos), Silo 1 (cryo-pods and control), the Nanobot Dome (why outside is deadly), the truth about the Argon gas and heat-tape during a Cleaning.
 *   **Part 2: The Lies Within:** IT's secret comms room to Silo 1, the hidden IT elevator, amnesiac drugs in the water supply, the massive Digger parked beneath Level 144.
 *   **Part 3: Campaign Pacing Guide:** A 4-phase guide on how to keep the campaign focused on daily survival before introducing the macro-lore.
+
+---
+
+## 5. TABLE-USE REFERENCE SHEETS
+
+**Purpose:** Condensed companions for quick use at the table; consult the source documents above for full context. The [Silo document-class README](https://github.com/kaybenleroll/ai_assisted_research/blob/main/gaming_silo_rpg/README.md) explains audience boundaries and how to keep the sheets in sync.
+
+**Contents:**
+
+*   **`gaming_reference_silo_index.md`:** Routes GMs to the other three sheets and full documents; GM-only.
+*   **`gaming_reference_silo_player.md`:** Citizen knowledge, sectors, roles, slang, and party prompts from the player guide, with bonds from the starter campaign; player-safe.
+*   **`gaming_reference_silo_gm.md`:** Travel, security, adjudication, factions, and daily-life generators from Chapters 30–33 of the comprehensive bible; GM-only.
+*   **`gaming_reference_silo_campaign.md`:** Party bonds and ten campaign quick kits from the starter campaign; GM-only.

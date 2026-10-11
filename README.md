@@ -15,11 +15,11 @@ These are the five most recently reviewed primary documents across the catalogue
 
 | Document | Category | Last reviewed |
 |----------|----------|---------------|
-| [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | AI Agents and Coding Tools | 2026-10-07 |
-| [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | AI Agents and Coding Tools | 2026-10-07 |
-| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-10-07 |
-| [Containerization](primer_containerization/primer_containerization.html) · [PDF](primer_containerization/primer_containerization.pdf) | Developer Tooling | 2026-10-07 |
-| [Deep Learning and Generative AI](primer_deep_learning/primer_deep_learning.html) · [PDF](primer_deep_learning/primer_deep_learning.pdf) | Quantitative Foundations | 2026-10-07 |
+| [Campaign Reference Sheet](gaming_silo_rpg/gaming_reference_silo_campaign.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_campaign.pdf) | Silo RPG Materials | 2026-10-11 |
+| [Document Index](gaming_silo_rpg/gaming_silo_index.html) · [PDF](gaming_silo_rpg/gaming_silo_index.pdf) | Silo RPG Materials | 2026-10-11 |
+| [GM Reference Sheet](gaming_silo_rpg/gaming_reference_silo_gm.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_gm.pdf) | Silo RPG Materials | 2026-10-11 |
+| [Player Reference Sheet](gaming_silo_rpg/gaming_reference_silo_player.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_player.pdf) | Silo RPG Materials | 2026-10-11 |
+| [Reference-Sheet Index](gaming_silo_rpg/gaming_reference_silo_index.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_index.pdf) | Silo RPG Materials | 2026-10-11 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -84,7 +84,11 @@ These are the five most recently reviewed primary documents across the catalogue
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
-| [Document Index](gaming_silo_rpg/gaming_silo_index.html) · [PDF](gaming_silo_rpg/gaming_silo_index.pdf) | 2026-10-07 | Navigation map for all Silo RPG source documents |
+| [Document Index](gaming_silo_rpg/gaming_silo_index.html) · [PDF](gaming_silo_rpg/gaming_silo_index.pdf) | 2026-10-11 | Navigation map for all Silo RPG source documents |
+| [Reference-Sheet Index](gaming_silo_rpg/gaming_reference_silo_index.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_index.pdf) | 2026-10-11 | GM routing map for the four compact Silo reference sheets |
+| [Player Reference Sheet](gaming_silo_rpg/gaming_reference_silo_player.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_player.pdf) | 2026-10-11 | Player-safe reminders for sectors, roles, everyday life, and party bonds |
+| [GM Reference Sheet](gaming_silo_rpg/gaming_reference_silo_gm.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_gm.pdf) | 2026-10-11 | GM travel, security, pressure, faction, and daily-life tools |
+| [Campaign Reference Sheet](gaming_silo_rpg/gaming_reference_silo_campaign.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_campaign.pdf) | 2026-10-11 | Party bonds and quick kits for all ten starter campaigns |
 | [Comprehensive World Bible](gaming_silo_rpg/gaming_silo_comprehensive_bible.html) · [PDF](gaming_silo_rpg/gaming_silo_comprehensive_bible.pdf) | 2026-08-31 | Full world reference — history, factions, technology, and geography |
 | [Game Master's Secrets](gaming_silo_rpg/gaming_silo_gm_secrets.html) · [PDF](gaming_silo_rpg/gaming_silo_gm_secrets.pdf) | 2026-08-31 | GM-only lore, hidden mechanics, and macro-level world state |
 | [Player's Survival Guide](gaming_silo_rpg/gaming_silo_player_guide.html) · [PDF](gaming_silo_rpg/gaming_silo_player_guide.pdf) | 2026-08-31 | Player-facing rules, setting knowledge, and character options |

@@ -52,6 +52,12 @@ Source documents:
 - `gaming_silo_gm_secrets.md` — GM-only lore and hidden mechanics
 - `gaming_silo_comprehensive_bible.md` — full world reference
 - `gaming_silo_starter_campaign.md` — the introductory campaign
+- `gaming_reference_silo_index.md` — routing sheet for the reference set (GM-only)
+- `gaming_reference_silo_player.md` — compact player-safe setting and character sheet
+- `gaming_reference_silo_gm.md` — compact GM procedures, factions, and generators
+- `gaming_reference_silo_campaign.md` — party bonds and ten campaign quick kits (GM-only)
+
+The four reference sheets are small enough to read whole after consulting the index.
 
 ## Definition of Done
 
