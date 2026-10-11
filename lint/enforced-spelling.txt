@@ -1,5 +1,13 @@
 # Add a document only when its baseline is clear and its owner accepts enforcement.
 gaming_silo_rpg/README.md
+gaming_silo_rpg/gaming_silo_index.md
+gaming_silo_rpg/gaming_silo_player_guide.md
+gaming_silo_rpg/gaming_silo_gm_secrets.md
+gaming_silo_rpg/gaming_silo_comprehensive_bible.md
+gaming_silo_rpg/gaming_silo_starter_campaign.md
 gaming_silo_rpg/gaming_reference_silo_index.md
+gaming_silo_rpg/gaming_reference_silo_player.md
+gaming_silo_rpg/gaming_reference_silo_gm.md
+gaming_silo_rpg/gaming_reference_silo_campaign.md
 primer_deep_learning/primer_deep_learning.md
 primer_pi_coding_agent/primer_pi_coding_agent.md

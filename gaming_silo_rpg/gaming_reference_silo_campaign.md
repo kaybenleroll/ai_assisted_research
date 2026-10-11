@@ -7,7 +7,7 @@ Fast-launch reference for party setup and the ten starter campaigns.
 | d6 | Bond |
 | :--- | :--- |
 | **1** | **The Work Crew:** You bonded during a dangerous cleanup assignment. |
-| **2** | **The Block Watch:** You formed a neighborhood defense group. |
+| **2** | **The Block Watch:** You formed a neighbourhood defence group. |
 | **3** | **The Syndicate Debt:** You all owe the same dangerous boss. |
 | **4** | **The Framed:** You were jailed for the same crime you did not commit. |
 | **5** | **The Secret Society:** You share forbidden beliefs and meet in secret. |
@@ -40,7 +40,7 @@ Fast-launch reference for party setup and the ten starter campaigns.
 ### 2. The Chit-Poor Harvest
 
 * **Key Faces:** Foreman Dera Vos, Minn Ose, Cala Venn, Brikk, **Nel Ardin**
-* **Clue Chain:** Yield shortfall -> skim -> processing problem -> textile favor debt -> hungry block pressure
+* **Clue Chain:** Yield shortfall -> skim -> processing problem -> textile favour debt -> hungry block pressure
 * **Escalation:** Half-rations -> thefts -> child collapse -> names traded for food
 * **Fail Forward:** Lost food can become leverage for broader relief
 
@@ -55,7 +55,7 @@ Fast-launch reference for party setup and the ten starter campaigns.
 
 * **Key Faces:** **Nel Ardin**, Rho Kell, Supervisor Pell, Hobb Fen
 * **Clue Chain:** Missing manifest -> office access -> forged delay stamp -> hidden file drawer -> travel route
-* **Escalation:** Deadline nears -> neighbors turn cold -> rival alerts Judicial -> dawn deadline
+* **Escalation:** Deadline nears -> neighbours turn cold -> rival alerts Judicial -> dawn deadline
 * **Fail Forward:** The party can still win a temporary extension by proving sabotage
 
 ### 5. The Rust in the Reclamation
@@ -90,7 +90,7 @@ Fast-launch reference for party setup and the ten starter campaigns.
 
 * **Key Faces:** Lysa Trent, Inquisitor Sel Verin, Enid Marr, Doctor Hal Wen
 * **Clue Chain:** Blood-test hardcopy -> burn order -> terminal log -> forged credentials -> family tie
-* **Escalation:** Rumors spread -> records vanish -> Verin frames the PCs -> public hearing or silent arrest
+* **Escalation:** Rumours spread -> records vanish -> Verin frames the PCs -> public hearing or silent arrest
 * **Fail Forward:** A morgue attendant remembers the key order for a price
 
 ### 10. The Generator Hammer

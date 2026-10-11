@@ -24,7 +24,7 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 | :--- | :--- | :--- | :--- |
 | **Viewport / IT / Judicial corridors** | 1-10 | IT security, Judicial clerk, armed deputy | Someone already knows the PCs' names |
 | **Mayor / Medical / major offices** | 11-25 | Clerk, orderly, deputy | Paper trail and witnesses |
-| **Markets / Mids tiers** | 26-45 | Local deputy or informant | Crowds and rumors |
+| **Markets / Mids tiers** | 26-45 | Local deputy or informant | Crowds and rumours |
 | **Hydroponics / Supply floors** | 30-50 | Foreman or quartermaster | Shortage panic |
 | **Down Deep slums / maintenance crawls** | 45-75 | Local toughs, Mechanics, or nobody | Environmental danger |
 | **Ghost levels / vents / dead spaces** | 70-100 | No official response until later | The location itself is lethal |
@@ -33,7 +33,7 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 
 | Need | Typical Price |
 | :--- | :--- |
-| **Hot meal with real protein** | 8-15 chits or a favor |
+| **Hot meal with real protein** | 8-15 chits or a favour |
 | **Bed for a night** | 5 chits, gossip, or guard duty |
 | **Stamped form expedited** | 10-30 chits |
 | **Minor infraction ignored** | 1 meal, 1 bottle, or 1 name |
@@ -43,11 +43,11 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 
 ### 30.4 Punishments at a Glance
 
-| Offense | Likely Outcome |
+| Offence | Likely Outcome |
 | :--- | :--- |
 | **Petty theft / ration skimming** | Fines, ration cuts, humiliation |
-| **Forgery / repeat theft / black-market dealing** | Holding cells, beatings, labor transfer |
-| **Infrastructure tampering** | Mine labor, suspicion, family blacklisting |
+| **Forgery / repeat theft / black-market dealing** | Holding cells, beatings, labour transfer |
+| **Infrastructure tampering** | Mine labour, suspicion, family blacklisting |
 | **Relic possession** | Interrogation, disappearance, or coerced informing |
 | **Sedition / "I want to go outside"** | Cleaning |
 
@@ -63,7 +63,7 @@ Call for a roll when an action risks official notice, harm or exhaustion, scarce
 | :--- | :--- | :--- | :--- |
 | **Stress** | Fear, crowding, guilt, claustrophobia | Riots, cells, family pressure, corpses, Cleaning | Freeze, lash out, confess, or flee |
 | **Heat** | Official attention | Forgery, cameras, bribery, repeated questions | Raids, tails, arrests, interviews |
-| **Fatigue** | Physical depletion | Long climbs, hunger, poor sleep, labor, carrying loads | Collapse, tremor, dropped gear, slowed movement |
+| **Fatigue** | Physical depletion | Long climbs, hunger, poor sleep, labour, carrying loads | Collapse, tremor, dropped gear, slowed movement |
 
 Stress resets to 2 after the crisis; Heat resets to 2 once the official response lands; Fatigue resets to 2 after rest or medical care.
 
@@ -83,8 +83,8 @@ On a mixed success or failure, use one:
 * **Bureaucracy:** They get the paper, but their name is now on it.
 * **Stealth:** They avoid capture, but leave a trace or witness.
 * **Travel:** They arrive late, dehydrated, or short one item.
-* **Social Pressure:** They win the scene, but create resentment or rumor.
-* **Repair Work:** The fix holds for now, but needs more parts, labor, or risk.
+* **Social Pressure:** They win the scene, but create resentment or rumour.
+* **Repair Work:** The fix holds for now, but needs more parts, labour, or risk.
 
 ### 31.5 Escalation Clocks
 
@@ -109,13 +109,13 @@ Between crises, each PC can usually do one:
 | Faction | Public Face | Real Objective | Main Leverage | Typical Ask |
 | :--- | :--- | :--- | :--- | :--- |
 | **IT** | Efficient stewards | Control knowledge and anomalies | Cameras, archives, access | Recover tech, silence glitches |
-| **Judicial** | Guardians of the Pact | Normalize fear and obedience | Warrants, trials, informants | Names, leverage, examples |
+| **Judicial** | Guardians of the Pact | Normalise fear and obedience | Warrants, trials, informants | Names, leverage, examples |
 | **Sheriff's Office** | Public law | Stop open chaos | Deputies, patrols, legal force | Witnesses, culprits, calm |
-| **Mechanical** | Proud labor backbone | Keep the machine alive and autonomous | Repairs, power, labor | Spare parts, warnings, silence |
-| **Supply** | Neutral inventory keepers | Turn shortages into leverage | Ledgers, stamps, rations | Favors, signatures, delays |
+| **Mechanical** | Proud labour backbone | Keep the machine alive and autonomous | Repairs, power, labour | Spare parts, warnings, silence |
+| **Supply** | Neutral inventory keepers | Turn shortages into leverage | Ledgers, stamps, rations | Favours, signatures, delays |
 | **Medical** | Healers | Manage bodies and social stability | Drugs, records, quarantine | Samples, quiet patients, paperwork |
 | **Porters' Union** | Tireless runners | Protect flow and neutrality | Routes, speed, gossip | Respect, water, payment |
-| **Scrap Syndicates** | Hidden operators | Profit from scarcity | Contraband, debt, intimidation | Favors, silence, risky jobs |
+| **Scrap Syndicates** | Hidden operators | Profit from scarcity | Contraband, debt, intimidation | Favours, silence, risky jobs |
 | **Flame Watchers** | Strange believers | Keep dangerous hope alive | Secret rooms, coded talk, believers | Cover, recruits, proof |
 
 ### 32.1 Reading a Faction Fast
@@ -136,7 +136,7 @@ To improvise a faction, ask what it fears, what it lacks, who could embarrass it
 | **6** | Hallway lights fail and replacements are "pending" |
 | **7** | A child found metal inside a wall cavity |
 | **8** | A deputy is shaking people down for inspection fees |
-| **9** | Mold spreads through a sleeping tier |
+| **9** | Mould spreads through a sleeping tier |
 | **10** | The local fixer vanishes with the block chit box |
 | **11** | A marriage permit is denied |
 | **12** | A known informant suddenly seems scared |
@@ -158,7 +158,7 @@ To improvise a faction, ask what it fears, what it lacks, who could embarrass it
 
 ### 33.3 Favours Asked of the PCs (d12)
 
-| d12 | Favor |
+| d12 | Favour |
 | :--- | :--- |
 | **1** | Carry a sealed message |
 | **2** | Sit with a dying relative during a work shift |

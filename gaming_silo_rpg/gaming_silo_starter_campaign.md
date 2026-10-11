@@ -11,7 +11,7 @@ In the Silo, players do not play "adventurers"—they play citizens with jobs, s
 ### 1. The "Runner" (Veteran Porter)
 *   **The Role:** The physical powerhouse and navigator. You know the stairs better than anyone, and you have legs made of iron. You carry messages, freight, and secrets.
 *   **Starting Gear:** Reinforced leather boots (the most valuable item you own), a sealed message tube, a heavy walking stick (treat as a baton), canteen.
-*   **The Secret:** You once opened a sealed Judicial message and read it. You know exactly who authorized the murder of a mid-level Supply clerk.
+*   **The Secret:** You once opened a sealed Judicial message and read it. You know exactly who authorised the murder of a mid-level Supply clerk.
 *   **The Desire:** To map the "dead spaces" of the Silo—the vents and shafts not on the official blueprints.
 
 ### 2. The "Grease-Stained" (Mechanical Tech)
@@ -28,13 +28,13 @@ In the Silo, players do not play "adventurers"—they play citizens with jobs, s
 
 ### 4. The "Disgraced" (Ex-Deputy / Watchman)
 *   **The Role:** The investigator and enforcer. You used to work for the Sheriff, but you were demoted or fired. Now you work as a private "fixer" for the Mids.
-*   **Starting Gear:** An old, cracked Sheriff's helmet (minor armor), a vulcanized baton, a notebook filled with blackmail, a pair of zip-ties.
+*   **Starting Gear:** An old, cracked Sheriff's helmet (minor armour), a vulcanised baton, a notebook filled with blackmail, a pair of zip-ties.
 *   **The Secret:** You were fired because you refused to arrest a pregnant woman who had illegally removed her birth control implant. You hid her in the Down Deep.
 *   **The Desire:** To expose the corruption of the Judicial clerk who got you fired.
 
 ### 5. The "Green-Thumb" (Hydroponics Farmer)
 *   **The Role:** The survivalist and biochemist. You understand biology, toxins, and the delicate balance of the Silo's air and food supply. You are territorial and tough.
-*   **Starting Gear:** Heavy canvas overalls, a machete used for harvesting thick soy-stalks, a vial of concentrated fertilizer (can be used as a blinding acid), seeds.
+*   **Starting Gear:** Heavy canvas overalls, a machete used for harvesting thick soy-stalks, a vial of concentrated fertiliser (can be used as a blinding acid), seeds.
 *   **The Secret:** You have a hidden, unregistered vat where you are growing illegal "Sleep-Root" to brew hallucinogenic liquor.
 *   **The Desire:** To find real, pre-Silo soil, or a seed from an extinct fruit.
 
@@ -51,7 +51,7 @@ In the Silo, players do not play "adventurers"—they play citizens with jobs, s
 *   **The Desire:** To build your own independent, untracked comms network.
 
 ### 8. The "Soil-Duty" (Compost Mortician)
-*   **The Role:** The grim pragmatist. You work on Level 72, processing the dead into fertilizer. People avoid you, which makes you excellent at moving unseen.
+*   **The Role:** The grim pragmatist. You work on Level 72, processing the dead into fertiliser. People avoid you, which makes you excellent at moving unseen.
 *   **Starting Gear:** Thick rubber gloves, a respirator mask, a heavy bone-saw, a small locket stolen from a corpse.
 *   **The Secret:** You didn't compost a body last month. You helped someone fake their own death, and they are now living in the vents.
 *   **The Desire:** To understand what "The Syndrome" actually is, having seen the brains of those who went mad.
@@ -64,11 +64,11 @@ To avoid the awkward "meeting in a tavern" phase, roll a d6 to determine why thi
 | Roll | The Party Bond |
 | :--- | :--- |
 | **1** | **The Work Crew:** You were all randomly assigned by Supply to clear a collapsed, toxic air-shaft on Level 80. You bonded over the shared trauma and the discovery of a secret room in the rubble. |
-| **2** | **The Block Watch:** You all live on the same tier in the Mids. When the Sheriff stopped patrolling your floor, you formed an unofficial neighborhood watch to keep the Syndicates out. |
-| **3** | **The Syndicate Debt:** Every single one of you owes a massive debt to the Scrap Syndicates. The boss has put you together as a specialized "fixer" team to work off your ledgers. |
+| **2** | **The Block Watch:** You all live on the same tier in the Mids. When the Sheriff stopped patrolling your floor, you formed an unofficial neighbourhood watch to keep the Syndicates out. |
+| **3** | **The Syndicate Debt:** Every single one of you owes a massive debt to the Scrap Syndicates. The boss has put you together as a specialised "fixer" team to work off your ledgers. |
 | **4** | **The Framed:** You were all arrested and placed in the Level 1 Holding Cells for a crime you didn't commit. You managed to prove your innocence, but now you share a burning desire to find the actual culprit. |
 | **5** | **The Secret Society:** You are all members of a hidden philosophy club (like the Flame Watchers). You meet in the dark to discuss forbidden history. |
-| **6** | **The Relic Hunters:** You are a specialized, illegal team. One finds the ruins, one cracks the locks, one appraises the scrap, and one provides muscle. |
+| **6** | **The Relic Hunters:** You are a specialised, illegal team. One finds the ruins, one cracks the locks, one appraises the scrap, and one provides muscle. |
 
 ---
 
@@ -83,7 +83,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 *   **The Premise:** A "Structural Seam" shift has caused a minor collapse on Level 92, rendering three apartments uninhabitable. Supply refuses to grant new housing for months. As a result, Judicial has mandated "Vertical Cohabitation." Your family's 20-square-meter apartment is now home to you, your Shadow, and a rival family of four. A weary mid-level Supply clerk named **Nel Ardin** is the only official who seems to care, but his influence is limited.
 *   **Session 1: The Crowded Room.** Dealing with the immediate fallout. The rival family (the Miller clan) is loud, they use too much water, and they've taken the best sleeping corner. The party must manage their **Stress** levels while trying to negotiate a "house treaty." *Climax:* A theft occurs—a valuable family heirloom (a non-relic locket) goes missing. The party must find it before a brawl breaks out.
 *   **Session 2: The Scavenge Hunt.** The only way to get the Millers out is to fix their old apartment themselves. Supply claims they don't have the parts (heavy-duty rivets and sealant). Nel quietly tells the party which requisition shelf to stop trusting. The party must travel to the **Scrap Syndicates** on Level 101 to barter for the parts using their own personal rations and chits. *Climax:* Navigating a dangerous, pitch-black "Ghost Level" to recover abandoned structural supports.
-*   **Session 3: The Repair & The Red Tape.** The party has the parts, but now they need a "Mechanical Authorization" to perform the repair, or they'll be arrested for sabotage. They must bribe a weary Mechanical Shadow or forge the documents. *Climax:* Performing a dangerous, high-pressure repair on a structural beam while the Miller family watches. Success doesn't uncover a conspiracy—it just means you finally get your apartment back to yourselves and earn a few chits of gratitude.
+*   **Session 3: The Repair & The Red Tape.** The party has the parts, but now they need a "Mechanical Authorisation" to perform the repair, or they'll be arrested for sabotage. They must bribe a weary Mechanical Shadow or forge the documents. *Climax:* Performing a dangerous, high-pressure repair on a structural beam while the Miller family watches. Success doesn't uncover a conspiracy—it just means you finally get your apartment back to yourselves and earn a few chits of gratitude.
 
 ---
 
@@ -91,20 +91,20 @@ The following order is designed as a natural campaign flow: start with local, mu
 **Theme:** Scarcity, the gray market, and the desperation of hunger.
 **Location:** The Hydroponics Rings (Levels 60–80).
 
-*   **The Premise:** It has been a terrible cycle. A minor mold outbreak means the soy yield is down 15%. Because Supply takes their official cut first, the workers on the Hydroponics levels are left with half-rations for the month. People are getting desperate, and the party's "Block" is running out of food. Nel Ardin quietly warns them that the official numbers have been massaged and their tier is going to starve first.
+*   **The Premise:** It has been a terrible cycle. A minor mould outbreak means the soy yield is down 15%. Because Supply takes their official cut first, the workers on the Hydroponics levels are left with half-rations for the month. People are getting desperate, and the party's "Block" is running out of food. Nel Ardin quietly warns them that the official numbers have been massaged and their tier is going to starve first.
 *   **Session 1: The Skim.** The party decides the only way their families will eat is to "skim" from the official harvest before it goes to Supply. *Climax:* A tense, coordinated distraction in the sweltering, UV-lit vats to smuggle out five heavy bags of unprocessed soy-meal without the foreman noticing.
-*   **Session 2: The Barter Grind.** You can't just eat raw soy-meal; it needs to be processed, and doing so openly will get them arrested. The party must venture to the "Textile Tiers" to find an illegal, hand-cranked grinding press. *Climax:* Negotiating with the sweatshop workers, who demand a steep price (perhaps a favor or a valuable tool) to use the press in secret.
-*   **Session 3: The Hungry Neighbor.** The party has the processed food, but word gets out on their floor. A desperate neighbor begs for a share for their sick child. If the party shares, they don't have enough for themselves. If they refuse, the neighbor threatens to tell a "Friend of the Silo" about the skim. *Climax:* A brutal, deeply personal moral negotiation in a cramped hallway. How do you survive without losing your humanity?
+*   **Session 2: The Barter Grind.** You can't just eat raw soy-meal; it needs to be processed, and doing so openly will get them arrested. The party must venture to the "Textile Tiers" to find an illegal, hand-cranked grinding press. *Climax:* Negotiating with the sweatshop workers, who demand a steep price (perhaps a favour or a valuable tool) to use the press in secret.
+*   **Session 3: The Hungry Neighbour.** The party has the processed food, but word gets out on their floor. A desperate neighbour begs for a share for their sick child. If the party shares, they don't have enough for themselves. If they refuse, the neighbour threatens to tell a "Friend of the Silo" about the skim. *Climax:* A brutal, deeply personal moral negotiation in a cramped hallway. How do you survive without losing your humanity?
 
 ---
 
 ### Campaign 3: "The Flickering Dark" (Mundane Slice-of-Life)
-**Theme:** Infrastructure decay, neighborhood solidarity, and class resentment.
+**Theme:** Infrastructure decay, neighbourhood solidarity, and class resentment.
 **Location:** A Deep Residential Slum (Level 105).
 
 *   **The Premise:** Due to a minor issue at the Generator, the Mayor has ordered "Load Shedding." Level 105 has been selected to have its power cut by 50%. The hallway lights are off, the water pumps are at a trickle, and the air scrubbers are running at minimum capacity, making the floor stifling and suffocating. Nel Ardin manages to bury the worst of the ration penalties for one day, buying the party just enough time to act.
-*   **Session 1: The Dark Tier.** The party must navigate the immediate dangers of a dark level. Crime spikes instantly. The party's objective is simply to keep their specific hallway safe, dealing with panicked neighbors, minor thefts, and the oppressive, stale air.
-*   **Session 2: The Siphon.** The level above them (Level 104) houses mid-tier supervisors and has full power. The party realizes they can splice a heavy-duty cable from an industrial socket on 104 and run it down the maintenance shaft to power their floor's water pump. *Climax:* A dangerous, illegal "jury-rigging" job in the vertical crawlspace, risking electrocution and discovery.
+*   **Session 1: The Dark Tier.** The party must navigate the immediate dangers of a dark level. Crime spikes instantly. The party's objective is simply to keep their specific hallway safe, dealing with panicked neighbours, minor thefts, and the oppressive, stale air.
+*   **Session 2: The Siphon.** The level above them (Level 104) houses mid-tier supervisors and has full power. The party realises they can splice a heavy-duty cable from an industrial socket on 104 and run it down the maintenance shaft to power their floor's water pump. *Climax:* A dangerous, illegal "jury-rigging" job in the vertical crawlspace, risking electrocution and discovery.
 *   **Session 3: The Inspector Calls.** The splice works, but the sudden power draw alerts IT and Mechanical. A weary, low-level inspector is sent down to find the illegal siphon. *Climax:* The entire hallway must work together to hide the cable, distract the inspector, and convince him to write it off as a "faulty sensor gauge." If they fail, the Sheriff is called, and the block loses power for a month.
 
 ---
@@ -114,9 +114,9 @@ The following order is designed as a natural campaign flow: start with local, mu
 **Location:** The Upper Mids (Levels 45–50).
 
 *   **The Premise:** By now, the party's close friend **Nel Ardin**, the mid-level Supply Clerk who helped them survive housing disputes, shortages, and blackouts, has fallen in love with a Mechanic from Level 133. Against all odds, they secured a marriage permit. The problem? Judicial approved the union under the condition that Nel must "Down-Shift"—transferring job and residence to Level 133 to join the spouse.
-*   **Session 1: The Goodbye Feast.** The party needs to throw a farewell party, but rations are tight. They must pool their chits, barter with a Hydroponics smuggler for a single real potato, and deal with the social stigma from their Up-Top leaning neighbors who view the Down-Shift as a "class betrayal."
+*   **Session 1: The Goodbye Feast.** The party needs to throw a farewell party, but rations are tight. They must pool their chits, barter with a Hydroponics smuggler for a single real potato, and deal with the social stigma from their Up-Top leaning neighbours who view the Down-Shift as a "class betrayal."
 *   **Session 2: The Red Tape Trap.** On the eve of the move, a jealous rival in Supply intentionally "loses" Nel's official transfer manifest. If the manifest isn't stamped by dawn, the marriage permit is revoked. *Climax:* The party must sneak into the dark, silent Supply offices, not to steal a relic or hack a server, but simply to find a misfiled piece of paper and forge a manager's stamp.
-*   **Session 3: The Long Walk.** The actual journey down 60 levels. It is exhausting. They have to hire a Porter to carry the meager belongings, navigate the crowded bazaars, and face the culture shock of arriving in the sweltering, deafening Down Deep. *Climax:* There is no grand villain. The climax is the emotional realization that this friend is effectively gone forever, separated by a cultural and physical gulf that is too exhausting to cross regularly.
+*   **Session 3: The Long Walk.** The actual journey down 60 levels. It is exhausting. They have to hire a Porter to carry the meagre belongings, navigate the crowded bazaars, and face the culture shock of arriving in the sweltering, deafening Down Deep. *Climax:* There is no grand villain. The climax is the emotional realisation that this friend is effectively gone forever, separated by a cultural and physical gulf that is too exhausting to cross regularly.
 
 ---
 
@@ -124,9 +124,9 @@ The following order is designed as a natural campaign flow: start with local, mu
 **Theme:** Bureaucracy, environmental disaster, and moral ambiguity.
 **Location:** The Mids (Levels 80–85).
 
-*   **The Premise:** A localized biological contamination—a red "rust-bloom"—is bypassing the water filters on Level 84. Families on Level 82 are getting severely sick. The Mayor's local deputy has coerced the party to find the source before Judicial sends a culling squad to "sanitize" the sick levels.
+*   **The Premise:** A localised biological contamination—a red "rust-bloom"—is bypassing the water filters on Level 84. Families on Level 82 are getting severely sick. The Mayor's local deputy has coerced the party to find the source before Judicial sends a culling squad to "sanitise" the sick levels.
 *   **Session 1: The Red Tap.** Investigate the near-riot at a communal water station. Navigate the bureaucracy to inspect the main tanks. *Climax:* Finding a half-melted, pre-Silo chemical container inside the tank—a Relic.
-*   **Session 2: The Shadow Trace.** Trace the chemical markings to the Scrap Syndicates. Evade a "Friend of the Silo" who is tailing the party. *Climax:* Discovering the chemicals were bought by a respected Shadow Doctor trying to synthesize medicine for sick children.
+*   **Session 2: The Shadow Trace.** Trace the chemical markings to the Scrap Syndicates. Evade a "Friend of the Silo" who is tailing the party. *Climax:* Discovering the chemicals were bought by a respected Shadow Doctor trying to synthesise medicine for sick children.
 *   **Session 3: The Lever of Power.** Discover that a corrupt Supply Clerk was selling the Doctor the toxic relics in exchange for painkillers. The rust-bloom threatens the Hydroponics vats. *Climax:* A confrontation in the dark Reclamation vents. Do they turn in the Doctor (who meant well), the Clerk (the parasite), or frame it as an accident to save both?
 
 ---
@@ -135,10 +135,10 @@ The following order is designed as a natural campaign flow: start with local, mu
 **Theme:** Bureaucratic erasure, identity, and the terrifying cost of existing.
 **Location:** The Mids Administrative Tiers (Levels 40–50).
 
-*   **The Premise:** A longtime neighbor—a lifelong resident known by every family on the block—has been administratively deleted from the Silo's population registry. A lazy data-merge during the Level 84 contamination cleanup paperwork wiped their entry. Without a registry number, they have no ration allocation, no legal right to their apartment, and their work assignment has been voided. Housing Compliance will sweep the level in 72 hours. The party must navigate the chain of administrative desks to get their neighbor re-registered before they are arrested as an "unregistered occupant."
-*   **Session 1: The Desk That Passes the Buck.** The party quickly learns the deletion was a minor clerical error—their neighbor's old record still exists, it was simply "archived" rather than deleted. But correcting it requires a "Registry Review" form, which requires a supervisor's signature, which requires a formal appointment three weeks out. The party must find a shortcut: bribery, a forged appointment slip, or leverage. *Climax:* A junior IT archivist agrees to flag the old record for restoration—but only in exchange for a favor involving a very sensitive personal errand.
-*   **Session 2: The Chain of Stamps.** The restoration requires confirmation from three departments simultaneously: Medical must verify biometrics, IT must issue a formal record-reinstatement, and Supply must issue a provisional ration token. The party splits up to run all three at once. Each desk hits a different bureaucratic wall. *Climax:* At the final desk, a suspicious Supply clerk realizes the party is trying to shortcut the system. He doesn't stop them—but he writes their names down.
-*   **Session 3: The Compliance Sweep.** The Housing Compliance officer arrives six hours early. The restoration paperwork is queued, but the official printout hasn't been issued. The party must stall the officer—through distraction, misdirection, or a neighborly appeal to the one human instinct the officer hasn't fully suppressed—long enough for a weary administrator to issue a hand-written provisional certificate. *Climax:* There is no conspiracy. There is no villain. There is just a person who almost ceased to exist because of a typo, and a party that spent three days fighting staplers and rubber stamps to prove otherwise.
+*   **The Premise:** A longtime neighbour—a lifelong resident known by every family on the block—has been administratively deleted from the Silo's population registry. A lazy data-merge during the Level 84 contamination cleanup paperwork wiped their entry. Without a registry number, they have no ration allocation, no legal right to their apartment, and their work assignment has been voided. Housing Compliance will sweep the level in 72 hours. The party must navigate the chain of administrative desks to get their neighbour re-registered before they are arrested as an "unregistered occupant."
+*   **Session 1: The Desk That Passes the Buck.** The party quickly learns the deletion was a minor clerical error—their neighbour's old record still exists, it was simply "archived" rather than deleted. But correcting it requires a "Registry Review" form, which requires a supervisor's signature, which requires a formal appointment three weeks out. The party must find a shortcut: bribery, a forged appointment slip, or leverage. *Climax:* A junior IT archivist agrees to flag the old record for restoration—but only in exchange for a favour involving a very sensitive personal errand.
+*   **Session 2: The Chain of Stamps.** The restoration requires confirmation from three departments simultaneously: Medical must verify biometrics, IT must issue a formal record-reinstatement, and Supply must issue a provisional ration token. The party splits up to run all three at once. Each desk hits a different bureaucratic wall. *Climax:* At the final desk, a suspicious Supply clerk realises the party is trying to shortcut the system. He doesn't stop them—but he writes their names down.
+*   **Session 3: The Compliance Sweep.** The Housing Compliance officer arrives six hours early. The restoration paperwork is queued, but the official printout hasn't been issued. The party must stall the officer—through distraction, misdirection, or a neighbourly appeal to the one human instinct the officer hasn't fully suppressed—long enough for a weary administrator to issue a hand-written provisional certificate. *Climax:* There is no conspiracy. There is no villain. There is just a person who almost ceased to exist because of a typo, and a party that spent three days fighting staplers and rubber stamps to prove otherwise.
 
 ---
 
@@ -147,8 +147,8 @@ The following order is designed as a natural campaign flow: start with local, mu
 **Location:** Lower Mids (Levels 60–70).
 
 *   **The Premise:** An elderly resident the party knew in passing dies without registering a housing beneficiary. Per Silo law, unassigned apartments are immediately reclaimed by Supply and reallocated. The deceased's adult child—who lived with them, cooked for them, cared for them—was technically registered two levels down, making their residency informal. They have 48 hours to file a competing claim or they lose the apartment and are reassigned to a communal dormitory. The problem: a Supply floor manager has already earmarked the unit for a "preferred applicant"—the nephew of a Friend of the Silo.
-*   **Session 1: The Empty Room.** The child is too grief-stricken to advocate for themselves. The party steps in, gathering evidence of actual residency: witness statements from neighbors, ration-draw records that show two people eating from one unit, the worn-down patch of floor next to the window where the child always slept. *Climax:* The Supply manager stops by to "catalogue the unit." He is polite, efficient, and makes clear in the quietest possible way that he expects no complications.
-*   **Session 2: The Co-Signatory Problem.** Filing a formal "Competing Claim" requires a co-signatory with Level 40 clearance or above—someone with institutional standing willing to stake a small piece of their reputation. Everyone the party asks finds a polite reason to decline. *Climax:* A retired, half-blind former IT administrator who has nothing left to lose agrees to co-sign. Her price: three favors, to be named later, and a real cup of chicory.
+*   **Session 1: The Empty Room.** The child is too grief-stricken to advocate for themselves. The party steps in, gathering evidence of actual residency: witness statements from neighbours, ration-draw records that show two people eating from one unit, the worn-down patch of floor next to the window where the child always slept. *Climax:* The Supply manager stops by to "catalogue the unit." He is polite, efficient, and makes clear in the quietest possible way that he expects no complications.
+*   **Session 2: The Co-Signatory Problem.** Filing a formal "Competing Claim" requires a co-signatory with Level 40 clearance or above—someone with institutional standing willing to stake a small piece of their reputation. Everyone the party asks finds a polite reason to decline. *Climax:* A retired, half-blind former IT administrator who has nothing left to lose agrees to co-sign. Her price: three favours, to be named later, and a real cup of chicory.
 *   **Session 3: The Tribunal.** Three Supply clerks hear the competing claims in a windowless room. The preferred applicant's sponsor attends in person, dropping no explicit threats—just presence and implication. The party must present their evidence, read the room, and find the one clerk on the panel whose conscience isn't fully bought. *Climax:* Even a clean win is narrow. The child keeps the apartment. The Supply manager makes a quiet note of the party's names. Nothing explodes. Nothing is solved. But one person gets to keep their home, and that has to be enough.
 
 ---
@@ -199,14 +199,14 @@ The campaign premises above are designed to be evocative. Use the following quic
 
 ### Campaign 2 Quick Kit: "The Chit-Poor Harvest"
 
-*   **Key Faces:** Foreman Dera Vos (hard but hungry), Minn Ose (textile machine keeper), Cala Venn (desperate neighbor), Brikk (Syndicate grain broker), **Nel Ardin** (the clerk who tipped them off).
-*   **Clue Chain:** Yield shortfall -> skim opportunity -> processing bottleneck -> textile favor debt -> public pressure from the hungry floor.
+*   **Key Faces:** Foreman Dera Vos (hard but hungry), Minn Ose (textile machine keeper), Cala Venn (desperate neighbour), Brikk (Syndicate grain broker), **Nel Ardin** (the clerk who tipped them off).
+*   **Clue Chain:** Yield shortfall -> skim opportunity -> processing bottleneck -> textile favour debt -> public pressure from the hungry floor.
 *   **Escalation Clock:** Half-rations begin -> thefts multiply -> a child collapses from hunger -> informants trade names for food.
 *   **Fail Forward:** If the party loses the soy, they can still bargain for community food relief by exposing who skimmed worse than they did.
 
 ### Campaign 3 Quick Kit: "The Flickering Dark"
 
-*   **Key Faces:** Rella Voss (hallway organizer), Inspector Dorn (not eager to ruin lives), Tekk Mar (cable-splicing mechanic), Yune (teen scout who knows the crawlspace), **Nel Ardin** (the friend buying them a little time).
+*   **Key Faces:** Rella Voss (hallway organiser), Inspector Dorn (not eager to ruin lives), Tekk Mar (cable-splicing mechanic), Yune (teen scout who knows the crawlspace), **Nel Ardin** (the friend buying them a little time).
 *   **Clue Chain:** Dark hallway incidents -> power disparity with Level 104 -> access to industrial socket -> illegal splice -> incoming inspection.
 *   **Escalation Clock:** Crime rises -> pump fails entirely -> stale air causes sickness -> Sheriff uses blackout as pretext for crackdown.
 *   **Fail Forward:** If the splice job fails, the PCs still create enough light to become local heroes, but now everyone knows they meddled with the grid.
@@ -215,28 +215,28 @@ The campaign premises above are designed to be evocative. Use the following quic
 
 *   **Key Faces:** **Nel Ardin** (the transferring clerk), Rho Kell (mechanic spouse), Supervisor Pell (jealous rival), Hobb Fen (porter hired for the move).
 *   **Clue Chain:** Missing manifest -> supervisor's late-night office access -> forged delay stamp -> hidden file drawer -> path through the long walk south.
-*   **Escalation Clock:** Permit deadline nears -> neighbors turn cold -> rival alerts Judicial -> dawn arrives with incomplete papers.
+*   **Escalation Clock:** Permit deadline nears -> neighbours turn cold -> rival alerts Judicial -> dawn arrives with incomplete papers.
 *   **Fail Forward:** If the party cannot save the original manifest, they can salvage the marriage by proving sabotage and forcing a temporary extension.
 
 ### Campaign 5 Quick Kit: "The Rust in the Reclamation"
 
 *   **Key Faces:** Deputy Mara Quill (desperate local law), Doctor Pell Rane (well-meaning Shadow Doctor), Kett Varo (Supply parasite), Nix "Red-Hand" Sol (Syndicate courier).
 *   **Clue Chain:** Red residue at the tap -> half-melted container -> Supply requisition mismatch -> courier delivery route -> Doctor Rane's hidden lab.
-*   **Escalation Clock:** Families get sick -> Hydroponics contamination scare -> quarantine rumor sparks panic -> Judicial sanitation team arrives.
+*   **Escalation Clock:** Families get sick -> Hydroponics contamination scare -> quarantine rumour sparks panic -> Judicial sanitation team arrives.
 *   **Fail Forward:** If the party misses a clue, a dying victim produces matching residue on clothing, or a Porter saw the courier run the stairs.
 
 ### Campaign 6 Quick Kit: "The Ghost in the Ledger"
 
-*   **Key Faces:** Ossa Remm (the erased neighbor), Archivist Tay (IT clerk owed a favor), Supply Clerk Phen (the man who writes names down), Retired Administrator Voss (half-blind, unimpressed), Compliance Officer Brenn (not cruel, just procedural).
+*   **Key Faces:** Ossa Remm (the erased neighbour), Archivist Tay (IT clerk owed a favour), Supply Clerk Phen (the man who writes names down), Retired Administrator Voss (half-blind, unimpressed), Compliance Officer Brenn (not cruel, just procedural).
 *   **Clue Chain:** Ration denial at the communal tap -> registry lookup fails -> archived record located in IT -> three-desk confirmation loop -> Supply clerk obstruction -> provisional certificate race.
 *   **Escalation Clock:** Ration access cut -> work assignment voided -> apartment flagged for sweep -> compliance officer arrives ahead of schedule -> arrest warrant issued.
-*   **Fail Forward:** If the paperwork isn't complete in time, Ossa is held for 48 hours in a compliance cell rather than permanently reassigned—giving the party one last window to finalize the restoration.
+*   **Fail Forward:** If the paperwork isn't complete in time, Ossa is held for 48 hours in a compliance cell rather than permanently reassigned—giving the party one last window to finalise the restoration.
 
 ### Campaign 7 Quick Kit: "The Tier Inheritance"
 
 *   **Key Faces:** Dava Senne (grieving child), Supply Manager Torr (quietly threatening), Preferred Applicant Brem (oblivious nephew, not malicious), Retired IT Administrator Wren Cass (co-signatory, sharp despite the age), Panel Clerk Ilen Mosk (the one with a conscience).
-*   **Clue Chain:** Informal residency records -> double-draw ration logs -> neighbor witness statements -> clearance co-signatory requirement -> Wren Cass's three favors -> tribunal preparation.
-*   **Escalation Clock:** 48-hour window opens -> manager catalogs the unit -> preferred applicant moves belongings in -> competing claim filing deadline passes.
+*   **Clue Chain:** Informal residency records -> double-draw ration logs -> neighbour witness statements -> clearance co-signatory requirement -> Wren Cass's three favours -> tribunal preparation.
+*   **Escalation Clock:** 48-hour window opens -> manager catalogues the unit -> preferred applicant moves belongings in -> competing claim filing deadline passes.
 *   **Fail Forward:** If the party misses the filing window, Wren Cass knows a procedural trick: a "bereavement review" extension can be filed within 24 hours of the original deadline if new residency evidence surfaces.
 
 ### Campaign 8 Quick Kit: "The Missing Porter"
@@ -250,7 +250,7 @@ The campaign premises above are designed to be evocative. Use the following quic
 
 *   **Key Faces:** Lysa Trent (the robbed winner), Inquisitor Sel Verin (architect of the fraud), Enid Marr (IT clerk under blackmail), Doctor Hal Wen (archivist on night shift).
 *   **Clue Chain:** Blood-test hardcopy -> archive burn order -> terminal access log -> Enid's forged credentials -> Verin's family tie to the replacement winner.
-*   **Escalation Clock:** Celebration turns to rumor -> records begin disappearing -> Verin frames the PCs -> public hearing or silent arrest.
+*   **Escalation Clock:** Celebration turns to rumour -> records begin disappearing -> Verin frames the PCs -> public hearing or silent arrest.
 *   **Fail Forward:** If they lose the paper trail, a morgue attendant remembers the incineration order and names the wrongdoer for a price.
 
 ### Campaign 10 Quick Kit: "The Generator Hammer"

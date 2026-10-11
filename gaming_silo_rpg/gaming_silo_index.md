@@ -25,7 +25,7 @@ This file serves as a routing map for LLMs and GMs to quickly locate specific lo
     *   `1.3 The Life Cycle & The Bureaucracy:` The Lottery, birth control implants, Shadowing (apprenticeships), marriage/cohabitation permits, death and composting.
 *   **Chapter 2: The Law & The Panopticon**
     *   `2.1 The Two Faces of Order:` `2.1.1 The Sheriff (The Peacekeeper)` covers the public face of law; `2.1.2 Judicial (The Warden)` covers the shadow bureaucracy and "Friends of the Silo" informants.
-    *   `2.2 The Justice Process:` Holding cells (Level 1 psychological torture), trials without juries, The Mines (hard labor).
+    *   `2.2 The Justice Process:` Holding cells (Level 1 psychological torture), trials without juries, The Mines (hard labour).
     *   `2.3 Surveillance: The All-Seeing Eye:` Overt vs. covert cameras and `2.3.2 Game Mechanics: The Panopticon Roll`.
     *   `2.4 Taboos and Capital Offenses:` Definition of Relics, the ultimate crime of Sedition ("I want to go outside").
 *   **Chapter 3: The Departments**
@@ -44,7 +44,7 @@ This file serves as a routing map for LLMs and GMs to quickly locate specific lo
 *   **Chapter 32: Faction Sheets**
     *   Public face, real objectives, leverage, and typical asks for the major factions.
 *   **Chapter 33: Slice-of-Life Engine**
-    *   Random generators for block problems, inspections, favors, and sudden shortages.
+    *   Random generators for block problems, inspections, favours, and sudden shortages.
 
 ---
 
