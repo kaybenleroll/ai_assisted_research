@@ -14,7 +14,7 @@ Crucially, **these secrets should not be the focus of the early or mid-game**. A
 The characters are not in the only Silo. They are in one of **fifty identical Silos** arranged in a massive subterranean grid beneath the ruins of Atlanta, Georgia.
 
 #### The Architects
-In the mid-21st century, a faction of scientists, intelligence operatives, and industrialists — operating inside the U.S. government but answerable to no elected body — concluded that human civilization was on a trajectory towards self-destruction within three generations. Climate collapse, resource wars, and the proliferation of engineered biological weapons made this, in their modelling, a near-certainty. They called themselves **the Pact**.
+In the mid-21st century, a faction of scientists, intelligence operatives, and industrialists — operating inside the U.S. government but answerable to no elected body — concluded that human civilisation was on a trajectory towards self-destruction within three generations. Climate collapse, resource wars, and the proliferation of engineered biological weapons made this, in their modelling, a near-certainty. They called themselves **the Pact**.
 
 The Pact did not build the Silos as a response to disaster. They built the Silos, then *caused* one.
 
@@ -36,11 +36,11 @@ The Pact's own internal records — locked in Silo 1 — estimate that approxima
 The nanobot dome that players sometimes hear referenced is **not** the global atmosphere. It is a secondary, denser local barrier specifically concentrated over the Atlanta grid — a deliberate kill-layer deployed to prevent any surface survivor from stumbling into the Silo entrances and contaminating the experiment.
 
 #### The 500-Year Plan (the Full Mechanism)
-The plan is not simply "wait underground." It is a staged, multi-century program to re-seed civilization from scratch, with the Pact's ideology baked into its foundations. The key phases:
+The plan is not simply "wait underground." It is a staged, multi-century program to re-seed civilisation from scratch, with the Pact's ideology baked into its foundations. The key phases:
 
 *   **Years 0–50 (Stabilisation):** The 49 populated Silos are sealed. Internal governance structures (seeded by Pact operatives placed among the initial population) organise along the lines of the Order document. Silo 1 monitors population stability, resource consumption, and rebellion indicators. Any Silo showing early systemic failure is "culled" — Silo 1 terminates its power and water remotely.
-*   **Years 50–450 (The Pressure Cycle):** The Silos are deliberately under-resourced. Births are controlled. Rations are calculated to keep populations just above starvation, maintaining a permanent low-level desperation that suppresses long-term rebellious thinking. Silo 1's models show that comfortable populations philosophize and revolt. Hungry ones focus on survival. The scarcity is *engineered*.
-*   **Year 450 (The Selection):** By Year 450, Silo 1 will evaluate which of the remaining Silos is the most psychologically and genetically stable — the best-functioning civilization in miniature. This Silo is designated **the Seed**. The other surviving Silos are quietly terminated.
+*   **Years 50–450 (The Pressure Cycle):** The Silos are deliberately under-resourced. Births are controlled. Rations are calculated to keep populations just above starvation, maintaining a permanent low-level desperation that suppresses long-term rebellious thinking. Silo 1's models show that comfortable populations philosophise and revolt. Hungry ones focus on survival. The scarcity is *engineered*.
+*   **Year 450 (The Selection):** By Year 450, Silo 1 will evaluate which of the remaining Silos is the most psychologically and genetically stable — the best-functioning civilisation in miniature. This Silo is designated **the Seed**. The other surviving Silos are quietly terminated.
 *   **Year 500 (The Emergence):** The Pact's atmospheric purge device — housed in a bunker connected to the Seed Silo via The Digger — is activated. The purge takes approximately 18 months to render the surface survivable. The Seed Silo's population emerges, guided by a curated library of pre-Pact knowledge (agriculture, medicine, engineering) that has been held in Silo 1's archives. The Pact's descendants, awoken from cryo, take up administrative roles in the new society.
 
 **The current year of the campaign is approximately Year 182.** The players are living in the Pressure Cycle. The selection has not yet happened. Every Silo is still technically viable.
@@ -53,7 +53,7 @@ Silo 1 does not contain a civilian populace. It contains cryo-pods. The architec
 
 ### 1.2 The Nanobot Dome
 The air outside the Silo is not naturally toxic; it is saturated with weaponized, aggressive **nanobots** (the "bad seed"). 
-*   **The localized barrier:** These nanobots form a dome directly over the 50 Silos, intentionally designed to instantly destroy organic tissue and technology. They were deployed by the Silo creators to ensure no one could leave or cross the wasteland to other Silos.
+*   **The localised barrier:** These nanobots form a dome directly over the 50 Silos, intentionally designed to instantly destroy organic tissue and technology. They were deployed by the Silo creators to ensure no one could leave or cross the wasteland to other Silos.
 *   **The Medical "Good Seed":** Conversely, the "miracle" healing in the Silo's Medical sector is aided by suppressed, beneficial nanobots.
 
 ### 1.3 The Execution Mechanism (The Cleaning)
@@ -96,13 +96,13 @@ The grand lore is fascinating, but if introduced too early, it destroys the inti
 **Focus: Daily Grinds, Scarcity, and Local Politics**
 *   Do not mention outside, IT conspiracies, or relics. 
 *   The players should be hyper-focused on their jobs. The drama comes from a broken water filter, a stolen chit for extra rations, or a violent dispute between two families in the Hydroponics sector.
-*   *Tension:* The players are struggling to survive the crushing bureaucracy and brutal labor of their daily lives. The Sheriff is a looming, terrifying threat for minor infractions.
+*   *Tension:* The players are struggling to survive the crushing bureaucracy and brutal labour of their daily lives. The Sheriff is a looming, terrifying threat for minor infractions.
 
 ### Phase 2: The Vertical Climb (Cross-Sector Scope)
 **Focus: Inter-departmental Cold Wars and "Glitches"**
 *   The players are forced to travel outside their comfort zone (e.g., Porters, investigating a cross-level crime, or trading black market goods).
 *   They get caught in the political crossfire between Mechanical and IT, or the Mayor and Judicial. 
-*   *The Hook:* Introduce tiny, seemingly mundane anomalies. A mechanic notices that Supply provides two different types of heat-tape, but they are forbidden from using the "good" tape on the Cleaning suits. A doctor realizes a patient's memory of a traumatic event is completely gone after drinking water from a specific reservoir.
+*   *The Hook:* Introduce tiny, seemingly mundane anomalies. A mechanic notices that Supply provides two different types of heat-tape, but they are forbidden from using the "good" tape on the Cleaning suits. A doctor realises a patient's memory of a traumatic event is completely gone after drinking water from a specific reservoir.
 
 ### Phase 3: The Veil Thins (High-Level Scope)
 **Focus: The Shadow, Relics, and True Danger**
@@ -113,5 +113,5 @@ The grand lore is fascinating, but if introduced too early, it destroys the inti
 ### Phase 4: The Paradigm Shift (Endgame)
 **Focus: Breaking the Silo**
 *   This is the climax of the campaign. The players uncover the truth of Operation Fifty. 
-*   They might gain access to the Head of IT's terminal, discover the Digger beneath the oil, or synthesize good heat-tape to survive a Cleaning and walk over the hill to another Silo.
+*   They might gain access to the Head of IT's terminal, discover the Digger beneath the oil, or synthesise good heat-tape to survive a Cleaning and walk over the hill to another Silo.
 *   *The Hook:* They are no longer fighting for their lives; they are fighting to overthrow the 500-year plan.

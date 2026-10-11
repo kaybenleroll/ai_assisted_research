@@ -47,7 +47,7 @@ About **50 stairs** sit between official levels.
 | :--- | :--- |
 | **45-50** | Supply paperwork, transfers, marriage permits |
 | **60-80** | Hydroponics rings, crop quotas, food anxiety |
-| **79-85** | Water stations, tanks, maintenance access, rumor |
+| **79-85** | Water stations, tanks, maintenance access, rumour |
 | **92** | Cramped seam housing and repair disputes |
 | **101-105** | Scrap, bad lighting, flooded tiers, the start of the true Deep |
 
@@ -58,7 +58,7 @@ About **50 stairs** sit between official levels.
 * **Mayor Tamsin Rook:** The official voice of the Silo.
 * **Chief Deputy Harlan Fiske:** The Sheriff's hard public edge.
 * **Inquisitor Sel Verin:** Judicial fear made personal.
-* **Merrow Hale:** Distant head of IT and source of cold-level rumors.
+* **Merrow Hale:** Distant head of IT and source of cold-level rumours.
 * **Tavi Rune:** Porter boss and staircase power broker.
 * **Auntie Cinder:** Scrap boss, fixer, and black-market name everyone knows.
 * **Matron Ysra Thorn:** Crop-boss feared and respected across Hydroponics.
@@ -67,7 +67,7 @@ About **50 stairs** sit between official levels.
 
 * **Nel Ardin:** A decent Supply clerk who sometimes helps the wrong people.
 * **The Miller Clan:** A loud, entrenched seam family.
-* **Rella Voss:** A practical hallway organizer people listen to in a crisis.
+* **Rella Voss:** A practical hallway organiser people listen to in a crisis.
 * **Inspector Dorn:** A Mechanical inspector known in the Deep.
 
 ## Groups and Factions
@@ -75,7 +75,7 @@ About **50 stairs** sit between official levels.
 * **The Miller Clan:** A loud, stubborn seam family.
 * **The Porters' Union:** Neutral in theory, indispensable in practice.
 * **The Scrap Syndicates:** Smugglers, gamblers, fixers, thieves.
-* **Block Watches:** Unofficial hallway defense groups.
+* **Block Watches:** Unofficial hallway defence groups.
 * **Hydroponics Crews:** Territorial work groups shaped by quota pressure.
 * **The Friends of the Silo:** Suspected informants and true believers.
 
@@ -91,9 +91,9 @@ About **50 stairs** sit between official levels.
 
 ## Core Roles
 
-* **Porter:** Stairs runner, courier, rumor mill.
+* **Porter:** Stairs runner, courier, rumour mill.
 * **Mechanic:** Keeps machines, scrubbers, and generators alive.
-* **Supply Clerk:** Controls forms, ledgers, shortages, and favors.
+* **Supply Clerk:** Controls forms, ledgers, shortages, and favours.
 * **Hydroponics Farmer:** Grows food and understands plants, toxins, and yield.
 * **IT Tech / Medical Assistant:** Has access to rare knowledge, terminals, or medicine.
 
@@ -110,8 +110,8 @@ About **50 stairs** sit between official levels.
 
 * Queue for water.
 * Work your shift.
-* Trade small favors all day.
-* Hear rumors before mid-cycle.
+* Trade small favours all day.
+* Hear rumours before mid-cycle.
 * Measure distance in sore legs.
 * Fall asleep wondering who on your level can really be trusted.
 
@@ -121,8 +121,8 @@ About **50 stairs** sit between official levels.
 2. Which department do you distrust on principle?
 3. What minor law did you break as a child and get away with?
 4. Who taught you how to survive the stairs, queues, or inspections?
-5. What rumor about the Silo do you secretly hope is true?
-6. What debt, favor, or shame keeps you from walking away from trouble?
+5. What rumour about the Silo do you secretly hope is true?
+6. What debt, favour, or shame keeps you from walking away from trouble?
 
 ## Common Slang
 
@@ -130,12 +130,12 @@ About **50 stairs** sit between official levels.
 | :--- | :--- |
 | **Up-Top** | Privilege, surveillance, or clean-handed authority |
 | **Down-Shift** | Transfer to a lower level |
-| **Soft-Hands** | A Deep insult for non-laborers |
+| **Soft-Hands** | A Deep insult for non-labourers |
 | **Grease** | Mechanics and Down Deep workers |
 | **Shadow** | An apprentice with little power |
 | **Good Tape** | Rare, high-quality repair material |
 | **Dead Space** | A vent, crawl, or sealed area off the official maps |
-| **Blue Water** | Water rumored to be drugged |
+| **Blue Water** | Water rumoured to be drugged |
 | **Pact-Blind** | Someone who obeys without questioning cruelty |
 | **"Mind the rail."** | Be careful, stay quiet, stop asking questions |
 
@@ -146,7 +146,7 @@ Roll or choose a bond from Part 1 of the starter campaign:
 | d6 | Bond |
 | :--- | :--- |
 | **1** | **The Work Crew:** You survived a dangerous cleanup assignment together. |
-| **2** | **The Block Watch:** You formed a neighborhood defense group. |
+| **2** | **The Block Watch:** You formed a neighbourhood defence group. |
 | **3** | **The Syndicate Debt:** You all owe the same dangerous people. |
 | **4** | **The Framed:** You were all arrested for the same crime you did not commit. |
 | **5** | **The Secret Society:** You share forbidden beliefs and meet in secret. |
