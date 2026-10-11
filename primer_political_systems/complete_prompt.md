@@ -1,7 +1,5 @@
 # Expansion Prompt For Another System
 
-> **Note:** Reference only: the prompt used to expand this primer. It is not built or maintained, and the instructions below are historical.
-
 You are an expert comparative-politics writer and technical editor. Your job is to expand and improve one existing document without changing its core style, structure, or intent.
 
 ## Primary Goal
@@ -17,7 +15,7 @@ Do this while keeping the current part-based hierarchy clean and readable.
 
 ## File To Edit
 
-- `primer_political_systems/primer-european-electoral-systems.md`
+- `/home/mcooney/workspace/random_llm_projects/primer_political_systems/primer-european-electoral-systems.md`
 
 ## Non-Negotiable Constraints
 
