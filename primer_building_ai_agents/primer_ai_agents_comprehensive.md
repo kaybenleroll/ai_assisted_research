@@ -58,7 +58,7 @@ A quick litmus test: if the system can only respond with text, it's a chat assis
 
 Every autonomous AI agent has these essential parts:
 
-```mermaid
+```{.mermaid caption="The diagram shows an agent model exchanging actions with tools and reading or updating shared memory."}
 flowchart LR
   subgraph A[Autonomous AI Agent System]
     LLM[LLM<br/>Decision Engine]
@@ -190,7 +190,7 @@ This also explains why loop-based agents often outperform one giant prompt. The 
 
 Every autonomous agent follows a repeating cycle:
 
-```mermaid
+```{.mermaid caption="The diagram shows the agent lifecycle from receiving a goal through deciding whether to continue or stop."}
 flowchart TD
     S1[1. Start with a goal/task]
     S2[2. Build the prompt<br/>Add state, tools, task, history]
