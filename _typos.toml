@@ -21,3 +21,5 @@ extend-ignore-re = [
 Behavior = "Behavior"
 # "ACI" is the named Agent-Computer Interface pattern introduced by SWE-agent.
 ACI = "ACI"
+# "Center" is part of the official product name "ChatGPT Help Center".
+Center = "Center"

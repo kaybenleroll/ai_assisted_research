@@ -9,6 +9,7 @@ gaming_silo_rpg/gaming_reference_silo_index.md
 gaming_silo_rpg/gaming_reference_silo_player.md
 gaming_silo_rpg/gaming_reference_silo_gm.md
 gaming_silo_rpg/gaming_reference_silo_campaign.md
+primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md
 primer_deep_learning/primer_deep_learning.md
 primer_claude_code_alternative/primer-claude-code-alternatives.md
 primer_pi_coding_agent/primer_pi_coding_agent.md
