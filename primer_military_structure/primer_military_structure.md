@@ -28,6 +28,8 @@ Three terms recur throughout this primer and deserve careful definition.
 
 ## The Building Blocks: From Fire Team to Battalion
 
+The diagram shows a representative US/UK/NATO ground-force hierarchy; national structures and unit strengths vary.
+
 ```{.mermaid caption="Illustrative US/UK/NATO ground-force hierarchy: echelons from fire team to army group. Actual national tables, strengths, and subordinate counts vary."}
 graph LR
     ft["Fire Team<br/>4"] --> sq["Squad / Section<br/>8–12"]
@@ -68,6 +70,8 @@ Three to five companies form a **battalion** of 300 to 1,000 soldiers, commanded
 In the US Army example, the Command Sergeant Major is the senior NCO in the formation and advises the commanding officer on matters touching soldiers' welfare, discipline, and training; the British counterpart is the Regimental Sergeant Major. In these US and British models, battalion command is a commissioned-officer appointment. That is a feature of the reference systems, not a universal claim about every armed force.
 
 ---
+
+The table summarises representative personnel ranges and command ranks for the US and British ground-force models.
 
 | Echelon | Personnel | US Commander | NATO OF/OR | British Commander |
 |---|---:|---|---|---|
@@ -229,6 +233,8 @@ This imposed a decisive constraint on strategy. An army could not divide into in
 French theorists had identified this problem in the decades before the Revolution. Maurice de Saxe argued for permanent combined-arms formations in his 1757 *Mes Rêveries*. Marshal Broglie experimented with temporary divisions during the Seven Years' War. The theorist Guibert, in his *Essai général de Tactique* (1772), advocated formations capable of operating independently. Jean de Bourcet theorised dispersed marching and rapid concentration. Napoleon read and re-read all of them. But the ideas were conceptual; no army had institutionalised them.
 
 ### The Corps d'Armée
+
+The diagram shows the corps as a permanent combined-arms formation, with divisions and specialist capabilities under one command.
 
 ```{.mermaid caption="A Napoleonic corps d'armée: the first permanent combined-arms formation capable of independent strategic manoeuvre and tactical battle."}
 graph TD
