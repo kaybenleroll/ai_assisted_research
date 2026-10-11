@@ -1,10 +1,4 @@
-# Hermes Agent Server: A Long-Form, Operations-First Primer
-
----
-
-*Long-form edition · 27 September 2026*
-
----
+# Hermes Agent Server: An Operations-First Primer
 
 ## What you are operating
 
@@ -48,13 +42,13 @@ Hermes is not a security boundary by itself. Model output is untrusted input. Th
 
 ### Choose a surface and starting setup
 
-Start with this table when someone says “the Hermes server.” A surface is a client-facing process or protocol, not a synonym for the whole runtime.
+Use this table when someone says “the Hermes server” to distinguish which process and protocol a client needs. Each surface exposes a different part of the runtime.
 
-| Surface | Command/process | Protocol and usual port | Primary client | What it does not do |
+| Surface | Process | Transport | Typical client | Distinct from |
 |---|---|---|---|---|
-| Messaging gateway | `hermes gateway` or `hermes gateway run` | Platform adapters; the API server may share this process | Telegram, Discord, Slack, WhatsApp, and other adapters | It is not the Desktop JSON-RPC backend |
-| OpenAI-compatible API server | Enabled with `API_SERVER_ENABLED=true`; usually launched with the gateway | HTTP, usually `127.0.0.1:8642` | Open WebUI, LobeChat, curl, SDKs, automation | It is not a model-weight server and does not use the Desktop WS protocol |
-| Headless backend | `hermes serve` | JSON-RPC over WebSocket plus HTTP support, commonly `127.0.0.1:9119` | Hermes Desktop and remote desktop-style clients | It does not configure or poll messaging platforms |
+| Messaging gateway | `hermes gateway` | Messaging adapters | Telegram, Discord, Slack, WhatsApp | Desktop backend |
+| OpenAI-compatible API | Gateway with API enabled | HTTP, usually `:8642` | Open WebUI, SDKs, automation | Model inference; Desktop WebSocket |
+| Headless backend | `hermes serve` | JSON-RPC/WebSocket, usually `:9119` | Hermes Desktop | Messaging adapters |
 
 The [official API Server guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/) documents the HTTP surface. The [Desktop guide](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md) describes the headless `hermes serve` process and its `tui_gateway` JSON-RPC/WebSocket API. The [gateway internals guide](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md) describes the messaging process.
 
@@ -86,19 +80,24 @@ The client surface is the command-line/terminal user interface (CLI/TUI), Deskto
 
 This model prevents category errors. A malformed tool call is usually a provider/model or tool-schema issue, not a gateway-port issue. A message from an unknown Telegram user is an authorization issue, not a memory issue. A Desktop connection refusal is a backend lifecycle or network issue, not proof that the model provider is down.
 
+\newpage
+
 #### The process relationships
 
-The normal relationships look like this:
+The normal relationships between clients, Hermes surfaces, and the agent runtime are:
 
-```text
-CLI / TUI             \\
-Hermes Desktop         +--> agent runtime --> provider/model
-OpenAI client -- HTTP /
-Messaging platform ----> agent runtime --> tools and terminal backend
-                         agent runtime --> profile-scoped state
-
-hermes gateway  = messaging adapters + sessions + optional API server
-hermes serve    = headless JSON-RPC/WebSocket backend for Desktop clients
+```{.mermaid caption="Hermes client surfaces connect to distinct server processes and a shared agent runtime"}
+flowchart LR
+    cli["CLI / TUI"] --> runtime["Agent runtime"]
+    apiClient["OpenAI client"] -->|HTTP| api["API server"]
+    message["Messaging platform"] --> gateway["hermes gateway"]
+    desktop["Hermes Desktop"] -->|JSON-RPC over WebSocket| serve["hermes serve"]
+    api --> runtime
+    gateway --> runtime
+    serve --> runtime
+    runtime --> model["Provider / model"]
+    runtime --> tools["Tools and terminal backend"]
+    runtime --> state["Profile-scoped state"]
 ```
 
 The gateway and `serve` share runtime concepts and state conventions, but they are separate long-running surfaces. A server may run both, but do not infer that one command supervises the other unless your service manager or container definition explicitly does so.
@@ -272,6 +271,8 @@ Then review pending changes with the documented `/skills pending`, `/skills diff
 ## Set the execution boundary
 
 The terminal backend determines where commands execute. Hermes currently supports local, Docker, SSH, Modal, Daytona, Vercel Sandbox, and Singularity/Apptainer backends. The [Terminal Backend section of Configuration](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) is the reference for options and optional dependencies.
+
+This table contrasts where each backend runs commands and the isolation it provides.
 
 | Backend | Execution location | Isolation posture | Good default use |
 |---|---|---|---|
@@ -564,7 +565,7 @@ Updates change both the runtime and bundled skills. Review the [CLI reference](h
 
 Hermes has two useful backup scopes. `hermes backup` captures the whole Hermes home, including profiles and credentials, while `hermes profile export` creates a portable single-profile archive with `.env` and `auth.json` excluded. The official [profile command reference](https://hermes-agent.nousresearch.com/docs/reference/profile-commands/) and [CLI reference](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md) describe the current behaviour.
 
-#### Full machine backup
+### Full machine backup
 
 The full backup is appropriate for disaster recovery or moving the installation. It contains secrets, so protect the archive like a password vault:
 
@@ -670,6 +671,8 @@ Need independent identity and memory?          Create a profile, not another pro
 10. Back up before updates and verify restored profiles on a test path.
 
 #### Troubleshooting map
+
+Use this symptom map to choose the first diagnostic area.
 
 | Symptom | First place to look |
 |---|---|
