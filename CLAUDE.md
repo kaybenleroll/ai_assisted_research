@@ -29,6 +29,7 @@ This repository publishes technical primers and related documents. Sources and r
 - Commit source documents and their required published outputs together; do not commit intermediate files.
 - Use UK English in repository-authored prose. Follow [STYLE_GUIDE.md](STYLE_GUIDE.md).
 - Use [CONTRIBUTING.md](CONTRIBUTING.md) for build and render commands. The Mermaid filter now lives in `_shared/filters/`.
+- Start a new Pandoc primer with `just new-primer <short> "<Full Title>"`; finish the printed registration steps in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 <a id="primer-build-and-render-notes"></a>
 

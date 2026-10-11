@@ -9,6 +9,49 @@ MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
 default:
   @just --list
 
+# Create a Pandoc primer skeleton; finish the printed registration steps before publishing
+new-primer $short $title:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [[ ! "$short" =~ ^[a-z0-9_]+$ ]]; then
+    printf 'Invalid short name: use lowercase letters, digits and underscores.\n' >&2
+    exit 1
+  fi
+  if [[ -z "$title" || "$title" == *$'\n'* ]]; then
+    printf 'Title must be non-empty and contain no newline.\n' >&2
+    exit 1
+  fi
+  project_dir="primer_${short}"
+  if [[ -e "$project_dir" || -L "$project_dir" ]]; then
+    printf '%s already exists.\n' "$project_dir" >&2
+    exit 1
+  fi
+  escape_sed_replacement() {
+    printf '%s' "$1" | sed 's/[\\&|]/\\&/g'
+  }
+  source_title="$(escape_sed_replacement "$title")"
+  just_title="$(printf '%s' "$title" | sed 's/[\\"]/\\&/g')"
+  just_title="$(escape_sed_replacement "$just_title")"
+  project_value="$(escape_sed_replacement "$project_dir")"
+  review_date="$(LC_ALL=C date '+%e %B %Y' | sed 's/^ //')"
+  mkdir "$project_dir"
+  trap 'rm -f "$project_dir/Justfile" "$project_dir/$project_dir.md"; rmdir "$project_dir"' ERR
+  sed -e "s|@@PROJECT_DIR@@|$project_value|g" -e "s|@@JUST_TITLE@@|$just_title|g" \
+    -e "s|@@DATE@@|$review_date|g" \
+    _shared/templates/primer/Justfile.tmpl > "$project_dir/Justfile"
+  sed "s|@@TITLE@@|$source_title|g" \
+    _shared/templates/primer/primer.md.tmpl > "$project_dir/$project_dir.md"
+  trap - ERR
+  printf 'Created %s. Next:\n' "$project_dir"
+  printf '%s\n' \
+    '  - Set AUTHOR; update DATE after the substantive review.' \
+    '  - Draft and verify the primer against STYLE_GUIDE.md.' \
+    '  - Add top-level Justfile targets.' \
+    '  - Register source and outputs in scripts/update_readme_recent.py; run just readme.' \
+    '  - Add and synchronise an area label in .github/labels.json if this is a new class.' \
+    '  - Add the directory to the CLAUDE.md document-class list.' \
+    '  - Render in containers and commit the source, Justfile, HTML and PDF together.'
+
 # Generate the README document tables from Justfile review dates
 readme:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python scripts/update_readme_recent.py

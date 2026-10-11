@@ -70,7 +70,7 @@ Before renumbering or removing headings, search prose for embedded section refer
 
 ## Adding a Document
 
-Until `just new-primer` arrives in #162, create the project directory and its `<dir>.md` source, with an H1 equal to `TITLE`. Add a thin Justfile defining `SOURCE_MD`, `PROJECT_DIR`, `TITLE`, `AUTHOR`, `DATE`, `HTML_EXTRA`, and `PDF_EXTRA`, then import `../_shared/common.just`. Add appropriate root Justfile targets, register the source and outputs in `scripts/update_readme_recent.py`, and run `just readme` to update the catalogue. Add an `area:` label to `.github/labels.json` if the new document introduces a category, and synchronise that repository label. Render and commit the source, Justfile, and required HTML/PDF outputs in the same PR. Follow the style guide for prose and headings.
+Run `just new-primer <short> "<Full Title>"` from the repository root to create `primer_<short>/Justfile` and `primer_<short>/primer_<short>.md`. The recipe prints the remaining registration and publication steps. Replace the scaffold's AUTHOR placeholder and update DATE after a substantive review, write the primer under [STYLE_GUIDE.md](STYLE_GUIDE.md), add top-level build targets, register its source and outputs in `scripts/update_readme_recent.py`, and run `just readme`. Add and synchronise an `area:` label in `.github/labels.json` if this introduces a new class, and add the directory to the document-class list in [CLAUDE.md](CLAUDE.md). Render in containers and commit the source, Justfile, and required HTML/PDF outputs together.
 
 ## Dates
 
