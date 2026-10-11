@@ -225,6 +225,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -578,6 +587,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -597,8 +607,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Codex for Claude Code Users: A Practical
 Guide to Running Two Coding Agents in One Repository</span>
-
-    <span class="navbar-meta">October 7, 2026</span>
+    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -611,237 +621,237 @@ Guide to Running Two Coding Agents in One Repository</span>
       <div id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a>
 <ul>
-<li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1.1</span> What this primer covers</a></li>
-<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.2</span> What this primer is not</a></li>
-<li><a href="#what-you-should-already-know" id="toc-what-you-should-already-know"><span class="toc-section-number">1.3</span> What you should already
-know</a></li>
+<li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1.1</span> What This Primer Covers</a></li>
+<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.2</span> What This Primer Is Not</a></li>
+<li><a href="#what-you-should-already-know" id="toc-what-you-should-already-know"><span class="toc-section-number">1.3</span> What You Should Already
+Know</a></li>
 </ul></li>
-<li><a href="#two-harnesses-one-repository" id="toc-two-harnesses-one-repository"><span class="toc-section-number">2</span> Two harnesses, one repository</a>
+<li><a href="#two-harnesses-one-repository" id="toc-two-harnesses-one-repository"><span class="toc-section-number">2</span> Two Harnesses, One Repository</a>
 <ul>
-<li><a href="#the-model-is-a-decision-component-not-the-whole-agent" id="toc-the-model-is-a-decision-component-not-the-whole-agent"><span class="toc-section-number">2.1</span> The model is a decision component,
-not the whole agent</a></li>
-<li><a href="#the-harness-supplies-the-working-loop" id="toc-the-harness-supplies-the-working-loop"><span class="toc-section-number">2.2</span> The harness supplies the working
-loop</a></li>
-<li><a href="#the-interface-is-where-you-steer-the-session" id="toc-the-interface-is-where-you-steer-the-session"><span class="toc-section-number">2.3</span> The interface is where you steer
-the session</a></li>
-<li><a href="#tools-and-the-execution-environment-define-the-agents-reach" id="toc-tools-and-the-execution-environment-define-the-agents-reach"><span class="toc-section-number">2.4</span> Tools and the execution
-environment define the agent’s reach</a></li>
-<li><a href="#coexistence-is-a-repository-practice-not-a-parity-claim" id="toc-coexistence-is-a-repository-practice-not-a-parity-claim"><span class="toc-section-number">2.5</span> Coexistence is a repository
-practice, not a parity claim</a></li>
-<li><a href="#a-compact-diagnostic-model" id="toc-a-compact-diagnostic-model"><span class="toc-section-number">2.6</span> A compact diagnostic
-model</a></li>
+<li><a href="#the-model-is-a-decision-component-not-the-whole-agent" id="toc-the-model-is-a-decision-component-not-the-whole-agent"><span class="toc-section-number">2.1</span> The Model Is a Decision Component,
+Not the Whole Agent</a></li>
+<li><a href="#the-harness-supplies-the-working-loop" id="toc-the-harness-supplies-the-working-loop"><span class="toc-section-number">2.2</span> The Harness Supplies the Working
+Loop</a></li>
+<li><a href="#the-interface-is-where-you-steer-the-session" id="toc-the-interface-is-where-you-steer-the-session"><span class="toc-section-number">2.3</span> The Interface Is Where You Steer
+the Session</a></li>
+<li><a href="#tools-and-the-execution-environment-define-the-agents-reach" id="toc-tools-and-the-execution-environment-define-the-agents-reach"><span class="toc-section-number">2.4</span> Tools and the Execution
+Environment Define the Agent’s Reach</a></li>
+<li><a href="#coexistence-is-a-repository-practice-not-a-parity-claim" id="toc-coexistence-is-a-repository-practice-not-a-parity-claim"><span class="toc-section-number">2.5</span> Coexistence Is a Repository
+Practice, Not a Parity Claim</a></li>
+<li><a href="#a-compact-diagnostic-model" id="toc-a-compact-diagnostic-model"><span class="toc-section-number">2.6</span> A Compact Diagnostic
+Model</a></li>
 </ul></li>
-<li><a href="#first-session-setup" id="toc-first-session-setup"><span class="toc-section-number">3</span> First-session setup</a>
+<li><a href="#first-session-setup" id="toc-first-session-setup"><span class="toc-section-number">3</span> First-Session Setup</a>
 <ul>
-<li><a href="#install-and-authenticate-without-changing-the-repository" id="toc-install-and-authenticate-without-changing-the-repository"><span class="toc-section-number">3.1</span> Install and authenticate without
-changing the repository</a></li>
-<li><a href="#inspect-the-repository-before-asking-for-edits" id="toc-inspect-the-repository-before-asking-for-edits"><span class="toc-section-number">3.2</span> Inspect the repository before
-asking for edits</a></li>
-<li><a href="#choose-a-deliberately-small-first-task" id="toc-choose-a-deliberately-small-first-task"><span class="toc-section-number">3.3</span> Choose a deliberately small first
-task</a></li>
-<li><a href="#use-a-review-loop-not-a-hand-off" id="toc-use-a-review-loop-not-a-hand-off"><span class="toc-section-number">3.4</span> Use a review loop, not a
-hand-off</a></li>
-<li><a href="#end-the-first-session-with-a-reproducible-hand-off" id="toc-end-the-first-session-with-a-reproducible-hand-off"><span class="toc-section-number">3.5</span> End the first session with a
-reproducible hand-off</a></li>
+<li><a href="#install-and-authenticate-without-changing-the-repository" id="toc-install-and-authenticate-without-changing-the-repository"><span class="toc-section-number">3.1</span> Install and Authenticate Without
+Changing the Repository</a></li>
+<li><a href="#inspect-the-repository-before-asking-for-edits" id="toc-inspect-the-repository-before-asking-for-edits"><span class="toc-section-number">3.2</span> Inspect the Repository Before
+Asking for Edits</a></li>
+<li><a href="#choose-a-deliberately-small-first-task" id="toc-choose-a-deliberately-small-first-task"><span class="toc-section-number">3.3</span> Choose a Deliberately Small First
+Task</a></li>
+<li><a href="#use-a-review-loop-not-a-hand-off" id="toc-use-a-review-loop-not-a-hand-off"><span class="toc-section-number">3.4</span> Use a Review Loop, Not a
+Hand-off</a></li>
+<li><a href="#end-the-first-session-with-a-reproducible-hand-off" id="toc-end-the-first-session-with-a-reproducible-hand-off"><span class="toc-section-number">3.5</span> End the First Session With a
+Reproducible Hand-off</a></li>
 </ul></li>
-<li><a href="#instruction-systems" id="toc-instruction-systems"><span class="toc-section-number">4</span> Instruction systems</a>
+<li><a href="#instruction-systems" id="toc-instruction-systems"><span class="toc-section-number">4</span> Instruction Systems</a>
 <ul>
-<li><a href="#who-owns-agents.md-now" id="toc-who-owns-agents.md-now"><span class="toc-section-number">4.1</span> Who owns <code>AGENTS.md</code>
-now</a></li>
-<li><a href="#separate-the-repository-contract-from-the-harness-adapter" id="toc-separate-the-repository-contract-from-the-harness-adapter"><span class="toc-section-number">4.2</span> Separate the repository contract
-from the harness adapter</a></li>
+<li><a href="#who-owns-agents.md-now" id="toc-who-owns-agents.md-now"><span class="toc-section-number">4.1</span> Who Owns <code>AGENTS.md</code>
+Now</a></li>
+<li><a href="#separate-the-repository-contract-from-the-harness-adapter" id="toc-separate-the-repository-contract-from-the-harness-adapter"><span class="toc-section-number">4.2</span> Separate the Repository Contract
+From the Harness Adapter</a></li>
 <li><a href="#what-claude.md-and-agents.md-mean-in-this-setup" id="toc-what-claude.md-and-agents.md-mean-in-this-setup"><span class="toc-section-number">4.3</span> What <code>CLAUDE.md</code> and
-<code>AGENTS.md</code> mean in this setup</a>
+<code>AGENTS.md</code> Mean in This Setup</a>
 <ul>
-<li><a href="#claude-code-does-not-read-agents.md" id="toc-claude-code-does-not-read-agents.md"><span class="toc-section-number">4.3.1</span> Claude Code does not read
+<li><a href="#claude-code-does-not-read-agents.md" id="toc-claude-code-does-not-read-agents.md"><span class="toc-section-number">4.3.1</span> Claude Code Does Not Read
 <code>AGENTS.md</code></a></li>
-<li><a href="#how-claude-code-discovers-instructions" id="toc-how-claude-code-discovers-instructions"><span class="toc-section-number">4.3.2</span> How Claude Code discovers
-instructions</a></li>
-<li><a href="#how-codex-discovers-instructions" id="toc-how-codex-discovers-instructions"><span class="toc-section-number">4.3.3</span> How Codex discovers
-instructions</a></li>
+<li><a href="#how-claude-code-discovers-instructions" id="toc-how-claude-code-discovers-instructions"><span class="toc-section-number">4.3.2</span> How Claude Code Discovers
+Instructions</a></li>
+<li><a href="#how-codex-discovers-instructions" id="toc-how-codex-discovers-instructions"><span class="toc-section-number">4.3.3</span> How Codex Discovers
+Instructions</a></li>
 </ul></li>
-<li><a href="#the-bridge-pattern-and-which-direction-to-point-it" id="toc-the-bridge-pattern-and-which-direction-to-point-it"><span class="toc-section-number">4.4</span> The bridge pattern, and which
-direction to point it</a>
+<li><a href="#the-bridge-pattern-and-which-direction-to-point-it" id="toc-the-bridge-pattern-and-which-direction-to-point-it"><span class="toc-section-number">4.4</span> The Bridge Pattern, and Which
+Direction to Point It</a>
 <ul>
 <li><a href="#point-claude.md-at-agents.md-with-an-import" id="toc-point-claude.md-at-agents.md-with-an-import"><span class="toc-section-number">4.4.1</span> Point <code>CLAUDE.md</code> at
-<code>AGENTS.md</code>, with an import</a></li>
+<code>AGENTS.md</code>, With an Import</a></li>
 <li><a href="#pointing-agents.md-at-claude.md-is-prose-not-a-mechanism" id="toc-pointing-agents.md-at-claude.md-is-prose-not-a-mechanism"><span class="toc-section-number">4.4.2</span> Pointing <code>AGENTS.md</code>
-at <code>CLAUDE.md</code> is prose, not a mechanism</a></li>
-<li><a href="#what-the-bridge-does-not-do" id="toc-what-the-bridge-does-not-do"><span class="toc-section-number">4.4.3</span> What the bridge does not
-do</a></li>
+at <code>CLAUDE.md</code> Is Prose, Not a Mechanism</a></li>
+<li><a href="#what-the-bridge-does-not-do" id="toc-what-the-bridge-does-not-do"><span class="toc-section-number">4.4.3</span> What the Bridge Does Not
+Do</a></li>
 </ul></li>
-<li><a href="#shared-guidance-without-a-second-manual" id="toc-shared-guidance-without-a-second-manual"><span class="toc-section-number">4.5</span> Shared guidance without a second
-manual</a></li>
-<li><a href="#generating-each-harnesss-files-from-one-source" id="toc-generating-each-harnesss-files-from-one-source"><span class="toc-section-number">4.6</span> Generating each harness’s files
-from one source</a></li>
-<li><a href="#codex-configuration-is-a-supplement-not-the-project-contract" id="toc-codex-configuration-is-a-supplement-not-the-project-contract"><span class="toc-section-number">4.7</span> Codex configuration is a
-supplement, not the project contract</a></li>
-<li><a href="#a-practical-instruction-audit" id="toc-a-practical-instruction-audit"><span class="toc-section-number">4.8</span> A practical instruction
-audit</a></li>
+<li><a href="#shared-guidance-without-a-second-manual" id="toc-shared-guidance-without-a-second-manual"><span class="toc-section-number">4.5</span> Shared Guidance Without a Second
+Manual</a></li>
+<li><a href="#generating-each-harnesss-files-from-one-source" id="toc-generating-each-harnesss-files-from-one-source"><span class="toc-section-number">4.6</span> Generating Each Harness’s Files
+From One Source</a></li>
+<li><a href="#codex-configuration-is-a-supplement-not-the-project-contract" id="toc-codex-configuration-is-a-supplement-not-the-project-contract"><span class="toc-section-number">4.7</span> Codex Configuration Is a
+Supplement, Not the Project Contract</a></li>
+<li><a href="#a-practical-instruction-audit" id="toc-a-practical-instruction-audit"><span class="toc-section-number">4.8</span> A Practical Instruction
+Audit</a></li>
 </ul></li>
-<li><a href="#workflow-differences" id="toc-workflow-differences"><span class="toc-section-number">5</span> Workflow differences</a>
+<li><a href="#workflow-differences" id="toc-workflow-differences"><span class="toc-section-number">5</span> Workflow Differences</a>
 <ul>
-<li><a href="#exploration-establish-the-map-before-choosing-a-route" id="toc-exploration-establish-the-map-before-choosing-a-route"><span class="toc-section-number">5.1</span> Exploration: establish the map
-before choosing a route</a></li>
-<li><a href="#planning-make-the-change-boundary-explicit" id="toc-planning-make-the-change-boundary-explicit"><span class="toc-section-number">5.2</span> Planning: make the change boundary
-explicit</a></li>
-<li><a href="#implementation-constrain-scope-preserve-local-idioms" id="toc-implementation-constrain-scope-preserve-local-idioms"><span class="toc-section-number">5.3</span> Implementation: constrain scope,
-preserve local idioms</a></li>
-<li><a href="#testing-treat-verification-as-part-of-the-task" id="toc-testing-treat-verification-as-part-of-the-task"><span class="toc-section-number">5.4</span> Testing: treat verification as
-part of the task</a></li>
-<li><a href="#review-review-the-diff-not-the-confidence" id="toc-review-review-the-diff-not-the-confidence"><span class="toc-section-number">5.5</span> Review: review the diff, not the
-confidence</a></li>
-<li><a href="#sessions-history-compaction-and-hand-off" id="toc-sessions-history-compaction-and-hand-off"><span class="toc-section-number">5.6</span> Sessions, history, compaction, and
-hand-off</a></li>
-<li><a href="#git-use-the-working-tree-as-the-contract" id="toc-git-use-the-working-tree-as-the-contract"><span class="toc-section-number">5.7</span> Git: use the working tree as the
-contract</a></li>
-<li><a href="#parallel-work-divide-by-contract-not-by-file-count" id="toc-parallel-work-divide-by-contract-not-by-file-count"><span class="toc-section-number">5.8</span> Parallel work: divide by contract,
-not by file count</a></li>
-<li><a href="#a-practical-cross-harness-loop" id="toc-a-practical-cross-harness-loop"><span class="toc-section-number">5.9</span> A practical cross-harness
-loop</a></li>
+<li><a href="#exploration-establish-the-map-before-choosing-a-route" id="toc-exploration-establish-the-map-before-choosing-a-route"><span class="toc-section-number">5.1</span> Exploration: Establish the Map
+Before Choosing a Route</a></li>
+<li><a href="#planning-make-the-change-boundary-explicit" id="toc-planning-make-the-change-boundary-explicit"><span class="toc-section-number">5.2</span> Planning: Make the Change Boundary
+Explicit</a></li>
+<li><a href="#implementation-constrain-scope-preserve-local-idioms" id="toc-implementation-constrain-scope-preserve-local-idioms"><span class="toc-section-number">5.3</span> Implementation: Constrain Scope,
+Preserve Local Idioms</a></li>
+<li><a href="#testing-treat-verification-as-part-of-the-task" id="toc-testing-treat-verification-as-part-of-the-task"><span class="toc-section-number">5.4</span> Testing: Treat Verification as
+Part of the Task</a></li>
+<li><a href="#review-review-the-diff-not-the-confidence" id="toc-review-review-the-diff-not-the-confidence"><span class="toc-section-number">5.5</span> Review: Review the Diff, Not the
+Confidence</a></li>
+<li><a href="#sessions-history-compaction-and-hand-off" id="toc-sessions-history-compaction-and-hand-off"><span class="toc-section-number">5.6</span> Sessions, History, Compaction, and
+Hand-off</a></li>
+<li><a href="#git-use-the-working-tree-as-the-contract" id="toc-git-use-the-working-tree-as-the-contract"><span class="toc-section-number">5.7</span> Git: Use the Working Tree as the
+Contract</a></li>
+<li><a href="#parallel-work-divide-by-contract-not-by-file-count" id="toc-parallel-work-divide-by-contract-not-by-file-count"><span class="toc-section-number">5.8</span> Parallel Work: Divide by Contract,
+Not by File Count</a></li>
+<li><a href="#a-practical-cross-harness-loop" id="toc-a-practical-cross-harness-loop"><span class="toc-section-number">5.9</span> A Practical Cross-Harness
+Loop</a></li>
 </ul></li>
-<li><a href="#models-and-reasoning-effort" id="toc-models-and-reasoning-effort"><span class="toc-section-number">6</span> Models and reasoning effort</a>
+<li><a href="#models-and-reasoning-effort" id="toc-models-and-reasoning-effort"><span class="toc-section-number">6</span> Models and Reasoning Effort</a>
 <ul>
-<li><a href="#what-the-controls-mean" id="toc-what-the-controls-mean"><span class="toc-section-number">6.1</span> What the controls mean</a></li>
-<li><a href="#a-dated-snapshot-of-the-current-codex-models" id="toc-a-dated-snapshot-of-the-current-codex-models"><span class="toc-section-number">6.2</span> A dated snapshot of the current
-Codex models</a></li>
-<li><a href="#choose-by-task-shape" id="toc-choose-by-task-shape"><span class="toc-section-number">6.3</span> Choose by task shape</a></li>
-<li><a href="#exploration-and-planning-usually-need-less-than-implementation-of-ambiguity" id="toc-exploration-and-planning-usually-need-less-than-implementation-of-ambiguity"><span class="toc-section-number">6.4</span> Exploration and planning usually
-need less than implementation of ambiguity</a></li>
-<li><a href="#a-model-selection-workflow" id="toc-a-model-selection-workflow"><span class="toc-section-number">6.5</span> A model-selection
-workflow</a></li>
-<li><a href="#fast-strong-and-specialised-are-not-permanent-categories" id="toc-fast-strong-and-specialised-are-not-permanent-categories"><span class="toc-section-number">6.6</span> Fast, strong, and specialised are
-not permanent categories</a></li>
-<li><a href="#cost-and-latency-are-part-of-engineering-quality" id="toc-cost-and-latency-are-part-of-engineering-quality"><span class="toc-section-number">6.7</span> Cost and latency are part of
-engineering quality</a></li>
-<li><a href="#a-compact-selection-rule" id="toc-a-compact-selection-rule"><span class="toc-section-number">6.8</span> A compact selection rule</a></li>
-<li><a href="#verification-notes-for-the-final-edition" id="toc-verification-notes-for-the-final-edition"><span class="toc-section-number">6.9</span> Verification notes for the final
-edition</a></li>
+<li><a href="#what-the-controls-mean" id="toc-what-the-controls-mean"><span class="toc-section-number">6.1</span> What the Controls Mean</a></li>
+<li><a href="#a-dated-snapshot-of-the-current-codex-models" id="toc-a-dated-snapshot-of-the-current-codex-models"><span class="toc-section-number">6.2</span> A Dated Snapshot of the Current
+Codex Models</a></li>
+<li><a href="#choose-by-task-shape" id="toc-choose-by-task-shape"><span class="toc-section-number">6.3</span> Choose by Task Shape</a></li>
+<li><a href="#exploration-and-planning-usually-need-less-than-implementation-of-ambiguity" id="toc-exploration-and-planning-usually-need-less-than-implementation-of-ambiguity"><span class="toc-section-number">6.4</span> Exploration and Planning Usually
+Need Less Than Implementation of Ambiguity</a></li>
+<li><a href="#a-model-selection-workflow" id="toc-a-model-selection-workflow"><span class="toc-section-number">6.5</span> A Model-Selection
+Workflow</a></li>
+<li><a href="#fast-strong-and-specialised-are-not-permanent-categories" id="toc-fast-strong-and-specialised-are-not-permanent-categories"><span class="toc-section-number">6.6</span> Fast, Strong, and Specialised Are
+Not Permanent Categories</a></li>
+<li><a href="#cost-and-latency-are-part-of-engineering-quality" id="toc-cost-and-latency-are-part-of-engineering-quality"><span class="toc-section-number">6.7</span> Cost and Latency Are Part of
+Engineering Quality</a></li>
+<li><a href="#a-compact-selection-rule" id="toc-a-compact-selection-rule"><span class="toc-section-number">6.8</span> A Compact Selection Rule</a></li>
+<li><a href="#verification-notes-for-the-final-edition" id="toc-verification-notes-for-the-final-edition"><span class="toc-section-number">6.9</span> Verification Notes for the Final
+Edition</a></li>
 </ul></li>
-<li><a href="#feature-translation" id="toc-feature-translation"><span class="toc-section-number">7</span> Feature translation</a>
+<li><a href="#feature-translation" id="toc-feature-translation"><span class="toc-section-number">7</span> Feature Translation</a>
 <ul>
-<li><a href="#start-with-the-job-not-the-feature-name" id="toc-start-with-the-job-not-the-feature-name"><span class="toc-section-number">7.1</span> Start with the job, not the
-feature name</a></li>
-<li><a href="#skills-reusable-workflow-knowledge" id="toc-skills-reusable-workflow-knowledge"><span class="toc-section-number">7.2</span> Skills: reusable workflow
-knowledge</a>
+<li><a href="#start-with-the-job-not-the-feature-name" id="toc-start-with-the-job-not-the-feature-name"><span class="toc-section-number">7.1</span> Start With the Job, Not the
+Feature Name</a></li>
+<li><a href="#skills-reusable-workflow-knowledge" id="toc-skills-reusable-workflow-knowledge"><span class="toc-section-number">7.2</span> Skills: Reusable Workflow
+Knowledge</a>
 <ul>
-<li><a href="#skills-are-the-one-place-the-two-harnesses-genuinely-converged" id="toc-skills-are-the-one-place-the-two-harnesses-genuinely-converged"><span class="toc-section-number">7.2.1</span> Skills are the one place the two
-harnesses genuinely converged</a></li>
-<li><a href="#custom-slash-commands-are-being-absorbed-into-skills" id="toc-custom-slash-commands-are-being-absorbed-into-skills"><span class="toc-section-number">7.2.2</span> Custom slash commands are being
-absorbed into skills</a></li>
+<li><a href="#skills-are-the-one-place-the-two-harnesses-genuinely-converged" id="toc-skills-are-the-one-place-the-two-harnesses-genuinely-converged"><span class="toc-section-number">7.2.1</span> Skills Are the One Place the Two
+Harnesses Genuinely Converged</a></li>
+<li><a href="#custom-slash-commands-are-being-absorbed-into-skills" id="toc-custom-slash-commands-are-being-absorbed-into-skills"><span class="toc-section-number">7.2.2</span> Custom Slash Commands Are Being
+Absorbed Into Skills</a></li>
 </ul></li>
-<li><a href="#hooks-automation-around-the-agent" id="toc-hooks-automation-around-the-agent"><span class="toc-section-number">7.3</span> Hooks: automation around the
-agent</a></li>
-<li><a href="#mcp-same-protocol-different-connection" id="toc-mcp-same-protocol-different-connection"><span class="toc-section-number">7.4</span> MCP: same protocol, different
-connection</a>
+<li><a href="#hooks-automation-around-the-agent" id="toc-hooks-automation-around-the-agent"><span class="toc-section-number">7.3</span> Hooks: Automation Around the
+Agent</a></li>
+<li><a href="#mcp-same-protocol-different-connection" id="toc-mcp-same-protocol-different-connection"><span class="toc-section-number">7.4</span> MCP: Same Protocol, Different
+Connection</a>
 <ul>
-<li><a href="#the-configuration-is-not-shared-and-there-is-no-converter" id="toc-the-configuration-is-not-shared-and-there-is-no-converter"><span class="toc-section-number">7.4.1</span> The configuration is not shared,
-and there is no converter</a></li>
-<li><a href="#exposing-one-harness-to-the-other-as-an-mcp-server" id="toc-exposing-one-harness-to-the-other-as-an-mcp-server"><span class="toc-section-number">7.4.2</span> Exposing one harness to the
-other as an MCP server</a></li>
+<li><a href="#the-configuration-is-not-shared-and-there-is-no-converter" id="toc-the-configuration-is-not-shared-and-there-is-no-converter"><span class="toc-section-number">7.4.1</span> The Configuration Is Not Shared,
+and There Is No Converter</a></li>
+<li><a href="#exposing-one-harness-to-the-other-as-an-mcp-server" id="toc-exposing-one-harness-to-the-other-as-an-mcp-server"><span class="toc-section-number">7.4.2</span> Exposing One Harness to the
+Other as an MCP Server</a></li>
 </ul></li>
-<li><a href="#subagents-delegation-is-not-parallelism-by-itself" id="toc-subagents-delegation-is-not-parallelism-by-itself"><span class="toc-section-number">7.5</span> Subagents: delegation is not
-parallelism by itself</a>
+<li><a href="#subagents-delegation-is-not-parallelism-by-itself" id="toc-subagents-delegation-is-not-parallelism-by-itself"><span class="toc-section-number">7.5</span> Subagents: Delegation Is Not
+Parallelism by Itself</a>
 <ul>
-<li><a href="#how-codex-subagents-are-defined" id="toc-how-codex-subagents-are-defined"><span class="toc-section-number">7.5.1</span> How Codex subagents are
-defined</a></li>
-<li><a href="#the-formats-do-not-port-and-one-rough-edge-is-unresolved" id="toc-the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="toc-section-number">7.5.2</span> The formats do not port, and one
-rough edge is unresolved</a></li>
+<li><a href="#how-codex-subagents-are-defined" id="toc-how-codex-subagents-are-defined"><span class="toc-section-number">7.5.1</span> How Codex Subagents Are
+Defined</a></li>
+<li><a href="#the-formats-do-not-port-and-one-rough-edge-is-unresolved" id="toc-the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="toc-section-number">7.5.2</span> The Formats Do Not Port, and One
+Rough Edge Is Unresolved</a></li>
 </ul></li>
-<li><a href="#permissions-and-sandboxing-are-different-controls" id="toc-permissions-and-sandboxing-are-different-controls"><span class="toc-section-number">7.6</span> Permissions and sandboxing are
-different controls</a>
+<li><a href="#permissions-and-sandboxing-are-different-controls" id="toc-permissions-and-sandboxing-are-different-controls"><span class="toc-section-number">7.6</span> Permissions and Sandboxing Are
+Different Controls</a>
 <ul>
-<li><a href="#codexs-enterprise-layers-have-no-claude-code-equivalent" id="toc-codexs-enterprise-layers-have-no-claude-code-equivalent"><span class="toc-section-number">7.6.1</span> Codex’s enterprise layers have
-no Claude Code equivalent</a></li>
+<li><a href="#codexs-enterprise-layers-have-no-claude-code-equivalent" id="toc-codexs-enterprise-layers-have-no-claude-code-equivalent"><span class="toc-section-number">7.6.1</span> Codex’s Enterprise Layers Have
+No Claude Code Equivalent</a></li>
 </ul></li>
-<li><a href="#a-migration-rule-of-thumb" id="toc-a-migration-rule-of-thumb"><span class="toc-section-number">7.7</span> A migration rule of thumb</a></li>
+<li><a href="#a-migration-rule-of-thumb" id="toc-a-migration-rule-of-thumb"><span class="toc-section-number">7.7</span> A Migration Rule of Thumb</a></li>
 </ul></li>
-<li><a href="#prompting-patterns" id="toc-prompting-patterns"><span class="toc-section-number">8</span> Prompting patterns</a>
+<li><a href="#prompting-patterns" id="toc-prompting-patterns"><span class="toc-section-number">8</span> Prompting Patterns</a>
 <ul>
-<li><a href="#exploration-before-editing" id="toc-exploration-before-editing"><span class="toc-section-number">8.1</span> Exploration before
-editing</a></li>
-<li><a href="#bounded-implementation" id="toc-bounded-implementation"><span class="toc-section-number">8.2</span> Bounded implementation</a></li>
-<li><a href="#review-an-existing-diff" id="toc-review-an-existing-diff"><span class="toc-section-number">8.3</span> Review an existing diff</a></li>
-<li><a href="#ask-for-evidence-not-a-confident-narrative" id="toc-ask-for-evidence-not-a-confident-narrative"><span class="toc-section-number">8.4</span> Ask for evidence, not a confident
-narrative</a></li>
-<li><a href="#prompts-for-delegated-work" id="toc-prompts-for-delegated-work"><span class="toc-section-number">8.5</span> Prompts for delegated
-work</a></li>
-<li><a href="#recovery-patterns" id="toc-recovery-patterns"><span class="toc-section-number">8.6</span> Recovery patterns</a>
+<li><a href="#exploration-before-editing" id="toc-exploration-before-editing"><span class="toc-section-number">8.1</span> Exploration Before
+Editing</a></li>
+<li><a href="#bounded-implementation" id="toc-bounded-implementation"><span class="toc-section-number">8.2</span> Bounded Implementation</a></li>
+<li><a href="#review-an-existing-diff" id="toc-review-an-existing-diff"><span class="toc-section-number">8.3</span> Review an Existing Diff</a></li>
+<li><a href="#ask-for-evidence-not-a-confident-narrative" id="toc-ask-for-evidence-not-a-confident-narrative"><span class="toc-section-number">8.4</span> Ask for Evidence, Not a Confident
+Narrative</a></li>
+<li><a href="#prompts-for-delegated-work" id="toc-prompts-for-delegated-work"><span class="toc-section-number">8.5</span> Prompts for Delegated
+Work</a></li>
+<li><a href="#recovery-patterns" id="toc-recovery-patterns"><span class="toc-section-number">8.6</span> Recovery Patterns</a>
 <ul>
-<li><a href="#the-agent-changed-the-wrong-files" id="toc-the-agent-changed-the-wrong-files"><span class="toc-section-number">8.6.1</span> The agent changed the wrong
-files</a></li>
-<li><a href="#the-tests-fail-after-the-change" id="toc-the-tests-fail-after-the-change"><span class="toc-section-number">8.6.2</span> The tests fail after the
-change</a></li>
-<li><a href="#the-agent-claims-a-tool-or-capability-is-unavailable" id="toc-the-agent-claims-a-tool-or-capability-is-unavailable"><span class="toc-section-number">8.6.3</span> The agent claims a tool or
-capability is unavailable</a></li>
-<li><a href="#the-context-is-stale-or-contradictory" id="toc-the-context-is-stale-or-contradictory"><span class="toc-section-number">8.6.4</span> The context is stale or
-contradictory</a></li>
-<li><a href="#the-agent-is-over-scoping-the-task" id="toc-the-agent-is-over-scoping-the-task"><span class="toc-section-number">8.6.5</span> The agent is over-scoping the
-task</a></li>
-<li><a href="#the-agent-is-too-hesitant" id="toc-the-agent-is-too-hesitant"><span class="toc-section-number">8.6.6</span> The agent is too
-hesitant</a></li>
+<li><a href="#the-agent-changed-the-wrong-files" id="toc-the-agent-changed-the-wrong-files"><span class="toc-section-number">8.6.1</span> The Agent Changed the Wrong
+Files</a></li>
+<li><a href="#the-tests-fail-after-the-change" id="toc-the-tests-fail-after-the-change"><span class="toc-section-number">8.6.2</span> The Tests Fail After the
+Change</a></li>
+<li><a href="#the-agent-claims-a-tool-or-capability-is-unavailable" id="toc-the-agent-claims-a-tool-or-capability-is-unavailable"><span class="toc-section-number">8.6.3</span> The Agent Claims a Tool or
+Capability Is Unavailable</a></li>
+<li><a href="#the-context-is-stale-or-contradictory" id="toc-the-context-is-stale-or-contradictory"><span class="toc-section-number">8.6.4</span> The Context Is Stale or
+Contradictory</a></li>
+<li><a href="#the-agent-is-over-scoping-the-task" id="toc-the-agent-is-over-scoping-the-task"><span class="toc-section-number">8.6.5</span> The Agent Is Over-Scoping the
+Task</a></li>
+<li><a href="#the-agent-is-too-hesitant" id="toc-the-agent-is-too-hesitant"><span class="toc-section-number">8.6.6</span> The Agent Is Too
+Hesitant</a></li>
 </ul></li>
-<li><a href="#a-compact-prompt-checklist" id="toc-a-compact-prompt-checklist"><span class="toc-section-number">8.7</span> A compact prompt
-checklist</a></li>
+<li><a href="#a-compact-prompt-checklist" id="toc-a-compact-prompt-checklist"><span class="toc-section-number">8.7</span> A Compact Prompt
+Checklist</a></li>
 </ul></li>
-<li><a href="#migration-cookbook" id="toc-migration-cookbook"><span class="toc-section-number">9</span> Migration cookbook</a>
+<li><a href="#migration-cookbook" id="toc-migration-cookbook"><span class="toc-section-number">9</span> Migration Cookbook</a>
 <ul>
-<li><a href="#move-the-canonical-text-to-agents.md-and-import-it" id="toc-move-the-canonical-text-to-agents.md-and-import-it"><span class="toc-section-number">9.1</span> Move the canonical text to
-<code>AGENTS.md</code> and import it</a></li>
-<li><a href="#choose-a-shared-instruction-strategy" id="toc-choose-a-shared-instruction-strategy"><span class="toc-section-number">9.2</span> Choose a shared-instruction
-strategy</a></li>
-<li><a href="#roll-out-in-a-branch-one-capability-at-a-time" id="toc-roll-out-in-a-branch-one-capability-at-a-time"><span class="toc-section-number">9.3</span> Roll out in a branch, one
-capability at a time</a></li>
-<li><a href="#port-integrations-by-behaviour-not-by-filename" id="toc-port-integrations-by-behaviour-not-by-filename"><span class="toc-section-number">9.4</span> Port integrations by behaviour,
-not by filename</a></li>
-<li><a href="#preserve-a-clean-rollback-path" id="toc-preserve-a-clean-rollback-path"><span class="toc-section-number">9.5</span> Preserve a clean rollback
-path</a></li>
+<li><a href="#move-the-canonical-text-to-agents.md-and-import-it" id="toc-move-the-canonical-text-to-agents.md-and-import-it"><span class="toc-section-number">9.1</span> Move the Canonical Text to
+<code>AGENTS.md</code> and Import It</a></li>
+<li><a href="#choose-a-shared-instruction-strategy" id="toc-choose-a-shared-instruction-strategy"><span class="toc-section-number">9.2</span> Choose a Shared-Instruction
+Strategy</a></li>
+<li><a href="#roll-out-in-a-branch-one-capability-at-a-time" id="toc-roll-out-in-a-branch-one-capability-at-a-time"><span class="toc-section-number">9.3</span> Roll Out in a Branch, One
+Capability at a Time</a></li>
+<li><a href="#port-integrations-by-behaviour-not-by-filename" id="toc-port-integrations-by-behaviour-not-by-filename"><span class="toc-section-number">9.4</span> Port Integrations by Behaviour,
+Not by Filename</a></li>
+<li><a href="#preserve-a-clean-rollback-path" id="toc-preserve-a-clean-rollback-path"><span class="toc-section-number">9.5</span> Preserve a Clean Rollback
+Path</a></li>
 </ul></li>
-<li><a href="#safety-cost-and-operational-discipline" id="toc-safety-cost-and-operational-discipline"><span class="toc-section-number">10</span> Safety, cost, and operational
-discipline</a>
+<li><a href="#safety-cost-and-operational-discipline" id="toc-safety-cost-and-operational-discipline"><span class="toc-section-number">10</span> Safety, Cost, and Operational
+Discipline</a>
 <ul>
-<li><a href="#separate-approval-from-sandboxing" id="toc-separate-approval-from-sandboxing"><span class="toc-section-number">10.1</span> Separate approval from
-sandboxing</a></li>
-<li><a href="#protect-secrets-and-external-systems" id="toc-protect-secrets-and-external-systems"><span class="toc-section-number">10.2</span> Protect secrets and external
-systems</a></li>
-<li><a href="#control-cost-with-task-boundaries" id="toc-control-cost-with-task-boundaries"><span class="toc-section-number">10.3</span> Control cost with task
-boundaries</a></li>
-<li><a href="#make-generated-changes-observable" id="toc-make-generated-changes-observable"><span class="toc-section-number">10.4</span> Make generated changes
-observable</a></li>
-<li><a href="#establish-an-operating-rhythm" id="toc-establish-an-operating-rhythm"><span class="toc-section-number">10.5</span> Establish an operating rhythm</a>
+<li><a href="#separate-approval-from-sandboxing" id="toc-separate-approval-from-sandboxing"><span class="toc-section-number">10.1</span> Separate Approval From
+Sandboxing</a></li>
+<li><a href="#protect-secrets-and-external-systems" id="toc-protect-secrets-and-external-systems"><span class="toc-section-number">10.2</span> Protect Secrets and External
+Systems</a></li>
+<li><a href="#control-cost-with-task-boundaries" id="toc-control-cost-with-task-boundaries"><span class="toc-section-number">10.3</span> Control Cost With Task
+Boundaries</a></li>
+<li><a href="#make-generated-changes-observable" id="toc-make-generated-changes-observable"><span class="toc-section-number">10.4</span> Make Generated Changes
+Observable</a></li>
+<li><a href="#establish-an-operating-rhythm" id="toc-establish-an-operating-rhythm"><span class="toc-section-number">10.5</span> Establish an Operating Rhythm</a>
 <ul>
-<li><a href="#safety-and-operational-checklist" id="toc-safety-and-operational-checklist"><span class="toc-section-number">10.5.1</span> Safety and operational
-checklist</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#what-to-measure" id="toc-what-to-measure"><span class="toc-section-number">11</span> What to measure</a>
-<ul>
-<li><a href="#define-the-comparison-before-running-it" id="toc-define-the-comparison-before-running-it"><span class="toc-section-number">11.1</span> Define the comparison before
-running it</a></li>
-<li><a href="#use-a-task-matrix-that-resembles-real-work" id="toc-use-a-task-matrix-that-resembles-real-work"><span class="toc-section-number">11.2</span> Use a task matrix that resembles
-real work</a></li>
-<li><a href="#score-correctness-before-speed" id="toc-score-correctness-before-speed"><span class="toc-section-number">11.3</span> Score correctness before
-speed</a></li>
-<li><a href="#record-the-review-burden" id="toc-record-the-review-burden"><span class="toc-section-number">11.4</span> Record the review burden</a></li>
-<li><a href="#report-distributions-not-a-single-victory-lap" id="toc-report-distributions-not-a-single-victory-lap"><span class="toc-section-number">11.5</span> Report distributions, not a
-single victory lap</a></li>
-<li><a href="#a-practical-evaluation-record" id="toc-a-practical-evaluation-record"><span class="toc-section-number">11.6</span> A practical evaluation record</a>
-<ul>
-<li><a href="#fair-bake-off-checklist" id="toc-fair-bake-off-checklist"><span class="toc-section-number">11.6.1</span> Fair bake-off
-checklist</a></li>
+<li><a href="#safety-and-operational-checklist" id="toc-safety-and-operational-checklist"><span class="toc-section-number">10.5.1</span> Safety and Operational
+Checklist</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#conclusion-and-quick-reference" id="toc-conclusion-and-quick-reference"><span class="toc-section-number">12</span> Conclusion and quick reference</a>
+<li><a href="#what-to-measure" id="toc-what-to-measure"><span class="toc-section-number">11</span> What to Measure</a>
 <ul>
-<li><a href="#quick-reference-adding-codex-to-an-existing-repository" id="toc-quick-reference-adding-codex-to-an-existing-repository"><span class="toc-section-number">12.1</span> Quick-reference: adding Codex to
-an existing repository</a>
+<li><a href="#define-the-comparison-before-running-it" id="toc-define-the-comparison-before-running-it"><span class="toc-section-number">11.1</span> Define the Comparison Before
+Running It</a></li>
+<li><a href="#use-a-task-matrix-that-resembles-real-work" id="toc-use-a-task-matrix-that-resembles-real-work"><span class="toc-section-number">11.2</span> Use a Task Matrix That Resembles
+Real Work</a></li>
+<li><a href="#score-correctness-before-speed" id="toc-score-correctness-before-speed"><span class="toc-section-number">11.3</span> Score Correctness Before
+Speed</a></li>
+<li><a href="#record-the-review-burden" id="toc-record-the-review-burden"><span class="toc-section-number">11.4</span> Record the Review Burden</a></li>
+<li><a href="#report-distributions-not-a-single-victory-lap" id="toc-report-distributions-not-a-single-victory-lap"><span class="toc-section-number">11.5</span> Report Distributions, Not a
+Single Victory Lap</a></li>
+<li><a href="#a-practical-evaluation-record" id="toc-a-practical-evaluation-record"><span class="toc-section-number">11.6</span> A Practical Evaluation Record</a>
 <ul>
-<li><a href="#minimal-migration" id="toc-minimal-migration"><span class="toc-section-number">12.1.1</span> Minimal migration</a></li>
-<li><a href="#task-start-prompt" id="toc-task-start-prompt"><span class="toc-section-number">12.1.2</span> Task-start prompt</a></li>
-<li><a href="#preflight-checklist" id="toc-preflight-checklist"><span class="toc-section-number">12.1.3</span> Preflight checklist</a></li>
-<li><a href="#postflight-checklist" id="toc-postflight-checklist"><span class="toc-section-number">12.1.4</span> Postflight checklist</a></li>
-<li><a href="#choosing-a-harness-or-model-setting" id="toc-choosing-a-harness-or-model-setting"><span class="toc-section-number">12.1.5</span> Choosing a harness or model
-setting</a></li>
+<li><a href="#fair-bake-off-checklist" id="toc-fair-bake-off-checklist"><span class="toc-section-number">11.6.1</span> Fair Bake-Off
+Checklist</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#conclusion-and-quick-reference" id="toc-conclusion-and-quick-reference"><span class="toc-section-number">12</span> Conclusion and Quick Reference</a>
+<ul>
+<li><a href="#quick-reference-adding-codex-to-an-existing-repository" id="toc-quick-reference-adding-codex-to-an-existing-repository"><span class="toc-section-number">12.1</span> Quick-Reference: Adding Codex to
+an Existing Repository</a>
+<ul>
+<li><a href="#minimal-migration" id="toc-minimal-migration"><span class="toc-section-number">12.1.1</span> Minimal Migration</a></li>
+<li><a href="#task-start-prompt" id="toc-task-start-prompt"><span class="toc-section-number">12.1.2</span> Task-Start Prompt</a></li>
+<li><a href="#preflight-checklist" id="toc-preflight-checklist"><span class="toc-section-number">12.1.3</span> Preflight Checklist</a></li>
+<li><a href="#postflight-checklist" id="toc-postflight-checklist"><span class="toc-section-number">12.1.4</span> Postflight Checklist</a></li>
+<li><a href="#choosing-a-harness-or-model-setting" id="toc-choosing-a-harness-or-model-setting"><span class="toc-section-number">12.1.5</span> Choosing a Harness or Model
+Setting</a></li>
 <li><a href="#verified-as-of-september-2026" id="toc-verified-as-of-september-2026"><span class="toc-section-number">12.1.6</span> Verified as of September
 2026</a></li>
 </ul></li>
@@ -880,7 +890,7 @@ harness without turning an existing repository into a compatibility
 project. The goal is not to declare a winner. The useful question is:
 given this repository, this task, and these constraints, how do you make
 either harness behave predictably?</p>
-<h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What this primer covers</h2>
+<h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
 <p>The guide builds a working mental model before it gives you recipes.
 It explains the layers that people often collapse into the word “Codex”
 or “Claude,” then maps the practical differences that matter when you
@@ -906,7 +916,7 @@ anecdotes.</li>
 test, changing a build recipe, updating documentation, and reviewing a
 multi-file refactor. You do not need to adopt every suggested
 convention. The point is to make the important choices visible.</p>
-<h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What this primer is not</h2>
+<h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
 <p>This is not a complete reference manual for either product. Commands,
 configuration keys, available models, plan entitlements, usage limits,
 and interface behaviour can change. Where an exact product detail
@@ -929,8 +939,8 @@ and worth maintaining. The chapter on instruction systems explains which
 file should hold that canonical text and why the direction of the bridge
 between <code>CLAUDE.md</code> and <code>AGENTS.md</code> is not an
 arbitrary choice.</p>
-<h2 data-number="1.3" id="what-you-should-already-know"><span class="header-section-number">1.3</span> What you should already
-know</h2>
+<h2 data-number="1.3" id="what-you-should-already-know"><span class="header-section-number">1.3</span> What You Should Already
+Know</h2>
 <p>You should be comfortable working in a terminal, reading a git diff,
 running a project’s tests, and making ordinary changes across several
 files. You should know what your repository’s <code>CLAUDE.md</code>
@@ -943,8 +953,8 @@ do need to bring the habits that make any coding agent safe to use: give
 it a bounded task, keep the working tree understandable, inspect its
 proposed changes, and run the checks that establish whether the result
 is correct.</p>
-<h1 data-number="2" id="two-harnesses-one-repository"><span class="header-section-number">2</span> Two harnesses, one
-repository</h1>
+<h1 data-number="2" id="two-harnesses-one-repository"><span class="header-section-number">2</span> Two Harnesses, One
+Repository</h1>
 <p>The most useful starting point is to stop comparing “Claude” and
 “Codex” as if each were a single interchangeable object. In a coding
 session, at least four layers are involved:</p>
@@ -964,8 +974,8 @@ harness supplies different instructions, exposes different tools, or
 applies different approval rules. Conversely, the same harness can
 behave differently after you change the model, reasoning setting,
 working directory, or sandbox.</p>
-<h2 data-number="2.1" id="the-model-is-a-decision-component-not-the-whole-agent"><span class="header-section-number">2.1</span> The model is a decision
-component, not the whole agent</h2>
+<h2 data-number="2.1" id="the-model-is-a-decision-component-not-the-whole-agent"><span class="header-section-number">2.1</span> The Model Is a Decision
+Component, Not the Whole Agent</h2>
 <p>The model is the language-and-reasoning component that predicts the
 next response or action from the context it receives. In a coding task,
 that context can include your prompt, repository instructions, files,
@@ -996,8 +1006,8 @@ instructions. Keep task-level guidance such as “use a faster model for a
 small formatting change; use a deeper reasoning setting for an
 unfamiliar concurrency bug” separate from the current product catalogue.
 The model-selection chapter will return to this distinction.</p>
-<h2 data-number="2.2" id="the-harness-supplies-the-working-loop"><span class="header-section-number">2.2</span> The harness supplies the
-working loop</h2>
+<h2 data-number="2.2" id="the-harness-supplies-the-working-loop"><span class="header-section-number">2.2</span> The Harness Supplies the
+Working Loop</h2>
 <p>The agent harness is the program that turns a conversation into an
 agentic coding session. It loads instructions, assembles context,
 presents tools, interprets the model’s requested actions, applies
@@ -1041,8 +1051,8 @@ while leaving room to state a real difference when one exists. For
 instance, an instruction about a particular approval mode belongs with
 the harness that implements that mode; a command for building the
 project belongs in the shared canonical file.</p>
-<h2 data-number="2.3" id="the-interface-is-where-you-steer-the-session"><span class="header-section-number">2.3</span> The interface is where you
-steer the session</h2>
+<h2 data-number="2.3" id="the-interface-is-where-you-steer-the-session"><span class="header-section-number">2.3</span> The Interface Is Where You
+Steer the Session</h2>
 <p>The interface is the surface you use to start, observe, and control
 the harness. It might be a command-line session, an editor integration,
 or another product surface. The interface affects discoverability and
@@ -1068,8 +1078,8 @@ route; or</li>
 </ul>
 <p>The final error may look similar in the conversation, but the fixes
 are different. Ask which layer failed.</p>
-<h2 data-number="2.4" id="tools-and-the-execution-environment-define-the-agents-reach"><span class="header-section-number">2.4</span> Tools and the execution
-environment define the agent’s reach</h2>
+<h2 data-number="2.4" id="tools-and-the-execution-environment-define-the-agents-reach"><span class="header-section-number">2.4</span> Tools and the Execution
+Environment Define the Agent’s Reach</h2>
 <p>Tools are the capabilities the harness exposes to the model: reading
 files, searching text, applying patches, running shell commands,
 inspecting git state, calling an external service, or interacting with a
@@ -1098,8 +1108,8 @@ every system directory or reach the package registry. Conversely, a
 permissive sandbox does not mean the harness will run every command
 without asking. Confusing these concepts leads to bad debugging and
 unsafe assumptions.</p>
-<h2 data-number="2.5" id="coexistence-is-a-repository-practice-not-a-parity-claim"><span class="header-section-number">2.5</span> Coexistence is a repository
-practice, not a parity claim</h2>
+<h2 data-number="2.5" id="coexistence-is-a-repository-practice-not-a-parity-claim"><span class="header-section-number">2.5</span> Coexistence Is a Repository
+Practice, Not a Parity Claim</h2>
 <p>Claude Code and Codex can work on the same repository because the
 repository already contains the most important shared assets: source
 code, tests, build commands, version history, and project conventions.
@@ -1139,7 +1149,7 @@ investigation. One environment may have the credentials or services the
 task requires. Use the mechanism that fits the task, and make the result
 legible to the other harness through files, commands, tests, and
 explicit notes.</p>
-<h2 data-number="2.6" id="a-compact-diagnostic-model"><span class="header-section-number">2.6</span> A compact diagnostic model</h2>
+<h2 data-number="2.6" id="a-compact-diagnostic-model"><span class="header-section-number">2.6</span> A Compact Diagnostic Model</h2>
 <p>When a session goes wrong, classify the failure before changing
 prompts or models:</p>
 <pre class="text"><code>model       -&gt; reasoning, code generation, action proposals
@@ -1158,7 +1168,7 @@ model upgrade will solve the coordination problem.</p>
 next sections turn it into an initial setup, an instruction-file
 strategy, and task workflows that let you switch harnesses without
 losing control of the repository.</p>
-<h1 data-number="3" id="first-session-setup"><span class="header-section-number">3</span> First-session setup</h1>
+<h1 data-number="3" id="first-session-setup"><span class="header-section-number">3</span> First-Session Setup</h1>
 <p>Your first Codex session should not begin with a large feature
 request. The useful first question is whether Codex can understand the
 repository, respect its boundaries, and leave you with a diff you can
@@ -1170,8 +1180,8 @@ use the command name <code>codex</code> where an executable is needed;
 check those commands against the current official Codex documentation
 before you publish or automate them. This guide intentionally avoids
 turning a volatile login flow into repository policy.</p>
-<h2 data-number="3.1" id="install-and-authenticate-without-changing-the-repository"><span class="header-section-number">3.1</span> Install and authenticate
-without changing the repository</h2>
+<h2 data-number="3.1" id="install-and-authenticate-without-changing-the-repository"><span class="header-section-number">3.1</span> Install and Authenticate
+Without Changing the Repository</h2>
 <p>Install Codex using the current supported path for the interface you
 intend to use: command-line, editor integration, or another supported
 client. Keep the installation and authentication step separate from
@@ -1214,8 +1224,8 @@ release. Treat any command-line flags, configuration keys, or UI labels
 as provisional until checked against the version in use. Start with the
 narrowest permissions that let the task run. Widen them only when a
 specific, understood operation needs it.</p>
-<h2 data-number="3.2" id="inspect-the-repository-before-asking-for-edits"><span class="header-section-number">3.2</span> Inspect the repository before
-asking for edits</h2>
+<h2 data-number="3.2" id="inspect-the-repository-before-asking-for-edits"><span class="header-section-number">3.2</span> Inspect the Repository Before
+Asking for Edits</h2>
 <p>Open Codex from the repository root, or explicitly tell it which
 directory is the project root. The root matters because instruction
 files, build commands, relative paths, and git state are all interpreted
@@ -1255,8 +1265,8 @@ from its own work, and state uncertainty instead of silently filling
 gaps. If the answer invents a test command, claims that it changed
 nothing without showing how it checked, or misses an obvious instruction
 file, stop and fix the setup before giving it write access.</p>
-<h2 data-number="3.3" id="choose-a-deliberately-small-first-task"><span class="header-section-number">3.3</span> Choose a deliberately small
-first task</h2>
+<h2 data-number="3.3" id="choose-a-deliberately-small-first-task"><span class="header-section-number">3.3</span> Choose a Deliberately Small
+First Task</h2>
 <p>The first write should be reversible and easy to review. Updating one
 sentence in a document, adding a focused test, or correcting a narrow
 configuration comment is usually better than beginning with a
@@ -1283,8 +1293,8 @@ unrelated test and tries to make the repository “better” while it is
 there. That may be useful on a later task, but it makes the first diff
 harder to attribute. Scope discipline is part of what you are
 testing.</p>
-<h2 data-number="3.4" id="use-a-review-loop-not-a-hand-off"><span class="header-section-number">3.4</span> Use a review loop, not a
-hand-off</h2>
+<h2 data-number="3.4" id="use-a-review-loop-not-a-hand-off"><span class="header-section-number">3.4</span> Use a Review Loop, Not a
+Hand-off</h2>
 <p>The basic loop is:</p>
 <pre class="text"><code>inspect -&gt; propose -&gt; edit -&gt; validate -&gt; review -&gt; accept or revise</code></pre>
 <p>Do not treat a successful tool call as evidence that the result is
@@ -1317,8 +1327,8 @@ more edits. Do not commit.</code></pre>
 review loop. Do not respond to an incorrect first attempt by broadening
 the task. A small, explicit correction tells you whether the agent can
 recover without losing the original constraints.</p>
-<h2 data-number="3.5" id="end-the-first-session-with-a-reproducible-hand-off"><span class="header-section-number">3.5</span> End the first session with a
-reproducible hand-off</h2>
+<h2 data-number="3.5" id="end-the-first-session-with-a-reproducible-hand-off"><span class="header-section-number">3.5</span> End the First Session With a
+Reproducible Hand-off</h2>
 <p>Before you close the session, ask for a short hand-off containing the
 final state, validation performed, unresolved questions, and the next
 safe action. You should be able to resume the work from the repository
@@ -1336,7 +1346,7 @@ Do not modify files or commit while writing the summary.</code></pre>
 did not do, which instructions it followed, and which parts still need
 human judgment. It has not gone well merely because the client started,
 a model responded, or the task ended without an error message.</p>
-<h1 data-number="4" id="instruction-systems"><span class="header-section-number">4</span> Instruction systems</h1>
+<h1 data-number="4" id="instruction-systems"><span class="header-section-number">4</span> Instruction Systems</h1>
 <p>Claude Code and Codex both use project instructions, but an
 instruction file is not a portable command language.
 <code>CLAUDE.md</code> and <code>AGENTS.md</code> are conventions used
@@ -1344,8 +1354,8 @@ by different harnesses; they do not automatically have identical
 discovery rules, precedence, inheritance, or feature support. The
 practical problem is to give two agents one repository contract without
 maintaining two conflicting manuals.</p>
-<h2 data-number="4.1" id="who-owns-agents.md-now"><span class="header-section-number">4.1</span> Who owns <code>AGENTS.md</code>
-now</h2>
+<h2 data-number="4.1" id="who-owns-agents.md-now"><span class="header-section-number">4.1</span> Who Owns <code>AGENTS.md</code>
+Now</h2>
 <p>Both of the conventions in this chapter stopped being single-vendor
 conventions on 9 December 2025. On that date the Linux Foundation
 announced the formation of the Agentic AI Foundation (AAIF), and
@@ -1384,8 +1394,8 @@ number. The tool list is the more useful half: it tells you which other
 agents will find a root <code>AGENTS.md</code> without extra
 configuration, which is exactly the question a repository owner needs
 answered before choosing where the canonical text lives.</p>
-<h2 data-number="4.2" id="separate-the-repository-contract-from-the-harness-adapter"><span class="header-section-number">4.2</span> Separate the repository
-contract from the harness adapter</h2>
+<h2 data-number="4.2" id="separate-the-repository-contract-from-the-harness-adapter"><span class="header-section-number">4.2</span> Separate the Repository
+Contract From the Harness Adapter</h2>
 <p>Start by classifying an instruction:</p>
 <table>
 <colgroup>
@@ -1440,7 +1450,7 @@ Duplication creates two sources of truth. The files will drift, and the
 drift will be hardest to notice when the instructions concern safety,
 generated outputs, or validation.</p>
 <h2 data-number="4.3" id="what-claude.md-and-agents.md-mean-in-this-setup"><span class="header-section-number">4.3</span> What <code>CLAUDE.md</code> and
-<code>AGENTS.md</code> mean in this setup</h2>
+<code>AGENTS.md</code> Mean in This Setup</h2>
 <p>For this guide, use these terms precisely:</p>
 <ul>
 <li><code>CLAUDE.md</code> is the file Claude Code discovers. In the
@@ -1457,7 +1467,7 @@ either harness.</li>
 Markdown link is not. That distinction decides which direction a bridge
 can safely point.</li>
 </ul>
-<h3 data-number="4.3.1" id="claude-code-does-not-read-agents.md"><span class="header-section-number">4.3.1</span> Claude Code does not read
+<h3 data-number="4.3.1" id="claude-code-does-not-read-agents.md"><span class="header-section-number">4.3.1</span> Claude Code Does Not Read
 <code>AGENTS.md</code></h3>
 <p>This was the open question in earlier drafts of this primer, and it
 is now settled from the primary source. Anthropic’s own memory
@@ -1501,8 +1511,8 @@ at the moment you run them, so a later edit to <code>AGENTS.md</code>
 does not propagate. For a repository where both harnesses are in
 continuous use, the <code>@AGENTS.md</code> import is the mechanism that
 stays correct without a maintenance step.</p>
-<h3 data-number="4.3.2" id="how-claude-code-discovers-instructions"><span class="header-section-number">4.3.2</span> How Claude Code discovers
-instructions</h3>
+<h3 data-number="4.3.2" id="how-claude-code-discovers-instructions"><span class="header-section-number">4.3.2</span> How Claude Code Discovers
+Instructions</h3>
 <p>Claude Code loads instruction files in this order, and the order is
 concatenation rather than override:</p>
 <ol type="1">
@@ -1538,8 +1548,8 @@ repository sits inside a parent directory whose <code>CLAUDE.md</code>
 describes an unrelated project, or where an organisation-wide file is
 accurate but too long to be worth the context it consumes on every
 session.</p>
-<h3 data-number="4.3.3" id="how-codex-discovers-instructions"><span class="header-section-number">4.3.3</span> How Codex discovers
-instructions</h3>
+<h3 data-number="4.3.3" id="how-codex-discovers-instructions"><span class="header-section-number">4.3.3</span> How Codex Discovers
+Instructions</h3>
 <p>Codex’s algorithm is genuinely different, and more monorepo-native.
 According to OpenAI’s <code>AGENTS.md</code> guidance (checked 10
 September 2026), Codex resolves a global file first —
@@ -1638,14 +1648,14 @@ behaviour generally. A key accepted by one Codex release may be renamed,
 moved, or removed in another, and Claude Code’s settings schema moves
 too. Configuration should support the instruction design; it should not
 be the only place where a safety or validation rule exists.</p>
-<h2 data-number="4.4" id="the-bridge-pattern-and-which-direction-to-point-it"><span class="header-section-number">4.4</span> The bridge pattern, and which
-direction to point it</h2>
+<h2 data-number="4.4" id="the-bridge-pattern-and-which-direction-to-point-it"><span class="header-section-number">4.4</span> The Bridge Pattern, and Which
+Direction to Point It</h2>
 <p>A bridge file gives the second harness an entry point to the first
 harness’s instructions. There are two directions to point it, and they
 are not equally reliable. Getting this right is the single most
 consequential decision in the chapter.</p>
 <h3 data-number="4.4.1" id="point-claude.md-at-agents.md-with-an-import"><span class="header-section-number">4.4.1</span> Point <code>CLAUDE.md</code>
-at <code>AGENTS.md</code>, with an import</h3>
+at <code>AGENTS.md</code>, With an Import</h3>
 <p>The direction that works uses a real include primitive. Put the
 canonical instructions in <code>AGENTS.md</code> and make
 <code>CLAUDE.md</code> an import of it:</p>
@@ -1682,8 +1692,8 @@ Linux and macOS. It needs Developer Mode or an elevated shell on
 Windows, and a repository that Windows contributors may clone should use
 the import instead.</p>
 <h3 data-number="4.4.2" id="pointing-agents.md-at-claude.md-is-prose-not-a-mechanism"><span class="header-section-number">4.4.2</span> Pointing
-<code>AGENTS.md</code> at <code>CLAUDE.md</code> is prose, not a
-mechanism</h3>
+<code>AGENTS.md</code> at <code>CLAUDE.md</code> Is Prose, Not a
+Mechanism</h3>
 <p>Earlier drafts of this primer recommended the reverse: keep
 <code>CLAUDE.md</code> canonical and add a thin <code>AGENTS.md</code>
 that links to it. That arrangement looks symmetrical and is not. Codex
@@ -1712,8 +1722,8 @@ plus a prose <code>AGENTS.md</code> is a defensible interim state. It is
 not the arrangement to build a team convention on. The one-line import
 in the other direction costs a single commit and removes the model’s
 judgement from the loop.</p>
-<h3 data-number="4.4.3" id="what-the-bridge-does-not-do"><span class="header-section-number">4.4.3</span> What the bridge does not
-do</h3>
+<h3 data-number="4.4.3" id="what-the-bridge-does-not-do"><span class="header-section-number">4.4.3</span> What the Bridge Does Not
+Do</h3>
 <p>A bridge establishes where a repository-level reader should begin. It
 is not a parity claim. Skills, hooks, MCP servers, subagent definitions,
 approval policy, and sandbox policy all live in harness-specific files
@@ -1723,8 +1733,8 @@ read-only session in each harness and ask which instruction files it
 found and which rules it believes apply. An agent that cannot name your
 build command has not read your instructions, whatever the file tree
 looks like.</p>
-<h2 data-number="4.5" id="shared-guidance-without-a-second-manual"><span class="header-section-number">4.5</span> Shared guidance without a
-second manual</h2>
+<h2 data-number="4.5" id="shared-guidance-without-a-second-manual"><span class="header-section-number">4.5</span> Shared Guidance Without a
+Second Manual</h2>
 <p>There are three reasonable designs. Pick one deliberately instead of
 allowing the repository to accumulate all three.</p>
 <p>The first is the import bridge: put the canonical text in
@@ -1752,8 +1762,8 @@ detectable in review.</p>
 already has a substantial <code>CLAUDE.md</code>, and the desired Codex
 adaptation is intentionally lightweight. A migration should not
 reorganise every instruction merely to introduce a second reader.</p>
-<h2 data-number="4.6" id="generating-each-harnesss-files-from-one-source"><span class="header-section-number">4.6</span> Generating each harness’s files
-from one source</h2>
+<h2 data-number="4.6" id="generating-each-harnesss-files-from-one-source"><span class="header-section-number">4.6</span> Generating Each Harness’s Files
+From One Source</h2>
 <p>Two harnesses is manageable by hand. Two harnesses plus an editor
 assistant, plus a code-review bot, plus whatever a new contributor
 brings, is not — and the parts that are not bridgeable by an import,
@@ -1829,8 +1839,8 @@ everything in this chapter — universal instructions in
 <code>AGENTS.md</code>, <code>CLAUDE.md</code> as an
 <code>@AGENTS.md</code> import plus Claude-specific extras, and
 <code>~/.codex/config.toml</code> left deliberately tool-specific.</p>
-<h2 data-number="4.7" id="codex-configuration-is-a-supplement-not-the-project-contract"><span class="header-section-number">4.7</span> Codex configuration is a
-supplement, not the project contract</h2>
+<h2 data-number="4.7" id="codex-configuration-is-a-supplement-not-the-project-contract"><span class="header-section-number">4.7</span> Codex Configuration Is a
+Supplement, Not the Project Contract</h2>
 <p>Codex may have user-level and repository-level configuration for
 model choice, approval behaviour, sandboxing, or instruction-file
 fallback. Those settings are more volatile than repository prose and may
@@ -1852,8 +1862,8 @@ shared project instructions unless every contributor should inherit
 them. A developer who needs a more permissive sandbox for a local
 experiment should be able to make that choice locally without changing
 the repository’s review policy for everyone else.</p>
-<h2 data-number="4.8" id="a-practical-instruction-audit"><span class="header-section-number">4.8</span> A practical instruction
-audit</h2>
+<h2 data-number="4.8" id="a-practical-instruction-audit"><span class="header-section-number">4.8</span> A Practical Instruction
+Audit</h2>
 <p>When adding Codex to an existing Claude Code repository, audit the
 instruction system in this order:</p>
 <ol type="1">
@@ -1873,7 +1883,7 @@ questions and still retain their own harness-specific workflows. You do
 not need identical prompts or identical feature sets. You do need one
 understandable source of truth for what the repository considers a
 correct change.</p>
-<h1 data-number="5" id="workflow-differences"><span class="header-section-number">5</span> Workflow differences</h1>
+<h1 data-number="5" id="workflow-differences"><span class="header-section-number">5</span> Workflow Differences</h1>
 <p>If you already use Claude Code, the first Codex session can feel
 familiar enough to be misleading. You still describe a goal, let an
 agent inspect a repository, approve or reject actions, review a diff,
@@ -1887,8 +1897,8 @@ establish the task boundary, inspect the relevant system, make a small
 change, verify it, and review the result. The parts you need to
 recalibrate are the hand-off between those stages and the amount of
 context you make explicit.</p>
-<h2 data-number="5.1" id="exploration-establish-the-map-before-choosing-a-route"><span class="header-section-number">5.1</span> Exploration: establish the map
-before choosing a route</h2>
+<h2 data-number="5.1" id="exploration-establish-the-map-before-choosing-a-route"><span class="header-section-number">5.1</span> Exploration: Establish the Map
+Before Choosing a Route</h2>
 <p>Claude Code users often begin with a natural-language request and
 allow the agent to discover the repository while working. That can work
 well when the repository instructions, naming conventions, and test
@@ -1929,8 +1939,8 @@ ask it to follow references only when they affect the task. This is
 especially important when Claude Code and Codex use different
 instruction-file conventions: a thin compatibility file is useful only
 if the agent actually follows the path to the canonical guidance.</p>
-<h2 data-number="5.2" id="planning-make-the-change-boundary-explicit"><span class="header-section-number">5.2</span> Planning: make the change
-boundary explicit</h2>
+<h2 data-number="5.2" id="planning-make-the-change-boundary-explicit"><span class="header-section-number">5.2</span> Planning: Make the Change
+Boundary Explicit</h2>
 <p>Planning has two meanings in agentic coding. It can mean a
 lightweight statement of intended edits before work begins, or it can
 mean a detailed implementation design with dependencies, alternatives,
@@ -1964,8 +1974,8 @@ implementation starts, let the agent revise the plan when tests or
 source inspection contradict it. The useful distinction is between a
 plan that records current intent and a rigid script that prevents
 learning.</p>
-<h2 data-number="5.3" id="implementation-constrain-scope-preserve-local-idioms"><span class="header-section-number">5.3</span> Implementation: constrain
-scope, preserve local idioms</h2>
+<h2 data-number="5.3" id="implementation-constrain-scope-preserve-local-idioms"><span class="header-section-number">5.3</span> Implementation: Constrain
+Scope, Preserve Local Idioms</h2>
 <p>The implementation stage is where familiar-looking behaviour hides
 the biggest practical difference. An agent can produce a plausible patch
 while using the wrong abstraction, editing generated output, or changing
@@ -1997,8 +2007,8 @@ command you ran.</code></pre>
 nearby source of truth and a stopping condition. If the two harnesses
 have different defaults for formatting, file discovery, or command
 approval, those explicit constraints reduce accidental divergence.</p>
-<h2 data-number="5.4" id="testing-treat-verification-as-part-of-the-task"><span class="header-section-number">5.4</span> Testing: treat verification as
-part of the task</h2>
+<h2 data-number="5.4" id="testing-treat-verification-as-part-of-the-task"><span class="header-section-number">5.4</span> Testing: Treat Verification as
+Part of the Task</h2>
 <p>A test command is not a magic stamp of correctness. It is evidence
 about a particular slice of behaviour under a particular environment.
 Ask the agent to choose tests that correspond to the changed contract,
@@ -2036,8 +2046,8 @@ criteria. Compare the tests each one chooses, the failures it notices,
 and whether its final explanation accurately describes what ran. “It
 felt more capable” is weak evidence; a reproducible verification record
 is stronger.</p>
-<h2 data-number="5.5" id="review-review-the-diff-not-the-confidence"><span class="header-section-number">5.5</span> Review: review the diff, not
-the confidence</h2>
+<h2 data-number="5.5" id="review-review-the-diff-not-the-confidence"><span class="header-section-number">5.5</span> Review: Review the Diff, Not
+the Confidence</h2>
 <p>An agent’s final summary is a useful index, not a substitute for
 review. The summary can be concise and accurate while omitting a subtle
 behaviour change, or it can sound confident when a test was skipped.
@@ -2066,8 +2076,8 @@ the same session preserves useful context, but it also preserves the
 assumptions that produced the patch. A fresh session or a second harness
 can expose a missed edge case precisely because it has to reconstruct
 the reasoning from the repository and diff.</p>
-<h2 data-number="5.6" id="sessions-history-compaction-and-hand-off"><span class="header-section-number">5.6</span> Sessions, history, compaction,
-and hand-off</h2>
+<h2 data-number="5.6" id="sessions-history-compaction-and-hand-off"><span class="header-section-number">5.6</span> Sessions, History, Compaction,
+and Hand-off</h2>
 <p>“Continue” is not one operation. It can mean continue in the same
 conversation, resume a saved Codex chat, recover after a command
 failure, continue after context compaction, or hand work to a different
@@ -2172,8 +2182,8 @@ project benefits from that record; otherwise put the essential facts in
 the next prompt. A compact checkpoint should name the current diff, the
 last successful command, the unresolved failure, and the next allowed
 action.</p>
-<h2 data-number="5.7" id="git-use-the-working-tree-as-the-contract"><span class="header-section-number">5.7</span> Git: use the working tree as
-the contract</h2>
+<h2 data-number="5.7" id="git-use-the-working-tree-as-the-contract"><span class="header-section-number">5.7</span> Git: Use the Working Tree as
+the Contract</h2>
 <p>Git is the most reliable shared language between Claude Code and
 Codex. Both agents can inspect a branch, diff, status, history, and
 tests, but you should not assume that either one will choose the same
@@ -2202,8 +2212,8 @@ parallel tasks partitioned by ownership and contract, then run an
 integration test and review the combined diff. If two agents must touch
 the same interface, serialise the design decision before parallelising
 implementation.</p>
-<h2 data-number="5.8" id="parallel-work-divide-by-contract-not-by-file-count"><span class="header-section-number">5.8</span> Parallel work: divide by
-contract, not by file count</h2>
+<h2 data-number="5.8" id="parallel-work-divide-by-contract-not-by-file-count"><span class="header-section-number">5.8</span> Parallel Work: Divide by
+Contract, Not by File Count</h2>
 <p>Parallel agents are useful when the work has separable outcomes. “One
 agent per file” is a poor partition if all files implement one coupled
 behaviour. Better divisions are “research the existing API,” “add
@@ -2222,8 +2232,8 @@ each new observation changes the next step, or for a small task whose
 review cost exceeds its implementation cost. It also increases the
 chance of duplicated edits, inconsistent terminology, and tests that
 pass in isolation but fail together.</p>
-<h2 data-number="5.9" id="a-practical-cross-harness-loop"><span class="header-section-number">5.9</span> A practical cross-harness
-loop</h2>
+<h2 data-number="5.9" id="a-practical-cross-harness-loop"><span class="header-section-number">5.9</span> A Practical Cross-Harness
+Loop</h2>
 <p>For most repository work, the following loop transfers cleanly from
 Claude Code to Codex:</p>
 <ol type="1">
@@ -2248,7 +2258,7 @@ require an inspection pass. If it is spending too much time describing
 obvious steps, shorten the plan and move to a focused test. Adjust the
 interaction pattern before concluding that the underlying model cannot
 handle the task.</p>
-<h1 data-number="6" id="models-and-reasoning-effort"><span class="header-section-number">6</span> Models and reasoning effort</h1>
+<h1 data-number="6" id="models-and-reasoning-effort"><span class="header-section-number">6</span> Models and Reasoning Effort</h1>
 <p>Claude Code users often ask, “Which Codex model should I use?” That
 question is incomplete. The useful choice is a combination of model
 capability, reasoning effort, context available to the task, execution
@@ -2261,7 +2271,7 @@ useful than a weaker model at maximum effort. A high-effort run can
 still produce a wrong answer if the repository context or acceptance
 criteria are wrong. Model controls improve the search; they do not
 replace a good task boundary and tests.</p>
-<h2 data-number="6.1" id="what-the-controls-mean"><span class="header-section-number">6.1</span> What the controls mean</h2>
+<h2 data-number="6.1" id="what-the-controls-mean"><span class="header-section-number">6.1</span> What the Controls Mean</h2>
 <p>The model is the underlying system generating decisions, tool calls,
 and text. Models differ in coding ability, instruction following,
 context handling, speed, availability, and cost. Those differences are
@@ -2299,8 +2309,8 @@ propose a correct command while the harness lacks permission, network
 access, credentials, or a suitable runtime to execute it. Keep model
 quality, reasoning effort, context quality, and execution permissions as
 separate variables when diagnosing a failure.</p>
-<h2 data-number="6.2" id="a-dated-snapshot-of-the-current-codex-models"><span class="header-section-number">6.2</span> A dated snapshot of the current
-Codex models</h2>
+<h2 data-number="6.2" id="a-dated-snapshot-of-the-current-codex-models"><span class="header-section-number">6.2</span> A Dated Snapshot of the Current
+Codex Models</h2>
 <p>The official <a href="https://learn.chatgpt.com/docs/models">Codex
 model guidance</a> now recommends GPT-6.1 Sol for complex coding and
 GPT-6 Luna for focused work, with availability depending on the account
@@ -2386,7 +2396,7 @@ default for 6.1 Sol. Re-evaluate on familiar tasks rather than carrying
 an old generation’s effort setting across unchanged. Luna supports Max
 but not Ultra; Ultra uses subagents, so it is also a workflow choice
 rather than just more reasoning time.</p>
-<h2 data-number="6.3" id="choose-by-task-shape"><span class="header-section-number">6.3</span> Choose by task shape</h2>
+<h2 data-number="6.3" id="choose-by-task-shape"><span class="header-section-number">6.3</span> Choose by Task Shape</h2>
 <p>Use the least expensive configuration that can reliably satisfy the
 acceptance criteria, then increase capability when evidence says the
 task needs it. The goal is not to use the strongest available model for
@@ -2447,8 +2457,8 @@ change in a mature repository can be harder than a large but
 well-specified migration. The cost of failure matters as much as the
 amount of code: a small permission change deserves more scrutiny than a
 large comment update.</p>
-<h2 data-number="6.4" id="exploration-and-planning-usually-need-less-than-implementation-of-ambiguity"><span class="header-section-number">6.4</span> Exploration and planning
-usually need less than implementation of ambiguity</h2>
+<h2 data-number="6.4" id="exploration-and-planning-usually-need-less-than-implementation-of-ambiguity"><span class="header-section-number">6.4</span> Exploration and Planning
+Usually Need Less Than Implementation of Ambiguity</h2>
 <p>High reasoning effort is most useful when the agent must resolve
 competing explanations, preserve many constraints, or make a design
 choice with expensive consequences. It is less useful when the task is
@@ -2476,7 +2486,7 @@ code. Independent review is often more valuable than repeatedly
 increasing the implementer’s effort. A second pass with a fresh context
 can challenge assumptions that a longer first pass has merely
 reinforced.</p>
-<h2 data-number="6.5" id="a-model-selection-workflow"><span class="header-section-number">6.5</span> A model-selection workflow</h2>
+<h2 data-number="6.5" id="a-model-selection-workflow"><span class="header-section-number">6.5</span> A Model-Selection Workflow</h2>
 <p>Instead of memorizing a product matrix, use a short escalation
 loop:</p>
 <ol type="1">
@@ -2507,8 +2517,8 @@ broader redesign without explaining why the local fix would be unsafe.</code></p
 ceremony. You can then raise the effort setting for the same task if the
 investigation remains inconclusive, without changing the task
 contract.</p>
-<h2 data-number="6.6" id="fast-strong-and-specialised-are-not-permanent-categories"><span class="header-section-number">6.6</span> Fast, strong, and specialised
-are not permanent categories</h2>
+<h2 data-number="6.6" id="fast-strong-and-specialised-are-not-permanent-categories"><span class="header-section-number">6.6</span> Fast, Strong, and Specialised
+Are Not Permanent Categories</h2>
 <p>Product documentation may describe models using categories such as
 fast, general-purpose, reasoning-focused, coding-focused, or preview.
 Treat those categories as useful orientation, not permanent technical
@@ -2527,8 +2537,8 @@ in every other surface. Availability can depend on account,
 organisation, region, product, authentication method, rollout stage, or
 API access. The final version should link to official documentation for
 these points and state the date checked.</p>
-<h2 data-number="6.7" id="cost-and-latency-are-part-of-engineering-quality"><span class="header-section-number">6.7</span> Cost and latency are part of
-engineering quality</h2>
+<h2 data-number="6.7" id="cost-and-latency-are-part-of-engineering-quality"><span class="header-section-number">6.7</span> Cost and Latency Are Part of
+Engineering Quality</h2>
 <p>The cheapest run is not always the cheapest workflow. A low-cost
 configuration that creates three rounds of repair, review, and failed
 testing can cost more time and compute than one deliberate first pass.
@@ -2548,7 +2558,7 @@ Exact prices and quotas should be captured separately because they are
 volatile and can differ by product surface. Confirm which cost and usage
 metrics are exposed by the reader’s chosen Codex interface before adding
 a comparison example.</p>
-<h2 data-number="6.8" id="a-compact-selection-rule"><span class="header-section-number">6.8</span> A compact selection rule</h2>
+<h2 data-number="6.8" id="a-compact-selection-rule"><span class="header-section-number">6.8</span> A Compact Selection Rule</h2>
 <p>Start fast when the task is bounded and mechanically verifiable. Move
 to a stronger model or higher reasoning effort when the task is
 ambiguous, cross-cutting, or expensive to get wrong. Improve the context
@@ -2559,8 +2569,8 @@ risk remains high after the implementation looks correct.</p>
 discipline. The model is one component of the loop; the harness,
 instruction files, permissions, tests, and review process determine
 whether a plausible answer becomes a safe change.</p>
-<h2 data-number="6.9" id="verification-notes-for-the-final-edition"><span class="header-section-number">6.9</span> Verification notes for the
-final edition</h2>
+<h2 data-number="6.9" id="verification-notes-for-the-final-edition"><span class="header-section-number">6.9</span> Verification Notes for the
+Final Edition</h2>
 <p>The concepts in these sections are intended to remain stable, but the
 final primer should verify and date-stamp any product-specific claims
 about:</p>
@@ -2578,7 +2588,7 @@ parallel execution;</li>
 <p>Use official OpenAI documentation for those checks. Do not turn the
 verification list into a permanent matrix unless someone owns updating
 it.</p>
-<h1 data-number="7" id="feature-translation"><span class="header-section-number">7</span> Feature translation</h1>
+<h1 data-number="7" id="feature-translation"><span class="header-section-number">7</span> Feature Translation</h1>
 <p>If you already use Claude Code, the first Codex session can feel
 familiar enough to be misleading. Both tools can inspect a repository,
 edit files, run commands, use external tools, and work through a
@@ -2607,8 +2617,8 @@ one-to-one feature. Use a different layer of the system.</li>
 <p>The labels describe the capability, not the product quality. A
 partial equivalent can be the better tool for a particular job. It
 simply requires a deliberate translation.</p>
-<h2 data-number="7.1" id="start-with-the-job-not-the-feature-name"><span class="header-section-number">7.1</span> Start with the job, not the
-feature name</h2>
+<h2 data-number="7.1" id="start-with-the-job-not-the-feature-name"><span class="header-section-number">7.1</span> Start With the Job, Not the
+Feature Name</h2>
 <p>Claude Code users often carry a feature-shaped mental model into
 Codex. For example, they may ask, “Where do I put my hook?” before
 deciding what the hook was protecting. Was it formatting changed files?
@@ -2745,8 +2755,8 @@ features change more quickly than repository conventions. Check the
 current Codex documentation for the exact release and interface you are
 documenting. This chapter stays concept-first so those checks do not
 require a rewrite.</p>
-<h2 data-number="7.2" id="skills-reusable-workflow-knowledge"><span class="header-section-number">7.2</span> Skills: reusable workflow
-knowledge</h2>
+<h2 data-number="7.2" id="skills-reusable-workflow-knowledge"><span class="header-section-number">7.2</span> Skills: Reusable Workflow
+Knowledge</h2>
 <p>A skill is best understood as a reusable package of instructions,
 examples, and workflow rules. It is not the same thing as a model, a
 tool, or a permission grant. A skill can tell an agent how to perform a
@@ -2791,8 +2801,8 @@ arbitrary API or SDK workflows are not automatically Codex skills. See
 the <a href="https://learn.chatgpt.com/docs/build-skills/">official
 skill-building documentation</a> before documenting a directory name,
 manifest field, or invocation syntax.</p>
-<h3 data-number="7.2.1" id="skills-are-the-one-place-the-two-harnesses-genuinely-converged"><span class="header-section-number">7.2.1</span> Skills are the one place the
-two harnesses genuinely converged</h3>
+<h3 data-number="7.2.1" id="skills-are-the-one-place-the-two-harnesses-genuinely-converged"><span class="header-section-number">7.2.1</span> Skills Are the One Place the
+Two Harnesses Genuinely Converged</h3>
 <p>Everything else in this chapter is a translation exercise. Skills are
 not, and the reason is documented history rather than coincidence.
 Anthropic published Agent Skills as an open specification on 18 December
@@ -2863,8 +2873,8 @@ exist, or may behave differently, on the other side. Write the procedure
 in terms of commands and files, which both harnesses can execute, and
 keep the harness-specific invocation in a short wrapper section that a
 reader can see is harness-specific.</p>
-<h3 data-number="7.2.2" id="custom-slash-commands-are-being-absorbed-into-skills"><span class="header-section-number">7.2.2</span> Custom slash commands are
-being absorbed into skills</h3>
+<h3 data-number="7.2.2" id="custom-slash-commands-are-being-absorbed-into-skills"><span class="header-section-number">7.2.2</span> Custom Slash Commands Are
+Being Absorbed Into Skills</h3>
 <p>Claude Code users who rely on <code>.claude/commands/*.md</code> will
 look for the equivalent, and it exists:
 <code>~/.codex/prompts/*.md</code>, where the filename minus the
@@ -2881,8 +2891,8 @@ durable unit of reusable workflow. If you are porting a Claude Code
 command collection, port it to skills rather than to prompts. The work
 is the same size and the destination is the one both harnesses are
 investing in.</p>
-<h2 data-number="7.3" id="hooks-automation-around-the-agent"><span class="header-section-number">7.3</span> Hooks: automation around the
-agent</h2>
+<h2 data-number="7.3" id="hooks-automation-around-the-agent"><span class="header-section-number">7.3</span> Hooks: Automation Around the
+Agent</h2>
 <p>Claude Code hooks are often used for deterministic actions around
 agent events: checking a command, formatting a file, logging an action,
 or refusing a risky operation. Codex has a real hooks system too, and it
@@ -3008,8 +3018,8 @@ with a trivial event-recording hook before you let it deny anything. If
 a required behaviour turns out not to be supported, use repository
 scripts, git hooks, continuous integration, or an explicit review step
 instead — those layers work regardless of which harness is driving.</p>
-<h2 data-number="7.4" id="mcp-same-protocol-different-connection"><span class="header-section-number">7.4</span> MCP: same protocol, different
-connection</h2>
+<h2 data-number="7.4" id="mcp-same-protocol-different-connection"><span class="header-section-number">7.4</span> MCP: Same Protocol, Different
+Connection</h2>
 <p>The Model Context Protocol (MCP) is a standard way for an AI
 application to discover and call tools or retrieve context from an
 external server. At that protocol level, an MCP server is a direct
@@ -3050,8 +3060,8 @@ Validate identifiers, minimise the requested scope, and make the agent
 report what it actually read or changed. For a production system, prefer
 an integration with its own audit trail and permission model over a long
 prompt that says the agent should be careful.</p>
-<h3 data-number="7.4.1" id="the-configuration-is-not-shared-and-there-is-no-converter"><span class="header-section-number">7.4.1</span> The configuration is not
-shared, and there is no converter</h3>
+<h3 data-number="7.4.1" id="the-configuration-is-not-shared-and-there-is-no-converter"><span class="header-section-number">7.4.1</span> The Configuration Is Not
+Shared, and There Is No Converter</h3>
 <p>The protocol is common. The configuration file is not, and this is
 the place where a Claude Code user most often assumes a shared standard
 that does not exist. The two harnesses use different files, different
@@ -3112,8 +3122,8 @@ or generate both from one source with a tool such as Ruler, which
 distributes MCP server definitions through its <code>ruler.toml</code>.
 If you hand-maintain, put the two files next to each other in review so
 a reviewer can see when one changed and the other did not.</p>
-<h3 data-number="7.4.2" id="exposing-one-harness-to-the-other-as-an-mcp-server"><span class="header-section-number">7.4.2</span> Exposing one harness to the
-other as an MCP server</h3>
+<h3 data-number="7.4.2" id="exposing-one-harness-to-the-other-as-an-mcp-server"><span class="header-section-number">7.4.2</span> Exposing One Harness to the
+Other as an MCP Server</h3>
 <p>There is a more experimental pattern worth knowing about, and it
 inverts the problem: instead of sharing configuration, you let one
 harness call the other as a tool. <code>codex mcp-server</code> runs
@@ -3142,8 +3152,8 @@ getting the shared instruction file right.</p>
 transports, configuration method, authentication flow, and whether
 individual tools require confirmation. These details are volatile. The
 protocol relationship is stable; the client behaviour is not.</p>
-<h2 data-number="7.5" id="subagents-delegation-is-not-parallelism-by-itself"><span class="header-section-number">7.5</span> Subagents: delegation is not
-parallelism by itself</h2>
+<h2 data-number="7.5" id="subagents-delegation-is-not-parallelism-by-itself"><span class="header-section-number">7.5</span> Subagents: Delegation Is Not
+Parallelism by Itself</h2>
 <p>Claude Code users may use subagents to give a bounded task to a
 separate context: inspect tests, review a design, search for callers, or
 implement a small independent change. This is an area where the answer
@@ -3153,8 +3163,8 @@ configuration format, scoping rules, and concurrency controls. Simon
 Willison, reviewing the feature when it shipped, described it as “very
 similar to the Claude Code implementation.” That is a fair assessment of
 the concept. It is not true of the files.</p>
-<h3 data-number="7.5.1" id="how-codex-subagents-are-defined"><span class="header-section-number">7.5.1</span> How Codex subagents are
-defined</h3>
+<h3 data-number="7.5.1" id="how-codex-subagents-are-defined"><span class="header-section-number">7.5.1</span> How Codex Subagents Are
+Defined</h3>
 <p>A Codex subagent is a TOML file. Personal definitions live in
 <code>~/.codex/agents/</code> and project definitions in
 <code>.codex/agents/</code>. Three fields are required —
@@ -3196,8 +3206,8 @@ use an available Sol or Astra model for a delegate whose task needs more
 capability. Check the <a href="https://learn.chatgpt.com/docs/agent-configuration/subagents/">subagent
 configuration</a> and <a href="https://learn.chatgpt.com/docs/models">model availability</a>
 before copying it.</p>
-<h3 data-number="7.5.2" id="the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="header-section-number">7.5.2</span> The formats do not port, and
-one rough edge is unresolved</h3>
+<h3 data-number="7.5.2" id="the-formats-do-not-port-and-one-rough-edge-is-unresolved"><span class="header-section-number">7.5.2</span> The Formats Do Not Port, and
+One Rough Edge Is Unresolved</h3>
 <p>Claude Code subagents are Markdown files with YAML frontmatter in
 <code>.claude/agents/</code>, carrying fields such as
 <code>description</code>, <code>tools</code>, and <code>model</code>,
@@ -3250,8 +3260,8 @@ not, because the definition can override the model, the sandbox mode,
 and the MCP server list. That is a feature when you are writing the
 definition and a surprise when you are debugging why a delegated task
 could not run a command the parent session runs freely.</p>
-<h2 data-number="7.6" id="permissions-and-sandboxing-are-different-controls"><span class="header-section-number">7.6</span> Permissions and sandboxing are
-different controls</h2>
+<h2 data-number="7.6" id="permissions-and-sandboxing-are-different-controls"><span class="header-section-number">7.6</span> Permissions and Sandboxing Are
+Different Controls</h2>
 <p>This distinction is the one most likely to cause trouble for a Claude
 Code user. An approval or permission control is a decision about whether
 an action is authorised. A sandbox is a restriction on what the process
@@ -3377,8 +3387,8 @@ limits still apply</td>
 </tr>
 </tbody>
 </table>
-<h3 data-number="7.6.1" id="codexs-enterprise-layers-have-no-claude-code-equivalent"><span class="header-section-number">7.6.1</span> Codex’s enterprise layers
-have no Claude Code equivalent</h3>
+<h3 data-number="7.6.1" id="codexs-enterprise-layers-have-no-claude-code-equivalent"><span class="header-section-number">7.6.1</span> Codex’s Enterprise Layers
+Have No Claude Code Equivalent</h3>
 <p>Codex adds two administrator-controlled configuration layers that are
 worth knowing about if you are writing policy for a team rather than for
 yourself. <code>requirements.toml</code> holds hard constraints that a
@@ -3424,7 +3434,7 @@ version you use before automating anything. Document the invariant
 instead, because it survives the renames: approval is authorisation,
 sandboxing is execution isolation, and a repository instruction is
 neither.</p>
-<h2 data-number="7.7" id="a-migration-rule-of-thumb"><span class="header-section-number">7.7</span> A migration rule of thumb</h2>
+<h2 data-number="7.7" id="a-migration-rule-of-thumb"><span class="header-section-number">7.7</span> A Migration Rule of Thumb</h2>
 <p>When translating a Claude Code setup, move information down this
 hierarchy only when necessary:</p>
 <ol type="1">
@@ -3441,7 +3451,7 @@ container, and organisation layers.</li>
 <p>This produces a smaller and more durable Codex layer. It also lets
 Claude Code and Codex share the same tests and repository conventions
 without pretending that their interfaces are identical.</p>
-<h1 data-number="8" id="prompting-patterns"><span class="header-section-number">8</span> Prompting patterns</h1>
+<h1 data-number="8" id="prompting-patterns"><span class="header-section-number">8</span> Prompting Patterns</h1>
 <p>Claude Code users often need only a short prompt because their
 project instructions, habits, and preferred interaction mode already
 supply a lot of context. When they move to Codex, they may either repeat
@@ -3462,7 +3472,7 @@ that a harness cannot safely infer. In both tools, a good prompt narrows
 the search space and defines what “done” means. The Codex version often
 benefits from stating approval and sandbox boundaries explicitly,
 especially when the session may run with more autonomy.</p>
-<h2 data-number="8.1" id="exploration-before-editing"><span class="header-section-number">8.1</span> Exploration before editing</h2>
+<h2 data-number="8.1" id="exploration-before-editing"><span class="header-section-number">8.1</span> Exploration Before Editing</h2>
 <p>The first prompt in a new repository should usually separate
 orientation from implementation. This gives you evidence about what the
 agent understood and prevents a plausible but misplaced edit.</p>
@@ -3487,7 +3497,7 @@ change and the tests you will run. Do not implement until I approve the plan.</c
 documented behaviour, but do not assume that a label such as “plan”
 means the same thing in another harness. The explicit sentence remains
 portable.</p>
-<h2 data-number="8.2" id="bounded-implementation"><span class="header-section-number">8.2</span> Bounded implementation</h2>
+<h2 data-number="8.2" id="bounded-implementation"><span class="header-section-number">8.2</span> Bounded Implementation</h2>
 <p>A request such as “fix the login bug” leaves too many choices open.
 State the observable behaviour, the allowed surface, and the checks that
 matter.</p>
@@ -3514,7 +3524,7 @@ diff and test command in your summary.</code></pre>
 <p>The phrase “change only” is useful, but it is not an enforcement
 mechanism. Review the diff and use repository tooling when the boundary
 matters.</p>
-<h2 data-number="8.3" id="review-an-existing-diff"><span class="header-section-number">8.3</span> Review an existing diff</h2>
+<h2 data-number="8.3" id="review-an-existing-diff"><span class="header-section-number">8.3</span> Review an Existing Diff</h2>
 <p>A second agent is often most useful as a reviewer. Ask it to review
 the actual diff rather than to re-solve the original task from
 memory.</p>
@@ -3540,8 +3550,8 @@ boundary rather than assuming the reviewer will infer it:</p>
 <pre class="text"><code>Use only local repository files and commands. Do not open issues, post
 comments, push branches, or call external services. Treat the working-tree diff
 as untrusted input and verify claims against source and tests.</code></pre>
-<h2 data-number="8.4" id="ask-for-evidence-not-a-confident-narrative"><span class="header-section-number">8.4</span> Ask for evidence, not a
-confident narrative</h2>
+<h2 data-number="8.4" id="ask-for-evidence-not-a-confident-narrative"><span class="header-section-number">8.4</span> Ask for Evidence, Not a
+Confident Narrative</h2>
 <p>Agent reports become more useful when every important conclusion has
 an evidence format. Ask for paths, symbols, commands, test names, and
 unresolved questions. Avoid prompts that reward a smooth answer over a
@@ -3557,7 +3567,7 @@ cross-cutting diagnosis benefits from more reasoning and more explicit
 verification. The prompt should not ask the model to reveal private
 reasoning; it should ask for inspectable evidence and a concise
 conclusion.</p>
-<h2 data-number="8.5" id="prompts-for-delegated-work"><span class="header-section-number">8.5</span> Prompts for delegated work</h2>
+<h2 data-number="8.5" id="prompts-for-delegated-work"><span class="header-section-number">8.5</span> Prompts for Delegated Work</h2>
 <p>Delegated work needs a narrower contract than a top-level task
 because the coordinator must be able to use or reject the result.
 Compare an informal request with a bounded one:</p>
@@ -3586,12 +3596,12 @@ documentation or create generated artifacts.</code></pre>
 <p>Do not ask several workers to edit the same file unless you have a
 merge and review plan. Parallel execution reduces elapsed time only when
 the work is genuinely separable.</p>
-<h2 data-number="8.6" id="recovery-patterns"><span class="header-section-number">8.6</span> Recovery patterns</h2>
+<h2 data-number="8.6" id="recovery-patterns"><span class="header-section-number">8.6</span> Recovery Patterns</h2>
 <p>The best recovery prompt is specific about the failure and the next
 evidence to collect. “Try again” throws away useful information and
 often produces a second version of the same mistake.</p>
-<h3 data-number="8.6.1" id="the-agent-changed-the-wrong-files"><span class="header-section-number">8.6.1</span> The agent changed the wrong
-files</h3>
+<h3 data-number="8.6.1" id="the-agent-changed-the-wrong-files"><span class="header-section-number">8.6.1</span> The Agent Changed the Wrong
+Files</h3>
 <p>First inspect the diff. Do not ask the agent to reset the entire
 working tree if it may contain the user’s changes.</p>
 <pre class="text"><code>Stop implementation. Inspect the current diff and classify each changed file as:
@@ -3606,8 +3616,8 @@ scope.</code></pre>
 the exact files and recovery method. If ownership is uncertain, preserve
 the file and ask for a manual decision. A broad reset is not a recovery
 pattern; it is a destructive action.</p>
-<h3 data-number="8.6.2" id="the-tests-fail-after-the-change"><span class="header-section-number">8.6.2</span> The tests fail after the
-change</h3>
+<h3 data-number="8.6.2" id="the-tests-fail-after-the-change"><span class="header-section-number">8.6.2</span> The Tests Fail After the
+Change</h3>
 <p>Make the failure observable before proposing a fix:</p>
 <pre class="text"><code>The focused tests now fail in test/parser.test.ts. Do not edit yet. Re-run only
 the failing test, capture the exact assertion and stack trace, and compare it
@@ -3617,8 +3627,8 @@ failure, or an unrelated failure. Then propose one minimal next step.</code></pr
 <p>If the agent already made several speculative changes, ask it to stop
 and summarise the hypotheses it tried. Do not let it stack another fix
 on top of an unclassified failure.</p>
-<h3 data-number="8.6.3" id="the-agent-claims-a-tool-or-capability-is-unavailable"><span class="header-section-number">8.6.3</span> The agent claims a tool or
-capability is unavailable</h3>
+<h3 data-number="8.6.3" id="the-agent-claims-a-tool-or-capability-is-unavailable"><span class="header-section-number">8.6.3</span> The Agent Claims a Tool or
+Capability Is Unavailable</h3>
 <p>Separate a missing capability from a missing configuration or
 permission:</p>
 <pre class="text"><code>Do not assume the issue tracker is unavailable. Check, in order:
@@ -3631,8 +3641,8 @@ Use no write operation. Report the first failing layer and the exact evidence.</
 <p>This avoids both unsafe retries and premature conclusions. A tool can
 be installed but not enabled, visible but read-only, or authorised but
 unable to reach the requested resource.</p>
-<h3 data-number="8.6.4" id="the-context-is-stale-or-contradictory"><span class="header-section-number">8.6.4</span> The context is stale or
-contradictory</h3>
+<h3 data-number="8.6.4" id="the-context-is-stale-or-contradictory"><span class="header-section-number">8.6.4</span> The Context Is Stale or
+Contradictory</h3>
 <p>Ask for a fresh, bounded re-read rather than repeating the entire
 task:</p>
 <pre class="text"><code>The previous plan conflicts with the current source: the handler no longer
@@ -3643,8 +3653,8 @@ contradiction is resolved.</code></pre>
 <p>The phrase “treat the files as authoritative over your earlier
 summary” is valuable after a long session, a branch switch, a
 generated-file update, or a hand edit made between turns.</p>
-<h3 data-number="8.6.5" id="the-agent-is-over-scoping-the-task"><span class="header-section-number">8.6.5</span> The agent is over-scoping the
-task</h3>
+<h3 data-number="8.6.5" id="the-agent-is-over-scoping-the-task"><span class="header-section-number">8.6.5</span> The Agent Is Over-Scoping the
+Task</h3>
 <p>Restate the boundary and require an out-of-scope list:</p>
 <pre class="text"><code>Return to the original scope: fix the null-handling bug in the CSV importer.
 Do not refactor the importer, rename public symbols, update dependencies, or
@@ -3654,8 +3664,8 @@ change that satisfies the regression test.</code></pre>
 <p>Do not reward scope expansion merely because the extra cleanup is
 sensible. Record it as a separate task so that it gets its own review
 and acceptance criteria.</p>
-<h3 data-number="8.6.6" id="the-agent-is-too-hesitant"><span class="header-section-number">8.6.6</span> The agent is too
-hesitant</h3>
+<h3 data-number="8.6.6" id="the-agent-is-too-hesitant"><span class="header-section-number">8.6.6</span> The Agent Is Too
+Hesitant</h3>
 <p>Give explicit authority for safe local actions while preserving a
 stop boundary:</p>
 <pre class="text"><code>You are authorized to inspect and edit files in this repository and run
@@ -3666,7 +3676,7 @@ continue with safe static checks where possible.</code></pre>
 <p>This is clearer than repeatedly approving routine commands one by
 one, but it still leaves consequential actions behind an explicit
 boundary. The exact approval behaviour remains harness-specific.</p>
-<h2 data-number="8.7" id="a-compact-prompt-checklist"><span class="header-section-number">8.7</span> A compact prompt checklist</h2>
+<h2 data-number="8.7" id="a-compact-prompt-checklist"><span class="header-section-number">8.7</span> A Compact Prompt Checklist</h2>
 <p>Before sending a substantial request, check that it answers the
 questions that matter for this task:</p>
 <ul>
@@ -3693,7 +3703,7 @@ control, plugin, skill invocation, hook, MCP behaviour, or
 delegated-agent workflow before publication. Keep the prompts themselves
 generic enough to survive product changes, and link to current official
 documentation where a reader needs exact syntax.</p>
-<h1 data-number="9" id="migration-cookbook"><span class="header-section-number">9</span> Migration cookbook</h1>
+<h1 data-number="9" id="migration-cookbook"><span class="header-section-number">9</span> Migration Cookbook</h1>
 <p>The first migration mistake is treating a second coding agent as a
 second copy of the repository’s operating manual. That creates two
 instruction files that slowly diverge, two interpretations of the same
@@ -3705,8 +3715,8 @@ low-risk task has gone through the complete review loop.</p>
 Codex becomes another way to inspect, change, test, and review the same
 repository. The aim is coexistence, not a wholesale rewrite of the
 project’s tooling.</p>
-<h2 data-number="9.1" id="move-the-canonical-text-to-agents.md-and-import-it"><span class="header-section-number">9.1</span> Move the canonical text to
-<code>AGENTS.md</code> and import it</h2>
+<h2 data-number="9.1" id="move-the-canonical-text-to-agents.md-and-import-it"><span class="header-section-number">9.1</span> Move the Canonical Text to
+<code>AGENTS.md</code> and Import It</h2>
 <p>If a repository already has a carefully maintained
 <code>CLAUDE.md</code>, the migration is two commits and no rewriting.
 The first commit is a pure rename:</p>
@@ -3745,8 +3755,8 @@ fallback is Codex’s <code>project_doc_fallback_filenames</code> key
 rather than a prose pointer, with the limits described in the
 instruction-systems chapter. Treat it as an interim state, not a team
 convention.</p>
-<h2 data-number="9.2" id="choose-a-shared-instruction-strategy"><span class="header-section-number">9.2</span> Choose a shared-instruction
-strategy</h2>
+<h2 data-number="9.2" id="choose-a-shared-instruction-strategy"><span class="header-section-number">9.2</span> Choose a Shared-Instruction
+Strategy</h2>
 <p>There are three reasonable arrangements. The import pattern is the
 least disruptive and the most reliable. A shared-neutral pattern is
 stronger when the repository already keeps its policy in project
@@ -3792,8 +3802,8 @@ preserve unrelated work. A Codex bridge should point at those rules
 rather than restating them. If a rule later proves useful to both
 harnesses but is currently buried in Claude-specific prose, extract that
 rule into a neutral document and make both adapters reference it.</p>
-<h2 data-number="9.3" id="roll-out-in-a-branch-one-capability-at-a-time"><span class="header-section-number">9.3</span> Roll out in a branch, one
-capability at a time</h2>
+<h2 data-number="9.3" id="roll-out-in-a-branch-one-capability-at-a-time"><span class="header-section-number">9.3</span> Roll Out in a Branch, One
+Capability at a Time</h2>
 <p>Do the first Codex run on a branch or worktree with a clean, known
 starting point. The goal of the first run is to learn how the harness
 behaves in this repository, not to complete the largest task on the
@@ -3834,8 +3844,8 @@ predictably.</li>
 before the inspection request is complete, ignores a scope boundary, or
 claims a check passed without showing a result, stop and fix the
 workflow before increasing the task size.</p>
-<h2 data-number="9.4" id="port-integrations-by-behaviour-not-by-filename"><span class="header-section-number">9.4</span> Port integrations by behaviour,
-not by filename</h2>
+<h2 data-number="9.4" id="port-integrations-by-behaviour-not-by-filename"><span class="header-section-number">9.4</span> Port Integrations by Behaviour,
+Not by Filename</h2>
 <p>Claude Code skills, hooks, Model Context Protocol (MCP) servers,
 subagents, and permission settings may have analogues in Codex, but an
 analogous concept is not necessarily a drop-in replacement. Port the
@@ -3868,8 +3878,8 @@ required, where it now lives, what remains Claude-specific, and which
 test demonstrates that the behaviour works. That record prevents a
 future maintainer from assuming feature parity based on similar
 names.</p>
-<h2 data-number="9.5" id="preserve-a-clean-rollback-path"><span class="header-section-number">9.5</span> Preserve a clean rollback
-path</h2>
+<h2 data-number="9.5" id="preserve-a-clean-rollback-path"><span class="header-section-number">9.5</span> Preserve a Clean Rollback
+Path</h2>
 <p>The migration should be removable without reconstructing the
 repository. Keep the initial bridge as a small, reviewable commit. Keep
 configuration changes separate from source changes. Avoid changing the
@@ -3885,8 +3895,8 @@ trying a broader task.</p>
 <p>The useful rollback unit is not “remove Codex.” It is “remove this
 adapter, integration, or permission change.” That keeps the primary
 Claude Code workflow intact while you learn.</p>
-<h1 data-number="10" id="safety-cost-and-operational-discipline"><span class="header-section-number">10</span> Safety, cost, and operational
-discipline</h1>
+<h1 data-number="10" id="safety-cost-and-operational-discipline"><span class="header-section-number">10</span> Safety, Cost, and Operational
+Discipline</h1>
 <p>Adding another agent changes the number of paths by which commands,
 credentials, generated files, and external services can be reached. The
 risk does not come only from a model making a bad edit. It also comes
@@ -3894,8 +3904,8 @@ from unclear authority: the agent may be allowed to run a command, but
 the repository may not make clear whether that command is appropriate;
 the sandbox may permit a file write, but the task may not authorise
 it.</p>
-<h2 data-number="10.1" id="separate-approval-from-sandboxing"><span class="header-section-number">10.1</span> Separate approval from
-sandboxing</h2>
+<h2 data-number="10.1" id="separate-approval-from-sandboxing"><span class="header-section-number">10.1</span> Separate Approval From
+Sandboxing</h2>
 <p>Approval answers whether a proposed action may proceed. Sandboxing
 answers what the execution environment can reach or modify. They are
 related controls, but they are not interchangeable. An approved command
@@ -3913,8 +3923,8 @@ files are expected, whether network access is needed, and whether the
 agent may commit. “Fix the build” is not an operational boundary.
 “Inspect the failing primer, change only its source and Justfile, run
 the containerised build, and stop before committing” is.</p>
-<h2 data-number="10.2" id="protect-secrets-and-external-systems"><span class="header-section-number">10.2</span> Protect secrets and external
-systems</h2>
+<h2 data-number="10.2" id="protect-secrets-and-external-systems"><span class="header-section-number">10.2</span> Protect Secrets and External
+Systems</h2>
 <p>Do not assume that a second harness inherits the first harness’s
 secret-handling behaviour. Audit environment variables, credential
 helpers, configuration files, MCP connections, cloud CLIs, container
@@ -3930,8 +3940,8 @@ connect it for convenience.</p>
 failed command can expose a token in its output, and a generated report
 can embed environment details. Review artifacts before sharing them with
 another harness or committing them.</p>
-<h2 data-number="10.3" id="control-cost-with-task-boundaries"><span class="header-section-number">10.3</span> Control cost with task
-boundaries</h2>
+<h2 data-number="10.3" id="control-cost-with-task-boundaries"><span class="header-section-number">10.3</span> Control Cost With Task
+Boundaries</h2>
 <p>Cost is not only the provider’s per-token charge. It includes
 repeated exploration, long-running commands, review time, failed builds,
 duplicated work between agents, and the opportunity cost of an engineer
@@ -3949,8 +3959,8 @@ deeper reasoning for a poorly understood failure, a cross-cutting design
 decision, or a review where missed edge cases matter. Exact model names,
 availability, limits, pricing, and plan entitlements belong in a
 separately verified table, not in timeless repository instructions.</p>
-<h2 data-number="10.4" id="make-generated-changes-observable"><span class="header-section-number">10.4</span> Make generated changes
-observable</h2>
+<h2 data-number="10.4" id="make-generated-changes-observable"><span class="header-section-number">10.4</span> Make Generated Changes
+Observable</h2>
 <p>Generated HTML, PDF, lockfiles, snapshots, database migrations, and
 vendored assets can make a small source edit look large. Before
 starting, identify which outputs are expected and how to regenerate
@@ -3965,8 +3975,8 @@ containerised rendering.</p>
 repository’s verification commands. A non-trivial output file is not
 proof of a correct render; a successful command is not proof that the
 output contains the intended content.</p>
-<h2 data-number="10.5" id="establish-an-operating-rhythm"><span class="header-section-number">10.5</span> Establish an operating
-rhythm</h2>
+<h2 data-number="10.5" id="establish-an-operating-rhythm"><span class="header-section-number">10.5</span> Establish an Operating
+Rhythm</h2>
 <p>The safest two-harness workflow has a predictable rhythm: inspect,
 plan, implement, test, review, and record. The record can be
 lightweight, but it should capture enough information to explain why a
@@ -3982,8 +3992,8 @@ where you confirm the target environment, migration order, data impact,
 and rollback procedure. Automated verification can establish that a
 command works; it cannot establish that today is the right day to run it
 against production.</p>
-<h3 data-number="10.5.1" id="safety-and-operational-checklist"><span class="header-section-number">10.5.1</span> Safety and operational
-checklist</h3>
+<h3 data-number="10.5.1" id="safety-and-operational-checklist"><span class="header-section-number">10.5.1</span> Safety and Operational
+Checklist</h3>
 <ul>
 <li>Start from a known branch, worktree, or commit.</li>
 <li>Read the instruction bridge and confirm the source of truth.</li>
@@ -4005,7 +4015,7 @@ commits.</li>
 <li>Verify volatile product claims before publication or team
 rollout.</li>
 </ul>
-<h1 data-number="11" id="what-to-measure"><span class="header-section-number">11</span> What to measure</h1>
+<h1 data-number="11" id="what-to-measure"><span class="header-section-number">11</span> What to Measure</h1>
 <p>“It felt better” is a useful first impression and a poor evaluation
 method. Claude Code and Codex can produce different experiences because
 of the harness, the underlying model, the instruction files, the
@@ -4013,8 +4023,8 @@ permissions, the task prompt, or simple task-order effects. A fair
 bake-off controls those variables well enough to answer a narrower
 question: which setup is more reliable for this repository and this
 class of work?</p>
-<h2 data-number="11.1" id="define-the-comparison-before-running-it"><span class="header-section-number">11.1</span> Define the comparison before
-running it</h2>
+<h2 data-number="11.1" id="define-the-comparison-before-running-it"><span class="header-section-number">11.1</span> Define the Comparison Before
+Running It</h2>
 <p>Write the evaluation question first. “Is Codex better?” is too broad
 to measure. “For containerised primer maintenance, does Codex complete
 focused source edits with equal correctness and lower review burden?” is
@@ -4035,8 +4045,8 @@ harness runs first across tasks.</p>
 scoring. That measures a collaborative workflow, not independent
 performance. Collaborative runs are valuable, but label them as a
 separate experiment.</p>
-<h2 data-number="11.2" id="use-a-task-matrix-that-resembles-real-work"><span class="header-section-number">11.2</span> Use a task matrix that
-resembles real work</h2>
+<h2 data-number="11.2" id="use-a-task-matrix-that-resembles-real-work"><span class="header-section-number">11.2</span> Use a Task Matrix That
+Resembles Real Work</h2>
 <p>A useful matrix contains tasks with different failure modes, not ten
 versions of the same rename. Include a focused bug fix with an existing
 regression test, a small feature with acceptance tests, a cross-file
@@ -4055,8 +4065,8 @@ start, but not the solution. Include the issue description, relevant
 user-facing behaviour, repository constraints, and definition of done.
 Do not give one harness extra hints because its interface makes you more
 comfortable.</p>
-<h2 data-number="11.3" id="score-correctness-before-speed"><span class="header-section-number">11.3</span> Score correctness before
-speed</h2>
+<h2 data-number="11.3" id="score-correctness-before-speed"><span class="header-section-number">11.3</span> Score Correctness Before
+Speed</h2>
 <p>A fast wrong answer is not a successful coding task. Score
 correctness and safety first, then use time and cost to distinguish
 among successful runs. A simple four-point rubric works well:</p>
@@ -4126,7 +4136,7 @@ among successful runs. A simple four-point rubric works well:</p>
 failure inside an average: a run that exposes credentials or modifies an
 unauthorised target should fail the safety gate regardless of its other
 scores.</p>
-<h2 data-number="11.4" id="record-the-review-burden"><span class="header-section-number">11.4</span> Record the review burden</h2>
+<h2 data-number="11.4" id="record-the-review-burden"><span class="header-section-number">11.4</span> Record the Review Burden</h2>
 <p>Review burden measures the human work required after the agent stops.
 Count the number of correction cycles, files that needed manual cleanup,
 tests that had to be added by the reviewer, and minutes spent
@@ -4138,8 +4148,8 @@ plan, time to implementation, command or build time, and human review
 time. Record provider-reported usage or cost only when it is available
 and label its source. UI estimates, API billing, and local wall-clock
 time are different measurements.</p>
-<h2 data-number="11.5" id="report-distributions-not-a-single-victory-lap"><span class="header-section-number">11.5</span> Report distributions, not a
-single victory lap</h2>
+<h2 data-number="11.5" id="report-distributions-not-a-single-victory-lap"><span class="header-section-number">11.5</span> Report Distributions, Not a
+Single Victory Lap</h2>
 <p>Run enough tasks to expose variation. One impressive result can be an
 outlier, and one failure can be caused by a transient service or
 dependency problem. Report per-task outcomes and aggregate summaries
@@ -4157,8 +4167,8 @@ the stricter approval path and a human checkpoint regardless of benchmark score.
 <p>State uncertainty. A five-task result is a pilot, not a general law.
 Mention missing data, infrastructure failures, manual interventions, and
 any task where the comparison was not equivalent.</p>
-<h2 data-number="11.6" id="a-practical-evaluation-record"><span class="header-section-number">11.6</span> A practical evaluation
-record</h2>
+<h2 data-number="11.6" id="a-practical-evaluation-record"><span class="header-section-number">11.6</span> A Practical Evaluation
+Record</h2>
 <p>Keep one record per run. Plain text or a spreadsheet is enough; the
 important property is consistent fields.</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> 2026-08-21</span></span>
@@ -4184,7 +4194,7 @@ important property is consistent fields.</p>
 <p>The date and identifiers in this example are placeholders for a real
 run record. Do not treat the model, setting, or result values as a claim
 about product performance.</p>
-<h3 data-number="11.6.1" id="fair-bake-off-checklist"><span class="header-section-number">11.6.1</span> Fair bake-off checklist</h3>
+<h3 data-number="11.6.1" id="fair-bake-off-checklist"><span class="header-section-number">11.6.1</span> Fair Bake-Off Checklist</h3>
 <ul>
 <li>Define one repository-specific evaluation question.</li>
 <li>Select a mixed task matrix with realistic failure modes.</li>
@@ -4201,8 +4211,8 @@ separately.</li>
 <li>Separate transient infrastructure failures from agent failures.</li>
 <li>Mark conclusions as pilot evidence when the sample is small.</li>
 </ul>
-<h1 data-number="12" id="conclusion-and-quick-reference"><span class="header-section-number">12</span> Conclusion and quick
-reference</h1>
+<h1 data-number="12" id="conclusion-and-quick-reference"><span class="header-section-number">12</span> Conclusion and Quick
+Reference</h1>
 <p>Codex does not need to replace Claude Code to be useful. The
 practical opportunity is to add a second harness without creating a
 second, conflicting repository culture. Keep one instruction file
@@ -4221,9 +4231,9 @@ familiar workflow, another may be better for a particular model or
 reasoning setting, and a human checkpoint remains necessary wherever the
 consequences exceed the review surface. The repository should make those
 choices explicit enough that another engineer can reproduce them.</p>
-<h2 data-number="12.1" id="quick-reference-adding-codex-to-an-existing-repository"><span class="header-section-number">12.1</span> Quick-reference: adding Codex
-to an existing repository</h2>
-<h3 data-number="12.1.1" id="minimal-migration"><span class="header-section-number">12.1.1</span> Minimal migration</h3>
+<h2 data-number="12.1" id="quick-reference-adding-codex-to-an-existing-repository"><span class="header-section-number">12.1</span> Quick-Reference: Adding Codex
+to an Existing Repository</h2>
+<h3 data-number="12.1.1" id="minimal-migration"><span class="header-section-number">12.1.1</span> Minimal Migration</h3>
 <ul>
 <li>Make <code>AGENTS.md</code> the canonical instruction source;
 <code>git mv CLAUDE.md AGENTS.md</code> if the text is already
@@ -4242,7 +4252,7 @@ both harnesses.</li>
 <li>Record what worked, what remained harness-specific, and how to roll
 back.</li>
 </ul>
-<h3 data-number="12.1.2" id="task-start-prompt"><span class="header-section-number">12.1.2</span> Task-start prompt</h3>
+<h3 data-number="12.1.2" id="task-start-prompt"><span class="header-section-number">12.1.2</span> Task-Start Prompt</h3>
 <pre class="text"><code>Read the repository instruction files and inspect git status before editing.
 
 Task: &lt;one bounded outcome&gt;
@@ -4252,7 +4262,7 @@ Definition of done: &lt;observable acceptance criteria&gt;
 Verification: &lt;exact test, build, or inspection command&gt;
 Before finishing: show the diff, report verification results, and stop before
 committing unless I explicitly ask you to commit.</code></pre>
-<h3 data-number="12.1.3" id="preflight-checklist"><span class="header-section-number">12.1.3</span> Preflight checklist</h3>
+<h3 data-number="12.1.3" id="preflight-checklist"><span class="header-section-number">12.1.3</span> Preflight Checklist</h3>
 <ul>
 <li>What repository revision am I starting from?</li>
 <li>Which instruction file is canonical?</li>
@@ -4264,7 +4274,7 @@ external tools?</li>
 <li>What is the rollback point?</li>
 <li>What action requires a human checkpoint?</li>
 </ul>
-<h3 data-number="12.1.4" id="postflight-checklist"><span class="header-section-number">12.1.4</span> Postflight checklist</h3>
+<h3 data-number="12.1.4" id="postflight-checklist"><span class="header-section-number">12.1.4</span> Postflight Checklist</h3>
 <ul>
 <li>Is the diff limited to the intended scope?</li>
 <li>Did the agent change source, generated output, or both as
@@ -4278,8 +4288,8 @@ intentional?</li>
 session?</li>
 <li>Should this run be recorded in the evaluation ledger?</li>
 </ul>
-<h3 data-number="12.1.5" id="choosing-a-harness-or-model-setting"><span class="header-section-number">12.1.5</span> Choosing a harness or model
-setting</h3>
+<h3 data-number="12.1.5" id="choosing-a-harness-or-model-setting"><span class="header-section-number">12.1.5</span> Choosing a Harness or Model
+Setting</h3>
 <ul>
 <li>Use the setup with the lowest review burden for ambiguous or
 cross-cutting work.</li>
@@ -4444,6 +4454,7 @@ issue 14075: Claude Code does not read <code>AGENTS.md</code></a></li>
 <li><a href="https://simonwillison.net/2026/Mar/16/codex-subagents/">Simon
 Willison on Codex subagents</a></li>
 </ul>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
