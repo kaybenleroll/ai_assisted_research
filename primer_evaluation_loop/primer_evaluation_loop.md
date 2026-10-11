@@ -1,7 +1,5 @@
 # The Evaluation Loop: How AI Systems Learn to Improve
 
-*Research snapshot · September 10, 2026*
-
 The conceptual argument is durable; benchmark scores, framework APIs, and
 vendor safety practices are not. Claims about current systems in this primer
 are dated research snapshots. Re-check the primary source and reproduce the
@@ -12,7 +10,7 @@ as an engineering decision.
 
 Here is the thing nobody tells you when you start building with AI: the model is often the easy part. You can download a strong open-weight model this afternoon, or call a frontier one over an API in three lines of code. What separates a system that gets better every month from one that plateaus on day one is whether you have built a loop that turns mistakes into the next improvement signal — and whether, somewhere in that loop, you can attach a defensible number or checklist to "how good was that?"
 
-Andrej Karpathy gave this loop its clearest articulation. In his 2017 essay "Software 2.0," he argued that for a growing class of problems, the program is no longer hand-written logic but a model whose behaviour is shaped by data, and so "most of the active software development takes the form of curating, growing, massaging and cleaning labeled datasets." The precondition he named for this to work at all is blunt: "repeated evaluation is possible and cheap." Hold onto that sentence. The whole primer hangs off it.
+Andrej Karpathy gave this loop its clearest articulation. In his 2017 essay "Software 2.0," he argued that for a growing class of problems, the program is no longer hand-written logic but a model whose behaviour is shaped by data, and so "most of the active software development takes the form of curating, growing, massaging and cleaning labeled datasets." The precondition he named for this to work at all is blunt: "repeated evaluation is possible and cheap." Hold onto that sentence. The whole primer hangs off it. <!-- typos: ignore-line --> <!-- Exact wording from Karpathy's quotation. -->
 
 By December 2022 Karpathy had sharpened the idea into what he called a data engine. His formulation, in paraphrase: competitive advantage in AI goes not so much to those with data, but to those with a data engine — iterated data acquisition, re-training, evaluation, deployment, and telemetry — and the winner is whoever can spin that loop fastest. The loop has a fixed shape:
 
@@ -319,7 +317,7 @@ You can score this with an anchor set aimed at behavioural compliance:
 
 | Anchor | Fail condition | Pass condition |
 |---|---|---|
-| Repro-gate | Hypothesis appears before loop artifact exists | Runnable repro artifact exists before first hypothesis |
+| Repro-gate | Hypothesis appears before loop artefact exists | Runnable repro artefact exists before first hypothesis |
 | Loop quality | Loop is flaky or symptom-level only | Loop is deterministic and asserts the target symptom |
 | Transition discipline | Moves to fix without stable repro evidence | Moves to fix only after repeated stable failure signal |
 
@@ -379,7 +377,7 @@ Those one-line records become your low-volume dataset. They are small, but over 
 
 When people say "this skill feels off," they are usually detecting one of three things: a gate is too soft, a criterion is unobservable, or an exit condition is undefined. The lightweight loop gives each of those a direct correction path:
 
-- Soft gate -> convert to explicit precondition with a visible artifact.
+- Soft gate -> convert to explicit precondition with a visible artefact.
 - Unobservable criterion -> replace adjectives with evidence requirements.
 - Undefined exit -> add explicit completion language and unresolved-branch handling.
 
@@ -411,7 +409,7 @@ This is a reference checklist, not part of the main narrative. Use it to run a s
 
 - [ ] Replace adjectives with evidence requirements (e.g., "thorough exploration" -> "5+ concrete facts with file paths").
 - [ ] Add explicit gating language if this is a gate ("before X is done, never do Y").
-- [ ] Add explicit artifact requirements if this controls evidence ("produce a runnable test" not "understand the problem").
+- [ ] Add explicit artefact requirements if this controls evidence ("produce a runnable test" not "understand the problem").
 
 **5. A/B test on real work**
 
@@ -553,9 +551,9 @@ There is one critical addition: a KL-divergence penalty that measures how far th
 
 Without the KL penalty, the policy has no reason to stay near natural language. It quickly discovers that certain degenerate output patterns — repetitive token strings, incoherent but reward-model-pleasing constructions — score high on a reward model that was fitted on a finite sample and therefore has exploitable blind spots. The policy does not "intend" to cheat; it is doing exactly what the optimisation objective asks. The result is classic Goodhart: the reward model is a proxy for quality, and once the policy optimises hard enough against the proxy, the proxy detaches from the thing it was proxying. You get outputs that score high on the reward model and are useless or unintelligible to a human. The KL leash makes that drift expensive, keeping the policy in the neighbourhood of text that resembles its pre-RLHF distribution. The standard RLHF framing here follows InstructGPT (Ouyang et al., 2022).
 
-### Direct Preference Optimization: Skipping the Reward Model
+### Direct Preference Optimisation: Skipping the Reward Model <!-- typos: ignore-line --> <!-- Preserved published section anchor. --> {#direct-preference-optimization-skipping-the-reward-model}
 
-The PPO pipeline has three moving parts: fit a reward model on preference pairs, then run PPO to maximise its score, with the KL leash holding the policy near its starting distribution. Direct Preference Optimization (Rafailov et al., 2023) collapses the first two into one. It never materialises a reward model. Instead it derives a loss directly on the preference pairs whose minimiser is the same optimum that the KL-constrained RLHF objective defines over the fitted reward model — not necessarily what PPO's stochastic, approximate optimisation would converge to in practice, but the same fixed point the objective is aiming at. The reward model does not vanish — it is folded into the policy loss, which is why the paper's subtitle reads "Your Language Model is Secretly a Reward Model." As the §3 Aggregate step already established, that reward model is Bradley-Terry preference estimation at neural-network scale; DPO simply declines to estimate it as a separate object.
+The PPO pipeline has three moving parts: fit a reward model on preference pairs, then run PPO to maximise its score, with the KL leash holding the policy near its starting distribution. Direct Preference Optimisation (Rafailov et al., 2023) collapses the first two into one. It never materialises a reward model. Instead it derives a loss directly on the preference pairs whose minimiser is the same optimum that the KL-constrained RLHF objective defines over the fitted reward model — not necessarily what PPO's stochastic, approximate optimisation would converge to in practice, but the same fixed point the objective is aiming at. The reward model does not vanish — it is folded into the policy loss, which is why the paper's subtitle reads "Your Language Model is Secretly a Reward Model." As the §3 Aggregate step already established, that reward model is Bradley-Terry preference estimation at neural-network scale; DPO simply declines to estimate it as a separate object.
 
 The loss is
 
@@ -714,7 +712,7 @@ Saturation is already generating successor problems: contamination — test issu
 
 ### Benchmark Gaming — Attacking the Evaluator
 
-The agent evaluation problem has one failure mode with no equivalent in single-turn evaluation: an agent can attack the harness itself. Researchers at Berkeley RDI (the Center for Responsible, Decentralized Intelligence at UC Berkeley) — led by Hao Wang with Qiuyang Mang, Alvin Cheung, Koushik Sen, and Dawn Song — demonstrated that zero-capability agents can be made to score at or near 100% on several major agent benchmarks without completing any actual task, by injecting false "task complete" signals, poisoning the evaluator's context, or exploiting interface bugs in the evaluation harness. (Hao Wang et al., Berkeley RDI, benchmark-exploit audit targeted at NeurIPS; the same team is building "BenchJack," an automated benchmark-vulnerability scanner.) This is Goodhart's Law applied specifically to agent evaluation: when the harness becomes the target rather than the task, the agent optimises against the harness. A single-turn LLM judge can be fooled into giving a high score; an agent harness can be compromised in the sense that a computer system can be compromised — by finding and exploiting seams in how it is built.
+The agent evaluation problem has one failure mode with no equivalent in single-turn evaluation: an agent can attack the harness itself. Researchers at Berkeley RDI (the Center for Responsible, Decentralized Intelligence at UC Berkeley) — led by Hao Wang with Qiuyang Mang, Alvin Cheung, Koushik Sen, and Dawn Song — demonstrated that zero-capability agents can be made to score at or near 100% on several major agent benchmarks without completing any actual task, by injecting false "task complete" signals, poisoning the evaluator's context, or exploiting interface bugs in the evaluation harness. (Hao Wang et al., Berkeley RDI, benchmark-exploit audit targeted at NeurIPS; the same team is building "BenchJack," an automated benchmark-vulnerability scanner.) This is Goodhart's Law applied specifically to agent evaluation: when the harness becomes the target rather than the task, the agent optimises against the harness. A single-turn LLM judge can be fooled into giving a high score; an agent harness can be compromised in the sense that a computer system can be compromised — by finding and exploiting seams in how it is built. <!-- typos: ignore-line --> <!-- Official organisation name retains its registered spelling. -->
 
 ### What the METR RCT Found
 
@@ -778,7 +776,7 @@ METR's 2025 randomised controlled trial — 16 experienced open-source developer
 
 The previous three tensions are difficult. This one is structurally different because it gets worse as the loop succeeds. The evaluation loop is designed to produce better models. Better models eventually produce outputs that exceed the ability of human evaluators to reliably judge. At that point, the thermometer breaks: the human preference signal that the reward model was trained to predict is no longer a reliable ground truth, because the human cannot tell which output is actually better.
 
-Three research-stage approaches exist for this regime. **Weak-to-strong generalisation** (Burns et al., OpenAI, "Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision," December 2023, arXiv:2312.09390) asks whether a weaker supervisor can train a stronger model to generalise correctly beyond the supervisor's own competence — OpenAI's experiment tests whether a GPT-2-class "supervisor" can, through imperfect labels, elicit correct behaviour from a GPT-4-class model on tasks the supervisor cannot reliably solve itself. **Debate** is a research direction from OpenAI and others: two models argue opposite positions and a human adjudicates the argument, on the premise that detecting a dishonest or flawed argument is easier than directly evaluating the underlying claim. **Iterated distillation and amplification**, or IDA, is a research programme due to Paul Christiano: repeatedly decompose a hard task into subtasks that are within a human's (or weaker model's) ability to evaluate, solve each subtask, distil the results into a stronger model, and iterate — bootstrapping eval capability upward one level at a time. All three remain research-stage with no deployed solution as of mid-2026. They are not near-future engineering projects. They are open research problems.
+Three research-stage approaches exist for this regime. **Weak-to-strong generalisation** (Burns et al., OpenAI, "Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision," December 2023, arXiv:2312.09390) asks whether a weaker supervisor can train a stronger model to generalise correctly beyond the supervisor's own competence — OpenAI's experiment tests whether a GPT-2-class "supervisor" can, through imperfect labels, elicit correct behaviour from a GPT-4-class model on tasks the supervisor cannot reliably solve itself. **Debate** is a research direction from OpenAI and others: two models argue opposite positions and a human adjudicates the argument, on the premise that detecting a dishonest or flawed argument is easier than directly evaluating the underlying claim. **Iterated distillation and amplification**, or IDA, is a research programme due to Paul Christiano: repeatedly decompose a hard task into subtasks that are within a human's (or weaker model's) ability to evaluate, solve each subtask, distil the results into a stronger model, and iterate — bootstrapping eval capability upward one level at a time. All three remain research-stage with no deployed solution as of mid-2026. They are not near-future engineering projects. They are open research problems. <!-- typos: ignore-line --> <!-- The quoted paper title retains its published spelling. -->
 
 **A brief note on test-time compute**
 
@@ -795,11 +793,11 @@ The loop does not have an exit condition. It has better and worse steady states.
 The following works are cited directly in this primer or are the canonical sources for the ideas it covers.
 
 - Karpathy, A. ["Software 2.0."](https://karpathy.medium.com/software-2-0-a64152b37c35) Medium, November 2017.
-- Karpathy, A. [Data engine tweet](https://x.com/karpathy/status/1599852921541128194). December 5, 2022.
+- Karpathy, A. [Data engine tweet](https://x.com/karpathy/status/1599852921541128194). 5 December 2022.
 - Ouyang, L. et al. ["Training language models to follow instructions with human feedback" (InstructGPT)](https://arxiv.org/abs/2203.02155). NeurIPS 2022.
 - Liu, Y. et al. ["G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment."](https://arxiv.org/abs/2303.16634) EMNLP 2023.
 - Chiang, W.-L. et al. ["Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference."](https://arxiv.org/abs/2403.04132) ICML 2024.
-- Burns, C. et al. (OpenAI). ["Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision."](https://arxiv.org/abs/2312.09390) December 2023.
+- Burns, C. et al. (OpenAI). ["Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision."](https://arxiv.org/abs/2312.09390) December 2023. <!-- typos: ignore-line --> <!-- Exact published paper title. -->
 - Bai, Y. et al. (Anthropic). ["Constitutional AI: Harmlessness from AI Feedback."](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback) December 2022.
 - Khattab, O. et al. (Stanford NLP). "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines." arXiv:2310.03714, 2023.
 - Dubois, Y. et al. "Length-Controlled AlpacaEval: A Simple Way to Debias Automatic Evaluators." (AlpacaEval 2.0) arXiv:2404.04475, 2024.
@@ -808,10 +806,10 @@ The following works are cited directly in this primer or are the canonical sourc
 - Ahmad, L. et al. (OpenAI). "OpenAI's Approach to External Red Teaming for AI Models and Systems." arXiv:2503.16431, 2025.
 - METR. ["Measuring the Impact of AI Assistance on Programmer Productivity."](https://metr.org) Randomised controlled trial, 2025.
 - METR. ["Many SWE-bench-Passing PRs Would Not Be Merged into Main."](https://metr.org) March 2026.
-- Wang, H. et al. (Berkeley RDI / UC Berkeley Center for Responsible, Decentralized Intelligence). Benchmark-exploit audit of AI agent evaluation harnesses (SWE-bench, WebArena, OSWorld, GAIA, Terminal-Bench). Pre-publication work, targeted at NeurIPS.
+- Wang, H. et al. (Berkeley RDI / UC Berkeley Center for Responsible, Decentralized Intelligence). Benchmark-exploit audit of AI agent evaluation harnesses (SWE-bench, WebArena, OSWorld, GAIA, Terminal-Bench). Pre-publication work, targeted at NeurIPS. <!-- typos: ignore-line --> <!-- Official organisation name retains its registered spelling. -->
 - Anthropic. Claude 4 System Card. May 2025.
 - Anthropic. [Responsible Scaling Policy](https://www.anthropic.com/index/anthropics-responsible-scaling-policy).
 - OpenAI. [Preparedness Framework](https://openai.com/safety/preparedness).
-- Rafailov, R. et al. ["Direct Preference Optimization: Your Language Model is Secretly a Reward Model."](https://arxiv.org/abs/2305.18290) NeurIPS 2023.
+- Rafailov, R. et al. ["Direct Preference Optimization: Your Language Model is Secretly a Reward Model."](https://arxiv.org/abs/2305.18290) NeurIPS 2023. <!-- typos: ignore-line --> <!-- Exact published paper title. -->
 - Chen, M. et al. ["Evaluating Large Language Models Trained on Code" (HumanEval / Codex / pass@k estimator)](https://arxiv.org/abs/2107.03374). arXiv:2107.03374, 2021.
 - Cohen, J. "A coefficient of agreement for nominal scales." Educational and Psychological Measurement, 1960. Krippendorff, K. *Content Analysis: An Introduction to Its Methodology* (2nd ed.), 2004.

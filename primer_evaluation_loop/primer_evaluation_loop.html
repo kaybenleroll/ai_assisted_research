@@ -669,8 +669,9 @@ to Model</a>
 <li><a href="#reward-model-training" id="toc-reward-model-training"><span class="toc-section-number">6.1</span> Reward Model Training</a></li>
 <li><a href="#rlhf-via-ppo-with-a-kl-leash" id="toc-rlhf-via-ppo-with-a-kl-leash"><span class="toc-section-number">6.2</span> RLHF via PPO With a KL
 Leash</a></li>
-<li><a href="#direct-preference-optimization-skipping-the-reward-model" id="toc-direct-preference-optimization-skipping-the-reward-model"><span class="toc-section-number">6.3</span> Direct Preference Optimization:
-Skipping the Reward Model</a></li>
+<li><a href="#direct-preference-optimization-skipping-the-reward-model" id="toc-direct-preference-optimization-skipping-the-reward-model"><span class="toc-section-number">6.3</span> Direct Preference Optimisation:
+Skipping the Reward Model <!-- typos: ignore-line -->
+<!-- Preserved published section anchor. --></a></li>
 <li><a href="#constitutional-ai-and-rlaif" id="toc-constitutional-ai-and-rlaif"><span class="toc-section-number">6.4</span> Constitutional AI and
 RLAIF</a></li>
 <li><a href="#dspy-your-eval-metric-as-the-loss-function" id="toc-dspy-your-eval-metric-as-the-loss-function"><span class="toc-section-number">6.5</span> DSPy: Your Eval Metric as the Loss
@@ -709,7 +710,6 @@ Resources</a></li>
 
     <main class="content">
       <div class="content-inner">
-<p><em>Research snapshot · September 10, 2026</em></p>
 <p>The conceptual argument is durable; benchmark scores, framework APIs,
 and vendor safety practices are not. Claims about current systems in
 this primer are dated research snapshots. Re-check the primary source
@@ -732,7 +732,8 @@ is shaped by data, and so “most of the active software development takes
 the form of curating, growing, massaging and cleaning labeled datasets.”
 The precondition he named for this to work at all is blunt: “repeated
 evaluation is possible and cheap.” Hold onto that sentence. The whole
-primer hangs off it.</p>
+primer hangs off it. <!-- typos: ignore-line -->
+<!-- Exact wording from Karpathy's quotation. --></p>
 <p>By December 2022 Karpathy had sharpened the idea into what he called
 a data engine. His formulation, in paraphrase: competitive advantage in
 AI goes not so much to those with data, but to those with a data engine
@@ -1397,8 +1398,8 @@ compliance:</p>
 <tbody>
 <tr>
 <td>Repro-gate</td>
-<td>Hypothesis appears before loop artifact exists</td>
-<td>Runnable repro artifact exists before first hypothesis</td>
+<td>Hypothesis appears before loop artefact exists</td>
+<td>Runnable repro artefact exists before first hypothesis</td>
 </tr>
 <tr>
 <td>Loop quality</td>
@@ -1472,7 +1473,7 @@ an exit condition is undefined. The lightweight loop gives each of those
 a direct correction path:</p>
 <ul>
 <li>Soft gate -&gt; convert to explicit precondition with a visible
-artifact.</li>
+artefact.</li>
 <li>Unobservable criterion -&gt; replace adjectives with evidence
 requirements.</li>
 <li>Undefined exit -&gt; add explicit completion language and
@@ -1525,7 +1526,7 @@ requirements (e.g., “thorough exploration” -&gt; “5+ concrete facts with
 file paths”).</label></li>
 <li><label><input type="checkbox"></input>Add explicit gating language if this
 is a gate (“before X is done, never do Y”).</label></li>
-<li><label><input type="checkbox"></input>Add explicit artifact requirements
+<li><label><input type="checkbox"></input>Add explicit artefact requirements
 if this controls evidence (“produce a runnable test” not “understand the
 problem”).</label></li>
 </ul>
@@ -1864,12 +1865,13 @@ human. The KL leash makes that drift expensive, keeping the policy in
 the neighbourhood of text that resembles its pre-RLHF distribution. The
 standard RLHF framing here follows InstructGPT (Ouyang et al.,
 2022).</p>
-<h2 data-number="6.3" id="direct-preference-optimization-skipping-the-reward-model"><span class="header-section-number">6.3</span> Direct Preference Optimization:
-Skipping the Reward Model</h2>
+<h2 data-number="6.3" id="direct-preference-optimization-skipping-the-reward-model"><span class="header-section-number">6.3</span> Direct Preference Optimisation:
+Skipping the Reward Model <!-- typos: ignore-line -->
+<!-- Preserved published section anchor. --></h2>
 <p>The PPO pipeline has three moving parts: fit a reward model on
 preference pairs, then run PPO to maximise its score, with the KL leash
 holding the policy near its starting distribution. Direct Preference
-Optimization (Rafailov et al., 2023) collapses the first two into one.
+Optimisation (Rafailov et al., 2023) collapses the first two into one.
 It never materialises a reward model. Instead it derives a loss directly
 on the preference pairs whose minimiser is the same optimum that the
 KL-constrained RLHF objective defines over the fitted reward model — not
@@ -2315,7 +2317,8 @@ the harness becomes the target rather than the task, the agent optimises
 against the harness. A single-turn LLM judge can be fooled into giving a
 high score; an agent harness can be compromised in the sense that a
 computer system can be compromised — by finding and exploiting seams in
-how it is built.</p>
+how it is built. <!-- typos: ignore-line -->
+<!-- Official organisation name retains its registered spelling. --></p>
 <h2 data-number="9.5" id="what-the-metr-rct-found"><span class="header-section-number">9.5</span> What the METR RCT Found</h2>
 <p>The sharpest evidence for the gap between benchmark progress and
 real-world impact comes from a randomised controlled trial METR ran in
@@ -2520,7 +2523,8 @@ to evaluate, solve each subtask, distil the results into a stronger
 model, and iterate — bootstrapping eval capability upward one level at a
 time. All three remain research-stage with no deployed solution as of
 mid-2026. They are not near-future engineering projects. They are open
-research problems.</p>
+research problems. <!-- typos: ignore-line -->
+<!-- The quoted paper title retains its published spelling. --></p>
 <p><strong>A brief note on test-time compute</strong></p>
 <p>Models that spend more inference-time compute — chain-of-thought,
 tree search, self-critique passes — often score higher on benchmarks.
@@ -2550,7 +2554,7 @@ canonical sources for the ideas it covers.</p>
 <li>Karpathy, A. <a href="https://karpathy.medium.com/software-2-0-a64152b37c35">“Software
 2.0.”</a> Medium, November 2017.</li>
 <li>Karpathy, A. <a href="https://x.com/karpathy/status/1599852921541128194">Data engine
-tweet</a>. December 5, 2022.</li>
+tweet</a>. 5 December 2022.</li>
 <li>Ouyang, L. et al. <a href="https://arxiv.org/abs/2203.02155">“Training language models to
 follow instructions with human feedback” (InstructGPT)</a>. NeurIPS
 2022.</li>
@@ -2560,8 +2564,8 @@ NLG Evaluation using GPT-4 with Better Human Alignment.”</a> EMNLP
 <li>Chiang, W.-L. et al. <a href="https://arxiv.org/abs/2403.04132">“Chatbot Arena: An Open Platform
 for Evaluating LLMs by Human Preference.”</a> ICML 2024.</li>
 <li>Burns, C. et al. (OpenAI). <a href="https://arxiv.org/abs/2312.09390">“Weak-to-Strong Generalization:
-Eliciting Strong Capabilities With Weak Supervision.”</a> December
-2023.</li>
+Eliciting Strong Capabilities With Weak Supervision.”</a> December 2023.
+<!-- typos: ignore-line --> <!-- Exact published paper title. --></li>
 <li>Bai, Y. et al. (Anthropic). <a href="https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback">“Constitutional
 AI: Harmlessness from AI Feedback.”</a> December 2022.</li>
 <li>Khattab, O. et al. (Stanford NLP). “DSPy: Compiling Declarative
@@ -2584,14 +2588,17 @@ Not Be Merged into Main.”</a> March 2026.</li>
 <li>Wang, H. et al. (Berkeley RDI / UC Berkeley Center for Responsible,
 Decentralized Intelligence). Benchmark-exploit audit of AI agent
 evaluation harnesses (SWE-bench, WebArena, OSWorld, GAIA,
-Terminal-Bench). Pre-publication work, targeted at NeurIPS.</li>
+Terminal-Bench). Pre-publication work, targeted at NeurIPS.
+<!-- typos: ignore-line -->
+<!-- Official organisation name retains its registered spelling. --></li>
 <li>Anthropic. Claude 4 System Card. May 2025.</li>
 <li>Anthropic. <a href="https://www.anthropic.com/index/anthropics-responsible-scaling-policy">Responsible
 Scaling Policy</a>.</li>
 <li>OpenAI. <a href="https://openai.com/safety/preparedness">Preparedness
 Framework</a>.</li>
 <li>Rafailov, R. et al. <a href="https://arxiv.org/abs/2305.18290">“Direct Preference Optimization:
-Your Language Model is Secretly a Reward Model.”</a> NeurIPS 2023.</li>
+Your Language Model is Secretly a Reward Model.”</a> NeurIPS 2023.
+<!-- typos: ignore-line --> <!-- Exact published paper title. --></li>
 <li>Chen, M. et al. <a href="https://arxiv.org/abs/2107.03374">“Evaluating Large Language
 Models Trained on Code” (HumanEval / Codex / pass@k estimator)</a>.
 arXiv:2107.03374, 2021.</li>
