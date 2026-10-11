@@ -1,0 +1,10 @@
+# The offline gate checks links and fragments against committed HTML in place.
+include_fragments = true
+accept = [200, 206, 429]
+max_retries = 2
+
+# Scratch checkouts and the retired third-party article are outside the corpus.
+exclude_path = [
+  "(^|/)\\.scratch/",
+  "(^|/)article_info_theory/html_articles/",
+]

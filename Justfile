@@ -81,9 +81,17 @@ check-readme: readme-check
 build-lint-image:
   {{OCI}} build --build-arg PYTHON_IMAGE={{PYTHON_IMAGE}} -t {{LINT_IMAGE}} -f _shared/Dockerfile.lint _shared/
 
-# Check every in-scope Markdown source with spelling, structure, and prose rules
+# Check Markdown sources and offline links in committed HTML and README
 lint:
   bash scripts/lint.sh
+
+# Check relative links and fragments in tracked built HTML and README
+lint-links *FILES:
+  bash scripts/lint.sh --links {{FILES}}
+
+# Report external links in Markdown sources without gating
+lint-links-online *FILES:
+  bash scripts/lint.sh --links-online {{FILES}}
 
 # Check Markdown structure and accessibility without the spelling checker
 lint-md *FILES:
@@ -97,7 +105,7 @@ lint-prose *FILES:
 lint-prose-test:
   bash scripts/lint.sh --prose-test
 
-# Check Markdown files changed since BASE_REF (default: origin/main)
+# Check changed Markdown and the full offline link baseline
 lint-changed:
   bash scripts/lint.sh --changed
 
