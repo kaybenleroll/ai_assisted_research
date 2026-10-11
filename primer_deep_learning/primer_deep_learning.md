@@ -338,7 +338,7 @@ Suppose you want to classify a 224×224 RGB image with an ordinary MLP. The inpu
 
 That is the problem convolutional neural networks (CNNs) solve. They build the structure of an image directly into the architecture: nearby pixels are related, the same visual pattern can appear anywhere in the frame, and a feature detector that finds vertical edges in the top-left corner should also find them in the bottom-right. Instead of learning a separate weight for every (input pixel, output neuron) pair, a CNN learns a small set of filters and slides them across the whole image. The result is dramatically fewer parameters and a model that actually respects how images are put together.
 
-### The convolution operation
+### The Convolution Operation
 
 The core operation is the 2D convolution. You have an input feature map $\mathbf{X}$ — for the first layer, this is the image itself — and a small kernel (also called a filter) $\mathbf{K}$ of size $k \times k$, typically $3 \times 3$ or $5 \times 5$. The kernel slides over every position in the input, and at each position it computes a dot product between its weights and the patch of input it currently overlaps:
 
@@ -379,13 +379,13 @@ The kernel visits nine positions in total — three across, three down — and e
 
 In practice a single kernel is never enough, because one kernel detects exactly one kind of pattern. A real convolutional layer has $C_{\mathrm{out}}$ separate kernels, and each kernel spans all the input channels: its shape is $C_{\mathrm{in}} \times k \times k$. So for an RGB input, each kernel is $3 \times k \times k$ and convolves across all three colour channels at once, summing the result into a single output map. With $C_{\mathrm{out}}$ kernels you get $C_{\mathrm{out}}$ output feature maps, which become the channels fed to the next layer. Concretely, a conv layer with 64 kernels of size $3 \times 3$ acting on a 3-channel input has $64 \times (3 \times 3 \times 3) + 64 = 1792$ parameters — the $+64$ is one bias per kernel. Compare that with the hundreds of millions an MLP would burn on the equivalent transformation. The parameter count of a conv layer depends on the kernel size and channel counts, and not at all on the image resolution. You can feed it a bigger image and it costs more compute but not one extra weight.
 
-### Pooling layers
+### Pooling Layers
 
 Convolution detects features; pooling summarises them and shrinks the spatial dimensions. **Max pooling** slides a window — usually $2 \times 2$ — over the feature map and keeps only the maximum value in each window, discarding the rest. **Average pooling** takes the mean of each window instead. A $2 \times 2$ pool with stride 2 halves both spatial dimensions, cutting the number of values by a factor of four, with no learnable parameters at all. **Global average pooling** is the extreme case: it collapses each entire feature map to a single number by averaging over the whole spatial extent, turning a stack of $C$ feature maps into a length-$C$ vector. Modern architectures often use global average pooling right before the classifier instead of flattening, which avoids a huge fully-connected layer.
 
 Pooling buys you two things. It reduces spatial resolution, which cuts compute and memory for everything downstream and lets later layers see a larger effective region of the original image. And it grants approximate **translation invariance**: if a feature shifts by one pixel, the max within a pooling window often does not change, so small spatial perturbations stop propagating. Note the distinction from the equivariance of convolution — convolution moves the feature in the output, pooling makes the output indifferent to small moves. That is usually what you want for classification, where you care that a cat is present, not exactly which pixel its ear starts on.
 
-### Architecture evolution
+### Architecture Evolution
 
 The history of CNN architectures is a story of a few key ideas, each unlocking the next level of depth, told across a handful of landmark networks.
 
@@ -401,23 +401,23 @@ $$\mathbf{h}^{(l+1)} = \mathcal{F}(\mathbf{h}^{(l)}, \mathbf{W}^{(l)}) + \mathbf
 
 Here $\mathcal{F}$ is the block's learned function and the bare $+\,\mathbf{h}^{(l)}$ is the identity shortcut. Two things make this work. First, learning is easier: if the optimal transformation for a block is close to doing nothing — close to the identity — then the residual $\mathcal{F}$ just needs to be close to zero, and driving a stack of weights towards zero is far easier than coaxing them to reproduce the identity exactly. Second, and this is the deeper reason, the gradient gets a free path. During backpropagation the derivative of that $+\,\mathbf{h}^{(l)}$ term passes the gradient straight through to the earlier layer with a coefficient of one, bypassing the chain of multiplications inside $\mathcal{F}$ that would otherwise shrink it towards zero. The skip connection is a gradient highway, and it is the same trick you will see again in the residual connections of the transformer. With it, networks of 152 layers became trainable; ResNet-152 won ILSVRC 2015 with a top-5 error of 3.57%, below the commonly cited human benchmark on the same task.
 
-### Transfer learning
+### Transfer Learning
 
 Training a large CNN from scratch needs a lot of labelled data and a lot of compute, and most people have neither for their specific problem. Transfer learning is the standard escape hatch, and it works because of a genuinely useful empirical fact about what CNNs learn. The early layers of an ImageNet-trained network learn general-purpose, low-level features: oriented edge detectors that look strikingly like Gabor filters, colour blobs, simple textures. These are not specific to ImageNet's thousand categories — they are the building blocks of essentially any natural image. As you move deeper, the features grow more abstract and more task-specific: textures combine into motifs, motifs into object parts, parts into whole-object detectors tuned to the training categories.
 
 This layered generality is what you exploit. You take a network pretrained on ImageNet and reuse it on your own, much smaller, dataset. Two strategies sit on a spectrum. In **feature extraction**, you freeze every convolutional layer, throw away the original classification head, and train only a fresh head (often a single linear layer) on top of the frozen features. You are treating the pretrained CNN as a fixed function that turns images into useful vectors. This is fast, needs little data, and works well when your task is visually similar to ImageNet. In **fine-tuning**, you go further: you unfreeze some of the later layers and continue training them, usually at a small learning rate, so the task-specific features can adapt to your domain while the general early-layer features stay put. The rule of thumb follows directly from the generality gradient — freeze the early layers that learned transferable edges and textures, retrain the later layers that need to specialise. The less your data resembles ImageNet (medical scans, satellite imagery), the more layers you will want to unfreeze.
 
-### Vision Transformers, briefly
+### Vision Transformers, Briefly
 
 Convolution is not the only way to process images. The Vision Transformer, or ViT (Dosovitskiy et al., 2020), discards convolution almost entirely. It chops the image into a grid of fixed-size patches — typically $16 \times 16$ pixels — flattens each patch, projects it to an embedding, and then treats the sequence of patch embeddings exactly like a sequence of word tokens fed to a standard transformer (the architecture covered in full in §7). There is no built-in notion of locality or translation equivariance; the model has to learn spatial relationships from data through attention.
 
 That trade-off has a clear shape. Convolution's hard-wired assumptions about images are an *inductive bias*, and inductive bias is most valuable exactly when data is scarce — it is prior knowledge you did not have to learn. So on small and medium datasets, CNNs still win, because the convolutional structure is doing work the ViT would otherwise need millions of extra examples to discover. But give a ViT enough data — and "enough" here means pretraining on hundreds of millions of images — and it overtakes comparable CNNs, because it is not constrained by convolution's assumptions and can learn whatever spatial structure the data actually contains. The headline lesson is that architectural priors and data volume are substitutes: the more data you have, the less you need to bake in by hand.
 
-### When CNNs are the wrong tool
+### When CNNs Are the Wrong Tool
 
 Convolution is a bet that your data has grid-like spatial structure where locality and translation matter. When that bet is wrong, a CNN is the wrong tool. Plain text and most time series have no two-dimensional spatial layout in the relevant sense — a 1D convolution can capture local patterns in a sequence, but the long-range, order-dependent relationships that matter in language are not what convolution is built for, which is why transformers dominate there. On small datasets without any pretraining to lean on, CNNs are data-hungry enough to overfit badly, and you may be better served by classical methods or heavy transfer learning. And data that simply is not grid-shaped — point clouds, molecular graphs, social networks, anything where the relationships between elements are not "lives at fixed coordinates next to its neighbours" — breaks convolution's core assumption entirely. Graph neural networks generalise the idea of convolution to arbitrary graph structure, and transformers handle sets and sequences with learned relationships; for non-grid data, reach for those instead.
 
-### Code: a small ConvNet in three frameworks
+### Code: A Small ConvNet in Three Frameworks
 
 Here is the same small CNN — two conv-pool blocks feeding a linear classifier, sized for 28×28 MNIST digits — written idiomatically in three frameworks. The shapes line up across all three: each $2 \times 2$ pool halves the spatial size, so 28 becomes 14 then 7, and the classifier sees $64 \times 7 \times 7$ features.
 
@@ -503,7 +503,7 @@ Everything so far has assumed a fixed-size input that arrives all at once. Langu
 
 Recurrent neural networks (RNNs) are built for sequences. The idea is to process the sequence one element at a time while carrying a running summary — a hidden state — that accumulates information from everything seen so far. The same small network is applied at every step, updating that summary as each new element arrives. This handles variable length naturally (just keep stepping until the input runs out) and respects order by construction (the state at step $t$ depends on everything that came before, in order).
 
-### The RNN cell
+### The RNN Cell
 
 At each time step $t$, the recurrent cell takes two inputs — the current element of the sequence $\mathbf{x}_t$ and the hidden state from the previous step $\mathbf{h}_{t-1}$ — and produces a new hidden state:
 
@@ -535,7 +535,7 @@ graph LR
 
 The crucial detail is that every box labelled `[RNN]` is the *same* box — the weight matrices $\mathbf{W}_h,$ $\mathbf{W}_x,$ and the bias are shared across all time steps. There is one set of parameters, applied repeatedly. This is exactly the parameter-sharing logic of a CNN, just applied along the time axis instead of across spatial positions: a CNN reuses a kernel at every location, an RNN reuses a cell at every step. The shared cell is what lets a single small network handle a sequence of any length.
 
-### Backpropagation through time
+### Backpropagation Through Time
 
 To train an RNN you unroll it across the full sequence of $T$ steps, which turns it into a (very deep, but weight-tied) feed-forward network, and then you run ordinary backpropagation over that unrolled graph. This procedure has a name — backpropagation through time, or BPTT — but mechanically it is just the chain rule applied to the unrolled network. Because every step shares the same weights, the gradient contributions from all $T$ steps are summed into a single update for each parameter.
 
@@ -545,7 +545,7 @@ $$\frac{\partial \mathcal{L}}{\partial \mathbf{h}_0} = \left( \prod_{t=1}^{T} \f
 
 That product of $T$ Jacobians is the whole problem.
 
-### The vanishing gradient problem in RNNs
+### The Vanishing Gradient Problem in RNNs
 
 This is the vanishing/exploding gradient phenomenon from §4, and the recurrent structure is where it bites hardest. The reason is the product above. Each Jacobian $\frac{\partial \mathbf{h}_t}{\partial \mathbf{h}_{t-1}}$ folds in the derivative of the $\tanh$, whose maximum value is 1 and is typically well below that, multiplied by the recurrent weight matrix. Multiply $T$ such factors together and, unless they sit in a narrow band right around magnitude 1, the product moves exponentially: factors below 1 drive it towards zero (vanishing), factors above 1 blow it up (exploding). For a sequence of length 100 you are multiplying roughly a hundred of these terms, and the result almost always vanishes.
 
@@ -584,13 +584,13 @@ The **reset gate** $\mathbf{r}_t$ controls how much of the previous hidden state
 
 With one fewer gate and no separate cell state, a GRU has fewer parameters than an LSTM and trains a little faster. In practice the two perform comparably on most tasks, and there is no universal winner. Prefer a GRU when you want the lighter, faster option — shorter sequences, tighter compute budgets, or cases where the long-range dependency is real but not the make-or-break factor. Reach for an LSTM when the task hinges on very long-range memory and you want the extra control the separate cell state and dedicated output gate provide. When it genuinely matters, try both.
 
-### When RNNs still earn their place
+### When RNNs Still Earn Their Place
 
 Transformers (§7) have largely displaced RNNs for natural language, where their parallelism and direct long-range attention win decisively. But RNNs hold onto real niches, and the reasons are structural. The first is streaming and online inference: an RNN processes one element at a time and carries a fixed-size hidden state, so it uses $O(1)$ memory per step regardless of how much history precedes it. Attention, by contrast, attends to all previous tokens, so its per-step cost grows with the sequence. For a model that must consume an unbounded stream — live audio, sensor telemetry — the RNN's constant per-step footprint is exactly right. The second is very long sequences, where attention's quadratic cost in sequence length becomes prohibitive and a linear-cost recurrence is the only thing that fits. The third is edge deployment under tight memory limits, where a small recurrent model beats a transformer you cannot afford to host. And the fourth is data with a genuinely recurrent character — many time-series problems — where the recurrent inductive bias matches the underlying process and helps rather than hinders.
 
 Worth naming here: **state-space models** (SSMs), most prominently **Mamba** (Gu & Dao, 2023), are the current standard answer to exactly the pitch above — linear-cost sequence processing with a fixed-size recurrent state, but with a training-time formulation that parallelises across the sequence the way a transformer does, closing much of the throughput gap that made vanilla RNNs impractical to train at scale. Where you would once have reached for an LSTM or GRU on long-sequence, streaming, or edge workloads, an SSM is now the more common choice.
 
-### Code: an LSTM in three frameworks
+### Code: An LSTM in Three Frameworks
 
 The same single-layer LSTM classifier in each framework: it consumes a sequence, takes the final hidden state, and maps it to class logits. The shapes follow each framework's convention for sequence batches.
 
@@ -663,11 +663,11 @@ The LSTM tamed the vanishing gradient, but it left a structural bottleneck in pl
 
 Attention removes the bottleneck. The insight is simple: instead of forcing the decoder to rely on one compressed summary, let it look back at *all* of the encoder's hidden states at every step of generation, and take a weighted combination of them where the weights reflect which parts of the input are relevant right now. Generating the verb? Attend heavily to the subject and the source verb. Generating a noun? Attend to the corresponding source noun. Nothing has to be crammed into a single vector, because the decoder can reach back to whatever it needs, whenever it needs it.
 
-### The attention intuition
+### The Attention Intuition
 
 A clean mental model for attention is a soft dictionary lookup. An ordinary dictionary maps keys to values: you supply a key, find the matching entry, and get back its value. Attention does a soft version of this. You have a **query** $\mathbf{q}$ — a vector describing what you are currently looking for. You have a set of **keys** $\mathbf{k}_1, \ldots, \mathbf{k}_n$, one per item of context, each describing what that item is "about." And you have a set of **values** $\mathbf{v}_1, \ldots, \mathbf{v}_n$, the actual content of each item. Rather than retrieve a single exact match, attention measures how similar the query is to every key, turns those similarities into weights that sum to one, and returns the weighted average of the values. If the query strongly matches one key, the result is dominated by that key's value, approximating a hard lookup; if it matches several keys partially, the result blends their values. The whole thing is differentiable, which is the point — you can train it end to end with backpropagation.
 
-### Scaled dot-product attention
+### Scaled Dot-Product Attention
 
 The transformer's specific form of attention packs all the queries, keys, and values into matrices — $\mathbf{Q}, \mathbf{K}, \mathbf{V}$, one row per position — and computes them all at once. First form the scaled score matrix:
 
@@ -681,7 +681,7 @@ Walk through it piece by piece. The product $\mathbf{Q}\mathbf{K}^T$ computes a 
 
 It is worth distinguishing two uses of this same machinery. In **self-attention**, the queries, keys, and values all come from the same sequence — each token attends to every token in its own sequence, including itself, to build a context-aware representation. In **cross-attention**, the queries come from one sequence and the keys and values from another — this is how a decoder attends over an encoder's output, which is exactly the bottleneck-removing mechanism we started with.
 
-### Multi-head attention
+### Multi-Head Attention
 
 A single attention operation produces one weighted view of the sequence, but one view is limiting — there are many different kinds of relationship a token might want to track at once. Multi-head attention runs $H$ attention operations in parallel, each with its own learned projection matrices, and combines the results. Each head first projects the queries, keys, and values into its own subspace, then attends within that subspace:
 
@@ -693,7 +693,7 @@ $$\operatorname{MultiHead}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{C
 
 The motivation is that different heads can specialise. With separate projections, one head is free to learn syntactic relationships — matching a verb to its subject — while another tracks something semantic, like coreference between a pronoun and the noun it refers to, and a third attends to nearby tokens for local context. They run concurrently and independently, and the final projection blends their distinct perspectives into the output. In practice the per-head dimension is set to $d_{\mathrm{model}} / H$, so that splitting $d_{\mathrm{model}}$ across $H$ heads keeps the total computation roughly the same as a single full-width attention — you get the diversity of multiple heads at essentially no extra cost.
 
-### Positional encoding
+### Positional Encoding
 
 Self-attention has a property that is both a feature and a problem: it is permutation-equivariant. Because attention computes weighted sums over a *set* of keys and values, with no inherent notion of which came first, shuffling the input tokens produces an identically shuffled output and changes nothing else. The model literally cannot tell "dog bites man" from "man bites dog" on the basis of attention alone — both have the same tokens, and order is invisible to the mechanism. That is fatal for language, where order is meaning.
 
@@ -705,7 +705,7 @@ Each dimension of the encoding is a sinusoid, with low dimensions varying quickl
 
 A more modern approach, **RoPE** (Rotary Position Embedding), is now standard in models like LLaMA and GPT-NeoX. Instead of adding a positional vector, RoPE *rotates* the query and key vectors by an angle proportional to their position before the dot product. Because the dot product of two rotated vectors depends only on the difference of their rotation angles, relative position falls out of the attention scores naturally, and it does so without any additive encoding and with good behaviour as sequences get long.
 
-### The full transformer architecture
+### The Full Transformer Architecture
 
 The transformer stacks these pieces into an encoder and a decoder. The encoder turns the input sequence into a stack of context-rich representations; the decoder generates the output sequence one token at a time, attending both to what it has generated so far and to the encoder's output. Here is the overall structure:
 
@@ -746,7 +746,7 @@ It is "position-wise" because the same FFN is applied to each token's vector sep
 
 Every sub-layer is wrapped in a residual connection and a layer normalisation, in the form $\operatorname{LayerNorm}(\mathbf{x} + \operatorname{Sublayer}(\mathbf{x}))$. The residual is there for exactly the reason it was in ResNet: the $+\,\mathbf{x}$ gives the gradient a direct path back through the identity, so even a deep stack of blocks trains without the gradient vanishing. Transformers are deep, and they would not train without these skip connections any more than a 152-layer CNN would.
 
-### Layer normalisation
+### Layer Normalisation
 
 Transformers normalise with layer normalisation rather than the batch normalisation of §4, and the difference is which dimension you normalise over. Batch norm computes its mean and variance over the batch dimension — across all the examples in a mini-batch, for each feature. Layer norm instead computes them over the feature dimension, independently for each single example:
 
@@ -756,7 +756,7 @@ where $\mu$ and $\sigma$ are the mean and standard deviation of the features of 
 
 One detail of placement is worth knowing, because it changed after the original paper. The 2017 transformer used **post-LN**: normalise *after* adding the residual, as written above. Post-LN turned out to be finicky to train at depth, often needing careful learning-rate warm-up. Modern practice has largely shifted to **pre-LN**, applying the norm to the input of each sub-layer *before* attention or the FFN, with the form $\mathbf{x} + \operatorname{Sublayer}(\operatorname{LayerNorm}(\mathbf{x}))$. Pre-LN keeps the residual path completely clean — nothing normalises the signal travelling down the skip connections — which makes deep transformers markedly more stable to train.
 
-### BERT versus GPT
+### BERT Versus GPT
 
 Two model families took the transformer in different directions, and the contrast is the clearest way to understand what the architecture's two halves are each good for. Both use the same building blocks; they differ in which half they keep and what objective they train on.
 
@@ -766,7 +766,7 @@ Two model families took the transformer in different directions, and the contras
 
 The summary is clean. BERT is an encoder trained bidirectionally for understanding; GPT is a decoder trained causally for generation. The same transformer, pointed at two different objectives, gives you the two dominant families of modern language models — and §8 picks up the GPT line to build out large language models in full.
 
-### Code: self-attention in three frameworks
+### Code: Self-Attention in Three Frameworks
 
 Here is scaled dot-product self-attention with a single head, implemented from the formula in each framework so the mechanism is visible rather than hidden inside a library call. Each version projects an input sequence to queries, keys, and values, computes scaled scores, softmaxes them, and returns the weighted sum of values.
 
@@ -852,7 +852,7 @@ A large language model is not a new architecture. It is the transformer from §7
 
 That distinction matters because it sets your expectations correctly. If you go looking for a clever new layer type that explains why GPT-4 can write code, you will not find one. What you will find is scale, a few engineering refinements to make scale tractable, and a training recipe that turns a raw next-token predictor into something that follows instructions. This section walks through that recipe: how text becomes tokens, what objective the model is trained on, how loss behaves as you add compute, how a pre-trained model is cheaply adapted to a task, how it is taught to follow instructions, and the strange fact that some capabilities only appear once the model is large enough.
 
-### Tokenisation: the model never sees text
+### Tokenisation: The Model Never Sees Text
 
 Before any of the math in §7 can run, you have to turn a string into a sequence of integers. This step is more consequential than it looks, and it is the first place things quietly go wrong.
 
@@ -875,7 +875,7 @@ A couple of close relatives are worth knowing by name. **WordPiece**, used by BE
 
 Here is the consequence that bites people. The model never sees your text. It sees token IDs, and those IDs are an artefact of whatever the tokeniser decided. This is exactly why arithmetic is unreliable in LLMs. The string "1234" might be a single token, or "12" + "34", or "1" + "2" + "3" + "4", depending entirely on which digit substrings happened to be frequent in the tokeniser's training corpus. The model has to learn addition on top of a representation that chops numbers into inconsistent chunks, and the chunking changes with context. When an LLM flubs a multiplication, the failure often started here, before the first attention layer ever ran. Tokenisation is a lossy, quirky lens, and everything downstream looks through it.
 
-### Pre-training objectives
+### Pre-Training Objectives
 
 Once text is tokens, you need something to train on. There is no labelled data at internet scale, so the objective has to be self-supervised: the text supplies its own targets. Two objectives dominate, and the choice between them determines what the model is good for.
 
@@ -893,7 +893,7 @@ where $\mathbf{x}_{\backslash \mathcal{M}}$ is the sequence with the masked posi
 
 The two objectives produce different kinds of model, and the reason is straightforward once you line up training against inference. CLM is trained to do exactly what generation requires — emit one token at a time, conditioned on what came before — so a CLM model is a generative model by construction; you sample from it autoregressively and it just keeps going. MLM is never trained to continue text, so it is awkward as a generator, but the bidirectional context it learns makes it a richer encoder: for understanding a sentence well enough to classify its sentiment or extract its entities, seeing the words on both sides of every position is genuinely more informative than seeing only the left context. So the rough division is CLM for generation, MLM for representation. The headline LLMs you interact with — GPT, Claude, Llama — are decoder-only CLM models, because the product is generation.
 
-### Scaling laws
+### Scaling Laws
 
 The defining empirical fact about LLMs is that their loss is predictable. Kaplan et al. (2020) measured how test loss falls as you increase three things — the number of parameters, the size of the dataset, and the amount of compute — and found clean power-law relationships in each, over many orders of magnitude. Double the compute and the loss drops by a predictable amount; the curve on a log-log plot is a straight line. This is unusual and useful. It means you can train small models, fit the curve, and forecast the loss of a model ten times larger before you spend a cent training it.
 
@@ -901,7 +901,7 @@ The first-order practical lesson from Kaplan was that, for a fixed compute budge
 
 The implication reaches past the training run. A smaller model trained on the compute-optimal amount of data can match a larger model that was undertrained — and the smaller model is cheaper to run for every single inference, forever. Since most of an LLM's lifetime cost is inference, not training, this reframes the whole economics. The question stopped being "how big a model can we afford to train?" and became "what is the smallest model that hits our quality bar, trained on enough data to earn its parameters?" That shift is why the field moved towards smaller, longer-trained models for deployment even as the frontier kept pushing scale at the top end.
 
-### Fine-tuning: adapting without retraining
+### Fine-Tuning: Adapting Without Retraining
 
 A pre-trained model is a general next-token predictor. To make it good at a specific task — summarising legal documents, answering medical questions in a house style — you adapt it. The brute-force option is **full fine-tuning**: keep training, updating every parameter on your task data. It works, and for a long time it was the only option, but it has two costs. It is computationally expensive — you need optimiser state for billions of parameters, several times the memory of the model itself — and it risks **catastrophic forgetting**, where the model overwrites general competence while specialising and comes out worse at everything it wasn't fine-tuned on. You also end up with a full-size copy of the model per task, which is a storage and serving nightmare if you have many tasks.
 
@@ -913,7 +913,7 @@ and train only $\mathbf{A}$ and $\mathbf{B}$. Because the rank $r$ is small — 
 
 **Prefix tuning** is a different lever on the same goal. Leave every model weight frozen and instead prepend a handful of trainable "virtual tokens" — learned embedding vectors that are not real tokens but occupy positions at the front of the sequence. Only those prefix embeddings are trained. The model reads them through its ordinary attention machinery and they steer its behaviour, much as a well-crafted prompt would, except the steering is learned by gradient descent rather than written by hand. It trains even fewer parameters than LoRA, at the cost of consuming some of the context window.
 
-### RLHF: from completion to instruction-following
+### RLHF: From Completion to Instruction-Following
 
 A pre-trained CLM model completes text. That is not the same as being helpful. Ask a raw pre-trained model "What is the capital of France?" and a plausible continuation is another question — because in the training data, questions are often followed by more questions — rather than "Paris." The model is doing its job perfectly; its job just isn't what you wanted. **Reinforcement Learning from Human Feedback** (RLHF) is the standard recipe for closing that gap, and it runs in three stages.
 
@@ -933,7 +933,7 @@ The first term is the reward to maximise. The second term is the crucial guardra
 
 That KL constraint is not optional decoration, and it is worth understanding why. The reward model is an imperfect proxy for human preference — it was trained on finite data and has blind spots. If you let the policy optimise the reward freely, it will find those blind spots and exploit them. This is **reward hacking**: the policy discovers degenerate outputs that score absurdly high on the reward model while being useless or incoherent to an actual human — repeating flattering phrases, exploiting length biases, drifting into text that games the scorer's quirks. Left unchecked, the policy collapses onto a narrow region of these high-scoring degeneracies. The KL term prevents this by making the policy pay a penalty for straying far from the sensible, fluent SFT distribution. It keeps the model's outputs recognisably language while it climbs the reward, so the optimisation improves helpfulness instead of discovering an adversarial exploit of its own grader. (Newer methods like Direct Preference Optimisation fold these stages together and skip the explicit reward model, but the conceptual structure — preferences supply the signal, a proximity constraint prevents collapse — is the same.)
 
-### Emergent capabilities
+### Emergent Capabilities
 
 The last thing to know about scale is the strangest. At small scale, a language model does roughly what you'd expect: it completes tokens, more or less fluently. At large scale, models exhibit capabilities that nobody trained into them explicitly. **Few-shot learning**: give the model three examples of a task in the prompt — no gradient updates, just text — and it generalises the pattern to a fourth. **Chain-of-thought reasoning**: append "think step by step" and the model lays out intermediate steps and reaches answers it gets wrong when asked to reply immediately. Multi-digit arithmetic, code generation, translation between languages it was never explicitly paired on — these appear without any task-specific objective.
 
@@ -947,7 +947,7 @@ For how these models are actually put to work — wrapped in loops that call too
 
 Generative modelling is the problem of learning a distribution well enough to draw new samples from it — new faces, new sentences, new molecules. The next three sections cover the three families that dominate it: variational autoencoders, generative adversarial networks, and diffusion models. They make different bargains between sample quality, diversity, training stability, and speed, and the cleanest way to understand each is to see the problem it was built to fix in its predecessor. We start with the VAE, and the cleanest way to motivate it is to look at the problem ordinary autoencoders solve, and then the problem they create.
 
-### Autoencoders, and the gap they leave
+### Autoencoders, and the Gap They Leave
 
 An autoencoder is two networks trained as a pair. An **encoder** $q_\phi(\mathbf{z} \mid \mathbf{x})$ takes an input $\mathbf{x}$ — an image, say — and compresses it to a low-dimensional latent code $\mathbf{z}$. A **decoder** $p_\theta(\mathbf{x} \mid \mathbf{z})$ takes that code and tries to reconstruct the original input. You train them jointly to minimise reconstruction error, mean-squared for continuous data or binary cross-entropy for binary data:
 
@@ -957,7 +957,7 @@ The bottleneck — the fact that $\mathbf{z}$ is much smaller than $\mathbf{x}$ 
 
 The trouble is the latent space they learn. Nothing in the reconstruction objective constrains *where* the encoder places codes. It is free to map each training input to any arbitrary point in $\mathbb{R}^d$, and it will, scattering codes wherever happens to minimise reconstruction error. The result is a latent space full of holes and discontinuities. Two inputs that are similar in data space can land far apart in latent space, and the regions between training codes correspond to nothing the decoder has ever been asked to reconstruct. So if you do the obvious generative thing — sample a random point from the latent space and decode it — you get garbage, because that point almost certainly falls in one of the holes the decoder never learned to handle. Interpolate along a straight line between two valid codes and you pass through the same dead regions, producing nonsense partway across. The autoencoder learned to represent the training data, but it did not learn a latent *distribution* you can sample from. That is the generative gap, and closing it is the entire point of the VAE.
 
-### The latent-variable view
+### The Latent-Variable View
 
 To fix the gap you need a different framing. Stop thinking of the encoder as the primary object and start with a generative story for how data is produced. Imagine that to make a data point, nature first samples a latent vector from a fixed, simple prior — a standard Gaussian, $p(\mathbf{z}) = \mathcal{N}(\mathbf{0}, \mathbf{I})$ — and then passes it through a stochastic decoder $p_\theta(\mathbf{x} \mid \mathbf{z})$ to produce the observed $\mathbf{x}$. If this story is right and we know the prior, generation is trivial: sample $\mathbf{z}$ from the prior, decode, done. The prior is something we *can* sample from, so the holes problem vanishes by construction — there are no holes in a Gaussian.
 
@@ -983,7 +983,7 @@ $$\operatorname{KL} = \frac{1}{2}\sum_j \left(\mu_j^2 + \sigma_j^2 - \log \sigma
 
 a sum over latent dimensions of a per-dimension penalty. Each term is minimised at $\mu_j = 0, \sigma_j = 1$ — the prior — and grows as the encoder's mean drifts from zero or its variance from one. No integral, no sampling needed for this term: you read $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ straight off the encoder and plug in.
 
-### The reparameterisation trick
+### The Reparameterisation Trick
 
 There is one obstacle left, and it is in the reconstruction term. To estimate $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$ you have to sample $\mathbf{z}$ from $q_\phi(\mathbf{z} \mid \mathbf{x})$ and then decode. But sampling is not a differentiable operation. You cannot backpropagate through a random draw — there is no derivative of "drew this particular sample" with respect to the parameters of the distribution it was drawn from. And $\phi$, the encoder's parameters, are upstream of exactly that draw. Without a gradient path through the sample, the encoder cannot learn.
 
@@ -993,7 +993,7 @@ $$\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon
 
 This produces a sample from exactly the right distribution, but now the stochastic part lives entirely in $\boldsymbol{\epsilon}$, which sits outside the computational graph, while the path from $\phi$ to $\mathbf{z}$ — through $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ — is a chain of ordinary differentiable operations. Gradients flow straight through $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ back into the encoder. The randomness is still there, sample to sample, but it no longer blocks the gradient. This single trick is what makes the VAE trainable end-to-end by gradient descent, and the same idea reappears whenever you need to differentiate through a sampling step.
 
-### Putting it together
+### Putting It Together
 
 In practice the encoder is built to output $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$ rather than $\boldsymbol{\sigma}$ directly — predicting the log-variance keeps the value numerically stable and unconstrained in sign, since variance must be positive but a log can range freely. A training step then runs: encode $\mathbf{x}$ to get $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$, draw $\boldsymbol{\epsilon}$, form $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}$, decode $\mathbf{z}$ to a reconstruction, compute the ELBO (reconstruction term plus the closed-form KL), and backpropagate.
 
@@ -1025,7 +1025,7 @@ The second failure mode is **posterior collapse**. If the KL term comes to domin
 
 The VAE's blurriness traces back to its objective: a likelihood-based loss that rewards hedging towards the average. GANs throw that objective out entirely. Instead of training a generator to maximise a likelihood, you train it to fool an adversary — a second network whose only job is to tell real data from the generator's fakes. There is no explicit density, no reconstruction term averaging over possibilities, nothing pulling towards a blurry mean. The generator improves by being told, repeatedly, exactly how it got caught. The payoff is sharpness; the price, as we'll see, is that the training is genuinely hard to make converge.
 
-### The minimax game
+### The Minimax Game
 
 Two networks play against each other. The **generator** $G_\theta$ takes a noise vector $\mathbf{z} \sim p_z$ — typically a standard Gaussian — and maps it to a fake data point $G_\theta(\mathbf{z})$. The **discriminator** $D_\phi$ takes a data point $\mathbf{x}$ and outputs a single number: the probability that $\mathbf{x}$ is real rather than generated. They are trained on opposite objectives, which is the whole idea, and the combined objective is a single minimax expression:
 
@@ -1039,7 +1039,7 @@ $$D^*(\mathbf{x}) = \frac{p_{\mathrm{data}}(\mathbf{x})}{p_{\mathrm{data}}(\math
 
 the probability that a point at $\mathbf{x}$ came from the data rather than the generator, given how often each produces it. Substitute this optimal discriminator back into the objective and the generator's problem reduces to minimising the **Jensen-Shannon divergence** between the real data distribution $p_{\mathrm{data}}$ and the generator's distribution $p_G$. So in principle a GAN drives $p_G$ towards $p_{\mathrm{data}}$ under a sensible divergence. That is the reassuring theory. The practice is where it gets difficult.
 
-### Why GANs are hard to train
+### Why GANs Are Hard to Train
 
 GANs are notorious, and the difficulties are not incidental — they fall out of the minimax structure. Three are worth knowing by name.
 
@@ -1065,11 +1065,11 @@ $$\mathcal{L}_{\mathrm{GP}} = \lambda \, \mathbb{E}_{\hat{\mathbf{x}}}\big[(\|\n
 
 evaluated at points $\hat{\mathbf{x}}$ sampled along lines between real and fake examples. This softly holds the critic's gradient norm near 1 without the pathologies of weight clipping, and it is the recipe most stable GAN training is built on.
 
-### Architecture variants
+### Architecture Variants
 
 Several variants are worth recognising. **DCGAN** was the one that made GANs work reliably on images: build both networks from convolutions — transposed convolutions in the generator to upsample noise into an image, ordinary convolutions in the discriminator to downsample an image into a verdict — along with a set of architectural conventions (batch norm, particular activations) that tamed much of the early instability. **Conditional GAN** adds control: feed a class label $\mathbf{y}$ to both networks, $G(\mathbf{z}, \mathbf{y})$ and $D(\mathbf{x}, \mathbf{y})$, and the generator learns to produce a sample of the requested class while the discriminator judges real-versus-fake conditioned on that class — turning an uncontrolled sampler into one you can steer. **StyleGAN** (Karras et al., 2018) pushed photorealism to its peak by injecting a learned style vector at every resolution of the generator, giving control over coarse structure and fine detail separately; for several years its faces were the state of the art in photorealistic generation and the source of most "this person does not exist" demonstrations. The original StyleGAN did this via adaptive instance normalisation (AdaIN), but AdaIN turned out to cause characteristic droplet-shaped artefacts; StyleGAN2 (2019) replaced it with weight demodulation, which achieves the same per-resolution style control without the artefacts. "StyleGAN" today usually means the StyleGAN2/3 line, not the original AdaIN-based version.
 
-### When GANs are still the right tool
+### When GANs Are Still the Right Tool
 
 Diffusion models have displaced GANs as the default for high-fidelity image generation, but GANs are far from obsolete, and the reasons come down to what the adversarial setup uniquely offers. The biggest is speed: a GAN generates in a **single forward pass**, while diffusion needs many sequential denoising steps, so when you need samples fast — interactive tools, real-time generation, anything latency-sensitive — a GAN's one-shot sampling is a decisive advantage. They retain a niche in latency-critical video — real-time avatar and face-reenactment systems, where single-pass speed matters more than absolute fidelity — though for general video generation, diffusion and transformer-based (DiT) models have taken over since 2023–24: Sora, Veo, and Runway Gen-3 are all diffusion-family, not GAN-family. And GANs own image-to-image translation and domain adaptation — turning horses into zebras, sketches into photos, summer scenes into winter ones — through architectures like CycleGAN and pix2pix, where the adversarial signal directly judges whether a translated image looks like it belongs in the target domain. Wherever you need fast sampling or adversarial feedback on a specific distributional property, the GAN is still the right tool.
 
@@ -1077,7 +1077,7 @@ Diffusion models have displaced GANs as the default for high-fidelity image gene
 
 Diffusion models come from one disarmingly simple observation. Take an image and add a little Gaussian noise. Add a little more. Keep going for enough steps and the image dissolves into pure, structureless noise — every trace of the original gone. That forward direction is trivial; anyone can destroy an image by adding noise. The bet diffusion makes is that the *reverse* is learnable: train a network to undo one step of noising, and you can run it backward from pure noise, step by step, gradually removing noise until a coherent image emerges from static. This gives diffusion a particularly stable training objective and an unusually strong quality–diversity trade-off on many generation tasks. It does not make diffusion universally best: model architecture, data, conditioning, sampler, and latency budget still determine which family wins.
 
-### The forward process
+### The Forward Process
 
 The noising is defined as a fixed Markov chain — fixed meaning it has no learned parameters; it is the same recipe for every image. Over $T$ steps it gradually adds Gaussian noise, each step nudging the image towards the noise distribution:
 
@@ -1095,7 +1095,7 @@ $$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}
 
 This is the workhorse of training. To make one training example you pick a random timestep $t,$ draw one noise vector $\boldsymbol{\epsilon},$ and produce $\mathbf{x}_t$ directly — no loop. As $t$ runs from 1 to $T,$ $\bar{\alpha}_t$ shrinks from near 1 to near 0, so $\mathbf{x}_t$ slides smoothly from "the original image" to "pure noise", and you can land anywhere on that path instantly.
 
-### The reverse process
+### The Reverse Process
 
 To generate, you want to run the chain backwards: given a noisy $\mathbf{x}_t$, produce a slightly less noisy $\mathbf{x}_{t-1}$. The true reverse conditional $p(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$ is intractable — computing it exactly would require knowing the full data distribution, which is the very thing we're trying to learn. So you approximate it with a network. The key parameterisation in DDPM (Ho et al., 2020) is not to predict the denoised image directly but to predict the **noise** that was added: a network $\epsilon_\theta(\mathbf{x}_t, t)$ takes the noisy image and the timestep and outputs its estimate of the $\boldsymbol{\epsilon}$ that produced it. Since the forward equation tells you $\mathbf{x}_t$ is a known mix of $\mathbf{x}_0$ and $\boldsymbol{\epsilon}$, knowing $\boldsymbol{\epsilon}$ is equivalent to knowing $\mathbf{x}_0$ — predicting the noise and predicting the clean image are two views of the same thing, and noise prediction trains more stably.
 
@@ -1121,11 +1121,11 @@ $$\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta
 
 The bracketed part removes the network's estimate of the current step's noise; the trailing $\sigma_t \mathbf{z}$ adds a small amount of fresh randomness back in, which keeps the reverse process a proper stochastic sampler rather than a deterministic collapse. Run all the way down and $\mathbf{x}_0$ is your generated image.
 
-### Score matching, briefly
+### Score Matching, Briefly
 
 It is worth knowing that this connects to a broader theory, because it explains why the noise-prediction trick works and links diffusion to a whole other line of research. The **score** of a distribution is $\nabla_\mathbf{x} \log p(\mathbf{x})$ — the gradient of log-density, pointing in the direction of steepest increase in probability, i.e. "which way is more like real data from here." If you knew the score everywhere, you could generate by starting somewhere random and repeatedly stepping uphill in density. It turns out the noise the network predicts is, up to a scale factor, the *negative* score of the noised data distribution: predicting $\boldsymbol{\epsilon}$ is equivalent to estimating $\nabla_\mathbf{x} \log p(\mathbf{x})$. So a diffusion model is a score-based model in disguise, and the denoising it learns is really an estimate of the direction towards higher data density at each noise level. This places diffusion inside the family of energy-based and score-based generative models, and the equivalence is more than cosmetic — it is where a lot of the theory and the faster samplers come from. A close relative worth a name-check is **flow matching**, which trains a network to regress a velocity field along a chosen path from noise to data rather than a noise-prediction target. Sampling then integrates that learned vector field from the noise endpoint towards the data endpoint. The path and numerical solver become part of the design, so flow matching is related to diffusion but is not simply “diffusion with a different name”; it offers another route to fast, high-quality continuous generation.
 
-### DDIM: fewer steps
+### DDIM: Fewer Steps
 
 The DDPM sampler has one serious practical drawback: it wants on the order of 1000 steps, one per noise level, and each step is a full forward pass through a large network. Generating one image takes a thousand network evaluations, which is slow. **DDIM** (Song et al., 2020) fixes this by reformulating the reverse process. It reparameterises the chain as non-Markovian and makes the reverse step *deterministic* — dropping the random $\sigma_t \mathbf{z}$ term — which, somewhat surprisingly, lets you take much larger steps without wrecking quality. You can skip from $t$ to some much earlier timestep directly, and 10–50 steps can work well for many models, but that is not a universal quality-preserving conversion: the best step count depends on the training objective, noise schedule, solver, guidance scale, and requested fidelity. Every skipped step is a latency saving only if the resulting quality remains acceptable. Each DDIM step first reconstructs an estimate of the clean image from the current noisy one and the predicted noise, then re-noises it to the next (lower) level:
 
@@ -1139,7 +1139,7 @@ $$\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1
 
 The first term uses the model's current best guess at the fully denoised image; the second term pushes it partway back towards noise at the next level down. Because the process is deterministic given the starting noise, DDIM also gives you a clean latent-to-image map, which makes interpolation and editing in noise space possible — the same starting noise always produces the same image.
 
-### Classifier-free guidance
+### Classifier-Free Guidance
 
 Everything so far generates unconditionally — it draws *some* image from the learned distribution, with no way to ask for a specific one. To condition on a class label or a text prompt $\mathbf{c}$, the trick that won is **classifier-free guidance**, and it is elegant because it needs no separate classifier. Train a single model to do both conditional and unconditional denoising: feed it the conditioning $\mathbf{c}$ most of the time, but randomly drop $\mathbf{c}$ (replace it with a null token $\emptyset$) on some fraction of training examples. The one network thus learns both $\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c})$ and $\epsilon_\theta(\mathbf{x}_t, t, \emptyset)$.
 
@@ -1149,7 +1149,7 @@ $$\tilde{\epsilon}_\theta(\mathbf{x}_t, t, \mathbf{c}) = \epsilon_\theta(\mathbf
 
 The difference between the conditional and unconditional predictions is the direction the prompt is pulling; the guidance scale $w$ controls how hard you push in that direction. At $w = 1$ you get ordinary conditional generation. Crank $w$ above 1 and you exaggerate the prompt's influence, producing images that adhere more tightly to the conditioning — but at a cost: higher $w$ trades diversity for fidelity to the prompt, so push it too far and outputs become over-saturated and samey. This single dial is the mechanism behind the prompt control in DALL-E 2, Stable Diffusion, and Imagen, and tuning it is most of what "guidance scale" means in those tools.
 
-### Latent diffusion
+### Latent Diffusion
 
 There is one more piece, and it is what made high-resolution text-to-image practical rather than a research curiosity. Running diffusion directly in pixel space is brutally expensive: a 256×256 RGB image is roughly 196,000 dimensions, and you need a forward pass over all of them at every one of many sampling steps. **Latent diffusion models** (Rombach et al., 2022, the basis of Stable Diffusion) move the whole process into a compressed space. First, a VAE encoder — exactly the kind from §9 — compresses the image to a much smaller latent, $\mathbf{z} = E(\mathbf{x})$. Run the entire diffusion process, forward and reverse, in that latent space. Then decode the final clean latent back to pixels with the VAE decoder, $\hat{\mathbf{x}} = D(\mathbf{z}_0)$.
 
@@ -1157,7 +1157,7 @@ The savings are enormous. A typical compression factor is 8× along each spatial
 
 Text conditioning in Stable Diffusion uses machinery you already know from §7. A CLIP text encoder turns the prompt into a sequence of embedding vectors, and those embeddings are injected into the denoising network through **cross-attention**. The original Stable Diffusion used a U-Net (a convolutional encoder-decoder with skip connections) as that denoising network; since 2024 frontier models (SD3, Flux, Sora) have mostly replaced it with a **diffusion transformer (DiT)** — a plain transformer operating on patchified latents — which scales more predictably with data and compute than the convolutional U-Net does. The image features supply the queries, the text embeddings supply the keys and values, exactly the encoder-decoder cross-attention pattern from §7, so at every layer the image being denoised "looks up" the parts of the prompt relevant to each spatial location. That is the whole text-to-image pathway: encode the prompt, diffuse in latent space under cross-attention to the prompt, decode to pixels.
 
-### Diffusion beyond images
+### Diffusion Beyond Images
 
 The denoising idea is not tied to pixels. For audio, the model can diffuse a waveform, a time-frequency representation such as a mel spectrogram, or a learned audio latent, then decode the result back to audio. For video, it denoises a spatiotemporal latent: the model must make neighbouring frames agree as well as making each frame plausible. Audio and video therefore inherit the same basic strengths as image diffusion — rich conditional generation and good sample diversity — but add expensive temporal structure, so memory, sampling time, and consistency become the dominant engineering constraints. The same pattern also appears outside perceptual media: **Diffusion Policy**, for example, generates a short sequence of robot actions rather than pixels. A **diffusion transformer (DiT)** replaces the U-Net with a transformer over patches or latent tokens; the name describes the denoising architecture, not a different probability model. The original DiT work is a useful architectural reference: [*Scalable Diffusion Models with Transformers*](https://arxiv.org/abs/2212.09748).
 
