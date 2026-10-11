@@ -1,8 +1,8 @@
-# SILO RPG DOCUMENT INDEX
+# Silo RPG Document Index
 
 This file serves as a routing map for LLMs and GMs to quickly locate specific lore, mechanics, and rules across the Silo RPG document suite without reading all files into context.
 
-## 1. PLAYER INTRODUCTION
+## 1. Player Introduction
 **File:** `gaming_silo_player_guide.md`
 **Purpose:** Session Zero handout. Visceral tone, citizen perspective, biased world-view. Contains no GM secrets.
 **Contents:**
@@ -15,7 +15,7 @@ This file serves as a routing map for LLMs and GMs to quickly locate specific lo
 
 ---
 
-## 2. COMPREHENSIVE WORLD BIBLE
+## 2. Comprehensive World Bible
 **File:** `gaming_silo_comprehensive_bible.md`
 **Purpose:** The core GM reference manual for the daily, micro-simulation of the Silo. Route Operation Fifty and endgame macro-lore to the GM secrets file. This bible is not spoiler-free: Chapter 23 reveals the Cleaning suit's deception and failing heat-tape.
 
@@ -48,7 +48,7 @@ This file serves as a routing map for LLMs and GMs to quickly locate specific lo
 
 ---
 
-## 3. STARTER CAMPAIGNS & PLAYER ARCHETYPES
+## 3. Starter Campaigns & Player Archetypes
 **File:** `gaming_silo_starter_campaign.md`
 **Purpose:** Ten starter arcs, each planned for 3-4 sessions (8-12 hours), playable individually or linked in the source's suggested order.
 **Contents:**
@@ -74,7 +74,7 @@ The starter document's introduction and its ten numbered premises now agree on t
 
 ---
 
-## 4. GAME MASTER'S SECRETS & MACRO-LORE
+## 4. Game Master's Secrets & Macro-Lore
 **File:** `gaming_silo_gm_secrets.md`
 **Purpose:** The overarching truth of the setting, based on the *Wool/Shift/Dust* novels. Strictly for endgame GM use.
 **Contents:**
@@ -84,7 +84,7 @@ The starter document's introduction and its ten numbered premises now agree on t
 
 ---
 
-## 5. TABLE-USE REFERENCE SHEETS
+## 5. Table-Use Reference Sheets
 
 **Purpose:** Condensed companions for quick use at the table; consult the source documents above for full context. The [Silo document-class README](https://github.com/kaybenleroll/ai_assisted_research/blob/main/gaming_silo_rpg/README.md) explains audience boundaries and how to keep the sheets in sync.
 

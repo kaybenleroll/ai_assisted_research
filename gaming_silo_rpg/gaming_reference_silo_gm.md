@@ -1,4 +1,4 @@
-# SILO RPG GM REFERENCE
+# Silo RPG GM Reference
 
 Compact table-use sheet for adjudication, pressure, factions, and daily-life complications.
 

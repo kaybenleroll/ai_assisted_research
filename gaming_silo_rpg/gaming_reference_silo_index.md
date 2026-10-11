@@ -1,4 +1,4 @@
-# SILO RPG REFERENCE INDEX
+# Silo RPG Reference Index
 
 These condensed quick-reference sheets support fast table use; consult the full documents for context. The [Silo document-class README](https://github.com/kaybenleroll/ai_assisted_research/blob/main/gaming_silo_rpg/README.md) explains which sheets are safe to share with players.
 

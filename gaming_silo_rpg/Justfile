@@ -1,6 +1,6 @@
 SOURCE_MD   := "gaming_silo_index.md"
 PROJECT_DIR := "gaming_silo_rpg"
-TITLE       := "Silo RPG"
+TITLE       := "Silo RPG Document Index"
 AUTHOR      := "Mick Cooney"
 DATE        := "11 October 2026"
 PLAYER_DATE := "31 August 2026"
@@ -59,28 +59,28 @@ silo-ref-pdf stem title date:
     --metadata date="{{date}}"
 
 silo-ref-index-html:
-  just silo-ref-html index "SILO RPG REFERENCE INDEX" "{{REF_INDEX_DATE}}"
+  just silo-ref-html index "Silo RPG Reference Index" "{{REF_INDEX_DATE}}"
 
 silo-ref-player-html:
-  just silo-ref-html player "SILO RPG PLAYER REFERENCE" "{{REF_PLAYER_DATE}}"
+  just silo-ref-html player "Silo RPG Player Reference" "{{REF_PLAYER_DATE}}"
 
 silo-ref-gm-html:
-  just silo-ref-html gm "SILO RPG GM REFERENCE" "{{REF_GM_DATE}}"
+  just silo-ref-html gm "Silo RPG GM Reference" "{{REF_GM_DATE}}"
 
 silo-ref-campaign-html:
-  just silo-ref-html campaign "SILO RPG CAMPAIGN REFERENCE" "{{REF_CAMPAIGN_DATE}}"
+  just silo-ref-html campaign "Silo RPG Campaign Reference" "{{REF_CAMPAIGN_DATE}}"
 
 silo-ref-index-pdf:
-  just silo-ref-pdf index "SILO RPG REFERENCE INDEX" "{{REF_INDEX_DATE}}"
+  just silo-ref-pdf index "Silo RPG Reference Index" "{{REF_INDEX_DATE}}"
 
 silo-ref-player-pdf:
-  just silo-ref-pdf player "SILO RPG PLAYER REFERENCE" "{{REF_PLAYER_DATE}}"
+  just silo-ref-pdf player "Silo RPG Player Reference" "{{REF_PLAYER_DATE}}"
 
 silo-ref-gm-pdf:
-  just silo-ref-pdf gm "SILO RPG GM REFERENCE" "{{REF_GM_DATE}}"
+  just silo-ref-pdf gm "Silo RPG GM Reference" "{{REF_GM_DATE}}"
 
 silo-ref-campaign-pdf:
-  just silo-ref-pdf campaign "SILO RPG CAMPAIGN REFERENCE" "{{REF_CAMPAIGN_DATE}}"
+  just silo-ref-pdf campaign "Silo RPG Campaign Reference" "{{REF_CAMPAIGN_DATE}}"
 
 silo-index-html:
   {{OCI}} run --rm {{OCI_FLAGS}} \
@@ -90,7 +90,7 @@ silo-index-html:
     gaming_silo_index.md -o gaming_silo_index.html \
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
-    --metadata title="SILO RPG DOCUMENT INDEX" \
+    --metadata title="Silo RPG Document Index" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{DATE}}"
 
@@ -102,7 +102,7 @@ silo-index-pdf:
     gaming_silo_index.md -o gaming_silo_index.pdf \
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
-    --metadata title="SILO RPG DOCUMENT INDEX" \
+    --metadata title="Silo RPG Document Index" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{DATE}}"
 
@@ -114,7 +114,7 @@ silo-player-html:
     gaming_silo_player_guide.md -o gaming_silo_player_guide.html \
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
-    --metadata title="SILO SYSTEM: PLAYER'S SURVIVAL GUIDE" \
+    --metadata title="Silo System: Player's Survival Guide" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{PLAYER_DATE}}"
 
@@ -126,7 +126,7 @@ silo-player-pdf:
     gaming_silo_player_guide.md -o gaming_silo_player_guide.pdf \
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
-    --metadata title="SILO SYSTEM: PLAYER'S SURVIVAL GUIDE" \
+    --metadata title="Silo System: Player's Survival Guide" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{PLAYER_DATE}}"
 
@@ -138,7 +138,7 @@ silo-gm-html:
     gaming_silo_gm_secrets.md -o gaming_silo_gm_secrets.html \
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
-    --metadata title="SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE" \
+    --metadata title="Silo System: Game Master's Secrets & Macro-Lore" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{GM_DATE}}"
 
@@ -150,7 +150,7 @@ silo-gm-pdf:
     gaming_silo_gm_secrets.md -o gaming_silo_gm_secrets.pdf \
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
-    --metadata title="SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE" \
+    --metadata title="Silo System: Game Master's Secrets & Macro-Lore" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{GM_DATE}}"
 
@@ -162,7 +162,7 @@ silo-bible-html:
     gaming_silo_comprehensive_bible.md -o gaming_silo_comprehensive_bible.html \
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
-    --metadata title="SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)" \
+    --metadata title="Silo System: Comprehensive World Bible (Encyclopedic Edition)" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{BIBLE_DATE}}"
 
@@ -174,7 +174,7 @@ silo-bible-pdf:
     gaming_silo_comprehensive_bible.md -o gaming_silo_comprehensive_bible.pdf \
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
-    --metadata title="SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)" \
+    --metadata title="Silo System: Comprehensive World Bible (Encyclopedic Edition)" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{BIBLE_DATE}}"
 
@@ -186,7 +186,7 @@ silo-campaign-html:
     gaming_silo_starter_campaign.md -o gaming_silo_starter_campaign.html \
     {{HTML_FLAGS_BASE}} \
     --template="{{TEMPLATE}}" \
-    --metadata title="SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES" \
+    --metadata title="Silo RPG: Starter Campaigns & Player Archetypes" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{CAMPAIGN_DATE}}"
 
@@ -198,6 +198,6 @@ silo-campaign-pdf:
     gaming_silo_starter_campaign.md -o gaming_silo_starter_campaign.pdf \
     {{PDF_FLAGS_BASE}} \
     --include-in-header="{{COMPACT_LATEX}}" \
-    --metadata title="SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES" \
+    --metadata title="Silo RPG: Starter Campaigns & Player Archetypes" \
     --metadata author="{{AUTHOR}}" \
     --metadata date="{{CAMPAIGN_DATE}}"

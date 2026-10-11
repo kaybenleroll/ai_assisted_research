@@ -1,4 +1,4 @@
-# SILO RPG PLAYER REFERENCE
+# Silo RPG Player Reference
 
 Player-safe quick sheet for character creation, table reminders, and everyday assumptions.
 
