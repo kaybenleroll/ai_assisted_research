@@ -545,7 +545,7 @@ The reward model is typically a smaller transformer initialised from the base LL
 
 InstructGPT (Ouyang et al., 2022) trained its reward model on roughly 33,000 prompts, each with 4 to 9 model responses ranked by human labellers; expanding every ranking into all of its pairwise comparisons — $\binom{K}{2}$ pairs for $K$ ranked responses — yielded several hundred thousand training pairs in total. Ranking $K$ responses in one pass is more label-efficient than collecting $K$ independent pairwise judgments, since a single ranking of $K$ items yields $\binom{K}{2}$ comparisons for the annotator cost of ordering them once.
 
-### RLHF via PPO with a KL Leash
+### RLHF via PPO With a KL Leash
 
 Once the reward model is trained, it becomes the scoring function in a reinforcement learning loop. The policy — the LLM you are trying to improve — generates a response. The reward model scores it. The score is the signal that drives a PPO (Proximal Policy Optimisation) gradient update, nudging the policy towards outputs the reward model rates highly.
 

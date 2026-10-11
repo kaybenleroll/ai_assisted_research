@@ -667,7 +667,7 @@ Rewards</a></li>
 to Model</a>
 <ul>
 <li><a href="#reward-model-training" id="toc-reward-model-training"><span class="toc-section-number">6.1</span> Reward Model Training</a></li>
-<li><a href="#rlhf-via-ppo-with-a-kl-leash" id="toc-rlhf-via-ppo-with-a-kl-leash"><span class="toc-section-number">6.2</span> RLHF via PPO with a KL
+<li><a href="#rlhf-via-ppo-with-a-kl-leash" id="toc-rlhf-via-ppo-with-a-kl-leash"><span class="toc-section-number">6.2</span> RLHF via PPO With a KL
 Leash</a></li>
 <li><a href="#direct-preference-optimization-skipping-the-reward-model" id="toc-direct-preference-optimization-skipping-the-reward-model"><span class="toc-section-number">6.3</span> Direct Preference Optimization:
 Skipping the Reward Model</a></li>
@@ -1798,7 +1798,7 @@ hundred thousand training pairs in total. Ranking <span class="math inline">\(K\
 label-efficient than collecting <span class="math inline">\(K\)</span>
 independent pairwise judgments, since a single ranking of <span class="math inline">\(K\)</span> items yields <span class="math inline">\(\binom{K}{2}\)</span> comparisons for the
 annotator cost of ordering them once.</p>
-<h2 data-number="6.2" id="rlhf-via-ppo-with-a-kl-leash"><span class="header-section-number">6.2</span> RLHF via PPO with a KL
+<h2 data-number="6.2" id="rlhf-via-ppo-with-a-kl-leash"><span class="header-section-number">6.2</span> RLHF via PPO With a KL
 Leash</h2>
 <p>Once the reward model is trained, it becomes the scoring function in
 a reinforcement learning loop. The policy — the LLM you are trying to
