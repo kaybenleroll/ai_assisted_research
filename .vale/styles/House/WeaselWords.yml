@@ -1,0 +1,11 @@
+extends: existence
+message: "Attribute or qualify '%s' in this contested subject."
+level: suggestion
+ignorecase: true
+scope: ~blockquote
+tokens:
+  - many believe
+  - some say
+  - widely regarded
+  - it is said
+  - experts agree

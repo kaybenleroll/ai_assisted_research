@@ -1,0 +1,6 @@
+extends: existence
+message: "Review punctuation inside the closing quote in '%s'. Complete quoted sentences are valid."
+level: warning
+scope: ~blockquote
+raw:
+  - '[.,]"'

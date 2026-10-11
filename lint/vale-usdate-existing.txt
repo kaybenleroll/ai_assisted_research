@@ -1,0 +1,2 @@
+# Existing US-format date in a spelling-enforced file. Remove when #141 fixes it.
+primer_deep_learning/primer_deep_learning.md|October 7, 2026

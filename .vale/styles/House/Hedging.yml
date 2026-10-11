@@ -1,0 +1,7 @@
+extends: existence
+message: "Remove the empty hedge '%s'; state the actual uncertainty."
+level: error
+ignorecase: true
+scope: ~blockquote
+raw:
+  - '\b(?:it\s+should\s+be\s+noted|it\s+is\s+worth\s+(?:mentioning|noting)|one\s+might\s+argue|needless\s+to\s+say|it\s+is\s+important\s+to\s+note)\b'

@@ -40,7 +40,7 @@ A local preference does not silently override the guide. Declare a necessary dep
 
 **V1.** Address the reader as "you" by default when giving guidance, without turning every paragraph into an instruction. Use "we" in derivations and worked reasoning; do not use "I" in repository-authored exposition. Write as a knowledgeable colleague: conversational, respectful, direct, and technically serious. Prefer active voice and avoid slogans, unexplained idioms, and promotional language. [check: review]
 
-**V2.** Treat these five empty hedge patterns as errors: "it should be noted"; "it is worth mentioning" or "it is worth noting"; "one might argue"; "needless to say"; and "it is important to note". Remove verbal padding while preserving the genuine uncertainty described in V3. [check: review]
+**V2.** Treat the empty hedge patterns in [House.Hedging](.vale/styles/House/Hedging.yml) as errors. Remove verbal padding while preserving the genuine uncertainty described in V3. [check: Vale]
 
 **V3.** State when evidence is limited, a claim is conditional, interpretations differ, or behaviour depends on an implementation. Precision is more useful than false certainty. Prefer one main idea per sentence where that improves comprehension, and vary sentence length to suit the argument. [check: review]
 

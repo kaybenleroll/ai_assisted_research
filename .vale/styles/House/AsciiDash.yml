@@ -1,0 +1,6 @@
+extends: existence
+message: "Use a spaced em dash for the prose break '%s'."
+level: warning
+scope: ~blockquote
+raw:
+  - ' -- '

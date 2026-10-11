@@ -1,0 +1,7 @@
+extends: existence
+message: "Replace directional cross-reference '%s' with a named section or link."
+level: warning
+ignorecase: true
+scope: ~blockquote
+raw:
+  - '\b(?:see|shown|discussed)\s+(?:above|below)\b'
