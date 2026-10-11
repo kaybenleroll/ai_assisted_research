@@ -80,7 +80,7 @@ Imagine that both harnesses receive this request:
 Inspect the build failure, explain the root cause, and propose a fix. Do not edit files yet.
 ```
 
-One harness may naturally spend the session in an investigation-and-plan phase. Another may inspect the failure and then ask whether it should apply the proposed patch. Both outcomes can be reasonable. Your prompt should make the important boundary explicit, and you should verify that the harness honored it before proceeding.
+One harness may naturally spend the session in an investigation-and-plan phase. Another may inspect the failure and then ask whether it should apply the proposed patch. Both outcomes can be reasonable. Your prompt should make the important boundary explicit, and you should verify that the harness honoured it before proceeding.
 
 The harness also determines how repository guidance is discovered, and this is the first place where the two tools genuinely disagree rather than merely differ. Claude Code reads `CLAUDE.md`; Codex reads `AGENTS.md`. Neither reads the other's file by default, and neither says so when it does not. Putting all of your operational rules in one of the two files produces a repository where half your agent sessions have the rules and half do not, with nothing in the session to indicate which case you are in.
 
@@ -369,7 +369,7 @@ Do not modify files or commit while writing the summary.
 ```
 
 A first session has gone well when you know what Codex did, what it did not do,
-which instructions it followed, and which parts still need human judgment. It
+which instructions it followed, and which parts still need human judgement. It
 has not gone well merely because the client started, a model responded, or the
 task ended without an error message.
 
@@ -903,7 +903,7 @@ The example does more than prescribe style. It gives the agent a nearby source o
 
 A test command is not a magic stamp of correctness. It is evidence about a particular slice of behaviour under a particular environment. Ask the agent to choose tests that correspond to the changed contract, then widen verification when the change crosses a boundary.
 
-For a focused bug fix, the useful sequence is usually: reproduce or write the failing case, make the smallest change, run the focused test, run the relevant package or subsystem tests, and run broader checks if the risk justifies them. For a documentation or configuration change, validation may mean rendering, linting, schema checking, or inspecting the generated artifact rather than running a unit-test suite.
+For a focused bug fix, the useful sequence is usually: reproduce or write the failing case, make the smallest change, run the focused test, run the relevant package or subsystem tests, and run broader checks if the risk justifies them. For a documentation or configuration change, validation may mean rendering, linting, schema checking, or inspecting the generated artefact rather than running a unit-test suite.
 
 Tell Codex what “done” means before it edits. Otherwise an agent may stop after a syntactically valid patch or report that a test could not run without distinguishing an environmental failure from a product failure. Ask it to report the command, result, and any limitation:
 
@@ -1071,7 +1071,7 @@ Think of model selection as choosing an engine for a job, and reasoning effort a
 
 The model is the underlying system generating decisions, tool calls, and text. Models differ in coding ability, instruction following, context handling, speed, availability, and cost. Those differences are not perfectly captured by a single intelligence ranking. A model that is excellent at a self-contained algorithm may be less useful for a large repository if it is slow to navigate or weak at maintaining constraints across many files.
 
-Reasoning effort is a control over how much internal computation or deliberation the system allocates before producing an answer or taking the next action. The labels and exact behaviour depend on the product surface. Conceptually, lower effort favors speed and throughput; higher effort gives difficult tasks more room for decomposition, checking, and alternative consideration. It does not guarantee correctness, and increasing it can make a poor prompt more expensive without making it more precise.
+Reasoning effort is a control over how much internal computation or deliberation the system allocates before producing an answer or taking the next action. The labels and exact behaviour depend on the product surface. Conceptually, lower effort favours speed and throughput; higher effort gives difficult tasks more room for decomposition, checking, and alternative consideration. It does not guarantee correctness, and increasing it can make a poor prompt more expensive without making it more precise.
 
 Reasoning controls are surface- and model-specific. The current Codex CLI guide
 describes Low, Medium, High, Extra High, Max, and Ultra; its documentation
@@ -1101,7 +1101,7 @@ administrators must enable it, and Free and Go are not included at launch.
 
 | Model | Practical orientation | Good starting use |
 | --- | --- | --- |
-| `gpt-6-astra` (Astra) | Highest-capability model for complex work across code, apps, and research | Hardest end-to-end tasks that need sustained reasoning and judgment |
+| `gpt-6-astra` (Astra) | Highest-capability model for complex work across code, apps, and research | Hardest end-to-end tasks that need sustained reasoning and judgement |
 | `gpt-6.1-sol` (6.1 Sol) | Recommended for complex coding and agentic workflows; OpenAI describes near-Astra performance at lower cost | Ordinary implementation through repeated, long-running work; evaluate against Astra on hard tasks |
 | `gpt-6-luna` (6 Luna) | Efficient model for focused, high-volume tasks | Clear transformations, extraction, summaries, and bounded coding |
 | `gpt-6-sol` (6 Sol) | Earlier GPT-6 Sol; named replacement in the GPT-5.5 retirement notice | Migration where the account offers 6 Sol but not 6.1 Sol |
@@ -1144,7 +1144,7 @@ This table is a starting heuristic, not a benchmark. A “simple” change in a 
 
 High reasoning effort is most useful when the agent must resolve competing explanations, preserve many constraints, or make a design choice with expensive consequences. It is less useful when the task is already fully specified and the remaining work is mechanical.
 
-For exploration, begin with enough capability to build a trustworthy map. Ask for evidence and paths. If the agent cannot distinguish the relevant subsystem from neighboring code, increase capability or narrow the search before asking for a larger answer. Spending maximum effort on an unbounded repository tour often produces a long but shallow inventory.
+For exploration, begin with enough capability to build a trustworthy map. Ask for evidence and paths. If the agent cannot distinguish the relevant subsystem from neighbouring code, increase capability or narrow the search before asking for a larger answer. Spending maximum effort on an unbounded repository tour often produces a long but shallow inventory.
 
 For planning, effort should track the number of plausible designs and the cost of choosing the wrong one. A small bug with one obvious fix does not need a design essay. A compatibility migration, concurrency change, or schema transition does. Ask the agent to state assumptions and alternatives so that you can see whether extra reasoning is addressing real uncertainty.
 
@@ -1154,7 +1154,7 @@ For testing and review, capability matters because the agent must interpret fail
 
 ### A Model-Selection Workflow
 
-Instead of memorizing a product matrix, use a short escalation loop:
+Instead of memorising a product matrix, use a short escalation loop:
 
 1. Classify the task as mechanical, diagnostic, design-heavy, or high-impact.
 2. Choose a fast or general configuration that can inspect the relevant code.
@@ -2124,7 +2124,7 @@ There are three reasonable arrangements. The import pattern is the least disrupt
 
 In the import pattern, `AGENTS.md` is canonical and `CLAUDE.md` is an `@AGENTS.md` import. Repository rules, build commands, style guidance, and safety constraints all live in one file that both harnesses read in full. This is the right first step for an existing project because it changes discovery without reorganising anything else.
 
-In the shared-neutral pattern, stable repository rules move into a neutral file such as `docs/agent-instructions.md`. Each harness-specific file becomes a short adapter that names the shared file and adds only the behaviour specific to that harness. The neutral file should contain facts that remain true regardless of who is acting: which directories are source, how to run tests, what must not be modified, and how generated artifacts are handled.
+In the shared-neutral pattern, stable repository rules move into a neutral file such as `docs/agent-instructions.md`. Each harness-specific file becomes a short adapter that names the shared file and adds only the behaviour specific to that harness. The neutral file should contain facts that remain true regardless of who is acting: which directories are source, how to run tests, what must not be modified, and how generated artefacts are handled.
 
 In the split pattern, the shared file still owns repository policy, but `CLAUDE.md` and `AGENTS.md` contain separate instructions for different interfaces. Examples include a Claude Code hook convention, a Codex approval workflow, or a command wrapper available in only one environment. Split only the interface detail. Do not split the underlying safety rule or definition of done.
 
@@ -2216,21 +2216,21 @@ Do not assume that a second harness inherits the first harness’s secret-handli
 
 Use least privilege for integrations. Give an agent read-only access to issue tracking before write access, a staging credential before a production credential, and a narrowly scoped service account before a personal account. If a task does not need an external service, do not connect it for convenience.
 
-Treat pasted logs and generated files as possible secret carriers. A failed command can expose a token in its output, and a generated report can embed environment details. Review artifacts before sharing them with another harness or committing them.
+Treat pasted logs and generated files as possible secret carriers. A failed command can expose a token in its output, and a generated report can embed environment details. Review artefacts before sharing them with another harness or committing them.
 
 ### Control Cost With Task Boundaries
 
 Cost is not only the provider’s per-token charge. It includes repeated exploration, long-running commands, review time, failed builds, duplicated work between agents, and the opportunity cost of an engineer supervising an unbounded loop. A fast model that needs three correction cycles may be more expensive than a slower model that completes a bounded task correctly.
 
-Give each task a stopping rule. Ask for an investigation report before authorizing a broad edit. Set a maximum useful iteration count for debugging. Split a large migration into independently reviewable changes. Stop when the acceptance criteria are met rather than asking an agent to “keep improving” without a definition of done.
+Give each task a stopping rule. Ask for an investigation report before authorising a broad edit. Set a maximum useful iteration count for debugging. Split a large migration into independently reviewable changes. Stop when the acceptance criteria are met rather than asking an agent to “keep improving” without a definition of done.
 
 Choose model and reasoning settings by task risk and ambiguity. Use a quicker setting for a mechanical rename with strong tests; reserve deeper reasoning for a poorly understood failure, a cross-cutting design decision, or a review where missed edge cases matter. Exact model names, availability, limits, pricing, and plan entitlements belong in a separately verified table, not in timeless repository instructions.
 
 ### Make Generated Changes Observable
 
-Generated HTML, PDF, lockfiles, snapshots, database migrations, and vendored assets can make a small source edit look large. Before starting, identify which outputs are expected and how to regenerate them. Afterward, compare both source and generated changes.
+Generated HTML, PDF, lockfiles, snapshots, database migrations, and vendored assets can make a small source edit look large. Before starting, identify which outputs are expected and how to regenerate them. Afterwards, compare both source and generated changes.
 
-In a primer repository, the source Markdown and thin `Justfile` are inputs, while HTML and PDF are committed outputs. A safe task says which of those files may change and which build recipe produces them. The agent should not silently replace an output with a host-generated artifact when the repository requires containerised rendering.
+In a primer repository, the source Markdown and thin `Justfile` are inputs, while HTML and PDF are committed outputs. A safe task says which of those files may change and which build recipe produces them. The agent should not silently replace an output with a host-generated artefact when the repository requires containerised rendering.
 
 Use `git diff --stat`, the normal diff, and the repository’s verification commands. A non-trivial output file is not proof of a correct render; a successful command is not proof that the output contains the intended content.
 
@@ -2251,7 +2251,7 @@ Before a release or a destructive operation, use a human checkpoint even if the 
 - Remove unnecessary secrets, mounts, credentials, and network access.
 - Start with read-only inspection and a low-risk change.
 - Give long-running tasks a stopping rule and a verification command.
-- Review the complete diff, including generated artifacts and deletions.
+- Review the complete diff, including generated artefacts and deletions.
 - Do not commit or deploy without an explicit human checkpoint.
 - Record the harness, model setting, repository revision, result, and failures.
 - Keep configuration and source changes in separate, recoverable commits.

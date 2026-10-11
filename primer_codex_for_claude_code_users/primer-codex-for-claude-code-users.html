@@ -1024,7 +1024,7 @@ semantics.</p>
 investigation-and-plan phase. Another may inspect the failure and then
 ask whether it should apply the proposed patch. Both outcomes can be
 reasonable. Your prompt should make the important boundary explicit, and
-you should verify that the harness honored it before proceeding.</p>
+you should verify that the harness honoured it before proceeding.</p>
 <p>The harness also determines how repository guidance is discovered,
 and this is the first place where the two tools genuinely disagree
 rather than merely differ. Claude Code reads <code>CLAUDE.md</code>;
@@ -1344,7 +1344,7 @@ conversation.</p>
 Do not modify files or commit while writing the summary.</code></pre>
 <p>A first session has gone well when you know what Codex did, what it
 did not do, which instructions it followed, and which parts still need
-human judgment. It has not gone well merely because the client started,
+human judgement. It has not gone well merely because the client started,
 a model responded, or the task ended without an error message.</p>
 <h1 data-number="4" id="instruction-systems"><span class="header-section-number">4</span> Instruction Systems</h1>
 <p>Claude Code and Codex both use project instructions, but an
@@ -2018,7 +2018,7 @@ write the failing case, make the smallest change, run the focused test,
 run the relevant package or subsystem tests, and run broader checks if
 the risk justifies them. For a documentation or configuration change,
 validation may mean rendering, linting, schema checking, or inspecting
-the generated artifact rather than running a unit-test suite.</p>
+the generated artefact rather than running a unit-test suite.</p>
 <p>Tell Codex what “done” means before it edits. Otherwise an agent may
 stop after a syntactically valid patch or report that a test could not
 run without distinguishing an environmental failure from a product
@@ -2282,7 +2282,7 @@ across many files.</p>
 <p>Reasoning effort is a control over how much internal computation or
 deliberation the system allocates before producing an answer or taking
 the next action. The labels and exact behaviour depend on the product
-surface. Conceptually, lower effort favors speed and throughput; higher
+surface. Conceptually, lower effort favours speed and throughput; higher
 effort gives difficult tasks more room for decomposition, checking, and
 alternative consideration. It does not guarantee correctness, and
 increasing it can make a poor prompt more expensive without making it
@@ -2342,7 +2342,7 @@ launch.</p>
 <td>Highest-capability model for complex work across code, apps, and
 research</td>
 <td>Hardest end-to-end tasks that need sustained reasoning and
-judgment</td>
+judgement</td>
 </tr>
 <tr>
 <td><code>gpt-6.1-sol</code> (6.1 Sol)</td>
@@ -2465,7 +2465,7 @@ choice with expensive consequences. It is less useful when the task is
 already fully specified and the remaining work is mechanical.</p>
 <p>For exploration, begin with enough capability to build a trustworthy
 map. Ask for evidence and paths. If the agent cannot distinguish the
-relevant subsystem from neighboring code, increase capability or narrow
+relevant subsystem from neighbouring code, increase capability or narrow
 the search before asking for a larger answer. Spending maximum effort on
 an unbounded repository tour often produces a long but shallow
 inventory.</p>
@@ -2487,7 +2487,7 @@ increasing the implementer’s effort. A second pass with a fresh context
 can challenge assumptions that a longer first pass has merely
 reinforced.</p>
 <h2 data-number="6.5" id="a-model-selection-workflow"><span class="header-section-number">6.5</span> A Model-Selection Workflow</h2>
-<p>Instead of memorizing a product matrix, use a short escalation
+<p>Instead of memorising a product matrix, use a short escalation
 loop:</p>
 <ol type="1">
 <li>Classify the task as mechanical, diagnostic, design-heavy, or
@@ -3774,7 +3774,7 @@ harness-specific file becomes a short adapter that names the shared file
 and adds only the behaviour specific to that harness. The neutral file
 should contain facts that remain true regardless of who is acting: which
 directories are source, how to run tests, what must not be modified, and
-how generated artifacts are handled.</p>
+how generated artefacts are handled.</p>
 <p>In the split pattern, the shared file still owns repository policy,
 but <code>CLAUDE.md</code> and <code>AGENTS.md</code> contain separate
 instructions for different interfaces. Examples include a Claude Code
@@ -3938,7 +3938,7 @@ personal account. If a task does not need an external service, do not
 connect it for convenience.</p>
 <p>Treat pasted logs and generated files as possible secret carriers. A
 failed command can expose a token in its output, and a generated report
-can embed environment details. Review artifacts before sharing them with
+can embed environment details. Review artefacts before sharing them with
 another harness or committing them.</p>
 <h2 data-number="10.3" id="control-cost-with-task-boundaries"><span class="header-section-number">10.3</span> Control Cost With Task
 Boundaries</h2>
@@ -3949,7 +3949,7 @@ supervising an unbounded loop. A fast model that needs three correction
 cycles may be more expensive than a slower model that completes a
 bounded task correctly.</p>
 <p>Give each task a stopping rule. Ask for an investigation report
-before authorizing a broad edit. Set a maximum useful iteration count
+before authorising a broad edit. Set a maximum useful iteration count
 for debugging. Split a large migration into independently reviewable
 changes. Stop when the acceptance criteria are met rather than asking an
 agent to “keep improving” without a definition of done.</p>
@@ -3964,12 +3964,12 @@ Observable</h2>
 <p>Generated HTML, PDF, lockfiles, snapshots, database migrations, and
 vendored assets can make a small source edit look large. Before
 starting, identify which outputs are expected and how to regenerate
-them. Afterward, compare both source and generated changes.</p>
+them. Afterwards, compare both source and generated changes.</p>
 <p>In a primer repository, the source Markdown and thin
 <code>Justfile</code> are inputs, while HTML and PDF are committed
 outputs. A safe task says which of those files may change and which
 build recipe produces them. The agent should not silently replace an
-output with a host-generated artifact when the repository requires
+output with a host-generated artefact when the repository requires
 containerised rendering.</p>
 <p>Use <code>git diff --stat</code>, the normal diff, and the
 repository’s verification commands. A non-trivial output file is not
@@ -4005,7 +4005,7 @@ access.</li>
 <li>Start with read-only inspection and a low-risk change.</li>
 <li>Give long-running tasks a stopping rule and a verification
 command.</li>
-<li>Review the complete diff, including generated artifacts and
+<li>Review the complete diff, including generated artefacts and
 deletions.</li>
 <li>Do not commit or deploy without an explicit human checkpoint.</li>
 <li>Record the harness, model setting, repository revision, result, and
