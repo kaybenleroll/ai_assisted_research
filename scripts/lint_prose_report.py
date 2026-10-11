@@ -72,7 +72,7 @@ def main() -> int:
         raise ValueError(f"unknown mode: {mode}")
     allowed = set(paths)
     spelling = manifest("enforced-spelling.txt")
-    headings = manifest("enforced-headings.txt", primer_only=True)
+    headings = manifest("enforced-headings.txt")
     existing_dates = date_baseline()
     seen_dates: set[tuple[str, str]] = set()
     rules = Counter()
