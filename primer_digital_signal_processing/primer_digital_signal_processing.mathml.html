@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -577,6 +586,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -596,8 +606,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Digital Signal Processing: A Technical
 Primer</span>
-
     <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -1418,7 +1428,8 @@ X(f)=\int_{-\infty}^{\infty}x(t)e^{-j2\pi ft}\,dt,
 x(t)=\int_{-\infty}^{\infty}X(f)e^{j2\pi ft}\,df.
 </annotation></semantics></math></p>
 <p>The four Fourier representations differ in what is discrete,
-periodic, finite, or continuous. Confusing them causes unit and scaling
+periodic, finite, or continuous. The table compares their domains and
+periodicity; confusing these distinctions causes unit and scaling
 errors:</p>
 <table>
 <colgroup>
@@ -1521,9 +1532,9 @@ trade-offs.</p>
 <h1 data-number="4" id="sampling-reconstruction-and-acquisition-limits"><span class="header-section-number">4</span> Sampling, Reconstruction, and
 Acquisition Limits</h1>
 <p>Sampling is where the physical signal chain meets discrete-time
-mathematics. The following chapter treats aliasing, reconstruction,
-quantisation, and timing error as acquisition constraints, not as
-details to repair later.</p>
+mathematics. This section treats aliasing, reconstruction, quantisation,
+and timing error as acquisition constraints, not as details to repair
+later.</p>
 <h2 data-number="4.1" id="sampling-is-multiplication-by-an-impulse-train"><span class="header-section-number">4.1</span> Sampling Is Multiplication by
 an Impulse Train</h2>
 <p>Suppose a continuous signal
@@ -5811,6 +5822,8 @@ a filter against explicit edges and attenuation. If the answer is
 and model the noise.</p>
 <h2 data-number="13.2" id="method-selection-heuristics"><span class="header-section-number">13.2</span> Method Selection
 Heuristics</h2>
+<p>The table maps common engineering goals to methods worth evaluating
+first and the main risk to check during validation.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -6503,6 +6516,7 @@ write down the transform convention, and verify the result against an
 identity or a controlled experiment. The mathematics gives you the
 relationships; the engineering work is making sure the conditions for
 those relationships are actually true.</p>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 

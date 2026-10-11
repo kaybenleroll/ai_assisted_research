@@ -1,5 +1,6 @@
 # Add a primer only after its #136 row is merged and MD001, MD025 and MD034 are clear.
 primer_evaluation_loop/primer_evaluation_loop.md
+primer_digital_signal_processing/primer_digital_signal_processing.md
 primer_building_ai_agents/primer_ai_agents_comprehensive.md
 primer_building_ai_agents/primer_agent_quick_reference.md
 primer_claude_code_alternative/primer-claude-code-alternatives.md
