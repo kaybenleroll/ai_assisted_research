@@ -42,13 +42,17 @@ build-lint-image:
 lint:
   bash scripts/lint.sh
 
+# Check Markdown structure and accessibility without the spelling checker
+lint-md *FILES:
+  bash scripts/lint.sh --md {{FILES}}
+
 # Check Markdown files changed since BASE_REF (default: origin/main)
 lint-changed:
   bash scripts/lint.sh --changed
 
 # Check all in-scope files, or only the named Markdown files
 lint-spell *FILES:
-  bash scripts/lint.sh {{FILES}}
+  bash scripts/lint.sh --spell {{FILES}}
 
 # Build the shared pandoc image used by all primer projects
 build-image:

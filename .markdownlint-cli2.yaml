@@ -1,0 +1,27 @@
+config:
+  default: false
+  MD001: true
+  MD003:
+    style: atx
+  MD004:
+    style: dash
+  MD025: true
+  MD034: true
+  MD036: true
+  MD040: true
+  MD045: true
+  MD046:
+    style: fenced
+  MD048:
+    style: backtick
+  MD049:
+    style: asterisk
+  MD050:
+    style: asterisk
+  MD051: true
+  MD059: true
+
+ignores:
+  - .scratch/**
+  - workbook_catmodel_elt_documents/outputs/**
+  - primer_political_systems/complete_prompt.md
