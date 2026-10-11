@@ -11,7 +11,7 @@ This opening section establishes the language used throughout the primer. It rev
 
 A real differentiable function can behave almost arbitrarily away from the point where you differentiate it. A complex differentiable function has much less freedom. Once it has a complex derivative throughout an open region, its values on a small circle determine every value inside that circle. It has derivatives of every order and a convergent power series nearby. Contour integrals then connect local behaviour at singularities to global quantities such as definite integrals and zero counts. This is the useful surprise of complex analysis: a stronger definition of derivative produces stronger tools.
 
-This primer develops that chain of ideas for readers who know calculus and linear algebra. You will learn to recognize holomorphic functions, use Cauchy's formula, classify isolated singularities, evaluate residues, count zeros, and understand what conformal maps preserve. Later sections can turn this theory into boundary-value models and computational practice. This is not a full real-analysis text or a treatment of several complex variables. We will prove the transitions that explain the subject and mark the few foundational results whose complete proofs would require a longer detour.
+This primer develops that chain of ideas for readers who know calculus and linear algebra. You will learn to recognise holomorphic functions, use Cauchy's formula, classify isolated singularities, evaluate residues, count zeros, and understand what conformal maps preserve. Later sections can turn this theory into boundary-value models and computational practice. This is not a full real-analysis text or a treatment of several complex variables. We will prove the transitions that explain the subject and mark the few foundational results whose complete proofs would require a longer detour.
 
 The real-analysis facts needed here are manageable. A limit $z_n\to z$ means $|z_n-z|\to0$; a complex limit exists only if every way of approaching the point gives the same answer. A series converges absolutely when the series of moduli converges. Convergence is *uniform* on a set $E$ when one index works for every point of $E$ at once: for every $\varepsilon>0$ there is $N$ such that $|f_n(z)-f(z)|<\varepsilon$ for all $n\ge N$ and all $z\in E$. This stronger condition licenses passing a limit through an integral along a fixed finite-length contour, because
 $$
@@ -20,7 +20,7 @@ $$
 $$
 It does not automatically licence differentiation of arbitrary series; power series receive a separate argument in Section 4. A set is *compact* in the plane if it is closed and bounded. A continuous function attains its maximum modulus on a compact set. More subtly, a compact set lying inside an open domain has positive distance from the domain's complement. That spare room lets us draw small circles around its points without leaving the domain. We will repeatedly work on a smaller closed disk or annulus inside a larger open one for exactly this reason.
 
-If this is your first encounter with analysis language, keep four practical tests in view. To disprove a proposed limit, find two approaches that give different answers. To prove a limit, bound the modulus of the difference from the proposed value by something that tends to zero independently of direction. To exchange a limiting series with a contour integral, establish uniform convergence on the contour. To apply a theorem on a closed contour, check that the function is defined on an open neighborhood of the contour, not only at the boundary points you happen to sample. These tests will do more work than memorising a long list of theorems.
+If this is your first encounter with analysis language, keep four practical tests in view. To disprove a proposed limit, find two approaches that give different answers. To prove a limit, bound the modulus of the difference from the proposed value by something that tends to zero independently of direction. To exchange a limiting series with a contour integral, establish uniform convergence on the contour. To apply a theorem on a closed contour, check that the function is defined on an open neighbourhood of the contour, not only at the boundary points you happen to sample. These tests will do more work than memorising a long list of theorems.
 
 For instance, $\overline z/z$ has no limit as $z\to0$ through nonzero points. Along the real axis it equals $1$; along the imaginary axis it equals $-1$. In contrast, $|z|^2/z=\overline z$ tends to zero, since its modulus is $|z|$. The distinction matters when you inspect an apparent singularity: a formula that looks like $0/0$ may have a removable limit, a directional mismatch, or genuinely wild behaviour. Algebraic appearance alone does not classify it.
 
@@ -30,7 +30,7 @@ Uniform convergence often comes from the *Weierstrass M-test*. If functions $g_n
 
 The distinction between a limit at each point and a limit uniform over a whole set will recur throughout the subject. Consider $f_n(z)=z^n$ on the real interval $[0,1]$. At every $x<1$, $x^n\to0$, while $f_n(1)=1$. The pointwise limit is discontinuous, even though every $f_n$ is continuous. The convergence cannot be uniform: if it were, the uniform limit of continuous functions would be continuous. More directly, $\sup_{0\le x<1}x^n=1$ for every $n$. On $[0,r]$ with $r<1$, the same sequence converges uniformly because the supremum is $r^n$. Complex analysis repeatedly makes this smaller-set move: work on a closed disk strictly inside a domain, obtain a uniform bound there, and only then take a limit or differentiate a series.
 
-Why does a uniform limit of continuous functions remain continuous? Fix a point $a$ and choose one approximant $f_N$ uniformly within $\varepsilon/3$ of the limit $f$. Continuity of that *single* $f_N$ gives a neighborhood where $|f_N(z)-f_N(a)|<\varepsilon/3$. The triangle inequality then bounds $|f(z)-f(a)|$ by three errors, each below $\varepsilon/3$. Pointwise convergence cannot supply one $N$ that works for all nearby $z$. This elementary three-term argument is the model for many later proofs: one finite approximant handles local geometry, and a uniform bound controls both ends of the comparison.
+Why does a uniform limit of continuous functions remain continuous? Fix a point $a$ and choose one approximant $f_N$ uniformly within $\varepsilon/3$ of the limit $f$. Continuity of that *single* $f_N$ gives a neighbourhood where $|f_N(z)-f_N(a)|<\varepsilon/3$. The triangle inequality then bounds $|f(z)-f(a)|$ by three errors, each below $\varepsilon/3$. Pointwise convergence cannot supply one $N$ that works for all nearby $z$. This elementary three-term argument is the model for many later proofs: one finite approximant handles local geometry, and a uniform bound controls both ends of the comparison.
 
 Uniform convergence on a contour is different from uniform convergence throughout its interior. In Cauchy's formula we need to interchange a series with an integral over one fixed circle, so a uniform bound on that circle suffices. To show a series represents a holomorphic function on an open disk, we want uniform convergence on every *compact subdisk*. This is called local uniform convergence. It does not demand one bound that works all the way out to the boundary. For the geometric series $\sum z^n$, every $|z|\le r<1$ works, while no single geometric majorant works over all $|z|<1$. The natural convergence notion follows the geometry of the proof, not a preference for a stronger theorem.
 
@@ -70,9 +70,9 @@ The difference between a region and its boundary is not pedantry. The function $
 
 There is another geometric operation worth learning before calculus: inversion. The map $z\mapsto1/z$ sends a large modulus to a small one, reverses argument, and is undefined at zero. A circle through zero generally maps to a straight line; a circle avoiding zero maps to another circle. The related map $z\mapsto1/\overline z$ is reflection across the unit circle: a point $re^{i\theta}$ goes to $r^{-1}e^{i\theta}$. Unlike $1/z$, this reflection uses conjugation and is not holomorphic. Keeping those two inversions apart prevents an easy geometric mistake when we reach Möbius transformations.
 
-One early picture is worth keeping in mind. A domain-coloring plot assigns hue to $\arg f(z)$ and brightness or bands to $|f(z)|$. For $f(z)=z^2$, a small counterclockwise circle around zero makes the hue cycle twice. That twofold *phase winding* is the zero's multiplicity, which we will recover without a plot using the argument principle. At the origin itself, the phase is undefined; any colour placed there is a display convention. A plot can reveal a pattern and suggest a contour, but pixels cannot establish a zero count or prove continuity across a suspected branch cut.
+One early picture is worth keeping in mind. A domain-colouring plot assigns hue to $\arg f(z)$ and brightness or bands to $|f(z)|$. For $f(z)=z^2$, a small counterclockwise circle around zero makes the hue cycle twice. That twofold *phase winding* is the zero's multiplicity, which we will recover without a plot using the argument principle. At the origin itself, the phase is undefined; any colour placed there is a display convention. A plot can reveal a pattern and suggest a contour, but pixels cannot establish a zero count or prove continuity across a suspected branch cut.
 
-You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ray at angle $\theta$ maps to a ray at $2\theta$ while its radius is squared. The first quadrant maps onto the upper half-plane, and a small circle around zero wraps around its image twice. Under $z\mapsto1/z$, circles of radius $r$ become circles of radius $1/r$ with orientation reversed if you follow the angle parameter through the map. Under $z\mapsto e^z$, vertical translation by $2\pi i$ repeats the same values. Domain coloring makes these rules visible, but the algebra tells you which features are structural and which are artifacts of sampling or a hue discontinuity.
+You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ray at angle $\theta$ maps to a ray at $2\theta$ while its radius is squared. The first quadrant maps onto the upper half-plane, and a small circle around zero wraps around its image twice. Under $z\mapsto1/z$, circles of radius $r$ become circles of radius $1/r$ with orientation reversed if you follow the angle parameter through the map. Under $z\mapsto e^z$, vertical translation by $2\pi i$ repeats the same values. Domain colouring makes these rules visible, but the algebra tells you which features are structural and which are artefacts of sampling or a hue discontinuity.
 
 ![Domain colouring for the square map](figures/domain_colouring_z2.png)
 
@@ -109,7 +109,7 @@ For $f:D\to\mathbb C$, continuity and limits use the modulus just as they do for
 $$
 f'(z_0)=\lim_{h\to0}\frac{f(z_0+h)-f(z_0)}{h},
 $$
-where $h$ approaches zero through *every* complex direction. We call $f$ *holomorphic* on $D$ if it is complex differentiable at every point of $D$. Some authors use *analytic* as a synonym; the power-series theorem will later justify that terminology. Differentiability at one isolated point is a much weaker claim than holomorphy on a neighborhood.
+where $h$ approaches zero through *every* complex direction. We call $f$ *holomorphic* on $D$ if it is complex differentiable at every point of $D$. Some authors use *analytic* as a synonym; the power-series theorem will later justify that terminology. Differentiability at one isolated point is a much weaker claim than holomorphy on a neighbourhood.
 
 Write $f(x+iy)=u(x,y)+iv(x,y)$. If $f'(z_0)$ exists, approach with real increments $h=t$ and imaginary increments $h=it$. Provided the relevant real partial derivatives are defined, the two computations give
 $$
@@ -120,11 +120,11 @@ Equating real and imaginary parts yields the *Cauchy–Riemann equations*
 $$
 u_x=v_y,\qquad u_y=-v_x.
 $$
-These equations are necessary at a point where the complex derivative exists. A useful converse has an explicit regularity assumption: if $u$ and $v$ have continuous first partial derivatives on an open neighborhood and satisfy the equations there, then $f$ is holomorphic on that neighborhood. Real differentiability gives the linear increment
+These equations are necessary at a point where the complex derivative exists. A useful converse has an explicit regularity assumption: if $u$ and $v$ have continuous first partial derivatives on an open neighbourhood and satisfy the equations there, then $f$ is holomorphic on that neighbourhood. Real differentiability gives the linear increment
 $$
 f(z+h)-f(z)=(u_x+iv_x)\Re h+(u_y+iv_y)\Im h+o(|h|).
 $$
-The equations make its first two terms equal $(u_x+iv_x)h$; dividing by $h$ then leaves an error tending to zero. Checking two directional derivatives at one point without the real differentiability hypothesis does not prove complex differentiability there. Even a genuine complex derivative at one point does not make a function holomorphic nearby: $f(z)=|z|^2$ has $f'(0)=0$, and its partial derivatives satisfy Cauchy–Riemann at $0$, but it is not holomorphic on any neighborhood of $0$.
+The equations make its first two terms equal $(u_x+iv_x)h$; dividing by $h$ then leaves an error tending to zero. Checking two directional derivatives at one point without the real differentiability hypothesis does not prove complex differentiability there. Even a genuine complex derivative at one point does not make a function holomorphic nearby: $f(z)=|z|^2$ has $f'(0)=0$, and its partial derivatives satisfy Cauchy–Riemann at $0$, but it is not holomorphic on any neighbourhood of $0$.
 
 For a quick negative test, $f(z)=\overline z$ gives $u=x$, $v=-y$, hence $u_x=1\ne-1=v_y$. Directly, $\overline h/h$ equals $1$ along the real axis and $-1$ along the imaginary axis. By contrast, $f(z)=z^2$ gives $u=x^2-y^2$ and $v=2xy$, so $u_x=v_y=2x$ and $u_y=-v_x=-2y$ everywhere. Its derivative is $2z$. The real Jacobian of a holomorphic function is therefore
 $$
@@ -141,7 +141,7 @@ The example $|z|^2$ deserves a second look because it exposes the difference bet
 $$
 \frac{f(h)-f(0)}{h}=\frac{|h|^2}{h}=\overline h\longrightarrow0.
 $$
-The derivative really exists at zero. Yet any disk around zero contains points at which the Cauchy–Riemann equations fail. We cannot invoke Cauchy's formula on such a disk, and no power series centered at zero represents $|z|^2$ on a neighborhood. Its ordinary two-variable smoothness, even with derivatives of every real order, does not replace holomorphy.
+The derivative really exists at zero. Yet any disk around zero contains points at which the Cauchy–Riemann equations fail. We cannot invoke Cauchy's formula on such a disk, and no power series centred at zero represents $|z|^2$ on a neighbourhood. Its ordinary two-variable smoothness, even with derivatives of every real order, does not replace holomorphy.
 
 Here is a positive example where the equations help build a function rather than reject one. Let $u(x,y)=x^2-y^2$. We seek $v$ so that $u+iv$ is holomorphic. The equations give $v_y=u_x=2x$ and $v_x=-u_y=2y$. Integrating the first gives $v=2xy+C(x)$; differentiating in $x$ and comparing with $2y$ forces $C'(x)=0$. Thus $v=2xy+C$ and $f(z)=z^2+iC$. The arbitrary constant reflects that a harmonic conjugate is unique only up to an additive real constant on a connected domain. If the given $u$ had failed $\Delta u=0$, the equations would have been incompatible; harmonicity is the integrability condition for this construction.
 
@@ -290,9 +290,9 @@ The function is holomorphic throughout the annulus, exactly as Cauchy–Goursat 
 
 Sometimes a contour is closed only after adding a segment or arc, and the added piece changes the integral. For a rectangle with vertices $0,1,1+i,i$, the boundary is counterclockwise in that order. If a complex integral along its bottom edge is the quantity you want, the other three edges must be bounded or computed; the closed integral does not equal the bottom-edge integral by definition. Likewise, a real interval $[-R,R]$ traversed left to right becomes a counterclockwise upper-half-plane contour when the semicircle runs from $R$ back to $-R$. This elementary orientation sketch prevents a surprising number of sign errors in residue calculations.
 
-Contour deformation needs a region, not merely two endpoints. Suppose $f$ is holomorphic on and between two circles centered at $a$, with radii $r<R$. The annular theorem says their counterclockwise integrals agree. You may deform one to the other because the swept annulus contains no singularity. But if a pole lies between them, the difference is $2\pi i$ times its residue. For $f(z)=1/(z-1)$, circles centered at zero with radii $1/2$ and $2$ give $0$ and $2\pi i$. The pole at $1$ lies in the swept region. “Move the contour outward” is therefore an operation with a ledger: record every singularity crossed and its orientation.
+Contour deformation needs a region, not merely two endpoints. Suppose $f$ is holomorphic on and between two circles centred at $a$, with radii $r<R$. The annular theorem says their counterclockwise integrals agree. You may deform one to the other because the swept annulus contains no singularity. But if a pole lies between them, the difference is $2\pi i$ times its residue. For $f(z)=1/(z-1)$, circles centred at zero with radii $1/2$ and $2$ give $0$ and $2\pi i$. The pole at $1$ lies in the swept region. “Move the contour outward” is therefore an operation with a ledger: record every singularity crossed and its orientation.
 
-The topology is visible even without a meromorphic singularity. A branch of $\log z$ is holomorphic on its slit domain, but a proposed deformation that crosses its cut is not a deformation *within that domain*. You may move the cut or choose another branch and re-express the integrand, but the two sides can carry different values of a complex power. If a contour surrounds a branch point, a keyhole construction follows the sides of the cut as separate directed paths. Treating them as one canceled segment silently assumes the integrand has equal boundary values there, which is exactly what the branch often denies.
+The topology is visible even without a meromorphic singularity. A branch of $\log z$ is holomorphic on its slit domain, but a proposed deformation that crosses its cut is not a deformation *within that domain*. You may move the cut or choose another branch and re-express the integrand, but the two sides can carry different values of a complex power. If a contour surrounds a branch point, a keyhole construction follows the sides of the cut as separate directed paths. Treating them as one cancelled segment silently assumes the integrand has equal boundary values there, which is exactly what the branch often denies.
 
 The index is locally constant as a function of the reference point $a$ away from the contour. One way to see this is to choose $a$ and $b$ so close that $|a-b|<\min_{z\in\gamma}|z-a|$. Then the paths $\gamma(t)-a$ and $\gamma(t)-b$ can be connected by straight segments without passing through zero. Their winding numbers agree. Since an integer cannot vary continuously except by jumping, the index changes only when the reference point crosses the trace of the contour. For a simple Jordan curve this gives the familiar inside value $1$ and outside value $0$ after choosing positive orientation. For a multiply traced curve there may be regions with index $2$ or $-1$; the same local-constancy argument still applies.
 
@@ -318,7 +318,7 @@ For a continuous $f$ on a simply connected domain, zero integrals around every c
 
 ### Cauchy–Goursat and the Subdivision Idea
 
-Here is a precise foundational version. If $T$ is a closed triangle and $f$ is holomorphic on an open neighborhood of $T$, then
+Here is a precise foundational version. If $T$ is a closed triangle and $f$ is holomorphic on an open neighbourhood of $T$, then
 $$
 \int_{\partial T}f(z)\,dz=0
 $$
@@ -333,15 +333,15 @@ The constant and linear terms have zero integral around every triangle: they hav
 
 What has this proof replaced? In a real-vector-calculus approach, one might write $f=u+iv$, convert $\int f\,dz$ into two real line integrals, and invoke Green's theorem with the Cauchy–Riemann equations. That works when $u$ and $v$ have sufficiently regular first partial derivatives on the filled region. Cauchy–Goursat needs only complex differentiability, so its conclusion is stronger than a proof that quietly assumes continuous derivatives. This is why the theorem is a genuine result, even if the Green's-theorem calculation provides an attractive first intuition.
 
-The theorem also has a useful deformation corollary. If two simple closed contours wind around the same holes and the closed region between them contains no singularity of $f$, their integrals agree, provided $f$ is holomorphic on an open neighborhood of that intervening region and both boundaries. The annulus between two circles is the model case: its outer boundary is counterclockwise and its inner boundary clockwise, so the sum of boundary integrals is zero. We will use this annular equality to move Laurent coefficient circles and to shrink residue contours around poles. It does not say that either individual integral is zero; $1/z$ gives $2\pi i$ on every positively oriented circle around zero.
+The theorem also has a useful deformation corollary. If two simple closed contours wind around the same holes and the closed region between them contains no singularity of $f$, their integrals agree, provided $f$ is holomorphic on an open neighbourhood of that intervening region and both boundaries. The annulus between two circles is the model case: its outer boundary is counterclockwise and its inner boundary clockwise, so the sum of boundary integrals is zero. We will use this annular equality to move Laurent coefficient circles and to shrink residue contours around poles. It does not say that either individual integral is zero; $1/z$ gives $2\pi i$ on every positively oriented circle around zero.
 
 ### Cauchy's Formula: Boundary Values Control the Interior
 
-Let $C$ be a positively oriented, piecewise smooth simple closed contour, let $a$ lie in its bounded interior, and suppose $f$ is holomorphic on an open neighborhood of the contour together with its closure of the interior. Then *Cauchy's integral formula* is
+Let $C$ be a positively oriented, piecewise smooth simple closed contour, let $a$ lie in its bounded interior, and suppose $f$ is holomorphic on an open neighbourhood of the contour together with its closure of the interior. Then *Cauchy's integral formula* is
 $$
 f(a)=\frac{1}{2\pi i}\int_C\frac{f(z)}{z-a}\,dz.
 $$
-For the proof, remove a small closed disk about $a$ from the interior. The function $f(z)/(z-a)$ is holomorphic on a neighborhood of the remaining region, so its outer boundary integral equals the counterclockwise integral on the small circle $C_r$. On $C_r$, split $f(z)=f(a)+[f(z)-f(a)]$. The first term integrates to $2\pi i f(a)$. For the second, continuity gives
+For the proof, remove a small closed disk about $a$ from the interior. The function $f(z)/(z-a)$ is holomorphic on a neighbourhood of the remaining region, so its outer boundary integral equals the counterclockwise integral on the small circle $C_r$. On $C_r$, split $f(z)=f(a)+[f(z)-f(a)]$. The first term integrates to $2\pi i f(a)$. For the second, continuity gives
 $$
 \left|\int_{C_r}\frac{f(z)-f(a)}{z-a}\,dz\right|
 \le 2\pi\max_{|z-a|=r}|f(z)-f(a)|\longrightarrow0.
@@ -388,11 +388,11 @@ I(a)=\frac{1}{2\pi i}\int_C\frac{\cos z}{z-a}\,dz,
 $$
 The formula says $I(a)=\cos a$. Differentiation under the integral gives $I'(a)=(2\pi i)^{-1}\int_C\cos z/(z-a)^2\,dz=-\sin a$. At $a=0$ the integral with a squared denominator is zero. The result is not a symmetry guess about the circle; it follows from a family of identities valid throughout its interior. As $a$ approaches the boundary, the uniform denominator bound deteriorates. This proof does not automatically give a formula at $|a|=2$.
 
-The Cauchy estimates say more than “all derivatives exist.” Suppose $f$ is holomorphic on a neighborhood of $|z-a|\le R$ and $|f|\le M$ on its boundary. Then $|f^{(n)}(a)|\le n!M/R^n$. If the disk radius doubles while the boundary bound stays comparable, high derivatives are strongly constrained. Conversely, a proposed holomorphic function with derivatives growing faster than this for every possible enclosing circle cannot exist on that disk. This is often a useful sanity check on a formal series. The estimate also proves that an entire function with polynomial growth is a polynomial: if $|f(z)|\le A(1+|z|)^m$ for all $z$ and an integer $m\ge0$, choose a large circle around zero. For $n>m$, Cauchy's estimate gives $|f^{(n)}(0)|\le n!A(1+R)^m/R^n\to0$ as $R\to\infty$. Hence all Taylor coefficients above degree $m$ vanish.
+The Cauchy estimates say more than “all derivatives exist.” Suppose $f$ is holomorphic on a neighbourhood of $|z-a|\le R$ and $|f|\le M$ on its boundary. Then $|f^{(n)}(a)|\le n!M/R^n$. If the disk radius doubles while the boundary bound stays comparable, high derivatives are strongly constrained. Conversely, a proposed holomorphic function with derivatives growing faster than this for every possible enclosing circle cannot exist on that disk. This is often a useful sanity check on a formal series. The estimate also proves that an entire function with polynomial growth is a polynomial: if $|f(z)|\le A(1+|z|)^m$ for all $z$ and an integer $m\ge0$, choose a large circle around zero. For $n>m$, Cauchy's estimate gives $|f^{(n)}(0)|\le n!A(1+R)^m/R^n\to0$ as $R\to\infty$. Hence all Taylor coefficients above degree $m$ vanish.
 
-Another consequence is that zero values cannot accumulate inside a domain unless the whole function vanishes. Suppose $f$ has zeros $z_k\to a$ with $a$ interior. Continuity gives $f(a)=0$. If the Taylor series has a first nonzero term $c_m(z-a)^m$, then $f(z)=(z-a)^m g(z)$ with $g(a)=c_m\ne0$. The factor $g$ stays nonzero near $a$, so $a$ is the only zero in some disk, contradicting the accumulating zeros. Thus every Taylor coefficient vanishes and $f$ is zero near $a$; connectedness propagates the identity. This proof shows exactly why an accumulation at a boundary point does not trigger the theorem: there may be no admissible disk centered there.
+Another consequence is that zero values cannot accumulate inside a domain unless the whole function vanishes. Suppose $f$ has zeros $z_k\to a$ with $a$ interior. Continuity gives $f(a)=0$. If the Taylor series has a first nonzero term $c_m(z-a)^m$, then $f(z)=(z-a)^m g(z)$ with $g(a)=c_m\ne0$. The factor $g$ stays nonzero near $a$, so $a$ is the only zero in some disk, contradicting the accumulating zeros. Thus every Taylor coefficient vanishes and $f$ is zero near $a$; connectedness propagates the identity. This proof shows exactly why an accumulation at a boundary point does not trigger the theorem: there may be no admissible disk centred there.
 
-The mean-value formula follows by using a circle centered at $a$. The factor $dz/(z-a)$ becomes $i\,d\theta$, giving
+The mean-value formula follows by using a circle centred at $a$. The factor $dz/(z-a)$ becomes $i\,d\theta$, giving
 $$
 f(a)=\frac1{2\pi}\int_0^{2\pi}f(a+re^{i\theta})\,d\theta.
 $$
@@ -400,13 +400,13 @@ Taking real parts shows that the real part of a holomorphic function has the sam
 
 Finally, the boundary values determine the interior only when they arise from a function holomorphic on the filled region. You cannot feed arbitrary boundary data into Cauchy's formula and assume the resulting expression reproduces those data on the boundary. For instance, a continuous real-valued function prescribed on a circle may have a harmonic extension, but unless it is compatible with a holomorphic function's boundary trace, the Cauchy integral does not act as a generic interpolation formula. Cauchy's theorem is rigid precisely because its input already satisfies a strong interior condition.
 
-A particularly clean use of the derivative estimate is the polynomial-growth result when the bound is centered somewhere other than zero. Suppose $|f(z)|\le A(1+|z|)^m$ on the entire plane, and fix any $a$. On $|z-a|=R$, the triangle inequality gives $|z|\le |a|+R$, so
+A particularly clean use of the derivative estimate is the polynomial-growth result when the bound is centred somewhere other than zero. Suppose $|f(z)|\le A(1+|z|)^m$ on the entire plane, and fix any $a$. On $|z-a|=R$, the triangle inequality gives $|z|\le |a|+R$, so
 $$
 |f^{(n)}(a)|\le \frac{n!A(1+|a|+R)^m}{R^n}.
 $$
 For $n>m$, the right side tends to zero as $R\to\infty$. Thus every derivative above order $m$ vanishes at every point. This is the higher-order version of Liouville's theorem, and it shows exactly how a global growth rate constrains algebraic degree. The use of arbitrarily large circles is essential: a bounded function on just one disk need not be a polynomial or constant.
 
-Cauchy's formula also proves uniqueness from boundary values with little effort. If $f$ and $g$ are holomorphic on a neighborhood of a closed disk and agree at every point of its boundary circle, apply the formula to $f-g$. Every interior value is an integral of zero, so $f=g$ throughout the disk. You do not need to check derivatives or invoke the identity theorem. The result is stronger than a numerical interpolation statement: infinitely many interior values are forced simultaneously. It also explains why a supposed compactly supported holomorphic “bump” cannot exist on a connected region. Outside its support it vanishes on an open set; analytic continuation then forces it to vanish everywhere.
+Cauchy's formula also proves uniqueness from boundary values with little effort. If $f$ and $g$ are holomorphic on a neighbourhood of a closed disk and agree at every point of its boundary circle, apply the formula to $f-g$. Every interior value is an integral of zero, so $f=g$ throughout the disk. You do not need to check derivatives or invoke the identity theorem. The result is stronger than a numerical interpolation statement: infinitely many interior values are forced simultaneously. It also explains why a supposed compactly supported holomorphic “bump” cannot exist on a connected region. Outside its support it vanishes on an open set; analytic continuation then forces it to vanish everywhere.
 
 ![Cauchy's formula connects boundary values to an interior point](figures/cauchy_integral_formula.png)
 
@@ -423,7 +423,7 @@ See [Appendix B, Solutions 6–7](#appendix-b-outline-solutions).
 
 ## Series and Singularities
 
-Cauchy's formula supplies the expansions that make local behaviour calculable. Taylor series describe regular points, while Laurent series distinguish removable singularities, poles, and essential singularities on punctured neighborhoods. The examples emphasize convergence regions as well as coefficients, since both determine what an expansion can establish.
+Cauchy's formula supplies the expansions that make local behaviour calculable. Taylor series describe regular points, while Laurent series distinguish removable singularities, poles, and essential singularities on punctured neighbourhoods. The examples emphasise convergence regions as well as coefficients, since both determine what an expansion can establish.
 
 ### Taylor Series Come from a Contour, Not a Smoothness Guess
 
@@ -466,7 +466,7 @@ $$
 $$
 The obstruction at $z=-1$ limits this Taylor series to radius $1$. Its branch cut controls which continuation is chosen beyond the disk; the singular point itself controls the radius.
 
-The radius of convergence of the Taylor series centered at $a$ reaches at least as far as the largest disk centered at $a$ on which $f$ is holomorphic. It can sometimes extend beyond a particular domain we happened to choose; what matters is the function's analytic continuation and its nearest obstruction. For example,
+The radius of convergence of the Taylor series centred at $a$ reaches at least as far as the largest disk centred at $a$ on which $f$ is holomorphic. It can sometimes extend beyond a particular domain we happened to choose; what matters is the function's analytic continuation and its nearest obstruction. For example,
 $$
 \frac1{1-z}=\sum_{n=0}^{\infty}z^n,\qquad |z|<1.
 $$
@@ -511,7 +511,7 @@ $$
 G(z)=\frac{1}{(z-1)(z-2)}
 =-\frac1{z-1}+\frac1{z-2}.
 $$
-Centered at zero, its singular radii are $1$ and $2$. These radii divide the punctured plane into three maximal circular annuli on which a Laurent expansion about zero can converge. For $|z|<1$, expand both simple fractions in nonnegative powers:
+Centred at zero, its singular radii are $1$ and $2$. These radii divide the punctured plane into three maximal circular annuli on which a Laurent expansion about zero can converge. For $|z|<1$, expand both simple fractions in nonnegative powers:
 $$
 \begin{aligned}
 G(z)
@@ -520,7 +520,7 @@ G(z)
 \qquad |z|<1.
 \end{aligned}
 $$
-The constant coefficient is $1/2$. No negative powers occur, as expected: the entire disk bounded by any centered circle of radius below one contains no singularity.
+The constant coefficient is $1/2$. No negative powers occur, as expected: the entire disk bounded by any centred circle of radius below one contains no singularity.
 
 In the middle annulus $1<|z|<2$, the first fraction must be expanded in inverse powers while the second remains a positive-power series:
 $$
@@ -533,7 +533,7 @@ G(z)
 \qquad 1<|z|<2.
 \end{aligned}
 $$
-The coefficient of $z^{-1}$ is $-1$, the residue at $z=1$. A centered circle with radius in this annulus encloses that pole and excludes the pole at $2$. Notice that the coefficient of $z^0$ is now $-1/2$, not the value $1/2$ from the inner disk. Laurent coefficients are attached to the annulus and its contour integrals; they are not globally fixed by a formula and a centre alone.
+The coefficient of $z^{-1}$ is $-1$, the residue at $z=1$. A centred circle with radius in this annulus encloses that pole and excludes the pole at $2$. Notice that the coefficient of $z^0$ is now $-1/2$, not the value $1/2$ from the inner disk. Laurent coefficients are attached to the annulus and its contour integrals; they are not globally fixed by a formula and a centre alone.
 
 For $|z|>2$, expand both fractions in inverse powers:
 $$
@@ -551,11 +551,11 @@ Now the coefficient of $z^{-1}$ is $2^0-1=0$: both poles are enclosed, and their
 
 The region restrictions can be read directly from the geometric series. The expansion of $(1-1/z)^{-1}$ requires $|1/z|<1$, while $(1-z/2)^{-1}$ requires $|z/2|<1$. Their simultaneous validity gives the middle annulus. A formula may be algebraically true after analytic continuation elsewhere, but the displayed series does not converge there. In particular, the two boundary circles are excluded because one of the geometric ratios has modulus one.
 
-There is also a topological reading. As a centered contour expands past radius one, its integral changes from zero to $-2\pi i$. It does not change while the contour moves within $1<|z|<2$. Expanding past radius two adds $2\pi i$ and returns the integral to zero. Since the contour integral of a Laurent series is $2\pi i$ times its $z^{-1}$ coefficient, the three coefficient values $0,-1,0$ encode exactly these changes. The power-series algebra and residue theorem are two descriptions of the same contour behaviour.
+There is also a topological reading. As a centred contour expands past radius one, its integral changes from zero to $-2\pi i$. It does not change while the contour moves within $1<|z|<2$. Expanding past radius two adds $2\pi i$ and returns the integral to zero. Since the contour integral of a Laurent series is $2\pi i$ times its $z^{-1}$ coefficient, the three coefficient values $0,-1,0$ encode exactly these changes. The power-series algebra and residue theorem are two descriptions of the same contour behaviour.
 
 One can see the same stability directly from the coefficient integral. Fix an integer $k$ and let $\rho_1,\rho_2$ be two radii in the same annulus. The integrand $G(z)z^{-k-1}$ is holomorphic on the closed ring between those circles, so the integral on the outer circle equals the integral on the inner circle with positive circular orientation. Consequently the coefficient $c_k$ is independent of $\rho$ as long as the circle stays within that annulus. If poles lie between radii in different annuli, the difference between the outer and inner coefficient integrals, each divided by $2\pi i$, equals the sum of the residues of $G(z)z^{-k-1}$ at those poles. It need not equal the sum of the residues of $G$ unless $k=-1$, and it may even vanish by cancellation. Thus “the Laurent coefficient” is well-defined only after the annular region has been specified.
 
-The annulus boundaries also identify the convergence limit without summing a series. The middle expansion cannot converge on $|z|=1$ or $|z|=2$ as a normally convergent Laurent series on a neighborhood of either boundary: those circles contain singularities of the represented function. For general holomorphic functions, the maximal annulus of convergence is bounded by the nearest singularity on each side, though continuation may still define the function beyond one side through a different expansion. In this rational example the poles sit exactly on the boundary circles, making the two radii transparent.
+The annulus boundaries also identify the convergence limit without summing a series. The middle expansion cannot converge on $|z|=1$ or $|z|=2$ as a normally convergent Laurent series on a neighbourhood of either boundary: those circles contain singularities of the represented function. For general holomorphic functions, the maximal annulus of convergence is bounded by the nearest singularity on each side, though continuation may still define the function beyond one side through a different expansion. In this rational example the poles sit exactly on the boundary circles, making the two radii transparent.
 
 ### Convergence and Singularity Traps
 
@@ -585,7 +585,7 @@ The Taylor series of $1/(1+z^2)$ makes the radius issue concrete without a branc
 $$
 \frac1{1+z^2}=\sum_{n=0}^{\infty}(-1)^nz^{2n},\qquad |z|<1.
 $$
-Its nearest singularities are the poles at $i$ and $-i$, both at distance $1$ from the centre. On $|z|=1$ the terms have modulus $1$, so they do not even tend to zero and the series diverges at every boundary point. Yet the rational function is perfectly regular at many of those points, including $z=1$. Recenter at $1$ and a different Taylor series describes it there. A failure of one centered series on its boundary is not a failure of the function to exist at that point.
+Its nearest singularities are the poles at $i$ and $-i$, both at distance $1$ from the centre. On $|z|=1$ the terms have modulus $1$, so they do not even tend to zero and the series diverges at every boundary point. Yet the rational function is perfectly regular at many of those points, including $z=1$. Recenter at $1$ and a different Taylor series describes it there. A failure of one centred series on its boundary is not a failure of the function to exist at that point.
 
 ### The Principal Part Tells You What Failed
 
@@ -650,7 +650,7 @@ The formulas can be checked against a local expansion rather than trusted as rec
 
 For a rational function, always locate and cancel removable factors before declaring poles. The expression $(z^2-1)/(z-1)$ has a denominator zero at $1$ as written, but it equals $z+1$ away from $1$ and extends holomorphically there; its residue is zero. By contrast, $(z+1)/(z^2-1)$ reduces to $1/(z-1)$ away from $-1$, so $-1$ is removable while $1$ is a simple pole. The distinction changes which points belong in a residue sum. It also affects numerical work: evaluating an uncancelled expression very near a removable point can suffer severe cancellation even though the mathematical function is regular.
 
-Now let $C$ be a positively oriented piecewise smooth simple closed contour. Suppose $f$ is holomorphic on an open neighborhood of $C$ and its interior except at finitely many isolated points $a_1,\ldots,a_N$ strictly inside $C$, and suppose no singularity lies on $C$. Excise disjoint small disks around the $a_j$. Cauchy–Goursat on the punctured region gives the outer integral equal to the sum of counterclockwise inner-circle integrals. Shrink those circles, or use their Laurent expansions, to obtain the *residue theorem*
+Now let $C$ be a positively oriented piecewise smooth simple closed contour. Suppose $f$ is holomorphic on an open neighbourhood of $C$ and its interior except at finitely many isolated points $a_1,\ldots,a_N$ strictly inside $C$, and suppose no singularity lies on $C$. Excise disjoint small disks around the $a_j$. Cauchy–Goursat on the punctured region gives the outer integral equal to the sum of counterclockwise inner-circle integrals. Shrink those circles, or use their Laurent expansions, to obtain the *residue theorem*
 $$
 \int_C f(z)\,dz=2\pi i\sum_{j=1}^{N}\operatorname{Res}(f,a_j).
 $$
@@ -704,7 +704,7 @@ $$
 $$
 The series converges absolutely. A residue need not have a short elementary form; coefficient extraction remains valid because both series converge normally on every compact annulus around zero. The example also shows why multiplying just the first few terms can give a plausible but incomplete answer when infinitely many pairs contribute to the desired power.
 
-For residues of quotients with a non-simple zero in the denominator, first factor out the known vanishing order. If $h(z)=(z-a)^mq(z)$ with $q(a)\ne0$, then $g(z)/h(z)=(z-a)^{-m}g(z)/q(z)$. The residue is the coefficient of $(z-a)^{m-1}$ in the Taylor series of the *regular* factor $g/q$. This formulation is often easier to use than memorizing the repeated-pole derivative formula. If $g$ also vanishes at $a$, its order may cancel some or all of the pole; determine that cancellation before assigning $m$. For instance, $(z-a)^2e^z/(z-a)^3=e^z/(z-a)$ has a simple pole with residue $e^a$, not a third-order pole.
+For residues of quotients with a non-simple zero in the denominator, first factor out the known vanishing order. If $h(z)=(z-a)^mq(z)$ with $q(a)\ne0$, then $g(z)/h(z)=(z-a)^{-m}g(z)/q(z)$. The residue is the coefficient of $(z-a)^{m-1}$ in the Taylor series of the *regular* factor $g/q$. This formulation is often easier to use than memorising the repeated-pole derivative formula. If $g$ also vanishes at $a$, its order may cancel some or all of the pole; determine that cancellation before assigning $m$. For instance, $(z-a)^2e^z/(z-a)^3=e^z/(z-a)$ has a simple pole with residue $e^a$, not a third-order pole.
 
 One can often verify a residue calculation by integrating on two convenient circles. Take $f(z)=z/(z^2+1)$ and radii $1/2$ and $2$. The smaller circle contains no pole, so its integral is zero. The larger contains both poles, whose residues sum to $1$, so its integral is $2\pi i$. The two answers differ because the annulus between the circles contains both $i$ and $-i$. If you had found the same answer on both circles by an unjustified deformation, this comparison would expose the missing poles. For a circle whose radius passes through $1$, the integrand has poles on the path; neither calculation applies until you change the contour.
 
@@ -940,13 +940,13 @@ The identity theorem behind isolation of zeros has a useful limitation. Its accu
 
 ### Argument Principle and Rouché's Theorem
 
-Let $C$ be a positively oriented piecewise smooth simple closed contour. Suppose $f$ is meromorphic on an open neighborhood of $C$ and its interior, has only finitely many zeros and poles inside, and has neither zeros nor poles on $C$. Applying the residue theorem to $f'/f$ gives the *argument principle*
+Let $C$ be a positively oriented piecewise smooth simple closed contour. Suppose $f$ is meromorphic on an open neighbourhood of $C$ and its interior, has only finitely many zeros and poles inside, and has neither zeros nor poles on $C$. Applying the residue theorem to $f'/f$ gives the *argument principle*
 $$
 \frac1{2\pi i}\int_C\frac{f'(z)}{f(z)}\,dz
 =N_Z-N_P
 =\operatorname{Ind}(f\circ C,0),
 $$
-where $N_Z$ and $N_P$ count interior zeros and poles with multiplicity and order. The last expression is the winding number of the image curve $f(C)$ around zero. It explains the domain-coloring picture from Section 1: if $f(z)=z^2$ and $C$ encircles the origin once, the image encircles zero twice. It also explains why a pole winds in the opposite direction.
+where $N_Z$ and $N_P$ count interior zeros and poles with multiplicity and order. The last expression is the winding number of the image curve $f(C)$ around zero. It explains the domain-colouring picture from Section 1: if $f(z)=z^2$ and $C$ encircles the origin once, the image encircles zero twice. It also explains why a pole winds in the opposite direction.
 
 Consider the meromorphic function $f(z)=(z-1)^2/[z(z-2)]$ on $C:|z|=3/2$, traversed counterclockwise. Inside the circle, $f$ has a double zero at $1$ and a simple pole at $0$; its pole at $2$ lies outside. No zero or pole touches the circle. The argument principle gives
 $$
@@ -960,7 +960,7 @@ The image of the circle winds once around the origin, even though $f$ has two ze
 
 For a polynomial, there are no finite poles, so the principle counts all its roots inside a contour. For a rational function, cancellations can make a suspected zero and pole removable; reduce or factor locally first. For a numerical implementation, sampled values of $f(C)$ may suggest a winding number, but the count is only reliable if the continuous image does not pass through zero between samples. The theorem supplies an exact answer when the boundary condition can be proved.
 
-*Rouché's theorem* packages this winding idea into an efficient comparison. Suppose $f$ and $g$ are holomorphic on an open neighborhood of the closure of a bounded region with positively oriented piecewise smooth simple boundary $C$, and assume
+*Rouché's theorem* packages this winding idea into an efficient comparison. Suppose $f$ and $g$ are holomorphic on an open neighbourhood of the closure of a bounded region with positively oriented piecewise smooth simple boundary $C$, and assume
 $$
 |g(z)|<|f(z)|\quad\text{for every }z\in C.
 $$
@@ -980,7 +980,7 @@ $$
 $$
 whose residues inside the circle sum to $3-2=1$. A parameterized plot of the image might cross itself and make a visual turn count awkward. The logarithmic derivative turns the problem into local integer arithmetic. It also warns you that if $F$ has a zero on $C$, $F'/F$ has a pole on the path and the integral is not covered by the theorem.
 
-For a less factorized example, let $P(z)=z^4+2z^2+4$. On $|z|=1$, compare the constant $4$ with the remaining terms: $|z^4+2z^2|\le3<4$. Rouché gives zero roots in the unit disk. On $|z|=2$, the leading term has modulus $16$, while $|2z^2+4|\le12<16$, so all four roots lie in $|z|<2$. Consequently all four roots lie in $1<|z|<2$, counted with multiplicity. This is a genuine location result even though no root has been computed. The strict inequalities also prove that neither boundary circle contains a root.
+For a less factorised example, let $P(z)=z^4+2z^2+4$. On $|z|=1$, compare the constant $4$ with the remaining terms: $|z^4+2z^2|\le3<4$. Rouché gives zero roots in the unit disk. On $|z|=2$, the leading term has modulus $16$, while $|2z^2+4|\le12<16$, so all four roots lie in $|z|<2$. Consequently all four roots lie in $1<|z|<2$, counted with multiplicity. This is a genuine location result even though no root has been computed. The strict inequalities also prove that neither boundary circle contains a root.
 
 Choosing the comparison term is often a matter of choosing the radius. For $P(z)=z^5+5z^2+1$, on $|z|=1$ the $5z^2$ term dominates because $|z^5+1|\le2<5$. There are exactly two zeros in $|z|<1$. On $|z|=2$, the leading term has modulus $32$, while $|5z^2+1|\le21$, so there are five zeros in $|z|<2$. Hence three lie in the annulus $1<|z|<2$. Trying to use $z^5$ on the unit circle fails because its modulus is only $1$, while the other terms can have size $6$. The theorem is flexible about which piece you call the base function; the inequality decides the valid choice.
 
@@ -1029,7 +1029,7 @@ The count does not imply that the six roots are simple, evenly spaced, or numeri
 
 ### Maximum Modulus and What It Forbids
 
-A nonconstant holomorphic function on a connected domain cannot attain a local maximum of its modulus at an interior point. One proof begins with Cauchy's mean-value formula on a small circle centered at $a$:
+A nonconstant holomorphic function on a connected domain cannot attain a local maximum of its modulus at an interior point. One proof begins with Cauchy's mean-value formula on a small circle centred at $a$:
 $$
 f(a)=\frac1{2\pi}\int_0^{2\pi}f(a+re^{i\theta})\,d\theta.
 $$
@@ -1041,13 +1041,13 @@ On a bounded domain $D$ whose closure lies in an open set where $f$ is holomorph
 
 For example, $f(z)=z$ on the unit disk has $|f(0)|=0$, an interior minimum, because the function vanishes there; it has no interior maximum. The function $f(z)=e^z$ has no zeros, so neither $|f|$ nor $|1/f|$ can attain an interior maximum on any disk unless constant. On the closed unit disk, the largest value of $|e^z|=e^{\Re z}$ occurs at the boundary point $z=1$, and the smallest at $z=-1$. The formula for $|e^z|$ makes this example transparent, but the principle works even when no elementary modulus formula is available.
 
-The *open mapping theorem* is a related consequence: a nonconstant holomorphic function maps open sets to open sets. Near a regular point it follows from the complex inverse function theorem. Near a critical point, local factorisation of $f(z)-f(a)$ shows a small punctured neighborhood of $f(a)$ is still covered, with multiple preimages counted by the zero's multiplicity. This result explains why a nonconstant holomorphic image cannot end abruptly at an interior point. The maximum modulus principle is consistent with it: if $f(D)$ were trapped in a closed disk and touched its boundary at an interior image point, the image could not be open around that point.
+The *open mapping theorem* is a related consequence: a nonconstant holomorphic function maps open sets to open sets. Near a regular point it follows from the complex inverse function theorem. Near a critical point, local factorisation of $f(z)-f(a)$ shows a small punctured neighbourhood of $f(a)$ is still covered, with multiple preimages counted by the zero's multiplicity. This result explains why a nonconstant holomorphic image cannot end abruptly at an interior point. The maximum modulus principle is consistent with it: if $f(D)$ were trapped in a closed disk and touched its boundary at an interior image point, the image could not be open around that point.
 
 The maximum principle connects geometry and analysis. A holomorphic map cannot create a new peak of $|f|$ in the interior. Cauchy's estimates make that boundary control quantitative, and Liouville's theorem follows when the same bound holds on arbitrarily large circles. In potential theory, the real and imaginary parts of $f$ satisfy related maximum principles for harmonic functions; that is why conformal methods can turn boundary data into interior fields.
 
 ### Boundary Bounds and the Order of a Zero
 
-The maximum modulus principle can produce quantitative bounds when the boundary values are simpler than the interior formula. Let $f$ be holomorphic on an open neighborhood of the closed disk $|z|\le1$ and suppose $|f(z)|\le3$ on $|z|=1$. Then $|f(z)|\le3$ throughout the disk. If $|f(0)|=3$, the interior point already attains the maximum, so $f$ must be constant with modulus $3$ on the whole disk. If $|f(0)|<3$, the principle allows many functions; it does not say every interior value is substantially below $3$ by one universal gap independent of the function.
+The maximum modulus principle can produce quantitative bounds when the boundary values are simpler than the interior formula. Let $f$ be holomorphic on an open neighbourhood of the closed disk $|z|\le1$ and suppose $|f(z)|\le3$ on $|z|=1$. Then $|f(z)|\le3$ throughout the disk. If $|f(0)|=3$, the interior point already attains the maximum, so $f$ must be constant with modulus $3$ on the whole disk. If $|f(0)|<3$, the principle allows many functions; it does not say every interior value is substantially below $3$ by one universal gap independent of the function.
 
 For a nontrivial worked bound, suppose $f$ is holomorphic near $|z|\le1$, $f(0)=0$, and $|f(z)|\le1$ on $|z|=1$. The maximum principle first gives $|f|\le1$ in the disk. Define $g(z)=f(z)/z$ for $z\ne0$ and set $g(0)=f'(0)$; the singularity at zero is removable because $f(0)=0$. On the unit circle $|g(z)|=|f(z)|\le1$, so maximum modulus applied to $g$ gives $|g(z)|\le1$ inside. Therefore
 $$
@@ -1077,13 +1077,13 @@ The simplest global building blocks are Möbius transformations
 $$
 M(z)=\frac{az+b}{cz+d},\qquad ad-bc\ne0.
 $$
-On the Riemann sphere $\widehat{\mathbb C}=\mathbb C\cup\{\infty\}$, each is a bijection with a Möbius inverse. In the finite plane it has a pole at $z=-d/c$ when $c\ne0$, and its derivative is $(ad-bc)/(cz+d)^2$ wherever defined. Möbius maps send generalized circles—ordinary circles and straight lines, with a line regarded as a circle through $\infty$—to generalized circles. Translation, rotation/scaling, and inversion $z\mapsto1/z$ generate their basic geometry.
+On the Riemann sphere $\widehat{\mathbb C}=\mathbb C\cup\{\infty\}$, each is a bijection with a Möbius inverse. In the finite plane it has a pole at $z=-d/c$ when $c\ne0$, and its derivative is $(ad-bc)/(cz+d)^2$ wherever defined. Möbius maps send generalised circles—ordinary circles and straight lines, with a line regarded as a circle through $\infty$—to generalised circles. Translation, rotation/scaling, and inversion $z\mapsto1/z$ generate their basic geometry.
 
 ![A grid in the upper half-plane and its image in the unit disk](figures/mobius_half_plane_disk.png)
 
 *Figure: The Möbius map $(z-i)/(z+i)$ sends the upper half-plane to the unit disk and carries boundary geometry to the unit circle.*
 
-The sphere language accounts cleanly for poles and infinity. When $c\ne0$, $M(-d/c)=\infty$ and $M(\infty)=a/c$; if $c=0$, the map is affine and fixes infinity. A Euclidean line becomes a circle through $M(\infty)$ unless that image is infinity. This observation often predicts a boundary image before any algebra. The real axis is a generalized circle, for example, and $M(z)=(z-i)/(z+i)$ sends it to the unit circle. Which side maps to the disk is decided by testing one point, such as $z=i$.
+The sphere language accounts cleanly for poles and infinity. When $c\ne0$, $M(-d/c)=\infty$ and $M(\infty)=a/c$; if $c=0$, the map is affine and fixes infinity. A Euclidean line becomes a circle through $M(\infty)$ unless that image is infinity. This observation often predicts a boundary image before any algebra. The real axis is a generalised circle, for example, and $M(z)=(z-i)/(z+i)$ sends it to the unit circle. Which side maps to the disk is decided by testing one point, such as $z=i$.
 
 An explicit canonical map is
 $$
@@ -1167,7 +1167,7 @@ For a concrete right-angle wedge, set $\alpha=\pi/2$. Then $\zeta=z^2$, the pote
 
 The solution is unique among bounded harmonic functions on the open wedge that extend continuously to each open face $r>0$ and take the prescribed constant values there. The conformal map sends any two such solutions to bounded harmonic functions in the upper half-plane with the same boundary values everywhere except the image of the vertex; bounded harmonic functions are determined by their boundary values almost everywhere. No value at the vertex or at infinity is required in this class. Boundedness matters: $r^{\pi/\alpha}\sin(\pi\theta/\alpha)$ is harmonic and vanishes on both faces, but adding it gives an unbounded solution with the same face data.
 
-The field's corner exponent has a useful interpretation beyond this one wedge. The inverse map is $z=\zeta^{\alpha/\pi}$, and its derivative has magnitude proportional to $|\zeta|^{\alpha/\pi-1}$. Uniform field in the mapped half-plane therefore becomes a field whose size scales like $r^{\pi/\alpha-1}$ in the wedge. For $\alpha=\pi/2$, this is $r^1$ for a uniform mapped field, while the particular angular-potential boundary data above produces $1/r$ because its mapped potential is an angle function with a boundary singularity at the origin. These are different mapped problems: the map alone does not determine the field; the transformed boundary data do. This distinction is a good safeguard against memorizing one corner exponent and applying it to every electrode arrangement.
+The field's corner exponent has a useful interpretation beyond this one wedge. The inverse map is $z=\zeta^{\alpha/\pi}$, and its derivative has magnitude proportional to $|\zeta|^{\alpha/\pi-1}$. Uniform field in the mapped half-plane therefore becomes a field whose size scales like $r^{\pi/\alpha-1}$ in the wedge. For $\alpha=\pi/2$, this is $r^1$ for a uniform mapped field, while the particular angular-potential boundary data above produces $1/r$ because its mapped potential is an angle function with a boundary singularity at the origin. These are different mapped problems: the map alone does not determine the field; the transformed boundary data do. This distinction is a good safeguard against memorising one corner exponent and applying it to every electrode arrangement.
 
 The same exponential map gives a compact second geometry check. The infinite horizontal strip $0<\operatorname{Im}z<h$ maps to the upper half-plane under $\zeta=e^{\pi z/h}$. The lower edge maps to the positive real axis and the upper edge to the negative real axis. If those edges are held at 0 and $V_0$, respectively, then the half-plane angle potential pulls back to $V(x,y)=V_0y/h$: the familiar uniform field between parallel plates. This is a case where the answer is already easy in the original geometry, but the map makes the correspondence between strip boundaries and half-plane boundary pieces explicit. For finite plates, edge effects enter because the ideal infinite-strip boundary conditions no longer apply; the exponential map does not remove them.
 
@@ -1177,7 +1177,7 @@ The logarithm also connects potential theory to point sources. In a two-dimensio
 
 This logarithmic kernel is the two-dimensional analogue of the inverse-distance kernel in three dimensions and is a building block for Green's functions: kernels that encode how a point source contributes to a boundary-value problem. Boundaries modify the free-space kernel, often by adding a harmonic correction chosen to satisfy the boundary condition. That is the conceptual bridge from the elementary logarithm to more systematic potential theory. The detailed construction of Green's functions requires careful treatment of the domain and boundary regularity, so the connection here is a guide to further study rather than a general solution formula.
 
-The idealized field diverges like $1/r$ at the vertex. That is a real feature of this mathematical boundary condition, but an actual electrode has a rounded tip, finite thickness, and material limits. The singularity warns that the ideal geometry predicts large local fields; it does not predict an infinite measurable field.
+The idealised field diverges like $1/r$ at the vertex. That is a real feature of this mathematical boundary condition, but an actual electrode has a rounded tip, finite thickness, and material limits. The singularity warns that the ideal geometry predicts large local fields; it does not predict an infinite measurable field.
 
 The example also shows why mapping is a method, not a magic eraser. The transformed boundary is easy, but the map has a branch point at the corner, and its derivative vanishes or diverges there depending on the angle. Away from that point the map is conformal; at the vertex the local angle-preservation argument does not apply. Boundary values on curved or segmented conductors are usually less tidy, and one may need an explicit map, a numerical map, or a numerical solution after mapping.
 
@@ -1294,12 +1294,12 @@ The mechanism is local concentration. If $f$ has a strict global minimum at $x_0
 $$
 f(x)=f(x_0)+\frac12 f''(x_0)(x-x_0)^2+O((x-x_0)^3).
 $$
-The contributing neighborhood has width of order $\lambda^{-1/2}$: set $x=x_0+y/\sqrt{\lambda}$. The exponent becomes $-\lambda f(x_0)-\tfrac12 f''(x_0)y^2+O(y^3/\sqrt{\lambda})$, and the differential contributes $dx=dy/\sqrt{\lambda}$. To leading order the remaining integral is a Gaussian. With a smooth amplitude $g$, this yields
+The contributing neighbourhood has width of order $\lambda^{-1/2}$: set $x=x_0+y/\sqrt{\lambda}$. The exponent becomes $-\lambda f(x_0)-\tfrac12 f''(x_0)y^2+O(y^3/\sqrt{\lambda})$, and the differential contributes $dx=dy/\sqrt{\lambda}$. To leading order the remaining integral is a Gaussian. With a smooth amplitude $g$, this yields
 $$
 \int g(x)e^{-\lambda f(x)}\,dx \sim
 g(x_0)e^{-\lambda f(x_0)}\sqrt{\frac{2\pi}{\lambda f''(x_0)}}.
 $$
-One standard sufficient setting is a real integral over a fixed interval or the real line, a unique interior global minimum, $f$ at least four times continuously differentiable near $x_0$, $f''(x_0)>0$, and a smooth amplitude with adequate integrability; outside every fixed neighborhood of $x_0$, assume the phase is separated from its minimum enough that the tail is exponentially smaller. Under routine stronger smoothness and tail conditions, the leading term has relative error $O(1/\lambda)$. If the amplitude vanishes at the minimum, the leading power changes. Equal-depth minima contribute a sum; a boundary minimum gives a different scaling; if $f''(x_0)=0$, the quadratic Gaussian model fails. This is the real Laplace method, closely related to saddle-point approximations. Complex contour steepest descent is a broader theory, and should not be inferred from this one real-variable estimate.
+One standard sufficient setting is a real integral over a fixed interval or the real line, a unique interior global minimum, $f$ at least four times continuously differentiable near $x_0$, $f''(x_0)>0$, and a smooth amplitude with adequate integrability; outside every fixed neighbourhood of $x_0$, assume the phase is separated from its minimum enough that the tail is exponentially smaller. Under routine stronger smoothness and tail conditions, the leading term has relative error $O(1/\lambda)$. If the amplitude vanishes at the minimum, the leading power changes. Equal-depth minima contribute a sum; a boundary minimum gives a different scaling; if $f''(x_0)=0$, the quadratic Gaussian model fails. This is the real Laplace method, closely related to saddle-point approximations. Complex contour steepest descent is a broader theory, and should not be inferred from this one real-variable estimate.
 
 ![Laplace concentration near a non-degenerate minimum](figures/laplace_method.png)
 
@@ -1311,15 +1311,15 @@ One standard sufficient setting is a real integral over a fixed interval or the 
 17. State the maximum principle for a harmonic function on a bounded domain and explain what it implies for uniqueness of a Dirichlet problem. Why does it not prove existence? ([Solution 17](#solution-17))
 18. For $F(z)=Uz+a/z$, with real $U,a>0$, find the stagnation points and derive the nontrivial streamline. Explain the physical idealisations. ([Solution 18](#solution-18))
 19. Explain how a conformal map transfers a Dirichlet problem to a disk and back. State what is preserved, what is rescaled, and why the method does not automatically produce an explicit solution. ([Solution 19](#solution-19))
-20. Consider $I(\lambda)=\int_{-\infty}^{\infty}e^{-\lambda x^2}\,dx$ for real $\lambda>0$. Explain the real-variable derivation and what complex analysis contributes when the exponent or contour is generalized. Name one condition needed before moving a contour. ([Solution 20](#solution-20))
+20. Consider $I(\lambda)=\int_{-\infty}^{\infty}e^{-\lambda x^2}\,dx$ for real $\lambda>0$. Explain the real-variable derivation and what complex analysis contributes when the exponent or contour is generalised. Name one condition needed before moving a contour. ([Solution 20](#solution-20))
 
 See [Appendix B, Solutions 17–20](#appendix-b-outline-solutions).
 
 ## Computational Complex Analysis
 
-Numerical experiments can make branches, mapped grids, residues, and contour integrals easier to inspect. They are diagnostic companions to the proofs: finite samples cannot establish holomorphy, rule out unseen singularities, or certify a zero count. The examples proceed from visualizing functions and maps to symbolic and numerical contour checks, then collect practical guidance on error and reliability.
+Numerical experiments can make branches, mapped grids, residues, and contour integrals easier to inspect. They are diagnostic companions to the proofs: finite samples cannot establish holomorphy, rule out unseen singularities, or certify a zero count. The examples proceed from visualising functions and maps to symbolic and numerical contour checks, then collect practical guidance on error and reliability.
 
-### Visualizing Functions and Maps
+### Visualising Functions and Maps
 
 
 Numerical work is most useful here as a way to inspect geometry, test a derivation, and find mistakes in signs or branches. It does not establish analyticity or prove that a contour encloses all singularities. Python is the canonical language in these examples. The arrays below represent a rectangular grid in the complex plane; the hue records argument and brightness records modulus.
@@ -1378,7 +1378,7 @@ image(x, y, matrix(hue, nrow = length(x)), col = palette, zlim = c(0, 1),
 
 :::
 
-The picture should show a discontinuity across the negative real axis, the chosen branch cut. The origin is excluded because the logarithm is singular there. The mask excludes only zero, so NumPy still returns pointwise principal values for sampled negative real inputs on the cut (normally the value approached from above; a negative signed zero in the imaginary part selects the lower side). The holomorphic principal branch itself is defined on $\mathbb C\setminus(-\infty,0]$ and excludes those cut points. Grid coloring can make a jump look like a steep but continuous transition, and a finite plot cannot certify the location or nature of a singularity. Check the numerical convention when comparing formulas or libraries ([NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html)).
+The picture should show a discontinuity across the negative real axis, the chosen branch cut. The origin is excluded because the logarithm is singular there. The mask excludes only zero, so NumPy still returns pointwise principal values for sampled negative real inputs on the cut (normally the value approached from above; a negative signed zero in the imaginary part selects the lower side). The holomorphic principal branch itself is defined on $\mathbb C\setminus(-\infty,0]$ and excludes those cut points. Grid colouring can make a jump look like a steep but continuous transition, and a finite plot cannot certify the location or nature of a singularity. Check the numerical convention when comparing formulas or libraries ([NumPy `log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html)).
 
 The code is intentionally explicit about the grid and the branch. Away from the cut, the plotted phase is $\operatorname{Im}\operatorname{Log}z=\operatorname{Arg}z\in(-\pi,\pi)$, so it jumps across the cut; numerical values on the cut use NumPy's side convention. Masking the origin before evaluation avoids asking a floating-point routine to assign a finite logarithm to zero. The contour lines display levels of $|F|$, not additional phase information. A denser mesh can make the image smoother but cannot remove the branch discontinuity; changing the branch convention moves the cut and changes the displayed function while leaving its local derivative $1/z$ unchanged.
 
@@ -1503,7 +1503,7 @@ $$
 $$
 A positive certified lower bound proves strict dominance. A dense sample with positive values merely suggests it. If the minimum is small relative to floating-point error or interpolation error, the proposed split is fragile even if the exact inequality is true. Try a different contour or a different grouping of terms to increase the margin. This is the computational analogue of selecting a contour where the theorem has room to work.
 
-Domain coloring and mapped grids are similarly diagnostic. A phase seam can be the chosen branch cut, an actual zero, or a plotting wrap from $\pi$ to $-\pi$; inspect the formula and the domain before interpreting colors. Grid crowding under a conformal map often signals a large derivative or a boundary point mapped near infinity, but a finite grid cannot measure an extremal distortion reliably. A vanishing derivative, as with $z^2$ at zero, is qualitatively different: local angle preservation fails there. Plot refinement can reveal a missed feature, but it cannot turn samples into a theorem.
+Domain colouring and mapped grids are similarly diagnostic. A phase seam can be the chosen branch cut, an actual zero, or a plotting wrap from $\pi$ to $-\pi$; inspect the formula and the domain before interpreting colours. Grid crowding under a conformal map often signals a large derivative or a boundary point mapped near infinity, but a finite grid cannot measure an extremal distortion reliably. A vanishing derivative, as with $z^2$ at zero, is qualitatively different: local angle preservation fails there. Plot refinement can reveal a missed feature, but it cannot turn samples into a theorem.
 
 ### Computational Source Notes
 
@@ -1661,11 +1661,11 @@ The proof sequence, examples, and theorem formulations were checked against [MIT
 
 - **Accessible undergraduate text — Saff and Snider, *Fundamentals of Complex Analysis with Applications to Engineering and Science*, 3rd ed.** A readable first course with worked problems and engineering examples. Strong for contour integration, residues, and applications. [Pearson title page](https://www.pearson.com/en-us/subject-catalog/p/fundamentals-of-complex-analysis-with-applications-to-engineering-and-science/P200000003263/9780139078743).
 - **Visual and geometric introduction — Tristan Needham, *Visual Complex Analysis*.** Builds intuition for conformal maps, harmonic functions, and the rigidity of analytic functions. Pair it with a theorem-oriented text when formal hypotheses matter. [Oxford Academic](https://global.oup.com/academic/product/visual-complex-analysis-9780198534464).
-- **Classical rigorous text — Lars Ahlfors, *Complex Analysis*, 3rd ed.** Compact and proof-centered, with deeper treatment of analytic functions and conformal mapping than a first applied course. [McGraw Hill catalogue](https://www.mheducation.com/highered/product/complex-analysis-ahlfors.html).
+- **Classical rigorous text — Lars Ahlfors, *Complex Analysis*, 3rd ed.** Compact and proof-centred, with deeper treatment of analytic functions and conformal mapping than a first applied course. [McGraw Hill catalogue](https://www.mheducation.com/highered/product/complex-analysis-ahlfors.html).
 - **Broad undergraduate text — Marsden and Hoffman, *Basic Complex Analysis*, 3rd ed.** Balances core theory and geometry and extends beyond residue-calculus techniques. [Springer record](https://link.springer.com/book/10.1007/978-1-4612-0585-0).
 - **Analytic viewpoint — Stein and Shakarchi, *Complex Analysis*, Princeton Lectures in Analysis II.** Connects one-variable theory to harmonic analysis and broader analytic ideas; a good next step after a first course. [Princeton University Press](https://press.princeton.edu/books/paperback/9780691113852/complex-analysis).
-- **Free applied course — MIT OpenCourseWare 18.04, *Complex Variables with Applications*.** Topic-organized notes, problem sets, and solutions cover Cauchy theory, harmonic functions, hydrodynamics, residues, transforms, and conformal maps. [Lecture notes](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/).
-- **Free proof-focused notes — Dan Romik, UC Davis, *Complex Analysis*.** A compact sequence emphasizing precise theorem statements, residues, the argument principle, Rouché’s theorem, and introductory asymptotics. [PDF notes](https://www.math.ucdavis.edu/~romik/data/uploads/notes/complex-analysis.pdf).
+- **Free applied course — MIT OpenCourseWare 18.04, *Complex Variables with Applications*.** Topic-organised notes, problem sets, and solutions cover Cauchy theory, harmonic functions, hydrodynamics, residues, transforms, and conformal maps. [Lecture notes](https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/).
+- **Free proof-focused notes — Dan Romik, UC Davis, *Complex Analysis*.** A compact sequence emphasising precise theorem statements, residues, the argument principle, Rouché’s theorem, and introductory asymptotics. [PDF notes](https://www.math.ucdavis.edu/~romik/data/uploads/notes/complex-analysis.pdf).
 - **Open textbook — Beck, Marchesi, Pixton, and Sabalka, *A First Course in Complex Analysis*.** A freely available, traditional undergraduate text for readers who want a complete course sequence with exercises. The Open Textbook Initiative lists it as an approved text; its first half covers analytic and harmonic functions and contour integration. [Book site](https://complexanalysis.org/) · [Open Textbook Initiative listing](https://textbooks.aimath.org/textbooks/approved-textbooks/beck-marchesi-pixton-sabalka/).
 - **Advanced classical text — J. B. Conway, *Functions of One Complex Variable I*, 2nd ed.** A systematic and proof-intensive treatment, including conformal mapping and the Riemann mapping theorem. [Springer record](https://link.springer.com/book/10.1007/978-1-4612-6313-5).
 
@@ -1679,13 +1679,13 @@ The proof sequence, examples, and theorem formulations were checked against [MIT
 
 #### History and Context
 
-- **History of analysis — Jeremy Gray, *The Real and the Complex: A History of Analysis in the 19th Century*.** Places complex function theory in the development of nineteenth-century analysis and its changing standards of rigor. [Springer record](https://link.springer.com/book/10.1007/978-3-319-23715-2).
+- **History of analysis — Jeremy Gray, *The Real and the Complex: A History of Analysis in the 19th Century*.** Places complex function theory in the development of nineteenth-century analysis and its changing standards of rigour. [Springer record](https://link.springer.com/book/10.1007/978-3-319-23715-2).
 - **Geometric context — Needham, *Visual Complex Analysis* (above).** Particularly effective for seeing how geometric interpretations illuminate the subject, though it is a mathematical exposition rather than a documentary history.
 
 #### Software Documentation
 
 - **Arrays and branch conventions — NumPy, logarithms and complex routines.** Documents principal-value behaviour and vectorized complex arithmetic; check results near branch cuts and signed zeros. [numpy.log](https://numpy.org/doc/stable/reference/generated/numpy.log.html) · [Mathematical functions](https://numpy.org/doc/stable/reference/routines.math.html).
-- **Plotting — Matplotlib contour and colormap normalisation.** Useful for magnitude/phase plots and domain coloring. Use cyclic colors for phase and explicitly mask singularities and cuts. [contour](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.contour.html) · [Colour normalisation](https://matplotlib.org/stable/users/explain/colors/colormapnorms.html).
+- **Plotting — Matplotlib contour and colormap normalisation.** Useful for magnitude/phase plots and domain colouring. Use cyclic colours for phase and explicitly mask singularities and cuts. [contour](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.contour.html) · [Colour normalisation](https://matplotlib.org/stable/users/explain/colors/colormapnorms.html).
 - **Symbolic expansions — SymPy series and residue functions.** Computes local series and Laurent coefficients; inspect variable, centre, assumptions, and branch choices. [Series documentation](https://docs.sympy.org/latest/modules/series/series.html).
 - **Arbitrary precision — mpmath integration.** Offers tanh-sinh and Gauss–Legendre quadrature. Extra precision cannot fix a contour crossing a singularity or a missed contribution. [Integration documentation](https://mpmath.org/doc/current/calculus/integration.html).
 - **Adaptive quadrature — SciPy integrate.quad.** Integrates real-interval functions; for complex integrands, integrate real and imaginary parts separately and account for singularities and oscillation. [API reference](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html).
@@ -1693,7 +1693,7 @@ The proof sequence, examples, and theorem formulations were checked against [MIT
 
 #### Choosing a Next Step
 
-For a first pass through the subject, pair the primer with MIT 18.04 or Saff and Snider: both keep applications visible while supplying additional worked examples. If a proof feels compressed, Romik’s notes give a more theorem-centered presentation; Ahlfors or Conway then provide a sustained rigorous development. Needham is the best fit when the algebra is familiar but the geometry of conformality, phase, or harmonic conjugates remains opaque.
+For a first pass through the subject, pair the primer with MIT 18.04 or Saff and Snider: both keep applications visible while supplying additional worked examples. If a proof feels compressed, Romik’s notes give a more theorem-centred presentation; Ahlfors or Conway then provide a sustained rigorous development. Needham is the best fit when the algebra is familiar but the geometry of conformality, phase, or harmonic conjugates remains opaque.
 
 The exercise set is intentionally mixed in difficulty and appears beside the ideas it tests. Problems 1–5 test convergence, definitions, and harmonic conjugates; 6–13 develop contour integrals, local expansions, residues, and global counting; 14–20 focus on maps, harmonic structure, and applications; and 21–23 treat computation as a controlled experiment. For a self-study pass, write a complete argument before consulting a solution sketch, then identify the exact theorem hypothesis that licenses each step. Where a sketch gives a result without a derivation, use the listed course notes or text to fill in the proof at the depth you need.
 
