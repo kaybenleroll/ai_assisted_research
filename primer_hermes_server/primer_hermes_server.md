@@ -1,6 +1,6 @@
 # Hermes Agent Server: An Operations-First Primer
 
-## What you are operating
+## What You Are Operating
 
 Hermes Agent is easy to misclassify. It is described as a personal AI assistant, a coding agent, a messaging bot, a desktop application, an OpenAI-compatible server, and a self-improving agent runtime. Those descriptions point at real parts of the project, but they do not describe the same process. The most expensive operational mistakes come from treating the commands as interchangeable.
 
@@ -18,19 +18,19 @@ The emphasis is on the operational boundary: what receives input, what chooses a
 
 This is not a model benchmark, a complete catalogue of every messaging adapter, or a replacement for provider documentation. Hermes Agent is not the same thing as the [Nous Hermes model family](https://huggingface.co/NousResearch); here, “Hermes” means the agent runtime and its server surfaces. The examples assume a technically literate operator who can read shell commands, YAML, and HTTP requests. They do not assume that a model can safely execute any action it proposes: tool policy, filesystem permissions, network exposure, and human approval remain your responsibility.
 
-### What Hermes Agent is used for
+### What Hermes Agent Is Used for
 
 Hermes Agent is an open-source, tool-using agent runtime from Nous Research. It puts a model in a loop with tools, persistent instructions, session history, skills, and optional memory providers. You can use it interactively in a terminal, expose it through a desktop application, connect it to messaging platforms, or embed it behind an OpenAI-shaped HTTP client.
 
 The important mental model is not “a chatbot with many frontends.” It is “one agent runtime with several ingress and control surfaces.” A Telegram message, a CLI prompt, an OpenAI-compatible request, and a Desktop chat can all reach an agent configured with the same profile, but each surface has a different protocol, lifecycle, authentication story, and set of assumptions about the caller.
 
-### Common tasks
+### Common Tasks
 
 Hermes can draft and revise documents, inspect repositories, run development commands, search the web, use browser or computer-use tools, remember compact user preferences, follow procedural skills, and send results back through a messaging channel. A profile can be shaped into a coding assistant, research assistant, homelab operator, customer-support bot, or narrowly scoped internal worker.
 
 The value increases when the task has continuity. A one-shot completion does not need session storage, a profile, or a gateway. A coding assistant that should remember repository conventions, use the same terminal workspace, and answer from Telegram does.
 
-### The boundaries that matter
+### The Boundaries That Matter
 
 Hermes is not a model server in the sense of Ollama, vLLM, or llama.cpp. It consumes providers and model endpoints; it does not replace the inference engine behind them. It can expose an OpenAI-compatible API, but that does not mean it serves model weights or becomes a general-purpose inference router.
 
@@ -40,7 +40,7 @@ Hermes is not the messaging gateway. The gateway is one long-running process wit
 
 Hermes is not a security boundary by itself. Model output is untrusted input. The terminal backend, OS account, container permissions, API bind address, messaging allowlists, and review gates determine the blast radius.
 
-### Choose a surface and starting setup
+### Choose a Surface and Starting Setup
 
 Use this table when someone says “the Hermes server” to distinguish which process and protocol a client needs. Each surface exposes a different part of the runtime.
 
@@ -52,27 +52,27 @@ Use this table when someone says “the Hermes server” to distinguish which pr
 
 The [official API Server guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/) documents the HTTP surface. The [Desktop guide](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md) describes the headless `hermes serve` process and its `tui_gateway` JSON-RPC/WebSocket API. The [gateway internals guide](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md) describes the messaging process.
 
-#### A common failure sequence
+#### A Common Failure Sequence
 
 Suppose Desktop says it cannot connect, but Telegram works. Do not restart the Telegram gateway repeatedly: inspect the `hermes serve` process, its port, its authentication, and the Desktop connection target. Conversely, if Desktop works but Telegram is silent, inspect `hermes gateway status`, platform credentials, pairing, and adapter logs. If Open WebUI reports connection refused on `8642`, check that the API server is enabled and that you did not start only `hermes serve`.
 
 The port numbers are defaults and conventions, not a substitute for observing the process startup line. Profiles and container deployments can require distinct API ports. A Desktop backend may choose an available port when launched by the app. Always use the printed readiness line or the configured bind address as the final answer.
 
-### Choose a starting setup
+### Choose a Starting Setup
 
-#### Start small
+#### Start Small
 
 Start with the CLI or terminal UI on one machine, one profile, one provider, and the local terminal backend. This gives you a small failure surface while you learn how the agent uses tools, writes memory, and edits skills. It is the right place to establish a safe working directory and decide whether local execution is acceptable.
 
-#### Add a client or channel deliberately
+#### Add a Client or Channel Deliberately
 
 Hermes Desktop provides a richer chat surface while `hermes serve` owns the agent runtime. The backend can be local or remote. A remote setup commonly runs `hermes serve` on a server reachable over a private network or VPN, while the desktop client connects to its JSON-RPC/WebSocket endpoint. Messaging remains separate: start a gateway independently if you also want Telegram or Discord.
 
-#### Select the right expansion
+#### Select the Right Expansion
 
 The API server lets an existing OpenAI-shaped client use Hermes as an agent backend. The gateway connects messaging adapters and scheduled jobs. A profile separates credentials, identity, skills, memory, sessions, cron jobs, and gateway state. Add each deliberately: a bot that can run shell commands is not safe merely because its chat channel is private.
 
-### Hermes architecture in one mental model
+### Hermes Architecture in One Mental Model
 
 Think in layers: client surface, transport, agent loop, provider, tools, and state.
 
@@ -82,7 +82,7 @@ This model prevents category errors. A malformed tool call is usually a provider
 
 \newpage
 
-#### The process relationships
+#### The Process Relationships
 
 The normal relationships between clients, Hermes surfaces, and the agent runtime are:
 
@@ -102,7 +102,7 @@ flowchart LR
 
 The gateway and `serve` share runtime concepts and state conventions, but they are separate long-running surfaces. A server may run both, but do not infer that one command supervises the other unless your service manager or container definition explicitly does so.
 
-## Install and prove one local run
+## Install and Prove One Local Run
 
 The supported installation path is documented in [Installation](https://hermes-agent.nousresearch.com/docs/getting-started/installation). On non-Windows systems the installer expects Git; Linux installs may also need `curl` and `xz-utils`. The installer provisions its managed Python and Node-related dependencies rather than asking you to build a hand-maintained system environment.
 
@@ -157,11 +157,11 @@ hermes sessions list
 
 If this acceptance test fails, fix the provider, profile, or session configuration before adding messaging, API, Desktop, or automation surfaces.
 
-### Source checkout for development
+### Source Checkout for Development
 
 If you are modifying Hermes itself, use the [repository's development instructions](https://github.com/NousResearch/hermes-agent) and its managed environment. A source checkout is not the same as a production installation: the installed launcher must use the project virtual environment, and updates may alter both Python and Node dependencies. Run `hermes doctor` after changes and pin the commit or image tag for reproducible deployments.
 
-## Configure providers and durable state
+## Configure Providers and Durable State
 
 The default Hermes home is `~/.hermes`. A profile changes the effective home through `HERMES_HOME`; the same layout then appears under `~/.hermes/profiles/<name>/`. The [Configuration guide](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) gives the current directory map.
 
@@ -192,7 +192,7 @@ chmod 600 ~/.hermes/.env ~/.hermes/auth.json 2>/dev/null || true
 
 Do not confuse `HERMES_HOME` with the operating-system `HOME`. `HERMES_HOME` selects the Hermes profile and therefore its config, memory, sessions, skills, logs, and gateway state. Host terminal subprocesses normally retain the real OS user's `HOME` so `git`, `ssh`, `gh`, npm, cloud CLIs, Claude Code, and Codex can find existing credentials. Set `terminal.home_mode: profile` only when you intentionally want a separate subprocess home, and then initialize those credentials inside the profile home.
 
-### Providers and models
+### Providers and Models
 
 Hermes separates the agent runtime from the provider that supplies model inference. Providers can be hosted APIs, Nous Portal, OpenAI-compatible endpoints, local model servers, or provider-specific integrations. The exact provider list changes; use the [current model configuration guide](https://hermes-agent.nousresearch.com/docs/user-guide/configuring-models/) and `hermes model` for the live inventory.
 
@@ -215,7 +215,7 @@ For local OpenAI-compatible servers, keep the endpoint on loopback until you hav
 
 Model selection affects more than prose quality. Tool-call formatting, context length, reasoning behaviour, latency, cost, vision support, and provider rate limits all affect the agent loop. A model that looks good on a chat benchmark can still fail because it emits invalid tool arguments or loses the current working directory after a long tool trace.
 
-### Provider fallback and model overrides
+### Provider Fallback and Model Overrides
 
 Configure a default model for normal work, then add a deliberate fallback policy if unattended operation matters. Test fallbacks by disabling the primary provider; do not assume a configured fallback is healthy just because its name parses.
 
@@ -223,11 +223,11 @@ OpenAI-compatible clients often send a hard-coded model such as `gpt-4o`. Hermes
 
 The API server's `GET /v1/models` is intentionally minimal. It advertises the Hermes-facing model name that a frontend needs; it is not the complete provider/model picker. Hermes-aware clients can use `/api/model/options` for richer provider-aware metadata.
 
-### Memory, skills, and durable state
+### Memory, Skills, and Durable State
 
 Configuration, sessions, credentials, memory, skills, and logs all live under the active Hermes home. Treat that home as application state: back it up, restrict its permissions, and do not let independent writers share it casually.
 
-#### Memory: curated continuity, not an infinite transcript
+#### Memory: Curated Continuity, Not an Infinite Transcript
 
 Hermes has bounded built-in memory. The default memory files are `~/.hermes/memories/MEMORY.md` for durable agent notes and `USER.md` for user preferences. They are compact and injected as a snapshot at session start, not treated as an unlimited conversation transcript. The [Persistent Memory guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/) documents the current limits and controls.
 
@@ -246,7 +246,7 @@ Hermes also supports external memory provider plugins. The [Memory Providers gui
 
 Do not run two agent processes against one Hermes home. Both can write memory, and each can load the other's writes into its next system prompt. Use profiles for independent agents and an external memory provider when deliberate sharing is required.
 
-#### Skills: procedural knowledge with a write boundary
+#### Skills: Procedural Knowledge with a Write Boundary
 
 Skills are on-demand knowledge documents, normally `SKILL.md` files under `~/.hermes/skills/`. Hermes reads short descriptions cheaply and loads a skill's full procedure when the task needs it. This progressive disclosure pattern lets you add detailed workflows without injecting every instruction into every request.
 
@@ -268,7 +268,7 @@ skills:
 
 Then review pending changes with the documented `/skills pending`, `/skills diff`, `/skills approve`, and `/skills reject` commands. Treat skill content as executable policy: a malicious or careless skill can tell the model to exfiltrate secrets, weaken a terminal boundary, or approve a dangerous workflow.
 
-## Set the execution boundary
+## Set the Execution Boundary
 
 The terminal backend determines where commands execute. Hermes currently supports local, Docker, SSH, Modal, Daytona, Vercel Sandbox, and Singularity/Apptainer backends. The [Terminal Backend section of Configuration](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) is the reference for options and optional dependencies.
 
@@ -318,7 +318,7 @@ TERMINAL_SSH_KEY=~/.ssh/hermes_agent_key
 
 The gateway host then holds messaging and provider credentials while the worker host holds the project files. This does not make the model trusted; it limits where a bad command can run.
 
-### Security baseline
+### Security Baseline
 
 Use platform allowlists and pairing rather than `GATEWAY_ALLOW_ALL_USERS=true`. Keep API and dashboard listeners on loopback unless you have an authenticated reverse proxy or private network. Give every externally reachable API server a strong bearer key. Use dashboard authentication for a non-loopback bind; the current Docker documentation explicitly fails closed for an unauthenticated public dashboard, and the old insecure bypass is not a safe deployment mechanism.
 
@@ -334,7 +334,7 @@ tool_loop_guardrails:
 
 The model should never be the only approval layer for sending messages, deleting files, changing credentials, or modifying a deployment.
 
-### Profiles: separate agents without separate installs
+### Profiles: Separate Agents Without Separate Installs
 
 A profile is an independent Hermes home. It gives a coding agent and a research agent different configuration, credentials, personality, skills, memory, sessions, cron jobs, and gateway state while sharing the installed runtime.
 
@@ -354,9 +354,9 @@ The profile guide explains that profile commands use `HERMES_HOME` internally. T
 
 Profile gateways need deliberate lifecycle and port planning. A deployment may run separate gateway processes, each with its own port, or use the multiplexed multi-profile gateway and route named profiles through `/p/<profile>/` on one listener. In multiplexed mode, each named profile needs its own `API_SERVER_KEY`; the default profile's key is not accepted on a named-profile route. Do not assign one port per profile unless you are actually running separate listeners. The headless `serve` backend can also serve several profiles; do not assume that it gives every client a separate `8642` listener.
 
-## Add one ingress surface
+## Add One Ingress Surface
 
-### Messaging gateway: `hermes gateway`
+### Messaging Gateway: `hermes gateway`
 
 The [Messaging Gateway guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging) describes a single background gateway that can connect configured adapters such as Telegram, Discord, Slack, WhatsApp, Signal, Matrix, email, Home Assistant, Microsoft Teams, and many others. The gateway owns platform connections, per-chat sessions, typing/streaming behaviour where supported, scheduled jobs, and outbound delivery.
 
@@ -386,7 +386,7 @@ The exact environment variable depends on the platform. Keep tokens in `${HERMES
 
 Do not expose the gateway's platform credentials to a second container that shares the same home. Do not run two gateways against one profile. Session files, memory, and gateway state are designed for one active writer.
 
-### OpenAI-compatible API
+### OpenAI-Compatible API
 
 The API server is an HTTP adapter for applications that already speak the OpenAI format. It is not `hermes serve`, and it is not a replacement for `hermes gateway`. The current [API Server documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/) describes Chat Completions, Responses, run lifecycle endpoints, health checks, approvals, steering, and model discovery.
 
@@ -451,7 +451,7 @@ The web dashboard is a related but different client surface. `hermes dashboard` 
 
 Treat a remote `serve` endpoint as an administrative agent backend. The safest remote pattern keeps it on loopback and uses an SSH tunnel or private VPN path. If you bind it to a private interface, configure the supported dashboard authentication provider and signing secret before starting it; a non-loopback bind without an authentication gate should fail closed. Do not publish `9119` directly to the public internet. If a reverse proxy terminates TLS, preserve WebSocket upgrades and forward the authentication mechanism expected by the installed Hermes version. Verify the exact readiness line and complete one authenticated Desktop connection before adding a gateway or API client.
 
-## Deploy and supervise
+## Deploy and Supervise
 
 There are two different container questions:
 
@@ -509,7 +509,7 @@ Rootless UID mapping can make a mounted directory appear owned by an unexpected 
 
 Do not assume a rootless container has access to the host Docker socket, GPU, audio devices, or browser sandbox. Grant those resources explicitly, and document the resulting security tradeoff. For a remote Desktop backend, publish or proxy the `serve` port separately from the API port; publishing `8642` does not make the JSON-RPC/WebSocket backend available.
 
-#### Compose shape
+#### Compose Shape
 
 The minimal Compose shape below exposes only the authenticated API. Add the dashboard only after configuring its authentication gate from the official guide.
 
@@ -532,7 +532,7 @@ services:
 
 Do not copy `API_SERVER_KEY` into a committed Compose file; provide it from an untracked environment file or secret manager. Test the exact image tag before rollout, and never run two containers against the same Hermes home concurrently.
 
-## Operate and diagnose
+## Operate and Diagnose
 
 Use the smallest diagnostic surface that answers the question:
 
@@ -561,11 +561,11 @@ Keep logs on persistent storage but treat them as sensitive. They can contain pr
 
 Updates change both the runtime and bundled skills. Review the [CLI reference](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md), take a backup before a major update, then run `hermes doctor` and a small tool-free prompt before re-enabling unattended gateways.
 
-## Backup, restore, and recover
+## Backup, Restore, and Recover
 
 Hermes has two useful backup scopes. `hermes backup` captures the whole Hermes home, including profiles and credentials, while `hermes profile export` creates a portable single-profile archive with `.env` and `auth.json` excluded. The official [profile command reference](https://hermes-agent.nousresearch.com/docs/reference/profile-commands/) and [CLI reference](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md) describe the current behaviour.
 
-### Full machine backup
+### Full Machine Backup
 
 The full backup is appropriate for disaster recovery or moving the installation. It contains secrets, so protect the archive like a password vault:
 
@@ -597,7 +597,7 @@ hermes profile list
 
 The exact import confirmation and path behaviour can change; read `hermes import --help` before an overwrite. Re-authenticate providers or messaging platforms if tokens were intentionally excluded or invalidated. Start one profile at a time and verify that the restored API bind and gateway adapters are not colliding with an old process. Run `hermes doctor`, a tool-free prompt, an authenticated API health check, and a controlled channel smoke test before reconnecting unattended traffic. Keep `~/.hermes.before-restore` until those checks pass.
 
-#### Profile handoff
+#### Profile Handoff
 
 For sharing a profile with another machine or person, prefer the credential-stripping export:
 
@@ -611,11 +611,11 @@ hermes profile import ./researcher-2026-08-22.tar.gz \
 
 Inspect archives before sharing them. Memory, sessions, user preferences, skills, and `SOUL.md` can contain private material even when API keys are removed. A profile distribution in a Git repository is a different mechanism: it versions a reviewed agent bundle while keeping each install's credentials and user data local.
 
-#### Recovery checklist
+#### Recovery Checklist
 
 When Hermes fails after an update, preserve logs and the backup before deleting state. Check the installed version, run `hermes doctor`, validate YAML, confirm that the launcher points at the managed virtual environment, and test the provider with a minimal prompt. If the problem is profile-specific, create a temporary profile to separate runtime failure from corrupted state. Restore the original profile only after confirming which artifact is damaged.
 
-## Reference and alternatives
+## Reference and Alternatives
 
 OpenClaw and Hermes appear in the same local-first assistant discussions because they can both sit between people, models, tools, and messaging channels. They are not identical products, and “Hermes” in this document is not a model family.
 
@@ -632,21 +632,21 @@ At a high level, [OpenClaw](https://github.com/openclaw/openclaw) is an assistan
 | Model role | Hermes routes to configured providers; it is not the Nous Hermes model | OpenClaw also routes to configured providers; it is not a model server |
 | Main operational question | Which Hermes surface and profile is running, and where do tools execute? | Which gateway, channel, provider, session, and sandbox policy is active? |
 
-### When Hermes is the better fit
+### When Hermes Is the Better Fit
 
 Choose Hermes when you want the Nous Research agent runtime, its skill and memory model, profile isolation, terminal-backend choices, a native Desktop client, or a direct OpenAI-compatible agent endpoint. It is particularly attractive when the distinction between a model response and a tool-using, stateful agent is central to your application.
 
-### When OpenClaw is the better fit
+### When OpenClaw Is the Better Fit
 
 Choose OpenClaw when its gateway/channel orchestration, ecosystem integrations, routing model, sandbox controls, or existing deployment conventions match your needs. If your team already operates OpenClaw, replacing it with Hermes solely because both can receive chat messages is not a technical comparison; compare the control-plane features and recovery model you actually use.
 
-### When they can be combined
+### When They Can Be Combined
 
 They can occupy different layers: OpenClaw can be the outward channel/control plane while Hermes or another backend supplies agent behaviour, or Hermes can expose an API that a separate application consumes. A combined deployment adds network, authentication, session, and duplicate-tool risks. Define which system owns identity, model selection, memory, terminal execution, and outbound messaging before connecting them. Do not let both systems independently answer the same channel or write the same state directory.
 
-### Operational reference
+### Operational Reference
 
-#### Surface-selection checklist
+#### Surface-Selection Checklist
 
 ```text
 Need Telegram/Discord/Slack inbound messages?  Start and configure hermes gateway.
@@ -657,7 +657,7 @@ Need command isolation?                         Configure terminal.backend, sepa
 Need independent identity and memory?          Create a profile, not another process on one home.
 ```
 
-#### Hardening checklist
+#### Hardening Checklist
 
 1. Keep `8642` and `9119` on loopback or a private network by default.
 2. Require a strong API bearer key and use a narrow CORS allowlist for browser clients.
@@ -670,7 +670,7 @@ Need independent identity and memory?          Create a profile, not another pro
 9. Review agent-written skills and memory, enabling write approval when needed.
 10. Back up before updates and verify restored profiles on a test path.
 
-#### Troubleshooting map
+#### Troubleshooting Map
 
 Use this symptom map to choose the first diagnostic area.
 
@@ -686,7 +686,7 @@ Use this symptom map to choose the first diagnostic area.
 | Two profiles collide | duplicate API port, shared home, duplicate gateway process |
 | Container loses everything after restart | missing `/opt/data` mount or wrong host path/permissions |
 
-### Reference links
+### Reference Links
 
 - [Hermes Agent documentation](https://hermes-agent.nousresearch.com/docs/)
 - [NousResearch/hermes-agent repository](https://github.com/NousResearch/hermes-agent)
@@ -708,7 +708,7 @@ Use this symptom map to choose the first diagnostic area.
 - [Gateway internals](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md)
 - [OpenClaw repository](https://github.com/openclaw/openclaw)
 
-### Closing perspective
+### Closing Perspective
 
 Hermes becomes easier to operate once you stop treating “the server” as one thing. The messaging gateway is for platform connections. The API server on `8642` is for OpenAI-shaped HTTP clients. `hermes serve`, commonly on `9119`, is for Desktop and headless JSON-RPC/WebSocket clients. Profiles and `~/.hermes` provide continuity, while terminal backends define where the agent's actions land.
 
