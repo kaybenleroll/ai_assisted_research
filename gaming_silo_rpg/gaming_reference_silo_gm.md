@@ -2,7 +2,9 @@
 
 Compact table-use sheet for adjudication, pressure, factions, and daily-life complications.
 
-## Travel Time by Stair
+## Chapter 30: GM's Quick-Reference Sheets
+
+### 30.1 Travel Time by Stair
 
 | Distance | Fit Citizen | Porter | Citizen with Load / Injured Escort |
 | :--- | :--- | :--- | :--- |
@@ -14,7 +16,9 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 
 **Fast rule:** Any non-Porter crossing more than 20 levels arrives tired, thirsty, and out of place.
 
-## Security and Response
+**Faster rule:** When exact timing does not matter, treat a journey as local, serious, or an expedition.
+
+### 30.2 Security and Response
 
 | Zone | Typical SR | First Response | Common Complication |
 | :--- | :--- | :--- | :--- |
@@ -25,9 +29,7 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 | **Down Deep slums / maintenance crawls** | 45-75 | Local toughs, Mechanics, or nobody | Environmental danger |
 | **Ghost levels / vents / dead spaces** | 70-100 | No official response until later | The location itself is lethal |
 
-## Costs, Bribes, and Punishments
-
-### Typical Prices
+### 30.3 Everyday Costs, Bribes, and Favours
 
 | Need | Typical Price |
 | :--- | :--- |
@@ -39,7 +41,7 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 | **Unofficial Mechanical part** | Barter plus leverage |
 | **Real medicine** | Usually unaffordable; always comes with strings |
 
-### Punishments
+### 30.4 Punishments at a Glance
 
 | Offense | Likely Outcome |
 | :--- | :--- |
@@ -49,7 +51,13 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 | **Relic possession** | Interrogation, disappearance, or coerced informing |
 | **Sedition / "I want to go outside"** | Cleaning |
 
-## Pressure Tracks
+## Chapter 31: Core Play Procedure
+
+### 31.1 When to Call for Uncertainty
+
+Call for a roll when an action risks official notice, harm or exhaustion, scarce time or resources, or social trust; or when failure would make the next scene more dangerous. Otherwise, let the PCs do it.
+
+### 31.2 Pressure Tracks
 
 | Track | It Measures | Typical Triggers | At 4 |
 | :--- | :--- | :--- | :--- |
@@ -57,9 +65,9 @@ Compact table-use sheet for adjudication, pressure, factions, and daily-life com
 | **Heat** | Official attention | Forgery, cameras, bribery, repeated questions | Raids, tails, arrests, interviews |
 | **Fatigue** | Physical depletion | Long climbs, hunger, poor sleep, labor, carrying loads | Collapse, tremor, dropped gear, slowed movement |
 
-Reset a track to 2 after the consequence fully lands and the fiction changes.
+Stress resets to 2 after the crisis; Heat resets to 2 once the official response lands; Fatigue resets to 2 after rest or medical care.
 
-## Consequence Menu
+### 31.3 Consequence Menu
 
 On a mixed success or failure, use one:
 
@@ -70,7 +78,7 @@ On a mixed success or failure, use one:
 * **Debt:** Someone helps and now expects repayment.
 * **Damage:** Leak, blackout, panic, lockdown, or similar escalation.
 
-## Fail-Forward Reminders
+### 31.4 Fail-Forward Reminders
 
 * **Bureaucracy:** They get the paper, but their name is now on it.
 * **Stealth:** They avoid capture, but leave a trace or witness.
@@ -78,7 +86,15 @@ On a mixed success or failure, use one:
 * **Social Pressure:** They win the scene, but create resentment or rumor.
 * **Repair Work:** The fix holds for now, but needs more parts, labor, or risk.
 
-## Downtime Options
+### 31.5 Escalation Clocks
+
+For a problem larger than one room, use a four-segment clock. Fill it when the PCs' actions or the situation advance it; when it fills, change the fiction.
+
+* **Authority:** Evidence, angered officials, or a pattern brings an official response.
+* **Neighbourhood:** Rumours, shortages, or panic affect the surrounding level.
+* **Infrastructure:** A leak, contamination, or power fault worsens.
+
+### 31.6 Downtime Between Crises
 
 Between crises, each PC can usually do one:
 
@@ -88,7 +104,7 @@ Between crises, each PC can usually do one:
 * **Care for Someone**
 * **Ask the Stairs**
 
-## Faction Cheat Sheet
+## Chapter 32: Faction Sheets
 
 | Faction | Public Face | Real Objective | Main Leverage | Typical Ask |
 | :--- | :--- | :--- | :--- | :--- |
@@ -102,9 +118,13 @@ Between crises, each PC can usually do one:
 | **Scrap Syndicates** | Hidden operators | Profit from scarcity | Contraband, debt, intimidation | Favors, silence, risky jobs |
 | **Flame Watchers** | Strange believers | Keep dangerous hope alive | Secret rooms, coded talk, believers | Cover, recruits, proof |
 
-## Slice-of-Life Generators
+### 32.1 Reading a Faction Fast
 
-### Block Problems (d12)
+To improvise a faction, ask what it fears, what it lacks, who could embarrass it, and what small favour from the PCs would make it useful.
+
+## Chapter 33: The Slice-of-Life Engine
+
+### 33.1 Block Problems (d12)
 
 | d12 | Problem |
 | :--- | :--- |
@@ -121,7 +141,7 @@ Between crises, each PC can usually do one:
 | **11** | A marriage permit is denied |
 | **12** | A known informant suddenly seems scared |
 
-### Inspections and Sweeps (d10)
+### 33.2 Inspections and Sweeps (d10)
 
 | d10 | Trigger |
 | :--- | :--- |
@@ -136,7 +156,7 @@ Between crises, each PC can usually do one:
 | **9** | An air-scrubber fault gives cover for a sweep |
 | **10** | The inspection is fake; the real target is elsewhere |
 
-### Favors Asked of the PCs (d12)
+### 33.3 Favours Asked of the PCs (d12)
 
 | d12 | Favor |
 | :--- | :--- |
@@ -153,7 +173,7 @@ Between crises, each PC can usually do one:
 | **11** | Deliver a forged form before dawn |
 | **12** | Find out what really happened to a missing worker |
 
-### Sudden Shortages (d10)
+### 33.4 Sudden Shortages (d10)
 
 | d10 | Shortage |
 | :--- | :--- |

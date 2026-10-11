@@ -1,27 +1,13 @@
 # SILO RPG REFERENCE INDEX
 
-These are copy-based quick-reference sheets extracted from the larger Silo documents. They are meant for fast table use and do **not** replace the full guides.
+These condensed quick-reference sheets support fast table use; consult the full documents for context. The [Silo document-class README](https://github.com/kaybenleroll/ai_assisted_research/blob/main/gaming_silo_rpg/README.md) explains which sheets are safe to share with players.
 
 ## Reference Sheets
 
-1. `gaming_reference_silo_player.md`
-   * Player-safe setting primer
-   * Sector summary
-   * Core roles
-   * Citizen knowledge
-   * Slang and Session Zero prompts
-
-2. `gaming_reference_silo_gm.md`
-   * Travel, security, costs, punishments
-   * Pressure tracks and consequences
-   * Downtime and escalation
-   * Faction cheat sheet
-   * Slice-of-life generators
-
-3. `gaming_reference_silo_campaign.md`
-   * Party bonds
-   * All eight starter campaigns at a glance
-   * Quick kits with NPCs, clue chains, escalation, and fail-forward notes
+* `gaming_reference_silo_index.md` (GM-only) — routes readers to the sheets and full documents.
+* `gaming_reference_silo_player.md` (player-safe) — sectors, roles, citizen knowledge, slang, and Session Zero prompts.
+* `gaming_reference_silo_gm.md` (GM-only) — travel, security, costs, pressure tracks, factions, and daily-life generators.
+* `gaming_reference_silo_campaign.md` (GM-only) — party bonds, all ten campaigns, and quick kits with clues and escalation.
 
 ## Full Documents
 

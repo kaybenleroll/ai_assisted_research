@@ -1,6 +1,6 @@
 # SILO RPG CAMPAIGN REFERENCE
 
-Fast-launch reference for party setup and the eight starter campaigns.
+Fast-launch reference for party setup and the ten starter campaigns.
 
 ## Party Bonds
 
@@ -22,9 +22,11 @@ Fast-launch reference for party setup and the eight starter campaigns.
 | **3. The Flickering Dark** | Infrastructure decay, solidarity, resentment | Level 105 | Load shedding turns a hallway into a dark pressure cooker, and Nel buys the block a little time. |
 | **4. The Down-Shift Transfer** | Bureaucracy, heartbreak, class divide | Levels 45-50 and below | The party's friend Nel Ardin is forced to leave for the Down Deep after marriage. |
 | **5. The Rust in the Reclamation** | Bureaucracy, contamination, moral ambiguity | Mids, 80-85 | A toxic rust-bloom is poisoning families through the water supply. |
-| **6. The Missing Porter** | Cults, hidden geography, forbidden belief | Levels 79-81 | A beloved Porter vanished with a critical Judicial message. |
-| **7. The Lottery Swap** | IT espionage, paranoia, family desperation | Up Top / Upper Mids, 20-34 | A legitimate Lottery winner is erased from the official records. |
-| **8. The Generator Hammer** | Industrial terror, class warfare | Down Deep, 130-144 | A coded SOS seems to come from beneath the Generator. |
+| **6. The Ghost in the Ledger** | Bureaucratic erasure, identity, survival | Administrative tiers, 40-50 | A clerical error removes a neighbour from the population registry before a compliance sweep. |
+| **7. The Tier Inheritance** | Property, grief, housing | Lower Mids, 60-70 | A resident has 48 hours to contest Supply's claim on their late parent's apartment. |
+| **8. The Missing Porter** | Cults, hidden geography, forbidden belief | Levels 79-81 | A beloved Porter vanished with a critical Judicial message. |
+| **9. The Lottery Swap** | IT espionage, paranoia, family desperation | Up Top / Upper Mids, 20-34 | A legitimate Lottery winner is erased from the official records. |
+| **10. The Generator Hammer** | Industrial terror, class warfare | Down Deep, 130-144 | A coded SOS seems to come from beneath the Generator. |
 
 ## Quick Kits
 
@@ -63,21 +65,35 @@ Fast-launch reference for party setup and the eight starter campaigns.
 * **Escalation:** More sickness -> Hydroponics scare -> quarantine panic -> Judicial sanitation team
 * **Fail Forward:** A dying victim or observant Porter supplies the missed clue
 
-### 6. The Missing Porter
+### 6. The Ghost in the Ledger
+
+* **Key Faces:** Ossa Remm, Archivist Tay, Supply Clerk Phen, Retired Administrator Voss, Compliance Officer Brenn
+* **Clue Chain:** Ration denial -> missing registry entry -> archived IT record -> three-desk confirmation -> Supply obstruction -> provisional certificate
+* **Escalation:** Rations cut -> work voided -> apartment flagged -> early compliance sweep -> arrest warrant
+* **Fail Forward:** If the forms are late, Ossa is held for 48 hours, leaving one last chance to complete the restoration.
+
+### 7. The Tier Inheritance
+
+* **Key Faces:** Dava Senne, Supply Manager Torr, Preferred Applicant Brem, Wren Cass, Panel Clerk Ilen Mosk
+* **Clue Chain:** Residency records -> ration logs -> neighbour witnesses -> co-signatory -> Wren's three favours -> tribunal
+* **Escalation:** 48-hour claim window -> unit catalogued -> preferred applicant moves in -> filing deadline
+* **Fail Forward:** New residency evidence allows a bereavement review within 24 hours of the missed deadline.
+
+### 8. The Missing Porter
 
 * **Key Faces:** Elias Dane, Sister Avrel, Deputy Colm Werr, Bessa Pike
 * **Clue Chain:** Blood and satchel -> porter schedule gap -> architectural mismatch -> vent grate -> Level 80.5
 * **Escalation:** Family asks publicly -> Judicial notices -> cult relocates Elias -> execution begins
 * **Fail Forward:** A runner reveals Elias used an impossible route
 
-### 7. The Lottery Swap
+### 9. The Lottery Swap
 
 * **Key Faces:** Lysa Trent, Inquisitor Sel Verin, Enid Marr, Doctor Hal Wen
 * **Clue Chain:** Blood-test hardcopy -> burn order -> terminal log -> forged credentials -> family tie
 * **Escalation:** Rumors spread -> records vanish -> Verin frames the PCs -> public hearing or silent arrest
 * **Fail Forward:** A morgue attendant remembers the key order for a price
 
-### 8. The Generator Hammer
+### 10. The Generator Hammer
 
 * **Key Faces:** Shift-Boss Rourke, Iri Vale, Joss Trent, Old Merek
 * **Clue Chain:** Flicker code -> miner's crew -> blocked route -> false checkpoint ledger -> vault noise
