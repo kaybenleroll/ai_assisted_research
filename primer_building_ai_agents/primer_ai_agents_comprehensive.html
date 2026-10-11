@@ -1036,7 +1036,7 @@ System executes: Returns order details
 <p><strong>Iteration 2:</strong></p>
 <pre class="text"><code>Prompt sent to LLM:
 &quot;Previous context:
-- Retrieved order #12345: Widget A ($29.99) and Widget B ($19.99), delivered May 15
+- Retrieved order #12345: Widget A ($29.99) and Widget B ($19.99), delivered 15 May
 - Customer says: &#39;Widget A arrived broken.&#39;
 
 What should you do next?&quot;
@@ -1053,7 +1053,7 @@ System executes: Returns inventory status
 <p><strong>Iteration 3:</strong></p>
 <pre class="text"><code>Prompt sent to LLM:
 &quot;Previous context:
-- Order #12345: Widget A ($29.99, broken) and Widget B ($19.99), delivered May 15
+- Order #12345: Widget A ($29.99, broken) and Widget B ($19.99), delivered 15 May
 - Widget A in stock: 15 units available
 - Customer says: &#39;Widget A arrived broken.&#39;
 
@@ -1798,22 +1798,22 @@ one.</p>
 <h2 data-number="10.1" id="current-limitations-september-2026"><span class="header-section-number">10.1</span> Current Limitations (September
 2026)</h2>
 <ol type="1">
-<li><p><strong>LLMs aren’t perfect reasoners</strong> - They work
+<li><p><strong>LLMs aren’t perfect reasoners</strong> — They work
 through learned pattern matching, not logical deduction. Complex
 multi-step planning with many variables is still hard.</p></li>
-<li><p><strong>Tool use is brittle</strong> - If a tool returns
+<li><p><strong>Tool use is brittle</strong> — If a tool returns
 unexpected format, agents often fail. Schema validation helps but isn’t
 foolproof.</p></li>
-<li><p><strong>Cost and latency</strong> - Each LLM call takes time and
+<li><p><strong>Cost and latency</strong> — Each LLM call takes time and
 money. Real-time applications are challenging.</p></li>
-<li><p><strong>Knowledge cutoffs</strong> - Every model has a cutoff
+<li><p><strong>Knowledge cutoffs</strong> — Every model has a cutoff
 date, and those dates change as providers ship new model versions.
 Agents cannot reliably know post-cutoff events unless you provide fresh
 data through tools or retrieval. As a concrete example, Anthropic’s
 current model line spans multiple cutoff points (reliable knowledge
 dates vary by model family), so even within one provider you cannot
 assume a single “current knowledge” date.</p></li>
-<li><p><strong>Interpretability</strong> - Why did the agent choose
+<li><p><strong>Interpretability</strong> — Why did the agent choose
 action X instead of Y? Sometimes unclear.</p></li>
 </ol>
 <h2 data-number="10.2" id="reference-branch-emerging-patterns"><span class="header-section-number">10.2</span> Reference Branch: Emerging
@@ -1857,15 +1857,15 @@ boundary.</p>
 <p>Autonomous AI agents are not magical. They’re engineered systems
 combining:</p>
 <ol type="1">
-<li><strong>LLM as reasoning engine</strong> - Excellent
+<li><strong>LLM as reasoning engine</strong> — Excellent
 pattern-matching to understand context and plan</li>
-<li><strong>Tools as capabilities</strong> - Giving agents access to
+<li><strong>Tools as capabilities</strong> — Giving agents access to
 real systems</li>
-<li><strong>Memory and context</strong> - Maintaining state and
+<li><strong>Memory and context</strong> — Maintaining state and
 learning</li>
-<li><strong>Execution loops</strong> - Repeating the cycle of reason →
+<li><strong>Execution loops</strong> — Repeating the cycle of reason →
 act → learn</li>
-<li><strong>Error handling</strong> - Recovering gracefully from
+<li><strong>Error handling</strong> — Recovering gracefully from
 inevitable failures</li>
 </ol>
 <p>The key insight is that <strong>autonomy comes from putting the LLM

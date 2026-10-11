@@ -17,3 +17,5 @@ extend-ignore-re = [
 ]
 
 [default.extend-words]
+# "Behavior" is preserved in the exact title of the cited Generative Agents paper.
+Behavior = "Behavior"
