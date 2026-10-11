@@ -1,0 +1,13 @@
+SOURCE_MD   := "@@PROJECT_DIR@@.md"
+PROJECT_DIR := "@@PROJECT_DIR@@"
+TITLE       := "@@JUST_TITLE@@"
+AUTHOR      := "Your Name"
+DATE        := "@@DATE@@"
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
+
+# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
+# MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
+
+import '../_shared/common.just'
