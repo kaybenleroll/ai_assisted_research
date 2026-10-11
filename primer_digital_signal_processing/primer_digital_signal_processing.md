@@ -284,7 +284,7 @@ X(f)=\int_{-\infty}^{\infty}x(t)e^{-j2\pi ft}\,dt,
 x(t)=\int_{-\infty}^{\infty}X(f)e^{j2\pi ft}\,df.
 $$
 
-The four Fourier representations differ in what is discrete, periodic, finite, or continuous. Confusing them causes unit and scaling errors:
+The four Fourier representations differ in what is discrete, periodic, finite, or continuous. The table compares their domains and periodicity; confusing these distinctions causes unit and scaling errors:
 
 | Representation | Time/domain index | Frequency/domain index | Frequency periodic? |
 |---|---|---|---|
@@ -333,7 +333,7 @@ The magnitude has a main lobe and sidelobes. It attenuates high frequencies but 
 
 ## Sampling, Reconstruction, and Acquisition Limits
 
-Sampling is where the physical signal chain meets discrete-time mathematics. The following chapter treats aliasing, reconstruction, quantisation, and timing error as acquisition constraints, not as details to repair later.
+Sampling is where the physical signal chain meets discrete-time mathematics. This section treats aliasing, reconstruction, quantisation, and timing error as acquisition constraints, not as details to repair later.
 
 ### Sampling Is Multiplication by an Impulse Train
 
@@ -2329,6 +2329,8 @@ Before choosing an FFT, filter, or resampler, answer:
 If the answer is “I need to see what is there,” start with a calibrated, windowed exploratory spectrum and a time-domain plot, but label it exploratory. If the answer is “estimate power,” use a PSD method and integrate it. If the answer is “remove a known band,” design a filter against explicit edges and attenuation. If the answer is “detect a known waveform,” begin with correlation or matched filtering and model the noise.
 
 ### Method Selection Heuristics
+
+The table maps common engineering goals to methods worth evaluating first and the main risk to check during validation.
 
 | Need | First method to evaluate | Main risk |
 |---|---|---|
