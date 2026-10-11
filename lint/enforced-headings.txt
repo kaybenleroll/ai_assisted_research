@@ -11,3 +11,4 @@ gaming_silo_rpg/gaming_silo_gm_secrets.md
 gaming_silo_rpg/gaming_silo_index.md
 gaming_silo_rpg/gaming_silo_player_guide.md
 gaming_silo_rpg/gaming_silo_starter_campaign.md
+primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md
