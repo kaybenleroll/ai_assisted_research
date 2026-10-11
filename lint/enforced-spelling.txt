@@ -11,3 +11,4 @@ gaming_silo_rpg/gaming_reference_silo_gm.md
 gaming_silo_rpg/gaming_reference_silo_campaign.md
 primer_deep_learning/primer_deep_learning.md
 primer_pi_coding_agent/primer_pi_coding_agent.md
+primer_evaluation_loop/primer_evaluation_loop.md
