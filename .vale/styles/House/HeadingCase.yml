@@ -1,0 +1,11 @@
+extends: capitalization
+message: "Review Title Case in heading '%s' against S1's minor-word list."
+level: warning
+scope: heading
+match: $title
+exceptions:
+  - API
+  - CLI
+  - HTML
+  - PDF
+  - RAG

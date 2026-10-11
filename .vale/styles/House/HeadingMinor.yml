@@ -1,0 +1,6 @@
+extends: existence
+message: "Lowercase the interior minor word in '%s' (S1), unless it is a proper name."
+level: warning
+scope: heading
+raw:
+  - '[[:alnum:]]\s+(?:A|An|The|And|But|Or|Nor|For|So|Yet|As|At|By|In|Of|On|Per|To|Via|Vs)\s+[[:alnum:]]'

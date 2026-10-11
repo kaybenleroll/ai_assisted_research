@@ -1,0 +1,6 @@
+extends: existence
+message: "Use day-month-year prose dates instead of '%s'."
+level: warning
+scope: ~blockquote
+raw:
+  - '\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+(?:[1-9]|[12][0-9]|3[01]),\s+[12][0-9]{3}\b'

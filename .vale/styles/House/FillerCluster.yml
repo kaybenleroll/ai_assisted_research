@@ -1,0 +1,7 @@
+extends: occurrence
+message: "Review this paragraph: it contains %d filler terms."
+level: suggestion
+scope: paragraph
+ignorecase: true
+token: '\b(?:clearly|obviously|simply|essentially|basically|notably|crucially|importantly|furthermore|moreover|additionally|in conclusion|delve|tapestry|transformative|robust)\b'
+max: 2

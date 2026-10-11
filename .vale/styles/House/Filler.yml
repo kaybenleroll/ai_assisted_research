@@ -1,0 +1,22 @@
+extends: existence
+message: "Review filler or formulaic wording: '%s'."
+level: suggestion
+ignorecase: true
+scope: ~blockquote
+tokens:
+  - clearly
+  - obviously
+  - simply
+  - essentially
+  - basically
+  - notably
+  - crucially
+  - importantly
+  - furthermore
+  - moreover
+  - additionally
+  - in conclusion
+  - delve
+  - tapestry
+  - transformative
+  - robust

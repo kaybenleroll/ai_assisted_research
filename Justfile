@@ -38,13 +38,21 @@ check-readme: readme-check
 build-lint-image:
   {{OCI}} build --build-arg PYTHON_IMAGE={{PYTHON_IMAGE}} -t {{LINT_IMAGE}} -f _shared/Dockerfile.lint _shared/
 
-# Check every in-scope Markdown source; manifest entries are enforced
+# Check every in-scope Markdown source with spelling, structure, and prose rules
 lint:
   bash scripts/lint.sh
 
 # Check Markdown structure and accessibility without the spelling checker
 lint-md *FILES:
   bash scripts/lint.sh --md {{FILES}}
+
+# Check House prose rules, or only the named Markdown files
+lint-prose *FILES:
+  bash scripts/lint.sh --prose {{FILES}}
+
+# Assert each House rule's passing and failing fixture
+lint-prose-test:
+  bash scripts/lint.sh --prose-test
 
 # Check Markdown files changed since BASE_REF (default: origin/main)
 lint-changed:

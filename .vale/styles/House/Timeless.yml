@@ -1,0 +1,14 @@
+extends: existence
+message: "Replace relative-time wording '%s' with a dated claim or stable wording."
+level: warning
+ignorecase: true
+scope: ~blockquote
+tokens:
+  - currently
+  - recently
+  - the latest
+  - nowadays
+  - to date
+  - at the time of writing
+  - soon
+  - upcoming

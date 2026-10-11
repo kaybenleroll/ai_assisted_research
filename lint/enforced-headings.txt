@@ -1,0 +1,1 @@
+# Add a primer only after its heading-case sweep has cleared all House.HeadingCase alerts.

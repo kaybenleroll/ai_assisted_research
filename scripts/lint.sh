@@ -8,6 +8,8 @@ mode=all
 case "${1:-}" in
   --md) mode=md; shift ;;
   --spell) mode=spell; shift ;;
+  --prose) mode=prose; shift ;;
+  --prose-test) mode=prose-test; shift ;;
 esac
 
 if [[ -n "${OCI:-}" ]]; then
@@ -19,7 +21,9 @@ else
 fi
 
 files=()
-if [[ "${1:-}" == --changed ]]; then
+if [[ "$mode" == prose-test ]]; then
+  files=(lint/fixtures/vale/*.md)
+elif [[ "${1:-}" == --changed ]]; then
   base_ref="${BASE_REF:-origin/main}"
   git rev-parse --verify "${base_ref}^{commit}" >/dev/null
   while IFS= read -r -d '' path; do
@@ -39,12 +43,52 @@ else
   done < <(git ls-files -z -- 'README.md' 'primer_*/*.md' 'gaming_silo_rpg/*.md')
 fi
 
+run_prose() {
+  local report_mode=$1 vale_status=0 report_status=0
+  shift
+  local prose_files=() path vale_output
+  for path in "$@"; do
+    if [[ "$path" != primer_political_systems/complete_prompt.md ]]; then
+      prose_files+=("$path")
+    fi
+  done
+  if (( ${#prose_files[@]} == 0 )); then
+    printf 'SUMMARY Vale files=0 enforced=0 advisory=0\n'
+    return 0
+  fi
+  vale_output=$("$runtime" run --rm "${identity[@]}" -v "$repo_root:/repo$mount_suffix" -w /repo \
+    "${VALE_IMAGE:-docker.io/jdkato/vale:v3.24.0}" --output=JSON "${prose_files[@]}") || vale_status=$?
+  if (( vale_status > 1 )) || [[ -z "$vale_output" ]]; then
+    printf 'Vale failed with status %s\n' "$vale_status" >&2
+    return 2
+  fi
+  printf '%s' "$vale_output" | "$runtime" run --rm -i "${identity[@]}" \
+    -v "$repo_root:/repo$mount_suffix" -w /repo \
+    "${LINT_IMAGE:-localhost/primers-lint:1.51.1}" \
+    python3 -I scripts/lint_prose_report.py "$report_mode" "${prose_files[@]}" || report_status=$?
+  if [[ "$report_mode" == --report ]]; then
+    "$runtime" run --rm "${identity[@]}" -v "$repo_root:/repo$mount_suffix" -w /repo \
+      "${LINT_IMAGE:-localhost/primers-lint:1.51.1}" \
+      python3 -I scripts/filler_density.py "${prose_files[@]}" || return $?
+  fi
+  return "$report_status"
+}
+
 if [[ "$runtime" == podman ]]; then
   identity=(--userns=keep-id)
   mount_suffix=:z
 else
   identity=(--user="$UID")
   mount_suffix=
+fi
+
+if [[ "$mode" == prose || "$mode" == prose-test ]]; then
+  if [[ "$mode" == prose-test ]]; then
+    run_prose --fixtures "${files[@]}"
+  else
+    run_prose --report "${files[@]}"
+  fi
+  exit $?
 fi
 
 spell_status=0
@@ -135,6 +179,11 @@ done
 printf 'SUMMARY markdownlint files=%s enforced=%s advisory=%s\n' \
   "${#md_files[@]}" "$enforced_count" "$advisory_count"
 
-if (( enforced_count || spell_status )); then
+prose_status=0
+if [[ "$mode" == all ]]; then
+  run_prose --report "${files[@]}" || prose_status=$?
+fi
+
+if (( enforced_count || spell_status || prose_status )); then
   exit 1
 fi
