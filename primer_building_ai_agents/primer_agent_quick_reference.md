@@ -242,6 +242,8 @@ score = 0.4 * recency + 0.4 * relevance + 0.2 * importance
 
 ### Failure Detection Strategies
 
+The table maps common agent failures to ways to detect and recover from them.
+
 | Failure Type | Detection | Recovery |
 |---|---|---|
 | Invalid tool args | Schema validation | Ask LLM to retry with error message |
@@ -268,6 +270,8 @@ Example reflection:
 ---
 
 ## Framework and Runtime Selection Matrix
+
+Use this matrix to choose a starting framework or runtime based on the capability you need.
 
 | Need | Start with | Why |
 |---|---|---|
@@ -383,6 +387,8 @@ ORDER BY success_rate ASC, max_latency_ms DESC
 ---
 
 ## Common Pitfalls & Solutions
+
+The table pairs frequent production symptoms with practical mitigations.
 
 | Pitfall | Symptom | Solution |
 |---------|---------|----------|

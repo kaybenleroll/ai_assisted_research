@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Implementation Quick Reference</title>
+  <title>Agent Architecture Quick Reference &amp; Decision
+Frameworks</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -223,6 +224,15 @@ max-width: none;
 }
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
+}
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -577,6 +587,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -594,10 +605,10 @@ code span.wa { color: #da4453; } /* Warning */
 <body>
 
   <nav class="navbar">
-    <span class="navbar-brand">Agent Implementation Quick
-Reference</span>
-
-    <span class="navbar-meta">October 7, 2026</span>
+    <span class="navbar-brand">Agent Architecture Quick Reference &amp;
+Decision Frameworks</span>
+    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -902,6 +913,8 @@ are just a starting point, tune per your data):</p>
 <hr />
 <h2 id="error-handling-recovery">Error Handling &amp; Recovery</h2>
 <h3 id="failure-detection-strategies">Failure Detection Strategies</h3>
+<p>The table maps common agent failures to ways to detect and recover
+from them.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -962,6 +975,8 @@ Example reflection:
 <hr />
 <h2 id="framework-and-runtime-selection-matrix">Framework and Runtime
 Selection Matrix</h2>
+<p>Use this matrix to choose a starting framework or runtime based on
+the capability you need.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -1086,6 +1101,8 @@ Optimization:
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> success_rate <span class="kw">ASC</span>, max_latency_ms <span class="kw">DESC</span></span></code></pre></div>
 <hr />
 <h2 id="common-pitfalls-solutions">Common Pitfalls &amp; Solutions</h2>
+<p>The table pairs frequent production symptoms with practical
+mitigations.</p>
 <table>
 <colgroup>
 <col style="width: 32%" />
@@ -1298,6 +1315,7 @@ can survive failure, pause for input, and resume from saved state</p>
 <hr />
 <p><em>Last updated: October 7, 2026. Companion to the comprehensive
 primer’s September 2026 framework and product snapshot.</em></p>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
