@@ -19,3 +19,5 @@ extend-ignore-re = [
 [default.extend-words]
 # "Behavior" is preserved in the exact title of the cited Generative Agents paper.
 Behavior = "Behavior"
+# "ACI" is the named Agent-Computer Interface pattern introduced by SWE-agent.
+ACI = "ACI"
