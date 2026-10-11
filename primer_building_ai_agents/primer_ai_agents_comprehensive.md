@@ -10,7 +10,7 @@ This primer covers how autonomous AI agents work at a technical level: the execu
 
 This is not a guide to training or fine-tuning LLMs. It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
 
-**Freshness note (October 7, 2026):** The terminology and editorial review were updated on this date; the framework and product snapshot remains September 2026. Framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
+**Freshness note (7 October 2026):** The terminology and editorial review were updated on this date; the framework and product snapshot remains September 2026. Framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
 
 ### The Default Production Path
 
@@ -152,13 +152,13 @@ Same pattern, different domain: an expense-audit agent can fetch a report, compa
 
 The model proposes an action; application code decides whether that action is
 allowed and performs the side effect. Keep those responsibilities separate.
-Tool schemas constrain shape, but they do not provide authorization. A valid
+Tool schemas constrain shape, but they do not provide authorisation. A valid
 `delete_customer` call can still be the wrong action for the current user,
 tenant, policy, or workflow state.
 
 Treat retrieved pages, emails, documents, and tool results as untrusted data.
 They may contain prompt-injection text that looks like an instruction. Put
-authorization, tenant checks, rate limits, idempotency keys, and approval gates
+authorisation, tenant checks, rate limits, idempotency keys, and approval gates
 in the tool or service layer, where they cannot be bypassed by a persuasive
 model response. For irreversible actions, pause before execution and show the
 human the exact arguments, target, and expected consequence.
@@ -166,9 +166,9 @@ human the exact arguments, target, and expected consequence.
 The current ecosystem exposes this boundary through several converging
 interfaces: provider SDKs offer guardrails, handoffs, tracing, and sometimes
 sandboxed execution; [Model Context Protocol (MCP)](https://modelcontextprotocol.io/specification/2025-06-18)
-standardizes tool and resource connections; and [Agent2Agent (A2A)](https://a2a-protocol.org/latest/)
+standardises tool and resource connections; and [Agent2Agent (A2A)](https://a2a-protocol.org/latest/)
 addresses communication between independently deployed agents. These are
-integration layers, not replacements for application authorization.
+integration layers, not replacements for application authorisation.
 
 ### Why This Works
 
@@ -988,7 +988,7 @@ Unlimited loops are a failure mode, not a feature.
 
 ### Path step 6: Build a Realistic Test Suite
 
-Use labeled test sets covering:
+Use labelled test sets covering:
 
 - routine tickets (expected wins)
 - ambiguous tickets (missing identifiers)
@@ -1013,7 +1013,7 @@ Recommended rollout pattern:
 
 1. Shadow mode: agent recommends, humans execute.
 2. Limited autonomy for low-risk ticket categories.
-3. Expand scope only after metrics stabilize.
+3. Expand scope only after metrics stabilise.
 
 Slow rollout catches real-world edge cases early.
 
@@ -1055,11 +1055,11 @@ That is already a meaningful business win.
 
 ### Reference branch: Emerging Patterns
 
-**Multi-Agent Systems:** Instead of one agent doing everything, multiple specialized agents collaborate:
+**Multi-Agent Systems:** Instead of one agent doing everything, multiple specialised agents collaborate:
 
-- Agent A specializes in data retrieval
-- Agent B specializes in analysis  
-- Agent C specializes in communication
+- Agent A specialises in data retrieval
+- Agent B specialises in analysis
+- Agent C specialises in communication
 - They coordinate to solve problems
 
 **Agentic Loops with Reflection:** Agents evaluate their own work and revise:
@@ -1114,4 +1114,4 @@ If you remember one practical takeaway, make it this: treat agent development li
 
 ---
 
-*Created: May 20, 2026. Last updated: October 7, 2026. Framework and product snapshot: September 2026.*
+*Created: 20 May 2026. Last updated: 7 October 2026. Framework and product snapshot: September 2026.*

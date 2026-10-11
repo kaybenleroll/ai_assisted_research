@@ -13,7 +13,7 @@ comprehensive primer. It does not contain the full conceptual explanations,
 framework/runtime discussion, challenges, or either customer-support
 walkthrough. When a choice is high-risk or the quick rule conflicts with a
 domain policy, follow the detailed treatment and the application's
-authorization layer.
+authorisation layer.
 
 ## Pattern Selection Guide
 
@@ -58,7 +58,7 @@ LLM → Tool Calls → Append Results → Loop Until Done
 
 **Pros:** Flexible, general-purpose, handles complex scenarios
 **Cons:** Can hit maximum iterations, hard to reason about long-term outcomes,
-requires explicit authorization around side effects
+requires explicit authorisation around side effects
 
 **Code Pattern (Pydantic AI):**
 ```python
@@ -106,7 +106,7 @@ Execute → Evaluate → Reflect → Retry with Reflection
 
 ### Multi-Agent Orchestration (CrewAI Crews)
 **When to use:**
-- Need specialized agent roles
+- Need specialised agent roles
 - Complex workflows with delegation
 - Team-like collaboration required
 
@@ -132,7 +132,7 @@ Classify tools before wiring them into an agent:
 | Reversible write | Draft email, create ticket, stage file change | Automatic only if the user can undo it; otherwise review |
 | Irreversible or high-impact | Send email, delete data, issue refund, change access | Pause and require explicit approval |
 
-Authorization belongs in the tool/service layer, not only in the prompt. Validate
+Authorisation belongs in the tool/service layer, not only in the prompt. Validate
 the user, tenant, target, policy, and idempotency key immediately before the
 side effect.
 
@@ -201,7 +201,7 @@ async def execute_tool_with_retry(tool_call, max_retries=2):
 
 ```python
 if len(conversation) > 20:
-    # Summarize older interactions
+    # Summarise older interactions
     summary = await llm.summarize(conversation[:-10])
     conversation = [summary] + conversation[-10:]
 ```
@@ -250,7 +250,7 @@ The table maps common agent failures to ways to detect and recover from them.
 | Tool timeout | Execution timeout >30s | Fallback tool or skip |
 | Hallucinated facts | No tool backing | Reject in prompt, ask for sources |
 | Infinite loop | Same action 3x | Insert reflection, suggest alternatives |
-| Context exhaustion | Token count > limit | Summarize, move to long-term memory |
+| Context exhaustion | Token count > limit | Summarise, move to long-term memory |
 | API rate limit | 429 response | Exponential backoff, queue |
 
 ### Reflection Template
@@ -279,7 +279,7 @@ Use this matrix to choose a starting framework or runtime based on the capabilit
 | Explicit state, pause/resume, and durable execution | LangGraph | Checkpointing, interrupts, persistence, and workflow control |
 | Role-based multi-agent collaboration | CrewAI | Convenient delegation model; accept coordination overhead |
 | One-provider features and fastest access to its SDK | Provider-native SDK | OpenAI Agents SDK, Claude Agent SDK, or Google ADK; lower portability |
-| Interoperable tool connections | MCP | Standard tool/resource boundary; still apply local authorization |
+| Interoperable tool connections | MCP | Standard tool/resource boundary; still apply local authorisation |
 | Independent agent-to-agent delegation | A2A | Useful when agents have separate endpoints and lifecycles |
 
 Choose the smallest layer that provides the failure semantics you need. Do not
@@ -570,16 +570,16 @@ Pass/fail: Average rating >= 4/5
 
 **ReAct:** Pattern: Decision summary → Action → Observation → Repeat; summaries document decisions without exposing hidden chain-of-thought
 
-**MRKL:** Modular reasoning system routing tasks to specialized expert tools
+**MRKL:** Modular reasoning system routing tasks to specialised expert tools
 
 **A2A:** Agent-to-Agent protocol for communication between independently deployed agents; use it when separate identity, endpoint, and task lifecycle matter
 
 **MCP:** Model Context Protocol for standardised tool and resource interfaces
 
-**Idempotency key:** A caller-supplied identifier that lets a service recognize a retried request and avoid repeating a side effect
+**Idempotency key:** A caller-supplied identifier that lets a service recognise a retried request and avoid repeating a side effect
 
 **Durable execution:** Persisted workflow execution that can survive failure, pause for input, and resume from saved state
 
 ---
 
-*Last updated: October 7, 2026. Companion to the comprehensive primer's September 2026 framework and product snapshot.*
+*Last updated: 7 October 2026. Companion to the comprehensive primer's September 2026 framework and product snapshot.*

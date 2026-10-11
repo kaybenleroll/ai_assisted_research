@@ -750,12 +750,12 @@ engineering in isolation from agentic execution. If you want a survey of
 agent frameworks without implementation depth, this is probably not the
 right starting point — this primer assumes you intend to build
 something.</p>
-<p><strong>Freshness note (October 7, 2026):</strong> The terminology
-and editorial review were updated on this date; the framework and
-product snapshot remains September 2026. Framework capabilities,
-provider SDK features, model pricing, and benchmark rankings move
-monthly. Treat product and protocol references as dated guidance and
-re-check the linked official docs before implementation.</p>
+<p><strong>Freshness note (7 October 2026):</strong> The terminology and
+editorial review were updated on this date; the framework and product
+snapshot remains September 2026. Framework capabilities, provider SDK
+features, model pricing, and benchmark rankings move monthly. Treat
+product and protocol references as dated guidance and re-check the
+linked official docs before implementation.</p>
 <h2 data-number="1.3" id="the-default-production-path"><span class="header-section-number">1.3</span> The Default Production
 Path</h2>
 <p>Use this primer as one end-to-end path when you are building an agent
@@ -934,12 +934,12 @@ Boundary</h2>
 <p>The model proposes an action; application code decides whether that
 action is allowed and performs the side effect. Keep those
 responsibilities separate. Tool schemas constrain shape, but they do not
-provide authorization. A valid <code>delete_customer</code> call can
+provide authorisation. A valid <code>delete_customer</code> call can
 still be the wrong action for the current user, tenant, policy, or
 workflow state.</p>
 <p>Treat retrieved pages, emails, documents, and tool results as
 untrusted data. They may contain prompt-injection text that looks like
-an instruction. Put authorization, tenant checks, rate limits,
+an instruction. Put authorisation, tenant checks, rate limits,
 idempotency keys, and approval gates in the tool or service layer, where
 they cannot be bypassed by a persuasive model response. For irreversible
 actions, pause before execution and show the human the exact arguments,
@@ -947,10 +947,10 @@ target, and expected consequence.</p>
 <p>The current ecosystem exposes this boundary through several
 converging interfaces: provider SDKs offer guardrails, handoffs,
 tracing, and sometimes sandboxed execution; <a href="https://modelcontextprotocol.io/specification/2025-06-18">Model
-Context Protocol (MCP)</a> standardizes tool and resource connections;
+Context Protocol (MCP)</a> standardises tool and resource connections;
 and <a href="https://a2a-protocol.org/latest/">Agent2Agent (A2A)</a>
 addresses communication between independently deployed agents. These are
-integration layers, not replacements for application authorization.</p>
+integration layers, not replacements for application authorisation.</p>
 <h2 data-number="3.5" id="why-this-works"><span class="header-section-number">3.5</span> Why This Works</h2>
 <p>LLMs have learned from millions of examples of:</p>
 <ul>
@@ -1746,7 +1746,7 @@ Execution Loop with Hard Stops</h2>
 <p>Unlimited loops are a failure mode, not a feature.</p>
 <h2 data-number="9.9" id="path-step-6-build-a-realistic-test-suite"><span class="header-section-number">9.9</span> Path step 6: Build a Realistic
 Test Suite</h2>
-<p>Use labeled test sets covering:</p>
+<p>Use labelled test sets covering:</p>
 <ul>
 <li>routine tickets (expected wins)</li>
 <li>ambiguous tickets (missing identifiers)</li>
@@ -1771,7 +1771,7 @@ Gradually</h2>
 <ol type="1">
 <li>Shadow mode: agent recommends, humans execute.</li>
 <li>Limited autonomy for low-risk ticket categories.</li>
-<li>Expand scope only after metrics stabilize.</li>
+<li>Expand scope only after metrics stabilise.</li>
 </ol>
 <p>Slow rollout catches real-world edge cases early.</p>
 <h2 data-number="9.12" id="path-step-9-operate-observe-iterate"><span class="header-section-number">9.12</span> Path step 9: Operate, Observe,
@@ -1819,12 +1819,11 @@ action X instead of Y? Sometimes unclear.</p></li>
 <h2 data-number="10.2" id="reference-branch-emerging-patterns"><span class="header-section-number">10.2</span> Reference branch: Emerging
 Patterns</h2>
 <p><strong>Multi-Agent Systems:</strong> Instead of one agent doing
-everything, multiple specialized agents collaborate:</p>
+everything, multiple specialised agents collaborate:</p>
 <ul>
-<li>Agent A specializes in data retrieval</li>
-<li>Agent B specializes in analysis<br />
-</li>
-<li>Agent C specializes in communication</li>
+<li>Agent A specialises in data retrieval</li>
+<li>Agent B specialises in analysis</li>
+<li>Agent C specialises in communication</li>
 <li>They coordinate to solve problems</li>
 </ul>
 <p><strong>Agentic Loops with Reflection:</strong> Agents evaluate their
@@ -1906,8 +1905,8 @@ specification</a> and <a href="https://a2a-protocol.org/latest/">A2A
 protocol</a></li>
 </ul>
 <hr />
-<p><em>Created: May 20, 2026. Last updated: October 7, 2026. Framework
-and product snapshot: September 2026.</em></p>
+<p><em>Created: 20 May 2026. Last updated: 7 October 2026. Framework and
+product snapshot: September 2026.</em></p>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
