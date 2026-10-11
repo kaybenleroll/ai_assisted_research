@@ -1,11 +1,11 @@
-# SILO SYSTEM: COMPREHENSIVE WORLD BIBLE (ENCYCLOPEDIC EDITION)
+# Silo System: Comprehensive World Bible (Encyclopedic Edition)
 
 **RESTRICTED ACCESS // GM REFERENCE MANUAL**
 *(This document is the definitive, 10,000-word simulation guide for the Silo. It covers every granular detail of daily life, architecture, and society.)*
 
 ---
 
-## CHAPTER 1: THE ARCHITECTURE & THE GRIND
+## Chapter 1: The Architecture & the Grind
 
 The Silo is a vertical city-state. It is a masterpiece of pre-collapse brutalist engineering, designed to sustain 10,000 lives for an indefinite period. However, after two centuries, the "Silo" is also a decaying machine. Every weld is under tension, every pipe is pitted with rust, and every citizen is a component in a closed-loop survival engine.
 
@@ -67,7 +67,7 @@ In the Silo, nothing is ever "new." Everything is on its third, fourth, or fifth
 
 ---
 
-### 1.3 The Life Cycle & The Bureaucracy
+### 1.3 The Life Cycle & the Bureaucracy
 
 The Silo is a managed population. Every individual is a resource to be optimised.
 
@@ -99,7 +99,7 @@ The population is strictly capped at 10,000.
 
 *(Continuing to Chapter 2...)*
 
-## CHAPTER 2: THE LAW & THE PANOPTICON
+## Chapter 2: The Law & the Panopticon
 
 In the Silo, "justice" is a secondary concern to "order." The legal system is designed to identify and remove biological and social friction. To the Game Master, Chapter 2 outlines the mechanics of fear, the rigid hierarchy of enforcement, and the specific ways Judicial maintains a state of perpetual, low-level paranoia.
 
@@ -131,7 +131,7 @@ Judicial is not elected. They are an opaque, self-perpetuating bureaucracy that 
 
 The Silo does not recognize the concept of a "fair trial." There are no defense attorneys, no juries, and no appeals.
 
-#### 2.2.1 The Arrest and The Holding Cells
+#### 2.2.1 The Arrest and the Holding Cells
 Most arrests happen in the middle of the night. 
 *   **The Level 1 Cells:** These are the primary holding cells. They are small, cold, and composed of reinforced glass facing the Viewport. 
 *   **The "Silent Sentence":** Prisoners are often held for weeks without being told their crime. They are forced to watch the dead world outside 24/7. This is designed to break their will before the hearing ever begins.
@@ -185,7 +185,7 @@ The most dangerous thing in the Silo is a thought that travels.
 *   **The Mechanism:** The words are seen as a biological contagion. The person who says them is "infected" with a desire that could spread and cause a Silo-wide uprising. Execution (Cleaning) is the only "cure."
 
 
-## CHAPTER 3: THE DEPARTMENTS (THE FIVE PILLARS)
+## Chapter 3: The Departments (the Five Pillars)
 
 The Silo is not a monolith; it is an uneasy alliance of five major bureaucratic and industrial powers. Each department is a silo within the Silo—possessing its own culture, its own secrets, and its own unique leverage over the others. A citizen’s primary identity is not "Silo resident," but "Mechanic," "Supply Clerk," or "IT Tech."
 
@@ -277,11 +277,11 @@ They are seen as simple "Dirt Farmers" by the Up Top, but they are incredibly sa
 Hydroponics can trigger a famine with a single "fungal outbreak." They can also manipulate the oxygen levels in specific sectors, inducing lethargy or euphoria to suit their political needs.
 
 
-## CHAPTER 4: THE 144 LEVELS (THE GAZETTEER)
+## Chapter 4: The 144 Levels (the Gazetteer)
 
 To the citizens, the Silo is a vertical continent. A person born on Level 130 might never see Level 20 in their entire life. Each "block" of levels has its own distinct micro-culture, hazards, and architecture. This Gazetteer provides the Game Master with a granular map of the world.
 
-### 4.1 THE UP TOP (LEVELS 1 - 48)
+### 4.1 The Up Top (Levels 1 - 48)
 *Acoustics: Low, humming silence. Lighting: Bright, sterile white. Smell: Floor wax and cold air.*
 
 *   **Level 1: The Threshold.**
@@ -296,7 +296,7 @@ To the citizens, the Silo is a vertical continent. A person born on Level 130 mi
 *   **Level 34: The IT Gate.**
     *   A massive steel bulkhead blocks the stairs. One must be scanned and authorized by IT security to pass. The air temp drops 10 degrees here.
 
-### 4.2 THE MIDS (LEVELS 49 - 96)
+### 4.2 The Mids (Levels 49 - 96)
 *Acoustics: Constant chatter and footsteps. Lighting: Warm yellow. Smell: Loam, fertilizer, and cooking soy.*
 
 *   **Levels 49-55: The Great Bazaars.**
@@ -309,7 +309,7 @@ To the citizens, the Silo is a vertical continent. A person born on Level 130 mi
 *   **Levels 90-96: The Textile Sweatshops.**
     *   Loom-rooms that run 24/7. The air is thick with cotton lint. Most children shadowed to "Supply" begin their careers here.
 
-### 4.3 THE DOWN DEEP (LEVELS 97 - 144)
+### 4.3 The Down Deep (Levels 97 - 144)
 *Acoustics: Deafening industrial roar. Lighting: Dim red or flickering orange. Smell: Oil, coal smoke, and hot metal.*
 
 *   **Levels 100-110: The Steel Slums.**
@@ -326,7 +326,7 @@ To the citizens, the Silo is a vertical continent. A person born on Level 130 mi
 
 ---
 
-## CHAPTER 5: CULTURE, RITUALS, AND SUB-FACTIONS
+## Chapter 5: Culture, Rituals, and Sub-Factions
 
 To understand the Silo, you must understand the "Invisible World"—the traditions and secrets that bind the 10,000 together or tear them apart.
 
@@ -347,7 +347,7 @@ When a Cleaning is announced, the Silo stops. It is a day of terrifying celebrat
 #### 5.2.2 The "Naming" Day
 Because names are reused (to save space in the digital ledgers), children are not "named" at birth. They are given a number. On their 5th birthday, if they have survived, they are "Gifted" the name of a deceased ancestor in a communal ceremony.
 
-### 5.3 Illegal Sub-factions
+### 5.3 Illegal Sub-Factions
 
 *   **The Flame Watchers:** A cult that believes fire is a purifying force. They hoard matches and lighters (strictly illegal due to oxygen consumption). They believe the Silo is a "tomb" and that fire will "wake the world."
 *   **The Scrap Syndicates:** The mafia of the Mids. They hijack Supply shipments and run illegal gambling rings. Their leader, "Auntie Cinder," is said to have more chits than the Mayor.
@@ -356,7 +356,7 @@ Because names are reused (to save space in the digital ledgers), children are no
 
 ---
 
-## CHAPTER 6: THE ENGINEERING OF SURVIVAL (TECHNICAL SPECIFICATIONS)
+## Chapter 6: The Engineering of Survival (Technical Specifications)
 
 To the average citizen, the Silo’s systems are magic. To the GM, they are the levers of tension. When a system fails, the stakes are immediate and life-threatening.
 
@@ -400,7 +400,7 @@ The Generator (Level 144) is the only source of electricity.
 
 ---
 
-## CHAPTER 7: MEDICAL REALITIES AND "THE SYNDROME"
+## Chapter 7: Medical Realities and "The Syndrome"
 
 Medicine in the Silo is a blend of high-tech remnants and desperate herbalism.
 
@@ -422,7 +422,7 @@ Doctors are trained in "The Math of Mercy."
 
 ---
 
-## CHAPTER 8: THE SHADOW ECONOMY AND BARTER TABLES
+## Chapter 8: The Shadow Economy and Barter Tables
 
 While "Chits" are the official currency, the real business of the Silo happens in the shadows.
 
@@ -446,7 +446,7 @@ Items that an adventurer in another game would ignore are priceless in the Silo.
 
 ---
 
-## CHAPTER 9: THE DAILY SIMULATION (ROUTINES AND CALENDARS)
+## Chapter 9: The Daily Simulation (Routines and Calendars)
 
 To make the Silo feel "alive," the GM must manage the passage of time. Life in the Silo is rhythmic, punctuated by the mechanical cycles of the structure.
 
@@ -470,7 +470,7 @@ The Silo doesn't use months like "January." They use "Cycle Months" based on the
 
 ---
 
-## CHAPTER 10: NPCs AND THE HUMAN ELEMENT
+## Chapter 10: NPCs and the Human Element
 
 The Silo is a pressure cooker. These NPCs are archetypes the GM can use to populate any level.
 
@@ -488,7 +488,7 @@ The Silo is a pressure cooker. These NPCs are archetypes the GM can use to popul
 
 ---
 
-## CHAPTER 11: GEOGRAPHY DEEP DIVE (THE FORGOTTEN SPACES)
+## Chapter 11: Geography Deep Dive (the Forgotten Spaces)
 
 Not all of the Silo is occupied. There are "Dead Spaces" that offer opportunities for exploration and danger.
 
@@ -504,7 +504,7 @@ Every few decades, a level is abandoned due to structural failure, toxic leak, o
 
 ---
 
-## CHAPTER 12: THE SYNDROME AND THE PSYCHOLOGY OF WALLS
+## Chapter 12: The Syndrome and the Psychology of Walls
 
 To truly GM the Silo, you must understand the "Agoraphobia of the Soul."
 
@@ -522,11 +522,11 @@ In the cafeterias, people speak in code.
 
 ---
 
-## CHAPTER 13: THE COMPLETE LEVEL GAZETTEER (1 - 144)
+## Chapter 13: The Complete Level Gazetteer (1 - 144)
 
 The following is a definitive, level-by-level accounting of the Silo's distribution. The GM can use this list to determine exactly what a character encounters when stepping off the stairs at any given depth.
 
-### THE UP TOP (LEVELS 1 - 48)
+### The Up Top (Levels 1 - 48)
 
 *   **Level 1:** The Air-Lock, The Viewport, Cafeteria, Sheriff's Station, Holding Cells.
 *   **Levels 2 - 3:** Judicial Administration (The "Inner Circle" offices).
@@ -545,7 +545,7 @@ The following is a definitive, level-by-level accounting of the Silo's distribut
 *   **Levels 41 - 44:** White-Collar Residential (Supply Officers, Junior Clerks).
 *   **Levels 45 - 48:** Primary Air Scrubbers (Up Top Block).
 
-### THE MIDS (LEVELS 49 - 96)
+### The Mids (Levels 49 - 96)
 
 *   **Level 49:** The Great Exchange (The Silo's largest Bazaar).
 *   **Levels 50 - 55:** Mid-Tier Residential (The "Merchant Levels").
@@ -562,7 +562,7 @@ The following is a definitive, level-by-level accounting of the Silo's distribut
 *   **Levels 87 - 92:** The Textile Tiers (Cotton looms & Synthetic spinning).
 *   **Levels 93 - 96:** The Repair Wards (Recycling broken goods from Up Top).
 
-### THE DOWN DEEP (LEVELS 97 - 144)
+### The Down Deep (Levels 97 - 144)
 
 *   **Levels 97 - 105:** Laborer Slums (High density, high noise).
 *   **Levels 106 - 110:** The Industrial Foundries (Steel smelting & Smelting).
@@ -583,7 +583,7 @@ The following is a definitive, level-by-level accounting of the Silo's distribut
 
 ---
 
-## CHAPTER 14: THE MECHANICAL PHYSICS OF THE SILO
+## Chapter 14: The Mechanical Physics of the Silo
 
 To run a realistic Silo game, the GM must account for the physical constraints of the structure.
 
@@ -603,7 +603,7 @@ The Silo uses a pneumatic tube system for official messages.
 
 ---
 
-## CHAPTER 15: CHARACTER PROGRESSION AND THE "TIERS"
+## Chapter 15: Character Progression and the "Tiers"
 
 As characters gain experience, they do not just "level up"; they gain **Silo Standing**.
 
@@ -616,7 +616,7 @@ As characters gain experience, they do not just "level up"; they gain **Silo Sta
 
 ---
 
-## CHAPTER 16: CRIME, PUNISHMENT, AND THE BLACK MARKET (EXTENDED)
+## Chapter 16: Crime, Punishment, and the Black Market (Extended)
 
 In a world of total scarcity, every object has a story, and every crime is an act of desperation or rebellion.
 
@@ -639,7 +639,7 @@ Transactions in the Mids don't happen in the open.
 
 ---
 
-## CHAPTER 17: PSYCHOLOGY AND SOCIAL TENSIONS (DEEP DIVE)
+## Chapter 17: Psychology and Social Tensions (Deep Dive)
 
 The Silo is a pressure cooker of repressed emotions and inherited trauma.
 
@@ -655,7 +655,7 @@ The social distance between Level 1 and Level 144 is greater than the physical d
 
 ---
 
-## CHAPTER 18: THE ARCHITECTURE OF THE "INNER RING"
+## Chapter 18: The Architecture of the "Inner Ring"
 
 While the citizens live in the "Outer Ring," the "Inner Ring" is the Silo's hidden nervous system.
 
@@ -671,7 +671,7 @@ Small, secondary air vents (30cm wide) crisscross every level.
 
 ---
 
-## CHAPTER 19: RECREATION AND THE HUMAN SPIRIT
+## Chapter 19: Recreation and the Human Spirit
 
 How do 10,000 people keep from going mad?
 
@@ -687,11 +687,11 @@ How do 10,000 people keep from going mad?
 
 ---
 
-## CHAPTER 20: THE GM'S TOOLKIT (SITUATIONAL TABLES)
+## Chapter 20: The GM's Toolkit (Situational Tables)
 
 The following tables are designed for quick-generation of sensory details and minor complications during play.
 
-### 20.1 "What do I smell?" (Level Atmosphere)
+### 20.1 "What Do I Smell?" (Level Atmosphere)
 | Roll (d10) | Result |
 | :--- | :--- |
 | **1** | Sharp iodine and sterile floor wax (Up Top). |
@@ -721,7 +721,7 @@ The following tables are designed for quick-generation of sensory details and mi
 
 ---
 
-## CHAPTER 21: THE HISTORY OF THE "RUIN" (OFFICIAL VERSION)
+## Chapter 21: The History of the "Ruin" (Official Version)
 
 The following is the only history allowed to be taught in the Silo schools. Any variation from this text is sedition.
 
@@ -733,7 +733,7 @@ The following is the only history allowed to be taught in the Silo schools. Any 
 
 ---
 
-## CHAPTER 22: THE SHADOW PHARMACY (LIST OF DRUGS)
+## Chapter 22: The Shadow Pharmacy (List of Drugs)
 
 Medical resources are rare, but chemical control is a primary tool of the state.
 
@@ -744,7 +744,7 @@ Medical resources are rare, but chemical control is a primary tool of the state.
 
 ---
 
-## CHAPTER 23: THE MECHANICS OF THE SUIT (TECHNICAL)
+## Chapter 23: The Mechanics of the Suit (Technical)
 
 The Suit used in The Cleaning is a masterpiece of deceptive engineering.
 
@@ -755,7 +755,7 @@ The Suit used in The Cleaning is a masterpiece of deceptive engineering.
 
 ---
 
-## CHAPTER 24: THE GEOLOGY OF THE SILO
+## Chapter 24: The Geology of the Silo
 
 *   **The Bedrock:** The Silo is encased in solid granite. This is why the "Mines" are so difficult to dig. 
 *   **The Aquifer:** A slow-moving river of brackish water flows 50 meters beneath Level 144. This is the source of the "Deep Well" water.
@@ -763,7 +763,7 @@ The Suit used in The Cleaning is a masterpiece of deceptive engineering.
 
 ---
 
-## CHAPTER 25: A FINAL WORD ON ATMOSPHERE
+## Chapter 25: A Final Word on Atmosphere
 
 To run the Silo correctly, the GM must never let the players feel "safe." 
 *   The lights should always be a little too dim. 
@@ -775,11 +775,11 @@ The Silo is not just a building. It is a tomb that hasn't been closed yet.
 
 ****
 
-## CHAPTER 26: THE FACES OF THE SILO (NPC ROSTER)
+## Chapter 26: The Faces of the Silo (NPC Roster)
 
 To run a setting driven by political tension and scarcity, the GM needs a robust cast of characters whose motivations intersect and conflict. Below is a roster of key NPCs across the sectors.
 
-### 26.1 The Up Top (The Elite & The Enforcers)
+### 26.1 The Up Top (the Elite & the Enforcers)
 
 *   **Mayor Tamsin Rook (The Pragmatist):** 
     *   *Role:* The elected leader of the Silo. Currently on Level 5.
@@ -802,7 +802,7 @@ To run a setting driven by political tension and scarcity, the GM needs a robust
     *   *Motivation:* Protecting "The Order." He views the citizens as livestock to be managed for the 500-year plan.
     *   *The Secret:* He holds the key to the secret elevator and regularly communicates with Silo 1.
 
-### 26.2 The Mids (The Hustlers & The Harvesters)
+### 26.2 The Mids (the Hustlers & the Harvesters)
 
 *   **Quartermaster "Hooks" Sera Krail (Supply):**
     *   *Role:* Runs the primary supply depot on Level 50.
@@ -825,7 +825,7 @@ To run a setting driven by political tension and scarcity, the GM needs a robust
     *   *Motivation:* Maintaining the Porters' neutrality and monopoly on transit.
     *   *The Secret:* She intercepts and reads 10% of all Judicial messages before delivering them, maintaining a massive blackmail ledger.
 
-### 26.3 The Down Deep (The Grease & The Grime)
+### 26.3 The Down Deep (the Grease & the Grime)
 
 *   **Shift-Boss Rourke (Mechanical):**
     *   *Role:* The lord of Level 144. Runs the Generator.
@@ -845,11 +845,11 @@ To run a setting driven by political tension and scarcity, the GM needs a robust
 
 ---
 
-## CHAPTER 27: ARMORY, GEAR, AND THE ECONOMY OF VIOLENCE
+## Chapter 27: Armory, Gear, and the Economy of Violence
 
 Combat in the Silo is desperate, unarmored, and brutally close-quarters. There are no gunsmiths. Every weapon is a tool that has been repurposed for violence.
 
-### 27.1 Weapons (The Arsenal of Scarcity)
+### 27.1 Weapons (the Arsenal of Scarcity)
 
 *   **The "Shiv" (Concealable Melee):**
     *   *Description:* A piece of shattered view-screen glass wrapped in cloth, or a sharpened screwdriver.
@@ -867,7 +867,7 @@ Combat in the Silo is desperate, unarmored, and brutally close-quarters. There a
     *   *Description:* A makeshift explosive crafted by Hydroponics workers using fertilizer and spark-plugs.
     *   *Mechanics/Role:* Does little physical damage but causes deafening noise and blinding light. Used to scatter crowds or escape Sheriff's deputies on the stairs.
 
-### 27.2 Armor (The Myth of Protection)
+### 27.2 Armor (the Myth of Protection)
 
 True armor does not exist. Wearing heavy metal plates on the stairs would cause exhaustion in an hour.
 *   **The "Thick-Coat":** Heavy denim or canvas patched with dozens of layers of scrap fabric. Provides minor protection against slashing (shivs).
@@ -884,11 +884,11 @@ True armor does not exist. Wearing heavy metal plates on the stairs would cause 
 
 ---
 
-## CHAPTER 28: ECOLOGY, FLORA, AND SILO FAUNA
+## Chapter 28: Ecology, Flora, and Silo Fauna
 
 The Silo is a closed ecosystem. While the apex predator is humanity (and Judicial), there is a thriving, desperate ecology that exists in the margins.
 
-### 28.1 Fauna (The Meat and The Vermin)
+### 28.1 Fauna (the Meat and the Vermin)
 
 *   **The "Mids Rabbit":**
     *   *Description:* Genetically modified for rapid gestation and high meat yield. They are kept in massive, stacked cages on Levels 65-68.
@@ -901,7 +901,7 @@ The Silo is a closed ecosystem. While the apex predator is humanity (and Judicia
     *   *Description:* Pale, blind moths that infest the textile levels. 
     *   *Hazard:* They eat hydroponic cotton. A moth infestation can destroy the Silo’s clothing supply. When an outbreak occurs, Judicial authorizes "The Burn"—flooding an entire level with toxic smoke to kill the larvae.
 
-### 28.2 Flora (The Hydroponic Balance)
+### 28.2 Flora (the Hydroponic Balance)
 
 *   **The "Green Lung" Algae:**
     *   *Description:* The primary oxygen producer. It is thick, viscous, and highly sensitive to temperature.
@@ -915,7 +915,7 @@ The Silo is a closed ecosystem. While the apex predator is humanity (and Judicia
 
 ---
 
-## CHAPTER 29: THE RUMOR MILL (d20 GENERATOR)
+## Chapter 29: The Rumor Mill (d20 Generator)
 
 Porters run the stairs, and gossip is the true currency of the Silo. When players ask "What's the word?", roll a d20.
 
@@ -944,7 +944,7 @@ Porters run the stairs, and gossip is the true currency of the Silo. When player
 
 ---
 
-## CHAPTER 30: THE GM'S QUICK-REFERENCE SHEETS
+## Chapter 30: The GM's Quick-Reference Sheets
 
 These tools are meant to sit beside the GM during play. They are not new lore; they are compressed forms of the setting so you can answer table questions fast.
 
@@ -996,7 +996,7 @@ These tools are meant to sit beside the GM during play. They are not new lore; t
 
 ---
 
-## CHAPTER 31: CORE PLAY PROCEDURE (SYSTEM-AGNOSTIC)
+## Chapter 31: Core Play Procedure (System-Agnostic)
 
 The Silo works best when risk feels cumulative. Use the following procedures with any base system to keep pressure rising even when the PCs technically "succeed."
 
@@ -1062,7 +1062,7 @@ Between major scenes, each PC can usually do one meaningful thing:
 
 ---
 
-## CHAPTER 32: FACTION SHEETS
+## Chapter 32: Faction Sheets
 
 Use these when the PCs touch politics and survival at the same time.
 
@@ -1089,7 +1089,7 @@ If you need to improvise quickly, answer four questions:
 
 ---
 
-## CHAPTER 33: THE SLICE-OF-LIFE ENGINE
+## Chapter 33: The Slice-of-Life Engine
 
 These generators keep the campaign grounded in the daily grind before the big revelations.
 

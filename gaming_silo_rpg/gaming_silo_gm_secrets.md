@@ -1,4 +1,4 @@
-# SILO SYSTEM: GAME MASTER'S SECRETS & MACRO-LORE
+# Silo System: Game Master's Secrets & Macro-Lore
 
 **RESTRICTED ACCESS // FOR GAME MASTER EYES ONLY**
 
@@ -8,7 +8,7 @@ Crucially, **these secrets should not be the focus of the early or mid-game**. A
 
 ---
 
-## PART I: THE TRUE REALITY OF THE WORLD
+## Part I: The True Reality of the World
 
 ### 1.1 Operation Fifty
 The characters are not in the only Silo. They are in one of **fifty identical Silos** arranged in a massive subterranean grid beneath the ruins of Atlanta, Georgia.
@@ -35,7 +35,7 @@ The Pact's own internal records — locked in Silo 1 — estimate that approxima
 
 The nanobot dome that players sometimes hear referenced is **not** the global atmosphere. It is a secondary, denser local barrier specifically concentrated over the Atlanta grid — a deliberate kill-layer deployed to prevent any surface survivor from stumbling into the Silo entrances and contaminating the experiment.
 
-#### The 500-Year Plan (The Full Mechanism)
+#### The 500-Year Plan (the Full Mechanism)
 The plan is not simply "wait underground." It is a staged, multi-century program to re-seed civilization from scratch, with the Pact's ideology baked into its foundations. The key phases:
 
 *   **Years 0–50 (Stabilisation):** The 49 populated Silos are sealed. Internal governance structures (seeded by Pact operatives placed among the initial population) organise along the lines of the Order document. Silo 1 monitors population stability, resource consumption, and rebellion indicators. Any Silo showing early systemic failure is "culled" — Silo 1 terminates its power and water remotely.
@@ -45,7 +45,7 @@ The plan is not simply "wait underground." It is a staged, multi-century program
 
 **The current year of the campaign is approximately Year 182.** The players are living in the Pressure Cycle. The selection has not yet happened. Every Silo is still technically viable.
 
-#### Silo 1 (The Control Silo)
+#### Silo 1 (the Control Silo)
 Silo 1 does not contain a civilian populace. It contains cryo-pods. The architects of the Silos — and their trained successors — work in "shifts," waking for a few decades to monitor the other 49 Silos before returning to cryo-sleep. Institutionally, they refer to themselves simply as **the Order** and to their function as **Oversight**.
 
 *   Silo 1 has direct kill-switch authority over every other Silo: power, water, and atmospheric processors can all be terminated remotely.
@@ -63,7 +63,7 @@ The Cleaning is a rigged execution designed to ensure compliance.
 
 ---
 
-## PART II: THE LIES WITHIN THE SILO
+## Part II: The Lies Within the Silo
 
 ### 2.1 The True Purpose of IT
 IT is not just the computer department; they are the wardens of the Silo.
@@ -88,7 +88,7 @@ The surface is lethal. Any tunnel to another Silo would require boring through h
 
 ---
 
-## PART III: CAMPAIGN PACING ("LIVING IN THE SILO")
+## Part III: Campaign Pacing ("Living in the Silo")
 
 The grand lore is fascinating, but if introduced too early, it destroys the intimate, claustrophobic tension of the setting. The players must care about the Silo as their entire universe before they can care about the universe outside it.
 

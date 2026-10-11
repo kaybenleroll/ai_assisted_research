@@ -1,10 +1,10 @@
-# SILO RPG: STARTER CAMPAIGNS & PLAYER ARCHETYPES
+# Silo RPG: Starter Campaigns & Player Archetypes
 
 This document provides a structured starting point for a tabletop campaign. It contains detailed Player Character (PC) archetypes designed for the Silo setting, mechanics for binding the party together, and ten fully fleshed-out "Starter Campaigns" estimated to take 3–4 sessions (8–12 hours) each.
 
 ---
 
-## PART 1: BUILDING A CITIZEN (PLAYER ARCHETYPES)
+## Part 1: Building a Citizen (Player Archetypes)
 
 In the Silo, players do not play "adventurers"—they play citizens with jobs, schedules, and quotas. When creating a party, players should select an archetype that roots them in the world. Every character should have a **Job**, a **Secret**, and a **Desire**.
 
@@ -58,7 +58,7 @@ In the Silo, players do not play "adventurers"—they play citizens with jobs, s
 
 ---
 
-### WHY ARE YOU TOGETHER? (PARTY BONDS)
+### Why Are You Together? (Party Bonds)
 To avoid the awkward "meeting in a tavern" phase, roll a d6 to determine why this specific group of citizens is working together.
 
 | Roll | The Party Bond |
@@ -72,11 +72,11 @@ To avoid the awkward "meeting in a tavern" phase, roll a d6 to determine why thi
 
 ---
 
-## PART 2: THE STARTER CAMPAIGNS (3-4 SESSIONS EACH)
+## Part 2: The Starter Campaigns (3-4 Sessions Each)
 
 The following order is designed as a natural campaign flow: start with local, mundane survival problems, build emotional attachment to recurring NPCs, then widen into conspiracy, forbidden spaces, and deep-system secrets.
 
-### CAMPAIGN 1: "THE PARTITION WAR" (MUNDANE SLICE-OF-LIFE)
+### Campaign 1: "The Partition War" (Mundane Slice-of-Life)
 **Theme:** Community friction, resource management, and daily survival.
 **Location:** The Slums of the Down Deep (Level 92).
 
@@ -87,7 +87,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 2: "THE CHIT-POOR HARVEST" (MUNDANE SLICE-OF-LIFE)
+### Campaign 2: "The Chit-Poor Harvest" (Mundane Slice-of-Life)
 **Theme:** Scarcity, the gray market, and the desperation of hunger.
 **Location:** The Hydroponics Rings (Levels 60–80).
 
@@ -98,7 +98,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 3: "THE FLICKERING DARK" (MUNDANE SLICE-OF-LIFE)
+### Campaign 3: "The Flickering Dark" (Mundane Slice-of-Life)
 **Theme:** Infrastructure decay, neighborhood solidarity, and class resentment.
 **Location:** A Deep Residential Slum (Level 105).
 
@@ -109,7 +109,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 4: "THE DOWN-SHIFT TRANSFER" (MUNDANE SLICE-OF-LIFE)
+### Campaign 4: "The Down-Shift Transfer" (Mundane Slice-of-Life)
 **Theme:** Bureaucracy, heartbreak, and the social cost of vertical mobility.
 **Location:** The Upper Mids (Levels 45–50).
 
@@ -120,7 +120,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 5: "THE RUST IN THE RECLAMATION"
+### Campaign 5: "The Rust in the Reclamation"
 **Theme:** Bureaucracy, environmental disaster, and moral ambiguity.
 **Location:** The Mids (Levels 80–85).
 
@@ -131,7 +131,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 6: "THE GHOST IN THE LEDGER" (MUNDANE SLICE-OF-LIFE)
+### Campaign 6: "The Ghost in the Ledger" (Mundane Slice-of-Life)
 **Theme:** Bureaucratic erasure, identity, and the terrifying cost of existing.
 **Location:** The Mids Administrative Tiers (Levels 40–50).
 
@@ -142,7 +142,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 7: "THE TIER INHERITANCE" (MUNDANE SLICE-OF-LIFE)
+### Campaign 7: "The Tier Inheritance" (Mundane Slice-of-Life)
 **Theme:** Property, grief, and the cold economics of death.
 **Location:** Lower Mids (Levels 60–70).
 
@@ -153,7 +153,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 8: "THE MISSING PORTER"
+### Campaign 8: "The Missing Porter"
 **Theme:** Cults, the unknown geography of the Silo, and forbidden beliefs.
 **Location:** The deep Mids / The Gap (Levels 79-81).
 
@@ -164,7 +164,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 9: "THE LOTTERY SWAP"
+### Campaign 9: "The Lottery Swap"
 **Theme:** IT espionage, extreme paranoia, and the desperate desire for a family.
 **Location:** Up Top and Upper Mids (Levels 20–34).
 
@@ -175,7 +175,7 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-### CAMPAIGN 10: "THE GENERATOR HAMMER"
+### Campaign 10: "The Generator Hammer"
 **Theme:** Industrial terror, class warfare, and the secrets of the deep earth.
 **Location:** The Down Deep (Levels 130–144).
 
@@ -186,81 +186,81 @@ The following order is designed as a natural campaign flow: start with local, mu
 
 ---
 
-## PART 3: RUNNING THE CAMPAIGNS AT THE TABLE
+## Part 3: Running the Campaigns at the Table
 
 The campaign premises above are designed to be evocative. Use the following quick kits when you want the scenarios to run with less prep and more momentum.
 
-### CAMPAIGN 1 QUICK KIT: "THE PARTITION WAR"
+### Campaign 1 Quick Kit: "The Partition War"
 
 *   **Key Faces:** Jora Miller (proud rival matriarch), Tavin Holt (weary Supply housing clerk), **Nel Ardin** (helpful clerk with limited pull), Bee (child thief with good intentions), Mett Saar (underpaid Mechanical Shadow).
 *   **Clue Chain:** Missing heirloom -> child's secret hidey-hole -> truth about the collapse seam -> blocked requisition file -> black-market path to repair parts.
 *   **Escalation Clock:** Families stop sharing space -> hallway brawl -> deputy intervention -> one family is forcibly relocated or arrested.
 *   **Fail Forward:** If the party cannot prove who took the locket, Bee returns it anonymously after overhearing the adults prepare for violence.
 
-### CAMPAIGN 2 QUICK KIT: "THE CHIT-POOR HARVEST"
+### Campaign 2 Quick Kit: "The Chit-Poor Harvest"
 
 *   **Key Faces:** Foreman Dera Vos (hard but hungry), Minn Ose (textile machine keeper), Cala Venn (desperate neighbor), Brikk (Syndicate grain broker), **Nel Ardin** (the clerk who tipped them off).
 *   **Clue Chain:** Yield shortfall -> skim opportunity -> processing bottleneck -> textile favor debt -> public pressure from the hungry floor.
 *   **Escalation Clock:** Half-rations begin -> thefts multiply -> a child collapses from hunger -> informants trade names for food.
 *   **Fail Forward:** If the party loses the soy, they can still bargain for community food relief by exposing who skimmed worse than they did.
 
-### CAMPAIGN 3 QUICK KIT: "THE FLICKERING DARK"
+### Campaign 3 Quick Kit: "The Flickering Dark"
 
 *   **Key Faces:** Rella Voss (hallway organizer), Inspector Dorn (not eager to ruin lives), Tekk Mar (cable-splicing mechanic), Yune (teen scout who knows the crawlspace), **Nel Ardin** (the friend buying them a little time).
 *   **Clue Chain:** Dark hallway incidents -> power disparity with Level 104 -> access to industrial socket -> illegal splice -> incoming inspection.
 *   **Escalation Clock:** Crime rises -> pump fails entirely -> stale air causes sickness -> Sheriff uses blackout as pretext for crackdown.
 *   **Fail Forward:** If the splice job fails, the PCs still create enough light to become local heroes, but now everyone knows they meddled with the grid.
 
-### CAMPAIGN 4 QUICK KIT: "THE DOWN-SHIFT TRANSFER"
+### Campaign 4 Quick Kit: "The Down-Shift Transfer"
 
 *   **Key Faces:** **Nel Ardin** (the transferring clerk), Rho Kell (mechanic spouse), Supervisor Pell (jealous rival), Hobb Fen (porter hired for the move).
 *   **Clue Chain:** Missing manifest -> supervisor's late-night office access -> forged delay stamp -> hidden file drawer -> path through the long walk south.
 *   **Escalation Clock:** Permit deadline nears -> neighbors turn cold -> rival alerts Judicial -> dawn arrives with incomplete papers.
 *   **Fail Forward:** If the party cannot save the original manifest, they can salvage the marriage by proving sabotage and forcing a temporary extension.
 
-### CAMPAIGN 5 QUICK KIT: "THE RUST IN THE RECLAMATION"
+### Campaign 5 Quick Kit: "The Rust in the Reclamation"
 
 *   **Key Faces:** Deputy Mara Quill (desperate local law), Doctor Pell Rane (well-meaning Shadow Doctor), Kett Varo (Supply parasite), Nix "Red-Hand" Sol (Syndicate courier).
 *   **Clue Chain:** Red residue at the tap -> half-melted container -> Supply requisition mismatch -> courier delivery route -> Doctor Rane's hidden lab.
 *   **Escalation Clock:** Families get sick -> Hydroponics contamination scare -> quarantine rumor sparks panic -> Judicial sanitation team arrives.
 *   **Fail Forward:** If the party misses a clue, a dying victim produces matching residue on clothing, or a Porter saw the courier run the stairs.
 
-### CAMPAIGN 6 QUICK KIT: "THE GHOST IN THE LEDGER"
+### Campaign 6 Quick Kit: "The Ghost in the Ledger"
 
 *   **Key Faces:** Ossa Remm (the erased neighbor), Archivist Tay (IT clerk owed a favor), Supply Clerk Phen (the man who writes names down), Retired Administrator Voss (half-blind, unimpressed), Compliance Officer Brenn (not cruel, just procedural).
 *   **Clue Chain:** Ration denial at the communal tap -> registry lookup fails -> archived record located in IT -> three-desk confirmation loop -> Supply clerk obstruction -> provisional certificate race.
 *   **Escalation Clock:** Ration access cut -> work assignment voided -> apartment flagged for sweep -> compliance officer arrives ahead of schedule -> arrest warrant issued.
 *   **Fail Forward:** If the paperwork isn't complete in time, Ossa is held for 48 hours in a compliance cell rather than permanently reassigned—giving the party one last window to finalize the restoration.
 
-### CAMPAIGN 7 QUICK KIT: "THE TIER INHERITANCE"
+### Campaign 7 Quick Kit: "The Tier Inheritance"
 
 *   **Key Faces:** Dava Senne (grieving child), Supply Manager Torr (quietly threatening), Preferred Applicant Brem (oblivious nephew, not malicious), Retired IT Administrator Wren Cass (co-signatory, sharp despite the age), Panel Clerk Ilen Mosk (the one with a conscience).
 *   **Clue Chain:** Informal residency records -> double-draw ration logs -> neighbor witness statements -> clearance co-signatory requirement -> Wren Cass's three favors -> tribunal preparation.
 *   **Escalation Clock:** 48-hour window opens -> manager catalogs the unit -> preferred applicant moves belongings in -> competing claim filing deadline passes.
 *   **Fail Forward:** If the party misses the filing window, Wren Cass knows a procedural trick: a "bereavement review" extension can be filed within 24 hours of the original deadline if new residency evidence surfaces.
 
-### CAMPAIGN 8 QUICK KIT: "THE MISSING PORTER"
+### Campaign 8 Quick Kit: "The Missing Porter"
 
 *   **Key Faces:** Elias Dane (missing Porter), Sister Avrel (Flame Watcher negotiator), Deputy Colm Werr (lazy but not stupid), Bessa Pike (porter union elder).
 *   **Clue Chain:** Blood and broken satchel -> porter timetable discrepancy -> architectural mismatch -> hidden vent grate -> captive on Level 80.5.
 *   **Escalation Clock:** Family starts asking publicly -> Judicial notices the missing message -> cult moves Elias deeper -> execution preparations begin.
 *   **Fail Forward:** If the party cannot find the gap, a child relay runner reveals Elias used an "impossible stair" shortcut.
 
-### CAMPAIGN 9 QUICK KIT: "THE LOTTERY SWAP"
+### Campaign 9 Quick Kit: "The Lottery Swap"
 
 *   **Key Faces:** Lysa Trent (the robbed winner), Inquisitor Sel Verin (architect of the fraud), Enid Marr (IT clerk under blackmail), Doctor Hal Wen (archivist on night shift).
 *   **Clue Chain:** Blood-test hardcopy -> archive burn order -> terminal access log -> Enid's forged credentials -> Verin's family tie to the replacement winner.
 *   **Escalation Clock:** Celebration turns to rumor -> records begin disappearing -> Verin frames the PCs -> public hearing or silent arrest.
 *   **Fail Forward:** If they lose the paper trail, a morgue attendant remembers the incineration order and names the wrongdoer for a price.
 
-### CAMPAIGN 10 QUICK KIT: "THE GENERATOR HAMMER"
+### Campaign 10 Quick Kit: "The Generator Hammer"
 
 *   **Key Faces:** Shift-Boss Rourke (deep tyrant), Iri Vale (terrified miner's widow), Joss Trent (surviving crewman), Old Merek (generator sage).
 *   **Clue Chain:** Light-flicker code -> dead miner's crew -> blocked maintenance route -> checkpoint ledger lie -> vault noise under floorplates.
 *   **Escalation Clock:** Pounding worsens -> Mechanical lockdown -> Rourke silences witnesses -> the vault opens or collapses.
 *   **Fail Forward:** If they fail to reach Level 144 cleanly, they arrive branded as intruders but still hear the SOS and must act fast.
 
-### UNIVERSAL CAMPAIGN TOOLS
+### Universal Campaign Tools
 
 *   **Best Opening Move:** Start with a queue, a work shift, or a communal crisis rather than a briefing. The Silo feels most real when trouble interrupts routine.
 *   **Best Mid-Campaign Twist:** Reveal that an apparently personal problem is being shaped by paperwork, surveillance, or a shortage upstream.

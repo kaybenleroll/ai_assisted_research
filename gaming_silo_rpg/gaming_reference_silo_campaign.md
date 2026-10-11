@@ -1,4 +1,4 @@
-# SILO RPG CAMPAIGN REFERENCE
+# Silo RPG Campaign Reference
 
 Fast-launch reference for party setup and the ten starter campaigns.
 

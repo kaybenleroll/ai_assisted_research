@@ -1,4 +1,4 @@
-# SILO SYSTEM: PLAYER'S SURVIVAL GUIDE
+# Silo System: Player's Survival Guide
 
 **"We do not know why we are here. We do not know who built the Silo. We only know that the world outside is dead, and the Silo is life."**
 
@@ -10,23 +10,23 @@ The Silo is a pressure cooker of scarcity, bureaucracy, and paranoia. Survival m
 
 ---
 
-## THE THREE ABSOLUTE TRUTHS
+## The Three Absolute Truths
 
 Every child in the Silo is taught these three truths from the moment they can speak. To question them is not just illegal; it is treated as a dangerous mental illness.
 
-### 1. The Outside is Death
+### 1. The Outside Is Death
 The world above is a toxic, blasted wasteland. The only window to this world is the "Viewport" in the Level 1 Cafeteria—a massive screen hooked to an external camera. It shows a landscape of ruined, dead hills beneath a grey, swirling sky, littered with the rotting bodies of those who came before. The air outside will melt your lungs in minutes. 
 
-### 2. The Pact is Law
+### 2. The Pact Is Law
 There is no constitution, no bill of rights, and no forgiving judge. There is only **The Pact**. It is a massive, ancient legal text that dictates every aspect of your life. It dictates how many children can be born, the required thread count of a mechanic's coveralls, and the exact punishment for stealing a ration of water. Judicial clerks enforce The Pact with terrifying, absolute authority.
 
-### 3. The Cleaning is Our Burden
+### 3. The Cleaning Is Our Burden
 The ultimate punishment for any major crime—or for uttering the forbidden words, *"I want to go outside"*—is The Cleaning. 
 The condemned is fitted with a hazmat suit and sent out the airlock to die. But before they die, as the toxic air eats through their suit, they are compelled by some profound, tragic realization to take a wool pad and clean the lenses of the Silo’s external cameras. They wipe away the grime so those inside can clearly see the wasteland, reminding everyone why they must stay inside. 
 
 ---
 
-## THE WORLD YOU KNOW (THE THREE SECTORS)
+## The World You Know (the Three Sectors)
 
 You likely rarely leave a tight three-level radius around your home and workplace. Traveling more than ten levels is an exhausting journey requiring packed rations and canteens of water. Because of this, the Silo is fiercely divided by geography. 
 
@@ -47,7 +47,7 @@ You likely rarely leave a tight three-level radius around your home and workplac
 
 ---
 
-## HOW THE SILO FEELS TO LIVE IN
+## How the Silo Feels to Live In
 
 You do not think in blueprints. You think in stairs, queues, walls, and how long your legs will hurt afterward.
 
@@ -86,7 +86,7 @@ The first few sessions of play should turn these from rumors into places you act
 
 ---
 
-## THE LOCAL RADIUS (WHERE MANY CITIZENS ACTUALLY LIVE)
+## The Local Radius (Where Many Citizens Actually Live)
 
 Most citizens know the whole Silo only in the abstract. What they know *personally* is a cluster of floors, routes, queues, and faces. If you are from the late Mids or the shallow Down Deep, the following levels likely mean something to you.
 
@@ -100,7 +100,7 @@ Most citizens know the whole Silo only in the abstract. What they know *personal
 
 ---
 
-## FACES YOU KNOW BY REPUTATION
+## Faces You Know by Reputation
 
 You may never have met these people, but if you live in this part of the Silo, you have heard their names.
 
@@ -123,7 +123,7 @@ You may never have met these people, but if you live in this part of the Silo, y
 
 ---
 
-## GROUPS, FAMILIES, AND FACTIONS PEOPLE TALK ABOUT
+## Groups, Families, and Factions People Talk About
 
 These are not hidden conspiracies. They are the names that come up in queues, workshops, and communal kitchens.
 
@@ -136,7 +136,7 @@ These are not hidden conspiracies. They are the names that come up in queues, wo
 
 ---
 
-## LANDMARKS IN THE LATE MIDS AND SHALLOW DEEP
+## Landmarks in the Late Mids and Shallow Deep
 
 | Place | Why It Matters |
 | :--- | :--- |
@@ -150,7 +150,7 @@ These are not hidden conspiracies. They are the names that come up in queues, wo
 
 ---
 
-## YOUR PLACE IN THE MACHINE (CHARACTER ROLES)
+## Your Place in the Machine (Character Roles)
 
 When you create your character, you aren't an adventurer. You are a citizen with a job. Who are you in the machine?
 
@@ -162,7 +162,7 @@ When you create your character, you aren't an adventurer. You are a citizen with
 
 ---
 
-## WHAT YOUR CITIZEN KNOWS WITHOUT ASKING
+## What Your Citizen Knows Without Asking
 
 Even the most obedient citizen learns the following truths just by surviving:
 
@@ -175,7 +175,7 @@ Even the most obedient citizen learns the following truths just by surviving:
 
 ---
 
-## WHAT A NORMAL DAY FEELS LIKE
+## What a Normal Day Feels Like
 
 Before the first few sessions of play turn your life upside down, this is what "normal" looks like:
 
@@ -190,7 +190,7 @@ The first few sessions should answer the rest: who your block trusts, which leve
 
 ---
 
-## SESSION ZERO QUESTIONS FOR YOUR BLOCK
+## Session Zero Questions for Your Block
 
 Use these prompts when building characters so the party feels like citizens from the same world instead of strangers who happened to meet.
 
@@ -203,7 +203,7 @@ Use these prompts when building characters so the party feels like citizens from
 
 ---
 
-## SILO SLANG AND COMMON SAYINGS
+## Silo Slang and Common Sayings
 
 | Term | Meaning |
 | :--- | :--- |
@@ -220,7 +220,7 @@ Use these prompts when building characters so the party feels like citizens from
 
 ---
 
-## A FINAL WARNING
+## A Final Warning
 
 The Silo is not just a place; it is a living, breathing entity that wants to maintain the status quo at all costs. 
 
