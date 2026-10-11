@@ -272,7 +272,7 @@ System executes: Returns order details
 ```text
 Prompt sent to LLM:
 "Previous context:
-- Retrieved order #12345: Widget A ($29.99) and Widget B ($19.99), delivered May 15
+- Retrieved order #12345: Widget A ($29.99) and Widget B ($19.99), delivered 15 May
 - Customer says: 'Widget A arrived broken.'
 
 What should you do next?"
@@ -292,7 +292,7 @@ System executes: Returns inventory status
 ```text
 Prompt sent to LLM:
 "Previous context:
-- Order #12345: Widget A ($29.99, broken) and Widget B ($19.99), delivered May 15
+- Order #12345: Widget A ($29.99, broken) and Widget B ($19.99), delivered 15 May
 - Widget A in stock: 15 units available
 - Customer says: 'Widget A arrived broken.'
 
@@ -1043,15 +1043,15 @@ That is already a meaningful business win.
 
 ### Current Limitations (September 2026)
 
-1. **LLMs aren't perfect reasoners** - They work through learned pattern matching, not logical deduction. Complex multi-step planning with many variables is still hard.
+1. **LLMs aren't perfect reasoners** — They work through learned pattern matching, not logical deduction. Complex multi-step planning with many variables is still hard.
 
-2. **Tool use is brittle** - If a tool returns unexpected format, agents often fail. Schema validation helps but isn't foolproof.
+2. **Tool use is brittle** — If a tool returns unexpected format, agents often fail. Schema validation helps but isn't foolproof.
 
-3. **Cost and latency** - Each LLM call takes time and money. Real-time applications are challenging.
+3. **Cost and latency** — Each LLM call takes time and money. Real-time applications are challenging.
 
-4. **Knowledge cutoffs** - Every model has a cutoff date, and those dates change as providers ship new model versions. Agents cannot reliably know post-cutoff events unless you provide fresh data through tools or retrieval. As a concrete example, Anthropic's current model line spans multiple cutoff points (reliable knowledge dates vary by model family), so even within one provider you cannot assume a single "current knowledge" date.
+4. **Knowledge cutoffs** — Every model has a cutoff date, and those dates change as providers ship new model versions. Agents cannot reliably know post-cutoff events unless you provide fresh data through tools or retrieval. As a concrete example, Anthropic's current model line spans multiple cutoff points (reliable knowledge dates vary by model family), so even within one provider you cannot assume a single "current knowledge" date.
 
-5. **Interpretability** - Why did the agent choose action X instead of Y? Sometimes unclear.
+5. **Interpretability** — Why did the agent choose action X instead of Y? Sometimes unclear.
 
 ### Reference Branch: Emerging Patterns
 
@@ -1088,11 +1088,11 @@ adds latency, state, and another trust boundary.
 
 Autonomous AI agents are not magical. They're engineered systems combining:
 
-1. **LLM as reasoning engine** - Excellent pattern-matching to understand context and plan
-2. **Tools as capabilities** - Giving agents access to real systems
-3. **Memory and context** - Maintaining state and learning
-4. **Execution loops** - Repeating the cycle of reason → act → learn
-5. **Error handling** - Recovering gracefully from inevitable failures
+1. **LLM as reasoning engine** — Excellent pattern-matching to understand context and plan
+2. **Tools as capabilities** — Giving agents access to real systems
+3. **Memory and context** — Maintaining state and learning
+4. **Execution loops** — Repeating the cycle of reason → act → learn
+5. **Error handling** — Recovering gracefully from inevitable failures
 
 The key insight is that **autonomy comes from putting the LLM in a loop**. Rather than asking for a final answer, you ask "what should I do next?" → execute that → ask again. This simple pattern, repeated, enables sophisticated behaviour.
 
