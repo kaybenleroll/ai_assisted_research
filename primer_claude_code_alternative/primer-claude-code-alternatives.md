@@ -1,9 +1,4 @@
----
-title: "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (October 7 Refresh)"
-author: "October 7, 2026"
----
-
-# Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026 (October 7 Refresh)
+# Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026
 
 ## Introduction
 
