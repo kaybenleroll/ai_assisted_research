@@ -15,3 +15,4 @@ primer_claude_code_alternative/primer-claude-code-alternatives.md
 primer_pi_coding_agent/primer_pi_coding_agent.md
 primer_evaluation_loop/primer_evaluation_loop.md
 primer_comparative_religion/primer-comparative-religion.md
+primer_complex_analysis/primer_complex_analysis.md
