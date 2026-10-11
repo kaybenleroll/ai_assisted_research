@@ -569,7 +569,7 @@ A practical default policy:
 
 ---
 
-## Reference branch: Alternative Patterns, Architectures, and Frameworks
+## Reference Branch: Alternative Patterns, Architectures, and Frameworks
 
 This is the first deliberate branch from the default path. Use it to choose
 an execution pattern or runtime after you understand the baseline loop, tool
@@ -932,7 +932,7 @@ Let's make this concrete with a full use case: **an inbound customer support tri
 
 Goal: automatically classify incoming tickets, gather missing details, propose a resolution path, and escalate only when needed.
 
-### Path step 1: Define Scope and Guardrails
+### Path Step 1: Define Scope and Guardrails
 
 Start with narrow scope for v1:
 
@@ -942,7 +942,7 @@ Start with narrow scope for v1:
 
 If scope is fuzzy, quality and safety both collapse.
 
-### Path step 2: Define Success Metrics Before Coding
+### Path Step 2: Define Success Metrics Before Coding
 
 Pick measurable outcomes:
 
@@ -953,7 +953,7 @@ Pick measurable outcomes:
 
 No metrics means no reliable way to improve.
 
-### Path step 3: Design Tool Contracts
+### Path Step 3: Design Tool Contracts
 
 Create small, explicit tools:
 
@@ -965,7 +965,7 @@ Create small, explicit tools:
 
 Keep input and output structured. Avoid mixed free-form returns for core tools.
 
-### Path step 4: Write the System Prompt Like an Operating Manual
+### Path Step 4: Write the System Prompt Like an Operating Manual
 
 Include:
 
@@ -976,7 +976,7 @@ Include:
 
 Think behaviour spec, not marketing copy.
 
-### Path step 5: Implement the Execution Loop with Hard Stops
+### Path Step 5: Implement the Execution Loop with Hard Stops
 
 Use deterministic boundaries:
 
@@ -986,7 +986,7 @@ Use deterministic boundaries:
 
 Unlimited loops are a failure mode, not a feature.
 
-### Path step 6: Build a Realistic Test Suite
+### Path Step 6: Build a Realistic Test Suite
 
 Use labelled test sets covering:
 
@@ -997,7 +997,7 @@ Use labelled test sets covering:
 
 Your goal is decision quality under stress, not just successful code execution.
 
-### Path step 7: Add Human-in-the-Loop for Sensitive Paths
+### Path Step 7: Add Human-in-the-Loop for Sensitive Paths
 
 Require approval for:
 
@@ -1007,7 +1007,7 @@ Require approval for:
 
 This is how you ship value quickly without pretending the agent is flawless.
 
-### Path step 8: Roll Out Gradually
+### Path Step 8: Roll Out Gradually
 
 Recommended rollout pattern:
 
@@ -1017,7 +1017,7 @@ Recommended rollout pattern:
 
 Slow rollout catches real-world edge cases early.
 
-### Path step 9: Operate, Observe, Iterate
+### Path Step 9: Operate, Observe, Iterate
 
 Weekly quality loop:
 
@@ -1053,7 +1053,7 @@ That is already a meaningful business win.
 
 5. **Interpretability** - Why did the agent choose action X instead of Y? Sometimes unclear.
 
-### Reference branch: Emerging Patterns
+### Reference Branch: Emerging Patterns
 
 **Multi-Agent Systems:** Instead of one agent doing everything, multiple specialised agents collaborate:
 

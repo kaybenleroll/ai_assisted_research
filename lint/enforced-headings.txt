@@ -1,2 +1,4 @@
 # Add a primer only after its heading-case sweep has cleared all House.HeadingCase alerts.
 primer_evaluation_loop/primer_evaluation_loop.md
+primer_building_ai_agents/primer_ai_agents_comprehensive.md
+primer_building_ai_agents/primer_agent_quick_reference.md

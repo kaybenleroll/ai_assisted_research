@@ -502,7 +502,7 @@ async def test_agent_research_task():
     assert len(result.sources) >= 3
 ```
 
-### End-to-End Tests
+### Complete Workflow Tests
 ```python
 # Test agent on realistic scenarios
 test_cases = [
