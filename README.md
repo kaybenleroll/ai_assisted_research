@@ -97,7 +97,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 Shared build infrastructure lives in `_shared/`. Each primer has a thin `Justfile` that sets variables and imports `../_shared/common.just`.
 
-```
+```bash
 # Render a specific primer
 cd primer_numerical_analysis && just all
 
