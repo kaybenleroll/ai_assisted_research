@@ -794,24 +794,24 @@ The loop does not have an exit condition. It has better and worse steady states.
 
 The following works are cited directly in this primer or are the canonical sources for the ideas it covers.
 
-- Karpathy, A. "Software 2.0." Medium, November 2017. https://karpathy.medium.com/software-2-0-a64152b37c35
-- Karpathy, A. Data engine tweet. December 5, 2022. https://x.com/karpathy/status/1599852921541128194
-- Ouyang, L. et al. "Training language models to follow instructions with human feedback" (InstructGPT). NeurIPS 2022. https://arxiv.org/abs/2203.02155
-- Liu, Y. et al. "G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment." EMNLP 2023. https://arxiv.org/abs/2303.16634
-- Chiang, W.-L. et al. "Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference." ICML 2024. https://arxiv.org/abs/2403.04132
-- Burns, C. et al. (OpenAI). "Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision." December 2023. https://arxiv.org/abs/2312.09390
-- Bai, Y. et al. (Anthropic). "Constitutional AI: Harmlessness from AI Feedback." December 2022. https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback
+- Karpathy, A. ["Software 2.0."](https://karpathy.medium.com/software-2-0-a64152b37c35) Medium, November 2017.
+- Karpathy, A. [Data engine tweet](https://x.com/karpathy/status/1599852921541128194). December 5, 2022.
+- Ouyang, L. et al. ["Training language models to follow instructions with human feedback" (InstructGPT)](https://arxiv.org/abs/2203.02155). NeurIPS 2022.
+- Liu, Y. et al. ["G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment."](https://arxiv.org/abs/2303.16634) EMNLP 2023.
+- Chiang, W.-L. et al. ["Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference."](https://arxiv.org/abs/2403.04132) ICML 2024.
+- Burns, C. et al. (OpenAI). ["Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision."](https://arxiv.org/abs/2312.09390) December 2023.
+- Bai, Y. et al. (Anthropic). ["Constitutional AI: Harmlessness from AI Feedback."](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback) December 2022.
 - Khattab, O. et al. (Stanford NLP). "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines." arXiv:2310.03714, 2023.
 - Dubois, Y. et al. "Length-Controlled AlpacaEval: A Simple Way to Debias Automatic Evaluators." (AlpacaEval 2.0) arXiv:2404.04475, 2024.
-- He, H. (@cHHillee). Documentation of GPT-4 Codeforces contamination cliff. March 2023. https://x.com/cHHillee/status/1635790330854526981
+- He, H. (@cHHillee). [Documentation of GPT-4 Codeforces contamination cliff](https://x.com/cHHillee/status/1635790330854526981). March 2023.
 - Roberts et al. "Data Contamination Through the Lens of Time." arXiv:2310.10628, 2023.
 - Ahmad, L. et al. (OpenAI). "OpenAI's Approach to External Red Teaming for AI Models and Systems." arXiv:2503.16431, 2025.
-- METR. "Measuring the Impact of AI Assistance on Programmer Productivity." Randomised controlled trial, 2025. https://metr.org
-- METR. "Many SWE-bench-Passing PRs Would Not Be Merged into Main." March 2026. https://metr.org
+- METR. ["Measuring the Impact of AI Assistance on Programmer Productivity."](https://metr.org) Randomised controlled trial, 2025.
+- METR. ["Many SWE-bench-Passing PRs Would Not Be Merged into Main."](https://metr.org) March 2026.
 - Wang, H. et al. (Berkeley RDI / UC Berkeley Center for Responsible, Decentralized Intelligence). Benchmark-exploit audit of AI agent evaluation harnesses (SWE-bench, WebArena, OSWorld, GAIA, Terminal-Bench). Pre-publication work, targeted at NeurIPS.
 - Anthropic. Claude 4 System Card. May 2025.
-- Anthropic. Responsible Scaling Policy. https://www.anthropic.com/index/anthropics-responsible-scaling-policy
-- OpenAI. Preparedness Framework. https://openai.com/safety/preparedness
-- Rafailov, R. et al. "Direct Preference Optimization: Your Language Model is Secretly a Reward Model." NeurIPS 2023. https://arxiv.org/abs/2305.18290
-- Chen, M. et al. "Evaluating Large Language Models Trained on Code" (HumanEval / Codex / pass@k estimator). arXiv:2107.03374, 2021. https://arxiv.org/abs/2107.03374
+- Anthropic. [Responsible Scaling Policy](https://www.anthropic.com/index/anthropics-responsible-scaling-policy).
+- OpenAI. [Preparedness Framework](https://openai.com/safety/preparedness).
+- Rafailov, R. et al. ["Direct Preference Optimization: Your Language Model is Secretly a Reward Model."](https://arxiv.org/abs/2305.18290) NeurIPS 2023.
+- Chen, M. et al. ["Evaluating Large Language Models Trained on Code" (HumanEval / Codex / pass@k estimator)](https://arxiv.org/abs/2107.03374). arXiv:2107.03374, 2021.
 - Cohen, J. "A coefficient of agreement for nominal scales." Educational and Psychological Measurement, 1960. Krippendorff, K. *Content Analysis: An Introduction to Its Methodology* (2nd ed.), 2004.
