@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -577,6 +586,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -596,8 +606,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Complex Analysis: A Technical
 Primer</span>
-
     <span class="navbar-meta">October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -724,8 +734,32 @@ notes</a></li>
 Solutions, and Further Reading</a>
 <ul>
 <li><a href="#appendix-a-hints" id="toc-appendix-a-hints"><span class="toc-section-number">9.1</span> Appendix A: Hints</a></li>
-<li><a href="#appendix-b-outline-solutions" id="toc-appendix-b-outline-solutions"><span class="toc-section-number">9.2</span> Appendix B: Outline
-solutions</a></li>
+<li><a href="#appendix-b-outline-solutions" id="toc-appendix-b-outline-solutions"><span class="toc-section-number">9.2</span> Appendix B: Outline solutions</a>
+<ul>
+<li><a href="#solution-1" id="toc-solution-1">Solution 1</a></li>
+<li><a href="#solution-2" id="toc-solution-2">Solution 2</a></li>
+<li><a href="#solution-3" id="toc-solution-3">Solution 3</a></li>
+<li><a href="#solution-4" id="toc-solution-4">Solution 4</a></li>
+<li><a href="#solution-5" id="toc-solution-5">Solution 5</a></li>
+<li><a href="#solution-6" id="toc-solution-6">Solution 6</a></li>
+<li><a href="#solution-7" id="toc-solution-7">Solution 7</a></li>
+<li><a href="#solution-8" id="toc-solution-8">Solution 8</a></li>
+<li><a href="#solution-9" id="toc-solution-9">Solution 9</a></li>
+<li><a href="#solution-10" id="toc-solution-10">Solution 10</a></li>
+<li><a href="#solution-11" id="toc-solution-11">Solution 11</a></li>
+<li><a href="#solution-12" id="toc-solution-12">Solution 12</a></li>
+<li><a href="#solution-13" id="toc-solution-13">Solution 13</a></li>
+<li><a href="#solution-14" id="toc-solution-14">Solution 14</a></li>
+<li><a href="#solution-15" id="toc-solution-15">Solution 15</a></li>
+<li><a href="#solution-16" id="toc-solution-16">Solution 16</a></li>
+<li><a href="#solution-17" id="toc-solution-17">Solution 17</a></li>
+<li><a href="#solution-18" id="toc-solution-18">Solution 18</a></li>
+<li><a href="#solution-19" id="toc-solution-19">Solution 19</a></li>
+<li><a href="#solution-20" id="toc-solution-20">Solution 20</a></li>
+<li><a href="#solution-21" id="toc-solution-21">Solution 21</a></li>
+<li><a href="#solution-22" id="toc-solution-22">Solution 22</a></li>
+<li><a href="#solution-23" id="toc-solution-23">Solution 23</a></li>
+</ul></li>
 <li><a href="#further-reading-and-references" id="toc-further-reading-and-references"><span class="toc-section-number">9.3</span> Further reading and references</a>
 <ul>
 <li><a href="#foundational-texts-and-course-notes" id="toc-foundational-texts-and-course-notes"><span class="toc-section-number">9.3.1</span> Foundational texts and course
@@ -4067,13 +4101,13 @@ command must receive the intended variable and centre.</li>
 </ul>
 <h2 data-number="9.2" id="appendix-b-outline-solutions"><span class="header-section-number">9.2</span> Appendix B: Outline
 solutions</h2>
-<h4 class="unnumbered" id="solution-1">Solution 1</h4>
+<h3 class="unnumbered" id="solution-1">Solution 1</h3>
 <p>On <span class="math inline">\([0,1]\)</span>, <span class="math inline">\(x^n\to0\)</span> for every <span class="math inline">\(x&lt;1\)</span> but <span class="math inline">\(f_n(1)=1\)</span>, so the pointwise limit is
 discontinuous. Uniform convergence would preserve continuity, so it
 cannot occur. On <span class="math inline">\([0,r]\)</span> with <span class="math inline">\(r&lt;1\)</span>, <span class="math inline">\(\sup|x^n|=r^n\to0\)</span>. The pointwise limit is
 <span class="math inline">\(f(x)=0\)</span> for <span class="math inline">\(0\le x&lt;1\)</span> and <span class="math inline">\(f(1)=1\)</span>, which makes the continuity
 contradiction explicit.</p>
-<h4 class="unnumbered" id="solution-2">Solution 2</h4>
+<h3 class="unnumbered" id="solution-2">Solution 2</h3>
 <p>Parameterising <span class="math inline">\(\gamma\)</span> gives
 <span class="math display">\[
 \left|\int_\gamma(f_n-f)\,dz\right|\le
@@ -4082,7 +4116,7 @@ L\sup_{z\in\gamma}|f_n(z)-f(z)|\le LM_n.
 sufficient. This is the precise estimate behind interchanging a
 uniformly convergent limit with a fixed finite-length contour
 integral.</p>
-<h4 class="unnumbered" id="solution-3">Solution 3</h4>
+<h3 class="unnumbered" id="solution-3">Solution 3</h3>
 <p>At every point, the difference quotient of <span class="math inline">\(\overline z\)</span> is <span class="math inline">\(\overline h/h\)</span>. Taking <span class="math inline">\(h\)</span> real gives <span class="math inline">\(1\)</span>, while taking <span class="math inline">\(h\)</span> purely imaginary gives <span class="math inline">\(-1\)</span>, so there is no limit. In particular,
 the claim that it is differentiable at zero is already false.
 Equivalently, for <span class="math inline">\(f=u+iv=x-iy\)</span>, CR
@@ -4094,7 +4128,7 @@ f(x+iy)=\frac{x^2y}{x^4+y^2}\quad\text{when }(x,y)\ne(0,0).
 CR holds there. Along the path <span class="math inline">\(y=x^2\)</span>, however, <span class="math inline">\(f=1/2\)</span>, and <span class="math inline">\(f(z)/z\)</span> does not approach a finite limit.
 Continuously differentiable components satisfying CR on a neighbourhood
 do imply holomorphy.</p>
-<h4 class="unnumbered" id="solution-4">Solution 4</h4>
+<h3 class="unnumbered" id="solution-4">Solution 4</h3>
 <p>Continuous first partial derivatives plus CR imply complex
 differentiability throughout the region. Continuity controls the
 first-order real differentiability remainder in the complex difference
@@ -4103,7 +4137,7 @@ the remainder; the counterexample displayed in Solution 3 has zero first
 partials at the origin but an unbounded difference quotient along <span class="math inline">\(y=x^2\)</span>. Thus the hypothesis is a
 neighbourhood hypothesis, not merely a pair of equalities checked at the
 target point.</p>
-<h4 class="unnumbered" id="solution-5">Solution 5</h4>
+<h3 class="unnumbered" id="solution-5">Solution 5</h3>
 <p>CR gives <span class="math inline">\(v_y=2x\)</span>, <span class="math inline">\(v_x=2y\)</span>, hence <span class="math inline">\(v=2xy+C\)</span> and <span class="math inline">\(f(z)=z^2+iC\)</span>. For <span class="math inline">\(u=\log|z|\)</span>, local conjugates are branches
 of <span class="math inline">\(\arg z\)</span>. Continuation once around
 zero changes the argument by <span class="math inline">\(2\pi\)</span>,
@@ -4111,7 +4145,7 @@ so there is no globally single-valued conjugate on the punctured plane.
 The obstruction is topological, not a failure of local harmonicity. On
 any simply connected slit region avoiding zero, one branch of the
 argument supplies a valid conjugate.</p>
-<h4 class="unnumbered" id="solution-6">Solution 6</h4>
+<h3 class="unnumbered" id="solution-6">Solution 6</h3>
 <p>A primitive would make every closed-curve integral zero, but the unit
 circle gives <span class="math inline">\(\oint dz/z=2\pi i\)</span>.
 Holomorphy is local; simple connectivity is a standard sufficient
@@ -4119,12 +4153,12 @@ condition for a primitive. More generally, all closed-curve integrals
 must vanish. The punctured plane fails the topological condition because
 the unit circle cannot be contracted without crossing the missing
 origin.</p>
-<h4 class="unnumbered" id="solution-7">Solution 7</h4>
+<h3 class="unnumbered" id="solution-7">Solution 7</h3>
 <p>Cauchy’s derivative formula gives <span class="math display">\[
 \oint_{|z|=2}\frac{e^z}{(z-1)^3}\,dz=\frac{2\pi i}{2!}e^1=\pi i e,
 \]</span> because <span class="math inline">\(e^z\)</span> is
 holomorphic on and inside the circle and the denominator is <span class="math inline">\((z-1)^{2+1}\)</span>.</p>
-<h4 class="unnumbered" id="solution-8">Solution 8</h4>
+<h3 class="unnumbered" id="solution-8">Solution 8</h3>
 <p>For <span class="math inline">\(|z|&lt;1\)</span>, <span class="math inline">\(z/(z-1)=-z/(1-z)=-\sum_{n=1}^{\infty}z^n\)</span>.
 For <span class="math inline">\(|z|&gt;1\)</span>, <span class="math inline">\(z/(z-1)=1/(1-1/z)=\sum_{n=0}^{\infty}z^{-n}\)</span>.
 The geometric series have distinct convergence regions separated by the
@@ -4133,21 +4167,21 @@ belongs to an annulus of analyticity, so the same centre can support
 different expansions on different annuli. Neither expansion may be
 extended across the pole merely because its algebraic formula looks the
 same.</p>
-<h4 class="unnumbered" id="solution-9">Solution 9</h4>
+<h3 class="unnumbered" id="solution-9">Solution 9</h3>
 <p>Expand <span class="math inline">\(g(z)=\sum_{n=0}^{\infty}z^{-(n+2)}/n!\)</span>. No
 <span class="math inline">\(z^{-1}\)</span> term appears, so the residue
 is zero. Infinitely many negative powers occur, hence the singularity is
 essential. The residue is only one Laurent coefficient; it does not
 determine the rest of the principal part. In particular, “residue zero”
 does not mean “removable” or “regular.”</p>
-<h4 class="unnumbered" id="solution-10">Solution 10</h4>
+<h3 class="unnumbered" id="solution-10">Solution 10</h3>
 <p>Partial fractions give <span class="math inline">\((z^2+1)/(z(z-1))=1-1/z+2/(z-1)\)</span>. The
 enclosed residues at zero and one are <span class="math inline">\(-1\)</span> and <span class="math inline">\(2\)</span>, summing to <span class="math inline">\(1\)</span>, so the integral is <span class="math inline">\(2\pi i\)</span>. On <span class="math inline">\(|z|&gt;1\)</span>, expand <span class="math inline">\(1/(z-1)=z^{-1}(1-z^{-1})^{-1}\)</span>; the
 coefficient of <span class="math inline">\(z^{-1}\)</span> in the full
 expression is <span class="math inline">\(1\)</span>, giving the same
 answer. The coefficient method applies because the contour lies in that
 annulus.</p>
-<h4 class="unnumbered" id="solution-11">Solution 11</h4>
+<h3 class="unnumbered" id="solution-11">Solution 11</h3>
 <p>The simple poles of <span class="math inline">\(e^z/(z^2+1)\)</span>
 are <span class="math inline">\(i,-i\)</span>. The residues are <span class="math inline">\(e^i/(2i)\)</span> and <span class="math inline">\(-e^{-i}/(2i)\)</span>. For the real integral,
 instead integrate <span class="math inline">\(1/(z^2+1)\)</span> over
@@ -4157,24 +4191,24 @@ the real integral. Only <span class="math inline">\(i\)</span> is
 enclosed; its residue is <span class="math inline">\(1/(2i)\)</span>, so
 the closed integral is <span class="math inline">\(\pi\)</span>. On the
 arc <span class="math inline">\(|z|=R\)</span>, the integrand is <span class="math inline">\(O(R^{-2})\)</span> and the arc length is <span class="math inline">\(\pi R\)</span>; the arc integral is <span class="math inline">\(O(R^{-1})\to0\)</span>.</p>
-<h4 class="unnumbered" id="solution-12">Solution 12</h4>
+<h3 class="unnumbered" id="solution-12">Solution 12</h3>
 <p>On <span class="math inline">\(|z|=1\)</span>, compare <span class="math inline">\(3z\)</span> with <span class="math inline">\(z^5+1\)</span>: <span class="math inline">\(|3z|=3\)</span> and <span class="math inline">\(|z^5+1|\le2\)</span>. Rouché gives one zero. On
 <span class="math inline">\(|z|=2\)</span>, compare <span class="math inline">\(z^5\)</span> with <span class="math inline">\(3z+1\)</span>: <span class="math inline">\(|z^5|=32\)</span> and <span class="math inline">\(|3z+1|\le7\)</span>. Thus there are five zeros
 inside radius two and four in the annulus. The inequalities are strict
 on the complete boundary circles, so no boundary-zero ambiguity
 remains.</p>
-<h4 class="unnumbered" id="solution-13">Solution 13</h4>
+<h3 class="unnumbered" id="solution-13">Solution 13</h3>
 <p>The argument principle gives <span class="math inline">\(N-P=(2\pi
 i)^{-1}\oint f&#39;/f\,dz\)</span>. For <span class="math inline">\(z^2+1\)</span>, both zeros <span class="math inline">\(\pm i\)</span> lie inside radius two and neither
 lies inside radius one-half; the net argument changes are <span class="math inline">\(4\pi\)</span> and <span class="math inline">\(0\)</span>, respectively. There are no poles, so
 these winding counts are exactly the zero counts.</p>
-<h4 class="unnumbered" id="solution-14">Solution 14</h4>
+<h3 class="unnumbered" id="solution-14">Solution 14</h3>
 <p><span class="math inline">\(w=(z-i)/(z+i)\)</span> works. It sends
 <span class="math inline">\(i\mapsto0\)</span>, <span class="math inline">\(0\mapsto-1\)</span>, <span class="math inline">\(1\mapsto-i\)</span>, and <span class="math inline">\(\infty\mapsto1\)</span>. For real <span class="math inline">\(x\)</span>, numerator and denominator have equal
 modulus, so the real axis maps to <span class="math inline">\(|w|=1\)</span>. In the upper half-plane <span class="math inline">\(|z-i|&lt;|z+i|\)</span>, so the image lies inside
 the circle. The strict inequality follows by comparing squared
 distances: <span class="math inline">\(|z+i|^2-|z-i|^2=4\operatorname{Im}z&gt;0\)</span>.</p>
-<h4 class="unnumbered" id="solution-15">Solution 15</h4>
+<h3 class="unnumbered" id="solution-15">Solution 15</h3>
 <p>Since <span class="math inline">\(|e^{\pi
 z}|=e^{\pi\operatorname{Re}z}\)</span>, the image is <span class="math inline">\(1&lt;|w|&lt;e^\pi\)</span>. The map is not
 injective: <span class="math inline">\(e^{\pi(z+2i)}=e^{\pi z}\)</span>,
@@ -4183,7 +4217,7 @@ circle and the circle of radius <span class="math inline">\(e^\pi\)</span>, each
 imaginary part varies. The image is an annulus, not a disk, because the
 strip’s two vertical boundary lines become two distinct modulus
 boundaries.</p>
-<h4 class="unnumbered" id="solution-16">Solution 16</h4>
+<h3 class="unnumbered" id="solution-16">Solution 16</h3>
 <p>The real Jacobian at <span class="math inline">\(z_0\)</span> is
 rotation and uniform scaling by <span class="math inline">\(|f&#39;(z_0)|\)</span> to first order. Thus angles
 are preserved locally, and an orthogonal grid remains locally
@@ -4192,7 +4226,7 @@ orthogonal, though its scale and orientation may vary with position. Yet
 injective on the whole plane because it has period <span class="math inline">\(2\pi i\)</span>. Nonzero derivative gives local,
 not global, one-to-one behaviour; global injectivity requires additional
 information about the domain and the map.</p>
-<h4 class="unnumbered" id="solution-17">Solution 17</h4>
+<h3 class="unnumbered" id="solution-17">Solution 17</h3>
 <p>The maximum principle says a nonconstant harmonic function cannot
 attain an interior maximum or minimum. A continuous harmonic function on
 a bounded domain therefore takes its extrema on the boundary. This gives
@@ -4202,7 +4236,7 @@ existence or give a formula; those require separate construction or an
 existence theorem. This distinction is important: a uniqueness argument
 rules out two different solutions, but it does not produce even one
 solution.</p>
-<h4 class="unnumbered" id="solution-18">Solution 18</h4>
+<h3 class="unnumbered" id="solution-18">Solution 18</h3>
 <p><span class="math inline">\(F&#39;(z)=U-a/z^2\)</span>, so the
 stagnation points are <span class="math inline">\(z=\pm\sqrt{a/U}\)</span>. For <span class="math inline">\(z=x+iy\)</span>, <span class="math inline">\(\operatorname{Im}(a/z)=-ay/(x^2+y^2)\)</span>;
 hence <span class="math inline">\(\operatorname{Im}F=y(U-a/(x^2+y^2))\)</span>.
@@ -4212,7 +4246,7 @@ cylinder in ideal potential flow. The assumptions omit viscosity,
 turbulence, compressibility, and time dependence; the doublet
 singularity lies inside the excluded cylinder, so the formula is used
 only outside the physical boundary.</p>
-<h4 class="unnumbered" id="solution-19">Solution 19</h4>
+<h3 class="unnumbered" id="solution-19">Solution 19</h3>
 <p>Let <span class="math inline">\(\phi\)</span> map the disk
 conformally to the physical domain. Composition <span class="math inline">\(u\circ\phi\)</span> is harmonic because the
 two-dimensional Laplacian transforms by <span class="math inline">\(|\phi&#39;|^2\)</span>. Dirichlet boundary values
@@ -4224,7 +4258,7 @@ elementary formula; boundary regularity, multiply connected regions, and
 non-Dirichlet conditions require extra work. In practice, the disk
 solution must still be evaluated and composed with <span class="math inline">\(\phi^{-1}\)</span>, so the theorem and the
 computational solution are separate steps.</p>
-<h4 class="unnumbered" id="solution-20">Solution 20</h4>
+<h3 class="unnumbered" id="solution-20">Solution 20</h3>
 <p>Squaring the integral and using polar coordinates gives <span class="math inline">\(I(\lambda)^2=\pi/\lambda\)</span>, and positivity
 selects <span class="math inline">\(I(\lambda)=\sqrt{\pi/\lambda}\)</span>. Complex
 analysis helps with oscillatory or complex parameters, where contour
@@ -4233,7 +4267,7 @@ holomorphy in the swept region (and accounting for any crossed poles);
 parameter limits also need domination or another interchange
 justification. For a complex Gaussian, the chosen branch of <span class="math inline">\(\sqrt{\lambda}\)</span> and the direction in which
 the contour can be rotated are additional data.</p>
-<h4 class="unnumbered" id="solution-21">Solution 21</h4>
+<h3 class="unnumbered" id="solution-21">Solution 21</h3>
 <p>With <span class="math inline">\(t_k=2\pi k/N\)</span>, use <span class="math display">\[
 S_N=\frac{2\pi}{N}\sum_{k=0}^{N-1}
 \frac{iR e^{it_k}}{Re^{it_k}-1}.
@@ -4246,7 +4280,7 @@ i\,2^{-N}/(1-2^{-N})\)</span> for <span class="math inline">\(R=1/2\)</span>. Bo
 for the smaller circle the finite sum is not exactly zero. The nearest
 singularity in the complexified parameter controls trapezoidal
 convergence. Refining the mesh never changes which pole is enclosed.</p>
-<h4 class="unnumbered" id="solution-22">Solution 22</h4>
+<h3 class="unnumbered" id="solution-22">Solution 22</h3>
 <p>The principal logarithm has real part <span class="math inline">\(\log|z|\)</span> and imaginary part <span class="math inline">\(\operatorname{Arg}z\in(-\pi,\pi]\)</span>. Its
 phase jumps across the negative real axis, while zero is a logarithmic
 singularity; mask both. Any simply connected region avoiding zero admits
@@ -4256,7 +4290,7 @@ around zero, so a finer grid can only sample it more sharply. For
 example, the slit plane <span class="math inline">\(\mathbb
 C\setminus(-\infty,0]\)</span> supports the standard principal
 branch.</p>
-<h4 class="unnumbered" id="solution-23">Solution 23</h4>
+<h3 class="unnumbered" id="solution-23">Solution 23</h3>
 <p>The expansion is <span class="math inline">\(\sin
 z/z^3=z^{-2}-1/6+z^2/120-\cdots\)</span>. The singularity is a pole of
 order two and its residue, the coefficient of <span class="math inline">\(z^{-1}\)</span>, is zero. A symbolic residue
@@ -4436,6 +4470,7 @@ theorem, first check orientation, poles on or near the contour, branch
 cuts, and whether the numerical path actually matches the intended
 contour. A plot is most useful as a way to discover a bad assumption or
 a missed feature, then return to the analytic argument.</p>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
