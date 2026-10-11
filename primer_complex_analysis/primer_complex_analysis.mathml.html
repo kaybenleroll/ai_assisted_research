@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -577,6 +586,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -596,8 +606,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Complex Analysis: A Technical
 Primer</span>
-
     <span class="navbar-meta">October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -724,8 +734,32 @@ notes</a></li>
 Solutions, and Further Reading</a>
 <ul>
 <li><a href="#appendix-a-hints" id="toc-appendix-a-hints"><span class="toc-section-number">9.1</span> Appendix A: Hints</a></li>
-<li><a href="#appendix-b-outline-solutions" id="toc-appendix-b-outline-solutions"><span class="toc-section-number">9.2</span> Appendix B: Outline
-solutions</a></li>
+<li><a href="#appendix-b-outline-solutions" id="toc-appendix-b-outline-solutions"><span class="toc-section-number">9.2</span> Appendix B: Outline solutions</a>
+<ul>
+<li><a href="#solution-1" id="toc-solution-1">Solution 1</a></li>
+<li><a href="#solution-2" id="toc-solution-2">Solution 2</a></li>
+<li><a href="#solution-3" id="toc-solution-3">Solution 3</a></li>
+<li><a href="#solution-4" id="toc-solution-4">Solution 4</a></li>
+<li><a href="#solution-5" id="toc-solution-5">Solution 5</a></li>
+<li><a href="#solution-6" id="toc-solution-6">Solution 6</a></li>
+<li><a href="#solution-7" id="toc-solution-7">Solution 7</a></li>
+<li><a href="#solution-8" id="toc-solution-8">Solution 8</a></li>
+<li><a href="#solution-9" id="toc-solution-9">Solution 9</a></li>
+<li><a href="#solution-10" id="toc-solution-10">Solution 10</a></li>
+<li><a href="#solution-11" id="toc-solution-11">Solution 11</a></li>
+<li><a href="#solution-12" id="toc-solution-12">Solution 12</a></li>
+<li><a href="#solution-13" id="toc-solution-13">Solution 13</a></li>
+<li><a href="#solution-14" id="toc-solution-14">Solution 14</a></li>
+<li><a href="#solution-15" id="toc-solution-15">Solution 15</a></li>
+<li><a href="#solution-16" id="toc-solution-16">Solution 16</a></li>
+<li><a href="#solution-17" id="toc-solution-17">Solution 17</a></li>
+<li><a href="#solution-18" id="toc-solution-18">Solution 18</a></li>
+<li><a href="#solution-19" id="toc-solution-19">Solution 19</a></li>
+<li><a href="#solution-20" id="toc-solution-20">Solution 20</a></li>
+<li><a href="#solution-21" id="toc-solution-21">Solution 21</a></li>
+<li><a href="#solution-22" id="toc-solution-22">Solution 22</a></li>
+<li><a href="#solution-23" id="toc-solution-23">Solution 23</a></li>
+</ul></li>
 <li><a href="#further-reading-and-references" id="toc-further-reading-and-references"><span class="toc-section-number">9.3</span> Further reading and references</a>
 <ul>
 <li><a href="#foundational-texts-and-course-notes" id="toc-foundational-texts-and-course-notes"><span class="toc-section-number">9.3.1</span> Foundational texts and course
@@ -6518,7 +6552,7 @@ command must receive the intended variable and centre.</li>
 </ul>
 <h2 data-number="9.2" id="appendix-b-outline-solutions"><span class="header-section-number">9.2</span> Appendix B: Outline
 solutions</h2>
-<h4 class="unnumbered" id="solution-1">Solution 1</h4>
+<h3 class="unnumbered" id="solution-1">Solution 1</h3>
 <p>On
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mi>n</mi></msup><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x^n\to0</annotation></semantics></math>
@@ -6539,7 +6573,7 @@ for
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(1)=1</annotation></semantics></math>,
 which makes the continuity contradiction explicit.</p>
-<h4 class="unnumbered" id="solution-2">Solution 2</h4>
+<h3 class="unnumbered" id="solution-2">Solution 2</h3>
 <p>Parameterising
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 gives
@@ -6550,7 +6584,7 @@ gives
 is sufficient. This is the precise estimate behind interchanging a
 uniformly convergent limit with a fixed finite-length contour
 integral.</p>
-<h4 class="unnumbered" id="solution-3">Solution 3</h4>
+<h3 class="unnumbered" id="solution-3">Solution 3</h3>
 <p>At every point, the difference quotient of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>z</mi><mo accent="true">¯</mo></mover><annotation encoding="application/x-tex">\overline z</annotation></semantics></math>
 is
@@ -6584,7 +6618,7 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">f(z)/z</annotation></semantics></math>
 does not approach a finite limit. Continuously differentiable components
 satisfying CR on a neighbourhood do imply holomorphy.</p>
-<h4 class="unnumbered" id="solution-4">Solution 4</h4>
+<h3 class="unnumbered" id="solution-4">Solution 4</h3>
 <p>Continuous first partial derivatives plus CR imply complex
 differentiability throughout the region. Continuity controls the
 first-order real differentiability remainder in the complex difference
@@ -6594,7 +6628,7 @@ partials at the origin but an unbounded difference quotient along
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">y=x^2</annotation></semantics></math>.
 Thus the hypothesis is a neighbourhood hypothesis, not merely a pair of
 equalities checked at the target point.</p>
-<h4 class="unnumbered" id="solution-5">Solution 5</h4>
+<h3 class="unnumbered" id="solution-5">Solution 5</h3>
 <p>CR gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>y</mi></msub><mo>=</mo><mn>2</mn><mi>x</mi></mrow><annotation encoding="application/x-tex">v_y=2x</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>x</mi></msub><mo>=</mo><mn>2</mn><mi>y</mi></mrow><annotation encoding="application/x-tex">v_x=2y</annotation></semantics></math>,
@@ -6612,7 +6646,7 @@ so there is no globally single-valued conjugate on the punctured plane.
 The obstruction is topological, not a failure of local harmonicity. On
 any simply connected slit region avoiding zero, one branch of the
 argument supplies a valid conjugate.</p>
-<h4 class="unnumbered" id="solution-6">Solution 6</h4>
+<h3 class="unnumbered" id="solution-6">Solution 6</h3>
 <p>A primitive would make every closed-curve integral zero, but the unit
 circle gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∮</mo><mi>d</mi><mi>z</mi><mi>/</mi><mi>z</mi><mo>=</mo><mn>2</mn><mi>π</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">\oint dz/z=2\pi i</annotation></semantics></math>.
@@ -6621,7 +6655,7 @@ condition for a primitive. More generally, all closed-curve integrals
 must vanish. The punctured plane fails the topological condition because
 the unit circle cannot be contracted without crossing the missing
 origin.</p>
-<h4 class="unnumbered" id="solution-7">Solution 7</h4>
+<h3 class="unnumbered" id="solution-7">Solution 7</h3>
 <p>Cauchy’s derivative formula gives
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∮</mo><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>2</mn></mrow></msub><mfrac><msup><mi>e</mi><mi>z</mi></msup><mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>3</mn></msup></mrow></mfrac><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi><mo>=</mo><mfrac><mrow><mn>2</mn><mi>π</mi><mi>i</mi></mrow><mrow><mn>2</mn><mi>!</mi></mrow></mfrac><msup><mi>e</mi><mn>1</mn></msup><mo>=</mo><mi>π</mi><mi>i</mi><mi>e</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
 \oint_{|z|=2}\frac{e^z}{(z-1)^3}\,dz=\frac{2\pi i}{2!}e^1=\pi i e,
@@ -6629,7 +6663,7 @@ origin.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><mi>z</mi></msup><annotation encoding="application/x-tex">e^z</annotation></semantics></math>
 is holomorphic on and inside the circle and the denominator is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mrow><mn>2</mn><mo>+</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">(z-1)^{2+1}</annotation></semantics></math>.</p>
-<h4 class="unnumbered" id="solution-8">Solution 8</h4>
+<h3 class="unnumbered" id="solution-8">Solution 8</h3>
 <p>For
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|z|&lt;1</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mi>z</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><msubsup><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><msup><mi>z</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">z/(z-1)=-z/(1-z)=-\sum_{n=1}^{\infty}z^n</annotation></semantics></math>.
@@ -6643,7 +6677,7 @@ A Laurent expansion belongs to an annulus of analyticity, so the same
 centre can support different expansions on different annuli. Neither
 expansion may be extended across the pole merely because its algebraic
 formula looks the same.</p>
-<h4 class="unnumbered" id="solution-9">Solution 9</h4>
+<h3 class="unnumbered" id="solution-9">Solution 9</h3>
 <p>Expand
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>0</mn></mrow><mi>∞</mi></msubsup><msup><mi>z</mi><mrow><mi>−</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>+</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mi>/</mi><mi>n</mi><mi>!</mi></mrow><annotation encoding="application/x-tex">g(z)=\sum_{n=0}^{\infty}z^{-(n+2)}/n!</annotation></semantics></math>.
 No
@@ -6653,7 +6687,7 @@ occur, hence the singularity is essential. The residue is only one
 Laurent coefficient; it does not determine the rest of the principal
 part. In particular, “residue zero” does not mean “removable” or
 “regular.”</p>
-<h4 class="unnumbered" id="solution-10">Solution 10</h4>
+<h3 class="unnumbered" id="solution-10">Solution 10</h3>
 <p>Partial fractions give
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>z</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>z</mi><mo>+</mo><mn>2</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(z^2+1)/(z(z-1))=1-1/z+2/(z-1)</annotation></semantics></math>.
 The enclosed residues at zero and one are
@@ -6674,7 +6708,7 @@ in the full expression is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>,
 giving the same answer. The coefficient method applies because the
 contour lies in that annulus.</p>
-<h4 class="unnumbered" id="solution-11">Solution 11</h4>
+<h3 class="unnumbered" id="solution-11">Solution 11</h3>
 <p>The simple poles of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mi>z</mi></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>z</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">e^z/(z^2+1)</annotation></semantics></math>
 are
@@ -6702,7 +6736,7 @@ and the arc length is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\pi R</annotation></semantics></math>;
 the arc integral is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">O(R^{-1})\to0</annotation></semantics></math>.</p>
-<h4 class="unnumbered" id="solution-12">Solution 12</h4>
+<h3 class="unnumbered" id="solution-12">Solution 12</h3>
 <p>On
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|z|=1</annotation></semantics></math>,
 compare
@@ -6724,7 +6758,7 @@ and
 Thus there are five zeros inside radius two and four in the annulus. The
 inequalities are strict on the complete boundary circles, so no
 boundary-zero ambiguity remains.</p>
-<h4 class="unnumbered" id="solution-13">Solution 13</h4>
+<h3 class="unnumbered" id="solution-13">Solution 13</h3>
 <p>The argument principle gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mi>P</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>π</mi><mi>i</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>∮</mo><msup><mi>f</mi><mo>′</mo></msup><mi>/</mi><mi>f</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">N-P=(2\pi i)^{-1}\oint f&#39;/f\,dz</annotation></semantics></math>.
 For
@@ -6738,7 +6772,7 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>,
 respectively. There are no poles, so these winding counts are exactly
 the zero counts.</p>
-<h4 class="unnumbered" id="solution-14">Solution 14</h4>
+<h3 class="unnumbered" id="solution-14">Solution 14</h3>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>+</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">w=(z-i)/(z+i)</annotation></semantics></math>
 works. It sends
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>↦</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">i\mapsto0</annotation></semantics></math>,
@@ -6755,7 +6789,7 @@ In the upper half-plane
 so the image lies inside the circle. The strict inequality follows by
 comparing squared distances:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo>+</mo><mi>i</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mo>−</mo><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo>−</mo><mi>i</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mo>=</mo><mn>4</mn><mrow><mi mathvariant="normal">Im</mi><mo>⁡</mo></mrow><mi>z</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">|z+i|^2-|z-i|^2=4\operatorname{Im}z&gt;0</annotation></semantics></math>.</p>
-<h4 class="unnumbered" id="solution-15">Solution 15</h4>
+<h3 class="unnumbered" id="solution-15">Solution 15</h3>
 <p>Since
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msup><mi>e</mi><mrow><mi>π</mi><mi>z</mi></mrow></msup><mo stretchy="false" form="prefix">|</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>π</mi><mrow><mi mathvariant="normal">Re</mi><mo>⁡</mo></mrow><mi>z</mi></mrow></msup></mrow><annotation encoding="application/x-tex">|e^{\pi z}|=e^{\pi\operatorname{Re}z}</annotation></semantics></math>,
 the image is
@@ -6769,7 +6803,7 @@ map to the unit circle and the circle of radius
 each covered repeatedly as the imaginary part varies. The image is an
 annulus, not a disk, because the strip’s two vertical boundary lines
 become two distinct modulus boundaries.</p>
-<h4 class="unnumbered" id="solution-16">Solution 16</h4>
+<h3 class="unnumbered" id="solution-16">Solution 16</h3>
 <p>The real Jacobian at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mn>0</mn></msub><annotation encoding="application/x-tex">z_0</annotation></semantics></math>
 is rotation and uniform scaling by
@@ -6784,7 +6818,7 @@ has period
 Nonzero derivative gives local, not global, one-to-one behaviour; global
 injectivity requires additional information about the domain and the
 map.</p>
-<h4 class="unnumbered" id="solution-17">Solution 17</h4>
+<h3 class="unnumbered" id="solution-17">Solution 17</h3>
 <p>The maximum principle says a nonconstant harmonic function cannot
 attain an interior maximum or minimum. A continuous harmonic function on
 a bounded domain therefore takes its extrema on the boundary. This gives
@@ -6794,7 +6828,7 @@ existence or give a formula; those require separate construction or an
 existence theorem. This distinction is important: a uniqueness argument
 rules out two different solutions, but it does not produce even one
 solution.</p>
-<h4 class="unnumbered" id="solution-18">Solution 18</h4>
+<h3 class="unnumbered" id="solution-18">Solution 18</h3>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>F</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>U</mi><mo>−</mo><mi>a</mi><mi>/</mi><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">F&#39;(z)=U-a/z^2</annotation></semantics></math>,
 so the stagnation points are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>±</mi><msqrt><mrow><mi>a</mi><mi>/</mi><mi>U</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">z=\pm\sqrt{a/U}</annotation></semantics></math>.
@@ -6810,7 +6844,7 @@ uniform flow past a circular cylinder in ideal potential flow. The
 assumptions omit viscosity, turbulence, compressibility, and time
 dependence; the doublet singularity lies inside the excluded cylinder,
 so the formula is used only outside the physical boundary.</p>
-<h4 class="unnumbered" id="solution-19">Solution 19</h4>
+<h3 class="unnumbered" id="solution-19">Solution 19</h3>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 map the disk conformally to the physical domain. Composition
@@ -6827,7 +6861,7 @@ require extra work. In practice, the disk solution must still be
 evaluated and composed with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ϕ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">\phi^{-1}</annotation></semantics></math>,
 so the theorem and the computational solution are separate steps.</p>
-<h4 class="unnumbered" id="solution-20">Solution 20</h4>
+<h3 class="unnumbered" id="solution-20">Solution 20</h3>
 <p>Squaring the integral and using polar coordinates gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>λ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mi>π</mi><mi>/</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">I(\lambda)^2=\pi/\lambda</annotation></semantics></math>,
 and positivity selects
@@ -6840,7 +6874,7 @@ justification. For a complex Gaussian, the chosen branch of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>λ</mi></msqrt><annotation encoding="application/x-tex">\sqrt{\lambda}</annotation></semantics></math>
 and the direction in which the contour can be rotated are additional
 data.</p>
-<h4 class="unnumbered" id="solution-21">Solution 21</h4>
+<h3 class="unnumbered" id="solution-21">Solution 21</h3>
 <p>With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>k</mi></msub><mo>=</mo><mn>2</mn><mi>π</mi><mi>k</mi><mi>/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">t_k=2\pi k/N</annotation></semantics></math>,
 use
@@ -6867,7 +6901,7 @@ Both errors decay geometrically; for the smaller circle the finite sum
 is not exactly zero. The nearest singularity in the complexified
 parameter controls trapezoidal convergence. Refining the mesh never
 changes which pole is enclosed.</p>
-<h4 class="unnumbered" id="solution-22">Solution 22</h4>
+<h3 class="unnumbered" id="solution-22">Solution 22</h3>
 <p>The principal logarithm has real part
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">\log|z|</annotation></semantics></math>
 and imaginary part
@@ -6880,7 +6914,7 @@ argument around zero, so a finer grid can only sample it more sharply.
 For example, the slit plane
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">ℂ</mi><mo>\</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mi>∞</mi><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb C\setminus(-\infty,0]</annotation></semantics></math>
 supports the standard principal branch.</p>
-<h4 class="unnumbered" id="solution-23">Solution 23</h4>
+<h3 class="unnumbered" id="solution-23">Solution 23</h3>
 <p>The expansion is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">sin</mi><mo>⁡</mo></mrow><mi>z</mi><mi>/</mi><msup><mi>z</mi><mn>3</mn></msup><mo>=</mo><msup><mi>z</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup><mo>−</mo><mn>1</mn><mi>/</mi><mn>6</mn><mo>+</mo><msup><mi>z</mi><mn>2</mn></msup><mi>/</mi><mn>120</mn><mo>−</mo><mi>⋯</mi></mrow><annotation encoding="application/x-tex">\sin z/z^3=z^{-2}-1/6+z^2/120-\cdots</annotation></semantics></math>.
 The singularity is a pole of order two and its residue, the coefficient
@@ -7062,6 +7096,7 @@ theorem, first check orientation, poles on or near the contour, branch
 cuts, and whether the numerical path actually matches the intended
 contour. A plot is most useful as a way to discover a bad assumption or
 a missed feature, then return to the analytic argument.</p>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
