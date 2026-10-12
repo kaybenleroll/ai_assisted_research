@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -511,6 +520,7 @@ max-width: none;
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -530,8 +540,8 @@ max-width: none;
   <nav class="navbar">
     <span class="navbar-brand">A Practical Primer On European Electoral
 Systems</span>
-
-    <span class="navbar-meta">October 7, 2026</span>
+    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -543,129 +553,125 @@ Systems</span>
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
-<li><a href="#a-practical-primer-on-european-electoral-systems" id="toc-a-practical-primer-on-european-electoral-systems"><span class="toc-section-number">1</span> A Practical Primer On European
-Electoral Systems</a>
-<ul>
-<li><a href="#what-this-covers" id="toc-what-this-covers"><span class="toc-section-number">1.1</span> What This Covers</a></li>
-<li><a href="#what-this-is-not" id="toc-what-this-is-not"><span class="toc-section-number">1.2</span> What This Is Not</a></li>
-</ul></li>
-<li><a href="#foundational-concepts" id="toc-foundational-concepts"><span class="toc-section-number">2</span>
+<li><a href="#what-this-covers" id="toc-what-this-covers"><span class="toc-section-number">1</span> What This Covers</a></li>
+<li><a href="#what-this-is-not" id="toc-what-this-is-not"><span class="toc-section-number">2</span> What This Is Not</a></li>
+<li><a href="#foundational-concepts" id="toc-foundational-concepts"><span class="toc-section-number">3</span>
 Foundational Concepts</a>
 <ul>
-<li><a href="#the-core-electoral-trade-off" id="toc-the-core-electoral-trade-off"><span class="toc-section-number">2.1</span> The Core Electoral
+<li><a href="#the-core-electoral-trade-off" id="toc-the-core-electoral-trade-off"><span class="toc-section-number">3.1</span> The Core Electoral
 Trade-Off</a></li>
-<li><a href="#how-the-eu-layer-fits-above-national-elections" id="toc-how-the-eu-layer-fits-above-national-elections"><span class="toc-section-number">2.2</span> How The EU Layer Fits Above
+<li><a href="#how-the-eu-layer-fits-above-national-elections" id="toc-how-the-eu-layer-fits-above-national-elections"><span class="toc-section-number">3.2</span> How The EU Layer Fits Above
 National Elections</a>
 <ul>
-<li><a href="#the-core-eu-institutions-in-plain-english" id="toc-the-core-eu-institutions-in-plain-english"><span class="toc-section-number">2.2.1</span> The core EU institutions in
+<li><a href="#the-core-eu-institutions-in-plain-english" id="toc-the-core-eu-institutions-in-plain-english"><span class="toc-section-number">3.2.1</span> The core EU institutions in
 plain English</a></li>
-<li><a href="#what-national-elections-actually-change-at-eu-level" id="toc-what-national-elections-actually-change-at-eu-level"><span class="toc-section-number">2.2.2</span> What national elections actually
+<li><a href="#what-national-elections-actually-change-at-eu-level" id="toc-what-national-elections-actually-change-at-eu-level"><span class="toc-section-number">3.2.2</span> What national elections actually
 change at EU level</a></li>
-<li><a href="#why-this-matters-for-analysis" id="toc-why-this-matters-for-analysis"><span class="toc-section-number">2.2.3</span> Why this matters for
+<li><a href="#why-this-matters-for-analysis" id="toc-why-this-matters-for-analysis"><span class="toc-section-number">3.2.3</span> Why this matters for
 analysis</a></li>
-<li><a href="#a-practical-eu-policy-flow-walkthrough" id="toc-a-practical-eu-policy-flow-walkthrough"><span class="toc-section-number">2.2.4</span> A practical EU policy-flow
+<li><a href="#a-practical-eu-policy-flow-walkthrough" id="toc-a-practical-eu-policy-flow-walkthrough"><span class="toc-section-number">3.2.4</span> A practical EU policy-flow
 walkthrough</a></li>
-<li><a href="#two-end-to-end-eu-legislative-pathway-examples" id="toc-two-end-to-end-eu-legislative-pathway-examples"><span class="toc-section-number">2.2.5</span> Two end-to-end EU legislative
+<li><a href="#two-end-to-end-eu-legislative-pathway-examples" id="toc-two-end-to-end-eu-legislative-pathway-examples"><span class="toc-section-number">3.2.5</span> Two end-to-end EU legislative
 pathway examples</a></li>
 </ul></li>
-<li><a href="#the-cleanest-mental-model" id="toc-the-cleanest-mental-model"><span class="toc-section-number">2.3</span> The Cleanest Mental Model</a></li>
+<li><a href="#the-cleanest-mental-model" id="toc-the-cleanest-mental-model"><span class="toc-section-number">3.3</span> The Cleanest Mental Model</a></li>
 </ul></li>
-<li><a href="#the-10-electoral-systems" id="toc-the-10-electoral-systems"><span class="toc-section-number">3</span> The 10 Electoral Systems</a>
+<li><a href="#the-10-electoral-systems" id="toc-the-10-electoral-systems"><span class="toc-section-number">4</span> The 10 Electoral Systems</a>
 <ul>
-<li><a href="#the-united-kingdom-first-past-the-post" id="toc-the-united-kingdom-first-past-the-post"><span class="toc-section-number">3.1</span> The United Kingdom:
+<li><a href="#the-united-kingdom-first-past-the-post" id="toc-the-united-kingdom-first-past-the-post"><span class="toc-section-number">4.1</span> The United Kingdom:
 First-Past-The-Post</a></li>
-<li><a href="#france-two-round-voting" id="toc-france-two-round-voting"><span class="toc-section-number">3.2</span> France: Two-Round Voting</a></li>
-<li><a href="#ireland-stv-or-ranked-choice-with-actual-teeth" id="toc-ireland-stv-or-ranked-choice-with-actual-teeth"><span class="toc-section-number">3.3</span> Ireland: STV, or Ranked Choice
+<li><a href="#france-two-round-voting" id="toc-france-two-round-voting"><span class="toc-section-number">4.2</span> France: Two-Round Voting</a></li>
+<li><a href="#ireland-stv-or-ranked-choice-with-actual-teeth" id="toc-ireland-stv-or-ranked-choice-with-actual-teeth"><span class="toc-section-number">4.3</span> Ireland: STV, or Ranked Choice
 With Actual Teeth</a></li>
-<li><a href="#germany-mixed-member-proportional" id="toc-germany-mixed-member-proportional"><span class="toc-section-number">3.4</span> Germany: Mixed-Member
+<li><a href="#germany-mixed-member-proportional" id="toc-germany-mixed-member-proportional"><span class="toc-section-number">4.4</span> Germany: Mixed-Member
 Proportional</a></li>
-<li><a href="#italy-rosatellum-the-hybrid-that-is-not-fully-compensatory" id="toc-italy-rosatellum-the-hybrid-that-is-not-fully-compensatory"><span class="toc-section-number">3.5</span> Italy: Rosatellum, The Hybrid That
+<li><a href="#italy-rosatellum-the-hybrid-that-is-not-fully-compensatory" id="toc-italy-rosatellum-the-hybrid-that-is-not-fully-compensatory"><span class="toc-section-number">4.5</span> Italy: Rosatellum, The Hybrid That
 Is Not Fully Compensatory</a></li>
-<li><a href="#spain-closed-list-pr-with-dhondt" id="toc-spain-closed-list-pr-with-dhondt"><span class="toc-section-number">3.6</span> Spain: Closed-List PR With
+<li><a href="#spain-closed-list-pr-with-dhondt" id="toc-spain-closed-list-pr-with-dhondt"><span class="toc-section-number">4.6</span> Spain: Closed-List PR With
 D’Hondt</a></li>
-<li><a href="#the-netherlands-the-purest-big-tent-party-system-in-this-set" id="toc-the-netherlands-the-purest-big-tent-party-system-in-this-set"><span class="toc-section-number">3.7</span> The Netherlands: The Purest
+<li><a href="#the-netherlands-the-purest-big-tent-party-system-in-this-set" id="toc-the-netherlands-the-purest-big-tent-party-system-in-this-set"><span class="toc-section-number">4.7</span> The Netherlands: The Purest
 Big-Tent Party System In This Set</a></li>
-<li><a href="#denmark-proportional-representation-with-a-top-up-safety-net" id="toc-denmark-proportional-representation-with-a-top-up-safety-net"><span class="toc-section-number">3.8</span> Denmark: Proportional
+<li><a href="#denmark-proportional-representation-with-a-top-up-safety-net" id="toc-denmark-proportional-representation-with-a-top-up-safety-net"><span class="toc-section-number">4.8</span> Denmark: Proportional
 Representation With A Top-Up Safety Net</a></li>
-<li><a href="#sweden-proportional-open-list-and-slightly-more-candidate-friendly" id="toc-sweden-proportional-open-list-and-slightly-more-candidate-friendly"><span class="toc-section-number">3.9</span> Sweden: Proportional, Open-List,
+<li><a href="#sweden-proportional-open-list-and-slightly-more-candidate-friendly" id="toc-sweden-proportional-open-list-and-slightly-more-candidate-friendly"><span class="toc-section-number">4.9</span> Sweden: Proportional, Open-List,
 And Slightly More Candidate-Friendly</a></li>
-<li><a href="#romania-closed-list-pr-with-thresholds-and-a-very-political-reality" id="toc-romania-closed-list-pr-with-thresholds-and-a-very-political-reality"><span class="toc-section-number">3.10</span> Romania: Closed-List PR With
+<li><a href="#romania-closed-list-pr-with-thresholds-and-a-very-political-reality" id="toc-romania-closed-list-pr-with-thresholds-and-a-very-political-reality"><span class="toc-section-number">4.10</span> Romania: Closed-List PR With
 Thresholds And A Very Political Reality</a></li>
 </ul></li>
-<li><a href="#comparative-lenses" id="toc-comparative-lenses"><span class="toc-section-number">4</span> Comparative Lenses</a>
+<li><a href="#comparative-lenses" id="toc-comparative-lenses"><span class="toc-section-number">5</span> Comparative Lenses</a>
 <ul>
-<li><a href="#ten-mini-case-studies-how-votes-became-governments" id="toc-ten-mini-case-studies-how-votes-became-governments"><span class="toc-section-number">4.1</span> Ten Mini Case Studies: How Votes
+<li><a href="#ten-mini-case-studies-how-votes-became-governments" id="toc-ten-mini-case-studies-how-votes-became-governments"><span class="toc-section-number">5.1</span> Ten Mini Case Studies: How Votes
 Became Governments</a>
 <ul>
-<li><a href="#united-kingdom" id="toc-united-kingdom"><span class="toc-section-number">4.1.1</span> United Kingdom</a></li>
-<li><a href="#france" id="toc-france"><span class="toc-section-number">4.1.2</span> France</a></li>
-<li><a href="#ireland" id="toc-ireland"><span class="toc-section-number">4.1.3</span> Ireland</a></li>
-<li><a href="#germany" id="toc-germany"><span class="toc-section-number">4.1.4</span> Germany</a></li>
-<li><a href="#italy" id="toc-italy"><span class="toc-section-number">4.1.5</span> Italy</a></li>
-<li><a href="#spain" id="toc-spain"><span class="toc-section-number">4.1.6</span> Spain</a></li>
-<li><a href="#netherlands" id="toc-netherlands"><span class="toc-section-number">4.1.7</span> Netherlands</a></li>
-<li><a href="#denmark" id="toc-denmark"><span class="toc-section-number">4.1.8</span> Denmark</a></li>
-<li><a href="#sweden" id="toc-sweden"><span class="toc-section-number">4.1.9</span> Sweden</a></li>
-<li><a href="#romania" id="toc-romania"><span class="toc-section-number">4.1.10</span> Romania</a></li>
+<li><a href="#united-kingdom" id="toc-united-kingdom"><span class="toc-section-number">5.1.1</span> United Kingdom</a></li>
+<li><a href="#france" id="toc-france"><span class="toc-section-number">5.1.2</span> France</a></li>
+<li><a href="#ireland" id="toc-ireland"><span class="toc-section-number">5.1.3</span> Ireland</a></li>
+<li><a href="#germany" id="toc-germany"><span class="toc-section-number">5.1.4</span> Germany</a></li>
+<li><a href="#italy" id="toc-italy"><span class="toc-section-number">5.1.5</span> Italy</a></li>
+<li><a href="#spain" id="toc-spain"><span class="toc-section-number">5.1.6</span> Spain</a></li>
+<li><a href="#netherlands" id="toc-netherlands"><span class="toc-section-number">5.1.7</span> Netherlands</a></li>
+<li><a href="#denmark" id="toc-denmark"><span class="toc-section-number">5.1.8</span> Denmark</a></li>
+<li><a href="#sweden" id="toc-sweden"><span class="toc-section-number">5.1.9</span> Sweden</a></li>
+<li><a href="#romania" id="toc-romania"><span class="toc-section-number">5.1.10</span> Romania</a></li>
 </ul></li>
-<li><a href="#vote-to-seat-snapshot-table-illustrative-rounded" id="toc-vote-to-seat-snapshot-table-illustrative-rounded"><span class="toc-section-number">4.2</span> Vote-To-Seat Snapshot Table
+<li><a href="#vote-to-seat-snapshot-table-illustrative-rounded" id="toc-vote-to-seat-snapshot-table-illustrative-rounded"><span class="toc-section-number">5.2</span> Vote-To-Seat Snapshot Table
 (Illustrative, Rounded)</a></li>
-<li><a href="#comparative-summary" id="toc-comparative-summary"><span class="toc-section-number">4.3</span> Comparative Summary</a>
+<li><a href="#comparative-summary" id="toc-comparative-summary"><span class="toc-section-number">5.3</span> Comparative Summary</a>
 <ul>
-<li><a href="#at-a-glance" id="toc-at-a-glance"><span class="toc-section-number">4.3.1</span> At a Glance</a></li>
-<li><a href="#what-these-systems-feel-like-in-practice" id="toc-what-these-systems-feel-like-in-practice"><span class="toc-section-number">4.3.2</span> What These Systems Feel Like In
+<li><a href="#at-a-glance" id="toc-at-a-glance"><span class="toc-section-number">5.3.1</span> At a Glance</a></li>
+<li><a href="#what-these-systems-feel-like-in-practice" id="toc-what-these-systems-feel-like-in-practice"><span class="toc-section-number">5.3.2</span> What These Systems Feel Like In
 Practice</a></li>
-<li><a href="#the-trade-offs-plain-english" id="toc-the-trade-offs-plain-english"><span class="toc-section-number">4.3.3</span> The Trade-Offs, Plain
+<li><a href="#the-trade-offs-plain-english" id="toc-the-trade-offs-plain-english"><span class="toc-section-number">5.3.3</span> The Trade-Offs, Plain
 English</a></li>
 </ul></li>
-<li><a href="#early-warning-indicators-for-coalition-stress" id="toc-early-warning-indicators-for-coalition-stress"><span class="toc-section-number">4.4</span> Early Warning Indicators For
+<li><a href="#early-warning-indicators-for-coalition-stress" id="toc-early-warning-indicators-for-coalition-stress"><span class="toc-section-number">5.4</span> Early Warning Indicators For
 Coalition Stress</a>
 <ul>
-<li><a href="#fragmentation-trend" id="toc-fragmentation-trend"><span class="toc-section-number">4.4.1</span> 1) Fragmentation trend</a></li>
-<li><a href="#coalition-ideological-distance" id="toc-coalition-ideological-distance"><span class="toc-section-number">4.4.2</span> 2) Coalition ideological
+<li><a href="#fragmentation-trend" id="toc-fragmentation-trend"><span class="toc-section-number">5.4.1</span> 1) Fragmentation trend</a></li>
+<li><a href="#coalition-ideological-distance" id="toc-coalition-ideological-distance"><span class="toc-section-number">5.4.2</span> 2) Coalition ideological
 distance</a></li>
-<li><a href="#minority-government-dependency-risk" id="toc-minority-government-dependency-risk"><span class="toc-section-number">4.4.3</span> 3) Minority-government
+<li><a href="#minority-government-dependency-risk" id="toc-minority-government-dependency-risk"><span class="toc-section-number">5.4.3</span> 3) Minority-government
 dependency risk</a></li>
-<li><a href="#regional-party-pivot-leverage" id="toc-regional-party-pivot-leverage"><span class="toc-section-number">4.4.4</span> 4) Regional-party pivot
+<li><a href="#regional-party-pivot-leverage" id="toc-regional-party-pivot-leverage"><span class="toc-section-number">5.4.4</span> 4) Regional-party pivot
 leverage</a></li>
-<li><a href="#seat-vote-distortion-trend" id="toc-seat-vote-distortion-trend"><span class="toc-section-number">4.4.5</span> 5) Seat-vote distortion
+<li><a href="#seat-vote-distortion-trend" id="toc-seat-vote-distortion-trend"><span class="toc-section-number">5.4.5</span> 5) Seat-vote distortion
 trend</a></li>
-<li><a href="#intra-coalition-policy-incompatibility" id="toc-intra-coalition-policy-incompatibility"><span class="toc-section-number">4.4.6</span> 6) Intra-coalition policy
+<li><a href="#intra-coalition-policy-incompatibility" id="toc-intra-coalition-policy-incompatibility"><span class="toc-section-number">5.4.6</span> 6) Intra-coalition policy
 incompatibility</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#technical-analysis-tools" id="toc-technical-analysis-tools"><span class="toc-section-number">5</span> Technical Analysis Tools</a>
+<li><a href="#technical-analysis-tools" id="toc-technical-analysis-tools"><span class="toc-section-number">6</span> Technical Analysis Tools</a>
 <ul>
-<li><a href="#the-math-layer-that-usually-gets-hidden" id="toc-the-math-layer-that-usually-gets-hidden"><span class="toc-section-number">5.1</span> The Math Layer That Usually Gets
+<li><a href="#the-math-layer-that-usually-gets-hidden" id="toc-the-math-layer-that-usually-gets-hidden"><span class="toc-section-number">6.1</span> The Math Layer That Usually Gets
 Hidden</a>
 <ul>
-<li><a href="#dhondt-versus-sainte-laguë-in-one-minute" id="toc-dhondt-versus-sainte-laguë-in-one-minute"><span class="toc-section-number">5.1.1</span> D’Hondt versus Sainte-Laguë in
+<li><a href="#dhondt-versus-sainte-laguë-in-one-minute" id="toc-dhondt-versus-sainte-laguë-in-one-minute"><span class="toc-section-number">6.1.1</span> D’Hondt versus Sainte-Laguë in
 one minute</a></li>
-<li><a href="#why-district-size-quietly-dominates-outcomes" id="toc-why-district-size-quietly-dominates-outcomes"><span class="toc-section-number">5.1.2</span> Why district size quietly
+<li><a href="#why-district-size-quietly-dominates-outcomes" id="toc-why-district-size-quietly-dominates-outcomes"><span class="toc-section-number">6.1.2</span> Why district size quietly
 dominates outcomes</a></li>
-<li><a href="#quick-formulas-you-actually-use" id="toc-quick-formulas-you-actually-use"><span class="toc-section-number">5.1.3</span> Quick formulas you actually
+<li><a href="#quick-formulas-you-actually-use" id="toc-quick-formulas-you-actually-use"><span class="toc-section-number">6.1.3</span> Quick formulas you actually
 use</a></li>
-<li><a href="#worked-example-gallagher-index-in-practice" id="toc-worked-example-gallagher-index-in-practice"><span class="toc-section-number">5.1.4</span> Worked example: Gallagher index
+<li><a href="#worked-example-gallagher-index-in-practice" id="toc-worked-example-gallagher-index-in-practice"><span class="toc-section-number">6.1.4</span> Worked example: Gallagher index
 in practice</a></li>
-<li><a href="#worked-example-district-magnitude-sensitivity" id="toc-worked-example-district-magnitude-sensitivity"><span class="toc-section-number">5.1.5</span> Worked example: district
+<li><a href="#worked-example-district-magnitude-sensitivity" id="toc-worked-example-district-magnitude-sensitivity"><span class="toc-section-number">6.1.5</span> Worked example: district
 magnitude sensitivity</a></li>
 </ul></li>
-<li><a href="#same-votes-different-parliament-a-worked-comparison" id="toc-same-votes-different-parliament-a-worked-comparison"><span class="toc-section-number">5.2</span> Same Votes, Different Parliament:
+<li><a href="#same-votes-different-parliament-a-worked-comparison" id="toc-same-votes-different-parliament-a-worked-comparison"><span class="toc-section-number">6.2</span> Same Votes, Different Parliament:
 A Worked Comparison</a></li>
-<li><a href="#coalition-mechanics-and-government-durability" id="toc-coalition-mechanics-and-government-durability"><span class="toc-section-number">5.3</span> Coalition Mechanics And Government
+<li><a href="#coalition-mechanics-and-government-durability" id="toc-coalition-mechanics-and-government-durability"><span class="toc-section-number">6.3</span> Coalition Mechanics And Government
 Durability</a></li>
-<li><a href="#a-practical-analyst-checklist" id="toc-a-practical-analyst-checklist"><span class="toc-section-number">5.4</span> A Practical Analyst
+<li><a href="#a-practical-analyst-checklist" id="toc-a-practical-analyst-checklist"><span class="toc-section-number">6.4</span> A Practical Analyst
 Checklist</a></li>
-<li><a href="#reusable-political-system-risk-scoring-rubric" id="toc-reusable-political-system-risk-scoring-rubric"><span class="toc-section-number">5.5</span> Reusable Political-System Risk
+<li><a href="#reusable-political-system-risk-scoring-rubric" id="toc-reusable-political-system-risk-scoring-rubric"><span class="toc-section-number">6.5</span> Reusable Political-System Risk
 Scoring Rubric</a>
 <ul>
-<li><a href="#worked-scoring-example-spain-style-profile" id="toc-worked-scoring-example-spain-style-profile"><span class="toc-section-number">5.5.1</span> Worked scoring example:
+<li><a href="#worked-scoring-example-spain-style-profile" id="toc-worked-scoring-example-spain-style-profile"><span class="toc-section-number">6.5.1</span> Worked scoring example:
 Spain-style profile</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#conclusion" id="toc-conclusion"><span class="toc-section-number">6</span> Conclusion</a>
+<li><a href="#conclusion" id="toc-conclusion"><span class="toc-section-number">7</span> Conclusion</a>
 <ul>
-<li><a href="#main-takeaway" id="toc-main-takeaway"><span class="toc-section-number">6.1</span> Main Takeaway</a></li>
+<li><a href="#main-takeaway" id="toc-main-takeaway"><span class="toc-section-number">7.1</span> Main Takeaway</a></li>
 </ul></li>
 </ul></div>
 
@@ -675,9 +681,7 @@ Spain-style profile</a></li>
 
     <main class="content">
       <div class="content-inner">
-<h1 data-number="1" id="a-practical-primer-on-european-electoral-systems"><span class="header-section-number">1</span> A Practical Primer On European
-Electoral Systems</h1>
-<h2 data-number="1.1" id="what-this-covers"><span class="header-section-number">1.1</span> What This Covers</h2>
+<h1 data-number="1" id="what-this-covers"><span class="header-section-number">1</span> What This Covers</h1>
 <p>Ten European national electoral systems: how each converts votes into
 seats, how seats translate into governments, and how the design of each
 system shapes political outcomes in practice. The primer includes
@@ -688,7 +692,7 @@ dated historical outcomes, not live cabinet or parliamentary membership
 trackers. Denmark and Sweden’s examples include their 2026 elections;
 government formation is discussed only where supported by the cited
 record.</p>
-<h2 data-number="1.2" id="what-this-is-not"><span class="header-section-number">1.2</span> What This Is Not</h2>
+<h1 data-number="2" id="what-this-is-not"><span class="header-section-number">2</span> What This Is Not</h1>
 <p>This is not a complete history of electoral-system evolution, and it
 makes no argument for which system is best. It is not a guide to voting
 as a citizen in any particular country. The EU Parliament election
@@ -705,8 +709,8 @@ every European system is this: how much should the system reward a clear
 winner, and how much should it try to mirror the actual shape of the
 vote? Once you see that trade-off, the rest of the map gets easier to
 read.</p>
-<h1 data-number="2" id="foundational-concepts"><span class="header-section-number">2</span> Foundational Concepts</h1>
-<h2 data-number="2.1" id="the-core-electoral-trade-off"><span class="header-section-number">2.1</span> The Core Electoral
+<h1 data-number="3" id="foundational-concepts"><span class="header-section-number">3</span> Foundational Concepts</h1>
+<h2 data-number="3.1" id="the-core-electoral-trade-off"><span class="header-section-number">3.1</span> The Core Electoral
 Trade-Off</h2>
 <p>There are really four things that electoral systems keep
 juggling:</p>
@@ -731,7 +735,7 @@ Romania uses list PR. France’s <a href="https://www.justice.gouv.fr/sites/defa
 framework</a> and Romania’s <a href="https://www.wipo.int/wipolex/en/legislation/details/3589">Constitution,
 Articles 81, 103, and 109</a> establish the respective executive
 arrangements.</p>
-<h2 data-number="2.2" id="how-the-eu-layer-fits-above-national-elections"><span class="header-section-number">2.2</span> How The EU Layer Fits Above
+<h2 data-number="3.2" id="how-the-eu-layer-fits-above-national-elections"><span class="header-section-number">3.2</span> How The EU Layer Fits Above
 National Elections</h2>
 <p>One reason European politics can feel confusing is that there are two
 interacting levels of democratic authority:</p>
@@ -743,7 +747,7 @@ co-legislate).</li>
 </ol>
 <p>Those levels are linked but not identical. You do not vote in one
 election and get one single chain of command all the way up.</p>
-<h3 data-number="2.2.1" id="the-core-eu-institutions-in-plain-english"><span class="header-section-number">2.2.1</span> The core EU institutions in
+<h3 data-number="3.2.1" id="the-core-eu-institutions-in-plain-english"><span class="header-section-number">3.2.1</span> The core EU institutions in
 plain English</h3>
 <ol type="1">
 <li>European Council: Heads of state or government from each member
@@ -757,7 +761,7 @@ implementation.</li>
 <li>Court of Justice of the European Union (CJEU): Final interpreter of
 EU law.</li>
 </ol>
-<h3 data-number="2.2.2" id="what-national-elections-actually-change-at-eu-level"><span class="header-section-number">2.2.2</span> What national elections
+<h3 data-number="3.2.2" id="what-national-elections-actually-change-at-eu-level"><span class="header-section-number">3.2.2</span> What national elections
 actually change at EU level</h3>
 <p>National elections matter because they decide who runs each member
 state government. Those governments then sit in the European Council and
@@ -769,7 +773,7 @@ cycle and party groups. That creates a dual-democratic system:</p>
 <li>National executive legitimacy channel.</li>
 <li>Transnational parliamentary legitimacy channel.</li>
 </ol>
-<h3 data-number="2.2.3" id="why-this-matters-for-analysis"><span class="header-section-number">2.2.3</span> Why this matters for
+<h3 data-number="3.2.3" id="why-this-matters-for-analysis"><span class="header-section-number">3.2.3</span> Why this matters for
 analysis</h3>
 <p>If you only model national seat arithmetic, you miss part of the
 policy pipeline. Serious political-risk analysis in Europe usually needs
@@ -781,7 +785,7 @@ both:</p>
 <p>That is the frame for the country sections below: each electoral
 system is explained together with the constitutional structure it feeds
 into.</p>
-<h3 data-number="2.2.4" id="a-practical-eu-policy-flow-walkthrough"><span class="header-section-number">2.2.4</span> A practical EU policy-flow
+<h3 data-number="3.2.4" id="a-practical-eu-policy-flow-walkthrough"><span class="header-section-number">3.2.4</span> A practical EU policy-flow
 walkthrough</h3>
 <p>The most useful way to see the EU layer is as a chain of linked
 political veto points rather than one single election result.</p>
@@ -815,11 +819,11 @@ medium-to-large member states all move towards similar fiscal or
 industrial-policy preferences, the odds of EU-level compromise rise. If
 they move in opposite directions, files stall, dilute, or split into
 partial deals.</p>
-<h3 data-number="2.2.5" id="two-end-to-end-eu-legislative-pathway-examples"><span class="header-section-number">2.2.5</span> Two end-to-end EU legislative
+<h3 data-number="3.2.5" id="two-end-to-end-eu-legislative-pathway-examples"><span class="header-section-number">3.2.5</span> Two end-to-end EU legislative
 pathway examples</h3>
 <p>The cleanest way to operationalize this is to map a full file
 lifecycle. Below are two compact pathways analysts can reuse.</p>
-<h4 data-number="2.2.5.1" id="pathway-a-carbon-border-adjustment-mechanism-style-file"><span class="header-section-number">2.2.5.1</span> Pathway A: Carbon Border
+<h4 data-number="3.2.5.1" id="pathway-a-carbon-border-adjustment-mechanism-style-file"><span class="header-section-number">3.2.5.1</span> Pathway A: Carbon Border
 Adjustment Mechanism style file</h4>
 <ol type="1">
 <li>Commission drafting: DG-level design sets scope, reporting
@@ -838,7 +842,7 @@ finance ministries implement with uneven administrative speed.</li>
 <p>Analytical takeaway: changes in national governing coalitions can
 materially shift Council red lines even when Parliament party-group
 balance is stable.</p>
-<h4 data-number="2.2.5.2" id="pathway-b-electricity-market-reform-style-file"><span class="header-section-number">2.2.5.2</span> Pathway B: Electricity
+<h4 data-number="3.2.5.2" id="pathway-b-electricity-market-reform-style-file"><span class="header-section-number">3.2.5.2</span> Pathway B: Electricity
 market reform style file</h4>
 <ol type="1">
 <li>Trigger event: energy-price shock creates political urgency.</li>
@@ -857,7 +861,7 @@ assign blame, feeding back into subsequent election campaigns.</li>
 <p>Analytical takeaway: emergency-driven files can pass quickly, but
 downstream implementation risk rises when compromise language is
 politically broad and technically thin.</p>
-<h2 data-number="2.3" id="the-cleanest-mental-model"><span class="header-section-number">2.3</span> The Cleanest Mental Model</h2>
+<h2 data-number="3.3" id="the-cleanest-mental-model"><span class="header-section-number">3.3</span> The Cleanest Mental Model</h2>
 <p>The easiest way to think about these systems is on a spectrum.</p>
 <p>At one end, you have pure winner-takes-all systems. One district, one
 winner, everyone else goes home annoyed. That is the UK.</p>
@@ -873,8 +877,8 @@ mix local representation with proportional outcomes. Germany does it in
 a very deliberate compensatory way. Italy does it more as a side-by-side
 blend of district races and list seats.</p>
 <p>That is the whole game. Everything else is detail.</p>
-<h1 data-number="3" id="the-10-electoral-systems"><span class="header-section-number">3</span> The 10 Electoral Systems</h1>
-<h2 data-number="3.1" id="the-united-kingdom-first-past-the-post"><span class="header-section-number">3.1</span> The United Kingdom:
+<h1 data-number="4" id="the-10-electoral-systems"><span class="header-section-number">4</span> The 10 Electoral Systems</h1>
+<h2 data-number="4.1" id="the-united-kingdom-first-past-the-post"><span class="header-section-number">4.1</span> The United Kingdom:
 First-Past-The-Post</h2>
 <p>The UK is the simplest system in this group, and simplicity is both
 its strength and its curse.</p>
@@ -920,7 +924,7 @@ across the country.</p>
 <p>The political effect is familiar: fewer parties, more tactical
 voting, and governments that often have a working majority without
 needing a coalition.</p>
-<h2 data-number="3.2" id="france-two-round-voting"><span class="header-section-number">3.2</span> France: Two-Round Voting</h2>
+<h2 data-number="4.2" id="france-two-round-voting"><span class="header-section-number">4.2</span> France: Two-Round Voting</h2>
 <p>France is still winner-takes-all in spirit, but it adds a second
 round so that the final winner usually has broader support.</p>
 <p>France’s semi-presidential system has two separate electoral
@@ -981,7 +985,7 @@ winner. A legislative second round can be won by plurality in a race
 with three or more candidates. Both give voters a chance to regroup
 after the first pass; neither guarantees proportional seats or a
 governing majority in the Assembly.</p>
-<h2 data-number="3.3" id="ireland-stv-or-ranked-choice-with-actual-teeth"><span class="header-section-number">3.3</span> Ireland: STV, or Ranked Choice
+<h2 data-number="4.3" id="ireland-stv-or-ranked-choice-with-actual-teeth"><span class="header-section-number">4.3</span> Ireland: STV, or Ranked Choice
 With Actual Teeth</h2>
 <p>Ireland is where the ballot gets more elegant and more complicated at
 the same time.</p>
@@ -1034,7 +1038,7 @@ increases voter agency.</p>
 <p>The trade-off is count complexity. STV is proportional, but it is not
 neat. It can take time, especially with paper ballots and transfers that
 need careful handling.</p>
-<h2 data-number="3.4" id="germany-mixed-member-proportional"><span class="header-section-number">3.4</span> Germany: Mixed-Member
+<h2 data-number="4.4" id="germany-mixed-member-proportional"><span class="header-section-number">4.4</span> Germany: Mixed-Member
 Proportional</h2>
 <p>Germany is probably the cleanest example of a system that tries to
 have both a local MP and a fair overall party result.</p>
@@ -1082,7 +1086,7 @@ match the party vote as closely as possible without completely
 abandoning local districts.</p>
 <p>This is why Germany is often treated as the gold standard for
 proportional mixed systems.</p>
-<h2 data-number="3.5" id="italy-rosatellum-the-hybrid-that-is-not-fully-compensatory"><span class="header-section-number">3.5</span> Italy: Rosatellum, The Hybrid
+<h2 data-number="4.5" id="italy-rosatellum-the-hybrid-that-is-not-fully-compensatory"><span class="header-section-number">4.5</span> Italy: Rosatellum, The Hybrid
 That Is Not Fully Compensatory</h2>
 <p>Italy’s current system is a mixed setup, but it is not the same kind
 of balance as Germany’s.</p>
@@ -1101,7 +1105,7 @@ instability when alliances are necessity-driven.</p>
 <p>The easiest way to think about Italy is: it tries to combine local
 races and proportional lists, but the marriage is looser and less
 elegant than Germany’s.</p>
-<h2 data-number="3.6" id="spain-closed-list-pr-with-dhondt"><span class="header-section-number">3.6</span> Spain: Closed-List PR With
+<h2 data-number="4.6" id="spain-closed-list-pr-with-dhondt"><span class="header-section-number">4.6</span> Spain: Closed-List PR With
 D’Hondt</h2>
 <p>Spain is proportional, but not in a perfectly smooth way.</p>
 <p>Voters pick a party list, not individual candidates. The parties
@@ -1142,7 +1146,7 @@ weaker parties can be squeezed out completely.</p>
 <p>Spain is useful because it shows that PR is not automatically
 ultra-fair. District size and formula design can quietly reshape
 outcomes.</p>
-<h2 data-number="3.7" id="the-netherlands-the-purest-big-tent-party-system-in-this-set"><span class="header-section-number">3.7</span> The Netherlands: The Purest
+<h2 data-number="4.7" id="the-netherlands-the-purest-big-tent-party-system-in-this-set"><span class="header-section-number">4.7</span> The Netherlands: The Purest
 Big-Tent Party System In This Set</h2>
 <p>The Netherlands is one of the closest things Europe has to a
 national-scale party-list PR machine.</p>
@@ -1203,7 +1207,7 @@ lots of proportionality, and very little room for manufactured
 majorities.</p>
 <p>In one sentence: Dutch voters are effectively allocating national
 political shares rather than choosing local winners.</p>
-<h2 data-number="3.8" id="denmark-proportional-representation-with-a-top-up-safety-net"><span class="header-section-number">3.8</span> Denmark: Proportional
+<h2 data-number="4.8" id="denmark-proportional-representation-with-a-top-up-safety-net"><span class="header-section-number">4.8</span> Denmark: Proportional
 Representation With A Top-Up Safety Net</h2>
 <p>Denmark is a great example of a system that looks proportional, feels
 proportional, and still has enough moving parts to keep political
@@ -1227,7 +1231,7 @@ Then the leveling seats are used to pull the final seat total back
 towards its real vote share.</p>
 <p>That is the whole point of the system: local results first,
 proportional correction afterward.</p>
-<h2 data-number="3.9" id="sweden-proportional-open-list-and-slightly-more-candidate-friendly"><span class="header-section-number">3.9</span> Sweden: Proportional,
+<h2 data-number="4.9" id="sweden-proportional-open-list-and-slightly-more-candidate-friendly"><span class="header-section-number">4.9</span> Sweden: Proportional,
 Open-List, And Slightly More Candidate-Friendly</h2>
 <p>Sweden uses list PR with a modified Sainte-Laguë method, multi-member
 districts, and adjustment seats. It is proportional, but not
@@ -1274,7 +1278,7 @@ allocation and adjustment seats, but that is the overall point: the
 system tries very hard to make votes and seats line up.</p>
 <p>Sweden is more proportional than France or the UK, more open than
 Spain, and more party-list-driven than Ireland.</p>
-<h2 data-number="3.10" id="romania-closed-list-pr-with-thresholds-and-a-very-political-reality"><span class="header-section-number">3.10</span> Romania: Closed-List PR With
+<h2 data-number="4.10" id="romania-closed-list-pr-with-thresholds-and-a-very-political-reality"><span class="header-section-number">4.10</span> Romania: Closed-List PR With
 Thresholds And A Very Political Reality</h2>
 <p>Romania currently uses closed-list proportional representation for
 its parliament. Parties submit lists, voters choose a list, and seats
@@ -1331,21 +1335,21 @@ merely crowded.</p>
 <p>Romania shows that PR does not automatically mean open candidate
 choice or endless fragmentation. Closed lists and thresholds can make PR
 feel centralised and party-driven.</p>
-<h1 data-number="4" id="comparative-lenses"><span class="header-section-number">4</span> Comparative Lenses</h1>
-<h2 data-number="4.1" id="ten-mini-case-studies-how-votes-became-governments"><span class="header-section-number">4.1</span> Ten Mini Case Studies: How
+<h1 data-number="5" id="comparative-lenses"><span class="header-section-number">5</span> Comparative Lenses</h1>
+<h2 data-number="5.1" id="ten-mini-case-studies-how-votes-became-governments"><span class="header-section-number">5.1</span> Ten Mini Case Studies: How
 Votes Became Governments</h2>
 <p>These are compact snapshots of specified election cycles, reviewed on
 7 October 2026. Seat counts refer to the election outcome, before
 subsequent vacancies or changes of party. They illustrate translation
 logic; they do not establish that an electoral formula alone caused the
 eventual coalition choice.</p>
-<h3 data-number="4.1.1" id="united-kingdom"><span class="header-section-number">4.1.1</span> United Kingdom</h3>
+<h3 data-number="5.1.1" id="united-kingdom"><span class="header-section-number">5.1.1</span> United Kingdom</h3>
 <p>In the 2024 general election, Labour converted a vote share in the
 low-to-mid 30s (33.7 percent) into a very large Commons majority. Under
 FPTP, constituency efficiency mattered more than proportional vote-seat
 matching. Governing consequence: high legislative capacity early in the
 term, despite a sizable national vote-seat gap.</p>
-<h3 data-number="4.1.2" id="france"><span class="header-section-number">4.1.2</span> France</h3>
+<h3 data-number="5.1.2" id="france"><span class="header-section-number">5.1.2</span> France</h3>
 <p>The legislative elections of 30 June and 7 July 2024 produced no
 absolute majority in the 577-seat Assembly: 289 seats were needed. The
 official electoral labels gave Union of the Left 178 seats, Ensemble
@@ -1357,7 +1361,7 @@ prime minister could not supply the Assembly support needed for durable
 government. Sources: <a href="https://www.interieur.gouv.fr/actualites/actualites-du-ministere/elections-legislatives-2024-resultats-definitifs">Interior
 Ministry final results</a> and <a href="https://data.ipu.org/parliament/FR/FR-LC01/election/FR-LC01-E20240630/">IPU
 election record</a>.</p>
-<h3 data-number="4.1.3" id="ireland"><span class="header-section-number">4.1.3</span> Ireland</h3>
+<h3 data-number="5.1.3" id="ireland"><span class="header-section-number">5.1.3</span> Ireland</h3>
 <p>Ireland’s November 2024 election again delivered a fragmented Dail:
 Fianna Fail took 48 seats and Fine Gael 38, but their combined
 first-preference vote share barely cleared 40 percent (21.9 and 20.8
@@ -1370,7 +1374,7 @@ with independents (this time without the Greens), and coalition
 construction again took nearly two months, with Micheal Martin returning
 as Taoiseach in January 2025. Coalition construction remains the core
 executive task under STV, not a postscript.</p>
-<h3 data-number="4.1.4" id="germany"><span class="header-section-number">4.1.4</span> Germany</h3>
+<h3 data-number="5.1.4" id="germany"><span class="header-section-number">5.1.4</span> Germany</h3>
 <p>Germany’s 23 February 2025 election, following the collapse of the
 SPD-Greens-FDP “traffic light” coalition, shows proportionality and
 political exclusions working together. The FDP’s 4.3 percent missed the
@@ -1389,20 +1393,20 @@ chancellor election</a>.</p>
 <p>The German coalition discussion also draws on <a href="https://www.cdu.de/aktuelles/cdu-deutschlands/friedrich-merz-gemeinsam-mit-der-union-kaempfen/">CDU’s
 explicit pre-election rejection of cooperation with AfD</a>. This party
 statement documents a political constraint, not an electoral rule.</p>
-<h3 data-number="4.1.5" id="italy"><span class="header-section-number">4.1.5</span> Italy</h3>
+<h3 data-number="5.1.5" id="italy"><span class="header-section-number">5.1.5</span> Italy</h3>
 <p>In 2022, a coherent pre-election centre-right bloc converted
 coalition coordination into a parliamentary majority. The mixed
 Rosatellum structure rewarded alliance discipline in single-member
 districts while list votes reinforced bloc advantage. Governing
 consequence: stronger initial executive control than Italy’s fragmented
 party map might suggest.</p>
-<h3 data-number="4.1.6" id="spain"><span class="header-section-number">4.1.6</span> Spain</h3>
+<h3 data-number="5.1.6" id="spain"><span class="header-section-number">5.1.6</span> Spain</h3>
 <p>The 2023 election produced no simple winner-takes-government outcome.
 Closed-list PR with provincial districts and regional-party leverage
 made investiture arithmetic hinge on post-election agreements. Governing
 consequence: cabinet durability became tied to ongoing support
 management rather than one-off coalition contracting.</p>
-<h3 data-number="4.1.7" id="netherlands"><span class="header-section-number">4.1.7</span> Netherlands</h3>
+<h3 data-number="5.1.7" id="netherlands"><span class="header-section-number">5.1.7</span> Netherlands</h3>
 <p>The 29 October 2025 Dutch election followed the collapse of the
 Schoof coalition, in which PVV was the largest party. D66 and PVV each
 won 26 of 150 seats, but D66 had more votes: a seat tie is not a vote
@@ -1414,7 +1418,7 @@ beyond its own parties. Winning the most votes did not itself supply a
 governing majority. Sources: <a href="https://www.kiesraad.nl/adviezen-en-publicaties/publicaties/2025/11/07/proces-verbaal-van-de-uitslag-van-de-verkiezing-van-de-tweede-kamer-2025-d.d.-7-november-2025">Kiesraad’s
 final election record</a> and <a href="https://www.government.nl/latest/news/2026/02/23/jetten-government-sworn-in">government’s
 inauguration record</a>.</p>
-<h3 data-number="4.1.8" id="denmark"><span class="header-section-number">4.1.8</span> Denmark</h3>
+<h3 data-number="5.1.8" id="denmark"><span class="header-section-number">5.1.8</span> Denmark</h3>
 <p>In the 24 March 2026 election, Socialdemokratiet won 21.8 percent of
 votes and 38 of the 175 seats allocated in Denmark proper. SF won 20
 seats, Venstre 18, and Moderaterne 14. The outgoing
@@ -1425,7 +1429,7 @@ compensatory seats preserved broad representation but did not reproduce
 the outgoing coalition’s majority. This is election arithmetic, not a
 claim about the eventual cabinet or its external support. Source: <a href="https://www.valg.im.dk/Media/639117581241830159/Danmarks%20Statistiks%20opgrelse%20af%20folketingsvalget%20den%2024.%20marts%202026.pdf">official
 Statistics Denmark election tables</a>, Tables 10 and 12.</p>
-<h3 data-number="4.1.9" id="sweden"><span class="header-section-number">4.1.9</span> Sweden</h3>
+<h3 data-number="5.1.9" id="sweden"><span class="header-section-number">5.1.9</span> Sweden</h3>
 <p>Sweden’s 13 September 2026 election gave Socialdemokraterna 28.02
 percent and 99 of 349 seats, Moderaterna 70, and Sverigedemokraterna 62.
 Vänsterpartiet, Centerpartiet, Kristdemokraterna, Miljöpartiet, and
@@ -1437,7 +1441,7 @@ agreement. Governing consequence: list PR with preference votes produced
 a closely divided multiparty chamber; cabinet formation still depended
 on party negotiations and parliamentary confidence rules. Source: <a href="https://www.val.se/valresultat-och-statistik/riksdags--region--och-kommunval/valresultat-2026">Swedish
 Election Authority’s final 2026 result</a>.</p>
-<h3 data-number="4.1.10" id="romania"><span class="header-section-number">4.1.10</span> Romania</h3>
+<h3 data-number="5.1.10" id="romania"><span class="header-section-number">5.1.10</span> Romania</h3>
 <p>Romania’s 1 December 2024 parliamentary election gave PSD about 22
 percent of the Chamber of Deputies vote and 86 of the 331 seats at that
 election. Seven parties won ordinary list seats, alongside 19 minority
@@ -1450,7 +1454,7 @@ the 2024 election and formation figures, not the current composition of
 a later cabinet. Sources: <a href="https://data.ipu.org/parliament/RO/RO-LC01/election/RO-LC01-E20241201/">IPU’s
 parliament-supplied seat record</a> and <a href="https://www.romania-actualitati.ro/news-in-english/centralization-of-parliamentary-election-votes-completed-id202704.html">Radio
 România’s report of the electoral authority’s completed count</a>.</p>
-<h2 data-number="4.2" id="vote-to-seat-snapshot-table-illustrative-rounded"><span class="header-section-number">4.2</span> Vote-To-Seat Snapshot Table
+<h2 data-number="5.2" id="vote-to-seat-snapshot-table-illustrative-rounded"><span class="header-section-number">5.2</span> Vote-To-Seat Snapshot Table
 (Illustrative, Rounded)</h2>
 <p>The table below is intentionally approximate and decision-oriented.
 It is designed to anchor pattern recognition, not replace official
@@ -1558,8 +1562,10 @@ bargaining</td>
 modest but seat concentration is high, the system is usually adding a
 governability bonus; when both remain fragmented, coalition negotiation
 is the real executive-selection mechanism.</p>
-<h2 data-number="4.3" id="comparative-summary"><span class="header-section-number">4.3</span> Comparative Summary</h2>
-<h3 data-number="4.3.1" id="at-a-glance"><span class="header-section-number">4.3.1</span> At a Glance</h3>
+<h2 data-number="5.3" id="comparative-summary"><span class="header-section-number">5.3</span> Comparative Summary</h2>
+<h3 data-number="5.3.1" id="at-a-glance"><span class="header-section-number">5.3.1</span> At a Glance</h3>
+<p>The table compares the ten systems across ballot design, candidate
+control, proportionality, and local representation.</p>
 <table style="width:100%;">
 <colgroup>
 <col style="width: 16%" />
@@ -1662,7 +1668,7 @@ is the real executive-selection mechanism.</p>
 </tr>
 </tbody>
 </table>
-<h3 data-number="4.3.2" id="what-these-systems-feel-like-in-practice"><span class="header-section-number">4.3.2</span> What These Systems Feel Like
+<h3 data-number="5.3.2" id="what-these-systems-feel-like-in-practice"><span class="header-section-number">5.3.2</span> What These Systems Feel Like
 In Practice</h3>
 <p>These systems differ less in democratic legitimacy than in political
 texture.</p>
@@ -1674,7 +1680,7 @@ proportional correction, and Italy coalition-first bloc strategy.</p>
 Denmark, and Sweden combine strong proportionality with different
 balances of fragmentation, correction, and voter influence over
 candidates.</p>
-<h3 data-number="4.3.3" id="the-trade-offs-plain-english"><span class="header-section-number">4.3.3</span> The Trade-Offs, Plain
+<h3 data-number="5.3.3" id="the-trade-offs-plain-english"><span class="header-section-number">5.3.3</span> The Trade-Offs, Plain
 English</h3>
 <p>If you want a super blunt version:</p>
 <ol type="1">
@@ -1696,18 +1702,18 @@ at the centre.</li>
 <p>That last idea is really the modern European theme. Very few systems
 are satisfied with pure winner-takes-all anymore. Even when they are not
 perfectly proportional, they usually try to patch the rough edges.</p>
-<h2 data-number="4.4" id="early-warning-indicators-for-coalition-stress"><span class="header-section-number">4.4</span> Early Warning Indicators For
+<h2 data-number="5.4" id="early-warning-indicators-for-coalition-stress"><span class="header-section-number">5.4</span> Early Warning Indicators For
 Coalition Stress</h2>
 <p>If you want to forecast governing durability, watch indicators that
 move before cabinet collapse headlines show up.</p>
-<h3 data-number="4.4.1" id="fragmentation-trend"><span class="header-section-number">4.4.1</span> 1) Fragmentation trend</h3>
+<h3 data-number="5.4.1" id="fragmentation-trend"><span class="header-section-number">5.4.1</span> 1) Fragmentation trend</h3>
 <p>What to watch: whether the effective number of parliamentary parties
 is rising across consecutive elections.</p>
 <p>Why it matters: more relevant parties means more veto points and more
 complex coalition contracts.</p>
 <p>Worsening signal: coalition talks require three or more medium
 parties with little ideological overlap.</p>
-<h3 data-number="4.4.2" id="coalition-ideological-distance"><span class="header-section-number">4.4.2</span> 2) Coalition ideological
+<h3 data-number="5.4.2" id="coalition-ideological-distance"><span class="header-section-number">5.4.2</span> 2) Coalition ideological
 distance</h3>
 <p>What to watch: policy distance on budget rules, migration,
 labor-market reform, and EU fiscal integration.</p>
@@ -1715,7 +1721,7 @@ labor-market reform, and EU fiscal integration.</p>
 domains are sequenced and bounded.</p>
 <p>Worsening signal: repeated public dissent by coalition partners on
 high-salience files before first budget passage.</p>
-<h3 data-number="4.4.3" id="minority-government-dependency-risk"><span class="header-section-number">4.4.3</span> 3) Minority-government
+<h3 data-number="5.4.3" id="minority-government-dependency-risk"><span class="header-section-number">5.4.3</span> 3) Minority-government
 dependency risk</h3>
 <p>What to watch: number and volatility of external support parties
 needed for confidence and supply.</p>
@@ -1723,7 +1729,7 @@ needed for confidence and supply.</p>
 support norms are institutionalized.</p>
 <p>Worsening signal: support parties begin conditioning routine votes on
 unrelated policy concessions.</p>
-<h3 data-number="4.4.4" id="regional-party-pivot-leverage"><span class="header-section-number">4.4.4</span> 4) Regional-party pivot
+<h3 data-number="5.4.4" id="regional-party-pivot-leverage"><span class="header-section-number">5.4.4</span> 4) Regional-party pivot
 leverage</h3>
 <p>What to watch: whether regionally concentrated parties are
 mathematically pivotal to forming or preserving a majority.</p>
@@ -1731,7 +1737,7 @@ mathematically pivotal to forming or preserving a majority.</p>
 concessions that strain coalition coherence.</p>
 <p>Worsening signal: repeated government crises tied to centre-periphery
 bargaining files.</p>
-<h3 data-number="4.4.5" id="seat-vote-distortion-trend"><span class="header-section-number">4.4.5</span> 5) Seat-vote distortion
+<h3 data-number="5.4.5" id="seat-vote-distortion-trend"><span class="header-section-number">5.4.5</span> 5) Seat-vote distortion
 trend</h3>
 <p>What to watch: whether the vote-seat gap for governing parties is
 widening over time.</p>
@@ -1739,7 +1745,7 @@ widening over time.</p>
 sharpen opposition mobilization.</p>
 <p>Worsening signal: governing majority persists with declining vote
 share and rising disproportionality metrics.</p>
-<h3 data-number="4.4.6" id="intra-coalition-policy-incompatibility"><span class="header-section-number">4.4.6</span> 6) Intra-coalition policy
+<h3 data-number="5.4.6" id="intra-coalition-policy-incompatibility"><span class="header-section-number">5.4.6</span> 6) Intra-coalition policy
 incompatibility</h3>
 <p>What to watch: unresolved conflicts in manifesto commitments that
 cannot be delayed to committee-level compromise.</p>
@@ -1747,8 +1753,8 @@ cannot be delayed to committee-level compromise.</p>
 cabinet-breaking.</p>
 <p>Worsening signal: coalition leaders escalate disputes in public
 rather than containing them in bargaining forums.</p>
-<h1 data-number="5" id="technical-analysis-tools"><span class="header-section-number">5</span> Technical Analysis Tools</h1>
-<h2 data-number="5.1" id="the-math-layer-that-usually-gets-hidden"><span class="header-section-number">5.1</span> The Math Layer That Usually
+<h1 data-number="6" id="technical-analysis-tools"><span class="header-section-number">6</span> Technical Analysis Tools</h1>
+<h2 data-number="6.1" id="the-math-layer-that-usually-gets-hidden"><span class="header-section-number">6.1</span> The Math Layer That Usually
 Gets Hidden</h2>
 <p>Most primers stop at labels like FPTP, STV, or PR. The practical
 decisions, though, are often made in the allocation formula details. Two
@@ -1763,7 +1769,7 @@ by small district size).</li>
 <li>Allocation formula (D’Hondt, Sainte-Laguë, largest remainder, and so
 on).</li>
 </ol>
-<h3 data-number="5.1.1" id="dhondt-versus-sainte-laguë-in-one-minute"><span class="header-section-number">5.1.1</span> D’Hondt versus Sainte-Laguë
+<h3 data-number="6.1.1" id="dhondt-versus-sainte-laguë-in-one-minute"><span class="header-section-number">6.1.1</span> D’Hondt versus Sainte-Laguë
 in one minute</h3>
 <p>D’Hondt divides party vote totals by 1, 2, 3, … and assigns seats to
 the highest quotients. Because the divisor starts at 1 and then
@@ -1773,7 +1779,7 @@ top.</p>
 advantage and is usually friendlier to mid-sized parties.</p>
 <p>That is why two countries with similar vote shares can still end up
 with different coalition arithmetic.</p>
-<h3 data-number="5.1.2" id="why-district-size-quietly-dominates-outcomes"><span class="header-section-number">5.1.2</span> Why district size quietly
+<h3 data-number="6.1.2" id="why-district-size-quietly-dominates-outcomes"><span class="header-section-number">6.1.2</span> Why district size quietly
 dominates outcomes</h3>
 <p>If a district only has 3 to 5 seats, very small parties are
 effectively locked out even if there is no strict legal threshold. If a
@@ -1782,7 +1788,7 @@ shares.</p>
 <p>That is one reason the Netherlands (national district) feels so
 different from Spain (provincial districts), even though both live in
 the PR family.</p>
-<h3 data-number="5.1.3" id="quick-formulas-you-actually-use"><span class="header-section-number">5.1.3</span> Quick formulas you actually
+<h3 data-number="6.1.3" id="quick-formulas-you-actually-use"><span class="header-section-number">6.1.3</span> Quick formulas you actually
 use</h3>
 <p>For STV, the Droop quota is:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Quota</mtext><mo>=</mo><mrow><mo stretchy="true" form="prefix">⌊</mo><mfrac><mi>V</mi><mrow><mi>S</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mo stretchy="true" form="postfix">⌋</mo></mrow><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
@@ -1806,7 +1812,7 @@ is party seat share.</p>
 <p>Higher
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>
 means more vote-seat distortion.</p>
-<h3 data-number="5.1.4" id="worked-example-gallagher-index-in-practice"><span class="header-section-number">5.1.4</span> Worked example: Gallagher
+<h3 data-number="6.1.4" id="worked-example-gallagher-index-in-practice"><span class="header-section-number">6.1.4</span> Worked example: Gallagher
 index in practice</h3>
 <p>Suppose an election produces the following national shares:</p>
 <table>
@@ -1859,7 +1865,7 @@ G = \sqrt{\frac{1}{2} \cdot 86} = \sqrt{43} \approx 6.56
 <p>Interpretation in plain English: a value around 6 to 7 signals a
 noticeable but not extreme vote-seat distortion. In applied work, the
 trend over time is often more useful than one isolated value.</p>
-<h3 data-number="5.1.5" id="worked-example-district-magnitude-sensitivity"><span class="header-section-number">5.1.5</span> Worked example: district
+<h3 data-number="6.1.5" id="worked-example-district-magnitude-sensitivity"><span class="header-section-number">6.1.5</span> Worked example: district
 magnitude sensitivity</h3>
 <p>Hold votes constant across two district designs:</p>
 <table>
@@ -1921,7 +1927,7 @@ to
 threshold falls, so smaller parties need less concentrated support to
 win seats. That one design choice often matters as much as the
 allocation formula itself.</p>
-<h2 data-number="5.2" id="same-votes-different-parliament-a-worked-comparison"><span class="header-section-number">5.2</span> Same Votes, Different
+<h2 data-number="6.2" id="same-votes-different-parliament-a-worked-comparison"><span class="header-section-number">6.2</span> Same Votes, Different
 Parliament: A Worked Comparison</h2>
 <p>Take this stylized national vote split:</p>
 <table>
@@ -1991,7 +1997,7 @@ proportionality</td>
 <p>The key practical insight is not that one is morally superior. It is
 that each design encodes a political theory about governability versus
 representativeness.</p>
-<h2 data-number="5.3" id="coalition-mechanics-and-government-durability"><span class="header-section-number">5.3</span> Coalition Mechanics And
+<h2 data-number="6.3" id="coalition-mechanics-and-government-durability"><span class="header-section-number">6.3</span> Coalition Mechanics And
 Government Durability</h2>
 <p>Electoral-system discussions often end at seat allocation, but
 governing risk shows up one step later in coalition formation.</p>
@@ -2013,7 +2019,7 @@ depending on party-system fragmentation.</li>
 <li>Minority government viability depends heavily on
 confidence-and-supply norms, not only electoral math.</li>
 </ol>
-<h2 data-number="5.4" id="a-practical-analyst-checklist"><span class="header-section-number">5.4</span> A Practical Analyst
+<h2 data-number="6.4" id="a-practical-analyst-checklist"><span class="header-section-number">6.4</span> A Practical Analyst
 Checklist</h2>
 <p>When you assess a country’s electoral system for policy risk, market
 risk, or geopolitical context, run this checklist:</p>
@@ -2034,7 +2040,7 @@ parties, or many?</li>
 <p>If you answer these seven questions, you usually understand the
 political-system risk far better than by just naming the electoral
 model.</p>
-<h2 data-number="5.5" id="reusable-political-system-risk-scoring-rubric"><span class="header-section-number">5.5</span> Reusable Political-System Risk
+<h2 data-number="6.5" id="reusable-political-system-risk-scoring-rubric"><span class="header-section-number">6.5</span> Reusable Political-System Risk
 Scoring Rubric</h2>
 <p>This rubric is built for repeatable country comparison. Score each
 dimension from 1 to 5, where 1 is low risk contribution and 5 is high
@@ -2093,7 +2099,7 @@ risk contribution.</p>
 </tr>
 </tbody>
 </table>
-<h3 data-number="5.5.1" id="worked-scoring-example-spain-style-profile"><span class="header-section-number">5.5.1</span> Worked scoring example:
+<h3 data-number="6.5.1" id="worked-scoring-example-spain-style-profile"><span class="header-section-number">6.5.1</span> Worked scoring example:
 Spain-style profile</h3>
 <p>Illustrative scoring:</p>
 <ol type="1">
@@ -2122,8 +2128,8 @@ budget defeats, coalition exits).</li>
 <li>Escalate risk flags when score increases by 3 or more points
 cycle-on-cycle.</li>
 </ol>
-<h1 data-number="6" id="conclusion"><span class="header-section-number">6</span> Conclusion</h1>
-<h2 data-number="6.1" id="main-takeaway"><span class="header-section-number">6.1</span> Main Takeaway</h2>
+<h1 data-number="7" id="conclusion"><span class="header-section-number">7</span> Conclusion</h1>
+<h2 data-number="7.1" id="main-takeaway"><span class="header-section-number">7.1</span> Main Takeaway</h2>
 <p>European electoral systems are not cosmetic variations on one model.
 They are different institutional choices about representation,
 governability, and accountability.</p>
@@ -2145,6 +2151,7 @@ institutional detail.</p>
 is identifying which political behaviour each design systematically
 rewards, and what that implies for policy stability, coalition
 durability, and EU negotiation outcomes.</p>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
