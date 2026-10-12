@@ -1,0 +1,13 @@
+SOURCE_MD   := "primer_retrieval_rag.md"
+PROJECT_DIR := "primer_retrieval_rag"
+TITLE       := "Information Retrieval, Embeddings, and Retrieval-Augmented Generation"
+AUTHOR      := "Mick Cooney"
+DATE        := "12 October 2026"
+HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
+
+# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
+# MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
+
+import '../_shared/common.just'

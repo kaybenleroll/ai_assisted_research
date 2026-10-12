@@ -286,12 +286,21 @@ information-theory-pdf:
 information-theory-all:
   cd primer_information_theory && just all
 
+retrieval-rag-html:
+  cd primer_retrieval_rag && just html
+
+retrieval-rag-pdf:
+  cd primer_retrieval_rag && just pdf
+
+retrieval-rag-all:
+  cd primer_retrieval_rag && just all
+
 # Common daily build across active document projects
-html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all
+html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -313,4 +322,5 @@ clean-generated:
   cd primer_pi_coding_agent && just clobber
   cd primer_complex_analysis && just clobber
   cd primer_information_theory && just clobber
+  cd primer_retrieval_rag && just clobber
   @echo "✓ Generated artifacts cleaned"

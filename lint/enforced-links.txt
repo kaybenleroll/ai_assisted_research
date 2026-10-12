@@ -40,6 +40,9 @@ primer_political_systems/primer-european-electoral-systems.mathjax.html
 primer_political_systems/primer-european-electoral-systems.mathml.html
 primer_python_for_r_users/primer_python_for_r_users.html
 primer_research_local_llms/primer-running-llms-locally.html
+primer_retrieval_rag/primer_retrieval_rag.html
+primer_retrieval_rag/primer_retrieval_rag.mathjax.html
+primer_retrieval_rag/primer_retrieval_rag.mathml.html
 workbook_catmodel_elt_documents/outputs/workbook_elt.html
 workbook_catmodel_elt_documents/outputs/workbook_executable_index.html
 workbook_catmodel_elt_documents/outputs/workbook_quickstart.html
