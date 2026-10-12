@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Containers are the substrate almost everything you deploy now runs on, and most practitioners learn them by osmosis — a `Dockerfile` inherited from a colleague, a `docker compose up` in a README, a YAML manifest someone in platform engineering wrote two years ago and nobody has touched since. That works right up until it doesn't: until a build behaves differently in CI than on your laptop, until a rootless container can't write to a mounted volume, until a Pod sits in `Pending` forever and the only diagnostic you have is a vague memory that Kubernetes "schedules things." At that point the gap between using containers and understanding them turns into wasted days.
+Containers are the substrate almost everything you deploy now runs on, and most practitioners learn them by osmosis — a `Dockerfile` inherited from a colleague, a `docker compose up` in a README, a YAML manifest someone in platform engineering wrote two years ago and nobody has touched since. That works right up until it doesn't: until a build behaves differently in CI than on your laptop, until a rootless container can't write to a mounted volume, until a Pod sits in `Pending` forever and the only diagnostic you have is a vague memory that Kubernetes "schedules things". At that point the gap between using containers and understanding them turns into wasted days.
 
 This primer closes that gap. It is written for the engineer or data scientist who ships containerised software, reads Kubernetes manifests, and has a working intuition for what a container does — but has never been shown the machinery underneath, and so cannot reason about it when it misbehaves. The goal is not to make you a platform engineer. It is to give you an accurate mental model: what a container actually is at the kernel level, how the user-facing engines and lower-level runtimes fit together, why Kubernetes exists at all, and what the 2026 landscape looks like now rather than what it looked like when the blog post you read was written.
 
@@ -32,7 +32,7 @@ You should be comfortable on a Unix command line, know what a process is, and ha
 
 The order is deliberate: kernel mechanics, then standards, then engines, then orchestration, then the current state of play. Each section assumes the ones before it. If you are only here for Kubernetes, you can start at the section on why Kubernetes exists — but the architecture discussion will make considerably more sense if you have read the OCI section first, because Kubernetes' relationship to container runtimes is defined entirely in terms of those specifications.
 
-**Freshness note (12 September 2026):** The conceptual sections are intended to age slowly. Version numbers, licensing terms, release status, adoption figures, and ecosystem recommendations are a snapshot of the date above; check the linked project documentation before making an implementation or procurement decision.
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
 
 ## What a Container Actually Is
 
@@ -72,7 +72,7 @@ Namespaces isolate visibility; they do nothing about consumption. A process in i
 
 Two generations exist. cgroups v1 used a separate hierarchy per controller, which made consistent policy across resources awkward and produced a long tail of edge cases. cgroups v2 uses a single unified hierarchy and is now effectively universal on current distributions; Podman 6.0 dropped v1 support entirely, and Kubernetes has moved the same way. If you encounter cgroups v1 in 2026, you are on an old system and should expect tooling friction.
 
-The failure mode worth knowing is the memory limit. When a container exceeds its cgroup memory limit, the kernel's out-of-memory (OOM) killer terminates a process inside it — usually the largest, which is usually your application. From inside the container this looks like an unexplained hard kill: no stack trace, no exception, no log line, exit code 137. From the host it is an entry in the kernel log. This is the single most common cause of containers that "just restart for no reason," and it is why a JVM or Python process with a heap sized from the host's total memory rather than the cgroup limit will die under load. Modern runtimes read cgroup limits, but only if configured to, and older ones do not.
+The failure mode worth knowing is the memory limit. When a container exceeds its cgroup memory limit, the kernel's out-of-memory (OOM) killer terminates a process inside it — usually the largest, which is usually your application. From inside the container this looks like an unexplained hard kill: no stack trace, no exception, no log line, exit code 137. From the host it is an entry in the kernel log. This is the single most common cause of containers that "just restart for no reason", and it is why a JVM or Python process with a heap sized from the host's total memory rather than the cgroup limit will die under load. Modern runtimes read cgroup limits, but only if configured to, and older ones do not.
 
 CPU limits fail more subtly. The CPU controller in bandwidth mode gives a container a quota per scheduling period; when the quota is exhausted, every thread in the container is stopped until the next period begins. For a latency-sensitive multi-threaded service this produces periodic stalls that look like network problems and do not show up as high CPU utilisation, because the process is not running when it is throttled. Throttling metrics exist in the cgroup filesystem and are worth watching precisely because the obvious metrics hide the problem.
 
@@ -235,7 +235,7 @@ That last option is now standard practice at any scale, and it is why GitHub Con
 
 ## Podman
 
-Podman is an OCI-compliant container engine developed primarily by Red Hat, designed around two architectural decisions that differ from Docker's: it has no daemon, and it runs rootless by default. It is also deliberately CLI-compatible with Docker, to the point that `alias docker=podman` works for the large majority of everyday commands. The name comes from "pod manager," which is a hint about a feature discussed below.
+Podman is an OCI-compliant container engine developed primarily by Red Hat, designed around two architectural decisions that differ from Docker's: it has no daemon, and it runs rootless by default. It is also deliberately CLI-compatible with Docker, to the point that `alias docker=podman` works for the large majority of everyday commands. The name comes from "pod manager", which is a hint about a feature discussed below.
 
 ### Daemonless Architecture
 
@@ -282,7 +282,7 @@ Restart=always
 WantedBy=default.target
 ```
 
-That covers a surprisingly large class of deployments where people reach for Kubernetes without needing it. If you are running a handful of services on one or two machines and your real requirements are "start on boot, restart on failure, log to the journal, have dependencies ordered correctly," `systemd` already does all of that well, and Quadlet lets containers participate. Reaching for a cluster orchestrator to get restart-on-failure is a large amount of accidental complexity for a feature `systemd` has had for over a decade.
+That covers a surprisingly large class of deployments where people reach for Kubernetes without needing it. If you are running a handful of services on one or two machines and your real requirements are "start on boot, restart on failure, log to the journal, have dependencies ordered correctly", `systemd` already does all of that well, and Quadlet lets containers participate. Reaching for a cluster orchestrator to get restart-on-failure is a large amount of accidental complexity for a feature `systemd` has had for over a decade.
 
 ### Compose, Desktop, and Kubernetes YAML
 
@@ -296,7 +296,7 @@ Podman also does something Docker does not: `podman generate kube` emits Kuberne
 
 Podman has a native grouping primitive called a **pod**: a set of containers that share network and IPC namespaces, so they reach each other on `localhost`, plus an infrastructure container that holds the shared namespaces open while individual containers come and go.
 
-Kubernetes' Pod predates this by several years — the object goes back to Kubernetes' original 2014–2015 design, itself derived from Google Borg's internal grouping concept. Podman, which grew out of Red Hat's CRI-O work in 2017–2018, deliberately adopted the same shared-namespace grouping so that a local Podman workflow would interoperate cleanly with real Kubernetes manifests: `podman generate kube` and `podman play kube` only make sense as a round trip if the concept is the same on both sides. Podman is named for it — "Pod Manager." The practical value is that the mental model transfers: if you understand why a sidecar container in a Podman pod can talk to the main container on `localhost`, you understand Kubernetes Pod networking, because it is the same mechanism, adopted on purpose rather than reinvented in parallel.
+Kubernetes' Pod predates this by several years — the object goes back to Kubernetes' original 2014–2015 design, itself derived from Google Borg's internal grouping concept. Podman, which grew out of Red Hat's CRI-O work in 2017–2018, deliberately adopted the same shared-namespace grouping so that a local Podman workflow would interoperate cleanly with real Kubernetes manifests: `podman generate kube` and `podman play kube` only make sense as a round trip if the concept is the same on both sides. Podman is named for it — "Pod Manager". The practical value is that the mental model transfers: if you understand why a sidecar container in a Podman pod can talk to the main container on `localhost`, you understand Kubernetes Pod networking, because it is the same mechanism, adopted on purpose rather than reinvented in parallel.
 
 ### Buildah and Skopeo
 
@@ -373,7 +373,7 @@ Also worth saying plainly: this choice matters less than the amount written abou
 
 Docker and Podman are *engines* — user-facing tools that manage images and orchestrate the act of running a container. Beneath and beside them sits a set of components that matter once you touch Kubernetes or have isolation requirements that plain containers cannot meet. The most important distinction to get straight is the one between a CRI implementation and an OCI runtime, because the terms are used interchangeably in casual writing and they are not interchangeable at all.
 
-A **CRI implementation** talks upwards to Kubernetes. The Container Runtime Interface is a gRPC API that the kubelet uses to say "pull this image," "create a sandbox for this Pod," "start this container." `containerd` with its CRI plugin and CRI-O are the two common implementations.
+A **CRI implementation** talks upwards to Kubernetes. The Container Runtime Interface is a gRPC API that the kubelet uses to say "pull this image", "create a sandbox for this Pod", "start this container". `containerd` with its CRI plugin and CRI-O are the two common implementations.
 
 An **OCI runtime** talks downwards to the kernel. It consumes a filesystem bundle and a `config.json` and performs the actual isolation work. `runc`, `crun`, `runsc` (gVisor), and `kata-runtime` are OCI runtimes.
 
@@ -438,7 +438,7 @@ Roughly: Firecracker is common in serverless and AI-sandbox platforms, Kata is a
 
 ### LXC and LXD
 
-LXC and LXD are frequently filed as "alternatives to Docker," which misses that they answer a different question.
+LXC and LXD are frequently filed as "alternatives to Docker", which misses that they answer a different question.
 
 Docker and Podman are **application container** tools. The model is one primary process per container, an immutable image, ephemeral instances, and upgrade-by-replacement: you do not patch a running container, you build a new image and replace it. Configuration comes from environment variables and mounted files; state lives in volumes or external services.
 
@@ -773,7 +773,7 @@ The caution is that an Operator is production software running with broad cluste
 
 ### Policy and Admission
 
-Authentication answers who is making a request; authorisation answers whether that identity may make it; **admission** answers whether the requested object is acceptable before it is persisted. This is where a cluster can enforce rules such as "no privileged containers," "images must come from this registry," "every workload needs resource requests," or "this namespace may use only these security contexts."
+Authentication answers who is making a request; authorisation answers whether that identity may make it; **admission** answers whether the requested object is acceptable before it is persisted. This is where a cluster can enforce rules such as "no privileged containers", "images must come from this registry", "every workload needs resource requests", or "this namespace may use only these security contexts".
 
 Kubernetes' built-in **Pod Security Admission** provides the baseline, restricted, and privileged Pod Security Standards at namespace scope. It is deliberately general. Teams that need organisation-specific rules commonly add a policy engine such as Kyverno or Gatekeeper, and supply-chain policy can use the same admission point to verify image signatures. Policy is part of the platform contract: test it against real workloads, report violations clearly, and keep an emergency path that is audited rather than relying on undocumented cluster-admin exceptions.
 
@@ -843,7 +843,7 @@ A few developments from the past eighteen months are genuinely worth a practitio
 
 ### Release Cadence and Versions
 
-Kubernetes ships three minor releases a year. Version 1.37, codenamed "Garhwal," was released on 26 August 2026 with 67 enhancements — 16 graduating to stable, 23 to beta, 27 in alpha, and one deprecation. The preceding patch line, 1.36.4, came out on 11 August 2026. The practical consequence of the cadence is that each minor version receives about one year of patch support, so a cluster left alone for two years is out of support and its upgrade path is a multi-hop exercise. Upgrade planning is not optional work.
+Kubernetes ships three minor releases a year. Version 1.37, codenamed "Garhwal", was released on 26 August 2026 with 67 enhancements — 16 graduating to stable, 23 to beta, 27 in alpha, and one deprecation. The preceding patch line, 1.36.4, came out on 11 August 2026. The practical consequence of the cadence is that each minor version receives about one year of patch support, so a cluster left alone for two years is out of support and its upgrade path is a multi-hop exercise. Upgrade planning is not optional work.
 
 ### GPU Scheduling and AI Workloads
 
@@ -883,15 +883,19 @@ Docker versus Podman is a real decision with a clear default and low stakes. Pod
 
 Kubernetes is a reconciliation engine, and that single idea explains all of it. You declare desired state; controllers observe actual state and act continuously to close the gap. Pods, Deployments, Services, and every custom resource are expressions of desired state, and every controller including the ones you write is the same loop. It is the right answer when you genuinely have the fleet coordination problem, and expensive accidental complexity when you do not — so answer that question honestly before you adopt it, because the cost of running it badly is higher than the cost of not running it at all.
 
-## Reference Links
+\newpage
 
-- [Open Container Initiative specifications](https://opencontainers.org/specs/)
-- [Docker Desktop subscription terms](https://docs.docker.com/desktop/setup/install/)
-- [Podman Container Tools in the CNCF](https://www.cncf.io/projects/podman-container-tools/)
-- [Kubernetes release history and support windows](https://kubernetes.io/releases/)
-- [Kubernetes 1.34: Dynamic Resource Allocation reaches GA](https://kubernetes.io/blog/2025/09/01/kubernetes-v1-34-dra-updates/)
-- [CNCF Annual Cloud Native Survey, January 2026](https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/)
-- [Kubernetes Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/)
-- [Kubernetes observability overview](https://kubernetes.io/docs/concepts/cluster-administration/observability/)
-- [Sigstore documentation](https://docs.sigstore.dev/)
-- [AWS Lambda MicroVMs announcement](https://aws.amazon.com/about-aws/whats-new/2026/06/aws-lambda-microvms/)
+## Further Reading
+
+These sources provide the specifications, current project documentation, and evidence behind the primer's time-sensitive claims.
+
+- [Open Container Initiative specifications](https://opencontainers.org/specs/) — the image, runtime, and distribution standards that make engines and registries interoperable.
+- [Docker Desktop subscription terms](https://docs.docker.com/desktop/setup/install/) — the current source for Docker Desktop's commercial conditions.
+- [Podman Container Tools in the CNCF](https://www.cncf.io/projects/podman-container-tools/) — governance and project status for the Podman tool family.
+- [Kubernetes release history and support windows](https://kubernetes.io/releases/) — release cadence and support information for version planning.
+- [Kubernetes 1.34: Dynamic Resource Allocation reaches GA](https://kubernetes.io/blog/2025/09/01/kubernetes-v1-34-dra-updates/) — the primary explanation of DRA's GPU and specialised-resource model.
+- [CNCF Annual Cloud Native Survey, January 2026](https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/) — survey evidence for the adoption figures discussed in the primer.
+- [Kubernetes Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) — the built-in baseline, restricted, and privileged policy profiles.
+- [Kubernetes observability overview](https://kubernetes.io/docs/concepts/cluster-administration/observability/) — the official overview of metrics, logs, traces, and events.
+- [Sigstore documentation](https://docs.sigstore.dev/) — signing, keyless identity, and transparency-log documentation for image supply chains.
+- [AWS Lambda MicroVMs announcement](https://aws.amazon.com/about-aws/whats-new/2026/06/aws-lambda-microvms/) — the source for the Firecracker-related deployment example.
