@@ -6,7 +6,7 @@ Most introductions to numerical analysis land in one of two camps: short and han
 
 This primer tries to sit in the middle. The goal is not to water anything down. The goal is to explain real numerical ideas in plain language, with enough detail that you can build useful code, understand why it works, and — crucially — know when it might fail.
 
-You will still see math throughout, because numerical analysis is math plus computation and there is no way around that. But the style here is practical and conversational, and every major method comes with examples in Python, R, and Julia written in each language's own idiom rather than a forced one-size-fits-all style.
+You will still see maths throughout, because numerical analysis is mathematics plus computation and there is no way around that. But the style here is practical and conversational, and every major method comes with examples in Python, R, and Julia written in each language's own idiom rather than a forced one-size-fits-all style.
 
 ### What Numerical Analysis Is, Really
 
@@ -36,7 +36,7 @@ If you only remember one thing from this primer, remember this:
 
 ### What This Primer Is Not
 
-This is not a full proof-based textbook, and it makes no attempt to be one. If you want the full theoretical machinery — convergence proofs, spectral theory, the Lax Equivalence Theorem with all conditions stated precisely — the reading list at the end will point you to the right books. This primer is also not a replacement for specialized references in PDEs, large-scale sparse computing, or uncertainty quantification; those are deep disciplines in their own right. And it does not pretend that any one language or algorithm is the universal winner — because none of them are.
+This is not a full proof-based textbook, and it makes no attempt to be one. If you want the full theoretical machinery — convergence proofs, spectral theory, the Lax Equivalence Theorem with all conditions stated precisely — the reading list at the end will point you to the right books. This primer is also not a replacement for specialised references in PDEs, large-scale sparse computing, or uncertainty quantification; those are deep disciplines in their own right. And it does not pretend that any one language or algorithm is the universal winner — because none of them are.
 
 ---
 
@@ -53,7 +53,7 @@ A direct method aims to reach a solution in a finite sequence of operations. In 
 
 In floating-point arithmetic, "exact" becomes "as exact as this arithmetic allows," but the spirit is the same: no outer convergence loop to a limit.
 
-Direct methods are the right tool when the problem is moderate in size and when the matrix has structure you can exploit — symmetry, positive definiteness, or banded form all make factorisation significantly cheaper. They are also particularly convenient when you need to solve the same linear system repeatedly with the same coefficient matrix but different right-hand sides, since you can factorize once and reuse the result for each new solve without repeating the expensive decomposition. In exact arithmetic the computation is mathematically complete: a fixed, predictable number of operations, no convergence criterion to manage, and a result that does not depend on an initial guess. In floating-point arithmetic you lose "exact" in the strict sense, but the structure of the computation remains deterministic and bounded. Typical examples are LU factorisation for general square systems, QR for overdetermined or least-squares problems, and Cholesky for symmetric positive definite matrices. Computing interpolation coefficients by solving a Vandermonde system also fits this pattern.
+Direct methods are the right tool when the problem is moderate in size and when the matrix has structure you can exploit — symmetry, positive definiteness, or banded form all make factorisation significantly cheaper. They are also particularly convenient when you need to solve the same linear system repeatedly with the same coefficient matrix but different right-hand sides, since you can factorise once and reuse the result for each new solve without repeating the expensive decomposition. In exact arithmetic the computation is mathematically complete: a fixed, predictable number of operations, no convergence criterion to manage, and a result that does not depend on an initial guess. In floating-point arithmetic you lose "exact" in the strict sense, but the structure of the computation remains deterministic and bounded. Typical examples are LU factorisation for general square systems, QR for overdetermined or least-squares problems, and Cholesky for symmetric positive definite matrices. Computing interpolation coefficients by solving a Vandermonde system also fits this pattern.
 
 #### Iterative Methods
 Iterative methods produce a sequence of approximations, often improving until a stopping rule is met.
@@ -78,20 +78,20 @@ The diagram summarises the first design decision in linear algebra: whether you 
 A deterministic method gives exactly the same result every time it runs with the same input. There are no random draws, no seeds to manage, and no statistical fluctuation in results. This predictability makes verification and debugging straightforward: if a result is wrong, it is reproducibly wrong, which means you can isolate the problem systematically. The trapezoidal rule, classical Runge-Kutta methods, and Newton's method are all deterministic in this sense — given identical floating-point inputs and the same execution path, they produce identical outputs.
 
 #### Stochastic
-Stochastic methods deliberately introduce randomness as a core ingredient. Results vary from run to run unless the seed is fixed, and accuracy is characterized statistically — you expect a result within some confidence interval rather than guaranteeing a deterministic bound. Monte Carlo integration, stochastic gradient methods, and randomized linear algebra sketches all work this way. It is worth being direct about something: stochastic methods are not sloppy or imprecise by nature. They are often the only practical choice when deterministic methods cannot scale. High-dimensional integration is the clearest case: Monte Carlo error scales like $1/\sqrt{n}$ regardless of dimension, while deterministic quadrature rules require exponentially more evaluation points as dimension grows — a combinatorial explosion that makes them unusable beyond a handful of dimensions.
+Stochastic methods deliberately introduce randomness as a core ingredient. Results vary from run to run unless the seed is fixed, and accuracy is characterised statistically — you expect a result within some confidence interval rather than guaranteeing a deterministic bound. Monte Carlo integration, stochastic gradient methods, and randomised linear algebra sketches all work this way. It is worth being direct about something: stochastic methods are not sloppy or imprecise by nature. They are often the only practical choice when deterministic methods cannot scale. High-dimensional integration is the clearest case: Monte Carlo error scales like $1/\sqrt{n}$ regardless of dimension, while deterministic quadrature rules require exponentially more evaluation points as dimension grows — a combinatorial explosion that makes them unusable beyond a handful of dimensions.
 
 ### Local vs Global Approximation
 
 #### Local Approximation
-A local method builds its approximation using information near a specific point or within a small neighborhood, without claiming anything about behaviour far away. Finite difference derivative estimates use function values at nearby points only. Newton updates linearize the function around the current iterate, ignoring curvature elsewhere. Adaptive mesh refinement makes local decisions about where to place grid points based on estimated error in each cell, independent of distant regions. The strength of local methods is robustness: strange behaviour in one part of the domain does not contaminate estimates elsewhere.
+A local method builds its approximation using information near a specific point or within a small neighbourhood, without claiming anything about behaviour far away. Finite difference derivative estimates use function values at nearby points only. Newton updates linearise the function around the current iterate, ignoring curvature elsewhere. Adaptive mesh refinement makes local decisions about where to place grid points based on estimated error in each cell, independent of distant regions. The strength of local methods is robustness: strange behaviour in one part of the domain does not contaminate estimates elsewhere.
 
 #### Global Approximation
 A global method constructs a single approximation intended to be valid across the entire interval or domain. Polynomial interpolation through all nodes, spectral methods that represent the solution as a sum of basis functions over the whole domain, and spline fits over an entire dataset all operate this way. When the target function is smooth and the basis is well-chosen, global methods can achieve remarkably high accuracy with relatively few degrees of freedom — spectral methods on smooth periodic functions can converge faster than any fixed polynomial rate. The downside is sensitivity: a function with a singularity or rough spot in one region can degrade accuracy everywhere, since global basis functions respond to the entire domain.
 
-### Discretization-First vs Model-Reduction-First
+### Discretisation-First vs Model-Reduction-First
 
-#### Discretization-First
-The classical path in computational science is to start from governing equations — differential equations, integral equations, conservation laws — and discretize them directly into a finite algebraic system. Finite difference methods replace derivatives with local polynomial approximations on a grid. Finite element and finite volume methods divide the domain into small cells and enforce the equations either locally or via variational principles. The resulting algebraic systems can be large, but the path from model to computation is direct and the numerical behaviour is well understood.
+#### Discretisation-First
+The classical path in computational science is to start from governing equations — differential equations, integral equations, conservation laws — and discretise them directly into a finite algebraic system. Finite difference methods replace derivatives with local polynomial approximations on a grid. Finite element and finite volume methods divide the domain into small cells and enforce the equations either locally or via variational principles. The resulting algebraic systems can be large, but the path from model to computation is direct and the numerical behaviour is well understood.
 
 #### Model-Reduction-First
 An alternative path, increasingly important in modern scientific computing, is to reduce the complexity of the model before or during numerical solving. Proper orthogonal decomposition identifies the dominant modes of a high-dimensional system and projects the dynamics onto a much smaller subspace. Krylov subspace projections do something similar during an iterative solve — they look for a good solution in a low-dimensional space built from successive matrix-vector products. Surrogate models and emulators learn cheap approximations to expensive simulations and then optimise or analyse the surrogate instead of running the full model.
@@ -114,7 +114,7 @@ In the weak form, the equation is multiplied by a test function and integrated o
 In a forward problem, you are given a model and its parameters and asked to compute the outputs. You know the governing equations, you know the inputs, and you run the computation forward in the natural causal direction. This is the standard computational science workflow: given the physical law and the initial or boundary conditions, simulate what happens. Forward problems are generally well-posed — small changes in inputs produce proportionally small changes in outputs, and solutions are usually unique.
 
 #### Inverse Problems
-In an inverse problem, you observe some outputs — often noisy, incomplete, or indirect measurements — and want to infer the underlying parameters, initial conditions, or model structure that would have produced them. You are running the causal chain backwards. Inverse problems tend to be fundamentally harder for several reasons that are mathematical, not just computational. They are often ill-posed: multiple parameter sets can explain the observed data nearly equally well, small amounts of noise in the measurements can correspond to wildly different parameter values, and without additional constraints the problem may have no unique solution. Regularization — adding prior information or smoothness penalties to distinguish plausible solutions — is central to making inverse problems tractable, and choosing the right regularisation is often as much an art as a science.
+In an inverse problem, you observe some outputs — often noisy, incomplete, or indirect measurements — and want to infer the underlying parameters, initial conditions, or model structure that would have produced them. You are running the causal chain backwards. Inverse problems tend to be fundamentally harder for several reasons that are mathematical, not just computational. They are often ill-posed: multiple parameter sets can explain the observed data nearly equally well, small amounts of noise in the measurements can correspond to wildly different parameter values, and without additional constraints the problem may have no unique solution. Regularisation — adding prior information or smoothness penalties to distinguish plausible solutions — is central to making inverse problems tractable, and choosing the right regularisation is often as much an art as a science.
 
 ### Error-First vs Throughput-First Workflow
 
@@ -172,7 +172,7 @@ $$
 
 Unit roundoff is closely related and is often defined as half this value under round-to-nearest arithmetic. In either convention, the practical interpretation is similar: a single well-scaled floating-point operation typically incurs a relative error on the order of $10^{-16}$ in double precision.
 
-Why this matters is not that every result is off by exactly that amount, but that this sets the floor for what arithmetic alone can promise. If your algorithm asks for relative tolerances far below this scale, the request is physically meaningless in double precision. If your method performs huge numbers of operations, these tiny errors can accumulate and be amplified by conditioning. As a working rule, solver tolerances in the $10^{-8}$ to $10^{-12}$ range are often sensible in double precision, while claims of stable relative accuracy near $10^{-16}$ across large computations should be treated skeptically unless the problem structure strongly supports it.
+Why this matters is not that every result is off by exactly that amount, but that this sets the floor for what arithmetic alone can promise. If your algorithm asks for relative tolerances far below this scale, the request is physically meaningless in double precision. If your method performs huge numbers of operations, these tiny errors can accumulate and be amplified by conditioning. As a working rule, solver tolerances in the $10^{-8}$ to $10^{-12}$ range are often sensible in double precision, while claims of stable relative accuracy near $10^{-16}$ across large computations should be treated sceptically unless the problem structure strongly supports it.
 
 ### Catastrophic Cancellation
 
@@ -221,11 +221,11 @@ The other modes are round-towards-zero (truncation towards the origin), round-up
 
 The three languages in this primer each have a natural style for numerical work, and working against that style usually means slower and less readable code.
 
-In Python, the standard approach is to lean heavily on NumPy arrays and vectorized operations. Pure Python loops over large arrays are slow because Python is interpreted and each loop iteration carries interpreter overhead. NumPy pushes the loop into compiled C or Fortran code, which is orders of magnitude faster. The rule of thumb is: if you can express the computation as array operations, do so; reach for explicit loops only when profiling shows a specific, justified reason.
+In Python, the standard approach is to lean heavily on NumPy arrays and vectorised operations. Pure Python loops over large arrays are slow because Python is interpreted and each loop iteration carries interpreter overhead. NumPy pushes the loop into compiled C or Fortran code, which is orders of magnitude faster. The rule of thumb is: if you can express the computation as array operations, do so; reach for explicit loops only when profiling shows a specific, justified reason.
 
-In R, vectorisation is built into the language's DNA. Base R functions are generally vectorized by design, matrix operations are first-class citizens, and the language is heavily optimised around the assumption that you are working with vectors and matrices rather than scalars. Writing explicit loops is not wrong in R, but it is often a sign that a vectorized alternative exists.
+In R, vectorisation is built into the language's DNA. Base R functions are generally vectorised by design, matrix operations are first-class citizens, and the language is heavily optimised around the assumption that you are working with vectors and matrices rather than scalars. Writing explicit loops is not wrong in R, but it is often a sign that a vectorised alternative exists.
 
-In Julia, the situation is strikingly different from both Python and R. Julia's compiler generates native machine code via LLVM, and explicit loops over type-stable arrays run at speeds comparable to C or Fortran. Writing a loop in Julia is idiomatic and efficient — there is no performance penalty for it. This surprises programmers arriving from Python or R, who have internalized “loops are slow” as a reflex. In Julia, that reflex does not apply, and forcing vectorisation where a loop is more natural is the wrong trade-off.
+In Julia, the situation is strikingly different from both Python and R. Julia's compiler generates native machine code via LLVM, and explicit loops over type-stable arrays run at speeds comparable to C or Fortran. Writing a loop in Julia is idiomatic and efficient — there is no performance penalty for it. This surprises programmers arriving from Python or R, who have internalised “loops are slow” as a reflex. In Julia, that reflex does not apply, and forcing vectorisation where a loop is more natural is the wrong trade-off.
 
 ### Example: Inspect Machine Epsilon in All Three Languages
 
@@ -290,9 +290,9 @@ Stability is a property of the algorithm rather than the problem. A numerically 
 
 An important and often-confused point: a stable algorithm applied to an ill-conditioned problem can still produce poor results, and that is not a failure of the algorithm. If the problem amplifies small perturbations by a factor of $10^{10}$ and you are working in double precision, you can expect to lose roughly ten digits of accuracy no matter how careful the implementation is. The algorithm is doing its job; the problem is simply sensitive. The practical implication is that diagnosing numerical failures requires separating the two questions: is the algorithm stable, and is the problem well-conditioned?
 
-### Consistency, Stability, Convergence (for Discretizations)
+### Consistency, Stability, Convergence (for Discretisations)
 
-For numerical methods that discretize differential equations — replacing continuous derivatives with finite differences or similar approximations — there is a classical and important theorem that governs their behaviour, often called the Lax equivalence theorem in the context of linear problems.
+For numerical methods that discretise differential equations — replacing continuous derivatives with finite differences or similar approximations — there is a classical and important theorem that governs their behaviour, often called the Lax equivalence theorem in the context of linear problems.
 
 Consistency means that the local truncation error — the error made in approximating the differential equation at a single grid point — goes to zero as the grid spacing is refined. In other words, the discrete equations look increasingly like the true continuous equations as you use a finer grid. This is a necessary condition for the method to make sense, but it is not sufficient for convergence.
 
@@ -306,7 +306,7 @@ One of the most practically useful habits in numerical work is setting up an err
 
 **Modelling error** is the mismatch between the mathematical model you have chosen and the actual physical or real-world process you are studying. No model is perfect, and the gap between the model and reality sets a floor below which further numerical precision is meaningless.
 
-**Discretization and truncation error** arises from replacing continuous equations with finite approximations — grids, step sizes, polynomial degrees, and so on. This is the error that improves as you refine the discretization.
+**Discretisation and truncation error** arises from replacing continuous equations with finite approximations — grids, step sizes, polynomial degrees, and so on. This is the error that improves as you refine the discretisation.
 
 **Floating-point round-off** is introduced at each arithmetic operation and accumulates throughout the computation. For well-conditioned problems in double precision, this is usually small relative to other sources.
 
@@ -387,7 +387,7 @@ The geometric picture helps: Newton replaces $f$ near $x_n$ with its tangent lin
 
 The failure modes of Newton’s method are real and worth taking seriously. If the derivative $f'(x_n)$ is near zero at some iterate, the update step becomes enormous and the method typically diverges. A bad initial guess — far from the root, or on the wrong side of a local maximum or minimum — can send the iterates to entirely the wrong part of the domain. Non-smooth functions can make the derivative discontinuous, invalidating the local linear approximation that the method relies on. In some configurations, Newton’s method cycles between points without converging, or oscillates in a chaotic pattern. The practical lesson is that Newton’s method should be paired with some form of safeguard — a step-length control, a bracket check, or a fallback to bisection — unless you have strong reasons to trust the starting point.
 
-### Secant Method: Derivative-Free Newton Flavor
+### Secant Method: Derivative-Free Newton Flavour
 
 Approximates derivative from two prior points:
 $$
@@ -677,7 +677,7 @@ A dense matrix has most of its entries nonzero. The appropriate tools are the BL
 **BLAS** (Basic Linear Algebra Subprograms) is a standardised, language-agnostic interface for elementary linear algebra operations. It is not an implementation; it is a specification. Different vendors provide different implementations — OpenBLAS (open-source, widely portable), Intel MKL (proprietary, often the fastest on x86), Apple Accelerate, AMD BLIS — but they all expose the same interface.
 
 
-BLAS operations are organized into three levels:
+BLAS operations are organised into three levels:
 
   - **Level 1** (vector-vector): dot products, norms, vector scaling. Computational complexity is $O(n)$ with minimal data reuse.
   - **Level 2** (matrix-vector): matrix-vector products, triangular solves. Complexity is $O(n^2)$ but data reuse is still limited.
@@ -697,7 +697,7 @@ Understanding this layering changes how you write numerical code:
 1. **Use library calls, not loops.** A call to `np.linalg.solve(A, b)` hits LAPACK which uses BLAS Level 3 operations. A Python loop over rows of the matrix hits nothing but Python's interpreter. The library call is not just faster; it can be 50–100x faster. This is not premature optimisation; it is basic engineering.
 2. **Dense matrix operations are highly tuned.** Once your matrix is in the BLAS/LAPACK ecosystem, you can expect performance close to the machine's peak throughput. Modern multi-core CPUs with AVX-512 can sustain hundreds of GFLOP/s (billions of floating-point operations per second) up to beyond a TFLOP/s on matrix multiplication, and a good BLAS will hit a significant fraction of that. Hand-written code rarely does.
 3. **Different BLAS implementations can have large performance differences.** NumPy compiled against OpenBLAS might be 2–3x faster or slower on a particular operation compared to the same NumPy compiled against MKL, depending on the operation and the CPU. This is usually not something you need to tune, but it is worth knowing when comparing benchmarks across machines or environments.
-4. **BLAS Level 1 and 2 operations are memory-bound.** They do not vectorize as efficiently as Level 3. When possible, rephrase a problem to use Level 3 operations (e.g., batch solves instead of many single solves; matrix products instead of sequences of matrix-vector products).
+4. **BLAS Level 1 and 2 operations are memory-bound.** They do not vectorise as efficiently as Level 3. When possible, rephrase a problem to use Level 3 operations (e.g. batch solves instead of many single solves; matrix products instead of sequences of matrix-vector products).
 
 
 The high-level lesson: dense linear algebra has been carefully engineered at the low level. Use it. Do not reimplement it.
@@ -830,9 +830,9 @@ $$
 $$
 over an expanding Krylov subspace, and search directions are made $A$-conjugate so later steps do not undo earlier progress. In exact arithmetic you can finish in at most $n$ steps; in floating-point that ideal is softened, but performance is still excellent on well-conditioned SPD systems.
 
-**GMRES** (generalized minimum residual) handles general nonsymmetric matrices. It is more memory-intensive than CG because it builds an expanding Krylov subspace, but it is far more broadly applicable.
+**GMRES** (generalised minimum residual) handles general nonsymmetric matrices. It is more memory-intensive than CG because it builds an expanding Krylov subspace, but it is far more broadly applicable.
 
-What GMRES is doing: at iteration $k$, it picks $x_k$ in the Krylov space to directly minimise $\|b-Ax_k\|_2$. That residual-first strategy is why it is reliable on many nonsymmetric problems. The tradeoff is memory and orthogonalization cost growing with $k$, so restarted versions (like GMRES(m)) are common in real code.
+What GMRES is doing: at iteration $k$, it picks $x_k$ in the Krylov space to directly minimise $\|b-Ax_k\|_2$. That residual-first strategy is why it is reliable on many nonsymmetric problems. The tradeoff is memory and orthogonalisation cost growing with $k$, so restarted versions (like GMRES(m)) are common in real code.
 
 **Preconditioning** is often the decisive factor in practice. A preconditioner is an approximation to the inverse of the matrix, applied at each iteration to transform the system into one with a much smaller condition number. The difference between conjugate gradient on a raw problem and conjugate gradient with a good preconditioner can be factors of hundreds or thousands in iteration count. Finding or constructing a good preconditioner is often the hard engineering problem in large-scale linear algebra.
 
@@ -850,7 +850,7 @@ Common choices:
 - **SSOR / block-Jacobi**: useful when there is local coupling by blocks (for example, multiple variables per grid cell).
 - **Incomplete factorisations (ILU, IC)**: the workhorse for many sparse problems. You keep a sparse approximation of LU/Cholesky by dropping fill entries below a threshold or beyond a pattern.
 - **Algebraic multigrid (AMG)**: often excellent for elliptic PDE-type systems (Poisson-like operators). More setup cost, but can reduce iteration counts dramatically.
-- **Domain decomposition / Schwarz methods**: natural for distributed-memory parallel runs and subdomain-based discretizations.
+- **Domain decomposition / Schwarz methods**: natural for distributed-memory parallel runs and subdomain-based discretisations.
 
 A practical selection loop looks like this:
 
@@ -1274,13 +1274,13 @@ The monomial basis $\{1, x, x^2, \ldots\}$ is conceptually simple but can be num
 
 Understanding interpolation error requires thinking about several interacting factors.
 
-**Data noise** is the first consideration. If the data contains measurement errors, exact interpolation through each point builds the noise directly into the approximation. In that case, smoothing or regularized approximation is almost always the right approach.
+**Data noise** is the first consideration. If the data contains measurement errors, exact interpolation through each point builds the noise directly into the approximation. In that case, smoothing or regularised approximation is almost always the right approach.
 
 **Node placement** shapes the error distribution, as Runge's phenomenon illustrates. Chebyshev nodes minimise the worst-case interpolation error for global polynomial approximation over an interval.
 
 **Function smoothness** determines how well polynomial approximation can work — the smoother the function, the faster convergence as degree increases.
 
-**Extrapolation** is perhaps the most underappreciated danger. Polynomial and spline fits can behave unpredictably outside the range of the data, and the further you extrapolate, the worse it gets. Any numerical result claimed outside the fitting domain should be treated with strong skepticism.
+**Extrapolation** is perhaps the most underappreciated danger. Polynomial and spline fits can behave unpredictably outside the range of the data, and the further you extrapolate, the worse it gets. Any numerical result claimed outside the fitting domain should be treated with strong scepticism.
 
 ### Shared Example: Compare Linear Interpolation and Cubic Spline at a Target Point
 
@@ -1729,7 +1729,7 @@ The **global error** is what you actually care about — the total accumulated e
 
 Step-size control matters as much as method order in practice. Adaptive solvers continuously estimate the local error at each step and adjust $h$ to keep it within a specified tolerance, taking large steps where the solution is smooth and small steps where it is changing rapidly. This delivers the desired accuracy with far fewer function evaluations than a fixed-step method.
 
-### PDE Discretization Basics: Finite Difference, Finite Volume, Finite Element
+### PDE Discretisation Basics: Finite Difference, Finite Volume, Finite Element
 
 You are absolutely right to care about this distinction because these three methods often solve "the same" PDE with very different tradeoffs.
 
@@ -1739,7 +1739,7 @@ u''(x_i) \approx \frac{u_{i+1}-2u_i+u_{i-1}}{h^2}.
 $$
 Why people like it: easy to implement, very fast on structured grids, and great for rectangular domains with simple boundary conditions. Where it struggles: irregular geometry, complex boundaries, and local mesh adaptation are less natural.
 
-**Finite volume (FVM)** writes the PDE in conservation form, integrates over each control volume, and balances fluxes across faces. Unknowns are typically cell averages. Why it matters: conservation is built in by construction, which is why FVM is dominant in CFD and transport problems. If flux leaves one cell, it enters the neighbor; global conservation follows naturally.
+**Finite volume (FVM)** writes the PDE in conservation form, integrates over each control volume, and balances fluxes across faces. Unknowns are typically cell averages. Why it matters: conservation is built in by construction, which is why FVM is dominant in CFD and transport problems. If flux leaves one cell, it enters the neighbour; global conservation follows naturally.
 
 **Finite element (FEM)** starts from a weak form, chooses basis/test functions on each element, and assembles a global system from local element contributions. Why it is powerful: it handles complex geometry and mixed boundary conditions cleanly, supports high-order basis functions, and works naturally with adaptive mesh refinement. That flexibility is why FEM is standard in structural mechanics and many multiphysics problems.
 
@@ -1749,7 +1749,7 @@ How to choose in practice:
 2. If local/global conservation is non-negotiable (mass, momentum, energy): prefer FVM.
 3. If geometry/materials are complex or weak-form machinery is natural: prefer FEM.
 
-All three discretize a continuous PDE into algebraic equations. The right one is usually the method whose assumptions best match your domain geometry, conservation requirements, and software ecosystem.
+All three discretise a continuous PDE into algebraic equations. The right one is usually the method whose assumptions best match your domain geometry, conservation requirements, and software ecosystem.
 
 #### Which Problem Types Map to Which Method?
 
@@ -2066,7 +2066,7 @@ A practical intuition: for small enough steps, the first-order model points down
 
 **Newton's method** for optimisation uses second-order information — the Hessian matrix of second derivatives — to build a quadratic model near the current point and jump to its minimum. This gives quadratic convergence near a solution, but computing and inverting the Hessian is expensive for large problems.
 
-Near a well-behaved minimizer, the objective looks almost quadratic, and Newton is basically solving that local quadratic directly. That is where the fast convergence comes from. Farther away, raw Newton can overshoot or even point uphill, which is why production solvers add damping, line search, or trust-region safeguards.
+Near a well-behaved minimiser, the objective looks almost quadratic, and Newton is basically solving that local quadratic directly. That is where the fast convergence comes from. Farther away, raw Newton can overshoot or even point uphill, which is why production solvers add damping, line search, or trust-region safeguards.
 
 **Quasi-Newton methods: BFGS and L-BFGS**
 
@@ -2457,7 +2457,7 @@ Before locking in a method, run through a short diagnostic checklist.
 
 **What accuracy is needed?** One significant figure is a different problem from twelve. Trying to achieve unnecessary precision wastes time and can introduce numerical difficulties that a looser tolerance would avoid.
 
-**Is the data noisy?** If so, exact interpolation is almost certainly the wrong approach. Smoothing or regularized methods are appropriate instead.
+**Is the data noisy?** If so, exact interpolation is almost certainly the wrong approach. Smoothing or regularised methods are appropriate instead.
 
 **Can you compute derivatives?** If not, Newton-type methods require modification or replacement. Automatic differentiation tools often solve this cleanly.
 
@@ -2473,7 +2473,7 @@ Before locking in a method, run through a short diagnostic checklist.
 1. **Small dense linear system**: direct LU/QR solve. You get predictable runtime and strong library support.
 2. **Huge sparse SPD system**: CG plus a preconditioner. Sparse mat-vecs stay cheap; preconditioning controls iteration count.
 3. **Single smooth root with bracket**: hybrid bracketing/Newton method. You keep safety while still getting fast local steps.
-4. **Noisy tabular data**: smoothing splines or regularized regression. Exact high-degree interpolation usually fits noise, not signal.
+4. **Noisy tabular data**: smoothing splines or regularised regression. Exact high-degree interpolation usually fits noise, not signal.
 5. **Non-stiff ODE**: adaptive explicit RK. Excellent accuracy per function call when stability is not the bottleneck.
 6. **Stiff ODE**: stiff-aware implicit solver (BDF, Rosenbrock, etc.). Bigger stable steps usually win despite heavier individual steps.
 7. **High-dimensional integration**: Monte Carlo or quasi-Monte Carlo. Grid-based quadrature scales poorly as dimension grows.
@@ -2507,11 +2507,11 @@ The point of this section is to respect each language's native style instead of 
 
 ### Python Style in Scientific Work
 
-Python scientific computing is built around NumPy and SciPy. The usual style is to express work as array operations, not Python-level element loops. The reason is practical: Python loop overhead is expensive, while NumPy hands the heavy lifting to compiled kernels. Good rule of thumb: vectorize first, then only drop to explicit loops if profiling says it is worth it.
+Python scientific computing is built around NumPy and SciPy. The usual style is to express work as array operations, not Python-level element loops. The reason is practical: Python loop overhead is expensive, while NumPy hands the heavy lifting to compiled kernels. Good rule of thumb: vectorise first, then only drop to explicit loops if profiling says it is worth it.
 
 ### R Style in Numerical and Statistical Work
 
-R was built for statistics, and its style reflects that. Vectorization in R is not a micro-optimisation; it is the default way to write clear code. Vectors, matrices, and data frames are first-class, and core functions are built around them. The formula interface (`lm`, `nls`, and friends) is especially useful because model code stays close to the math.
+R was built for statistics, and its style reflects that. Vectorisation in R is not a micro-optimisation; it is the default way to write clear code. Vectors, matrices, and data frames are first-class, and core functions are built around them. The formula interface (`lm`, `nls`, and friends) is especially useful because model code stays close to the maths.
 
 ### Julia Style for Performance and Clarity
 
@@ -2751,7 +2751,7 @@ Every solver ships with default tolerances, iteration limits, and method choices
 
 Optimisation and linear algebra methods care a lot about variable scales. If some variables live in $[0,1]$ while others live in $[0,10^9]$, many algorithms behave badly because gradients and curvature are dominated by the largest scales.
 
-**Fix**: non-dimensionalize your problem before solving it. Choose characteristic scales for each variable and divide through so that all variables are order 1. This often improves conditioning by orders of magnitude.
+**Fix**: non-dimensionalise your problem before solving it. Choose characteristic scales for each variable and divide through so that all variables are order 1. This often improves conditioning by orders of magnitude.
 
 ### Solving Ill-Conditioned Formulations Directly
 
@@ -2763,7 +2763,7 @@ The normal equations approach to least squares ($A^T A x = A^T b$) squares the c
 
 If data is noisy and you force exact interpolation (high-degree polynomial or a spline knot at every point), you usually fit the noise as well as the signal. The curve hits every observed point, but can oscillate badly between points and behave unpredictably outside the data range.
 
-**Fix**: use smoothing splines, regularized regression, or low-degree polynomial fits. The degree of smoothing acts as a regularisation parameter that should be chosen based on an estimate of the noise level or by cross-validation.
+**Fix**: use smoothing splines, regularised regression, or low-degree polynomial fits. The degree of smoothing acts as a regularisation parameter that should be chosen based on an estimate of the noise level or by cross-validation.
 
 ### Weak Stopping Criteria
 
@@ -2893,7 +2893,7 @@ Each topic in this primer is a doorway into a much larger field.
 
 **PDE numerics** is the natural extension of ODE methods to problems with spatial variation. Finite difference, finite volume, and finite element methods each have rich theories. The CFL stability condition — which links time step size to grid spacing for explicit PDE schemes — is one of the most important and most widely violated ideas in computational science.
 
-**Advanced linear algebra** covers Krylov subspace theory in depth, preconditioner design, iterative refinement, and randomized methods for large-scale matrix problems. Trefethen and Bau is the best single reference.
+**Advanced linear algebra** covers Krylov subspace theory in depth, preconditioner design, iterative refinement, and randomised methods for large-scale matrix problems. Trefethen and Bau is the best single reference.
 
 **Eigenvalue problems** extend well beyond the basic power iteration covered here. Shift-and-invert strategies, the QR algorithm, and Krylov-based methods such as Arnoldi and Lanczos are the tools of choice at scale. Parlett's *The Symmetric Eigenvalue Problem* is the definitive rigorous treatment.
 
@@ -2903,7 +2903,7 @@ Each topic in this primer is a doorway into a much larger field.
 
 **Automatic differentiation** has transformed numerical optimisation and machine learning by making exact derivative computation of essentially arbitrary programs practical. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood. Griewank and Walther's *Evaluating Derivatives* is the rigorous reference.
 
-**High-performance computing** covers everything that happens when problems are too large for a single core: memory hierarchy effects, cache-friendly data layouts, parallelization strategies, and GPU-aware algorithms.
+**High-performance computing** covers everything that happens when problems are too large for a single core: memory hierarchy effects, cache-friendly data layouts, parallelisation strategies, and GPU-aware algorithms.
 
 For rigorous theoretical foundations:
 
@@ -2913,7 +2913,7 @@ For rigorous theoretical foundations:
 4. Parlett, *The Symmetric Eigenvalue Problem* — the definitive treatment of eigenvalue algorithms.
 5. Griewank and Walther, *Evaluating Derivatives* — the standard reference for automatic differentiation, covering both forward and reverse mode in depth.
 6. Hastie, Tibshirani, and Friedman, *The Elements of Statistical Learning* — covers regularisation, shrinkage, and model selection from a statistical learning perspective.
-7. Sauer, *Numerical Analysis* — a good alternative undergraduate text with more computational flavor.
+7. Sauer, *Numerical Analysis* — a good alternative undergraduate text with more computational flavour.
 8. Hairer, Norsett, and Wanner, *Solving Ordinary Differential Equations I* — the definitive treatment of non-stiff ODE methods.
 9. Quarteroni, Sacco, and Saleri, *Numerical Mathematics* — rigorous and broad, good for graduate study.
 
@@ -2928,7 +2928,7 @@ For practical coding references:
 
 Numerical analysis can look intimidating at first because it sits at the intersection of mathematics, software engineering, and domain modelling. The notation can be dense, the failure modes are subtle, and a lot of the literature assumes significant mathematical background.
 
-But the core ideas are fewer than they seem. Once they click, the field feels less like a pile of disconnected algorithms and more like recurring design patterns. Discretize carefully, track your errors, match the method to the problem structure, and validate before trusting results. Those principles show up everywhere: root finding, linear algebra, quadrature, differential equations, and optimisation.
+But the core ideas are fewer than they seem. Once they click, the field feels less like a pile of disconnected algorithms and more like recurring design patterns. Discretise carefully, track your errors, match the method to the problem structure, and validate before trusting results. Those principles show up everywhere: root finding, linear algebra, quadrature, differential equations, and optimisation.
 
 The biggest shift is from asking "did I get a number?" to asking "how much should I trust this number, and why?" Once that becomes instinctive, you are doing numerical analysis rather than just running code and hoping.
 
