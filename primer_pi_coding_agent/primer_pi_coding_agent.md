@@ -232,6 +232,8 @@ Test the layers in order: health check, ordinary chat, streaming, Pi-compatible 
 
 ## Running Pi non-interactively
 
+The table compares Pi's main execution modes and the work each suits.
+
 | Way to run Pi | Interface | Use it when |
 | --- | --- | --- |
 | Interactive | Terminal UI | A person is working with Pi |
