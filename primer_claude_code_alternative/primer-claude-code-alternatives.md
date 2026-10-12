@@ -20,11 +20,11 @@ Assume a working knowledge of version control, shell commands, software-developm
 
 ---
 
-## Capability-led Selection and Adoption
+## Capability-Led Selection and Adoption
 
 The shortest useful answer is to choose the operating boundary first, then choose a model inside it. Do not start by translating Claude model names into another vendor's names: the harness, provider, context policy, tools, permissions, and recovery loop are part of the system you are evaluating.
 
-### Choose a capability lane
+### Choose a Capability Lane
 
 Use the first row that matches the constraint that matters most. The named tools are starting points, not claims of universal superiority; the dated profiles and matrix below explain the evidence and the exceptions.
 
@@ -38,7 +38,7 @@ Use the first row that matches the constraint that matters most. The named tools
 
 For model allocation, begin with four roles rather than four permanent model names: a frontier route for hard diagnosis, a normal implementation route, a fast/bounded route, and an independent-review route. The [candidate-family shortlist](#candidate-families-against-the-claude-baseline) supplies dated examples. The concrete setup later turns those roles into OpenCode/OpenRouter, direct-provider, local, Aider, Cline, and Pi configurations. A model choice never grants additional shell, file, network, credential, or merge authority.
 
-### A staged adoption path
+### A Staged Adoption Path
 
 Treat migration as an evaluation programme. Keep the existing Claude workflow as the baseline and promote alternatives only when the complete harness/provider/model configuration passes the same acceptance checks.
 
@@ -50,7 +50,7 @@ Treat migration as an evaluation programme. Keep the existing Claude workflow as
 
 The recommended starting configuration is therefore **OpenCode plus a scoped OpenRouter project/key**, with an explicit hard/normal/bounded/review allocation and a local route for data that must stay on the workstation. Keep Aider as the minimal fallback, Cline as the editor-first option, and Pi as the inspectable harness experiment. Prefer direct providers or self-hosting when they provide a required regional, contractual, or data boundary; OpenRouter is a convenient routing layer, not a privacy guarantee. The provider-specific retention distinctions later in this document are part of the decision, not footnotes.
 
-### Command contract for every example
+### Command Contract for Every Example
 
 The installation, authentication, configuration, and launch commands throughout this document are illustrative recipes. Before retaining or running any one of them, apply the following contract to that command and record the result in the pilot notes. A command is not authorised merely because it appears in a profile.
 
@@ -679,7 +679,7 @@ The GPT-6 Astra model is also available in the current OpenAI model catalogue; u
 
 ## IDE Extensions and Hybrid Tools
 
-### Cline (formerly Claude Dev)
+### Cline (Formerly Claude Dev)
 
 **What it is:** Cline is an open-source autonomous coding agent that operates primarily as a VS Code extension. It is model-agnostic, OpenRouter-compatible, and one of the most capable agentic tools available for IDE-based workflows. It has since expanded well beyond VS Code and beyond the IDE entirely, moving it towards hybrid territory.
 
@@ -863,7 +863,7 @@ Current Cursor pricing documentation also lists MCPs, skills, and hooks on its p
 - Heavier than a terminal tool — requires a full VS Code instance
 - Usage-based credit pricing makes monthly cost less predictable than the old flat-request model
 
-### Windsurf (now Devin Desktop, Cognition AI)
+### Windsurf (Now Devin Desktop, Cognition AI)
 
 **What it is:** Windsurf was an AI-first IDE built by Codeium, positioned as a direct competitor to Cursor. Its standout feature was the Cascade agent, which used "Flow" — a system that maintained contextual awareness across an entire coding session rather than treating each interaction as independent. The product has since been acquired and rebranded; treat "Windsurf" as the legacy name and "Devin Desktop" as the current one.
 
@@ -998,7 +998,7 @@ Current Cursor pricing documentation also lists MCPs, skills, and hooks on its p
 - Not a local-model, self-hosted, or OpenRouter-oriented workflow
 - Beta product with rapidly changing plan eligibility, quotas, and administrative controls
 
-### OpenHands (formerly OpenDevin)
+### OpenHands (Formerly OpenDevin)
 
 **What it is:** OpenHands is a highly capable open-source AI software engineer designed to solve complex software engineering tasks autonomously. It is the open-source project that most directly competes with commercial cloud agents like Devin.
 
@@ -1077,7 +1077,7 @@ Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf
 
 ## Commercial AI Coding Assistants
 
-### GitHub Copilot with Agent Mode
+### GitHub Copilot With Agent Mode
 
 **What it is:** GitHub Copilot is Microsoft/GitHub's AI coding assistant. It now spans autocomplete, chat, an in-IDE "Agent Mode," and a separate cloud-based "Copilot Coding Agent." These are two distinct products, not one: **Agent Mode** (VS Code, synchronous, runs locally, GA since early 2026) executes edits directly in your editor session; the **Copilot Coding Agent** (cloud, asynchronous, GA September 2025) takes a GitHub issue assignment and opens a pull request without an open editor session. Both superseded the original "Copilot Workspace" preview, which was sunset 30 May 2025 — that name no longer refers to a current product.
 
@@ -1105,7 +1105,7 @@ Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf
 - Agent Mode and Copilot Coding Agent are two separate mental models to learn, with different sync/async execution semantics
 - Less suited for non-GitHub workflows
 
-### Amazon Q Developer (formerly CodeWhisperer) — IDE transition to Kiro
+### Amazon Q Developer (Formerly CodeWhisperer) — IDE Transition to Kiro
 
 **What it is:** Amazon Q Developer is AWS's AI coding assistant, with deep integration into the AWS ecosystem (rebranded from CodeWhisperer in 2024). Its agentic mode autonomously implements features, refactors, and proposes multi-step changes in both IDE and CLI — this is no longer a completions-only tool, contrary to earlier characterisations.
 
@@ -1176,7 +1176,7 @@ All Products Pack, dotUltimate, and some IDE licences can include AI entitlement
 - Agentic capability is newer and less proven than Cursor, Cline, or Claude Code
 - Being overtaken by Cursor/Windsurf on raw completion quality
 
-### Supermaven — discontinued, folded into Cursor
+### Supermaven — Discontinued, Folded Into Cursor
 
 **What it is:** Supermaven was a VS Code-focused autocomplete tool with a very large context window for completions (300k tokens), notable for speed and accuracy.
 
@@ -1554,7 +1554,7 @@ Antigravity CLI is the announced first-party migration path for individual Googl
 
 ## Recommendations
 
-### If you want the closest CLI experience to Claude Code
+### If You Want the Closest CLI Experience to Claude Code
 
 **Primary:** Aider — mature, reliable, git-native, OpenRouter-supported, local LLM support. Start here. The absence of MCP and hooks is a real limitation if you've invested heavily in those, but the core editing workflow is the most Claude Code-like of any open-source tool.
 
@@ -1562,7 +1562,7 @@ Antigravity CLI is the announced first-party migration path for individual Googl
 
 **Worth evaluating if you want mainstream backing or hybrid local/cloud:** OpenAI's Codex CLI is a major CLI-native competitor, bundled into ChatGPT plans from Free through Enterprise, with local-model support via `--oss` for Ollama and LM Studio. Amp offers a hybrid local-CLI-plus-cloud-Orbs model with $20/$200 subscriptions or pay-as-you-go billing; model inference and Orb compute are separate meters.
 
-### If you want the best IDE-integrated alternative
+### If You Want the Best IDE-Integrated Alternative
 
 **Primary:** Cline — model-agnostic, OpenRouter-supported, browser use, MCP-compatible, Plan/Act mode, and now available beyond VS Code through JetBrains and ACP-compatible editors, plus a full CLI. The most capable open-source agentic IDE/CLI tool available. Note: Roo Code, a 2024 fork of Cline that grew its own multi-agent following, was archived in May 2026; most of its userbase returned to Cline, reinforcing Cline's position here.
 
@@ -1570,7 +1570,7 @@ Antigravity CLI is the announced first-party migration path for individual Googl
 
 **Commercial option:** Cursor (Pro $20/month, Pro+ $60/month, Ultra $200/month) — if you want the best polished commercial experience and are comfortable with a VS Code-derived workflow. Note the terminology shift: "Composer" is Cursor's own in-house model, not the agent mode — autonomous execution is called "Agent mode." Current Cursor supports multiple parallel agents, but exact concurrency and branch limits are plan-dependent; it remains OpenRouter- and local-model-incompatible.
 
-### If cost is the primary constraint
+### If Cost Is the Primary Constraint
 
 **Free option:** Antigravity CLI has an official $0 individual tier authenticated with a Google Account. It is the simplest zero-subscription starting point in this survey, though weekly quotas and Google's model ecosystem still matter.
 
@@ -1580,17 +1580,17 @@ Antigravity CLI is the announced first-party migration path for individual Googl
 
 **A caution on Devin:** Devin's $20/month Pro plan includes usage allowances, but extra work is purchased as on-demand credits at API pricing. That is clearer than the legacy ACU model, but it still means heavy users can spend beyond the subscription. Devin competes on autonomy and capability, not guaranteed low cost.
 
-### If you need persistent cross-application or asynchronous work
+### If You Need Persistent Cross-Application or Asynchronous Work
 
 **Primary:** Grok Bot — if the task crosses websites, inboxes, documents, and business applications and can continue while you are away. Its persistent cloud computer and computer-use interface can reach systems that lack clean APIs or MCP servers. It is a poor fit when local repository control, local models, self-hosting, or strict no-cloud handling is the main requirement.
 
 **Coding-focused alternatives:** Devin remains the better comparison for GitHub-centred autonomous software engineering, while OpenHands is the better comparison when you want an open-source, self-hostable cloud-agent stack. Claude Code remains the better fit for interactive terminal-native work.
 
-### If MCP server investments are critical
+### If MCP Server Investments Are Critical
 
 Tools with confirmed MCP support: Claude Code (native), OpenCode, Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural pillar with documented extensions and broad ecosystem compatibility), OpenHands (config, multiple transports), Amp, Kiro, and Grok Bot (connectors and custom MCP, alongside direct computer use). Of these, OpenCode, Cline, and Kiro have the strongest current combination of agentic execution and extensibility; Goose remains worth a closer look when on-device execution and MCP portability matter. Grok Bot is the better fit when MCP is unavailable but browser or desktop computer use can bridge the gap.
 
-### If you need extensibility similar to Claude Code's skills+hooks
+### If You Need Extensibility Similar to Claude Code's Skills+Hooks
 
 The honest answer: no alternative is drop-in compatible with Claude Code's skills+hooks system. The closest approximations:
 - **Skills equivalents:** Cline skills, OpenCode skills, Kiro skills, AGENTS.md-style instruction files, and custom system prompts
@@ -1598,7 +1598,7 @@ The honest answer: no alternative is drop-in compatible with Claude Code's skill
 - **MCP equivalents:** Cline, OpenCode, Gemini CLI, Goose, OpenHands, and Amp all support MCP — your server investments are portable
 - **Instruction-file equivalents:** if per-tool rule files (rather than MCP servers) are your bigger migration cost, AGENTS.md is now adopted across tens of thousands of projects and is a better consolidation target than any single vendor's format
 
-### Migration strategy
+### Migration Strategy
 
 Rather than a hard switch, a practical migration path:
 
@@ -1614,7 +1614,7 @@ The survey above helps you choose a tool. It does not tell you how to run a real
 
 This is an operating design, not a claim that these products or models are interchangeable. The model, provider, pricing, and policy examples below reflect a **18 September 2026** research checkpoint. Model IDs, prices, quotas, authentication methods, and tool support can change independently. Replace every example ID with one confirmed in the live provider catalogue before adoption.
 
-### The recommended default: OpenCode plus explicit model tiers
+### The Recommended Default: OpenCode Plus Explicit Model Tiers
 
 For this multi-provider, MCP-heavy design, start with OpenCode. Its MCP support, project configuration, local-model options, and broad provider catalogue make it a better centre of gravity than Aider when one workflow needs several providers and tool integrations. This is narrower than the single-tool recommendation above: use Aider as the minimal git-native fallback when you want a small editing loop and do not need MCP or an IDE planning surface.
 
@@ -1647,7 +1647,7 @@ OpenCode can select a main model and a smaller model explicitly. A project confi
 
 These are concrete examples, not permanent defaults. Authenticate through OpenCode's credential flow, environment variables, or the provider's credential store. Do not put an API key in `opencode.json`, commit it in a repository, or assume that an OpenAI-compatible endpoint provides reliable tool calls, long context, structured output, or reasoning controls. OpenCode's provider, configuration, and model documentation are the relevant setup references. The exact provider route is part of the experiment: pin a provider when a long tool-use session needs stable latency, or permit fallbacks when availability matters more than reproducibility.
 
-### Provider accounts, credits, and data boundaries
+### Provider Accounts, Credits, and Data Boundaries
 
 Create one separate API key for this coding harness, give it a small spending limit, and keep it in the shell environment or the harness credential store. Do not use a personal, unlimited production key while evaluating models. The following are practical provider choices for the open-weight roster:
 
@@ -1689,7 +1689,7 @@ For OpenCode's current v1 configuration, enter the interactive client and use `/
 
 Pi's provider flow is similar but more explicit. Run `pi`, use `/login openrouter` for the browser or headless authorisation flow, then `/model`; or export `OPENROUTER_API_KEY`. Pi also maps direct keys such as `DEEPSEEK_API_KEY`, `MISTRAL_API_KEY`, `ZAI_API_KEY`, and `DASHSCOPE_API_KEY` when the corresponding provider is configured. Stored credentials live in `~/.pi/agent/auth.json` with restrictive permissions and take precedence over environment variables. Local Ollama, vLLM, and llama.cpp providers normally belong in Pi's `models.json` and OpenCode's custom-provider configuration; bind them to `127.0.0.1` and use the model's required tool parser.
 
-### Rough cost planning
+### Rough Cost Planning
 
 For a simple planning estimate, assume one month contains 2 million input tokens and 500,000 output tokens. At the 18 September 2026 snapshot, the model-only arithmetic is approximately:
 
@@ -1704,7 +1704,7 @@ For a simple planning estimate, assume one month contains 2 million input tokens
 
 This is a budgeting example, not a bill. Agent sessions often resend repository instructions, file contents, tool results, and summaries, so a long debugging session can consume many times the tokens of the visible conversation. Reasoning tokens, cache-hit rates, provider routing, retries, minimum charges, and any gateway or BYOK fee also change the result. Start with a $10–25 cap, record actual usage by model and provider, and raise the limit only when the task pilot justifies it. Local inference replaces token billing with hardware, electricity, setup, and maintenance costs; count failed runs and operator time rather than calling it free.
 
-### Model allocation by task
+### Model Allocation by Task
 
 Use a role-based policy that you can inspect and override. A wrapper script or shell alias is enough; automatic model switching that the user cannot see is not.
 
@@ -1736,7 +1736,7 @@ aider --model openrouter/qwen/qwen3-coder-next \
       --weak-model openrouter/z-ai/glm-5.3-flash
 ```
 
-### Setup: CLI-first
+### Setup: CLI-First
 
 Install OpenCode and connect the providers you have approved. Put repository-wide instructions in `AGENTS.md`; keep `opencode.json` focused on model and provider adapters. Begin with DeepSeek V4 Pro for hard tasks, GLM 5.3 Flash for cheap routine work, and Qwen3 Coder Next or Qwen3 Coder 30B A3B for the coding-focused middle tier. Add a local endpoint after verifying context and tool behaviour. Direct DeepSeek, Mistral, Z.ai, Qwen, Together, Fireworks, NVIDIA NIM, and Groq endpoints are alternatives to OpenRouter when you need a different billing, region, or data-retention boundary; the same model name does not imply the same tool implementation. For a minimal Aider fallback, use a repository-level `.aider.conf.yml` with no secrets:
 
@@ -1750,13 +1750,13 @@ auto-commits: false
 
 Aider's model metadata can describe context limits, costs, edit format, and a weak model when a provider's model is not already known to it. That is useful for reproducibility, but it is still local client configuration, not a guarantee that the remote model supports the advertised capabilities. Choose Aider when the small git-native loop is the requirement; do not describe it as an equivalent replacement for Claude Code's MCP, skills, and hooks architecture.
 
-### Setup: agentic editor
+### Setup: Agentic Editor
 
 Use Cline when the editor is the primary surface and you want Plan/Act review, browser and MCP access, and a visual diff loop. Configure OpenRouter with GLM 5.3 for difficult Act-mode changes, Qwen3 Coder Next for ordinary implementation, and GLM 5.3 Flash for bounded tasks. Cline can use the same provider and model IDs through OpenRouter, but that does not imply behavioural equivalence: test the full harness/provider/model/context/tool-schema/reasoning-settings tuple, and remember that approval semantics remain Cline-specific.
 
 Use Continue.dev instead when local Ollama or LM Studio inference and IDE context matter more than autonomous tool breadth. It is a lower-risk editor choice for sensitive code if the endpoint, telemetry, context providers, and extensions are all reviewed. In either editor, keep the plan reviewable, require approval before writes with external consequences, and do not assume that importing an `AGENTS.md` file reproduces Claude Code's full instruction or hook behaviour.
 
-### Repository configuration and security boundaries
+### Repository Configuration and Security Boundaries
 
 Treat the harness, provider, model, repository, and external tools as separate trust boundaries. MCP standardises tool access; it does not standardise permissions, data retention, or approval policy. A gateway such as OpenRouter is a provider-boundary decision, not merely a convenient billing layer.
 
@@ -1777,7 +1777,7 @@ Require explicit review before destructive commands, migrations, credential acce
 
 Model selection must not silently expand these permissions. For OpenHands or Devin, distinguish execution isolation from data isolation: a Docker sandbox can still send source through a hosted model or MCP service, while Devin is a managed cloud boundary. Use a separate branch or worktree with least-privilege credentials and a clean handoff containing the task contract, diff, relevant source, tests, and unresolved questions. Human approval remains the integration gate.
 
-### A staged rollout and evaluation loop
+### A Staged Rollout and Evaluation Loop
 
 Start with a pilot of roughly 20-30 representative tasks from the repository, including a new feature, multi-file refactor, failing-test diagnosis, documentation edit, and tool or MCP task. Run each task with the proposed frontier, fast, local, and independent-review routes where they apply. Record the harness and model IDs, provider, permissions, reasoning settings, context and quantisation, retries, successful completion, missed defects, false positives, review burden, latency, cost, tool failures, and data-boundary exceptions. A model that finishes quickly but creates a large review burden is not cheap in practice.
 
@@ -1785,7 +1785,7 @@ An independent review needs fresh context, not just a second opinion in the orig
 
 Promote a model to a broader role only after it passes that task set with the permissions it will actually receive. Re-run the benchmark when a provider, model ID, quantisation, context setting, harness version, or major project instruction changes. Keep representative prompts and expected checks in the repository's normal evaluation workflow so the result is reproducible rather than anecdotal.
 
-### What this setup does not solve
+### What This Setup Does Not Solve
 
 Multiple models do not remove the need for good repository instructions, tests, observability, or human judgement. A second model can repeat the first model's mistake, especially when both rely on the same provider, training data, or misleading project context. OpenRouter does not make every provider equivalent, and a local endpoint does not make sensitive data safe if the harness or an MCP server sends it elsewhere. MCP portability still varies by transport, authentication, filesystem roots, approvals, and client behaviour; skills and hooks are not drop-in portable. `AGENTS.md` can consolidate instructions, but it does not standardise permissions or tool execution. An asynchronous agent does not become trustworthy merely because it works in the cloud or reports success.
 
@@ -1797,7 +1797,7 @@ Pi is worth adding to the comparison because it takes a different position from 
 
 This section describes Pi as documented on **18 September 2026**. The project has had package and repository-scope changes, so verify the current package name, release, provider catalogue, authentication path, and documentation before installing. The current official site uses the `@earendil-works/pi-coding-agent` package; older examples may use the `@mariozechner` scope.
 
-### What Pi adds to a multi-harness setup
+### What Pi Adds to a Multi-Harness Setup
 
 Pi is a useful third surface when you want to hold the harness constant enough to compare models, but keep the harness itself easy to inspect and extend. Its interactive session supports switching models and thinking levels during a task, automatic session persistence, branching and forking, context compaction, and direct access to the repository. Its print/JSON modes support one-shot or machine-readable runs, while RPC mode and the TypeScript SDK make it possible to embed Pi in a wrapper or another application. The practical low-cost pairing is OpenRouter for hosted open-weight models and `llama.cpp`, Ollama, or another local provider for offline work; Pi's provider documentation includes OpenRouter, DeepSeek, Mistral, NVIDIA, Together, Fireworks, and custom compatible endpoints. A compatible endpoint is only a transport: Pi still needs the model's correct context, reasoning, developer-role, and tool-call settings.
 
@@ -1810,7 +1810,7 @@ That combination creates several practical roles:
 
 Do not use Pi merely because it can call the same underlying model. A model's behaviour depends on the complete tuple of harness, provider, model ID, context policy, tool schemas, thinking settings, retries, and permissions. A successful Pi run does not prove that the same model will behave the same way in OpenCode, Cline, or Claude Code.
 
-### Installation and a first controlled run
+### Installation and a First Controlled Run
 
 The current official quick start offers an installer or a global npm installation. Pin the version in a reproducible environment where the harness itself matters, and inspect the package source before granting it access to sensitive repositories:
 
@@ -1834,7 +1834,7 @@ Report the test command, build command, and three likely failure points."
 
 For a write task, create a branch or worktree first, give Pi the repository contract, require tests, and inspect the diff yourself. Pi runs with the permissions of the user who starts it, so the working directory and shell account are part of the authorisation boundary.
 
-### Project context, settings, and extensions
+### Project Context, Settings, and Extensions
 
 Pi can load `AGENTS.md` and `CLAUDE.md` context files, which makes it a useful consumer of portable repository instructions. Keep those files about repository invariants, commands, tests, and safety rules. Do not treat them as a permission system. Project-local Pi resources live under `.pi/` and can include settings, extensions, skills, prompts, and themes; global resources live below `~/.pi/agent/`.
 
@@ -1853,7 +1853,7 @@ The model ID is a 17 September 2026 starting point, not a permanent default. For
 
 Extensions are TypeScript modules that can register custom tools, commands, UI, event handlers, and tool-call interception. They can implement approval prompts, policy checks, custom compaction, or an MCP adapter, but that flexibility moves security responsibility to the extension author. Pi packages can bundle extensions, skills, prompt templates, and themes from npm, Git, URLs, or local paths. Official documentation warns that extensions execute arbitrary code and skills can instruct the model to perform actions, so review and pin third-party packages before enabling them. Do not install an unreviewed package in a repository containing credentials or production access.
 
-### What Pi does not provide by default
+### What Pi Does Not Provide by Default
 
 Pi's minimal core intentionally does not provide built-in MCP, plan mode, subagents, permission popups, background bash, or a built-in to-do system. That is a design choice, not an unfinished claim of parity. You can add some of these through extensions, packages, scripts, tmux, or a wrapper, but the result becomes your workflow and must be tested as a new harness configuration.
 
@@ -1861,13 +1861,13 @@ The absence of built-in approval popups is the sharpest operational difference. 
 
 The absence of built-in MCP also changes migration cost. Existing MCP servers are not automatically available in Pi. An extension can bridge them, or a CLI tool with a stable interface can be invoked through `bash`, but transport, authentication, roots, result size, approval, and failure-recovery behaviour all need separate validation. If MCP is central to the workflow, OpenCode or Cline remains the more direct additional harness. The model choice does not repair this gap: GLM, DeepSeek, and Qwen can all emit tool calls, but Pi still owns the tool schema, approval policy, retries, and result handling.
 
-### Sessions and cross-harness handoff
+### Sessions and Cross-Harness Handoff
 
 Pi automatically saves sessions and supports continuing the most recent session, browsing older sessions, opening a session by path or ID, branching, forking, cloning, and compaction. This is valuable for interactive exploration, but Pi session files are not a portable continuation format for Claude Code, OpenCode, or Cline. A durable handoff should contain the repository revision, task contract, changed files, diff, tests and results, model/provider identifiers, unresolved questions, and any approval decisions. The shared state is the worktree plus written checkpoint, not the private transcript.
 
 A practical handoff from Pi to the main harness looks like this: Pi explores the repository and records a short plan in the issue or checkpoint file; OpenCode or Claude Code implements the approved change in a dedicated worktree; a different provider receives the contract, diff, relevant source, and test results for review; CI and a human own the merge. The reverse direction works for investigation or a small follow-up, but do not carry hidden assumptions across the boundary.
 
-### How to evaluate Pi fairly
+### How to Evaluate Pi Fairly
 
 Add Pi as another row in the existing 20-30-task pilot, not as an anecdotal alternative. Use the same initial revision, task contract, context files, permission envelope, model/provider tuple, thinking level, retry policy, and acceptance checks. Record Pi's version, package scope, provider, model ID, context and session settings, extension/package versions, local runtime and quantisation where relevant, tool failures, latency, cost, accepted changes, missed defects, false positives, and human correction time.
 
