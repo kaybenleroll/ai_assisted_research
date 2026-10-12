@@ -2,7 +2,7 @@ SOURCE_MD   := "primer_complex_analysis.md"
 PROJECT_DIR := "primer_complex_analysis"
 TITLE       := "Complex Analysis: A Technical Primer"
 AUTHOR      := "Mick Cooney"
-DATE        := "October 2026"
+DATE        := "12 October 2026"
 HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
 

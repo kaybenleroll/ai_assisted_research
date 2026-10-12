@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Complex Analysis: A Technical
 Primer</span>
-    <span class="navbar-meta">October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -771,6 +771,7 @@ Topics</a></li>
 <li><a href="#choosing-a-next-step" id="toc-choosing-a-next-step"><span class="toc-section-number">9.3.5</span> Choosing a Next Step</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">10</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -816,6 +817,8 @@ and computational practice. This is not a full real-analysis text or a
 treatment of several complex variables. We will prove the transitions
 that explain the subject and mark the few foundational results whose
 complete proofs would require a longer detour.</p>
+<p><em>Verified against primary and scholarly sources for all sections;
+unverified claims are flagged inline.</em></p>
 <p>The real-analysis facts needed here are manageable. A limit <span class="math inline">\(z_n\to z\)</span> means <span class="math inline">\(|z_n-z|\to0\)</span>; a complex limit exists only
 if every way of approaching the point gives the same answer. A series
 converges absolutely when the series of moduli converges. Convergence is
@@ -4469,6 +4472,77 @@ theorem, first check orientation, poles on or near the contour, branch
 cuts, and whether the numerical path actually matches the intended
 contour. A plot is most useful as a way to discover a bad assumption or
 a missed feature, then return to the analytic argument.</p>
+<h1 data-number="10" id="notation"><span class="header-section-number">10</span> Notation</h1>
+<p>The table gathers the symbols that carry the main arguments. Local
+variables introduced in a theorem or calculation are defined again where
+they first matter.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(z=x+iy\)</span></td>
+<td>Complex variable with real components <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><span class="math inline">\(i\)</span></td>
+<td>Imaginary unit, with <span class="math inline">\(i^2=-1\)</span></td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mathbb{C}\)</span></td>
+<td>Complex plane</td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mathbb{R}\)</span></td>
+<td>Real line</td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\varepsilon\)</span></td>
+<td>Positive tolerance in a convergence estimate</td>
+<td>Limits, Compactness, and the Spare Room in a Proof</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\gamma\)</span> and <span class="math inline">\(C\)</span></td>
+<td>Directed curves and closed contours</td>
+<td>Integrating Along a Directed Curve</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\operatorname{Arg}z\)</span> and <span class="math inline">\(\operatorname{Log}z\)</span></td>
+<td>Principal argument and its selected logarithm branch</td>
+<td>Exponential, Logarithm, and What a Branch Chooses</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\operatorname{Res}(f,a)\)</span></td>
+<td>Residue of <span class="math inline">\(f\)</span> at an isolated
+singularity <span class="math inline">\(a\)</span></td>
+<td>One Laurent Coefficient Survives a Loop</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\operatorname{Ind}(C,a)\)</span></td>
+<td>Winding number of <span class="math inline">\(C\)</span> about <span class="math inline">\(a\)</span></td>
+<td>Winding Is a Directed Count</td>
+</tr>
+</tbody>
+</table>
+<p>The symbol <span class="math inline">\(i\)</span> is specific to this
+complex-analysis primer; an application may use another letter for the
+imaginary unit when that avoids a clash with an existing variable. The
+table uses semantic operator commands such as <span class="math inline">\(\operatorname{Arg}\)</span> and <span class="math inline">\(\operatorname{Res}\)</span>, and the transpose
+convention is not needed in this document.</p>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>

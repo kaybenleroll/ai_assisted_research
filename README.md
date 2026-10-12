@@ -19,7 +19,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 | [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 | [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) · [PDF](primer_comparative_religion/primer-comparative-religion.pdf) | Society and Institutions | 2026-10-12 |
-| [The Evaluation Loop](primer_evaluation_loop/primer_evaluation_loop.html) · [PDF](primer_evaluation_loop/primer_evaluation_loop.pdf) | AI Agents and Coding Tools | 2026-10-12 |
+| [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | Quantitative Foundations | 2026-10-12 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -63,7 +63,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Catastrophe ELT Workbook](workbook_catmodel_elt_documents/outputs/workbook_elt.html) | 2026-09-07 | *Quarto workbook, executable.* Catastrophe event-loss-table modelling — building and validating an ELT pipeline in R and Python. Companions: [Quickstart](workbook_catmodel_elt_documents/outputs/workbook_quickstart.html) · [Executable Index](workbook_catmodel_elt_documents/outputs/workbook_executable_index.html) |
 | [Deep Learning and Generative AI](primer_deep_learning/primer_deep_learning.html) · [PDF](primer_deep_learning/primer_deep_learning.pdf) | 2026-10-07 | Neural networks, transformers, LLMs, and generative AI — architecture, training, and practical use |
 | [Digital Signal Processing](primer_digital_signal_processing/primer_digital_signal_processing.html) · [PDF](primer_digital_signal_processing/primer_digital_signal_processing.pdf) | 2026-09 | Sampling, Fourier analysis, filtering, spectral estimation, multirate systems, and practical DSP workflows |
-| [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | 2026-10 | Holomorphic functions, contour integration, residues, conformal maps, harmonic functions, applications, and computation |
+| [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | 2026-10-12 | Holomorphic functions, contour integration, residues, conformal maps, harmonic functions, applications, and computation |
 | [Numerical Analysis](primer_numerical_analysis/primer_numerical_analysis.html) · [PDF](primer_numerical_analysis/primer_numerical_analysis.pdf) | 2026-06 | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
 <!-- END QUANTITATIVE FOUNDATIONS -->
 
