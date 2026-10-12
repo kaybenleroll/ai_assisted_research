@@ -2,7 +2,7 @@
 
 ---
 
-*Long-form edition · 7 October 2026. Runtime requirements rechecked against official documentation.*
+*Long-form edition. Runtime requirements rechecked against official documentation.*
 
 ---
 
@@ -12,7 +12,7 @@ OpenClaw is easy to describe badly. Calling it a chatbot hides the important par
 
 The first successful conversation is not the difficult milestone. The difficult work starts when you need to decide which channels may reach the agent, where tool calls execute, how model failures are handled, what state survives a restart, and how to recover without guessing. Short installation guides rarely explain those boundaries.
 
-This primer gives you an operational mental model and a Podman-first deployment path. It also separates OpenClaw from Hermes Agent Server, a neighboring project with different server processes and state semantics. The comparison matters because both projects are now used as self-hosted assistants, but they are not interchangeable components.
+This primer gives you an operational mental model and a Podman-first deployment path. It also separates OpenClaw from Hermes Agent Server, a neighbouring project with different server processes and state semantics. The comparison matters because both projects are now used as self-hosted assistants, but they are not interchangeable components.
 
 ### What This Primer Covers
 
@@ -52,7 +52,7 @@ OpenClaw is not:
 - a magic memory system that makes every conversation permanently available;
 - the same project as Hermes Agent, Hermes Server, or the Hermes model family.
 
-Containerizing the Gateway can protect the Gateway process and its files, but OpenClaw's own tool sandbox is a separate setting. If you enable no sandbox, tool execution may still occur on the host or in the Gateway container, depending on your configuration.
+Containerising the Gateway can protect the Gateway process and its files, but OpenClaw's own tool sandbox is a separate setting. If you enable no sandbox, tool execution may still occur on the host or in the Gateway container, depending on your configuration.
 
 ## How People Actually Use OpenClaw
 
@@ -214,7 +214,7 @@ systemctl --user restart openclaw.service
 
 ### Upgrades and Recovery
 
-When you rebuild or pull a newer image, restart the container or Quadlet service. If the updated Gateway exits while applying state changes, run a one-off `podman run` with the same image, user mapping, and mounted state, ending with `openclaw doctor --fix`, then start the Gateway normally. The official Podman guide contains the complete command because the exact image and mount paths must match your deployment. Afterward, run a linting preflight:
+When you rebuild or pull a newer image, restart the container or Quadlet service. If the updated Gateway exits while applying state changes, run a one-off `podman run` with the same image, user mapping, and mounted state, ending with `openclaw doctor --fix`, then start the Gateway normally. The official Podman guide contains the complete command because the exact image and mount paths must match your deployment. Afterwards, run a linting preflight:
 
 ```bash
 openclaw --container openclaw doctor --lint --json
@@ -333,7 +333,7 @@ Choose Hermes when you want the Hermes Agent runtime's built-in memory, skills, 
 
 ### Combining Them
 
-An OpenAI-compatible Hermes API can look like a model endpoint to another system, but that does not mean the two systems share sessions or tool policy. This is an experimental generic OpenAI-compatible integration pattern, not a documented supported OpenClaw-plus-Hermes pairing. Hermes returns a tool-using agent's final response; it is not a plain inference server. If OpenClaw sends a request to Hermes, decide explicitly which system owns tool execution, memory, authorization, and the user-visible session. Avoid building two independent agents that both believe they own the same terminal or credentials.
+An OpenAI-compatible Hermes API can look like a model endpoint to another system, but that does not mean the two systems share sessions or tool policy. This is an experimental generic OpenAI-compatible integration pattern, not a documented supported OpenClaw-plus-Hermes pairing. Hermes returns a tool-using agent's final response; it is not a plain inference server. If OpenClaw sends a request to Hermes, decide explicitly which system owns tool execution, memory, authorisation, and the user-visible session. Avoid building two independent agents that both believe they own the same terminal or credentials.
 
 ## Tool Sandboxing and Containment
 
@@ -378,7 +378,7 @@ For higher assurance, remove unnecessary workspace mounts, keep network access c
 Start at the outside and move inward:
 
 1. **Reachability:** Is the Gateway process running, and is the expected port bound?
-2. **Authorization:** Does the caller have a valid token, pairing, or allowlist entry?
+2. **Authorisation:** Does the caller have a valid token, pairing, or allowlist entry?
 3. **Session:** Did the message route to the expected agent and session key?
 4. **Provider:** Can the selected model authenticate and answer a minimal request?
 5. **Tool policy:** Is the requested tool enabled and permitted in this session?
@@ -429,6 +429,8 @@ Store the archive somewhere access-controlled. It can contain tokens, auth state
 
 ### Validate After Restore
 
+Run these checks:
+
 ```bash
 openclaw --container openclaw doctor --lint --json
 openclaw --container openclaw gateway status --deep
@@ -456,4 +458,4 @@ Send a test message through the Control UI before reconnecting every external ch
 
 OpenClaw becomes dependable when you stop treating it as a chat window and start treating it as a small distributed system. The Gateway owns connectivity and state; the model proposes reasoning and actions; the tool boundary decides what can happen; the operator owns secrets, access, and recovery.
 
-Rootless Podman is useful because it makes those boundaries visible. It does not remove the need for channel authorization, sandbox policy, backups, or upgrade testing. If you can name the process, state directory, port, credential, and execution target for every part of your setup, you are operating OpenClaw rather than merely hoping it works.
+Rootless Podman is useful because it makes those boundaries visible. It does not remove the need for channel authorisation, sandbox policy, backups, or upgrade testing. If you can name the process, state directory, port, credential, and execution target for every part of your setup, you are operating OpenClaw rather than merely hoping it works.

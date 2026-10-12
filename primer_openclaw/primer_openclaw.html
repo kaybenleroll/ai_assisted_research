@@ -709,8 +709,8 @@ Containment</a></li>
     <main class="content">
       <div class="content-inner">
 <hr />
-<p><em>Long-form edition · 7 October 2026. Runtime requirements
-rechecked against official documentation.</em></p>
+<p><em>Long-form edition. Runtime requirements rechecked against
+official documentation.</em></p>
 <hr />
 <h1 data-number="1" id="why-this-primer-exists"><span class="header-section-number">1</span> Why This Primer Exists</h1>
 <p>OpenClaw is easy to describe badly. Calling it a chatbot hides the
@@ -725,9 +725,9 @@ what state survives a restart, and how to recover without guessing.
 Short installation guides rarely explain those boundaries.</p>
 <p>This primer gives you an operational mental model and a Podman-first
 deployment path. It also separates OpenClaw from Hermes Agent Server, a
-neighboring project with different server processes and state semantics.
-The comparison matters because both projects are now used as self-hosted
-assistants, but they are not interchangeable components.</p>
+neighbouring project with different server processes and state
+semantics. The comparison matters because both projects are now used as
+self-hosted assistants, but they are not interchangeable components.</p>
 <h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
 <p>You will learn:</p>
 <ol type="1">
@@ -792,7 +792,7 @@ available;</li>
 <li>the same project as Hermes Agent, Hermes Server, or the Hermes model
 family.</li>
 </ul>
-<p>Containerizing the Gateway can protect the Gateway process and its
+<p>Containerising the Gateway can protect the Gateway process and its
 files, but OpenClaw’s own tool sandbox is a separate setting. If you
 enable no sandbox, tool execution may still occur on the host or in the
 Gateway container, depending on your configuration.</p>
@@ -1007,7 +1007,7 @@ changes, run a one-off <code>podman run</code> with the same image, user
 mapping, and mounted state, ending with
 <code>openclaw doctor --fix</code>, then start the Gateway normally. The
 official Podman guide contains the complete command because the exact
-image and mount paths must match your deployment. Afterward, run a
+image and mount paths must match your deployment. Afterwards, run a
 linting preflight:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw doctor <span class="at">--lint</span> <span class="at">--json</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw gateway status <span class="at">--deep</span></span></code></pre></div>
@@ -1222,7 +1222,7 @@ tool policy. This is an experimental generic OpenAI-compatible
 integration pattern, not a documented supported OpenClaw-plus-Hermes
 pairing. Hermes returns a tool-using agent’s final response; it is not a
 plain inference server. If OpenClaw sends a request to Hermes, decide
-explicitly which system owns tool execution, memory, authorization, and
+explicitly which system owns tool execution, memory, authorisation, and
 the user-visible session. Avoid building two independent agents that
 both believe they own the same terminal or credentials.</p>
 <h1 data-number="10" id="tool-sandboxing-and-containment"><span class="header-section-number">10</span> Tool Sandboxing and
@@ -1286,7 +1286,7 @@ replacement.</li>
 <ol type="1">
 <li><strong>Reachability:</strong> Is the Gateway process running, and
 is the expected port bound?</li>
-<li><strong>Authorization:</strong> Does the caller have a valid token,
+<li><strong>Authorisation:</strong> Does the caller have a valid token,
 pairing, or allowlist entry?</li>
 <li><strong>Session:</strong> Did the message route to the expected
 agent and session key?</li>
@@ -1382,6 +1382,7 @@ auth state, private conversations, and tool results. Do not copy live
 SQLite files with a raw <code>tar</code> command while the Gateway is
 writing to them.</p>
 <h2 data-number="12.3" id="validate-after-restore"><span class="header-section-number">12.3</span> Validate After Restore</h2>
+<p>Run these checks:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw doctor <span class="at">--lint</span> <span class="at">--json</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw gateway status <span class="at">--deep</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw models list</span></code></pre></div>
@@ -1420,7 +1421,7 @@ owns connectivity and state; the model proposes reasoning and actions;
 the tool boundary decides what can happen; the operator owns secrets,
 access, and recovery.</p>
 <p>Rootless Podman is useful because it makes those boundaries visible.
-It does not remove the need for channel authorization, sandbox policy,
+It does not remove the need for channel authorisation, sandbox policy,
 backups, or upgrade testing. If you can name the process, state
 directory, port, credential, and execution target for every part of your
 setup, you are operating OpenClaw rather than merely hoping it
