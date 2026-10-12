@@ -225,6 +225,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -578,6 +587,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -597,8 +607,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Containerization: Docker, Podman, and How
 Kubernetes Fits In</span>
-
-    <span class="navbar-meta">October 7, 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -775,7 +785,7 @@ Correction</a></li>
 </ul></li>
 <li><a href="#closing-a-usable-mental-model" id="toc-closing-a-usable-mental-model"><span class="toc-section-number">17</span> Closing: A Usable Mental
 Model</a></li>
-<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">18</span> Reference Links</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">18</span> Further Reading</a></li>
 </ul></div>
 
     </aside>
@@ -794,7 +804,7 @@ That works right up until it doesn’t: until a build behaves differently
 in CI than on your laptop, until a rootless container can’t write to a
 mounted volume, until a Pod sits in <code>Pending</code> forever and the
 only diagnostic you have is a vague memory that Kubernetes “schedules
-things.” At that point the gap between using containers and
+things”. At that point the gap between using containers and
 understanding them turns into wasted days.</p>
 <p>This primer closes that gap. It is written for the engineer or data
 scientist who ships containerised software, reads Kubernetes manifests,
@@ -882,11 +892,8 @@ architecture discussion will make considerably more sense if you have
 read the OCI section first, because Kubernetes’ relationship to
 container runtimes is defined entirely in terms of those
 specifications.</p>
-<p><strong>Freshness note (12 September 2026):</strong> The conceptual
-sections are intended to age slowly. Version numbers, licensing terms,
-release status, adoption figures, and ecosystem recommendations are a
-snapshot of the date above; check the linked project documentation
-before making an implementation or procurement decision.</p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h1 data-number="2" id="what-a-container-actually-is"><span class="header-section-number">2</span> What a Container Actually Is</h1>
 <p>A container is a process. That is the single most useful sentence in
 this primer, and it is worth resisting every instinct to complicate it.
@@ -1016,7 +1023,7 @@ your application. From inside the container this looks like an
 unexplained hard kill: no stack trace, no exception, no log line, exit
 code 137. From the host it is an entry in the kernel log. This is the
 single most common cause of containers that “just restart for no
-reason,” and it is why a JVM or Python process with a heap sized from
+reason”, and it is why a JVM or Python process with a heap sized from
 the host’s total memory rather than the cgroup limit will die under
 load. Modern runtimes read cgroup limits, but only if configured to, and
 older ones do not.</p>
@@ -1421,7 +1428,7 @@ Red Hat, designed around two architectural decisions that differ from
 Docker’s: it has no daemon, and it runs rootless by default. It is also
 deliberately CLI-compatible with Docker, to the point that
 <code>alias docker=podman</code> works for the large majority of
-everyday commands. The name comes from “pod manager,” which is a hint
+everyday commands. The name comes from “pod manager”, which is a hint
 about a feature discussed below.</p>
 <h2 data-number="6.1" id="daemonless-architecture"><span class="header-section-number">6.1</span> Daemonless Architecture</h2>
 <p>When you run <code>podman run</code>, there is no daemon. The
@@ -1529,7 +1536,7 @@ via <code>systemctl --user</code> with lingering enabled.</p>
 reach for Kubernetes without needing it. If you are running a handful of
 services on one or two machines and your real requirements are “start on
 boot, restart on failure, log to the journal, have dependencies ordered
-correctly,” <code>systemd</code> already does all of that well, and
+correctly”, <code>systemd</code> already does all of that well, and
 Quadlet lets containers participate. Reaching for a cluster orchestrator
 to get restart-on-failure is a large amount of accidental complexity for
 a feature <code>systemd</code> has had for over a decade.</p>
@@ -1575,7 +1582,7 @@ grouping so that a local Podman workflow would interoperate cleanly with
 real Kubernetes manifests: <code>podman generate kube</code> and
 <code>podman play kube</code> only make sense as a round trip if the
 concept is the same on both sides. Podman is named for it — “Pod
-Manager.” The practical value is that the mental model transfers: if you
+Manager”. The practical value is that the mental model transfers: if you
 understand why a sidecar container in a Podman pod can talk to the main
 container on <code>localhost</code>, you understand Kubernetes Pod
 networking, because it is the same mechanism, adopted on purpose rather
@@ -1787,8 +1794,8 @@ interchangeably in casual writing and they are not interchangeable at
 all.</p>
 <p>A <strong>CRI implementation</strong> talks upwards to Kubernetes.
 The Container Runtime Interface is a gRPC API that the kubelet uses to
-say “pull this image,” “create a sandbox for this Pod,” “start this
-container.” <code>containerd</code> with its CRI plugin and CRI-O are
+say “pull this image”, “create a sandbox for this Pod”, “start this
+container”. <code>containerd</code> with its CRI plugin and CRI-O are
 the two common implementations.</p>
 <p>An <strong>OCI runtime</strong> talks downwards to the kernel. It
 consumes a filesystem bundle and a <code>config.json</code> and performs
@@ -1907,7 +1914,7 @@ is a strong fit for workloads that need a userspace kernel without a
 full microVM. All three can be consumed as workload-level isolation
 choices rather than as platform-wide commitments.</p>
 <h2 data-number="8.7" id="lxc-and-lxd"><span class="header-section-number">8.7</span> LXC and LXD</h2>
-<p>LXC and LXD are frequently filed as “alternatives to Docker,” which
+<p>LXC and LXD are frequently filed as “alternatives to Docker”, which
 misses that they answer a different question.</p>
 <p>Docker and Podman are <strong>application container</strong> tools.
 The model is one primary process per container, an immutable image,
@@ -2764,9 +2771,9 @@ dependency.</p>
 <p>Authentication answers who is making a request; authorisation answers
 whether that identity may make it; <strong>admission</strong> answers
 whether the requested object is acceptable before it is persisted. This
-is where a cluster can enforce rules such as “no privileged containers,”
-“images must come from this registry,” “every workload needs resource
-requests,” or “this namespace may use only these security contexts.”</p>
+is where a cluster can enforce rules such as “no privileged containers”,
+“images must come from this registry”, “every workload needs resource
+requests”, or “this namespace may use only these security contexts”.</p>
 <p>Kubernetes’ built-in <strong>Pod Security Admission</strong> provides
 the baseline, restricted, and privileged Pod Security Standards at
 namespace scope. It is deliberately general. Teams that need
@@ -2961,7 +2968,7 @@ a practitioner knowing, as opposed to being conference noise.</p>
 <h2 data-number="16.1" id="release-cadence-and-versions"><span class="header-section-number">16.1</span> Release Cadence and
 Versions</h2>
 <p>Kubernetes ships three minor releases a year. Version 1.37, codenamed
-“Garhwal,” was released on 26 August 2026 with 67 enhancements — 16
+“Garhwal”, was released on 26 August 2026 with 67 enhancements — 16
 graduating to stable, 23 to beta, 27 in alpha, and one deprecation. The
 preceding patch line, 1.36.4, came out on 11 August 2026. The practical
 consequence of the cadence is that each minor version receives about one
@@ -3084,28 +3091,43 @@ right answer when you genuinely have the fleet coordination problem, and
 expensive accidental complexity when you do not — so answer that
 question honestly before you adopt it, because the cost of running it
 badly is higher than the cost of not running it at all.</p>
-<h1 data-number="18" id="reference-links"><span class="header-section-number">18</span> Reference Links</h1>
+<h1 data-number="18" id="further-reading"><span class="header-section-number">18</span> Further Reading</h1>
+<p>These sources provide the specifications, current project
+documentation, and evidence behind the primer’s time-sensitive
+claims.</p>
 <ul>
 <li><a href="https://opencontainers.org/specs/">Open Container
-Initiative specifications</a></li>
+Initiative specifications</a> — the image, runtime, and distribution
+standards that make engines and registries interoperable.</li>
 <li><a href="https://docs.docker.com/desktop/setup/install/">Docker
-Desktop subscription terms</a></li>
+Desktop subscription terms</a> — the current source for Docker Desktop’s
+commercial conditions.</li>
 <li><a href="https://www.cncf.io/projects/podman-container-tools/">Podman
-Container Tools in the CNCF</a></li>
+Container Tools in the CNCF</a> — governance and project status for the
+Podman tool family.</li>
 <li><a href="https://kubernetes.io/releases/">Kubernetes release history
-and support windows</a></li>
+and support windows</a> — release cadence and support information for
+version planning.</li>
 <li><a href="https://kubernetes.io/blog/2025/09/01/kubernetes-v1-34-dra-updates/">Kubernetes
-1.34: Dynamic Resource Allocation reaches GA</a></li>
+1.34: Dynamic Resource Allocation reaches GA</a> — the primary
+explanation of DRA’s GPU and specialised-resource model.</li>
 <li><a href="https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/">CNCF
-Annual Cloud Native Survey, January 2026</a></li>
+Annual Cloud Native Survey, January 2026</a> — survey evidence for the
+adoption figures discussed in the primer.</li>
 <li><a href="https://kubernetes.io/docs/concepts/security/pod-security-standards/">Kubernetes
-Pod Security Standards</a></li>
+Pod Security Standards</a> — the built-in baseline, restricted, and
+privileged policy profiles.</li>
 <li><a href="https://kubernetes.io/docs/concepts/cluster-administration/observability/">Kubernetes
-observability overview</a></li>
-<li><a href="https://docs.sigstore.dev/">Sigstore documentation</a></li>
+observability overview</a> — the official overview of metrics, logs,
+traces, and events.</li>
+<li><a href="https://docs.sigstore.dev/">Sigstore documentation</a> —
+signing, keyless identity, and transparency-log documentation for image
+supply chains.</li>
 <li><a href="https://aws.amazon.com/about-aws/whats-new/2026/06/aws-lambda-microvms/">AWS
-Lambda MicroVMs announcement</a></li>
+Lambda MicroVMs announcement</a> — the source for the
+Firecracker-related deployment example.</li>
 </ul>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 

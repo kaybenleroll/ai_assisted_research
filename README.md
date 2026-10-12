@@ -49,7 +49,7 @@ These are the five most recently reviewed primary documents across the catalogue
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
-| [Containerization: Docker, Podman, and How Kubernetes Fits In](primer_containerization/primer_containerization.html) · [PDF](primer_containerization/primer_containerization.pdf) | 2026-10-07 | Container fundamentals and the OCI spec, Docker's daemon architecture versus Podman's daemonless model, and how Kubernetes orchestrates it all |
+| [Containerization: Docker, Podman, and How Kubernetes Fits In](primer_containerization/primer_containerization.html) · [PDF](primer_containerization/primer_containerization.pdf) | 2026-10-12 | Container fundamentals and the OCI spec, Docker's daemon architecture versus Podman's daemonless model, and how Kubernetes orchestrates it all |
 | [Oh My Zsh: A Practical Guide](primer_ohmyzsh/primer_ohmyzsh.html) · [PDF](primer_ohmyzsh/primer_ohmyzsh.pdf) | 2026-10-07 | ZSH fundamentals, Oh My Zsh architecture, deep plugin coverage, themes, advanced features, and a personalised setup audit |
 | [Python for Expert R Users](primer_python_for_r_users/primer_python_for_r_users.html) · [PDF](primer_python_for_r_users/primer_python_for_r_users.pdf) | 2026-10-07 | Comprehensive migration guide for experienced tidyverse, purrr, and furrr users, with deep ggplot2 replacement strategy |
 <!-- END DEVELOPER TOOLING -->
