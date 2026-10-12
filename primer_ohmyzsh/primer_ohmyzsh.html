@@ -724,7 +724,6 @@ Next</a></li>
 
     <main class="content">
       <div class="content-inner">
-<p><strong>Mick Cooney — June 2026</strong></p>
 <hr />
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
 <p>Most people who install Oh My Zsh do the same three things: change
@@ -897,14 +896,14 @@ setup, key bindings, utility functions) 2. Sources each enabled plugin’s
 <code>.plugin.zsh</code> file 3. Sources everything in
 <code>custom/</code> that ends in <code>.zsh</code> 4. Loads the
 theme</p>
-<p>The <code>custom/</code> directory is where your personalizations
+<p>The <code>custom/</code> directory is where your personalisations
 live and where they survive OMZ updates. If you write a custom function
 and put it in <code>~/.oh-my-zsh/custom/myconfig.zsh</code>, it gets
 loaded automatically. If you put the same function in a bundled plugin
 file, the next <code>omz update</code> will overwrite it.</p>
 <p>The theme loading last matters in practice: because it runs after
 <code>custom/</code>, a theme can clobber prompt-related settings you
-set in a custom file. If a customization to your prompt doesn’t seem to
+set in a custom file. If a customisation to your prompt doesn’t seem to
 be taking effect, check whether the theme is overwriting it on load.</p>
 <h2 data-number="3.1" id="the-lib-layer"><span class="header-section-number">3.1</span> The <code>lib/</code>
 Layer</h2>
@@ -923,7 +922,7 @@ themes</li>
 <code>omz_urlencode</code></li>
 </ul>
 <p>You rarely edit these directly, but knowing they exist explains why
-certain behaviors appear without you configuring them.</p>
+certain behaviours appear without you configuring them.</p>
 <h2 data-number="3.2" id="enabling-and-disabling-plugins"><span class="header-section-number">3.2</span> Enabling and Disabling
 Plugins</h2>
 <p>The <code>plugins</code> array in <code>.zshrc</code> is
@@ -940,7 +939,7 @@ straightforward:</p>
 Third-party plugins (like <code>zsh-autosuggestions</code>) are cloned
 into <code>custom/plugins/</code> and added to the list.</p>
 <p>The startup cost of plugins is real. Each plugin sources a file. Most
-are small, but a plugin that initializes a large tool (like a package
+are small, but a plugin that initialises a large tool (like a package
 manager) adds perceptible latency. Keep only what you actually use.</p>
 <h2 data-number="3.3" id="choosing-plugins-without-bloating-startup"><span class="header-section-number">3.3</span> Choosing Plugins Without
 Bloating Startup</h2>
@@ -1114,12 +1113,12 @@ highlights commands in real time as you type:</p>
 <li>Commands that don’t exist: red</li>
 <li>Strings and quoted arguments: yellow</li>
 </ul>
-<p>Options/flags and pipes/redirects/semicolons are recognized as
+<p>Options/flags and pipes/redirects/semicolons are recognised as
 distinct token types internally, but the default <code>main</code>
 highlighter styles leave them unstyled — no colour unless you configure
 <code>ZSH_HIGHLIGHT_STYLES</code> yourself. If you want flags or
 separators to stand out visually, that’s a
-<code>ZSH_HIGHLIGHT_STYLES</code> customization, not default
+<code>ZSH_HIGHLIGHT_STYLES</code> customisation, not default
 behaviour.</p>
 <p>The value is catching typos before you press Enter. You type
 <code>pythno script.py</code> and the red highlight catches it
@@ -1231,7 +1230,7 @@ system-wide aliases.</p>
 <p>If you interact with systemd services regularly, these cut down the
 typing considerably.</p>
 <h2 data-number="4.13" id="mise"><span class="header-section-number">4.13</span> mise</h2>
-<p>The <code>mise</code> plugin initializes <code>mise</code> (the
+<p>The <code>mise</code> plugin initialises <code>mise</code> (the
 polyglot version manager, formerly <code>rtx</code>) and enables its
 completions. It runs <code>mise activate zsh</code> during shell startup
 so that tool versions are correctly set in every shell session. Without
@@ -1293,7 +1292,7 @@ alternative)</strong></li>
 </ol>
 <ul>
 <li>Strong choice for cross-shell consistency with TOML config.</li>
-<li>Worth trialing if you routinely jump between shells.</li>
+<li>Worth trialling if you routinely jump between shells.</li>
 </ul>
 <hr />
 <h1 data-number="5" id="themes-what-a-good-prompt-does"><span class="header-section-number">5</span> Themes: What a Good Prompt
@@ -1331,16 +1330,16 @@ divergence, and gives no indication of exit status.</p>
 <p>A powerline-style theme that uses special Unicode characters to
 create a segmented prompt:</p>
 <pre class="text"><code>you@hostname  ~/projects/example-project  main ✘</code></pre>
-<p>(The segments have colored backgrounds in the actual terminal.) Shows
-user, host, path, git branch, and git state. More information than
+<p>(The segments have coloured backgrounds in the actual terminal.)
+Shows user, host, path, git branch, and git state. More information than
 robbyrussell. Requires a Nerd Font or Powerline-patched font; without
 one, the segment characters render as boxes.</p>
 <p>A common <code>agnoster</code> variant,
 <code>agnoster-timestamp-newline</code>, adds a timestamp and puts
 command input on its own line, which makes long paths more readable.</p>
 <h2 data-number="5.4" id="powerlevel10k-p10k"><span class="header-section-number">5.4</span> Powerlevel10k (p10k)</h2>
-<p>Powerlevel10k is a third-party theme, not bundled with OMZ. As of
-October 7, 2026, its <a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">upstream
+<p>Powerlevel10k is a third-party theme, not bundled with OMZ. As of 7
+October 2026, its <a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">upstream
 README</a> explicitly warns of very limited support: no new features are
 planned, most bugs will remain unfixed, and help requests will be
 ignored. An existing setup can still work well, but do not assume that
@@ -1546,7 +1545,7 @@ them to key sequences:</p>
 <span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
 <span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="bu">zle</span> <span class="at">-N</span> prepend-sudo</span>
 <span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="bu">bindkey</span> <span class="st">&#39;^[s&#39;</span> prepend-sudo   <span class="co"># Alt+S</span></span></code></pre></div>
-<p>Realize halfway through typing a command that it needs root? Alt+S
+<p>Realise halfway through typing a command that it needs root? Alt+S
 prepends <code>sudo</code> without you having to jump to the start of
 the line, type it, and jump back. <code>BUFFER</code> is the whole
 command line as a string, and <code>CURSOR</code> is the cursor’s
@@ -1554,7 +1553,7 @@ character offset into it — direct edits to both are the basic pattern
 for any custom ZLE widget.</p>
 <p>Stock zsh (not something OMZ adds) already ships a related trick:
 <code>push-line</code> (bound to Ctrl+Q in emacs mode by default). If
-you’re mid-command and realize you need to run something else first,
+you’re mid-command and realise you need to run something else first,
 Ctrl+Q parks your current input, you run what you need, and your
 original command comes back on the next prompt. One catch: if your
 terminal has flow control enabled (<code>stty ixon</code>, common on
@@ -1611,7 +1610,7 @@ the same binary.</li>
 <li><strong>Custom file hygiene</strong></li>
 </ol>
 <ul>
-<li>Keep aliases/functions/options organized in <code>custom/</code>
+<li>Keep aliases/functions/options organised in <code>custom/</code>
 files instead of growing one giant <code>.zshrc</code>.</li>
 <li>Periodically delete stale helpers you no longer use.</li>
 </ul>
@@ -1728,7 +1727,7 @@ installed in this setup:</p>
 <li><code>sudo</code>: press <code>Esc Esc</code> after a failed command
 to put <code>sudo</code> in front of it.</li>
 <li><code>extract</code>: use <code>x archive.tar.gz</code> instead of
-memorizing archive-specific flags.</li>
+memorising archive-specific flags.</li>
 <li><code>history</code>: use <code>hs docker</code> instead of typing
 <code>history | grep docker</code>.</li>
 </ul>
@@ -1831,7 +1830,7 @@ first.</p>
 <p>Oh My Zsh is the right choice for most people, but there are
 situations where it starts to show its age.</p>
 <p><strong>Startup speed.</strong> OMZ adds measurable startup latency,
-mostly from sourcing plugins and initializing completions. On modern
+mostly from sourcing plugins and initialising completions. On modern
 hardware this is usually under 200ms, which is imperceptible. But if
 you’re on a slow machine, opening many terminals, or doing a lot of
 <code>zsh -c</code> invocations in scripts, it accumulates.
@@ -1867,7 +1866,7 @@ install needed, it’s bundled). Use it for a week.</p></li>
 <li><p><strong>Try <code>Ctrl+T</code> and <code>Alt+C</code></strong>
 with <code>fzf</code> — fuzzy file and directory completion. They’re
 already wired up.</p></li>
-<li><p><strong>Internalize <code>Esc Esc</code></strong> (sudo plugin)
+<li><p><strong>Internalise <code>Esc Esc</code></strong> (sudo plugin)
 and <code>x</code> (extract plugin) — you have both, just build the
 habit.</p></li>
 <li><p><strong>Consider p10k</strong> if you want a richer prompt with

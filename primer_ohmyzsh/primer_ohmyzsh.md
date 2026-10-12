@@ -1,7 +1,5 @@
 # Oh My Zsh: A Practical Guide to Your Shell
 
-**Mick Cooney — June 2026**
-
 ---
 
 ## Introduction
@@ -152,9 +150,9 @@ When your shell starts, OMZ loads `oh-my-zsh.sh`, which:
 3. Sources everything in `custom/` that ends in `.zsh`
 4. Loads the theme
 
-The `custom/` directory is where your personalizations live and where they survive OMZ updates. If you write a custom function and put it in `~/.oh-my-zsh/custom/myconfig.zsh`, it gets loaded automatically. If you put the same function in a bundled plugin file, the next `omz update` will overwrite it.
+The `custom/` directory is where your personalisations live and where they survive OMZ updates. If you write a custom function and put it in `~/.oh-my-zsh/custom/myconfig.zsh`, it gets loaded automatically. If you put the same function in a bundled plugin file, the next `omz update` will overwrite it.
 
-The theme loading last matters in practice: because it runs after `custom/`, a theme can clobber prompt-related settings you set in a custom file. If a customization to your prompt doesn't seem to be taking effect, check whether the theme is overwriting it on load.
+The theme loading last matters in practice: because it runs after `custom/`, a theme can clobber prompt-related settings you set in a custom file. If a customisation to your prompt doesn't seem to be taking effect, check whether the theme is overwriting it on load.
 
 ### The `lib/` Layer
 
@@ -166,7 +164,7 @@ Most users never look at `lib/`, but it does a lot. The files there configure:
 - `git.zsh` — the helper functions used by git-aware themes
 - `functions.zsh` — utility functions used internally, like `omz_urlencode`
 
-You rarely edit these directly, but knowing they exist explains why certain behaviors appear without you configuring them.
+You rarely edit these directly, but knowing they exist explains why certain behaviours appear without you configuring them.
 
 ### Enabling and Disabling Plugins
 
@@ -183,7 +181,7 @@ plugins=(
 
 Each name must match either a directory in `~/.oh-my-zsh/plugins/` or `~/.oh-my-zsh/custom/plugins/`. OMZ looks in both places. Third-party plugins (like `zsh-autosuggestions`) are cloned into `custom/plugins/` and added to the list.
 
-The startup cost of plugins is real. Each plugin sources a file. Most are small, but a plugin that initializes a large tool (like a package manager) adds perceptible latency. Keep only what you actually use.
+The startup cost of plugins is real. Each plugin sources a file. Most are small, but a plugin that initialises a large tool (like a package manager) adds perceptible latency. Keep only what you actually use.
 
 ### Choosing Plugins Without Bloating Startup
 
@@ -351,7 +349,7 @@ This plugin is not in the default OMZ bundle — it requires a separate install.
 - Commands that don't exist: red
 - Strings and quoted arguments: yellow
 
-Options/flags and pipes/redirects/semicolons are recognized as distinct token types internally, but the default `main` highlighter styles leave them unstyled — no colour unless you configure `ZSH_HIGHLIGHT_STYLES` yourself. If you want flags or separators to stand out visually, that's a `ZSH_HIGHLIGHT_STYLES` customization, not default behaviour.
+Options/flags and pipes/redirects/semicolons are recognised as distinct token types internally, but the default `main` highlighter styles leave them unstyled — no colour unless you configure `ZSH_HIGHLIGHT_STYLES` yourself. If you want flags or separators to stand out visually, that's a `ZSH_HIGHLIGHT_STYLES` customisation, not default behaviour.
 
 The value is catching typos before you press Enter. You type `pythno script.py` and the red highlight catches it immediately. You type `ls --recusrive` and it's red before you hit Enter. After using it for a week you will miss it in any shell that doesn't have it.
 
@@ -482,7 +480,7 @@ If you interact with systemd services regularly, these cut down the typing consi
 
 ### mise
 
-The `mise` plugin initializes `mise` (the polyglot version manager, formerly `rtx`) and enables its completions. It runs `mise activate zsh` during shell startup so that tool versions are correctly set in every shell session. Without this, you'd need to call `eval "$(mise activate zsh)"` manually in your `.zshrc`. That `eval` is appropriate only for initialisation code emitted by a locally installed, trusted executable; never adapt the pattern to execute output fetched from the network.
+The `mise` plugin initialises `mise` (the polyglot version manager, formerly `rtx`) and enables its completions. It runs `mise activate zsh` during shell startup so that tool versions are correctly set in every shell session. Without this, you'd need to call `eval "$(mise activate zsh)"` manually in your `.zshrc`. That `eval` is appropriate only for initialisation code emitted by a locally installed, trusted executable; never adapt the pattern to execute output fetched from the network.
 
 ### gh
 
@@ -512,7 +510,7 @@ These are common upgrades in mature setups. None are mandatory, but each can be 
 
 5. **`starship` prompt (theme alternative)**
   - Strong choice for cross-shell consistency with TOML config.
-  - Worth trialing if you routinely jump between shells.
+  - Worth trialling if you routinely jump between shells.
 
 ---
 
@@ -549,13 +547,13 @@ A powerline-style theme that uses special Unicode characters to create a segment
 you@hostname  ~/projects/example-project  main ✘
 ```
 
-(The segments have colored backgrounds in the actual terminal.) Shows user, host, path, git branch, and git state. More information than robbyrussell. Requires a Nerd Font or Powerline-patched font; without one, the segment characters render as boxes.
+(The segments have coloured backgrounds in the actual terminal.) Shows user, host, path, git branch, and git state. More information than robbyrussell. Requires a Nerd Font or Powerline-patched font; without one, the segment characters render as boxes.
 
 A common `agnoster` variant, `agnoster-timestamp-newline`, adds a timestamp and puts command input on its own line, which makes long paths more readable.
 
 ### Powerlevel10k (p10k)
 
-Powerlevel10k is a third-party theme, not bundled with OMZ. As of October 7, 2026, its [upstream README](https://github.com/romkatv/powerlevel10k#powerlevel10k) explicitly warns of very limited support: no new features are planned, most bugs will remain unfixed, and help requests will be ignored. An existing setup can still work well, but do not assume that future compatibility problems will be fixed. For a new setup, compare its features with [Starship](https://starship.rs/) and [Pure](https://github.com/sindresorhus/pure) before accepting that maintenance constraint.
+Powerlevel10k is a third-party theme, not bundled with OMZ. As of 7 October 2026, its [upstream README](https://github.com/romkatv/powerlevel10k#powerlevel10k) explicitly warns of very limited support: no new features are planned, most bugs will remain unfixed, and help requests will be ignored. An existing setup can still work well, but do not assume that future compatibility problems will be fixed. For a new setup, compare its features with [Starship](https://starship.rs/) and [Pure](https://github.com/sindresorhus/pure) before accepting that maintenance constraint.
 
 What makes p10k different:
 
@@ -741,9 +739,9 @@ zle -N prepend-sudo
 bindkey '^[s' prepend-sudo   # Alt+S
 ```
 
-Realize halfway through typing a command that it needs root? Alt+S prepends `sudo` without you having to jump to the start of the line, type it, and jump back. `BUFFER` is the whole command line as a string, and `CURSOR` is the cursor's character offset into it — direct edits to both are the basic pattern for any custom ZLE widget.
+Realise halfway through typing a command that it needs root? Alt+S prepends `sudo` without you having to jump to the start of the line, type it, and jump back. `BUFFER` is the whole command line as a string, and `CURSOR` is the cursor's character offset into it — direct edits to both are the basic pattern for any custom ZLE widget.
 
-Stock zsh (not something OMZ adds) already ships a related trick: `push-line` (bound to Ctrl+Q in emacs mode by default). If you're mid-command and realize you need to run something else first, Ctrl+Q parks your current input, you run what you need, and your original command comes back on the next prompt. One catch: if your terminal has flow control enabled (`stty ixon`, common on many default configs), Ctrl+Q is intercepted by the terminal driver as XON and never reaches zsh at all — the key will simply do nothing. If that's the case for you, either run `stty -ixon` or use the Esc-q alternative binding instead.
+Stock zsh (not something OMZ adds) already ships a related trick: `push-line` (bound to Ctrl+Q in emacs mode by default). If you're mid-command and realise you need to run something else first, Ctrl+Q parks your current input, you run what you need, and your original command comes back on the next prompt. One catch: if your terminal has flow control enabled (`stty ixon`, common on many default configs), Ctrl+Q is intercepted by the terminal driver as XON and never reaches zsh at all — the key will simply do nothing. If that's the case for you, either run `stty -ixon` or use the Esc-q alternative binding instead.
 
 ### Configuration Areas Worth Periodic Attention
 
@@ -770,7 +768,7 @@ Beyond plugins and themes, these settings often determine whether a shell feels 
   - Remove duplicate PATH appends spread across shell files.
 
 6. **Custom file hygiene**
-  - Keep aliases/functions/options organized in `custom/` files instead of growing one giant `.zshrc`.
+  - Keep aliases/functions/options organised in `custom/` files instead of growing one giant `.zshrc`.
   - Periodically delete stale helpers you no longer use.
 
 7. **Terminal/font compatibility**
@@ -855,7 +853,7 @@ Before adding another plugin, exercise the high-value ones already installed in 
 
 - `fzf`: use `Ctrl+T` for file arguments and `Alt+C` for directory jumping, not only `Ctrl+R`.
 - `sudo`: press `Esc Esc` after a failed command to put `sudo` in front of it.
-- `extract`: use `x archive.tar.gz` instead of memorizing archive-specific flags.
+- `extract`: use `x archive.tar.gz` instead of memorising archive-specific flags.
 - `history`: use `hs docker` instead of typing `history | grep docker`.
 
 The earlier plugin sections explain these capabilities in detail; this audit is checking that they have become habits, not recommending more plugins.
@@ -965,7 +963,7 @@ If the issue disappears, re-add plugins in small groups until it returns. This i
 
 Oh My Zsh is the right choice for most people, but there are situations where it starts to show its age.
 
-**Startup speed.** OMZ adds measurable startup latency, mostly from sourcing plugins and initializing completions. On modern hardware this is usually under 200ms, which is imperceptible. But if you're on a slow machine, opening many terminals, or doing a lot of `zsh -c` invocations in scripts, it accumulates. `zinit` and `zplug` are plugin managers that load plugins lazily or in parallel and can reduce startup time significantly. `sheldon` is another option with a simple TOML configuration.
+**Startup speed.** OMZ adds measurable startup latency, mostly from sourcing plugins and initialising completions. On modern hardware this is usually under 200ms, which is imperceptible. But if you're on a slow machine, opening many terminals, or doing a lot of `zsh -c` invocations in scripts, it accumulates. `zinit` and `zplug` are plugin managers that load plugins lazily or in parallel and can reduce startup time significantly. `sheldon` is another option with a simple TOML configuration.
 
 **Opinionated defaults.** OMZ makes choices about completion settings, history handling, and key bindings that most people are fine with. If you find yourself fighting the defaults, vanilla ZSH with `zinit` and hand-picked plugins gives you more control.
 
@@ -985,7 +983,7 @@ In order of impact:
 
 3. **Try `Ctrl+T` and `Alt+C`** with `fzf` — fuzzy file and directory completion. They're already wired up.
 
-4. **Internalize `Esc Esc`** (sudo plugin) and `x` (extract plugin) — you have both, just build the habit.
+4. **Internalise `Esc Esc`** (sudo plugin) and `x` (extract plugin) — you have both, just build the habit.
 
 5. **Consider p10k** if you want a richer prompt with git state detail.
 
