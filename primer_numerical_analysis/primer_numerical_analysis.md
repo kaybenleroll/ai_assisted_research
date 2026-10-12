@@ -128,6 +128,8 @@ Both workflows are legitimate depending on context. In safety-critical engineeri
 
 ### Practical Summary Table
 
+The table summarises the trade-offs between the numerical-analysis approaches discussed above.
+
 | Lens | Option A | Option B | Typical trade-off |
 |---|---|---|---|
 | Solve style | Direct | Iterative | Deterministic finite steps vs scalable approximations |
@@ -198,7 +200,7 @@ These edge cases rarely matter in simple computations, but in long iterative loo
 
 The default in almost all scientific code is double precision (float64), but there are real situations where single precision (float32) is the right call, and a handful where even double is not enough. Knowing the difference matters before you hit one of those situations.
 
-The basic numbers:
+The table compares float32 and float64 by storage size, representable range, machine epsilon, and throughput.
 
 | Type | Bits | Exponent bits | Mantissa bits | Approx. range | Machine epsilon | Throughput note |
 |---|---|---|---|---|---|---|
@@ -1574,7 +1576,7 @@ The cost of reverse mode: one forward pass plus one backward pass computes the f
 
 ### Forward vs Reverse: When to Use Which
 
-The decision comes down to the shape of the Jacobian $\mathbf{J} \in \mathbb{R}^{m \times n}$.
+The table shows how the input and output dimensions of the Jacobian $\mathbf{J} \in \mathbb{R}^{m \times n}$ determine the preferred mode and number of passes.
 
 | Situation | Preferred mode | Passes needed |
 |---|---|---|
@@ -1751,7 +1753,7 @@ All three discretize a continuous PDE into algebraic equations. The right one is
 
 #### Which problem types map to which method?
 
-If you think in terms of problem archetypes rather than method names, method choice becomes much clearer:
+The table maps common PDE problem archetypes to suitable first-choice methods and summarises why they fit.
 
 | Problem type | Typical first choice | Why this choice is common |
 |---|---|---|
@@ -2180,6 +2182,8 @@ where $\boldsymbol{\lambda}$ is the multiplier vector and $\rho > 0$ is a penalt
 ADMM (Alternating Direction Method of Multipliers) is a closely related splitting variant that has become particularly popular for distributed optimisation and problems with separable structure. The idea is to split the variable set and alternate minimisation steps over each part while enforcing consensus through augmented Lagrangian multiplier updates.
 
 ### Stochastic Optimisation
+
+The figure compares convex and nonconvex objective landscapes, showing how local minima can complicate optimisation.
 
 ![Convex vs nonconvex optimisation landscapes](figures/optimisation_landscape.png)
 
