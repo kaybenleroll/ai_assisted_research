@@ -75,7 +75,7 @@ These are the five most recently reviewed primary documents across the catalogue
 |----------|---------------|-------------|
 | [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) · [PDF](primer_comparative_religion/primer-comparative-religion.pdf) | 2026-10-12 | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
 | [European Electoral Systems](primer_political_systems/primer-european-electoral-systems.html) · [PDF](primer_political_systems/primer-european-electoral-systems.pdf) | 2026-10-07 | Practical primer on electoral systems across European democracies |
-| [Military Organisation, Ranks, and Doctrine](primer_military_structure/primer_military_structure.html) · [PDF](primer_military_structure/primer_military_structure.pdf) | 2026-10-07 | How armies are structured from fire team to army group, how ranks map to command levels, and naval/air force equivalents |
+| [Military Organisation, Ranks, and Doctrine](primer_military_structure/primer_military_structure.html) · [PDF](primer_military_structure/primer_military_structure.pdf) | 2026-10-12 | How armies are structured from fire team to army group, how ranks map to command levels, and naval/air force equivalents |
 <!-- END SOCIETY AND INSTITUTIONS -->
 
 ## Silo RPG Materials

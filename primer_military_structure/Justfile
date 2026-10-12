@@ -2,7 +2,7 @@ SOURCE_MD   := "primer_military_structure.md"
 PROJECT_DIR := "primer_military_structure"
 TITLE       := "Military Organisation, Ranks, and Doctrine: A Structural Primer"
 AUTHOR      := "Mick Cooney"
-DATE        := "7 October 2026"
+DATE        := "12 October 2026"
 HTML_EXTRA  := "--mathjax --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 
