@@ -48,14 +48,14 @@ You should know all of these lenses, because they affect both design and outcome
 
 ### Direct vs Iterative Methods
 
-#### Direct methods
+#### Direct Methods
 A direct method aims to reach a solution in a finite sequence of operations. In exact arithmetic, Gaussian elimination solves a linear system exactly in finite steps.
 
 In floating-point arithmetic, "exact" becomes "as exact as this arithmetic allows," but the spirit is the same: no outer convergence loop to a limit.
 
 Direct methods are the right tool when the problem is moderate in size and when the matrix has structure you can exploit — symmetry, positive definiteness, or banded form all make factorisation significantly cheaper. They are also particularly convenient when you need to solve the same linear system repeatedly with the same coefficient matrix but different right-hand sides, since you can factorize once and reuse the result for each new solve without repeating the expensive decomposition. In exact arithmetic the computation is mathematically complete: a fixed, predictable number of operations, no convergence criterion to manage, and a result that does not depend on an initial guess. In floating-point arithmetic you lose "exact" in the strict sense, but the structure of the computation remains deterministic and bounded. Typical examples are LU factorisation for general square systems, QR for overdetermined or least-squares problems, and Cholesky for symmetric positive definite matrices. Computing interpolation coefficients by solving a Vandermonde system also fits this pattern.
 
-#### Iterative methods
+#### Iterative Methods
 Iterative methods produce a sequence of approximations, often improving until a stopping rule is met.
 
 Iterative methods become attractive — and often necessary — when problems outgrow what direct factorisation can handle. For very large or sparse systems, forming and storing a dense factorisation is simply infeasible: memory costs scale quadratically or worse, and fill-in during factorisation can destroy the sparsity that made the problem tractable to begin with. Iterative methods sidestep this by working entirely through matrix-vector products, which remain cheap if the matrix is sparse or structured. The payoff is a controllable trade-off between accuracy and runtime: you can stop early if a rough answer suffices, or iterate longer to tighten the result. Conjugate gradient and GMRES are the two workhorses of iterative linear algebra. Newton iterations, fixed-point iterations, and gradient-based optimisation methods all belong in this family too, even when the underlying problem is not a linear system.
@@ -82,18 +82,18 @@ Stochastic methods deliberately introduce randomness as a core ingredient. Resul
 
 ### Local vs Global Approximation
 
-#### Local approximation
+#### Local Approximation
 A local method builds its approximation using information near a specific point or within a small neighborhood, without claiming anything about behaviour far away. Finite difference derivative estimates use function values at nearby points only. Newton updates linearize the function around the current iterate, ignoring curvature elsewhere. Adaptive mesh refinement makes local decisions about where to place grid points based on estimated error in each cell, independent of distant regions. The strength of local methods is robustness: strange behaviour in one part of the domain does not contaminate estimates elsewhere.
 
-#### Global approximation
+#### Global Approximation
 A global method constructs a single approximation intended to be valid across the entire interval or domain. Polynomial interpolation through all nodes, spectral methods that represent the solution as a sum of basis functions over the whole domain, and spline fits over an entire dataset all operate this way. When the target function is smooth and the basis is well-chosen, global methods can achieve remarkably high accuracy with relatively few degrees of freedom — spectral methods on smooth periodic functions can converge faster than any fixed polynomial rate. The downside is sensitivity: a function with a singularity or rough spot in one region can degrade accuracy everywhere, since global basis functions respond to the entire domain.
 
 ### Discretization-First vs Model-Reduction-First
 
-#### Discretization-first
+#### Discretization-First
 The classical path in computational science is to start from governing equations — differential equations, integral equations, conservation laws — and discretize them directly into a finite algebraic system. Finite difference methods replace derivatives with local polynomial approximations on a grid. Finite element and finite volume methods divide the domain into small cells and enforce the equations either locally or via variational principles. The resulting algebraic systems can be large, but the path from model to computation is direct and the numerical behaviour is well understood.
 
-#### Model-reduction-first
+#### Model-Reduction-First
 An alternative path, increasingly important in modern scientific computing, is to reduce the complexity of the model before or during numerical solving. Proper orthogonal decomposition identifies the dominant modes of a high-dimensional system and projects the dynamics onto a much smaller subspace. Krylov subspace projections do something similar during an iterative solve — they look for a good solution in a low-dimensional space built from successive matrix-vector products. Surrogate models and emulators learn cheap approximations to expensive simulations and then optimise or analyse the surrogate instead of running the full model.
 
 This distinction matters especially when full-order simulation is far too expensive to run in a loop — for design optimisation, uncertainty propagation, or real-time control — and some accuracy loss from the reduced model is an acceptable trade-off.
@@ -102,26 +102,26 @@ This distinction matters especially when full-order simulation is far too expens
 
 This distinction is especially important in differential equations and becomes unavoidable once you work with partial differential equations seriously.
 
-#### Strong form
+#### Strong Form
 In the strong form, the governing equation must hold at every point in the domain — it is enforced pointwise. This is the formulation you typically see when first writing down a differential equation: the equation must be satisfied literally everywhere, which implicitly requires the solution to be sufficiently smooth to make all the derivatives in the equation well-defined.
 
-#### Weak form
+#### Weak Form
 In the weak form, the equation is multiplied by a test function and integrated over the domain. The result is an integral condition that the solution must satisfy for all allowable test functions. This approach has two major advantages. First, it reduces the differentiability requirements on the solution, allowing functions that are not smooth enough to satisfy the strong form but are still meaningful in an integral sense. Second, it opens the door to Galerkin-type methods, where you look for the solution in a finite-dimensional subspace — which is precisely how finite element methods work. Weak-form approaches tend to be better suited to complex geometry, natural boundary conditions, and solutions with local roughness.
 
 ### Forward vs Inverse Problems
 
-#### Forward problems
+#### Forward Problems
 In a forward problem, you are given a model and its parameters and asked to compute the outputs. You know the governing equations, you know the inputs, and you run the computation forward in the natural causal direction. This is the standard computational science workflow: given the physical law and the initial or boundary conditions, simulate what happens. Forward problems are generally well-posed — small changes in inputs produce proportionally small changes in outputs, and solutions are usually unique.
 
-#### Inverse problems
+#### Inverse Problems
 In an inverse problem, you observe some outputs — often noisy, incomplete, or indirect measurements — and want to infer the underlying parameters, initial conditions, or model structure that would have produced them. You are running the causal chain backwards. Inverse problems tend to be fundamentally harder for several reasons that are mathematical, not just computational. They are often ill-posed: multiple parameter sets can explain the observed data nearly equally well, small amounts of noise in the measurements can correspond to wildly different parameter values, and without additional constraints the problem may have no unique solution. Regularization — adding prior information or smoothness penalties to distinguish plausible solutions — is central to making inverse problems tractable, and choosing the right regularisation is often as much an art as a science.
 
 ### Error-First vs Throughput-First Workflow
 
-#### Error-first workflow
+#### Error-First Workflow
 In an error-first workflow, you begin by asking what accuracy your application actually requires, and every other decision follows from that. You choose the method and stopping criteria based on their error behaviour, instrument the computation with residual checks and convergence diagnostics, and only benchmark runtime once the accuracy is under control. This sequencing ensures you are not optimising speed at the expense of correctness, and it forces you to think carefully about what “good enough” means for the problem at hand.
 
-#### Throughput-first workflow
+#### Throughput-First Workflow
 In a throughput-first workflow, you start from operational constraints — time budgets, hardware limits, scale requirements — and choose the fastest method that is plausible. Accuracy verification comes after, and the standard is pragmatic: if the errors are small enough that the downstream system behaves acceptably, the method is good enough.
 
 Both workflows are legitimate depending on context. In safety-critical engineering — aircraft design, nuclear reactor simulation, structural certification — error-first is usually the only professionally defensible approach. In large-scale production systems like recommendation engines or online optimisation, throughput-first may be exactly right, provided business metrics confirm the accuracy is adequate. The mistake is applying the throughput-first mentality to domains where it is not appropriate.
@@ -211,7 +211,7 @@ Float32 is acceptable when throughput or memory is the binding constraint and yo
 
 Float64 is non-negotiable in several categories. Any computation where errors accumulate over thousands of steps — ODE integration with tight tolerances, eigenvalue solvers on ill-conditioned matrices, long Markov-chain simulations — benefits from the extra fifteen digits of relative precision. Any problem whose condition number approaches $10^7$ or above is spending float32's entire precision budget just on conditioning, leaving nothing for the computation itself. And whenever you are comparing against published numerical benchmarks, you should match their precision to avoid false discrepancies.
 
-#### Rounding modes
+#### Rounding Modes
 
 IEEE 754 defines four rounding modes. The default is round-to-nearest-even, sometimes called banker's rounding. The "even" refers to the tiebreaking rule: when a result is exactly halfway between two representable values, the mode rounds to whichever one has a zero in the least-significant mantissa bit. This alternates rounding direction depending on the value and eliminates the systematic upward bias that plain round-half-up produces over many operations.
 
@@ -227,7 +227,7 @@ In R, vectorisation is built into the language's DNA. Base R functions are gener
 
 In Julia, the situation is strikingly different from both Python and R. Julia's compiler generates native machine code via LLVM, and explicit loops over type-stable arrays run at speeds comparable to C or Fortran. Writing a loop in Julia is idiomatic and efficient — there is no performance penalty for it. This surprises programmers arriving from Python or R, who have internalized “loops are slow” as a reflex. In Julia, that reflex does not apply, and forcing vectorisation where a loop is more natural is the wrong trade-off.
 
-### Example: Inspect machine epsilon in all three languages
+### Example: Inspect Machine Epsilon in All Three Languages
 
 **Python**
 ```python
@@ -316,7 +316,7 @@ One of the most practically useful habits in numerical work is setting up an err
 
 Setting up this budget explicitly before starting prevents a common and expensive mistake: spending days tightening solver tolerances to $10^{-12}$ when modelling uncertainty or data noise dominates the total error at the $10^{-3}$ level. Numerical precision is only worth pursuing to the point where it is no longer the dominant error source.
 
-### Example: Condition number and solve quality
+### Example: Condition Number and Solve Quality
 
 **Python**
 ```python
@@ -498,7 +498,7 @@ println("residual norm: ", result.residual_norm)
 
 All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a hybridised MINPACK routine (essentially Newton with step controls), `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
 
-### Shared Example: Find root of $f(x)=\cos(x)-x$
+### Shared Example: Find Root of $f(x)=\cos(x)-x$
 
 This function has a root near $0.739085...$
 
@@ -705,7 +705,7 @@ The high-level lesson: dense linear algebra has been carefully engineered at the
 A sparse matrix is mostly zeros — perhaps 99% zeros in a large finite element problem. Storing the zeros wastes memory; multiplying by them wastes time. Sparse matrix formats store only the nonzero entries and their indices, and sparse factorisation algorithms exploit the zero structure to avoid unnecessary work. Feeding a million-by-million sparse matrix to a dense BLAS/LAPACK solver will exhaust memory long before producing an answer. This is not an edge case; it is a routine failure mode when solver choices ignore sparsity.
 
 
-#### Fill-in and reordering
+#### Fill-in and Reordering
 
 The sparsity of a matrix before factorisation is not the same as the sparsity of its factors. LU of a sparse matrix can produce factors that are much denser — in the worst case fully dense — even when the original matrix has a tiny fraction of nonzero entries. This creation of new nonzeros during factorisation is called fill-in, and it is the central cost concern in sparse direct solvers.
 
@@ -713,7 +713,7 @@ A concrete illustration: a tridiagonal $n \times n$ matrix has $3n - 2$ nonzeros
 
 Two reordering strategies dominate in practice. **Minimum-degree reordering** eliminates the variable connected to the fewest other variables first, deferring dense regions until last, where they can be handled more compactly. It is cheap to compute and effective on many unstructured problems. **Nested dissection** recursively partitions the sparsity graph into subsets separated by small separators, exploiting the fact that eliminating separator variables last limits communication between subproblems. For 2D grid problems, nested dissection gives $O(n \log n)$ fill-in and $O(n^{3/2})$ operations, compared to $O(n^{3/2})$ fill-in and $O(n^2)$ operations for the natural banded ordering — a decisive win on large grids.
 
-#### Sparse Cholesky vs sparse LU
+#### Sparse Cholesky vs Sparse LU
 
 If your matrix is symmetric positive definite, use sparse Cholesky, not sparse LU. The SPD structure guarantees positive pivots, so no pivoting is needed — the factorisation is stable by construction. This halves the work and memory compared to LU, and the absence of pivoting means the sparsity structure is fully determined by the symbolic step and is consistent across different right-hand sides. For general nonsymmetric matrices, sparse LU with partial pivoting is necessary, though you pay for pivoting with less predictable fill patterns and some memory overhead.
 
@@ -862,7 +862,7 @@ A practical selection loop looks like this:
 
 The key engineering tradeoff is this: stronger preconditioners reduce iterations but cost more to build/apply. The winner is the one that minimises wall-clock time for your real workload, not the one with the fewest Krylov iterations on a toy case.
 
-### Shared Example A: Solve a system and compute residual
+### Shared Example A: Solve a System and Compute Residual
 
 Use:
 $$
@@ -929,7 +929,7 @@ println("x: ", x)
 println("residual norm: ", residual)
 ```
 
-### Shared Example B: Least squares line fit
+### Shared Example B: Least Squares Line Fit
 
 Fit $y \approx \beta_0 + \beta_1 x$ to data.
 
@@ -1213,7 +1213,7 @@ The problem is that high-degree polynomials on uniform grids can oscillate wildl
 The lesson is not that polynomial interpolation is always bad — it is that high-degree polynomial interpolation on equally spaced nodes is often bad. The oscillations are a consequence of this particular combination of basis, node placement, and degree, not an inherent failure of polynomials.
 
 
-#### Cubic spline coefficient construction
+#### Cubic Spline Coefficient Construction
 
 The practical value of understanding what a spline solver actually does is that it demystifies the boundary condition choices and explains why those choices can change the interpolant noticeably near the endpoints.
 
@@ -1242,7 +1242,7 @@ There are several well-established ways to avoid Runge's phenomenon while still 
 **Least-squares polynomial approximation** is the right tool when data is noisy. Rather than requiring the polynomial to pass through every data point exactly, you fit the best polynomial of a fixed degree in the least-squares sense. The degree acts as a regularisation parameter: low degree gives a smooth, robust fit; high degree risks fitting the noise.
 
 
-#### Legendre, Chebyshev, and Hermite polynomials
+#### Legendre, Chebyshev, and Hermite Polynomials
 
 The monomial basis $\{1, x, x^2, \ldots\}$ works conceptually but becomes ill-conditioned at high degree because the basis vectors are nearly parallel in the relevant inner-product sense. Orthogonal polynomial families replace monomials with functions that are mutually orthogonal with respect to a specific inner product, which dramatically improves the conditioning of approximation problems and often reveals natural structure.
 
@@ -1282,7 +1282,7 @@ Understanding interpolation error requires thinking about several interacting fa
 
 **Extrapolation** is perhaps the most underappreciated danger. Polynomial and spline fits can behave unpredictably outside the range of the data, and the further you extrapolate, the worse it gets. Any numerical result claimed outside the fitting domain should be treated with strong skepticism.
 
-### Shared Example: Compare linear interpolation and cubic spline at a target point
+### Shared Example: Compare Linear Interpolation and Cubic Spline at a Target Point
 
 Data: sample $\sin(x)$ on coarse grid and estimate at intermediate points.
 
@@ -1389,7 +1389,7 @@ When a method has error $O(h^p)$, halving the step size reduces the error roughl
 
 But the asymptotic regime requires a fine enough grid to resolve the function's features. On coarse grids, or for rough functions with discontinuities or kinks, the theoretical order may not yet be visible. Observing the expected convergence rate is itself a form of verification — it tells you the method is working correctly and the grid is in the asymptotic regime. If the rate looks wrong, the most likely causes are an implementation error, a function feature the grid is not resolving, or a problem that is rougher than expected.
 
-### Shared Example A: Central difference derivative of $\exp(x)$ at $x=1$
+### Shared Example A: Central Difference Derivative of $\exp(x)$ at $x=1$
 
 **Python**
 ```python
@@ -1697,7 +1697,7 @@ Since $y_{n+1}$ appears inside $f$ on the right-hand side, each step requires so
 For the same test equation, backward Euler gives $y_{n+1}=\frac{1}{1-h\lambda}y_n$. For $\operatorname{Re}(\lambda)<0$, this is stable for any positive step size, which is the key reason implicit methods dominate stiff dynamics despite higher per-step cost.
 
 
-#### BDF methods and implicit Runge-Kutta
+#### BDF Methods and Implicit Runge-Kutta
 
 Backward Euler — implicit, first-order, A-stable — is the entry point to a whole family of implicit multistep methods called backward differentiation formulae (BDF). BDF($k$) approximates $y'(t_{n+1})$ using a $k$-step backward difference of the solution values themselves. BDF(1) is backward Euler. BDF(2) is
 
@@ -1751,7 +1751,7 @@ How to choose in practice:
 
 All three discretize a continuous PDE into algebraic equations. The right one is usually the method whose assumptions best match your domain geometry, conservation requirements, and software ecosystem.
 
-#### Which problem types map to which method?
+#### Which Problem Types Map to Which Method?
 
 The table maps common PDE problem archetypes to suitable first-choice methods and summarises why they fit.
 
@@ -1773,7 +1773,7 @@ A practical way to use this table:
 5. Re-evaluate after a prototype: the best final method is the one that meets accuracy and runtime targets on your real problem, not the one that sounds best in theory.
 
 
-#### 1D Poisson equation: FDM, FEM, and FVM in detail
+#### 1D Poisson Equation: FDM, FEM, and FVM in Detail
 
 The 1D Poisson equation
 
@@ -1881,7 +1881,7 @@ Plots.savefig("figures/poisson_fdm_julia.png")
 
 For this problem ($f(x) = \pi^2 \sin(\pi x)$, exact solution $u(x) = \sin(\pi x)$), the FDM error scales as $O(h^2)$: with $n = 99$ interior points the maximum error is around $8 \times 10^{-5}$, and halving $h$ should reduce it to about $2 \times 10^{-5}$.
 
-### Shared Example A: Non-stiff IVP, compare Euler and RK4
+### Shared Example A: Non-Stiff IVP, Compare Euler and RK4
 
 Problem:
 $$
@@ -2000,7 +2000,7 @@ println("Euler: ", y_euler, " error: ", abs(y_euler - y_true))
 println("RK4  : ", y_rk4, " error: ", abs(y_rk4 - y_true))
 ```
 
-### Shared Example B: Use ecosystem solver with adaptivity
+### Shared Example B: Use Ecosystem Solver With Adaptivity
 
 This is where idiomatic language differences shine.
 
@@ -2249,7 +2249,7 @@ The cost is memory: storing one gradient per data point requires $O(n \cdot d)$ 
 
 **When to use variance reduction.** The honest answer is that variance reduction is worth the overhead in a specific niche: large-$n$ convex or mildly nonconvex objectives where you can afford to store per-example gradient information and you care about precise convergence rather than approximate solutions. Statistical learning problems — logistic regression, SVMs, regularised least squares — fit well. For deep learning the situation is different: the objectives are nonconvex, $n$ is often enormous, per-example gradient storage is impractical, and Adam-family methods with adaptive learning rates empirically outperform SVRG-style methods without requiring the checkpoint overhead. The convergence theory for variance reduction in nonconvex settings is also substantially weaker, so the practical case for it in deep learning is thin.
 
-### Shared Example: Fit exponential decay model
+### Shared Example: Fit Exponential Decay Model
 
 Model:
 $$
@@ -2363,7 +2363,7 @@ This is not just geometric intuition: the subdifferential structure of $\|\cdot\
 
 LASSO beats ridge regression when the true underlying problem is sparse — feature selection in high-dimensional regression, compressed sensing, sparse signal recovery. When most predictors are genuinely relevant and the true coefficient vector is dense, LASSO's preference for zeros works against you and ridge is better. In practice, elastic net (a linear combination of $\ell_1$ and $\ell_2$ penalties) handles both cases and is a robust default when you are unsure.
 
-### Choosing $\mu$: the L-Curve
+### Choosing $\mu$: The L-Curve
 
 Both Tikhonov and LASSO require you to choose $\mu$. This is the central practical difficulty.
 
@@ -2759,7 +2759,7 @@ The normal equations approach to least squares ($A^T A x = A^T b$) squares the c
 
 **Fix**: use QR or SVD directly on $A$ for least squares. Use factorisation-based solves rather than explicit inverses. If the problem is ill-conditioned by nature, regularisation may be the right tool rather than a more stable algorithm.
 
-### Overfitting Noisy Data with Exact Interpolation
+### Overfitting Noisy Data With Exact Interpolation
 
 If data is noisy and you force exact interpolation (high-degree polynomial or a spline knot at every point), you usually fit the noise as well as the signal. The curve hits every observed point, but can oscillate badly between points and behave unpredictably outside the data range.
 
