@@ -1,6 +1,6 @@
 # Pi Coding Agent: A Practical Primer
 
-*7 October 2026. Refreshed against Pi 1.0.4 and official documentation; earlier community-package checks retain their dates.*
+*Refreshed against Pi 1.0.4 and official documentation; earlier community-package checks retain their dates.*
 
 ## The Short Version
 
