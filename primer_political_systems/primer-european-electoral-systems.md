@@ -1,16 +1,20 @@
-# A Practical Primer On European Electoral Systems
+# A Practical Primer on European Electoral Systems
 
 ## What This Covers
 
 Ten European national electoral systems: how each converts votes into seats, how seats translate into governments, and how the design of each system shapes political outcomes in practice. The primer includes comparative analysis, worked numerical examples, and a framework for evaluating coalition risk.
 
-**Review date: 7 October 2026.** Election examples are dated historical outcomes, not live cabinet or parliamentary membership trackers. Denmark and Sweden's examples include their 2026 elections; government formation is discussed only where supported by the cited record.
+*Verified against primary sources for sections 1–10; unverified claims are flagged inline.*
+
+**Review date: 12 October 2026.** Election examples are dated historical outcomes, not live cabinet or parliamentary membership trackers. Denmark and Sweden's examples include their 2026 elections; government formation is discussed only where supported by the cited record.
 
 ## What This Is Not
 
 This is not a complete history of electoral-system evolution, and it makes no argument for which system is best. It is not a guide to voting as a citizen in any particular country. The EU Parliament election process is used as contextual scaffolding, but this primer is about domestic systems, not the EU legislature itself.
 
 European voting systems are different ways of solving the same problem: turning votes into seats and seats into governments. They optimise for different priorities, including proportional fairness, local MP accountability, party control, and coalition stability. That is why systems that look similar on paper can produce very different political outcomes.
+
+In this primer, an electoral system means the rules that convert votes into seats. A constitutional system means the rules that allocate executive authority and parliamentary accountability. A political outcome means the government, coalition, or bargaining pattern produced after those rules interact with parties, geography, and political choices. The terms are related, but they are not interchangeable.
 
 If you want the short version, the real argument underneath almost every European system is this: how much should the system reward a clear winner, and how much should it try to mirror the actual shape of the vote? Once you see that trade-off, the rest of the map gets easier to read.
 
@@ -46,7 +50,7 @@ Those levels are linked but not identical. You do not vote in one election and g
 
 #### What National Elections Actually Change at EU Level
 
-National elections matter because they decide who runs each member state government. Those governments then sit in the European Council and send ministers to the Council of the EU. So even if an election is "national," it shifts bargaining power inside EU lawmaking.
+National elections matter because they decide who runs each member state government. Those governments then sit in the European Council and send ministers to the Council of the EU. So even if an election is "national", it shifts bargaining power inside EU lawmaking.
 
 At the same time, European Parliament elections run on their own cycle and party groups. That creates a dual-democratic system:
 
@@ -122,7 +126,7 @@ That is the whole game. Everything else is detail.
 
 ## The 10 Electoral Systems
 
-### The United Kingdom: First-Past-The-Post
+### The United Kingdom: First-Past-the-Post
 
 The UK is the simplest system in this group, and simplicity is both its strength and its curse.
 
@@ -176,7 +180,7 @@ The presidential runoff guarantees a majority of valid votes for the winner. A l
 
 Ireland is where the ballot gets more elegant and more complicated at the same time.
 
-Voters rank candidates: 1, 2, 3, and so on. Seats are won in multi-member constituencies using the Droop quota, which is basically the minimum vote share needed to guarantee a seat in a district with several seats. If a candidate has surplus votes, those votes transfer. If nobody has enough, the lowest candidate gets eliminated and their ballots transfer.
+Voters rank candidates: 1, 2, 3, and so on. Seats are won in multi-member constituencies using the Droop quota, which is roughly the minimum vote share needed to guarantee a seat in a district with several seats. If a candidate has surplus votes, those votes transfer. If nobody has enough, the lowest candidate gets eliminated and their ballots transfer.
 
 This is one of the nicest systems to explain with an example because it feels almost intuitive once you watch the count move.
 
@@ -313,7 +317,7 @@ Sweden is more proportional than France or the UK, more open than Spain, and mor
 
 ### Romania: Closed-List PR With Thresholds and a Very Political Reality
 
-Romania currently uses closed-list proportional representation for its parliament. Parties submit lists, voters choose a list, and seats are allocated with thresholds that weed out the smallest parties.
+As of October 2026, Romania uses closed-list proportional representation for its parliament. Parties submit lists, voters choose a list, and seats are allocated with thresholds that weed out the smallest parties.
 
 This parliamentary ballot sits within a semi-presidential constitution. Voters elect the president separately; the president designates a prime-ministerial candidate after consultations, and the proposed government needs parliament's confidence. The government is politically accountable to parliament. A presidential result and a parliamentary list result therefore answer different questions about who can govern.
 
@@ -496,6 +500,21 @@ Why it matters: some disagreements are symbolic; others are cabinet-breaking.
 Worsening signal: coalition leaders escalate disputes in public rather than containing them in bargaining forums.
 
 ## Technical Analysis Tools
+
+## Notation
+
+The formulae in this primer use the following symbols. Vote and seat shares are percentages on the same scale within each calculation.
+
+| Symbol | Meaning | First use |
+|---|---|---|
+| $V$ | Valid votes in a district or election | Droop quota |
+| $S$ | Seats available in that district or election | Droop quota |
+| $v_i$ | Vote share of party $i$ | Gallagher index |
+| $s_i$ | Seat share of party $i$ | Gallagher index |
+| $G$ | Gallagher index of vote-seat disproportionality | Gallagher index |
+| $M$ | District magnitude, or number of seats in a district | District magnitude comparison |
+
+No complex-number convention is needed: this primer contains no imaginary unit.
 
 ### The Math Layer That Usually Gets Hidden
 
@@ -692,3 +711,11 @@ The practical way to read the map is to ask three questions at once:
 Viewed that way, the country differences stop looking random. Majoritarian systems buy decisiveness at the cost of proportionality. Proportional systems buy representativeness at the cost of negotiation complexity. Hybrid systems split the difference and push trade-offs into institutional detail.
 
 For analysis, the useful endpoint is not choosing a "best" system. It is identifying which political behaviour each design systematically rewards, and what that implies for policy stability, coalition durability, and EU negotiation outcomes.
+
+## Further Reading
+
+- [International IDEA Electoral System Design Database](https://www.idea.int/data-tools/data/electoral-system-design): comparative descriptions of electoral rules and country-level design choices.
+- [ACE Electoral Knowledge Network](https://aceproject.org/): practical reference material on electoral systems, administration, and comparative terminology.
+- [European Parliament: national electoral rules](https://www.europarl.europa.eu/at-your-service/en/be-heard/elections): official context for European Parliament elections, kept separate from the domestic systems analysed here.
+- [Gallagher index overview](https://www.tcd.ie/Political_Science/people/michael_gallagher/ElSystems/): Michael Gallagher's explanation of the disproportionality index used in the worked example.
+- [D'Hondt method](https://www.europarl.europa.eu/elections2024/en/how-to-vote/): an official worked context for proportional seat allocation and party-list elections.

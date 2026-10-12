@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Practical Primer On European Electoral Systems</title>
+  <title>A Practical Primer on European Electoral Systems</title>
   <style>
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -538,9 +538,9 @@ max-width: none;
 <body>
 
   <nav class="navbar">
-    <span class="navbar-brand">A Practical Primer On European Electoral
+    <span class="navbar-brand">A Practical Primer on European Electoral
 Systems</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -579,7 +579,7 @@ Pathway Examples</a></li>
 <li><a href="#the-10-electoral-systems" id="toc-the-10-electoral-systems"><span class="toc-section-number">4</span> The 10 Electoral Systems</a>
 <ul>
 <li><a href="#the-united-kingdom-first-past-the-post" id="toc-the-united-kingdom-first-past-the-post"><span class="toc-section-number">4.1</span> The United Kingdom:
-First-Past-The-Post</a></li>
+First-Past-the-Post</a></li>
 <li><a href="#france-two-round-voting" id="toc-france-two-round-voting"><span class="toc-section-number">4.2</span> France: Two-Round Voting</a></li>
 <li><a href="#ireland-stv-or-ranked-choice-with-actual-teeth" id="toc-ireland-stv-or-ranked-choice-with-actual-teeth"><span class="toc-section-number">4.3</span> Ireland: STV, or Ranked Choice
 With Actual Teeth</a></li>
@@ -640,39 +640,41 @@ Trend</a></li>
 Incompatibility</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#technical-analysis-tools" id="toc-technical-analysis-tools"><span class="toc-section-number">6</span> Technical Analysis Tools</a>
+<li><a href="#technical-analysis-tools" id="toc-technical-analysis-tools"><span class="toc-section-number">6</span> Technical Analysis Tools</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">7</span> Notation</a>
 <ul>
-<li><a href="#the-math-layer-that-usually-gets-hidden" id="toc-the-math-layer-that-usually-gets-hidden"><span class="toc-section-number">6.1</span> The Math Layer That Usually Gets
+<li><a href="#the-math-layer-that-usually-gets-hidden" id="toc-the-math-layer-that-usually-gets-hidden"><span class="toc-section-number">7.1</span> The Math Layer That Usually Gets
 Hidden</a>
 <ul>
-<li><a href="#dhondt-versus-sainte-laguë-in-one-minute" id="toc-dhondt-versus-sainte-laguë-in-one-minute"><span class="toc-section-number">6.1.1</span> D’Hondt Versus Sainte-Laguë in
+<li><a href="#dhondt-versus-sainte-laguë-in-one-minute" id="toc-dhondt-versus-sainte-laguë-in-one-minute"><span class="toc-section-number">7.1.1</span> D’Hondt Versus Sainte-Laguë in
 One Minute</a></li>
-<li><a href="#why-district-size-quietly-dominates-outcomes" id="toc-why-district-size-quietly-dominates-outcomes"><span class="toc-section-number">6.1.2</span> Why District Size Quietly
+<li><a href="#why-district-size-quietly-dominates-outcomes" id="toc-why-district-size-quietly-dominates-outcomes"><span class="toc-section-number">7.1.2</span> Why District Size Quietly
 Dominates Outcomes</a></li>
-<li><a href="#quick-formulas-you-actually-use" id="toc-quick-formulas-you-actually-use"><span class="toc-section-number">6.1.3</span> Quick Formulas You Actually
+<li><a href="#quick-formulas-you-actually-use" id="toc-quick-formulas-you-actually-use"><span class="toc-section-number">7.1.3</span> Quick Formulas You Actually
 Use</a></li>
-<li><a href="#worked-example-gallagher-index-in-practice" id="toc-worked-example-gallagher-index-in-practice"><span class="toc-section-number">6.1.4</span> Worked Example: Gallagher Index
+<li><a href="#worked-example-gallagher-index-in-practice" id="toc-worked-example-gallagher-index-in-practice"><span class="toc-section-number">7.1.4</span> Worked Example: Gallagher Index
 in Practice</a></li>
-<li><a href="#worked-example-district-magnitude-sensitivity" id="toc-worked-example-district-magnitude-sensitivity"><span class="toc-section-number">6.1.5</span> Worked Example: District
+<li><a href="#worked-example-district-magnitude-sensitivity" id="toc-worked-example-district-magnitude-sensitivity"><span class="toc-section-number">7.1.5</span> Worked Example: District
 Magnitude Sensitivity</a></li>
 </ul></li>
-<li><a href="#same-votes-different-parliament-a-worked-comparison" id="toc-same-votes-different-parliament-a-worked-comparison"><span class="toc-section-number">6.2</span> Same Votes, Different Parliament:
+<li><a href="#same-votes-different-parliament-a-worked-comparison" id="toc-same-votes-different-parliament-a-worked-comparison"><span class="toc-section-number">7.2</span> Same Votes, Different Parliament:
 A Worked Comparison</a></li>
-<li><a href="#coalition-mechanics-and-government-durability" id="toc-coalition-mechanics-and-government-durability"><span class="toc-section-number">6.3</span> Coalition Mechanics and Government
+<li><a href="#coalition-mechanics-and-government-durability" id="toc-coalition-mechanics-and-government-durability"><span class="toc-section-number">7.3</span> Coalition Mechanics and Government
 Durability</a></li>
-<li><a href="#a-practical-analyst-checklist" id="toc-a-practical-analyst-checklist"><span class="toc-section-number">6.4</span> A Practical Analyst
+<li><a href="#a-practical-analyst-checklist" id="toc-a-practical-analyst-checklist"><span class="toc-section-number">7.4</span> A Practical Analyst
 Checklist</a></li>
-<li><a href="#reusable-political-system-risk-scoring-rubric" id="toc-reusable-political-system-risk-scoring-rubric"><span class="toc-section-number">6.5</span> Reusable Political-System Risk
+<li><a href="#reusable-political-system-risk-scoring-rubric" id="toc-reusable-political-system-risk-scoring-rubric"><span class="toc-section-number">7.5</span> Reusable Political-System Risk
 Scoring Rubric</a>
 <ul>
-<li><a href="#worked-scoring-example-spain-style-profile" id="toc-worked-scoring-example-spain-style-profile"><span class="toc-section-number">6.5.1</span> Worked Scoring Example:
+<li><a href="#worked-scoring-example-spain-style-profile" id="toc-worked-scoring-example-spain-style-profile"><span class="toc-section-number">7.5.1</span> Worked Scoring Example:
 Spain-Style Profile</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#conclusion" id="toc-conclusion"><span class="toc-section-number">7</span> Conclusion</a>
+<li><a href="#conclusion" id="toc-conclusion"><span class="toc-section-number">8</span> Conclusion</a>
 <ul>
-<li><a href="#main-takeaway" id="toc-main-takeaway"><span class="toc-section-number">7.1</span> Main Takeaway</a></li>
+<li><a href="#main-takeaway" id="toc-main-takeaway"><span class="toc-section-number">8.1</span> Main Takeaway</a></li>
 </ul></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">9</span> Further Reading</a></li>
 </ul></div>
 
     </aside>
@@ -687,7 +689,9 @@ seats, how seats translate into governments, and how the design of each
 system shapes political outcomes in practice. The primer includes
 comparative analysis, worked numerical examples, and a framework for
 evaluating coalition risk.</p>
-<p><strong>Review date: 7 October 2026.</strong> Election examples are
+<p><em>Verified against primary sources for sections 1–10; unverified
+claims are flagged inline.</em></p>
+<p><strong>Review date: 12 October 2026.</strong> Election examples are
 dated historical outcomes, not live cabinet or parliamentary membership
 trackers. Denmark and Sweden’s examples include their 2026 elections;
 government formation is discussed only where supported by the cited
@@ -704,6 +708,12 @@ optimise for different priorities, including proportional fairness,
 local MP accountability, party control, and coalition stability. That is
 why systems that look similar on paper can produce very different
 political outcomes.</p>
+<p>In this primer, an electoral system means the rules that convert
+votes into seats. A constitutional system means the rules that allocate
+executive authority and parliamentary accountability. A political
+outcome means the government, coalition, or bargaining pattern produced
+after those rules interact with parties, geography, and political
+choices. The terms are related, but they are not interchangeable.</p>
 <p>If you want the short version, the real argument underneath almost
 every European system is this: how much should the system reward a clear
 winner, and how much should it try to mirror the actual shape of the
@@ -766,7 +776,7 @@ Actually Change at EU Level</h3>
 <p>National elections matter because they decide who runs each member
 state government. Those governments then sit in the European Council and
 send ministers to the Council of the EU. So even if an election is
-“national,” it shifts bargaining power inside EU lawmaking.</p>
+“national”, it shifts bargaining power inside EU lawmaking.</p>
 <p>At the same time, European Parliament elections run on their own
 cycle and party groups. That creates a dual-democratic system:</p>
 <ol type="1">
@@ -879,7 +889,7 @@ blend of district races and list seats.</p>
 <p>That is the whole game. Everything else is detail.</p>
 <h1 data-number="4" id="the-10-electoral-systems"><span class="header-section-number">4</span> The 10 Electoral Systems</h1>
 <h2 data-number="4.1" id="the-united-kingdom-first-past-the-post"><span class="header-section-number">4.1</span> The United Kingdom:
-First-Past-The-Post</h2>
+First-Past-the-Post</h2>
 <p>The UK is the simplest system in this group, and simplicity is both
 its strength and its curse.</p>
 <p>The country is split into 650 constituencies, and each constituency
@@ -990,11 +1000,11 @@ With Actual Teeth</h2>
 <p>Ireland is where the ballot gets more elegant and more complicated at
 the same time.</p>
 <p>Voters rank candidates: 1, 2, 3, and so on. Seats are won in
-multi-member constituencies using the Droop quota, which is basically
-the minimum vote share needed to guarantee a seat in a district with
-several seats. If a candidate has surplus votes, those votes transfer.
-If nobody has enough, the lowest candidate gets eliminated and their
-ballots transfer.</p>
+multi-member constituencies using the Droop quota, which is roughly the
+minimum vote share needed to guarantee a seat in a district with several
+seats. If a candidate has surplus votes, those votes transfer. If nobody
+has enough, the lowest candidate gets eliminated and their ballots
+transfer.</p>
 <p>This is one of the nicest systems to explain with an example because
 it feels almost intuitive once you watch the count move.</p>
 <p>Toy example in a 3-seat district with 10,000 valid votes:</p>
@@ -1280,9 +1290,10 @@ system tries very hard to make votes and seats line up.</p>
 Spain, and more party-list-driven than Ireland.</p>
 <h2 data-number="4.10" id="romania-closed-list-pr-with-thresholds-and-a-very-political-reality"><span class="header-section-number">4.10</span> Romania: Closed-List PR With
 Thresholds and a Very Political Reality</h2>
-<p>Romania currently uses closed-list proportional representation for
-its parliament. Parties submit lists, voters choose a list, and seats
-are allocated with thresholds that weed out the smallest parties.</p>
+<p>As of October 2026, Romania uses closed-list proportional
+representation for its parliament. Parties submit lists, voters choose a
+list, and seats are allocated with thresholds that weed out the smallest
+parties.</p>
 <p>This parliamentary ballot sits within a semi-presidential
 constitution. Voters elect the president separately; the president
 designates a prime-ministerial candidate after consultations, and the
@@ -1754,7 +1765,58 @@ cabinet-breaking.</p>
 <p>Worsening signal: coalition leaders escalate disputes in public
 rather than containing them in bargaining forums.</p>
 <h1 data-number="6" id="technical-analysis-tools"><span class="header-section-number">6</span> Technical Analysis Tools</h1>
-<h2 data-number="6.1" id="the-math-layer-that-usually-gets-hidden"><span class="header-section-number">6.1</span> The Math Layer That Usually
+<h1 data-number="7" id="notation"><span class="header-section-number">7</span> Notation</h1>
+<p>The formulae in this primer use the following symbols. Vote and seat
+shares are percentages on the same scale within each calculation.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(V\)</span></td>
+<td>Valid votes in a district or election</td>
+<td>Droop quota</td>
+</tr>
+<tr>
+<td><span class="math inline">\(S\)</span></td>
+<td>Seats available in that district or election</td>
+<td>Droop quota</td>
+</tr>
+<tr>
+<td><span class="math inline">\(v_i\)</span></td>
+<td>Vote share of party <span class="math inline">\(i\)</span></td>
+<td>Gallagher index</td>
+</tr>
+<tr>
+<td><span class="math inline">\(s_i\)</span></td>
+<td>Seat share of party <span class="math inline">\(i\)</span></td>
+<td>Gallagher index</td>
+</tr>
+<tr>
+<td><span class="math inline">\(G\)</span></td>
+<td>Gallagher index of vote-seat disproportionality</td>
+<td>Gallagher index</td>
+</tr>
+<tr>
+<td><span class="math inline">\(M\)</span></td>
+<td>District magnitude, or number of seats in a district</td>
+<td>District magnitude comparison</td>
+</tr>
+</tbody>
+</table>
+<p>No complex-number convention is needed: this primer contains no
+imaginary unit.</p>
+<h2 data-number="7.1" id="the-math-layer-that-usually-gets-hidden"><span class="header-section-number">7.1</span> The Math Layer That Usually
 Gets Hidden</h2>
 <p>Most primers stop at labels like FPTP, STV, or PR. The practical
 decisions, though, are often made in the allocation formula details. Two
@@ -1769,7 +1831,7 @@ by small district size).</li>
 <li>Allocation formula (D’Hondt, Sainte-Laguë, largest remainder, and so
 on).</li>
 </ol>
-<h3 data-number="6.1.1" id="dhondt-versus-sainte-laguë-in-one-minute"><span class="header-section-number">6.1.1</span> D’Hondt Versus Sainte-Laguë
+<h3 data-number="7.1.1" id="dhondt-versus-sainte-laguë-in-one-minute"><span class="header-section-number">7.1.1</span> D’Hondt Versus Sainte-Laguë
 in One Minute</h3>
 <p>D’Hondt divides party vote totals by 1, 2, 3, … and assigns seats to
 the highest quotients. Because the divisor starts at 1 and then
@@ -1779,7 +1841,7 @@ top.</p>
 advantage and is usually friendlier to mid-sized parties.</p>
 <p>That is why two countries with similar vote shares can still end up
 with different coalition arithmetic.</p>
-<h3 data-number="6.1.2" id="why-district-size-quietly-dominates-outcomes"><span class="header-section-number">6.1.2</span> Why District Size Quietly
+<h3 data-number="7.1.2" id="why-district-size-quietly-dominates-outcomes"><span class="header-section-number">7.1.2</span> Why District Size Quietly
 Dominates Outcomes</h3>
 <p>If a district only has 3 to 5 seats, very small parties are
 effectively locked out even if there is no strict legal threshold. If a
@@ -1788,7 +1850,7 @@ shares.</p>
 <p>That is one reason the Netherlands (national district) feels so
 different from Spain (provincial districts), even though both live in
 the PR family.</p>
-<h3 data-number="6.1.3" id="quick-formulas-you-actually-use"><span class="header-section-number">6.1.3</span> Quick Formulas You Actually
+<h3 data-number="7.1.3" id="quick-formulas-you-actually-use"><span class="header-section-number">7.1.3</span> Quick Formulas You Actually
 Use</h3>
 <p>For STV, the Droop quota is:</p>
 <p><span class="math display">\[
@@ -1804,7 +1866,7 @@ G = \sqrt{\frac{1}{2}\sum_i(v_i - s_i)^2}
 and <span class="math inline">\(s_i\)</span> is party seat share.</p>
 <p>Higher <span class="math inline">\(G\)</span> means more vote-seat
 distortion.</p>
-<h3 data-number="6.1.4" id="worked-example-gallagher-index-in-practice"><span class="header-section-number">6.1.4</span> Worked Example: Gallagher
+<h3 data-number="7.1.4" id="worked-example-gallagher-index-in-practice"><span class="header-section-number">7.1.4</span> Worked Example: Gallagher
 Index in Practice</h3>
 <p>Suppose an election produces the following national shares:</p>
 <table>
@@ -1854,7 +1916,7 @@ G = \sqrt{\frac{1}{2} \cdot 86} = \sqrt{43} \approx 6.56
 <p>Interpretation in plain English: a value around 6 to 7 signals a
 noticeable but not extreme vote-seat distortion. In applied work, the
 trend over time is often more useful than one isolated value.</p>
-<h3 data-number="6.1.5" id="worked-example-district-magnitude-sensitivity"><span class="header-section-number">6.1.5</span> Worked Example: District
+<h3 data-number="7.1.5" id="worked-example-district-magnitude-sensitivity"><span class="header-section-number">7.1.5</span> Worked Example: District
 Magnitude Sensitivity</h3>
 <p>Hold votes constant across two district designs:</p>
 <table>
@@ -1910,7 +1972,7 @@ Magnitude Sensitivity</h3>
 threshold falls, so smaller parties need less concentrated support to
 win seats. That one design choice often matters as much as the
 allocation formula itself.</p>
-<h2 data-number="6.2" id="same-votes-different-parliament-a-worked-comparison"><span class="header-section-number">6.2</span> Same Votes, Different
+<h2 data-number="7.2" id="same-votes-different-parliament-a-worked-comparison"><span class="header-section-number">7.2</span> Same Votes, Different
 Parliament: A Worked Comparison</h2>
 <p>Take this stylised national vote split:</p>
 <table>
@@ -1980,7 +2042,7 @@ proportionality</td>
 <p>The key practical insight is not that one is morally superior. It is
 that each design encodes a political theory about governability versus
 representativeness.</p>
-<h2 data-number="6.3" id="coalition-mechanics-and-government-durability"><span class="header-section-number">6.3</span> Coalition Mechanics and
+<h2 data-number="7.3" id="coalition-mechanics-and-government-durability"><span class="header-section-number">7.3</span> Coalition Mechanics and
 Government Durability</h2>
 <p>Electoral-system discussions often end at seat allocation, but
 governing risk shows up one step later in coalition formation.</p>
@@ -2002,7 +2064,7 @@ depending on party-system fragmentation.</li>
 <li>Minority government viability depends heavily on
 confidence-and-supply norms, not only electoral math.</li>
 </ol>
-<h2 data-number="6.4" id="a-practical-analyst-checklist"><span class="header-section-number">6.4</span> A Practical Analyst
+<h2 data-number="7.4" id="a-practical-analyst-checklist"><span class="header-section-number">7.4</span> A Practical Analyst
 Checklist</h2>
 <p>When you assess a country’s electoral system for policy risk, market
 risk, or geopolitical context, run this checklist:</p>
@@ -2023,7 +2085,7 @@ parties, or many?</li>
 <p>If you answer these seven questions, you usually understand the
 political-system risk far better than by just naming the electoral
 model.</p>
-<h2 data-number="6.5" id="reusable-political-system-risk-scoring-rubric"><span class="header-section-number">6.5</span> Reusable Political-System Risk
+<h2 data-number="7.5" id="reusable-political-system-risk-scoring-rubric"><span class="header-section-number">7.5</span> Reusable Political-System Risk
 Scoring Rubric</h2>
 <p>This rubric is built for repeatable country comparison. Score each
 dimension from 1 to 5, where 1 is low risk contribution and 5 is high
@@ -2082,7 +2144,7 @@ risk contribution.</p>
 </tr>
 </tbody>
 </table>
-<h3 data-number="6.5.1" id="worked-scoring-example-spain-style-profile"><span class="header-section-number">6.5.1</span> Worked Scoring Example:
+<h3 data-number="7.5.1" id="worked-scoring-example-spain-style-profile"><span class="header-section-number">7.5.1</span> Worked Scoring Example:
 Spain-Style Profile</h3>
 <p>Illustrative scoring:</p>
 <ol type="1">
@@ -2111,8 +2173,8 @@ budget defeats, coalition exits).</li>
 <li>Escalate risk flags when score increases by 3 or more points
 cycle-on-cycle.</li>
 </ol>
-<h1 data-number="7" id="conclusion"><span class="header-section-number">7</span> Conclusion</h1>
-<h2 data-number="7.1" id="main-takeaway"><span class="header-section-number">7.1</span> Main Takeaway</h2>
+<h1 data-number="8" id="conclusion"><span class="header-section-number">8</span> Conclusion</h1>
+<h2 data-number="8.1" id="main-takeaway"><span class="header-section-number">8.1</span> Main Takeaway</h2>
 <p>European electoral systems are not cosmetic variations on one model.
 They are different institutional choices about representation,
 governability, and accountability.</p>
@@ -2134,6 +2196,25 @@ institutional detail.</p>
 is identifying which political behaviour each design systematically
 rewards, and what that implies for policy stability, coalition
 durability, and EU negotiation outcomes.</p>
+<h1 data-number="9" id="further-reading"><span class="header-section-number">9</span> Further Reading</h1>
+<ul>
+<li><a href="https://www.idea.int/data-tools/data/electoral-system-design">International
+IDEA Electoral System Design Database</a>: comparative descriptions of
+electoral rules and country-level design choices.</li>
+<li><a href="https://aceproject.org/">ACE Electoral Knowledge
+Network</a>: practical reference material on electoral systems,
+administration, and comparative terminology.</li>
+<li><a href="https://www.europarl.europa.eu/at-your-service/en/be-heard/elections">European
+Parliament: national electoral rules</a>: official context for European
+Parliament elections, kept separate from the domestic systems analysed
+here.</li>
+<li><a href="https://www.tcd.ie/Political_Science/people/michael_gallagher/ElSystems/">Gallagher
+index overview</a>: Michael Gallagher’s explanation of the
+disproportionality index used in the worked example.</li>
+<li><a href="https://www.europarl.europa.eu/elections2024/en/how-to-vote/">D’Hondt
+method</a>: an official worked context for proportional seat allocation
+and party-list elections.</li>
+</ul>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
