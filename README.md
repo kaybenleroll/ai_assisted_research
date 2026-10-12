@@ -31,6 +31,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 <!-- BEGIN AI AGENTS AND CODING TOOLS -->
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
+
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
 | [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | 2026-10-12 | Comprehensive guide to designing and implementing agentic AI systems. Companion: [Agent Architecture Quick Reference](primer_building_ai_agents/primer_agent_quick_reference.html) |
@@ -47,6 +48,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 <!-- BEGIN DEVELOPER TOOLING -->
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
+
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
 | [Containerisation: Docker, Podman, and How Kubernetes Fits In](primer_containerization/primer_containerization.html) · [PDF](primer_containerization/primer_containerization.pdf) | 2026-10-12 | Container fundamentals and the OCI spec, Docker's daemon architecture versus Podman's daemonless model, and how Kubernetes orchestrates it all |
@@ -58,6 +60,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 <!-- BEGIN QUANTITATIVE FOUNDATIONS -->
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
+
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
 | [Catastrophe ELT Workbook](workbook_catmodel_elt_documents/outputs/workbook_elt.html) | 2026-09-07 | *Quarto workbook, executable.* Catastrophe event-loss-table modelling — building and validating an ELT pipeline in R and Python. Companions: [Quickstart](workbook_catmodel_elt_documents/outputs/workbook_quickstart.html) · [Executable Index](workbook_catmodel_elt_documents/outputs/workbook_executable_index.html) |
@@ -72,6 +75,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 <!-- BEGIN SOCIETY AND INSTITUTIONS -->
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
+
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
 | [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) · [PDF](primer_comparative_religion/primer-comparative-religion.pdf) | 2026-10-12 | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
@@ -83,6 +87,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 <!-- BEGIN SILO RPG MATERIALS -->
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
+
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
 | [Document Index](gaming_silo_rpg/gaming_silo_index.html) · [PDF](gaming_silo_rpg/gaming_silo_index.pdf) | 2026-10-11 | Navigation map for all Silo RPG source documents |

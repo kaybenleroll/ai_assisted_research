@@ -125,7 +125,7 @@ def generate_recent(dates: dict[Document, tuple[date, str]]) -> str:
 
 def generate_category(category: str, dates: dict[Document, tuple[date, str]]) -> str:
     begin, end = markers(category)
-    lines = [begin, "<!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->",
+    lines = [begin, "<!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->", "",
              "| Document | Last reviewed | Description |", "|----------|---------------|-------------|"]
     lines.extend(
         f"| {link(doc, catalogue=True)} | {dates[doc][1]} | {doc.description} |"
