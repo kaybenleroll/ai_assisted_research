@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Python for Expert R Users: A Practical
 Migration Primer</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -934,6 +934,7 @@ Migration</a></li>
 Thumb</a></li>
 </ul></li>
 <li><a href="#final-perspective" id="toc-final-perspective"><span class="toc-section-number">15</span> Final Perspective</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">16</span> Further Reading</a></li>
 </ul></div>
 
     </aside>
@@ -1002,6 +1003,8 @@ Python from first principles, survey every package, or replace package
 documentation and statistical texts. Use the examples as durable
 patterns and decision tests, not as a promise of one-to-one API
 equivalence.</p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h2 data-number="1.2" id="why-python-feels-different-even-when-capability-is-similar"><span class="header-section-number">1.2</span> Why Python Feels Different Even
 When Capability Is Similar</h2>
 <p>R with tidyverse gives you an unusually coherent grammar. The verbs
@@ -1050,7 +1053,7 @@ habits you can adopt.</p>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>active[<span class="st">&quot;value_norm&quot;</span>] <span class="op">=</span> active[<span class="st">&quot;value&quot;</span>] <span class="op">/</span> active[<span class="st">&quot;value&quot;</span>].<span class="bu">max</span>()</span></code></pre></div>
 <p>The <code>.copy()</code> call is not only for technical correctness.
 It is also documentation. It says, “this branch is intentionally
-independent.” That simple signal prevents many subtle bugs.</p>
+independent”. That simple signal prevents many subtle bugs.</p>
 <h2 data-number="2.2" id="missing-data-semantics-na-vs-nan-none-and-nullable-dtypes"><span class="header-section-number">2.2</span> Missing Data Semantics: NA vs
 NaN, None, and Nullable <code>dtypes</code></h2>
 <p>R users are used to a coherent <code>NA</code> story. Python
@@ -1122,7 +1125,7 @@ and improves portability.</p>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> Path(<span class="st">&quot;data&quot;</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> pd.read_csv(base <span class="op">/</span> <span class="st">&quot;transactions.csv&quot;</span>, parse_dates<span class="op">=</span>[<span class="st">&quot;txn_date&quot;</span>])</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>raw.to_parquet(base <span class="op">/</span> <span class="st">&quot;transactions.parquet&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
-<p>Think of this style as “boring and durable.” In production analytics,
+<p>Think of this style as “boring and durable”. In production analytics,
 boring and durable wins.</p>
 <h1 data-number="3" id="translating-tidyverse-workflows-in-practice"><span class="header-section-number">3</span> Translating Tidyverse Workflows
 in Practice</h1>
@@ -1594,7 +1597,7 @@ limits parallel execution of Python bytecode in threads. Thread pools
 work well for waiting-heavy tasks and can also parallelize native
 computation that releases the GIL. Process pools remain a useful
 baseline for independent, Python-heavy CPU tasks.</p>
-<p>As of October 7, 2026, Python 3.14’s <a href="https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported">free-threaded
+<p>As of 7 October 2026, Python 3.14’s <a href="https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported">free-threaded
 build is officially supported but still optional</a>. With the GIL
 disabled, Python threads can run on multiple cores. Check dependency
 compatibility and benchmark your workload: an extension without
@@ -3089,7 +3092,7 @@ that nobody can maintain.</p>
 <h2 data-number="12.2" id="playbook-2-translating-analytical-modelling-workflows-not-just-individual-models"><span class="header-section-number">12.2</span> Playbook 2: Translating
 Analytical Modelling Workflows, Not Just Individual Models</h2>
 <p>Teams often believe modelling migration means “fit the same model in
-Python and compare coefficients.” That is necessary and not sufficient.
+Python and compare coefficients”. That is necessary and not sufficient.
 Real modelling workflows include data prep assumptions, leakage
 controls, split policies, calibration, threshold governance, and
 monitoring. If you do not port those behaviours too, you may get a model
@@ -3304,7 +3307,7 @@ cross-team trust.</p>
 <h2 data-number="12.7" id="playbook-7-migration-planning-by-wave-instead-of-by-technology-layer"><span class="header-section-number">12.7</span> Playbook 7: Migration Planning
 by Wave Instead of by Technology Layer</h2>
 <p>Many migrations are planned as “first rewrite all wrangling, then all
-models, then all dashboards.” That looks tidy and often fails because
+models, then all dashboards”. That looks tidy and often fails because
 business value delivery is delayed too long.</p>
 <p>A more robust strategy is wave-based by workflow value. Wave 1 should
 target high-value, medium-complexity workflows with strong testability
@@ -3356,9 +3359,9 @@ Logic Into Maintainable Python Modules</h2>
 notebook-to-module boundary when workflow boundaries remain
 implicit.</p>
 <p>A good migration habit is to treat notebooks as hypothesis
-workspaces, not as ownership boundaries. As soon as a transformation or
-model behaviour is stable enough that someone else depends on it, move
-it to a module with explicit inputs and outputs. Keep the notebook as a
+workspaces, not as ownership boundaries. When a transformation or model
+behaviour is stable enough that someone else depends on it, move it to a
+module with explicit inputs and outputs. Keep the notebook as a
 narrative and visual explanation layer, but let the reusable logic live
 in code that can be imported, tested, linted, and versioned.</p>
 <p>Concretely, if a notebook cell does three things, split them:</p>
@@ -3450,7 +3453,7 @@ dataset</li>
 <span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>    delta <span class="op">=</span> (py[col] <span class="op">-</span> r[col]).<span class="bu">abs</span>().<span class="bu">max</span>()</span>
 <span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> delta <span class="op">&lt;=</span> atol, <span class="ss">f&quot;feature </span><span class="sc">{</span>col<span class="sc">}</span><span class="ss"> drifted: max abs delta=</span><span class="sc">{</span>delta<span class="sc">}</span><span class="ss">&quot;</span></span></code></pre></div>
 <p>Another high-value strategy is to separate “raw feature columns” from
-“model-ready feature columns.” In many legacy R pipelines, these phases
+“model-ready feature columns”. In many legacy R pipelines, these phases
 blur together. In Python migrations, making the separation explicit
 improves reuse and debugging. Raw features are often stable across many
 downstream models. Model-ready transformations (scaling, encoding,
@@ -3546,7 +3549,7 @@ This can reveal threshold brittleness quickly.</p>
 <span id="cb116-7"><a href="#cb116-7" aria-hidden="true" tabindex="-1"></a>    .agg(rate<span class="op">=</span>(<span class="st">&quot;churned&quot;</span>, <span class="st">&quot;mean&quot;</span>), n<span class="op">=</span>(<span class="st">&quot;churned&quot;</span>, <span class="st">&quot;size&quot;</span>))</span>
 <span id="cb116-8"><a href="#cb116-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Another practical diagnostic for migration projects is
-“R-versus-Python disagreement analysis.” Instead of only comparing
+“R-versus-Python disagreement analysis”. Instead of only comparing
 aggregate metrics, identify rows where model outputs differ materially
 and inspect feature-level causes.</p>
 <div class="sourceCode" id="cb117"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cmp</span> <span class="op">=</span> compare_df.assign(delta<span class="op">=</span><span class="kw">lambda</span> d: (d[<span class="st">&quot;score_py&quot;</span>] <span class="op">-</span> d[<span class="st">&quot;score_r&quot;</span>]).<span class="bu">abs</span>())</span>
@@ -3669,7 +3672,7 @@ ownership. In Weeks 9 through 12, repeat the cycle with a second
 high-value workflow, extract reusable helpers from custom glue code, and
 update migration guidance from real production behaviour.</p>
 <p>If you do this sequence with discipline, you will not just “port
-code.” You will build a migration engine your team can reuse.</p>
+code”. You will build a migration engine your team can reuse.</p>
 <p>This is the real long-term win.</p>
 <h1 data-number="14" id="extended-worked-scenarios-from-analyst-workflow-to-production-workflow"><span class="header-section-number">14</span> Extended Worked Scenarios: From
 Analyst Workflow to Production Workflow</h1>
@@ -3823,9 +3826,9 @@ friend. Use statsmodels outputs to provide familiar narratives about
 direction and magnitude of effects, confidence intervals, and
 significance context where appropriate.</p>
 <p>Then complement with practical outcome framing. Instead of saying,
-“coefficient for recency increased by 0.13,” translate: “customers
+“coefficient for recency increased by 0.13”, translate: “customers
 inactive for longer are materially higher risk, controlling for orders
-and segment.”</p>
+and segment”.</p>
 <p>For prediction workflows, use model-agnostic explanation summaries
 where helpful, but keep them grounded in business variables, not only
 abstract importance charts.</p>
@@ -4119,6 +4122,27 @@ but decision quality under change.</p>
 <p>Your analytical decomposition, evidence-based debugging, and
 communication-quality output transfer directly. Python adds explicit
 interfaces, execution models, and failure handling.</p>
+<h1 data-number="16" id="further-reading"><span class="header-section-number">16</span> Further Reading</h1>
+<ul>
+<li><a href="https://docs.python.org/3/">Python documentation</a>:
+language, standard-library, and packaging references for migration
+work.</li>
+<li><a href="https://pandas.pydata.org/docs/user_guide/">pandas user
+guide</a>: data-frame semantics, missing data, grouping, joins, and
+reshaping.</li>
+<li><a href="https://numpy.org/doc/stable/">NumPy documentation</a>:
+array operations and numerical foundations used by many analytical
+packages.</li>
+<li><a href="https://scikit-learn.org/stable/user_guide.html">scikit-learn user
+guide</a>: predictive modelling, validation, pipelines, and
+calibration.</li>
+<li><a href="https://www.statsmodels.org/stable/index.html">statsmodels
+documentation</a>: formula-based statistical models, inference, and
+diagnostics.</li>
+<li><a href="https://docs.python.org/3/library/concurrent.futures.html">Python
+concurrent execution</a>: the standard process and thread-pool
+interfaces discussed in the parallelism chapters.</li>
+</ul>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>

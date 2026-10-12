@@ -34,6 +34,8 @@ Those standards transfer directly to Python. What changes is the shape of the to
 
 This primer covers the migration decisions that most affect analytical work: data frames and missing values, functional composition, parallel execution, statistical models, visualisation, performance, reliability, and team delivery. It assumes that you already know R syntax and core tidyverse, purrr, and furrr ideas. It does not teach Python from first principles, survey every package, or replace package documentation and statistical texts. Use the examples as durable patterns and decision tests, not as a promise of one-to-one API equivalence.
 
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
+
 ### Why Python Feels Different Even When Capability Is Similar
 
 R with tidyverse gives you an unusually coherent grammar. The verbs feel unified, naming is consistent, and data-first pipelines are strongly reinforced by community style. Python gives you extraordinary breadth and depth, but less stylistic centralisation. Instead of one dominant grammar layer, you often compose specialised tools.
@@ -72,7 +74,7 @@ active = df.loc[df["status"] == "active", ["id", "value"]].copy()
 active["value_norm"] = active["value"] / active["value"].max()
 ```
 
-The `.copy()` call is not only for technical correctness. It is also documentation. It says, "this branch is intentionally independent." That simple signal prevents many subtle bugs.
+The `.copy()` call is not only for technical correctness. It is also documentation. It says, "this branch is intentionally independent". That simple signal prevents many subtle bugs.
 
 ### Missing Data Semantics: NA vs NaN, None, and Nullable `dtypes`
 
@@ -151,7 +153,7 @@ raw = pd.read_csv(base / "transactions.csv", parse_dates=["txn_date"])
 raw.to_parquet(base / "transactions.parquet", index=False)
 ```
 
-Think of this style as "boring and durable." In production analytics, boring and durable wins.
+Think of this style as "boring and durable". In production analytics, boring and durable wins.
 
 ## Translating Tidyverse Workflows in Practice
 
@@ -666,7 +668,7 @@ In practice, most migration errors happen when a workflow is mislabeled here. A 
 
 In the standard CPython build, the global interpreter lock (GIL) limits parallel execution of Python bytecode in threads. Thread pools work well for waiting-heavy tasks and can also parallelize native computation that releases the GIL. Process pools remain a useful baseline for independent, Python-heavy CPU tasks.
 
-As of October 7, 2026, Python 3.14's [free-threaded build is officially supported but still optional](https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported). With the GIL disabled, Python threads can run on multiple cores. Check dependency compatibility and benchmark your workload: an extension without free-threading support can re-enable the GIL, and shared mutable state still needs synchronisation. After importing your dependencies, use `sys._is_gil_enabled()` to check the running process; [Python's free-threading guide](https://docs.python.org/3.14/howto/free-threading-python.html) explains the build and runtime checks. Installing Python 3.14 alone does not remove the GIL.
+As of 7 October 2026, Python 3.14's [free-threaded build is officially supported but still optional](https://docs.python.org/3.14/whatsnew/3.14.html#free-threaded-python-is-officially-supported). With the GIL disabled, Python threads can run on multiple cores. Check dependency compatibility and benchmark your workload: an extension without free-threading support can re-enable the GIL, and shared mutable state still needs synchronisation. After importing your dependencies, use `sys._is_gil_enabled()` to check the running process; [Python's free-threading guide](https://docs.python.org/3.14/howto/free-threading-python.html) explains the build and runtime checks. Installing Python 3.14 alone does not remove the GIL.
 
 ### `ProcessPoolExecutor` as a Baseline
 
@@ -2134,7 +2136,7 @@ A final note on pipeline readability: do not treat method chaining as a purity t
 
 ### Playbook 2: Translating Analytical Modelling Workflows, Not Just Individual Models
 
-Teams often believe modelling migration means "fit the same model in Python and compare coefficients." That is necessary and not sufficient. Real modelling workflows include data prep assumptions, leakage controls, split policies, calibration, threshold governance, and monitoring. If you do not port those behaviours too, you may get a model that matches in-sample numbers but fails in operations.
+Teams often believe modelling migration means "fit the same model in Python and compare coefficients". That is necessary and not sufficient. Real modelling workflows include data prep assumptions, leakage controls, split policies, calibration, threshold governance, and monitoring. If you do not port those behaviours too, you may get a model that matches in-sample numbers but fails in operations.
 
 A robust migration flow for an existing R modelling workflow usually looks like this:
 
@@ -2309,7 +2311,7 @@ A pragmatic tip: preserve domain terminology from R systems where possible. If b
 
 ### Playbook 7: Migration Planning by Wave Instead of by Technology Layer
 
-Many migrations are planned as "first rewrite all wrangling, then all models, then all dashboards." That looks tidy and often fails because business value delivery is delayed too long.
+Many migrations are planned as "first rewrite all wrangling, then all models, then all dashboards". That looks tidy and often fails because business value delivery is delayed too long.
 
 A more robust strategy is wave-based by workflow value. Wave 1 should target high-value, medium-complexity workflows with strong testability so the team can build confidence quickly. Wave 2 should tackle high-value, high-complexity workflows after migration muscle is built. Wave 3 should include low-value or legacy workflows only when maintenance burden clearly justifies the effort.
 
@@ -2336,7 +2338,7 @@ These deep dives cover the execution details that determine whether a long migra
 
 Notebook exploration is productive, but migration often fails at the notebook-to-module boundary when workflow boundaries remain implicit.
 
-A good migration habit is to treat notebooks as hypothesis workspaces, not as ownership boundaries. As soon as a transformation or model behaviour is stable enough that someone else depends on it, move it to a module with explicit inputs and outputs. Keep the notebook as a narrative and visual explanation layer, but let the reusable logic live in code that can be imported, tested, linted, and versioned.
+A good migration habit is to treat notebooks as hypothesis workspaces, not as ownership boundaries. When a transformation or model behaviour is stable enough that someone else depends on it, move it to a module with explicit inputs and outputs. Keep the notebook as a narrative and visual explanation layer, but let the reusable logic live in code that can be imported, tested, linted, and versioned.
 
 Concretely, if a notebook cell does three things, split them:
 
@@ -2428,7 +2430,7 @@ def assert_feature_close(py, r, col, atol=1e-9):
     assert delta <= atol, f"feature {col} drifted: max abs delta={delta}"
 ```
 
-Another high-value strategy is to separate "raw feature columns" from "model-ready feature columns." In many legacy R pipelines, these phases blur together. In Python migrations, making the separation explicit improves reuse and debugging. Raw features are often stable across many downstream models. Model-ready transformations (scaling, encoding, clipping) may vary by model family and should be versioned independently.
+Another high-value strategy is to separate "raw feature columns" from "model-ready feature columns". In many legacy R pipelines, these phases blur together. In Python migrations, making the separation explicit improves reuse and debugging. Raw features are often stable across many downstream models. Model-ready transformations (scaling, encoding, clipping) may vary by model family and should be versioned independently.
 
 Finally, if you have multiple analysts adding features, define a lightweight feature review template:
 
@@ -2507,7 +2509,7 @@ segment_band = (
 )
 ```
 
-Another practical diagnostic for migration projects is "R-versus-Python disagreement analysis." Instead of only comparing aggregate metrics, identify rows where model outputs differ materially and inspect feature-level causes.
+Another practical diagnostic for migration projects is "R-versus-Python disagreement analysis". Instead of only comparing aggregate metrics, identify rows where model outputs differ materially and inspect feature-level causes.
 
 ```python
 cmp = compare_df.assign(delta=lambda d: (d["score_py"] - d["score_r"]).abs())
@@ -2607,7 +2609,7 @@ To close this chapter, here is a practical 90-day sequence you can operationaliz
 
 In Week 5, profile sequential runtime and memory checkpoints, vectorize hotspots, and document measured performance envelopes. In Week 6, parallelize one measured hotspot with a process pool, add structured failure buckets, and add resumable run metadata and logs. In Week 7, run a side-by-side parity demo with stakeholders, capture open gaps, and assign owners. In Week 8, harden CI checks for schema, parity, and runtime thresholds, add a rollback runbook, and define support ownership. In Weeks 9 through 12, repeat the cycle with a second high-value workflow, extract reusable helpers from custom glue code, and update migration guidance from real production behaviour.
 
-If you do this sequence with discipline, you will not just "port code." You will build a migration engine your team can reuse.
+If you do this sequence with discipline, you will not just "port code". You will build a migration engine your team can reuse.
 
 This is the real long-term win.
 
@@ -2758,7 +2760,7 @@ Many migrations fail socially, not technically. A new Python model might be stat
 
 For inference-style communication, formula models are still your friend. Use statsmodels outputs to provide familiar narratives about direction and magnitude of effects, confidence intervals, and significance context where appropriate.
 
-Then complement with practical outcome framing. Instead of saying, "coefficient for recency increased by 0.13," translate: "customers inactive for longer are materially higher risk, controlling for orders and segment."
+Then complement with practical outcome framing. Instead of saying, "coefficient for recency increased by 0.13", translate: "customers inactive for longer are materially higher risk, controlling for orders and segment".
 
 For prediction workflows, use model-agnostic explanation summaries where helpful, but keep them grounded in business variables, not only abstract importance charts.
 
@@ -3003,3 +3005,12 @@ That is the deepest translation from R to Python: not function names, but decisi
 ## Final Perspective
 
 Your analytical decomposition, evidence-based debugging, and communication-quality output transfer directly. Python adds explicit interfaces, execution models, and failure handling.
+
+## Further Reading
+
+- [Python documentation](https://docs.python.org/3/): language, standard-library, and packaging references for migration work.
+- [pandas user guide](https://pandas.pydata.org/docs/user_guide/): data-frame semantics, missing data, grouping, joins, and reshaping.
+- [NumPy documentation](https://numpy.org/doc/stable/): array operations and numerical foundations used by many analytical packages.
+- [scikit-learn user guide](https://scikit-learn.org/stable/user_guide.html): predictive modelling, validation, pipelines, and calibration.
+- [statsmodels documentation](https://www.statsmodels.org/stable/index.html): formula-based statistical models, inference, and diagnostics.
+- [Python concurrent execution](https://docs.python.org/3/library/concurrent.futures.html): the standard process and thread-pool interfaces discussed in the parallelism chapters.
