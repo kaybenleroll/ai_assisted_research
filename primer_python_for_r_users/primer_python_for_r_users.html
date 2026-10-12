@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -577,6 +586,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -596,8 +606,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Python for Expert R Users: A Practical
 Migration Primer</span>
-
-    <span class="navbar-meta">October 7, 2026</span>
+    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -690,7 +700,7 @@ as a Baseline</a></li>
 for I/O Bound Tasks</a></li>
 <li><a href="#as_completed-for-control-progress-and-partial-results" id="toc-as_completed-for-control-progress-and-partial-results"><span class="toc-section-number">5.5</span> <code>as_completed</code> for
 Control, Progress, and Partial Results</a></li>
-<li><a href="#serialization-and-data-movement-costs" id="toc-serialization-and-data-movement-costs"><span class="toc-section-number">5.6</span> Serialization and Data Movement
+<li><a href="#serialisation-and-data-movement-costs" id="toc-serialisation-and-data-movement-costs"><span class="toc-section-number">5.6</span> Serialisation and Data Movement
 Costs</a></li>
 <li><a href="#start-method-differences-and-platform-behaviour" id="toc-start-method-differences-and-platform-behaviour"><span class="toc-section-number">5.7</span> Start Method Differences and
 Platform Behaviour</a></li>
@@ -817,8 +827,8 @@ Together</a></li>
 <li><a href="#common-r-to-python-anti-patterns-and-how-to-fix-them" id="toc-common-r-to-python-anti-patterns-and-how-to-fix-them"><span class="toc-section-number">11</span> Common R-to-Python Anti-Patterns
 (and How to Fix Them)</a>
 <ul>
-<li><a href="#anti-pattern-1-literal-syntax-porting-without-behavioral-tests" id="toc-anti-pattern-1-literal-syntax-porting-without-behavioral-tests"><span class="toc-section-number">11.1</span> Anti-Pattern 1: Literal Syntax
-Porting Without Behavioral Tests</a></li>
+<li><a href="#anti-pattern-1-literal-syntax-porting-without-behavioural-tests" id="toc-anti-pattern-1-literal-syntax-porting-without-behavioural-tests"><span class="toc-section-number">11.1</span> Anti-Pattern 1: Literal Syntax
+Porting Without Behavioural Tests</a></li>
 <li><a href="#anti-pattern-2-overusing-row-loops-iterrows-in-data-paths" id="toc-anti-pattern-2-overusing-row-loops-iterrows-in-data-paths"><span class="toc-section-number">11.2</span> Anti-Pattern 2: Overusing Row
 Loops (<code>iterrows</code>) in Data Paths</a></li>
 <li><a href="#anti-pattern-3-treating-pandas-index-as-an-implicit-key-contract" id="toc-anti-pattern-3-treating-pandas-index-as-an-implicit-key-contract"><span class="toc-section-number">11.3</span> Anti-Pattern 3: Treating pandas
@@ -915,8 +925,8 @@ Confidence” to “Hybrid-System Confidence”</a></li>
 “Parallel Means Trade-Offs”</a></li>
 <li><a href="#from-code-style-preference-to-shared-team-operating-language" id="toc-from-code-style-preference-to-shared-team-operating-language"><span class="toc-section-number">14.16</span> From “Code Style Preference” to
 “Shared Team Operating Language”</a></li>
-<li><a href="#from-knowledge-in-heads-to-knowledge-in-artifacts" id="toc-from-knowledge-in-heads-to-knowledge-in-artifacts"><span class="toc-section-number">14.17</span> From “Knowledge in Heads” to
-“Knowledge in Artifacts”</a></li>
+<li><a href="#from-knowledge-in-heads-to-knowledge-in-artefacts" id="toc-from-knowledge-in-heads-to-knowledge-in-artefacts"><span class="toc-section-number">14.17</span> From “Knowledge in Heads” to
+“Knowledge in Artefacts”</a></li>
 <li><a href="#the-practical-emotional-side-of-migration" id="toc-the-practical-emotional-side-of-migration"><span class="toc-section-number">14.18</span> The Practical Emotional Side of
 Migration</a></li>
 <li><a href="#a-final-translation-rule-of-thumb" id="toc-a-final-translation-rule-of-thumb"><span class="toc-section-number">14.19</span> A Final Translation Rule of
@@ -947,7 +957,7 @@ with the wrangling chapter.</li>
 the functional chapter first.</li>
 <li>If your current bottleneck is parallel execution, go straight to the
 multicore chapter.</li>
-<li>If your anxiety centers on charting quality, the visualisation
+<li>If your anxiety centres on charting quality, the visualisation
 chapter is where you should spend time.</li>
 </ul>
 <p>Read each chapter as a decision aid, not a syntax catalogue: preserve
@@ -996,8 +1006,8 @@ When Capability Is Similar</h2>
 <p>R with tidyverse gives you an unusually coherent grammar. The verbs
 feel unified, naming is consistent, and data-first pipelines are
 strongly reinforced by community style. Python gives you extraordinary
-breadth and depth, but less stylistic centralization. Instead of one
-dominant grammar layer, you often compose specialized tools.</p>
+breadth and depth, but less stylistic centralisation. Instead of one
+dominant grammar layer, you often compose specialised tools.</p>
 <p>That can feel fragmented at first. Over time, most advanced users
 discover it can be a strength. You can work at a high abstraction level
 for speed, then drop to lower-level APIs when you need control. The
@@ -1050,7 +1060,7 @@ behaviour in joins, groupby operations, and type coercion.</p>
 <p>A good baseline policy is:</p>
 <ul>
 <li>adopt nullable dtypes where nulls are expected</li>
-<li>centralize missing-value handling rules</li>
+<li>centralise missing-value handling rules</li>
 <li>avoid direct equality checks for null logic</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.astype({</span>
@@ -1059,10 +1069,10 @@ behaviour in joins, groupby operations, and type coercion.</p>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;is_active&quot;</span>: <span class="st">&quot;boolean&quot;</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> df[<span class="st">&quot;segment&quot;</span>].isna()</span></code></pre></div>
-<p>The earlier you standardize this, the less cleanup you do later.</p>
+<p>The earlier you standardise this, the less cleanup you do later.</p>
 <h2 data-number="2.3" id="index-behaviour-and-output-shapes"><span class="header-section-number">2.3</span> Index Behaviour and Output
 Shapes</h2>
-<p>Tibbles de-emphasize row names. Pandas makes index state central.
+<p>Tibbles de-emphasise row names. Pandas makes index state central.
 This is useful, but it creates output-shape surprises if you are not
 watching carefully.</p>
 <p>When translating dplyr pipelines, a reliable pattern is to keep keys
@@ -1409,7 +1419,7 @@ robust services.</p>
 <h2 data-number="4.7" id="generators-and-lazy-pipelines"><span class="header-section-number">4.7</span> Generators and Lazy
 Pipelines</h2>
 <p>Generators are a major memory and architecture tool in Python. They
-let you stream data through stages instead of materializing everything
+let you stream data through stages instead of materialising everything
 at once.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_json_lines(path):</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(path, <span class="st">&quot;r&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
@@ -1491,7 +1501,7 @@ preserving Python’s preference for explicit named function
 boundaries.</p>
 <h2 data-number="4.10" id="partial-application-and-configurable-verb-families"><span class="header-section-number">4.10</span> Partial Application and
 Configurable Verb Families</h2>
-<p>In R, you may use closures and anonymous functions to specialize
+<p>In R, you may use closures and anonymous functions to specialise
 behaviour. In Python, <code>functools.partial</code> is often a clean
 way to produce configurable “verb families” without introducing
 framework complexity.</p>
@@ -1572,7 +1582,7 @@ Taxonomy</h2>
 preference.</p>
 <p>In practice, most migration errors happen when a workflow is
 mislabeled here. A pipeline that appears CPU-bound may actually be
-dominated by serialization and file I/O once you instrument it. A
+dominated by serialisation and file I/O once you instrument it. A
 workflow that appears I/O-bound may include one expensive transformation
 that determines end-to-end runtime. Treat taxonomy as an empirical
 classification step, not a guess. Run a quick stage-level profile, then
@@ -1588,7 +1598,7 @@ build is officially supported but still optional</a>. With the GIL
 disabled, Python threads can run on multiple cores. Check dependency
 compatibility and benchmark your workload: an extension without
 free-threading support can re-enable the GIL, and shared mutable state
-still needs synchronization. After importing your dependencies, use
+still needs synchronisation. After importing your dependencies, use
 <code>sys._is_gil_enabled()</code> to check the running process; <a href="https://docs.python.org/3.14/howto/free-threading-python.html">Python’s
 free-threading guide</a> explains the build and runtime checks.
 Installing Python 3.14 alone does not remove the GIL.</p>
@@ -1663,7 +1673,7 @@ control for production behaviour.</p>
 <li>partial completion handling</li>
 <li>explicit collection of failures</li>
 </ul>
-<h2 data-number="5.6" id="serialization-and-data-movement-costs"><span class="header-section-number">5.6</span> Serialization and Data Movement
+<h2 data-number="5.6" id="serialisation-and-data-movement-costs"><span class="header-section-number">5.6</span> Serialisation and Data Movement
 Costs</h2>
 <p>Multiprocessing speedups can collapse if each task ships large
 DataFrames between processes. This is one of the most common surprises
@@ -1804,7 +1814,7 @@ Methodology</h2>
 <ol type="1">
 <li>Measure sequential baseline first.</li>
 <li>Vary worker counts and chunk sizes.</li>
-<li>Separate serialization overhead from compute time.</li>
+<li>Separate serialisation overhead from compute time.</li>
 <li>Measure memory footprint and wall-clock time together.</li>
 <li>Repeat runs to control variance.</li>
 </ol>
@@ -1814,7 +1824,7 @@ real issue is task granularity.</p>
 Apply Quickly</h2>
 <p>Start with sequential vectorized code and prove correctness first.
 Then move to process pools for CPU-heavy independent Python tasks on a
-GIL-enabled build, where each unit of work is large enough to amortize
+GIL-enabled build, where each unit of work is large enough to amortise
 overhead. Benchmark threads for native code that releases the GIL or a
 compatible free-threaded build. Use thread pools or async for
 high-latency I/O where waiting dominates compute. Adopt joblib when the
@@ -1832,7 +1842,7 @@ accidental over-engineering.</p>
 <p>This progression keeps complexity proportional to actual need.</p>
 <h2 data-number="5.16" id="advanced-multicore-pattern-partition-by-file-instead-of-partition-by-object"><span class="header-section-number">5.16</span> Advanced Multicore Pattern:
 Partition-by-File Instead of Partition-by-Object</h2>
-<p>A lot of process-pool disappointment comes from serializing large
+<p>A lot of process-pool disappointment comes from serialising large
 in-memory DataFrames into worker processes. One robust alternative is to
 partition once to Parquet and parallelize by file path. That design
 usually transfers less data between processes and is easier to resume
@@ -1849,7 +1859,7 @@ after failures.</p>
 <span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    done_paths <span class="op">=</span> <span class="bu">list</span>(ex.<span class="bu">map</span>(score_partition_file, input_paths, chunksize<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div>
 <p>This mirrors how many mature distributed data systems work: push
 partitions through deterministic workers, persist outputs, and compose
-the final dataset afterward.</p>
+the final dataset afterwards.</p>
 <h2 data-number="5.17" id="advanced-multicore-pattern-two-stage-pipelines"><span class="header-section-number">5.17</span> Advanced Multicore Pattern:
 Two-Stage Pipelines</h2>
 <p>In real workloads, tasks are often mixed: a high-latency fetch stage
@@ -1865,7 +1875,7 @@ generic executor.</p>
 <ul>
 <li>threads hide I/O latency efficiently</li>
 <li>processes exploit multicore CPU for heavy transforms</li>
-<li>failure behaviour is easier to localize by stage</li>
+<li>failure behaviour is easier to localise by stage</li>
 </ul>
 <h2 data-number="5.18" id="advanced-multicore-pattern-failure-bucketing-and-retry-classes"><span class="header-section-number">5.18</span> Advanced Multicore Pattern:
 Failure Bucketing and Retry Classes</h2>
@@ -1948,7 +1958,7 @@ hyperparameter tuning, and consistent deployment interfaces. Use
 <code>statsmodels</code> when your primary goal is inference and
 interpretation: explicit formulas, standard errors, p-values, confidence
 intervals, and classical diagnostics.</p>
-<p>Then layer in specialized libraries when the problem demands it. For
+<p>Then layer in specialised libraries when the problem demands it. For
 Bayesian workflows, many teams use <code>PyMC</code> (or a Stan
 interface) to express hierarchical priors and full posterior
 uncertainty. For survival analysis, <code>lifelines</code> and
@@ -2396,7 +2406,7 @@ in lightweight tests so regressions are caught early.</p>
 <span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> mpl.rcParams[<span class="st">&quot;axes.spines.right&quot;</span>] <span class="kw">is</span> <span class="va">False</span></span>
 <span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">tuple</span>(mpl.rcParams[<span class="st">&quot;figure.figsize&quot;</span>]) <span class="op">==</span> (<span class="fl">8.5</span>, <span class="fl">5.25</span>)</span></code></pre></div>
 <p>Another high-value pattern is chart contracts. A chart contract is a
-short artifact that defines input schema, metric definitions, grouping
+short artefact that defines input schema, metric definitions, grouping
 policy, and formatting rules for one chart family. If you review
 contracts instead of ad-hoc screenshots, chart migration moves faster
 and disagreement drops.</p>
@@ -2467,10 +2477,10 @@ kernels.</p>
 Bottleneck</h2>
 <div class="sourceCode" id="cb81"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>df.info(memory_usage<span class="op">=</span><span class="st">&quot;deep&quot;</span>)</span></code></pre></div>
 <p>Use dtype tuning, categorical conversion, and chunked I/O to
-stabilize memory behaviour.</p>
+stabilise memory behaviour.</p>
 <p>R users are often used to workflows where memory pressure appears
 later in the pipeline. In Python/pandas ecosystems, memory blowups can
-surface earlier because of intermediate object materialization,
+surface earlier because of intermediate object materialisation,
 especially during joins and wide reshapes. You can reduce this risk by
 introducing explicit memory checkpoints at major boundaries.</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> memory_checkpoint(name, frame):</span>
@@ -2542,8 +2552,8 @@ regressions.</p>
 <span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;row_counts&quot;</span>: row_counts,</span>
 <span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;peak_memory_mb&quot;</span>: peak_memory_mb,</span>
 <span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;artifacts&quot;</span>) .mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;artifacts&quot;</span>, <span class="ss">f&quot;run_summary_</span><span class="sc">{</span>run_id<span class="sc">}</span><span class="ss">.json&quot;</span>).write_text(</span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;artefacts&quot;</span>) .mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;artefacts&quot;</span>, <span class="ss">f&quot;run_summary_</span><span class="sc">{</span>run_id<span class="sc">}</span><span class="ss">.json&quot;</span>).write_text(</span>
 <span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>    json.dumps(run_summary, indent<span class="op">=</span><span class="dv">2</span>),</span>
 <span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a>    encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>,</span>
 <span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
@@ -2590,7 +2600,7 @@ everywhere</li>
 </ul>
 <p>A practical pattern is to choose one or two high-value workflows
 first, build high-confidence parity, then reuse the same migration
-playbook for neighboring workflows.</p>
+playbook for neighbouring workflows.</p>
 <p>Example boundary contract in practice:</p>
 <div class="sourceCode" id="cb87"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>baseline <span class="op">=</span> pd.read_parquet(<span class="st">&quot;baseline_from_r.parquet&quot;</span>)</span>
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>candidate <span class="op">=</span> run_python_pipeline(raw)</span>
@@ -2632,7 +2642,7 @@ responsibilities are explicit.</p>
 <p>If you want this section to be actionable, define done status in
 three layers:</p>
 <ol type="1">
-<li>Behavioral parity: key outputs, metric definitions, and chart
+<li>Behavioural parity: key outputs, metric definitions, and chart
 semantics meet agreed tolerances.</li>
 <li>Operational readiness: runtime, memory, and failure-handling
 behaviour are inside agreed envelopes.</li>
@@ -2641,7 +2651,7 @@ teammate can execute from a clean environment.</li>
 </ol>
 <p>A workflow is done only when all three layers pass. That standard is
 demanding, but it is also what keeps migrated systems from becoming
-fragile hand-crafted artifacts.</p>
+fragile hand-crafted artefacts.</p>
 <h1 data-number="10" id="end-to-end-case-study-monthly-retention-pipeline"><span class="header-section-number">10</span> End-to-End Case Study: Monthly
 Retention Pipeline</h1>
 <p>This case study combines wrangling, functional abstraction, multicore
@@ -2738,7 +2748,7 @@ boundary.</li>
 <li>Run regression tests against known R baseline outputs.</li>
 </ul>
 <p>Add one more operational check that pays off quickly: persist a run
-summary artifact containing input snapshot ID, code version, stage
+summary artefact containing input snapshot ID, code version, stage
 durations, and top-level metric diffs from baseline. This gives incident
 responders immediate context when downstream users report anomalies.</p>
 <p>The point of this case study is not strict syntax parity. The point
@@ -2806,10 +2816,10 @@ workflow parity.</p>
 <h1 data-number="11" id="common-r-to-python-anti-patterns-and-how-to-fix-them"><span class="header-section-number">11</span> Common R-to-Python Anti-Patterns
 (and How to Fix Them)</h1>
 <p>This chapter exists because most painful migrations fail for
-repeated, recognizable reasons. If you can spot these patterns early,
+repeated, recognisable reasons. If you can spot these patterns early,
 you save weeks.</p>
-<h2 data-number="11.1" id="anti-pattern-1-literal-syntax-porting-without-behavioral-tests"><span class="header-section-number">11.1</span> Anti-Pattern 1: Literal Syntax
-Porting Without Behavioral Tests</h2>
+<h2 data-number="11.1" id="anti-pattern-1-literal-syntax-porting-without-behavioural-tests"><span class="header-section-number">11.1</span> Anti-Pattern 1: Literal Syntax
+Porting Without Behavioural Tests</h2>
 <p>Symptom:</p>
 <ul>
 <li>code is ported line-by-line</li>
@@ -2862,7 +2872,7 @@ Default Before Vectorization</h2>
 <p>Symptom:</p>
 <ul>
 <li>added complexity with little speedup</li>
-<li>brittle error handling and serialization overhead</li>
+<li>brittle error handling and serialisation overhead</li>
 </ul>
 <p>Fix:</p>
 <ul>
@@ -2870,7 +2880,7 @@ Default Before Vectorization</h2>
 <li>then parallelize only measured hotspots</li>
 </ul>
 <p>Parallel-first migrations often create systems that are both slower
-and harder to operate. The overhead is paid in serialization,
+and harder to operate. The overhead is paid in serialisation,
 orchestration complexity, and noisy failures. Vectorization-first keeps
 architecture simple and usually uncovers the true hotspots that actually
 deserve concurrency.</p>
@@ -2952,9 +2962,9 @@ one parallel framework)</li>
 <li>adopt layered stack rules by workload class</li>
 <li>keep migration architecture flexible but explicit</li>
 </ul>
-<p>A single-tool mandate usually optimises for consistency theater
+<p>A single-tool mandate usually optimises for consistency theatre
 rather than real maintainability. A layered standard gives teams clarity
-without forcing poor fit decisions for specialized workloads.</p>
+without forcing poor fit decisions for specialised workloads.</p>
 <h2 data-number="11.10" id="anti-pattern-10-confusing-notebook-convenience-with-production-readiness"><span class="header-section-number">11.10</span> Anti-Pattern 10: Confusing
 Notebook Convenience with Production Readiness</h2>
 <p>Symptom:</p>
@@ -3078,12 +3088,12 @@ Analytical Modelling Workflows, Not Just Individual Models</h2>
 Python and compare coefficients.” That is necessary and not sufficient.
 Real modelling workflows include data prep assumptions, leakage
 controls, split policies, calibration, threshold governance, and
-monitoring. If you do not port those behaviors too, you may get a model
+monitoring. If you do not port those behaviours too, you may get a model
 that matches in-sample numbers but fails in operations.</p>
 <p>A robust migration flow for an existing R modelling workflow usually
 looks like this:</p>
 <ol type="1">
-<li>establish baseline artifacts from R</li>
+<li>establish baseline artefacts from R</li>
 <li>recreate feature table in Python with parity checks</li>
 <li>port model specification in inference-first style (statsmodels
 formulas)</li>
@@ -3126,7 +3136,7 @@ You can start with formula parity:</p>
 <span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;threshold&quot;</span>: threshold, <span class="st">&quot;precision&quot;</span>: precision, <span class="st">&quot;recall&quot;</span>: recall}</span></code></pre></div>
 <p>Another important discussion point is feature governance. R teams
 often carry implicit feature assumptions in analyst notes or old
-scripts. During migration, formalize those assumptions as code-level
+scripts. During migration, formalise those assumptions as code-level
 checks:</p>
 <div class="sourceCode" id="cb106"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> train_df[<span class="st">&quot;recency_days&quot;</span>].ge(<span class="dv">0</span>).<span class="bu">all</span>()</span>
 <span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> train_df[<span class="st">&quot;orders&quot;</span>].ge(<span class="dv">0</span>).<span class="bu">all</span>()</span>
@@ -3216,7 +3226,7 @@ different decisions from charts that still look superficially
 similar.</p>
 <p>One practical strategy is to define a chart contract for each
 high-value chart family. A useful contract specifies the input schema,
-metric function, grouping and faceting policy, formatting and labeling
+metric function, grouping and faceting policy, formatting and labelling
 rules, and export settings such as dimensions and DPI. Once that
 contract exists, migration review shifts from “looks fine to me” towards
 objective checks against agreed chart behaviour.</p>
@@ -3232,7 +3242,7 @@ only “does it look okay?” It should ask:</p>
 <li>are y-axis limits and transforms consistent?</li>
 </ul>
 <p>Another recommendation from teams that migrate successfully:
-centralize plotting defaults as code, not human preference. In Python,
+centralise plotting defaults as code, not human preference. In Python,
 this usually means one style module plus small helper functions per
 chart family.</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line_with_band(ax, data, x, y, lo, hi, title):</span>
@@ -3321,7 +3331,7 @@ and choose next-wave candidates from measured outcomes.</p>
 <h2 data-number="12.9" id="playbook-9-closing-advice-for-long-migrations"><span class="header-section-number">12.9</span> Playbook 9: Closing Advice for
 Long Migrations</h2>
 <p>The biggest lesson across successful migrations is straightforward:
-do not optimise for ideological purity. Optimize for reliable outcomes,
+do not optimise for ideological purity. Optimise for reliable outcomes,
 maintainable systems, and analyst trust.</p>
 <p>Keep the parts of your R practice that are genuinely strong,
 including disciplined transformation logic, clear naming and metric
@@ -3462,9 +3472,9 @@ an operations-facing path in sklearn. The two paths serve different
 review and deployment needs.</p>
 <p>The inference-facing path helps analysts and statisticians evaluate
 coefficients, standard errors, and diagnostics in a language they
-recognize. The operations-facing path helps engineers deploy consistent
+recognise. The operations-facing path helps engineers deploy consistent
 preprocessing and scoring behaviour with robust interfaces.</p>
-<p>You can even formalize the relationship between the two:</p>
+<p>You can even formalise the relationship between the two:</p>
 <ul>
 <li>formula model for interpretive review</li>
 <li>sklearn pipeline for production scoring</li>
@@ -3486,12 +3496,12 @@ preprocessing inside sklearn pipelines</li>
 review, keep transformation intent explicit in statsmodels data prep and
 formulas</li>
 </ul>
-<p>One more organisational consequence: model artifact lifecycle. Python
-teams often mature faster when they treat model artifacts (coefficients,
+<p>One more organisational consequence: model artefact lifecycle. Python
+teams often mature faster when they treat model artefacts (coefficients,
 encoders, thresholds, calibration objects) as versioned outputs with
 metadata. In R, this may already exist informally through scripts and
 saved RDS objects. During migration, make it explicit.</p>
-<p>Artifact metadata worth storing:</p>
+<p>Artefact metadata worth storing:</p>
 <ul>
 <li>training data snapshot ID</li>
 <li>feature set version</li>
@@ -3759,7 +3769,7 @@ why” is often more useful than raw diff tables for decision-makers.</p>
 High-Volume API Ingestion with Downstream Modelling</h2>
 <p>Some R teams migrate because upstream data acquisition has outgrown
 current tooling comfort. Maybe you are pulling large API volumes daily,
-normalizing payloads, and feeding feature pipelines.</p>
+normalising payloads, and feeding feature pipelines.</p>
 <p>Python can excel here, but only if you separate concerns cleanly
 across ingestion reliability, payload normalisation, feature derivation,
 and model scoring.</p>
@@ -3775,7 +3785,7 @@ request logic small, timeout-aware, and structured.</p>
 <span id="cb128-7"><a href="#cb128-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="st">&quot;ok&quot;</span>: <span class="va">False</span>, <span class="st">&quot;json&quot;</span>: <span class="va">None</span>, <span class="st">&quot;error&quot;</span>: <span class="bu">str</span>(exc)}</span></code></pre></div>
 <p>Dispatch with a thread pool and write raw payload logs immediately so
 reruns can avoid repeated network cost where policy permits.</p>
-<p>Then normalize payloads into stable schemas. This is where many
+<p>Then normalise payloads into stable schemas. This is where many
 migrations get messy because JSON structures vary across edge cases.
 Build explicit extraction helpers and fail with context when required
 fields are absent.</p>
@@ -3787,16 +3797,16 @@ fields are absent.</p>
 the same module as network code. Keep transformation code independent so
 it can be tested offline with fixture payloads.</p>
 <p>For scoring, batch at stable boundaries. If model scoring is
-CPU-heavy, hand off normalized batches to process pools. If scoring is
+CPU-heavy, hand off normalised batches to process pools. If scoring is
 lightweight but high-throughput, vectorized batch scoring in one process
-may outperform naive multiprocessing due to lower serialization
+may outperform naive multiprocessing due to lower serialisation
 overhead.</p>
 <p>A useful production check is ingestion-to-score latency by stage.
-Track median and p95 separately for fetch, normalize, feature build,
+Track median and p95 separately for fetch, normalise, feature build,
 score, and persist so optimisation work stays evidence-driven.</p>
 <p>Without stage-level latency, you cannot optimise rationally.</p>
 <p>Finally, establish replayability. If a downstream bug is found, you
-should be able to replay from persisted normalized payloads without
+should be able to replay from persisted normalised payloads without
 re-calling external APIs. This is one of the most practical reliability
 upgrades Python migrations can deliver.</p>
 <h2 data-number="14.4" id="scenario-4-you-need-to-explain-model-decisions-to-non-technical-stakeholders"><span class="header-section-number">14.4</span> Scenario 4: You Need to
@@ -3843,7 +3853,7 @@ stability.</p>
 <p>Build these checks into CI/CD and runtime jobs, not manual dashboards
 that people may forget to inspect.</p>
 <p>For model-serving workflows, keep champion/challenger capability
-where practical. This lets you test improvements without destabilizing
+where practical. This lets you test improvements without destabilising
 primary outputs.</p>
 <p>You can also keep a small “sentinel dataset” with known expected
 outputs and run it on every deployment. Sentinel tests are often the
@@ -3861,7 +3871,7 @@ practice, not a one-time milestone.</p>
 <h2 data-number="14.6" id="scenario-6-what-to-do-when-you-genuinely-hit-a-hard-edge"><span class="header-section-number">14.6</span> Scenario 6: What to Do When
 You Genuinely Hit a Hard Edge</h2>
 <p>Sometimes migration friction is not a process issue. It is a real
-ecosystem edge: a specialized R package with no mature Python
+ecosystem edge: a specialised R package with no mature Python
 equivalent, a mixed-model structure that is hard to reproduce exactly,
 or a visualisation extension with no direct analog.</p>
 <p>When this happens, avoid ideological arguments and use a decision
@@ -3876,7 +3886,7 @@ Keep rare specialist components in R while migrating high-throughput and
 integration-heavy components to Python. Over time, revisit as ecosystems
 evolve.</p>
 <p>This is not failure. It is disciplined engineering
-prioritization.</p>
+prioritisation.</p>
 <h2 data-number="14.7" id="scenario-7-measuring-migration-success-with-the-right-kpis"><span class="header-section-number">14.7</span> Scenario 7: Measuring
 Migration Success with the Right KPIs</h2>
 <p>If you do not define migration success metrics, progress assessments
@@ -3964,9 +3974,9 @@ Culture” to “Two Complementary Modelling Cultures”</h2>
 <p>In R, many teams experience modelling and inference as one continuous
 culture, even when packages differ. In Python, the split between
 inference-oriented and prediction-oriented tooling is more explicit.
-That can feel fragmented until you realize it maps nicely to real
+That can feel fragmented until you realise it maps nicely to real
 organisational roles.</p>
-<p>Use statsmodels when you need interpretability artifacts that
+<p>Use statsmodels when you need interpretability artefacts that
 analysts trust: formula notation, coefficient tables, robust SE options,
 and familiar summary objects.</p>
 <p>Use sklearn when you need deployable, reproducible prediction
@@ -3980,7 +3990,7 @@ language and abandon the other immediately. In reality, high-performing
 teams often run hybrid systems for meaningful periods, and that is
 fine.</p>
 <p>The key is clean boundaries. If R and Python components exchange
-well-defined artifacts and validation checks are explicit, hybrid
+well-defined artefacts and validation checks are explicit, hybrid
 operation is not technical debt by default. It is an execution
 strategy.</p>
 <p>The danger is not hybrid architecture. The danger is fuzzy contracts
@@ -4032,7 +4042,7 @@ conditional.</p>
 <p>Parallelism hurts when:</p>
 <ul>
 <li>task payloads are tiny</li>
-<li>serialization dominates runtime</li>
+<li>serialisation dominates runtime</li>
 <li>observability is missing</li>
 <li>retry behaviour is naive</li>
 </ul>
@@ -4045,7 +4055,7 @@ more than lint rules. It includes naming conventions, validation
 expectations, failure semantics, and review criteria.</p>
 <p>When teams skip this layer, every PR reopens foundational debates.
 When teams define it, review quality improves and velocity
-stabilizes.</p>
+stabilises.</p>
 <p>You can start small. Write one page with answers to these
 questions:</p>
 <ul>
@@ -4057,12 +4067,12 @@ questions:</p>
 </ul>
 <p>Then use that page during reviews. This alone can reduce migration
 thrash dramatically.</p>
-<h2 data-number="14.17" id="from-knowledge-in-heads-to-knowledge-in-artifacts"><span class="header-section-number">14.17</span> From “Knowledge in Heads” to
-“Knowledge in Artifacts”</h2>
+<h2 data-number="14.17" id="from-knowledge-in-heads-to-knowledge-in-artefacts"><span class="header-section-number">14.17</span> From “Knowledge in Heads” to
+“Knowledge in Artefacts”</h2>
 <p>Legacy R systems often rely on a lot of tacit knowledge held by a few
 experts. Migration is your chance to convert that into explicit
-artifacts.</p>
-<p>Useful artifacts include:</p>
+artefacts.</p>
+<p>Useful artefacts include:</p>
 <ul>
 <li>feature definition documents</li>
 <li>run manifests</li>
@@ -4105,6 +4115,7 @@ but decision quality under change.</p>
 <p>Your analytical decomposition, evidence-based debugging, and
 communication-quality output transfer directly. Python adds explicit
 interfaces, execution models, and failure handling.</p>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
