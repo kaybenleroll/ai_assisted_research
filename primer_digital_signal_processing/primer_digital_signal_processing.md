@@ -93,7 +93,7 @@ A system maps an input signal to an output: $y = \mathcal{T}\{x\}$. Four propert
 * **Causality:** $y[n]$ depends only on samples at or before $n$. A noncausal system can use future samples and is possible for an offline record, but not for a live stream without adding delay.
 * **Stability:** in the bounded-input, bounded-output (BIBO) sense, every bounded input produces a bounded output.
 
-Linear time-invariant (LTI) systems are the centre of classical DSP because they are both expressive and analyzable. A nonlinear or time-varying system can be useful, but its behaviour cannot be inferred from one impulse response and one frequency-response curve.
+Linear time-invariant (LTI) systems are the centre of classical DSP because they are both expressive and analysable. A nonlinear or time-varying system can be useful, but its behaviour cannot be inferred from one impulse response and one frequency-response curve.
 
 You can test these properties with numbers before introducing transforms. Consider $\mathcal{T}\{x\}[n]=2x[n]-x[n-1]$, taking samples before the record to be zero. For $x_1=[1,2,0]$, the first three outputs are $[2,3,-2]$; for $x_2=[0,1,3]$, they are $[0,2,5]$. Form $3x_1-2x_2=[3,4,-6]$. Filtering this combination gives $[6,5,-16]$, exactly the same as $3[2,3,-2]-2[0,2,5]$. The tail at the next sample also agrees: it is $6$. Superposition must hold across the whole output support, not only where the input arrays overlap. A single successful test does not establish linearity for all inputs, but a failed test disproves it immediately.
 
@@ -254,7 +254,7 @@ x[n]=\frac{1}{2\pi}\int_{-\pi}^{\pi}
 X(e^{j\omega})e^{j\omega n}\,d\omega.
 $$
 
-The DTFT is continuous in $\omega$ but periodic with period $2\pi$. Normalized frequency $\omega$ is radians per sample. If the sample rate is $f_s$, physical frequency is $f=\frac{\omega f_s}{2\pi}$, and the interval $[-\pi,\pi)$ corresponds to $[-\frac{f_s}{2},\frac{f_s}{2})$.
+The DTFT is continuous in $\omega$ but periodic with period $2\pi$. Normalised frequency $\omega$ is radians per sample. If the sample rate is $f_s$, physical frequency is $f=\frac{\omega f_s}{2\pi}$, and the interval $[-\pi,\pi)$ corresponds to $[-\frac{f_s}{2},\frac{f_s}{2})$.
 
 For an LTI system,
 
@@ -474,7 +474,7 @@ For a measurement retaining only 0--3 kHz at a 10 kHz rate, the first out-of-ban
 
 The ideal sinc interpolator is noncausal and infinitely long. A digital-to-analogue converter (DAC) commonly holds each sample until the next update, producing a zero-order-hold waveform. In frequency, the hold contributes a sinc-shaped envelope and the staircase contains images at multiples of $f_s$. An analogue reconstruction filter removes those images and often compensates, approximately, for the hold's passband droop.
 
-When DSP documentation says “the output is a 1 kHz sine,” ask whether it means the discrete sequence has a normalized digital frequency, the DAC output has a 1 kHz analogue component, or the entire reconstruction chain has been characterised. Those are related but not identical statements.
+When DSP documentation says “the output is a 1 kHz sine,” ask whether it means the discrete sequence has a normalised digital frequency, the DAC output has a 1 kHz analogue component, or the entire reconstruction chain has been characterised. Those are related but not identical statements.
 
 ### Quantisation and Signal-to-Quantisation-Noise Ratio
 
@@ -499,19 +499,19 @@ The inputs $[-0.90,-0.62,-0.10,0.12]$ map approximately to $[-0.875,-0.625,-0.12
 
 The same scale issue appears in fixed-point arithmetic. In signed Q1.3 notation, the stored integer $q$ represents $q\,2^{-3}$, so $0.75$ is stored as $6$ and $0.625$ as $5$. Their exact product is represented by the integer product $6\cdot5=30$ on a scale of $2^{-6}$, which equals $0.46875$. To return to Q1.3, divide by $2^3$ and round: $\frac{30}{8}=3.75$ becomes stored integer $4$, or $0.5$. The $0.03125$ rounding error is one-quarter of a Q1.3 LSB, visible in this tiny example. A real multiply therefore needs a wider accumulator, a rounding policy, and a rule for values outside the destination range; “use fixed point” does not specify those choices. Dither can make repeated truncation less correlated with the signal, but it cannot recover bits discarded by an overloaded or poorly scaled operation.
 
-For a less toy-like budget, take a 12-bit ADC spanning -1 to +1 V. Its step is $\frac{2}{4096}=488.3$ $\mu$V and ideal quantisation-noise RMS is $\frac{\Delta}{\sqrt{12}}=141.0$ $\mu$V. A near-full-scale 1 V peak sine has RMS $0.7071$ V and ideal quantisation SNR about 74.0 dB. A 10 mV peak sine has RMS 7.071 mV and only about 34.0 dB relative to the same noise floor. Amplifying the small signal before conversion can use more codes, but the amplifier's noise, gain uncertainty, and overload margin then enter the budget. Digital gain afterward scales the signal and the already acquired errors together.
+For a less toy-like budget, take a 12-bit ADC spanning -1 to +1 V. Its step is $\frac{2}{4096}=488.3$ $\mu$V and ideal quantisation-noise RMS is $\frac{\Delta}{\sqrt{12}}=141.0$ $\mu$V. A near-full-scale 1 V peak sine has RMS $0.7071$ V and ideal quantisation SNR about 74.0 dB. A 10 mV peak sine has RMS 7.071 mV and only about 34.0 dB relative to the same noise floor. Amplifying the small signal before conversion can use more codes, but the amplifier's noise, gain uncertainty, and overload margin then enter the budget. Digital gain afterwards scales the signal and the already acquired errors together.
 
 If uncorrelated front-end noise contributes 100 $\mu$V RMS, combining it with the ideal quantisation noise gives $\sqrt{141^2+100^2}=172.9$ $\mu$V RMS. This root-sum-square addition applies to independent or uncorrelated random errors. It does not justify combining deterministic spurs, calibration bias, or coherent interference in the same way. Integrating a measured noise density over the actual analogue bandwidth is preferable to borrowing a quoted RMS noise measured in an unspecified bandwidth.
 
 ENOB derived from signal-to-noise-and-distortion ratio (SINAD) uses $\frac{\mathrm{SINAD}-1.76}{6.02}$ for the full-scale-sine reference. A measured 68 dB SINAD corresponds to about 11.0 effective bits under that convention. SINAD includes distortion power as well as noise; SNR measurements often exclude harmonics. Quoting ENOB without the input frequency, amplitude, bandwidth, and harmonic treatment conceals the conditions of the measurement. An ADC may achieve a higher ENOB at low frequency than near its analogue bandwidth limit.
 
-The uniform independent-error model is especially weak for quiet or coherent inputs. A constant voltage between two decision thresholds always maps to the same code; a low-level sine can generate a repeating, harmonic-rich error sequence. Dither deliberately randomises threshold crossings. A subtractive scheme adds a known random signal before quantisation and subtracts it afterward; with an appropriate uniform dither and no overload, the residual error can be uniform and independent of the input. A common nonsubtractive triangular dither, formed by summing two independent uniforms each spanning one LSB peak-to-peak, suppresses important signal-dependent error effects but raises the noise floor. Do not attribute the subtractive scheme's unchanged error variance to every dither implementation. Dither trades distortion for controlled noise and needs headroom of its own.
+The uniform independent-error model is especially weak for quiet or coherent inputs. A constant voltage between two decision thresholds always maps to the same code; a low-level sine can generate a repeating, harmonic-rich error sequence. Dither deliberately randomises threshold crossings. A subtractive scheme adds a known random signal before quantisation and subtracts it afterwards; with an appropriate uniform dither and no overload, the residual error can be uniform and independent of the input. A common nonsubtractive triangular dither, formed by summing two independent uniforms each spanning one LSB peak-to-peak, suppresses important signal-dependent error effects but raises the noise floor. Do not attribute the subtractive scheme's unchanged error variance to every dither implementation. Dither trades distortion for controlled noise and needs headroom of its own.
 
 For a reduced-level sine test, a full-scale-referred ENOB convention adds the level correction to SINAD before calculating bits; silently doing that changes the meaning of the number. Averaging reduces uncorrelated noise but cannot average away a repeatable harmonic, missing-code distortion, or clipping.
 
 Dither is deliberate randomness added before a quantising operation. Without it, a slowly varying sub-LSB signal may remain on one code for many samples and then jump; its error is locked to the signal, so a white-noise model is false. For an ideal rounding quantiser with infinite range, non-subtractive triangular probability density function (TPDF) dither can be formed by adding two independent uniform variables on $[-\frac{\Delta}{2},\frac{\Delta}{2}]$. Its support is $[-\Delta,\Delta]$ and variance is $\frac{\Delta^2}{6}$. The total output error relative to the original undithered input has variance $\frac{\Delta^2}{4}$, with zero mean and signal-independent first two moments under the standard ideal assumptions. That is three times the usual $\frac{\Delta^2}{12}$ noise power, a 4.77 dB increase. The benefit is predictable low-order error statistics and less deterministic distortion, paid for with additional noise. This does not make every aspect of the error statistically independent of the input.
 
-Subtractive dither is different: add a known dither before quantisation and subtract that same value afterward. With suitable independent uniform dither, the remaining error can be uniform and independent with variance $\frac{\Delta^2}{12}$. An ADC usually cannot remove analogue dither perfectly because the exact voltage perturbation is not available as a digital reference. In software, subtraction is feasible if both ends share the dither sequence and there is no overload. Keep enough headroom for the added dither; clipping invalidates the ideal guarantees. For low-level measurement, averaging dithered samples can reveal a mean below one LSB, but each sample remains quantised and the bandwidth and uncertainty of that average still have to be reported.
+Subtractive dither is different: add a known dither before quantisation and subtract that same value afterwards. With suitable independent uniform dither, the remaining error can be uniform and independent with variance $\frac{\Delta^2}{12}$. An ADC usually cannot remove analogue dither perfectly because the exact voltage perturbation is not available as a digital reference. In software, subtraction is feasible if both ends share the dither sequence and there is no overload. Keep enough headroom for the added dither; clipping invalidates the ideal guarantees. For low-level measurement, averaging dithered samples can reveal a mean below one LSB, but each sample remains quantised and the bandwidth and uncertainty of that average still have to be reported.
 
 ### Clock Jitter and Aperture Effects
 
@@ -857,7 +857,7 @@ $$
 y[n]=\sum_{k=0}^{N-1}x[k]h[(n-k)\bmod N].
 $$
 
-If you need linear convolution of sequences of lengths $L$ and $M$, zero-pad both to at least $L+M-1$ before multiplying their FFTs. For streaming signals, overlap-add and overlap-save divide the input into blocks, manage the boundary samples, and reuse one filter transform. Forgetting this distinction creates wraparound artifacts that can look like instability or ringing.
+If you need linear convolution of sequences of lengths $L$ and $M$, zero-pad both to at least $L+M-1$ before multiplying their FFTs. For streaming signals, overlap-add and overlap-save divide the input into blocks, manage the boundary samples, and reuse one filter transform. Forgetting this distinction creates wraparound artefacts that can look like instability or ringing.
 
 Here is the wraparound in a sequence small enough to calculate by hand. Let $x=[1,2,3]$ and $h=[10,1]$. Their linear convolution is
 
@@ -899,7 +899,7 @@ $$
 
 The $\frac{1}{N}$ is required because the forward transform has no scale and the inverse carries $\frac{1}{N}$. If both transforms use the unitary factor $\frac{1}{\sqrt{N}}$, the same identity has no factor. This distinction matters in matched-filter code: omitting the factor changes a correlation score and any threshold derived from it, even when the peak location looks correct.
 
-Correlation with a template is therefore a projection onto shifted template vectors. Matched filtering is not a mysterious “pattern recognizer”; it is a projection weighted according to the noise geometry. If the noise covariance is $R$, the relevant inner product is $x^HR^{-1}y$. Whitening transforms that inner product back into the ordinary Euclidean one.
+Correlation with a template is therefore a projection onto shifted template vectors. Matched filtering is not a mysterious “pattern recogniser”; it is a projection weighted according to the noise geometry. If the noise covariance is $R$, the relevant inner product is $x^HR^{-1}y$. Whitening transforms that inner product back into the ordinary Euclidean one.
 
 Whitening means filtering or linearly transforming data so that the noise covariance is approximately the identity: after transformation, different coordinates have equal variance and no correlation in the model. In the frequency domain, an approximate implementation divides by the square root of the noise PSD, with care where that PSD is small. It is a change of metric for detection, not a claim that the physical noise has disappeared.
 
@@ -1335,7 +1335,7 @@ H(z)=K\frac{1-2\cos(\omega_0)z^{-1}+z^{-2}}
 {1-2r\cos(\omega_0)z^{-1}+r^2z^{-2}}.
 $$
 
-The zeros force exact cancellation at the target frequency in exact arithmetic. The nearby poles restore gain around the notch and determine selectivity. In finite precision, the zero angle and coefficient values are quantised, so the measured notch depth may be much shallower than the mathematical one. Normalize $K$ at the frequency where unity gain matters; do not assume the unscaled numerator has the desired passband gain.
+The zeros force exact cancellation at the target frequency in exact arithmetic. The nearby poles restore gain around the notch and determine selectivity. In finite precision, the zero angle and coefficient values are quantised, so the measured notch depth may be much shallower than the mathematical one. Normalise $K$ at the frequency where unity gain matters; do not assume the unscaled numerator has the desired passband gain.
 
 ## Implementing Filters: State, Precision, and Real-Time Constraints
 
@@ -2096,7 +2096,7 @@ where $R$ is the hop size. The spectrogram is usually $|X(m,\omega)|^2$. A long 
 
 This uses a frame-local phase origin, consistent with the frame FFTs and reconstruction below. A global-origin definition using $e^{-j\omega n}$ instead equals $e^{-j\omega mR}X(m,\omega)$. The magnitudes coincide, but the phases require that deterministic rotation when exchanging coefficients between conventions.
 
-The window, hop, FFT length, centering convention, and boundary padding all affect the picture. FFT zero-padding can make each frame's displayed frequency curve smoother without improving the window's ability to separate nearby components.
+The window, hop, FFT length, centring convention, and boundary padding all affect the picture. FFT zero-padding can make each frame's displayed frequency curve smoother without improving the window's ability to separate nearby components.
 
 **Concrete example.** At 16 kHz, a 256-sample STFT window spans 16 ms. A 500 Hz tone completes eight cycles in that window, while a 50 Hz tone completes only 0.8 cycles, so the latter is poorly localised in frequency. A 1,024-sample window improves the frequency spacing by a factor of four but spans 64 ms, smearing events that change inside that interval. The window length is therefore a statement about the time scale you are willing to blur.
 
@@ -2766,7 +2766,7 @@ The exact order formula depends on the filter family and frequency transformatio
 
 ### FIR Order Intuition
 
-For a windowed-sinc FIR, order grows approximately inversely with normalized transition width. If the sample rate doubles while the physical transition width stays fixed, the normalized transition narrows and the required number of taps rises. This is why multirate systems often filter after an early rate reduction when the signal band permits it.
+For a windowed-sinc FIR, order grows approximately inversely with normalised transition width. If the sample rate doubles while the physical transition width stays fixed, the normalised transition narrows and the required number of taps rises. This is why multirate systems often filter after an early rate reduction when the signal band permits it.
 
 Kaiser-window estimates commonly take the form
 
@@ -2778,12 +2778,12 @@ where $A$ is desired attenuation in dB and $\Delta\omega$ is transition width in
 
 ### IIR Order and Warp Checks
 
-An analogue prototype order function usually works with prewarped passband and stopband frequencies. The resulting digital response must still be measured after the bilinear transform. At low normalized frequencies the tangent mapping is nearly linear; near Nyquist it is strongly warped. A design that looks correct in an analogue frequency table can miss its digital edge if the conversion is applied incorrectly.
+An analogue prototype order function usually works with prewarped passband and stopband frequencies. The resulting digital response must still be measured after the bilinear transform. At low normalised frequencies the tangent mapping is nearly linear; near Nyquist it is strongly warped. A design that looks correct in an analogue frequency table can miss its digital edge if the conversion is applied incorrectly.
 
 Always check:
 
 1. the prototype's frequency units;
-2. whether the API expects a half-cycle-normalized cutoff or hertz;
+2. whether the API expects a half-cycle-normalised cutoff or hertz;
 3. whether prewarping is internal or must be supplied;
 4. coefficient ordering and feedback sign convention;
 5. pole radii after quantisation;

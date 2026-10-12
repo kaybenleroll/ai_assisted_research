@@ -1055,7 +1055,7 @@ record, but not for a live stream without adding delay.</li>
 (BIBO) sense, every bounded input produces a bounded output.</li>
 </ul>
 <p>Linear time-invariant (LTI) systems are the centre of classical DSP
-because they are both expressive and analyzable. A nonlinear or
+because they are both expressive and analysable. A nonlinear or
 time-varying system can be useful, but its behaviour cannot be inferred
 from one impulse response and one frequency-response curve.</p>
 <p>You can test these properties with numbers before introducing
@@ -1388,7 +1388,7 @@ X(e^{j\omega})e^{j\omega n}\,d\omega.
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
 but periodic with period
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>.
-Normalized frequency
+Normalised frequency
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
 is radians per sample. If the sample rate is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>s</mi></msub><annotation encoding="application/x-tex">f_s</annotation></semantics></math>,
@@ -1834,7 +1834,7 @@ images at multiples of
 An analogue reconstruction filter removes those images and often
 compensates, approximately, for the hold’s passband droop.</p>
 <p>When DSP documentation says “the output is a 1 kHz sine,” ask whether
-it means the discrete sequence has a normalized digital frequency, the
+it means the discrete sequence has a normalised digital frequency, the
 DAC output has a 1 kHz analogue component, or the entire reconstruction
 chain has been characterised. Those are related but not identical
 statements.</p>
@@ -1949,7 +1949,7 @@ V and ideal quantisation SNR about 74.0 dB. A 10 mV peak sine has RMS
 7.071 mV and only about 34.0 dB relative to the same noise floor.
 Amplifying the small signal before conversion can use more codes, but
 the amplifier’s noise, gain uncertainty, and overload margin then enter
-the budget. Digital gain afterward scales the signal and the already
+the budget. Digital gain afterwards scales the signal and the already
 acquired errors together.</p>
 <p>If uncorrelated front-end noise contributes 100
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>V
@@ -1976,7 +1976,7 @@ coherent inputs. A constant voltage between two decision thresholds
 always maps to the same code; a low-level sine can generate a repeating,
 harmonic-rich error sequence. Dither deliberately randomises threshold
 crossings. A subtractive scheme adds a known random signal before
-quantisation and subtracts it afterward; with an appropriate uniform
+quantisation and subtracts it afterwards; with an appropriate uniform
 dither and no overload, the residual error can be uniform and
 independent of the input. A common nonsubtractive triangular dither,
 formed by summing two independent uniforms each spanning one LSB
@@ -2012,7 +2012,7 @@ error statistics and less deterministic distortion, paid for with
 additional noise. This does not make every aspect of the error
 statistically independent of the input.</p>
 <p>Subtractive dither is different: add a known dither before
-quantisation and subtract that same value afterward. With suitable
+quantisation and subtract that same value afterwards. With suitable
 independent uniform dither, the remaining error can be uniform and
 independent with variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><msup><mi mathvariant="normal">Δ</mi><mn>2</mn></msup><mn>12</mn></mfrac><annotation encoding="application/x-tex">\frac{\Delta^2}{12}</annotation></semantics></math>.
@@ -2733,7 +2733,7 @@ zero-pad both to at least
 before multiplying their FFTs. For streaming signals, overlap-add and
 overlap-save divide the input into blocks, manage the boundary samples,
 and reuse one filter transform. Forgetting this distinction creates
-wraparound artifacts that can look like instability or ringing.</p>
+wraparound artefacts that can look like instability or ringing.</p>
 <p>Here is the wraparound in a sequence small enough to calculate by
 hand. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x=[1,2,3]</annotation></semantics></math>
@@ -2819,7 +2819,7 @@ any threshold derived from it, even when the peak location looks
 correct.</p>
 <p>Correlation with a template is therefore a projection onto shifted
 template vectors. Matched filtering is not a mysterious “pattern
-recognizer”; it is a projection weighted according to the noise
+recogniser”; it is a projection weighted according to the noise
 geometry. If the noise covariance is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>,
 the relevant inner product is
@@ -3609,7 +3609,7 @@ H(z)=K\frac{1-2\cos(\omega_0)z^{-1}+z^{-2}}
 arithmetic. The nearby poles restore gain around the notch and determine
 selectivity. In finite precision, the zero angle and coefficient values
 are quantised, so the measured notch depth may be much shallower than
-the mathematical one. Normalize
+the mathematical one. Normalise
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 at the frequency where unity gain matters; do not assume the unscaled
 numerator has the desired passband gain.</p>
@@ -5334,7 +5334,7 @@ instead equals
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mi>−</mi><mi>j</mi><mi>ω</mi><mi>m</mi><mi>R</mi></mrow></msup><mi>X</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>,</mo><mi>ω</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">e^{-j\omega mR}X(m,\omega)</annotation></semantics></math>.
 The magnitudes coincide, but the phases require that deterministic
 rotation when exchanging coefficients between conventions.</p>
-<p>The window, hop, FFT length, centering convention, and boundary
+<p>The window, hop, FFT length, centring convention, and boundary
 padding all affect the picture. FFT zero-padding can make each frame’s
 displayed frequency curve smoother without improving the window’s
 ability to separate nearby components.</p>
@@ -6378,8 +6378,8 @@ two, while a 6 dB power error is also roughly a factor of four in
 power.</p>
 <h2 data-number="14.5" id="fir-order-intuition"><span class="header-section-number">14.5</span> FIR Order Intuition</h2>
 <p>For a windowed-sinc FIR, order grows approximately inversely with
-normalized transition width. If the sample rate doubles while the
-physical transition width stays fixed, the normalized transition narrows
+normalised transition width. If the sample rate doubles while the
+physical transition width stays fixed, the normalised transition narrows
 and the required number of taps rises. This is why multirate systems
 often filter after an early rate reduction when the signal band permits
 it.</p>
@@ -6398,7 +6398,7 @@ can miss a narrow ripple peak and falsely certify a filter.</p>
 <h2 data-number="14.6" id="iir-order-and-warp-checks"><span class="header-section-number">14.6</span> IIR Order and Warp Checks</h2>
 <p>An analogue prototype order function usually works with prewarped
 passband and stopband frequencies. The resulting digital response must
-still be measured after the bilinear transform. At low normalized
+still be measured after the bilinear transform. At low normalised
 frequencies the tangent mapping is nearly linear; near Nyquist it is
 strongly warped. A design that looks correct in an analogue frequency
 table can miss its digital edge if the conversion is applied
@@ -6406,7 +6406,7 @@ incorrectly.</p>
 <p>Always check:</p>
 <ol type="1">
 <li>the prototype’s frequency units;</li>
-<li>whether the API expects a half-cycle-normalized cutoff or
+<li>whether the API expects a half-cycle-normalised cutoff or
 hertz;</li>
 <li>whether prewarping is internal or must be supplied;</li>
 <li>coefficient ordering and feedback sign convention;</li>
