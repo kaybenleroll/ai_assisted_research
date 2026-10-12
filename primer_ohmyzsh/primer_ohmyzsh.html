@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Oh My Zsh: A Practical Guide to Your
 Shell</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -726,75 +726,65 @@ Next</a></li>
       <div class="content-inner">
 <hr />
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
-<p>Most people who install Oh My Zsh do the same three things: change
-the theme, add the <code>git</code> plugin, and then forget about it for
-two years. The shell gets faster and prettier, but the actual
-productivity gain stays shallow. The plugin list grows by one every time
-someone on Reddit says “you need X,” but the full picture of what the
-framework can do — and what ZSH itself can do underneath it — never
-quite lands.</p>
-<p>This primer tries to fix that. It starts with why ZSH is genuinely
-different from Bash (not just cosmetically), explains how Oh My Zsh is
-actually structured, goes deep on the plugins and features that change
-how you work, and ends with a worked configuration audit you can reuse
-on your own setup.</p>
+<p>Many users first encounter Oh My Zsh through a theme and a familiar
+plugin such as <code>git</code>. This primer looks beyond prompt
+appearance: it explains what Zsh (the Z shell) provides, how Oh My Zsh
+(OMZ) layers plugins and themes over it, and how to decide which parts
+are useful in your own setup.</p>
+<p>It compares Zsh with Bash, explains how OMZ is structured, examines
+selected plugins and shell features, and ends with a worked
+configuration audit you can adapt to your setup.</p>
 <h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
 <ul>
-<li>What ZSH adds over Bash that actually matters in daily use</li>
+<li>What Zsh adds over Bash that matters in daily use</li>
 <li>How Oh My Zsh works under the hood — plugins, themes, the
 <code>custom/</code> directory</li>
 <li>The plugins worth knowing deeply, with real examples of what they
 do</li>
 <li>Themes: what a good prompt gives you and when to switch</li>
-<li>Advanced ZSH features that most OMZ users never touch</li>
+<li>Zsh features that are easy to overlook</li>
 <li>A concrete worked audit and a checklist you can apply to your own
 shell</li>
 </ul>
 <h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
-<p>This is not a Bash-to-ZSH migration guide, and it does not cover
-every plugin in the OMZ repository. It also does not cover Prezto, Fish,
-or Nushell — all of which are worth knowing about, but that’s a
-different document. The focus is on getting maximum value out of Oh My
-Zsh specifically, for someone who already has it installed and wants to
-stop leaving capability on the table.</p>
+<p>This is not a Bash-to-Zsh migration guide, and it does not cover
+every plugin in the OMZ repository. It does not compare alternative
+shells or frameworks in depth. The focus is on helping someone who
+already has OMZ installed understand and configure it.</p>
 <h2 data-number="1.3" id="assumed-background"><span class="header-section-number">1.3</span> Assumed Background</h2>
-<p>You are comfortable in a terminal, have used Bash or ZSH before, and
+<p>You are comfortable in a terminal, have used Bash or Zsh before, and
 already have Oh My Zsh installed. You know what a <code>.zshrc</code>
-is. You don’t need to know anything about ZSH internals.</p>
-<p>Before we dive in, a useful mental model: ZSH is Bash plus three
-meaningful upgrades. First, completion is context-aware rather than
-simple prefix matching. Second, globbing can filter by file metadata
-directly, so many <code>find | grep | awk</code> chains collapse into
-one expression. Third, the prompt and line editor are designed to be
-programmable interfaces, not fixed text. Oh My Zsh then adds a curated
-plugin/theme layer on top of those native capabilities.</p>
+is. You don’t need to know Zsh internals.</p>
+<p>As a starting model, Zsh provides programmable completion, filename
+generation with qualifiers, and a programmable prompt and line editor.
+Bash also supports programmable completion; the two shells differ in
+their interfaces and built-in capabilities. OMZ adds configuration,
+plugins, and themes on top of Zsh rather than replacing the shell.</p>
+<p>Verified against primary sources for sections 2–6 and 9; unverified
+claims are flagged inline.</p>
 <hr />
 <h1 data-number="2" id="why-zsh-over-bash"><span class="header-section-number">2</span> Why ZSH Over Bash</h1>
-<p>It is worth spending a moment on why ZSH exists and what it actually
-adds, because understanding the foundation makes the Oh My Zsh layer
-easier to appreciate. ZSH is not Bash with a better theme engine. It has
-genuinely different capabilities.</p>
+<p>Understanding Zsh’s own features makes it easier to distinguish them
+from what OMZ adds. Zsh and Bash are separate shells, and both can be
+extended with completion functions.</p>
 <h2 data-number="2.1" id="completion"><span class="header-section-number">2.1</span> Completion</h2>
-<p>ZSH’s tab completion system — called <code>compsys</code> — is
-architecturally different from Bash’s. In Bash, completion is mostly
-prefix matching: you type <code>git com</code> and it completes to
-<code>git commit</code>. In ZSH, completion is programmable and
-contextual. It knows what <code>git commit</code> accepts as flags. It
-knows that <code>-m</code> takes a string. It can complete hostnames
-from your SSH config, Docker container names, systemd unit names,
-<code>man</code> page sections, and hundreds of other context-specific
-things. Plugin authors write completion functions, and OMZ ships many of
-them.</p>
-<p>You see this in practice every time you type
-<code>git &lt;Tab&gt;</code> and get a menu with descriptions, or type
-<code>docker run --&lt;Tab&gt;</code> and get the full flag list. Bash
-can approximate some of this with <code>bash-completion</code>, but
-ZSH’s system is deeper and more consistent.</p>
+<p>Zsh’s tab-completion system, called <code>compsys</code>, is
+programmable and context-sensitive. With suitable completion functions
+loaded, it can offer command-specific flags and arguments, hostnames
+from Secure Shell (SSH) configuration, container names, systemd units,
+and manual-page sections. OMZ bundles completion functions for many
+tools. Bash also has programmable completion, for example through the
+<code>bash-completion</code> project; the available candidates depend on
+the functions installed and configured in either shell.</p>
+<p>For example, a configured completion function can offer Git
+subcommands after <code>git &lt;Tab&gt;</code> or Docker flags after
+<code>docker run --&lt;Tab&gt;</code>. The exact candidates depend on
+the installed completion definitions and tool version.</p>
 <h2 data-number="2.2" id="globbing"><span class="header-section-number">2.2</span> Globbing</h2>
-<p>ZSH’s glob system is significantly more powerful than Bash’s. This is
-not a feature most people discover organically, but once you know it,
-you reach for it constantly.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Match all .log files recursively (** is a ZSH glob, not Bash)</span></span>
+<p>Zsh provides glob qualifiers that can filter filename matches by
+metadata. This can replace some pipelines for tasks that fit the
+available qualifiers.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Match .log files recursively (**/ is a Zsh glob pattern)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">**</span>/<span class="pp">*</span>.log</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Only files (not directories) modified in the last day</span></span>
@@ -809,12 +799,12 @@ you reach for it constantly.</p>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine: executable files modified in the last week</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span><span class="op">(x.m</span><span class="dv">-7</span><span class="op">)</span></span></code></pre></div>
 <p>The glob qualifiers (the characters inside <code>(...)</code>) filter
-on file metadata: type, modification time, size, permissions. This is
-the kind of thing you’d normally pipe through <code>find</code> with
-four flags; in ZSH it’s a glob modifier.</p>
+on file metadata such as type, modification time, size, and permissions.
+Use them when the selection fits the glob syntax; <code>find</code>
+remains useful for more complex traversal and actions.</p>
 <h2 data-number="2.3" id="parameter-expansion"><span class="header-section-number">2.3</span> Parameter Expansion</h2>
-<p>ZSH extends Bash’s already capable parameter expansion with
-additional flags:</p>
+<p>Zsh adds parameter-expansion flags beyond the forms shared with
+Bash:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">path</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects/example-project/notes.md&quot;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Bash-compatible: get filename without path</span></span>
@@ -837,33 +827,31 @@ additional flags:</p>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">parts</span><span class="op">=</span><span class="va">(${(</span><span class="op">s:</span><span class="st">/</span><span class="op">:</span><span class="va">)path})</span></span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$parts</span><span class="op">[</span><span class="dv">1</span><span class="op">]</span>            <span class="co"># home</span></span></code></pre></div>
 <p>The <code>(U)</code>, <code>(L)</code>, <code>(s:delim:)</code> and
-similar parameter flags are ZSH-specific. They’re not a party trick;
-they eliminate a lot of <code>awk</code>/<code>sed</code> one-liners for
-string manipulation in scripts.</p>
+similar parameter flags are Zsh-specific. They can handle some string
+transformations that might otherwise use external tools such as
+<code>awk</code> or <code>sed</code>.</p>
 <h2 data-number="2.4" id="history"><span class="header-section-number">2.4</span> History</h2>
-<p>ZSH history is more configurable than Bash’s. The key options that
-actually matter:</p>
+<p>Zsh history behaviour is configurable through options such as:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">HISTSIZE</span><span class="op">=</span>100000          <span class="co"># lines in memory</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">SAVEHIST</span><span class="op">=</span>100000          <span class="co"># lines on disk</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> HIST_IGNORE_DUPS  <span class="co"># don&#39;t record adjacent duplicates</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> HIST_IGNORE_SPACE <span class="co"># don&#39;t record commands starting with space</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> SHARE_HISTORY     <span class="co"># share history across sessions in real time</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> EXTENDED_HISTORY  <span class="co"># record timestamp with each command</span></span></code></pre></div>
-<p><code>SHARE_HISTORY</code> means that if you have three terminals
-open, history flows between them as each command finishes running — you
-don’t have to close and reopen to pick up commands from another session.
-<code>HIST_IGNORE_SPACE</code> is the one you want for sensitive
-commands: prefix any command with a space and it doesn’t go into
-history.</p>
-<p>Worth knowing before you go copy these into your <code>.zshrc</code>:
-OMZ’s <code>lib/history.zsh</code> already sets
-<code>HIST_IGNORE_SPACE</code>, <code>HIST_IGNORE_DUPS</code>,
-<code>SHARE_HISTORY</code>, and <code>EXTENDED_HISTORY</code>
-unconditionally, regardless of theme or plugins. The block above is
-shown for completeness — to make explicit what OMZ is doing for you —
-not because you need to add it yourself.</p>
+<p><code>SHARE_HISTORY</code> imports and appends history entries across
+sessions, so another shell can see commands without being reopened.
+<code>HIST_IGNORE_SPACE</code> omits commands beginning with a space
+from the shell’s history list. Treat it as a convenience, not as
+protection for secrets: other session logging, shell integrations, or
+process inspection may still expose a command.</p>
+<p>Before copying these into your <code>.zshrc</code>, note that OMZ’s
+history library sets <code>HIST_IGNORE_SPACE</code>,
+<code>HIST_IGNORE_DUPS</code>, <code>SHARE_HISTORY</code>, and
+<code>EXTENDED_HISTORY</code> during initialisation, independently of
+the selected theme and plugins. The block above is shown for
+completeness, not because you need to add it yourself.</p>
 <h2 data-number="2.5" id="named-directories"><span class="header-section-number">2.5</span> Named Directories</h2>
-<p>ZSH lets you name directories and use them like variables in
+<p>Zsh lets you name directories and use them like variables in
 paths:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> work=<span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects&quot;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">hash</span> <span class="at">-d</span> proj=<span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/projects/example-project&quot;</span></span>
@@ -938,13 +926,14 @@ straightforward:</p>
 <code>~/.oh-my-zsh/custom/plugins/</code>. OMZ looks in both places.
 Third-party plugins (like <code>zsh-autosuggestions</code>) are cloned
 into <code>custom/plugins/</code> and added to the list.</p>
-<p>The startup cost of plugins is real. Each plugin sources a file. Most
-are small, but a plugin that initialises a large tool (like a package
-manager) adds perceptible latency. Keep only what you actually use.</p>
+<p>OMZ sources each enabled plugin during shell initialisation, so
+plugins add startup work. The cost depends on the plugin, configuration,
+machine, and environment; keep plugins you use and measure before and
+after changing the list.</p>
 <h2 data-number="3.3" id="choosing-plugins-without-bloating-startup"><span class="header-section-number">3.3</span> Choosing Plugins Without
 Bloating Startup</h2>
-<p>The OMZ plugin list is large enough that it is easy to over-install
-and call it productivity. A practical selection framework:</p>
+<p>To avoid enabling plugins without a clear use, consider this
+selection framework:</p>
 <ol type="1">
 <li>Keep plugins that remove frequent friction from your real workflow
 (for example <code>git</code>, <code>fzf</code>, <code>sudo</code>,
@@ -955,8 +944,8 @@ weekly (<code>gh</code>, <code>docker</code>, <code>systemd</code>,
 <li>Remove plugins that only looked useful once but do not change your
 daily command lines.</li>
 </ol>
-<p>As a baseline, most people land in the 10-15 plugin range. More can
-be fine, but measure rather than guess:</p>
+<p>There is no useful universal plugin-count target. A longer list may
+be fine for your workflow; measure rather than guess:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">time</span> zsh <span class="at">-i</span> <span class="at">-c</span> exit</span></code></pre></div>
 <p>Run this before and after plugin changes. If startup jumps
 meaningfully, the extra plugin had a real cost.</p>
@@ -992,17 +981,17 @@ avoids that:</p>
 <li><code>zsh-syntax-highlighting</code> must be last in your plugins
 list.</li>
 </ol>
-<p>If something “doesn’t load,” these two checks fix a surprising number
-of cases.</p>
+<p>If something “doesn’t load”, check these two ordering rules
+first.</p>
 <hr />
 <h1 data-number="4" id="plugins-worth-knowing-deeply"><span class="header-section-number">4</span> Plugins Worth Knowing Deeply</h1>
 <p>This is not a list of every plugin. It is a deep look at the ones
 that change how you work, with concrete examples of what they actually
 do.</p>
 <h2 data-number="4.1" id="git"><span class="header-section-number">4.1</span> git</h2>
-<p>The <code>git</code> plugin ships a very large alias set. Most people
-use <code>gst</code> (git status) and <code>gaa</code> (git add –all)
-and call it done. The more interesting ones:</p>
+<p>The <code>git</code> plugin ships a large alias set. Two aliases to
+start with are <code>gst</code> (git status) and <code>gaa</code> (git
+add –all). Other examples include:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Commonly used</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gst</span>    <span class="co"># git status</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ga</span>     <span class="co"># git add</span></span>
@@ -1020,25 +1009,26 @@ and call it done. The more interesting ones:</p>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="ex">gpra</span>   <span class="co"># git pull --rebase --autostash</span></span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="ex">gcf</span>    <span class="co"># git config --list</span></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="ex">gclean</span> <span class="co"># git clean -id (interactive clean)</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="ex">gwip</span>   <span class="co"># commit a work-in-progress stash</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="ex">gunwip</span> <span class="co"># undo the last WIP stash commit</span></span></code></pre></div>
-<p>The <code>gwip</code> / <code>gunwip</code> pair is genuinely useful
-when you need to quickly switch branches mid-work without a full commit.
-<code>gwip</code> creates a temporary <code>[WIP]</code> commit;
-<code>gunwip</code> undoes it and restores the working state.</p>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="ex">gwip</span>   <span class="co"># create a work-in-progress commit</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="ex">gunwip</span> <span class="co"># remove the current WIP commit</span></span></code></pre></div>
+<p>The <code>gwip</code> / <code>gunwip</code> pair can help when you
+need to switch tasks without writing a conventional commit message.
+<code>gwip</code> creates a temporary work-in-progress (WIP) commit;
+<code>gunwip</code> removes it when <code>HEAD</code> points to that
+commit.</p>
 <p>The plugin also provides <code>git_prompt_info()</code>, which most
 themes use to show the current branch and status in the prompt.</p>
 <h2 data-number="4.2" id="fzf"><span class="header-section-number">4.2</span> fzf</h2>
-<p><code>fzf</code> is a fuzzy finder for the terminal. The OMZ plugin
-wires it into three key bindings:</p>
+<p><code>fzf</code> is a fuzzy finder for the terminal. When
+<code>fzf</code> and its shell key bindings are installed and enabled,
+the integration provides these key bindings:</p>
 <pre class="text"><code>Ctrl+R    — fuzzy search your command history
 Ctrl+T    — fuzzy find a file in the current directory tree
 Alt+C     — fuzzy cd into a subdirectory</code></pre>
-<p>Most people know Ctrl+R for history. The other two are underused.
-<code>Ctrl+T</code> is faster than typing a path when you remember the
-filename but not the full path. <code>Alt+C</code> is faster than
-<code>cd</code> with tab completion when you’re navigating several
-levels deep.</p>
+<p>If Ctrl+R is the only binding you use, try the others.
+<code>Ctrl+T</code> can help when you remember a filename but not its
+path; <code>Alt+C</code> offers another way to navigate nested
+directories.</p>
 <p><code>fzf</code> also integrates with commands directly:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview files while browsing</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fzf</span> <span class="at">--preview</span> <span class="st">&#39;cat {}&#39;</span></span>
@@ -1102,7 +1092,7 @@ accept one word at a time:</p>
 <p>One tuning option worth knowing: by default it only suggests from
 history. You can also enable completion-based suggestions:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="va">ZSH_AUTOSUGGEST_STRATEGY</span><span class="op">=</span><span class="va">(</span>history completion<span class="va">)</span></span></code></pre></div>
-<p>This means if history has no match, it falls back to ZSH
+<p>This means that if history has no match, it falls back to Zsh
 completions.</p>
 <h2 data-number="4.4" id="zsh-syntax-highlighting"><span class="header-section-number">4.4</span> zsh-syntax-highlighting</h2>
 <p>This plugin is not in the default OMZ bundle — it requires a separate
@@ -1142,12 +1132,12 @@ it needs to run after everything else.</p>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Find recent docker run commands</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">hsi</span> <span class="st">&quot;docker run&quot;</span></span></code></pre></div>
-<p>Simple but far faster than typing <code>history | grep</code> every
-time.</p>
+<p>These aliases provide shortcuts for repeated filtered-history
+searches.</p>
 <h2 data-number="4.6" id="sudo"><span class="header-section-number">4.6</span> sudo</h2>
 <p>Press <code>Esc Esc</code> (two taps) to prepend <code>sudo</code> to
 the current command line or re-run the last command with
-<code>sudo</code>. No plugin is simpler or more immediately useful.</p>
+<code>sudo</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You run:</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> install something-big</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Permission denied.</span></span>
@@ -1183,9 +1173,9 @@ zsh: command not found: tree
 
 Command &#39;tree&#39; not found, but can be installed with:
 sudo apt install tree</code></pre>
-<p>Requires <code>command-not-found</code> to be installed on the system
-(most Ubuntu/Debian systems have it). Saves a round-trip to the package
-manager search.</p>
+<p>Requires a compatible system <code>command-not-found</code> handler
+to be installed and configured; support differs by platform. See the
+plugin’s supported-platform list before relying on it.</p>
 <h2 data-number="4.10" id="timer"><span class="header-section-number">4.10</span> timer</h2>
 <p>Shows how long each command took, appended to the right side of your
 prompt after the command completes. Useful for scripts and builds where
@@ -1255,7 +1245,7 @@ each can be high leverage in the right workflow.</p>
 <li><strong><code>vi-mode</code></strong></li>
 </ol>
 <ul>
-<li>Gives Vim-style command-line editing in ZLE.</li>
+<li>Gives Vim-style command-line editing in Zsh’s line editor.</li>
 <li>Best if you already use Vim/Neovim motions.</li>
 <li>Skip if you strongly prefer emacs bindings.</li>
 </ul>
@@ -1264,7 +1254,8 @@ each can be high leverage in the right workflow.</p>
 </ol>
 <ul>
 <li>Auto-loads per-project environment via <code>.envrc</code>.</li>
-<li>Excellent for project-specific PATH/env separation.</li>
+<li>Useful for separating project-specific executable search paths and
+environment variables.</li>
 <li>Requires the <code>direnv</code> binary and disciplined
 <code>.envrc</code> review.</li>
 </ul>
@@ -1297,10 +1288,9 @@ alternative)</strong></li>
 <hr />
 <h1 data-number="5" id="themes-what-a-good-prompt-does"><span class="header-section-number">5</span> Themes: What a Good Prompt
 Does</h1>
-<p>The theme controls what your prompt looks like. Most people pick one
-that looks appealing and stop there. But a well-designed prompt is
-actually functional: it puts the right information in front of you at
-the right time.</p>
+<p>The theme controls what your prompt looks like. When choosing one,
+consider which information helps you act and whether the prompt remains
+readable and responsive in your terminal.</p>
 <h2 data-number="5.1" id="what-information-belongs-in-a-prompt"><span class="header-section-number">5.1</span> What Information Belongs in a
 Prompt</h2>
 <p>A practical prompt should show:</p>
@@ -1338,13 +1328,13 @@ one, the segment characters render as boxes.</p>
 <code>agnoster-timestamp-newline</code>, adds a timestamp and puts
 command input on its own line, which makes long paths more readable.</p>
 <h2 data-number="5.4" id="powerlevel10k-p10k"><span class="header-section-number">5.4</span> Powerlevel10k (p10k)</h2>
-<p>Powerlevel10k is a third-party theme, not bundled with OMZ. As of 7
+<p>Powerlevel10k is a third-party theme, not bundled with OMZ. As of 12
 October 2026, its <a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">upstream
-README</a> explicitly warns of very limited support: no new features are
-planned, most bugs will remain unfixed, and help requests will be
-ignored. An existing setup can still work well, but do not assume that
-future compatibility problems will be fixed. For a new setup, compare
-its features with <a href="https://starship.rs/">Starship</a> and <a href="https://github.com/sindresorhus/pure">Pure</a> before accepting
+README</a> warns of very limited support: no new features are planned,
+most bugs will remain unfixed, and help requests will be ignored. An
+existing setup can still work well, but do not assume that future
+compatibility problems will be fixed. For a new setup, compare its
+features with <a href="https://starship.rs/">Starship</a> and <a href="https://github.com/sindresorhus/pure">Pure</a> before accepting
 that maintenance constraint.</p>
 <p>What makes p10k different:</p>
 <ul>
@@ -1465,7 +1455,7 @@ Command</h2>
 are plugins for tools you use that you may not know OMZ ships.</p>
 <h2 data-number="6.3" id="smart-directory-navigation-without-cd"><span class="header-section-number">6.3</span> Smart Directory Navigation
 Without <code>cd</code></h2>
-<p>ZSH can change directories without typing <code>cd</code>, if you
+<p>Zsh can change directories without typing <code>cd</code>, if you
 enable it:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">setopt</span> AUTO_CD</span></code></pre></div>
 <p>With this set, typing a directory name alone (without
@@ -1485,29 +1475,28 @@ searches <code>.</code>, <code>~</code>, and <code>~/projects</code> for
 that directory name and changes into it if found.</p>
 <h2 data-number="6.4" id="z-smarter-directory-jumping"><span class="header-section-number">6.4</span> <code>z</code> — Smarter
 Directory Jumping</h2>
-<p>The <code>z</code> plugin (bundled with OMZ) tracks which directories
-you visit and lets you jump to them by partial name, ranked by how often
-and how recently you’ve been there:</p>
+<p>The <code>z</code> plugin (bundled with OMZ) tracks visited
+directories and lets you jump to matches by partial name. Its ranking
+combines visit frequency with time since the last visit:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After you&#39;ve visited ~/projects/example-project a few times:</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> example       <span class="co"># cd&#39;s to ~/projects/example-project</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> project       <span class="co"># same</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># It picks the highest-ranked match for the pattern</span></span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="ex">z</span> notes         <span class="co"># might jump to ~/projects/example-project/notes</span></span></code></pre></div>
-<p>The ranking function (“frecency”) is frequency × recency —
-directories you go to often and recently rank highest. For codebases you
-navigate daily, <code>z</code> eliminates most explicit <code>cd</code>
-commands.</p>
-<p><code>zoxide</code> is a faster modern alternative with the same
-concept. It integrates with OMZ via a plugin and can be configured to
-replace <code>cd</code> entirely. As with other shell initialisation
-snippets, only <code>eval</code> output from a locally installed
-executable you trust:</p>
+<p>This combined ranking (often called “frecency”) uses both visit count
+and access recency. It can reduce repeated path entry in workflows where
+you revisit the same directories.</p>
+<p><code>zoxide</code> is a separate directory-jumping tool with a
+similar use. It integrates with Zsh and can be configured to replace
+<code>cd</code>. As with other shell initialisation snippets, only
+<code>eval</code> output from a locally installed executable you
+trust:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install zoxide, then add to .zshrc:</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">zoxide</span> init zsh <span class="at">--cmd</span> cd<span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Now &#39;cd&#39; uses zoxide&#39;s frecency ranking</span></span></code></pre></div>
 <h2 data-number="6.5" id="zsh-suffix-aliases"><span class="header-section-number">6.5</span> ZSH Suffix Aliases</h2>
-<p>ZSH supports suffix aliases — aliases that apply to the file
+<p>Zsh supports suffix aliases — aliases that apply to the file
 extension, so the shell knows what program to use to open a file
 type:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> <span class="at">-s</span> py=python3</span>
@@ -1530,10 +1519,10 @@ work anywhere in a command line:</p>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> aux G python     <span class="co"># ps aux | grep python</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> big_log T       <span class="co"># cat big_log | tail -f</span></span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="ex">some-command</span> NUL    <span class="co"># some-command &gt;/dev/null 2&gt;&amp;1</span></span></code></pre></div>
-<p>This is a ZSH-specific feature with no Bash equivalent.</p>
+<p>This is a Zsh-specific feature with no Bash equivalent.</p>
 <h2 data-number="6.7" id="zsh-line-editor-zle-widgets"><span class="header-section-number">6.7</span> ZSH Line Editor (ZLE)
 Widgets</h2>
-<p>ZSH’s line editor is programmable. You can write functions and bind
+<p>Zsh’s line editor is programmable. You can write functions and bind
 them to key sequences:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Paste last argument of last command (already bound to Alt+. by default)</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># But you can write custom widgets:</span></span>
@@ -1551,16 +1540,15 @@ the line, type it, and jump back. <code>BUFFER</code> is the whole
 command line as a string, and <code>CURSOR</code> is the cursor’s
 character offset into it — direct edits to both are the basic pattern
 for any custom ZLE widget.</p>
-<p>Stock zsh (not something OMZ adds) already ships a related trick:
-<code>push-line</code> (bound to Ctrl+Q in emacs mode by default). If
-you’re mid-command and realise you need to run something else first,
+<p>Stock Zsh (not something OMZ adds) provides a related widget:
+<code>push-line</code> (bound to Ctrl+Q in the emacs keymap by default).
+If you’re mid-command and realise you need to run something else first,
 Ctrl+Q parks your current input, you run what you need, and your
-original command comes back on the next prompt. One catch: if your
-terminal has flow control enabled (<code>stty ixon</code>, common on
-many default configs), Ctrl+Q is intercepted by the terminal driver as
-XON and never reaches zsh at all — the key will simply do nothing. If
-that’s the case for you, either run <code>stty -ixon</code> or use the
-Esc-q alternative binding instead.</p>
+original command returns at the next prompt. If terminal flow control is
+enabled (<code>stty ixon</code>), the terminal driver may intercept
+Ctrl+Q as XON (the resume-output control character) before Zsh receives
+it. If so, run <code>stty -ixon</code> or use the Esc-q alternative
+binding.</p>
 <h2 data-number="6.8" id="configuration-areas-worth-periodic-attention"><span class="header-section-number">6.8</span> Configuration Areas Worth
 Periodic Attention</h2>
 <p>Beyond plugins and themes, these settings often determine whether a
@@ -1599,12 +1587,14 @@ and remove decorative noise.</li>
 <li>Re-check latency whenever adding new prompt segments.</li>
 </ul>
 <ol start="5" type="1">
-<li><strong>PATH ordering and shim collisions</strong></li>
+<li><strong>Executable search path (<code>PATH</code>) ordering and shim
+collisions</strong></li>
 </ol>
 <ul>
 <li>Ensure one intentional winner when multiple version managers provide
 the same binary.</li>
-<li>Remove duplicate PATH appends spread across shell files.</li>
+<li>Remove duplicate additions to the executable search path across
+shell files.</li>
 </ul>
 <ol start="6" type="1">
 <li><strong>Custom file hygiene</strong></li>
@@ -1665,35 +1655,33 @@ troubleshooting.</li>
 <hr />
 <h1 data-number="7" id="worked-example-auditing-a-real-omz-setup"><span class="header-section-number">7</span> Worked Example: Auditing a Real
 OMZ Setup</h1>
-<p>This is an audit of a representative real configuration. Read it as
-an example process you can replicate, not as a claim that every OMZ
-setup should look the same.</p>
+<p>This is an audit of one representative configuration. Read it as an
+example process you can adapt, not as a recommendation for every OMZ
+setup.</p>
 <h2 data-number="7.1" id="what-this-setup-has"><span class="header-section-number">7.1</span> What This Setup Has</h2>
 <p>Active plugins in this example:</p>
 <pre class="text"><code>git  ssh-agent  colored-man-pages  command-not-found  extract  history
 docker  timer  sudo  gh  podman  systemd  chezmoi  rsync  fzf
 mise  zsh-autosuggestions  zsh-claude-code-shell</code></pre>
-<p>This is a well-considered list. The <code>timer</code>,
-<code>sudo</code>, <code>extract</code>, <code>history</code>, and
-<code>colored-man-pages</code> plugins are all underrated workhorses
-that most setups skip. <code>fzf</code> and
-<code>zsh-autosuggestions</code> are two of the highest-value additions
-in most environments. The tool-specific plugins (<code>docker</code>,
-<code>podman</code>, <code>systemd</code>, <code>gh</code>,
-<code>chezmoi</code>, <code>rsync</code>, <code>mise</code>) are
-appropriate for this toolchain.</p>
-<p>The history config is solid: 100k entries, persistent logging,
-session sharing. Most people have 1000 entries and then wonder why old
-commands disappear.</p>
+<p>The list reflects this user’s toolchain. The value of
+<code>timer</code>, <code>sudo</code>, <code>extract</code>,
+<code>history</code>, <code>colored-man-pages</code>, <code>fzf</code>,
+and <code>zsh-autosuggestions</code> depends on which commands and
+interactions the user relies on. The tool-specific plugins
+(<code>docker</code>, <code>podman</code>, <code>systemd</code>,
+<code>gh</code>, <code>chezmoi</code>, <code>rsync</code>,
+<code>mise</code>) match tools in this example environment.</p>
+<p>The history configuration retains up to 100,000 entries and shares
+history across sessions. Choose <code>HISTSIZE</code> and
+<code>SAVEHIST</code> for your storage and search needs; a larger
+history can also make searching less focused.</p>
 <h2 data-number="7.2" id="whats-missing"><span class="header-section-number">7.2</span> What’s Missing</h2>
-<p><strong><code>zsh-syntax-highlighting</code> — highest-impact missing
-piece.</strong></p>
-<p>This is the gap with the most immediate impact. Every command is
-colour-coded as you type it: green means the command exists, red means
-it does not. You catch typos before Enter, see unclosed quotes quickly,
-and generally get a more readable command line. It is off by default
-because it is third-party, but it is near-standard in mature ZSH
-setups.</p>
+<p><strong><code>zsh-syntax-highlighting</code> — an optional
+addition.</strong></p>
+<p>This third-party addition applies styles to command-line tokens as
+you type. The default styles and recognised syntax do not guarantee that
+a command exists or will succeed. Try it if this feedback suits your
+workflow.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="dt">\</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span></code></pre></div>
 <p>Add <code>zsh-syntax-highlighting</code> to the plugins list, and put
@@ -1703,19 +1691,17 @@ it <strong>last</strong>:</p>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  zsh-syntax-highlighting   <span class="co"># must be last</span></span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="va">)</span></span></code></pre></div>
 <p><strong><code>z</code> for directory jumping.</strong></p>
-<p>For any multi-repository workflow, this pays off quickly. The
-<code>z</code> plugin is bundled with OMZ, so just add it to the plugins
-list. After a few days of normal use, <code>z research</code> or
-<code>z building</code> gets you directly to the right directory from
-anywhere. No install needed:</p>
+<p>If you revisit directories, the <code>z</code> plugin may reduce
+repeated path entry. It is bundled with OMZ; add it to the plugins list
+and let its database collect visits before trying queries such as
+<code>z research</code> or <code>z building</code>:</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="va">plugins</span><span class="op">=</span><span class="va">(</span>... z ...<span class="va">)</span></span></code></pre></div>
 <p><strong>Consider the active theme choice.</strong></p>
 <p>This example has <code>agnoster-timestamp-newline</code> available
-but uses <code>robbyrussell</code>. That may be intentional, but it is
-worth re-evaluating periodically. A newline layout is easier to scan in
-deep paths, and p10k gives much richer git state visibility (staged,
-unstaged, untracked, ahead/behind) with a quick
-<code>p10k configure</code> run.</p>
+but uses <code>robbyrussell</code>. That may be intentional; compare the
+layouts against your terminal width and the information you want to see.
+p10k’s configuration wizard lets you select prompt elements
+interactively.</p>
 <h2 data-number="7.3" id="verify-existing-plugins-are-actually-used"><span class="header-section-number">7.3</span> Verify Existing Plugins Are
 Actually Used</h2>
 <p>Before adding another plugin, exercise the high-value ones already
@@ -1752,7 +1738,7 @@ Considering</h2>
 <span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Show port usage</span></span>
 <span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ports=<span class="st">&#39;ss -tlnp&#39;</span></span></code></pre></div>
-<p>And a few ZSH options worth adding to your <code>.zshrc</code> if
+<p>And a few Zsh options worth adding to your <code>.zshrc</code> if
 they’re not there (note: <code>HIST_IGNORE_SPACE</code> and friends from
 the History section earlier are already set by OMZ’s
 <code>lib/history.zsh</code> — no need to add those yourself):</p>
@@ -1763,8 +1749,8 @@ the History section earlier are already set by OMZ’s
 <ol type="1">
 <li><p>Does every enabled plugin remove regular friction, or is it
 leftover experimentation?</p></li>
-<li><p>Is startup still fast (<code>time zsh -i -c exit</code>) after
-the latest plugin/theme additions?</p></li>
+<li><p>Is startup still responsive (<code>time zsh -i -c exit</code>)
+after a plugin or theme change?</p></li>
 <li><p>Are high-impact basics present (<code>fzf</code>,
 <code>zsh-autosuggestions</code>, <code>zsh-syntax-highlighting</code>,
 <code>z</code>)?</p></li>
@@ -1772,8 +1758,8 @@ the latest plugin/theme additions?</p></li>
 code) without visual noise?</p></li>
 <li><p>Are aliases/functions in <code>custom/</code> so updates do not
 overwrite your work?</p></li>
-<li><p>Is PATH order intentional, with no duplicate manager
-shims?</p></li>
+<li><p>Is executable search path order intentional, with no duplicate
+manager shims?</p></li>
 <li><p>Do key bindings match your editing mode (<code>emacs</code> or
 <code>vi</code>) without surprises?</p></li>
 <li><p>Are all critical custom files actually sourced (not just present
@@ -1783,8 +1769,9 @@ aliases, plugins, and helper scripts?</p></li>
 <li><p>Are tool completions generated once instead of re-generated on
 every shell startup?</p></li>
 </ol>
-<p>If two or more answers are “no,” you likely have a configuration debt
-cleanup worth doing.</p>
+<p>Several “no” answers can identify configuration areas worth
+reviewing; the checklist is a prompt for investigation, not a score or
+diagnosis.</p>
 <hr />
 <h1 data-number="8" id="troubleshooting-common-problems"><span class="header-section-number">8</span> Troubleshooting Common
 Problems</h1>
@@ -1812,8 +1799,8 @@ Inconsistent</h2>
 <ol type="1">
 <li>Confirm the relevant plugin is in <code>plugins=(...)</code>.</li>
 <li>Start a clean shell and test again.</li>
-<li>Update OMZ (<code>omz update</code>) in case a completion script is
-stale.</li>
+<li>Update OMZ (<code>omz update</code>) if the installed completion
+files may be out of date.</li>
 </ol>
 <p>If completion for one command is still missing, inspect that plugin’s
 <code>.plugin.zsh</code> file and verify the completion function is
@@ -1823,36 +1810,35 @@ Behaviour</h2>
 <p>Run a temporary minimal profile:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="va">plugins</span><span class="op">=</span><span class="va">(</span>git<span class="va">)</span></span></code></pre></div>
 <p>If the issue disappears, re-add plugins in small groups until it
-returns. This is usually faster than reading every plugin source
-first.</p>
+returns. This narrows the search before you inspect each plugin’s
+source.</p>
 <hr />
 <h1 data-number="9" id="when-omz-is-not-enough"><span class="header-section-number">9</span> When OMZ Is Not Enough</h1>
-<p>Oh My Zsh is the right choice for most people, but there are
-situations where it starts to show its age.</p>
-<p><strong>Startup speed.</strong> OMZ adds measurable startup latency,
-mostly from sourcing plugins and initialising completions. On modern
-hardware this is usually under 200ms, which is imperceptible. But if
-you’re on a slow machine, opening many terminals, or doing a lot of
-<code>zsh -c</code> invocations in scripts, it accumulates.
-<code>zinit</code> and <code>zplug</code> are plugin managers that load
-plugins lazily or in parallel and can reduce startup time significantly.
-<code>sheldon</code> is another option with a simple TOML
-configuration.</p>
-<p><strong>Opinionated defaults.</strong> OMZ makes choices about
-completion settings, history handling, and key bindings that most people
-are fine with. If you find yourself fighting the defaults, vanilla ZSH
-with <code>zinit</code> and hand-picked plugins gives you more
-control.</p>
-<p><strong>Alternatives worth knowing.</strong> Prezto is OMZ’s more
-modular cousin — faster startup, more configurable, smaller default
-footprint. Fish shell takes a different approach entirely: better
-out-of-the-box experience, but incompatible syntax with Bash/ZSH, which
-matters if you write a lot of scripts. Nushell is the most radical
-departure — structured data instead of text streams, genuinely different
-mental model, not a daily driver for most people yet.</p>
-<p>For the typical developer workflow, OMZ with a curated plugin list
-and p10k as the theme is a well-tested configuration that will serve you
-well without requiring you to build from scratch.</p>
+<p>OMZ is one way to organise Zsh configuration. Whether it suits you
+depends on the features, startup behaviour, and maintenance model you
+want.</p>
+<p><strong>Startup speed.</strong> OMZ initialises its configuration,
+completions, plugins, and theme when a shell starts. The time depends on
+the machine, configuration, cache state, and plugins, so measure your
+own interactive startup (for example, with
+<code>time zsh -i -c exit</code>) before changing frameworks. Other
+plugin managers offer different loading and configuration models;
+compare them using the same workload rather than assuming they will be
+faster.</p>
+<p><strong>Configuration control.</strong> OMZ supplies defaults for
+completion, history, and key bindings. If you want to manage those
+pieces yourself, a minimal Zsh configuration or another plugin manager
+may offer a better fit, at the cost of more setup and maintenance.</p>
+<p><strong>Alternatives worth comparing.</strong> Prezto is another Zsh
+configuration framework. Fish has its own interactive features and
+scripting syntax, so Bash and Zsh scripts do not transfer unchanged.
+Nushell uses structured data in its pipeline model rather than treating
+command output only as text. Compare the features and migration cost
+against your own use; these differences do not establish a universal
+ranking.</p>
+<p>If you want a preconfigured Zsh setup, OMZ with a deliberately chosen
+plugin list is one option. A theme such as p10k adds its own maintenance
+trade-offs, described above.</p>
 <hr />
 <h1 data-number="10" id="quick-reference-what-to-do-next"><span class="header-section-number">10</span> Quick Reference: What to Do
 Next</h1>
@@ -1878,18 +1864,44 @@ ships.</p></li>
 <hr />
 <h1 data-number="11" id="further-reading"><span class="header-section-number">11</span> Further Reading</h1>
 <ul>
-<li><strong>OMZ repository</strong> — <code>~/.oh-my-zsh/</code> itself:
-<code>plugins/&lt;name&gt;/&lt;name&gt;.plugin.zsh</code> files are the
-source of truth for what each plugin does and what commands/aliases it
-provides.</li>
-<li><strong>ZSH manual</strong> — <code>man zsh</code> is the definitive
-reference. The sections on parameter expansion, globbing qualifiers, and
-ZLE are particularly worth having open.</li>
-<li><strong><a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">Powerlevel10k</a></strong>
-— read the support notice before installing; <code>p10k configure</code>
-documents the available prompt options interactively.</li>
-<li><strong>ZSH Users mailing list / r/zsh</strong> — for real-world
-configuration questions; the OMZ wiki has gotten stale in places.</li>
+<li><strong><a href="https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins">Oh
+My Zsh plugin documentation</a></strong> — browse bundled plugin
+descriptions, then inspect the linked README or source for the installed
+version because behaviour can change.</li>
+<li><strong><a href="https://github.com/ohmyzsh/ohmyzsh/wiki/Customization">Oh My Zsh
+customisation guide</a></strong> — explains custom plugins, themes, and
+override files.</li>
+<li><strong><a href="https://zsh.sourceforge.io/Doc/Release/Expansion.html">Zsh manual:
+Expansion</a>, <a href="https://zsh.sourceforge.io/Doc/Release/Options.html">Options</a>,
+<a href="https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html">Line
+Editor</a>, and <a href="https://zsh.sourceforge.io/Doc/Release/Completion-System.html">Completion
+System</a></strong> — consult the sections on parameter expansion,
+filename generation, history options, widgets, and command completion;
+local installations also provide <code>man zsh</code>.</li>
+<li><strong><a href="https://github.com/zsh-users/zsh-autosuggestions">zsh-autosuggestions</a></strong>
+— documents the suggestion strategies, widgets, and key-binding arrays
+used in this primer.</li>
+<li><strong><a href="https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md">zsh-syntax-highlighting
+installation</a></strong> — documents installation and why it must be
+sourced after other plugins.</li>
+<li><strong><a href="https://github.com/junegunn/fzf#key-bindings-for-command-line">fzf
+shell integration</a></strong> — documents its default command-line key
+bindings and their installation.</li>
+<li><strong><a href="https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/z">Oh My
+Zsh <code>z</code> plugin</a></strong> — documents the bundled
+directory-jumping plugin and its matching behaviour.</li>
+<li><strong><a href="https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/command-not-found">Oh
+My Zsh <code>command-not-found</code> plugin</a></strong> — lists
+supported platform handlers and setup details.</li>
+<li><strong><a href="https://github.com/romkatv/powerlevel10k#powerlevel10k">Powerlevel10k
+README</a></strong> — read its support notice and feature documentation
+before adopting it; its current support status is summarised above.</li>
+<li><strong><a href="https://github.com/ajeetdsouza/zoxide">zoxide
+documentation</a></strong> — explains its Zsh initialisation and
+directory-jumping options.</li>
+<li><strong><a href="https://www.zsh.org/mla/">Zsh mailing
+list</a></strong> — a place for questions about Zsh itself; check the
+shell and framework versions when applying advice.</li>
 </ul>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
