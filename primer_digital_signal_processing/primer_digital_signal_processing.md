@@ -166,7 +166,7 @@ $$
 y[n] = h[0]x[n] + h[1]x[n-1]+\cdots+h[M]x[n-M].
 $$
 
-The coefficients are not “the frequencies to keep.” They are time-domain weights whose collective response determines the frequency behaviour. A moving average with $M$ taps,
+The coefficients are not “the frequencies to keep”. They are time-domain weights whose collective response determines the frequency behaviour. A moving average with $M$ taps,
 
 $$
 h[k]=\frac{1}{M},\qquad 0\le k<M,
@@ -474,7 +474,7 @@ For a measurement retaining only 0--3 kHz at a 10 kHz rate, the first out-of-ban
 
 The ideal sinc interpolator is noncausal and infinitely long. A digital-to-analogue converter (DAC) commonly holds each sample until the next update, producing a zero-order-hold waveform. In frequency, the hold contributes a sinc-shaped envelope and the staircase contains images at multiples of $f_s$. An analogue reconstruction filter removes those images and often compensates, approximately, for the hold's passband droop.
 
-When DSP documentation says “the output is a 1 kHz sine,” ask whether it means the discrete sequence has a normalised digital frequency, the DAC output has a 1 kHz analogue component, or the entire reconstruction chain has been characterised. Those are related but not identical statements.
+When DSP documentation says “the output is a 1 kHz sine”, ask whether it means the discrete sequence has a normalised digital frequency, the DAC output has a 1 kHz analogue component, or the entire reconstruction chain has been characterised. Those are related but not identical statements.
 
 ### Quantisation and Signal-to-Quantisation-Noise Ratio
 
@@ -515,10 +515,10 @@ Subtractive dither is different: add a known dither before quantisation and subt
 
 ### Clock Jitter and Aperture Effects
 
-Sampling time errors matter more at high frequency and high slew rate. If the intended sample time is $t_n=nT$ but the actual time is $t_n+\epsilon_n$, then to first order
+Sampling time errors matter more at high frequency and high slew rate. If the intended sample time is $t_n=nT$ but the actual time is $t_n+\varepsilon_n$, then to first order
 
 $$
-x(t_n+\epsilon_n)\approx x(t_n)+\epsilon_n x'(t_n).
+x(t_n+\varepsilon_n)\approx x(t_n)+\varepsilon_n x'(t_n).
 $$
 
 For a sinusoid, timing jitter creates amplitude error proportional to frequency. A useful approximate jitter-limited signal-to-noise ratio is
@@ -1500,7 +1500,7 @@ Saturation is usually safer than wraparound for signal amplitudes because it lim
 
 Make the bit format explicit rather than relying on ambiguous Q names. Suppose samples and FIR coefficients are signed 16-bit integers representing their values divided by $2^{15}$, so their real range is $[-1,1-2^{-15}]$. The product uses a $2^{-30}$ scale. Sum integer products in a wide accumulator, round once, shift right by 15, and saturate to the output's signed 16-bit range. Rounding each product before adding introduces a different error process and can lose many small contributions. A 64-bit accumulator is convenient for a software reference; a hardware implementation may use fewer bits after establishing a worst-case bound.
 
-For a length-$K$ FIR with coefficient-rounding errors $|\epsilon_k|\le2^{-16}$ and input bound $A$, the output perturbation obeys $|\Delta y[n]|\le AK2^{-16}$ before final rounding. In frequency, $|\Delta H(e^{j\omega})|\le K2^{-16}$. With 181 taps, the loose bound is about 0.00276, much larger than the $10^{-4}$ maximum magnitude allowed by an 80 dB stopband. This does not prove that rounded coefficients fail; it proves that a generic coefficient-error bound cannot certify this requirement. Measure the quantised response. A wider coefficient format can be necessary even when 16-bit input samples meet the sensor's amplitude-noise budget.
+For a length-$K$ FIR with coefficient-rounding errors $|\varepsilon_k|\le2^{-16}$ and input bound $A$, the output perturbation obeys $|\Delta y[n]|\le AK2^{-16}$ before final rounding. In frequency, $|\Delta H(e^{j\omega})|\le K2^{-16}$. With 181 taps, the loose bound is about 0.00276, much larger than the $10^{-4}$ maximum magnitude allowed by an 80 dB stopband. This does not prove that rounded coefficients fail; it proves that a generic coefficient-error bound cannot certify this requirement. Measure the quantised response. A wider coefficient format can be necessary even when 16-bit input samples meet the sensor's amplitude-noise budget.
 
 Small quantised feedback examples show why a pole-radius check is insufficient. Take a zero-input recurrence $q[n]=\operatorname{round}(0.9q[n-1])$ on integer state codes with rounding to nearest. Starting at code one gives $\operatorname{round}(0.9)=1$ forever. The real-valued recurrence would decay towards zero, but the quantised version has a limit cycle at one LSB. Starting at code ten gives $10,9,8,7,6,5,4,4,\ldots$ under the usual ties-to-even rule, trapping at four. Truncating towards zero would remove these particular cycles while introducing a different bias. Dead bands, dither, and greater state precision change the behaviour; each is a design choice, not a repair to the pole plot.
 
@@ -1570,7 +1570,7 @@ $$
 h[r+Lp],\qquad r=0,\ldots,L-1.
 $$
 
-Here “polyphase” means “organised by the residue, or phase, of an index modulo $L$.” The zero-stuffed signal has nonzero samples only at intermediate-rate indices divisible by $L$. For an intermediate output index $q$, write $q=r\pmod L$. In the convolution
+Here “polyphase” means “organised by the residue, or phase, of an index modulo $L$”. The zero-stuffed signal has nonzero samples only at intermediate-rate indices divisible by $L$. For an intermediate output index $q$, write $q=r\pmod L$. In the convolution
 
 $$
 v[q]=\sum_p h[p]u[q-p],
@@ -1594,7 +1594,7 @@ The first phase sequence is therefore $0,1,0,1,\ldots$ for output samples $m=0,1
 
 For a toy four-tap prototype $h=[1,2,3,4]$ and $L=2$, the stored branches are phase 0, $[h[0],h[2]]=[1,3]$, and phase 1, $[h[1],h[3]]=[2,4]$. Ignoring startup padding and the overall gain, the formula above gives $v[0]=1x[0]+3x[-1]$ at output $m=0$, while $v[3]=2x[1]+4x[0]$ at output $m=1$. The second output uses a different combination because the desired output time falls on the other fractional phase of the upsampled grid. A production prototype would be designed as a low-pass filter, and its coefficients would normally be reversed in the multiply loop; the point of the toy numbers is only to make “phase” an operation on coefficient indices rather than a label on a plot.
 
-This timing view also explains why a resampler needs a low-pass prototype even when its code appears to be “just selecting phases.” Zero insertion creates images, and the downsampling operation would alias intermediate frequencies unless the prototype removes them. The phase branches do not each represent independent frequency bands; they are pieces of one low-pass convolution evaluated at the output instants. At the beginning and end of a finite record, the filter has incomplete support. A library must choose zero padding, reflected extension, or another boundary convention, so the first and last output samples can differ between implementations even when the interior is identical.
+This timing view also explains why a resampler needs a low-pass prototype even when its code appears to be “just selecting phases”. Zero insertion creates images, and the downsampling operation would alias intermediate frequencies unless the prototype removes them. The phase branches do not each represent independent frequency bands; they are pieces of one low-pass convolution evaluated at the output instants. At the beginning and end of a finite record, the filter has incomplete support. A library must choose zero padding, reflected extension, or another boundary convention, so the first and last output samples can differ between implementations even when the interior is identical.
 
 For 48 kHz to 44.1 kHz, use $\frac{L}{M}=\frac{147}{160}$. A direct implementation at the 7.056 MHz intermediate rate is wasteful; polyphase conversion performs roughly the necessary work at the input/output rates. In practice, a library such as `scipy.signal.resample_poly` designs or accepts an FIR window and applies the polyphase structure.
 
@@ -1918,7 +1918,7 @@ Suppose $d[n]$ is a desired signal and $x[n]$ is an observed input. A linear est
 
 $$
 \hat d[n]=w^Hu[n]=\sum_{k=0}^{M}w_k^*x[n-k],
-\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^T
+\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^{\top}
 $$
 
 can be chosen to minimise mean-square error $\mathbb{E}|d[n]-\hat d[n]|^2$. Differentiating with respect to the coefficient vector gives the Wiener–Hopf equations
@@ -1944,7 +1944,7 @@ In coloured noise, a plain correlation is not generally optimal. Whiten the nois
 For a threshold calculation, normalise the correlation by the noise standard deviation. In a real-valued white-noise problem with variance $\sigma^2$, define
 
 $$
-z=\frac{s^Ty}{\sigma\,\|s\|_2}.
+z=\frac{s^{\top}y}{\sigma\,\|s\|_2}.
 $$
 
 Under noise alone, $z$ is standard normal. A one-sided threshold of $3$ has a single-alignment false-alarm probability $P(z>3)\approx0.00135$. That sounds small until the detector searches many alignments: if 1,000 lags were independent, the chance of at least one noise peak exceeding 3 would be
@@ -1953,7 +1953,7 @@ $$
 1-(1-0.00135)^{1000}\approx0.74.
 $$
 
-To target a global false-alarm probability near 1% over that search, a rough independent-trial threshold is $z>4.27$ because $P(z>4.27)\approx10^{-5}$. In terms of the raw correlation, this is $s^Ty>4.27\,\sigma\|s\|_2$. Real correlation outputs overlap and are not independent, so the effective number of trials must be measured or modelled, but the direction is important: a threshold is tied to the search scope, not only to the noise level. Estimate $\sigma$ and the noise-only score distribution from data that do not contain the event, and reserve a separate test interval for the final false-alarm check.
+To target a global false-alarm probability near 1% over that search, a rough independent-trial threshold is $z>4.27$ because $P(z>4.27)\approx10^{-5}$. In terms of the raw correlation, this is $s^{\top}y>4.27\,\sigma\|s\|_2$. Real correlation outputs overlap and are not independent, so the effective number of trials must be measured or modelled, but the direction is important: a threshold is tied to the search scope, not only to the noise level. Estimate $\sigma$ and the noise-only score distribution from data that do not contain the event, and reserve a separate test interval for the final false-alarm check.
 
 The expected matched-filter score also makes detection strength concrete. If $y=\alpha s+v$, then the normalised score has mean $\frac{\alpha\|s\|_2}{\sigma}$ under the signal hypothesis. Doubling the template energy increases this mean by $\sqrt{2}$, not by two, while doubling the amplitude doubles it. A threshold can therefore be translated into a required signal-to-noise ratio, but only after the template normalisation, noise colour, and number of searched hypotheses are explicit.
 
@@ -1961,7 +1961,7 @@ Connect the score to an actual decision. For the preamble above, if noise RMS is
 
 You can control search false alarms without assuming independence. For $K$ tested hypotheses, the union bound gives $P(\text{any false alarm})\le Kp$ when each has null exceedance probability at most $p$. Setting $p=\frac{0.01}{1000}$ therefore guarantees an upper bound of 1% under the stated marginal distributions, even for overlapping lags. It can be conservative. Estimating an effective search count is useful for sensitivity, but a count fitted to the very record being tested is not an independent calibration. Search scope includes templates, frequency offsets, channels, and repeated observation intervals, not only lags. Searching 1,000 lags across ten templates means up to 10,000 opportunities.
 
-A one-sided real score assumes known signal polarity. Unknown polarity calls for $|z|$ and a two-tail Gaussian threshold. Unknown complex phase calls for a magnitude statistic with a different null distribution. For proper complex Gaussian noise with covariance $R$, meaning zero pseudocovariance $\mathbb{E}[vv^T]$, define
+A one-sided real score assumes known signal polarity. Unknown polarity calls for $|z|$ and a two-tail Gaussian threshold. Unknown complex phase calls for a magnitude statistic with a different null distribution. For proper complex Gaussian noise with covariance $R$, meaning zero pseudocovariance $\mathbb{E}[vv^{\top}]$, define
 
 $$
 T=\frac{|s^HR^{-1}y|^2}{s^HR^{-1}s}.
@@ -1969,7 +1969,7 @@ $$
 
 Under noise alone, $T$ has mean-one exponential distribution when $R$ includes the absolute noise scale. Its exceedance probability is $e^{-\eta}$, so a union-bound threshold for $K=1000$ and global probability 0.01 is $\eta=\ln(100{,}000)=11.513$. Applying the real threshold 4.27 directly to this squared complex score would give the wrong false-alarm rate. Estimating noise variance from a short record adds uncertainty; even the real normal-score model changes when the denominator is random.
 
-Whitening must transform the template as well as the observation. If $R=LL^H$ is a Cholesky factorisation, solve $L\tilde y=y$ and $L\tilde s=s$. Then $\tilde s^H\tilde y=s^HR^{-1}y$. Correlating a whitened observation with an unwhitened template solves a different problem. In a two-coordinate example with $R=\operatorname{diag}(1,100)$ and $s=[1,1]^T$, ordinary matched correlation has signal mean divided by noise standard deviation $\frac{2}{\sqrt{101}}=0.199$ for unit signal amplitude. Whitening gives $\sqrt{s^TR^{-1}s}=\sqrt{1.01}=1.005$: it suppresses the second coordinate's large noise instead of assigning both coordinates equal weight. Nearly singular estimated covariance requires regularisation and held-out noise checks; an artificially tiny estimated PSD can otherwise create enormous scores.
+Whitening must transform the template as well as the observation. If $R=LL^H$ is a Cholesky factorisation, solve $L\tilde y=y$ and $L\tilde s=s$. Then $\tilde s^H\tilde y=s^HR^{-1}y$. Correlating a whitened observation with an unwhitened template solves a different problem. In a two-coordinate example with $R=\operatorname{diag}(1,100)$ and $s=[1,1]^{\top}$, ordinary matched correlation has signal mean divided by noise standard deviation $\frac{2}{\sqrt{101}}=0.199$ for unit signal amplitude. Whitening gives $\sqrt{s^{\top}R^{-1}s}=\sqrt{1.01}=1.005$: it suppresses the second coordinate's large noise instead of assigning both coordinates equal weight. Nearly singular estimated covariance requires regularisation and held-out noise checks; an artificially tiny estimated PSD can otherwise create enormous scores.
 
 ### Deconvolution
 
@@ -2004,16 +2004,16 @@ For intuition, consider the scalar case with input power $P_x=\mathbb{E}|x[n]|^2
 Normalised LMS (NLMS) compensates for the instantaneous input energy:
 
 $$
-w[n+1]=w[n]+\frac{\mu}{\epsilon+\|u[n]\|^2}e^*[n]u[n].
+w[n+1]=w[n]+\frac{\mu}{\varepsilon+\|u[n]\|^2}e^*[n]u[n].
 $$
 
-Here $\epsilon>0$ prevents division by zero and $\mu$ is dimensionless. For a one-tap filter with $x[n]=2$, $d[n]=3$, $w[0]=0$, and an $\epsilon$ negligible compared with $\|u[n]\|^2=4$, choosing $\mu=0.5$ gives $e[0]=3$ and, ignoring that tiny $\epsilon$ for the arithmetic,
+Here $\varepsilon>0$ prevents division by zero and $\mu$ is dimensionless. For a one-tap filter with $x[n]=2$, $d[n]=3$, $w[0]=0$, and an $\varepsilon$ negligible compared with $\|u[n]\|^2=4$, choosing $\mu=0.5$ gives $e[0]=3$ and, ignoring that tiny $\varepsilon$ for the arithmetic,
 
 $$
 w[1]\approx0+0.5\frac{3\cdot2}{2^2}=0.75.
 $$
 
-Normalisation reduces sensitivity to input amplitude, but it does not provide an amplitude-independent bound on the coefficient update. Its norm is $\frac{\mu|e|\|u\|}{\epsilon+\|u\|^2}$, whose multiplier can reach $\frac{\mu}{2\sqrt\epsilon}$. If $\epsilon$ is tiny and the reference is weak while the desired signal remains large, coefficients can jump substantially. Without the floor, that norm grows as $\frac{\mu|e|}{\|u\|}$. Freeze adaptation below a measured reference-energy threshold when such frames provide no useful information. Coloured inputs still create direction-dependent convergence, and values of $\mu$ near 2 are not automatically safe in finite precision or with modelling delay. Select the floor, update rate, and step size together, then measure convergence and residual error.
+Normalisation reduces sensitivity to input amplitude, but it does not provide an amplitude-independent bound on the coefficient update. Its norm is $\frac{\mu|e|\|u\|}{\varepsilon+\|u\|^2}$, whose multiplier can reach $\frac{\mu}{2\sqrt\varepsilon}$. If $\varepsilon$ is tiny and the reference is weak while the desired signal remains large, coefficients can jump substantially. Without the floor, that norm grows as $\frac{\mu|e|}{\|u\|}$. Freeze adaptation below a measured reference-energy threshold when such frames provide no useful information. Coloured inputs still create direction-dependent convergence, and values of $\mu$ near 2 are not automatically safe in finite precision or with modelling delay. Select the floor, update rate, and step size together, then measure convergence and residual error.
 
 **Adaptive noise cancellation.** For this scalar example, take signals and coefficients to be real-valued. Let the desired signal be $d[n]=s[n]+v[n]$, where $s$ is the wanted component and $v$ is interference. Let a reference microphone measure $x[n]=v[n]$, with $s$ uncorrelated with $v$. A scalar adaptive filter produces $y[n]=w[n]x[n]$ and subtracts it from $d[n]$. Its mean-square cost is
 
@@ -2326,7 +2326,7 @@ Before choosing an FFT, filter, or resampler, answer:
 * Is the output for display, estimation, control, detection, storage, or reconstruction?
 * Which assumptions are testable from the data and metadata?
 
-If the answer is “I need to see what is there,” start with a calibrated, windowed exploratory spectrum and a time-domain plot, but label it exploratory. If the answer is “estimate power,” use a PSD method and integrate it. If the answer is “remove a known band,” design a filter against explicit edges and attenuation. If the answer is “detect a known waveform,” begin with correlation or matched filtering and model the noise.
+If the answer is “I need to see what is there”, start with a calibrated, windowed exploratory spectrum and a time-domain plot, but label it exploratory. If the answer is “estimate power”, use a PSD method and integrate it. If the answer is “remove a known band”, design a filter against explicit edges and attenuation. If the answer is “detect a known waveform”, begin with correlation or matched filtering and model the noise.
 
 ### Method Selection Heuristics
 
@@ -2849,3 +2849,23 @@ The following references cover the subject more fully and provide the derivation
 * [Welch, “The use of fast Fourier transform for the estimation of power spectra”](https://doi.org/10.1109/TAU.1967.1161901) — original reference for the averaged modified-periodogram method.
 
 The durable habit to take from DSP is simple: model the signal chain, write down the transform convention, and verify the result against an identity or a controlled experiment. The mathematics gives you the relationships; the engineering work is making sure the conditions for those relationships are actually true.
+
+\newpage
+
+## Notation
+
+The table records the symbols used repeatedly in the derivations. Local definitions still appear where an equation introduces a variable or adopts a transform convention.
+
+| Symbol | Meaning | First Use |
+|---|---|---|
+| $x[n]$ | Discrete-time signal sample at index $n$ | Signal and system definitions |
+| $y[n]$ | Output sample of a discrete-time system | Signal and system definitions |
+| $j$ | Imaginary unit, with $j^2=-1$ | Fourier representations |
+| $f_s$ | Sampling frequency | Sampling and aliasing |
+| $\omega$ | Angular frequency in radians per sample | The DTFT |
+| $X(e^{j\omega})$ | Discrete-time Fourier transform of $x[n]$ | The DTFT |
+| $H(e^{j\omega})$ | Frequency response of a system | LTI systems |
+| $z$ | Complex $z$-transform variable | The $z$-transform |
+| $h[n]$ | Impulse response | Convolution |
+| $R$ | Passband ripple or a covariance matrix, according to context | Filter specifications and matched filtering |
+| $\varepsilon$ | Small positive numerical-stability or timing-error quantity, according to context | Adaptive filtering and sampling jitter |

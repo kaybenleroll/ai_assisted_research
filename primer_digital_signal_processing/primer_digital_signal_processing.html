@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Digital Signal Processing: A Technical
 Primer</span>
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -854,6 +854,7 @@ Checks</a></li>
 </ul></li>
 <li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources"><span class="toc-section-number">15</span> Further Reading and
 Resources</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">16</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -1239,7 +1240,7 @@ reversed coefficient vector:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mi>⋯</mi><mo>+</mo><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 y[n] = h[0]x[n] + h[1]x[n-1]+\cdots+h[M]x[n-M].
 </annotation></semantics></math></p>
-<p>The coefficients are not “the frequencies to keep.” They are
+<p>The coefficients are not “the frequencies to keep”. They are
 time-domain weights whose collective response determines the frequency
 behaviour. A moving average with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
@@ -1833,7 +1834,7 @@ images at multiples of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>s</mi></msub><annotation encoding="application/x-tex">f_s</annotation></semantics></math>.
 An analogue reconstruction filter removes those images and often
 compensates, approximately, for the hold’s passband droop.</p>
-<p>When DSP documentation says “the output is a 1 kHz sine,” ask whether
+<p>When DSP documentation says “the output is a 1 kHz sine”, ask whether
 it means the discrete sequence has a normalised digital frequency, the
 DAC output has a 1 kHz analogue component, or the entire reconstruction
 chain has been characterised. Those are related but not identical
@@ -2030,10 +2031,10 @@ Effects</h2>
 rate. If the intended sample time is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>=</mo><mi>n</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">t_n=nT</annotation></semantics></math>
 but the actual time is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ϵ</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">t_n+\epsilon_n</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">t_n+\varepsilon_n</annotation></semantics></math>,
 then to first order</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ϵ</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>ϵ</mi><mi>n</mi></msub><msup><mi>x</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-x(t_n+\epsilon_n)\approx x(t_n)+\epsilon_n x&#39;(t_n).
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>ε</mi><mi>n</mi></msub><msup><mi>x</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+x(t_n+\varepsilon_n)\approx x(t_n)+\varepsilon_n x&#39;(t_n).
 </annotation></semantics></math></p>
 <p>For a sinusoid, timing jitter creates amplitude error proportional to
 frequency. A useful approximate jitter-limited signal-to-noise ratio
@@ -3889,7 +3890,7 @@ establishing a worst-case bound.</p>
 <p>For a
 length-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 FIR with coefficient-rounding errors
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>ϵ</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>≤</mo><msup><mn>2</mn><mrow><mi>−</mi><mn>16</mn></mrow></msup></mrow><annotation encoding="application/x-tex">|\epsilon_k|\le2^{-16}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>ε</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>≤</mo><msup><mn>2</mn><mrow><mi>−</mi><mn>16</mn></mrow></msup></mrow><annotation encoding="application/x-tex">|\varepsilon_k|\le2^{-16}</annotation></semantics></math>
 and input bound
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>,
 the output perturbation obeys
@@ -4066,7 +4067,7 @@ h[r+Lp],\qquad r=0,\ldots,L-1.
 </annotation></semantics></math></p>
 <p>Here “polyphase” means “organised by the residue, or phase, of an
 index modulo
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>.”
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>”.
 The zero-stuffed signal has nonzero samples only at intermediate-rate
 indices divisible by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>.
@@ -4160,7 +4161,7 @@ coefficients would normally be reversed in the multiply loop; the point
 of the toy numbers is only to make “phase” an operation on coefficient
 indices rather than a label on a plot.</p>
 <p>This timing view also explains why a resampler needs a low-pass
-prototype even when its code appears to be “just selecting phases.” Zero
+prototype even when its code appears to be “just selecting phases”. Zero
 insertion creates images, and the downsampling operation would alias
 intermediate frequencies unless the prototype removes them. The phase
 branches do not each represent independent frequency bands; they are
@@ -4759,9 +4760,9 @@ response. Those are objective- and noise-model-dependent problems.</p>
 is a desired signal and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x[n]</annotation></semantics></math>
 is an observed input. A linear estimator</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>d</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi>w</mi><mi>H</mi></msup><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>M</mi></munderover><msubsup><mi>w</mi><mi>k</mi><mo>*</mo></msubsup><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>…</mi><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>d</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi>w</mi><mi>H</mi></msup><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>M</mi></munderover><msubsup><mi>w</mi><mi>k</mi><mo>*</mo></msubsup><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>…</mi><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">]</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">
 \hat d[n]=w^Hu[n]=\sum_{k=0}^{M}w_k^*x[n-k],
-\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^T
+\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^{\top}
 </annotation></semantics></math></p>
 <p>can be chosen to minimise mean-square error
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>−</mo><mover><mi>d</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb{E}|d[n]-\hat d[n]|^2</annotation></semantics></math>.
@@ -4839,8 +4840,8 @@ arbitrary absolute threshold.</p>
 standard deviation. In a real-valued white-noise problem with variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>,
 define</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mfrac><mrow><msup><mi>s</mi><mi>T</mi></msup><mi>y</mi></mrow><mrow><mi>σ</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
-z=\frac{s^Ty}{\sigma\,\|s\|_2}.
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mfrac><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>y</mi></mrow><mrow><mi>σ</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+z=\frac{s^{\top}y}{\sigma\,\|s\|_2}.
 </annotation></semantics></math></p>
 <p>Under noise alone,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
@@ -4860,7 +4861,7 @@ a rough independent-trial threshold is
 because
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>&gt;</mo><mn>4.27</mn><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P(z&gt;4.27)\approx10^{-5}</annotation></semantics></math>.
 In terms of the raw correlation, this is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>T</mi></msup><mi>y</mi><mo>&gt;</mo><mn>4.27</mn><mspace width="0.167em"></mspace><mi>σ</mi><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">s^Ty&gt;4.27\,\sigma\|s\|_2</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>y</mi><mo>&gt;</mo><mn>4.27</mn><mspace width="0.167em"></mspace><mi>σ</mi><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">s^{\top}y&gt;4.27\,\sigma\|s\|_2</annotation></semantics></math>.
 Real correlation outputs overlap and are not independent, so the
 effective number of trials must be measured or modelled, but the
 direction is important: a threshold is tied to the search scope, not
@@ -4927,7 +4928,7 @@ magnitude statistic with a different null distribution. For proper
 complex Gaussian noise with covariance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>,
 meaning zero pseudocovariance
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>v</mi><msup><mi>v</mi><mi>T</mi></msup><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb{E}[vv^T]</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>v</mi><msup><mi>v</mi><mi>⊤</mi></msup><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb{E}[vv^{\top}]</annotation></semantics></math>,
 define</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">|</mo><msup><mi>s</mi><mi>H</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>y</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup></mrow><mrow><msup><mi>s</mi><mi>H</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>s</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
 T=\frac{|s^HR^{-1}y|^2}{s^HR^{-1}s}.
@@ -4958,12 +4959,12 @@ Correlating a whitened observation with an unwhitened template solves a
 different problem. In a two-coordinate example with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>100</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">R=\operatorname{diag}(1,100)</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">s=[1,1]^T</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">s=[1,1]^{\top}</annotation></semantics></math>,
 ordinary matched correlation has signal mean divided by noise standard
 deviation
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>2</mn><msqrt><mn>101</mn></msqrt></mfrac><mo>=</mo><mn>0.199</mn></mrow><annotation encoding="application/x-tex">\frac{2}{\sqrt{101}}=0.199</annotation></semantics></math>
 for unit signal amplitude. Whitening gives
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><msup><mi>s</mi><mi>T</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>s</mi></mrow></msqrt><mo>=</mo><msqrt><mn>1.01</mn></msqrt><mo>=</mo><mn>1.005</mn></mrow><annotation encoding="application/x-tex">\sqrt{s^TR^{-1}s}=\sqrt{1.01}=1.005</annotation></semantics></math>:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><msup><mi>s</mi><mi>⊤</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>s</mi></mrow></msqrt><mo>=</mo><msqrt><mn>1.01</mn></msqrt><mo>=</mo><mn>1.005</mn></mrow><annotation encoding="application/x-tex">\sqrt{s^{\top}R^{-1}s}=\sqrt{1.01}=1.005</annotation></semantics></math>:
 it suppresses the second coordinate’s large noise instead of assigning
 both coordinates equal weight. Nearly singular estimated covariance
 requires regularisation and held-out noise checks; an artificially tiny
@@ -5041,11 +5042,11 @@ the direction with the largest eigenvalue limits stability while
 directions with small eigenvalues converge slowly.</p>
 <p>Normalised LMS (NLMS) compensates for the instantaneous input
 energy:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mfrac><mi>μ</mi><mrow><mi>ϵ</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><msup><mi>e</mi><mo>*</mo></msup><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-w[n+1]=w[n]+\frac{\mu}{\epsilon+\|u[n]\|^2}e^*[n]u[n].
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mfrac><mi>μ</mi><mrow><mi>ε</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><msup><mi>e</mi><mo>*</mo></msup><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+w[n+1]=w[n]+\frac{\mu}{\varepsilon+\|u[n]\|^2}e^*[n]u[n].
 </annotation></semantics></math></p>
 <p>Here
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\epsilon&gt;0</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\varepsilon&gt;0</annotation></semantics></math>
 prevents division by zero and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
 is dimensionless. For a one-tap filter with
@@ -5053,7 +5054,7 @@ is dimensionless. For a one-tap filter with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">d[n]=3</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">w[0]=0</annotation></semantics></math>,
 and an
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 negligible compared with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\|u[n]\|^2=4</annotation></semantics></math>,
 choosing
@@ -5061,7 +5062,7 @@ choosing
 gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">e[0]=3</annotation></semantics></math>
 and, ignoring that tiny
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 for the arithmetic,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>≈</mo><mn>0</mn><mo>+</mo><mn>0.5</mn><mfrac><mrow><mn>3</mn><mo>⋅</mo><mn>2</mn></mrow><msup><mn>2</mn><mn>2</mn></msup></mfrac><mo>=</mo><mn>0.75</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
 w[1]\approx0+0.5\frac{3\cdot2}{2^2}=0.75.
@@ -5069,11 +5070,11 @@ w[1]\approx0+0.5\frac{3\cdot2}{2^2}=0.75.
 <p>Normalisation reduces sensitivity to input amplitude, but it does not
 provide an amplitude-independent bound on the coefficient update. Its
 norm is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>μ</mi><mo stretchy="false" form="prefix">|</mo><mi>e</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="postfix">∥</mo></mrow><mrow><mi>ϵ</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu|e|\|u\|}{\epsilon+\|u\|^2}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>μ</mi><mo stretchy="false" form="prefix">|</mo><mi>e</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="postfix">∥</mo></mrow><mrow><mi>ε</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu|e|\|u\|}{\varepsilon+\|u\|^2}</annotation></semantics></math>,
 whose multiplier can reach
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mi>μ</mi><mrow><mn>2</mn><msqrt><mi>ϵ</mi></msqrt></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu}{2\sqrt\epsilon}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mi>μ</mi><mrow><mn>2</mn><msqrt><mi>ε</mi></msqrt></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu}{2\sqrt\varepsilon}</annotation></semantics></math>.
 If
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 is tiny and the reference is weak while the desired signal remains
 large, coefficients can jump substantially. Without the floor, that norm
 grows as
@@ -5813,12 +5814,12 @@ pipeline with the deployed one.</p>
 or reconstruction?</li>
 <li>Which assumptions are testable from the data and metadata?</li>
 </ul>
-<p>If the answer is “I need to see what is there,” start with a
+<p>If the answer is “I need to see what is there”, start with a
 calibrated, windowed exploratory spectrum and a time-domain plot, but
-label it exploratory. If the answer is “estimate power,” use a PSD
-method and integrate it. If the answer is “remove a known band,” design
+label it exploratory. If the answer is “estimate power”, use a PSD
+method and integrate it. If the answer is “remove a known band”, design
 a filter against explicit edges and attenuation. If the answer is
-“detect a known waveform,” begin with correlation or matched filtering
+“detect a known waveform”, begin with correlation or matched filtering
 and model the noise.</p>
 <h2 data-number="13.2" id="method-selection-heuristics"><span class="header-section-number">13.2</span> Method Selection
 Heuristics</h2>
@@ -6516,6 +6517,88 @@ write down the transform convention, and verify the result against an
 identity or a controlled experiment. The mathematics gives you the
 relationships; the engineering work is making sure the conditions for
 those relationships are actually true.</p>
+<h1 data-number="16" id="notation"><span class="header-section-number">16</span> Notation</h1>
+<p>The table records the symbols used repeatedly in the derivations.
+Local definitions still appear where an equation introduces a variable
+or adopts a transform convention.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x[n]</annotation></semantics></math></td>
+<td>Discrete-time signal sample at index
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math></td>
+<td>Signal and system definitions</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">y[n]</annotation></semantics></math></td>
+<td>Output sample of a discrete-time system</td>
+<td>Signal and system definitions</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math></td>
+<td>Imaginary unit, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>j</mi><mn>2</mn></msup><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">j^2=-1</annotation></semantics></math></td>
+<td>Fourier representations</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>s</mi></msub><annotation encoding="application/x-tex">f_s</annotation></semantics></math></td>
+<td>Sampling frequency</td>
+<td>Sampling and aliasing</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math></td>
+<td>Angular frequency in radians per sample</td>
+<td>The DTFT</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X(e^{j\omega})</annotation></semantics></math></td>
+<td>Discrete-time Fourier transform of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x[n]</annotation></semantics></math></td>
+<td>The DTFT</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(e^{j\omega})</annotation></semantics></math></td>
+<td>Frequency response of a system</td>
+<td>LTI systems</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math></td>
+<td>Complex
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>-transform
+variable</td>
+<td>The
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>-transform</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">h[n]</annotation></semantics></math></td>
+<td>Impulse response</td>
+<td>Convolution</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math></td>
+<td>Passband ripple or a covariance matrix, according to context</td>
+<td>Filter specifications and matched filtering</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></td>
+<td>Small positive numerical-stability or timing-error quantity,
+according to context</td>
+<td>Adaptive filtering and sampling jitter</td>
+</tr>
+</tbody>
+</table>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
