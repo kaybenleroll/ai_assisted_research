@@ -1,4 +1,4 @@
-# Containerization: Docker, Podman, and How Kubernetes Fits In
+# Containerisation: Docker, Podman, and How Kubernetes Fits In
 
 ## Introduction
 
