@@ -979,7 +979,7 @@ Include:
 
 Think behaviour spec, not marketing copy.
 
-### Path Step 5: Implement the Execution Loop with Hard Stops
+### Path Step 5: Implement the Execution Loop With Hard Stops
 
 Use deterministic boundaries:
 
