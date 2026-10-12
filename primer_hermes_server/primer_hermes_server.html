@@ -917,7 +917,7 @@ platform-specific actions. The state layer persists configuration,
 credentials, sessions, memory, skills, logs, and profile metadata.</p>
 <p>This model prevents category errors. A malformed tool call is usually
 a provider/model or tool-schema issue, not a gateway-port issue. A
-message from an unknown Telegram user is an authorization issue, not a
+message from an unknown Telegram user is an authorisation issue, not a
 memory issue. A Desktop connection refusal is a backend lifecycle or
 network issue, not proof that the model provider is down.</p>
 <h3 data-number="1.8.1" id="the-process-relationships"><span class="header-section-number">1.8.1</span> The Process
@@ -1024,7 +1024,7 @@ state. Host terminal subprocesses normally retain the real OS user’s
 <code>gh</code>, npm, cloud CLIs, Claude Code, and Codex can find
 existing credentials. Set <code>terminal.home_mode: profile</code> only
 when you intentionally want a separate subprocess home, and then
-initialize those credentials inside the profile home.</p>
+initialise those credentials inside the profile home.</p>
 <h2 data-number="3.1" id="providers-and-models"><span class="header-section-number">3.1</span> Providers and Models</h2>
 <p>Hermes separates the agent runtime from the provider that supplies
 model inference. Providers can be hosted APIs, Nous Portal,
@@ -1613,14 +1613,14 @@ before deleting state. Check the installed version, run
 points at the managed virtual environment, and test the provider with a
 minimal prompt. If the problem is profile-specific, create a temporary
 profile to separate runtime failure from corrupted state. Restore the
-original profile only after confirming which artifact is damaged.</p>
+original profile only after confirming which artefact is damaged.</p>
 <h1 data-number="9" id="reference-and-alternatives"><span class="header-section-number">9</span> Reference and Alternatives</h1>
 <p>OpenClaw and Hermes appear in the same local-first assistant
 discussions because they can both sit between people, models, tools, and
 messaging channels. They are not identical products, and “Hermes” in
 this document is not a model family.</p>
 <p>At a high level, <a href="https://github.com/openclaw/openclaw">OpenClaw</a> is an assistant
-orchestration/control-plane platform organized around its gateway,
+orchestration/control-plane platform organised around its gateway,
 channels, sessions, routing, tool policy, and provider integrations.
 Hermes Agent is an agent runtime from Nous Research that combines
 interactive clients, tools, skills, memory, profiles, messaging
@@ -1770,7 +1770,7 @@ allowlist</td>
 container publish</td>
 </tr>
 <tr>
-<td>API returns unauthorized</td>
+<td>API returns unauthorised</td>
 <td><code>API_SERVER_KEY</code>, profile <code>.env</code>, proxy
 headers, wrong port/profile</td>
 </tr>
