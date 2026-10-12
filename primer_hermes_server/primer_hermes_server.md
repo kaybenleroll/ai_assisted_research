@@ -78,7 +78,7 @@ Think in layers: client surface, transport, agent loop, provider, tools, and sta
 
 The client surface is the command-line/terminal user interface (CLI/TUI), Desktop, dashboard, messaging adapter, or API client. The transport layer turns that interaction into a local call, HTTP request, platform event, or JSON-RPC/WebSocket message. JSON-RPC is a request/response protocol; WebSocket is the persistent connection that carries it for Desktop clients. The agent loop assembles instructions and history, chooses a provider/model, asks for the next step, validates tool calls, executes approved tools, and repeats until it can answer. The provider layer handles model authentication and protocol differences. The tool layer includes terminal execution, web and browser capabilities, file operations, skills, memory, MCP integrations, and platform-specific actions. The state layer persists configuration, credentials, sessions, memory, skills, logs, and profile metadata.
 
-This model prevents category errors. A malformed tool call is usually a provider/model or tool-schema issue, not a gateway-port issue. A message from an unknown Telegram user is an authorization issue, not a memory issue. A Desktop connection refusal is a backend lifecycle or network issue, not proof that the model provider is down.
+This model prevents category errors. A malformed tool call is usually a provider/model or tool-schema issue, not a gateway-port issue. A message from an unknown Telegram user is an authorisation issue, not a memory issue. A Desktop connection refusal is a backend lifecycle or network issue, not proof that the model provider is down.
 
 \newpage
 
@@ -190,7 +190,7 @@ chmod 700 ~/.hermes
 chmod 600 ~/.hermes/.env ~/.hermes/auth.json 2>/dev/null || true
 ```
 
-Do not confuse `HERMES_HOME` with the operating-system `HOME`. `HERMES_HOME` selects the Hermes profile and therefore its config, memory, sessions, skills, logs, and gateway state. Host terminal subprocesses normally retain the real OS user's `HOME` so `git`, `ssh`, `gh`, npm, cloud CLIs, Claude Code, and Codex can find existing credentials. Set `terminal.home_mode: profile` only when you intentionally want a separate subprocess home, and then initialize those credentials inside the profile home.
+Do not confuse `HERMES_HOME` with the operating-system `HOME`. `HERMES_HOME` selects the Hermes profile and therefore its config, memory, sessions, skills, logs, and gateway state. Host terminal subprocesses normally retain the real OS user's `HOME` so `git`, `ssh`, `gh`, npm, cloud CLIs, Claude Code, and Codex can find existing credentials. Set `terminal.home_mode: profile` only when you intentionally want a separate subprocess home, and then initialise those credentials inside the profile home.
 
 ### Providers and Models
 
@@ -613,13 +613,13 @@ Inspect archives before sharing them. Memory, sessions, user preferences, skills
 
 #### Recovery Checklist
 
-When Hermes fails after an update, preserve logs and the backup before deleting state. Check the installed version, run `hermes doctor`, validate YAML, confirm that the launcher points at the managed virtual environment, and test the provider with a minimal prompt. If the problem is profile-specific, create a temporary profile to separate runtime failure from corrupted state. Restore the original profile only after confirming which artifact is damaged.
+When Hermes fails after an update, preserve logs and the backup before deleting state. Check the installed version, run `hermes doctor`, validate YAML, confirm that the launcher points at the managed virtual environment, and test the provider with a minimal prompt. If the problem is profile-specific, create a temporary profile to separate runtime failure from corrupted state. Restore the original profile only after confirming which artefact is damaged.
 
 ## Reference and Alternatives
 
 OpenClaw and Hermes appear in the same local-first assistant discussions because they can both sit between people, models, tools, and messaging channels. They are not identical products, and “Hermes” in this document is not a model family.
 
-At a high level, [OpenClaw](https://github.com/openclaw/openclaw) is an assistant orchestration/control-plane platform organized around its gateway, channels, sessions, routing, tool policy, and provider integrations. Hermes Agent is an agent runtime from Nous Research that combines interactive clients, tools, skills, memory, profiles, messaging adapters, an OpenAI-compatible API server, and a Desktop/headless backend. Both can be deployed as a long-running personal or team assistant, but their command names, configuration layouts, protocols, and operational assumptions differ.
+At a high level, [OpenClaw](https://github.com/openclaw/openclaw) is an assistant orchestration/control-plane platform organised around its gateway, channels, sessions, routing, tool policy, and provider integrations. Hermes Agent is an agent runtime from Nous Research that combines interactive clients, tools, skills, memory, profiles, messaging adapters, an OpenAI-compatible API server, and a Desktop/headless backend. Both can be deployed as a long-running personal or team assistant, but their command names, configuration layouts, protocols, and operational assumptions differ.
 
 | Dimension | Hermes Agent | OpenClaw |
 |---|---|---|
@@ -678,7 +678,7 @@ Use this symptom map to choose the first diagnostic area.
 |---|---|
 | Telegram/Discord does nothing | `hermes gateway status`, adapter token, pairing, allowlist |
 | Open WebUI says connection refused | `API_SERVER_ENABLED`, bind/port, gateway process, container publish |
-| API returns unauthorized | `API_SERVER_KEY`, profile `.env`, proxy headers, wrong port/profile |
+| API returns unauthorised | `API_SERVER_KEY`, profile `.env`, proxy headers, wrong port/profile |
 | Desktop cannot connect | `hermes serve`, readiness port, WS upgrade, backend auth, VPN/reverse proxy |
 | Tools run on the wrong machine | `terminal.backend`, `terminal.cwd`, `HERMES_HOME` vs `HOME` |
 | Agent remembers too much or too little | memory limits, profile selection, external provider status |
