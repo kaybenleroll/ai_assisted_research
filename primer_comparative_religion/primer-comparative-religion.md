@@ -34,6 +34,8 @@ The sections on major branches are deliberately uneven in one sense: they give m
 
 When the primer describes a practice, ask three questions. What happens physically? What does the community say is happening? What kind of person or relationship is the practice meant to form? A prostration, a meal, a chant, or a reading can be an act of obedience, sacramental participation, remembrance, merit-making, hospitality, or purification depending on the tradition around it.
 
+*Verified against primary and scholarly sources for all sections; unverified claims are flagged inline.*
+
 # How to Compare Religions Without Flattening Them
 
 The comparison becomes clearer when it follows the shape of religious life rather than a checklist of labels. The questions below are threads to carry through each chapter: they connect doctrine to institutions, and institutions to the gestures and habits of ordinary people.

@@ -18,8 +18,8 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 | [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 | [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-10-12 |
+| [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) · [PDF](primer_comparative_religion/primer-comparative-religion.pdf) | Society and Institutions | 2026-10-12 |
 | [The Evaluation Loop](primer_evaluation_loop/primer_evaluation_loop.html) · [PDF](primer_evaluation_loop/primer_evaluation_loop.pdf) | AI Agents and Coding Tools | 2026-10-12 |
-| [Campaign Reference Sheet](gaming_silo_rpg/gaming_reference_silo_campaign.html) · [PDF](gaming_silo_rpg/gaming_reference_silo_campaign.pdf) | Silo RPG Materials | 2026-10-11 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -73,7 +73,7 @@ These are the five most recently reviewed primary documents across the catalogue
 <!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
-| [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) · [PDF](primer_comparative_religion/primer-comparative-religion.pdf) | 2026-08 | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
+| [Comparative Religion](primer_comparative_religion/primer-comparative-religion.html) · [PDF](primer_comparative_religion/primer-comparative-religion.pdf) | 2026-10-12 | Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto |
 | [European Electoral Systems](primer_political_systems/primer-european-electoral-systems.html) · [PDF](primer_political_systems/primer-european-electoral-systems.pdf) | 2026-10-07 | Practical primer on electoral systems across European democracies |
 | [Military Organisation, Ranks, and Doctrine](primer_military_structure/primer_military_structure.html) · [PDF](primer_military_structure/primer_military_structure.pdf) | 2026-10-07 | How armies are structured from fire team to army group, how ranks map to command levels, and naval/air force equivalents |
 <!-- END SOCIETY AND INSTITUTIONS -->
