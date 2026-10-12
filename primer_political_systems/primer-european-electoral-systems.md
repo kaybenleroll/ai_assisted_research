@@ -27,7 +27,7 @@ There are really four things that electoral systems keep juggling:
 
 No system nails all four. Every design picks a flavor of trade-off. The UK, Germany, Ireland, Spain, Italy, the Netherlands, Denmark, and Sweden have parliamentary systems. France and Romania are **semi-presidential**: a directly elected president shares executive authority with a prime minister and a government accountable to parliament. That constitutional distinction is separate from the electoral formula: France uses two-round legislative contests, while Romania uses list PR. France's [constitutional framework](https://www.justice.gouv.fr/sites/default/files/2026-04/systeme_juridique_et_judiciaire_france.pdf) and Romania's [Constitution, Articles 81, 103, and 109](https://www.wipo.int/wipolex/en/legislation/details/3589) establish the respective executive arrangements.
 
-### How The EU Layer Fits Above National Elections
+### How the EU Layer Fits Above National Elections
 
 One reason European politics can feel confusing is that there are two interacting levels of democratic authority:
 
@@ -36,7 +36,7 @@ One reason European politics can feel confusing is that there are two interactin
 
 Those levels are linked but not identical. You do not vote in one election and get one single chain of command all the way up.
 
-#### The core EU institutions in plain English
+#### The Core EU Institutions in Plain English
 
 1. European Council: Heads of state or government from each member state. Sets strategic direction.
 2. Council of the European Union (Council of Ministers): National ministers by policy area. Co-legislates with Parliament.
@@ -44,7 +44,7 @@ Those levels are linked but not identical. You do not vote in one election and g
 4. European Commission: Proposes legislation, enforces EU law, manages implementation.
 5. Court of Justice of the European Union (CJEU): Final interpreter of EU law.
 
-#### What national elections actually change at EU level
+#### What National Elections Actually Change at EU Level
 
 National elections matter because they decide who runs each member state government. Those governments then sit in the European Council and send ministers to the Council of the EU. So even if an election is "national," it shifts bargaining power inside EU lawmaking.
 
@@ -53,7 +53,7 @@ At the same time, European Parliament elections run on their own cycle and party
 1. National executive legitimacy channel.
 2. Transnational parliamentary legitimacy channel.
 
-#### Why this matters for analysis
+#### Why This Matters for Analysis
 
 If you only model national seat arithmetic, you miss part of the policy pipeline. Serious political-risk analysis in Europe usually needs both:
 
@@ -62,7 +62,7 @@ If you only model national seat arithmetic, you miss part of the policy pipeline
 
 That is the frame for the country sections below: each electoral system is explained together with the constitutional structure it feeds into.
 
-#### A practical EU policy-flow walkthrough
+#### A Practical EU Policy-Flow Walkthrough
 
 The most useful way to see the EU layer is as a chain of linked political veto points rather than one single election result.
 
@@ -80,11 +80,11 @@ For analysis, this creates a simple rule: do not treat a national election as ju
 
 The forecasting implication is concrete. If two or three medium-to-large member states all move towards similar fiscal or industrial-policy preferences, the odds of EU-level compromise rise. If they move in opposite directions, files stall, dilute, or split into partial deals.
 
-#### Two end-to-end EU legislative pathway examples
+#### Two End-to-End EU Legislative Pathway Examples
 
 The cleanest way to operationalize this is to map a full file lifecycle. Below are two compact pathways analysts can reuse.
 
-##### Pathway A: Carbon Border Adjustment Mechanism style file
+##### Pathway A: Carbon Border Adjustment Mechanism Style File
 
 1. Commission drafting: DG-level design sets scope, reporting obligations, and timeline assumptions.
 2. Parliament first pass: committee work pushes amendments on sector coverage, transition timing, and enforcement burden.
@@ -95,7 +95,7 @@ The cleanest way to operationalize this is to map a full file lifecycle. Below a
 
 Analytical takeaway: changes in national governing coalitions can materially shift Council red lines even when Parliament party-group balance is stable.
 
-##### Pathway B: Electricity market reform style file
+##### Pathway B: Electricity Market Reform Style File
 
 1. Trigger event: energy-price shock creates political urgency.
 2. Commission package: proposal balances market design stability with consumer-protection pressure.
@@ -220,7 +220,7 @@ Still, the logic is consistent: Germany wants the final parliament to match the 
 
 This is why Germany is often treated as the gold standard for proportional mixed systems.
 
-### Italy: Rosatellum, The Hybrid That Is Not Fully Compensatory
+### Italy: Rosatellum, the Hybrid That Is Not Fully Compensatory
 
 Italy’s current system is a mixed setup, but it is not the same kind of balance as Germany’s.
 
@@ -251,7 +251,7 @@ Using D'Hondt, the seats might go 2, 2, 1, 0. That is proportional-ish, but not 
 
 Spain is useful because it shows that PR is not automatically ultra-fair. District size and formula design can quietly reshape outcomes.
 
-### The Netherlands: The Purest Big-Tent Party System In This Set
+### The Netherlands: The Purest Big-Tent Party System in This Set
 
 The Netherlands is one of the closest things Europe has to a national-scale party-list PR machine.
 
@@ -275,7 +275,7 @@ That is the basic Dutch story: lots of parties, lots of bargaining, lots of prop
 
 In one sentence: Dutch voters are effectively allocating national political shares rather than choosing local winners.
 
-### Denmark: Proportional Representation With A Top-Up Safety Net
+### Denmark: Proportional Representation With a Top-Up Safety Net
 
 Denmark is a great example of a system that looks proportional, feels proportional, and still has enough moving parts to keep political scientists busy.
 
@@ -291,7 +291,7 @@ Suppose Party A does very well in a few districts but not as well nationally. Th
 
 That is the whole point of the system: local results first, proportional correction afterward.
 
-### Sweden: Proportional, Open-List, And Slightly More Candidate-Friendly
+### Sweden: Proportional, Open-List, and Slightly More Candidate-Friendly
 
 Sweden uses list PR with a modified Sainte-Laguë method, multi-member districts, and adjustment seats. It is proportional, but not mechanically identical to Denmark or the Netherlands.
 
@@ -311,7 +311,7 @@ The exact seat numbers will move around because of district allocation and adjus
 
 Sweden is more proportional than France or the UK, more open than Spain, and more party-list-driven than Ireland.
 
-### Romania: Closed-List PR With Thresholds And A Very Political Reality
+### Romania: Closed-List PR With Thresholds and a Very Political Reality
 
 Romania currently uses closed-list proportional representation for its parliament. Parties submit lists, voters choose a list, and seats are allocated with thresholds that weed out the smallest parties.
 
@@ -419,7 +419,7 @@ The table compares the ten systems across ballot design, candidate control, prop
 | Sweden | Open-list PR | Party or candidate on list | Moderate party control | Very high | Medium |
 | Romania | Closed-list PR | Party list | Very strong party control | Medium-high | Medium |
 
-#### What These Systems Feel Like In Practice
+#### What These Systems Feel Like in Practice
 
 These systems differ less in democratic legitimacy than in political texture.
 
@@ -443,11 +443,11 @@ If you want a super blunt version:
 
 That last idea is really the modern European theme. Very few systems are satisfied with pure winner-takes-all anymore. Even when they are not perfectly proportional, they usually try to patch the rough edges.
 
-### Early Warning Indicators For Coalition Stress
+### Early Warning Indicators for Coalition Stress
 
 If you want to forecast governing durability, watch indicators that move before cabinet collapse headlines show up.
 
-#### 1) Fragmentation trend
+#### 1) Fragmentation Trend
 
 What to watch: whether the effective number of parliamentary parties is rising across consecutive elections.
 
@@ -455,7 +455,7 @@ Why it matters: more relevant parties means more veto points and more complex co
 
 Worsening signal: coalition talks require three or more medium parties with little ideological overlap.
 
-#### 2) Coalition ideological distance
+#### 2) Coalition Ideological Distance
 
 What to watch: policy distance on budget rules, migration, labor-market reform, and EU fiscal integration.
 
@@ -463,7 +463,7 @@ Why it matters: broad coalitions can govern, but only if conflict domains are se
 
 Worsening signal: repeated public dissent by coalition partners on high-salience files before first budget passage.
 
-#### 3) Minority-government dependency risk
+#### 3) Minority-Government Dependency Risk
 
 What to watch: number and volatility of external support parties needed for confidence and supply.
 
@@ -471,7 +471,7 @@ Why it matters: minority cabinets can be durable, but only where support norms a
 
 Worsening signal: support parties begin conditioning routine votes on unrelated policy concessions.
 
-#### 4) Regional-party pivot leverage
+#### 4) Regional-Party Pivot Leverage
 
 What to watch: whether regionally concentrated parties are mathematically pivotal to forming or preserving a majority.
 
@@ -479,7 +479,7 @@ Why it matters: pivotal regional actors can extract asymmetric concessions that 
 
 Worsening signal: repeated government crises tied to centre-periphery bargaining files.
 
-#### 5) Seat-vote distortion trend
+#### 5) Seat-Vote Distortion Trend
 
 What to watch: whether the vote-seat gap for governing parties is widening over time.
 
@@ -487,7 +487,7 @@ Why it matters: large distortion can increase legitimacy disputes and sharpen op
 
 Worsening signal: governing majority persists with declining vote share and rising disproportionality metrics.
 
-#### 6) Intra-coalition policy incompatibility
+#### 6) Intra-Coalition Policy Incompatibility
 
 What to watch: unresolved conflicts in manifesto commitments that cannot be delayed to committee-level compromise.
 
@@ -507,7 +507,7 @@ Three knobs matter a lot:
 2. Thresholds (formal legal thresholds and effective thresholds caused by small district size).
 3. Allocation formula (D'Hondt, Sainte-Laguë, largest remainder, and so on).
 
-#### D'Hondt versus Sainte-Laguë in one minute
+#### D'Hondt Versus Sainte-Laguë in One Minute
 
 D'Hondt divides party vote totals by 1, 2, 3, ... and assigns seats to the highest quotients. Because the divisor starts at 1 and then increments linearly, larger parties tend to keep appearing near the top.
 
@@ -515,13 +515,13 @@ Sainte-Laguë uses odd-number divisors 1, 3, 5, ... which smooths that advantage
 
 That is why two countries with similar vote shares can still end up with different coalition arithmetic.
 
-#### Why district size quietly dominates outcomes
+#### Why District Size Quietly Dominates Outcomes
 
 If a district only has 3 to 5 seats, very small parties are effectively locked out even if there is no strict legal threshold. If a district has 15 to 30 seats, seat conversion is much closer to vote shares.
 
 That is one reason the Netherlands (national district) feels so different from Spain (provincial districts), even though both live in the PR family.
 
-#### Quick formulas you actually use
+#### Quick Formulas You Actually Use
 
 For STV, the Droop quota is:
 
@@ -541,7 +541,7 @@ where $v_i$ is party vote share and $s_i$ is party seat share.
 
 Higher $G$ means more vote-seat distortion.
 
-#### Worked example: Gallagher index in practice
+#### Worked Example: Gallagher Index in Practice
 
 Suppose an election produces the following national shares:
 
@@ -566,7 +566,7 @@ $$
 
 Interpretation in plain English: a value around 6 to 7 signals a noticeable but not extreme vote-seat distortion. In applied work, the trend over time is often more useful than one isolated value.
 
-#### Worked example: district magnitude sensitivity
+#### Worked Example: District Magnitude Sensitivity
 
 Hold votes constant across two district designs:
 
@@ -609,7 +609,7 @@ Now imagine this exact vote distribution is processed by different rule sets.
 
 The key practical insight is not that one is morally superior. It is that each design encodes a political theory about governability versus representativeness.
 
-### Coalition Mechanics And Government Durability
+### Coalition Mechanics and Government Durability
 
 Electoral-system discussions often end at seat allocation, but governing risk shows up one step later in coalition formation.
 
@@ -652,7 +652,7 @@ This rubric is built for repeatable country comparison. Score each dimension fro
 | Regional pivot risk | Regional parties non-pivotal | Regional parties intermittently pivotal | Regional parties routinely hold formation veto leverage |
 | Policy-coherence risk | Governing coalition has tight program overlap | Manageable policy divergence | Recurrent high-salience conflict inside governing bloc |
 
-#### Worked scoring example: Spain-style profile
+#### Worked Scoring Example: Spain-Style Profile
 
 Illustrative scoring:
 
