@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Running LLMs Locally: A Secure Practical
 Landscape</span>
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -654,7 +654,8 @@ Pattern</a></li>
 the Modality</a>
 <ul>
 <li><a href="#practical-model-map" id="toc-practical-model-map"><span class="toc-section-number">3.1</span> Practical Model Map</a></li>
-<li><a href="#what-changed-recently" id="toc-what-changed-recently"><span class="toc-section-number">3.2</span> What Changed Recently</a></li>
+<li><a href="#what-changed-in-the-september-2026-snapshot" id="toc-what-changed-in-the-september-2026-snapshot"><span class="toc-section-number">3.2</span> What Changed in the September 2026
+Snapshot</a></li>
 <li><a href="#specialist-models-worth-knowing" id="toc-specialist-models-worth-knowing"><span class="toc-section-number">3.3</span> Specialist Models Worth
 Knowing</a></li>
 <li><a href="#image-generation-is-not-vision" id="toc-image-generation-is-not-vision"><span class="toc-section-number">3.4</span> Image Generation Is Not
@@ -793,8 +794,8 @@ Families</a></li>
     <main class="content">
       <div class="content-inner">
 <p>From first prompt to a maintainable private AI stack</p>
-<p><em>September 2026 · runtime and model references reviewed 30
-September 2026</em></p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <p>You have used cloud AI tools.</p>
 <p>Now you want control, but “local” has to mean more than a model file
 on your disk. A browser UI can retain chats, a search connector can send
@@ -861,8 +862,9 @@ useful.</li>
 model.</li>
 <li>Keep application code on OpenAI-compatible APIs, behind a small
 adapter.</li>
-<li>Before exposing any port, add authentication, authorisation, TLS, a
-firewall rule, and a named owner for the service.</li>
+<li>Before exposing any port, add authentication, authorisation,
+transport layer security (TLS), a firewall rule, and a named owner for
+the service.</li>
 </ol>
 <h2 data-number="1.6" id="privacy-is-a-data-flow-question"><span class="header-section-number">1.6</span> Privacy Is a Data-Flow
 Question</h2>
@@ -898,8 +900,8 @@ tokenizer, architecture, and prompt formatting.</p>
 <li>Safetensors/Hugging Face checkpoints for transformer-native and
 diffusion runtimes</li>
 <li>MLX-converted weights for Apple Silicon</li>
-<li>Pipeline components such as a VAE, text encoder, vision encoder, or
-multimodal projector</li>
+<li>Pipeline components such as a variational autoencoder (VAE), text
+encoder, vision encoder, or multimodal projector</li>
 </ol>
 <p>GGUF remains the practical default for many local setups because it
 is portable and quantisation-friendly.</p>
@@ -940,6 +942,10 @@ sooner on complex tasks.</li>
 </ol>
 <p>Common practical choices:</p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
 <tr>
 <th>Quantisation</th>
@@ -953,7 +959,8 @@ sooner on complex tasks.</li>
 </tr>
 <tr>
 <td>8-bit</td>
-<td>Quality-sensitive local serving with decent VRAM</td>
+<td>Quality-sensitive local serving with decent video random-access
+memory (VRAM)</td>
 </tr>
 <tr>
 <td>4-bit</td>
@@ -1235,7 +1242,8 @@ separately from the language model that writes the final response.</td>
 </tr>
 </tbody>
 </table>
-<h2 data-number="3.2" id="what-changed-recently"><span class="header-section-number">3.2</span> What Changed Recently</h2>
+<h2 data-number="3.2" id="what-changed-in-the-september-2026-snapshot"><span class="header-section-number">3.2</span> What Changed in the September
+2026 Snapshot</h2>
 <p>The September 2026 snapshot points towards smaller specialists,
 sparse larger models, configurable reasoning, native tool calling,
 multimodal input, and long-context variants. <a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5</a>, <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
@@ -1314,8 +1322,8 @@ about 5.1 GB; its model card also lists an approximately 15 GB FP16
 variant. The file size is only the first bound: leave room for the
 runtime, activations, tokenizer, context, and any cache or scratch
 buffers. A 4-bit checkpoint is a sensible starting point for a machine
-with roughly 8–16 GB of usable GPU memory, or more system RAM if running
-mostly on the CPU.</p>
+with roughly 8–16 GB of usable GPU memory, or more system random-access
+memory (RAM) if running mostly on the CPU.</p>
 <p>After installing a current llama.cpp build with its diffusion
 executable and downloading a compatible GGUF, the shape of a first run
 is:</p>
@@ -1624,7 +1632,8 @@ their exact request patterns before committing. For image or video
 generation, SGLang-Diffusion is a separate path from ordinary chat
 serving.</p>
 <h2 data-number="5.8" id="lm-studio-and-jan"><span class="header-section-number">5.8</span> LM Studio and Jan</h2>
-<p>LM Studio and Jan remain useful GUI-first desktop choices.</p>
+<p>LM Studio and Jan remain useful graphical user interface (GUI)-first
+desktop choices.</p>
 <p>Use them when:</p>
 <ol type="1">
 <li>You want model experimentation without shell-heavy setup</li>
@@ -1642,7 +1651,8 @@ unpinned image.</p>
 <ol type="1">
 <li>Browser chat UI</li>
 <li>Multi-user accounts</li>
-<li>RAG-style document chat features on top of your backend</li>
+<li>retrieval-augmented generation (RAG)-style document chat features on
+top of your backend</li>
 </ol>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">-p</span> 127.0.0.1:3000:8080 <span class="dt">\</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--add-host</span><span class="op">=</span>host.docker.internal:host-gateway <span class="dt">\</span></span>
@@ -1655,7 +1665,8 @@ unless you need it, and review web search, tools, connectors, upload
 retention, and outbound network settings before giving anyone access.
 Check the <a href="https://github.com/open-webui/open-webui/releases">release
 page</a> before copying the version tag, and keep it patched: an earlier
-2026 release line had a DNS-rebinding security advisory.</p>
+2026 release line had a domain name system (DNS)-rebinding security
+advisory.</p>
 <h2 data-number="5.10" id="comparison-snapshot"><span class="header-section-number">5.10</span> Comparison Snapshot</h2>
 <table style="width:100%;">
 <colgroup>
@@ -2180,7 +2191,7 @@ Time</h1>
 <li>Compare quality and latency against baseline.</li>
 <li>Promote only if metrics and behaviour are acceptable.</li>
 </ol>
-<p>Local stacks feel “small,” but this discipline is still worth it.</p>
+<p>Local stacks feel “small”, but this discipline is still worth it.</p>
 <h2 data-number="10.3" id="observability-that-actually-helps"><span class="header-section-number">10.3</span> Observability That Actually
 Helps</h2>
 <p>You do not need enterprise observability to get value.</p>

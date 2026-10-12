@@ -2,7 +2,7 @@
 
 From first prompt to a maintainable private AI stack
 
-*September 2026 · runtime and model references reviewed 30 September 2026*
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
 
 You have used cloud AI tools.
 
@@ -68,7 +68,7 @@ If you need one short answer:
 4. Use LocalAI when one local API for several modalities is genuinely useful.
 5. Use ComfyUI or Diffusers for image and video generation, not a chat model.
 6. Keep application code on OpenAI-compatible APIs, behind a small adapter.
-7. Before exposing any port, add authentication, authorisation, TLS, a
+7. Before exposing any port, add authentication, authorisation, transport layer security (TLS), a
    firewall rule, and a named owner for the service.
 
 ### Privacy Is a Data-Flow Question
@@ -110,7 +110,7 @@ For local inference, you will mostly see:
 1. GGUF files for llama.cpp-class runtimes
 2. Safetensors/Hugging Face checkpoints for transformer-native and diffusion runtimes
 3. MLX-converted weights for Apple Silicon
-4. Pipeline components such as a VAE, text encoder, vision encoder, or multimodal projector
+4. Pipeline components such as a variational autoencoder (VAE), text encoder, vision encoder, or multimodal projector
 
 GGUF remains the practical default for many local setups because it is portable and quantisation-friendly.
 
@@ -152,7 +152,7 @@ Common practical choices:
 | Quantisation | Typical Use |
 |---|---|
 | FP16/BF16 | Datacenter or high-memory local GPU runs |
-| 8-bit | Quality-sensitive local serving with decent VRAM |
+| 8-bit | Quality-sensitive local serving with decent video random-access memory (VRAM) |
 | 4-bit | Common local sweet spot for many personal text-model runs |
 | 2-3 bit | Extreme memory constraint, quality trade-off is obvious |
 
@@ -241,15 +241,15 @@ Jev itself is a hosted, proprietary API at the time of this review. The local
 ecosystem is young and should be treated as a set of experiments, not as a
 settled compatibility layer. Examples include:
 
-* [Laya](https://huggingface.co/convaiinnovations/laya), an open-weight typed
+- [Laya](https://huggingface.co/convaiinnovations/laya), an open-weight typed
   decision model intended for local inference.
-* [OpenJev](https://huggingface.co/openjev/openjev), an independent
+- [OpenJev](https://huggingface.co/openjev/openjev), an independent
   open-weight implementation with `choice`, `score`, and `noul`-style
   questions.
-* [Decision-4B](https://huggingface.co/evalengine/decision-4b), an open-weight
+- [Decision-4B](https://huggingface.co/evalengine/decision-4b), an open-weight
   adapter based on Qwen3.5-4B with a GGUF route documented for llama.cpp and
   Ollama.
-* Small NLI or encoder classifiers, and a fine-tuned model trained on your
+- Small NLI or encoder classifiers, and a fine-tuned model trained on your
   own labels, when the task is narrower than a general typed-decision model.
 
 “Open-weight Jev” is shorthand for a similar decision interface or training
@@ -314,7 +314,7 @@ Do not assume that a model advertised as multimodal can generate every modality.
 | Video understanding and generation | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni), [Wan2.2](https://github.com/Wan-Video/Wan2.2) | vLLM, SGLang, or Transformers for understanding; Diffusers or model code for generation | Video generation is substantially more demanding than image generation. Wan2.2's 5B text-image-to-video path documents 24 GB VRAM at 720p; its larger paths need much more. |
 | Text and multimodal retrieval | [EmbeddingGemma](https://ai.google.dev/gemma/docs), [Qwen3-VL-Embedding and Reranker](https://github.com/QwenLM/Qwen3-VL-Embedding), BGE-family models | Sentence Transformers, Transformers, Ollama, or a vector database | Embeddings produce vectors, not answers. Evaluate retrieval separately from the language model that writes the final response. |
 
-### What Changed Recently
+### What Changed in the September 2026 Snapshot
 
 The September 2026 snapshot points towards smaller specialists, sparse larger
 models, configurable reasoning, native tool calling, multimodal input, and
@@ -363,7 +363,7 @@ The software stack has four pieces:
 
 #### A Practical First Experiment
 
-For a desktop or workstation, start with an 8B instruction-tuned checkpoint and a 4-bit GGUF. One published LLaDA Q4_K_M conversion is about 5.1 GB; its model card also lists an approximately 15 GB FP16 variant. The file size is only the first bound: leave room for the runtime, activations, tokenizer, context, and any cache or scratch buffers. A 4-bit checkpoint is a sensible starting point for a machine with roughly 8–16 GB of usable GPU memory, or more system RAM if running mostly on the CPU.
+For a desktop or workstation, start with an 8B instruction-tuned checkpoint and a 4-bit GGUF. One published LLaDA Q4_K_M conversion is about 5.1 GB; its model card also lists an approximately 15 GB FP16 variant. The file size is only the first bound: leave room for the runtime, activations, tokenizer, context, and any cache or scratch buffers. A 4-bit checkpoint is a sensible starting point for a machine with roughly 8–16 GB of usable GPU memory, or more system random-access memory (RAM) if running mostly on the CPU.
 
 After installing a current llama.cpp build with its diffusion executable and downloading a compatible GGUF, the shape of a first run is:
 
@@ -608,7 +608,7 @@ In practice, serious teams often benchmark both vLLM and SGLang for their exact 
 
 ### LM Studio and Jan
 
-LM Studio and Jan remain useful GUI-first desktop choices.
+LM Studio and Jan remain useful graphical user interface (GUI)-first desktop choices.
 
 Use them when:
 
@@ -626,7 +626,7 @@ Use it when you need:
 
 1. Browser chat UI
 2. Multi-user accounts
-3. RAG-style document chat features on top of your backend
+3. retrieval-augmented generation (RAG)-style document chat features on top of your backend
 
 ```bash
 podman run -d -p 127.0.0.1:3000:8080 \
@@ -640,7 +640,7 @@ It does not replace inference backends. It sits in front of them. Create the
 initial administrator deliberately, disable self-registration unless you need
 it, and review web search, tools, connectors, upload retention, and outbound
 network settings before giving anyone access. Check the [release page](https://github.com/open-webui/open-webui/releases) before copying the version tag,
-and keep it patched: an earlier 2026 release line had a DNS-rebinding security
+and keep it patched: an earlier 2026 release line had a domain name system (DNS)-rebinding security
 advisory.
 
 ### Comparison Snapshot
@@ -1094,7 +1094,7 @@ Use a simple release procedure:
 3. Compare quality and latency against baseline.
 4. Promote only if metrics and behaviour are acceptable.
 
-Local stacks feel "small," but this discipline is still worth it.
+Local stacks feel "small", but this discipline is still worth it.
 
 ### Observability That Actually Helps
 
