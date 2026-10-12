@@ -36,13 +36,35 @@ If you only remember one thing from this primer, remember this:
 
 ### What This Primer Is Not
 
-This is not a full proof-based textbook, and it makes no attempt to be one. If you want the full theoretical machinery — convergence proofs, spectral theory, the Lax Equivalence Theorem with all conditions stated precisely — the reading list at the end will point you to the right books. This primer is also not a replacement for specialised references in PDEs, large-scale sparse computing, or uncertainty quantification; those are deep disciplines in their own right. And it does not pretend that any one language or algorithm is the universal winner — because none of them are.
+This is not a full proof-based textbook, and it makes no attempt to be one. If you want the full theoretical machinery — convergence proofs, spectral theory, the Lax Equivalence Theorem with all conditions stated precisely — the reading list at the end will point you to the right books. This primer is also not a replacement for specialised references in partial differential equations (PDEs), large-scale sparse computing, or uncertainty quantification; those are deep disciplines in their own right. And it does not pretend that any one language or algorithm is the universal winner — because none of them are.
+
+### Assumed Background
+
+You should be comfortable with algebra, functions, derivatives and integrals, and basic vectors and matrices. No previous numerical-analysis course is assumed: the primer introduces conditioning, stability, and error as they are needed. The examples use Python, R, and Julia; familiarity with at least one programming language is enough to follow the computational ideas, and you can skip the other languages' code blocks.
+
+### Notation
+
+The table records the main symbols used throughout. Each is defined again locally when it first appears in a derivation; subscripts and dimensions are explained in context.
+
+| Symbol | Meaning | First use |
+|---|---|---|
+| $x$ | scalar input, iterate, or unknown vector (stated locally) | Root finding and linear systems |
+| $f$ | scalar- or vector-valued function (stated locally) | Root finding |
+| $A$ | matrix of a linear system or least-squares problem | Linear systems |
+| $b$ | right-hand-side vector or observed data vector | Linear systems |
+| $\varepsilon_{\mathrm{mach}}$ | machine epsilon for the working floating-point format | Floating-point arithmetic |
+| $\kappa(A)$ | condition number of matrix $A$ in the stated norm | Conditioning |
+| $\|\cdot\|_2$ | Euclidean vector norm or induced spectral matrix norm | Least squares |
+| $h$ | grid spacing or time step (distinguished in context) | Discretisation |
+| $n$ | problem size, sample count, or iteration index (stated locally) | Error and complexity |
+
+*Verified against primary sources for sections 3 and 6; unverified claims are flagged inline.*
 
 ---
 
 ## The Different Approaches to Numerical Analysis
 
-When people say "approaches to numerical analysis," they might mean different things. Sometimes they mean classes of algorithms (direct vs iterative). Sometimes they mean modelling style (deterministic vs stochastic). Sometimes they mean workflow priorities (error-first vs throughput-first).
+When people say "approaches to numerical analysis", they might mean different things. Sometimes they mean classes of algorithms (direct vs iterative). Sometimes they mean modelling style (deterministic vs stochastic). Sometimes they mean workflow priorities (error-first vs throughput-first).
 
 You should know all of these lenses, because they affect both design and outcomes.
 
@@ -51,14 +73,14 @@ You should know all of these lenses, because they affect both design and outcome
 #### Direct Methods
 A direct method aims to reach a solution in a finite sequence of operations. In exact arithmetic, Gaussian elimination solves a linear system exactly in finite steps.
 
-In floating-point arithmetic, "exact" becomes "as exact as this arithmetic allows," but the spirit is the same: no outer convergence loop to a limit.
+In floating-point arithmetic, "exact" becomes "as exact as this arithmetic allows", but the spirit is the same: no outer convergence loop to a limit.
 
 Direct methods are the right tool when the problem is moderate in size and when the matrix has structure you can exploit — symmetry, positive definiteness, or banded form all make factorisation significantly cheaper. They are also particularly convenient when you need to solve the same linear system repeatedly with the same coefficient matrix but different right-hand sides, since you can factorise once and reuse the result for each new solve without repeating the expensive decomposition. In exact arithmetic the computation is mathematically complete: a fixed, predictable number of operations, no convergence criterion to manage, and a result that does not depend on an initial guess. In floating-point arithmetic you lose "exact" in the strict sense, but the structure of the computation remains deterministic and bounded. Typical examples are LU factorisation for general square systems, QR for overdetermined or least-squares problems, and Cholesky for symmetric positive definite matrices. Computing interpolation coefficients by solving a Vandermonde system also fits this pattern.
 
 #### Iterative Methods
 Iterative methods produce a sequence of approximations, often improving until a stopping rule is met.
 
-Iterative methods become attractive — and often necessary — when problems outgrow what direct factorisation can handle. For very large or sparse systems, forming and storing a dense factorisation is simply infeasible: memory costs scale quadratically or worse, and fill-in during factorisation can destroy the sparsity that made the problem tractable to begin with. Iterative methods sidestep this by working entirely through matrix-vector products, which remain cheap if the matrix is sparse or structured. The payoff is a controllable trade-off between accuracy and runtime: you can stop early if a rough answer suffices, or iterate longer to tighten the result. Conjugate gradient and GMRES are the two workhorses of iterative linear algebra. Newton iterations, fixed-point iterations, and gradient-based optimisation methods all belong in this family too, even when the underlying problem is not a linear system.
+Iterative methods become attractive — and often necessary — when problems outgrow what direct factorisation can handle. For very large or sparse systems, forming and storing a dense factorisation is simply infeasible: memory costs scale quadratically or worse, and fill-in during factorisation can destroy the sparsity that made the problem tractable to begin with. Iterative methods sidestep this by working entirely through matrix-vector products, which remain cheap if the matrix is sparse or structured. The payoff is a controllable trade-off between accuracy and runtime: you can stop early if a rough answer suffices, or iterate longer to tighten the result. Conjugate gradient (CG) and the generalised minimum residual (GMRES) method are two workhorses of iterative linear algebra. Newton iterations, fixed-point iterations, and gradient-based optimisation methods all belong in this family too, even when the underlying problem is not a linear system.
 
 
 ```mermaid
@@ -78,7 +100,7 @@ The diagram summarises the first design decision in linear algebra: whether you 
 A deterministic method gives exactly the same result every time it runs with the same input. There are no random draws, no seeds to manage, and no statistical fluctuation in results. This predictability makes verification and debugging straightforward: if a result is wrong, it is reproducibly wrong, which means you can isolate the problem systematically. The trapezoidal rule, classical Runge-Kutta methods, and Newton's method are all deterministic in this sense — given identical floating-point inputs and the same execution path, they produce identical outputs.
 
 #### Stochastic
-Stochastic methods deliberately introduce randomness as a core ingredient. Results vary from run to run unless the seed is fixed, and accuracy is characterised statistically — you expect a result within some confidence interval rather than guaranteeing a deterministic bound. Monte Carlo integration, stochastic gradient methods, and randomised linear algebra sketches all work this way. It is worth being direct about something: stochastic methods are not sloppy or imprecise by nature. They are often the only practical choice when deterministic methods cannot scale. High-dimensional integration is the clearest case: Monte Carlo error scales like $1/\sqrt{n}$ regardless of dimension, while deterministic quadrature rules require exponentially more evaluation points as dimension grows — a combinatorial explosion that makes them unusable beyond a handful of dimensions.
+Stochastic methods deliberately introduce randomness as a core ingredient. Results vary from run to run unless the seed is fixed, and accuracy is characterised statistically — you expect a result within some confidence interval rather than guaranteeing a deterministic bound. Monte Carlo integration, stochastic gradient methods, and randomised linear algebra sketches all work this way. It is worth being direct about something: stochastic methods are not sloppy or imprecise by nature. They are often the only practical choice when deterministic methods cannot scale. High-dimensional integration is a useful example: under standard finite-variance assumptions, Monte Carlo's root-mean-square error scales like $1/\sqrt{n}$ without an explicit dimension factor, while tensor-product quadrature can require exponentially more points as dimension grows. This is not a universal limit on deterministic methods: exploitable smoothness, low effective dimension, or problem structure can make deterministic and quasi-Monte Carlo methods effective in higher dimensions.
 
 ### Local vs Global Approximation
 
@@ -128,7 +150,7 @@ Both workflows are legitimate depending on context. In safety-critical engineeri
 
 ### Practical Summary Table
 
-The table summarises the trade-offs between the numerical-analysis approaches discussed above.
+The table summarises the trade-offs between the numerical-analysis approaches described in the preceding sections.
 
 | Lens | Option A | Option B | Typical trade-off |
 |---|---|---|---|
@@ -149,7 +171,7 @@ Before algorithms, we need machine arithmetic reality.
 
 ### Floating-Point in One Minute
 
-Most scientific code uses IEEE 754 floating-point, where a real number is represented roughly as:
+Most scientific code uses the Institute of Electrical and Electronics Engineers (IEEE) 754 floating-point standard, where a real number is represented roughly as:
 $$
 (-1)^s \times m \times 2^e
 $$
@@ -163,11 +185,11 @@ in floating-point arithmetic, because rounding happens after each operation and 
 
 ### Machine Epsilon and Unit Roundoff
 
-Machine epsilon is often introduced as "the smallest number such that $1 + \epsilon > 1$" in floating-point arithmetic. That definition is useful, but in practice you should think of it as a scale marker: it tells you roughly how much relative precision the format can represent near 1.0.
+Machine epsilon is often introduced as "the smallest number such that $1 + \varepsilon > 1$" in floating-point arithmetic. That definition is useful, but in practice you should think of it as a scale marker: it tells you roughly how much relative precision the format can represent near 1.0.
 
 For double precision, it is about:
 $$
-\epsilon_{mach} \approx 2.22 \times 10^{-16}
+\varepsilon_{\mathrm{mach}} \approx 2.22 \times 10^{-16}
 $$
 
 Unit roundoff is closely related and is often defined as half this value under round-to-nearest arithmetic. In either convention, the practical interpretation is similar: a single well-scaled floating-point operation typically incurs a relative error on the order of $10^{-16}$ in double precision.
@@ -204,10 +226,10 @@ The table compares float32 and float64 by storage size, representable range, mac
 
 | Type | Bits | Exponent bits | Mantissa bits | Approx. range | Machine epsilon | Throughput note |
 |---|---|---|---|---|---|---|
-| float32 | 32 | 8 | 23 | $\pm 3.4 \times 10^{38}$ | ${\sim}1.2 \times 10^{-7}$ | 2–4× faster on data-centre GPUs (consumer GPUs: much larger); half memory |
+| float32 | 32 | 8 | 23 | $\pm 3.4 \times 10^{38}$ | ${\sim}1.2 \times 10^{-7}$ | Peak throughput and storage depend on hardware and workload; half the bytes per value |
 | float64 | 64 | 11 | 52 | $\pm 1.8 \times 10^{308}$ | ${\sim}2.2 \times 10^{-16}$ | Standard for most scientific work |
 
-Float32 is acceptable when throughput or memory is the binding constraint and you are not accumulating errors over many operations. Machine-learning inference is the clearest case: data-centre GPUs (A100/H100-class) execute float32 at two to four times the throughput of float64, and cutting precision in half also halves memory bandwidth. Consumer GPUs are far more lopsided — float64 throughput there is often 1/32 to 1/64 of float32, so the incentive to drop to float32 is even stronger on that hardware. For neural-network inference, where you are doing one forward pass on fixed weights, the rounding errors rarely matter. The same logic applies to iterative refinement workflows, where you can run the inner iterations cheaply in float32 and apply a correction pass in float64 — you get most of the speed gain without surrendering final accuracy. Graphics pipelines have used float32 by default for decades for the same reason.
+Float32 can be appropriate when throughput or memory is the binding constraint, provided the resulting error is acceptable for the task. Peak arithmetic throughput is hardware-specific: NVIDIA's A100 and H100 specifications give roughly twice the FP32 throughput of FP64, while NVIDIA's compute-capability table shows that some consumer architectures have much larger FP32-to-FP64 ratios. These are peak rates, not guaranteed application speedups. Float32 uses half as many bytes per value as float64, reducing storage and data traffic; it does not increase a device's memory-bandwidth rate. For neural-network inference, validate the effect on task metrics rather than assuming rounding errors are negligible. Mixed-precision iterative refinement can use lower-precision work with higher-precision correction when the method's assumptions hold. [A100 specifications](https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-nvidia-us-2188504-web.pdf), [H100 specifications](https://www.nvidia.com/en-eu/data-center/h100/), and [CUDA compute capabilities](https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/compute-capabilities.html) document these hardware-specific rates.
 
 Float64 is non-negotiable in several categories. Any computation where errors accumulate over thousands of steps — ODE integration with tight tolerances, eigenvalue solvers on ill-conditioned matrices, long Markov-chain simulations — benefits from the extra fifteen digits of relative precision. Any problem whose condition number approaches $10^7$ or above is spending float32's entire precision budget just on conditioning, leaving nothing for the computation itself. And whenever you are comparing against published numerical benchmarks, you should match their precision to avoid false discrepancies.
 
@@ -298,7 +320,7 @@ Consistency means that the local truncation error — the error made in approxim
 
 Stability is the additional requirement. Roughly, a method is stable if small errors at one step do not grow without bound as they propagate through subsequent steps. You can think of it as a condition that prevents accumulated numerical noise from swamping the true signal.
 
-The key theorem states that for well-posed linear problems: consistency plus stability implies convergence. Equivalently, if a consistent method fails to converge, it must be unstable. This separates the analysis into two tractable pieces and explains why stability analysis — checking stability regions, CFL conditions, and energy estimates — is so central to numerical methods for differential equations. A scheme that is consistent but unstable will diverge as you refine the grid, which is the opposite of the convergence you hoped for.
+The Lax equivalence theorem states that, for a consistent finite-difference approximation to a well-posed linear initial-value problem, stability is equivalent to convergence under the theorem's standard assumptions. This separates the analysis into two tractable pieces and explains why stability analysis — checking stability regions, Courant–Friedrichs–Lewy (CFL) conditions, and energy estimates — is so central to numerical methods for differential equations. A scheme that is consistent but unstable will diverge as you refine the grid, which is the opposite of the convergence you hoped for.
 
 ### Practical Error Budgeting
 
@@ -445,7 +467,7 @@ The Newton step solves $\mathbf{J}_F(\mathbf{x}_k)\delta\mathbf{x}_k = -F(\mathb
 
 **Broyden's method.** When the Jacobian is expensive to evaluate — perhaps because $F$ involves a simulation or a long numerical computation — you can use a quasi-Newton update that avoids re-evaluating $\mathbf{J}_F$ at each step. Broyden's method maintains an approximate Jacobian $\mathbf{J}_k$ and updates it with a rank-1 correction after each step:
 
-$$\mathbf{J}_{k+1} = \mathbf{J}_k + \frac{\bigl(F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k) - \mathbf{J}_k \mathbf{s}_k\bigr)\mathbf{s}_k^T}{\|\mathbf{s}_k\|^2}$$
+$$\mathbf{J}_{k+1} = \mathbf{J}_k + \frac{\bigl(F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k) - \mathbf{J}_k \mathbf{s}_k\bigr)\mathbf{s}_k^{\top}}{\|\mathbf{s}_k\|^2}$$
 
 where $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$. The update is designed so that $\mathbf{J}_{k+1}\mathbf{s}_k = F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k)$, which is the secant condition in multiple dimensions. Convergence is superlinear rather than quadratic, but the cost per step is much lower when Jacobian evaluations are expensive.
 
@@ -670,7 +692,7 @@ Why? Because many nonlinear, differential, and optimisation problems eventually 
 
 The first design decision in any linear algebra problem is whether the matrix is dense or sparse, and getting this wrong is expensive.
 
-A dense matrix has most of its entries nonzero. The appropriate tools are the BLAS- and LAPACK-backed factorisation routines that power NumPy, R's base matrix operations, and Julia's standard library. To understand why this matters, it helps to know what BLAS and LAPACK actually are.
+A dense matrix has most of its entries nonzero. The appropriate tools are factorisation routines built on BLAS (Basic Linear Algebra Subprograms) and LAPACK (Linear Algebra PACKage), which power NumPy, R's base matrix operations, and Julia's standard library.
 
 #### BLAS and LAPACK: The Foundation Layer
 
@@ -683,9 +705,9 @@ BLAS operations are organised into three levels:
   - **Level 2** (matrix-vector): matrix-vector products, triangular solves. Complexity is $O(n^2)$ but data reuse is still limited.
   - **Level 3** (matrix-matrix): matrix multiplication, triangular factorisation. Complexity is $O(n^3)$ with high data reuse; these operations are where vectorisation and cache blocking matter most.
 
-When you call `numpy.dot(A, B)` or `A @ B`, you are calling a BLAS Level 3 routine. A hand-written Python loop doing the same operation runs ten to a hundred times slower because it cannot exploit SIMD instructions, cache locality, or multi-threading the way a tuned BLAS library can.
+When you call `numpy.dot(A, B)` or `A @ B`, you are calling a BLAS Level 3 routine. A hand-written Python loop doing the same operation runs ten to a hundred times slower because it cannot exploit single-instruction, multiple-data (SIMD) instructions, cache locality, or multi-threading the way a tuned BLAS library can.
 
-**LAPACK** (Linear Algebra Package) is built on top of BLAS. It provides higher-level routines: LU, Cholesky, QR, SVD, eigenvalue decomposition, and many others. LAPACK delegates the heavy lifting to BLAS Level 3 calls and focuses on the algorithmic structure — pivoting strategies, stability improvements, blocking for cache efficiency — rather than reinventing low-level linear algebra from scratch.
+**LAPACK** (Linear Algebra Package) is built on top of BLAS. It provides higher-level routines: LU, Cholesky, QR, singular value decomposition (SVD), eigenvalue decomposition, and many others. LAPACK delegates the heavy lifting to BLAS Level 3 calls and focuses on the algorithmic structure — pivoting strategies, stability improvements, blocking for cache efficiency — rather than reinventing low-level linear algebra from scratch.
 
 This two-layer design is crucial: it means that when a BLAS vendor releases a faster implementation (tuned for a new CPU, or exploiting a new instruction set), all LAPACK routines and all downstream libraries benefit immediately without recompilation. NumPy, R, Julia, and MATLAB all benefit from the same BLAS and LAPACK development.
 
@@ -715,7 +737,7 @@ Two reordering strategies dominate in practice. **Minimum-degree reordering** el
 
 #### Sparse Cholesky vs Sparse LU
 
-If your matrix is symmetric positive definite, use sparse Cholesky, not sparse LU. The SPD structure guarantees positive pivots, so no pivoting is needed — the factorisation is stable by construction. This halves the work and memory compared to LU, and the absence of pivoting means the sparsity structure is fully determined by the symbolic step and is consistent across different right-hand sides. For general nonsymmetric matrices, sparse LU with partial pivoting is necessary, though you pay for pivoting with less predictable fill patterns and some memory overhead.
+If your matrix is symmetric positive definite, use sparse Cholesky, not sparse LU. The symmetric positive definite (SPD) structure guarantees positive pivots, so no pivoting is needed — the factorisation is stable by construction. This halves the work and memory compared to LU, and the absence of pivoting means the sparsity structure is fully determined by the symbolic step and is consistent across different right-hand sides. For general nonsymmetric matrices, sparse LU with partial pivoting is necessary, though you pay for pivoting with less predictable fill patterns and some memory overhead.
 
 #### Code
 
@@ -750,7 +772,7 @@ plt.title("Tridiagonal sparsity pattern")
 plt.savefig("figures/tridiagonal_spy.png", dpi=120, bbox_inches="tight")
 ```
 
-`spla.spsolve` always uses SuperLU (sparse LU) — it does not detect SPD structure or fall back to Cholesky, and SciPy has no built-in sparse Cholesky at all. If your matrix is SPD and you want to exploit that, use `scikit-sparse`'s CHOLMOD binding, or solve iteratively with CG. `spla.splu` exposes the factors directly so you can solve multiple right-hand sides cheaply — factorisation is the expensive step; each additional solve costs only $O(\text{nnz})$ once the factors exist.
+`spla.spsolve` uses SuperLU by default; when `scikits.umfpack` is installed and the right-hand side is a vector, its `use_umfpack` option can select UMFPACK instead. It does not select Cholesky based on positive-definite structure. SciPy's sparse linear-algebra API does not provide a sparse Cholesky routine; to exploit SPD structure, use a compatible CHOLMOD binding such as `scikit-sparse`, or an iterative method such as CG. `spla.splu` exposes factors for reuse with multiple right-hand sides; the solve cost depends on factor sparsity, not just the original matrix's number of nonzeros. See the [SciPy `spsolve` documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.spsolve.html) and [`use_solver` documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.use_solver.html).
 
 In Julia, the `\` operator dispatches automatically:
 
@@ -789,9 +811,9 @@ where $P$ is a row-permutation matrix, $L$ is lower triangular, and $U$ is upper
 
 Cholesky writes
 $$
-A = LL^T
+A = LL^{\top}
 $$
-(or $A=R^TR$), using only one triangular factor because symmetry removes duplicate work. Under the hood, positive definiteness gives stable positive pivots, so you do not need pivoting. In practice that means less memory, fewer flops, and often cleaner numerical behaviour than LU.
+(or $A=R^{\top}R$), using only one triangular factor because symmetry removes duplicate work. Under the hood, positive definiteness gives stable positive pivots, so you do not need pivoting. In practice that means less memory, fewer flops, and often cleaner numerical behaviour than LU.
 
 **QR decomposition** is the right choice for overdetermined systems and least-squares problems. It avoids the condition number squaring that comes with the normal equations approach.
 
@@ -799,13 +821,13 @@ QR writes
 $$
 A = QR,
 $$
-with $Q$ orthonormal and $R$ upper triangular. The key idea is that orthonormal transforms preserve lengths, so minimising $\|Ax-b\|_2$ turns into minimising $\|Rx-Q^Tb\|_2$, which is a stable triangular solve. That is why QR usually beats normal equations numerically: you avoid forming $A^TA$, which can magnify round-off.
+with $Q$ orthonormal and $R$ upper triangular. The key idea is that orthonormal transforms preserve lengths, so minimising $\|Ax-b\|_2$ turns into minimising $\|Rx-Q^{\top}b\|_2$, which is a stable triangular solve. That is why QR usually beats normal equations numerically: you avoid forming $A^{\top}A$, which can magnify round-off.
 
 **Singular value decomposition (SVD)** is the most informative and most expensive. It reveals rank structure, gives the best low-rank approximation, provides numerically safe pseudo-inverses for rank-deficient systems, and is indispensable for diagnostic work. When a matrix is ill-conditioned and you need to understand why, the SVD tells you which directions are causing trouble and by how much.
 
 SVD writes
 $$
-A = U\Sigma V^T,
+A = U\Sigma V^{\top},
 $$
 where diagonal entries of $\Sigma$ are singular values. A useful mental model is: SVD rotates coordinates so the matrix acts like pure scaling along orthogonal directions. Once you see those scales, rank deficiency and ill-conditioning stop being mysterious; they become directly visible.
 
@@ -816,7 +838,7 @@ $$
 \min_x \|Ax-b\|_2
 $$
 
-The naive approach is the normal equations $A^T A x = A^T b$, a square system you can solve directly. This works, but it squares the condition number: if $\kappa(A) = 10^6$, then $\kappa(A^T A) = 10^{12}$, and you have lost twelve decimal digits of accuracy before solving a single equation. QR factorisation applied directly to $A$ — as implemented in `numpy.linalg.lstsq`, R's `lm`, and Julia's `\` for tall matrices — solves the same problem without this numerical hazard and should almost always be preferred.
+The naive approach is the normal equations $A^{\top} A x = A^{\top} b$, a square system you can solve directly. This works, but it squares the condition number: if $\kappa(A) = 10^6$, then $\kappa(A^{\top} A) = 10^{12}$, and you have lost twelve decimal digits of accuracy before solving a single equation. QR factorisation applied directly to $A$ — as implemented in `numpy.linalg.lstsq`, R's `lm`, and Julia's `\` for tall matrices — solves the same problem without this numerical hazard and should almost always be preferred.
 
 ### Iterative Solvers for Large Systems
 
@@ -826,7 +848,7 @@ When matrices are large and sparse, direct methods become impractical and iterat
 
 What CG is doing under the hood: each iterate minimises the quadratic energy
 $$
-\phi(x)=\tfrac12 x^TAx-b^Tx
+\phi(x)=\tfrac12 x^{\top}Ax-b^{\top}x
 $$
 over an expanding Krylov subspace, and search directions are made $A$-conjugate so later steps do not undo earlier progress. In exact arithmetic you can finish in at most $n$ steps; in floating-point that ideal is softened, but performance is still excellent on well-conditioned SPD systems.
 
@@ -847,15 +869,15 @@ So how do you actually find one in practice? Usually you do not "discover" a per
 Common choices:
 
 - **Jacobi / diagonal scaling**: cheapest baseline. Works when row/column scaling is the main problem, but rarely enough by itself for hard systems.
-- **SSOR / block-Jacobi**: useful when there is local coupling by blocks (for example, multiple variables per grid cell).
-- **Incomplete factorisations (ILU, IC)**: the workhorse for many sparse problems. You keep a sparse approximation of LU/Cholesky by dropping fill entries below a threshold or beyond a pattern.
+- **symmetric successive over-relaxation (SSOR) / block-Jacobi**: useful when there is local coupling by blocks (for example, multiple variables per grid cell).
+- **Incomplete LU (ILU) and incomplete Cholesky (IC) factorisations**: the workhorse for many sparse problems. You keep a sparse approximation of LU/Cholesky by dropping fill entries below a threshold or beyond a pattern.
 - **Algebraic multigrid (AMG)**: often excellent for elliptic PDE-type systems (Poisson-like operators). More setup cost, but can reduce iteration counts dramatically.
 - **Domain decomposition / Schwarz methods**: natural for distributed-memory parallel runs and subdomain-based discretisations.
 
 A practical selection loop looks like this:
 
 1. Start with the matrix class: SPD, nonsymmetric, block-structured, PDE-like, graph-like.
-2. Choose a solver-compatible baseline: IC/AMG for CG on SPD systems, ILU/AMG for GMRES/BiCGSTAB on nonsymmetric systems.
+2. Choose a solver-compatible baseline: IC/AMG for CG on SPD systems, ILU or AMG for GMRES or stabilised biconjugate gradient (BiCGSTAB) on nonsymmetric systems.
 3. Measure two costs separately: preconditioner setup time and per-iteration apply time.
 4. Tune one knob at a time (drop tolerance, fill level, restart size, AMG coarsening/smoother) and track total time-to-solution, not just iteration count.
 5. Validate robustness across representative right-hand sides and parameter regimes; a preconditioner that is fast on one case but brittle on nearby cases is risky in production.
@@ -972,7 +994,7 @@ println("beta0, beta1: ", beta)
 
 ## Eigenvalue Problems
 
-The previous section treated linear algebra mostly as "solve **A****x** = **b**." That is the right problem when you know the right-hand side. But many important problems instead ask: for what values of $\lambda$ does **A****x** = $\lambda$**x** have a nontrivial solution? This is the eigenvalue problem, and it shows up everywhere — not as a mathematical curiosity, but as the natural formulation of questions about stability, dominant behaviour, vibration, and information structure.
+The previous section treated linear algebra mostly as "solve **A****x** = **b**". That is the right problem when you know the right-hand side. But many important problems instead ask: for what values of $\lambda$ does **A****x** = $\lambda$**x** have a nontrivial solution? This is the eigenvalue problem, and it shows up everywhere — not as a mathematical curiosity, but as the natural formulation of questions about stability, dominant behaviour, vibration, and information structure.
 
 ### Why Eigenvalue Problems Matter
 
@@ -999,10 +1021,10 @@ v = random unit vector
 for k = 1, 2, 3, ...:
     w = A @ v
     v = w / ||w||_2
-    lambda = v^T @ A @ v   # Rayleigh quotient
+    lambda = v.T @ A @ v   # Rayleigh quotient
 ```
 
-After enough iterations, **v** converges to the eigenvector corresponding to the eigenvalue with the largest absolute value — the dominant eigenvector — and the Rayleigh quotient $\mathbf{v}^T \mathbf{A}\mathbf{v}$ converges to $\lambda_1$.
+If $A$ has a unique eigenvalue of strictly greatest modulus and the starting vector has a nonzero component in its dominant eigendirection, normalised power iteration converges to that eigenvector in the usual diagonalizable case. Otherwise it can fail to converge or converge to a different invariant subspace. The Rayleigh quotient $\mathbf{v}^{\top}\mathbf{A}\mathbf{v}$ estimates the corresponding eigenvalue; it equals the eigenvalue for a unit eigenvector of a symmetric matrix.
 
 **Why it converges.** Expand the initial random vector in the eigenbasis of **A**: $\mathbf{v}_0 = \sum_i c_i \mathbf{q}_i$, where $\mathbf{q}_i$ are the eigenvectors and $c_i$ are coordinates. After $k$ multiplications by **A**:
 
@@ -1014,7 +1036,7 @@ This ratio is the key number to think about when power iteration is struggling. 
 
 ![Power iteration convergence: residual versus iteration count](figures/eigenvalue_convergence.png)
 
-**Deflation.** Power iteration only gives you the dominant eigenvalue. To find the next one, you deflate: once $\lambda_1$ and $\mathbf{q}_1$ are known, subtract out their contribution from **A** to get a deflated matrix $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T$ — this formula relies on $\mathbf{q}_1$ being orthonormal, which holds for symmetric/normal **A**; for general matrices you need the left eigenvector instead, $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{w}_1^T / (\mathbf{w}_1^T\mathbf{q}_1)$. Power iteration on $\mathbf{A}'$ converges to $\lambda_2$. You can repeat this to peel off further eigenvalues one by one. In practice, deflation accumulates rounding errors, so it is mostly useful conceptually or for finding a small number of extreme eigenvalues. For finding many eigenvalues the QR algorithm or Krylov methods are more robust.
+**Deflation.** Power iteration only gives you the dominant eigenvalue. To find the next one, you deflate: once $\lambda_1$ and $\mathbf{q}_1$ are known, subtract out their contribution from **A** to get a deflated matrix $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^{\top}$ — this formula relies on $\mathbf{q}_1$ being orthonormal, which holds for symmetric/normal **A**; for general matrices you need the left eigenvector instead, $\mathbf{A}' = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{w}_1^{\top} / (\mathbf{w}_1^{\top}\mathbf{q}_1)$. Power iteration on $\mathbf{A}'$ converges to $\lambda_2$. You can repeat this to peel off further eigenvalues one by one. In practice, deflation accumulates rounding errors, so it is mostly useful conceptually or for finding a small number of extreme eigenvalues. For finding many eigenvalues the QR algorithm or Krylov methods are more robust.
 
 **Inverse iteration and shift-and-invert.** Power iteration converges to the largest-magnitude eigenvalue. What if you want the smallest, or one near a specific value $\sigma$? Replace **A** with $(\mathbf{A} - \sigma \mathbf{I})^{-1}$. The eigenvalues of this shifted-inverted matrix are $1/(\lambda_i - \sigma)$, so the eigenvalue of **A** nearest $\sigma$ becomes the dominant eigenvalue of the transformed problem. Power iteration on $(\mathbf{A} - \sigma \mathbf{I})^{-1}$ — meaning: solve a linear system $(\mathbf{A} - \sigma \mathbf{I})\mathbf{w} = \mathbf{v}$ at each step instead of multiplying — then converges to the eigenpair nearest $\sigma$. This is inverse iteration. The convergence rate becomes $|\lambda_{\text{near}} - \sigma| / |\lambda_{\text{next}} - \sigma|$, which can be extraordinary when $\sigma$ is close to a target eigenvalue. A single shift close to the target often gives convergence in fewer than ten steps.
 
@@ -1026,13 +1048,13 @@ The core idea is iterated QR factorisation. At each step, factorise the current 
 
 $$\mathbf{A}_{k+1} = \mathbf{R}_k \mathbf{Q}_k$$
 
-This is an orthogonal similarity transformation: $\mathbf{A}_{k+1} = \mathbf{Q}_k^T \mathbf{A}_k \mathbf{Q}_k$, so all $\mathbf{A}_k$ share the same eigenvalues. Under mild conditions, $\mathbf{A}_k$ converges to Schur form — upper triangular (for general matrices) or diagonal (for symmetric matrices) — with the eigenvalues on the diagonal. The eigenvectors appear in the product of all the $\mathbf{Q}_k$ matrices accumulated along the way.
+This is an orthogonal similarity transformation: $\mathbf{A}_{k+1} = \mathbf{Q}_k^{\top} \mathbf{A}_k \mathbf{Q}_k$, so all $\mathbf{A}_k$ share the same eigenvalues. Under mild conditions, $\mathbf{A}_k$ converges to Schur form — upper triangular (for general matrices) or diagonal (for symmetric matrices) — with the eigenvalues on the diagonal. The eigenvectors appear in the product of all the $\mathbf{Q}_k$ matrices accumulated along the way.
 
 **Why it works at all** is non-obvious. Heuristically, each QR step is doing something like a step of power iteration on each column simultaneously, using orthogonality to keep the directions from collapsing. The formal explanation requires more machinery, but the practical point is: it converges, it is stable, and Schur form is a numerically clean representation of eigenstructure.
 
-**Shift acceleration.** Without shifts, convergence is controlled by eigenvalue ratios in the same way as power iteration — potentially slow. The standard fix is Wilkinson shifts: at each step, shift by the eigenvalue of the trailing $2 \times 2$ block (the bottom-right corner of the current matrix) that is closest to the bottom-right diagonal entry — this targets the eigenvalue currently being deflated, not the smallest eigenvalue of the matrix overall — run one QR step, then unshift. This drives the subdiagonal entries towards zero much faster and usually gives cubic convergence near the end of the process for the symmetric tridiagonal case (general matrices see quadratic convergence with shifted QR). In practice, the shifted QR algorithm finishes in $O(n)$ iterations on most matrices, so the total cost is dominated by the QR factorisations: $O(n^3)$ overall.
+**Shift acceleration.** Without shifts, convergence is controlled by eigenvalue ratios in the same way as power iteration — potentially slow. A common acceleration is the Wilkinson shift: at each step, shift by the eigenvalue of the trailing $2 \times 2$ block (the bottom-right corner of the current matrix) that is closest to the bottom-right diagonal entry — this targets the eigenvalue being deflated at that step, not the smallest eigenvalue of the matrix overall — run one QR step, then unshift. This drives the subdiagonal entries towards zero much faster and usually gives cubic convergence near the end of the process for the symmetric tridiagonal case (general matrices see quadratic convergence with shifted QR). The iteration count depends on the matrix spectrum and stopping criterion; if it is $O(n)$, dense QR steps give $O(n^3)$ work overall.
 
-**Symmetric vs general.** When **A** is symmetric, the Schur form is diagonal with real eigenvalues — a full eigendecomposition. The standard path is to first reduce **A** to symmetric tridiagonal form (Householder reflections, $O(n^3)$ but with a small constant), then run QR on the tridiagonal, which is much cheaper at $O(n^2)$ per iteration. The LAPACK routine is `dsyev` (or `dsyevd` for the divide-and-conquer variant, which is often faster). When **A** is general (non-symmetric), eigenvalues may be complex, and the Schur form is quasi-upper-triangular with $1 \times 1$ and $2 \times 2$ diagonal blocks. The LAPACK routine is `dgeev`. All three language libraries call these routines through their standard eigenvalue functions — you do not need to invoke LAPACK directly, but knowing the symmetric path exists means you should always tell the solver when your matrix is symmetric, because it is faster and gives guaranteed real eigenvalues.
+**Symmetric vs general.** When **A** is symmetric, the Schur form is diagonal with real eigenvalues — a full eigendecomposition. The standard path is to first reduce **A** to symmetric tridiagonal form (Householder reflections, $O(n^3)$ but with a small constant), then run QR on the tridiagonal, which is much cheaper at $O(n^2)$ per iteration. The LAPACK routine is `dsyev` (or `dsyevd` for the divide-and-conquer variant, which may be faster depending on the matrix and implementation). When **A** is general (non-symmetric), eigenvalues may be complex, and the Schur form is quasi-upper-triangular with $1 \times 1$ and $2 \times 2$ diagonal blocks. The LAPACK routine is `dgeev`. All three language libraries call these routines through their standard eigenvalue functions — you do not need to invoke LAPACK directly; use a symmetric-specific routine when the matrix is symmetric to preserve that structure and obtain real eigenvalues.
 
 Do not implement the QR algorithm yourself. It is numerically subtle — getting the shift strategy right, handling near-deflations, maintaining orthogonality — and the library implementations have decades of work in them. Use `numpy.linalg.eigh` for symmetric, `numpy.linalg.eig` for general, and let LAPACK do its job.
 
@@ -1066,9 +1088,9 @@ This arises naturally in structural mechanics (stiffness matrix **A** and mass m
 
 The generalised problem looks like a minor generalisation but has some subtle wrinkles. If **B** is singular, there can be infinite eigenvalues. If **B** is indefinite, eigenvalues can be complex even when **A** is symmetric. The most tractable and common case is when **B** is symmetric positive definite (SPD).
 
-When **B** is SPD, you can reduce the generalised problem to a standard one without losing symmetry. Factor $\mathbf{B} = \mathbf{L}\mathbf{L}^T$ (Cholesky). Then **x** = $\mathbf{L}^{-T}$**y** transforms the system:
+When **B** is SPD, you can reduce the generalised problem to a standard one without losing symmetry. Factor $\mathbf{B} = \mathbf{L}\mathbf{L}^{\top}$ (Cholesky). Then **x** = $\mathbf{L}^{-T}$**y** transforms the system:
 
-$$\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{L}\mathbf{L}^T \mathbf{L}^{-T}\mathbf{y}$$
+$$\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{L}\mathbf{L}^{\top} \mathbf{L}^{-T}\mathbf{y}$$
 
 $$\mathbf{L}^{-1}\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{y}$$
 
@@ -1225,7 +1247,7 @@ This is a tridiagonal linear system, which can be solved in $O(n)$ time by Thoma
 
 The remaining two degrees of freedom are fixed by boundary conditions, which modify the first and last equations of the system:
 
-- **Natural (free) boundary:** $M_0 = M_n = 0$. The spline has zero curvature at the endpoints, which is a sensible default when the data provides no information about endpoint derivatives. The visual effect is that the curve enters and exits the data range "straight."
+- **Natural (free) boundary:** $M_0 = M_n = 0$. The spline has zero curvature at the endpoints, which is a sensible default when the data provides no information about endpoint derivatives. The visual effect is that the curve enters and exits the data range "straight".
 - **Clamped boundary:** you specify $S'(x_0)$ and $S'(x_n)$. The first and last equations are replaced by constraints that match the given slopes. This reduces oscillation near the endpoints if the true derivatives are known.
 - **Not-a-knot condition:** the third derivative is forced to be continuous at the second knot ($x_1$) and the second-to-last knot ($x_{n-1}$), effectively merging the first two and last two cubic pieces. This is the default in `scipy.interpolate.CubicSpline` and tends to give the most visually natural result when endpoint derivatives are unknown.
 
@@ -1353,14 +1375,14 @@ $$
 f'(x) \approx \frac{f(x+h)-f(x)}{h}
 $$
 
-There are two sources of error that push in opposite directions. Truncation error — the error from using a finite difference instead of the true limit — decreases as $h$ decreases, scaling like $O(h)$ for the forward difference. But round-off and cancellation error increases as $h$ decreases: when $h$ is very small, $f(x+h)$ and $f(x)$ are nearly equal, and their difference suffers catastrophic cancellation. The result is an optimal step size that balances these two effects — typically around $\sqrt{\epsilon_{mach}} \approx 10^{-8}$ for the forward difference in double precision.
+There are two sources of error that push in opposite directions. Truncation error — the error from using a finite difference instead of the true limit — decreases as $h$ decreases, scaling like $O(h)$ for the forward difference. But round-off and cancellation error increases as $h$ decreases: when $h$ is very small, $f(x+h)$ and $f(x)$ are nearly equal, and their difference suffers catastrophic cancellation. The result is an optimal step size that balances these two effects — typically around $\sqrt{\varepsilon_{mach}} \approx 10^{-8}$ for the forward difference in double precision.
 
 The central difference improves the truncation order to $O(h^2)$:
 $$
 f'(x) \approx \frac{f(x+h)-f(x-h)}{2h}
 $$
 
-This allows a larger optimal $h$ (around $\epsilon_{mach}^{1/3} \approx 10^{-5}$ for double precision) and is generally preferred for smooth functions. When derivative accuracy is critical, automatic differentiation — which computes exact derivatives of the code rather than approximating them — is often a better choice than any finite difference scheme.
+This allows a larger optimal $h$ (around $\varepsilon_{mach}^{1/3} \approx 10^{-5}$ for double precision) and is generally preferred for smooth functions. When derivative accuracy is critical, automatic differentiation — which computes exact derivatives of the code rather than approximating them — is often a better choice than any finite difference scheme.
 
 
 The optimal step size for central differences is not arbitrary. Truncation error from the Taylor expansion scales as $O(h^2)$. Cancellation error arises because $f(x+h)$ and $f(x-h)$ agree in their leading $\sim|\log_{10} h|$ digits, so the subtraction loses that many digits to catastrophic cancellation, leaving an absolute error of roughly $\varepsilon_\text{mach}|f(x)|$ in the numerator — which, after dividing by $2h$, gives a cancellation error of $O(\varepsilon_\text{mach}/h)$ in the derivative estimate. The total error is minimised when $h^2 \approx \varepsilon_\text{mach}/h$, giving optimal $h \approx \varepsilon_\text{mach}^{1/3} \approx 6 \times 10^{-6}$ for double precision. You cannot make $h$ arbitrarily small — doing so makes cancellation dominate and the error actually grows. This is exactly why automatic differentiation (covered later) is preferable: it achieves machine-precision derivatives with no step-size tuning whatsoever.
@@ -1663,7 +1685,7 @@ cat(sprintf("numDeriv result : %.15f\n", fd_deriv))
 cat(sprintf("Absolute error  : %.3e\n", abs(fd_deriv - true_deriv)))
 ```
 
-`numDeriv::grad`'s default method is Richardson extrapolation rather than a plain central difference, so typical output shows error around $10^{-10}$ to $10^{-12}$ on smooth functions like this one — much tighter than the $O(\sqrt{\epsilon_\text{mach}})$ floor you'd get from a single central difference. For a single smooth scalar function this is often tolerable. For a gradient of a loss over thousands of parameters, accumulated finite-difference errors become a real problem, and the $n$ function evaluations per gradient become expensive. This is the concrete cost of not having AD: you pay in both accuracy and computation.
+`numDeriv::grad`'s default method is Richardson extrapolation rather than a plain central difference, so typical output shows error around $10^{-10}$ to $10^{-12}$ on smooth functions like this one — much tighter than the $O(\sqrt{\varepsilon_\text{mach}})$ floor you'd get from a single central difference. For a single smooth scalar function this is often tolerable. For a gradient of a loss over thousands of parameters, accumulated finite-difference errors become a real problem, and the $n$ function evaluations per gradient become expensive. This is the concrete cost of not having AD: you pay in both accuracy and computation.
 
 ---
 
@@ -1739,7 +1761,7 @@ u''(x_i) \approx \frac{u_{i+1}-2u_i+u_{i-1}}{h^2}.
 $$
 Why people like it: easy to implement, very fast on structured grids, and great for rectangular domains with simple boundary conditions. Where it struggles: irregular geometry, complex boundaries, and local mesh adaptation are less natural.
 
-**Finite volume (FVM)** writes the PDE in conservation form, integrates over each control volume, and balances fluxes across faces. Unknowns are typically cell averages. Why it matters: conservation is built in by construction, which is why FVM is dominant in CFD and transport problems. If flux leaves one cell, it enters the neighbour; global conservation follows naturally.
+**Finite volume (FVM)** writes the PDE in conservation form, integrates over each control volume, and balances fluxes across faces. Unknowns are typically cell averages. Why it matters: conservation is built in by construction, which is why FVM is dominant in computational fluid dynamics (CFD) and transport problems. If flux leaves one cell, it enters the neighbour; global conservation follows naturally.
 
 **Finite element (FEM)** starts from a weak form, chooses basis/test functions on each element, and assembles a global system from local element contributions. Why it is powerful: it handles complex geometry and mixed boundary conditions cleanly, supports high-order basis functions, and works naturally with adaptive mesh refinement. That flexibility is why FEM is standard in structural mechanics and many multiphysics problems.
 
@@ -1888,7 +1910,7 @@ $$
 y'=-2y, \quad y(0)=1, \quad y(1)=e^{-2}
 $$
 
-Euler and RK4 are worth comparing because they represent two different philosophies. Euler uses one slope evaluation per step and is first-order accurate globally, so errors shrink linearly with $h$. Classical RK4 uses four carefully weighted slope evaluations per step; those weights are chosen so low-order truncation terms cancel, giving fourth-order global accuracy on smooth problems. In practice, RK4 usually delivers far smaller error at the same step size, while Euler is mainly useful as a baseline and for intuition.
+Euler and classical fourth-order Runge–Kutta (RK4) are worth comparing because they represent two different philosophies. Euler uses one slope evaluation per step and is first-order accurate globally, so errors shrink linearly with $h$. Classical RK4 uses four carefully weighted slope evaluations per step; those weights are chosen so low-order truncation terms cancel, giving fourth-order global accuracy on smooth problems. In practice, RK4 usually delivers far smaller error at the same step size, while Euler is mainly useful as a baseline and for intuition.
 
 **Python**
 ```python
@@ -2068,17 +2090,17 @@ A practical intuition: for small enough steps, the first-order model points down
 
 Near a well-behaved minimiser, the objective looks almost quadratic, and Newton is basically solving that local quadratic directly. That is where the fast convergence comes from. Farther away, raw Newton can overshoot or even point uphill, which is why production solvers add damping, line search, or trust-region safeguards.
 
-**Quasi-Newton methods: BFGS and L-BFGS**
+**Quasi-Newton methods: Broyden–Fletcher–Goldfarb–Shanno (BFGS) and limited-memory BFGS (L-BFGS)**
 
 BFGS — named for Broyden, Fletcher, Goldfarb, and Shanno — is the practical workhorse for smooth unconstrained optimisation. The core idea is to approximate the *inverse* Hessian $\mathbf{H}^{-1}$ directly, so that each iteration requires only a matrix-vector product rather than a linear solve. At each step the approximation is updated using information from the most recent gradient change, without ever computing a second derivative.
 
 The update rule is derived from the secant condition: the new Hessian approximation must satisfy $\mathbf{H}_{k+1} \mathbf{s}_k = \mathbf{y}_k$, where $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$ is the step taken and $\mathbf{y}_k = \nabla f(\mathbf{x}_{k+1}) - \nabla f(\mathbf{x}_k)$ is the corresponding change in gradient. This says: the approximate Hessian must agree with the true curvature along the direction you just moved. Applied to the inverse Hessian approximation, this gives the rank-2 update
 
 $$
-\mathbf{H}_{k+1}^{-1} = \left(\mathbf{I} - \rho_k \mathbf{s}_k \mathbf{y}_k^T\right)\mathbf{H}_k^{-1}\left(\mathbf{I} - \rho_k \mathbf{y}_k \mathbf{s}_k^T\right) + \rho_k \mathbf{s}_k \mathbf{s}_k^T
+\mathbf{H}_{k+1}^{-1} = \left(\mathbf{I} - \rho_k \mathbf{s}_k \mathbf{y}_k^{\top}\right)\mathbf{H}_k^{-1}\left(\mathbf{I} - \rho_k \mathbf{y}_k \mathbf{s}_k^{\top}\right) + \rho_k \mathbf{s}_k \mathbf{s}_k^{\top}
 $$
 
-where $\rho_k = 1/(\mathbf{y}_k^T \mathbf{s}_k)$. Each iteration adds two rank-1 outer products to the previous approximation — hence "rank-2 update." This structure guarantees the approximation stays symmetric and, under the Wolfe conditions on line search, stays positive definite. That last property matters: it means the search direction $-\mathbf{H}_k^{-1} \nabla f(\mathbf{x}_k)$ always points downhill.
+where $\rho_k = 1/(\mathbf{y}_k^{\top} \mathbf{s}_k)$. Each iteration adds two rank-1 outer products to the previous approximation — hence "rank-2 update". With a positive-definite initial approximation and a line search satisfying the curvature condition $y_k^{\top} s_k > 0$ (as appropriate Wolfe conditions do), this update preserves symmetry and positive definiteness. Consequently, for a nonzero gradient, the direction $-\mathbf{H}_k^{-1} \nabla f(\mathbf{x}_k)$ is a descent direction.
 
 Why BFGS converges fast: as the iterates approach the solution, the accumulated curvature information makes the approximation increasingly accurate, and the algorithm transitions from linear to *superlinear* convergence — the error ratio between successive steps tends to zero, faster than any fixed linear rate, though not the full error-squaring of Newton. You get much of Newton's speed without ever touching second derivatives.
 
@@ -2132,7 +2154,7 @@ In **nonconvex optimisation**, the objective landscape may have many local minim
 
 Real-world optimisation problems almost always come with constraints. **Equality constraints** fix the value of some function of the variables. **Inequality constraints** restrict variables to a region. **Bound constraints** simply clamp each variable to a range. The differences between these categories matter for which algorithms work well, but the underlying theory runs through a single set of conditions.
 
-**KKT conditions.** The first-order optimality conditions for a constrained problem are the Karush-Kuhn-Tucker (KKT) conditions. For a problem with equality constraints $c_i(\mathbf{x}) = 0$ and inequality constraints $g_j(\mathbf{x}) \leq 0$, a feasible point $\mathbf{x}^*$ is a local minimum only if there exist multipliers $\lambda_i$ and $\mu_j \geq 0$ satisfying: stationarity of the Lagrangian $\nabla f(\mathbf{x}^*) + \sum \lambda_i \nabla c_i(\mathbf{x}^*) + \sum \mu_j \nabla g_j(\mathbf{x}^*) = 0$; primal feasibility ($c_i = 0$, $g_j \leq 0$); dual feasibility ($\mu_j \geq 0$); and complementary slackness ($\mu_j g_j(\mathbf{x}^*) = 0$ — each inequality is either active or its multiplier is zero). These conditions tell you what a solution must look like. They do not tell you how to find one — that is the job of the algorithm.
+**Karush–Kuhn–Tucker (KKT) conditions.** These first-order optimality conditions for a constrained problem For a problem with equality constraints $c_i(\mathbf{x}) = 0$ and inequality constraints $g_j(\mathbf{x}) \leq 0$, a feasible point $\mathbf{x}^*$ is a local minimum only if there exist multipliers $\lambda_i$ and $\mu_j \geq 0$ satisfying: stationarity of the Lagrangian $\nabla f(\mathbf{x}^*) + \sum \lambda_i \nabla c_i(\mathbf{x}^*) + \sum \mu_j \nabla g_j(\mathbf{x}^*) = 0$; primal feasibility ($c_i = 0$, $g_j \leq 0$); dual feasibility ($\mu_j \geq 0$); and complementary slackness ($\mu_j g_j(\mathbf{x}^*) = 0$ — each inequality is either active or its multiplier is zero). These conditions tell you what a solution must look like. They do not tell you how to find one — that is the job of the algorithm.
 
 **Sequential quadratic programming (SQP).** SQP applies Newton-like ideas directly to the KKT system. At each iterate $\mathbf{x}_k$, the algorithm constructs a quadratic subproblem: a quadratic approximation to the Lagrangian as the objective, with the constraints linearised around $\mathbf{x}_k$. Solving that subproblem gives a step that makes progress on both the objective and constraint satisfaction simultaneously. Because the local quadratic model becomes exact near a solution, SQP converges fast — typically superlinearly — when derivatives are accurate and the starting point is reasonable.
 
@@ -2149,7 +2171,7 @@ result = minimize(f, x0, method='SLSQP', constraints=constraints,
                   jac=grad_f)
 ```
 
-SLSQP is a good default for small-to-medium nonlinear problems with a mix of constraint types.
+Sequential Least Squares Programming (SLSQP) is one option for small-to-medium nonlinear problems with mixed constraint types.
 
 **Interior-point (barrier) methods.** For large or highly constrained problems, interior-point methods are usually faster. The idea is to replace each inequality constraint $g_j(\mathbf{x}) \leq 0$ with a logarithmic barrier term $-\mu \log(-g_j(\mathbf{x}))$ added to the objective, where the barrier parameter $\mu > 0$ controls how hard the constraint is enforced. As $\mu \to 0$, the barrier pushes the solution towards the true constrained optimum along what is called the *central path*. The key advantage is that iterates are always strictly feasible, and the barrier converts a hard constrained problem into a sequence of smooth unconstrained-like subproblems.
 
@@ -2174,12 +2196,12 @@ prob.solve()
 **Augmented Lagrangian methods.** A third major approach combines penalty terms with Lagrange multipliers. The augmented Lagrangian for equality constraints is
 
 $$
-L_\rho(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) + \boldsymbol{\lambda}^T c(\mathbf{x}) + \frac{\rho}{2}\|c(\mathbf{x})\|^2
+L_\rho(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) + \boldsymbol{\lambda}^{\top} c(\mathbf{x}) + \frac{\rho}{2}\|c(\mathbf{x})\|^2
 $$
 
 where $\boldsymbol{\lambda}$ is the multiplier vector and $\rho > 0$ is a penalty parameter. Each outer iteration minimises $L_\rho$ over $\mathbf{x}$ with $\boldsymbol{\lambda}$ fixed, then updates $\boldsymbol{\lambda} \leftarrow \boldsymbol{\lambda} + \rho \, c(\mathbf{x})$. The key difference from pure penalty methods ($\boldsymbol{\lambda} = 0$, just the quadratic term) is that the multiplier update means a finite $\rho$ is sufficient — you do not need to drive $\rho \to \infty$ to enforce the constraint, which is what causes ill-conditioning in pure penalty methods. The method tolerates more flexibility in the inner solve and tends to be robust when the constraint structure is complex or the problem is not smooth everywhere.
 
-ADMM (Alternating Direction Method of Multipliers) is a closely related splitting variant that has become particularly popular for distributed optimisation and problems with separable structure. The idea is to split the variable set and alternate minimisation steps over each part while enforcing consensus through augmented Lagrangian multiplier updates.
+Alternating Direction Method of Multipliers (ADMM) is a closely related splitting variant that has become particularly popular for distributed optimisation and problems with separable structure. The idea is to split the variable set and alternate minimisation steps over each part while enforcing consensus through augmented Lagrangian multiplier updates.
 
 ### Stochastic Optimisation
 
@@ -2199,7 +2221,7 @@ where $B$ is a randomly sampled batch. This estimate is unbiased — its expecta
 
 That noise turns out to have a useful side effect. Because the gradient estimate is random, the iterates do not converge to a fixed point but wander around the neighbourhood of a minimum. This wandering can help escape shallow local minima and saddle points that would trap a deterministic method. There is a growing body of evidence that noisy gradients act as implicit regularisation for overparameterised models, nudging the solution towards flatter minima that generalise better.
 
-**Convergence with noisy gradients.** The fundamental difference from deterministic gradient descent is that convergence guarantees now hold in expectation, not deterministically. For a convex objective with a fixed learning rate $\eta$, SGD (stochastic gradient descent with batch size 1) converges to a neighbourhood of the minimum — not the minimum itself. The radius of that neighbourhood is proportional to $\eta$. To achieve exact convergence you need a decreasing learning rate schedule, $\eta_k \to 0$, but then the convergence rate slows down compared to what a fixed rate would give in the early iterations. The headline comparison: SGD with a decaying learning rate schedule converges at $O(1/k)$ for strongly convex problems (and $O(1/\sqrt{k})$ for merely convex ones); deterministic gradient descent converges linearly, $O(\rho^k)$ for $\rho < 1$, on strongly convex smooth objectives. The gap is the cost of stochastic noise, and closing it is the subject of the variance reduction methods in the next subsection.
+**Convergence with noisy gradients.** The fundamental difference from deterministic gradient descent is that convergence guarantees now hold in expectation, not deterministically. For a convex objective with a fixed learning rate $\eta$, the stochastic gradient descent (SGD) method with batch size 1 converges to a neighbourhood of the minimum — not the minimum itself. The radius of that neighbourhood is proportional to $\eta$. To achieve exact convergence you need a decreasing learning rate schedule, $\eta_k \to 0$, but then the convergence rate slows down compared to what a fixed rate would give in the early iterations. The headline comparison: SGD with a decaying learning rate schedule converges at $O(1/k)$ for strongly convex problems (and $O(1/\sqrt{k})$ for merely convex ones); deterministic gradient descent converges linearly, $O(\rho^k)$ for $\rho < 1$, on strongly convex smooth objectives. The gap is the cost of stochastic noise, and closing it is the subject of the variance reduction methods in the next subsection.
 
 **Learning rate is the key parameter.** Set it too large and the iterates diverge or oscillate. Set it too small and progress is painfully slow. In practice you tune it by watching the loss curve: a learning rate that is too large produces spiky, increasing loss; one that is too small produces a curve that barely moves. Common schedules include step decay (halve the rate every fixed number of epochs), exponential decay, and cosine annealing, which cycles the rate smoothly from a maximum down to near zero and optionally restarts. Adaptive methods like Adam, RMSProp, and AdaGrad adjust the effective learning rate per parameter using accumulated gradient statistics — these are covered in depth in the deep learning primer and are not repeated here.
 
@@ -2235,7 +2257,7 @@ For scientific objectives without an automatic differentiation framework availab
 
 The gap between SGD and full gradient descent is not just a theoretical curiosity. For strongly convex problems, full gradient descent converges *linearly* — each step reduces the error by a constant factor, so you need $O(\log(1/\varepsilon))$ iterations to reach precision $\varepsilon$. SGD with a decaying learning rate converges at $O(1/k)$, which is sublinear — you need $O(1/\varepsilon)$ iterations for the same precision. That is an enormous practical difference when $\varepsilon$ is small. Variance reduction methods close this gap by reducing the gradient noise without paying the full cost of an exact gradient.
 
-**SVRG (Stochastic Variance Reduced Gradient).** The key observation is that the noise in an SGD step comes from the difference between the full gradient and the single-sample estimate. SVRG makes this explicit. At the start of each outer epoch, compute and store a full gradient checkpoint $\tilde{\nabla} f(\tilde{\mathbf{x}})$ at the current iterate $\tilde{\mathbf{x}}$. Then each inner stochastic step uses the corrected estimate
+**Stochastic variance-reduced gradient (SVRG).** The key observation is that the noise in an SGD step comes from the difference between the full gradient and the single-sample estimate. SVRG makes this explicit. At the start of each outer epoch, compute and store a full gradient checkpoint $\tilde{\nabla} f(\tilde{\mathbf{x}})$ at the current iterate $\tilde{\mathbf{x}}$. Then each inner stochastic step uses the corrected estimate
 
 $$
 g_k = \nabla f_i(\mathbf{x}_k) - \nabla f_i(\tilde{\mathbf{x}}) + \tilde{\nabla} f(\tilde{\mathbf{x}})
@@ -2243,11 +2265,11 @@ $$
 
 The correction term subtracts the same sample's contribution at the checkpoint and adds back the full gradient at the checkpoint. When $\mathbf{x}_k$ is close to $\tilde{\mathbf{x}}$, the two single-sample terms nearly cancel and the estimate is dominated by the full gradient $\tilde{\nabla} f(\tilde{\mathbf{x}})$ — which is accurate. As the iterates move further from the checkpoint, the variance grows, which is why you periodically refresh the checkpoint. The result is that for strongly convex objectives SVRG restores linear convergence, the same rate as full gradient descent, while paying only one full gradient pass per epoch rather than one per step.
 
-**SAG (Stochastic Average Gradient).** SAG takes a different approach: maintain a table of the most recent gradient evaluated for each data point $i$. Each step picks a random index $i$, computes a fresh gradient for that index, updates the table, and takes a step using the average of all stored gradients. Because the average is smooth and updates incrementally, the variance of the step direction decreases over time. SAG converges linearly for strongly convex objectives (and at $O(1/k)$ for merely convex ones), with a constant significantly better than plain SGD — and the constant improves as the algorithm accumulates more accurate per-example gradient estimates.
+**Stochastic average gradient (SAG).** SAG takes a different approach: maintain a table of the most recent gradient evaluated for each data point $i$. Each step picks a random index $i$, computes a fresh gradient for that index, updates the table, and takes a step using the average of all stored gradients. Because the average is smooth and updates incrementally, the variance of the step direction decreases over time. SAG converges linearly for strongly convex objectives (and at $O(1/k)$ for merely convex ones), with a constant significantly better than plain SGD — and the constant improves as the algorithm accumulates more accurate per-example gradient estimates.
 
 The cost is memory: storing one gradient per data point requires $O(n \cdot d)$ memory, where $d$ is the number of parameters. For large $n$ and small $d$ this is entirely feasible. For neural networks where $d$ is in the millions this is typically not.
 
-**When to use variance reduction.** The honest answer is that variance reduction is worth the overhead in a specific niche: large-$n$ convex or mildly nonconvex objectives where you can afford to store per-example gradient information and you care about precise convergence rather than approximate solutions. Statistical learning problems — logistic regression, SVMs, regularised least squares — fit well. For deep learning the situation is different: the objectives are nonconvex, $n$ is often enormous, per-example gradient storage is impractical, and Adam-family methods with adaptive learning rates empirically outperform SVRG-style methods without requiring the checkpoint overhead. The convergence theory for variance reduction in nonconvex settings is also substantially weaker, so the practical case for it in deep learning is thin.
+**When to use variance reduction.** The honest answer is that variance reduction is worth the overhead in a specific niche: large-$n$ convex or mildly nonconvex objectives where you can afford to store per-example gradient information and you care about precise convergence rather than approximate solutions. Statistical learning problems — logistic regression, support vector machines (SVMs), regularised least squares — fit well. For deep learning the situation is different: the objectives are nonconvex, $n$ is often enormous, per-example gradient storage is impractical, and Adam-family methods with adaptive learning rates empirically outperform SVRG-style methods without requiring the checkpoint overhead. The convergence theory for variance reduction in nonconvex settings is also substantially weaker, so the practical case for it in deep learning is thin.
 
 ### Shared Example: Fit Exponential Decay Model
 
@@ -2309,9 +2331,9 @@ Most of the linear algebra treatment so far has assumed your system is well-cond
 
 Recall from the conditioning discussion in section 4: the condition number $\kappa(\mathbf{A})$ bounds how much a relative perturbation in the data $\mathbf{b}$ can be amplified in the solution $\mathbf{x}$. When $\kappa(\mathbf{A})$ is large, small noise in $\mathbf{b}$ translates to enormous noise in $\mathbf{x}$.
 
-The SVD makes this visible. Section 6 covered that the SVD writes $\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^T$, where the diagonal entries of $\boldsymbol{\Sigma}$ are the singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n \geq 0$. The pseudo-inverse solution is:
+The SVD makes this visible. Section 6 covered that the SVD writes $\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^{\top}$, where the diagonal entries of $\boldsymbol{\Sigma}$ are the singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n \geq 0$. The pseudo-inverse solution is:
 
-$$\mathbf{x} = \mathbf{V}\boldsymbol{\Sigma}^{-1}\mathbf{U}^T\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
+$$\mathbf{x} = \mathbf{V}\boldsymbol{\Sigma}^{-1}\mathbf{U}^{\top}\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^{\top} \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
 
 Each term amplifies the component of $\mathbf{b}$ aligned with $\mathbf{u}_i$ by the factor $1/\sigma_i$. When some $\sigma_i$ are very small — near-rank-deficiency — the corresponding terms blow up. A tiny amount of noise in $\mathbf{b}$ in a nearly null-space direction gets amplified by $1/\sigma_{\min}$, which for an ill-conditioned problem can be enormous.
 
@@ -2323,7 +2345,7 @@ The simplest regularisation is to throw away the problem's bad directions entire
 
 If you keep only the $k$ largest singular values — those large enough to be trusted — the truncated solution is:
 
-$$\mathbf{x}_k = \sum_{i=1}^{k} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
+$$\mathbf{x}_k = \sum_{i=1}^{k} \frac{\mathbf{u}_i^{\top} \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
 
 The remaining singular components, where $\sigma_i < \sigma_{\min}^{\text{thresh}}$, are simply set to zero in the pseudo-inverse rather than amplifying noise. The result is stable but biased: you are effectively solving a projected version of the original problem.
 
@@ -2339,7 +2361,7 @@ $$\min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \mu\|\mathbf{x}\
 
 The parameter $\mu > 0$ controls the tradeoff: large $\mu$ shrinks the solution towards zero but degrades the fit; small $\mu$ approaches the unregularised least-squares solution. Differentiating and setting to zero gives the regularised normal equations:
 
-$$(\mathbf{A}^T\mathbf{A} + \mu\mathbf{I})\mathbf{x} = \mathbf{A}^T\mathbf{b}$$
+$$(\mathbf{A}^{\top}\mathbf{A} + \mu\mathbf{I})\mathbf{x} = \mathbf{A}^{\top}\mathbf{b}$$
 
 The effect on singular value amplification is illuminating. In the SVD frame, the unregularised pseudo-inverse amplifies the $i$-th singular component by $1/\sigma_i$. The Tikhonov solution replaces this with:
 
@@ -2351,7 +2373,7 @@ In statistics, this is ridge regression: the $\mu\|\mathbf{x}\|_2^2$ penalty shr
 
 ### $\ell_1$ Regularisation (LASSO)
 
-Tikhonov's $\ell_2$ penalty shrinks all coefficients towards zero, but it never sets any of them exactly to zero. When you believe the true solution is sparse — only a few coefficients are genuinely nonzero — Tikhonov is the wrong tool. LASSO uses an $\ell_1$ penalty instead:
+Tikhonov's $\ell_2$ penalty shrinks all coefficients towards zero, but it never sets any of them exactly to zero. When you believe the true solution is sparse — only a few coefficients are genuinely nonzero — Tikhonov is the wrong tool. Least absolute shrinkage and selection operator (LASSO) uses an $\ell_1$ penalty instead:
 
 $$\min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \mu\|\mathbf{x}\|_1$$
 
@@ -2515,7 +2537,7 @@ R was built for statistics, and its style reflects that. Vectorisation in R is n
 
 ### Julia Style for Performance and Clarity
 
-Julia was designed so readable numerical code can still run fast. Its JIT compiler means code that looks close to mathematical pseudocode often runs near C speed. The practical consequence is important: explicit loops are fine in Julia. Broadcasting with `.` remains useful for concise array expressions, but you do not have to contort code just to avoid loops.
+Julia was designed so readable numerical code can still run fast. Its just-in-time (JIT) compiler means code that looks close to mathematical pseudocode often runs near C speed. The practical consequence is important: explicit loops are fine in Julia. Broadcasting with `.` remains useful for concise array expressions, but you do not have to contort code just to avoid loops.
 
 ### Shared Concept, Different Idioms
 
@@ -2755,7 +2777,7 @@ Optimisation and linear algebra methods care a lot about variable scales. If som
 
 ### Solving Ill-Conditioned Formulations Directly
 
-The normal equations approach to least squares ($A^T A x = A^T b$) squares the condition number of $A$. If $A$ is mildly ill-conditioned with $\kappa(A) = 10^6$, then $A^T A$ has condition number $10^{12}$, and you have lost twelve decimal digits of accuracy before solving anything. Similarly, computing $A^{-1}$ explicitly to solve $Ax = b$ is always wrong numerically — it is slower than factorisation and less accurate.
+The normal equations approach to least squares ($A^{\top} A x = A^{\top} b$) squares the condition number of $A$. If $A$ is mildly ill-conditioned with $\kappa(A) = 10^6$, then $A^{\top} A$ has condition number $10^{12}$, and you have lost twelve decimal digits of accuracy before solving anything. Similarly, computing $A^{-1}$ explicitly to solve $Ax = b$ is always wrong numerically — it is slower than factorisation and less accurate.
 
 **Fix**: use QR or SVD directly on $A$ for least squares. Use factorisation-based solves rather than explicit inverses. If the problem is ill-conditioned by nature, regularisation may be the right tool rather than a more stable algorithm.
 
@@ -2891,7 +2913,7 @@ This tiny pipeline captures a very common real-world pattern: you have a model w
 
 Each topic in this primer is a doorway into a much larger field.
 
-**PDE numerics** is the natural extension of ODE methods to problems with spatial variation. Finite difference, finite volume, and finite element methods each have rich theories. The CFL stability condition — which links time step size to grid spacing for explicit PDE schemes — is one of the most important and most widely violated ideas in computational science.
+**PDE numerics** is the natural extension of ODE methods to problems with spatial variation. Finite difference, finite volume, and finite element methods each have rich theories. The Courant–Friedrichs–Lewy (CFL) stability condition — which links time step size to grid spacing for explicit PDE schemes — is one of the most important and most widely violated ideas in computational science.
 
 **Advanced linear algebra** covers Krylov subspace theory in depth, preconditioner design, iterative refinement, and randomised methods for large-scale matrix problems. Trefethen and Bau is the best single reference.
 
@@ -2919,10 +2941,10 @@ For rigorous theoretical foundations:
 
 For practical coding references:
 
-1. NumPy and SciPy official documentation — well-written and full of worked examples.
+1. [NumPy](https://numpy.org/doc/stable/reference/) and [SciPy](https://docs.scipy.org/doc/scipy/reference/) API references, including worked examples.
 2. R documentation for base numerical routines, plus the deSolve and optim package vignettes.
-3. Julia documentation, plus the DifferentialEquations.jl, Optim.jl, and LsqFit.jl package docs — often the most detailed and most modern of the three.
-4. JAX documentation and the "Autodiff Cookbook" — the clearest practical introduction to automatic differentiation in a production framework.
+3. [Julia's official documentation](https://docs.julialang.org/en/v1/), [DifferentialEquations.jl](https://docs.sciml.ai/DiffEqDocs/stable/), [Optim.jl](https://julianlsolvers.github.io/Optim.jl/stable/), and [LsqFit.jl](https://github.com/JuliaNLSolvers/LsqFit.jl) package documentation.
+4. [JAX documentation](https://docs.jax.dev/) and its [Autodidax guide](https://docs.jax.dev/en/latest/autodidax.html) for practical automatic differentiation.
 
 ---
 
