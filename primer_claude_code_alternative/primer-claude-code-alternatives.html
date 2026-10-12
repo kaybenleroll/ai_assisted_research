@@ -607,7 +607,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Claude Code Alternatives: A Comprehensive
 Survey of AI Coding Agents in 2026</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -820,10 +820,11 @@ Documentation</a></li>
       <div class="content-inner">
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
 <p>Claude Code has established itself as one of the most capable agentic
-coding tools available: it runs in the terminal and supported editors,
-takes high-level natural-language instructions, autonomously edits
-multiple files, executes shell commands, runs tests, and iterates until
-the task is done. Its extensibility system — skills, hooks, and MCP
+coding tools available: it runs in the terminal and supported integrated
+development environments (IDEs), takes high-level natural-language
+instructions, autonomously edits multiple files, executes shell
+commands, runs tests, and iterates until the task is done. Its
+extensibility system — skills, hooks, and Model Context Protocol (MCP)
 server support — allows deep customisation of its workflow. For heavy
 users, a Max plan (<strong>$100/month for Max 5x, $200/month for Max
 20x</strong>) can be good value relative to metered API pricing, but it
@@ -878,6 +879,13 @@ chat, image, embedding, or research model. Cloud IDE platforms (Replit,
 Gitpod, etc.) are out of scope unless they offer a dedicated
 coding-agent mode. Where a claim could not be verified, it is
 flagged.</p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
+<p>Assume a working knowledge of version control, shell commands,
+software-development workflows, and API credentials. This is a
+comparative survey and evaluation guide, not a product endorsement,
+security approval, benchmark result, or substitute for testing an agent
+against your own repository and data-handling requirements.</p>
 <hr />
 <h1 data-number="2" id="capability-led-selection-and-adoption"><span class="header-section-number">2</span> Capability-led Selection and
 Adoption</h1>
@@ -911,9 +919,9 @@ exceptions.</p>
 <td>Terminal-native, multi-provider work with MCP</td>
 <td><strong>OpenCode</strong> with an approved provider; keep
 <strong>Aider</strong> as the small git-native fallback</td>
-<td>OpenCode combines a terminal surface, broad provider choice, LSP,
-MCP, and multi-session work; Aider is simpler and automatically
-git-oriented</td>
+<td>OpenCode combines a terminal surface, broad provider choice,
+Language Server Protocol (LSP), MCP, and multi-session work; Aider is
+simpler and automatically git-oriented</td>
 <td>Choose Aider when minimalism and predictable git edits matter more
 than MCP; choose Goose when on-device execution and MCP portability are
 the priority</td>
@@ -1081,9 +1089,9 @@ Analysis’s coding agent classification (verified):</p>
 instructions, edit files, run commands, and loop autonomously. This is
 the category Claude Code belongs to. Other members: Aider, OpenCode,
 Goose, Gemini CLI (legacy/enterprise path), Antigravity CLI, Plandex,
-SWE-agent, Qwen Code, Kimi CLI, OpenAI Codex CLI, Amp (hybrid
-local/cloud), and GitHub Copilot CLI (distinct from the IDE-based
-Copilot covered under IDE Extensions below).</p>
+SWE-agent (Software Engineering agent), Qwen Code, Kimi CLI, OpenAI
+Codex CLI, Amp (hybrid local/cloud), and GitHub Copilot CLI (distinct
+from the IDE-based Copilot covered under IDE Extensions below).</p>
 <p><strong>IDE Extensions</strong> augment an existing editor (primarily
 VS Code or JetBrains). They have full access to the editor’s language
 server, refactoring tools, and UI, but are less suitable for scripted or
@@ -1093,7 +1101,8 @@ Q Developer, Tabnine, JetBrains AI Assistant.</p>
 AI-first workflows. They typically fork VS Code and add deeper AI
 integration than an extension permits (Zed is the exception, built from
 scratch in Rust). Members: Cursor, Windsurf (now Devin Desktop,
-Cognition AI), Zed AI, AWS Kiro IDE, Google Antigravity 2.0.</p>
+Cognition AI), Zed AI, Amazon Web Services (AWS) Kiro IDE, Google
+Antigravity 2.0.</p>
 <p><strong>Cloud Platform Agents</strong> run primarily in the cloud or
 a sandboxed environment (Docker). They expose a web or app-based
 interface and are designed for longer-running autonomous tasks, often

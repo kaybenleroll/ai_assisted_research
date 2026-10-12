@@ -2,7 +2,7 @@ SOURCE_MD   := "primer-claude-code-alternatives.md"
 PROJECT_DIR := "primer_claude_code_alternative"
 TITLE       := "Claude Code Alternatives: A Comprehensive Survey of AI Coding Agents in 2026"
 AUTHOR      := "Mick Cooney"
-DATE        := "7 October 2026"
+DATE        := "12 October 2026"
 HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
 
