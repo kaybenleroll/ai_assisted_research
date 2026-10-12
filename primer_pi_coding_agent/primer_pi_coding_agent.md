@@ -1,10 +1,10 @@
 # Pi Coding Agent: A Practical Primer
 
-*Refreshed against Pi 1.0.4 and official documentation; earlier community-package checks retain their dates.*
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
 
 ## The Short Version
 
-If you have used Claude Code, Pi still feels sparse on first contact: no built-in plan mode, subagent workflow, per-tool permission prompts, or general web search. But the old claim that it has no MCP client is now wrong: Pi 1.0 includes built-in support for MCP servers (external tool servers) and codemode for composing tool calls. Pi remains a programmable harness (the program around the model that runs the agent loop) that you extend. The official documentation is reference-style, and third-party write-ups can describe an earlier package or feature set. This primer is the orientation in between, written for someone who already knows Claude Code.
+If you have used Claude Code, Pi still feels sparse on first contact: no built-in plan mode, subagent workflow, per-tool permission prompts, or general web search. But the old claim that it has no Model Context Protocol (MCP) client is now wrong: Pi 1.0 includes built-in support for MCP servers (external tool servers) and codemode for composing tool calls. Pi remains a programmable harness (the program around the model that runs the agent loop) that you extend. The official documentation is reference-style, and third-party write-ups can describe an earlier package or feature set. This primer is the orientation in between, written for someone who already knows Claude Code.
 
 Pi is a terminal coding agent and an agent toolkit. Its default tools are `read`, `write`, `edit`, and `bash`; optional built-in tools and MCP can expand that set. It provides persistent sessions, a terminal UI, and several ways to add your own behaviour: skills, prompt templates, TypeScript extensions, and packages. You can add a search skill, browser bridge, approval gate, subagent workflow, or local-model provider without forking the program.
 
@@ -72,7 +72,7 @@ inspect repository -> edit file -> run tests -> inspect failure -> edit again
 
 Pi includes an MCP client as a built-in extension, while planning, subagents, browser automation, and general web search remain workflow choices. Optional `codemode` lets the model compose tool calls in JavaScript; it is off by default unless selected or enabled by an MCP server. See the [CLI tool reference](https://pi.dev/docs/latest/cli) and [codemode reference](https://pi.dev/docs/latest/codemode). You can install a package, write an extension, create a skill, or keep other capabilities outside Pi and feed their results into the session.
 
-Pi runs interactively, prints one-shot output, emits JSON events, communicates over RPC, or is embedded through its TypeScript SDK, so it is both a terminal program and a component of larger applications.
+Pi runs interactively, prints one-shot output, emits JSON events, communicates over remote procedure call (RPC), or is embedded through its TypeScript software development kit (SDK), so it is both a terminal program and a component of larger applications.
 
 ### Why Pi Is Built This Way
 
@@ -653,7 +653,7 @@ Claude Code and Codex supply the surrounding workflow themselves: permission pro
 
 ### Forks and Derivatives
 
-Because Pi is MIT-licensed and embeddable, others build on it. `oh-my-pi` (Stencil Labs, MIT) is, by its own README, a fork that adds subagents, IDE (LSP) integration, and browser tooling. OpenClaw (see the [OpenClaw primer](../primer_openclaw/primer_openclaw.html)) was described in January 2026 as having Pi "under the hood" ([Armin Ronacher](https://lucumr.pocoo.org/2026/1/31/pi/)); its current documentation says only `@earendil-works/pi-tui`, the terminal-UI toolkit, remains a dependency. A claim that a project "runs on Pi" needs a date.
+Because Pi is MIT-licensed and embeddable, others build on it. `oh-my-pi` (Stencil Labs, MIT) is, by its own README, a fork that adds subagents, integrated development environment (IDE) and Language Server Protocol (LSP) support, and browser tooling. OpenClaw (see the [OpenClaw primer](../primer_openclaw/primer_openclaw.html)) was described in January 2026 as having Pi "under the hood" ([Armin Ronacher](https://lucumr.pocoo.org/2026/1/31/pi/)); its current documentation says only `@earendil-works/pi-tui`, the terminal-UI toolkit, remains a dependency. A claim that a project "runs on Pi" needs a date.
 
 ## Worked Example: A Reproducible Data-Science Project With Pi and Rocker
 
@@ -786,7 +786,7 @@ RUN R -q -e 'install.packages("renv")' \
 USER rstudio
 ~~~
 
-The virtual environment isolates the pinned Python packages from the Ubuntu system Python. Tag pinning alone does not make the R packages reproducible, because for the latest R version Rocker installs from a moving CRAN snapshot; that is why the image uses `renv`. Four details matter:
+The virtual environment isolates the pinned Python packages from the Ubuntu system Python. Tag pinning alone does not make the R packages reproducible, because Rocker installs the selected R version from a moving CRAN snapshot; that is why the image uses `renv`. Four details matter:
 
 - `renv::restore()` in a project that is not activated installs into the image's system library and can overwrite Rocker's own packages. An incomplete lockfile, or one taken from another machine, can downgrade packages that the tidyverse relies on, and the image then fails at load time. Generate `renv.lock` from a container running this same image, so it records Rocker's package set as well as yours:
 
