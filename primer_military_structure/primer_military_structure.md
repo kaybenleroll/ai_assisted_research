@@ -168,7 +168,7 @@ The British OR-8 and OR-9 slots are worth examining. British Warrant Officers Cl
 
 ### Warrant Officers
 
-The US Army's warrant officer corps is a distinct structure, filling grades W-1 through W-5. Warrants are technical and tactical experts — helicopter pilots, intelligence analysts, special forces team leaders, cyber operators — who do not follow the standard commissioned officer career path. They have command authority within their specialty but typically do not command manoeuvre formations. A CW5 (Chief Warrant Officer 5) may have decades of mastery in a specific domain that no general officer would have; the warrant structure preserves that expertise outside the promotion-driven churn of the regular officer corps. Germany's Bundeswehr has no equivalent category; those functions are distributed between NCOs and specialist officers.
+The US Army's warrant officer corps is a distinct structure, filling grades W-1 through W-5. Warrants are technical and tactical experts — helicopter pilots, intelligence analysts, special forces team leaders, cyber operators — who do not follow the standard commissioned officer career path. They have command authority within their speciality but typically do not command manoeuvre formations. A CW5 (Chief Warrant Officer 5) may have decades of mastery in a specific domain that no general officer would have; the warrant structure preserves that expertise outside the promotion-driven churn of the regular officer corps. Germany's Bundeswehr has no equivalent category; those functions are distributed between NCOs and specialist officers.
 
 ### Promotion and the Up-or-Out System
 
