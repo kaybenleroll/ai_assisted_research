@@ -130,7 +130,7 @@ Military personnel divide into three categories with distinct bases of authority
 
 **Commissioned officers** hold a formal appointment — historically a royal or presidential commission — and enter through an officer academy, university training corps, or officer candidate school, usually after tertiary education. They plan, command, and are legally accountable for their orders in ways that NCOs are not. The commission creates a formal distinction: officers exercise command authority; NCOs exercise supervisory authority delegated within that structure. In most armies the two career paths are nearly impermeable; an NCO who becomes an officer is the exception, not the rule, and the transition is treated as a significant institutional event.
 
-### Rank versus Appointment
+### Rank Versus Appointment
 
 Rank is personal and permanent. Appointment is organisational and temporary. A Lieutenant Colonel is always a Lieutenant Colonel; whether they are currently commanding a battalion, serving as a brigade chief of staff, or attending a staff college course is a matter of appointment. These can diverge considerably: in wartime, a colonel might be given a corps to command because no suitable general is available; a general might find themselves commanding a task force the size of a battalion. The rank describes the individual; the echelon describes the job.
 
