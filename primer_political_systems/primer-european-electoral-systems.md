@@ -25,7 +25,7 @@ There are really four things that electoral systems keep juggling:
 3. Party control: does the party leadership decide who gets in, or do voters have real influence over candidates?
 4. Stability: does the system tend to produce single-party governments, or does it push parties into coalitions and bargaining?
 
-No system nails all four. Every design picks a flavor of trade-off. The UK, Germany, Ireland, Spain, Italy, the Netherlands, Denmark, and Sweden have parliamentary systems. France and Romania are **semi-presidential**: a directly elected president shares executive authority with a prime minister and a government accountable to parliament. That constitutional distinction is separate from the electoral formula: France uses two-round legislative contests, while Romania uses list PR. France's [constitutional framework](https://www.justice.gouv.fr/sites/default/files/2026-04/systeme_juridique_et_judiciaire_france.pdf) and Romania's [Constitution, Articles 81, 103, and 109](https://www.wipo.int/wipolex/en/legislation/details/3589) establish the respective executive arrangements.
+No system nails all four. Every design picks a flavour of trade-off. The UK, Germany, Ireland, Spain, Italy, the Netherlands, Denmark, and Sweden have parliamentary systems. France and Romania are **semi-presidential**: a directly elected president shares executive authority with a prime minister and a government accountable to parliament. That constitutional distinction is separate from the electoral formula: France uses two-round legislative contests, while Romania uses list PR. France's [constitutional framework](https://www.justice.gouv.fr/sites/default/files/2026-04/systeme_juridique_et_judiciaire_france.pdf) and Romania's [Constitution, Articles 81, 103, and 109](https://www.wipo.int/wipolex/en/legislation/details/3589) establish the respective executive arrangements.
 
 ### How the EU Layer Fits Above National Elections
 
@@ -99,7 +99,7 @@ Analytical takeaway: changes in national governing coalitions can materially shi
 
 1. Trigger event: energy-price shock creates political urgency.
 2. Commission package: proposal balances market design stability with consumer-protection pressure.
-3. Council fault lines: some states prioritize fiscal shielding and contracts-for-difference scale; others prioritize market discipline and cross-border neutrality.
+3. Council fault lines: some states prioritise fiscal shielding and contracts-for-difference scale; others prioritise market discipline and cross-border neutrality.
 4. Parliament bargaining: groups align around affordability messaging but diverge on intervention depth.
 5. Trilogue outcome: compromise text often includes broad framework language with delegated detail left to implementation stages.
 6. Domestic political return loop: national governments claim credit or assign blame, feeding back into subsequent election campaigns.
@@ -236,7 +236,7 @@ The easiest way to think about Italy is: it tries to combine local races and pro
 
 Spain is proportional, but not in a perfectly smooth way.
 
-Voters pick a party list, not individual candidates. The parties control the ranking. Seats are allocated by province, and the D'Hondt method slightly favors larger parties. Small provinces also get minimum seat guarantees, which gives rural areas extra weight and makes the overall system less proportional than a simple nationwide PR design.
+Voters pick a party list, not individual candidates. The parties control the ranking. Seats are allocated by province, and the D'Hondt method slightly favours larger parties. Small provinces also get minimum seat guarantees, which gives rural areas extra weight and makes the overall system less proportional than a simple nationwide PR design.
 
 Toy example in a 5-seat province:
 
@@ -279,17 +279,17 @@ In one sentence: Dutch voters are effectively allocating national political shar
 
 Denmark is a great example of a system that looks proportional, feels proportional, and still has enough moving parts to keep political scientists busy.
 
-The Folketing has 179 seats, but the key design is the split between constituency seats and leveling seats. Voters usually get one vote. That vote helps elect a candidate in a district and also feeds the overall proportional allocation. Leveling seats then correct for distortions so the national result lines up with the vote.
+The Folketing has 179 seats, but the key design is the split between constituency seats and levelling seats. Voters usually get one vote. That vote helps elect a candidate in a district and also feeds the overall proportional allocation. Levelling seats then correct for distortions so the national result lines up with the vote.
 
 Denmark also uses thresholds, but they are not a blunt wall that shuts everyone out. Parties can qualify through different routes, including winning a constituency seat or clearing a national vote threshold.
 
-Why this matters: Denmark combines high proportionality with a local district feel, sitting between Dutch national PR and Ireland's candidate-centered model.
+Why this matters: Denmark combines high proportionality with a local district feel, sitting between Dutch national PR and Ireland's candidate-centred model.
 
 Toy example:
 
-Suppose Party A does very well in a few districts but not as well nationally. The district seats may temporarily overstate its strength. Then the leveling seats are used to pull the final seat total back towards its real vote share.
+Suppose Party A does very well in a few districts but not as well nationally. The district seats may temporarily overstate its strength. Then the levelling seats are used to pull the final seat total back towards its real vote share.
 
-That is the whole point of the system: local results first, proportional correction afterward.
+That is the whole point of the system: local results first, proportional correction afterwards.
 
 ### Sweden: Proportional, Open-List, and Slightly More Candidate-Friendly
 
@@ -415,7 +415,7 @@ The table compares the ten systems across ballot design, candidate control, prop
 | Italy | Hybrid mixed | Usually one ballot | Party-controlled lists plus district races | Medium | Medium |
 | Spain | Closed-list PR | One party | Very strong party control | Medium-high, but district-limited | Medium |
 | Netherlands | Open-list PR | Party or candidate on list | Party-controlled but with candidate preference | Very high | Weak |
-| Denmark | PR with leveling seats | Usually one vote | Moderate party control | Very high | Medium |
+| Denmark | PR with levelling seats | Usually one vote | Moderate party control | Very high | Medium |
 | Sweden | Open-list PR | Party or candidate on list | Moderate party control | Very high | Medium |
 | Romania | Closed-list PR | Party list | Very strong party control | Medium-high | Medium |
 
@@ -423,9 +423,9 @@ The table compares the ten systems across ballot design, candidate control, prop
 
 These systems differ less in democratic legitimacy than in political texture.
 
-The UK and France emphasize decisive winner selection, but by different methods: plurality versus two-round consolidation.
+The UK and France emphasise decisive winner selection, but by different methods: plurality versus two-round consolidation.
 
-Ireland emphasizes voter choice among candidates, Germany engineered proportional correction, and Italy coalition-first bloc strategy.
+Ireland emphasises voter choice among candidates, Germany engineered proportional correction, and Italy coalition-first bloc strategy.
 
 Spain and Romania are more party-list-driven, while the Netherlands, Denmark, and Sweden combine strong proportionality with different balances of fragmentation, correction, and voter influence over candidates.
 
@@ -439,7 +439,7 @@ If you want a super blunt version:
 4. MMP tries to have both local MPs and proportional results, but the machinery gets complicated fast.
 5. Closed-list PR makes seat allocation clean, but it gives parties a lot of control.
 6. Open-list PR gives voters more say, but it still keeps party logic at the centre.
-7. Leveling seats and adjustment seats are the system's way of saying, "Yes, that district result was a bit weird, let's fix it."
+7. Levelling seats and adjustment seats are the system's way of saying, "Yes, that district result was a bit weird, let's fix it."
 
 That last idea is really the modern European theme. Very few systems are satisfied with pure winner-takes-all anymore. Even when they are not perfectly proportional, they usually try to patch the rough edges.
 
@@ -457,7 +457,7 @@ Worsening signal: coalition talks require three or more medium parties with litt
 
 #### 2) Coalition Ideological Distance
 
-What to watch: policy distance on budget rules, migration, labor-market reform, and EU fiscal integration.
+What to watch: policy distance on budget rules, migration, labour-market reform, and EU fiscal integration.
 
 Why it matters: broad coalitions can govern, but only if conflict domains are sequenced and bounded.
 
@@ -467,7 +467,7 @@ Worsening signal: repeated public dissent by coalition partners on high-salience
 
 What to watch: number and volatility of external support parties needed for confidence and supply.
 
-Why it matters: minority cabinets can be durable, but only where support norms are institutionalized.
+Why it matters: minority cabinets can be durable, but only where support norms are institutionalised.
 
 Worsening signal: support parties begin conditioning routine votes on unrelated policy concessions.
 
@@ -483,7 +483,7 @@ Worsening signal: repeated government crises tied to centre-periphery bargaining
 
 What to watch: whether the vote-seat gap for governing parties is widening over time.
 
-Why it matters: large distortion can increase legitimacy disputes and sharpen opposition mobilization.
+Why it matters: large distortion can increase legitimacy disputes and sharpen opposition mobilisation.
 
 Worsening signal: governing majority persists with declining vote share and rising disproportionality metrics.
 
@@ -588,7 +588,7 @@ Why this happens: as district magnitude rises, the effective threshold falls, so
 
 ### Same Votes, Different Parliament: A Worked Comparison
 
-Take this stylized national vote split:
+Take this stylised national vote split:
 
 | Party | Vote share |
 | --- | ---: |
