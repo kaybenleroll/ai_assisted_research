@@ -1,0 +1,13 @@
+SOURCE_MD   := "primer_information_theory.md"
+PROJECT_DIR := "primer_information_theory"
+TITLE       := "Information Theory: Surprise, Compression, and Communication"
+AUTHOR      := "Mick Cooney"
+DATE        := "12 October 2026"
+HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --metadata mathvariants=true --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
+
+# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
+# MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
+
+import '../_shared/common.just'
