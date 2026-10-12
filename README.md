@@ -40,7 +40,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Hermes Agent Server](primer_hermes_server/primer_hermes_server.html) · [PDF](primer_hermes_server/primer_hermes_server.pdf) | 2026-10-12 | Guide to the Hermes Server framework |
 | [OpenClaw](primer_openclaw/primer_openclaw.html) · [PDF](primer_openclaw/primer_openclaw.pdf) | 2026-10-12 | Podman-first guide to the OpenClaw framework |
 | [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | 2026-10-07 | Practical primer on Pi’s architecture, local and hosted models, web research, extensions, and coding-agent comparisons |
-| [Running LLMs Locally](primer_research_local_llms/primer-running-llms-locally.html) · [PDF](primer_research_local_llms/primer-running-llms-locally.pdf) | 2026-09 | Landscape of options for running language models on local hardware |
+| [Running LLMs Locally](primer_research_local_llms/primer-running-llms-locally.html) · [PDF](primer_research_local_llms/primer-running-llms-locally.pdf) | 2026-10-12 | Landscape of options for running language models on local hardware |
 <!-- END AI AGENTS AND CODING TOOLS -->
 
 ## Developer Tooling
