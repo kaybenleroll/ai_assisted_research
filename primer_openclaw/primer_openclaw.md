@@ -387,6 +387,8 @@ When tool calls arrive as plain text, inspect the provider API mode first. When 
 
 ### Exposure profiles
 
+This matrix compares the controls to apply at each exposure level, from local development to public reachability.
+
 | Control | Local development | Trusted home or tailnet | Publicly reachable |
 |---|---|---|---|
 | Published ports | Loopback | Loopback plus controlled tailnet access | Authenticated proxy or tailnet; no raw Gateway port |
