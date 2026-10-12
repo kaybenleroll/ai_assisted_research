@@ -309,6 +309,8 @@ Hermes has at least three relevant long-running modes:
 2. The API server, enabled through `API_SERVER_ENABLED=true` and protected with `API_SERVER_KEY`, exposes an OpenAI-compatible HTTP API on port `8642` by default.
 3. `hermes serve` is a headless backend for the desktop application's JSON-RPC/WebSocket interface, commonly listening on port `9119`.
 
+The table compares OpenClaw Gateway and Hermes Agent across control, state, execution, messaging, and model-routing responsibilities.
+
 | Dimension | OpenClaw Gateway | Hermes Agent server surfaces |
 |---|---|---|
 | Primary role | Multi-channel Gateway and agent control plane | Agent runtime exposed through messaging, HTTP API, or desktop backend |
@@ -386,6 +388,8 @@ Start at the outside and move inward:
 When tool calls arrive as plain text, inspect the provider API mode first. When a container restart loses configuration, inspect mounts and paths before re-running onboarding.
 
 ### Exposure profiles
+
+This matrix compares the controls to apply at each exposure level, from local development to public reachability.
 
 | Control | Local development | Trusted home or tailnet | Publicly reachable |
 |---|---|---|---|
