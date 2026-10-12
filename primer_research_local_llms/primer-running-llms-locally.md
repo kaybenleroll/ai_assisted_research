@@ -58,7 +58,7 @@ the task needs it. The guide expands that path:
 4. Deployment blueprints (copyable patterns)
 5. Model and operations decisions (how to stay sane over time)
 
-### Quick Read if You Are in a Hurry
+### Quick Read If You Are in a Hurry
 
 If you need one short answer:
 
@@ -138,7 +138,7 @@ If you keep to OpenAI-compatible endpoints, you can usually swap runtimes with s
 
 That API stability is what makes local inference practical for real applications, not just demos.
 
-### Quantisation (The Lever You Will Use Most)
+### Quantisation (the Lever You Will Use Most)
 
 Quantisation reduces weight precision to make models fit smaller hardware.
 
@@ -214,7 +214,7 @@ explicit business logic. That decomposition is important: a decision model
 is not a general autonomous reasoner, and its confidence does not prove that
 the question or option set was well designed.
 
-#### Jev is not the same as a classifier or structured output
+#### Jev Is Not the Same as a Classifier or Structured Output
 
 These tools overlap, but they are not interchangeable:
 
@@ -235,7 +235,7 @@ poor calibration, or prompt injection in the state. Treat the returned
 probability as a signal to validate on your own workload, not as a licence to
 skip evaluation.
 
-#### What can run locally
+#### What Can Run Locally
 
 Jev itself is a hosted, proprietary API at the time of this review. The local
 ecosystem is young and should be treated as a set of experiments, not as a
@@ -261,7 +261,7 @@ it changes the latency, memory, and output-reliability story. A model card
 that reports accuracy without calibration or abstention behaviour is not
 enough for confidence-gated automation.
 
-#### A practical local pattern
+#### A Practical Local Pattern
 
 Keep the decision model behind ordinary application code. Do not let it
 execute tools directly. Validate the question and option set, record the
@@ -361,7 +361,7 @@ The software stack has four pieces:
 3. **Accelerator backend.** PyTorch normally uses CUDA on NVIDIA, ROCm on supported AMD cards, or Metal/MPS on Apple hardware. llama.cpp has its own CPU, CUDA, Metal, Vulkan, and other backend paths. A model working in one backend does not prove that its diffusion sampler works in another.
 4. **Optional server or UI.** Start with a CLI while validating the model. Add an OpenAI-compatible server only after you know how the runtime represents diffusion steps, maximum output length, batching, and cancellation. A chat UI can hide those details and make a slow or incorrect sampler look like a model-quality problem.
 
-#### A practical first experiment
+#### A Practical First Experiment
 
 For a desktop or workstation, start with an 8B instruction-tuned checkpoint and a 4-bit GGUF. One published LLaDA Q4_K_M conversion is about 5.1 GB; its model card also lists an approximately 15 GB FP16 variant. The file size is only the first bound: leave room for the runtime, activations, tokenizer, context, and any cache or scratch buffers. A 4-bit checkpoint is a sensible starting point for a machine with roughly 8–16 GB of usable GPU memory, or more system RAM if running mostly on the CPU.
 
@@ -490,7 +490,7 @@ There are more choices now, but the core categories are stable.
 
 At the 10 September 2026 cutoff, the release pages still showed a fast-moving stack across [Ollama](https://github.com/ollama/ollama/releases), [vLLM](https://github.com/vllm-project/vllm/releases), [SGLang](https://github.com/sgl-project/sglang/releases), [MLX](https://github.com/ml-explore/mlx/releases), and [Transformers](https://github.com/huggingface/transformers/releases). This document deliberately does not pin a “current” version: runtime and model compatibility is more important than the newest tag, and a moving version number ages immediately. Read the model recipe and accelerator requirements before upgrading.
 
-### llama.cpp and llama-server
+### `llama.cpp` and `llama-server`
 
 llama.cpp is still the foundational local inference engine for GGUF workflows.
 
@@ -576,7 +576,7 @@ each modality separately.
 
 [Diffusers](https://github.com/huggingface/diffusers) is the corresponding practical layer for image and video generation. It handles pipelines, schedulers, VAEs, adapters, and quantisation. Use it for Python integration and reproducibility; use ComfyUI when you want to inspect and iterate on a graph interactively.
 
-### vLLM
+### `vLLM`
 
 vLLM remains one of the leading choices for high-throughput serving with strong batching behaviour and efficient cache management. Its supported-model surface now includes text, image, video, and audio inputs for selected architectures, with the exact combination depending on the model and backend.
 
@@ -1133,43 +1133,43 @@ defaults to leave unexplained.
 
 Use this when you need a fast recommendation.
 
-### I want the easiest possible local setup
+### I Want the Easiest Possible Local Setup
 
 Use Ollama first.
 
-### I want maximum low-level control
+### I Want Maximum Low-Level Control
 
 Use llama.cpp directly.
 
-### I need high concurrency for team APIs
+### I Need High Concurrency for Team APIs
 
 Benchmark vLLM and SGLang for your request pattern.
 
-### I need one local platform for text + embeddings + audio + image
+### I Need One Local Platform for Text + Embeddings + Audio + Image
 
 Use LocalAI for a single API surface, but validate each modality independently. For best generation workflows, use LocalAI or an LLM server alongside ComfyUI/Diffusers.
 
-### I need image generation or image editing
+### I Need Image Generation or Image Editing
 
 Start with FLUX.2 Klein 4B or Qwen-Image/Edit if their licenses fit your use. Use ComfyUI for interactive graphs or Diffusers for code. Do not select a VLM just because it accepts images.
 
-### I need OCR, screenshots, or document understanding
+### I Need OCR, Screenshots, or Document Understanding
 
 Start with a small VLM or OCR specialist such as Qwen3-VL, Gemma 4, PaddleOCR-VL, GLM-OCR, or olmOCR. Test layout, tables, formulas, and reading order—not only plain paragraphs.
 
-### I need local transcription or speech generation
+### I Need Local Transcription or Speech Generation
 
 Use Whisper/faster-whisper for broad transcription compatibility, Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS for speech synthesis. Voice cloning needs explicit speaker consent and a licence review.
 
-### I need local video generation
+### I Need Local Video Generation
 
 Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can accept slow generation. Larger Wan2.2 or synchronised audio-video models move into workstation and multi-GPU territory. Check territorial restrictions on Tencent models before adopting them.
 
-### I want a polished local chat UI
+### I Want a Polished Local Chat UI
 
 Use Open WebUI with your backend, or desktop-first tools like LM Studio or Jan.
 
-### I want private assistant workflows through messaging apps
+### I Want Private Assistant Workflows Through Messaging Apps
 
 Use a gateway layer such as OpenClaw in front of your local inference stack. For a deep setup and hardening walkthrough, see the [OpenClaw Primer](../primer_openclaw/primer_openclaw.md).
 
