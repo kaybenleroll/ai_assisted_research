@@ -7,3 +7,4 @@ primer_claude_code_alternative/primer-claude-code-alternatives.md
 primer_military_structure/primer_military_structure.md
 primer_numerical_analysis/primer_numerical_analysis.md
 primer_ohmyzsh/primer_ohmyzsh.md
+primer_openclaw/primer_openclaw.md
