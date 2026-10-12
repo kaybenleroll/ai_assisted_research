@@ -40,6 +40,8 @@ You should be comfortable working in a terminal, reading a git diff, running a p
 
 You do not need to know Codex's configuration syntax in advance. You do need to bring the habits that make any coding agent safe to use: give it a bounded task, keep the working tree understandable, inspect its proposed changes, and run the checks that establish whether the result is correct.
 
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
+
 ## Two Harnesses, One Repository
 
 The most useful starting point is to stop comparing “Claude” and “Codex” as if each were a single interchangeable object. In a coding session, at least four layers are involved:
