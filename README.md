@@ -65,6 +65,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Digital Signal Processing](primer_digital_signal_processing/primer_digital_signal_processing.html) · [PDF](primer_digital_signal_processing/primer_digital_signal_processing.pdf) | 2026-10-12 | Sampling, Fourier analysis, filtering, spectral estimation, multirate systems, and practical DSP workflows |
 | [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | 2026-10-12 | Holomorphic functions, contour integration, residues, conformal maps, harmonic functions, applications, and computation |
 | [Numerical Analysis](primer_numerical_analysis/primer_numerical_analysis.html) · [PDF](primer_numerical_analysis/primer_numerical_analysis.pdf) | 2026-10-12 | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
+| [Information Theory](primer_information_theory/primer_information_theory.html) · [PDF](primer_information_theory/primer_information_theory.pdf) | 2026-10-12 | Surprise, entropy, compression, mutual information, noisy channels, capacity, error correction, and rate–distortion |
 <!-- END QUANTITATIVE FOUNDATIONS -->
 
 ## Society and Institutions
