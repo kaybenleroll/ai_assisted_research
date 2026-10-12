@@ -607,7 +607,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Agent Architecture Quick Reference &amp;
 Decision Frameworks</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -710,6 +710,8 @@ Evaluation</a></li>
 <li><a href="#deployment" id="toc-deployment">Deployment</a></li>
 <li><a href="#post-deployment" id="toc-post-deployment">Post-Deployment</a></li>
 </ul></li>
+<li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources">Further Reading and
+Resources</a></li>
 <li><a href="#glossary" id="toc-glossary">Glossary</a></li>
 </ul></li>
 </ul></div>
@@ -735,6 +737,12 @@ explanations, framework/runtime discussion, challenges, or either
 customer-support walkthrough. When a choice is high-risk or the quick
 rule conflicts with a domain policy, follow the detailed treatment and
 the application’s authorisation layer.</p>
+<p>This reference assumes basic familiarity with software systems, APIs,
+and large language models. It is not a framework benchmark, a security
+approval, or a substitute for testing a design against its actual data
+and failure modes.</p>
+<p><em>Verified against the comprehensive primer and linked primary
+sources; version-sensitive claims are flagged inline.</em></p>
 <h2 id="pattern-selection-guide">Pattern Selection Guide</h2>
 <h3 id="react-reasoning-acting">ReAct (Reasoning + Acting)</h3>
 <p><strong>When to use:</strong> - Knowledge-intensive tasks (Q&amp;A,
@@ -777,7 +785,7 @@ side effects</p>
 preconditions - Robotics/structured domains - When long-horizon planning
 critical</p>
 <p><strong>Execution Model:</strong></p>
-<pre class="text"><code>LLM → Translate to PDDL → Symbolic Planner → LLM → Execute</code></pre>
+<pre class="text"><code>LLM → Translate to Planning Domain Definition Language (PDDL) → Symbolic Planner → LLM → Execute</code></pre>
 <p><strong>Pros:</strong> Better long-horizon planning, less
 hallucination on action sequencing <strong>Cons:</strong> Requires
 domain knowledge (PDDL), inflexible for novel domains</p>
@@ -1006,20 +1014,21 @@ the capability you need.</p>
 <td>Convenient delegation model; accept coordination overhead</td>
 </tr>
 <tr>
-<td>One-provider features and fastest access to its SDK</td>
+<td>One-provider features and fastest access to its software development
+kit (SDK)</td>
 <td>Provider-native SDK</td>
-<td>OpenAI Agents SDK, Claude Agent SDK, or Google ADK; lower
-portability</td>
+<td>OpenAI Agents SDK, Claude Agent SDK, or Google Agent Development Kit
+(ADK); lower portability</td>
 </tr>
 <tr>
 <td>Interoperable tool connections</td>
-<td>MCP</td>
+<td>Model Context Protocol (MCP)</td>
 <td>Standard tool/resource boundary; still apply local
 authorisation</td>
 </tr>
 <tr>
 <td>Independent agent-to-agent delegation</td>
-<td>A2A</td>
+<td>Agent-to-Agent (A2A)</td>
 <td>Useful when agents have separate endpoints and lifecycles</td>
 </tr>
 </tbody>
@@ -1278,6 +1287,25 @@ baseline</label></li>
 weeks</label></li>
 </ul>
 <hr />
+<h2 id="further-reading-and-resources">Further Reading and
+Resources</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing
+Reasoning and Acting in Language Models</a> (Yao et al., 2023), the core
+reasoning-and-acting pattern.</li>
+<li><a href="https://arxiv.org/abs/2302.04761">Toolformer: Language
+Models Can Teach Themselves to Use Tools</a> (Schick et al., 2023),
+tool-use training.</li>
+<li><a href="https://arxiv.org/abs/2303.11366">Reflexion: Language
+Agents with Verbal Reinforcement Learning</a> (Shinn et al., 2023),
+feedback-driven agent loops.</li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-06-18">Model
+Context Protocol specification</a> and <a href="https://a2a-protocol.org/latest/">Agent2Agent protocol</a>,
+interoperability references.</li>
+<li>The comprehensive primer’s <a href="primer_ai_agents_comprehensive.html#further-reading-and-resources">Further
+Reading and Resources</a> section, for framework documentation and
+additional sources.</li>
+</ul>
 <h2 id="glossary">Glossary</h2>
 <p><strong>Agent:</strong> Autonomous system with LLM as decision-making
 core, tools for action, memory for context</p>
@@ -1312,7 +1340,7 @@ effect</p>
 <p><strong>Durable execution:</strong> Persisted workflow execution that
 can survive failure, pause for input, and resume from saved state</p>
 <hr />
-<p><em>Last updated: 7 October 2026. Companion to the comprehensive
+<p><em>Last updated: 12 October 2026. Companion to the comprehensive
 primer’s September 2026 framework and product snapshot.</em></p>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>

@@ -8,9 +8,11 @@ This primer covers how autonomous AI agents work at a technical level: the execu
 
 ### What This Is Not
 
-This is not a guide to training or fine-tuning LLMs. It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
+This is not a guide to training or fine-tuning large language models (LLMs). It is not a benchmark comparison of AI providers, and it does not cover prompt engineering in isolation from agentic execution. If you want a survey of agent frameworks without implementation depth, this is probably not the right starting point — this primer assumes you intend to build something.
 
-**Freshness note (7 October 2026):** The terminology and editorial review were updated on this date; the framework and product snapshot remains September 2026. Framework capabilities, provider SDK features, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
+*Verified against primary sources for sections 1–11; unverified claims are flagged inline.*
+
+The framework and product snapshot remains September 2026. Framework capabilities, provider software development kits, model pricing, and benchmark rankings move monthly. Treat product and protocol references as dated guidance and re-check the linked official docs before implementation.
 
 ### The Default Production Path
 
@@ -24,7 +26,8 @@ example; the second support walkthrough in the build section turns that
 example into an implementation plan.
 
 The section titled **Reference branch** contains useful alternatives—ReAct,
-planning variants, multi-agent coordination, provider SDKs, MCP, and A2A—but
+planning variants, multi-agent coordination, provider software development kits
+(SDKs), Model Context Protocol (MCP), and Agent2Agent (A2A)—but
 those are branches from the default single-agent, tool-grounded workflow.
 Choose one only when its additional state, latency, trust boundary, or
 operational complexity solves a problem that the default path cannot.
@@ -1114,4 +1117,4 @@ If you remember one practical takeaway, make it this: treat agent development li
 
 ---
 
-*Created: 20 May 2026. Last updated: 7 October 2026. Framework and product snapshot: September 2026.*
+*Created: 20 May 2026. Last updated: 12 October 2026. Framework and product snapshot: September 2026.*
