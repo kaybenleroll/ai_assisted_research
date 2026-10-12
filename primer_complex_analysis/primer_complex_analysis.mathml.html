@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Complex Analysis: A Technical
 Primer</span>
-    <span class="navbar-meta">October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -771,6 +771,7 @@ Topics</a></li>
 <li><a href="#choosing-a-next-step" id="toc-choosing-a-next-step"><span class="toc-section-number">9.3.5</span> Choosing a Next Step</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">10</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -816,6 +817,8 @@ and computational practice. This is not a full real-analysis text or a
 treatment of several complex variables. We will prove the transitions
 that explain the subject and mark the few foundational results whose
 complete proofs would require a longer detour.</p>
+<p><em>Verified against primary and scholarly sources for all sections;
+unverified claims are flagged inline.</em></p>
 <p>The real-analysis facts needed here are manageable. A limit
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>n</mi></msub><mo>→</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">z_n\to z</annotation></semantics></math>
 means
@@ -7095,6 +7098,94 @@ theorem, first check orientation, poles on or near the contour, branch
 cuts, and whether the numerical path actually matches the intended
 contour. A plot is most useful as a way to discover a bad assumption or
 a missed feature, then return to the analytic argument.</p>
+<h1 data-number="10" id="notation"><span class="header-section-number">10</span> Notation</h1>
+<p>The table gathers the symbols that carry the main arguments. Local
+variables introduced in a theorem or calculation are defined again where
+they first matter.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>x</mi><mo>+</mo><mi>i</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">z=x+iy</annotation></semantics></math></td>
+<td>Complex variable with real components
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math></td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math></td>
+<td>Imaginary unit, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>i</mi><mn>2</mn></msup><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">i^2=-1</annotation></semantics></math></td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="double-struck">ℂ</mi><annotation encoding="application/x-tex">\mathbb{C}</annotation></semantics></math></td>
+<td>Complex plane</td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="double-struck">ℝ</mi><annotation encoding="application/x-tex">\mathbb{R}</annotation></semantics></math></td>
+<td>Real line</td>
+<td>Arithmetic Is Geometry</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></td>
+<td>Positive tolerance in a convergence estimate</td>
+<td>Limits, Compactness, and the Spare Room in a Proof</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math></td>
+<td>Directed curves and closed contours</td>
+<td>Integrating Along a Directed Curve</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Arg</mi><mo>⁡</mo></mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">\operatorname{Arg}z</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Log</mi><mo>⁡</mo></mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">\operatorname{Log}z</annotation></semantics></math></td>
+<td>Principal argument and its selected logarithm branch</td>
+<td>Exponential, Logarithm, and What a Branch Chooses</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Res</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>f</mi><mo>,</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{Res}(f,a)</annotation></semantics></math></td>
+<td>Residue of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
+at an isolated singularity
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math></td>
+<td>One Laurent Coefficient Survives a Loop</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Ind</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>C</mi><mo>,</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{Ind}(C,a)</annotation></semantics></math></td>
+<td>Winding number of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
+about
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math></td>
+<td>Winding Is a Directed Count</td>
+</tr>
+</tbody>
+</table>
+<p>The symbol
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+is specific to this complex-analysis primer; an application may use
+another letter for the imaginary unit when that avoids a clash with an
+existing variable. The table uses semantic operator commands such as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Arg</mi><annotation encoding="application/x-tex">\operatorname{Arg}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Res</mi><annotation encoding="application/x-tex">\operatorname{Res}</annotation></semantics></math>,
+and the transpose convention is not needed in this document.</p>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>

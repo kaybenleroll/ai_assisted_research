@@ -13,6 +13,8 @@ A real differentiable function can behave almost arbitrarily away from the point
 
 This primer develops that chain of ideas for readers who know calculus and linear algebra. You will learn to recognise holomorphic functions, use Cauchy's formula, classify isolated singularities, evaluate residues, count zeros, and understand what conformal maps preserve. Later sections can turn this theory into boundary-value models and computational practice. This is not a full real-analysis text or a treatment of several complex variables. We will prove the transitions that explain the subject and mark the few foundational results whose complete proofs would require a longer detour.
 
+*Verified against primary and scholarly sources for all sections; unverified claims are flagged inline.*
+
 The real-analysis facts needed here are manageable. A limit $z_n\to z$ means $|z_n-z|\to0$; a complex limit exists only if every way of approaching the point gives the same answer. A series converges absolutely when the series of moduli converges. Convergence is *uniform* on a set $E$ when one index works for every point of $E$ at once: for every $\varepsilon>0$ there is $N$ such that $|f_n(z)-f(z)|<\varepsilon$ for all $n\ge N$ and all $z\in E$. This stronger condition licenses passing a limit through an integral along a fixed finite-length contour, because
 $$
 \left|\int_\gamma (f_n-f)(z)\,dz\right|
@@ -1700,3 +1702,23 @@ The exercise set is intentionally mixed in difficulty and appears beside the ide
 For potential theory, revisit the MIT complex-potential notes and then use a boundary-value text or course to learn how the analytic representation interacts with physical boundary conditions. The complex potential is a powerful reduction in two dimensions, but it does not encode viscous effects or remove the need to select physically valid boundary data. For asymptotic integrals, consult NIST DLMF only after identifying the relevant method and its hypotheses; the formulas are authoritative, but the presentation assumes mathematical maturity.
 
 Software references answer API and convention questions, not theorem questions. When a symbolic package reports a residue, verify the Laurent coefficient and singularity classification by hand for at least one local expansion. When a quadrature routine disagrees with the residue theorem, first check orientation, poles on or near the contour, branch cuts, and whether the numerical path actually matches the intended contour. A plot is most useful as a way to discover a bad assumption or a missed feature, then return to the analytic argument.
+
+\newpage
+
+## Notation
+
+The table gathers the symbols that carry the main arguments. Local variables introduced in a theorem or calculation are defined again where they first matter.
+
+| Symbol | Meaning | First use |
+|---|---|---|
+| $z=x+iy$ | Complex variable with real components $x$ and $y$ | Arithmetic Is Geometry |
+| $i$ | Imaginary unit, with $i^2=-1$ | Arithmetic Is Geometry |
+| $\mathbb{C}$ | Complex plane | Arithmetic Is Geometry |
+| $\mathbb{R}$ | Real line | Arithmetic Is Geometry |
+| $\varepsilon$ | Positive tolerance in a convergence estimate | Limits, Compactness, and the Spare Room in a Proof |
+| $\gamma$ and $C$ | Directed curves and closed contours | Integrating Along a Directed Curve |
+| $\operatorname{Arg}z$ and $\operatorname{Log}z$ | Principal argument and its selected logarithm branch | Exponential, Logarithm, and What a Branch Chooses |
+| $\operatorname{Res}(f,a)$ | Residue of $f$ at an isolated singularity $a$ | One Laurent Coefficient Survives a Loop |
+| $\operatorname{Ind}(C,a)$ | Winding number of $C$ about $a$ | Winding Is a Directed Count |
+
+The symbol $i$ is specific to this complex-analysis primer; an application may use another letter for the imaginary unit when that avoids a clash with an existing variable. The table uses semantic operator commands such as $\operatorname{Arg}$ and $\operatorname{Res}$, and the transpose convention is not needed in this document.
