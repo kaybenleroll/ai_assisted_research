@@ -15,6 +15,13 @@ walkthrough. When a choice is high-risk or the quick rule conflicts with a
 domain policy, follow the detailed treatment and the application's
 authorisation layer.
 
+This reference assumes basic familiarity with software systems, APIs, and
+large language models. It is not a framework benchmark, a security approval,
+or a substitute for testing a design against its actual data and failure
+modes.
+
+*Verified against the comprehensive primer and linked primary sources; version-sensitive claims are flagged inline.*
+
 ## Pattern Selection Guide
 
 ### ReAct (Reasoning + Acting)
@@ -80,7 +87,7 @@ result = await agent.run("Find info about X", deps=deps)
 
 **Execution Model:**
 ```text
-LLM → Translate to PDDL → Symbolic Planner → LLM → Execute
+LLM → Translate to Planning Domain Definition Language (PDDL) → Symbolic Planner → LLM → Execute
 ```
 
 **Pros:** Better long-horizon planning, less hallucination on action sequencing
@@ -278,9 +285,9 @@ Use this matrix to choose a starting framework or runtime based on the capabilit
 | Typed Python tools and fast implementation | Pydantic AI | Strong schemas and a small abstraction surface |
 | Explicit state, pause/resume, and durable execution | LangGraph | Checkpointing, interrupts, persistence, and workflow control |
 | Role-based multi-agent collaboration | CrewAI | Convenient delegation model; accept coordination overhead |
-| One-provider features and fastest access to its SDK | Provider-native SDK | OpenAI Agents SDK, Claude Agent SDK, or Google ADK; lower portability |
-| Interoperable tool connections | MCP | Standard tool/resource boundary; still apply local authorisation |
-| Independent agent-to-agent delegation | A2A | Useful when agents have separate endpoints and lifecycles |
+| One-provider features and fastest access to its software development kit (SDK) | Provider-native SDK | OpenAI Agents SDK, Claude Agent SDK, or Google Agent Development Kit (ADK); lower portability |
+| Interoperable tool connections | Model Context Protocol (MCP) | Standard tool/resource boundary; still apply local authorisation |
+| Independent agent-to-agent delegation | Agent-to-Agent (A2A) | Useful when agents have separate endpoints and lifecycles |
 
 Choose the smallest layer that provides the failure semantics you need. Do not
 add multi-agent orchestration when ordinary functions or a durable workflow
@@ -550,6 +557,14 @@ Pass/fail: Average rating >= 4/5
 
 ---
 
+## Further Reading and Resources
+
+- [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) (Yao et al., 2023), the core reasoning-and-acting pattern.
+- [Toolformer: Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761) (Schick et al., 2023), tool-use training.
+- [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) (Shinn et al., 2023), feedback-driven agent loops.
+- [Model Context Protocol specification](https://modelcontextprotocol.io/specification/2025-06-18) and [Agent2Agent protocol](https://a2a-protocol.org/latest/), interoperability references.
+- The comprehensive primer's [Further Reading and Resources](primer_ai_agents_comprehensive.html#further-reading-and-resources) section, for framework documentation and additional sources.
+
 ## Glossary
 
 **Agent:** Autonomous system with LLM as decision-making core, tools for action, memory for context
@@ -582,4 +597,4 @@ Pass/fail: Average rating >= 4/5
 
 ---
 
-*Last updated: 7 October 2026. Companion to the comprehensive primer's September 2026 framework and product snapshot.*
+*Last updated: 12 October 2026. Companion to the comprehensive primer's September 2026 framework and product snapshot.*
