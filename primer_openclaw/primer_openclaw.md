@@ -2,7 +2,7 @@
 
 ---
 
-*Long-form edition. Runtime requirements rechecked against official documentation.*
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
 
 ---
 
@@ -95,7 +95,7 @@ The safe design pattern is consistent: let the model propose work, let OpenClaw 
 Think in five layers:
 
 1. **Channel and node adapters** receive messages, media, or device events.
-2. **The Gateway** owns routing, sessions, provider connections, WebSocket RPC, and lifecycle events.
+2. **The Gateway** owns routing, sessions, provider connections, WebSocket remote procedure call (RPC), and lifecycle events.
 3. **The agent runtime** builds context, calls the selected model, interprets tool requests, and produces replies.
 4. **Providers and model services** generate model output through hosted APIs or local endpoints.
 5. **Tool execution and state** perform actions and persist configuration, credentials, sessions, workspaces, memory, and logs.
@@ -136,7 +136,7 @@ The target posture is a rootless Gateway container, host-controlled state, loopb
 
 ### Prerequisites
 
-You need rootless Podman and the OpenClaw CLI on the host. As checked on 7 October 2026, the [Node guide](https://docs.openclaw.ai/install/node) requires Node 24.16+ or 26.1+ with a WAL-reset-safe linked SQLite library; Node 26 is recommended. Node 22, 23, and 25 are unsupported. The [compatibility guide](https://docs.openclaw.ai/install/node-compatibility) explains the SQLite safety checks: a version number alone is insufficient for a distro build linked to a different SQLite library. Upgrade the runtime before updating OpenClaw. The installer can provision a compatible runtime. `systemd --user` is optional for Quadlet-managed startup.
+You need rootless Podman and the OpenClaw CLI on the host. As checked on 7 October 2026, the [Node guide](https://docs.openclaw.ai/install/node) requires Node 24.16+ or 26.1+ with a write-ahead logging (WAL)-reset-safe linked SQLite library; Node 26 is recommended. Node 22, 23, and 25 are unsupported. The [compatibility guide](https://docs.openclaw.ai/install/node-compatibility) explains the SQLite safety checks: a version number alone is insufficient for a distro build linked to a different SQLite library. Upgrade the runtime before updating OpenClaw. The installer can provision a compatible runtime. `systemd --user` is optional for Quadlet-managed startup.
 
 ### Install and Verify the Host CLI
 
@@ -237,7 +237,7 @@ openclaw --container openclaw gateway status --deep
 
 Channels are not just output formats. They are authenticated ingress paths into an agent with tools. Start with one channel and configure the narrowest useful policy: known-user allowlists, pairing where supported, mention requirements in groups, and no public port exposure.
 
-The Control UI is useful for local administration because it gives you a direct view of sessions and configuration. Remote access should use an explicit access layer such as Tailscale or an authenticated proxy. A port that is reachable from a LAN is not “local” merely because the agent is personal.
+The Control UI is useful for local administration because it gives you a direct view of sessions and configuration. Remote access should use an explicit access layer such as Tailscale or an authenticated proxy. A port that is reachable from a local-area network (LAN) is not “local” merely because the agent is personal.
 
 Sessions are the unit of conversational state. Main, group, channel, and agent-specific sessions can have different routing and sandbox behaviour. Do not infer that two messages share context because they reached the same Gateway; inspect the session key and routing policy.
 
@@ -288,14 +288,14 @@ For an agentic workload, evaluate more than tokens per second:
 - tool-call schema reliability;
 - context window under accumulated tool results;
 - first-token latency and long-context prefill;
-- memory and VRAM pressure during key-value-cache growth;
+- memory and video random-access memory (VRAM) pressure during key-value-cache growth;
 - recovery behaviour when the model service restarts.
 
 Do not promise a fixed VRAM number for a model family. Quantisation, context length, vision support, batching, and backend version all change the footprint. Measure the exact model and settings on the hardware you intend to operate.
 
 ### Constrained Hardware
 
-Partial GPU offload can make a local model usable on a laptop that cannot hold the full model in VRAM. The tradeoff is lower throughput and a more complicated memory budget. The key-value cache can still consume significant VRAM as context grows even when model weights are split between GPU and CPU RAM.
+Partial GPU offload can make a local model usable on a laptop that cannot hold the full model in VRAM. The trade-off is lower throughput and a more complicated memory budget. The key-value cache can still consume significant VRAM as context grows even when model weights are split between GPU and central processing unit (CPU) random-access memory (RAM).
 
 Start with a modest context window, measure memory during a long tool loop, and increase it only when the workload requires it. A nominal “64K context” setting is not free: it changes both latency and memory behaviour.
 
@@ -317,7 +317,7 @@ The table compares OpenClaw Gateway and Hermes Agent across control, state, exec
 | Main control transport | Typed WebSocket API, Control UI, CLI, nodes | OpenAI-compatible HTTP API; `hermes serve` JSON-RPC/WebSocket; messaging adapters |
 | Default local web surface | Control UI on `127.0.0.1:18789` | API server on `127.0.0.1:8642`; desktop backend commonly on `9119` |
 | Durable state | `~/.openclaw` configuration, SQLite databases, sessions, auth, workspaces, and agent state | `~/.hermes` config, secrets, profiles, memories, skills, cron, sessions, logs, and `state.db` |
-| Execution boundary | Sandbox is off by default; Docker, Podman, SSH, or OpenShell can be selected for tools | Local, Docker, SSH, Singularity, Modal, Daytona, Vercel Sandbox, or other configured backends |
+| Execution boundary | Sandbox is off by default; Docker, Podman, Secure Shell (SSH), or OpenShell can be selected for tools | Local, Docker, SSH, Singularity, Modal, Daytona, Vercel Sandbox, or other configured backends |
 | Messaging | Channel plugins owned by the Gateway | A separate `hermes gateway` process connects many messaging platforms |
 | Model routing | Provider/model refs, auth-profile rotation, configured fallbacks | Provider configuration and model profiles; routing is configured in Hermes |
 
@@ -439,7 +439,7 @@ openclaw --container openclaw models list
 
 Send a test message through the Control UI before reconnecting every external channel. This isolates a state or provider problem from a channel-authentication problem.
 
-## Reference Links
+## Further Reading
 
 - [OpenClaw documentation](https://docs.openclaw.ai/)
 - [OpenClaw installation](https://docs.openclaw.ai/install)
