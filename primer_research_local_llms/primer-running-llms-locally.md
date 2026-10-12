@@ -95,13 +95,13 @@ Most confusion in local LLM work comes from blending three layers together.
 
 Separate them:
 
-1. The model artifact (weights + metadata)
+1. The model artefact (weights + metadata)
 2. The inference engine (token generation runtime)
 3. The server or UI layer (APIs, chat interfaces, auth)
 
 When you keep these layers distinct, the ecosystem stops feeling messy.
 
-### Model Artifact
+### Model Artefact
 
 A model is a large set of learned weights plus metadata about tokenizer, architecture, and prompt formatting.
 
@@ -112,7 +112,7 @@ For local inference, you will mostly see:
 3. MLX-converted weights for Apple Silicon
 4. Pipeline components such as a VAE, text encoder, vision encoder, or multimodal projector
 
-GGUF remains the practical default for many local setups because it is portable and quantization-friendly.
+GGUF remains the practical default for many local setups because it is portable and quantisation-friendly.
 
 It is not the universal format. Image and video generators are commonly distributed as Safetensors components, while Apple-oriented tools often use MLX conversions. A vision-language model may also need a separate vision tower or `mmproj` file.
 
@@ -138,9 +138,9 @@ If you keep to OpenAI-compatible endpoints, you can usually swap runtimes with s
 
 That API stability is what makes local inference practical for real applications, not just demos.
 
-### Quantization (The Lever You Will Use Most)
+### Quantisation (The Lever You Will Use Most)
 
-Quantization reduces weight precision to make models fit smaller hardware.
+Quantisation reduces weight precision to make models fit smaller hardware.
 
 A simplified mental model:
 
@@ -149,14 +149,14 @@ A simplified mental model:
 
 Common practical choices:
 
-| Quantization | Typical Use |
+| Quantisation | Typical Use |
 |---|---|
 | FP16/BF16 | Datacenter or high-memory local GPU runs |
 | 8-bit | Quality-sensitive local serving with decent VRAM |
 | 4-bit | Common local sweet spot for many personal text-model runs |
 | 2-3 bit | Extreme memory constraint, quality trade-off is obvious |
 
-In the GGUF world, 4-bit variants like Q4_K_M remain a strong llama.cpp baseline for many assistants and coding workflows. They are not a universal optimum: image/video pipelines and accelerator servers often use different formats, and quantization quality depends on the model and hardware.
+In the GGUF world, 4-bit variants like Q4_K_M remain a strong llama.cpp baseline for many assistants and coding workflows. They are not a universal optimum: image/video pipelines and accelerator servers often use different formats, and quantisation quality depends on the model and hardware.
 
 ### Context Window and KV Cache
 
@@ -166,7 +166,7 @@ Longer context means larger KV cache. That memory cost can dominate runs that ot
 
 A practical rule:
 
-1. Pick model size and quantization first.
+1. Pick model size and quantisation first.
 2. Then increase context until latency and memory stay acceptable.
 3. Do not assume max advertised context is affordable on your hardware.
 
@@ -306,9 +306,9 @@ Do not assume that a model advertised as multimodal can generate every modality.
 
 | Workload | Current local examples | Typical local path | What to expect |
 |---|---|---|---|
-| Text, coding, reasoning, and agents | [Qwen3.5](https://github.com/QwenLM/Qwen3.5), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), [gpt-oss](https://openai.com/index/introducing-gpt-oss/), [LFM2.5](https://huggingface.co/LiquidAI/models) | llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM | The broadest ecosystem. Size, quantization, and context length still dominate fit. |
+| Text, coding, reasoning, and agents | [Qwen3.5](https://github.com/QwenLM/Qwen3.5), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), [gpt-oss](https://openai.com/index/introducing-gpt-oss/), [LFM2.5](https://huggingface.co/LiquidAI/models) | llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM | The broadest ecosystem. Size, quantisation, and context length still dominate fit. |
 | Image understanding, OCR, charts, and documents | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4), [Granite Vision](https://huggingface.co/ibm-granite/granite-vision-4.1-4b), [LFM2.5-VL](https://huggingface.co/LiquidAI/models) | Transformers, vLLM, SGLang, Ollama vision models, or supported llama.cpp multimodal builds | These models describe and reason about pixels; they do not create finished images. OCR quality depends heavily on resolution and layout. |
-| Text-to-image and image editing | [FLUX.2](https://github.com/black-forest-labs/flux2), [Qwen-Image](https://huggingface.co/Qwen/Qwen-Image-Edit), Stable Diffusion family | Diffusers, ComfyUI, InvokeAI | Treat the pipeline, text encoder, variational autoencoder (VAE), and transformer/diffusion weights as one artifact. VRAM rises quickly with resolution and reference images. Licenses differ by checkpoint. |
+| Text-to-image and image editing | [FLUX.2](https://github.com/black-forest-labs/flux2), [Qwen-Image](https://huggingface.co/Qwen/Qwen-Image-Edit), Stable Diffusion family | Diffusers, ComfyUI, InvokeAI | Treat the pipeline, text encoder, variational autoencoder (VAE), and transformer/diffusion weights as one artefact. VRAM rises quickly with resolution and reference images. Licenses differ by checkpoint. |
 | Speech recognition and alignment | [Whisper](https://github.com/openai/whisper), [faster-whisper](https://github.com/SYSTRAN/faster-whisper), [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR), Granite Speech | faster-whisper/CTranslate2, Transformers, vLLM, or experimental llama.cpp audio support | Usually much smaller and easier to run than a general LLM. Use a dedicated automatic speech recognition (ASR) model when transcription is the job. |
 | Speech synthesis and audio understanding | [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni), [XTTS v2](https://github.com/coqui-ai/TTS), CosyVoice | Transformers, project-specific runtimes, or LocalAI | Text-to-speech (TTS), voice cloning, and audio captioning have different quality and consent risks. Check speaker-data terms before cloning a voice. |
 | Video understanding and generation | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni), [Wan2.2](https://github.com/Wan-Video/Wan2.2) | vLLM, SGLang, or Transformers for understanding; Diffusers or model code for generation | Video generation is substantially more demanding than image generation. Wan2.2's 5B text-image-to-video path documents 24 GB VRAM at 720p; its larger paths need much more. |
@@ -322,7 +322,7 @@ long-context variants. [Qwen3.5](https://github.com/QwenLM/Qwen3.5),
 [Granite 4.2](https://huggingface.co/blog/ibm-granite/granite-4-2), and
 [Gemma 4](https://ai.google.dev/gemma/docs/core/model_card_4) are useful
 examples, not a permanent shortlist. Parameter count alone is no longer a fit
-estimate: active parameters, modality encoders, context length, quantization,
+estimate: active parameters, modality encoders, context length, quantisation,
 and draft-model support all affect actual memory and throughput.
 
 ### Specialist Models Worth Knowing
@@ -336,19 +336,19 @@ examples include [FLUX.2](https://github.com/black-forest-labs/flux2) or
 [GLM-OCR](https://github.com/zai-org/glm-ocr) for layout-aware extraction, and
 [Whisper](https://github.com/openai/whisper) or
 [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR) for transcription. These are
-orientation points, not a catalogue: verify the exact artifact, runtime,
+orientation points, not a catalogue: verify the exact artefact, runtime,
 hardware fit, and licence. Voice cloning requires speaker consent; video
 generation remains a workstation-scale workload.
 
 ### Image Generation Is Not Vision
 
-This distinction prevents a common failed setup. A VLM such as Qwen3-VL can inspect a screenshot, read a receipt, or answer questions about a photograph. An image model such as FLUX.2 or Qwen-Image can synthesize or edit pixels. They may share a text encoder or appear in the same UI, but they are not interchangeable. For a private document pipeline, the usual sequence is:
+This distinction prevents a common failed setup. A VLM such as Qwen3-VL can inspect a screenshot, read a receipt, or answer questions about a photograph. An image model such as FLUX.2 or Qwen-Image can synthesise or edit pixels. They may share a text encoder or appear in the same UI, but they are not interchangeable. For a private document pipeline, the usual sequence is:
 
 1. Use a VLM or OCR model to extract structure from the document.
 2. Use a text model to classify, summarise, or call tools.
 3. Use an image model only if the workflow needs a generated or edited image.
 
-The same separation applies to audio and video. Transcribe with ASR, reason over the transcript with a language model, and synthesize speech or video only at the output stage when required.
+The same separation applies to audio and video. Transcribe with ASR, reason over the transcript with a language model, and synthesise speech or video only at the output stage when required.
 
 ### Running Diffusion Language Models Locally
 
@@ -356,7 +356,7 @@ Diffusion language models use the same broad idea as image diffusion — start f
 
 The software stack has four pieces:
 
-1. **Model checkpoint.** The official LLaDA releases use Hugging Face transformer checkpoints, usually Safetensors plus custom model code. Quantized local deployments may instead use GGUF. Do not assume that a GGUF made for a causal Llama model will work; the diffusion architecture and sampler must be supported by the runtime.
+1. **Model checkpoint.** The official LLaDA releases use Hugging Face transformer checkpoints, usually Safetensors plus custom model code. Quantised local deployments may instead use GGUF. Do not assume that a GGUF made for a causal Llama model will work; the diffusion architecture and sampler must be supported by the runtime.
 2. **Diffusion-aware inference engine.** The official [LLaDA PyTorch implementation](https://github.com/lrbob/LLaDA) is the most direct reference path. Current [llama.cpp diffusion support](https://github.com/ggml-org/llama.cpp/blob/master/examples/diffusion/README.md) includes LLaDA and Dream examples, while [diffuse-cpp](https://github.com/iafiscal1212/diffuse-cpp) provides a portable C++ route for supported GGUF checkpoints.
 3. **Accelerator backend.** PyTorch normally uses CUDA on NVIDIA, ROCm on supported AMD cards, or Metal/MPS on Apple hardware. llama.cpp has its own CPU, CUDA, Metal, Vulkan, and other backend paths. A model working in one backend does not prove that its diffusion sampler works in another.
 4. **Optional server or UI.** Start with a CLI while validating the model. Add an OpenAI-compatible server only after you know how the runtime represents diffusion steps, maximum output length, batching, and cancellation. A chat UI can hide those details and make a slow or incorrect sampler look like a model-quality problem.
@@ -394,13 +394,13 @@ cd LLaDA
 python chat.py
 ```
 
-Use the repository's current instructions for checkpoint selection, CUDA or MPS installation, and model loading. BF16/FP16 inference for an 8B model generally wants a high-memory GPU; CPU execution is possible but usually much slower and may require substantial system RAM. Quantization reduces weight memory, not all working memory, and an MoE model's “active parameters” describe compute per step, not necessarily the total checkpoint that must be stored.
+Use the repository's current instructions for checkpoint selection, CUDA or MPS installation, and model loading. BF16/FP16 inference for an 8B model generally wants a high-memory GPU; CPU execution is possible but usually much slower and may require substantial system RAM. Quantisation reduces weight memory, not all working memory, and an MoE model's “active parameters” describe compute per step, not necessarily the total checkpoint that must be stored.
 
-For larger or newer families, use a runtime that explicitly names the model. [dInfer](https://github.com/inclusionAI/dInfer) supports LLaDA, LLaDA-MoE, and LLaDA2 through specialized inference paths, with vLLM and SGLang backends depending on the model family. This is a better fit for a CUDA workstation or multi-GPU server than for a first laptop experiment. Treat support as model-specific: LLaDA, LLaDA-MoE, LLaDA2, and Dream do not automatically share the same checkpoint format, sampler flags, or serving API.
+For larger or newer families, use a runtime that explicitly names the model. [dInfer](https://github.com/inclusionAI/dInfer) supports LLaDA, LLaDA-MoE, and LLaDA2 through specialised inference paths, with vLLM and SGLang backends depending on the model family. This is a better fit for a CUDA workstation or multi-GPU server than for a first laptop experiment. Treat support as model-specific: LLaDA, LLaDA-MoE, LLaDA2, and Dream do not automatically share the same checkpoint format, sampler flags, or serving API.
 
 GPU memory has three separate costs:
 
-1. **Weights:** reduced by 4-bit or 8-bit quantization.
+1. **Weights:** reduced by 4-bit or 8-bit quantisation.
 2. **Working memory:** activations, temporary logits, tokenizer buffers, and the repeated denoising passes.
 3. **Context and batching:** attention/cache state and simultaneous requests; these grow with sequence length and batch size.
 
@@ -438,7 +438,7 @@ Modern llama.cpp builds are excellent on CPU, but a slow token stream is still a
 
 NVIDIA remains the easiest path for predictable high-performance local inference because CUDA tooling is mature across runtimes.
 
-Approximate fit guidance for mainstream quantized models:
+Approximate fit guidance for mainstream quantised models:
 
 | VRAM | Comfortable Tier |
 |---|---|
@@ -574,7 +574,7 @@ each modality separately.
 
 [Transformers](https://github.com/huggingface/transformers) remains the model-definition and native-inference layer for many VLM, OCR, ASR, and text models. Its newer `transformers serve` command can expose an OpenAI-compatible endpoint for supported models, which is convenient for testing before moving to vLLM or SGLang.
 
-[Diffusers](https://github.com/huggingface/diffusers) is the corresponding practical layer for image and video generation. It handles pipelines, schedulers, VAEs, adapters, and quantization. Use it for Python integration and reproducibility; use ComfyUI when you want to inspect and iterate on a graph interactively.
+[Diffusers](https://github.com/huggingface/diffusers) is the corresponding practical layer for image and video generation. It handles pipelines, schedulers, VAEs, adapters, and quantisation. Use it for Python integration and reproducibility; use ComfyUI when you want to inspect and iterate on a graph interactively.
 
 ### vLLM
 
@@ -592,7 +592,7 @@ uv pip install vllm
 vllm serve meta-llama/Llama-3.3-8B-Instruct
 ```
 
-For local single-user chat, vLLM can be overkill. For multi-user APIs, it is often the right level of machinery. Its main quantization path is Hugging Face-native (for example FP8, GPTQ, AWQ, MXFP4, NVFP4, and quantized KV cache); GGUF support is experimental and requires the separate [vLLM GGUF plugin](https://docs.vllm.ai/en/latest/features/quantization/gguf/).
+For local single-user chat, vLLM can be overkill. For multi-user APIs, it is often the right level of machinery. Its main quantisation path is Hugging Face-native (for example FP8, GPTQ, AWQ, MXFP4, NVFP4, and quantised KV cache); GGUF support is experimental and requires the separate [vLLM GGUF plugin](https://docs.vllm.ai/en/latest/features/quantisation/gguf/).
 
 ### SGLang
 
@@ -661,7 +661,7 @@ advisory.
 
 ## Containers, Runtime Hygiene, and Why Reproducibility Wins
 
-Containerization is a strong default for Linux server-style local inference. It
+Containerisation is a strong default for Linux server-style local inference. It
 improves reproducibility; it does not make an exposed HTTP service private.
 
 ### Why Containers Matter
@@ -678,7 +678,7 @@ This makes rollback possible and debugging less chaotic.
 
 Both are viable. Podman remains attractive for rootless operation and daemonless workflow. Docker still has broader tutorial gravity.
 
-Pick one and standardize across your own docs and scripts. The consistency is more important than the brand.
+Pick one and standardise across your own docs and scripts. The consistency is more important than the brand.
 
 ### Image Tags and Drift
 
@@ -824,7 +824,7 @@ Who this is for:
 
 This is intentionally a single-machine service. A user systemd unit makes
 restart behaviour repeatable; it does not add authentication. Record the image
-digest, model revision, quantization, context limit, and baseline latency
+digest, model revision, quantisation, context limit, and baseline latency
 alongside the unit. If another machine needs access, put an authenticated TLS
 gateway in front of it rather than changing both bindings to `0.0.0.0`.
 
@@ -895,7 +895,7 @@ Use this sequence:
 2. Pick a family with a licence that fits your use.
 3. Pick size for hardware, including encoders and KV cache.
 4. Pick a runtime and its supported format.
-5. Pick quantization or an official compressed checkpoint.
+5. Pick quantisation or an official compressed checkpoint.
 6. Run short evals.
 7. Freeze the baseline.
 
@@ -916,13 +916,13 @@ Use a dated shortlist only to form candidates. At this review date, Qwen,
 Gemma, Granite, Mistral, gpt-oss, LFM, and established distilled reasoning
 families cover useful combinations of compact text/coding, tool use, vision,
 and permissive licensing. Older Llama and Mistral releases remain valuable for
-compatibility and mature quantized tooling. Do not select by family name:
+compatibility and mature quantised tooling. Do not select by family name:
 check the exact model card, licence, format, context support, and a realistic
 evaluation on your hardware. A sparse model's active-parameter count is not
 its whole memory footprint, and a headline long context may not fit its KV
 cache on your machine.
 
-### Size and Quantization Pairing
+### Size and Quantisation Pairing
 
 Use realistic tiers:
 
@@ -941,7 +941,7 @@ Those tiers describe text-model weights. Specialist models can be much smaller: 
 
 Primary sources remain:
 
-1. Hugging Face Hub for broad model and quantization availability
+1. Hugging Face Hub for broad model and quantisation availability
 2. Ollama library for curated pull-and-run simplicity
 
 Before downloading:
@@ -1163,7 +1163,7 @@ Use Whisper/faster-whisper for broad transcription compatibility, Qwen3-ASR for 
 
 ### I need local video generation
 
-Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can accept slow generation. Larger Wan2.2 or synchronized audio-video models move into workstation and multi-GPU territory. Check territorial restrictions on Tencent models before adopting them.
+Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can accept slow generation. Larger Wan2.2 or synchronised audio-video models move into workstation and multi-GPU territory. Check territorial restrictions on Tencent models before adopting them.
 
 ### I want a polished local chat UI
 
@@ -1203,7 +1203,7 @@ chat retention, document uploads, web search, or tools before enabling them.
 
 Send chat-completions requests and confirm you can call your local model from code.
 
-### Day 4: Containerize and Persist
+### Day 4: Containerise and Persist
 
 Move your runtime into containers with persistent volumes and service startup.
 
