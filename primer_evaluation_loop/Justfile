@@ -3,7 +3,7 @@ PROJECT_DIR := "primer_evaluation_loop"
 TITLE       := "The Evaluation Loop: How AI Systems Learn to Improve"
 AUTHOR      := "Mick Cooney"
 DATE        := "12 October 2026"
-HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
+HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 
 import '../_shared/common.just'

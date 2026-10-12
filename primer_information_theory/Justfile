@@ -3,7 +3,7 @@ PROJECT_DIR := "primer_information_theory"
 TITLE       := "Information Theory: Surprise, Compression, and Communication"
 AUTHOR      := "Mick Cooney"
 DATE        := "12 October 2026"
-HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --metadata mathvariants=true --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
+HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 
 # For maths variants, add --metadata mathvariants=true to HTML_EXTRA.

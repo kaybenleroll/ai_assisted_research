@@ -3,7 +3,7 @@ PROJECT_DIR := "primer_numerical_analysis"
 TITLE       := "Numerical Analysis Primer: Practical, Detailed, and Friendly"
 AUTHOR      := "Mick Cooney"
 DATE        := "12 October 2026"
-HTML_EXTRA  := "--mathml --metadata mathrenderer=mathml --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
+HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "--lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
 
 # Generate R figures (inside rocker container)

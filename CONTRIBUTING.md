@@ -54,7 +54,7 @@ Run `just readme` to generate the README catalogue and Recently Updated block, t
 
 Use wrapper recipes such as `full` to chain shared targets; `just` does not override an imported recipe. Render plots through the Rocker container and commit the generation script with figure outputs. The Mermaid Lua filter and Puppeteer configuration live in `_shared/filters/`; generated PNGs remain project-local in `.build/mermaid`. Prefer Mermaid to ASCII diagrams where PDF font coverage is unreliable. Set DejaVu Sans Mono for code containing Greek, because the default monospaced font lacks those glyphs. With a leading body H1 and numbered `##` sections, pair `--number-sections` with `--shift-heading-level-by=-1` so sections number from 1.
 
-Maths variants use shared `html-mathml`, `html-mathjax`, and `html-variants` recipes. Opt in through `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants using the main page's structural flags. The opted-in primers are complex analysis, deep learning, digital signal processing, evaluation loop, numerical analysis, and political systems. Complex analysis defaults to MathJax; the other five default to MathML. A project without the opt-in cannot run `html-variants`.
+Maths variants use shared `html-mathml`, `html-mathjax`, and `html-variants` recipes. Opt in through `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants using the main page's structural flags. The opted-in primers are complex analysis, deep learning, digital signal processing, evaluation loop, information theory, numerical analysis, and political systems. All seven default to MathJax. A project without the opt-in cannot run `html-variants`.
 
 ## Render QA
 
