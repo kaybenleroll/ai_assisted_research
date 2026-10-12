@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Deep Learning and Generative AI: A
 Technical Primer</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -764,8 +764,9 @@ Model</a></li>
 Requirements</a></li>
 <li><a href="#the-practical-starting-point" id="toc-the-practical-starting-point"><span class="toc-section-number">12.6</span> The Practical Starting
 Point</a></li>
-<li><a href="#what-to-read-next" id="toc-what-to-read-next"><span class="toc-section-number">12.7</span> What to Read Next</a></li>
 </ul></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">13</span> Further Reading</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">14</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -864,6 +865,8 @@ frameworks and the practical concerns of building real systems. Each
 section assumes the ones before it, so the vanishing-gradient problem
 defined while discussing training is the same one that explains why
 recurrent networks struggle with long sequences.</p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h1 data-number="2" id="why-deep-learning-now"><span class="header-section-number">2</span> Why Deep Learning Now</h1>
 <p>Neural networks are not new. The perceptron dates to 1958.
 Backpropagation, the algorithm that trains modern networks, was
@@ -1044,7 +1047,7 @@ weights as a vector
 and the bias as a scalar
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>,
 the pre-activation is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝒘</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝒙</mi><mo>+</mo><mi>b</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">z = \mathbf{w}^T \mathbf{x} + b,</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝒘</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒙</mi><mo>+</mo><mi>b</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">z = \mathbf{w}^{\top} \mathbf{x} + b,</annotation></semantics></math></p>
 <p>and the output is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sigma(z)</annotation></semantics></math>
 for some activation function
@@ -1057,7 +1060,7 @@ is a hard step function — output 1 when
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z &gt; 0</annotation></semantics></math>
 and 0 otherwise — you have the original perceptron, a linear classifier
 that draws a hyperplane
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒘</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝒙</mi><mo>+</mo><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbf{w}^T \mathbf{x} + b = 0</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒘</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒙</mi><mo>+</mo><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbf{w}^{\top} \mathbf{x} + b = 0</annotation></semantics></math>
 through the input space and labels everything on one side positive.</p>
 <p>This is also where the perceptron’s limitation becomes clear, and it
 is a limitation you can already name from classical ML: a single
@@ -1395,7 +1398,7 @@ with respect to
 just pulls out
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝒉</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><annotation encoding="application/x-tex">\mathbf{h}^{(1)}</annotation></semantics></math>,
 giving the second-layer weight gradient as an outer product:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi mathvariant="script">ℒ</mi></mrow><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow></mfrac><mo>=</mo><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mspace width="0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒉</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>T</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}} = \boldsymbol{\delta}^{(2)} \, \big(\mathbf{h}^{(1)}\big)^T.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi mathvariant="script">ℒ</mi></mrow><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow></mfrac><mo>=</mo><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mspace width="0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒉</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}} = \boldsymbol{\delta}^{(2)} \, \big(\mathbf{h}^{(1)}\big)^{\top}.</annotation></semantics></math></p>
 <p>This is the structure that makes backpropagation efficient. The error
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><annotation encoding="application/x-tex">\boldsymbol{\delta}^{(2)}</annotation></semantics></math>
 at a layer, times the input that arrived at that layer, gives the
@@ -1404,14 +1407,14 @@ the first layer. The chain rule sends
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><annotation encoding="application/x-tex">\boldsymbol{\delta}^{(2)}</annotation></semantics></math>
 back through the second-layer weights and then through the first
 activation:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>T</mi></msup><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊙</mo><msup><mi>σ</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒛</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\delta}^{(1)} = \left(\big(\mathbf{W}^{(2)}\big)^T \boldsymbol{\delta}^{(2)}\right) \odot \sigma&#39;(\mathbf{z}^{(1)}),</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊙</mo><msup><mi>σ</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝒛</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\delta}^{(1)} = \left(\big(\mathbf{W}^{(2)}\big)^{\top} \boldsymbol{\delta}^{(2)}\right) \odot \sigma&#39;(\mathbf{z}^{(1)}),</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⊙</mi><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
 is element-wise multiplication and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mo>′</mo></msup><annotation encoding="application/x-tex">\sigma&#39;</annotation></semantics></math>
 is the derivative of the hidden activation. Read this carefully because
 it is the heart of the algorithm. The factor
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mo stretchy="false" form="postfix">)</mo><mi>T</mi></msup><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">(\mathbf{W}^{(2)})^T \boldsymbol{\delta}^{(2)}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">(\mathbf{W}^{(2)})^{\top} \boldsymbol{\delta}^{(2)}</annotation></semantics></math>
 takes the error at the output layer and routes it backward through the
 same weights the forward pass used — each hidden unit gets blamed for
 the output error in proportion to how strongly it fed into it. The
@@ -1422,7 +1425,7 @@ was. With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><annotation encoding="application/x-tex">\boldsymbol{\delta}^{(1)}</annotation></semantics></math>
 in hand, the first-layer weight gradient has the identical outer-product
 form:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi mathvariant="script">ℒ</mi></mrow><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow></mfrac><mo>=</mo><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mspace width="0.167em"></mspace><msup><mi mathvariant="bold-italic">𝒙</mi><mi>T</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}} = \boldsymbol{\delta}^{(1)} \, \mathbf{x}^T.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi mathvariant="script">ℒ</mi></mrow><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝑾</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow></mfrac><mo>=</mo><msup><mi mathvariant="bold-italic">𝜹</mi><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mspace width="0.167em"></mspace><msup><mi mathvariant="bold-italic">𝒙</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}} = \boldsymbol{\delta}^{(1)} \, \mathbf{x}^{\top}.</annotation></semantics></math></p>
 <p>The pattern is now visible and it generalises to any depth: compute
 the error at the output, then repeatedly push it backward one layer at a
 time by multiplying with the transposed weight matrix and the local
@@ -1530,9 +1533,9 @@ oscillation across it.</p>
 global learning rate is wrong when different weights need different step
 sizes. It keeps a running average of the squared gradient for each
 weight and divides the step by the square root of that average:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒔</mi><mo>←</mo><mi>ρ</mi><mi mathvariant="bold-italic">𝒔</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>∇</mi><mi mathvariant="script">ℒ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝒘</mi><mo>←</mo><mi mathvariant="bold-italic">𝒘</mi><mo>−</mo><mfrac><mi>η</mi><msqrt><mrow><mi mathvariant="bold-italic">𝒔</mi><mo>+</mo><mi>ϵ</mi></mrow></msqrt></mfrac><mspace width="0.167em"></mspace><mi>∇</mi><mi mathvariant="script">ℒ</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbf{s} \leftarrow \rho \mathbf{s} + (1 - \rho)(\nabla \mathcal{L})^2, \qquad \mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\mathbf{s} + \epsilon}} \, \nabla \mathcal{L},</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒔</mi><mo>←</mo><mi>ρ</mi><mi mathvariant="bold-italic">𝒔</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>∇</mi><mi mathvariant="script">ℒ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝒘</mi><mo>←</mo><mi mathvariant="bold-italic">𝒘</mi><mo>−</mo><mfrac><mi>η</mi><msqrt><mrow><mi mathvariant="bold-italic">𝒔</mi><mo>+</mo><mi>ε</mi></mrow></msqrt></mfrac><mspace width="0.167em"></mspace><mi>∇</mi><mi mathvariant="script">ℒ</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbf{s} \leftarrow \rho \mathbf{s} + (1 - \rho)(\nabla \mathcal{L})^2, \qquad \mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\mathbf{s} + \varepsilon}} \, \nabla \mathcal{L},</annotation></semantics></math></p>
 <p>with the squaring and division applied element-wise and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 a small constant guarding against division by zero. The effect is a
 per-weight adaptive learning rate: weights that have seen large
 gradients get smaller steps, weights that have seen small gradients get
@@ -1558,11 +1561,11 @@ raised to the step count
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝒎</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mi mathvariant="bold-italic">𝒎</mi><mrow><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mover><mi mathvariant="bold-italic">𝒗</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mi mathvariant="bold-italic">𝒗</mi><mrow><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>2</mn><mi>t</mi></msubsup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{\mathbf{m}} = \frac{\mathbf{m}}{1 - \beta_1^t}, \qquad \hat{\mathbf{v}} = \frac{\mathbf{v}}{1 - \beta_2^t}.</annotation></semantics></math></p>
 <p>The update then uses the bias-corrected momentum, scaled by the
 bias-corrected adaptive rate:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒘</mi><mo>←</mo><mi mathvariant="bold-italic">𝒘</mi><mo>−</mo><mfrac><mi>η</mi><mrow><msqrt><mover><mi mathvariant="bold-italic">𝒗</mi><mo accent="true">̂</mo></mover></msqrt><mo>+</mo><mi>ϵ</mi></mrow></mfrac><mspace width="0.167em"></mspace><mover><mi mathvariant="bold-italic">𝒎</mi><mo accent="true">̂</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \epsilon} \, \hat{\mathbf{m}}.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒘</mi><mo>←</mo><mi mathvariant="bold-italic">𝒘</mi><mo>−</mo><mfrac><mi>η</mi><mrow><msqrt><mover><mi mathvariant="bold-italic">𝒗</mi><mo accent="true">̂</mo></mover></msqrt><mo>+</mo><mi>ε</mi></mrow></mfrac><mspace width="0.167em"></mspace><mover><mi mathvariant="bold-italic">𝒎</mi><mo accent="true">̂</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \varepsilon} \, \hat{\mathbf{m}}.</annotation></semantics></math></p>
 <p>The typical defaults —
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>=</mo><mn>0.9</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\beta_1 = 0.9,</annotation></semantics></math>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>2</mn></msub><mo>=</mo><mn>0.999</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\beta_2 = 0.999,</annotation></semantics></math>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>=</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\epsilon = 10^{-8}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\varepsilon = 10^{-8}</annotation></semantics></math>
 — work across an enormous range of problems with little tuning, and that
 robustness is why Adam is the default. It gives you momentum’s
 acceleration and RMSProp’s per-weight adaptation in one optimiser, and
@@ -1644,7 +1647,7 @@ and variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>σ</mi><mi mathvariant="script">ℬ</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">\sigma^2_{\mathcal{B}}</annotation></semantics></math>,
 standardises each value, and then applies a learnable scale and
 shift:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi mathvariant="script">ℬ</mi></msub></mrow><msqrt><mrow><msubsup><mi>σ</mi><mi mathvariant="script">ℬ</mi><mn>2</mn></msubsup><mo>+</mo><mi>ϵ</mi></mrow></msqrt></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mi>γ</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>+</mo><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{x}_i = \frac{x_i - \mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}} + \epsilon}}, \qquad y_i = \gamma \hat{x}_i + \beta.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi mathvariant="script">ℬ</mi></msub></mrow><msqrt><mrow><msubsup><mi>σ</mi><mi mathvariant="script">ℬ</mi><mn>2</mn></msubsup><mo>+</mo><mi>ε</mi></mrow></msqrt></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mi>γ</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>+</mo><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{x}_i = \frac{x_i - \mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}} + \varepsilon}}, \qquad y_i = \gamma \hat{x}_i + \beta.</annotation></semantics></math></p>
 <p>The standardisation forces the activations to have zero mean and unit
 variance across the batch; the learnable parameters
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
@@ -2463,12 +2466,12 @@ keys, and values into matrices —
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑸</mi><mo>,</mo><mi mathvariant="bold-italic">𝑲</mi><mo>,</mo><mi mathvariant="bold-italic">𝑽</mi></mrow><annotation encoding="application/x-tex">\mathbf{Q}, \mathbf{K}, \mathbf{V}</annotation></semantics></math>,
 one row per position — and computes them all at once. First form the
 scaled score matrix:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑺</mi><mo>=</mo><mfrac><mrow><mi mathvariant="bold-italic">𝑸</mi><msup><mi mathvariant="bold-italic">𝑲</mi><mi>T</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{S} = \frac{\mathbf{Q}\mathbf{K}^{T}}{\sqrt{d_k}}.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑺</mi><mo>=</mo><mfrac><mrow><mi mathvariant="bold-italic">𝑸</mi><msup><mi mathvariant="bold-italic">𝑲</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{S} = \frac{\mathbf{Q}\mathbf{K}^{\top}}{\sqrt{d_k}}.</annotation></semantics></math></p>
 <p>Then turn each row of scores into weights and use those weights to
 average the values:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Attention</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑸</mi><mo>,</mo><mi mathvariant="bold-italic">𝑲</mi><mo>,</mo><mi mathvariant="bold-italic">𝑽</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">softmax</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑺</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝑽</mi></mrow><annotation encoding="application/x-tex">\operatorname{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{softmax}(\mathbf{S})\mathbf{V}</annotation></semantics></math></p>
 <p>Walk through it piece by piece. The product
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑸</mi><msup><mi mathvariant="bold-italic">𝑲</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{Q}\mathbf{K}^T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑸</mi><msup><mi mathvariant="bold-italic">𝑲</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{Q}\mathbf{K}^{\top}</annotation></semantics></math>
 computes a similarity score for every query against every key — entry
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(i, j)</annotation></semantics></math>
 is the dot product of query
@@ -2635,13 +2638,13 @@ over. Batch norm computes its mean and variance over the batch dimension
 — across all the examples in a mini-batch, for each feature. Layer norm
 instead computes them over the feature dimension, independently for each
 single example:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">LayerNorm</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>γ</mi><mo>⊙</mo><mfrac><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>−</mo><mi>μ</mi></mrow><msqrt><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mi>ϵ</mi></mrow></msqrt></mfrac><mo>+</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">\operatorname{LayerNorm}(\mathbf{x}) = \gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">LayerNorm</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>γ</mi><mo>⊙</mo><mfrac><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>−</mo><mi>μ</mi></mrow><msqrt><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mi>ε</mi></mrow></msqrt></mfrac><mo>+</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">\operatorname{LayerNorm}(\mathbf{x}) = \gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \varepsilon}} + \beta</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
 are the mean and standard deviation of the features of that one example,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 is a small constant for numerical stability, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\gamma,</annotation></semantics></math>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
@@ -2693,7 +2696,7 @@ repeatedly predicting the next token and feeding it back in. The catch
 is that during training the model must never see the future tokens it is
 supposed to predict, which is enforced by <em>causal masking</em>.
 Inside the self-attention, after computing the score matrix
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑸</mi><msup><mi mathvariant="bold-italic">𝑲</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{Q}\mathbf{K}^T</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑸</mi><msup><mi mathvariant="bold-italic">𝑲</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{Q}\mathbf{K}^{\top}</annotation></semantics></math>,
 you set every entry in the upper triangle — every score where a query at
 position
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
@@ -3292,14 +3295,14 @@ out of the path that needs gradients. Instead of drawing
 directly from
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">𝒩</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝝁</mi><mo>,</mo><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝝈</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(\boldsymbol{\sigma}^2))</annotation></semantics></math>,
 draw a fixed-distribution noise vector
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝐</mi><mo>∼</mo><mi mathvariant="script">𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo>,</mo><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝜺</mi><mo>∼</mo><mi mathvariant="script">𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo>,</mo><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})</annotation></semantics></math>
 — which does not depend on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 at all — and then compute</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mi mathvariant="bold-italic">𝝁</mi><mo>+</mo><mi mathvariant="bold-italic">𝝈</mi><mo>⊙</mo><mi mathvariant="bold-italic">𝝐</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mi mathvariant="bold-italic">𝝁</mi><mo>+</mo><mi mathvariant="bold-italic">𝝈</mi><mo>⊙</mo><mi mathvariant="bold-italic">𝜺</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}.</annotation></semantics></math></p>
 <p>This produces a sample from exactly the right distribution, but now
 the stochastic part lives entirely in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝐</mi><annotation encoding="application/x-tex">\boldsymbol{\epsilon}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
 which sits outside the computational graph, while the path from
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 to
@@ -3334,9 +3337,9 @@ to get
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msup><mi mathvariant="bold-italic">𝝈</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\log \boldsymbol{\sigma}^2</annotation></semantics></math>,
 draw
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝐</mi><annotation encoding="application/x-tex">\boldsymbol{\epsilon}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
 form
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mi mathvariant="bold-italic">𝝁</mi><mo>+</mo><mi mathvariant="bold-italic">𝝈</mi><mo>⊙</mo><mi mathvariant="bold-italic">𝝐</mi></mrow><annotation encoding="application/x-tex">\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><mi mathvariant="bold-italic">𝝁</mi><mo>+</mo><mi mathvariant="bold-italic">𝝈</mi><mo>⊙</mo><mi mathvariant="bold-italic">𝜺</mi></mrow><annotation encoding="application/x-tex">\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}</annotation></semantics></math>,
 decode
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒛</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math>
 to a reconstruction, compute the ELBO (reconstruction term plus the
@@ -3659,12 +3662,12 @@ given the <em>original</em>
 — skipping every intermediate step — also has a closed form:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>∣</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi mathvariant="script">𝒩</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>;</mo><mspace width="0.167em"></mspace><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></msqrt><mspace width="0.167em"></mspace><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><mo>,</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝑰</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">q(\mathbf{x}_t \mid \mathbf{x}_0) = \mathcal{N}\big(\mathbf{x}_t;\, \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0,\, (1 - \bar{\alpha}_t)\mathbf{I}\big).</annotation></semantics></math></p>
 <p>So you can jump straight to any noise level in one shot:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>=</mo><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></msqrt><mspace width="0.167em"></mspace><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><mo>+</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow></msqrt><mspace width="0.167em"></mspace><mi mathvariant="bold-italic">𝝐</mi><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝝐</mi><mo>∼</mo><mi mathvariant="script">𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo>,</mo><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\,\boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}).</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>=</mo><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></msqrt><mspace width="0.167em"></mspace><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><mo>+</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow></msqrt><mspace width="0.167em"></mspace><mi mathvariant="bold-italic">𝜺</mi><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝜺</mi><mo>∼</mo><mi mathvariant="script">𝒩</mi><mo stretchy="false" form="prefix">(</mo><mn mathvariant="bold">𝟎</mn><mo>,</mo><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\,\boldsymbol{\varepsilon}, \qquad \boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}).</annotation></semantics></math></p>
 <p>This is the workhorse of training. To make one training example you
 pick a random timestep
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">t,</annotation></semantics></math>
 draw one noise vector
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝐</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\epsilon},</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝜺</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\varepsilon},</annotation></semantics></math>
 and produce
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_t</annotation></semantics></math>
 directly — no loop. As
@@ -3688,17 +3691,17 @@ data distribution, which is the very thing we’re trying to learn. So you
 approximate it with a network. The key parameterisation in DDPM (Ho et
 al., 2020) is not to predict the denoised image directly but to predict
 the <strong>noise</strong> that was added: a network
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\epsilon_\theta(\mathbf{x}_t, t)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon_\theta(\mathbf{x}_t, t)</annotation></semantics></math>
 takes the noisy image and the timestep and outputs its estimate of the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝐</mi><annotation encoding="application/x-tex">\boldsymbol{\epsilon}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>
 that produced it. Since the forward equation tells you
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_t</annotation></semantics></math>
 is a known mix of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\mathbf{x}_0</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝐</mi><annotation encoding="application/x-tex">\boldsymbol{\epsilon}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
 knowing
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝐</mi><annotation encoding="application/x-tex">\boldsymbol{\epsilon}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>
 is equivalent to knowing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\mathbf{x}_0</annotation></semantics></math>
 — predicting the noise and predicting the clean image are two views of
@@ -3706,7 +3709,7 @@ the same thing, and noise prediction trains more stably.</p>
 <p>The training objective that falls out of this is remarkably plain —
 strip away the theoretical weighting and what remains is a mean-squared
 error on noise:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="script">ℒ</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>=</mo><msub><mi mathvariant="double-struck">𝔼</mi><mrow><mi>t</mi><mo>,</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="bold-italic">𝝐</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">[</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝝐</mi><mo>−</mo><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{x}_t, t)\|^2\right].</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="script">ℒ</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>=</mo><msub><mi mathvariant="double-struck">𝔼</mi><mrow><mi>t</mi><mo>,</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><mo>,</mo><mi mathvariant="bold-italic">𝜺</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">[</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝜺</mi><mo>−</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal{L}_{\mathrm{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\varepsilon}}\!\left[\|\boldsymbol{\varepsilon} - \varepsilon_\theta(\mathbf{x}_t, t)\|^2\right].</annotation></semantics></math></p>
 <p>Sample an image, sample a timestep, sample noise, form
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_t</annotation></semantics></math>
 with the one-shot formula, and train the network to recover the noise
@@ -3726,7 +3729,7 @@ noise
 and step down through
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mi>T</mi><mo>,</mo><mi>T</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t = T, T-1, \ldots, 1</annotation></semantics></math>,
 at each step using the predicted noise to estimate where to move:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>α</mi><mi>t</mi></msub></msqrt></mfrac><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>−</mo><mfrac><msub><mi>β</mi><mi>t</mi></msub><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow></msqrt></mfrac><mspace width="0.167em"></mspace><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>t</mi></msub><mi mathvariant="bold-italic">𝒛</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}}\,\epsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t \mathbf{z}.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>α</mi><mi>t</mi></msub></msqrt></mfrac><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>−</mo><mfrac><msub><mi>β</mi><mi>t</mi></msub><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow></msqrt></mfrac><mspace width="0.167em"></mspace><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>t</mi></msub><mi mathvariant="bold-italic">𝒛</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}}\,\varepsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t \mathbf{z}.</annotation></semantics></math></p>
 <p>The bracketed part removes the network’s estimate of the current
 step’s noise; the trailing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>t</mi></msub><mi mathvariant="bold-italic">𝒛</mi></mrow><annotation encoding="application/x-tex">\sigma_t \mathbf{z}</annotation></semantics></math>
@@ -3736,10 +3739,9 @@ collapse. Run all the way down and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\mathbf{x}_0</annotation></semantics></math>
 is your generated image.</p>
 <h2 data-number="10.3" id="score-matching-briefly"><span class="header-section-number">10.3</span> Score Matching, Briefly</h2>
-<p>It is worth knowing that this connects to a broader theory, because
-it explains why the noise-prediction trick works and links diffusion to
-a whole other line of research. The <strong>score</strong> of a
-distribution is
+<p>This connects to a broader theory because it explains why the
+noise-prediction trick works and links diffusion to a whole other line
+of research. The <strong>score</strong> of a distribution is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi mathvariant="bold-italic">𝒙</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\nabla_\mathbf{x} \log p(\mathbf{x})</annotation></semantics></math>
 — the gradient of log-density, pointing in the direction of steepest
 increase in probability, i.e. “which way is more like real data from
@@ -3747,7 +3749,7 @@ here.” If you knew the score everywhere, you could generate by starting
 somewhere random and repeatedly stepping uphill in density. It turns out
 the noise the network predicts is, up to a scale factor, the
 <em>negative</em> score of the noised data distribution: predicting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝐</mi><annotation encoding="application/x-tex">\boldsymbol{\epsilon}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>
 is equivalent to estimating
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi mathvariant="bold-italic">𝒙</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\nabla_\mathbf{x} \log p(\mathbf{x})</annotation></semantics></math>.
 So a diffusion model is a score-based model in disguise, and the
@@ -3784,9 +3786,9 @@ acceptable. Each DDIM step first reconstructs an estimate of the clean
 image from the current noisy one and the predicted noise, then re-noises
 it to the next (lower) level:</p>
 <p>First reconstruct the clean-image estimate:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>=</mo><mfrac><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>−</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow></msqrt><mspace width="0.167em"></mspace><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo></mrow><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></msqrt></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat{\mathbf{x}}_0 = \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\,\epsilon_\theta(\mathbf{x}_t, t)}{\sqrt{\bar{\alpha}_t}}.</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>=</mo><mfrac><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>−</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow></msqrt><mspace width="0.167em"></mspace><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo></mrow><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></msqrt></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat{\mathbf{x}}_0 = \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\,\varepsilon_\theta(\mathbf{x}_t, t)}{\sqrt{\bar{\alpha}_t}}.</annotation></semantics></math></p>
 <p>Then re-noise that estimate at the next level down:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></msqrt><mspace width="0.167em"></mspace><msub><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>+</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></msqrt><mspace width="0.167em"></mspace><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 - \bar{\alpha}_{t-1}}\,\epsilon_\theta(\mathbf{x}_t, t).</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><msqrt><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></msqrt><mspace width="0.167em"></mspace><msub><mover><mi mathvariant="bold-italic">𝒙</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>+</mo><msqrt><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>α</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></msqrt><mspace width="0.167em"></mspace><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 - \bar{\alpha}_{t-1}}\,\varepsilon_\theta(\mathbf{x}_t, t).</annotation></semantics></math></p>
 <p>The first term uses the model’s current best guess at the fully
 denoised image; the second term pushes it partway back towards noise at
 the next level down. Because the process is deterministic given the
@@ -3808,12 +3810,12 @@ most of the time, but randomly drop
 (replace it with a null token
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∅</mi><annotation encoding="application/x-tex">\emptyset</annotation></semantics></math>)
 on some fraction of training examples. The one network thus learns both
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi mathvariant="bold-italic">𝒄</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi mathvariant="bold-italic">𝒄</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon_\theta(\mathbf{x}_t, t, \mathbf{c})</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi>∅</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\epsilon_\theta(\mathbf{x}_t, t, \emptyset)</annotation></semantics></math>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi>∅</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\varepsilon_\theta(\mathbf{x}_t, t, \emptyset)</annotation></semantics></math>.</p>
 <p>At inference you combine the two predictions to amplify the influence
 of the conditioning:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>ϵ</mi><mo accent="true">̃</mo></mover><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi mathvariant="bold-italic">𝒄</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi>∅</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>w</mi><mo>⋅</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi mathvariant="bold-italic">𝒄</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>ϵ</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi>∅</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\tilde{\epsilon}_\theta(\mathbf{x}_t, t, \mathbf{c}) = \epsilon_\theta(\mathbf{x}_t, t, \emptyset) + w \cdot \big(\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c}) - \epsilon_\theta(\mathbf{x}_t, t, \emptyset)\big).</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>ε</mi><mo accent="true">̃</mo></mover><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi mathvariant="bold-italic">𝒄</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi>∅</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>w</mi><mo>⋅</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi mathvariant="bold-italic">𝒄</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><mo>,</mo><mi>t</mi><mo>,</mo><mi>∅</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\tilde{\varepsilon}_\theta(\mathbf{x}_t, t, \mathbf{c}) = \varepsilon_\theta(\mathbf{x}_t, t, \emptyset) + w \cdot \big(\varepsilon_\theta(\mathbf{x}_t, t, \mathbf{c}) - \varepsilon_\theta(\mathbf{x}_t, t, \emptyset)\big).</annotation></semantics></math></p>
 <p>The difference between the conditional and unconditional predictions
 is the direction the prompt is pulling; the guidance scale
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>
@@ -4535,24 +4537,118 @@ model, so their learned features will not transfer; you actually have
 the data and the compute to do it; and you have a specific, articulable
 reason to believe pretrained features will fail you. If you cannot make
 all three arguments, fine-tune.</p>
-<h2 data-number="12.7" id="what-to-read-next"><span class="header-section-number">12.7</span> What to Read Next</h2>
+<h1 data-number="13" id="further-reading"><span class="header-section-number">13</span> Further Reading</h1>
 <p>This primer gives you the conceptual foundation; the papers give you
-the detail and the caveats it omits by design. The ones worth reading in
-the original are “Attention Is All You Need” (Vaswani et al., 2017) for
-the transformer, “Auto-Encoding Variational Bayes” (Kingma &amp;
-Welling, 2013) for the VAE, “Generative Adversarial Networks”
-(Goodfellow et al., 2014) for the GAN, “Denoising Diffusion
-Probabilistic Models” (Ho et al., 2020) for diffusion, <a href="https://arxiv.org/abs/2212.09748"><em>Scalable Diffusion Models
-with Transformers</em></a> for DiT, <a href="https://arxiv.org/abs/2502.09992"><em>Large Language Diffusion
-Models</em></a> for a discrete text-diffusion example, “Deep Residual
-Learning for Image Recognition” (He et al., 2015) for the residual
-connections that made very deep networks trainable, and “Language Models
-are Few-Shot Learners” (Brown et al., 2020) for GPT-3 and the in-context
-learning that came with scale. For structured courses, fast.ai is the
-best on-ramp to practical deep learning, Stanford’s cs231n is the
-reference for CNNs and computer vision, and Stanford’s cs224n covers
-NLP. Read the papers when a topic touches your work; take the courses
-when you want the guided path rather than the reference.</p>
+the detail and the caveats it omits by design.</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You
+Need</a> — the original transformer paper.</li>
+<li><a href="https://arxiv.org/abs/1312.6114">Auto-Encoding Variational
+Bayes</a> — the foundational variational autoencoder paper.</li>
+<li><a href="https://arxiv.org/abs/1406.2661">Generative Adversarial
+Nets</a> — the original generative adversarial network paper.</li>
+<li><a href="https://arxiv.org/abs/2006.11239">Denoising Diffusion
+Probabilistic Models</a> — the paper that established the DDPM
+formulation.</li>
+<li><a href="https://arxiv.org/abs/2212.09748">Scalable Diffusion Models
+with Transformers</a> — the DiT architecture discussed in the diffusion
+section.</li>
+<li><a href="https://arxiv.org/abs/2502.09992">Large Language Diffusion
+Models</a> — a discrete text-diffusion example.</li>
+<li><a href="https://arxiv.org/abs/1512.03385">Deep Residual Learning
+for Image Recognition</a> — the residual connections that made very deep
+networks trainable.</li>
+<li><a href="https://arxiv.org/abs/2005.14165">Language Models are
+Few-Shot Learners</a> — GPT-3 and the in-context learning that came with
+scale.</li>
+<li><a href="https://course.fast.ai/">fast.ai</a> — a practical course
+for applying deep learning.</li>
+<li><a href="https://cs231n.stanford.edu/">Stanford CS231n</a> — a
+reference course for convolutional networks and computer vision.</li>
+<li><a href="https://web.stanford.edu/class/cs224n/">Stanford CS224n</a>
+— a reference course for natural-language processing.</li>
+</ul>
+<h1 data-number="14" id="notation"><span class="header-section-number">14</span> Notation</h1>
+<p>The table collects the symbols used repeatedly in the derivations;
+local definitions still appear where a new equation introduces a
+variable.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒙</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math></td>
+<td>Input or feature vector</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒘</mi><annotation encoding="application/x-tex">\mathbf{w}</annotation></semantics></math></td>
+<td>Weight vector</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math></td>
+<td>Bias parameter</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></td>
+<td>Activation function</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℒ</mi><annotation encoding="application/x-tex">\mathcal{L}</annotation></semantics></math></td>
+<td>Loss function</td>
+<td>Backpropagation</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><mi mathvariant="script">ℒ</mi></mrow><annotation encoding="application/x-tex">\nabla \mathcal{L}</annotation></semantics></math></td>
+<td>Gradient of the loss</td>
+<td>Optimisation</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math></td>
+<td>Learning rate</td>
+<td>Gradient descent</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></td>
+<td>Small positive numerical-stability constant</td>
+<td>RMSProp</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑾</mi><mo>,</mo><mi mathvariant="bold-italic">𝑸</mi><mo>,</mo><mi mathvariant="bold-italic">𝑲</mi><mo>,</mo><mi mathvariant="bold-italic">𝑽</mi></mrow><annotation encoding="application/x-tex">\mathbf{W}, \mathbf{Q}, \mathbf{K}, \mathbf{V}</annotation></semantics></math></td>
+<td>Weight, query, key, and value matrices</td>
+<td>Backpropagation and attention</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⊤</mi><annotation encoding="application/x-tex">\top</annotation></semantics></math></td>
+<td>Matrix or vector transpose</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒙</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_t</annotation></semantics></math></td>
+<td>Noisy sample at diffusion timestep
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math></td>
+<td>Diffusion forward process</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝜺</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math></td>
+<td>Gaussian noise vector</td>
+<td>Variational autoencoders</td>
+</tr>
+</tbody>
+</table>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
