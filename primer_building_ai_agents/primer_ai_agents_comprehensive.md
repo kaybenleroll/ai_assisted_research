@@ -109,7 +109,7 @@ Here's where the magic happens. Instead of just asking an LLM to "solve this pro
 
 The example below shows the underlying idea using plain text instructions, so you can see exactly what's happening with nothing hidden behind an API. It's conceptually accurate but it is not how you'd build this today — the subsection right after the example explains what production systems actually do.
 
-**Example 1: Simple tool use**
+#### Example 1: Simple Tool Use
 ```text
 System prompt: "You are an agent. You can call these tools:
 - search(query): searches the web
@@ -500,26 +500,26 @@ Also remember context includes more than chat history. Tool schemas, policy text
 
 Smart agents use a **memory hierarchy**:
 
-**1. Working Memory (the current prompt)**
+#### Working Memory: Current Prompt
 
 - Current task/goal
 - Recent decisions and results
 - Immediate context needed to continue
 
-**2. Short-Term Memory (recent events)**
+#### Short-Term Memory: Recent Events
 
 - Last 10-50 interactions
 - Recent tool call results
 - Conversation context
 
-**3. Long-Term Memory (persistent knowledge)**
+#### Long-Term Memory: Persistent Knowledge
 
 - Facts learned over time
 - Customer history
 - Relevant documentation
 - Embeddings/vector search for semantic similarity
 
-**4. Core Instructions (always there)**
+#### Core Instructions: Always There
 
 - System prompt defining role and capabilities
 - Tool definitions
@@ -699,21 +699,21 @@ def run_agent(task, max_iterations=10):
 
 Before you lock in a framework, treat this section as a decision starting point, not a permanent ranking. Framework strengths move quickly as maintainers add state management, tracing, eval hooks, and human-in-the-loop controls.
 
-**Pydantic AI**
+#### Pydantic AI
 
 - Built on Pydantic models
 - Type-safe tool definitions
 - Excellent for Python projects
 - Modern, actively developed
 
-**LangGraph**
+#### LangGraph
 
 - Graph-based agent definitions
 - Excellent for multi-agent systems
 - Supports human-in-the-loop
 - Built by LangChain team
 
-**CrewAI**
+#### CrewAI
 
 - Role-based agent design
 - Built-in agent personas

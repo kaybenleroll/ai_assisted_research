@@ -636,7 +636,11 @@ Agent?</a></li>
 <li><a href="#the-misconception-llms-as-black-boxes" id="toc-the-misconception-llms-as-black-boxes"><span class="toc-section-number">3.1</span> The Misconception: LLMs as Black
 Boxes</a></li>
 <li><a href="#the-trick-tool-use-and-structured-outputs" id="toc-the-trick-tool-use-and-structured-outputs"><span class="toc-section-number">3.2</span> The Trick: Tool Use and Structured
-Outputs</a></li>
+Outputs</a>
+<ul>
+<li><a href="#example-1-simple-tool-use" id="toc-example-1-simple-tool-use"><span class="toc-section-number">3.2.1</span> Example 1: Simple Tool
+Use</a></li>
+</ul></li>
 <li><a href="#native-tool-use-apis" id="toc-native-tool-use-apis"><span class="toc-section-number">3.3</span> Native Tool Use APIs</a></li>
 <li><a href="#the-tool-boundary-is-a-trust-boundary" id="toc-the-tool-boundary-is-a-trust-boundary"><span class="toc-section-number">3.4</span> The Tool Boundary Is a Trust
 Boundary</a></li>
@@ -661,7 +665,17 @@ Patterns</a></li>
 <ul>
 <li><a href="#the-context-window-problem" id="toc-the-context-window-problem"><span class="toc-section-number">6.1</span> The Context Window
 Problem</a></li>
-<li><a href="#memory-hierarchy" id="toc-memory-hierarchy"><span class="toc-section-number">6.2</span> Memory Hierarchy</a></li>
+<li><a href="#memory-hierarchy" id="toc-memory-hierarchy"><span class="toc-section-number">6.2</span> Memory Hierarchy</a>
+<ul>
+<li><a href="#working-memory-current-prompt" id="toc-working-memory-current-prompt"><span class="toc-section-number">6.2.1</span> Working Memory: Current
+Prompt</a></li>
+<li><a href="#short-term-memory-recent-events" id="toc-short-term-memory-recent-events"><span class="toc-section-number">6.2.2</span> Short-Term Memory: Recent
+Events</a></li>
+<li><a href="#long-term-memory-persistent-knowledge" id="toc-long-term-memory-persistent-knowledge"><span class="toc-section-number">6.2.3</span> Long-Term Memory: Persistent
+Knowledge</a></li>
+<li><a href="#core-instructions-always-there" id="toc-core-instructions-always-there"><span class="toc-section-number">6.2.4</span> Core Instructions: Always
+There</a></li>
+</ul></li>
 <li><a href="#managing-memory-in-practice" id="toc-managing-memory-in-practice"><span class="toc-section-number">6.3</span> Managing Memory in
 Practice</a></li>
 </ul></li>
@@ -676,7 +690,12 @@ Recovery</a></li>
 <li><a href="#the-execution-loop-implementation" id="toc-the-execution-loop-implementation"><span class="toc-section-number">7.4</span> The Execution Loop
 Implementation</a></li>
 <li><a href="#frameworks-sdks-and-runtimes-september-2026-snapshot" id="toc-frameworks-sdks-and-runtimes-september-2026-snapshot"><span class="toc-section-number">7.5</span> Frameworks, SDKs, and Runtimes
-(September 2026 Snapshot)</a></li>
+(September 2026 Snapshot)</a>
+<ul>
+<li><a href="#pydantic-ai" id="toc-pydantic-ai"><span class="toc-section-number">7.5.1</span> Pydantic AI</a></li>
+<li><a href="#langgraph" id="toc-langgraph"><span class="toc-section-number">7.5.2</span> LangGraph</a></li>
+<li><a href="#crewai" id="toc-crewai"><span class="toc-section-number">7.5.3</span> CrewAI</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#production-risks-and-failure-modes" id="toc-production-risks-and-failure-modes"><span class="toc-section-number">8</span> Production Risks and Failure
 Modes</a>
@@ -870,7 +889,8 @@ instructions, so you can see exactly what’s happening with nothing
 hidden behind an API. It’s conceptually accurate but it is not how you’d
 build this today — the subsection right after the example explains what
 production systems actually do.</p>
-<p><strong>Example 1: Simple tool use</strong></p>
+<h3 data-number="3.2.1" id="example-1-simple-tool-use"><span class="header-section-number">3.2.1</span> Example 1: Simple Tool
+Use</h3>
 <pre class="text"><code>System prompt: &quot;You are an agent. You can call these tools:
 - search(query): searches the web
 - read_file(path): reads a file
@@ -1238,26 +1258,30 @@ for hours, making hundreds of decisions, the history grows.</p>
 policy text, and system instructions consume tokens too.</p>
 <h2 data-number="6.2" id="memory-hierarchy"><span class="header-section-number">6.2</span> Memory Hierarchy</h2>
 <p>Smart agents use a <strong>memory hierarchy</strong>:</p>
-<p><strong>1. Working Memory (the current prompt)</strong></p>
+<h3 data-number="6.2.1" id="working-memory-current-prompt"><span class="header-section-number">6.2.1</span> Working Memory: Current
+Prompt</h3>
 <ul>
 <li>Current task/goal</li>
 <li>Recent decisions and results</li>
 <li>Immediate context needed to continue</li>
 </ul>
-<p><strong>2. Short-Term Memory (recent events)</strong></p>
+<h3 data-number="6.2.2" id="short-term-memory-recent-events"><span class="header-section-number">6.2.2</span> Short-Term Memory: Recent
+Events</h3>
 <ul>
 <li>Last 10-50 interactions</li>
 <li>Recent tool call results</li>
 <li>Conversation context</li>
 </ul>
-<p><strong>3. Long-Term Memory (persistent knowledge)</strong></p>
+<h3 data-number="6.2.3" id="long-term-memory-persistent-knowledge"><span class="header-section-number">6.2.3</span> Long-Term Memory: Persistent
+Knowledge</h3>
 <ul>
 <li>Facts learned over time</li>
 <li>Customer history</li>
 <li>Relevant documentation</li>
 <li>Embeddings/vector search for semantic similarity</li>
 </ul>
-<p><strong>4. Core Instructions (always there)</strong></p>
+<h3 data-number="6.2.4" id="core-instructions-always-there"><span class="header-section-number">6.2.4</span> Core Instructions: Always
+There</h3>
 <ul>
 <li>System prompt defining role and capabilities</li>
 <li>Tool definitions</li>
@@ -1424,21 +1448,21 @@ in practice:</p>
 starting point, not a permanent ranking. Framework strengths move
 quickly as maintainers add state management, tracing, eval hooks, and
 human-in-the-loop controls.</p>
-<p><strong>Pydantic AI</strong></p>
+<h3 data-number="7.5.1" id="pydantic-ai"><span class="header-section-number">7.5.1</span> Pydantic AI</h3>
 <ul>
 <li>Built on Pydantic models</li>
 <li>Type-safe tool definitions</li>
 <li>Excellent for Python projects</li>
 <li>Modern, actively developed</li>
 </ul>
-<p><strong>LangGraph</strong></p>
+<h3 data-number="7.5.2" id="langgraph"><span class="header-section-number">7.5.2</span> LangGraph</h3>
 <ul>
 <li>Graph-based agent definitions</li>
 <li>Excellent for multi-agent systems</li>
 <li>Supports human-in-the-loop</li>
 <li>Built by LangChain team</li>
 </ul>
-<p><strong>CrewAI</strong></p>
+<h3 data-number="7.5.3" id="crewai"><span class="header-section-number">7.5.3</span> CrewAI</h3>
 <ul>
 <li>Role-based agent design</li>
 <li>Built-in agent personas</li>
