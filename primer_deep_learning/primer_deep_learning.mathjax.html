@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Deep Learning and Generative AI: A
 Technical Primer</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -764,8 +764,9 @@ Model</a></li>
 Requirements</a></li>
 <li><a href="#the-practical-starting-point" id="toc-the-practical-starting-point"><span class="toc-section-number">12.6</span> The Practical Starting
 Point</a></li>
-<li><a href="#what-to-read-next" id="toc-what-to-read-next"><span class="toc-section-number">12.7</span> What to Read Next</a></li>
 </ul></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">13</span> Further Reading</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">14</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -864,6 +865,8 @@ frameworks and the practical concerns of building real systems. Each
 section assumes the ones before it, so the vanishing-gradient problem
 defined while discussing training is the same one that explains why
 recurrent networks struggle with long sequences.</p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h1 data-number="2" id="why-deep-learning-now"><span class="header-section-number">2</span> Why Deep Learning Now</h1>
 <p>Neural networks are not new. The perceptron dates to 1958.
 Backpropagation, the algorithm that trains modern networks, was
@@ -1029,7 +1032,7 @@ picture, and it maps directly onto a piece of mathematics.</p>
 <p>The artificial version — the perceptron — takes an input vector <span class="math inline">\(\mathbf{x}\)</span>, weights each component by a
 corresponding weight, sums them, adds a bias, and passes the result
 through an activation function. Writing the weights as a vector <span class="math inline">\(\mathbf{w}\)</span> and the bias as a scalar <span class="math inline">\(b\)</span>, the pre-activation is</p>
-<p><span class="math display">\[z = \mathbf{w}^T \mathbf{x} +
+<p><span class="math display">\[z = \mathbf{w}^{\top} \mathbf{x} +
 b,\]</span></p>
 <p>and the output is <span class="math inline">\(\sigma(z)\)</span> for
 some activation function <span class="math inline">\(\sigma\)</span>.
@@ -1038,8 +1041,8 @@ shifts the threshold, and the activation decides how the summed signal
 becomes an output. If <span class="math inline">\(\sigma\)</span> is a
 hard step function — output 1 when <span class="math inline">\(z &gt;
 0\)</span> and 0 otherwise — you have the original perceptron, a linear
-classifier that draws a hyperplane <span class="math inline">\(\mathbf{w}^T \mathbf{x} + b = 0\)</span> through
-the input space and labels everything on one side positive.</p>
+classifier that draws a hyperplane <span class="math inline">\(\mathbf{w}^{\top} \mathbf{x} + b = 0\)</span>
+through the input space and labels everything on one side positive.</p>
 <p>This is also where the perceptron’s limitation becomes clear, and it
 is a limitation you can already name from classical ML: a single
 perceptron can only separate data that is linearly separable. The
@@ -1325,7 +1328,7 @@ pulls out <span class="math inline">\(\mathbf{h}^{(1)}\)</span>, giving
 the second-layer weight gradient as an outer product:</p>
 <p><span class="math display">\[\frac{\partial \mathcal{L}}{\partial
 \mathbf{W}^{(2)}} = \boldsymbol{\delta}^{(2)} \,
-\big(\mathbf{h}^{(1)}\big)^T.\]</span></p>
+\big(\mathbf{h}^{(1)}\big)^{\top}.\]</span></p>
 <p>This is the structure that makes backpropagation efficient. The error
 <span class="math inline">\(\boldsymbol{\delta}^{(2)}\)</span> at a
 layer, times the input that arrived at that layer, gives the gradient
@@ -1333,12 +1336,12 @@ for that layer’s weights. Now propagate the error backward to the first
 layer. The chain rule sends <span class="math inline">\(\boldsymbol{\delta}^{(2)}\)</span> back through
 the second-layer weights and then through the first activation:</p>
 <p><span class="math display">\[\boldsymbol{\delta}^{(1)} =
-\left(\big(\mathbf{W}^{(2)}\big)^T \boldsymbol{\delta}^{(2)}\right)
+\left(\big(\mathbf{W}^{(2)}\big)^{\top} \boldsymbol{\delta}^{(2)}\right)
 \odot \sigma&#39;(\mathbf{z}^{(1)}),\]</span></p>
 <p>where <span class="math inline">\(\odot\)</span> is element-wise
 multiplication and <span class="math inline">\(\sigma&#39;\)</span> is
 the derivative of the hidden activation. Read this carefully because it
-is the heart of the algorithm. The factor <span class="math inline">\((\mathbf{W}^{(2)})^T
+is the heart of the algorithm. The factor <span class="math inline">\((\mathbf{W}^{(2)})^{\top}
 \boldsymbol{\delta}^{(2)}\)</span> takes the error at the output layer
 and routes it backward through the same weights the forward pass used —
 each hidden unit gets blamed for the output error in proportion to how
@@ -1349,7 +1352,7 @@ the first-layer weight gradient has the identical outer-product
 form:</p>
 <p><span class="math display">\[\frac{\partial \mathcal{L}}{\partial
 \mathbf{W}^{(1)}} = \boldsymbol{\delta}^{(1)} \,
-\mathbf{x}^T.\]</span></p>
+\mathbf{x}^{\top}.\]</span></p>
 <p>The pattern is now visible and it generalises to any depth: compute
 the error at the output, then repeatedly push it backward one layer at a
 time by multiplying with the transposed weight matrix and the local
@@ -1447,9 +1450,9 @@ sizes. It keeps a running average of the squared gradient for each
 weight and divides the step by the square root of that average:</p>
 <p><span class="math display">\[\mathbf{s} \leftarrow \rho \mathbf{s} +
 (1 - \rho)(\nabla \mathcal{L})^2, \qquad \mathbf{w} \leftarrow
-\mathbf{w} - \frac{\eta}{\sqrt{\mathbf{s} + \epsilon}} \, \nabla
+\mathbf{w} - \frac{\eta}{\sqrt{\mathbf{s} + \varepsilon}} \, \nabla
 \mathcal{L},\]</span></p>
-<p>with the squaring and division applied element-wise and <span class="math inline">\(\epsilon\)</span> a small constant guarding
+<p>with the squaring and division applied element-wise and <span class="math inline">\(\varepsilon\)</span> a small constant guarding
 against division by zero. The effect is a per-weight adaptive learning
 rate: weights that have seen large gradients get smaller steps, weights
 that have seen small gradients get larger steps, so the effective rate
@@ -1474,12 +1477,12 @@ raised to the step count <span class="math inline">\(t\)</span>:</p>
 <p>The update then uses the bias-corrected momentum, scaled by the
 bias-corrected adaptive rate:</p>
 <p><span class="math display">\[\mathbf{w} \leftarrow \mathbf{w} -
-\frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \epsilon} \,
+\frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \varepsilon} \,
 \hat{\mathbf{m}}.\]</span></p>
 <p>The typical defaults — <span class="math inline">\(\beta_1 =
 0.9,\)</span> <span class="math inline">\(\beta_2 = 0.999,\)</span>
-<span class="math inline">\(\epsilon = 10^{-8}\)</span> — work across an
-enormous range of problems with little tuning, and that robustness is
+<span class="math inline">\(\varepsilon = 10^{-8}\)</span> — work across
+an enormous range of problems with little tuning, and that robustness is
 why Adam is the default. It gives you momentum’s acceleration and
 RMSProp’s per-weight adaptation in one optimiser, and it converges
 quickly and reliably on the kinds of loss surfaces deep networks
@@ -1557,8 +1560,8 @@ flow through the network. For a mini-batch <span class="math inline">\(\mathcal{
 pre-activation values at some layer, it computes the batch mean <span class="math inline">\(\mu_{\mathcal{B}}\)</span> and variance <span class="math inline">\(\sigma^2_{\mathcal{B}}\)</span>, standardises each
 value, and then applies a learnable scale and shift:</p>
 <p><span class="math display">\[\hat{x}_i = \frac{x_i -
-\mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}} + \epsilon}}, \qquad y_i
-= \gamma \hat{x}_i + \beta.\]</span></p>
+\mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}} + \varepsilon}}, \qquad
+y_i = \gamma \hat{x}_i + \beta.\]</span></p>
 <p>The standardisation forces the activations to have zero mean and unit
 variance across the batch; the learnable parameters <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\beta\)</span> then let the network rescale and
 re-shift them to whatever distribution actually serves the task, so
@@ -2289,13 +2292,13 @@ keys, and values into matrices — <span class="math inline">\(\mathbf{Q},
 \mathbf{K}, \mathbf{V}\)</span>, one row per position — and computes
 them all at once. First form the scaled score matrix:</p>
 <p><span class="math display">\[\mathbf{S} =
-\frac{\mathbf{Q}\mathbf{K}^{T}}{\sqrt{d_k}}.\]</span></p>
+\frac{\mathbf{Q}\mathbf{K}^{\top}}{\sqrt{d_k}}.\]</span></p>
 <p>Then turn each row of scores into weights and use those weights to
 average the values:</p>
 <p><span class="math display">\[\operatorname{Attention}(\mathbf{Q},
 \mathbf{K}, \mathbf{V}) =
 \operatorname{softmax}(\mathbf{S})\mathbf{V}\]</span></p>
-<p>Walk through it piece by piece. The product <span class="math inline">\(\mathbf{Q}\mathbf{K}^T\)</span> computes a
+<p>Walk through it piece by piece. The product <span class="math inline">\(\mathbf{Q}\mathbf{K}^{\top}\)</span> computes a
 similarity score for every query against every key — entry <span class="math inline">\((i, j)\)</span> is the dot product of query <span class="math inline">\(i\)</span> with key <span class="math inline">\(j\)</span>, so the result is a matrix of shape
 (number of queries × number of keys). A large dot product means the
 query and key point in similar directions, signalling relevance.
@@ -2443,10 +2446,10 @@ over. Batch norm computes its mean and variance over the batch dimension
 instead computes them over the feature dimension, independently for each
 single example:</p>
 <p><span class="math display">\[\operatorname{LayerNorm}(\mathbf{x}) =
-\gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \epsilon}} +
+\gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \varepsilon}} +
 \beta\]</span></p>
 <p>where <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> are the mean and standard
-deviation of the features of that one example, <span class="math inline">\(\epsilon\)</span> is a small constant for
+deviation of the features of that one example, <span class="math inline">\(\varepsilon\)</span> is a small constant for
 numerical stability, and <span class="math inline">\(\gamma,\)</span>
 <span class="math inline">\(\beta\)</span> are learned per-feature scale
 and shift. Normalising per-example is a much better fit for sequence
@@ -2496,13 +2499,14 @@ text generator — completion, summarisation, dialogue all reduce to
 repeatedly predicting the next token and feeding it back in. The catch
 is that during training the model must never see the future tokens it is
 supposed to predict, which is enforced by <em>causal masking</em>.
-Inside the self-attention, after computing the score matrix <span class="math inline">\(\mathbf{Q}\mathbf{K}^T\)</span>, you set every
-entry in the upper triangle — every score where a query at position
-<span class="math inline">\(t\)</span> would attend to a key at a later
-position <span class="math inline">\(t&#39; &gt; t\)</span> — to <span class="math inline">\(-\infty\)</span> before the softmax. Softmax turns
-<span class="math inline">\(-\infty\)</span> into a weight of zero, so
-token <span class="math inline">\(t\)</span> can attend only to itself
-and the tokens before it, never ahead. This is why GPT is
+Inside the self-attention, after computing the score matrix <span class="math inline">\(\mathbf{Q}\mathbf{K}^{\top}\)</span>, you set
+every entry in the upper triangle — every score where a query at
+position <span class="math inline">\(t\)</span> would attend to a key at
+a later position <span class="math inline">\(t&#39; &gt; t\)</span> — to
+<span class="math inline">\(-\infty\)</span> before the softmax. Softmax
+turns <span class="math inline">\(-\infty\)</span> into a weight of
+zero, so token <span class="math inline">\(t\)</span> can attend only to
+itself and the tokens before it, never ahead. This is why GPT is
 unidirectional: it sees only left context, which is exactly the
 constraint that makes left-to-right generation well-defined.</p>
 <p>The summary is clean. BERT is an encoder trained bidirectionally for
@@ -3047,13 +3051,14 @@ sample, the encoder cannot learn.</p>
 <p>The <strong>reparameterisation trick</strong> moves the randomness
 out of the path that needs gradients. Instead of drawing <span class="math inline">\(\mathbf{z}\)</span> directly from <span class="math inline">\(\mathcal{N}(\boldsymbol{\mu},
 \operatorname{diag}(\boldsymbol{\sigma}^2))\)</span>, draw a
-fixed-distribution noise vector <span class="math inline">\(\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0},
-\mathbf{I})\)</span> — which does not depend on <span class="math inline">\(\phi\)</span> at all — and then compute</p>
+fixed-distribution noise vector <span class="math inline">\(\boldsymbol{\varepsilon} \sim
+\mathcal{N}(\mathbf{0}, \mathbf{I})\)</span> — which does not depend on
+<span class="math inline">\(\phi\)</span> at all — and then compute</p>
 <p><span class="math display">\[\mathbf{z} = \boldsymbol{\mu} +
-\boldsymbol{\sigma} \odot \boldsymbol{\epsilon}.\]</span></p>
+\boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}.\]</span></p>
 <p>This produces a sample from exactly the right distribution, but now
-the stochastic part lives entirely in <span class="math inline">\(\boldsymbol{\epsilon}\)</span>, which sits outside
-the computational graph, while the path from <span class="math inline">\(\phi\)</span> to <span class="math inline">\(\mathbf{z}\)</span> — through <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span> — is a chain of
+the stochastic part lives entirely in <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>, which sits
+outside the computational graph, while the path from <span class="math inline">\(\phi\)</span> to <span class="math inline">\(\mathbf{z}\)</span> — through <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span> — is a chain of
 ordinary differentiable operations. Gradients flow straight through
 <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span> back into the
 encoder. The randomness is still there, sample to sample, but it no
@@ -3065,9 +3070,10 @@ whenever you need to differentiate through a sampling step.</p>
 <span class="math inline">\(\boldsymbol{\sigma}\)</span> directly —
 predicting the log-variance keeps the value numerically stable and
 unconstrained in sign, since variance must be positive but a log can
-range freely. A training step then runs: encode <span class="math inline">\(\mathbf{x}\)</span> to get <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\log \boldsymbol{\sigma}^2\)</span>, draw <span class="math inline">\(\boldsymbol{\epsilon}\)</span>, form <span class="math inline">\(\mathbf{z} = \boldsymbol{\mu} +
-\boldsymbol{\sigma} \odot \boldsymbol{\epsilon}\)</span>, decode <span class="math inline">\(\mathbf{z}\)</span> to a reconstruction, compute
-the ELBO (reconstruction term plus the closed-form KL), and
+range freely. A training step then runs: encode <span class="math inline">\(\mathbf{x}\)</span> to get <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\log \boldsymbol{\sigma}^2\)</span>, draw <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>, form <span class="math inline">\(\mathbf{z} = \boldsymbol{\mu} +
+\boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}\)</span>, decode
+<span class="math inline">\(\mathbf{z}\)</span> to a reconstruction,
+compute the ELBO (reconstruction term plus the closed-form KL), and
 backpropagate.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One VAE training step, schematically (PyTorch-style)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mu, logvar <span class="op">=</span> encoder(x)</span>
@@ -3342,13 +3348,14 @@ the <em>original</em> <span class="math inline">\(\mathbf{x}_0\)</span>
 <p>So you can jump straight to any noise level in one shot:</p>
 <p><span class="math display">\[\mathbf{x}_t =
 \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 -
-\bar{\alpha}_t}\,\boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon}
-\sim \mathcal{N}(\mathbf{0}, \mathbf{I}).\]</span></p>
+\bar{\alpha}_t}\,\boldsymbol{\varepsilon}, \qquad
+\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0},
+\mathbf{I}).\]</span></p>
 <p>This is the workhorse of training. To make one training example you
 pick a random timestep <span class="math inline">\(t,\)</span> draw one
-noise vector <span class="math inline">\(\boldsymbol{\epsilon},\)</span>
-and produce <span class="math inline">\(\mathbf{x}_t\)</span> directly —
-no loop. As <span class="math inline">\(t\)</span> runs from 1 to <span class="math inline">\(T,\)</span> <span class="math inline">\(\bar{\alpha}_t\)</span> shrinks from near 1 to
+noise vector <span class="math inline">\(\boldsymbol{\varepsilon},\)</span> and produce
+<span class="math inline">\(\mathbf{x}_t\)</span> directly — no loop. As
+<span class="math inline">\(t\)</span> runs from 1 to <span class="math inline">\(T,\)</span> <span class="math inline">\(\bar{\alpha}_t\)</span> shrinks from near 1 to
 near 0, so <span class="math inline">\(\mathbf{x}_t\)</span> slides
 smoothly from “the original image” to “pure noise”, and you can land
 anywhere on that path instantly.</p>
@@ -3361,9 +3368,9 @@ require knowing the full data distribution, which is the very thing
 we’re trying to learn. So you approximate it with a network. The key
 parameterisation in DDPM (Ho et al., 2020) is not to predict the
 denoised image directly but to predict the <strong>noise</strong> that
-was added: a network <span class="math inline">\(\epsilon_\theta(\mathbf{x}_t, t)\)</span> takes
-the noisy image and the timestep and outputs its estimate of the <span class="math inline">\(\boldsymbol{\epsilon}\)</span> that produced it.
-Since the forward equation tells you <span class="math inline">\(\mathbf{x}_t\)</span> is a known mix of <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\boldsymbol{\epsilon}\)</span>, knowing <span class="math inline">\(\boldsymbol{\epsilon}\)</span> is equivalent to
+was added: a network <span class="math inline">\(\varepsilon_\theta(\mathbf{x}_t, t)\)</span> takes
+the noisy image and the timestep and outputs its estimate of the <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> that produced
+it. Since the forward equation tells you <span class="math inline">\(\mathbf{x}_t\)</span> is a known mix of <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>, knowing <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> is equivalent to
 knowing <span class="math inline">\(\mathbf{x}_0\)</span> — predicting
 the noise and predicting the clean image are two views of the same
 thing, and noise prediction trains more stably.</p>
@@ -3372,8 +3379,8 @@ strip away the theoretical weighting and what remains is a mean-squared
 error on noise:</p>
 <p><span class="math display">\[\mathcal{L}_{\mathrm{simple}} =
 \mathbb{E}_{t, \mathbf{x}_0,
-\boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} -
-\epsilon_\theta(\mathbf{x}_t, t)\|^2\right].\]</span></p>
+\boldsymbol{\varepsilon}}\!\left[\|\boldsymbol{\varepsilon} -
+\varepsilon_\theta(\mathbf{x}_t, t)\|^2\right].\]</span></p>
 <p>Sample an image, sample a timestep, sample noise, form <span class="math inline">\(\mathbf{x}_t\)</span> with the one-shot formula,
 and train the network to recover the noise you added. That is the entire
 training loop, and its simplicity — no adversary, no balancing act, just
@@ -3392,7 +3399,7 @@ noise <span class="math inline">\(\mathbf{x}_T \sim
 the predicted noise to estimate where to move:</p>
 <p><span class="math display">\[\mathbf{x}_{t-1} =
 \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 -
-\bar{\alpha}_t}}\,\epsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t
+\bar{\alpha}_t}}\,\varepsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t
 \mathbf{z}.\]</span></p>
 <p>The bracketed part removes the network’s estimate of the current
 step’s noise; the trailing <span class="math inline">\(\sigma_t
@@ -3400,17 +3407,16 @@ step’s noise; the trailing <span class="math inline">\(\sigma_t
 which keeps the reverse process a proper stochastic sampler rather than
 a deterministic collapse. Run all the way down and <span class="math inline">\(\mathbf{x}_0\)</span> is your generated image.</p>
 <h2 data-number="10.3" id="score-matching-briefly"><span class="header-section-number">10.3</span> Score Matching, Briefly</h2>
-<p>It is worth knowing that this connects to a broader theory, because
-it explains why the noise-prediction trick works and links diffusion to
-a whole other line of research. The <strong>score</strong> of a
-distribution is <span class="math inline">\(\nabla_\mathbf{x} \log
-p(\mathbf{x})\)</span> — the gradient of log-density, pointing in the
-direction of steepest increase in probability, i.e. “which way is more
-like real data from here.” If you knew the score everywhere, you could
-generate by starting somewhere random and repeatedly stepping uphill in
-density. It turns out the noise the network predicts is, up to a scale
-factor, the <em>negative</em> score of the noised data distribution:
-predicting <span class="math inline">\(\boldsymbol{\epsilon}\)</span> is
+<p>This connects to a broader theory because it explains why the
+noise-prediction trick works and links diffusion to a whole other line
+of research. The <strong>score</strong> of a distribution is <span class="math inline">\(\nabla_\mathbf{x} \log p(\mathbf{x})\)</span> —
+the gradient of log-density, pointing in the direction of steepest
+increase in probability, i.e. “which way is more like real data from
+here.” If you knew the score everywhere, you could generate by starting
+somewhere random and repeatedly stepping uphill in density. It turns out
+the noise the network predicts is, up to a scale factor, the
+<em>negative</em> score of the noised data distribution: predicting
+<span class="math inline">\(\boldsymbol{\varepsilon}\)</span> is
 equivalent to estimating <span class="math inline">\(\nabla_\mathbf{x}
 \log p(\mathbf{x})\)</span>. So a diffusion model is a score-based model
 in disguise, and the denoising it learns is really an estimate of the
@@ -3447,12 +3453,12 @@ current noisy one and the predicted noise, then re-noises it to the next
 <p>First reconstruct the clean-image estimate:</p>
 <p><span class="math display">\[\widehat{\mathbf{x}}_0 =
 \frac{\mathbf{x}_t - \sqrt{1 -
-\bar{\alpha}_t}\,\epsilon_\theta(\mathbf{x}_t,
+\bar{\alpha}_t}\,\varepsilon_\theta(\mathbf{x}_t,
 t)}{\sqrt{\bar{\alpha}_t}}.\]</span></p>
 <p>Then re-noise that estimate at the next level down:</p>
 <p><span class="math display">\[\mathbf{x}_{t-1} =
 \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 -
-\bar{\alpha}_{t-1}}\,\epsilon_\theta(\mathbf{x}_t, t).\]</span></p>
+\bar{\alpha}_{t-1}}\,\varepsilon_\theta(\mathbf{x}_t, t).\]</span></p>
 <p>The first term uses the model’s current best guess at the fully
 denoised image; the second term pushes it partway back towards noise at
 the next level down. Because the process is deterministic given the
@@ -3468,15 +3474,15 @@ needs no separate classifier. Train a single model to do both
 conditional and unconditional denoising: feed it the conditioning <span class="math inline">\(\mathbf{c}\)</span> most of the time, but randomly
 drop <span class="math inline">\(\mathbf{c}\)</span> (replace it with a
 null token <span class="math inline">\(\emptyset\)</span>) on some
-fraction of training examples. The one network thus learns both <span class="math inline">\(\epsilon_\theta(\mathbf{x}_t, t,
-\mathbf{c})\)</span> and <span class="math inline">\(\epsilon_\theta(\mathbf{x}_t, t,
+fraction of training examples. The one network thus learns both <span class="math inline">\(\varepsilon_\theta(\mathbf{x}_t, t,
+\mathbf{c})\)</span> and <span class="math inline">\(\varepsilon_\theta(\mathbf{x}_t, t,
 \emptyset)\)</span>.</p>
 <p>At inference you combine the two predictions to amplify the influence
 of the conditioning:</p>
-<p><span class="math display">\[\tilde{\epsilon}_\theta(\mathbf{x}_t, t,
-\mathbf{c}) = \epsilon_\theta(\mathbf{x}_t, t, \emptyset) + w \cdot
-\big(\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c}) -
-\epsilon_\theta(\mathbf{x}_t, t, \emptyset)\big).\]</span></p>
+<p><span class="math display">\[\tilde{\varepsilon}_\theta(\mathbf{x}_t,
+t, \mathbf{c}) = \varepsilon_\theta(\mathbf{x}_t, t, \emptyset) + w
+\cdot \big(\varepsilon_\theta(\mathbf{x}_t, t, \mathbf{c}) -
+\varepsilon_\theta(\mathbf{x}_t, t, \emptyset)\big).\]</span></p>
 <p>The difference between the conditional and unconditional predictions
 is the direction the prompt is pulling; the guidance scale <span class="math inline">\(w\)</span> controls how hard you push in that
 direction. At <span class="math inline">\(w = 1\)</span> you get
@@ -4191,24 +4197,118 @@ model, so their learned features will not transfer; you actually have
 the data and the compute to do it; and you have a specific, articulable
 reason to believe pretrained features will fail you. If you cannot make
 all three arguments, fine-tune.</p>
-<h2 data-number="12.7" id="what-to-read-next"><span class="header-section-number">12.7</span> What to Read Next</h2>
+<h1 data-number="13" id="further-reading"><span class="header-section-number">13</span> Further Reading</h1>
 <p>This primer gives you the conceptual foundation; the papers give you
-the detail and the caveats it omits by design. The ones worth reading in
-the original are “Attention Is All You Need” (Vaswani et al., 2017) for
-the transformer, “Auto-Encoding Variational Bayes” (Kingma &amp;
-Welling, 2013) for the VAE, “Generative Adversarial Networks”
-(Goodfellow et al., 2014) for the GAN, “Denoising Diffusion
-Probabilistic Models” (Ho et al., 2020) for diffusion, <a href="https://arxiv.org/abs/2212.09748"><em>Scalable Diffusion Models
-with Transformers</em></a> for DiT, <a href="https://arxiv.org/abs/2502.09992"><em>Large Language Diffusion
-Models</em></a> for a discrete text-diffusion example, “Deep Residual
-Learning for Image Recognition” (He et al., 2015) for the residual
-connections that made very deep networks trainable, and “Language Models
-are Few-Shot Learners” (Brown et al., 2020) for GPT-3 and the in-context
-learning that came with scale. For structured courses, fast.ai is the
-best on-ramp to practical deep learning, Stanford’s cs231n is the
-reference for CNNs and computer vision, and Stanford’s cs224n covers
-NLP. Read the papers when a topic touches your work; take the courses
-when you want the guided path rather than the reference.</p>
+the detail and the caveats it omits by design.</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You
+Need</a> — the original transformer paper.</li>
+<li><a href="https://arxiv.org/abs/1312.6114">Auto-Encoding Variational
+Bayes</a> — the foundational variational autoencoder paper.</li>
+<li><a href="https://arxiv.org/abs/1406.2661">Generative Adversarial
+Nets</a> — the original generative adversarial network paper.</li>
+<li><a href="https://arxiv.org/abs/2006.11239">Denoising Diffusion
+Probabilistic Models</a> — the paper that established the DDPM
+formulation.</li>
+<li><a href="https://arxiv.org/abs/2212.09748">Scalable Diffusion Models
+with Transformers</a> — the DiT architecture discussed in the diffusion
+section.</li>
+<li><a href="https://arxiv.org/abs/2502.09992">Large Language Diffusion
+Models</a> — a discrete text-diffusion example.</li>
+<li><a href="https://arxiv.org/abs/1512.03385">Deep Residual Learning
+for Image Recognition</a> — the residual connections that made very deep
+networks trainable.</li>
+<li><a href="https://arxiv.org/abs/2005.14165">Language Models are
+Few-Shot Learners</a> — GPT-3 and the in-context learning that came with
+scale.</li>
+<li><a href="https://course.fast.ai/">fast.ai</a> — a practical course
+for applying deep learning.</li>
+<li><a href="https://cs231n.stanford.edu/">Stanford CS231n</a> — a
+reference course for convolutional networks and computer vision.</li>
+<li><a href="https://web.stanford.edu/class/cs224n/">Stanford CS224n</a>
+— a reference course for natural-language processing.</li>
+</ul>
+<h1 data-number="14" id="notation"><span class="header-section-number">14</span> Notation</h1>
+<p>The table collects the symbols used repeatedly in the derivations;
+local definitions still appear where a new equation introduces a
+variable.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\mathbf{x}\)</span></td>
+<td>Input or feature vector</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mathbf{w}\)</span></td>
+<td>Weight vector</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><span class="math inline">\(b\)</span></td>
+<td>Bias parameter</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>Activation function</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mathcal{L}\)</span></td>
+<td>Loss function</td>
+<td>Backpropagation</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\nabla \mathcal{L}\)</span></td>
+<td>Gradient of the loss</td>
+<td>Optimisation</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\eta\)</span></td>
+<td>Learning rate</td>
+<td>Gradient descent</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\varepsilon\)</span></td>
+<td>Small positive numerical-stability constant</td>
+<td>RMSProp</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mathbf{W}, \mathbf{Q}, \mathbf{K},
+\mathbf{V}\)</span></td>
+<td>Weight, query, key, and value matrices</td>
+<td>Backpropagation and attention</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\top\)</span></td>
+<td>Matrix or vector transpose</td>
+<td>Perceptron</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mathbf{x}_t\)</span></td>
+<td>Noisy sample at diffusion timestep <span class="math inline">\(t\)</span></td>
+<td>Diffusion forward process</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\boldsymbol{\varepsilon}\)</span></td>
+<td>Gaussian noise vector</td>
+<td>Variational autoencoders</td>
+</tr>
+</tbody>
+</table>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>

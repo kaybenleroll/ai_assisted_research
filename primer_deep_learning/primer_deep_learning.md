@@ -28,6 +28,8 @@ On the mathematics, you need linear algebra and calculus at the level of "knows 
 
 The arc runs from foundations to frontier. It opens with why deep learning became viable when it did — a question of data, compute, and algorithms rather than raw cleverness. It then builds the multilayer perceptron from the single neuron up, and works through how such a network is trained: backpropagation, the optimisers, and the failure modes that make training hard. With those foundations in place, it moves to the specialised architectures — convolutional, recurrent, attentional — each motivated by the structure of the data it handles. From transformers it steps up to large language models, then turns to the generative families: VAEs, GANs, and diffusion. It closes on the frameworks and the practical concerns of building real systems. Each section assumes the ones before it, so the vanishing-gradient problem defined while discussing training is the same one that explains why recurrent networks struggle with long sequences.
 
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
+
 ## Why Deep Learning Now
 
 Neural networks are not new. The perceptron dates to 1958. Backpropagation, the algorithm that trains modern networks, was understood and published in the 1980s. Multilayer networks, the universal approximation theorem, even convolutional architectures — the core ideas were all in the literature decades before deep learning "happened." So the interesting question is not who invented neural networks. It is why they sat largely dormant for thirty years and then, around 2012, abruptly became the most important technology in computing. The answer is not a single breakthrough. It is the simultaneous arrival of three ingredients that had each been missing: data, compute, and a handful of algorithmic fixes that made deep networks trainable in practice.
@@ -80,9 +82,9 @@ The neural network's founding metaphor is the biological neuron. A neuron receiv
 
 The artificial version — the perceptron — takes an input vector $\mathbf{x}$, weights each component by a corresponding weight, sums them, adds a bias, and passes the result through an activation function. Writing the weights as a vector $\mathbf{w}$ and the bias as a scalar $b$, the pre-activation is
 
-$$z = \mathbf{w}^T \mathbf{x} + b,$$
+$$z = \mathbf{w}^{\top} \mathbf{x} + b,$$
 
-and the output is $\sigma(z)$ for some activation function $\sigma$. The weights are the strengths of the incoming connections, the bias shifts the threshold, and the activation decides how the summed signal becomes an output. If $\sigma$ is a hard step function — output 1 when $z > 0$ and 0 otherwise — you have the original perceptron, a linear classifier that draws a hyperplane $\mathbf{w}^T \mathbf{x} + b = 0$ through the input space and labels everything on one side positive.
+and the output is $\sigma(z)$ for some activation function $\sigma$. The weights are the strengths of the incoming connections, the bias shifts the threshold, and the activation decides how the summed signal becomes an output. If $\sigma$ is a hard step function — output 1 when $z > 0$ and 0 otherwise — you have the original perceptron, a linear classifier that draws a hyperplane $\mathbf{w}^{\top} \mathbf{x} + b = 0$ through the input space and labels everything on one side positive.
 
 This is also where the perceptron's limitation becomes clear, and it is a limitation you can already name from classical ML: a single perceptron can only separate data that is linearly separable. The classic counterexample is XOR. Take two binary inputs and ask the network to output 1 when exactly one input is 1. Plot the four cases and you find the two positive cases sit on one diagonal and the two negatives on the other — there is no single straight line that puts the positives on one side and the negatives on the other. A single perceptron cannot represent XOR, and this is not a quirk of one toy problem. It is the general fact that one linear boundary is not enough for problems whose structure is not linearly separable. The fix is to stop using one neuron.
 
@@ -221,15 +223,15 @@ Substituting the two softmax cases: when $i = c$ this gives $-\frac{1}{\hat{y}_c
 
 Call that error vector $\boldsymbol{\delta}^{(2)} = \hat{\mathbf{y}} - \mathbf{y}$. Since $\mathbf{z}^{(2)} = \mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}$, the derivative of $\mathbf{z}^{(2)}$ with respect to $\mathbf{W}^{(2)}$ just pulls out $\mathbf{h}^{(1)}$, giving the second-layer weight gradient as an outer product:
 
-$$\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}} = \boldsymbol{\delta}^{(2)} \, \big(\mathbf{h}^{(1)}\big)^T.$$
+$$\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(2)}} = \boldsymbol{\delta}^{(2)} \, \big(\mathbf{h}^{(1)}\big)^{\top}.$$
 
 This is the structure that makes backpropagation efficient. The error $\boldsymbol{\delta}^{(2)}$ at a layer, times the input that arrived at that layer, gives the gradient for that layer's weights. Now propagate the error backward to the first layer. The chain rule sends $\boldsymbol{\delta}^{(2)}$ back through the second-layer weights and then through the first activation:
 
-$$\boldsymbol{\delta}^{(1)} = \left(\big(\mathbf{W}^{(2)}\big)^T \boldsymbol{\delta}^{(2)}\right) \odot \sigma'(\mathbf{z}^{(1)}),$$
+$$\boldsymbol{\delta}^{(1)} = \left(\big(\mathbf{W}^{(2)}\big)^{\top} \boldsymbol{\delta}^{(2)}\right) \odot \sigma'(\mathbf{z}^{(1)}),$$
 
-where $\odot$ is element-wise multiplication and $\sigma'$ is the derivative of the hidden activation. Read this carefully because it is the heart of the algorithm. The factor $(\mathbf{W}^{(2)})^T \boldsymbol{\delta}^{(2)}$ takes the error at the output layer and routes it backward through the same weights the forward pass used — each hidden unit gets blamed for the output error in proportion to how strongly it fed into it. The element-wise factor $\sigma'(\mathbf{z}^{(1)})$ then scales that blame by how responsive each hidden unit's activation was. With $\boldsymbol{\delta}^{(1)}$ in hand, the first-layer weight gradient has the identical outer-product form:
+where $\odot$ is element-wise multiplication and $\sigma'$ is the derivative of the hidden activation. Read this carefully because it is the heart of the algorithm. The factor $(\mathbf{W}^{(2)})^{\top} \boldsymbol{\delta}^{(2)}$ takes the error at the output layer and routes it backward through the same weights the forward pass used — each hidden unit gets blamed for the output error in proportion to how strongly it fed into it. The element-wise factor $\sigma'(\mathbf{z}^{(1)})$ then scales that blame by how responsive each hidden unit's activation was. With $\boldsymbol{\delta}^{(1)}$ in hand, the first-layer weight gradient has the identical outer-product form:
 
-$$\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}} = \boldsymbol{\delta}^{(1)} \, \mathbf{x}^T.$$
+$$\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(1)}} = \boldsymbol{\delta}^{(1)} \, \mathbf{x}^{\top}.$$
 
 The pattern is now visible and it generalises to any depth: compute the error at the output, then repeatedly push it backward one layer at a time by multiplying with the transposed weight matrix and the local activation derivative, reading off each layer's weight gradient as the outer product of that layer's error with that layer's input. The same operation, repeated. That repetition — and the fact that it reuses the forward pass's intermediate values — is why backpropagation computes the gradient for the entire network at roughly the cost of one extra forward pass, rather than the catastrophic cost of perturbing each weight individually.
 
@@ -261,9 +263,9 @@ The coefficient $\beta$ (typically 0.9) controls how much past motion persists. 
 
 **RMSProp** addresses a different problem — that one global learning rate is wrong when different weights need different step sizes. It keeps a running average of the squared gradient for each weight and divides the step by the square root of that average:
 
-$$\mathbf{s} \leftarrow \rho \mathbf{s} + (1 - \rho)(\nabla \mathcal{L})^2, \qquad \mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\mathbf{s} + \epsilon}} \, \nabla \mathcal{L},$$
+$$\mathbf{s} \leftarrow \rho \mathbf{s} + (1 - \rho)(\nabla \mathcal{L})^2, \qquad \mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\mathbf{s} + \varepsilon}} \, \nabla \mathcal{L},$$
 
-with the squaring and division applied element-wise and $\epsilon$ a small constant guarding against division by zero. The effect is a per-weight adaptive learning rate: weights that have seen large gradients get smaller steps, weights that have seen small gradients get larger steps, so the effective rate is normalised across the network.
+with the squaring and division applied element-wise and $\varepsilon$ a small constant guarding against division by zero. The effect is a per-weight adaptive learning rate: weights that have seen large gradients get smaller steps, weights that have seen small gradients get larger steps, so the effective rate is normalised across the network.
 
 **Adam** combines both ideas, and it is the default optimiser for most of deep learning today. It maintains a momentum-style running average of the gradient ($\mathbf{m}$, the first moment) and an RMSProp-style running average of the squared gradient ($\mathbf{v}$, the second moment — note: this $\mathbf{v}$ is Adam's internal bookkeeping variable, not the momentum velocity from the previous subsection, despite the shared letter):
 
@@ -275,9 +277,9 @@ $$\hat{\mathbf{m}} = \frac{\mathbf{m}}{1 - \beta_1^t}, \qquad \hat{\mathbf{v}} =
 
 The update then uses the bias-corrected momentum, scaled by the bias-corrected adaptive rate:
 
-$$\mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \epsilon} \, \hat{\mathbf{m}}.$$
+$$\mathbf{w} \leftarrow \mathbf{w} - \frac{\eta}{\sqrt{\hat{\mathbf{v}}} + \varepsilon} \, \hat{\mathbf{m}}.$$
 
-The typical defaults — $\beta_1 = 0.9,$ $\beta_2 = 0.999,$ $\epsilon = 10^{-8}$ — work across an enormous range of problems with little tuning, and that robustness is why Adam is the default. It gives you momentum's acceleration and RMSProp's per-weight adaptation in one optimiser, and it converges quickly and reliably on the kinds of loss surfaces deep networks produce. When in doubt, reach for Adam.
+The typical defaults — $\beta_1 = 0.9,$ $\beta_2 = 0.999,$ $\varepsilon = 10^{-8}$ — work across an enormous range of problems with little tuning, and that robustness is why Adam is the default. It gives you momentum's acceleration and RMSProp's per-weight adaptation in one optimiser, and it converges quickly and reliably on the kinds of loss surfaces deep networks produce. When in doubt, reach for Adam.
 
 ### Weight Initialisation
 
@@ -305,7 +307,7 @@ Early stopping is the simplest regulariser of all and you already use it in spir
 
 Batch normalisation is one of the techniques that made very deep networks practical, and it works by normalising the activations as they flow through the network. For a mini-batch $\mathcal{B} = \{x_1, \ldots, x_m\}$ of pre-activation values at some layer, it computes the batch mean $\mu_{\mathcal{B}}$ and variance $\sigma^2_{\mathcal{B}}$, standardises each value, and then applies a learnable scale and shift:
 
-$$\hat{x}_i = \frac{x_i - \mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}} + \epsilon}}, \qquad y_i = \gamma \hat{x}_i + \beta.$$
+$$\hat{x}_i = \frac{x_i - \mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}} + \varepsilon}}, \qquad y_i = \gamma \hat{x}_i + \beta.$$
 
 The standardisation forces the activations to have zero mean and unit variance across the batch; the learnable parameters $\gamma$ and $\beta$ then let the network rescale and re-shift them to whatever distribution actually serves the task, so normalisation does not throw away representational power. Three benefits follow, though the first is more contested than the original paper let on. The 2015 paper's own explanation was that batch norm counters internal covariate shift — the way the distribution of inputs to a deep layer keeps shifting as the layers below it update — by pinning that distribution to a stable scale, so each layer trains against a more consistent target. Later work (Santurkar et al., 2018) found batch norm still works even when covariate shift is deliberately reinjected, and argued the real benefit is a smoother optimisation landscape — smaller, more predictable gradients that let you take bigger, safer steps. The question of exactly why batch norm helps is not fully settled; treat the covariate-shift story as the traditional intuition rather than a proven mechanism. Second, it makes training far less sensitive to the learning rate, because the normalisation prevents activations from drifting into extreme ranges, letting you use larger rates and train faster. Third, because the batch statistics inject a little noise (each example is normalised using its randomly-assembled batch), it has a mild regularising effect that sometimes reduces the need for dropout.
 
@@ -671,13 +673,13 @@ A clean mental model for attention is a soft dictionary lookup. An ordinary dict
 
 The transformer's specific form of attention packs all the queries, keys, and values into matrices — $\mathbf{Q}, \mathbf{K}, \mathbf{V}$, one row per position — and computes them all at once. First form the scaled score matrix:
 
-$$\mathbf{S} = \frac{\mathbf{Q}\mathbf{K}^{T}}{\sqrt{d_k}}.$$
+$$\mathbf{S} = \frac{\mathbf{Q}\mathbf{K}^{\top}}{\sqrt{d_k}}.$$
 
 Then turn each row of scores into weights and use those weights to average the values:
 
 $$\operatorname{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{softmax}(\mathbf{S})\mathbf{V}$$
 
-Walk through it piece by piece. The product $\mathbf{Q}\mathbf{K}^T$ computes a similarity score for every query against every key — entry $(i, j)$ is the dot product of query $i$ with key $j$, so the result is a matrix of shape (number of queries × number of keys). A large dot product means the query and key point in similar directions, signalling relevance. Dividing by $\sqrt{d_k}$, where $d_k$ is the dimension of the key vectors, is the "scaled" part, and it matters more than it looks. As $d_k$ grows, dot products are sums of more terms and their variance grows with $d_k$, so without the scaling the scores would get large in magnitude, and large inputs push the softmax into its saturated regime where one entry is near 1 and the rest near 0. In saturation the softmax's gradients are tiny, and learning stalls. Dividing by $\sqrt{d_k}$ rescales the scores so their variance stays around 1, keeping the softmax in a healthy, well-gradiented range. The softmax then converts each row of scores into a probability distribution over the keys — non-negative weights summing to 1. Finally multiplying by $\mathbf{V}$ takes, for each query, the weighted average of the value vectors using those attention weights. Every operation here is smooth and differentiable, so gradients flow cleanly back through the weights to the queries, keys, and values.
+Walk through it piece by piece. The product $\mathbf{Q}\mathbf{K}^{\top}$ computes a similarity score for every query against every key — entry $(i, j)$ is the dot product of query $i$ with key $j$, so the result is a matrix of shape (number of queries × number of keys). A large dot product means the query and key point in similar directions, signalling relevance. Dividing by $\sqrt{d_k}$, where $d_k$ is the dimension of the key vectors, is the "scaled" part, and it matters more than it looks. As $d_k$ grows, dot products are sums of more terms and their variance grows with $d_k$, so without the scaling the scores would get large in magnitude, and large inputs push the softmax into its saturated regime where one entry is near 1 and the rest near 0. In saturation the softmax's gradients are tiny, and learning stalls. Dividing by $\sqrt{d_k}$ rescales the scores so their variance stays around 1, keeping the softmax in a healthy, well-gradiented range. The softmax then converts each row of scores into a probability distribution over the keys — non-negative weights summing to 1. Finally multiplying by $\mathbf{V}$ takes, for each query, the weighted average of the value vectors using those attention weights. Every operation here is smooth and differentiable, so gradients flow cleanly back through the weights to the queries, keys, and values.
 
 It is worth distinguishing two uses of this same machinery. In **self-attention**, the queries, keys, and values all come from the same sequence — each token attends to every token in its own sequence, including itself, to build a context-aware representation. In **cross-attention**, the queries come from one sequence and the keys and values from another — this is how a decoder attends over an encoder's output, which is exactly the bottleneck-removing mechanism we started with.
 
@@ -750,9 +752,9 @@ Every sub-layer is wrapped in a residual connection and a layer normalisation, i
 
 Transformers normalise with layer normalisation rather than the batch normalisation of §4, and the difference is which dimension you normalise over. Batch norm computes its mean and variance over the batch dimension — across all the examples in a mini-batch, for each feature. Layer norm instead computes them over the feature dimension, independently for each single example:
 
-$$\operatorname{LayerNorm}(\mathbf{x}) = \gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta$$
+$$\operatorname{LayerNorm}(\mathbf{x}) = \gamma \odot \frac{\mathbf{x} - \mu}{\sqrt{\sigma^2 + \varepsilon}} + \beta$$
 
-where $\mu$ and $\sigma$ are the mean and standard deviation of the features of that one example, $\epsilon$ is a small constant for numerical stability, and $\gamma,$ $\beta$ are learned per-feature scale and shift. Normalising per-example is a much better fit for sequence models. Batch norm's statistics depend on the other examples in the batch, which is awkward when sequences have different lengths and when batches are small, and it behaves differently between training and inference because it must track running statistics. Layer norm sidesteps all of that — each token is normalised using only its own features, so it is independent of batch size, length, and the train/inference distinction.
+where $\mu$ and $\sigma$ are the mean and standard deviation of the features of that one example, $\varepsilon$ is a small constant for numerical stability, and $\gamma,$ $\beta$ are learned per-feature scale and shift. Normalising per-example is a much better fit for sequence models. Batch norm's statistics depend on the other examples in the batch, which is awkward when sequences have different lengths and when batches are small, and it behaves differently between training and inference because it must track running statistics. Layer norm sidesteps all of that — each token is normalised using only its own features, so it is independent of batch size, length, and the train/inference distinction.
 
 One detail of placement is worth knowing, because it changed after the original paper. The 2017 transformer used **post-LN**: normalise *after* adding the residual, as written above. Post-LN turned out to be finicky to train at depth, often needing careful learning-rate warm-up. Modern practice has largely shifted to **pre-LN**, applying the norm to the input of each sub-layer *before* attention or the FFN, with the form $\mathbf{x} + \operatorname{Sublayer}(\operatorname{LayerNorm}(\mathbf{x}))$. Pre-LN keeps the residual path completely clean — nothing normalises the signal travelling down the skip connections — which makes deep transformers markedly more stable to train.
 
@@ -762,7 +764,7 @@ Two model families took the transformer in different directions, and the contras
 
 **BERT** — Bidirectional Encoder Representations from Transformers (Devlin et al., 2018) — keeps only the encoder stack. Its training objective is the masked language model (MLM): take a sentence, randomly hide about 15% of the tokens, and train the model to predict the hidden tokens from everything around them. Because it is an encoder with unmasked self-attention, each token attends to the full sentence — every other token to its left *and* its right. That bidirectionality is the whole point: to fill in a blank well you want context from both sides, and BERT's representations are built from both. This makes BERT strong at tasks that require *understanding* a complete piece of text — classification, named-entity recognition, extractive question answering — where you have the whole input available and want a rich representation of it. What BERT cannot do naturally is generate text left to right, because it was never trained to predict the next token from only the past.
 
-**GPT** — Generative Pre-trained Transformer (Radford et al., 2018) — keeps only the decoder stack, and trains on the causal language model objective: predict the next token given all the tokens before it. This is autoregressive generation, and it is what makes GPT a text generator — completion, summarisation, dialogue all reduce to repeatedly predicting the next token and feeding it back in. The catch is that during training the model must never see the future tokens it is supposed to predict, which is enforced by *causal masking*. Inside the self-attention, after computing the score matrix $\mathbf{Q}\mathbf{K}^T$, you set every entry in the upper triangle — every score where a query at position $t$ would attend to a key at a later position $t' > t$ — to $-\infty$ before the softmax. Softmax turns $-\infty$ into a weight of zero, so token $t$ can attend only to itself and the tokens before it, never ahead. This is why GPT is unidirectional: it sees only left context, which is exactly the constraint that makes left-to-right generation well-defined.
+**GPT** — Generative Pre-trained Transformer (Radford et al., 2018) — keeps only the decoder stack, and trains on the causal language model objective: predict the next token given all the tokens before it. This is autoregressive generation, and it is what makes GPT a text generator — completion, summarisation, dialogue all reduce to repeatedly predicting the next token and feeding it back in. The catch is that during training the model must never see the future tokens it is supposed to predict, which is enforced by *causal masking*. Inside the self-attention, after computing the score matrix $\mathbf{Q}\mathbf{K}^{\top}$, you set every entry in the upper triangle — every score where a query at position $t$ would attend to a key at a later position $t' > t$ — to $-\infty$ before the softmax. Softmax turns $-\infty$ into a weight of zero, so token $t$ can attend only to itself and the tokens before it, never ahead. This is why GPT is unidirectional: it sees only left context, which is exactly the constraint that makes left-to-right generation well-defined.
 
 The summary is clean. BERT is an encoder trained bidirectionally for understanding; GPT is a decoder trained causally for generation. The same transformer, pointed at two different objectives, gives you the two dominant families of modern language models — and §8 picks up the GPT line to build out large language models in full.
 
@@ -987,15 +989,15 @@ a sum over latent dimensions of a per-dimension penalty. Each term is minimised 
 
 There is one obstacle left, and it is in the reconstruction term. To estimate $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$ you have to sample $\mathbf{z}$ from $q_\phi(\mathbf{z} \mid \mathbf{x})$ and then decode. But sampling is not a differentiable operation. You cannot backpropagate through a random draw — there is no derivative of "drew this particular sample" with respect to the parameters of the distribution it was drawn from. And $\phi$, the encoder's parameters, are upstream of exactly that draw. Without a gradient path through the sample, the encoder cannot learn.
 
-The **reparameterisation trick** moves the randomness out of the path that needs gradients. Instead of drawing $\mathbf{z}$ directly from $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(\boldsymbol{\sigma}^2))$, draw a fixed-distribution noise vector $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ — which does not depend on $\phi$ at all — and then compute
+The **reparameterisation trick** moves the randomness out of the path that needs gradients. Instead of drawing $\mathbf{z}$ directly from $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(\boldsymbol{\sigma}^2))$, draw a fixed-distribution noise vector $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ — which does not depend on $\phi$ at all — and then compute
 
-$$\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}.$$
+$$\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}.$$
 
-This produces a sample from exactly the right distribution, but now the stochastic part lives entirely in $\boldsymbol{\epsilon}$, which sits outside the computational graph, while the path from $\phi$ to $\mathbf{z}$ — through $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ — is a chain of ordinary differentiable operations. Gradients flow straight through $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ back into the encoder. The randomness is still there, sample to sample, but it no longer blocks the gradient. This single trick is what makes the VAE trainable end-to-end by gradient descent, and the same idea reappears whenever you need to differentiate through a sampling step.
+This produces a sample from exactly the right distribution, but now the stochastic part lives entirely in $\boldsymbol{\varepsilon}$, which sits outside the computational graph, while the path from $\phi$ to $\mathbf{z}$ — through $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ — is a chain of ordinary differentiable operations. Gradients flow straight through $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ back into the encoder. The randomness is still there, sample to sample, but it no longer blocks the gradient. This single trick is what makes the VAE trainable end-to-end by gradient descent, and the same idea reappears whenever you need to differentiate through a sampling step.
 
 ### Putting It Together
 
-In practice the encoder is built to output $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$ rather than $\boldsymbol{\sigma}$ directly — predicting the log-variance keeps the value numerically stable and unconstrained in sign, since variance must be positive but a log can range freely. A training step then runs: encode $\mathbf{x}$ to get $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$, draw $\boldsymbol{\epsilon}$, form $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}$, decode $\mathbf{z}$ to a reconstruction, compute the ELBO (reconstruction term plus the closed-form KL), and backpropagate.
+In practice the encoder is built to output $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$ rather than $\boldsymbol{\sigma}$ directly — predicting the log-variance keeps the value numerically stable and unconstrained in sign, since variance must be positive but a log can range freely. A training step then runs: encode $\mathbf{x}$ to get $\boldsymbol{\mu}$ and $\log \boldsymbol{\sigma}^2$, draw $\boldsymbol{\varepsilon}$, form $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}$, decode $\mathbf{z}$ to a reconstruction, compute the ELBO (reconstruction term plus the closed-form KL), and backpropagate.
 
 ```python
 # One VAE training step, schematically (PyTorch-style)
@@ -1091,17 +1093,17 @@ $$q(\mathbf{x}_t \mid \mathbf{x}_0) = \mathcal{N}\big(\mathbf{x}_t;\, \sqrt{\bar
 
 So you can jump straight to any noise level in one shot:
 
-$$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\,\boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}).$$
+$$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\,\boldsymbol{\varepsilon}, \qquad \boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}).$$
 
-This is the workhorse of training. To make one training example you pick a random timestep $t,$ draw one noise vector $\boldsymbol{\epsilon},$ and produce $\mathbf{x}_t$ directly — no loop. As $t$ runs from 1 to $T,$ $\bar{\alpha}_t$ shrinks from near 1 to near 0, so $\mathbf{x}_t$ slides smoothly from "the original image" to "pure noise", and you can land anywhere on that path instantly.
+This is the workhorse of training. To make one training example you pick a random timestep $t,$ draw one noise vector $\boldsymbol{\varepsilon},$ and produce $\mathbf{x}_t$ directly — no loop. As $t$ runs from 1 to $T,$ $\bar{\alpha}_t$ shrinks from near 1 to near 0, so $\mathbf{x}_t$ slides smoothly from "the original image" to "pure noise", and you can land anywhere on that path instantly.
 
 ### The Reverse Process
 
-To generate, you want to run the chain backwards: given a noisy $\mathbf{x}_t$, produce a slightly less noisy $\mathbf{x}_{t-1}$. The true reverse conditional $p(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$ is intractable — computing it exactly would require knowing the full data distribution, which is the very thing we're trying to learn. So you approximate it with a network. The key parameterisation in DDPM (Ho et al., 2020) is not to predict the denoised image directly but to predict the **noise** that was added: a network $\epsilon_\theta(\mathbf{x}_t, t)$ takes the noisy image and the timestep and outputs its estimate of the $\boldsymbol{\epsilon}$ that produced it. Since the forward equation tells you $\mathbf{x}_t$ is a known mix of $\mathbf{x}_0$ and $\boldsymbol{\epsilon}$, knowing $\boldsymbol{\epsilon}$ is equivalent to knowing $\mathbf{x}_0$ — predicting the noise and predicting the clean image are two views of the same thing, and noise prediction trains more stably.
+To generate, you want to run the chain backwards: given a noisy $\mathbf{x}_t$, produce a slightly less noisy $\mathbf{x}_{t-1}$. The true reverse conditional $p(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$ is intractable — computing it exactly would require knowing the full data distribution, which is the very thing we're trying to learn. So you approximate it with a network. The key parameterisation in DDPM (Ho et al., 2020) is not to predict the denoised image directly but to predict the **noise** that was added: a network $\varepsilon_\theta(\mathbf{x}_t, t)$ takes the noisy image and the timestep and outputs its estimate of the $\boldsymbol{\varepsilon}$ that produced it. Since the forward equation tells you $\mathbf{x}_t$ is a known mix of $\mathbf{x}_0$ and $\boldsymbol{\varepsilon}$, knowing $\boldsymbol{\varepsilon}$ is equivalent to knowing $\mathbf{x}_0$ — predicting the noise and predicting the clean image are two views of the same thing, and noise prediction trains more stably.
 
 The training objective that falls out of this is remarkably plain — strip away the theoretical weighting and what remains is a mean-squared error on noise:
 
-$$\mathcal{L}_{\mathrm{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{x}_t, t)\|^2\right].$$
+$$\mathcal{L}_{\mathrm{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\varepsilon}}\!\left[\|\boldsymbol{\varepsilon} - \varepsilon_\theta(\mathbf{x}_t, t)\|^2\right].$$
 
 Sample an image, sample a timestep, sample noise, form $\mathbf{x}_t$ with the one-shot formula, and train the network to recover the noise you added. That is the entire training loop, and its simplicity — no adversary, no balancing act, just a regression — is a large part of why diffusion training is so stable compared to GANs.
 
@@ -1117,13 +1119,13 @@ loss.backward()
 
 At generation time you reverse the chain for real. Start from pure noise $\mathbf{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ and step down through $t = T, T-1, \ldots, 1$, at each step using the predicted noise to estimate where to move:
 
-$$\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}}\,\epsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t \mathbf{z}.$$
+$$\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}}\,\varepsilon_\theta(\mathbf{x}_t, t)\right) + \sigma_t \mathbf{z}.$$
 
 The bracketed part removes the network's estimate of the current step's noise; the trailing $\sigma_t \mathbf{z}$ adds a small amount of fresh randomness back in, which keeps the reverse process a proper stochastic sampler rather than a deterministic collapse. Run all the way down and $\mathbf{x}_0$ is your generated image.
 
 ### Score Matching, Briefly
 
-It is worth knowing that this connects to a broader theory, because it explains why the noise-prediction trick works and links diffusion to a whole other line of research. The **score** of a distribution is $\nabla_\mathbf{x} \log p(\mathbf{x})$ — the gradient of log-density, pointing in the direction of steepest increase in probability, i.e. "which way is more like real data from here." If you knew the score everywhere, you could generate by starting somewhere random and repeatedly stepping uphill in density. It turns out the noise the network predicts is, up to a scale factor, the *negative* score of the noised data distribution: predicting $\boldsymbol{\epsilon}$ is equivalent to estimating $\nabla_\mathbf{x} \log p(\mathbf{x})$. So a diffusion model is a score-based model in disguise, and the denoising it learns is really an estimate of the direction towards higher data density at each noise level. This places diffusion inside the family of energy-based and score-based generative models, and the equivalence is more than cosmetic — it is where a lot of the theory and the faster samplers come from. A close relative worth a name-check is **flow matching**, which trains a network to regress a velocity field along a chosen path from noise to data rather than a noise-prediction target. Sampling then integrates that learned vector field from the noise endpoint towards the data endpoint. The path and numerical solver become part of the design, so flow matching is related to diffusion but is not simply “diffusion with a different name”; it offers another route to fast, high-quality continuous generation.
+This connects to a broader theory because it explains why the noise-prediction trick works and links diffusion to a whole other line of research. The **score** of a distribution is $\nabla_\mathbf{x} \log p(\mathbf{x})$ — the gradient of log-density, pointing in the direction of steepest increase in probability, i.e. "which way is more like real data from here." If you knew the score everywhere, you could generate by starting somewhere random and repeatedly stepping uphill in density. It turns out the noise the network predicts is, up to a scale factor, the *negative* score of the noised data distribution: predicting $\boldsymbol{\varepsilon}$ is equivalent to estimating $\nabla_\mathbf{x} \log p(\mathbf{x})$. So a diffusion model is a score-based model in disguise, and the denoising it learns is really an estimate of the direction towards higher data density at each noise level. This places diffusion inside the family of energy-based and score-based generative models, and the equivalence is more than cosmetic — it is where a lot of the theory and the faster samplers come from. A close relative worth a name-check is **flow matching**, which trains a network to regress a velocity field along a chosen path from noise to data rather than a noise-prediction target. Sampling then integrates that learned vector field from the noise endpoint towards the data endpoint. The path and numerical solver become part of the design, so flow matching is related to diffusion but is not simply “diffusion with a different name”; it offers another route to fast, high-quality continuous generation.
 
 ### DDIM: Fewer Steps
 
@@ -1131,21 +1133,21 @@ The DDPM sampler has one serious practical drawback: it wants on the order of 10
 
 First reconstruct the clean-image estimate:
 
-$$\widehat{\mathbf{x}}_0 = \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\,\epsilon_\theta(\mathbf{x}_t, t)}{\sqrt{\bar{\alpha}_t}}.$$
+$$\widehat{\mathbf{x}}_0 = \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\,\varepsilon_\theta(\mathbf{x}_t, t)}{\sqrt{\bar{\alpha}_t}}.$$
 
 Then re-noise that estimate at the next level down:
 
-$$\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 - \bar{\alpha}_{t-1}}\,\epsilon_\theta(\mathbf{x}_t, t).$$
+$$\mathbf{x}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\,\widehat{\mathbf{x}}_0 + \sqrt{1 - \bar{\alpha}_{t-1}}\,\varepsilon_\theta(\mathbf{x}_t, t).$$
 
 The first term uses the model's current best guess at the fully denoised image; the second term pushes it partway back towards noise at the next level down. Because the process is deterministic given the starting noise, DDIM also gives you a clean latent-to-image map, which makes interpolation and editing in noise space possible — the same starting noise always produces the same image.
 
 ### Classifier-Free Guidance
 
-Everything so far generates unconditionally — it draws *some* image from the learned distribution, with no way to ask for a specific one. To condition on a class label or a text prompt $\mathbf{c}$, the trick that won is **classifier-free guidance**, and it is elegant because it needs no separate classifier. Train a single model to do both conditional and unconditional denoising: feed it the conditioning $\mathbf{c}$ most of the time, but randomly drop $\mathbf{c}$ (replace it with a null token $\emptyset$) on some fraction of training examples. The one network thus learns both $\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c})$ and $\epsilon_\theta(\mathbf{x}_t, t, \emptyset)$.
+Everything so far generates unconditionally — it draws *some* image from the learned distribution, with no way to ask for a specific one. To condition on a class label or a text prompt $\mathbf{c}$, the trick that won is **classifier-free guidance**, and it is elegant because it needs no separate classifier. Train a single model to do both conditional and unconditional denoising: feed it the conditioning $\mathbf{c}$ most of the time, but randomly drop $\mathbf{c}$ (replace it with a null token $\emptyset$) on some fraction of training examples. The one network thus learns both $\varepsilon_\theta(\mathbf{x}_t, t, \mathbf{c})$ and $\varepsilon_\theta(\mathbf{x}_t, t, \emptyset)$.
 
 At inference you combine the two predictions to amplify the influence of the conditioning:
 
-$$\tilde{\epsilon}_\theta(\mathbf{x}_t, t, \mathbf{c}) = \epsilon_\theta(\mathbf{x}_t, t, \emptyset) + w \cdot \big(\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c}) - \epsilon_\theta(\mathbf{x}_t, t, \emptyset)\big).$$
+$$\tilde{\varepsilon}_\theta(\mathbf{x}_t, t, \mathbf{c}) = \varepsilon_\theta(\mathbf{x}_t, t, \emptyset) + w \cdot \big(\varepsilon_\theta(\mathbf{x}_t, t, \mathbf{c}) - \varepsilon_\theta(\mathbf{x}_t, t, \emptyset)\big).$$
 
 The difference between the conditional and unconditional predictions is the direction the prompt is pulling; the guidance scale $w$ controls how hard you push in that direction. At $w = 1$ you get ordinary conditional generation. Crank $w$ above 1 and you exaggerate the prompt's influence, producing images that adhere more tightly to the conditioning — but at a cost: higher $w$ trades diversity for fidelity to the prompt, so push it too far and outputs become over-saturated and samey. This single dial is the mechanism behind the prompt control in DALL-E 2, Stable Diffusion, and Imagen, and tuning it is most of what "guidance scale" means in those tools.
 
@@ -1361,6 +1363,37 @@ Read down the right-hand column and the practical lesson is obvious: the gap bet
 
 Which leads to the single most useful piece of advice in this primer: for almost every real application, start with a pretrained model. The compute and data required to train a competitive model from scratch are out of reach for most projects, and the table above is why. The practical skill in modern deep learning is not pre-training — it is fine-tuning a pretrained model on your task and, increasingly, prompting one well. Train from scratch only when three things are all true: your domain is genuinely out-of-distribution from every available pretrained model, so their learned features will not transfer; you actually have the data and the compute to do it; and you have a specific, articulable reason to believe pretrained features will fail you. If you cannot make all three arguments, fine-tune.
 
-### What to Read Next
+## Further Reading
 
-This primer gives you the conceptual foundation; the papers give you the detail and the caveats it omits by design. The ones worth reading in the original are "Attention Is All You Need" (Vaswani et al., 2017) for the transformer, "Auto-Encoding Variational Bayes" (Kingma & Welling, 2013) for the VAE, "Generative Adversarial Networks" (Goodfellow et al., 2014) for the GAN, "Denoising Diffusion Probabilistic Models" (Ho et al., 2020) for diffusion, [*Scalable Diffusion Models with Transformers*](https://arxiv.org/abs/2212.09748) for DiT, [*Large Language Diffusion Models*](https://arxiv.org/abs/2502.09992) for a discrete text-diffusion example, "Deep Residual Learning for Image Recognition" (He et al., 2015) for the residual connections that made very deep networks trainable, and "Language Models are Few-Shot Learners" (Brown et al., 2020) for GPT-3 and the in-context learning that came with scale. For structured courses, fast.ai is the best on-ramp to practical deep learning, Stanford's cs231n is the reference for CNNs and computer vision, and Stanford's cs224n covers NLP. Read the papers when a topic touches your work; take the courses when you want the guided path rather than the reference.
+This primer gives you the conceptual foundation; the papers give you the detail and the caveats it omits by design.
+
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762) — the original transformer paper.
+- [Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114) — the foundational variational autoencoder paper.
+- [Generative Adversarial Nets](https://arxiv.org/abs/1406.2661) — the original generative adversarial network paper.
+- [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) — the paper that established the DDPM formulation.
+- [Scalable Diffusion Models with Transformers](https://arxiv.org/abs/2212.09748) — the DiT architecture discussed in the diffusion section.
+- [Large Language Diffusion Models](https://arxiv.org/abs/2502.09992) — a discrete text-diffusion example.
+- [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385) — the residual connections that made very deep networks trainable.
+- [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) — GPT-3 and the in-context learning that came with scale.
+- [fast.ai](https://course.fast.ai/) — a practical course for applying deep learning.
+- [Stanford CS231n](https://cs231n.stanford.edu/) — a reference course for convolutional networks and computer vision.
+- [Stanford CS224n](https://web.stanford.edu/class/cs224n/) — a reference course for natural-language processing.
+
+## Notation
+
+The table collects the symbols used repeatedly in the derivations; local definitions still appear where a new equation introduces a variable.
+
+| Symbol | Meaning | First Use |
+|---|---|---|
+| $\mathbf{x}$ | Input or feature vector | Perceptron |
+| $\mathbf{w}$ | Weight vector | Perceptron |
+| $b$ | Bias parameter | Perceptron |
+| $\sigma$ | Activation function | Perceptron |
+| $\mathcal{L}$ | Loss function | Backpropagation |
+| $\nabla \mathcal{L}$ | Gradient of the loss | Optimisation |
+| $\eta$ | Learning rate | Gradient descent |
+| $\varepsilon$ | Small positive numerical-stability constant | RMSProp |
+| $\mathbf{W}, \mathbf{Q}, \mathbf{K}, \mathbf{V}$ | Weight, query, key, and value matrices | Backpropagation and attention |
+| $\top$ | Matrix or vector transpose | Perceptron |
+| $\mathbf{x}_t$ | Noisy sample at diffusion timestep $t$ | Diffusion forward process |
+| $\boldsymbol{\varepsilon}$ | Gaussian noise vector | Variational autoencoders |
