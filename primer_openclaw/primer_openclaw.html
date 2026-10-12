@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">OpenClaw: A Comprehensive, Podman-First
 Guide</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -698,7 +698,7 @@ Containment</a></li>
 <li><a href="#backup" id="toc-backup"><span class="toc-section-number">12.2</span> Backup</a></li>
 <li><a href="#validate-after-restore" id="toc-validate-after-restore"><span class="toc-section-number">12.3</span> Validate After Restore</a></li>
 </ul></li>
-<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">13</span> Reference Links</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">13</span> Further Reading</a></li>
 <li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">14</span> Closing Perspective</a></li>
 </ul></div>
 
@@ -709,8 +709,8 @@ Containment</a></li>
     <main class="content">
       <div class="content-inner">
 <hr />
-<p><em>Long-form edition. Runtime requirements rechecked against
-official documentation.</em></p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <hr />
 <h1 data-number="1" id="why-this-primer-exists"><span class="header-section-number">1</span> Why This Primer Exists</h1>
 <p>OpenClaw is easy to describe badly. Calling it a chatbot hides the
@@ -870,7 +870,8 @@ Mental Model</h1>
 <li><strong>Channel and node adapters</strong> receive messages, media,
 or device events.</li>
 <li><strong>The Gateway</strong> owns routing, sessions, provider
-connections, WebSocket RPC, and lifecycle events.</li>
+connections, WebSocket remote procedure call (RPC), and lifecycle
+events.</li>
 <li><strong>The agent runtime</strong> builds context, calls the
 selected model, interprets tool requests, and produces replies.</li>
 <li><strong>Providers and model services</strong> generate model output
@@ -925,8 +926,9 @@ needed, and a separate tool sandbox policy for non-main sessions.</p>
 <h2 data-number="6.2" id="prerequisites"><span class="header-section-number">6.2</span> Prerequisites</h2>
 <p>You need rootless Podman and the OpenClaw CLI on the host. As checked
 on 7 October 2026, the <a href="https://docs.openclaw.ai/install/node">Node guide</a> requires
-Node 24.16+ or 26.1+ with a WAL-reset-safe linked SQLite library; Node
-26 is recommended. Node 22, 23, and 25 are unsupported. The <a href="https://docs.openclaw.ai/install/node-compatibility">compatibility
+Node 24.16+ or 26.1+ with a write-ahead logging (WAL)-reset-safe linked
+SQLite library; Node 26 is recommended. Node 22, 23, and 25 are
+unsupported. The <a href="https://docs.openclaw.ai/install/node-compatibility">compatibility
 guide</a> explains the SQLite safety checks: a version number alone is
 insufficient for a distro build linked to a different SQLite library.
 Upgrade the runtime before updating OpenClaw. The installer can
@@ -1028,8 +1030,8 @@ mention requirements in groups, and no public port exposure.</p>
 <p>The Control UI is useful for local administration because it gives
 you a direct view of sessions and configuration. Remote access should
 use an explicit access layer such as Tailscale or an authenticated
-proxy. A port that is reachable from a LAN is not “local” merely because
-the agent is personal.</p>
+proxy. A port that is reachable from a local-area network (LAN) is not
+“local” merely because the agent is personal.</p>
 <p>Sessions are the unit of conversational state. Main, group, channel,
 and agent-specific sessions can have different routing and sandbox
 behaviour. Do not infer that two messages share context because they
@@ -1102,7 +1104,8 @@ before trusting the integration.</p>
 <li>tool-call schema reliability;</li>
 <li>context window under accumulated tool results;</li>
 <li>first-token latency and long-context prefill;</li>
-<li>memory and VRAM pressure during key-value-cache growth;</li>
+<li>memory and video random-access memory (VRAM) pressure during
+key-value-cache growth;</li>
 <li>recovery behaviour when the model service restarts.</li>
 </ul>
 <p>Do not promise a fixed VRAM number for a model family. Quantisation,
@@ -1111,10 +1114,11 @@ the footprint. Measure the exact model and settings on the hardware you
 intend to operate.</p>
 <h2 data-number="8.4" id="constrained-hardware"><span class="header-section-number">8.4</span> Constrained Hardware</h2>
 <p>Partial GPU offload can make a local model usable on a laptop that
-cannot hold the full model in VRAM. The tradeoff is lower throughput and
-a more complicated memory budget. The key-value cache can still consume
-significant VRAM as context grows even when model weights are split
-between GPU and CPU RAM.</p>
+cannot hold the full model in VRAM. The trade-off is lower throughput
+and a more complicated memory budget. The key-value cache can still
+consume significant VRAM as context grows even when model weights are
+split between GPU and central processing unit (CPU) random-access memory
+(RAM).</p>
 <p>Start with a modest context window, measure memory during a long tool
 loop, and increase it only when the workload requires it. A nominal “64K
 context” setting is not free: it changes both latency and memory
@@ -1180,8 +1184,8 @@ cron, sessions, logs, and <code>state.db</code></td>
 </tr>
 <tr>
 <td>Execution boundary</td>
-<td>Sandbox is off by default; Docker, Podman, SSH, or OpenShell can be
-selected for tools</td>
+<td>Sandbox is off by default; Docker, Podman, Secure Shell (SSH), or
+OpenShell can be selected for tools</td>
 <td>Local, Docker, SSH, Singularity, Modal, Daytona, Vercel Sandbox, or
 other configured backends</td>
 </tr>
@@ -1389,7 +1393,7 @@ writing to them.</p>
 <p>Send a test message through the Control UI before reconnecting every
 external channel. This isolates a state or provider problem from a
 channel-authentication problem.</p>
-<h1 data-number="13" id="reference-links"><span class="header-section-number">13</span> Reference Links</h1>
+<h1 data-number="13" id="further-reading"><span class="header-section-number">13</span> Further Reading</h1>
 <ul>
 <li><a href="https://docs.openclaw.ai/">OpenClaw documentation</a></li>
 <li><a href="https://docs.openclaw.ai/install">OpenClaw
