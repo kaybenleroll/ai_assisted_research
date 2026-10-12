@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Pi Coding Agent: A Practical
 Primer</span>
-    <span class="navbar-meta">7 October 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -730,19 +730,19 @@ Stack</a></li>
 
     <main class="content">
       <div class="content-inner">
-<p><em>Refreshed against Pi 1.0.4 and official documentation; earlier
-community-package checks retain their dates.</em></p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h1 data-number="1" id="the-short-version"><span class="header-section-number">1</span> The Short Version</h1>
 <p>If you have used Claude Code, Pi still feels sparse on first contact:
 no built-in plan mode, subagent workflow, per-tool permission prompts,
-or general web search. But the old claim that it has no MCP client is
-now wrong: Pi 1.0 includes built-in support for MCP servers (external
-tool servers) and codemode for composing tool calls. Pi remains a
-programmable harness (the program around the model that runs the agent
-loop) that you extend. The official documentation is reference-style,
-and third-party write-ups can describe an earlier package or feature
-set. This primer is the orientation in between, written for someone who
-already knows Claude Code.</p>
+or general web search. But the old claim that it has no Model Context
+Protocol (MCP) client is now wrong: Pi 1.0 includes built-in support for
+MCP servers (external tool servers) and codemode for composing tool
+calls. Pi remains a programmable harness (the program around the model
+that runs the agent loop) that you extend. The official documentation is
+reference-style, and third-party write-ups can describe an earlier
+package or feature set. This primer is the orientation in between,
+written for someone who already knows Claude Code.</p>
 <p>Pi is a terminal coding agent and an agent toolkit. Its default tools
 are <code>read</code>, <code>write</code>, <code>edit</code>, and
 <code>bash</code>; optional built-in tools and MCP can expand that set.
@@ -841,8 +841,9 @@ reference</a>. You can install a package, write an extension, create a
 skill, or keep other capabilities outside Pi and feed their results into
 the session.</p>
 <p>Pi runs interactively, prints one-shot output, emits JSON events,
-communicates over RPC, or is embedded through its TypeScript SDK, so it
-is both a terminal program and a component of larger applications.</p>
+communicates over remote procedure call (RPC), or is embedded through
+its TypeScript software development kit (SDK), so it is both a terminal
+program and a component of larger applications.</p>
 <h2 data-number="2.3" id="why-pi-is-built-this-way"><span class="header-section-number">2.3</span> Why Pi Is Built This Way</h2>
 <p>The design is an argument, not an accident. The author’s essay <a href="https://mariozechner.at/posts/2025-11-30-pi-coding-agent/">What I
 learned building an opinionated and minimal coding agent</a> (November
@@ -2011,12 +2012,14 @@ for Claude Code users</a> in more depth.</p>
 <h2 data-number="10.3" id="forks-and-derivatives"><span class="header-section-number">10.3</span> Forks and Derivatives</h2>
 <p>Because Pi is MIT-licensed and embeddable, others build on it.
 <code>oh-my-pi</code> (Stencil Labs, MIT) is, by its own README, a fork
-that adds subagents, IDE (LSP) integration, and browser tooling.
-OpenClaw (see the <a href="../primer_openclaw/primer_openclaw.html">OpenClaw primer</a>) was
-described in January 2026 as having Pi “under the hood” (<a href="https://lucumr.pocoo.org/2026/1/31/pi/">Armin Ronacher</a>); its
-current documentation says only <code>@earendil-works/pi-tui</code>, the
-terminal-UI toolkit, remains a dependency. A claim that a project “runs
-on Pi” needs a date.</p>
+that adds subagents, integrated development environment (IDE) and
+Language Server Protocol (LSP) support, and browser tooling. OpenClaw
+(see the <a href="../primer_openclaw/primer_openclaw.html">OpenClaw
+primer</a>) was described in January 2026 as having Pi “under the hood”
+(<a href="https://lucumr.pocoo.org/2026/1/31/pi/">Armin Ronacher</a>);
+its current documentation says only <code>@earendil-works/pi-tui</code>,
+the terminal-UI toolkit, remains a dependency. A claim that a project
+“runs on Pi” needs a date.</p>
 <h1 data-number="11" id="worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="header-section-number">11</span> Worked Example: A Reproducible
 Data-Science Project With Pi and Rocker</h1>
 <p>This project makes the boundary between an agent and an analysis
@@ -2178,7 +2181,7 @@ digest, which is the wrong source.</p>
 <span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a><span class="kw">USER</span> rstudio</span></code></pre></div>
 <p>The virtual environment isolates the pinned Python packages from the
 Ubuntu system Python. Tag pinning alone does not make the R packages
-reproducible, because for the latest R version Rocker installs from a
+reproducible, because Rocker installs the selected R version from a
 moving CRAN snapshot; that is why the image uses <code>renv</code>. Four
 details matter:</p>
 <ul>
