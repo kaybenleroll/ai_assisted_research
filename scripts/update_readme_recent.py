@@ -124,14 +124,12 @@ def generate_recent(dates: dict[Document, tuple[date, str]]) -> str:
 
 
 def generate_category(category: str, dates: dict[Document, tuple[date, str]]) -> str:
-    begin, end = markers(category)
-    lines = [begin, "<!-- Edit rows in scripts/update_readme_recent.py, then run just readme. -->", "",
-             "| Document | Last reviewed | Description |", "|----------|---------------|-------------|"]
+    lines = ["| Document | Last reviewed | Description |", "|----------|---------------|-------------|"]
     lines.extend(
         f"| {link(doc, catalogue=True)} | {dates[doc][1]} | {doc.description} |"
         for doc in DOCUMENTS if doc.category == category
     )
-    return "\n".join([*lines, end])
+    return "\n".join(lines)
 
 
 def replace_marked(text: str, name: str, replacement: str) -> str:
@@ -155,17 +153,10 @@ def generate(current: str) -> str:
     updated = replace_marked(current, "RECENTLY UPDATED", generate_recent(dates))
     for category in CATEGORIES:
         replacement = generate_category(category, dates)
-        begin, end = markers(category)
-        if begin in updated or end in updated:
-            updated = replace_marked(updated, category, replacement)
-            # Restore the blank separator if an earlier generator omitted it.
-            updated = updated.replace(end + "\n## ", end + "\n\n## ", 1)
-            updated = updated.replace(end + "\n---", end + "\n\n---", 1)
-            continue
         heading = rf"(?m)^(## {re.escape(category)}\n\n)(\| Document \|[^\n]*\n\|[-| ]+\n(?:\|[^\n]*\n?)+)"
         matches = list(re.finditer(heading, updated))
         if len(matches) != 1:
-            raise ValueError(f"Expected one unmarked README table for {category}")
+            raise ValueError(f"Expected one README table for {category}")
         match = matches[0]
         updated = updated[:match.start(2)] + replacement + "\n" + updated[match.end(2):]
     return updated
