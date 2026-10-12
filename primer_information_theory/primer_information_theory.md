@@ -1,187 +1,629 @@
 # Information Theory: Surprise, Compression, and Communication
 
-## What This Primer Covers
+## Orientation and Notation
 
-Information theory gives you a quantitative language for uncertainty, dependence, compression, and communication over noisy systems. This primer develops that language from elementary probability through entropy, source coding, mutual information, noisy channels, channel capacity, error-correcting codes, continuous variables, and rate–distortion theory. It then connects the same quantities to statistical modelling and machine learning, where cross-entropy, likelihood, divergence, and representation learning are often described with information-theoretic vocabulary.
+### Purpose, Scope, and Background
 
-The organising question is simple: when a random source produces an observation, how much can you learn from it, how compactly can you represent it, and how reliably can you transmit it? The answer depends on what is random, what is known, what distortion is acceptable, and what resources the system can use. The mathematics makes those conditions explicit instead of treating "information" as a synonym for data or surprise.
+Information theory gives precise ways to talk about uncertainty, dependence, representation, and communication. Its central move is to describe a source by a probability law, then ask how that law constrains what can be inferred or encoded. The word *information* here does not mean semantic importance, truth, usefulness, or the number of bytes in a file. Those may matter in an application, but they are not what entropy measures.
 
-The document is deliberately self-contained at the level of an advanced technical primer. It explains the probability needed for the derivations, computes small examples by hand, and uses Python to make the definitions testable. It is not a coding-theory textbook, a communications-engineering handbook, or a treatment of measure-theoretic probability. Those boundaries are deliberate: the aim is a connected map of the field that lets you recognise which theorem or quantity belongs to a new problem.
+The organising questions are: how uncertain is the next outcome before it arrives; how much does an observation change that uncertainty; and how many bits are needed to represent outcomes under a stated lossless coding rule? These questions connect probability to compression. The same definitions later support noisy communication, privacy analysis, statistical modelling, and machine learning, but those applications need additional assumptions.
 
-## What This Primer Is Not
+This primer develops the finite-alphabet foundations and the main regular continuous-variable cautions. It is an advanced technical primer rather than a measure-theoretic probability text, a complete coding-theory course, or a communications-engineering handbook. The emphasis is on knowing which quantity answers which question and what hypotheses make a theorem true.
 
-This is not a complete account of modern coding theory, network information theory, quantum information, cryptographic security proofs, or algorithmic information theory. Each of those subjects has its own definitions, proof techniques, and failure modes. They appear here only when a short comparison prevents a common category error or gives you a useful route into further reading.
+You should know algebra, logarithms, introductory probability, and enough calculus to follow expectations and elementary inequalities. Familiarity with Python is useful for the examples but not required. Examples use Python's standard library where practical and selected idiomatic base R; each is a direct calculation intended to expose conventions and assumptions, not a production compressor.
 
-The formulas use finite or well-behaved distributions unless a section says otherwise. Continuous variables require care because differential entropy is not invariant under a change of coordinates and can be negative; the primer treats those facts directly rather than silently transferring discrete intuition. Numerical examples illustrate definitions, not universal performance guarantees. A small sample can make an estimator look convincing while giving a poor estimate of a high-dimensional quantity.
+### Reading Route
 
-## Assumed Background
+Start with probability if conditional laws and expectations are unfamiliar. Entropy and divergence describe one distribution or compare two. Mutual information then treats dependence, source coding turns a known source law into a representation, and channel coding asks what a noisy link can convey. The final technical chapters address reconstruction under a distortion budget, estimation from finite data, and statistical applications. The rendered editions include a contents list; each chapter defines its local model so that you can also consult it independently.
 
-You should be comfortable with algebra, logarithms, basic calculus, vectors, and introductory probability. You need to know what a random variable, a probability mass function, a conditional probability, an expectation, and a derivative are. You do not need prior information theory. Readers who know basic statistics or machine learning will recognise several later connections, but those sections do not assume that a loss function has already been interpreted as a coding quantity.
+Source coding removes statistical redundancy, whereas channel coding adds structured redundancy to withstand noise. Both are asymptotic theories under stated models; the worked examples and exercises show how to calculate finite quantities without confusing them with theorem guarantees.
 
-The examples use Python 3 with standard-library code unless a section names another dependency. The code is explanatory rather than a benchmark; run it in a disposable environment and check the stated assumptions before adapting it to a production system.
+### Notation
 
-> **Note:** The conceptual and mathematical claims in this primer are checked against the primary references listed in [Further Reading](#further-reading). Product versions, package behaviour, and other time-sensitive claims are not part of the core argument and are either linked at their point of use or explicitly dated.
-
-## Notation
-
-The following notation is used throughout. A symbol may receive a more specific local meaning in a worked example, but the document does not silently change the meaning of a core quantity.
+Unless a section explicitly says otherwise, logarithms are base 2 and information is measured in bits. The convention $0\log_2 0=0$ is used in entropy sums by continuity. For a countable distribution, formulas require the relevant sums and expectations to exist; finiteness of the alphabet is a sufficient, convenient assumption for most identities below.
 
 | Symbol | Meaning | First Use |
 |---|---|---|
-| $X$, $Y$, $Z$ | Random variables | Probability Foundations |
-| $x$, $y$, $z$ | Values taken by random variables | Probability Foundations |
-| $p(x)$ or $p_X(x)$ | Probability mass or density of $X$ at $x$ | Probability Foundations |
-| $p(y\mid x)$ | Conditional probability or density of $Y$ given $X=x$ | Conditional Entropy |
-| $\mathbb{E}[X]$ | Expectation of $X$ | Probability Foundations |
-| $H(X)$ | Shannon entropy of a discrete random variable | Entropy |
-| $H(X\mid Y)$ | Conditional entropy of $X$ given $Y$ | Conditional Entropy |
-| $I(X;Y)$ | Mutual information between $X$ and $Y$ | Mutual Information |
-| $D_{\mathrm{KL}}(P\|Q)$ | Kullback–Leibler divergence from $Q$ to $P$ | Divergence |
-| $\mathcal{X}$, $\mathcal{Y}$ | Input and output alphabets or sample spaces | Channels |
-| $W(y\mid x)$ | Channel transition law | Noisy Channels |
-| $C$ | Channel capacity, in bits per channel use unless stated otherwise | Channel Capacity |
-| $R$ | Code or compression rate | Source and Channel Coding |
-| $D$ | Distortion level or distortion measure, as declared locally | Rate–Distortion Theory |
-| $\varepsilon$ | A positive error probability or tolerance, declared by context | Coding Theorems |
+| $X,Y,Z$ | Random variables; lowercase letters denote their values | Probability spaces |
+| $\mathcal{X}$ | Alphabet or state space of $X$ | Discrete variables |
+| $p_X(x)$, $p(x)$ | Probability mass function, or density when explicitly stated | Probability spaces |
+| $p_{XY}(x,y)$ | Joint mass function | Joint and conditional laws |
+| $p(x\mid y)$ | Conditional mass function on events with $p_Y(y)>0$ | Conditional laws |
+| $\mathbb{E}[X]$ | Expectation under the stated distribution | Expectation |
+| $H(X)$, $H(X\mid Y)$ | Discrete entropy and conditional entropy, in bits | Entropy |
+| $D_{\mathrm{KL}}(P\|Q)$ | KL divergence of $P$ relative to $Q$ | Divergence |
+| $I(X;Y)$, $I(X;Y\mid Z)$ | Mutual information and conditional mutual information | Dependence |
+| $\ell(x)$, $L$ | Codeword length for $x$ and expected length | Source coding |
+| $n$ | Block length, stated locally | Block coding |
+| $\varepsilon$ | Positive tolerance or error probability, declared by context | Theorems |
 
-Unless stated otherwise, logarithms are base 2, so information is measured in bits. Replacing every logarithm by the natural logarithm measures information in nats and changes values by a constant factor; it does not change the ordering or the underlying claims. We use $\varepsilon$ rather than $\epsilon$, blackboard bold for standard number sets, $^{\top}$ for transpose, and semantic operators such as $\operatorname{H}$ only where an operator name improves readability. Displays are introduced by prose and are numbered only when later text refers to them.
+For a discrete random variable, $p_X(x)=P(X=x)$. We often omit the subscript when the variable is unambiguous. For continuous variables, $p_X$ will be called a density and integrals replace sums; a density value is not a probability. We use $P$ and $Q$ for probability distributions when discussing divergence, and $p$ and $q$ for their mass functions or densities. A conditional law is only defined up to events of probability zero; finite-alphabet formulas can assign arbitrary conditional distributions on zero-probability conditioning events without changing any expectation.
 
-## A Map of the Subject
+### Units, Supports, and Claims
 
-The first half builds quantities for a source. Surprise assigns a number to one outcome; entropy averages that number before the outcome is observed; conditional entropy measures what uncertainty remains after another variable is known; and mutual information measures the reduction in uncertainty supplied by an observation. Divergences compare distributions, but they are not distances and need not be symmetric.
+Changing all logarithms from base 2 to natural logarithms changes bits to nats by multiplication by $\ln 2$. Inequalities and minimisers are unaffected by this fixed positive scale. Keep the base explicit when comparing numerical values.
 
-The second half asks what happens when information must be represented or transmitted. Source coding removes predictable structure, channel coding adds carefully chosen redundancy, and capacity marks the boundary between reliable and unreliable communication in an idealised asymptotic model. Rate–distortion theory joins those questions when the receiver is allowed to reconstruct an approximation rather than the exact source.
+The support of a discrete distribution $P$ is $\operatorname{supp}(P)=\{x:P(x)>0\}$. A formula involving $\log(P(x)/Q(x))$ is evaluated only where $P(x)>0$. If $P(x)>0$ but $Q(x)=0$, the KL divergence is $+\infty$. This support convention prevents the common but invalid operation of evaluating $\log 0$ and hoping a zero coefficient will cancel it.
 
-The path is therefore:
-
-```mermaid
-graph LR
-    A[Probability] --> B[Surprise and Entropy]
-    B --> C[Compression]
-    B --> D[Mutual Information]
-    D --> E[Noisy Channels]
-    E --> F[Capacity and Error Correction]
-    C --> G[Rate–Distortion]
-    D --> H[Statistics and Machine Learning]
-```
-
-The sections are useful out of order once this map is clear. For example, a reader working on a classifier can go from [Cross-Entropy and KL Divergence](#cross-entropy-and-kl-divergence) to [Connections to Statistics and Machine Learning](#connections-to-statistics-and-machine-learning), while a reader working on a communications system can follow the source-coding and channel-capacity sequence.
+The information quantities in Sections 3 and 4 depend on a probability model. In an empirical study, that model may be known, estimated, or implicitly replaced by empirical frequencies. State which case applies. A measured code length under a model is not automatically the entropy of the data-generating process.
 
 ## Probability Foundations
 
-Information theory starts with uncertainty represented by a probability distribution. A discrete random variable $X$ takes values in an alphabet $\mathcal{X}$, with probability mass function $p(x)=P(X=x)$ satisfying $p(x)\geq 0$ and $\sum_{x\in\mathcal{X}}p(x)=1$. A joint distribution $p(x,y)$ describes two variables together; its marginal is $p(x)=\sum_y p(x,y)$. When $p(y)>0$, the conditional distribution is $p(x\mid y)=p(x,y)/p(y)$.
+### Sample Spaces and Random Variables
 
-Two variables are independent exactly when $p(x,y)=p(x)p(y)$ for every pair of values. Equivalently, observing one does not change the distribution of the other: $p(x\mid y)=p(x)$ whenever the conditional is defined. These definitions matter because information measures quantify features of distributions, not meanings assigned to their outcomes.
+A probability model consists of a sample space $\Omega$, a collection of events, and a probability measure $P$. A random variable $X$ maps an outcome in $\Omega$ to a value in a measurable state space. For the finite examples in this section, the event structure is just the set of subsets of $\Omega$, so measure-theoretic details can remain in the background.
 
-## Surprise
+A discrete random variable has a probability mass function (pmf) $p_X(x)=P(X=x)$ satisfying $p_X(x)\geq0$ and $\sum_{x\in\mathcal{X}}p_X(x)=1$. The alphabet $\mathcal{X}$ lists possible values, including values whose probability may be zero. A random variable is not its realised value: $X$ names the uncertain quantity, while $x$ is one possible outcome.
 
-The self-information, or surprise, of an outcome $x$ with $p(x)>0$ is $-\log_2 p(x)$ bits. A rare outcome carries more surprise than a common one. The logarithm makes the information of independent outcomes additive: if $X$ and $Y$ are independent, then $-\log_2[p(x)p(y)]=-\log_2p(x)-\log_2p(y)$. Surprise is a property of an outcome relative to a stated distribution; it is not a measure of emotional surprise or semantic importance.
+For example, let $X$ be the result of a biased coin toss with $P(X=\mathrm{H})=0.4$ and $P(X=\mathrm{T})=0.6$. The event $\{X=\mathrm{H}\}$ has probability $0.4$. The labels H and T could be replaced by 0 and 1 without changing any information quantity, provided the probabilities travel with the labels.
 
-For a biased coin with $P(X=\mathrm{H})=0.4$ and $P(X=\mathrm{T})=0.6$, heads has surprise $-\log_2(0.4)\approx1.322$ bits, while tails has surprise $-\log_2(0.6)\approx0.737$ bits. Thus the less likely outcome is more informative when observed.
+#### Joint and Marginal Distributions
 
-## Entropy
-
-Entropy is the expected surprise of a random variable, and therefore measures uncertainty before its value is observed:
+For two discrete variables $X$ and $Y$, the joint pmf $p_{XY}(x,y)=P(X=x,Y=y)$ is non-negative and sums to one over pairs. Marginalisation removes a variable by summing over its possible values:
 
 $$
-H(X)=-\sum_{x\in\mathcal{X}}p(x)\log_2p(x).
+p_X(x)=\sum_y p_{XY}(x,y),\qquad p_Y(y)=\sum_x p_{XY}(x,y).
 $$
 
-For the coin above, $H(X)=-0.4\log_2(0.4)-0.6\log_2(0.6)\approx0.971$ bits per toss. A fair coin has one bit of entropy; a deterministic coin has zero. For an alphabet of size $m$, entropy is at most $\log_2m$, with equality for the uniform distribution. Entropy depends on the distribution and chosen alphabet, not on how outcomes are named.
+The table below gives a joint law for two fair bits that agree with probability $0.8$. It is one compact way to specify both marginals and dependence.
 
-The chain rule separates joint uncertainty into uncertainty about one variable and the remaining uncertainty after observing another:
+| $p_{XY}(x,y)$ | $y=0$ | $y=1$ | Row sum |
+|---|---:|---:|---:|
+| $x=0$ | 0.4 | 0.1 | 0.5 |
+| $x=1$ | 0.1 | 0.4 | 0.5 |
+| Column sum | 0.5 | 0.5 | 1 |
 
-$$
-H(X,Y)=H(Y)+H(X\mid Y),\qquad
-H(X\mid Y)=\sum_y p(y)H(X\mid Y=y).
-$$
+Each marginal is fair. The variables are nevertheless dependent because $p_{XY}(0,0)=0.4$ differs from $p_X(0)p_Y(0)=0.25$. Marginal distributions alone do not specify a joint law; dependence lives in the way the variables occur together.
 
-Conditional entropy is never greater than unconditional entropy: $H(X\mid Y)\leq H(X)$. Equality holds when $X$ and $Y$ are independent. This inequality expresses that access to an observation cannot increase average uncertainty when the joint distribution is known.
+For several variables, $p_{XYZ}(x,y,z)$ is the joint law, and all lower-dimensional marginals follow by summing over omitted coordinates. An ordered tuple $(X_1,\ldots,X_n)$ is itself a random variable with alphabet $\mathcal{X}_1\times\cdots\times\mathcal{X}_n$. This viewpoint makes block entropy and block coding ordinary single-variable questions over a larger alphabet.
 
-## Source Coding
+### Conditional Distributions and Bayes' Rule
 
-A binary code represents each source symbol as a finite string of 0s and 1s. A prefix code has no codeword that is the prefix of another, so a concatenation can be decoded without separators. If symbol $x$ receives a codeword of length $\ell(x)$, the expected length is $L=\sum_xp(x)\ell(x)$ bits per symbol. For any binary prefix code, Kraft's inequality requires $\sum_x2^{-\ell(x)}\leq1$, and Shannon's source-coding theorem implies $L\geq H(X)$. This is a lower bound on average length, not a claim that every symbol can be encoded in exactly its individual surprise.
-
-Huffman coding constructs an optimal prefix code for a known finite source when each symbol is coded separately and codeword lengths are measured in bits. Consider symbols $a,b,c,d$ with probabilities $0.4,0.3,0.2,0.1$. Repeatedly merge the two least probable nodes: $0.1+0.2=0.3$, then $0.3+0.3=0.6$, then $0.4+0.6=1$. One valid code from this tree is $a\mapsto0$, $b\mapsto10$, $c\mapsto110$, and $d\mapsto111$. It is prefix-free, and its expected length is
-
-$$
-L=0.4(1)+0.3(2)+0.2(3)+0.1(3)=1.9\text{ bits per symbol}.
-$$
-
-The source entropy is $H(X)\approx1.846$ bits, so the code is within one bit per symbol of the entropy bound, as guaranteed for a binary Huffman code. The exact tree can vary when merge weights tie; the average length remains optimal.
-
-## Cross-Entropy and KL Divergence
-
-Suppose outcomes are generated by a true distribution $p$, but a model or code assigns probabilities according to $q$. The cross-entropy is the expected code length when the ideal lengths are based on $q$ but outcomes follow $p$:
+For $p_Y(y)>0$, the conditional pmf of $X$ given $Y=y$ is
 
 $$
-H(p,q)=-\sum_xp(x)\log_2q(x).
+p(x\mid y)=P(X=x\mid Y=y)=\frac{p_{XY}(x,y)}{p_Y(y)}.
 $$
 
-If $q(x)=0$ for any outcome with $p(x)>0$, cross-entropy is infinite: the model assigns an impossible probability to an outcome that can occur. Otherwise, cross-entropy decomposes into true uncertainty plus the mismatch penalty:
+It is a distribution over $x$ for each fixed $y$. Rearranging gives the product rule $p_{XY}(x,y)=p_Y(y)p(x\mid y)$. Applying the same identity in the other direction gives Bayes' rule:
 
 $$
-H(p,q)=H(p)+D_{\mathrm{KL}}(p\|q),\qquad
-D_{\mathrm{KL}}(p\|q)=\sum_xp(x)\log_2\frac{p(x)}{q(x)}.
+p(x\mid y)=\frac{p(y\mid x)p_X(x)}{p_Y(y)},\qquad
+p_Y(y)=\sum_xp(y\mid x)p_X(x).
 $$
 
-The Kullback–Leibler (KL) divergence is non-negative and equals zero exactly when $p=q$ (on the support of $p$, with distributions normalised). It is not a metric: in general $D_{\mathrm{KL}}(p\|q)\neq D_{\mathrm{KL}}(q\|p)$. Its direction answers a specific question: how much extra expected log loss is incurred by using $q$ when data come from $p$? Cross-entropy minimisation is therefore equivalent to KL minimisation over $q$ for a fixed data distribution $p$.
+The distribution $p_X$ is often called a prior, $p(y\mid x)$ a likelihood, and $p(x\mid y)$ a posterior. These names describe roles in an inference calculation; they do not alter the probability identities. The denominator averages the likelihood over the prior and ensures the posterior sums to one.
 
-## Mutual Information
+**Worked Example 2.1 (A noisy observation).** Let a bit $X$ be equally likely to be 0 or 1. An observation $Y$ flips it independently with probability $0.1$. Then $p(Y=1\mid X=0)=0.1$ and $p(Y=1\mid X=1)=0.9$. The marginal probability of $Y=1$ is $0.1(0.5)+0.9(0.5)=0.5$. Bayes' rule gives $p(X=1\mid Y=1)=0.9(0.5)/0.5=0.9$. A posterior needs the observation model and the source distribution; the likelihood alone is not the posterior.
 
-Mutual information measures how much knowing one variable reduces uncertainty about another. It can be written as a difference of entropies, a KL divergence between the joint distribution and the product of its marginals, or an expected log likelihood ratio:
+#### Independence and Factorisation
+
+Variables $X$ and $Y$ are independent if their joint distribution factorises:
+
+$$
+p_{XY}(x,y)=p_X(x)p_Y(y)\quad\text{for every }x,y.
+$$
+
+Where $p_Y(y)>0$, this is equivalent to $p(x\mid y)=p_X(x)$. Independence is a property of the joint law, not a visual property of labels or a statement that two variables have no conceivable causal relation. Statistical independence does not, by itself, establish or rule out causation.
+
+For $n$ variables, mutual independence means the full joint law factors into the product of all marginals. Pairwise independence is weaker when $n\geq3$. For example, let $X$ and $Y$ be independent fair bits and set $Z=X\oplus Y$. Every pair among $X,Y,Z$ is independent, yet the triple is constrained by $X\oplus Y\oplus Z=0$. When a theorem assumes independence, check whether it requires mutual independence of the whole sequence rather than pairwise independence.
+
+### Expectation and Conditional Expectation
+
+For a discrete variable with finite support, the expectation of a function $g(X)$ is
+
+$$
+\mathbb{E}[g(X)]=\sum_xp_X(x)g(x).
+$$
+
+Expectation is an average under a probability law. It is not a claim that an observed finite sample will equal that average. For a joint distribution, $\mathbb{E}[g(X,Y)]=\sum_{x,y}p_{XY}(x,y)g(x,y)$.
+
+The conditional expectation given $Y=y$ is the average over the conditional law, $\mathbb{E}[g(X)\mid Y=y]=\sum_xp(x\mid y)g(x)$. Averaging these conditional expectations over $Y$ recovers the unconditional expectation:
+
+$$
+\mathbb{E}[g(X)]=\sum_y p_Y(y)\mathbb{E}[g(X)\mid Y=y].
+$$
+
+This is the law of total expectation. Entropy's conditional form uses exactly this averaging operation: calculate uncertainty separately for each observed value, then average according to how often that value occurs.
+
+#### Conditional Independence and Markov Chains
+
+The variables $X$ and $Z$ are conditionally independent given $Y$ if, for every $y$ with positive probability,
+
+$$
+p(x,z\mid y)=p(x\mid y)p(z\mid y).
+$$
+
+Equivalently, $p(z\mid x,y)=p(z\mid y)$ wherever the conditioning events have positive probability. We write $X\to Y\to Z$ for this Markov condition. The arrows encode a factorisation of a joint distribution, often $p(x,y,z)=p_X(x)p(y\mid x)p(z\mid y)$; they do not assert time order or causation unless those interpretations are independently justified.
+
+This condition is the hypothesis behind the data-processing inequality in [Data-Processing Inequality](#data-processing-inequality). Merely naming variables in a sequence does not make them a Markov chain. A representation $Z=f(Y)$ is conditionally independent of $X$ given $Y$ because it is determined by $Y$, but a representation that also uses $X$ directly may violate the condition.
+
+Conditional independence must not be confused with ordinary independence. Suppose $Y$ is a fair bit, and conditional on $Y$ we draw $X$ and $Z$ independently, each equalling $Y$ with probability $0.9$. Given $Y=0$, both $X$ and $Z$ favour zero; given $Y=1$, both favour one. They satisfy $X\perp Z\mid Y$ by construction. Marginally, however, observing $X$ tells us something about $Y$ and therefore about $Z$, so $X$ and $Z$ are dependent. The probability that they agree is $0.9^2+0.1^2=0.82$, greater than the $0.5$ agreement probability of independent fair bits.
+
+The reverse implication also fails. Let $X$ and $Z$ be independent fair bits and set $Y=X\oplus Z$. Unconditionally $X$ and $Z$ are independent. Once $Y=0$ is known, they must be equal; once $Y=1$ is known, they must differ. The conditional law does not factorise. This is the same parity structure used later to show why conditioning can increase mutual information. The two examples are useful checks when deciding whether a graphical arrow represents a valid factorisation: work from the joint law, not the apparent order of variables.
+
+### Continuous Variables: Probability Is Mass, Density Is Not
+
+A continuous random variable is described by a probability density function (pdf) $f_X$ when one exists. Probabilities are integrals, for example $P(a<X\leq b)=\int_a^b f_X(x)\,dx$. A density can exceed one and has units inverse to those of $X$; the probability of a single point is ordinarily zero. Consequently, substituting a density value into a discrete pmf formula without changing sums to integrals is a category error.
+
+For jointly continuous variables, the joint density $f_{XY}$ and conditional density $f_{X\mid Y}$ obey integral analogues of the marginal and product rules. Mixed discrete-continuous laws require sums and integrals over their respective components. A fully general treatment uses probability measures and Radon–Nikodym derivatives; no claim here assumes that every distribution has a density.
+
+### Python and Base R: Inspect a Joint Law
+
+The same joint table can be represented as a matrix whose rows index $X$ and columns index $Y$. The code checks the total mass and computes marginals. In NumPy's `sum` method, `axis=1` sums across columns, leaving row totals.
+
+```python
+joint = [[0.4, 0.1],
+         [0.1, 0.4]]
+
+row_marginals = [sum(row) for row in joint]
+column_marginals = [sum(joint[i][j] for i in range(2))
+                    for j in range(2)]
+total = sum(row_marginals)
+
+assert abs(total - 1.0) < 1e-12
+print(row_marginals, column_marginals)
+```
+
+Base R's column-major matrix layout is visible here. `rowSums` and `colSums` avoid indexing conventions becoming hidden in a loop.
+
+```r
+joint <- matrix(c(0.4, 0.1,
+                  0.1, 0.4),
+                nrow = 2, byrow = TRUE)
+
+row_marginals <- rowSums(joint)
+column_marginals <- colSums(joint)
+stopifnot(abs(sum(joint) - 1) < 1e-12)
+row_marginals
+column_marginals
+```
+
+The probability rules above are enough to begin calculating information, but a calculation is meaningful only after the random experiment has been specified. A joint table from repeated independent trials describes a different experiment from a single trajectory of a time series. If observations share a latent cause, treating their rows as independent can give apparently precise frequencies while understating uncertainty about the population law. Information identities still hold for the population distribution; what changes is whether the table in hand estimates it reliably.
+
+**Worked example (two noisy stages).** Let a fair bit $X$ pass through two independent binary flip mechanisms. The first flips with probability $a$, producing $Y$; the second flips with probability $b$, producing $Z$. Given $Y$, the second flip is independent of $X$, so $X\to Y\to Z$ is a Markov chain. The final bit differs from the initial bit precisely when one stage flips and the other does not. Its effective crossover probability is
+
+$$
+c=a(1-b)+(1-a)b=a+b-2ab.
+$$
+
+For $a=0.1$ and $b=0.2$, we obtain $c=0.26$. If both mechanisms are independent across uses as well as from each other, the composite link is a binary symmetric memoryless channel. If the second flip probability depends on the first flip after conditioning on $Y$, the simple composition formula need not hold. The calculation is a reminder that a conditional independence claim has observable consequences; writing arrows without checking it is not enough.
+
+The same distinction matters for a diagnostic test. A disease indicator $D$ and a positive result $T$ have a joint law fixed by prevalence, sensitivity, and false-positive rate. Bayes' rule computes $P(D=1\mid T=1)$ from all three; sensitivity alone cannot supply the posterior. For example, prevalence $0.01$, sensitivity $0.9$, and false-positive rate $0.1$ give
+
+$$
+P(D=1\mid T=1)=\frac{0.9(0.01)}
+{0.9(0.01)+0.1(0.99)}=\frac{1}{12}\approx0.0833.
+$$
+
+The test result is evidence, yet most positive results in this model are false positives because the condition is rare. Information measures later average log evidence across all possible test outcomes. They do not replace this posterior calculation for an individual result.
+
+## Entropy and Divergences
+
+### Surprise as Log Probability
+
+For an outcome $x$ with $p_X(x)>0$, its self-information or surprisal is
+
+$$
+\imath_X(x)=-\log_2p_X(x)\quad\text{bits}.
+$$
+
+An outcome assigned probability $1/2$ has one bit of surprisal; one assigned probability $1/8$ has three bits. The logarithm is useful because independent probabilities multiply while their surprisals add: if the joint probability of two observed outcomes factors as $p_X(x)p_Y(y)$, then $-\log_2p_{XY}(x,y)=\imath_X(x)+\imath_Y(y)$. This additivity is a design property of the logarithm, not an assertion that arbitrary data sources are independent.
+
+Surprisal is defined relative to a model. The same event can be surprising under one model and ordinary under another. It is also distinct from the Shannon entropy: surprisal is a random quantity evaluated after an outcome, whereas entropy is its expected value before observing that outcome.
+
+For the biased coin with head probability $0.4$, a head has surprisal about $1.322$ bits and a tail about $0.737$ bits. Heads is less probable and therefore has greater surprisal. The entropy averages the two values with probabilities $0.4$ and $0.6$.
+
+### Shannon Entropy
+
+For a discrete variable $X$ with pmf $p_X$, Shannon entropy is expected surprisal:
+
+$$
+H(X)=\mathbb{E}[-\log_2p_X(X)]
+=-\sum_{x:p_X(x)>0}p_X(x)\log_2p_X(x).
+$$
+
+Entropy is zero for a deterministic variable. A fair bit has entropy one bit, while a biased coin has less than one bit per toss. If $X$ has at most $m$ possible values, then $H(X)\leq\log_2m$, with equality exactly for the uniform law over those $m$ values. The bound is about uncertainty in the distribution, not the number of bits used by a particular file format.
+
+**Theorem 3.1 (Entropy bound).** If $X$ takes values in a finite alphabet of size $m$, then $0\leq H(X)\leq\log_2m$. The lower equality holds exactly for a point mass; the upper equality holds for the uniform distribution.
+
+**Proof sketch.** Non-negativity follows because $0<p(x)\leq1$ implies $-\log_2p(x)\geq0$. For the upper bound, compare $p$ with the uniform distribution $u(x)=1/m$: non-negativity of $D_{\mathrm{KL}}(p\|u)$ gives $\sum_xp(x)\log_2(mp(x))=\log_2m-H(X)\geq0$. Equality in KL divergence requires $p=u$. $\square$
+
+For the biased coin, $H(X)=-0.4\log_2(0.4)-0.6\log_2(0.6)\approx0.971$ bits per toss. This expected value is below one even though an individual outcome can have surprisal greater than one bit. There is no contradiction: rare outcomes contribute more, but they occur less often.
+
+The maximum-entropy statement depends on its constraint set. A uniform law is the most uncertain *among distributions on a specified finite alphabet*. There is no normalisable uniform probability density across the whole real line. Among real distributions with a fixed finite variance, a Gaussian maximises differential entropy under the usual regularity assumptions. That fact supports the Gaussian channel and source calculations later, but it does not imply that measurements are actually Gaussian. Maximum entropy describes an extremum under chosen constraints; a physical or empirical model requires evidence beyond the extremum calculation.
+
+Entropy also depends on the granularity of the outcome. If a four-symbol observation is recoded into a binary label that merges three categories, the new label cannot have more entropy than the original observation because it is a deterministic function of it. But the new entropy measures a different variable. Calling the binary label "the entropy of the data" would hide that choice. Conversely, splitting a category according to a new measured attribute expands the random variable and can raise entropy. Always name the source alphabet, sampling interval, and unit when reporting bits per observation.
+
+For a stream with dependence, one-symbol entropy need not be the best compression benchmark. Suppose a fair bit is repeated twice in each pair: $X_{2k}=X_{2k-1}$, and the first bit of each pair is independent across pairs. Every position has marginal entropy one bit, yet the pair has only one bit of joint entropy. An encoder that knows the pairing can represent the pair with one bit, or half a bit per original symbol, before framing. The chain rule makes the saving explicit: $H(X_{2k-1},X_{2k})=H(X_{2k-1})+H(X_{2k}\mid X_{2k-1})=1+0$. This is why a memoryless theorem must not be applied to a source with predictable temporal structure by substituting its marginal entropy.
+
+#### Joint Entropy and Chain Rule
+
+The joint entropy of two finite-alphabet variables is the entropy of their pair:
+
+$$
+H(X,Y)=-\sum_{x,y}p(x,y)\log_2p(x,y).
+$$
+
+Conditional entropy averages the entropy of the conditional distributions:
+
+$$
+H(X\mid Y)=\sum_{y:p_Y(y)>0}p_Y(y)H(X\mid Y=y).
+$$
+
+**Theorem 3.2 (Entropy chain rule).** For finite-alphabet variables $X,Y$,
+
+$$
+H(X,Y)=H(Y)+H(X\mid Y)=H(X)+H(Y\mid X).
+$$
+
+**Proof sketch.** For each pair with positive joint probability, factor $p(x,y)=p_Y(y)p(x\mid y)$ and take negative logarithms. Average the sum under $p(x,y)$. The term $-\log p_Y(y)$ averages to $H(Y)$; the term $-\log p(x\mid y)$ averages first conditionally on $y$ and then over $y$, yielding $H(X\mid Y)$. Reversing the roles gives the other equality. $\square$
+
+For finite alphabets, the sums are finite and the proof is direct. For countable alphabets, the identity holds when the relevant entropies are well-defined and no undefined $\infty-\infty$ subtraction is used. State that integrability qualification if using the identity beyond the finite case.
+
+Repeated application gives $H(X_1,\ldots,X_n)=\sum_{i=1}^nH(X_i\mid X_1,\ldots,X_{i-1})$. If the variables are mutually independent, each conditional term equals its marginal entropy, so joint entropy is the sum. Independence is essential to that simplification.
+
+#### Conditioning Reduces Entropy
+
+**Theorem 3.3 (Conditioning inequality).** For finite-alphabet $X,Y$, $H(X\mid Y)\leq H(X)$, with equality if and only if $X$ and $Y$ are independent.
+
+**Proof sketch.** By the chain rule, $H(X)-H(X\mid Y)=H(Y)-H(Y\mid X)=I(X;Y)$. Section 4 identifies this difference with a KL divergence, which is non-negative and zero exactly when the joint law factors into the product marginals. $\square$
+
+This statement concerns average uncertainty under the joint model. Observing a particular value $Y=y$ can increase a person's uncertainty about $X$ relative to their prior if that observation shifts probability towards a more diffuse conditional law. The theorem says that averaging $H(X\mid Y=y)$ over all $y$ cannot exceed $H(X)$.
+
+### KL Divergence
+
+For distributions $P$ and $Q$ on the same discrete alphabet, the Kullback–Leibler divergence (KL divergence) is
+
+$$
+D_{\mathrm{KL}}(P\|Q)=\sum_{x:P(x)>0}P(x)\log_2\frac{P(x)}{Q(x)}.
+$$
+
+It is finite only if $Q(x)>0$ wherever $P(x)>0$ and the sum is finite. If this support condition fails, define the divergence as $+\infty$. The direction matters: $D_{\mathrm{KL}}(P\|Q)$ weights log-ratios using outcomes from $P$, so swapping $P$ and $Q$ generally changes the answer.
+
+**Theorem 3.4 (Gibbs' inequality).** For probability distributions $P,Q$ on a finite alphabet, $D_{\mathrm{KL}}(P\|Q)\geq0$, with equality if and only if $P=Q$; if $Q$ vanishes on the support of $P$, the divergence is infinite.
+
+**Proof sketch.** When support inclusion holds, use $\ln t\leq t-1$ for $t>0$ with $t=Q(x)/P(x)$. Then $P(x)\ln(P(x)/Q(x))\geq P(x)-Q(x)$. Summing over the support of $P$ yields a non-negative result because $Q$ may also put mass outside that support. Equality requires equality termwise and no extra mass outside, giving $P=Q$. Dividing by $\ln2$ converts nats to bits. $\square$
+
+KL divergence is not a distance: it can be asymmetric and does not satisfy the triangle inequality. Its useful interpretation is excess expected log loss under $P$ when probabilities are assessed using $Q$, as made explicit by cross-entropy below. Do not call it a metric or interpret its numerical value as a geometric distance without additional structure.
+
+The support rule gives KL a sharp failure mode. Let $P=(1/2,1/2)$ and $Q=(1,0)$. Because $Q$ declares the second outcome impossible even though $P$ generates it half the time, $D_{\mathrm{KL}}(P\|Q)=+\infty$. In the reverse direction $D_{\mathrm{KL}}(Q\|P)=1$ bit: data generated under $Q$ always show the first outcome, which $P$ assigns probability one half. The two values are not contradictory; each average is taken under a different generating law. Adding a small positive probability to the second category makes the first divergence finite, but its value depends on that smoothing choice.
+
+Another useful comparison is the Jensen–Shannon divergence. With $M=(P+Q)/2$, define $\operatorname{JSD}(P,Q)=\tfrac12D_{\mathrm{KL}}(P\|M)+\tfrac12D_{\mathrm{KL}}(Q\|M)$. For finite alphabets, the mixture covers both supports, so JSD stays finite even when a directed KL is infinite; it is symmetric and lies between zero and one bit when the mixing weights are equal. It answers a different comparison question and should not replace the directed KL in the cross-entropy identity. In particular, the excess expected log loss incurred by predicting $Q$ on $P$-generated data remains $D_{\mathrm{KL}}(P\|Q)$, not JSD.
+
+#### Cross-Entropy and Log Loss
+
+If outcomes follow $P$ but a model assigns probabilities $Q$, their cross-entropy is
+
+$$
+H(P,Q)=-\sum_xP(x)\log_2Q(x).
+$$
+
+Under support inclusion and finite sums, algebra gives
+
+$$
+H(P,Q)=H(P)+D_{\mathrm{KL}}(P\|Q).
+$$
+
+If $P(x)>0$ and $Q(x)=0$, the cross-entropy and divergence are infinite. The decomposition says that for a fixed true law $P$, minimising expected log loss over candidate models $Q$ is equivalent to minimising KL divergence from $P$ to $Q$. For observed samples, average negative log probability is an empirical estimate of cross-entropy, not necessarily the population quantity.
+
+In classification, if the true label is $y$ and a model reports $q(y)$, the per-example log loss is $-\log q(y)$. For a one-hot target distribution, the cross-entropy reduces to that quantity. With soft targets, the loss averages across target categories. This is a connection to statistical modelling; it does not mean every loss function is entropy or that the model's probabilities are calibrated.
+
+### Entropy of a Bernoulli Variable
+
+For a bit that equals 1 with probability $p$, entropy is the binary entropy function
+
+$$
+h_2(p)=-p\log_2p-(1-p)\log_2(1-p),\quad 0\leq p\leq1,
+$$
+
+with endpoint values $h_2(0)=h_2(1)=0$. It is symmetric around $1/2$, reaches its maximum value of one bit at $p=1/2$, and approaches zero as the outcome becomes predictable. Differentiating in the interior gives $h_2'(p)=\log_2((1-p)/p)$, so the only stationary point is $p=1/2$; the second derivative is negative, confirming a maximum.
+
+This simple function recurs in binary channels, error bounds, and rate–distortion examples. It shows that entropy responds to the whole probability balance, not merely the count of possible labels.
+
+#### Continuous Entropy and Relative Entropy
+
+For a continuous variable with density $f_X$ (when the integral exists), differential entropy is
+
+$$
+h(X)=-\int f_X(x)\log_2 f_X(x)\,dx.
+$$
+
+Unlike discrete entropy, differential entropy can be negative and depends on units. If $Y=aX$ for a non-zero scalar $a$, then $h(Y)=h(X)+\log_2|a|$. Measuring a length in metres rather than centimetres shifts the numerical differential entropy. Therefore it is unsafe to interpret $h(X)$ by itself as an invariant number of bits needed to encode a continuous value.
+
+**Worked example (a uniform measurement).** Let $X$ be uniform on an interval of width $w>0$, expressed in some physical unit. Its density is $1/w$ on that interval and its differential entropy is $\log_2w$ in the corresponding coordinate convention. If $w=1/4$, the value is $-2$ bits. There is no negative-length binary code hidden in this answer. The value describes a density relative to a coordinate measure; representing a real sample exactly with arbitrary precision still needs unbounded bits in an ordinary digital scheme. If the measurement is rounded to cells of width $\Delta$, its discrete entropy is roughly $h(X)-\log_2\Delta$ when the density is regular and the cells are fine. The resolution term restores a meaningful discrete coding scale.
+
+Now change only units, measuring the same physical interval in centimetres instead of metres. The numerical width and density change, so $h(X)$ shifts by the logarithm of the conversion factor. A bijective change of units does not alter whether a second variable predicts $X$; mutual information is invariant under the corresponding change of coordinates. The contrast is why a table of differential entropies across datasets with different measurement units can mislead even when every integral was evaluated correctly.
+
+Relative entropy between continuous distributions instead uses densities with respect to a common reference measure:
+
+$$
+D_{\mathrm{KL}}(P\|Q)=\int f(x)\log_2\frac{f(x)}{g(x)}\,dx,
+$$
+
+when $P,Q$ have densities $f,g$ and the integral is defined. Under suitable absolute continuity and integrability assumptions it is non-negative and invariant under a one-to-one change of coordinates applied to both distributions. If $P$ has mass where $Q$ has none, it is infinite. General distributions need not possess densities; the measure-theoretic definition uses a Radon–Nikodym derivative when $P$ is absolutely continuous with respect to $Q$, and is infinite otherwise.
+
+For jointly continuous variables, mutual information is safely defined as a KL divergence between the joint law and the product of its marginals. It can also be expressed as $h(X)+h(Y)-h(X,Y)$ when these differential entropies are individually well-defined and the cancellation is legitimate. The KL definition is more robust: differential entropy terms may be infinite even when mutual information is finite. See [Continuous Variables and Mutual Information](#continuous-variables-and-mutual-information).
+
+### Python and Base R Calculations
+
+For a finite probability vector, define $0\log 0$ by omitting zero terms. Python's `math.log2` and base R's `log2` implement the chosen units.
+
+```python
+from math import log2
+
+def entropy(probabilities):
+    if any(p < 0 for p in probabilities):
+        raise ValueError("probabilities must be non-negative")
+    if abs(sum(probabilities) - 1.0) > 1e-12:
+        raise ValueError("probabilities must sum to one")
+    return -sum(p * log2(p) for p in probabilities if p > 0)
+
+print(entropy([0.4, 0.6]))
+```
+
+```r
+entropy <- function(p) {
+  stopifnot(all(p >= 0), abs(sum(p) - 1) < 1e-12)
+  positive <- p > 0
+  -sum(p[positive] * log2(p[positive]))
+}
+
+entropy(c(0.4, 0.6))
+```
+
+The validation is part of the example: normalising arbitrary non-negative weights silently changes the supplied model, so code should either require a probability vector or make normalisation an explicit operation.
+
+To compare two distributions, handle support violations before evaluating logarithms.
+
+```python
+from math import log2
+
+def kl_divergence(p, q):
+    if len(p) != len(q) or abs(sum(p) - 1) > 1e-12:
+        raise ValueError("incompatible probability vectors")
+    if abs(sum(q) - 1) > 1e-12 or any(v < 0 for v in p + q):
+        raise ValueError("invalid probability vector")
+    if any(pi > 0 and qi == 0 for pi, qi in zip(p, q)):
+        return float("inf")
+    return sum(pi * log2(pi / qi)
+               for pi, qi in zip(p, q) if pi > 0)
+
+print(kl_divergence([0.4, 0.6], [0.5, 0.5]))
+```
+
+```r
+kl_divergence <- function(p, q) {
+  stopifnot(length(p) == length(q), all(p >= 0), all(q >= 0),
+            abs(sum(p) - 1) < 1e-12, abs(sum(q) - 1) < 1e-12)
+  if (any(p > 0 & q == 0)) return(Inf)
+  keep <- p > 0
+  sum(p[keep] * log2(p[keep] / q[keep]))
+}
+
+kl_divergence(c(0.4, 0.6), c(0.5, 0.5))
+```
+
+These functions are suitable for small examples. For large or extreme probability vectors, compute with stable log-probabilities and avoid underflow; do not interpret a tiny negative floating-point result as evidence that KL divergence is mathematically negative.
+
+## Information Between Variables
+
+Entropy and divergence lead to mutual information by comparing a joint law with the law that would result if its marginals were independent. This construction makes the quantity symmetric in its two arguments, although the underlying conditional uncertainties can be very different. A small mutual information can mean weak dependence, or it can reflect a target with very little entropy to begin with. State the marginal entropies alongside it when interpreting a result.
+
+**Worked example (four-symbol mismatch).** For the recurring source $p=(0.4,0.3,0.2,0.1)$, its entropy is about $1.846$ bits. Suppose a probability model uses $q=(0.25,0.25,0.25,0.25)$. Its ideal log-loss code spends exactly two bits on every outcome, so the expected penalty relative to the true source law is $2-H(p)\approx0.154$ bits per symbol. The reversed divergence $D_{\mathrm{KL}}(q\|p)$ answers a different question: expected model mismatch if outcomes were uniform and predictions used $p$. It is about $0.176$ bits. Neither direction by itself includes the integer codeword and header costs of a real file format.
+
+This example also separates surprise from realised code length. Symbol $d$ has true surprisal $-\log_2 0.1\approx3.322$ bits and gets three bits in the Huffman code below. The single codeword is shorter than its surprisal; the average code length remains above entropy. A claim that every symbol must cost at least its own surprisal would contradict this ordinary prefix code. The Kraft constraint acts on the whole code tree, so code lengths must be judged together.
+
+### Conditional Entropy as Remaining Uncertainty
+
+Conditional entropy $H(X\mid Y)$ is the expected uncertainty about $X$ after observing $Y$. It averages the entropy of the posterior distribution $p(x\mid y)$ over $y$. It does not mean the entropy of one particular posterior, and an application should state whether it is discussing a realised observation or the model-wide average.
+
+The chain rule from [Joint Entropy and Chain Rule](#joint-entropy-and-chain-rule) gives $H(X,Y)=H(Y)+H(X\mid Y)$. This identity holds for finite alphabets without an independence assumption. In fact, it is the definition of conditional entropy consistent with the joint entropy decomposition. For countable variables, use the same finiteness and well-definedness cautions stated there.
+
+For the noisy-bit example with a fair $X$ and independent flip probability $0.1$, the posterior after either value of $Y$ has probabilities $(0.9,0.1)$. Therefore $H(X\mid Y)=h_2(0.1)\approx0.469$ bits. Since $H(X)=1$, observing $Y$ removes about $0.531$ bits of uncertainty on average.
+
+### Mutual Information
+
+Mutual information quantifies statistical dependence between two variables. For finite alphabets, equivalent expressions are
 
 $$
 \begin{aligned}
 I(X;Y)&=H(X)-H(X\mid Y)\\
-&=D_{\mathrm{KL}}\bigl(p(x,y)\|p(x)p(y)\bigr)\\
-&=\sum_{x,y}p(x,y)\log_2\frac{p(x,y)}{p(x)p(y)}.
+&=H(Y)-H(Y\mid X)\\
+&=H(X)+H(Y)-H(X,Y)\\
+&=D_{\mathrm{KL}}\!\left(P_{XY}\middle\|P_XP_Y\right)\\
+&=\sum_{x,y:p(x,y)>0}p(x,y)\log_2\frac{p(x,y)}{p_X(x)p_Y(y)}.
 \end{aligned}
 $$
 
-Because KL divergence is non-negative, $I(X;Y)\geq0$; it is zero exactly when $X$ and $Y$ are independent. It is symmetric, unlike KL divergence, and is bounded above by $\min(H(X),H(Y))$.
+The expression as a KL divergence proves non-negativity and identifies the zero case. $I(X;Y)=0$ exactly when $X$ and $Y$ are independent. Symmetry follows from the joint-law expression or the entropy identity: $I(X;Y)=I(Y;X)$. Also $I(X;Y)\leq\min(H(X),H(Y))$ for finite entropies, because conditional entropy is non-negative.
 
-For a computed example, let $X$ be a fair bit and let $Y$ equal $X$ with probability $0.9$, flipping it with probability $0.1$, independently of $X$. Then $Y$ is also fair, so $H(X)=H(Y)=1$ bit. Given either value of $Y$, the conditional distribution of $X$ is $(0.9,0.1)$, hence $H(X\mid Y)=-0.9\log_2(0.9)-0.1\log_2(0.1)\approx0.469$. Therefore $I(X;Y)=1-0.469\approx0.531$ bits. The observation is informative but does not determine $X$ perfectly.
+**Worked Example 4.1 (A binary symmetric observation).** Let $X$ be a fair bit and let $Y$ be $X$ flipped with probability $0.1$, independently of $X$. The output $Y$ is fair, so $H(Y)=1$. Given $X$, uncertainty about $Y$ is $h_2(0.1)\approx0.469$. Thus $I(X;Y)=H(Y)-H(Y\mid X)=1-h_2(0.1)\approx0.531$ bits. The observation is informative but not sufficient to recover $X$ without error.
 
-## The Data Processing Inequality
+We can verify the same answer without starting from the entropy difference. The four joint probabilities for $(X,Y)=(0,0),(0,1),(1,0),(1,1)$ are $(0.45,0.05,0.05,0.45)$, while every product of marginals is $0.25$. The two matching outcomes each contribute $0.45\log_2(0.45/0.25)$ to the expected log ratio; the two mismatches each contribute $0.05\log_2(0.05/0.25)$. A mismatch contributes a negative *pointwise* value because it is less likely under the joint law than under independence. Their weighted sum is non-negative. An individual information-density term may therefore be negative even though mutual information cannot be.
 
-If $X\to Y\to Z$ form a Markov chain — meaning $Z$ is conditionally independent of $X$ given $Y$ — then processing $Y$ into $Z$ cannot increase information about $X$:
+The fair input matters. If $P(X=1)=a$, the output probability becomes $P(Y=1)=0.1+0.8a$ and $H(Y\mid X)$ remains $h_2(0.1)$. Hence $I_a(X;Y)=h_2(0.1+0.8a)-h_2(0.1)$. For $a=0$ the input never varies, and mutual information is zero despite the same physical channel. At $a=1/2$ the output is fair and the value is $0.531$ bits. The channel chapter maximises over $a$ to obtain capacity; the mutual information just calculated belongs to one specified input law. That distinction holds for every channel, even when symmetry happens to make the fair law optimal.
+
+Mutual information is not a measure of semantic relevance by itself. A variable can carry information about a target in the probabilistic sense but be inaccessible to a particular algorithm, too costly to use, or ethically inappropriate to use. Those are separate modelling and decision questions.
+
+#### Conditional Mutual Information and Chain Rules
+
+Conditional mutual information is the average dependence between $X$ and $Y$ within the conditional distributions given $Z$:
+
+$$
+I(X;Y\mid Z)=\sum_zp(z)D_{\mathrm{KL}}\!\left(P_{XY\mid Z=z}\middle\|P_{X\mid Z=z}P_{Y\mid Z=z}\right).
+$$
+
+For finite alphabets it is non-negative, and it is zero exactly when $X$ and $Y$ are conditionally independent given $Z$, up to conditioning values of probability zero. Entropy identities include
+
+$$
+I(X;Y\mid Z)=H(X\mid Z)-H(X\mid Y,Z)
+=H(Y\mid Z)-H(Y\mid X,Z).
+$$
+
+The mutual-information chain rule is
+
+$$
+I(X;Y,Z)=I(X;Y)+I(X;Z\mid Y)
+=I(X;Z)+I(X;Y\mid Z).
+$$
+
+These formulas follow from the entropy chain rule and do not require $X,Y,Z$ to be independent. They do require the entropies or divergences to be well-defined; finite alphabets suffice. The non-negativity of conditional mutual information is the key reason conditioning can be used in the data-processing proof.
+
+Conditioning can increase mutual information: $I(X;Y\mid Z)$ is not generally smaller than $I(X;Y)$. This differs from the inequality for conditional entropy and is a frequent source of mistaken intuition. For example, conditioning on a common effect can induce dependence between otherwise independent causes (a collider pattern). In finite-alphabet information identities, no monotonicity claim about conditional mutual information should be added without a specific hypothesis.
+
+The parity example makes the increase exact. Let $X$ and $Y$ be independent fair bits, and let $Z=X\oplus Y$. Before seeing $Z$, the inputs are independent, so $I(X;Y)=0$. Once $Z$ is fixed, knowing $X$ determines $Y$, while $X$ remains fair. Thus $H(Y\mid Z)=1$ and $H(Y\mid X,Z)=0$, giving $I(X;Y\mid Z)=1$ bit. Conditioning on a variable constructed from both inputs has turned an independent pair into a perfectly dependent conditional pair. Nothing about this calculation implies that observing $Z$ caused either input.
+
+There is an equally simple case in the other direction. If $X=Y$ is a fair bit and $Z=X$, then $I(X;Y)=1$ bit but $I(X;Y\mid Z)=0$: once the shared bit is given, there is no uncertainty left to reduce. These two examples show why conditional mutual information must be calculated from the conditional law rather than inferred from a generic slogan about conditioning.
+
+### Independence, Synergy, and Interaction
+
+Pairwise mutual information can miss higher-order structure. Let $X,Y$ be independent fair bits and $Z=X\oplus Y$. Then each pair is independent, so each pairwise mutual information is zero, yet any two variables determine the third. The joint entropy is two bits, not three, and $H(Z\mid X,Y)=0$. This parity example shows why "no pairwise dependence" does not imply joint independence.
+
+Information shared by two observations can be redundant, complementary, or mixed. The basic definitions do not supply a unique decomposition into these categories. Terms such as synergy require a chosen framework and should not be introduced as if they were uniquely determined by Shannon entropy. For this primer, use the parity example to expose the limitation and route specialised decompositions to further reading.
+
+### Data-Processing Inequality
+
+**Theorem 4.1 (Data-processing inequality).** Let $X,Y,Z$ be finite-alphabet random variables forming the Markov chain $X\to Y\to Z$, meaning $X$ and $Z$ are conditionally independent given $Y$. Then
 
 $$
 I(X;Z)\leq I(X;Y).
 $$
 
-This follows from the chain rule: under the Markov condition, $I(X;Y,Z)=I(X;Y)$, while also $I(X;Y,Z)=I(X;Z)+I(X;Y\mid Z)$ and conditional mutual information is non-negative. Equality is possible when the processing preserves all information relevant to $X$; deterministic processing may also lose none if it retains a sufficient representation. The result does not say that a transformation cannot make a task easier for a constrained downstream system; it says that it cannot create statistical information about $X$ absent from its input.
+**Proof sketch.** By the mutual-information chain rule, $I(X;Y,Z)=I(X;Y)+I(X;Z\mid Y)$. The Markov condition makes the conditional term zero, so $I(X;Y,Z)=I(X;Y)$. Expanding in the other order gives $I(X;Y,Z)=I(X;Z)+I(X;Y\mid Z)$. Conditional mutual information is non-negative, hence the inequality. For general measurable variables, the result holds under the measure-theoretic definition of mutual information and appropriate regular conditional distributions; the finite-alphabet proof avoids those technicalities. $\square$
 
-### Dependence, Conditioning, and Bayes' Rule
+Equality holds precisely when $I(X;Y\mid Z)=0$ under this proof, equivalently when $X$ and $Y$ are conditionally independent given $Z$ (for finite alphabets). A deterministic map $Z=f(Y)$ can preserve all information about $X$ if it retains a sufficient statistic for $X$ relative to $Y$; determinism alone does not guarantee equality.
 
-Information theory uses conditional distributions constantly, so it is worth making the probability bookkeeping explicit. Bayes' rule follows from the definition of a joint distribution:
+The Markov hypothesis is essential. If $Z$ receives information directly from $X$ as well as from $Y$, then the arrows do not form $X\to Y\to Z$ and the inequality need not apply. The theorem says that a processing stage cannot increase information about $X$ when its output is generated from $Y$ alone according to a fixed conditional law. It does not say processing cannot make a downstream task easier for a limited model or a human reader.
+
+In the two-stage flip example, the Markov property holds when the flips are independent as specified. A fair $X$ gives $I(X;Y)=1-h_2(a)$ and $I(X;Z)=1-h_2(a+b-2ab)$. For $a=0.1$ and $b=0.2$, these are about $0.531$ and $0.173$ bits. The second observation carries less information about the original bit. One need not prove this by differentiating binary entropy: the data-processing theorem already gives the ordering once the conditional factorisation is checked. If $b=1$, the second stage deterministically inverts $Y$ and equality holds; processing has changed the label but lost no information.
+
+A statistical transformation can still improve performance for a restricted learner. For example, a classifier that only accepts one scalar feature might perform better on a carefully designed summary $Z=f(Y)$ than on a raw high-dimensional $Y$ it cannot fit with available data. The population mutual information cannot increase under this mapping, but estimation error, computation, and inductive bias can change. Separate the theorem's distributional statement from an empirical model comparison.
+
+**Example.** Suppose $Y$ is a noisy measurement of a sensitive variable $X$, and $Z$ is a report generated only from $Y$. Then $I(X;Z)\leq I(X;Y)$. This is a statement about average statistical dependence under a specified joint law. It does not establish a formal privacy guarantee by itself: adversary knowledge, rare individuals, utility, and the chosen threat model still matter.
+
+### Continuous Variables and Mutual Information
+
+For arbitrary random variables on suitable measurable spaces, define mutual information by relative entropy:
 
 $$
-p(x\mid y)=\frac{p(y\mid x)p(x)}{p(y)},
-\qquad
-p(y)=\sum_xp(y\mid x)p(x).
+I(X;Y)=D_{\mathrm{KL}}\!\left(P_{XY}\middle\|P_X\times P_Y\right).
 $$
 
-The denominator is not a decorative normalisation factor. It is the probability of the observed evidence under every possible explanation, weighted by its prior probability. A model that reports information about $X$ after observing $Y$ must therefore specify both the likelihood $p(y\mid x)$ and the prior or source distribution $p(x)$.
+This definition extends the discrete one and remains meaningful when differential entropies are not. It can be infinite. If the joint law is not absolutely continuous with respect to the product of its marginals, mutual information is infinite; deterministic relationships between continuous variables often produce this phenomenon. For example, if $Y=X$ and $X$ has a continuous density, the joint law lies on the diagonal in the plane while the product law assigns that diagonal probability zero, so $I(X;Y)=+\infty$.
 
-A Markov chain $X\to Y\to Z$ means $p(z\mid x,y)=p(z\mid y)$. It does not necessarily mean that the variables are temporally ordered or causally related; it is a conditional-independence property of a joint distribution. The data-processing inequality follows from this property. If $Z$ is produced by passing $Y$ through a noisy mechanism, then $Z$ cannot reveal more statistical information about $X$ than $Y$ did. A causal interpretation requires additional assumptions beyond the Markov factorisation.
+When relevant differential entropies are finite and subtraction is valid, one may write $I(X;Y)=h(X)-h(X\mid Y)=h(X)+h(Y)-h(X,Y)$. Do not use this identity when it creates an undefined $\infty-\infty$ expression. Mutual information, unlike differential entropy, is invariant under separate invertible coordinate transformations of $X$ and $Y$ and is non-negative.
 
-The distinction matters in privacy. If $X$ is sensitive data, $Y$ is a released representation, and $Z$ is a downstream report, then a post-processing guarantee can bound information leakage from $Y$ to $Z$. It does not show that $Y$ itself is private, and it does not measure every operational privacy risk. Membership inference, reconstruction, and attribute inference depend on the adversary, auxiliary data, and decision rule as well as on the distributional information measure.
+For jointly Gaussian scalar variables with non-degenerate variances and correlation $\rho$ satisfying $|\rho|<1$, the mutual information is $-\tfrac12\log_2(1-\rho^2)$ bits. At $|\rho|=1$, one variable is an exact affine function of the other and the mutual information diverges. This example is useful but not a general formula for arbitrary continuous distributions; correlation alone does not determine mutual information outside specified families such as the jointly Gaussian case.
 
-### A Source-Coding Theorem in Operational Terms
+At $\rho=0.6$, the jointly Gaussian formula gives $-\tfrac12\log_2(0.64)\approx0.322$ bits. Because a jointly Gaussian pair with zero correlation is independent, the formula gives zero at $\rho=0$. Neither conclusion extends to an arbitrary joint law. For example, let a symmetric continuous $X$ have finite variance and set $Y=X^2$. The covariance of $X$ and $Y$ can be zero by symmetry while $Y$ is completely determined by $X$; in the ideal noise-free continuous model the MI is generally infinite. Adding measurement noise changes that value. State both the distributional family and measurement resolution before using correlation as an information proxy.
 
-The statement $L\geq H(X)$ for a one-symbol prefix code is only the beginning. Shannon's noiseless coding theorem says that for a stationary memoryless source, long blocks can be encoded at an average rate arbitrarily close to the source entropy, while rates below the entropy cannot support vanishing error under lossless recovery. The word "long" is doing real work: block coding amortises integer-length constraints and captures dependencies when the model includes them.
+### Python Calculation From a Joint Table
 
-For an independent source with $m$ symbols, a block of length $n$ has roughly $2^{nH(X)}$ typical sequences. Most probability mass is concentrated in that typical set, even though the full set has $m^n$ members. A code can assign about $nH(X)$ bits to identify a typical sequence and handle atypical sequences separately. The probability of an atypical block approaches zero as $n$ grows under the usual finite-alphabet assumptions. This is the intuition behind the achievability argument; the converse states that a code using substantially fewer bits cannot distinguish the high-probability possibilities reliably.
+For a small finite joint distribution, mutual information can be computed from the ratio of joint mass to the product of marginals. This form makes the independence comparison explicit.
 
-The typical-set picture should not be mistaken for a universal finite-sample algorithm. A real compressor needs a model, a way to transmit or agree on that model, finite buffers, and a policy for sequences that violate the model. If the model is wrong, the empirical code length reflects cross-entropy rather than entropy. Adaptive compressors trade model overhead against responsiveness to changing sources.
+```python
+from math import log2
 
-For the four-symbol source in the Huffman example, the entropy is approximately $1.846$ bits per symbol while the best single-symbol prefix code uses $1.9$ bits on average. If we encode long blocks, the average can approach the entropy more closely. That does not mean the compressed output must have exactly $1.846n$ bits for every block. It means the expected rate, with an appropriate coding scheme and asymptotic interpretation, can be made close to that value.
+joint = [[0.4, 0.1],
+         [0.1, 0.4]]
+px = [sum(row) for row in joint]
+py = [sum(joint[i][j] for i in range(2)) for j in range(2)]
 
-### A Worked Prefix-Code Table
+information = sum(
+    joint[i][j] * log2(joint[i][j] / (px[i] * py[j]))
+    for i in range(2) for j in range(2)
+    if joint[i][j] > 0
+)
+print(information)
+```
 
-The Huffman construction is easiest to audit as a table. The probabilities below sum to one, and the last column records the code length.
+The result is approximately $0.278$ bits. This is population mutual information for the specified table, not an estimate from sampled observations. For empirical data, zero-count cells, bias, and alphabet size affect the estimate; see the later **Estimating Information in Practice** section.
+
+#### Idiomatic Base R Calculation
+
+In base R, matrix margins provide the marginals and logical indexing selects positive cells. `outer` constructs the product-marginal matrix with the same dimensions as the joint table.
+
+```r
+joint <- matrix(c(0.4, 0.1,
+                  0.1, 0.4),
+                nrow = 2, byrow = TRUE)
+px <- rowSums(joint)
+py <- colSums(joint)
+independent <- outer(px, py)
+positive <- joint > 0
+
+information <- sum(joint[positive] *
+                   log2(joint[positive] / independent[positive]))
+information
+```
+
+This calculation assumes a valid normalised joint distribution. For data frames of observations, first make the state space and handling of unobserved category combinations explicit; `table` can construct empirical counts, but naive plug-in mutual information is biased upward in many finite-sample settings.
+
+## Lossless Source Coding
+
+### From Probabilities to Code Lengths
+
+A binary code maps source symbols to finite strings over $\{0,1\}$. If symbol $x$ receives codeword $c(x)$, its length is $\ell(x)=|c(x)|$. Under source distribution $p$, the expected length is
+
+$$
+L=\mathbb{E}[\ell(X)]=\sum_xp(x)\ell(x)
+$$
+
+bits per source symbol. A code is injective if distinct symbols have distinct codewords. Injectivity permits decoding one isolated codeword, but concatenated variable-length codewords need a parsing rule.
+
+A prefix code has no codeword that is a prefix of another. It can therefore be decoded instantaneously from a concatenated bitstream without separators or lookahead beyond the end of a codeword. Prefix-freeness is sufficient for unique decodability, though not necessary: some uniquely decodable codes are not prefix codes. The simplest entropy bounds are stated for prefix codes; do not silently claim that every argument about a prefix tree applies to arbitrary codes without a corresponding theorem.
+
+#### Kraft Inequality
+
+For any binary prefix code with lengths $\ell_1,\ldots,\ell_m$,
+
+$$
+\sum_{i=1}^m2^{-\ell_i}\leq1.
+$$
+
+Each codeword identifies a node in a full binary tree. A codeword of length $\ell_i$ has a descendant region occupying a fraction $2^{-\ell_i}$ of all paths of a sufficiently deep fixed length. Prefix-freeness makes these regions disjoint, so their fractions sum to at most one.
+
+**Theorem 5.1 (Kraft's inequality and its converse).** The lengths of any binary prefix code satisfy Kraft's inequality. Conversely, any finite list of non-negative integer lengths satisfying the inequality can be realised by a binary prefix code.
+
+**Proof sketch.** Necessity is the disjoint-tree-region argument above. For sufficiency, sort the lengths in non-decreasing order and assign leaves greedily from left to right in the binary tree. At depth $\ell$, each selected leaf consumes $2^{-\ell}$ of the unit interval of binary paths. The Kraft sum ensures total consumed capacity is at most one, so no assigned leaf needs to overlap an earlier leaf. Equivalently, the canonical-code construction assigns each codeword the next available binary interval of width $2^{-\ell}$. $\square$
+
+The converse concerns existence of a prefix code with those lengths, not a particular bit assignment. Many bit patterns can have the same length profile and expected cost.
+
+#### The Entropy Lower Bound
+
+**Theorem 5.2 (Expected length lower bound).** For a discrete source $X$ with finite alphabet and distribution $p$, every binary prefix code has expected length $L\geq H(X)$.
+
+**Proof sketch.** Let $K=\sum_x2^{-\ell(x)}\leq1$ and define a normalised distribution $q(x)=2^{-\ell(x)}/K$. Then
+
+$$
+D_{\mathrm{KL}}(p\|q)
+=-H(X)+\sum_xp(x)\ell(x)+\log_2K\geq0.
+$$
+
+Since $\log_2K\leq0$, rearranging yields $L\geq H(X)-\log_2K\geq H(X)$. Symbols with zero source probability can be omitted or assigned arbitrary unused codewords. $\square$
+
+This theorem applies to expected length under the stated source law and a prefix code. It does not say that each individual codeword must have length at least that symbol's surprisal, nor that a finite block always uses exactly $nH(X)$ bits. An individual common symbol may have a short codeword and a rare one a longer codeword; the inequality holds after averaging.
+
+The entropy lower bound also extends to uniquely decodable codes through the Kraft–McMillan inequality: their length sequences obey the same Kraft bound. Prefix codes provide the construction and parsing intuition here. An arbitrary injective variable-length code is insufficient, because concatenated codewords may be ambiguous.
+
+### Shannon Code and the One-Bit Redundancy Bound
+
+For each positive-probability symbol, choose length $\ell(x)=\lceil-\log_2p(x)\rceil$. Then $2^{-\ell(x)}\leq p(x)$, so Kraft's inequality holds and a prefix code exists. Since $\lceil a\rceil<a+1$ unless $a$ is an integer (where equality with $a$ holds), its expected length satisfies
+
+$$
+H(X)\leq L < H(X)+1
+$$
+
+for a finite source after an appropriate prefix code is assigned. The lower bound is Theorem 5.2; the upper bound follows by averaging $\ell(x)<-\log_2p(x)+1$.
+
+The code is often called a Shannon code, but the name can refer to closely related constructions in different texts. The robust claim is the length assignment and its bound. A code word length is an integer, while surprisal is generally fractional; the ceiling is the rounding loss. This construction need not be optimal among one-symbol prefix codes.
+
+### Huffman Coding and a Complete Example
+
+Huffman coding produces a minimum-expected-length binary prefix code for a known finite source when symbols are encoded individually and symbol costs are measured by codeword length. Repeatedly merge the two least probable items, treating a merged item as a subtree; assign 0 and 1 to the branches after the tree is complete.
+
+Consider probabilities $p(a)=0.4$, $p(b)=0.3$, $p(c)=0.2$, and $p(d)=0.1$. Merge $d$ and $c$ to form a node of mass 0.3; merge that node with $b$ to form 0.6; then merge with $a$. The table gives one valid assignment. Ties can produce different trees and codewords without changing the optimal expected length.
 
 | Symbol | Probability | Codeword | Length |
 |---|---:|---|---:|
@@ -190,390 +632,825 @@ The Huffman construction is easiest to audit as a table. The probabilities below
 | $c$ | 0.20 | `110` | 3 |
 | $d$ | 0.10 | `111` | 3 |
 
-The expected length is the probability-weighted sum of the lengths, $1.9$ bits per symbol. The code is prefix-free because no listed codeword begins another listed codeword. Kraft's sum is $2^{-1}+2^{-2}+2^{-3}+2^{-3}=1$, so the tree fills the binary code space exactly. The difference $1.9-1.846\approx0.054$ bits per symbol is the redundancy of this particular code for this source.
-
-Changing the names of the symbols changes nothing. Changing their probabilities changes both the optimal tree and the entropy. If the probabilities are estimates rather than known facts, a code built from them can be suboptimal, and a code that assigns zero probability to a future symbol may fail catastrophically. Practical compressors reserve escape mechanisms or use smoothing so that new symbols remain representable.
-
-### A Small Arithmetic-Coding Intuition
-
-Suppose a source emits $A$ with probability $0.75$ and $B$ with probability $0.25$. Start with the interval $[0,1)$. After observing $A$, retain $[0,0.75)$; after observing $B$ next, subdivide that interval and retain its upper quarter, $[0.5625,0.75)$. Any sufficiently precise number in the final interval identifies the sequence `AB` under the model. Its width is $0.75\times0.25=0.1875$, and $-\log_2(0.1875)\approx2.415$ bits is the ideal information assigned by the model to that sequence.
-
-This is not a complete arithmetic coder. A production implementation must represent a finite-precision interval, emit stable leading bits, handle underflow, and agree on the probability model. The example is useful because it connects probability directly to code length: multiplying probabilities adds their negative logarithms.
-
-### Error Correction as Geometry
-
-A code is a subset of the space of possible transmitted sequences. For binary block codes of length $n$, the ambient space has $2^n$ points. A decoder partitions received words into decision regions around codewords. Noise moves the transmitted word. If the movement stays within its region, decoding succeeds; if it crosses a boundary, it fails.
-
-The minimum Hamming distance $d$ between distinct codewords controls a worst-case guarantee. Balls of radius $t$ around codewords are disjoint when $2t<d$, so nearest-neighbour decoding corrects up to $\lfloor(d-1)/2\rfloor$ arbitrary errors. Known erasures are easier: an erased position contributes uncertainty but does not point to a competing value, and unique recovery can tolerate up to $d-1$ erasures in the ideal codeword model.
-
-The geometric guarantee is not the same as average performance on a probabilistic channel. A code may have a good minimum distance but poor distance distribution, or its decoder may be too expensive. Modern capacity-approaching families such as low-density parity-check and polar codes rely on structure that is outside this primer's construction detail. The useful lesson is the separation of four quantities: rate, distance, decoding complexity, and probability of error under a specified channel.
-
-### Finite Blocks and the Limits of Asymptotic Theorems
-
-Capacity is a limit as block length tends to infinity. At finite block length, the relevant questions include the target error probability, latency, computational budget, and whether the channel state is known. A rate slightly below capacity may still be unusable for a short block, while a rate above capacity may appear successful in a small experiment only because the observed noise was unusually favourable.
-
-Fano's inequality makes the converse intuition quantitative. If a message $M$ is selected uniformly from a set of size $|\mathcal{M}|$, and $\widehat{M}$ is the decoder's estimate with error probability $P_e$, then
+The code is prefix-free, and its expected length is
 
 $$
-H(M\mid\widehat{M})\leq h_2(P_e)+P_e\log_2(|\mathcal{M}|-1).
+L=0.4(1)+0.3(2)+0.2(3)+0.1(3)=1.9\text{ bits per symbol}.
 $$
 
-When $P_e$ is small, the decoder has learned almost all the message entropy. When the communication rate exceeds the channel's information supply, the conditional uncertainty cannot vanish. The inequality is a tool in proofs; it is not a formula that predicts the exact error rate of a chosen code.
+The source entropy is $H(X)\approx1.846$ bits, so the redundancy is about $0.054$ bits per symbol. The code achieves the minimum expected length among binary prefix codes for this one-symbol problem. It is not exact entropy coding in the sense of assigning each symbol precisely $-\log_2p(x)$ bits, because lengths are integers.
 
-### Information in Continuous Variables
+The result changes if the source probabilities change while the codewords stay fixed. Suppose the actual law becomes $r=(0.1,0.2,0.3,0.4)$ in the same symbol order. The displayed tree then averages $0.1(1)+0.2(2)+0.3(3)+0.4(3)=2.6$ bits per symbol, even though the entropy is still about $1.846$ bits: permuting the probabilities leaves entropy unchanged but makes this fixed code badly matched to the new frequencies. Rebuilding the Huffman tree for $r$ restores an expected length of $1.9$ bits. A code optimal for one distribution need not be optimal for another.
 
-For a continuous random variable with density $f(x)$, differential entropy is
+The mismatch cost for a fixed integer code is not exactly a KL divergence. KL describes ideal lengths $-\log_2 q(x)$ under a model $q$; a prefix code rounds and couples lengths through Kraft's inequality. If a compressor sends the new model to its decoder, those model bits must also be counted. For a long stream the model cost can be amortised, but on a short message it may dominate the saved fraction of a bit per symbol. This is why an entropy figure alone cannot predict a compressed file size.
+
+**Proof sketch of Huffman optimality.** In an optimal binary prefix tree, the two least probable symbols can be chosen as sibling leaves at maximum depth: if not, swapping a lower-probability symbol deeper cannot increase cost. Merge those two leaves into a single symbol whose probability is their sum. Any code for the reduced source expands to a code for the original source by appending one bit to each of the two merged symbols; the expected length increases by exactly their combined probability. Induction on alphabet size proves that choosing the two least probable symbols at each step is optimal. This argument assumes symbol-wise coding, binary branches, and known probabilities; it says nothing about finite-block global optimality or model cost.
+
+#### Python and Base R for Expected Length
+
+For a known codebook, expected length is a weighted sum. The check below catches a missing symbol or a malformed probability vector but does not independently prove prefix-freeness.
+
+```python
+probability = {"a": 0.4, "b": 0.3, "c": 0.2, "d": 0.1}
+code = {"a": "0", "b": "10", "c": "110", "d": "111"}
+
+assert probability.keys() == code.keys()
+assert abs(sum(probability.values()) - 1.0) < 1e-12
+assert all(not right.startswith(left)
+           for left in code.values() for right in code.values()
+           if left != right)
+expected_length = sum(probability[symbol] * len(code[symbol])
+                      for symbol in probability)
+print(expected_length)
+```
+
+In base R, named vectors keep probabilities and code lengths aligned by symbol. This computes the cost of the supplied code; it does not construct a Huffman tree.
+
+```r
+probability <- c(a = 0.4, b = 0.3, c = 0.2, d = 0.1)
+code <- c(a = "0", b = "10", c = "110", d = "111")
+stopifnot(identical(names(probability), names(code)),
+          abs(sum(probability) - 1) < 1e-12)
+expected_length <- sum(probability * nchar(code))
+expected_length
+```
+
+Avoid presenting a short hand-written tree builder as production-quality Huffman code. Tie handling, zero-probability symbols, arbitrary alphabets, and canonical-code serialisation deserve deliberate design. The example's purpose is to audit the expected-length arithmetic.
+
+### Block Coding and the Noiseless Source-Coding Theorem
+
+Single-symbol codes pay an integer-length penalty on each symbol. A block code groups $n$ source symbols into one super-symbol, so the code length per original symbol can approach entropy as $n$ grows. For an i.i.d. finite-alphabet source, the block distribution is $p(x_1,\ldots,x_n)=\prod_{i=1}^np(x_i)$ and its entropy is $nH(X)$.
+
+**Theorem 5.3 (Noiseless source-coding theorem, finite-alphabet i.i.d. form).** Let $X_1,X_2,\ldots$ be independent and identically distributed (i.i.d.) with a finite alphabet and entropy $H(X)$. For every $\varepsilon>0$, sufficiently large block lengths admit exactly lossless prefix codes for $X^n=(X_1,\ldots,X_n)$ whose expected rate is less than $H(X)+\varepsilon$ bits per source symbol. Conversely, every exactly lossless uniquely decodable block code has expected rate at least $H(X)$ for each block. A fixed-length formulation that permits a vanishing block-error probability has a related threshold theorem, but its rate and error convention differ from this expected-length statement.
+
+**Proof sketch.** For achievability, assign Shannon lengths to the $n$-symbol super-alphabet. The expected block length is below $H(X^n)+1=nH(X)+1$, hence per-symbol rate is below $H(X)+1/n$. For the converse in an exactly lossless prefix setting, apply the entropy lower bound to the block: expected length is at least $H(X^n)=nH(X)$. The Kraft–McMillan extension gives the same expected-length lower bound for a uniquely decodable block code. If decoding errors are permitted, a separate fixed-length converse uses typical sets or an appropriate entropy bound; its exact statement depends on the coding formulation. $\square$
+
+This elementary expected-length statement does not require an informal typical-set proof. The typical-set argument gives useful intuition: under i.i.d. finite-alphabet sampling, most probability lies on sequences whose probability is near $2^{-nH(X)}$, so their count is roughly $2^{nH(X)}$. A lossless code must distinguish the high-probability sequences, suggesting a rate near $H(X)$. To make the converse rigorous, handle atypical sequences and the error criterion rather than treating "roughly" as a theorem.
+
+For the four-symbol source, the one-symbol Huffman code costs $1.9$ bits on average. If we use Shannon's length assignment for every $n$-symbol block, its average block cost is below $n(1.8464)+1$ bits, or below $1.8464+1/n$ per source symbol. At $n=100$, this upper bound is approximately $1.8564$ bits per symbol. It is an existence bound for a large block alphabet, not a recommendation to build a code table with $4^{100}$ entries. Arithmetic or range coding approaches the same fractional-length idea with a compact evolving interval and model.
+
+There are two different meanings of "rate" in nearby coding statements. Here rate is *expected bits emitted per source symbol* by an exactly invertible variable-length encoder. A fixed-length source block code instead emits a predetermined number of bits for every block and may declare an error on atypical source sequences. For such a code, a rate above entropy can make error probability vanish as block length grows; below entropy, vanishing error is impossible under the standard i.i.d. finite-alphabet formulation. An expected-length code has no block error, but its realised length varies across source blocks. Mixing these rate conventions can turn a correct theorem into a false operational claim.
+
+For a stationary source with memory, the relevant asymptotic rate is generally the entropy rate $\lim_{n\to\infty}H(X^n)/n$ when this limit exists, not necessarily the one-symbol entropy $H(X_1)$. A stationary ergodic finite-alphabet source has an entropy rate and a corresponding asymptotic equipartition property. Do not call a dependent source memoryless or substitute $H(X_1)$ for its entropy rate.
+
+#### What "lossless" Means in Practice
+
+Lossless coding requires exact recovery of the encoded source sequence under the declared code and decoding rule. A compression algorithm may be lossless relative to a byte sequence even if an earlier data-cleaning step discarded information; the boundary of what counts as the source must be specified.
+
+The entropy theorem assumes the encoder and decoder share or communicate enough about the coding model. If a compressor uses probabilities estimated from data, the model description has a cost unless it is fixed in advance or otherwise shared. Under a mismatched model $q$, ideal log-loss length averages to cross-entropy $H(p,q)=H(p)+D_{\mathrm{KL}}(p\|q)$, before finite-precision and framing overhead. This links coding back to [Section 3.6](#cross-entropy-and-log-loss).
+
+Finite files also pay for headers, dictionaries, block boundaries, checksums, and escape symbols. A code that is asymptotically close to entropy can expand a short input after those costs. A model that assigns zero probability to a possible future symbol can make an ideal arithmetic code impossible; practical coders use smoothing or escape mechanisms. These implementation details qualify practical compression claims but do not alter the entropy lower bound under its mathematical assumptions.
+
+A practical audit starts by fixing what exactly must be recovered. If a sensor stores a rounded decimal value, a lossless byte compressor can reproduce that rounded byte sequence perfectly while the original analogue signal is already lost. If an encoder normalises Unicode text before compression, the exact original byte sequence may likewise be unrecoverable. Such preprocessing must be accounted for outside the lossless coding theorem. Similarly, a checksum can detect a damaged compressed stream but does not generally repair it; protection against channel errors belongs to the channel-code model.
+
+### Arithmetic Coding: Probability Intervals
+
+Arithmetic coding illustrates how variable-length bitstrings can approximate fractional surprisal across a sequence. Given a known finite probability model, begin with interval $[0,1)$. Divide it into subintervals whose widths match symbol probabilities. After each symbol, retain the subinterval for that symbol and rescale within it. After a sequence $x_1,\ldots,x_n$, the interval width is $\prod_i p(x_i)$ for an i.i.d. model, so the number of bits needed to identify a point in it is approximately
 
 $$
-h(X)=-\int f(x)\log_2f(x)\,dx,
+-\log_2\prod_{i=1}^np(x_i)=\sum_{i=1}^n-\log_2p(x_i).
 $$
 
-when the integral is well-defined. Unlike discrete entropy, $h(X)$ can be negative and changes under rescaling. If $Y=aX$ for non-zero $a$, then $h(Y)=h(X)+\log_2|a|$. Changing units from metres to millimetres therefore changes differential entropy, which would be impossible for an invariant count of discrete messages.
+For $p(A)=0.75$ and $p(B)=0.25$, the sequence `AB` maps to an interval of width $0.75(0.25)=0.1875$, whose ideal information is about $2.415$ bits. No individual two-bit string has fractional length; the interval method assigns precision across the entire sequence and finalisation adds bounded overhead under an actual finite-precision implementation.
 
-Mutual information avoids this particular problem because the scale terms cancel in the appropriate density ratio:
+This is an intuition, not a complete arithmetic coder. A real implementation must manage finite registers, renormalisation, underflow, termination, and a probability model known to both sides. The next chapter contrasts this source representation with channel coding, where redundancy is intentionally added to enable recovery from noise.
 
-$$
-I(X;Y)=\int\!\int f(x,y)\log_2\frac{f(x,y)}{f(x)f(y)}\,dx\,dy.
-$$
+## Noisy Channels and Capacity
 
-It remains non-negative under the usual conditions and is invariant under invertible smooth reparameterisations. This is why mutual information is safer than differential entropy for describing dependence between continuous measurements. It is still an expectation under a model and can be difficult to estimate from finite data.
+Compression and communication are related but answer different questions. Source coding asks how concisely a source can be represented. Channel coding asks how reliably a message can be recovered after a specified channel has altered the transmitted symbols. Entropy and mutual information connect the questions, but source entropy is not a channel's capacity, and a code's rate is not automatically its useful throughput.
 
-The Gaussian distribution maximises differential entropy among distributions with a fixed variance. This fact supports the Gaussian-noise channel formula, but it does not make every measured signal Gaussian or every squared-error objective information-theoretically justified. Check the source model and constraint before applying a Gaussian result.
+This section introduces a probabilistic channel model, computes mutual information for selected input laws, optimises that law to obtain capacity, and states the asymptotic coding theorem. It treats a discrete memoryless channel first, then compares the binary symmetric channel (BSC) with the binary erasure channel (BEC), considers an asymmetric channel, and closes with the real additive white Gaussian noise (AWGN) model. The theorem statements concern mathematical existence; they do not supply a practical encoder, decoder, latency target, or finite-block error guarantee.
 
-### Rate–Distortion in More Detail
+### A Channel as a Conditional Distribution
 
-Lossless compression demands exact reconstruction. Lossy compression changes the goal: the decoder may output $\widehat{X}$ rather than $X$, provided the expected distortion $\mathbb{E}[d(X,\widehat{X})]$ is within a stated limit. The distortion function is part of the problem definition. Squared error penalises large numerical deviations, Hamming distortion counts symbol disagreements, and perceptual metrics encode a different notion of acceptable error.
+A channel is a conditional probability distribution from an input alphabet $\mathcal{X}$ to an output alphabet $\mathcal{Y}$. Write its transition law as $W(y\mid x)=P(Y=y\mid X=x)$. For each input $x$, $W(\cdot\mid x)$ is a distribution over possible outputs. The channel describes what can happen to a transmitted symbol; an input distribution $p(x)$ describes how often the transmitter chooses each input. These are separate ingredients.
 
-The rate–distortion function is non-increasing in $D$: allowing more distortion cannot require more rate. It is zero once the allowed distortion is high enough that a constant reconstruction is acceptable. It is generally convex under standard formulations because time-sharing two coding strategies can mix their rates and distortions.
-
-For a binary symmetric source under Hamming distortion, the rate–distortion curve is
-
-$$
-R(D)=1-h_2(D),\qquad 0\leq D\leq\frac{1}{2},
-$$
-
-and zero for $D\geq1/2$. At zero distortion, one bit per source symbol is required; at distortion one half, a constant guess has no worse average error than an independent reconstruction. The formula is elegant because the source, distortion, and alphabet are all matched to the binary model. It should not be transplanted to images, text, or structured records without redefining the distortion.
-
-### Information Theory and Machine Learning
-
-For a classifier with true class $Y$ and predicted distribution $q_\theta(y\mid x)$, the empirical cross-entropy is the average negative log probability assigned to the observed labels. If the labels are generated from a conditional distribution $p(y\mid x)$, the population objective decomposes into the conditional entropy $H(Y\mid X)$ plus a conditional KL divergence. The best possible model in the chosen family therefore depends on approximation error, while the irreducible term reflects label uncertainty.
-
-This decomposition also explains why a low training loss is not enough. A high-capacity model can assign excellent probabilities to the training sample while learning a conditional distribution that does not transfer. The empirical distribution, data collection process, label noise, and evaluation distribution all matter. Information theory names the mismatch but does not remove the need for held-out evaluation.
-
-Variational autoencoders introduce another useful connection. A latent-variable model uses a variational distribution $q_\phi(z\mid x)$ to approximate a posterior, and the evidence lower bound contains a reconstruction term plus a KL penalty between the approximate posterior and a prior. The KL term is a distribution mismatch penalty, not a direct measurement of the number of human-interpretable facts stored in $z$. Latent dimensions can be entangled, redundant, or unused; interpreting them requires a task and an intervention or evaluation protocol.
-
-The information bottleneck objective is often written as a trade-off between preserving information about a target $Y$ and limiting information retained about an input $X$, for example $I(Z;Y)-\beta I(Z;X)$. The expression is useful as a conceptual lens, but estimating both mutual informations can be hard, and the result depends on the encoder class, noise model, and finite sample. A representation with lower $I(Z;X)$ is not automatically better: it may have discarded information needed for a task that was not included in the objective.
-
-## Finite-Sample Estimation
-
-In applications, the distribution is usually unknown. Given $n$ independent observations $X_1,\ldots,X_n$ from $p$, the empirical distribution is $\widehat{p}(x)=N_x/n$, where $N_x$ counts occurrences of $x$. Substituting these frequencies into the entropy formula gives the plug-in estimate $\widehat{H}=-\sum_x\widehat{p}(x)\log_2\widehat{p}(x)$. It is consistent for a fixed finite alphabet as $n$ grows, but it is generally downward-biased at finite $n$: unseen outcomes receive estimated probability zero and contribute no estimated uncertainty.
-
-For fixed support size $k$ and sufficiently large $n$, a first-order approximation to the bias in bits is $\mathbb{E}[\widehat{H}]-H(p)\approx-(k-1)/(2n\ln2)$, provided the probabilities on that support are positive and the asymptotic approximation is appropriate. This is not a universal correction for sparse or growing alphabets. Smoothing can reduce zero-frequency problems but changes the estimator and introduces its own bias; report the method and assumptions rather than treating a smoothed result as assumption-free.
-
-Plug-in mutual information has an additional finite-sample problem: empirical dependence can arise by chance, so estimated mutual information is often positively biased under independence. The effective alphabet sizes and sample size both matter. Useful checks include reporting sample counts and support sizes, comparing against a permutation-based null distribution that preserves the marginals, and checking whether estimates stabilise as more data are collected. For continuous variables, naive binning changes the quantity being estimated, while differential entropy has different properties from discrete entropy; estimator choice must match the variable type and question.
-
-## Noisy Channels and Reliable Communication
-
-A communication channel maps an input symbol to an output symbol, sometimes changing or erasing it. Channel coding asks how much information can be sent reliably despite those changes. This section develops the discrete memoryless model, the binary symmetric and erasure channels, capacity, and Shannon's coding theorem, then connects the same ideas to continuous-valued systems, rate–distortion, statistics, and machine learning. It is an introduction to the central results and their use, not a proof-based treatment of coding constructions, network information theory, or modern coding standards. Readers should be comfortable with probabilities, logarithms, and finite sums.
-
-The table defines the notation used in the channel and compression arguments.
-
-| Symbol | Meaning | First Use |
-|---|---|---|
-| $X$, $Y$ | Channel input and output random variables | Discrete channel model |
-| $x$, $y$ | Realised input and output symbols | Transition probabilities |
-| $W(y\mid x)$ | Probability of output $y$ given input $x$ | Discrete channel model |
-| $p(x)$ | Probability assigned to input $x$ | Mutual information |
-| $H(X)$ | Entropy of a discrete random variable | Mutual information |
-| $I(X;Y)$ | Mutual information between input and output | Capacity |
-| $C$ | Channel capacity, in bits per channel use | Capacity |
-| $R$ | Communication rate, in bits per channel use | Coding theorem |
-| $D$ | Expected distortion per source symbol | Rate–distortion |
-| $R(D)$ | Minimum rate needed at distortion level $D$ | Rate–distortion |
-
-## The Discrete Memoryless Channel
-
-A discrete memoryless channel has finite input and output alphabets and a transition law $W(y\mid x)$. For each input $x$, the values $W(y\mid x)$ form a probability distribution over outputs. “Memoryless” means that, conditioned on the input sequence, each output is drawn according to the same transition law independently of other channel uses. It does not mean that successive inputs must be independent.
-
-If an encoder sends $x_1,\ldots,x_n$ and the channel returns $y_1,\ldots,y_n$, the model states
+A discrete memoryless channel (DMC) has finite input and output alphabets and the same transition law at each use. Conditional on the entire input sequence, outputs are independent:
 
 $$
 P(y_1,\ldots,y_n\mid x_1,\ldots,x_n)
-=\prod_{i=1}^{n} W(y_i\mid x_i).
+=\prod_{i=1}^{n}W(y_i\mid x_i).
 $$
 
-The model is useful because it separates the physical or abstract channel from the encoder and decoder. It can be a poor fit when errors are correlated, channel conditions drift, feedback changes future inputs, or the alphabet omits meaningful outcomes such as packet delay.
+The memoryless condition concerns the channel noise, not the encoder's choices. The inputs may be dependent because a codeword is selected as a whole. Nor does memorylessness mean that a physical system has no state: it means the chosen model either has no relevant state or has already incorporated a state in a way that makes this conditional factorisation valid. A radio link with slow fading or a sensor with burst errors may violate it.
 
-For a chosen input distribution $p(x)$, entropy measures uncertainty in the input:
-
-$$
-H(X)=-\sum_x p(x)\log_2 p(x).
-$$
-
-Mutual information measures how much observing the output reduces uncertainty about the input:
+Given input law $p(x)$, the joint distribution is $p(x,y)=p(x)W(y\mid x)$, and the output marginal is $p_Y(y)=\sum_xp(x)W(y\mid x)$. The mutual information for this input law is
 
 $$
-I(X;Y)=\sum_{x,y}p(x)W(y\mid x)
-\log_2\frac{W(y\mid x)}{p_Y(y)},
+I_p(X;Y)=\sum_{x,y}p(x)W(y\mid x)
+\log_2\frac{W(y\mid x)}{p_Y(y)}
+=H(X)-H(X\mid Y).
 $$
 
-where $p_Y(y)=\sum_x p(x)W(y\mid x)$. Equivalently, $I(X;Y)=H(X)-H(X\mid Y)$. It is an average over the stipulated input and channel distributions, not a guarantee about every message.
+The subscript reminds us that the value depends on the distribution used to select $X$, as well as on the channel. The conditional entropy asks how uncertain the input remains after observing the output. This connects directly to [Mutual Information](#mutual-information): mutual information is a property of a joint distribution, not of a channel diagram alone.
 
-## Binary Symmetric and Erasure Channels
+### Binary Symmetric Channel: One Input Law, One Capacity
 
-A binary symmetric channel (BSC) transmits bits and flips each bit independently with probability $p$, where $0\leq p\leq 1$. Its transition probabilities are $W(1\mid0)=W(0\mid1)=p$ and $W(0\mid0)=W(1\mid1)=1-p$. For a uniform input, the output is also uniform and the uncertainty remaining about the input is the binary entropy
+A BSC has input and output alphabets $\{0,1\}$. Each input bit is flipped independently with crossover probability $\varepsilon$, where $0\leq\varepsilon\leq1$. Thus $W(1\mid0)=W(0\mid1)=\varepsilon$ and $W(0\mid0)=W(1\mid1)=1-\varepsilon$. Let $X\sim\operatorname{Bernoulli}(a)$, so $P(X=1)=a$, and let $Z\sim\operatorname{Bernoulli}(\varepsilon)$ be independent noise. The output is $Y=X\mathbin{\oplus}Z$, with $P(Y=1)=\varepsilon+a(1-2\varepsilon)$.
 
-$$
-h_2(p)=-p\log_2p-(1-p)\log_2(1-p),
-$$
-
-with endpoint values defined by continuity. The BSC's capacity is therefore $1-h_2(p)$ bits per use.
-
-**Worked Example 1 (Binary Symmetric Channel).** Suppose each transmitted bit is flipped with probability $p=0.1$, independently. Then $h_2(0.1)=-0.1\log_2(0.1)-0.9\log_2(0.9)\approx0.469$. The capacity is approximately $1-0.469=0.531$ bits per use. Thus a long block can carry about 0.531 information bits per use with arbitrarily small decoding error under the coding theorem's assumptions; it does not say that sending uncoded bits has this performance.
-
-A binary erasure channel (BEC) has input alphabet $\{0,1\}$ and output alphabet $\{0,1,?\}$. Each bit is either received correctly or replaced by a visible erasure marker `?`, independently with probability $e$. The receiver knows which positions were erased. With a uniform input, each unerased output reveals one bit and each erased output reveals none, so the capacity is $1-e$ bits per use.
-
-**Worked Example 2 (Binary Erasure Channel).** If $e=0.2$, then over 1,000 channel uses the expected number of unerased bits is $1,000(1-0.2)=800$. Capacity is $0.8$ bits per use. This expectation is not a promise of exactly 800 received bits in each block: the erasure count varies, and a finite-length code can fail even when the realised count is below its nominal correction limit.
-
-The BSC and BEC illustrate different error information. An erasure announces that a symbol was lost; a flip gives a plausible but wrong symbol. This distinction explains why codes can often recover from more erasures than arbitrary errors at the same block length.
-
-## Capacity and Shannon's Coding Theorem
-
-For a discrete memoryless channel, capacity is the largest mutual information attainable by choosing an input distribution:
+The noise bit is independent of $X$, and $Y$ given $X$ is just a translated version of that noise. Therefore $H(Y\mid X)=h_2(\varepsilon)$, where $h_2(u)=-u\log_2u-(1-u)\log_2(1-u)$ and $0\log_2 0=0$. It follows that
 
 $$
-C=\max_{p(x)} I(X;Y).
+I_a(X;Y)=h_2\bigl(\varepsilon+a(1-2\varepsilon)\bigr)-h_2(\varepsilon).
 $$
 
-The maximisation matters: a non-uniform input can be best for an asymmetric channel. Capacity is an asymptotic limit measured in bits per channel use. It is not the rate of a particular code, nor does it specify its latency, computational cost, or finite-block error probability.
+This formula separates the *achieved mutual information* for input probability $a$ from the *channel capacity*, which maximises that quantity over all allowed input laws. At $a=1/2$, the output is uniform and $I_{1/2}(X;Y)=1-h_2(\varepsilon)$. For the BSC, this uniform input is capacity-achieving: $H(Y)\leq1$, with equality for a uniform binary output, while $H(Y\mid X)=h_2(\varepsilon)$ for every input law. Hence
 
-**Theorem (Shannon's Channel Coding Theorem).** For a discrete memoryless channel with finite alphabets and transition law $W$, let $C=\max_{p(x)}I(X;Y)$. For any rate $R<C$, there exist length-$n$ codes whose average probability of decoding error tends to zero as $n$ tends to infinity. For any $R>C$, no sequence of length-$n$ codes can make that error probability tend to zero.
+$$
+C=\max_{0\leq a\leq1}I_a(X;Y)=1-h_2(\varepsilon)
+\quad\text{bits per channel use}.
+$$
 
-**Proof Sketch.** For achievability, choose codewords randomly with symbols drawn from an input distribution approaching the capacity-achieving distribution. A typicality decoder looks for a unique codeword jointly typical with the received sequence. When $R<I(X;Y)$, the transmitted codeword is typical with high probability, while the chance that any of roughly $2^{nR}$ competing codewords also passes the test tends to zero. Optimising the input law reaches rates below $C$. For the converse, Fano's inequality bounds the message information that can be recovered from the output. The chain rule and memorylessness bound that information by $nC$; if the rate exceeds $C$, the error probability cannot vanish. The full theorem distinguishes average from maximal error conventions and handles boundary details; this statement uses average error and does not assert reliable operation at $R=C$ for every channel.
+The symmetry argument applies also at $\varepsilon=0$ and $\varepsilon=1$. At the latter endpoint, the channel deterministically flips every bit; it still has capacity one bit per use because the receiver can invert the flip. At $\varepsilon=1/2$, the output is independent of the input and capacity is zero. If a physical noise model restricts the transmitter's input frequencies, the maximisation domain must reflect that constraint; the displayed BSC capacity presumes either input bit is permitted with any probability.
 
-The result is an existence theorem. It does not construct a practical code or claim that a short block behaves like the limit. Real designs choose a rate below capacity to accommodate finite length, implementation constraints, and a target error rate.
+**Worked Example (Achieved Information Versus Capacity).** Suppose $\varepsilon=0.1$. Then $h_2(0.1)\approx0.469$. With a uniform input, the achieved mutual information is $1-0.469\approx0.531$ bits per use, and because the uniform input maximises the BSC expression, the capacity is also approximately $0.531$ bits per use. Now consider the same BSC but use $a=0.1$. The output-one probability is $0.1+0.1(0.8)=0.18$, so
 
-## How Error-Correcting Codes Help
+$$
+I_{0.1}(X;Y)=h_2(0.18)-h_2(0.1)\approx0.680-0.469=0.211
+\quad\text{bits per use}.
+$$
 
-An error-correcting code maps each message to a longer codeword, adding structured redundancy. A decoder uses that structure to distinguish likely transmitted codewords from corrupted received words. In a simple repetition code, encoding one bit as `000` or `111` lets majority vote correct one flip, but it uses three channel symbols per information bit and is far from capacity in many regimes.
+The channel has not changed: its capacity remains about $0.531$ bits per use. The particular biased input achieves only about $0.211$ bits per use. Calling $I_{0.1}(X;Y)$ "the capacity" would confuse a value at one operating distribution with the maximum over distributions. Likewise, the capacity does not mean uncoded bits can be transmitted at that rate with low error. A block code is needed to turn the channel's statistical information supply into reliable messages.
 
-More generally, if codewords have minimum Hamming distance $d$, unique decoding can correct up to $\lfloor(d-1)/2\rfloor$ arbitrary bit errors, or up to $d-1$ erasures when erased locations are known. This geometric picture does not by itself give a good long code: distance, rate, decoding complexity, and the channel's probabilistic structure all matter. Capacity says that suitable code families exist below a limit; coding theory supplies constructions and algorithms that approach it.
+For numerical checks, the following Python function handles endpoints without evaluating $\log_2(0)$ and computes both quantities separately.
 
-## Continuous-Valued Channels
+```python
+import math
 
-For continuous inputs and outputs, probabilities of individual exact values are generally zero, so densities replace probability masses and differential entropy replaces discrete entropy. Differential entropy depends on the coordinate scale and can be negative; by itself it is not an invariant measure of information. Mutual information remains meaningful when defined through densities or relative entropy, subject to the relevant integrability conditions.
+def h2(p):
+    if p == 0 or p == 1:
+        return 0.0
+    return -p * math.log2(p) - (1 - p) * math.log2(1 - p)
 
-For the real additive white Gaussian noise channel $Y=X+Z$, let $Z$ be independent Gaussian noise with mean zero and variance $N$, and constrain average input power by $\mathbb{E}[X^2]\leq P$. Its capacity is
+def bsc_mutual_information(input_one, crossover):
+    output_one = crossover + input_one * (1 - 2 * crossover)
+    return h2(output_one) - h2(crossover)
+
+epsilon = 0.1
+achieved = bsc_mutual_information(0.1, epsilon)
+capacity = 1 - h2(epsilon)
+print(f"achieved at a=0.1: {achieved:.3f} bits/use")
+print(f"capacity:          {capacity:.3f} bits/use")
+```
+
+An idiomatic base-R calculation can exploit vectorised arithmetic, while defining the endpoints explicitly.
+
+```r
+h2 <- function(p) {
+  out <- numeric(length(p))
+  interior <- p > 0 & p < 1
+  out[interior] <- -p[interior] * log2(p[interior]) -
+    (1 - p[interior]) * log2(1 - p[interior])
+  out
+}
+
+epsilon <- 0.1
+a <- c(0.1, 0.5)
+output_one <- epsilon + a * (1 - 2 * epsilon)
+achieved <- h2(output_one) - h2(epsilon)
+capacity <- 1 - h2(epsilon)
+data.frame(input_one = a, achieved_bits_per_use = achieved,
+           capacity_bits_per_use = rep(capacity, length(a)))
+```
+
+The $a=1/2$ row reaches capacity; the $a=0.1$ row does not. Keep those labels in plots and tables. A curve of $I_a(X;Y)$ against $a$ is not a curve of capacity unless each point has itself been maximised over every other permitted channel choice.
+
+#### Binary Erasure Channel
+
+A BEC with erasure probability $\delta$ has output alphabet $\{0,1,?\}$. The question mark is an explicit erasure symbol: the receiver knows which position was lost. With probability $1-\delta$, the input bit is delivered correctly; with probability $\delta$, it is erased. Assume erasures are independent across uses and independent of the input.
+
+Let $E$ indicate whether a position is erased. The output reveals $E$. If $E=0$, it reveals $X$; if $E=1$, it reveals nothing about $X$. Consequently, for any input distribution,
+
+$$
+I(X;Y)=(1-\delta)H(X),
+\qquad C=1-\delta\quad\text{bits per use},
+$$
+
+where capacity uses a uniform input to maximise the binary entropy. One derivation conditions on $E$: $I(X;Y)=I(X;E)+I(X;Y\mid E)$; independence gives $I(X;E)=0$, the erased case contributes zero, and the unerased case contributes $H(X)$.
+
+**Worked Example.** If $\delta=0.2$, capacity is $0.8$ bits per use. In a block of 1,000 uses, the expected number of unerased symbols is 800. This expectation is not a promise of exactly 800 received symbols in each block. The erasure count is random, and even a code that can recover from a stated number of erasures may fail on a larger-than-usual erasure pattern. If a missing packet is silently replaced by a wrong value rather than a visible marker, the BEC model is inappropriate; that event is closer to a substitution error.
+
+The BSC and BEC do not have directly interchangeable crossover parameters. A BSC output is always a bit and can be wrong without announcing the error. A BEC may carry less raw output but tells the decoder which observations are missing. A distance-based code can correct up to $d-1$ known erasures but only $\lfloor(d-1)/2\rfloor$ arbitrary substitutions, as discussed in [Error Correction as Geometry](#error-correction-as-geometry). Those are worst-case guarantees for a code with minimum distance $d$, not average-error predictions for a random channel.
+
+### Asymmetric Channels and Input Optimisation
+
+Uniform input is optimal for a symmetric channel such as the BSC, but not in general. For a binary asymmetric channel, let $\alpha=P(Y=1\mid X=0)$ and $\beta=P(Y=0\mid X=1)$. The input-one probability is $a$. Then $P(Y=1)=\alpha(1-a)+(1-\beta)a$, and
+
+$$
+I_a(X;Y)=h_2\bigl(\alpha(1-a)+(1-\beta)a\bigr)
+-(1-a)h_2(\alpha)-a h_2(\beta).
+$$
+
+Capacity is the maximum over $0\leq a\leq1$. The first term rewards an output distribution with entropy; the subtracted terms account for uncertainty introduced by the channel in each input row. If the channel's two rows differ greatly in reliability, equal input use can waste opportunities by sending too often through the less reliable row.
+
+**Worked Example (A Z Channel).** Consider a channel where input 0 is always received as 0, while input 1 flips to output 0 with probability $q=0.2$. Then $\alpha=0$ and $\beta=0.2$. If $a=P(X=1)$,
+
+$$
+I_a(X;Y)=h_2(0.8a)-a h_2(0.2).
+$$
+
+At $a=1/2$, this is $h_2(0.4)-0.5h_2(0.2)\approx0.971-0.361=0.610$ bits per use. The optimum is not at one half. Differentiating in the interior gives
+
+$$
+0.8\log_2\frac{1-0.8a}{0.8a}=h_2(0.2),
+$$
+
+which yields $a\approx0.436$ and capacity about $0.619$ bits per use. The numerical improvement is modest here, but the example establishes the principle: capacity is an optimisation over the input law, not a fixed entropy attached to the transition table. In other channels the difference can be substantial.
+
+For a finite alphabet, this is a concave optimisation problem in the input probabilities, so standard numerical optimisation is available. At the boundary, probabilities of zero must be treated by continuity. The resulting optimiser can be non-unique for some channels; if so, the capacity value is unique even though multiple input laws achieve it. A learned or estimated input law is not automatically the maximiser: it describes observed traffic, whereas capacity asks what the channel could support under the allowed input choices.
+
+### Capacity and the Channel Coding Theorem
+
+For a finite DMC $W$, its Shannon capacity is
+
+$$
+C=\max_{p(x)}I_p(X;Y)
+\quad\text{bits per channel use}.
+$$
+
+This is an optimisation over the channel input distribution. To interpret capacity operationally, define a block code with $M_n$ possible messages, an encoder mapping messages to length-$n$ input sequences, and a decoder mapping received sequences to message estimates. Its rate is $R_n=(1/n)\log_2M_n$ bits per channel use. Under a specified channel law, its average error probability is the probability that a uniformly selected message is decoded incorrectly, averaged over messages and channel noise.
+
+**Theorem (DMC Channel Coding Theorem).** Let $W(y\mid x)$ be a fixed finite-alphabet discrete memoryless channel with no feedback, and let $C=\max_{p(x)}I_p(X;Y)$. For every $R<C$, there is a sequence of length-$n$ block codes with rates approaching $R$ and average decoding error tending to zero as $n\to\infty$. For every $R>C$, no sequence of such codes can have rate approaching $R$ while its average error tends to zero. The boundary rate $R=C$ is not asserted achievable with vanishing error by this statement. A maximal-error formulation requires care about the channel and conventions; the statement here uses average error and a uniform message.
+
+**Proof Sketch.** For achievability, fix an input law whose mutual information exceeds $R$. Generate many candidate codewords at random according to its product distribution. For a long block, the transmitted input and output are jointly typical with high probability. A decoder declares the unique codeword jointly typical with the observed output. A competing independently generated codeword has probability roughly $2^{-nI(X;Y)}$ of passing this test; with about $2^{nR}$ candidates, the union bound tends to zero when $R<I(X;Y)$. Taking input laws closer to the capacity maximiser gives all rates below $C$. This is an existence proof; random generation does not itself yield a conveniently structured or efficiently decoded code.
+
+For the converse, let $M$ be the message and $\widehat M$ its decoded estimate, with error probability $P_e$. Fano's inequality bounds $H(M\mid\widehat M)$ by $h_2(P_e)+P_e\log_2(M_n-1)$. Therefore reliable decoding would require the output to carry nearly $\log_2 M_n$ bits of information about the message. The encoder and channel form a Markov chain from message to input sequence to output sequence, and memorylessness together with the chain rule bounds the information conveyed by $nC$. A rate above $C$ cannot have vanishing error. The omitted technical steps formalise typicality and the limiting inequalities; see Further Reading for complete proofs.
+
+The theorem's qualifications matter. It assumes a known, fixed channel law and permits arbitrarily long blocks. It makes no claim about a chosen short block, code family, decoder complexity, delay, energy use, or channel-estimation error. It does not say that a source whose entropy is below $C$ can be sent at its entropy without a source encoder, nor that capacity is bits per second. If the system permits $r$ channel uses per second, an ideal asymptotic information rate is $rC$ bits per second; protocol overhead and implementation loss reduce delivered application throughput.
+
+At finite block length, rate and error probability form a trade-off rather than a sharp operational step at capacity. A system designer chooses a block length $n$, a message count $M_n$, and an acceptable error target. The rate is $(\log_2 M_n)/n$, but the theorem does not say how large $n$ must be before the error becomes small. A capacity-achieving family can have poor error at the block lengths allowed by a low-latency application. Finite-blocklength bounds refine the asymptotic answer, but require additional analysis and often depend on channel dispersion as well as capacity.
+
+The observed empirical error from a test transmission is also not the channel capacity. A low error rate may reflect a very low code rate, a favourable finite noise realisation, or a test channel that differs from deployment. Conversely, an error on one codeword does not establish that the rate exceeds capacity. Report the code rate, block length, decoder, test protocol, sample count, and observed error with an uncertainty interval; report a model-based capacity separately as a theoretical benchmark. When the channel parameters themselves are estimated, their uncertainty propagates into the capacity calculation. For example, the BSC capacity $1-h_2(\varepsilon)$ is sensitive to the estimated crossover rate, especially near the region where the entropy curve changes rapidly.
+
+**Worked Example (Repetition Is Not Capacity).** Send a bit three times through a BSC with $\varepsilon=0.1$ and decode by majority vote. Decoding fails if at least two of the three uses flip:
+
+$$
+P_e=\binom{3}{2}(0.1)^2(0.9)+(0.1)^3=0.028.
+$$
+
+The code rate is $1/3$ message bit per channel use. Its error probability is lower than the uncoded bit error probability of $0.1$, at the cost of using three times as many channel uses. The BSC capacity is about $0.531$ bits per use, but this repetition code operates at $0.333$ bits per use with a non-zero finite-block error. Neither number is its achieved mutual information under a source bit distribution; they answer different questions. This is a useful small illustration, not a capacity-approaching construction.
+
+#### Error Correction as Geometry
+
+A binary block code can be viewed as a set of length-$n$ binary strings. The Hamming distance $d_{\mathrm{H}}(u,v)$ counts positions at which two strings differ. If the minimum distance between distinct codewords is $d$, then Hamming balls of radius $t=\lfloor(d-1)/2\rfloor$ around them do not overlap. Nearest-codeword decoding therefore corrects every pattern of at most $t$ substitutions. The qualifier "every" makes this a worst-case property of the code; it does not give the probability that a memoryless channel produces more than $t$ flips.
+
+For the threefold repetition code, the codewords are "000" and "111", at distance three. Their radius-one balls are disjoint, so majority decoding corrects any single flipped bit. On a BSC with crossover $0.1$, two or three flips occur with probability $0.028$, exactly the block error calculated above. The geometry supplies the correction threshold, while the channel law supplies the probability of crossing it. If bit flips are correlated, the geometric threshold remains true but the binomial probability formula no longer applies.
+
+Known erasures are easier to locate. If a code has minimum distance $d$, two codewords cannot agree outside fewer than $d$ erased positions, so any pattern of at most $d-1$ known erasures has a unique compatible codeword. For the repetition code, two erasures still leave one bit and can be corrected; three erasures leave no information. This comparison explains why a BEC and BSC with the same numerical error parameter have different capacities and decoding problems. It does not imply that minimum distance alone predicts average-error performance: the number and placement of nearby codewords, the decoder, and the channel probabilities matter.
+
+Long practical codes trade rate, block length, error probability, and decoder work. A parity-check code may make error patterns detectable without making all of them correctable. A cyclic redundancy check can flag many altered packets and support retransmission, yet a detected error is not a decoded message. Report whether a claimed reliability figure is raw symbol error, codeword error, undetected error, or application-level loss after retransmissions.
+
+### The Real AWGN Channel
+
+For a real-valued signal, an often-used ideal model is $Y=X+Z$, where $Z\sim\mathcal{N}(0,N)$ is independent of $X$ on each use. Impose an average input-power constraint $\mathbb{E}[X^2]\leq P$. The capacity is
 
 $$
 C=\frac{1}{2}\log_2\left(1+\frac{P}{N}\right)
 \quad\text{bits per real channel use}.
 $$
 
-The Gaussian input maximises output entropy under the power constraint, giving the formula; a converse follows because no admissible input can produce greater output entropy. The assumptions include a memoryless real channel, independent Gaussian noise, and an average power constraint. Bandwidth conventions can change the units: the complex baseband form often has no factor of one half because one complex use represents two real dimensions. The formula is not directly applicable to coloured noise, peak-power constraints, or channels with memory without further analysis.
+The formula assumes a real scalar channel used repeatedly with independent Gaussian noise of fixed variance, an average power constraint, no additional bandwidth or peak-amplitude restriction, and coding over arbitrarily long blocks. It is not a universal formula for any system that happens to contain Gaussian noise. If $P=0$, capacity is zero; increasing the signal-to-noise ratio $P/N$ increases capacity logarithmically. Doubling power does not double capacity.
 
-## Rate–Distortion and Lossy Compression
+The achievability intuition uses a Gaussian input with variance $P$, which maximises differential entropy among real distributions with that variance. For any admissible input, $h(Y)\leq\frac12\log_2(2\pi e(P+N))$, while independent Gaussian noise has $h(Z)=\frac12\log_2(2\pi eN)$. Since $I(X;Y)=h(Y)-h(Z)$, their difference gives the stated upper bound and is attained by the Gaussian input under the ideal model. A complete proof must also handle block codes and the power constraint; this entropy argument explains the single-use optimisation.
 
-Channel capacity concerns reliable communication through a noisy channel. Rate–distortion theory instead asks how compactly a source can be represented while tolerating a specified average loss. Let source symbol $X$ be reconstructed as $\hat X$, with distortion measure $d(x,\hat x)$. The rate–distortion function is
+For example, if $P/N=3$, capacity is $\frac12\log_2(4)=1$ bit per real use. This is not one bit on every use, and a practical finite-block system may need a margin below it. A complex baseband convention often has no factor $1/2$ because each complex use represents two real dimensions; the unit convention must be stated before comparing formulas. Bandwidth, sampling, and spectral-efficiency conversions need additional definitions. Coloured noise, fading, peak-power limits, non-Gaussian noise, and channel memory require a different optimisation or theorem.
+
+The average-power condition is a property of the allowed ensemble or code sequence, according to the chosen operational formulation. It does not mean every transmitted sample has squared magnitude at most $P$. A Gaussian input has unbounded tails and would violate a strict peak-amplitude bound, even though its average squared value is $P$. Under a peak constraint, the capacity-achieving input need not be Gaussian and the displayed formula should not be reused without proof. Likewise, "white" in this scalar memoryless model means independent, identically distributed noise across uses; a time-correlated Gaussian process cannot simply be assigned the same per-use capacity from its marginal variance.
+
+Compare units before interpreting a measured link. A sample rate of $r$ real channel uses per second gives the ideal ceiling $rC$ bits per second under this model. If bandwidth $B$ hertz is used to justify a sample rate, the relationship between $B$, real dimensions, and signalling convention must be stated. Framing, pilot symbols, modulation restrictions, finite codes, and protocol retransmissions can reduce application throughput. A reported signal-to-noise ratio also needs a reference point: receiver input power, post-filter noise variance, and per-symbol energy are not interchangeable without a system model.
+
+## Lossy Compression and Rate-Distortion
+
+Lossless coding tries to reproduce every source symbol exactly. Many tasks instead permit controlled error: an image can lose detail, a measurement can be rounded, or a stored signal can be approximated. The word *loss* is not yet a mathematical model. We must define which source and reconstruction pairs count as costly, then ask how many bits are needed at a chosen average cost.
+
+Rate–distortion theory formalises this choice. Its answer depends on the source distribution and distortion measure, not only on the source alphabet. The central function is an asymptotic bound for long blocks of a memoryless source; it is not an objective quality score that automatically matches human judgement.
+
+### Distortion and the Rate–Distortion Function
+
+Let $X$ be a source symbol and $\widehat X$ its reconstruction. A distortion function $d(x,\widehat x)\geq0$ assigns a cost to each pair. Under a conditional reconstruction law $p(\widehat x\mid x)$, expected distortion is $\mathbb{E}[d(X,\widehat X)]$. For a target $D\geq0$, define
 
 $$
-R(D)=\min_{p(\hat x\mid x):\,\mathbb{E}[d(X,\hat X)]\leq D}
-I(X;\hat X).
+R(D)=\min_{p(\widehat x\mid x):\,\mathbb{E}[d(X,\widehat X)]\leq D}
+I(X;\widehat X).
 $$
 
-For a memoryless source and a single-letter distortion measure, this is the asymptotic minimum number of bits per source symbol needed to achieve expected distortion at most $D$, up to arbitrarily small slack. The rate–distortion theorem's achievability and converse are source-coding counterparts to Shannon's channel theorem. They concern expected distortion over long blocks, not a per-item maximum or a guarantee for every input.
+The minimisation ranges over all conditional distributions that meet the distortion constraint, with the source marginal fixed. Mutual information measures how much the reconstruction must reveal about the source under that chosen reproduction channel. As $D$ increases, the feasible set expands and $R(D)$ cannot increase. Typically $R(D)$ is convex and non-increasing; convexity follows by time-sharing between two reconstruction channels and convexity of mutual information in the channel for a fixed input law.
 
-As a familiar case, a Gaussian source of variance $\sigma^2$ under mean-squared error has $R(D)=\frac{1}{2}\log_2(\sigma^2/D)$ for $0<D<\sigma^2$, and zero rate suffices for $D\geq\sigma^2$. This result assumes an independent identically distributed Gaussian source and squared-error distortion. Perceptual quality, structured data, and non-stationary sources require different distortion models or source assumptions.
+**Theorem (Rate–Distortion, Discrete Memoryless Form).** Let $X_1,X_2,\ldots$ be independent and identically distributed from a finite-alphabet law $p(x)$, and let $d(x,\widehat x)$ be a bounded single-letter distortion measure on finite source and reproduction alphabets. For any distortion level $D$, rates strictly above $R(D)$ permit length-$n$ lossy codes whose expected per-symbol distortion is at most $D$ plus arbitrarily small slack for sufficiently large $n$. Rates strictly below $R(D)$ cannot meet that asymptotic expected-distortion target. This statement is in the block-length limit and concerns expectation under the source model; it does not guarantee a maximum distortion for every block. Boundary and zero-probability cases need the usual limiting interpretation.
+
+**Proof Sketch.** For achievability, choose a conditional law $p(\widehat x\mid x)$ meeting the distortion constraint. Randomly construct a codebook of reproduction sequences drawn from the induced marginal $p(\widehat x)$. Typicality arguments show that a codebook with rate slightly greater than $I(X;\widehat X)$ contains, with high probability, a sequence jointly typical with the source block. The encoder selects one such sequence, and typical average distortion approaches the chosen expectation. For the converse, any encoder and decoder induce a joint distribution between source block and reconstruction block. The data-processing inequality and chain rule bound the rate needed for that dependence below by the sum of single-letter mutual-information terms; convexity reduces this to at least $nR(D)$ when average distortion is at most $D$. The full argument is longer than this sketch because it controls atypical blocks and converts a block code into single-letter distributions.
+
+The rate is bits per source symbol, not bits per reconstruction symbol or per second. The distortion is also per source symbol. If a sensor emits 100 samples per second and the rate–distortion point is 0.7 bits per sample, the ideal asymptotic description rate is 70 bits per second before framing and model overhead. If a design instead specifies a limit on the worst individual sample error, expected-distortion theory does not directly answer it.
+
+### Binary Hamming Distortion
+
+For a binary source with $X\sim\operatorname{Bernoulli}(p)$, use Hamming distortion $d(x,\widehat x)=\mathbf{1}\{x\neq\widehat x\}$. This counts the fraction of incorrect reconstructed bits. If $p=1/2$, the rate–distortion function is
+
+$$
+R(D)=1-h_2(D),\quad 0\leq D\leq\tfrac12;
+\qquad R(D)=0,\quad D\geq\tfrac12.
+$$
+
+For $D=0$, exact reconstruction requires one bit per fair source bit. At $D=0.1$, the asymptotic minimum is $1-h_2(0.1)\approx0.531$ bits per source bit. At $D\geq1/2$, a decoder can always output a fixed bit and incur error probability one half, so no information need be sent. Distortion greater than one half has no benefit under this measure because the decoder can invert its fixed output if needed.
+
+The binary formula has a short information argument. Write the reconstruction error as $E=X\oplus\widehat X$. Since $X$ is determined by $(\widehat X,E)$, the remaining uncertainty satisfies $H(X\mid\widehat X)\leq H(E)\leq h_2(D)$ when the error probability is at most $D\leq1/2$. For a fair source, $H(X)=1$, so $I(X;\widehat X)\geq1-h_2(D)$. Equality can be attained by choosing a fair reconstruction bit and passing it through an independent binary flip of probability $D$ to produce $X$; this construction has a fair source marginal and error probability $D$. The backwards description is a test channel for the optimisation, not an instruction that a real encoder knows the reconstruction before seeing its source bit.
+
+A distortion target of $D=0.1$ is an expectation over the source and, for a randomised code, the coding randomness. It permits some blocks to have more than 10% incorrect bits. A service contract requiring every delivered block to have at most 10% errors imposes a different, stronger criterion. At a finite length, even a code whose expected error fraction is 0.1 can produce an unusually bad block. A tail probability or worst-case bound needs separate analysis.
+
+The uniform-source assumption matters for the displayed $1-h_2(D)$ curve. For $X\sim\operatorname{Bernoulli}(p)$ with Hamming distortion, the corresponding finite-alphabet result is $R(D)=h_2(p)-h_2(D)$ for $0\leq D\leq\min(p,1-p)$, and zero for $D\geq\min(p,1-p)$. If $p=0.1$, always reconstructing zero already incurs distortion $0.1$ at zero rate. At $D=0.05$, the rate is $h_2(0.1)-h_2(0.05)\approx0.183$ bits per source symbol, much smaller than the fair-source value. The rate–distortion curve reflects the actual source law; a statement of "binary rate–distortion" without both the distribution and distortion measure is incomplete.
+
+### Gaussian Squared-Error Distortion
+
+Let $X$ be an independent and identically distributed Gaussian source with mean zero and variance $\sigma^2$. Use squared-error distortion $d(x,\widehat x)=(x-\widehat x)^2$. Then
+
+$$
+R(D)=\begin{cases}
+\frac12\log_2(\sigma^2/D),&0<D<\sigma^2,\\
+0,&D\geq\sigma^2.
+\end{cases}
+$$
+
+The formula is an asymptotic rate in bits per real-valued source sample. At $D=\sigma^2$, the constant reconstruction $\widehat X=0$ already has expected squared error $\sigma^2$, so zero rate suffices. As $D\downarrow0$, the required rate diverges. For a Gaussian source the exact zero-distortion point is not a finite-rate point because the source has a continuum of values.
+
+To see the lower-bound mechanism, suppose a reconstruction has mean-squared error at most $D$. The error entropy is maximised by a Gaussian at fixed variance, while the source-reconstruction mutual information is at least the difference between source entropy and that conditional error entropy. This yields $I(X;\widehat X)\geq\frac12\log_2(\sigma^2/D)$. A Gaussian test channel with appropriately chosen independent Gaussian error attains the bound. The full coding theorem turns this single-letter optimisation into achievable long-block compression.
+
+For the attaining test channel at $0<D<\sigma^2$, take an independent Gaussian error $E\sim\mathcal{N}(0,D)$ and a reconstruction $\widehat X\sim\mathcal{N}(0,\sigma^2-D)$, then set $X=\widehat X+E$. The resulting $X$ has the required $\mathcal{N}(0,\sigma^2)$ law and expected squared error $D$. Moreover $h(X\mid\widehat X)=h(E)$, so $I(X;\widehat X)=\frac12\log_2(\sigma^2/D)$. Describing the test channel in this direction avoids an easy mistake: adding independent noise of variance $D$ *to* an already fixed Gaussian source gives a different mutual information, $\frac12\log_2(1+\sigma^2/D)$, and does not attain the rate–distortion bound.
+
+The source mean is irrelevant if it is known to both sides: subtract it before coding and add it back after reconstruction. If the mean or variance must be learned and transmitted, their description and estimation errors are extra costs. The iid hypothesis is more consequential. A correlated Gaussian sequence can be compressed by exploiting predictability, and its rate–distortion function involves the source spectrum rather than only one marginal variance. Conversely, a non-Gaussian source with the same variance does not inherit the Gaussian formula merely because squared error is used.
+
+**Worked example (rate, block length, and error).** Suppose an iid Gaussian sensor has variance 9 and the desired expected squared error is 1. The ideal asymptotic rate is $\frac12\log_2 9\approx1.585$ bits per sample. For 1,000 samples, multiplying suggests roughly 1,585 description bits before finite-length overhead, but the theorem does not promise a 1,585-bit file or a block error bounded by one unit. If the sensor emits 200 samples each second, the corresponding asymptotic source-information rate is about 317 bits per second. A physical link must then supply enough channel uses and reliability; comparing 1.585 bits per sample directly with capacity in bits per channel use would mix units.
+
+This expression does not describe perceptual image quality, a bounded sensor, a heavy-tailed distribution, or a signal with temporal dependence without additional modelling. Squared error heavily penalises large errors and ignores semantic structure. A more appropriate distortion could weight frequency bands, count classification mistakes, or encode domain-specific consequences; then the rate–distortion curve changes. Distortion is a modelling decision, and reporting $R(D)$ without identifying it conceals the main value judgement.
+
+### Choosing a Distortion Measure
+
+For categorical records, zero-one loss may be understandable, but confusing two categories may have very different costs. For a medical measurement, squared error gives large deviations disproportionate influence, while absolute error is less sensitive to outliers. For images and audio, pixelwise or samplewise error can disagree with perceptual similarity. A distortion measure should describe the consequence that the application is prepared to tolerate, and it should be checked against examples that domain users recognise as acceptable and unacceptable.
+
+Rate–distortion theory does not decide those consequences. It tells us the best asymptotic information rate under the chosen distribution and cost. A codec can optimise a proxy faithfully while producing outputs users judge poor if the proxy is wrong. Conversely, a complex perceptual metric may be difficult to estimate and optimise. State both the mathematical criterion and the validation procedure rather than treating one as a substitute for the other.
+
+An operational comparison helps prevent unit errors:
+
+| Question | Quantity | Units | Governing choice |
+|---|---|---|---|
+| How much source uncertainty is present? | $H(X)$ | bits per source symbol | Source law and alphabet |
+| How much information does a selected channel input convey? | $I(X;Y)$ | bits per channel use | Input law and channel law |
+| What is the best asymptotic reliable channel rate? | $C$ | bits per channel use | Channel law and allowed inputs |
+| How many bits permit a stated average loss? | $R(D)$ | bits per source symbol | Source law and distortion measure |
+| How many bits cross a system per second? | Throughput | bits per second | Uses per second, coding, overhead, and implementation |
+
+## Estimating Information from Data
+
+The definitions above concern a probability model. In applied work, the model is usually unknown and the analyst has a finite sample. Replacing probabilities by observed frequencies is a natural first step, but it does not remove uncertainty. Estimators have bias and variance, sparse outcomes are easily missed, dependence invalidates independent-sample formulas, and analysis choices can inflate apparent dependence.
+
+The appropriate question is not merely "What is the mutual information?" It is "Which population quantity, under which sampling model, is this estimate intended to approximate, and how uncertain is it?" This section develops a basic workflow for discrete data and indicates where more specialised estimators are needed.
+
+### Plug-In Estimates and Their Bias
+
+Suppose $X_1,\ldots,X_n$ are independent observations from a fixed distribution on $k$ possible categories. Let $N_x$ be the number of observations equal to $x$, and define $\widehat p(x)=N_x/n$. The plug-in entropy estimator is
+
+$$
+\widehat H(X)=-\sum_x\widehat p(x)\log_2\widehat p(x),
+$$
+
+with zero-count terms set to zero. It is consistent for fixed finite support: as $n$ grows, empirical frequencies converge to their probabilities and the plug-in entropy converges to $H(X)$. For finite samples, it is typically downward-biased. An outcome that exists in the population but was not sampled appears to have probability zero, so its uncertainty is omitted; the concavity of entropy also contributes to the bias.
+
+For fixed $k$ with all $k$ probabilities positive and $n$ sufficiently large, the leading-order bias is approximately
+
+$$
+\mathbb{E}[\widehat H]-H(X)\approx-\frac{k-1}{2n\ln2}.
+$$
+
+This Miller–Madow approximation adds $(k-1)/(2n\ln2)$ to the plug-in estimate when the support is known and the regular large-sample conditions are reasonable. It is not a universal fix. If the alphabet grows with sample size, probabilities are extremely small, observations are dependent, or the actual support is unknown, the approximation can be poor. Smoothing, Bayesian estimators, coverage-based methods, and bias-corrected estimators each introduce assumptions; there is no estimator that makes sparse data information-free.
+
+**Worked Example (A Missing Category).** Suppose a status sensor can report four states, with true probabilities $(0.7,0.2,0.08,0.02)$. In a sample of 20 readings, it is quite possible not to observe the rarest state. The empirical support then has only three observed states, and its plug-in entropy treats the absent fourth state as impossible. Even if it is observed once, the frequency estimate $1/20=0.05$ is noisy relative to the true probability $0.02$. This example shows why reporting only a decimal entropy without the sample size, observed category counts, and support assumptions hides uncertainty.
+
+When categories are known in advance, preserve unobserved levels in the table rather than silently dropping them. In R, `table(factor(x, levels = ...))` helps retain structural zeros; distinguish those from sampling zeros. A structural zero is impossible by design under the model. A sampling zero is an unobserved event that may still have positive population probability. Adding a pseudocount treats the latter as possible, but the pseudocount is a modelling choice rather than evidence.
+
+### Joint Tables, Sparse Cells, and Mutual Information
+
+For paired observations $(X_i,Y_i)$, empirical joint frequencies give a plug-in mutual information estimate:
+
+$$
+\widehat I(X;Y)=\sum_{x,y}\widehat p(x,y)
+\log_2\frac{\widehat p(x,y)}{\widehat p_X(x)\widehat p_Y(y)}.
+$$
+
+The estimate is non-negative by construction, even when the population variables are independent. Random empirical imbalances create apparent dependence; under the null, the plug-in mutual information is generally upward-biased. The bias increases with the number of populated degrees of freedom relative to sample size. A table with $r$ rows and $c$ columns has $(r-1)(c-1)$ interaction degrees of freedom in the regular interior case, so a sparse $r\times c$ table can exaggerate the problem.
+
+The approximation
+
+$$
+2n\ln2\,\widehat I(X;Y)\approx\chi^2_{(r-1)(c-1)}
+$$
+
+is useful as a large-sample null reference for an independence test when expected cell counts are adequate and the usual regularity conditions hold. It is not a confidence interval for the information value and should not be trusted automatically when many expected counts are small. Pooling categories can be defensible when done for substantive reasons before examining the association; pooling solely to obtain a desired result biases the analysis. Exact or Monte Carlo tests can handle some sparse settings, but they still answer a test question under a specified sampling design.
+
+**Worked Example (Finite-Sample Association).** Let two independent fair binary variables be sampled in 40 pairs. Even though their population mutual information is zero, the four cell counts will rarely all equal ten. The plug-in estimator will therefore usually be positive. If the observed counts are $12,8,8,12$, the empirical table has equal marginals and
+
+$$
+\widehat I=2\left(0.3\log_2\frac{0.3}{0.25}
++0.2\log_2\frac{0.2}{0.25}\right)\approx0.029\text{ bits per pair}.
+$$
+
+This number describes empirical dependence in this table. It is not proof that the population variables share information. A null comparison that repeats the sampling process clarifies how unusual a value of this size would be under independence.
+
+The following Python snippet computes the plug-in value from a contingency table. Zero cells contribute zero; the marginals are kept explicit.
+
+```python
+import numpy as np
+
+def empirical_mi_bits(counts):
+    counts = np.asarray(counts, dtype=float)
+    joint = counts / counts.sum()
+    px = joint.sum(axis=1, keepdims=True)
+    py = joint.sum(axis=0, keepdims=True)
+    expected = px @ py
+    occupied = joint > 0
+    return np.sum(joint[occupied] * np.log2(
+        joint[occupied] / expected[occupied]
+    ))
+
+counts = np.array([[12, 8], [8, 12]])
+print(f"empirical MI: {empirical_mi_bits(counts):.3f} bits/pair")
+```
+
+The analogous base-R form uses matrix margins and indexes only positive cells.
+
+```r
+mi_bits <- function(counts) {
+  joint <- counts / sum(counts)
+  expected <- outer(rowSums(joint), colSums(joint))
+  occupied <- joint > 0
+  sum(joint[occupied] * log2(joint[occupied] / expected[occupied]))
+}
+
+counts <- matrix(c(12, 8, 8, 12), nrow = 2, byrow = TRUE)
+mi_bits(counts)
+```
+
+These functions return point estimates only. They do not account for paired sampling, missing data, repeated subjects, selection of the variables after looking at the data, or uncertainty in categories and preprocessing. Add those parts to the analysis plan.
+
+For raw categorical vectors, base R can produce the joint proportions without hand-entering a matrix. The factor levels state the planned support; unused levels remain visible as zero-count cells. The orientation of the table is explicit: rows are source categories and columns are observed categories.
+
+```r
+source_bit <- factor(c(0, 0, 0, 1, 1, 1), levels = c(0, 1))
+observed_bit <- factor(c(0, 0, 1, 0, 1, 1), levels = c(0, 1))
+counts <- table(source_bit, observed_bit)
+joint <- prop.table(counts)
+stopifnot(abs(sum(joint) - 1) < 1e-12)
+mi_bits(counts)
+```
+
+Here `table()` records counts and `prop.table()` divides by their total. The `mi_bits()` function normalises internally, so passing `joint` instead of `counts` gives the same numerical answer, but the counts should be retained for interpreting sampling error. A zero in this table means no observation in that cell. It does not prove that the population transition probability is zero. If a level was impossible by design, document that separately and exclude it from models that require positive support.
+
+We can expose the upward bias under independence with repeated simulated samples. This simulation fixes independent fair population variables and repeats the same estimator, so its distribution measures finite-sample behaviour under a known null rather than uncertainty about an unknown real dataset.
+
+```r
+set.seed(163)
+null_mi <- replicate(1000, {
+  x <- factor(sample(0:1, 40, replace = TRUE), levels = 0:1)
+  y <- factor(sample(0:1, 40, replace = TRUE), levels = 0:1)
+  mi_bits(table(x, y))
+})
+c(mean = mean(null_mi), median = median(null_mi),
+  upper_95_percentile = unname(quantile(null_mi, 0.95)))
+```
+
+The population MI is exactly zero, while the simulated estimates are normally positive. The exact numerical summaries depend on the random seed and the sample size. The simulation has only two categories per variable; a table with many possible cells and the same 40 pairs has a harder estimation problem. Repeating a computation 1,000 times makes Monte Carlo error smaller, but it does not fix an estimator's bias.
+
+The same resampling idea answers different questions depending on what is regenerated. Independently sampling both variables from their known laws, as above, studies a synthetic null. Permuting the observed `Y` labels conditions on the empirical marginals and tests exchangeability of pairings. Bootstrapping the observed pairs approximates variation under their empirical joint law. Substituting one for another changes the inferential target. If the data contain repeated measurements from one person, resampling individual rows also gives misleadingly narrow uncertainty because the rows are not independent units.
+
+### Permutation Tests for Dependence
+
+A permutation test can estimate the null distribution of empirical mutual information under independence while preserving the observed marginal counts. Keep the $X$ values fixed and randomly permute the $Y$ labels across independent paired observations. Each permutation breaks the pairing but leaves each variable's empirical marginal unchanged. Recompute the entire statistic for each shuffled data set. If $B$ random permutations produce statistics $T_1^*,\ldots,T_B^*$ and the observed statistic is $T_{\mathrm{obs}}$, a conservative Monte Carlo p-value is
+
+$$
+\widehat p=\frac{1+\sum_{b=1}^{B}\mathbf{1}\{T_b^*\geq T_{\mathrm{obs}}\}}{B+1}.
+$$
+
+The added one avoids a zero p-value and gives a valid Monte Carlo test convention under exchangeability. Permutation tests assess a null hypothesis; they do not directly estimate a bias-corrected population mutual information or provide an effect-size interval. A tiny p-value can accompany a practically negligible association in a huge sample.
+
+The permutation is valid only if pairings are exchangeable under the null. If observations are clustered by person, site, time block, or experimental unit, free permutation breaks the design. Permute at the appropriate unit, use restricted permutations, or fit a model that respects the dependence. For time series, naive shuffling destroys serial structure; use a null procedure designed for that process. The mechanics of shuffling are simple, but exchangeability is a substantive assumption.
+
+#### Bootstrap Uncertainty and Resampling Units
+
+The non-parametric bootstrap resamples observed units with replacement and recomputes the estimator. If the data are independent pairs, resample pairs $(X_i,Y_i)$, not the two columns separately; resampling columns separately changes the joint distribution. Quantiles of bootstrap estimates give an uncertainty interval when the estimator's sampling distribution is sufficiently well represented by resampling the observed data.
+
+Entropy and mutual information are nonlinear functions, so bootstrap intervals can behave poorly near boundaries, with many zero cells, or when rare categories are not observed at all. A bootstrap cannot recreate outcomes missing from every resample's parent data. For very sparse tables, a parametric bootstrap from a fitted model, a Bayesian posterior, or a specialised coverage method may be more defensible, each with its own assumptions. Report the resampling unit, interval method, number of resamples, and treatment of unobserved categories.
+
+Permutation and bootstrap answer different questions. Permutation constructs a reference distribution under a null such as independence. Bootstrap estimates sampling variability around the empirical distribution. Neither should be described generically as "the uncertainty" without stating the target and procedure. For repeated measures, both must respect subject or cluster structure.
+
+### Continuous Variables and Estimator Choice
+
+For continuous variables, discretising into bins changes the estimand. Mutual information between binned $X$ and binned $Y$ is the information between those categorical versions, and changing the bin edges can change the result. Differential entropy is not a drop-in replacement: as explained in [Continuous Entropy and Relative Entropy](#continuous-entropy-and-relative-entropy), it depends on units and can be negative. Mutual information is invariant to smooth invertible changes of coordinates under suitable conditions, but estimating it from a finite sample remains difficult.
+
+Common approaches include nearest-neighbour estimators, kernel methods, density-ratio estimation, and model-based likelihood ratios. They trade assumptions about smoothness, dimensionality, and computation. High-dimensional estimates can be unstable because local neighbourhoods become sparse. A model-based estimate can be precise under a correct model and misleading under a wrong one. Validate with simulated data whose dependence is known, inspect sensitivity to tuning parameters, and state whether the target is discrete MI, continuous MI, or MI after a declared discretisation.
+
+There is no universal rule that "more bins" or "more data" alone solves the problem. Increasing resolution while holding sample size fixed creates sparse cells; increasing sample size under a drifting distribution violates the fixed-target assumption. Decide what random variables and population are being studied before selecting the estimator.
+
+#### Reporting an Estimate so It Can Be Reused
+
+A useful report makes the calculation reproducible at the level of assumptions even if the raw data cannot be shared. State the target population and sampling period; define each random variable and its coding; give the number of independent sampling units and the number of repeated measurements; and list the category counts or a sufficient summary of the support. If data were filtered, weighted, imputed, or grouped, describe the operation and whether it was specified before examining the association.
+
+For entropy, name the estimator and say whether the support size was fixed in advance, inferred from observed values, or regularised. For mutual information, report the joint and marginal support sizes, the number of occupied cells, and whether the statistic is a plug-in estimate, model-based estimate, or estimator for a discretised version of continuous data. For uncertainty, state whether an interval comes from a bootstrap, an asymptotic approximation, a posterior, or another method. For a test, state the null, test statistic, number of permutations, and exchangeability unit. These details often matter more than the fourth decimal place.
+
+A compact report might read: "For 1,240 independent device-days, plug-in MI between the four-level alarm state and the binary service outcome was 0.083 bits per device-day. The joint table had six occupied cells of eight possible. A 5,000-replicate bootstrap of device-days gave a percentile interval of [0.061, 0.108] bits. Under a pre-specified independence null, 9,999 permutations of outcomes across device-days gave Monte Carlo $p=0.004$. The estimate is descriptive of monitored devices during the stated quarter; it does not identify a causal effect." This is only a reporting pattern, not a claim that percentile intervals or unrestricted permutations suit every design. If there are multiple days per device, resampling and permutation must instead respect the device clustering.
+
+Pre-registration is especially helpful when many variable pairs, bin edges, smoothing parameters, or subgroups could be explored. If exploration has already occurred, say so and validate the chosen estimate on new data where possible. The selection process changes the distribution of the reported maximum association. A nominal interval for one fixed estimator does not account for screening thousands of candidates and publishing only the largest result.
+
+Finally, preserve the distinction between uncertainty about the estimate and uncertainty about the model. A narrow confidence interval can quantify sampling variability conditional on an iid assumption while the observations are actually clustered or the population is shifting. Sensitivity analysis over defensible sampling and modelling assumptions is often more informative than a more elaborate interval under one fragile assumption.
+
+#### A Practical Estimation Workflow
+
+For a defensible estimate, write down the estimand in plain language first: for example, "mutual information in bits between a binary alarm and a four-level sensor category in the target population of devices during normal operation". Then identify the sampling unit and how observations entered the sample. Check whether the sample is independent, clustered, weighted, time-dependent, or selected based on the outcome. Construct the table with all design-known categories, marking structural and sampling zeros separately.
+
+Next calculate a transparent plug-in estimate as a baseline, but accompany it with sample size, support sizes, occupied cells, and an uncertainty or null procedure suited to the question. Use a permutation test for a null of independence when exchangeability is justified; use bootstrap resampling of the correct units for sampling uncertainty. For sparse cells, show sensitivity to a justified smoothing or model choice rather than presenting one correction as truth. For continuous data, define the estimator and its tuning choices before reading the result.
+
+Finally, compare the result with a task-relevant baseline. If the intended use is prediction, held-out predictive performance may answer the practical question better than a global information estimate. If the intended use is compression, evaluate held-out code length under the stated model. A statistic becomes useful when its population meaning and decision role are clear; a precise decimal alone does not establish either.
 
 ## Connections to Statistics and Machine Learning
 
-Mutual information appears in statistics as a measure of dependence and in machine learning as a feature-selection, representation-learning, and privacy-analysis objective. The data processing inequality states that if $X\to Y\to Z$ forms a Markov chain — meaning $Z$ is conditionally independent of $X$ given $Y$ — then $I(X;Z)\leq I(X;Y)$. A deterministic or stochastic post-processing step cannot create information about $X$ that was absent from $Y$. This is useful when reasoning about lossy representations, privacy mechanisms, and prediction pipelines, but it does not say that every downstream task's performance decreases monotonically under every metric.
+Information theory supplies quantities that recur in statistical modelling: likelihood, log loss, divergence, dependence, and compression. They can clarify what a learning objective rewards, but they do not remove choices about targets, populations, costs, or validation. This section connects earlier [Cross-Entropy and Log Loss](#cross-entropy-and-log-loss), [Mutual Information](#mutual-information), and [Data Processing Inequality](#data-processing-inequality) to prediction and representation learning.
 
-The coding viewpoint also clarifies noisy labels and finite datasets. A model sees examples through a data-generation channel: labels may be flipped, measurements quantised, or features erased. Estimating the channel and its assumptions is part of the statistical problem. A high mutual information estimate from a finite sample can reflect overfitting or estimator bias; it is not evidence by itself that a learned representation generalises or causes an outcome. Likewise, the information bottleneck objective balances predictive information about a target against retained information about an input, but its usefulness depends on the chosen distributions, estimator, and task.
+### Log Loss, Cross-Entropy, and KL Direction
 
-These connections are conceptual and mathematical, not a claim that every learning problem is best solved as a communication problem. The channel model helps name uncertainty and information loss; empirical validation and domain assumptions still determine whether a model is useful.
-
-## Failure Modes and Boundaries
-
-The most common errors are treating capacity as the guaranteed throughput of a finite system; applying an independent-error formula to bursty or stateful failures; confusing erasures, whose positions are known, with substitutions; and using differential entropy as if it were discrete entropy. Another is reporting mutual information without specifying the joint distribution or estimator. Capacity and rate–distortion are limits under stated models, not performance guarantees independent of assumptions.
-
-This introduction stops at single-user memoryless channels and single-letter distortion. It does not cover feedback capacity, network coding, fading-channel water-filling, quantum channels, finite-blocklength bounds, practical code construction, or perceptual distortion design. Those topics change assumptions or require additional machinery and should be introduced as separate sections with their own notation and hypotheses.
-
-## Entropy as a Constraint and an Optimisation Problem
-
-The entropy formula is more useful when you can recognise what controls it. For a fixed finite alphabet, the uniform distribution has the largest entropy. This is not merely an intuitive statement that "many possibilities mean more uncertainty"; it is an optimisation result. If $X$ has $m$ possible values, then
+For a categorical outcome $Y$ and a probabilistic prediction $q(y\mid x)$, logarithmic loss on an observed pair $(x,y)$ is $-\log_2q(y\mid x)$. Its expected value under the true data distribution $p(x,y)$ is the conditional cross-entropy
 
 $$
-H(X)\leq\log_2m,
+H_p(Y\mid X; q)=-\sum_{x,y}p(x,y)\log_2q(y\mid x).
 $$
 
-with equality only when $p(x)=1/m$ for every value. One proof uses the non-negativity of KL divergence. Let $u$ be the uniform distribution. Then $D_{\mathrm{KL}}(p\|u)\geq0$, so
+Condition on each $x$ and apply the cross-entropy decomposition from [Cross-Entropy and Log Loss](#cross-entropy-and-log-loss):
 
 $$
-\sum_xp(x)\log_2\frac{p(x)}{1/m}
-=-H(X)+\log_2m\geq0.
+H_p(Y\mid X;q)=H_p(Y\mid X)
++\mathbb{E}_{X\sim p}\left[
+D_{\mathrm{KL}}\bigl(p(\cdot\mid X)\|q(\cdot\mid X)\bigr)
+\right].
 $$
 
-Rearranging gives the bound. The proof also explains the equality condition: divergence is zero only when the distributions match.
+The direction matters. The data-generating conditional distribution is first, the model's predicted distribution second. The expected excess log loss is $D_{\mathrm{KL}}(p\|q)$, not generally $D_{\mathrm{KL}}(q\|p)$. If the model assigns zero probability to an outcome that can occur, its log loss is infinite. In practice, softmax models usually assign positive mass, though numerical clipping changes the literal objective.
 
-The constraint matters. If you know only that $X$ is real-valued and has a particular variance, the maximum-entropy distribution is Gaussian, not uniform over the whole real line. There is no uniform distribution on all of $\mathbb{R}$ with a finite normalising constant. When a maximum-entropy argument appears in modelling, ask which constraints define the feasible distributions and whether the resulting distribution is being used as a representation of ignorance, a physical model, or a computational convenience.
+When the evaluation distribution is fixed, minimising expected log loss over a sufficiently rich model class minimises this conditional KL divergence. With limited data, regularisation and architecture constrain the class; training log loss is a sample estimate and may improve while held-out log loss worsens. This connects to source coding: a probabilistic predictor induces ideal code lengths $-\log_2q(y\mid x)$, and the expected penalty for a mismatched predictor is conditional KL. This interpretation does not make a model calibrated or useful for every decision by itself.
 
-Conditional entropy has a parallel interpretation. The chain rule
+**Worked example (a forecast versus the marginal baseline).** Suppose rain occurs on 20% of days in a stable target population. A predictor that always assigns 0.2 to rain has expected log loss $h_2(0.2)\approx0.722$ bits per day. A feature-informed predictor can improve only if its conditional probabilities capture real dependence: the best possible population expected log loss using feature $X$ is $H(Y\mid X)$, and the largest possible improvement over the marginal baseline is $H(Y)-H(Y\mid X)=I(X;Y)$. This identity assumes both predictors know the true distributions. A fitted model with limited data may have worse held-out loss than the marginal forecast even when population MI is positive.
 
-$$
-H(X,Y)=H(X)+H(Y\mid X)=H(Y)+H(X\mid Y)
-$$
+Suppose instead the forecaster always reports 0.01 for rain in that 20% population. Expected log loss rises to $-0.2\log_2(0.01)-0.8\log_2(0.99)\approx1.34$ bits per day. The excess of about $0.62$ bits is $D_{\mathrm{KL}}(\operatorname{Bernoulli}(0.2)\|\operatorname{Bernoulli}(0.01))$. Reversing KL would weight outcomes as if 1% rain were the truth; that is a different evaluation population. The average log-loss comparison still says nothing about the costs of failing to warn on one particular day.
 
-is an accounting identity for uncertainty revealed in stages. It does not say that $X$ causes $Y$, and it does not require a causal model. The order of conditioning changes the two terms but not the joint entropy. Mutual information is the difference between the uncertainty before and after the observation:
+#### Calibration Is Not the Same as Discrimination
 
-$$
-I(X;Y)=H(X)-H(X\mid Y)=H(Y)-H(Y\mid X).
-$$
+A predictor is calibrated when, among cases assigned probability $r$ to an event, the event occurs about a fraction $r$ of the time, under the population and conditions used to assess calibration. A model can rank cases well while being overconfident, or be calibrated on average while ranking poorly. Log loss is a proper scoring rule: in expectation, reporting the true probability minimises the score. But a single aggregate log-loss value combines calibration, resolution, and irreducible uncertainty; it is not a calibration diagnostic on its own.
 
-This makes the units and the interpretation explicit. If $I(X;Y)=0.5$ bits, then the average reduction in uncertainty about $X$ supplied by observing $Y$ is half a bit under the stated joint distribution. It does not mean that every observation reduces uncertainty by exactly half a bit, nor that $Y$ is causally responsible for $X$.
+Reliability diagrams compare predicted probability bins with observed frequencies, though the binning and sample size matter. For multiclass forecasts, calibration can be defined in several ways (top-label, classwise, or stronger conditional forms); a paper should say which one it evaluates. A model calibrated on one distribution can become miscalibrated after prevalence shift or covariate shift. If deployment decisions have asymmetric costs, threshold selection should use those costs rather than treating 0.5 as universally optimal.
 
-## Conditional Information and Interaction
+Information-theoretic scoring and calibration are complementary. A lower held-out cross-entropy indicates better average probabilistic predictions on that test distribution, but it does not show that every subgroup is calibrated, that the model is robust to shift, or that a decision based on its outputs improves outcomes. Inspect the relevant subgroup and shift behaviour directly.
 
-Pairwise mutual information is not enough when several variables interact. Conditional mutual information measures the information two variables share after a third variable is known:
+### Evidence, Features, and Predictive Information
 
-$$
-I(X;Y\mid Z)=H(X\mid Z)-H(X\mid Y,Z).
-$$
+For a target $Y$ and feature vector $X$, the mutual information $I(X;Y)$ measures statistical dependence under a joint distribution. If $I(X;Y)=0$, the variables are independent in that distribution, so no predictor using $X$ can improve on the target's marginal distribution in expected log loss. If it is positive, some dependence exists, but it does not specify a simple predictive rule, achievable accuracy under a restricted model class, or causal effect.
 
-It is always non-negative and can be written as an expected KL divergence between conditional distributions. If $X$ and $Y$ become independent after conditioning on $Z$, then $I(X;Y\mid Z)=0$. This is the information-theoretic form of a conditional independence statement.
+Feature selection by mutual information can detect non-linear dependence that correlation misses. It can also overstate evidence when many candidate features are screened on the same finite sample. Estimation bias and multiple comparisons compound one another. Use held-out evaluation or nested validation for feature selection, and estimate the relevant information on data not used to choose the feature whenever possible. A high univariate $I(X_j;Y)$ does not imply that feature $j$ adds information conditional on other features; redundant and synergistic features complicate ranking.
 
-The chain rule for mutual information is
+For example, if two columns are identical copies of a signal, each has the same marginal MI with the target, but the second adds no conditional information once the first is known: $I(Y;X_2\mid X_1)=0$. In the parity construction, by contrast, either input alone has zero MI with the parity target, while both together determine it. A feature-ranking procedure that only scores one column at a time would discard both. The choice between marginal and conditional information is therefore a question about the feature set and prediction task, not an interchangeable implementation detail.
 
-$$
-I(X;Y,Z)=I(X;Z)+I(X;Y\mid Z).
-$$
+The data-processing inequality gives a useful ceiling. If $Y\to X\to Z$ is a Markov chain, then $I(Y;Z)\leq I(Y;X)$. A learned representation $Z=f(X)$ cannot contain more population information about $Y$ than the original $X$. Yet a representation can make the relevant information easier for a finite or restricted predictor to use, improve optimisation, reduce noise, or satisfy a resource constraint. The inequality concerns information in the random variables, not the computational accessibility of a useful decision rule.
 
-Read from left to right, the total information supplied by $(Y,Z)$ is the information supplied by $Z$ plus the additional information supplied by $Y$ once $Z$ is already known. The word "additional" is essential. Adding correlated features can increase the raw number of inputs while adding little conditional information.
+### The Information Bottleneck
 
-A practical feature-selection workflow can therefore compare $I(X;Y)$ with $I(X;Y\mid Z)$, but it must also account for estimation error, leakage, and the prediction task. A feature can have low marginal mutual information and still be useful in combination with another feature; XOR is the smallest familiar example. Conversely, a feature can have high mutual information because it records a training-set identifier that will not exist at deployment.
-
-## Source Coding Beyond Huffman Codes
-
-Huffman coding is optimal among binary prefix codes that assign one codeword to each source symbol. It is not optimal for every compression problem. If symbols are strongly dependent, a symbol-by-symbol model wastes the dependence. A compressor can model sequences, encode blocks, or transform the source before coding it.
-
-Arithmetic coding takes a different route. It represents a whole message by an interval whose width is approximately the message probability. As symbols arrive, the interval is narrowed according to the model's conditional probabilities. A message with probability $p$ needs roughly $-\log_2p$ bits in an ideal arithmetic representation, so the method can approach the entropy rate more closely than an integer-length prefix code. Practical implementations use finite precision, renormalisation, and a model that assigns non-zero probability to every symbol that may occur.
-
-Dictionary methods such as LZ77 and LZ78 exploit repeated substrings rather than an explicitly supplied probability model. A repeated phrase can be represented by a reference to an earlier occurrence. Their performance depends on the source's repetition structure and the available window or dictionary, not only on the single-symbol histogram. This is why a file with a nearly uniform byte histogram can still compress well if it contains long repeated patterns, and why a file with a skewed histogram can resist a dictionary method if it has little repetition.
-
-The entropy rate of a stationary source captures the asymptotic uncertainty per symbol when dependence is included. For a sequence $X_1,X_2,\ldots$, define
+The information bottleneck method frames representation learning as a trade-off. Given input $X$, target $Y$, and representation $Z$ with Markov structure $Y\to X\to Z$, one form minimises
 
 $$
-\mathcal{H}(X)=\lim_{n\to\infty}\frac{1}{n}H(X_1,\ldots,X_n),
+\mathcal{L}_{\mathrm{IB}}=I(X;Z)-\beta I(Z;Y),
 $$
 
-when the limit exists. Independent identically distributed symbols have entropy rate $H(X_1)$. A Markov source generally has a lower entropy rate because past symbols help predict the next one. The limit is the right comparison for long-stream compression; a marginal entropy calculation can overstate the irreducible rate when it ignores dependence.
+where $\beta\geq0$ controls the trade-off between compressing the input and retaining information about the target. A small first term favours a representation that discards details of $X$; a large second term rewards predictive dependence with $Y$. This is an objective defined from a joint distribution, not a universal law of good representations.
 
-## Cross-Entropy as Log Loss
+The objective depends on how $Z$ is stochastic or deterministic, what distribution is used, how each MI term is estimated, and what value of $\beta$ is selected. For deterministic neural representations of continuous variables, formal MI can be infinite or ill-behaved under common idealisations; practical variational bounds and noise injections change the estimation problem. Optimising a lower bound does not necessarily optimise the exact objective. Report the estimator and assumptions, and assess downstream performance on held-out data.
 
-Cross-entropy is both a coding quantity and a statistical scoring rule. If a model assigns $q(x)$ to an observation drawn from $p(x)$, the expected log loss is
+An information bottleneck can also discard information needed for a subgroup, a later task, or a shifted distribution, because $I(Z;Y)$ rewards average dependence for the chosen target and population. Choosing the target is therefore consequential. A representation that compresses away a feature correlated with a protected group may still encode that group through other features; low $I(X;Z)$ is not itself a privacy guarantee.
 
-$$
-H(p,q)=-\mathbb{E}_{X\sim p}[\log_2q(X)].
-$$
+#### Evidence Is Not Causation
 
-The decomposition $H(p,q)=H(p)+D_{\mathrm{KL}}(p\|q)$ says that the irreducible uncertainty is fixed while model mismatch is the excess. This is why minimising expected cross-entropy is a proper objective for probability forecasts: the true distribution minimises the expected score.
+Mutual information is symmetric association. It does not orient an arrow, distinguish confounding from direct influence, or identify what would happen under intervention. A common cause can make $X$ and $Y$ dependent even if changing $X$ would not change $Y$. Conditioning can create dependence as well as remove it, as in collider structures. Causal conclusions require a causal model, design assumptions, and often experimental or quasi-experimental evidence beyond an observational joint distribution.
 
-The same formula clarifies several practical mistakes. Accuracy discards the probabilities assigned to incorrect classes, while log loss penalises confident wrong predictions heavily. A model that predicts $(0.51,0.49)$ for every binary example may have the same accuracy as a model that predicts $(0.99,0.01)$ on correct examples and $(0.99,0.01)$ on the wrong side for a few cases, but its cross-entropy will be much worse when it is confidently wrong. Calibration and discrimination are different properties; cross-entropy rewards both in different ways.
+The Markov notation $X\to Y\to Z$ in the data-processing inequality denotes conditional independence, not necessarily a causal sequence. It is safe to say that post-processing $Y$ into $Z$ cannot increase information about $X$ when that factorisation holds. It is unsafe to infer from the arrows alone that $X$ caused $Y$ or that the process occurred in time. See [Dependence, Conditioning, and Bayes' Rule](#conditional-distributions-and-bayes-rule) for this distinction.
 
-For a dataset $x_1,\ldots,x_n$, the average negative log likelihood is the empirical cross-entropy. If the observations are independent under the model, the joint likelihood is the product of per-observation probabilities and the negative log likelihood is the sum of their log losses. The independence assumption may be wrong, but the algebra explains why language models, classifiers, and probabilistic regressors commonly train with cross-entropy.
+A concrete observational counterexample is a common weather variable $U$ that affects both ice-cream purchases $X$ and swimming visits $Y$. Their MI can be positive even if buying ice cream has no effect on swimming. Randomising purchases would break the association between $X$ and $U$ while leaving the weather pathway to swimming intact. The joint law of observed $(X,Y)$ alone cannot distinguish this structure from a direct effect of $X$ on $Y$; both can generate dependence. An intervention claim requires additional assumptions or data.
 
-## Divergences, Distances, and Model Comparison
+#### Privacy: Information Measures and Guarantees
 
-KL divergence is not a distance. It is non-negative and zero only for equal distributions, but it is asymmetric and does not generally satisfy the triangle inequality. The direction is not cosmetic. In variational inference, minimising $D_{\mathrm{KL}}(q\|p)$ can favour a distribution $q$ that concentrates on one plausible mode, while minimising $D_{\mathrm{KL}}(p\|q)$ penalises assigning too little probability to regions where $p$ has mass. The choice produces different behaviour when distributions are multimodal.
+If sensitive data are represented by $S$ and a released output by $Z$, mutual information $I(S;Z)$ measures average statistical dependence under the chosen joint distribution. It can compare mechanisms under a stated prior and population. It is not, by itself, a complete privacy guarantee: it can average away a severe disclosure affecting a rare person, depends on the prior, and does not state what an adversary knows or can do.
 
-The Jensen–Shannon divergence symmetrises KL through a mixture $m=(p+q)/2$:
+Differential privacy instead bounds how much a mechanism's output distribution can change when one person's data are changed, with a guarantee quantified by parameters and a defined neighbouring-dataset relation. It is designed to hold uniformly across datasets and does not require a prior distribution over sensitive values. This primer need not develop that framework, but should not use "low mutual information" as a synonym for differential privacy. Conversely, a differential privacy guarantee does not promise that a released aggregate is useful for every analysis; utility remains a separate question.
 
-$$
-\operatorname{JSD}(p,q)=\frac{1}{2}D_{\mathrm{KL}}(p\|m)+\frac{1}{2}D_{\mathrm{KL}}(q\|m).
-$$
+The data-processing inequality says that post-processing a release cannot increase its mutual information with the secret. It also cannot invalidate a formal differential-privacy guarantee when the post-processing uses no additional private data. These are related but distinct statements with different premises and threat models. Reconstruction, membership inference, and attribute inference depend on available auxiliary data, the adversary, and the output interface.
 
-It is symmetric and bounded for discrete distributions, and its square root is a metric under standard conditions. It is still a distribution-level comparison, not a guarantee that two samples look similar under a task-specific notion of quality. Wasserstein distance, total variation, Hellinger distance, and other measures answer different questions; choose one by the geometry and decision consequences of the problem rather than by familiarity.
+Consider a release that reveals a sensitive bit only for one rare subgroup and is constant for everyone else. If that subgroup has tiny probability in the chosen population, the average $I(S;Z)$ can be small while disclosure for a member of the subgroup is complete. Changing the prior changes the average again. This does not make MI useless: it is a coherent population dependence measure and can bound some average inference quantities under explicit assumptions. It does show why an application with individual-level promises needs a threat model and a guarantee that addresses the relevant worst cases or tail events.
 
-## Estimating Information in Practice
+### A Practical Quantity-Selection Guide
 
-The following small Python function computes a plug-in entropy estimate for a list of discrete observations. It deliberately exposes the support rather than hiding it in a library call.
+A dataset can support several legitimate questions, each with a different information quantity. Before calculating, identify the random variables, population, and decision. Then choose a quantity whose units and assumptions match that question.
 
-```python
-from collections import Counter
-from math import log2
+| Practical question | Start with | State explicitly | Do not infer automatically |
+|---|---|---|---|
+| How uncertain is one source symbol under this model? | $H(X)$ | Source distribution, alphabet, bits per symbol | Semantic value or file size |
+| How many bits does a probabilistic predictor spend on held-out outcomes? | Mean log loss / cross-entropy | Outcome model, test distribution, handling of zero probabilities | Calibration or causal validity |
+| How dependent are two measured variables? | $I(X;Y)$ | Joint population, variable types, estimator, uncertainty | Direction or intervention effect |
+| How much can a chosen channel input tell the receiver? | $I_p(X;Y)$ | Channel law and the actual input law | Maximum channel capability |
+| What is the ideal reliable rate of a modelled channel? | Capacity $C$ | Channel assumptions, allowed inputs, bits per use | Finite-code throughput |
+| What rate permits an acceptable average reconstruction? | $R(D)$ | Source model, distortion function, expected-loss target | Per-item or perceptual guarantee |
+| Does a learned representation retain target-relevant dependence? | $I(Z;Y)$ and a predictive evaluation | Joint distribution, estimator, representation and target | Generalisation or fairness |
+| Is sensitive information exposed by a release? | Threat model plus an appropriate privacy definition | Adversary, auxiliary knowledge, adjacency or prior | Privacy from MI alone |
 
-def plug_in_entropy(observations):
-    counts = Counter(observations)
-    total = len(observations)
-    return -sum(
-        (count / total) * log2(count / total)
-        for count in counts.values()
-    )
+A disciplined analysis often reports more than one quantity. For example, a communications design may report capacity as a theoretical ceiling, code rate and block error as an implementation result, and delivered application throughput after overhead. A compression study may report bitrate and a distortion metric, plus task performance if users make decisions from reconstructed data. Keep the model bound separate from the empirical outcome.
 
-print(plug_in_entropy("HHHTTTTT"))
-```
+Here is the bookkeeping for a simple end-to-end link. Suppose a source produces 12 symbols per second, a source coder averages 1.4 bits per source symbol, and the resulting bitstream is protected by a channel code of rate $r_c=0.7$ information bits per transmitted channel bit. The physical channel must carry $12(1.4)/0.7=24$ channel bits per second before framing. If the channel offers 30 uses per second and has capacity 0.9 bits per use, its ideal information ceiling is 27 bits per second. The fact that 24 is below 27 is a necessary asymptotic compatibility check under the models; it does not guarantee the chosen finite source coder, channel code, or latency meets requirements. If the source coder's 1.4-bit figure is a finite-file average including headers, it should not be compared casually with a stationary entropy rate either.
 
-The result is the entropy of the empirical distribution, not an unbiased estimate of the source entropy. The distinction is important when the sample is small or the support is large. A result with three observed categories may conceal dozens of unobserved categories. Report the number of observations, the support definition, the estimator, and any smoothing or bias correction.
-
-For mutual information, construct a contingency table and estimate the joint and marginal distributions from the same observations. Do not estimate the marginals from a different subset unless the missingness mechanism justifies it. Under a null hypothesis of independence, a permutation test can preserve the observed marginal counts while breaking the association between variables. The permutation distribution is not a proof that the estimator is unbiased, but it provides a useful check against interpreting a small empirical association as substantive evidence.
-
-The curse of dimensionality becomes severe when the joint alphabet grows. If each of five binary variables is observed jointly, there are already 32 cells; if each has 20 possible values, there are 3.2 million. Most cells will be empty unless the sample grows accordingly. Binning continuous variables can make a computation possible, but changing the bins changes the question. Kernel, nearest-neighbour, Bayesian, and variational estimators introduce different assumptions; compare their sensitivity rather than presenting one number as ground truth.
-
-## A Practical Decision Guide
-
-Use the following questions to choose a quantity:
-
-- If you need the uncertainty of one discrete source, calculate entropy.
-- If you need uncertainty remaining after an observation, calculate conditional entropy.
-- If you need dependence between variables, calculate mutual information and state the joint distribution or estimator.
-- If you need to compare a model distribution with a reference distribution, choose a divergence and its direction.
-- If you need compact exact representation, reason about source coding and entropy rate.
-- If you need reliable transmission through a specified noisy channel, calculate capacity and then choose a finite-length code below it.
-- If approximation is allowed, specify the distortion measure and use rate–distortion reasoning.
-
-Do not use entropy as a generic synonym for disorder, mutual information as evidence of causation, or capacity as the measured throughput of a finite implementation. Each quantity answers a narrowly defined question under a model.
+This bookkeeping also catches a common category error: dividing a source entropy in bits per symbol directly by a channel capacity in bits per use yields no meaningful utilisation until the source symbol rate and channel-use rate are included. A full system model may also include packet headers, retransmissions, idle time, and unequal error protection. Add these as explicit rate factors rather than quietly folding them into "capacity".
 
 ## Exercises
 
-1. A source emits four symbols with probabilities $(0.5,0.25,0.125,0.125)$. Calculate its entropy and compare it with the expected length of the code lengths $(1,2,3,3)$.
-2. Show that the entropy of a fair six-sided die is $\log_2 6$ bits and explain why no fixed-length binary code can represent every outcome in exactly that many bits.
-3. For a BSC with crossover probability $0.25$, calculate the capacity to three decimal places. What changes if the input distribution is not uniform?
-4. Construct the joint table for a fair bit passed through a BSC with crossover probability $0.1$ and verify the mutual-information calculation in the core example.
-5. Explain why a plug-in entropy estimate can be downward-biased when rare outcomes are not observed. Give one reason smoothing may improve a decision and one reason it may mislead.
-6. Choose a distortion measure for a lossy text-compression system and explain what kinds of errors it would treat as equivalent or different. Compare your choice with squared error.
+Unless stated otherwise, logarithms are base 2. Work from the stated model and check the units. Outline solutions follow each prompt.
 
-Outline solutions: (1) the entropy is $1.75$ bits and the stated code has expected length $1.75$ bits; (2) entropy is the expected surprise, while a fixed binary code needs an integer number of bits per symbol and must use at least three bits for six symbols; (3) capacity is $1-h_2(0.25)\approx0.189$ bits per use, and the capacity-achieving input need not be uniform for an asymmetric channel; (4) the diagonal joint probabilities are $0.45$ each and the off-diagonal probabilities are $0.05$ each, giving conditional entropy $h_2(0.1)$; (5) unseen outcomes contribute zero to the plug-in estimate, while smoothing can reduce variance but adds a modelling choice; and (6) the answer depends on the application, so justify the distortion rather than importing a continuous-valued metric.
+### Exercise 1: Probability and Labelling
+
+A three-outcome variable has probabilities $1/2,1/3,1/6$. Verify normalisation and calculate the expectation of the numeric labels $0,1,2$.
+
+**Outline Solution.** The probabilities sum to $1$. The expectation is $0(1/2)+1(1/3)+2(1/6)=2/3$. Relabelling the outcomes changes this expectation, unlike entropy, which depends only on the probability multiset.
+
+### Exercise 2: KL Direction and Support
+
+Let $P=(1,0)$ and $Q=(1/2,1/2)$. Find both directed KL divergences.
+
+**Outline Solution.** $D_{\mathrm{KL}}(P\|Q)=1$ bit. $D_{\mathrm{KL}}(Q\|P)=+\infty$ because $Q$ assigns positive mass where $P$ assigns zero. This also demonstrates asymmetry and the support rule.
+
+### Exercise 3: Pairwise Independence and Parity
+
+In the parity construction with independent fair $X,Y$ and $Z=X\oplus Y$, show that each pair is independent but $H(Z\mid X,Y)=0$.
+
+**Outline Solution.** For any fixed value of one bit, XOR with the other fair independent bit is fair, giving pairwise independence. Once both inputs are given, the output is fixed.
+
+### Exercise 4: Equality in Data Processing
+
+A system has $X\to Y\to Z$ and a deterministic $Z=f(Y)$. Does this imply $I(X;Z)=I(X;Y)$?
+
+**Outline Solution.** No. DPI gives only the upper bound. Equality requires that $Z$ preserve all information in $Y$ relevant to $X$, equivalently $I(X;Y\mid Z)=0$.
+
+### Exercise 5: Kraft and a Code Assignment
+
+A binary prefix code has lengths 1, 2, and 2. Is such a code possible? Give one assignment.
+
+**Outline Solution.** Kraft's sum is $1/2+1/4+1/4=1$, so it is possible. Codewords `0`, `10`, and `11` work.
+
+### Exercise 6: Fractional Entropy and Integer Lengths
+
+Explain why a 1.846-bit entropy does not imply that a one-symbol binary code can give every symbol a codeword of length 1.846 bits.
+
+**Outline Solution.** Binary codeword lengths are non-negative integers. Entropy is an expected lower bound; block codes and arithmetic coding can amortise fractional information over long sequences.
+
+
+State the assumptions alongside each calculation; a numerical answer alone does not identify the model.
+
+### Exercise 7: Input Bias on a BSC
+
+A BSC has crossover probability $\varepsilon=0.15$. The input has $P(X=1)=0.2$.
+
+1. Find $P(Y=1)$.
+2. Compute $I(X;Y)$ using $h_2(P(Y=1))-h_2(\varepsilon)$.
+3. Compute the channel capacity and explain why it is not the value in part 2.
+4. What changes if $\varepsilon=1$?
+
+**Outline Solution.** $P(Y=1)=0.15+0.2(1-0.30)=0.29$. Thus $I=h_2(0.29)-h_2(0.15)\approx0.869-0.610=0.259$ bits per use. Capacity is $1-h_2(0.15)\approx0.390$ bits per use, achieved by a uniform input, not the specified biased input. At $\varepsilon=1$, the channel flips deterministically; $I(X;Y)=H(X)$ for any input law and capacity is one bit per use. A deterministic flip is invertible, not destructive noise.
+
+### Exercise 8: Erasures and Substitutions
+
+A BEC has erasure probability $0.12$. A second channel is a BSC with crossover probability $0.12$.
+
+1. Find each capacity.
+2. Explain the role of the receiver's knowledge of erased positions.
+3. Are these channels equally difficult for every code and block length?
+
+**Outline Solution.** BEC capacity is $1-0.12=0.88$ bits per use. BSC capacity is $1-h_2(0.12)\approx0.471$ bits per use. The BEC reveals which symbols are unavailable; the BSC output can be a plausible but incorrect bit. The capacities compare asymptotic optimal rates under their respective models. They do not imply equal finite-block error, decoder complexity, or performance for a particular code. The numerical equality of the error parameter has no common operational meaning.
+
+### Exercise 9: A Z-Channel Optimisation
+
+Input 0 is always received as 0. Input 1 is received as 0 with probability $q=0.1$ and as 1 otherwise.
+
+1. Write $I_a(X;Y)$ when $P(X=1)=a$.
+2. Explain why $a=1/2$ is not generally optimal.
+3. Find the derivative condition for an interior maximiser.
+
+**Outline Solution.** $P(Y=1)=0.9a$ and $H(Y\mid X)=a h_2(0.1)$, so $I_a=h_2(0.9a)-a h_2(0.1)$. The conditional output entropy differs by input row, so a uniform input need not maximise the output-information balance. Since $h_2'(u)=\log_2((1-u)/u)$, the stationary condition is $0.9\log_2((1-0.9a)/(0.9a))=h_2(0.1)$. Verify the candidate is in $[0,1]$ and compare boundaries if solving numerically.
+
+### Exercise 10: Coding Rate and Error Probability
+
+For threefold repetition on a BSC with $\varepsilon=0.05$, use majority decoding.
+
+1. Find the code rate.
+2. Calculate the block error probability.
+3. Compare the result with the BSC capacity, and state why this does not verify the coding theorem.
+
+**Outline Solution.** One information bit uses three channel symbols, so the rate is $1/3$ bit per use. Failure requires at least two flips: $3(0.05)^2(0.95)+(0.05)^3=0.00725$. Capacity is $1-h_2(0.05)\approx0.714$ bits per use. The code's rate is below capacity and has a small but non-zero error for this one block length. The theorem concerns sequences of codes as block length tends to infinity, not this particular code.
+
+### Exercise 11: Choose a Distortion Measure
+
+A logger stores a binary warning flag with prevalence $P(X=1)=0.03$. Compare the distortions (a) Hamming loss and (b) asymmetric loss where missing a warning costs 20 and a false warning costs 1. What is the zero-rate constant reconstruction under each expected-distortion criterion? What does that tell you about the objective?
+
+**Outline Solution.** Under Hamming loss, always output 0 gives expected distortion 0.03, while always output 1 gives 0.97; the zero-rate choice is 0. Under asymmetric loss, always output 0 costs $20(0.03)=0.6$, while always output 1 costs $1(0.97)=0.97$, so output 0 remains preferable here. If prevalence or costs change, the choice can change. The example makes clear that "distortion" encodes application costs; a rate–distortion answer is only as appropriate as that cost model.
+
+### Exercise 12: Gaussian Rate–Distortion
+
+An iid Gaussian source has variance $\sigma^2=9$ and squared-error distortion is allowed up to $D=1$ per sample.
+
+1. Find the asymptotic rate–distortion bound.
+2. What rate suffices for $D\geq9$?
+3. Why can the rate not be read as an exact finite-file size?
+
+**Outline Solution.** $R(1)=\frac12\log_2(9)\approx1.585$ bits per sample. For $D\geq9$, outputting the mean zero requires no bits and meets the expected distortion target. The theorem is asymptotic for iid Gaussian samples under squared error; finite block coding, overhead, and a particular sample realisation affect actual file length and distortion.
+
+### Exercise 13: Entropy Bias and a Sparse Table
+
+You observe 25 pairs of categorical variables, each with 10 possible categories, but only 13 joint cells are occupied. The plug-in mutual information is 0.42 bits.
+
+1. Is 0.42 an unbiased estimate of population MI?
+2. Name two useful diagnostics or uncertainty procedures.
+3. Explain why permuting one variable answers a different question from bootstrapping paired observations.
+
+**Outline Solution.** No. Plug-in MI is generally positively biased under independence, particularly with sparse tables and many possible cells. Report support and cell counts, compare against a permutation null if pairings are exchangeable, and bootstrap pairs or clusters to assess sampling variation. Permutation estimates a reference distribution under a null of no association while retaining marginals; bootstrap estimates sampling variability around the observed joint distribution. Neither procedure repairs absent support automatically.
+
+### Exercise 14: KL Direction and Prediction
+
+The true outcome distribution is $p=(0.8,0.2)$ and a model predicts $q=(0.6,0.4)$.
+
+1. Write the model's expected log loss.
+2. Decompose it into entropy and KL divergence with the correct direction.
+3. What happens if the model assigns $q_2=0$?
+
+**Outline Solution.** Expected log loss is $-0.8\log_2(0.6)-0.2\log_2(0.4)=H(p)+D_{\mathrm{KL}}(p\|q)$. The true distribution comes first. If the second outcome has positive true probability but $q_2=0$, expected log loss and the KL divergence are infinite. A finite sample might fail to expose this failure, which is why unsmoothed zero predictions are dangerous.
+
+### Exercise 15: Information Bottleneck and Causation
+
+A representation $Z=f(X)$ has high estimated $I(Z;Y)$ on training data. A team concludes that $Z$ causes $Y$ and that the representation preserves every important input property.
+
+Identify two errors and propose two checks.
+
+**Outline Solution.** MI is symmetric association, not causal direction; confounding or selection can produce the dependence. High $I(Z;Y)$ says nothing about information discarded from $X$ that matters for another task or subgroup, and a training estimate can be biased or overfit. Use an identified causal design for causal claims, estimate performance and MI on held-out data with uncertainty, and audit subgroup and secondary-task behaviour. State the estimator and target population.
+
+### Exercise 16: Select a Quantity for a System Claim
+
+A team reports: "Our sensor system has capacity 2 bits/s and therefore loses no more than 1% of measurements." The model is a BSC used 4 times per second with crossover probability 0.1. The team also compresses a continuous sensor value before transmission.
+
+Rewrite the claim as separate, meaningful quantities and identify missing information.
+
+**Outline Solution.** The BSC capacity is approximately $0.531$ bits per channel use, so the ideal asymptotic rate is about $4(0.531)=2.12$ bits/s under the stated model, before overhead. This says nothing about a particular code's finite-block error, and the BSC crossover is not a measurement-distortion percentage after compression. To bound reconstruction loss, specify the source law, distortion measure, target average or maximum error, source coding method, channel code, block length, and end-to-end evaluation. Keep source symbols per second, channel uses per second, bits per use, and bits per second distinct.
 
 ## Glossary
 
-**Alphabet.** The set of symbols a random variable or code can take.
+These short definitions point to the first full treatment. In each application, the units and distributional assumptions belong with the reported value.
 
-**Capacity.** The supremum rate at which reliable communication is possible under a specified channel model and asymptotic convention.
-
-**Cross-entropy.** Expected negative log probability assigned by one distribution to observations from another.
-
-**Divergence.** A non-negative discrepancy measure between distributions that need not be symmetric or obey the triangle inequality.
-
-**Entropy.** Expected self-information of a random variable.
-
-**Erasure.** A channel error whose location or missing-value marker is known to the receiver.
-
-**Mutual information.** The reduction in uncertainty about one variable supplied by observing another.
-
-**Prefix code.** A code in which no codeword is the prefix of another codeword.
-
-**Rate–distortion function.** The minimum asymptotic rate needed to reconstruct a source within a specified expected distortion.
-
-**Source coding.** Representing a source efficiently, usually by removing redundancy.
-
-**Channel coding.** Adding structured redundancy so a receiver can recover a message after channel corruption.
+| Term | Definition | First Treatment |
+|---|---|---|
+| Achieved mutual information | $I_p(X;Y)$ for a specified input distribution $p$ and channel law | [Mutual Information](#mutual-information) |
+| Alphabet | Possible symbols of a discrete random variable or code | [Sample Spaces and Random Variables](#sample-spaces-and-random-variables) |
+| Asymmetric channel | A channel whose transition behaviour is not invariant under relabelling or symmetry of its inputs and outputs | [Asymmetric Channels and Input Optimisation](#asymmetric-channels-and-input-optimisation) |
+| Average error probability | Probability of decoding the wrong message, averaged over the stated message distribution and channel noise | [Capacity and the Channel Coding Theorem](#capacity-and-the-channel-coding-theorem) |
+| Binary erasure channel (BEC) | Binary-input channel that replaces a symbol with a visible erasure marker with a stated probability | [Binary Erasure Channel](#binary-erasure-channel) |
+| Binary symmetric channel (BSC) | Binary-input channel that flips each bit independently with a fixed crossover probability | [Binary Symmetric Channel: One Input Law, One Capacity](#binary-symmetric-channel-one-input-law-one-capacity) |
+| Capacity | Maximum mutual information over allowed input distributions; for a DMC, measured in bits per channel use | [Capacity and the Channel Coding Theorem](#capacity-and-the-channel-coding-theorem) |
+| Channel coding | Adding structured redundancy to improve recovery after channel errors | [Capacity and the Channel Coding Theorem](#capacity-and-the-channel-coding-theorem) |
+| Conditional entropy | Expected uncertainty in one variable after observing another | [Conditional Entropy as Remaining Uncertainty](#conditional-entropy-as-remaining-uncertainty) |
+| Cross-entropy | Expected negative log probability assigned by one distribution to outcomes generated under another | [Cross-Entropy and Log Loss](#cross-entropy-and-log-loss) |
+| Data-processing inequality | Markov-chain bound saying that processing an observation cannot increase its mutual information with a specified source | [Data-Processing Inequality](#data-processing-inequality) |
+| Differential entropy | Continuous-density analogue of entropy, which depends on coordinates and can be negative | [Continuous Entropy and Relative Entropy](#continuous-entropy-and-relative-entropy) |
+| Distortion measure | A non-negative cost assigned to a source value and its reconstruction | [Distortion and the Rate–Distortion Function](#distortion-and-the-ratedistortion-function) |
+| Discrete memoryless channel (DMC) | Finite-alphabet channel with a fixed transition law and conditionally independent outputs across uses | [A Channel as a Conditional Distribution](#a-channel-as-a-conditional-distribution) |
+| Empirical distribution | Observed relative frequencies used to approximate an unknown population distribution | [Plug-In Estimates and Their Bias](#plug-in-estimates-and-their-bias) |
+| Entropy | Expected surprisal under a discrete source law | [Shannon Entropy](#shannon-entropy) |
+| Erasure | Missing channel output whose position is explicitly known to the receiver | [Binary Erasure Channel](#binary-erasure-channel) |
+| Hamming distortion | Zero cost for an exact match and unit cost for a mismatched symbol | [Binary Hamming Distortion](#binary-hamming-distortion) |
+| Huffman code | Minimum-expected-length prefix code for a known finite source encoded one symbol at a time | [Huffman Coding and a Complete Example](#huffman-coding-and-a-complete-example) |
+| Information bottleneck | Objective trading off retained information about an input against predictive information about a target | [The Information Bottleneck](#the-information-bottleneck) |
+| KL divergence | Directed expected log likelihood ratio, or excess expected log loss under a mismatched model | [KL Divergence](#kl-divergence) |
+| Mutual information | Average reduction in uncertainty about one variable supplied by observing another | [Mutual Information](#mutual-information) |
+| Miller–Madow correction | First-order correction to plug-in entropy bias for a fixed finite support under regular large-sample conditions | [Plug-In Estimates and Their Bias](#plug-in-estimates-and-their-bias) |
+| Permutation test | Null procedure that reassigns labels under an exchangeability assumption to estimate a test-statistic reference distribution | [Permutation Tests for Dependence](#permutation-tests-for-dependence) |
+| Prefix code | A code in which no complete codeword begins another codeword | [From Probabilities to Code Lengths](#from-probabilities-to-code-lengths) |
+| Rate–distortion function | Minimum mutual information needed to meet an expected-distortion constraint | [Distortion and the Rate–Distortion Function](#distortion-and-the-ratedistortion-function) |
+| Sampling zero | Unobserved category or joint cell that may nevertheless have positive population probability | [Joint Tables, Sparse Cells, and Mutual Information](#joint-tables-sparse-cells-and-mutual-information) |
+| Source coding | Representing a source with fewer expected bits by exploiting a known distribution or dependence | [Lossless Source Coding](#lossless-source-coding) |
+| Structural zero | Category or cell that is impossible under the stated design or model | [Joint Tables, Sparse Cells, and Mutual Information](#joint-tables-sparse-cells-and-mutual-information) |
+| Surprisal | Negative log probability assigned to an outcome under a specified law | [Surprise as Log Probability](#surprise-as-log-probability) |
+| Typicality | A block-level property meaning empirical frequencies or information densities are close to their model values | [Capacity and the Channel Coding Theorem](#capacity-and-the-channel-coding-theorem) |
 
 ## Further Reading
 
-- Claude E. Shannon, ["A Mathematical Theory of Communication"](https://doi.org/10.1002/j.1538-7305.1948.tb00917.x), *Bell System Technical Journal* 27 (1948). Read this for the original definitions of entropy, channel capacity, and the coding-theorem framework.
-- Thomas M. Cover and Joy A. Thomas, [*Elements of Information Theory*, 2nd ed.](https://onlinelibrary.wiley.com/doi/book/10.1002/047174882X), Wiley, 2006. This is the most systematic next reference for entropy identities, divergence, mutual information, and channel coding.
-- David J. C. MacKay, [*Information Theory, Inference, and Learning Algorithms*](https://www.inference.phy.cam.ac.uk/itila/book.html), Cambridge University Press, 2003. The author’s freely available edition connects coding and inference with practical algorithms.
-- David A. Huffman, ["A Method for the Construction of Minimum-Redundancy Codes"](https://doi.org/10.1109/jrproc.1952.273898), *Proceedings of the IRE* 40 (1952), 1098–1101. The original prefix-code construction.
-- Liam Paninski, ["Estimation of Entropy and Mutual Information"](https://doi.org/10.1162/089976603321780272), *Neural Computation* 15 (2003), 1191–1253. A focused treatment of finite-sample bias and consistency.
-- Thomas Berger, [*Rate Distortion Theory and Its Applications to Speech*](https://ieeexplore.ieee.org/document/1162269), Prentice-Hall, 1971. An early systematic treatment of lossy source coding and distortion.
+The following sources support the main definitions and theorems. The annotations indicate where to continue after the primer; they do not replace the stated hypotheses of a result.
 
+- Claude E. Shannon, ["A Mathematical Theory of Communication", Part I](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x) and [Part II](https://doi.org/10.1002/j.1538-7305.1948.tb00917.x), *Bell System Technical Journal* 27 (1948). The original framework for entropy, communication, and channel coding; modern texts provide the theorem conventions used here.
+- Thomas M. Cover and Joy A. Thomas, [*Elements of Information Theory*, second edition](https://doi.org/10.1002/047174882X), Wiley (2006). A systematic treatment of entropy identities, coding theorems, Gaussian channels, and rate-distortion, with complete proofs beyond the sketches here.
+- David J. C. MacKay, [*Information Theory, Inference, and Learning Algorithms*](https://assets.cambridge.org/97805216/42989/excerpt/9780521642989_excerpt.pdf), Cambridge University Press (2003). The publisher's excerpt introduces communication and inference; the full book develops them with computational exercises.
+- David A. Huffman, ["A Method for the Construction of Minimum-Redundancy Codes"](https://doi.org/10.1109/jrproc.1952.273898), *Proceedings of the IRE* 40 (1952), 1098–1101. The original binary prefix-code construction.
+- Imre Csiszár and János Körner, [*Information Theory: Coding Theorems for Discrete Memoryless Systems*, second edition](https://www.cambridge.org/core/books/information-theory/A441D8792B877693D6F91E8D61B53F42), Cambridge University Press (2011). A deeper reference for discrete coding-theorem proofs and conventions.
+- Claude E. Shannon, ["Coding Theorems for a Discrete Source With a Fidelity Criterion"](https://gwern.net/doc/cs/algorithm/information/1959-shannon.pdf), *IRE National Convention Record* 7, Part 4 (1959), 142–163. The foundational source for coding under a fidelity or distortion criterion; the link is a scan of the original paper.
+- Liam Paninski, ["Estimation of Entropy and Mutual Information"](https://doi.org/10.1162/089976603321780272), *Neural Computation* 15 (2003), 1191–1253. Analyses bias, consistency, and finite-sample limits of information estimators.
+- Toby Berger, ["Rate-Distortion Theory"](https://doi.org/10.1002/0471219282.eot142), *Encyclopedia of Telecommunications* (2003). A concise account of lossy coding and the relationship between source and channel models.
