@@ -224,6 +224,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -577,6 +586,7 @@ code span.wa { color: #da4453; } /* Warning */
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -596,8 +606,8 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Running LLMs Locally: A Secure Practical
 Landscape</span>
-
     <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
 
@@ -622,10 +632,10 @@ Question</a></li>
 <li><a href="#foundations-what-you-are-actually-running" id="toc-foundations-what-you-are-actually-running"><span class="toc-section-number">2</span> Foundations: What You Are Actually
 Running</a>
 <ul>
-<li><a href="#model-artifact" id="toc-model-artifact"><span class="toc-section-number">2.1</span> Model Artifact</a></li>
+<li><a href="#model-artefact" id="toc-model-artefact"><span class="toc-section-number">2.1</span> Model Artefact</a></li>
 <li><a href="#inference-engine" id="toc-inference-engine"><span class="toc-section-number">2.2</span> Inference Engine</a></li>
 <li><a href="#server-layer" id="toc-server-layer"><span class="toc-section-number">2.3</span> Server Layer</a></li>
-<li><a href="#quantization-the-lever-you-will-use-most" id="toc-quantization-the-lever-you-will-use-most"><span class="toc-section-number">2.4</span> Quantization (The Lever You Will
+<li><a href="#quantisation-the-lever-you-will-use-most" id="toc-quantisation-the-lever-you-will-use-most"><span class="toc-section-number">2.4</span> Quantisation (The Lever You Will
 Use Most)</a></li>
 <li><a href="#context-window-and-kv-cache" id="toc-context-window-and-kv-cache"><span class="toc-section-number">2.5</span> Context Window and KV
 Cache</a></li>
@@ -710,7 +720,7 @@ Works</a></li>
 <li><a href="#workload-shapes" id="toc-workload-shapes"><span class="toc-section-number">8.2</span> Workload Shapes</a></li>
 <li><a href="#family-level-guidance-practical" id="toc-family-level-guidance-practical"><span class="toc-section-number">8.3</span> Family-Level Guidance
 (Practical)</a></li>
-<li><a href="#size-and-quantization-pairing" id="toc-size-and-quantization-pairing"><span class="toc-section-number">8.4</span> Size and Quantization
+<li><a href="#size-and-quantisation-pairing" id="toc-size-and-quantisation-pairing"><span class="toc-section-number">8.4</span> Size and Quantisation
 Pairing</a></li>
 <li><a href="#where-to-source-models" id="toc-where-to-source-models"><span class="toc-section-number">8.5</span> Where to Source Models</a></li>
 <li><a href="#minimal-local-eval-loop" id="toc-minimal-local-eval-loop"><span class="toc-section-number">8.6</span> Minimal Local Eval Loop</a></li>
@@ -763,7 +773,7 @@ workflows through messaging apps</a></li>
 <li><a href="#day-2-add-browser-ui" id="toc-day-2-add-browser-ui"><span class="toc-section-number">12.2</span> Day 2: Add Browser UI</a></li>
 <li><a href="#day-3-use-the-api-directly" id="toc-day-3-use-the-api-directly"><span class="toc-section-number">12.3</span> Day 3: Use the API
 Directly</a></li>
-<li><a href="#day-4-containerize-and-persist" id="toc-day-4-containerize-and-persist"><span class="toc-section-number">12.4</span> Day 4: Containerize and
+<li><a href="#day-4-containerise-and-persist" id="toc-day-4-containerise-and-persist"><span class="toc-section-number">12.4</span> Day 4: Containerise and
 Persist</a></li>
 <li><a href="#day-5-compare-two-model-families" id="toc-day-5-compare-two-model-families"><span class="toc-section-number">12.5</span> Day 5: Compare Two Model
 Families</a></li>
@@ -873,13 +883,13 @@ Actually Running</h1>
 together.</p>
 <p>Separate them:</p>
 <ol type="1">
-<li>The model artifact (weights + metadata)</li>
+<li>The model artefact (weights + metadata)</li>
 <li>The inference engine (token generation runtime)</li>
 <li>The server or UI layer (APIs, chat interfaces, auth)</li>
 </ol>
 <p>When you keep these layers distinct, the ecosystem stops feeling
 messy.</p>
-<h2 data-number="2.1" id="model-artifact"><span class="header-section-number">2.1</span> Model Artifact</h2>
+<h2 data-number="2.1" id="model-artefact"><span class="header-section-number">2.1</span> Model Artefact</h2>
 <p>A model is a large set of learned weights plus metadata about
 tokenizer, architecture, and prompt formatting.</p>
 <p>For local inference, you will mostly see:</p>
@@ -892,7 +902,7 @@ diffusion runtimes</li>
 multimodal projector</li>
 </ol>
 <p>GGUF remains the practical default for many local setups because it
-is portable and quantization-friendly.</p>
+is portable and quantisation-friendly.</p>
 <p>It is not the universal format. Image and video generators are
 commonly distributed as Safetensors components, while Apple-oriented
 tools often use MLX conversions. A vision-language model may also need a
@@ -917,9 +927,9 @@ structure, batching, and optional auth.</p>
 runtimes with small config changes.</p>
 <p>That API stability is what makes local inference practical for real
 applications, not just demos.</p>
-<h2 data-number="2.4" id="quantization-the-lever-you-will-use-most"><span class="header-section-number">2.4</span> Quantization (The Lever You
+<h2 data-number="2.4" id="quantisation-the-lever-you-will-use-most"><span class="header-section-number">2.4</span> Quantisation (The Lever You
 Will Use Most)</h2>
-<p>Quantization reduces weight precision to make models fit smaller
+<p>Quantisation reduces weight precision to make models fit smaller
 hardware.</p>
 <p>A simplified mental model:</p>
 <ol type="1">
@@ -932,7 +942,7 @@ sooner on complex tasks.</li>
 <table>
 <thead>
 <tr>
-<th>Quantization</th>
+<th>Quantisation</th>
 <th>Typical Use</th>
 </tr>
 </thead>
@@ -958,7 +968,7 @@ sooner on complex tasks.</li>
 <p>In the GGUF world, 4-bit variants like Q4_K_M remain a strong
 llama.cpp baseline for many assistants and coding workflows. They are
 not a universal optimum: image/video pipelines and accelerator servers
-often use different formats, and quantization quality depends on the
+often use different formats, and quantisation quality depends on the
 model and hardware.</p>
 <h2 data-number="2.5" id="context-window-and-kv-cache"><span class="header-section-number">2.5</span> Context Window and KV
 Cache</h2>
@@ -968,7 +978,7 @@ cache is the memory used to store token history state.</p>
 runs that otherwise fit fine.</p>
 <p>A practical rule:</p>
 <ol type="1">
-<li>Pick model size and quantization first.</li>
+<li>Pick model size and quantisation first.</li>
 <li>Then increase context until latency and memory stay acceptable.</li>
 <li>Do not assume max advertised context is affordable on your
 hardware.</li>
@@ -1164,7 +1174,7 @@ endpoint.</p>
 <a href="https://huggingface.co/blog/ibm-granite/granite-4-2">Granite
 4.2</a>, <a href="https://openai.com/index/introducing-gpt-oss/">gpt-oss</a>, <a href="https://huggingface.co/LiquidAI/models">LFM2.5</a></td>
 <td>llama.cpp, Ollama, vLLM, SGLang, Transformers, MLX-LM</td>
-<td>The broadest ecosystem. Size, quantization, and context length still
+<td>The broadest ecosystem. Size, quantisation, and context length still
 dominate fit.</td>
 </tr>
 <tr>
@@ -1184,7 +1194,7 @@ layout.</td>
 Stable Diffusion family</td>
 <td>Diffusers, ComfyUI, InvokeAI</td>
 <td>Treat the pipeline, text encoder, variational autoencoder (VAE), and
-transformer/diffusion weights as one artifact. VRAM rises quickly with
+transformer/diffusion weights as one artefact. VRAM rises quickly with
 resolution and reference images. Licenses differ by checkpoint.</td>
 </tr>
 <tr>
@@ -1232,7 +1242,7 @@ multimodal input, and long-context variants. <a href="https://github.com/QwenLM/
 4.2</a>, and <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Gemma 4</a>
 are useful examples, not a permanent shortlist. Parameter count alone is
 no longer a fit estimate: active parameters, modality encoders, context
-length, quantization, and draft-model support all affect actual memory
+length, quantisation, and draft-model support all affect actual memory
 and throughput.</p>
 <h2 data-number="3.3" id="specialist-models-worth-knowing"><span class="header-section-number">3.3</span> Specialist Models Worth
 Knowing</h2>
@@ -1244,7 +1254,7 @@ generation. Current examples include <a href="https://github.com/black-forest-la
 <a href="https://github.com/zai-org/glm-ocr">GLM-OCR</a> for
 layout-aware extraction, and <a href="https://github.com/openai/whisper">Whisper</a> or <a href="https://github.com/QwenLM/Qwen3-ASR">Qwen3-ASR</a> for
 transcription. These are orientation points, not a catalogue: verify the
-exact artifact, runtime, hardware fit, and licence. Voice cloning
+exact artefact, runtime, hardware fit, and licence. Voice cloning
 requires speaker consent; video generation remains a workstation-scale
 workload.</p>
 <h2 data-number="3.4" id="image-generation-is-not-vision"><span class="header-section-number">3.4</span> Image Generation Is Not
@@ -1252,7 +1262,7 @@ Vision</h2>
 <p>This distinction prevents a common failed setup. A VLM such as
 Qwen3-VL can inspect a screenshot, read a receipt, or answer questions
 about a photograph. An image model such as FLUX.2 or Qwen-Image can
-synthesize or edit pixels. They may share a text encoder or appear in
+synthesise or edit pixels. They may share a text encoder or appear in
 the same UI, but they are not interchangeable. For a private document
 pipeline, the usual sequence is:</p>
 <ol type="1">
@@ -1262,7 +1272,7 @@ pipeline, the usual sequence is:</p>
 image.</li>
 </ol>
 <p>The same separation applies to audio and video. Transcribe with ASR,
-reason over the transcript with a language model, and synthesize speech
+reason over the transcript with a language model, and synthesise speech
 or video only at the output stage when required.</p>
 <h2 data-number="3.5" id="running-diffusion-language-models-locally"><span class="header-section-number">3.5</span> Running Diffusion Language
 Models Locally</h2>
@@ -1277,7 +1287,7 @@ as well as its weights and tokenizer.</p>
 <ol type="1">
 <li><strong>Model checkpoint.</strong> The official LLaDA releases use
 Hugging Face transformer checkpoints, usually Safetensors plus custom
-model code. Quantized local deployments may instead use GGUF. Do not
+model code. Quantised local deployments may instead use GGUF. Do not
 assume that a GGUF made for a causal Llama model will work; the
 diffusion architecture and sampler must be supported by the
 runtime.</li>
@@ -1339,12 +1349,12 @@ implementation or intend to modify the sampler:</p>
 CUDA or MPS installation, and model loading. BF16/FP16 inference for an
 8B model generally wants a high-memory GPU; CPU execution is possible
 but usually much slower and may require substantial system RAM.
-Quantization reduces weight memory, not all working memory, and an MoE
+Quantisation reduces weight memory, not all working memory, and an MoE
 model’s “active parameters” describe compute per step, not necessarily
 the total checkpoint that must be stored.</p>
 <p>For larger or newer families, use a runtime that explicitly names the
 model. <a href="https://github.com/inclusionAI/dInfer">dInfer</a>
-supports LLaDA, LLaDA-MoE, and LLaDA2 through specialized inference
+supports LLaDA, LLaDA-MoE, and LLaDA2 through specialised inference
 paths, with vLLM and SGLang backends depending on the model family. This
 is a better fit for a CUDA workstation or multi-GPU server than for a
 first laptop experiment. Treat support as model-specific: LLaDA,
@@ -1353,7 +1363,7 @@ checkpoint format, sampler flags, or serving API.</p>
 <p>GPU memory has three separate costs:</p>
 <ol type="1">
 <li><strong>Weights:</strong> reduced by 4-bit or 8-bit
-quantization.</li>
+quantisation.</li>
 <li><strong>Working memory:</strong> activations, temporary logits,
 tokenizer buffers, and the repeated denoising passes.</li>
 <li><strong>Context and batching:</strong> attention/cache state and
@@ -1400,7 +1410,7 @@ is still a slow token stream.</p>
 <h2 data-number="4.2" id="nvidia-gpu-systems"><span class="header-section-number">4.2</span> NVIDIA GPU Systems</h2>
 <p>NVIDIA remains the easiest path for predictable high-performance
 local inference because CUDA tooling is mature across runtimes.</p>
-<p>Approximate fit guidance for mainstream quantized models:</p>
+<p>Approximate fit guidance for mainstream quantised models:</p>
 <table>
 <thead>
 <tr>
@@ -1572,7 +1582,7 @@ command can expose an OpenAI-compatible endpoint for supported models,
 which is convenient for testing before moving to vLLM or SGLang.</p>
 <p><a href="https://github.com/huggingface/diffusers">Diffusers</a> is
 the corresponding practical layer for image and video generation. It
-handles pipelines, schedulers, VAEs, adapters, and quantization. Use it
+handles pipelines, schedulers, VAEs, adapters, and quantisation. Use it
 for Python integration and reproducibility; use ComfyUI when you want to
 inspect and iterate on a graph interactively.</p>
 <h2 data-number="5.6" id="vllm"><span class="header-section-number">5.6</span> vLLM</h2>
@@ -1591,10 +1601,10 @@ on the model and backend.</p>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install vllm</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vllm</span> serve meta-llama/Llama-3.3-8B-Instruct</span></code></pre></div>
 <p>For local single-user chat, vLLM can be overkill. For multi-user
-APIs, it is often the right level of machinery. Its main quantization
+APIs, it is often the right level of machinery. Its main quantisation
 path is Hugging Face-native (for example FP8, GPTQ, AWQ, MXFP4, NVFP4,
-and quantized KV cache); GGUF support is experimental and requires the
-separate <a href="https://docs.vllm.ai/en/latest/features/quantization/gguf/">vLLM
+and quantised KV cache); GGUF support is experimental and requires the
+separate <a href="https://docs.vllm.ai/en/latest/features/quantisation/gguf/">vLLM
 GGUF plugin</a>.</p>
 <h2 data-number="5.7" id="sglang"><span class="header-section-number">5.7</span> SGLang</h2>
 <p>SGLang is now a serious option for optimised LLM, multimodal, and
@@ -1743,7 +1753,7 @@ page</a> before copying the version tag, and keep it patched: an earlier
 <hr />
 <h1 data-number="6" id="containers-runtime-hygiene-and-why-reproducibility-wins"><span class="header-section-number">6</span> Containers, Runtime Hygiene, and
 Why Reproducibility Wins</h1>
-<p>Containerization is a strong default for Linux server-style local
+<p>Containerisation is a strong default for Linux server-style local
 inference. It improves reproducibility; it does not make an exposed HTTP
 service private.</p>
 <h2 data-number="6.1" id="why-containers-matter"><span class="header-section-number">6.1</span> Why Containers Matter</h2>
@@ -1757,7 +1767,7 @@ service private.</p>
 <h2 data-number="6.2" id="docker-vs-podman"><span class="header-section-number">6.2</span> Docker vs Podman</h2>
 <p>Both are viable. Podman remains attractive for rootless operation and
 daemonless workflow. Docker still has broader tutorial gravity.</p>
-<p>Pick one and standardize across your own docs and scripts. The
+<p>Pick one and standardise across your own docs and scripts. The
 consistency is more important than the brand.</p>
 <h2 data-number="6.3" id="image-tags-and-drift"><span class="header-section-number">6.3</span> Image Tags and Drift</h2>
 <p>Never treat <code>latest</code> as a long-term contract.</p>
@@ -1878,7 +1888,7 @@ persistent volumes and service management.</p>
 </ol>
 <p>This is intentionally a single-machine service. A user systemd unit
 makes restart behaviour repeatable; it does not add authentication.
-Record the image digest, model revision, quantization, context limit,
+Record the image digest, model revision, quantisation, context limit,
 and baseline latency alongside the unit. If another machine needs
 access, put an authenticated TLS gateway in front of it rather than
 changing both bindings to <code>0.0.0.0</code>.</p>
@@ -1948,7 +1958,7 @@ generation.</li>
 <li>Pick a family with a licence that fits your use.</li>
 <li>Pick size for hardware, including encoders and KV cache.</li>
 <li>Pick a runtime and its supported format.</li>
-<li>Pick quantization or an official compressed checkpoint.</li>
+<li>Pick quantisation or an official compressed checkpoint.</li>
 <li>Run short evals.</li>
 <li>Freeze the baseline.</li>
 </ol>
@@ -1968,13 +1978,13 @@ universal best model.</p>
 Qwen, Gemma, Granite, Mistral, gpt-oss, LFM, and established distilled
 reasoning families cover useful combinations of compact text/coding,
 tool use, vision, and permissive licensing. Older Llama and Mistral
-releases remain valuable for compatibility and mature quantized tooling.
+releases remain valuable for compatibility and mature quantised tooling.
 Do not select by family name: check the exact model card, licence,
 format, context support, and a realistic evaluation on your hardware. A
 sparse model’s active-parameter count is not its whole memory footprint,
 and a headline long context may not fit its KV cache on your
 machine.</p>
-<h2 data-number="8.4" id="size-and-quantization-pairing"><span class="header-section-number">8.4</span> Size and Quantization
+<h2 data-number="8.4" id="size-and-quantisation-pairing"><span class="header-section-number">8.4</span> Size and Quantisation
 Pairing</h2>
 <p>Use realistic tiers:</p>
 <table>
@@ -2015,7 +2025,7 @@ path.</p>
 <h2 data-number="8.5" id="where-to-source-models"><span class="header-section-number">8.5</span> Where to Source Models</h2>
 <p>Primary sources remain:</p>
 <ol type="1">
-<li>Hugging Face Hub for broad model and quantization availability</li>
+<li>Hugging Face Hub for broad model and quantisation availability</li>
 <li>Ollama library for curated pull-and-run simplicity</li>
 </ol>
 <p>Before downloading:</p>
@@ -2236,7 +2246,7 @@ licence review.</p>
 <h2 data-number="11.8" id="i-need-local-video-generation"><span class="header-section-number">11.8</span> I need local video
 generation</h2>
 <p>Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can
-accept slow generation. Larger Wan2.2 or synchronized audio-video models
+accept slow generation. Larger Wan2.2 or synchronised audio-video models
 move into workstation and multi-GPU territory. Check territorial
 restrictions on Tencent models before adopting them.</p>
 <h2 data-number="11.9" id="i-want-a-polished-local-chat-ui"><span class="header-section-number">11.9</span> I want a polished local chat
@@ -2270,7 +2280,7 @@ enabling them.</p>
 Directly</h2>
 <p>Send chat-completions requests and confirm you can call your local
 model from code.</p>
-<h2 data-number="12.4" id="day-4-containerize-and-persist"><span class="header-section-number">12.4</span> Day 4: Containerize and
+<h2 data-number="12.4" id="day-4-containerise-and-persist"><span class="header-section-number">12.4</span> Day 4: Containerise and
 Persist</h2>
 <p>Move your runtime into containers with persistent volumes and service
 startup.</p>
@@ -2366,6 +2376,7 @@ open-weight model</a></li>
 <li><a href="https://github.com/huggingface/diffusers">Hugging Face
 Diffusers</a></li>
 </ul>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
 
