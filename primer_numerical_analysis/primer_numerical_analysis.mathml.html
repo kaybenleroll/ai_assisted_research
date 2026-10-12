@@ -607,7 +607,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Numerical Analysis Primer: Practical,
 Detailed, and Friendly</span>
-    <span class="navbar-meta">June 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -626,6 +626,8 @@ Detailed, and Friendly</span>
 Really</a></li>
 <li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1.2</span> What This Primer Covers</a></li>
 <li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">1.3</span> What This Primer Is Not</a></li>
+<li><a href="#assumed-background" id="toc-assumed-background"><span class="toc-section-number">1.4</span> Assumed Background</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">1.5</span> Notation</a></li>
 </ul></li>
 <li><a href="#the-different-approaches-to-numerical-analysis" id="toc-the-different-approaches-to-numerical-analysis"><span class="toc-section-number">2</span> The Different Approaches to
 Numerical Analysis</a>
@@ -989,14 +991,91 @@ be one. If you want the full theoretical machinery — convergence proofs,
 spectral theory, the Lax Equivalence Theorem with all conditions stated
 precisely — the reading list at the end will point you to the right
 books. This primer is also not a replacement for specialised references
-in PDEs, large-scale sparse computing, or uncertainty quantification;
-those are deep disciplines in their own right. And it does not pretend
-that any one language or algorithm is the universal winner — because
-none of them are.</p>
+in partial differential equations (PDEs), large-scale sparse computing,
+or uncertainty quantification; those are deep disciplines in their own
+right. And it does not pretend that any one language or algorithm is the
+universal winner — because none of them are.</p>
+<h2 data-number="1.4" id="assumed-background"><span class="header-section-number">1.4</span> Assumed Background</h2>
+<p>You should be comfortable with algebra, functions, derivatives and
+integrals, and basic vectors and matrices. No previous
+numerical-analysis course is assumed: the primer introduces
+conditioning, stability, and error as they are needed. The examples use
+Python, R, and Julia; familiarity with at least one programming language
+is enough to follow the computational ideas, and you can skip the other
+languages’ code blocks.</p>
+<h2 data-number="1.5" id="notation"><span class="header-section-number">1.5</span> Notation</h2>
+<p>The table records the main symbols used throughout. Each is defined
+again locally when it first appears in a derivation; subscripts and
+dimensions are explained in context.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math></td>
+<td>scalar input, iterate, or unknown vector (stated locally)</td>
+<td>Root finding and linear systems</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math></td>
+<td>scalar- or vector-valued function (stated locally)</td>
+<td>Root finding</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math></td>
+<td>matrix of a linear system or least-squares problem</td>
+<td>Linear systems</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math></td>
+<td>right-hand-side vector or observed data vector</td>
+<td>Linear systems</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ε</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">h</mi></mrow></msub><annotation encoding="application/x-tex">\varepsilon_{\mathrm{mach}}</annotation></semantics></math></td>
+<td>machine epsilon for the working floating-point format</td>
+<td>Floating-point arithmetic</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\kappa(A)</annotation></semantics></math></td>
+<td>condition number of matrix
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+in the stated norm</td>
+<td>Conditioning</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mo>⋅</mo><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\|\cdot\|_2</annotation></semantics></math></td>
+<td>Euclidean vector norm or induced spectral matrix norm</td>
+<td>Least squares</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math></td>
+<td>grid spacing or time step (distinguished in context)</td>
+<td>Discretisation</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math></td>
+<td>problem size, sample count, or iteration index (stated locally)</td>
+<td>Error and complexity</td>
+</tr>
+</tbody>
+</table>
+<p><em>Verified against primary sources for sections 3 and 6; unverified
+time-sensitive claims are flagged inline.</em></p>
 <hr />
 <h1 data-number="2" id="the-different-approaches-to-numerical-analysis"><span class="header-section-number">2</span> The Different Approaches to
 Numerical Analysis</h1>
-<p>When people say “approaches to numerical analysis,” they might mean
+<p>When people say “approaches to numerical analysis”, they might mean
 different things. Sometimes they mean classes of algorithms (direct vs
 iterative). Sometimes they mean modelling style (deterministic vs
 stochastic). Sometimes they mean workflow priorities (error-first vs
@@ -1010,7 +1089,7 @@ Methods</h2>
 operations. In exact arithmetic, Gaussian elimination solves a linear
 system exactly in finite steps.</p>
 <p>In floating-point arithmetic, “exact” becomes “as exact as this
-arithmetic allows,” but the spirit is the same: no outer convergence
+arithmetic allows”, but the spirit is the same: no outer convergence
 loop to a limit.</p>
 <p>Direct methods are the right tool when the problem is moderate in
 size and when the matrix has structure you can exploit — symmetry,
@@ -1073,13 +1152,15 @@ Monte Carlo integration, stochastic gradient methods, and randomised
 linear algebra sketches all work this way. It is worth being direct
 about something: stochastic methods are not sloppy or imprecise by
 nature. They are often the only practical choice when deterministic
-methods cannot scale. High-dimensional integration is the clearest case:
-Monte Carlo error scales like
+methods cannot scale. High-dimensional integration is a useful example:
+under standard finite-variance assumptions, Monte Carlo’s
+root-mean-square error scales like
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msqrt><mi>n</mi></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{n}</annotation></semantics></math>
-regardless of dimension, while deterministic quadrature rules require
-exponentially more evaluation points as dimension grows — a
-combinatorial explosion that makes them unusable beyond a handful of
-dimensions.</p>
+without an explicit dimension factor, while tensor-product quadrature
+can require exponentially more points as dimension grows. This is not a
+universal limit on deterministic methods: exploitable smoothness, low
+effective dimension, or problem structure can make deterministic and
+quasi-Monte Carlo methods effective in higher dimensions.</p>
 <h2 data-number="2.3" id="local-vs-global-approximation"><span class="header-section-number">2.3</span> Local vs Global
 Approximation</h2>
 <h3 data-number="2.3.1" id="local-approximation"><span class="header-section-number">2.3.1</span> Local Approximation</h3>
@@ -1210,7 +1291,7 @@ adequate. The mistake is applying the throughput-first mentality to
 domains where it is not appropriate.</p>
 <h2 data-number="2.8" id="practical-summary-table"><span class="header-section-number">2.8</span> Practical Summary Table</h2>
 <p>The table summarises the trade-offs between the numerical-analysis
-approaches discussed above.</p>
+approaches described in the preceding sections.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1297,13 +1378,13 @@ what gets rounded when.</p>
 <h2 data-number="3.2" id="machine-epsilon-and-unit-roundoff"><span class="header-section-number">3.2</span> Machine Epsilon and Unit
 Roundoff</h2>
 <p>Machine epsilon is often introduced as “the smallest number such that
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mi>ϵ</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1 + \epsilon &gt; 1</annotation></semantics></math>”
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mi>ε</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1 + \varepsilon &gt; 1</annotation></semantics></math>”
 in floating-point arithmetic. That definition is useful, but in practice
 you should think of it as a scale marker: it tells you roughly how much
 relative precision the format can represent near 1.0.</p>
 <p>For double precision, it is about:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mrow><mi>m</mi><mi>a</mi><mi>c</mi><mi>h</mi></mrow></msub><mo>≈</mo><mn>2.22</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>16</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-\epsilon_{mach} \approx 2.22 \times 10^{-16}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ε</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">h</mi></mrow></msub><mo>≈</mo><mn>2.22</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>16</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
+\varepsilon_{\mathrm{mach}} \approx 2.22 \times 10^{-16}
 </annotation></semantics></math></p>
 <p>Unit roundoff is closely related and is often defined as half this
 value under round-to-nearest arithmetic. In either convention, the
@@ -1397,8 +1478,8 @@ range, machine epsilon, and throughput.</p>
 <td>23</td>
 <td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>3.4</mn><mo>×</mo><msup><mn>10</mn><mn>38</mn></msup></mrow><annotation encoding="application/x-tex">\pm 3.4 \times 10^{38}</annotation></semantics></math></td>
 <td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∼</mo><mn>1.2</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>7</mn></mrow></msup></mrow><annotation encoding="application/x-tex">{\sim}1.2 \times 10^{-7}</annotation></semantics></math></td>
-<td>2–4× faster on data-centre GPUs (consumer GPUs: much larger); half
-memory</td>
+<td>Peak throughput and storage depend on hardware and workload; half
+the bytes per value</td>
 </tr>
 <tr>
 <td>float64</td>
@@ -1411,20 +1492,22 @@ memory</td>
 </tr>
 </tbody>
 </table>
-<p>Float32 is acceptable when throughput or memory is the binding
-constraint and you are not accumulating errors over many operations.
-Machine-learning inference is the clearest case: data-centre GPUs
-(A100/H100-class) execute float32 at two to four times the throughput of
-float64, and cutting precision in half also halves memory bandwidth.
-Consumer GPUs are far more lopsided — float64 throughput there is often
-1/32 to 1/64 of float32, so the incentive to drop to float32 is even
-stronger on that hardware. For neural-network inference, where you are
-doing one forward pass on fixed weights, the rounding errors rarely
-matter. The same logic applies to iterative refinement workflows, where
-you can run the inner iterations cheaply in float32 and apply a
-correction pass in float64 — you get most of the speed gain without
-surrendering final accuracy. Graphics pipelines have used float32 by
-default for decades for the same reason.</p>
+<p>Float32 can be appropriate when throughput or memory is the binding
+constraint, provided the resulting error is acceptable for the task.
+Peak arithmetic throughput is hardware-specific: NVIDIA’s A100 and H100
+specifications give roughly twice the FP32 throughput of FP64, while
+NVIDIA’s compute-capability table shows that some consumer architectures
+have much larger FP32-to-FP64 ratios. These are peak rates, not
+guaranteed application speedups. Float32 uses half as many bytes per
+value as float64, reducing storage and data traffic; it does not
+increase a device’s memory-bandwidth rate. For neural-network inference,
+validate the effect on task metrics rather than assuming rounding errors
+are negligible. Mixed-precision iterative refinement can use
+lower-precision work with higher-precision correction when the method’s
+assumptions hold. <a href="https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-nvidia-us-2188504-web.pdf">A100
+specifications</a>, <a href="https://www.nvidia.com/en-eu/data-center/h100/">H100
+specifications</a>, and <a href="https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/compute-capabilities.html">CUDA
+compute capabilities</a> document these hardware-specific rates.</p>
 <p>Float64 is non-negotiable in several categories. Any computation
 where errors accumulate over thousands of steps — ODE integration with
 tight tolerances, eigenvalue solvers on ill-conditioned matrices, long
@@ -1886,7 +1969,7 @@ quasi-Newton update that avoids re-evaluating
 at each step. Broyden’s method maintains an approximate Jacobian
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝑱</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\mathbf{J}_k</annotation></semantics></math>
 and updates it with a rank-1 correction after each step:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑱</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝑱</mi><mi>k</mi></msub><mo>+</mo><mfrac><mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi mathvariant="bold-italic">𝑱</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><msubsup><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi><mi>T</mi></msubsup></mrow><mrow><mo stretchy="false" form="postfix">∥</mo><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\mathbf{J}_{k+1} = \mathbf{J}_k + \frac{\bigl(F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k) - \mathbf{J}_k \mathbf{s}_k\bigr)\mathbf{s}_k^T}{\|\mathbf{s}_k\|^2}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑱</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝑱</mi><mi>k</mi></msub><mo>+</mo><mfrac><mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi mathvariant="bold-italic">𝑱</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><msubsup><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi><mi>⊤</mi></msubsup></mrow><mrow><mo stretchy="false" form="postfix">∥</mo><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\mathbf{J}_{k+1} = \mathbf{J}_k + \frac{\bigl(F(\mathbf{x}_{k+1}) - F(\mathbf{x}_k) - \mathbf{J}_k \mathbf{s}_k\bigr)\mathbf{s}_k^{\top}}{\|\mathbf{s}_k\|^2}</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi mathvariant="bold-italic">𝒙</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k</annotation></semantics></math>.
 The update is designed so that
@@ -2264,15 +2347,18 @@ directly:</p>
 <span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>plt.spy(A, markersize<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Tridiagonal sparsity pattern&quot;</span>)</span>
 <span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">&quot;figures/tridiagonal_spy.png&quot;</span>, dpi<span class="op">=</span><span class="dv">120</span>, bbox_inches<span class="op">=</span><span class="st">&quot;tight&quot;</span>)</span></code></pre></div>
-<p><code>spla.spsolve</code> always uses SuperLU (sparse LU) — it does
-not detect SPD structure or fall back to Cholesky, and SciPy has no
-built-in sparse Cholesky at all. If your matrix is SPD and you want to
-exploit that, use <code>scikit-sparse</code>’s CHOLMOD binding, or solve
-iteratively with CG. <code>spla.splu</code> exposes the factors directly
-so you can solve multiple right-hand sides cheaply — factorisation is
-the expensive step; each additional solve costs only
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">nnz</mtext><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\text{nnz})</annotation></semantics></math>
-once the factors exist.</p>
+<p><code>spla.spsolve</code> uses SuperLU by default; when
+<code>scikits.umfpack</code> is installed and the right-hand side is a
+vector, its <code>use_umfpack</code> option can select UMFPACK instead.
+It does not select Cholesky based on positive-definite structure.
+SciPy’s sparse linear-algebra API does not provide a sparse Cholesky
+routine; to exploit SPD structure, use a compatible CHOLMOD binding such
+as <code>scikit-sparse</code>, or an iterative method such as CG.
+<code>spla.splu</code> exposes factors for reuse with multiple
+right-hand sides; the solve cost depends on factor sparsity, not just
+the original matrix’s number of nonzeros. See the <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.spsolve.html">SciPy
+<code>spsolve</code> documentation</a> and <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.use_solver.html"><code>use_solver</code>
+documentation</a>.</p>
 <p>In Julia, the <code>\</code> operator dispatches automatically:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">SparseArrays</span>, <span class="bu">LinearAlgebra</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -2320,8 +2406,8 @@ is symmetric positive definite — common in statistics, physics, and
 optimisation. It is roughly twice as fast as LU and numerically cleaner.
 If your matrix qualifies, use it.</p>
 <p>Cholesky writes
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>L</mi><msup><mi>L</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">
-A = LL^T
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>L</mi><msup><mi>L</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">
+A = LL^{\top}
 </annotation></semantics></math> (or
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><msup><mi>R</mi><mi>T</mi></msup><mi>R</mi></mrow><annotation encoding="application/x-tex">A=R^TR</annotation></semantics></math>),
 using only one triangular factor because symmetry removes duplicate
@@ -2355,8 +2441,8 @@ for rank-deficient systems, and is indispensable for diagnostic work.
 When a matrix is ill-conditioned and you need to understand why, the SVD
 tells you which directions are causing trouble and by how much.</p>
 <p>SVD writes
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>U</mi><mi mathvariant="normal">Σ</mi><msup><mi>V</mi><mi>T</mi></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">
-A = U\Sigma V^T,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>U</mi><mi mathvariant="normal">Σ</mi><msup><mi>V</mi><mi>⊤</mi></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">
+A = U\Sigma V^{\top},
 </annotation></semantics></math> where diagonal entries of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
 are singular values. A useful mental model is: SVD rotates coordinates
@@ -2372,12 +2458,12 @@ least squares solves:
 \min_x \|Ax-b\|_2
 </annotation></semantics></math></p>
 <p>The naive approach is the normal equations
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi><mi>x</mi><mo>=</mo><msup><mi>A</mi><mi>T</mi></msup><mi>b</mi></mrow><annotation encoding="application/x-tex">A^T A x = A^T b</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>⊤</mi></msup><mi>A</mi><mi>x</mi><mo>=</mo><msup><mi>A</mi><mi>⊤</mi></msup><mi>b</mi></mrow><annotation encoding="application/x-tex">A^{\top} A x = A^{\top} b</annotation></semantics></math>,
 a square system you can solve directly. This works, but it squares the
 condition number: if
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mn>10</mn><mn>6</mn></msup></mrow><annotation encoding="application/x-tex">\kappa(A) = 10^6</annotation></semantics></math>,
 then
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mn>10</mn><mn>12</mn></msup></mrow><annotation encoding="application/x-tex">\kappa(A^T A) = 10^{12}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>A</mi><mi>⊤</mi></msup><mi>A</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mn>10</mn><mn>12</mn></msup></mrow><annotation encoding="application/x-tex">\kappa(A^{\top} A) = 10^{12}</annotation></semantics></math>,
 and you have lost twelve decimal digits of accuracy before solving a
 single equation. QR factorisation applied directly to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
@@ -2573,7 +2659,7 @@ to data.</p>
 <hr />
 <h1 data-number="7" id="eigenvalue-problems"><span class="header-section-number">7</span> Eigenvalue Problems</h1>
 <p>The previous section treated linear algebra mostly as “solve
-<strong>Ax</strong> = <strong>b</strong>.” That is the right problem
+<strong>Ax</strong> = <strong>b</strong>”. That is the right problem
 when you know the right-hand side. But many important problems instead
 ask: for what values of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
@@ -2649,13 +2735,17 @@ normalise at each step:</p>
 for k = 1, 2, 3, ...:
     w = A @ v
     v = w / ||w||_2
-    lambda = v^T @ A @ v   # Rayleigh quotient</code></pre>
-<p>After enough iterations, <strong>v</strong> converges to the
-eigenvector corresponding to the eigenvalue with the largest absolute
-value — the dominant eigenvector — and the Rayleigh quotient
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒗</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝑨</mi><mi mathvariant="bold-italic">𝒗</mi></mrow><annotation encoding="application/x-tex">\mathbf{v}^T \mathbf{A}\mathbf{v}</annotation></semantics></math>
-converges to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\lambda_1</annotation></semantics></math>.</p>
+    lambda = v.T @ A @ v   # Rayleigh quotient</code></pre>
+<p>If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+has a unique eigenvalue of strictly greatest modulus and the starting
+vector has a nonzero component in its dominant eigendirection,
+normalised power iteration converges to that eigenvector in the usual
+diagonalizable case. Otherwise it can fail to converge or converge to a
+different invariant subspace. The Rayleigh quotient
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒗</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑨</mi><mi mathvariant="bold-italic">𝒗</mi></mrow><annotation encoding="application/x-tex">\mathbf{v}^{\top}\mathbf{A}\mathbf{v}</annotation></semantics></math>
+estimates the corresponding eigenvalue; it equals the eigenvalue for a
+unit eigenvector of a symmetric matrix.</p>
 <p><strong>Why it converges.</strong> Expand the initial random vector
 in the eigenbasis of <strong>A</strong>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒗</mi><mn>0</mn></msub><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>c</mi><mi>i</mi></msub><msub><mi mathvariant="bold-italic">𝒒</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{v}_0 = \sum_i c_i \mathbf{q}_i</annotation></semantics></math>,
@@ -2704,12 +2794,12 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\mathbf{q}_1</annotation></semantics></math>
 are known, subtract out their contribution from <strong>A</strong> to
 get a deflated matrix
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑨</mi><mo>′</mo></msup><mo>=</mo><mi mathvariant="bold-italic">𝑨</mi><mo>−</mo><msub><mi>λ</mi><mn>1</mn></msub><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><msubsup><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">\mathbf{A}&#39; = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑨</mi><mo>′</mo></msup><mo>=</mo><mi mathvariant="bold-italic">𝑨</mi><mo>−</mo><msub><mi>λ</mi><mn>1</mn></msub><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><msubsup><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn><mi>⊤</mi></msubsup></mrow><annotation encoding="application/x-tex">\mathbf{A}&#39; = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{q}_1^{\top}</annotation></semantics></math>
 — this formula relies on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\mathbf{q}_1</annotation></semantics></math>
 being orthonormal, which holds for symmetric/normal <strong>A</strong>;
 for general matrices you need the left eigenvector instead,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑨</mi><mo>′</mo></msup><mo>=</mo><mi mathvariant="bold-italic">𝑨</mi><mo>−</mo><msub><mi>λ</mi><mn>1</mn></msub><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><msubsup><mi mathvariant="bold-italic">𝒘</mi><mn>1</mn><mi>T</mi></msubsup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi mathvariant="bold-italic">𝒘</mi><mn>1</mn><mi>T</mi></msubsup><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{A}&#39; = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{w}_1^T / (\mathbf{w}_1^T\mathbf{q}_1)</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑨</mi><mo>′</mo></msup><mo>=</mo><mi mathvariant="bold-italic">𝑨</mi><mo>−</mo><msub><mi>λ</mi><mn>1</mn></msub><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><msubsup><mi mathvariant="bold-italic">𝒘</mi><mn>1</mn><mi>⊤</mi></msubsup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi mathvariant="bold-italic">𝒘</mi><mn>1</mn><mi>⊤</mi></msubsup><msub><mi mathvariant="bold-italic">𝒒</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{A}&#39; = \mathbf{A} - \lambda_1 \mathbf{q}_1 \mathbf{w}_1^{\top} / (\mathbf{w}_1^{\top}\mathbf{q}_1)</annotation></semantics></math>.
 Power iteration on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝑨</mi><mo>′</mo></msup><annotation encoding="application/x-tex">\mathbf{A}&#39;</annotation></semantics></math>
 converges to
@@ -2755,7 +2845,7 @@ the current matrix
 then form the next iterate by reversing the factors:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑨</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝑹</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝑸</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{A}_{k+1} = \mathbf{R}_k \mathbf{Q}_k</annotation></semantics></math></p>
 <p>This is an orthogonal similarity transformation:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑨</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msubsup><mi mathvariant="bold-italic">𝑸</mi><mi>k</mi><mi>T</mi></msubsup><msub><mi mathvariant="bold-italic">𝑨</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝑸</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{A}_{k+1} = \mathbf{Q}_k^T \mathbf{A}_k \mathbf{Q}_k</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑨</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msubsup><mi mathvariant="bold-italic">𝑸</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi mathvariant="bold-italic">𝑨</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝑸</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{A}_{k+1} = \mathbf{Q}_k^{\top} \mathbf{A}_k \mathbf{Q}_k</annotation></semantics></math>,
 so all
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝑨</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\mathbf{A}_k</annotation></semantics></math>
 share the same eigenvalues. Under mild conditions,
@@ -2919,11 +3009,11 @@ tractable and common case is when <strong>B</strong> is symmetric
 positive definite (SPD).</p>
 <p>When <strong>B</strong> is SPD, you can reduce the generalised
 problem to a standard one without losing symmetry. Factor
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑩</mi><mo>=</mo><mi mathvariant="bold-italic">𝑳</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{B} = \mathbf{L}\mathbf{L}^T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑩</mi><mo>=</mo><mi mathvariant="bold-italic">𝑳</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{B} = \mathbf{L}\mathbf{L}^{\top}</annotation></semantics></math>
 (Cholesky). Then <strong>x</strong> =
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup><annotation encoding="application/x-tex">\mathbf{L}^{-T}</annotation></semantics></math><strong>y</strong>
 transforms the system:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><mi>λ</mi><mi mathvariant="bold-italic">𝑳</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mi>T</mi></msup><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup><mi mathvariant="bold-italic">𝒚</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{L}\mathbf{L}^T \mathbf{L}^{-T}\mathbf{y}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><mi>λ</mi><mi mathvariant="bold-italic">𝑳</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mi>⊤</mi></msup><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup><mi mathvariant="bold-italic">𝒚</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{L}\mathbf{L}^{\top} \mathbf{L}^{-T}\mathbf{y}</annotation></semantics></math></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi mathvariant="bold-italic">𝑨</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup><mi mathvariant="bold-italic">𝒚</mi><mo>=</mo><mi>λ</mi><mi mathvariant="bold-italic">𝒚</mi></mrow><annotation encoding="application/x-tex">\mathbf{L}^{-1}\mathbf{A}\mathbf{L}^{-T}\mathbf{y} = \lambda \mathbf{y}</annotation></semantics></math></p>
 <p>The transformed matrix
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi mathvariant="bold-italic">𝑨</mi><msup><mi mathvariant="bold-italic">𝑳</mi><mrow><mi>−</mi><mi>T</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{L}^{-1}\mathbf{A}\mathbf{L}^{-T}</annotation></semantics></math>
@@ -3131,7 +3221,7 @@ conditions, which modify the first and last equations of the system:</p>
 The spline has zero curvature at the endpoints, which is a sensible
 default when the data provides no information about endpoint
 derivatives. The visual effect is that the curve enters and exits the
-data range “straight.”</li>
+data range “straight”.</li>
 <li><strong>Clamped boundary:</strong> you specify
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>S</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">S&#39;(x_0)</annotation></semantics></math>
 and
@@ -3383,7 +3473,7 @@ and
 are nearly equal, and their difference suffers catastrophic
 cancellation. The result is an optimal step size that balances these two
 effects — typically around
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><msub><mi>ϵ</mi><mrow><mi>m</mi><mi>a</mi><mi>c</mi><mi>h</mi></mrow></msub></msqrt><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\sqrt{\epsilon_{mach}} \approx 10^{-8}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><msub><mi>ε</mi><mrow><mi>m</mi><mi>a</mi><mi>c</mi><mi>h</mi></mrow></msub></msqrt><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\sqrt{\varepsilon_{mach}} \approx 10^{-8}</annotation></semantics></math>
 for the forward difference in double precision.</p>
 <p>The central difference improves the truncation order to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>h</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(h^2)</annotation></semantics></math>:
@@ -3393,7 +3483,7 @@ f&#39;(x) \approx \frac{f(x+h)-f(x-h)}{2h}
 <p>This allows a larger optimal
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
 (around
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>ϵ</mi><mrow><mi>m</mi><mi>a</mi><mi>c</mi><mi>h</mi></mrow><mrow><mn>1</mn><mi>/</mi><mn>3</mn></mrow></msubsup><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\epsilon_{mach}^{1/3} \approx 10^{-5}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>ε</mi><mrow><mi>m</mi><mi>a</mi><mi>c</mi><mi>h</mi></mrow><mrow><mn>1</mn><mi>/</mi><mn>3</mn></mrow></msubsup><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\varepsilon_{mach}^{1/3} \approx 10^{-5}</annotation></semantics></math>
 for double precision) and is generally preferred for smooth functions.
 When derivative accuracy is critical, automatic differentiation — which
 computes exact derivatives of the code rather than approximating them —
@@ -3918,7 +4008,7 @@ shows error around
 to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>12</mn></mrow></msup><annotation encoding="application/x-tex">10^{-12}</annotation></semantics></math>
 on smooth functions like this one — much tighter than the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msqrt><msub><mi>ϵ</mi><mtext mathvariant="normal">mach</mtext></msub></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt{\epsilon_\text{mach}})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msqrt><msub><mi>ε</mi><mtext mathvariant="normal">mach</mtext></msub></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt{\varepsilon_\text{mach}})</annotation></semantics></math>
 floor you’d get from a single central difference. For a single smooth
 scalar function this is often tolerable. For a gradient of a loss over
 thousands of parameters, accumulated finite-difference errors become a
@@ -4540,13 +4630,13 @@ is the corresponding change in gradient. This says: the approximate
 Hessian must agree with the true curvature along the direction you just
 moved. Applied to the inverse Hessian approximation, this gives the
 rank-2 update</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="bold-italic">𝑯</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi mathvariant="bold-italic">𝑰</mi><mo>−</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><msubsup><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi><mi>T</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><msubsup><mi mathvariant="bold-italic">𝑯</mi><mi>k</mi><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mi mathvariant="bold-italic">𝑰</mi><mo>−</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi></msub><msubsup><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi><mi>T</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><msubsup><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">
-\mathbf{H}_{k+1}^{-1} = \left(\mathbf{I} - \rho_k \mathbf{s}_k \mathbf{y}_k^T\right)\mathbf{H}_k^{-1}\left(\mathbf{I} - \rho_k \mathbf{y}_k \mathbf{s}_k^T\right) + \rho_k \mathbf{s}_k \mathbf{s}_k^T
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="bold-italic">𝑯</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi mathvariant="bold-italic">𝑰</mi><mo>−</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><msubsup><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi><mi>⊤</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><msubsup><mi mathvariant="bold-italic">𝑯</mi><mi>k</mi><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mi mathvariant="bold-italic">𝑰</mi><mo>−</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi></msub><msubsup><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi><mi>⊤</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><msubsup><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi><mi>⊤</mi></msubsup></mrow><annotation encoding="application/x-tex">
+\mathbf{H}_{k+1}^{-1} = \left(\mathbf{I} - \rho_k \mathbf{s}_k \mathbf{y}_k^{\top}\right)\mathbf{H}_k^{-1}\left(\mathbf{I} - \rho_k \mathbf{y}_k \mathbf{s}_k^{\top}\right) + \rho_k \mathbf{s}_k \mathbf{s}_k^{\top}
 </annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mi>k</mi></msub><mo>=</mo><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi><mi>T</mi></msubsup><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\rho_k = 1/(\mathbf{y}_k^T \mathbf{s}_k)</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mi>k</mi></msub><mo>=</mo><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\rho_k = 1/(\mathbf{y}_k^{\top} \mathbf{s}_k)</annotation></semantics></math>.
 Each iteration adds two rank-1 outer products to the previous
-approximation — hence “rank-2 update.” This structure guarantees the
+approximation — hence “rank-2 update”. This structure guarantees the
 approximation stays symmetric and, under the Wolfe conditions on line
 search, stays positive definite. That last property matters: it means
 the search direction
@@ -4741,8 +4831,8 @@ interior-point solver automatically.</p>
 <p><strong>Augmented Lagrangian methods.</strong> A third major approach
 combines penalty terms with Lagrange multipliers. The augmented
 Lagrangian for equality constraints is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>ρ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo>,</mo><mi mathvariant="bold-italic">𝝀</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msup><mi mathvariant="bold-italic">𝝀</mi><mi>T</mi></msup><mi>c</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mi>ρ</mi><mn>2</mn></mfrac><mo stretchy="false" form="postfix">∥</mo><mi>c</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">
-L_\rho(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) + \boldsymbol{\lambda}^T c(\mathbf{x}) + \frac{\rho}{2}\|c(\mathbf{x})\|^2
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>ρ</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo>,</mo><mi mathvariant="bold-italic">𝝀</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msup><mi mathvariant="bold-italic">𝝀</mi><mi>⊤</mi></msup><mi>c</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mi>ρ</mi><mn>2</mn></mfrac><mo stretchy="false" form="postfix">∥</mo><mi>c</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">
+L_\rho(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) + \boldsymbol{\lambda}^{\top} c(\mathbf{x}) + \frac{\rho}{2}\|c(\mathbf{x})\|^2
 </annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝀</mi><annotation encoding="application/x-tex">\boldsymbol{\lambda}</annotation></semantics></math>
@@ -5027,13 +5117,13 @@ is large, small noise in
 translates to enormous noise in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒙</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math>.</p>
 <p>The SVD makes this visible. Section 6 covered that the SVD writes
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><mo>=</mo><mi mathvariant="bold-italic">𝑼</mi><mi mathvariant="bold">𝚺</mi><msup><mi mathvariant="bold-italic">𝑽</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^T</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><mo>=</mo><mi mathvariant="bold-italic">𝑼</mi><mi mathvariant="bold">𝚺</mi><msup><mi mathvariant="bold-italic">𝑽</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^{\top}</annotation></semantics></math>,
 where the diagonal entries of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold">𝚺</mi><annotation encoding="application/x-tex">\boldsymbol{\Sigma}</annotation></semantics></math>
 are the singular values
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub><mo>≥</mo><msub><mi>σ</mi><mn>2</mn></msub><mo>≥</mo><mi>⋯</mi><mo>≥</mo><msub><mi>σ</mi><mi>n</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n \geq 0</annotation></semantics></math>.
 The pseudo-inverse solution is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><mi mathvariant="bold-italic">𝑽</mi><msup><mi mathvariant="bold">𝚺</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑼</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mfrac><mrow><msubsup><mi mathvariant="bold-italic">𝒖</mi><mi>i</mi><mi>T</mi></msubsup><mi mathvariant="bold-italic">𝒃</mi></mrow><msub><mi>σ</mi><mi>i</mi></msub></mfrac><msub><mi mathvariant="bold-italic">𝒗</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} = \mathbf{V}\boldsymbol{\Sigma}^{-1}\mathbf{U}^T\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><mi mathvariant="bold-italic">𝑽</mi><msup><mi mathvariant="bold">𝚺</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝑼</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mfrac><mrow><msubsup><mi mathvariant="bold-italic">𝒖</mi><mi>i</mi><mi>⊤</mi></msubsup><mi mathvariant="bold-italic">𝒃</mi></mrow><msub><mi>σ</mi><mi>i</mi></msub></mfrac><msub><mi mathvariant="bold-italic">𝒗</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} = \mathbf{V}\boldsymbol{\Sigma}^{-1}\mathbf{U}^{\top}\mathbf{b} = \sum_{i=1}^{n} \frac{\mathbf{u}_i^{\top} \mathbf{b}}{\sigma_i} \mathbf{v}_i</annotation></semantics></math></p>
 <p>Each term amplifies the component of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒃</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>
 aligned with
@@ -5063,7 +5153,7 @@ directions entirely.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 largest singular values — those large enough to be trusted — the
 truncated solution is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mi>k</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><mfrac><mrow><msubsup><mi mathvariant="bold-italic">𝒖</mi><mi>i</mi><mi>T</mi></msubsup><mi mathvariant="bold-italic">𝒃</mi></mrow><msub><mi>σ</mi><mi>i</mi></msub></mfrac><msub><mi mathvariant="bold-italic">𝒗</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x}_k = \sum_{i=1}^{k} \frac{\mathbf{u}_i^T \mathbf{b}}{\sigma_i} \mathbf{v}_i</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒙</mi><mi>k</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><mfrac><mrow><msubsup><mi mathvariant="bold-italic">𝒖</mi><mi>i</mi><mi>⊤</mi></msubsup><mi mathvariant="bold-italic">𝒃</mi></mrow><msub><mi>σ</mi><mi>i</mi></msub></mfrac><msub><mi mathvariant="bold-italic">𝒗</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x}_k = \sum_{i=1}^{k} \frac{\mathbf{u}_i^{\top} \mathbf{b}}{\sigma_i} \mathbf{v}_i</annotation></semantics></math></p>
 <p>The remaining singular components, where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>i</mi></msub><mo>&lt;</mo><msubsup><mi>σ</mi><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mtext mathvariant="normal">thresh</mtext></msubsup></mrow><annotation encoding="application/x-tex">\sigma_i &lt; \sigma_{\min}^{\text{thresh}}</annotation></semantics></math>,
 are simply set to zero in the pseudo-inverse rather than amplifying
@@ -5098,7 +5188,7 @@ shrinks the solution towards zero but degrades the fit; small
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
 approaches the unregularised least-squares solution. Differentiating and
 setting to zero gives the regularised normal equations:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑨</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝑨</mi><mo>+</mo><mi>μ</mi><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝑨</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝒃</mi></mrow><annotation encoding="application/x-tex">(\mathbf{A}^T\mathbf{A} + \mu\mathbf{I})\mathbf{x} = \mathbf{A}^T\mathbf{b}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi mathvariant="bold-italic">𝑨</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝑨</mi><mo>+</mo><mi>μ</mi><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><msup><mi mathvariant="bold-italic">𝑨</mi><mi>⊤</mi></msup><mi mathvariant="bold-italic">𝒃</mi></mrow><annotation encoding="application/x-tex">(\mathbf{A}^{\top}\mathbf{A} + \mu\mathbf{I})\mathbf{x} = \mathbf{A}^{\top}\mathbf{b}</annotation></semantics></math></p>
 <p>The effect on singular value amplification is illuminating. In the
 SVD frame, the unregularised pseudo-inverse amplifies the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
@@ -5706,7 +5796,7 @@ orders of magnitude.</p>
 <h2 data-number="17.3" id="solving-ill-conditioned-formulations-directly"><span class="header-section-number">17.3</span> Solving Ill-Conditioned
 Formulations Directly</h2>
 <p>The normal equations approach to least squares
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi><mi>x</mi><mo>=</mo><msup><mi>A</mi><mi>T</mi></msup><mi>b</mi></mrow><annotation encoding="application/x-tex">A^T A x = A^T b</annotation></semantics></math>)
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>⊤</mi></msup><mi>A</mi><mi>x</mi><mo>=</mo><msup><mi>A</mi><mi>⊤</mi></msup><mi>b</mi></mrow><annotation encoding="application/x-tex">A^{\top} A x = A^{\top} b</annotation></semantics></math>)
 squares the condition number of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>.
 If
@@ -5714,7 +5804,7 @@ If
 is mildly ill-conditioned with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mn>10</mn><mn>6</mn></msup></mrow><annotation encoding="application/x-tex">\kappa(A) = 10^6</annotation></semantics></math>,
 then
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>T</mi></msup><mi>A</mi></mrow><annotation encoding="application/x-tex">A^T A</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>⊤</mi></msup><mi>A</mi></mrow><annotation encoding="application/x-tex">A^{\top} A</annotation></semantics></math>
 has condition number
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mn>12</mn></msup><annotation encoding="application/x-tex">10^{12}</annotation></semantics></math>,
 and you have lost twelve decimal digits of accuracy before solving
@@ -5924,16 +6014,17 @@ rigorous and broad, good for graduate study.</li>
 </ol>
 <p>For practical coding references:</p>
 <ol type="1">
-<li>NumPy and SciPy official documentation — well-written and full of
-worked examples.</li>
+<li><a href="https://numpy.org/doc/stable/reference/">NumPy</a> and <a href="https://docs.scipy.org/doc/scipy/reference/">SciPy</a> API
+references, including worked examples.</li>
 <li>R documentation for base numerical routines, plus the deSolve and
 optim package vignettes.</li>
-<li>Julia documentation, plus the DifferentialEquations.jl, Optim.jl,
-and LsqFit.jl package docs — often the most detailed and most modern of
-the three.</li>
-<li>JAX documentation and the “Autodiff Cookbook” — the clearest
-practical introduction to automatic differentiation in a production
-framework.</li>
+<li><a href="https://docs.julialang.org/en/v1/">Julia’s official
+documentation</a>, <a href="https://docs.sciml.ai/DiffEqDocs/stable/">DifferentialEquations.jl</a>,
+<a href="https://julianlsolvers.github.io/Optim.jl/stable/">Optim.jl</a>,
+and <a href="https://github.com/JuliaNLSolvers/LsqFit.jl">LsqFit.jl</a>
+package documentation.</li>
+<li><a href="https://docs.jax.dev/">JAX documentation</a> and its <a href="https://docs.jax.dev/en/latest/autodidax.html">Autodidax guide</a>
+for practical automatic differentiation.</li>
 </ol>
 <hr />
 <p>Numerical analysis can look intimidating at first because it sits at

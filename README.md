@@ -64,7 +64,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Deep Learning and Generative AI](primer_deep_learning/primer_deep_learning.html) · [PDF](primer_deep_learning/primer_deep_learning.pdf) | 2026-10-12 | Neural networks, transformers, LLMs, and generative AI — architecture, training, and practical use |
 | [Digital Signal Processing](primer_digital_signal_processing/primer_digital_signal_processing.html) · [PDF](primer_digital_signal_processing/primer_digital_signal_processing.pdf) | 2026-10-12 | Sampling, Fourier analysis, filtering, spectral estimation, multirate systems, and practical DSP workflows |
 | [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | 2026-10-12 | Holomorphic functions, contour integration, residues, conformal maps, harmonic functions, applications, and computation |
-| [Numerical Analysis](primer_numerical_analysis/primer_numerical_analysis.html) · [PDF](primer_numerical_analysis/primer_numerical_analysis.pdf) | 2026-06 | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
+| [Numerical Analysis](primer_numerical_analysis/primer_numerical_analysis.html) · [PDF](primer_numerical_analysis/primer_numerical_analysis.pdf) | 2026-10-12 | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
 <!-- END QUANTITATIVE FOUNDATIONS -->
 
 ## Society and Institutions
