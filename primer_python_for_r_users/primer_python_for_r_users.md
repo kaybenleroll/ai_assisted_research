@@ -74,7 +74,7 @@ active["value_norm"] = active["value"] / active["value"].max()
 
 The `.copy()` call is not only for technical correctness. It is also documentation. It says, "this branch is intentionally independent." That simple signal prevents many subtle bugs.
 
-### Missing Data Semantics: NA vs NaN, None, and Nullable dtypes
+### Missing Data Semantics: NA vs NaN, None, and Nullable `dtypes`
 
 R users are used to a coherent `NA` story. Python historically had multiple null-like values (`None`, `NaN`) and now has improved consistency through nullable dtypes. If you ignore this topic, you will eventually get surprising behaviour in joins, groupby operations, and type coercion.
 
@@ -159,7 +159,7 @@ A translation table is useful, but workflow examples teach more. This chapter fo
 
 As you read these examples, resist the urge to score them by line count alone. Some Python equivalents are longer, but they often expose assumptions that were implicit in the R version. That explicitness improves testability and incident response. A good migration mindset is to ask, for each translation: does this version make null handling, shape behaviour, and join assumptions easier to verify?
 
-### Example 1: Grouped Summary with Explicit Null Policy
+### Example 1: Grouped Summary With Explicit Null Policy
 
 R:
 
@@ -286,7 +286,7 @@ Discussion:
 
 Reshaping in Python is straightforward but expects explicit column lists more often. Many teams wrap common reshape patterns in helper functions to reduce repetition.
 
-### Example 5: Join with Diagnostics
+### Example 5: Join With Diagnostics
 
 R workflows often check row counts after joins. In Python, combine the merge with diagnostic columns.
 
@@ -325,7 +325,7 @@ Discussion:
 
 This pattern is perfectly viable, but for large workloads, many teams prefer explicit dictionary-of-dataframes or grouped iteration for clarity.
 
-## Functional Programming: Deep Translation from purrr to Python
+## Functional Programming: Deep Translation From `purrr` to Python
 
 For many advanced R users, this is the heart of the migration. You are not just translating one-liners. You are translating an entire way of structuring code.
 
@@ -337,7 +337,7 @@ Purrr gives a very elegant curated namespace for map-style programming. Python g
 
 This can feel less elegant at first. The key insight is that Python expects you to compose your own small local functional vocabulary. Once you do that, ergonomics improve dramatically.
 
-### Mapping Family Equivalents with Real Patterns
+### Mapping Family Equivalents With Real Patterns
 
 Basic map-like operations:
 
@@ -619,7 +619,7 @@ winsorize_strict = partial(winsorize, lower_q=0.05, upper_q=0.95)
 
 When teams adopt this style intentionally, you get reusable building blocks that remain easy to test and reason about.
 
-### Testing Functional Units the Way You Test dplyr Verbs
+### Testing Functional Units the Way You Test `dplyr` Verbs
 
 One migration anti-pattern is writing larger, stateful Python functions and then struggling to test them. If you keep transformation functions small and mostly pure, tests become straightforward and mirror how many R users mentally validate pipelines.
 
@@ -636,7 +636,7 @@ The deeper point is architectural: functional decomposition is not only style. I
 
 Prefer pure functions for transformation logic where feasible, and push side effects to clearly named boundaries such as I/O, logging, and persistence layers. Use closures for configuration and local state instead of scattering mutable globals through a codebase. Use decorators for cross-cutting concerns so behaviour stays consistent across call sites and does not degrade into wrapper copy-paste. When a helper appears in multiple workflows, promote it into a shared module with tests and a short docstring contract. The deeper pattern is consistency: functional style helps most when it is applied as a team-level operating language rather than as a personal preference.
 
-## Multicore and Parallelism: A Deep furrr-to-Python Guide
+## Multicore and Parallelism: A Deep `furrr-to-Python` Guide
 
 This chapter is intentionally detailed because multicore behaviour is where many migrations either succeed brilliantly or become brittle.
 
@@ -649,7 +649,7 @@ Use this sequence as your first-pass executor chooser:
 3. If memory is the constraint, use `dask` or a partition-by-file pipeline. If none of these constraints dominates, stay sequential and optimise the measured hotspots.
 4. Add `ray` only when you need distributed, stateful orchestration. Otherwise keep the process-based design simple.
 
-### Start with Workload Taxonomy
+### Start With Workload Taxonomy
 
 Before selecting tools, classify workload shape:
 
@@ -772,7 +772,7 @@ For portable code, use patterns compatible with both `spawn` and `forkserver`:
 
 Inspect `multiprocessing.get_start_method()` rather than inferring the method from the operating system alone. When you need an explicit choice, pass `mp_context=multiprocessing.get_context("spawn")` (or another supported method) to [`ProcessPoolExecutor`](https://docs.python.org/3.14/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor); reusable libraries should let callers supply the context.
 
-### joblib: Excellent Midpoint for Model Loops
+### `joblib`: Excellent Midpoint for Model Loops
 
 ```python
 from joblib import Parallel, delayed
@@ -793,7 +793,7 @@ coefs = Parallel(n_jobs=8, backend="loky")(
 
 joblib is often the fastest path from sequential loops to stable multicore behaviour in analytics code.
 
-### dask: Scaling DataFrame Workloads
+### `dask`: Scaling DataFrame Workloads
 
 ```python
 import dask.dataframe as dd
@@ -813,7 +813,7 @@ Dask is useful when:
 - you need parallel execution graphs
 - you want pandas-like API continuity
 
-### ray: Distributed Stateful Orchestration
+### `ray`: Distributed Stateful Orchestration
 
 ```python
 import ray
@@ -1017,7 +1017,7 @@ Quick chooser by question type:
 | "What is time-to-event risk and hazard behaviour?" | `lifelines` or `scikit-survival` | Survival-specific estimators and evaluation tools |
 | "How do we model panel/econometric structures?" | `linearmodels` | Fixed effects, random effects, IV, and panel-oriented estimators |
 
-### `lm()` Equivalent: OLS with Formula Notation
+### `lm()` Equivalent: OLS With Formula Notation
 
 R:
 
@@ -1287,7 +1287,7 @@ pred_label = (p_cal >= threshold).astype(int)
 
 This maps well to mature R workflows where operating thresholds are policy decisions, not model defaults.
 
-### Regularisation Equivalents (`glmnet` mindset)
+### Regularisation Equivalents (`glmnet` Mindset)
 
 If your R stack uses `glmnet`, Python equivalents are straightforward in `scikit-learn`.
 
@@ -1389,7 +1389,7 @@ A robust approach is:
 - matplotlib for precision control
 - altair for interactive storytelling
 
-### Side-by-Side Examples with Commentary
+### Side-by-Side Examples With Commentary
 
 Scatter with grouping:
 
@@ -1820,7 +1820,7 @@ Add one more operational check that pays off quickly: persist a run summary arte
 
 The point of this case study is not strict syntax parity. The point is preserving workflow reliability and communicative output quality while adopting Python-native execution patterns.
 
-### Variant A: OLS Revenue Model with Formula Workflow
+### Variant A: OLS Revenue Model With Formula Workflow
 
 Suppose a companion objective is estimating continuous customer revenue with interpretable coefficients.
 
@@ -1847,7 +1847,7 @@ mae = mean_absolute_error(model_df["revenue"], pred_rev)
 
 Why this variant matters: it demonstrates that inference-first linear workflows with familiar formula notation are straightforward to port.
 
-### Variant B: Logistic Churn Model with Calibration
+### Variant B: Logistic Churn Model With Calibration
 
 If your primary objective is churn probability for intervention ranking, add explicit calibration and threshold governance.
 
@@ -1871,7 +1871,7 @@ p_cal = calibrated.predict_proba(test_df[num_cols + cat_cols])[:, 1]
 
 Why this variant matters: many migrations stop at fitting and forget the probability quality needed for downstream decisions.
 
-### Variant C: Poisson Frequency Model with Exposure
+### Variant C: Poisson Frequency Model With Exposure
 
 For event-count modelling (claims, incidents, contact frequency), exposure-aware GLM parity is critical.
 
@@ -1899,7 +1899,9 @@ Taken together, the three variants show that Python modelling can preserve the f
 
 In other words, this is not a "toy parity" migration. It is full workflow parity.
 
+<!-- vale House.HeadingCase = NO -->
 ## Common R-to-Python Anti-Patterns (and How to Fix Them)
+<!-- vale House.HeadingCase = YES -->
 
 This chapter exists because most painful migrations fail for repeated, recognisable reasons. If you can spot these patterns early, you save weeks.
 
@@ -1935,7 +1937,7 @@ Fix:
 
 Why this pattern survives migration is understandable: row loops feel familiar when translating imperative snippets. The cost is usually not just speed. Loop-heavy code often hides null behaviour and creates difficult-to-review branching logic. If a row-wise algorithm is truly required, isolate it in one well-named function and document why vectorisation is not feasible.
 
-### Anti-Pattern 3: Treating pandas Index as an Implicit Key Contract
+### Anti-Pattern 3: Treating `pandas` Index as an Implicit Key Contract
 
 Symptom:
 
@@ -2028,7 +2030,7 @@ Fix:
 
 A single-tool mandate usually optimises for consistency theatre rather than real maintainability. A layered standard gives teams clarity without forcing poor fit decisions for specialised workloads.
 
-### Anti-Pattern 10: Confusing Notebook Convenience with Production Readiness
+### Anti-Pattern 10: Confusing Notebook Convenience With Production Readiness
 
 Symptom:
 
@@ -2058,7 +2060,7 @@ This is usually enough to recover momentum and restore trust.
 
 These playbooks turn the preceding patterns into execution mechanics, operational trust, and migration-program decisions.
 
-### Playbook 1: Building a Data Pipeline the Python Way Without Losing tidyverse Clarity
+### Playbook 1: Building a Data Pipeline the Python Way Without Losing `tidyverse` Clarity
 
 One of the hardest things for experienced R users is not writing Python syntax. It is preserving the "pipeline clarity" you are used to. In tidyverse work, a well-written pipeline reads like a story: filter this, aggregate that, derive this feature, join to lookup, summarise outputs. A lot of novice Python code breaks this story into disjoint temporary variables, ad-hoc mutations, and unscoped helper snippets. The result feels messy, and teams conclude that Python itself is messy.
 
@@ -2330,7 +2332,7 @@ If you combine those wisely, your team does not lose identity by migrating. It u
 
 These deep dives cover the execution details that determine whether a long migration remains maintainable.
 
-### Deep Dive 1: Turning Notebook Logic into Maintainable Python Modules
+### Deep Dive 1: Turning Notebook Logic Into Maintainable Python Modules
 
 Notebook exploration is productive, but migration often fails at the notebook-to-module boundary when workflow boundaries remain implicit.
 
@@ -2667,7 +2669,7 @@ Finally, add operational checks that legacy R workflows often had implicitly but
 
 Once those are in place, the Python version is often more robust than the legacy pipeline.
 
-### Scenario 2: You Are Migrating a Financial Reporting Workflow with Strict Auditability
+### Scenario 2: You Are Migrating a Financial Reporting Workflow With Strict Auditability
 
 Financial reporting migrations create a different kind of pressure. Here, tiny numeric discrepancies can trigger lengthy audits. You need not only correctness but also a clean evidence trail.
 
@@ -2709,7 +2711,7 @@ These manifests become the backbone of incident review and external assurance.
 
 One more practical lesson: keep human-readable reconciliation narrative. A short markdown summary per run that says "what changed and why" is often more useful than raw diff tables for decision-makers.
 
-### Scenario 3: You Need High-Volume API Ingestion with Downstream Modelling
+### Scenario 3: You Need High-Volume API Ingestion With Downstream Modelling
 
 Some R teams migrate because upstream data acquisition has outgrown current tooling comfort. Maybe you are pulling large API volumes daily, normalising payloads, and feeding feature pipelines.
 
@@ -2811,7 +2813,7 @@ For many teams, a hybrid architecture is the best near-term path. Keep rare spec
 
 This is not failure. It is disciplined engineering prioritisation.
 
-### Scenario 7: Measuring Migration Success with the Right KPIs
+### Scenario 7: Measuring Migration Success With the Right KPIs
 
 If you do not define migration success metrics, progress assessments become opinion-based.
 
