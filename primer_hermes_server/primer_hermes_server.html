@@ -606,7 +606,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Hermes Agent Server: An Operations-First
 Primer</span>
-    <span class="navbar-meta">27 September 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -713,7 +713,7 @@ Checklist</a></li>
 <li><a href="#hardening-checklist" id="toc-hardening-checklist"><span class="toc-section-number">9.4.2</span> Hardening Checklist</a></li>
 <li><a href="#troubleshooting-map" id="toc-troubleshooting-map"><span class="toc-section-number">9.4.3</span> Troubleshooting Map</a></li>
 </ul></li>
-<li><a href="#reference-links" id="toc-reference-links"><span class="toc-section-number">9.5</span> Reference Links</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">9.5</span> Further Reading</a></li>
 <li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">9.6</span> Closing Perspective</a></li>
 </ul></li>
 </ul></div>
@@ -742,10 +742,9 @@ These are related Hermes surfaces, but starting one does not
 automatically start the others.</p>
 <p>The official project is <a href="https://github.com/NousResearch/hermes-agent">NousResearch/hermes-agent</a>,
 documented at <a href="https://hermes-agent.nousresearch.com/docs/">hermes-agent.nousresearch.com</a>.
-This document describes the upstream project as checked on 27 September
-2026. Hermes changes quickly, so treat command help and the linked
-upstream pages as the authority when a local installation disagrees with
-an example here.</p>
+Hermes changes quickly, so treat command help and the linked upstream
+pages as the authority when a local installation disagrees with an
+example here.</p>
 <h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
 <p>You will learn how its processes fit together, how to install and
 configure one safe profile, where it keeps state, how providers, models,
@@ -766,6 +765,8 @@ commands, YAML, and HTTP requests. They do not assume that a model can
 safely execute any action it proposes: tool policy, filesystem
 permissions, network exposure, and human approval remain your
 responsibility.</p>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h2 data-number="1.3" id="what-hermes-agent-is-used-for"><span class="header-section-number">1.3</span> What Hermes Agent Is Used
 for</h2>
 <p>Hermes Agent is an open-source, tool-using agent runtime from Nous
@@ -1004,7 +1005,6 @@ guide</a> gives the current directory map.</p>
 |-- state.db          # canonical SQLite session/state store where present
 |-- cron/             # scheduled job definitions and state
 |-- logs/             # agent, gateway, and error logs
-|-- plugins/          # installed Hermes plugins
 `-- profiles/         # named profile homes</code></pre>
 <p>The exact tree grows with enabled features. Desktop themes, desktop
 plugins, TUI widgets, browser caches, checkpoints, knowledge stores, and
@@ -1803,7 +1803,7 @@ path/permissions</td>
 </tr>
 </tbody>
 </table>
-<h2 data-number="9.5" id="reference-links"><span class="header-section-number">9.5</span> Reference Links</h2>
+<h2 data-number="9.5" id="further-reading"><span class="header-section-number">9.5</span> Further Reading</h2>
 <ul>
 <li><a href="https://hermes-agent.nousresearch.com/docs/">Hermes Agent
 documentation</a></li>

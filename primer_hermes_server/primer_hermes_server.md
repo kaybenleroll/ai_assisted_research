@@ -6,7 +6,7 @@ Hermes Agent is easy to misclassify. It is described as a personal AI assistant,
 
 This primer resolves that ambiguity first. `hermes gateway` is the long-running messaging gateway. The OpenAI-compatible API server is an HTTP interface that normally listens on `127.0.0.1:8642` when enabled and is normally started alongside the gateway. `hermes serve` is the headless JSON-RPC/WebSocket backend used by Hermes Desktop and remote desktop-style clients; it is commonly reached on port `9119`. These are related Hermes surfaces, but starting one does not automatically start the others.
 
-The official project is [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), documented at [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com/docs/). This document describes the upstream project as checked on 27 September 2026. Hermes changes quickly, so treat command help and the linked upstream pages as the authority when a local installation disagrees with an example here.
+The official project is [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), documented at [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com/docs/). Hermes changes quickly, so treat command help and the linked upstream pages as the authority when a local installation disagrees with an example here.
 
 ### What This Primer Covers
 
@@ -17,6 +17,8 @@ The emphasis is on the operational boundary: what receives input, what chooses a
 ### What This Primer Is Not
 
 This is not a model benchmark, a complete catalogue of every messaging adapter, or a replacement for provider documentation. Hermes Agent is not the same thing as the [Nous Hermes model family](https://huggingface.co/NousResearch); here, “Hermes” means the agent runtime and its server surfaces. The examples assume a technically literate operator who can read shell commands, YAML, and HTTP requests. They do not assume that a model can safely execute any action it proposes: tool policy, filesystem permissions, network exposure, and human approval remain your responsibility.
+
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
 
 ### What Hermes Agent Is Used for
 
@@ -177,7 +179,6 @@ The default Hermes home is `~/.hermes`. A profile changes the effective home thr
 |-- state.db          # canonical SQLite session/state store where present
 |-- cron/             # scheduled job definitions and state
 |-- logs/             # agent, gateway, and error logs
-|-- plugins/          # installed Hermes plugins
 `-- profiles/         # named profile homes
 ```
 
@@ -686,7 +687,7 @@ Use this symptom map to choose the first diagnostic area.
 | Two profiles collide | duplicate API port, shared home, duplicate gateway process |
 | Container loses everything after restart | missing `/opt/data` mount or wrong host path/permissions |
 
-### Reference Links
+### Further Reading
 
 - [Hermes Agent documentation](https://hermes-agent.nousresearch.com/docs/)
 - [NousResearch/hermes-agent repository](https://github.com/NousResearch/hermes-agent)
