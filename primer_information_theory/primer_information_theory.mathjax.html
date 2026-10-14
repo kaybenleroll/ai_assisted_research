@@ -1084,6 +1084,24 @@ An ordered tuple <span class="math inline">\((X_1,\ldots,X_n)\)</span>
 is itself a random variable with alphabet <span class="math inline">\(\mathcal{X}_1\times\cdots\times\mathcal{X}_n\)</span>.
 This viewpoint makes block entropy and block coding ordinary
 single-variable questions over a larger alphabet.</p>
+<p><strong>Worked Example (Two Dice and a Reported Sum).</strong> Roll
+two fair, distinguishable six-sided dice. There are 36 equally likely
+ordered outcomes. Let <span class="math inline">\(X\)</span> be the
+first die, <span class="math inline">\(Y\)</span> the second, and <span class="math inline">\(S=X+Y\)</span>. The pair <span class="math inline">\((X,Y)\)</span> is uniform, but <span class="math inline">\(S\)</span> is not: one pair gives a sum of 2,
+while six pairs give a sum of 7. Counting the pairs for sums <span class="math inline">\(s=2,3,\ldots,12\)</span> gives respective
+probabilities</p>
+<p><span class="math display">\[
+P(S=s)=\frac{c_s}{36},\qquad
+(c_2,c_3,\ldots,c_{12})=(1,2,3,4,5,6,5,4,3,2,1).
+\]</span></p>
+<p>Thus <span class="math inline">\(P(S=7)=6/36=1/6\)</span>, whereas
+<span class="math inline">\(P(S=2)=1/36\)</span>. Linearity also gives
+<span class="math inline">\(\mathbb{E}[S]=\mathbb{E}[X]+\mathbb{E}[Y]=3.5+3.5=7\)</span>.
+Given <span class="math inline">\(S=7\)</span>, each of <span class="math inline">\((1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\)</span> has
+conditional probability <span class="math inline">\(1/6\)</span>; given
+<span class="math inline">\(S=2\)</span>, the ordered pair is known. The
+sum is a function of the pair, and reporting it loses different amounts
+of detail for different realised sums.</p>
 <h2 data-number="2.2" id="conditional-distributions-and-bayes-rule"><span class="header-section-number">2.2</span> Conditional Distributions and
 Bayes’ Rule</h2>
 <p>For <span class="math inline">\(p_Y(y)&gt;0\)</span>, the conditional
@@ -1156,6 +1174,25 @@ expectation:</p>
 exactly this averaging operation: calculate uncertainty separately for
 each observed value, then average according to how often that value
 occurs.</p>
+<p><strong>Worked Example (An Average Given the Dice Sum).</strong>
+Return to the two fair dice in <a href="#joint-and-marginal-distributions">Joint and Marginal
+Distributions</a>, and let <span class="math inline">\(S=X+Y\)</span>.
+Given <span class="math inline">\(S=7\)</span>, six ordered pairs are
+equally likely, so <span class="math inline">\(\mathbb{E}[X\mid
+S=7]=(1+2+3+4+5+6)/6=3.5\)</span>. Given <span class="math inline">\(S=2\)</span>, only <span class="math inline">\((1,1)\)</span> is possible, and the conditional
+mean is 1. Thus <span class="math inline">\(\mathbb{E}[X\mid S]\)</span>
+is a function of the observed sum rather than a single number
+independent of it.</p>
+<p>For any possible sum <span class="math inline">\(s\)</span>, the
+conditional distribution over pairs is symmetric under exchanging the
+dice. Consequently, <span class="math inline">\(\mathbb{E}[X\mid
+S=s]=\mathbb{E}[Y\mid S=s]\)</span>. Since <span class="math inline">\(X+Y=s\)</span> on that event, each conditional
+mean is <span class="math inline">\(s/2\)</span>. Averaging over the sum
+gives <span class="math inline">\(\mathbb{E}[\mathbb{E}[X\mid
+S]]=\mathbb{E}[S/2]=7/2=\mathbb{E}[X]\)</span>. The observation has
+narrowed the compatible pairs without necessarily identifying either
+die. Conditional expectation captures the average of what remains
+possible; it is not a reconstruction of the hidden roll.</p>
 <h3 data-number="2.3.1" id="conditional-independence-and-markov-chains"><span class="header-section-number">2.3.1</span> Conditional Independence and
 Markov Chains</h3>
 <p>The variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> are conditionally independent given
@@ -1203,6 +1240,32 @@ density can exceed one and has units inverse to those of <span class="math inlin
 ordinarily zero. Consequently, substituting a density value into a
 discrete pmf formula without changing sums to integrals is a category
 error.</p>
+<p><strong>Worked Example (Changing the Measurement Scale).</strong> Let
+<span class="math inline">\(U\)</span> be uniform on <span class="math inline">\([0,2]\)</span>, with density <span class="math inline">\(f_U(u)=1/2\)</span> inside that interval. Although
+<span class="math inline">\(f_U(1)=1/2\)</span>, the event <span class="math inline">\(U=1\)</span> has probability zero. An interval has
+positive probability: <span class="math inline">\(P(0.5\leq
+U\leq1)=\int_{0.5}^{1}(1/2)\,du=0.25\)</span>. The height of the density
+must be multiplied by width, or integrated when it varies.</p>
+<p>Now express the same measurements in half-units, <span class="math inline">\(V=2U\)</span>. The density on <span class="math inline">\([0,4]\)</span> is <span class="math inline">\(f_V(v)=1/4\)</span>, while the corresponding event
+<span class="math inline">\(1\leq V\leq2\)</span> still has probability
+<span class="math inline">\(0.25\)</span>. Its interval doubled in
+numerical width and its density halved. This change of coordinates
+alters density values without altering the chance of a physical event. A
+density has reciprocal measurement units; a probability is
+dimensionless. That distinction becomes important when continuous
+entropy is introduced below.</p>
+<p>If a sensor reports only whether <span class="math inline">\(U&gt;1\)</span>, the report itself is discrete
+even though <span class="math inline">\(U\)</span> is continuous. Given
+a positive report, the conditional density of <span class="math inline">\(U\)</span> is 1 on <span class="math inline">\((1,2]\)</span> and zero elsewhere, because the
+original density <span class="math inline">\(1/2\)</span> is divided by
+<span class="math inline">\(P(U&gt;1)=1/2\)</span>. The conditional mean
+is <span class="math inline">\(\mathbb{E}[U\mid
+U&gt;1]=\int_1^2u\,du=1.5\)</span>. A negative report gives a uniform
+conditional density on <span class="math inline">\([0,1]\)</span> and
+mean 0.5. Averaging over the two equally likely reports recovers <span class="math inline">\(\mathbb{E}[U]=(1/2)(1.5)+(1/2)(0.5)=1\)</span>.
+Thus conditioning a continuous variable uses densities for the
+underlying values and probabilities for the reported categories; neither
+operation treats the density height as a point mass.</p>
 <p>For jointly continuous variables, the joint density <span class="math inline">\(f_{XY}\)</span> and conditional density <span class="math inline">\(f_{X\mid Y}\)</span> obey integral analogues of
 the marginal and product rules. Mixed discrete-continuous laws require
 sums and integrals over their respective components. A fully general
@@ -1456,6 +1519,30 @@ probability one half. The two values are not contradictory; each average
 is taken under a different generating law. Adding a small positive
 probability to the second category makes the first divergence finite,
 but its value depends on that smoothing choice.</p>
+<p>The asymmetry is present even without a support failure. For <span class="math inline">\(P=(0.8,0.2)\)</span> and <span class="math inline">\(Q=(0.5,0.5)\)</span>, both outcomes are possible
+under both laws. Direct calculation in bits gives</p>
+<p><span class="math display">\[
+D_{\mathrm{KL}}(P\|Q)=0.8\log_2(1.6)+0.2\log_2(0.4)\approx0.2781,
+\qquad
+D_{\mathrm{KL}}(Q\|P)=0.5\log_2(0.5/0.8)+0.5\log_2(0.5/0.2)\approx0.3219.
+\]</span></p>
+<p>The first number is the expected log-likelihood ratio when
+observations follow <span class="math inline">\(P\)</span>; the second
+averages under <span class="math inline">\(Q\)</span>. Swapping the
+arguments changes the averaging weights as well as the ratios. When
+evaluating a forecast against a stipulated generating law, that law
+belongs in the first argument. Neither value alone says how many errors
+a classifier makes, because a decision threshold and costs have not been
+specified.</p>
+<p>The same arithmetic can be read as code-length regret. Since <span class="math inline">\(Q\)</span> is uniform, assigning ideal lengths
+from <span class="math inline">\(Q\)</span> spends one bit on either
+outcome. The entropy of <span class="math inline">\(P\)</span> is <span class="math inline">\(h_2(0.2)\approx0.7219\)</span> bits, so the excess
+expected length is <span class="math inline">\(1-0.7219\approx0.2781\)</span> bits under <span class="math inline">\(P\)</span>. Reversing the exercise starts with
+fair outcomes and assigns lengths <span class="math inline">\(-\log_2(0.8)\)</span> and <span class="math inline">\(-\log_2(0.2)\)</span>; its excess over the one-bit
+entropy of <span class="math inline">\(Q\)</span> is <span class="math inline">\(0.3219\)</span> bits. The mismatch penalty changes
+because the source being encoded changes. Actual prefix codes for
+isolated symbols also face integer-length and framing constraints, so
+these are ideal log-length comparisons.</p>
 <p>Another useful comparison is the Jensen–Shannon divergence. With
 <span class="math inline">\(M=(P+Q)/2\)</span>, define <span class="math inline">\(\operatorname{JSD}(P,Q)=\tfrac12D_{\mathrm{KL}}(P\|M)+\tfrac12D_{\mathrm{KL}}(Q\|M)\)</span>.
 For finite alphabets, the mixture covers both supports, so JSD stays
@@ -1489,6 +1576,22 @@ targets, the loss averages across target categories. This is a
 connection to statistical modelling; it does not mean every loss
 function is entropy or that the model’s probabilities are
 calibrated.</p>
+<p><strong>Worked Example (A Three-Outcome Forecast).</strong> Suppose
+the true alert probabilities are <span class="math inline">\(p=(0.5,0.3,0.2)\)</span> and a model reports <span class="math inline">\(q=(0.6,0.3,0.1)\)</span>. Under <span class="math inline">\(p\)</span>, entropy and the model’s expected log
+loss are</p>
+<p><span class="math display">\[
+H(p)=-\sum_i p_i\log_2p_i\approx1.4855\text{ bits per alert},\qquad
+H(p,q)=-\sum_i p_i\log_2q_i\approx1.5540\text{ bits per alert}.
+\]</span></p>
+<p>The excess is <span class="math inline">\(D_{\mathrm{KL}}(p\|q)=0.5\log_2(0.5/0.6)+0.3\log_2
+1+0.2\log_2 2\approx0.0685\)</span> bits per alert, so <span class="math inline">\(H(p)+D_{\mathrm{KL}}(p\|q)\approx H(p,q)\)</span>.
+The true distribution comes first in KL because it supplies the
+averaging weights. The middle alert contributes zero to KL, but the
+distributions still differ. If the first alert occurs, the realised log
+loss is <span class="math inline">\(-\log_2(0.6)\approx0.737\)</span>
+bits; if the third occurs, it is <span class="math inline">\(-\log_2(0.1)\approx3.322\)</span> bits.
+Cross-entropy averages these losses over possible alerts rather than
+describing every realised alert.</p>
 <h2 data-number="3.4" id="entropy-of-a-bernoulli-variable"><span class="header-section-number">3.4</span> Entropy of a Bernoulli
 Variable</h2>
 <p>For a bit that equals 1 with probability <span class="math inline">\(p\)</span>, entropy is the binary entropy
@@ -1506,6 +1609,17 @@ confirming a maximum.</p>
 <p>This simple function recurs in binary channels, error bounds, and
 rate–distortion examples. It shows that entropy responds to the whole
 probability balance, not merely the count of possible labels.</p>
+<p>Return to the two dice in <a href="#joint-and-marginal-distributions">Joint and Marginal
+Distributions</a>. If <span class="math inline">\(B=1\)</span> means
+<span class="math inline">\(S\geq7\)</span>, then 21 ordered pairs give
+<span class="math inline">\(B=1\)</span> and 15 give <span class="math inline">\(B=0\)</span>. Hence <span class="math inline">\(P(B=1)=7/12\)</span> and</p>
+<p><span class="math display">\[
+H(B)=-\frac{7}{12}\log_2\frac{7}{12}-\frac{5}{12}\log_2\frac{5}{12}\approx0.9799\text{
+bits}.
+\]</span></p>
+<p>This is uncertainty about the coarse label, not about the exact sum
+or ordered pair. Name the random variable before interpreting its
+entropy.</p>
 <h3 data-number="3.4.1" id="continuous-entropy-and-relative-entropy"><span class="header-section-number">3.4.1</span> Continuous Entropy and
 Relative Entropy</h3>
 <p>For a continuous variable with density <span class="math inline">\(f_X\)</span> (when the integral exists),
@@ -1657,25 +1771,16 @@ arguments, although the underlying conditional uncertainties can be very
 different. A small mutual information can mean weak dependence, or it
 can reflect a target with very little entropy to begin with. State the
 marginal entropies alongside it when interpreting a result.</p>
-<p><strong>Worked example (four-symbol mismatch).</strong> For the
-recurring source <span class="math inline">\(p=(0.4,0.3,0.2,0.1)\)</span>, its entropy is about
-<span class="math inline">\(1.846\)</span> bits. Suppose a probability
-model uses <span class="math inline">\(q=(0.25,0.25,0.25,0.25)\)</span>.
-Its ideal log-loss code spends exactly two bits on every outcome, so the
-expected penalty relative to the true source law is <span class="math inline">\(2-H(p)\approx0.154\)</span> bits per symbol. The
-reversed divergence <span class="math inline">\(D_{\mathrm{KL}}(q\|p)\)</span> answers a different
-question: expected model mismatch if outcomes were uniform and
-predictions used <span class="math inline">\(p\)</span>. It is about
-<span class="math inline">\(0.176\)</span> bits. Neither direction by
-itself includes the integer codeword and header costs of a real file
-format.</p>
-<p>This example also separates surprise from realised code length.
-Symbol <span class="math inline">\(d\)</span> has true surprisal <span class="math inline">\(-\log_2 0.1\approx3.322\)</span> bits and gets
-three bits in the Huffman code below. The single codeword is shorter
-than its surprisal; the average code length remains above entropy. A
-claim that every symbol must cost at least its own surprisal would
-contradict this ordinary prefix code. The Kraft constraint acts on the
-whole code tree, so code lengths must be judged together.</p>
+<p>For a four-symbol source <span class="math inline">\(p=(0.4,0.3,0.2,0.1)\)</span>, entropy is about
+<span class="math inline">\(1.846\)</span> bits; symbol <span class="math inline">\(d\)</span> will illustrate its Huffman code below.
+The mutual-information examples that follow use KL to compare a joint
+law with the product of its marginals.</p>
+<p>For symbol <span class="math inline">\(d\)</span>, true surprisal is
+<span class="math inline">\(-\log_2 0.1\approx3.322\)</span> bits, while
+the Huffman code below assigns three bits. A single codeword can be
+shorter than its surprisal even though the average code length remains
+above entropy. The Kraft constraint acts on the whole code tree, so code
+lengths must be judged together.</p>
 <h2 data-number="4.1" id="conditional-entropy-as-remaining-uncertainty"><span class="header-section-number">4.1</span> Conditional Entropy as
 Remaining Uncertainty</h2>
 <p>Conditional entropy <span class="math inline">\(H(X\mid Y)\)</span>
@@ -1684,6 +1789,24 @@ after observing <span class="math inline">\(Y\)</span>. It averages the
 entropy of the posterior distribution <span class="math inline">\(p(x\mid y)\)</span> over <span class="math inline">\(y\)</span>. It does not mean the entropy of one
 particular posterior, and an application should state whether it is
 discussing a realised observation or the model-wide average.</p>
+<p><strong>Worked Example (A Surprising Test Result).</strong> Suppose a
+binary state has prior <span class="math inline">\(P(X=1)=0.01\)</span>.
+A test returns <span class="math inline">\(Y=1\)</span> with probability
+<span class="math inline">\(0.99\)</span> if <span class="math inline">\(X=1\)</span> and <span class="math inline">\(0.01\)</span> if <span class="math inline">\(X=0\)</span>. The positive result is rare: <span class="math inline">\(P(Y=1)=0.01(0.99)+0.99(0.01)=0.0198\)</span>.
+Bayes’ rule gives <span class="math inline">\(P(X=1\mid
+Y=1)=0.0099/0.0198=1/2\)</span>. A person who receives that result moves
+from a strongly concentrated prior, with <span class="math inline">\(H(X)=h_2(0.01)\approx0.0808\)</span> bits, to a
+balanced posterior with <span class="math inline">\(H(X\mid
+Y=1)=1\)</span> bit. For this particular result, uncertainty has
+risen.</p>
+<p>The negative result has probability <span class="math inline">\(0.9802\)</span> and posterior <span class="math inline">\(P(X=1\mid
+Y=0)=0.0001/0.9802\approx0.0001020\)</span>. Its entropy is about <span class="math inline">\(0.00150\)</span> bits. Weighting the two possible
+results gives <span class="math inline">\(H(X\mid
+Y)=0.0198(1)+0.9802(0.00150)\approx0.0213\)</span> bits, below the prior
+entropy. The conditional-entropy inequality concerns this average, not a
+guarantee about each result. The probabilities describe a stipulated
+test model; changing the base rate or either error probability changes
+both posteriors and the average.</p>
 <p>The chain rule from <a href="#joint-entropy-and-chain-rule">Joint
 Entropy and Chain Rule</a> gives <span class="math inline">\(H(X,Y)=H(Y)+H(X\mid Y)\)</span>. This identity
 holds for finite alphabets without an independence assumption. In fact,
@@ -1817,6 +1940,14 @@ inequality. For general measurable variables, the result holds under the
 measure-theoretic definition of mutual information and appropriate
 regular conditional distributions; the finite-alphabet proof avoids
 those technicalities. <span class="math inline">\(\square\)</span></p>
+<p><strong>Worked Example (Discarding an Irrelevant Bit).</strong> Let
+<span class="math inline">\(X\)</span> and <span class="math inline">\(N\)</span> be independent fair bits, <span class="math inline">\(Y=(X,N)\)</span>, and <span class="math inline">\(Z\)</span> the first coordinate of <span class="math inline">\(Y\)</span>. The intermediate variable has entropy
+<span class="math inline">\(H(Y)=2\)</span> bits, but <span class="math inline">\(H(X\mid Y)=0\)</span>, so <span class="math inline">\(I(X;Y)=1\)</span> bit. Processing <span class="math inline">\(Y\)</span> into <span class="math inline">\(Z=X\)</span> removes the noise bit; <span class="math inline">\(H(X\mid Z)=0\)</span> and <span class="math inline">\(I(X;Z)=1\)</span> bit. This is equality in the
+data-processing inequality even though a bit of <em>total</em> entropy
+was discarded. The inequality tracks information about the specified
+source <span class="math inline">\(X\)</span>. If the question were
+instead about <span class="math inline">\(N\)</span>, the same
+processing would discard all the relevant information: <span class="math inline">\(I(N;Y)=1\)</span> and <span class="math inline">\(I(N;Z)=0\)</span>.</p>
 <p>Equality holds precisely when <span class="math inline">\(I(X;Y\mid
 Z)=0\)</span> under this proof, equivalently when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are conditionally independent given
 <span class="math inline">\(Z\)</span> (for finite alphabets). A
@@ -1997,6 +2128,32 @@ next available binary interval of width <span class="math inline">\(2^{-\ell}\)<
 <p>The converse concerns existence of a prefix code with those lengths,
 not a particular bit assignment. Many bit patterns can have the same
 length profile and expected cost.</p>
+<p>A length list and a proposed assignment require different checks. For
+lengths <span class="math inline">\((1,2,2)\)</span>, the Kraft sum is
+<span class="math inline">\(1/2+1/4+1/4=1\)</span>, and <code>0</code>,
+<code>10</code>, <code>11</code> realise those lengths as a prefix code.
+The assignment <code>0</code>, <code>01</code>, <code>11</code> has the
+same lengths and Kraft sum, but <code>0</code> is a prefix of
+<code>01</code>; the inequality does not certify that <em>these
+particular words</em> are prefix-free. Conversely, lengths <span class="math inline">\((1,1,2)\)</span> have Kraft sum <span class="math inline">\(1/2+1/2+1/4=1.25\)</span>. No binary prefix
+assignment with those lengths exists, however cleverly the bits are
+chosen. The test constrains all leaves of the code tree together, before
+probabilities are used to calculate expected length.</p>
+<p>The non-prefix assignment <code>0</code>, <code>01</code>,
+<code>11</code> also illustrates why prefix-freeness and unique
+decodability are distinct. Seeing an initial <code>0</code> does not
+immediately say whether that codeword has ended: it could be
+<code>0</code> or the start of <code>01</code>. Nevertheless, complete
+concatenations of these three words have unique parses. Any competing
+parse must first disagree by taking <code>0</code> on one side and
+<code>01</code> on the other, leaving an unmatched suffix
+<code>1</code>. The only codeword starting with <code>1</code> is
+<code>11</code>, which leaves the same unmatched suffix <code>1</code>
+after comparison; no sequence of complete codewords can eliminate it.
+Thus a complete stream has a unique parse even though the next symbol
+cannot always be identified when its last bit arrives. The prefix
+assignment with the same lengths is easier to parse as bits arrive,
+which is why the code tree remains the useful construction here.</p>
 <h3 data-number="5.1.2" id="the-entropy-lower-bound"><span class="header-section-number">5.1.2</span> The Entropy Lower Bound</h3>
 <p><strong>Theorem 5.2 (Expected length lower bound).</strong> For a
 discrete source <span class="math inline">\(X\)</span> with finite
@@ -2024,6 +2181,22 @@ through the Kraft–McMillan inequality: their length sequences obey the
 same Kraft bound. Prefix codes provide the construction and parsing
 intuition here. An arbitrary injective variable-length code is
 insufficient, because concatenated codewords may be ambiguous.</p>
+<p><strong>Worked Example (A Dyadic Source).</strong> Let <span class="math inline">\(a,b,c,d\)</span> have probabilities <span class="math inline">\((1/2,1/4,1/8,1/8)\)</span> and codewords
+<code>0</code>, <code>10</code>, <code>110</code>, <code>111</code>,
+respectively. No codeword is a prefix of another. Their lengths <span class="math inline">\((1,2,3,3)\)</span> satisfy Kraft’s equality:</p>
+<p><span class="math display">\[
+2^{-1}+2^{-2}+2^{-3}+2^{-3}=1.
+\]</span></p>
+<p>The expected length is <span class="math inline">\(L=(1/2)(1)+(1/4)(2)+(1/8)(3)+(1/8)(3)=1.75\)</span>
+bits per symbol. Each length equals its symbol’s surprisal, so <span class="math inline">\(H(X)=L=1.75\)</span> bits per symbol. This exact
+match is possible because these probabilities are powers of two;
+non-dyadic probabilities generally have fractional ideal lengths while
+one-symbol binary codewords have integer lengths.</p>
+<p>The stream <span class="math inline">\(b,c,a\)</span> becomes
+<code>101100</code>, parsed as <code>10 | 110 | 0</code>; the bars are
+not transmitted. Prefix-freeness makes parsing possible as bits arrive.
+For eight independent draws, the <em>expected</em> length is <span class="math inline">\(8(1.75)=14\)</span> bits before framing or model
+costs. A realised eight-symbol stream can have a different length.</p>
 <h2 data-number="5.2" id="shannon-code-and-the-one-bit-redundancy-bound"><span class="header-section-number">5.2</span> Shannon Code and the One-Bit
 Redundancy Bound</h2>
 <p>For each positive-probability symbol, choose length <span class="math inline">\(\ell(x)=\lceil-\log_2p(x)\rceil\)</span>. Then
@@ -2228,6 +2401,24 @@ symbol. It is an existence bound for a large block alphabet, not a
 recommendation to build a code table with <span class="math inline">\(4^{100}\)</span> entries. Arithmetic or range
 coding approaches the same fractional-length idea with a compact
 evolving interval and model.</p>
+<p>Consider a different source to isolate the integer-length penalty.
+Let independent bits have <span class="math inline">\(P(X=1)=0.1\)</span>. A one-symbol binary prefix
+code must assign one bit to each of the two outcomes, so it emits one
+bit per source bit, while <span class="math inline">\(H(X)=h_2(0.1)\approx0.4690\)</span> bits. For a
+100-symbol block, entropy is about <span class="math inline">\(46.90\)</span> bits. The Shannon assignment to
+complete blocks has expected length below <span class="math inline">\(100H(X)+1\approx47.90\)</span> bits per block,
+hence below <span class="math inline">\(0.4790\)</span> bits per source
+bit. The comparison shows how the less-than-one-bit <em>block</em>
+redundancy is amortised over 100 symbols; it does not claim every block
+is represented in at most 48 bits.</p>
+<p>In particular, a fixed-length, exactly lossless representation of all
+<span class="math inline">\(2^{100}\)</span> possible blocks still needs
+100 bits. The shorter expected variable length comes from giving more
+probable blocks shorter codewords and less probable blocks longer ones.
+The stipulated independence assumption supplies <span class="math inline">\(H(X^{100})=100H(X)\)</span>; a source with memory
+needs its actual block law. Building a literal table for <span class="math inline">\(2^{100}\)</span> words would be impractical, so
+the bound explains an achievable rate without specifying a useful
+implementation.</p>
 <p>There are two different meanings of “rate” in nearby coding
 statements. Here rate is <em>expected bits emitted per source
 symbol</em> by an exactly invertible variable-length encoder. A
@@ -2297,6 +2488,15 @@ information is about <span class="math inline">\(2.415\)</span> bits. No
 individual two-bit string has fractional length; the interval method
 assigns precision across the entire sequence and finalisation adds
 bounded overhead under an actual finite-precision implementation.</p>
+<p>To see the interval itself, put <span class="math inline">\(A\)</span> in the lower 75% of <span class="math inline">\([0,1)\)</span> and <span class="math inline">\(B\)</span> in the upper 25%. After <span class="math inline">\(A\)</span>, the surviving interval is <span class="math inline">\([0,0.75)\)</span>. Partitioning that interval in
+the same proportions puts <code>AB</code> in <span class="math inline">\([0.5625,0.75)\)</span>, with width <span class="math inline">\(0.1875\)</span>. A tag such as <span class="math inline">\(0.625=0.101_2\)</span> lies inside it. The
+receiver can recover <code>AB</code> only if it also knows this
+probability model and the sequence length or a termination convention: a
+tag by itself does not announce where to stop decoding. Endpoints need a
+consistent convention, and finite precision requires careful handling
+when intervals become narrow. The elementary subdivision explains the
+information calculation without making the three displayed binary digits
+a complete file format.</p>
 <p>This is an intuition, not a complete arithmetic coder. A real
 implementation must manage finite registers, renormalisation, underflow,
 termination, and a probability model known to both sides. The next
@@ -2490,6 +2690,30 @@ number of erasures may fail on a larger-than-usual erasure pattern. If a
 missing packet is silently replaced by a wrong value rather than a
 visible marker, the BEC model is inappropriate; that event is closer to
 a substitution error.</p>
+<p><strong>Worked Example (A Short Erasure Code).</strong> Send two fair
+message bits <span class="math inline">\(U,V\)</span> as the three-bit
+codeword <span class="math inline">\((U,V,U\oplus V)\)</span>. The
+parity bit lets the receiver reconstruct the message after any single
+erasure. For instance, received <span class="math inline">\((1,?,0)\)</span> implies <span class="math inline">\(V=1\)</span>. With two erasures, the one retained
+codeword bit is compatible with two messages; with three, none of the
+message bits is known. A decoder that declares failure unless the
+message is unique therefore succeeds exactly when at most one position
+is erased. Its code rate is <span class="math inline">\(2/3\)</span>
+message bit per channel use, below the <span class="math inline">\(0.8\)</span>-bit BEC capacity at <span class="math inline">\(\delta=0.2\)</span>.</p>
+<p>Under independent erasures, the block failure probability is</p>
+<p><span class="math display">\[
+P(\text{at least two erasures})=\binom{3}{2}(0.2)^2(0.8)+(0.2)^3=0.104.
+\]</span></p>
+<p>Thus 89.6% of these short blocks are uniquely decoded. Rate below
+capacity is an asymptotic possibility statement; it does not supply this
+finite code’s failure probability. Here failure means inability to
+recover the <em>whole two-bit message</em>, and an erasure is reported
+rather than silently guessed. Sending the two bits uncoded would use
+only two channel uses and would deliver both with probability <span class="math inline">\((0.8)^2=0.64\)</span>. That changes both the
+number of uses and the success probability, so a system comparison would
+also need latency, retransmission, and throughput requirements. The
+short parity code serves only to make the finite-block distinction
+concrete.</p>
 <p>The BSC and BEC do not have directly interchangeable crossover
 parameters. A BSC output is always a bit and can be wrong without
 announcing the error. A BEC may carry less raw output but tells the
@@ -2834,6 +3058,25 @@ errors imposes a different, stronger criterion. At a finite length, even
 a code whose expected error fraction is 0.1 can produce an unusually bad
 block. A tail probability or worst-case bound needs separate
 analysis.</p>
+<p>For a numerical instance, let ten independent source bits each equal
+1 with probability <span class="math inline">\(0.1\)</span>, and let a
+zero-rate decoder always reconstruct 0. The expected Hamming distortion
+is <span class="math inline">\(0.1\)</span> per bit. In one block,
+however, the error fraction is <span class="math inline">\(K/10\)</span>
+for <span class="math inline">\(K\sim\operatorname{Binomial}(10,0.1)\)</span>. A
+block exceeds a 20% error limit when at least three source bits are 1.
+Directly summing the complementary events gives</p>
+<p><span class="math display">\[
+P(K\geq3)=1-\left[(0.9)^{10}+10(0.1)(0.9)^9+45(0.1)^2(0.9)^8\right]\approx0.07019.
+\]</span></p>
+<p>About 7% of these ten-bit blocks breach that separate limit despite
+meeting the <em>average</em> distortion target. This probability follows
+from the stipulated independent bits and constant reconstruction; it is
+not a prediction for a positive-rate codec or a dependent source. The
+later warning-flag example changes the <em>cost assigned to an
+error</em>, whereas this calculation asks how often the count of
+ordinary Hamming errors is large. A design can need both kinds of
+constraint.</p>
 <p>The uniform-source assumption matters for the displayed <span class="math inline">\(1-h_2(D)\)</span> curve. For <span class="math inline">\(X\sim\operatorname{Bernoulli}(p)\)</span> with
 Hamming distortion, the corresponding finite-alphabet result is <span class="math inline">\(R(D)=h_2(p)-h_2(D)\)</span> for <span class="math inline">\(0\leq D\leq\min(p,1-p)\)</span>, and zero for
 <span class="math inline">\(D\geq\min(p,1-p)\)</span>. If <span class="math inline">\(p=0.1\)</span>, always reconstructing zero already
@@ -2921,6 +3164,18 @@ perceptual similarity. A distortion measure should describe the
 consequence that the application is prepared to tolerate, and it should
 be checked against examples that domain users recognise as acceptable
 and unacceptable.</p>
+<p><strong>Worked Example (A Warning Flag).</strong> Suppose <span class="math inline">\(P(X=1)=0.06\)</span> for a binary warning, and a
+zero-rate decoder must always reconstruct the same flag. Under Hamming
+distortion, always outputting 0 costs <span class="math inline">\(0.06\)</span> per symbol and always outputting 1
+costs <span class="math inline">\(0.94\)</span>, so choose 0. Now charge
+20 for a missed warning and 1 for a false warning, with zero cost for a
+correct flag. The respective expected costs become <span class="math inline">\(20(0.06)=1.20\)</span> and <span class="math inline">\(1(0.94)=0.94\)</span>, so choose 1. The decision
+switches when <span class="math inline">\(20p&gt;1-p\)</span>, or <span class="math inline">\(p&gt;1/21\approx0.0476\)</span>. Hamming
+distortion measures an error fraction; the asymmetric distortion
+measures expected decision cost in the stipulated units. This comparison
+concerns constant reconstructions at zero rate, not the positive-rate
+<span class="math inline">\(R(D)\)</span> curve or a bound on missed
+warnings in every block.</p>
 <p>Rate–distortion theory does not decide those consequences. It tells
 us the best asymptotic information rate under the chosen distribution
 and cost. A codec can optimise a proxy faithfully while producing
@@ -3022,22 +3277,30 @@ Bayesian estimators, coverage-based methods, and bias-corrected
 estimators each introduce assumptions; there is no estimator that makes
 sparse data information-free.</p>
 <p><strong>Worked Example (A Missing Category).</strong> Suppose a
-status sensor can report four states, with true probabilities <span class="math inline">\((0.7,0.2,0.08,0.02)\)</span>. In a sample of 20
-readings, it is quite possible not to observe the rarest state. The
-empirical support then has only three observed states, and its plug-in
-entropy treats the absent fourth state as impossible. Even if it is
-observed once, the frequency estimate <span class="math inline">\(1/20=0.05\)</span> is noisy relative to the true
-probability <span class="math inline">\(0.02\)</span>. This example
-shows why reporting only a decimal entropy without the sample size,
-observed category counts, and support assumptions hides uncertainty.</p>
+status sensor has four possible states with true probabilities <span class="math inline">\((0.70,0.20,0.08,0.02)\)</span>, and 20 independent
+readings yield counts <span class="math inline">\((14,4,2,0)\)</span>.
+The plug-in distribution is <span class="math inline">\((0.70,0.20,0.10,0)\)</span>, giving</p>
+<p><span class="math display">\[
+\widehat H=-0.70\log_2 0.70-0.20\log_2 0.20-0.10\log_2 0.10
+\approx1.156780\text{ bits per reading}.
+\]</span></p>
+<p>The stipulated population entropy is about <span class="math inline">\(1.228972\)</span> bits per reading. If all four
+positive-probability states are known, the leading Miller–Madow addition
+is <span class="math inline">\((4-1)/(2(20)\ln2)\approx0.108202\)</span>
+bits, producing <span class="math inline">\(1.264982\)</span> bits. It
+overshoots in this sample: the correction concerns expected bias under
+repeated regular sampling, not improvement for every dataset. Counting
+only the three observed states would silently change the support
+assumption.</p>
 <p>When categories are known in advance, preserve unobserved levels in
 the table rather than silently dropping them. In R,
-<code>table(factor(x, levels = ...))</code> helps retain structural
-zeros; distinguish those from sampling zeros. A structural zero is
-impossible by design under the model. A sampling zero is an unobserved
-event that may still have positive population probability. Adding a
-pseudocount treats the latter as possible, but the pseudocount is a
-modelling choice rather than evidence.</p>
+<code>table(factor(x, levels = ...))</code> retains design-known levels
+with zero observed counts; the table alone cannot tell whether those
+zeros are structural or due to sampling. A structural zero is impossible
+by design under the model. A sampling zero is an unobserved event that
+may still have positive population probability. Adding a pseudocount
+treats the latter as possible, but the pseudocount is a modelling choice
+rather than evidence.</p>
 <h2 data-number="8.2" id="joint-tables-sparse-cells-and-mutual-information"><span class="header-section-number">8.2</span> Joint Tables, Sparse Cells, and
 Mutual Information</h2>
 <p>For paired observations <span class="math inline">\((X_i,Y_i)\)</span>, empirical joint frequencies
@@ -3080,6 +3343,19 @@ marginals and</p>
 proof that the population variables share information. A null comparison
 that repeats the sampling process clarifies how unusual a value of this
 size would be under independence.</p>
+<p>Each row and column total is 20, so independence predicts ten
+observations per cell. The exact likelihood-ratio identity is <span class="math inline">\(G^2=2n\ln(2)\,\widehat I\)</span>; from the
+counts, <span class="math inline">\(G^2=2[24\ln(12/10)+16\ln(8/10)]\approx1.610841\)</span>.
+Pearson’s statistic is <span class="math inline">\(4(2^2/10)=1.6\)</span>: close, but not identical.
+Under independent sampling and a prespecified regular <span class="math inline">\(2\times2\)</span> independence model, the
+large-sample <span class="math inline">\(\chi^2_1\)</span> upper-tail
+reference for <span class="math inline">\(G^2\)</span> is about <span class="math inline">\(0.2044\)</span>. That p-value is neither the
+probability that independence is true nor an interval for population MI.
+Selecting this table after screening many candidates would also
+invalidate a single-table reference without accounting for selection.
+The conversion between <span class="math inline">\(\widehat I\)</span>
+and <span class="math inline">\(G^2\)</span> is exact; the chi-squared
+reference distribution is asymptotic.</p>
 <p>The following base R function computes the plug-in value from a
 contingency table. It requires a numeric matrix or two-way table of
 finite, non-negative counts with a positive, finite total. Matrix
@@ -3234,6 +3510,44 @@ Bootstrap estimates sampling variability around the empirical
 distribution. Neither should be described generically as “the
 uncertainty” without stating the target and procedure. For repeated
 measures, both must respect subject or cluster structure.</p>
+<p><strong>Worked Example (The Same Four Pairs Resampled Two
+Ways).</strong> Suppose four independent observed pairs are <span class="math inline">\((0,0),(0,0),(1,1),(1,1)\)</span>. Both empirical
+marginals are fair, and <span class="math inline">\(X=Y\)</span> in
+every row, so the plug-in estimate is <span class="math inline">\(\widehat I=H(X)=1\)</span> bit per pair. To test
+independence conditional on the observed margins, fix the four <span class="math inline">\(X\)</span> values and assign the two <span class="math inline">\(Y=1\)</span> labels to any two positions. There
+are <span class="math inline">\(\binom{4}{2}=6\)</span> distinct
+assignments, equally likely under this conditional permutation null. Two
+make the columns match or oppose perfectly, each giving MI of 1 bit. The
+other four place one observation in every joint cell and give MI of 0.
+Counting statistics at least as large as the observed value yields the
+exact dependence p-value <span class="math inline">\(2/6=1/3\)</span>. A
+perfectly reversed pairing counts as equally dependent because MI has no
+preferred direction.</p>
+<p>Now resample the four <em>pairs</em> with replacement. Every
+bootstrap row still has <span class="math inline">\(X=Y\)</span>, but
+the marginal fraction of ones varies. If <span class="math inline">\(K\)</span> counts selected <span class="math inline">\((1,1)\)</span> pairs, <span class="math inline">\(K\sim\operatorname{Binomial}(4,1/2)\)</span> under
+the empirical distribution, and the bootstrap statistic is <span class="math inline">\(\widehat I^*=h_2(K/4)\)</span>. The exact
+bootstrap distribution puts mass <span class="math inline">\(2/16\)</span> at 0 bits (<span class="math inline">\(K=0\)</span> or 4), <span class="math inline">\(8/16\)</span> at <span class="math inline">\(h_2(1/4)\approx0.811278\)</span> bits (<span class="math inline">\(K=1\)</span> or 3), and <span class="math inline">\(6/16\)</span> at 1 bit (<span class="math inline">\(K=2\)</span>). The resulting 2.5th to 97.5th
+percentile interval spans 0 to 1 bit. Its width warns against reading a
+one-bit sample estimate as precise.</p>
+<p>The procedures differ because permutation breaks pairings under an
+independence null, while the pair bootstrap resamples the observed joint
+law. Neither can manufacture a discordant pair in this tiny bootstrap
+sample, and the permutation p-value is coarse because only six
+assignments exist. Both calculations are fully reproducible by
+enumerating the assignments and the <span class="math inline">\(4^4\)</span> ordered resamples. If the rows were
+repeated measurements on fewer independent subjects, row-level
+permutation and bootstrap would use the wrong unit; subject-level
+resampling would be needed.</p>
+<p>The bootstrap mean in this enumeration is <span class="math inline">\([8h_2(1/4)+6]/16\approx0.780639\)</span> bits,
+lower than the observed one bit. That difference is not a correction to
+add to the estimate: the empirical distribution has only two of four
+possible joint cells, and resampling it cannot reveal whether either
+missing cell has positive population probability. A bias adjustment
+based on these replicates would still inherit that support limitation.
+With a larger sample, checking occupied cells and repeating the analysis
+under plausible smoothing choices can expose sensitivity that a single
+percentile interval conceals.</p>
 <h2 data-number="8.4" id="continuous-variables-and-estimator-choice"><span class="header-section-number">8.4</span> Continuous Variables and
 Estimator Choice</h2>
 <p>For continuous variables, discretising into bins changes the
@@ -3244,6 +3558,26 @@ Relative Entropy</a>, it depends on units and can be negative. Mutual
 information is invariant to smooth invertible changes of coordinates
 under suitable conditions, but estimating it from a finite sample
 remains difficult.</p>
+<p><strong>Worked Example (A Measurement and Its Sign).</strong> Let
+<span class="math inline">\(X\)</span> and <span class="math inline">\(N\)</span> be independent standard Gaussian
+variables, with <span class="math inline">\(Y=X+N\)</span>. Under this
+stipulated joint Gaussian model, the continuous mutual information is
+<span class="math inline">\(I(X;Y)=\tfrac12\log_2(1+\operatorname{Var}(X)/\operatorname{Var}(N))=\tfrac12\)</span>
+bit per pair. Now record only signs: <span class="math inline">\(A=\mathbf{1}\{X&gt;0\}\)</span> and <span class="math inline">\(B=\mathbf{1}\{Y&gt;0\}\)</span>. Both are fair
+bits. In the plane of <span class="math inline">\((X,N)\)</span>, the
+lines <span class="math inline">\(X=0\)</span> and <span class="math inline">\(X+N=0\)</span> divide the circularly symmetric
+Gaussian density into wedges. Opposite signs occupy two 45-degree
+wedges, one quarter of the full circle, so <span class="math inline">\(P(A\ne B)=1/4\)</span>.</p>
+<p>The sign pair is a binary symmetric observation with crossover
+probability <span class="math inline">\(1/4\)</span>, giving <span class="math inline">\(I(A;B)=1-h_2(1/4)\approx0.188722\)</span> bits per
+pair. Discarding magnitudes has removed about <span class="math inline">\(0.311278\)</span> bits of dependence in this
+population model. This also illustrates data processing: <span class="math inline">\(A\)</span> is determined by <span class="math inline">\(X\)</span> and <span class="math inline">\(B\)</span> by <span class="math inline">\(Y\)</span>, so their MI cannot exceed <span class="math inline">\(I(X;Y)\)</span>. The numbers are population
+quantities, not estimates from a finite sample. A four-cell sign table
+targets <span class="math inline">\(I(A;B)\)</span>; it cannot be
+reported as an estimate of the unbinned <span class="math inline">\(0.5\)</span> bits without further modelling.
+Narrower bins change the variables again and may produce sparse cells. A
+Gaussian model can estimate continuous MI from correlation only when its
+distributional assumptions are defensible.</p>
 <p>Common approaches include nearest-neighbour estimators, kernel
 methods, density-ratio estimation, and model-based likelihood ratios.
 They trade assumptions about smoothness, dimensionality, and
@@ -3279,18 +3613,19 @@ from a bootstrap, an asymptotic approximation, a posterior, or another
 method. For a test, state the null, test statistic, number of
 permutations, and exchangeability unit. These details often matter more
 than the fourth decimal place.</p>
-<p>A compact report might read: “For 1,240 independent device-days,
-plug-in MI between the four-level alarm state and the binary service
-outcome was 0.083 bits per device-day. The joint table had six occupied
-cells of eight possible. A 5,000-replicate bootstrap of device-days gave
-a percentile interval of [0.061, 0.108] bits. Under a pre-specified
-independence null, 9,999 permutations of outcomes across device-days
-gave Monte Carlo <span class="math inline">\(p=0.004\)</span>. The
-estimate is descriptive of monitored devices during the stated quarter;
-it does not identify a causal effect.” This is only a reporting pattern,
-not a claim that percentile intervals or unrestricted permutations suit
-every design. If there are multiple days per device, resampling and
-permutation must instead respect the device clustering.</p>
+<p>An illustrative, invented report might read: “For 1,240 independent
+device-days, plug-in MI between the four-level alarm state and the
+binary service outcome was 0.083 bits per device-day. The joint table
+had six occupied cells of eight possible. A 5,000-replicate bootstrap of
+device-days gave a percentile interval of [0.061, 0.108] bits. Under a
+pre-specified independence null, 9,999 permutations of outcomes across
+device-days gave Monte Carlo <span class="math inline">\(p=0.004\)</span>. The estimate is descriptive of
+monitored devices during the stated quarter; it does not identify a
+causal effect.” These numbers illustrate reporting fields and do not
+come from an observed dataset. The pattern does not imply that
+percentile intervals or unrestricted permutations suit every design. If
+there are multiple days per device, resampling and permutation must
+instead respect the device clustering.</p>
 <p>Pre-registration is especially helpful when many variable pairs, bin
 edges, smoothing parameters, or subgroups could be explored. If
 exploration has already occurred, say so and validate the chosen
@@ -3418,6 +3753,45 @@ predictions on that test distribution, but it does not show that every
 subgroup is calibrated, that the model is robust to shift, or that a
 decision based on its outputs improves outcomes. Inspect the relevant
 subgroup and shift behaviour directly.</p>
+<p><strong>Worked Example (A Forecast That Changes an Action).</strong>
+In an invented, independently sampled, untreated validation set, 100
+cases receive event probability 0.10 and another 100 receive 0.40. There
+are 20 events in the low-forecast group and 30 in the high-forecast
+group. Their observed event frequencies are 0.20 and 0.30, respectively.
+The forecast ranks the groups in the right order, but its two predefined
+probability groups are miscalibrated in opposite directions. Their
+empirical mean log losses are <span class="math inline">\(-0.2\log_2(0.10)-0.8\log_2(0.90)\approx0.786\)</span>
+and <span class="math inline">\(-0.3\log_2(0.40)-0.7\log_2(0.60)\approx0.912\)</span>
+bits per case. These scores assess probability assignments; they do not
+price an intervention.</p>
+<p>Suppose, only for this calculation, an intervention costs 3.5 units
+per case and prevents an event that would otherwise cost 10 units, with
+no other effects. Under a known untreated event probability <span class="math inline">\(p\)</span>, treating is preferable when <span class="math inline">\(3.5&lt;10p\)</span>, or <span class="math inline">\(p&gt;0.35\)</span>. The model’s 0.40 forecast
+would select the high group. Its observed untreated frequency of 0.30
+instead implies an illustrative no-treatment expected cost of 3 units
+per comparable case, against 3.5 for treatment: 300 versus 350 units for
+100 cases at those point estimates. The low group remains untreated
+under both its forecast and observed frequency.</p>
+<p>Here mean held-out log loss compares probabilistic forecasts, the two
+group frequencies check calibration, and expected cost under the
+<em>assumed treatment effect</em> selects the action. The observed 0.30
+is uncertain with only 100 cases; using the same outcomes to set a
+replacement threshold or recalibrate a model calls for fresh evaluation.
+If treatment prevents only a fraction of events, the threshold must use
+that causal effect and any side effects. Untreated observational event
+frequencies alone cannot establish the intervention’s benefit. Mutual
+information between a feature and the event would answer a dependence
+question, not this cost calculation.</p>
+<p>Even under independent, comparable cases, the high group’s event
+fraction has an approximate binomial standard error <span class="math inline">\(\sqrt{0.30(0.70)/100}\approx0.046\)</span>. Its
+distance from the 0.35 action threshold is only about one such standard
+error. The point-estimate cost comparison is therefore a demonstration
+of how calibration can reverse an action, not strong evidence that
+withholding treatment is optimal in a real population. Decision
+evaluation would need an uncertainty analysis for the untreated risk and
+the intervention effect, as well as a population to which both estimates
+apply. The chosen cost units and perfect prevention assumption are part
+of this example, not measured facts.</p>
 <h2 data-number="9.2" id="evidence-features-and-predictive-information"><span class="header-section-number">9.2</span> Evidence, Features, and
 Predictive Information</h2>
 <p>For a target <span class="math inline">\(Y\)</span> and feature
@@ -3467,6 +3841,21 @@ the target. A small first term favours a representation that discards
 details of <span class="math inline">\(X\)</span>; a large second term
 rewards predictive dependence with <span class="math inline">\(Y\)</span>. This is an objective defined from a
 joint distribution, not a universal law of good representations.</p>
+<p><strong>Worked Example (Retain the Target Bit).</strong> Let <span class="math inline">\(Y\)</span> and <span class="math inline">\(N\)</span> be independent fair bits and <span class="math inline">\(X=(Y,N)\)</span>. A constant representation <span class="math inline">\(Z_0\)</span> has <span class="math inline">\((I(X;Z_0),I(Z_0;Y))=(0,0)\)</span> bits. Keeping
+only the target bit, <span class="math inline">\(Z_1=Y\)</span>, gives
+<span class="math inline">\((1,1)\)</span>; keeping both bits, <span class="math inline">\(Z_2=X\)</span>, gives <span class="math inline">\((2,1)\)</span>. Their objective values are <span class="math inline">\(0\)</span>, <span class="math inline">\(1-\beta\)</span>, and <span class="math inline">\(2-\beta\)</span>. Thus <span class="math inline">\(Z_2\)</span> wastes one bit on <span class="math inline">\(N\)</span> for this target. Among these choices,
+the constant wins for <span class="math inline">\(0\leq\beta&lt;1\)</span>, the constant and <span class="math inline">\(Z_1\)</span> tie at <span class="math inline">\(\beta=1\)</span>, and <span class="math inline">\(Z_1\)</span> wins for <span class="math inline">\(\beta&gt;1\)</span>. The same optima hold over all
+representations obeying <span class="math inline">\(Y\to X\to
+Z\)</span>, since <span class="math inline">\(I(Z;Y)\leq I(X;Z)\)</span>
+and <span class="math inline">\(I(Z;Y)\leq H(Y)=1\)</span>; other
+representations can tie at the boundary.</p>
+<p>This is a chosen-target result, measured in bits per draw rather than
+a physical transmission rate. If a later task predicts <span class="math inline">\(N\)</span>, <span class="math inline">\(Z_1\)</span> retains none of the needed
+information. Under true population log loss, knowing <span class="math inline">\(Z_1\)</span> improves the target forecast over the
+marginal forecast by <span class="math inline">\(H(Y)-H(Y\mid
+Z_1)=1\)</span> bit per draw; a fitted finite-sample predictor need not
+realise that improvement on held-out data. A changed deployment law can
+also change the calculation.</p>
 <p>The objective depends on how <span class="math inline">\(Z\)</span>
 is stochastic or deterministic, what distribution is used, how each MI
 term is estimated, and what value of <span class="math inline">\(\beta\)</span> is selected. For deterministic
@@ -3626,26 +4015,33 @@ delivered application throughput after overhead. A compression study may
 report bitrate and a distortion metric, plus task performance if users
 make decisions from reconstructed data. Keep the model bound separate
 from the empirical outcome.</p>
-<p>Here is the bookkeeping for a simple end-to-end link. Suppose a
-source produces 12 symbols per second, a source coder averages 1.4 bits
-per source symbol, and the resulting bitstream is protected by a channel
-code of rate <span class="math inline">\(r_c=0.7\)</span> information
-bits per transmitted channel bit. The physical channel must carry <span class="math inline">\(12(1.4)/0.7=24\)</span> channel bits per second
-before framing. If the channel offers 30 uses per second and has
-capacity 0.9 bits per use, its ideal information ceiling is 27 bits per
-second. The fact that 24 is below 27 is a necessary asymptotic
-compatibility check under the models; it does not guarantee the chosen
-finite source coder, channel code, or latency meets requirements. If the
-source coder’s 1.4-bit figure is a finite-file average including
-headers, it should not be compared casually with a stationary entropy
-rate either.</p>
-<p>This bookkeeping also catches a common category error: dividing a
-source entropy in bits per symbol directly by a channel capacity in bits
-per use yields no meaningful utilisation until the source symbol rate
-and channel-use rate are included. A full system model may also include
-packet headers, retransmissions, idle time, and unequal error
-protection. Add these as explicit rate factors rather than quietly
-folding them into “capacity”.</p>
+<p>Here is the bookkeeping for one link. A source produces 12 symbols
+per second, and its source coder emits an average of 1.4 bits per source
+symbol: <span class="math inline">\(12(1.4)=16.8\)</span> source-coded
+bits per second enter the channel encoder as message bits. Suppose one
+coded binary bit occupies one channel use, the channel code rate is
+<span class="math inline">\(r_c=0.7\)</span> message bits per use, and
+the link permits 30 uses per second. The selected code needs an average
+of <span class="math inline">\(16.8/0.7=24\)</span> uses per second,
+leaving an average of six uses per second for idle time or separately
+budgeted overhead. At that code rate, the 30-use budget accommodates
+<span class="math inline">\(30(0.7)=21\)</span> message bits per second
+before overhead; the relevant implemented-rate comparison is <span class="math inline">\(16.8&lt;21\)</span>.</p>
+<p>If channel capacity is <span class="math inline">\(C=0.9\)</span>
+bits per use, its ideal asymptotic information ceiling at 30 uses per
+second is <span class="math inline">\(30(0.9)=27\)</span> message bits
+per second. Compare the source stream’s <span class="math inline">\(16.8\)</span> message bits per second with this
+<span class="math inline">\(27\)</span>-bit ceiling, and the selected
+code rate <span class="math inline">\(0.7\)</span> with <span class="math inline">\(0.9\)</span> bits per use. At capacity, <span class="math inline">\(16.8/0.9\approx18.67\)</span> uses per second is
+an ideal lower bound for the modelled stream; the selected code uses 24
+on average. Comparing 24 coded bits or channel uses per second with 27
+message bits per second mixes quantities. None of these rates
+establishes the finite code’s error probability, latency, or delivered
+application throughput. Framing, headers, retransmissions, and unequal
+error protection need separate budgets. If 1.4 bits per source symbol is
+a finite-file average, identify its included overhead before comparing
+it with an entropy rate or <span class="math inline">\(R(D)\)</span>;
+for lossy coding, report realised distortion and its units as well.</p>
 <h1 data-number="10" id="exercises"><span class="header-section-number">10</span> Exercises</h1>
 <p>Unless stated otherwise, logarithms are base 2. Work from the stated
 model and check the units. Outline solutions follow each prompt.</p>
@@ -3767,20 +4163,19 @@ of codes as block length tends to infinity, not this particular
 code.</p>
 <h2 data-number="10.11" id="exercise-11-choose-a-distortion-measure"><span class="header-section-number">10.11</span> Exercise 11: Choose a
 Distortion Measure</h2>
-<p>A logger stores a binary warning flag with prevalence <span class="math inline">\(P(X=1)=0.03\)</span>. Compare the distortions (a)
-Hamming loss and (b) asymmetric loss where missing a warning costs 20
+<p>A logger stores a binary warning flag with prevalence <span class="math inline">\(P(X=1)=0.08\)</span>. Compare the distortions (a)
+Hamming loss and (b) asymmetric loss where missing a warning costs 15
 and a false warning costs 1. What is the zero-rate constant
 reconstruction under each expected-distortion criterion? What does that
 tell you about the objective?</p>
 <p><strong>Outline Solution.</strong> Under Hamming loss, always output
-0 gives expected distortion 0.03, while always output 1 gives 0.97; the
-zero-rate choice is 0. Under asymmetric loss, always output 0 costs
-<span class="math inline">\(20(0.03)=0.6\)</span>, while always output 1
-costs <span class="math inline">\(1(0.97)=0.97\)</span>, so output 0
-remains preferable here. If prevalence or costs change, the choice can
-change. The example makes clear that “distortion” encodes application
-costs; a rate–distortion answer is only as appropriate as that cost
-model.</p>
+0 gives expected distortion 0.08, while always output 1 gives 0.92;
+choose 0. Under asymmetric loss, always output 0 costs <span class="math inline">\(15(0.08)=1.20\)</span>, while always output 1
+costs <span class="math inline">\(1(0.92)=0.92\)</span>; choose 1. The
+switch occurs when prevalence exceeds <span class="math inline">\(1/16\)</span>. Distortion encodes the stipulated
+application costs, and the optimum can change when that criterion
+changes. This zero-rate decision alone does not determine the
+positive-rate curve.</p>
 <h2 data-number="10.12" id="exercise-12-gaussian-ratedistortion"><span class="header-section-number">10.12</span> Exercise 12: Gaussian
 Rate–Distortion</h2>
 <p>An iid Gaussian source has variance <span class="math inline">\(\sigma^2=9\)</span> and squared-error distortion
