@@ -840,6 +840,10 @@ for a System Claim</a></li>
     <main class="content">
       <div class="content-inner">
 <h1 data-number="1" id="orientation-and-notation"><span class="header-section-number">1</span> Orientation and Notation</h1>
+<p>The sections that follow build from probability models to information
+quantities and then to coding consequences. This orientation fixes the
+scope, reading route, and notation used throughout, so later formulas
+can be read against a clearly stated model and unit.</p>
 <h2 data-number="1.1" id="purpose-scope-and-background"><span class="header-section-number">1.1</span> Purpose, Scope, and
 Background</h2>
 <p>Information theory gives precise ways to talk about uncertainty,
@@ -1034,6 +1038,11 @@ estimated, or implicitly replaced by empirical frequencies. State which
 case applies. A measured code length under a model is not automatically
 the entropy of the data-generating process.</p>
 <h1 data-number="2" id="probability-foundations"><span class="header-section-number">2</span> Probability Foundations</h1>
+<p>Information quantities are expectations or comparisons under
+probability laws, so their interpretation depends on specifying the
+random variables and their joint distribution. This section establishes
+the sample-space, marginal, conditional, and expectation rules used in
+the later definitions.</p>
 <h2 data-number="2.1" id="sample-spaces-and-random-variables"><span class="header-section-number">2.1</span> Sample Spaces and Random
 Variables</h2>
 <p>A probability model consists of a sample space
@@ -1476,6 +1485,10 @@ are false positives because the condition is rare. Information measures
 later average log evidence across all possible test outcomes. They do
 not replace this posterior calculation for an individual result.</p>
 <h1 data-number="3" id="entropy-and-divergences"><span class="header-section-number">3</span> Entropy and Divergences</h1>
+<p>Entropy averages the surprisal of outcomes under one distribution,
+while divergence compares distributions and mutual information measures
+dependence. This section develops these quantities from log probability,
+with their assumptions and support conditions made explicit.</p>
 <h2 data-number="3.1" id="surprise-as-log-probability"><span class="header-section-number">3.1</span> Surprise as Log
 Probability</h2>
 <p>For an outcome
@@ -2519,6 +2532,11 @@ plug-in mutual information is biased upward in many finite-sample
 settings. See <a href="#estimating-information-from-data">Estimating
 Information from Data</a>.</p>
 <h1 data-number="5" id="lossless-source-coding"><span class="header-section-number">5</span> Lossless Source Coding</h1>
+<p>Lossless source coding turns probabilities into binary
+representations and evaluates their cost by expected code length. The
+section relates prefix-code constraints to entropy bounds, then develops
+practical constructions and the conditions behind block-coding
+results.</p>
 <h2 data-number="5.1" id="from-probabilities-to-code-lengths"><span class="header-section-number">5.1</span> From Probabilities to Code
 Lengths</h2>
 <p>A binary code maps source symbols to finite strings over

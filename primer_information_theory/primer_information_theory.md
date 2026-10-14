@@ -2,6 +2,8 @@
 
 ## Orientation and Notation
 
+The sections that follow build from probability models to information quantities and then to coding consequences. This orientation fixes the scope, reading route, and notation used throughout, so later formulas can be read against a clearly stated model and unit.
+
 ### Purpose, Scope, and Background
 
 Information theory gives precise ways to talk about uncertainty, dependence, representation, and communication. Its central move is to describe a source by a probability law, then ask how that law constrains what can be inferred or encoded. The word *information* here does not mean semantic importance, truth, usefulness, or the number of bytes in a file. Those may matter in an application, but they are not what entropy measures.
@@ -48,6 +50,8 @@ The support of a discrete distribution $P$ is $\operatorname{supp}(P)=\{x:P(x)>0
 The information quantities in Sections 3 and 4 depend on a probability model. In an empirical study, that model may be known, estimated, or implicitly replaced by empirical frequencies. State which case applies. A measured code length under a model is not automatically the entropy of the data-generating process.
 
 ## Probability Foundations
+
+Information quantities are expectations or comparisons under probability laws, so their interpretation depends on specifying the random variables and their joint distribution. This section establishes the sample-space, marginal, conditional, and expectation rules used in the later definitions.
 
 ### Sample Spaces and Random Variables
 
@@ -210,6 +214,8 @@ $$
 The test result is evidence, yet most positive results in this model are false positives because the condition is rare. Information measures later average log evidence across all possible test outcomes. They do not replace this posterior calculation for an individual result.
 
 ## Entropy and Divergences
+
+Entropy averages the surprisal of outcomes under one distribution, while divergence compares distributions and mutual information measures dependence. This section develops these quantities from log probability, with their assumptions and support conditions made explicit.
 
 ### Surprise as Log Probability
 
@@ -617,6 +623,8 @@ print(information)
 The result is approximately $0.278$ bits. This is population mutual information for the specified table, not an estimate from sampled observations. The validation requires a normalised joint distribution. For data frames of observations, first make the state space and handling of unobserved category combinations explicit; `table()` can construct empirical counts, but naive plug-in mutual information is biased upward in many finite-sample settings. See [Estimating Information from Data](#estimating-information-from-data).
 
 ## Lossless Source Coding
+
+Lossless source coding turns probabilities into binary representations and evaluates their cost by expected code length. The section relates prefix-code constraints to entropy bounds, then develops practical constructions and the conditions behind block-coding results.
 
 ### From Probabilities to Code Lengths
 
