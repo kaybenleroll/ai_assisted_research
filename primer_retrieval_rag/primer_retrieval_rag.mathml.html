@@ -671,81 +671,102 @@ Filtered Recall</a></li>
 <li><a href="#dense-failure-cases-worth-inspecting" id="toc-dense-failure-cases-worth-inspecting"><span class="toc-section-number">5.4</span> Dense Failure Cases Worth
 Inspecting</a></li>
 <li><a href="#the-encoding-contract" id="toc-the-encoding-contract"><span class="toc-section-number">5.5</span> The Encoding Contract</a></li>
+<li><a href="#selecting-an-embedding-model" id="toc-selecting-an-embedding-model"><span class="toc-section-number">5.6</span> Selecting an Embedding
+Model</a></li>
 </ul></li>
-<li><a href="#combining-and-refining-candidates" id="toc-combining-and-refining-candidates"><span class="toc-section-number">6</span> Combining and Refining
+<li><a href="#postgresql-vector-search" id="toc-postgresql-vector-search"><span class="toc-section-number">6</span> PostgreSQL Vector Search</a>
+<ul>
+<li><a href="#exact-vector-search-and-metadata-predicates" id="toc-exact-vector-search-and-metadata-predicates"><span class="toc-section-number">6.1</span> Exact Vector Search and Metadata
+Predicates</a></li>
+<li><a href="#postgresql-full-text-ranking-is-not-bm25" id="toc-postgresql-full-text-ranking-is-not-bm25"><span class="toc-section-number">6.2</span> PostgreSQL Full-Text Ranking Is
+Not BM25</a></li>
+<li><a href="#optional-ann-index-and-its-limits" id="toc-optional-ann-index-and-its-limits"><span class="toc-section-number">6.3</span> Optional ANN Index and Its
+Limits</a></li>
+<li><a href="#choosing-a-search-store" id="toc-choosing-a-search-store"><span class="toc-section-number">6.4</span> Choosing a Search Store</a></li>
+</ul></li>
+<li><a href="#combining-and-refining-candidates" id="toc-combining-and-refining-candidates"><span class="toc-section-number">7</span> Combining and Refining
 Candidates</a>
 <ul>
-<li><a href="#reranking-must-be-able-to-change-the-order" id="toc-reranking-must-be-able-to-change-the-order"><span class="toc-section-number">6.1</span> Reranking Must Be Able to Change
+<li><a href="#reranking-must-be-able-to-change-the-order" id="toc-reranking-must-be-able-to-change-the-order"><span class="toc-section-number">7.1</span> Reranking Must Be Able to Change
 the Order</a></li>
-<li><a href="#worked-example-one-query-through-the-funnel" id="toc-worked-example-one-query-through-the-funnel"><span class="toc-section-number">6.2</span> Worked Example: One Query Through
+<li><a href="#worked-example-one-query-through-the-funnel" id="toc-worked-example-one-query-through-the-funnel"><span class="toc-section-number">7.2</span> Worked Example: One Query Through
 the Funnel</a></li>
-<li><a href="#routing-and-bounded-decomposition" id="toc-routing-and-bounded-decomposition"><span class="toc-section-number">6.3</span> Routing and Bounded
+<li><a href="#routing-and-bounded-decomposition" id="toc-routing-and-bounded-decomposition"><span class="toc-section-number">7.3</span> Routing and Bounded
 Decomposition</a></li>
-<li><a href="#context-packing-can-destroy-the-qualification" id="toc-context-packing-can-destroy-the-qualification"><span class="toc-section-number">6.4</span> Context Packing Can Destroy the
+<li><a href="#context-packing-can-destroy-the-qualification" id="toc-context-packing-can-destroy-the-qualification"><span class="toc-section-number">7.4</span> Context Packing Can Destroy the
 Qualification</a></li>
 </ul></li>
-<li><a href="#from-retrieved-passages-to-a-supported-answer" id="toc-from-retrieved-passages-to-a-supported-answer"><span class="toc-section-number">7</span> From Retrieved Passages to a
+<li><a href="#from-retrieved-passages-to-a-supported-answer" id="toc-from-retrieved-passages-to-a-supported-answer"><span class="toc-section-number">8</span> From Retrieved Passages to a
 Supported Answer</a>
 <ul>
-<li><a href="#map-claims-to-passages" id="toc-map-claims-to-passages"><span class="toc-section-number">7.1</span> Map Claims to Passages</a></li>
-<li><a href="#a-claim-ledger-and-an-explicit-packing-budget" id="toc-a-claim-ledger-and-an-explicit-packing-budget"><span class="toc-section-number">7.2</span> A Claim Ledger and an Explicit
+<li><a href="#map-claims-to-passages" id="toc-map-claims-to-passages"><span class="toc-section-number">8.1</span> Map Claims to Passages</a></li>
+<li><a href="#a-claim-ledger-and-an-explicit-packing-budget" id="toc-a-claim-ledger-and-an-explicit-packing-budget"><span class="toc-section-number">8.2</span> A Claim Ledger and an Explicit
 Packing Budget</a></li>
-<li><a href="#supported-partial-answers" id="toc-supported-partial-answers"><span class="toc-section-number">7.3</span> Supported Partial Answers</a></li>
-<li><a href="#conflict-missing-evidence-and-abstention" id="toc-conflict-missing-evidence-and-abstention"><span class="toc-section-number">7.4</span> Conflict, Missing Evidence, and
+<li><a href="#supported-partial-answers" id="toc-supported-partial-answers"><span class="toc-section-number">8.3</span> Supported Partial Answers</a></li>
+<li><a href="#conflict-missing-evidence-and-abstention" id="toc-conflict-missing-evidence-and-abstention"><span class="toc-section-number">8.4</span> Conflict, Missing Evidence, and
 Abstention</a></li>
 </ul></li>
-<li><a href="#evaluating-the-whole-pipeline" id="toc-evaluating-the-whole-pipeline"><span class="toc-section-number">8</span> Evaluating the Whole Pipeline</a>
+<li><a href="#evaluating-the-whole-pipeline" id="toc-evaluating-the-whole-pipeline"><span class="toc-section-number">9</span> Evaluating the Whole Pipeline</a>
 <ul>
-<li><a href="#labels-that-describe-the-actual-question" id="toc-labels-that-describe-the-actual-question"><span class="toc-section-number">8.1</span> Labels That Describe the Actual
+<li><a href="#labels-that-describe-the-actual-question" id="toc-labels-that-describe-the-actual-question"><span class="toc-section-number">9.1</span> Labels That Describe the Actual
 Question</a></li>
-<li><a href="#per-query-recall-and-reciprocal-rank" id="toc-per-query-recall-and-reciprocal-rank"><span class="toc-section-number">8.2</span> Per-Query Recall and Reciprocal
+<li><a href="#per-query-recall-and-reciprocal-rank" id="toc-per-query-recall-and-reciprocal-rank"><span class="toc-section-number">9.2</span> Per-Query Recall and Reciprocal
 Rank</a></li>
-<li><a href="#a-metric-calculation-fixture-for-baselines-and-ablations" id="toc-a-metric-calculation-fixture-for-baselines-and-ablations"><span class="toc-section-number">8.3</span> A Metric Calculation Fixture for
+<li><a href="#a-metric-calculation-fixture-for-baselines-and-ablations" id="toc-a-metric-calculation-fixture-for-baselines-and-ablations"><span class="toc-section-number">9.3</span> A Metric Calculation Fixture for
 Baselines and Ablations</a></li>
-<li><a href="#answer-judgements-and-worked-failure-diagnosis" id="toc-answer-judgements-and-worked-failure-diagnosis"><span class="toc-section-number">8.4</span> Answer Judgements and Worked
+<li><a href="#answer-judgements-and-worked-failure-diagnosis" id="toc-answer-judgements-and-worked-failure-diagnosis"><span class="toc-section-number">9.4</span> Answer Judgements and Worked
 Failure Diagnosis</a></li>
-<li><a href="#sufficient-evidence-and-paired-comparisons" id="toc-sufficient-evidence-and-paired-comparisons"><span class="toc-section-number">8.5</span> Sufficient Evidence and Paired
+<li><a href="#sufficient-evidence-and-paired-comparisons" id="toc-sufficient-evidence-and-paired-comparisons"><span class="toc-section-number">9.5</span> Sufficient Evidence and Paired
 Comparisons</a></li>
-<li><a href="#a-release-gate-that-can-refuse-an-attractive-score" id="toc-a-release-gate-that-can-refuse-an-attractive-score"><span class="toc-section-number">8.6</span> A Release Gate That Can Refuse an
+<li><a href="#a-release-gate-that-can-refuse-an-attractive-score" id="toc-a-release-gate-that-can-refuse-an-attractive-score"><span class="toc-section-number">9.6</span> A Release Gate That Can Refuse an
 Attractive Score</a></li>
 </ul></li>
-<li><a href="#operating-and-updating-a-retrieval-system" id="toc-operating-and-updating-a-retrieval-system"><span class="toc-section-number">9</span> Operating and Updating a Retrieval
+<li><a href="#operating-and-updating-a-retrieval-system" id="toc-operating-and-updating-a-retrieval-system"><span class="toc-section-number">10</span> Operating and Updating a Retrieval
 System</a>
 <ul>
-<li><a href="#worked-update-publication-rollback-and-withdrawal" id="toc-worked-update-publication-rollback-and-withdrawal"><span class="toc-section-number">9.1</span> Worked Update, Publication,
+<li><a href="#worked-update-publication-rollback-and-withdrawal" id="toc-worked-update-publication-rollback-and-withdrawal"><span class="toc-section-number">10.1</span> Worked Update, Publication,
 Rollback, and Withdrawal</a></li>
-<li><a href="#cache-identity-freshness-and-operating-evidence" id="toc-cache-identity-freshness-and-operating-evidence"><span class="toc-section-number">9.2</span> Cache Identity, Freshness, and
+<li><a href="#cache-identity-freshness-and-operating-evidence" id="toc-cache-identity-freshness-and-operating-evidence"><span class="toc-section-number">10.2</span> Cache Identity, Freshness, and
 Operating Evidence</a></li>
-<li><a href="#deadlines-degradation-and-replayable-incidents" id="toc-deadlines-degradation-and-replayable-incidents"><span class="toc-section-number">9.3</span> Deadlines, Degradation, and
+<li><a href="#deadlines-degradation-and-replayable-incidents" id="toc-deadlines-degradation-and-replayable-incidents"><span class="toc-section-number">10.3</span> Deadlines, Degradation, and
 Replayable Incidents</a></li>
 </ul></li>
-<li><a href="#security-and-trust-boundary-walkthroughs" id="toc-security-and-trust-boundary-walkthroughs"><span class="toc-section-number">10</span> Security and Trust-Boundary
+<li><a href="#security-and-trust-boundary-walkthroughs" id="toc-security-and-trust-boundary-walkthroughs"><span class="toc-section-number">11</span> Security and Trust-Boundary
 Walkthroughs</a>
 <ul>
-<li><a href="#an-instruction-hidden-in-meeting-evidence" id="toc-an-instruction-hidden-in-meeting-evidence"><span class="toc-section-number">10.1</span> An Instruction Hidden in Meeting
+<li><a href="#an-instruction-hidden-in-meeting-evidence" id="toc-an-instruction-hidden-in-meeting-evidence"><span class="toc-section-number">11.1</span> An Instruction Hidden in Meeting
 Evidence</a></li>
-<li><a href="#a-permission-leak-through-an-answer-cache" id="toc-a-permission-leak-through-an-answer-cache"><span class="toc-section-number">10.2</span> A Permission Leak Through an
+<li><a href="#a-permission-leak-through-an-answer-cache" id="toc-a-permission-leak-through-an-answer-cache"><span class="toc-section-number">11.2</span> A Permission Leak Through an
 Answer Cache</a></li>
-<li><a href="#source-intake-and-derived-data-boundaries" id="toc-source-intake-and-derived-data-boundaries"><span class="toc-section-number">10.3</span> Source Intake and Derived-Data
+<li><a href="#source-intake-and-derived-data-boundaries" id="toc-source-intake-and-derived-data-boundaries"><span class="toc-section-number">11.3</span> Source Intake and Derived-Data
 Boundaries</a></li>
 </ul></li>
-<li><a href="#exercises-and-worked-solutions" id="toc-exercises-and-worked-solutions"><span class="toc-section-number">11</span> Exercises and Worked Solutions</a>
+<li><a href="#putting-a-corpus-release-together" id="toc-putting-a-corpus-release-together"><span class="toc-section-number">12</span> Putting a Corpus Release
+Together</a>
 <ul>
-<li><a href="#problems" id="toc-problems"><span class="toc-section-number">11.1</span> Problems</a></li>
-<li><a href="#exercise-1-the-superseded-policy-ranks-first" id="toc-exercise-1-the-superseded-policy-ranks-first"><span class="toc-section-number">11.2</span> Exercise 1: The Superseded Policy
+<li><a href="#fix-the-release-inputs" id="toc-fix-the-release-inputs"><span class="toc-section-number">12.1</span> Fix the Release Inputs</a></li>
+<li><a href="#trace-retrieval-evidence-and-generation-separately" id="toc-trace-retrieval-evidence-and-generation-separately"><span class="toc-section-number">12.2</span> Trace Retrieval, Evidence, and
+Generation Separately</a></li>
+<li><a href="#update-withdraw-and-replay" id="toc-update-withdraw-and-replay"><span class="toc-section-number">12.3</span> Update, Withdraw, and
+Replay</a></li>
+</ul></li>
+<li><a href="#exercises-and-worked-solutions" id="toc-exercises-and-worked-solutions"><span class="toc-section-number">13</span> Exercises and Worked Solutions</a>
+<ul>
+<li><a href="#problems" id="toc-problems"><span class="toc-section-number">13.1</span> Problems</a></li>
+<li><a href="#exercise-1-the-superseded-policy-ranks-first" id="toc-exercise-1-the-superseded-policy-ranks-first"><span class="toc-section-number">13.2</span> Exercise 1: The Superseded Policy
 Ranks First</a></li>
-<li><a href="#exercise-2-calculate-mean-recall-and-explain-its-limit" id="toc-exercise-2-calculate-mean-recall-and-explain-its-limit"><span class="toc-section-number">11.3</span> Exercise 2: Calculate Mean Recall
+<li><a href="#exercise-2-calculate-mean-recall-and-explain-its-limit" id="toc-exercise-2-calculate-mean-recall-and-explain-its-limit"><span class="toc-section-number">13.3</span> Exercise 2: Calculate Mean Recall
 and Explain Its Limit</a></li>
-<li><a href="#exercise-3-prevent-document-instructions-from-triggering-actions" id="toc-exercise-3-prevent-document-instructions-from-triggering-actions"><span class="toc-section-number">11.4</span> Exercise 3: Prevent Document
+<li><a href="#exercise-3-prevent-document-instructions-from-triggering-actions" id="toc-exercise-3-prevent-document-instructions-from-triggering-actions"><span class="toc-section-number">13.4</span> Exercise 3: Prevent Document
 Instructions From Triggering Actions</a></li>
-<li><a href="#exercise-4-diagnose-post-filtering-misses" id="toc-exercise-4-diagnose-post-filtering-misses"><span class="toc-section-number">11.5</span> Exercise 4: Diagnose
-Post-Filtering Misses</a></li>
-<li><a href="#exercise-5-assign-claims-to-current-and-historical-evidence" id="toc-exercise-5-assign-claims-to-current-and-historical-evidence"><span class="toc-section-number">11.6</span> Exercise 5: Assign Claims to
+<li><a href="#exercise-4-set-an-authorised-recall-promotion-gate" id="toc-exercise-4-set-an-authorised-recall-promotion-gate"><span class="toc-section-number">13.5</span> Exercise 4: Set an
+Authorised-Recall Promotion Gate</a></li>
+<li><a href="#exercise-5-assign-claims-to-current-and-historical-evidence" id="toc-exercise-5-assign-claims-to-current-and-historical-evidence"><span class="toc-section-number">13.6</span> Exercise 5: Assign Claims to
 Current and Historical Evidence</a></li>
-<li><a href="#exercise-6-overlap-without-sufficient-evidence" id="toc-exercise-6-overlap-without-sufficient-evidence"><span class="toc-section-number">11.7</span> Exercise 6: Overlap Without
+<li><a href="#exercise-6-overlap-without-sufficient-evidence" id="toc-exercise-6-overlap-without-sufficient-evidence"><span class="toc-section-number">13.7</span> Exercise 6: Overlap Without
 Sufficient Evidence</a></li>
 </ul></li>
-<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">12</span> Further Reading</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14</span> Further Reading</a></li>
 </ul></div>
 
     </aside>
@@ -787,14 +808,18 @@ comfortable reading Python, basic Structured Query Language (SQL), and
 simple algebra. You need only the general idea that a language model
 produces text from a supplied context; no neural-network training
 experience is assumed.</p>
-<p><em>Verified against primary sources for all sections; unverified
-claims are flagged inline.</em></p>
+<p><em>PostgreSQL 18 and pgvector 0.8.7 implementation details in this
+primer were checked against the linked release-specific primary
+documentation on 14 October 2026. Other version-sensitive claims should
+be checked against the cited release when reproducing them.</em></p>
 <h2 data-number="1.1" id="reading-routes-and-the-system-boundary"><span class="header-section-number">1.1</span> Reading Routes and the System
 Boundary</h2>
 <p>Read <a href="#from-source-documents-to-a-searchable-corpus">the
 corpus chapter</a> first when building a pipeline. It defines identity,
 permissions, time, and extraction. Follow with <a href="#lexical-retrieval-and-query-analysis">lexical retrieval</a>, <a href="#embeddings-and-nearest-neighbour-search">embeddings</a>, and <a href="#combining-and-refining-candidates">candidate refinement</a> to
-establish independently inspectable baselines. <a href="#from-retrieved-passages-to-a-supported-answer">Supported
+establish independently inspectable baselines. The <a href="#postgresql-vector-search">PostgreSQL and pgvector chapter</a>
+connects those ideas to a local database; it does not replace the
+transparent SQLite baseline. <a href="#from-retrieved-passages-to-a-supported-answer">Supported
 answers</a> tests the evidence interface; <a href="#evaluating-the-whole-pipeline">evaluation</a>, <a href="#operating-and-updating-a-retrieval-system">operations</a>, and <a href="#security-and-trust-boundary-walkthroughs">security</a> establish
 what a release must preserve.</p>
 <p>For debugging, inspect the source, extracted representation,
@@ -1496,12 +1521,11 @@ extraction; chunk digests detect changes to retrieval units. None proves
 authenticity unless its expected value comes from a trusted process. A
 newly computed hash of a poisoned document faithfully identifies the
 poisoned bytes.</p>
-<p>The review sample should include a table, a scan, a long section, a
-code block, and a source with changed permissions. Review answer-bearing
-relationships rather than isolated keywords. For A, that means record
-class, seven-year duration, closure as starting event, and hold
-exclusion. The parser can preserve every word and still break those
-relationships.</p>
+<p>Sample tables, scans, long sections, code blocks, and changed
+permissions. Check their source-to-passage relationships using the
+acceptance conditions in “Worked Failure: Extraction Keeps Words but
+Loses Meaning”; do not repeat keyword-presence checks as a proxy for
+evidence integrity.</p>
 <h1 data-number="4" id="lexical-retrieval-and-query-analysis"><span class="header-section-number">4</span> Lexical Retrieval and Query
 Analysis</h1>
 <p>Lexical retrieval offers an inspectable first baseline: the result
@@ -2227,27 +2251,21 @@ for a question requiring both passages, but the equality is incidental.
 For a question answered by A alone, task recall is 1 even though ANN
 neighbour recall remains
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math>.</p>
-<p>The canonical five-passage fixture cannot model a realistic
-high-dimensional neighbourhood. Use a larger, separately versioned
-evaluation corpus to study permission-selective search. Suppose
-permitted records are only a small fraction of a cluster of similar
-restricted material. Retrieving an unrestricted top ten and then
-filtering can yield no permitted result even when a valid neighbour
-exists just beyond the cut-off. The application must prevent restricted
-candidates crossing the trusted retrieval boundary while assessing this
-behaviour.</p>
-<p>Overfetching is a bounded mitigation, not an access policy or a
-guarantee. If ten raw candidates are all forbidden, requesting twenty
-may recover a permitted one or may return twenty forbidden candidates.
-Measure returned count, authorised task recall, search work, and latency
-across permission slices. Do not assume that a global authorised
-fraction predicts local neighbour composition.</p>
-<p>A fallback exact scan over the eligible subset can be reasonable when
-that subset is small enough. Another design uses partitions or a
-documented filter-aware index. Whichever route is chosen, return a
-defined empty or partial result when the budget is exhausted. Silently
-relaxing permissions or changing the requested date to fill the list
-violates the retrieval contract.</p>
+<p>The five-passage fixture cannot model a realistic high-dimensional
+neighbourhood. On a larger, separately versioned set, compare exact
+search over the eligible subset with the chosen ANN route under
+identical dates, permissions, metric, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+Some ANN implementations apply metadata filters during traversal; others
+can return too few eligible results when filtering follows candidate
+selection. Confirm the selected release’s behaviour in its primary
+documentation. Overfetching, iterative scans, partitions, or an exact
+scan of a small eligible subset are implementation choices to measure,
+not substitutes for authorisation. Track eligible task recall and
+returned count, and ensure restricted text, IDs, and scores never cross
+the trusted retrieval boundary. If the search budget is exhausted,
+return a defined empty or partial result rather than relaxing
+permissions or changing the requested date.</p>
 <h2 data-number="5.4" id="dense-failure-cases-worth-inspecting"><span class="header-section-number">5.4</span> Dense Failure Cases Worth
 Inspecting</h2>
 <p>Dense models can match paraphrases while confusing negation, dates,
@@ -2309,6 +2327,27 @@ the geometry or its interpretation; re-embed the corpus as a coherent
 generation, replay the labelled queries, and compare retrieval and
 answer outcomes before switching traffic. Keep the old generation
 available for rollback until the new one is verified.</p>
+<h2 data-number="5.6" id="selecting-an-embedding-model"><span class="header-section-number">5.6</span> Selecting an Embedding
+Model</h2>
+<p>Select a model for the intended retrieval task and operating
+constraints, not from one headline score. Build a labelled set from the
+target corpus with representative query wording, languages, domain
+terms, difficult historical or restricted near-matches, and questions
+that need multiple passages. Measure candidate recall at the depth your
+reranker or packer can use, then assess answer support and access
+outcomes separately. Public suites such as <a href="https://arxiv.org/abs/2210.07316">MTEB</a> compare varied tasks;
+their aggregate results do not predict performance on this
+collection.</p>
+<p>Before adoption, verify from the model publisher’s primary
+documentation the immutable revision, licence, query and document input
+formats, maximum input length, output dimension, pooling and
+normalisation behaviour, and hardware or service requirements. Check
+that the model supports the collection’s languages and that its
+dimensions and distance assumptions fit the chosen index. Record
+preprocessing and prompts with the model revision. Do not treat a hosted
+endpoint’s stable name as an immutable model version, and do not compare
+a new encoder against old document vectors. This primer names no
+recommended model and reports no model benchmark.</p>
 <p>Truncation is a semantic change, not a harmless storage detail. If a
 passage contains “Incident logs must be retained for seven years from
 closure” followed by a hold exception, but indexing clips the text
@@ -2316,7 +2355,199 @@ before “legal hold”, the vector represents a different evidence object
 from the source chunk. Record the truncated span and test whether
 answer-bearing qualifications survive. Model token counts are not
 interchangeable with whitespace word counts.</p>
-<h1 data-number="6" id="combining-and-refining-candidates"><span class="header-section-number">6</span> Combining and Refining
+<h1 data-number="6" id="postgresql-vector-search"><span class="header-section-number">6</span> PostgreSQL Vector Search</h1>
+<p>The existing SQLite FTS5 example is the primer’s small, transparent
+lexical baseline. PostgreSQL plus <a href="https://github.com/pgvector/pgvector/tree/v0.8.7">pgvector
+0.8.7</a> gives a persistent store for passages, metadata, and vectors,
+with SQL predicates and vector-distance operators in one query.
+PostgreSQL does not create embeddings or enforce the application’s
+complete authorisation policy. This section uses PostgreSQL 18 and the
+versioned <code>pgvector/pgvector:0.8.7-pg18</code> image; pull it once,
+then the example needs no model, hosted service, or account. See the <a href="https://hub.docker.com/r/pgvector/pgvector/tags?name=0.8.7-pg18">image
+publisher’s tag</a> and the <a href="https://www.postgresql.org/docs/18/">PostgreSQL 18
+documentation</a>.</p>
+<p>Start a disposable database bound only to the local machine. The
+command generates an unprinted random password for this container;
+<code>psql</code> connects through the container’s local socket.
+<code>--rm</code> removes the container when it stops, and no database
+volume is mounted.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">--detach</span> <span class="at">--rm</span> <span class="at">--name</span> rag-pgvector-demo <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--publish</span> 127.0.0.1:55432:5432 <span class="dt">\</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--env</span> POSTGRES_PASSWORD=<span class="st">&quot;</span><span class="va">$(</span><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&#39;import secrets; print(secrets.token_hex(24))&#39;</span><span class="va">)</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  pgvector/pgvector:0.8.7-pg18</span></code></pre></div>
+<p>Wait until this readiness check succeeds, then open the local
+<code>psql</code> session. Docker users can substitute
+<code>docker</code> for <code>podman</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec rag-pgvector-demo pg_isready <span class="at">-U</span> postgres</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> exec <span class="at">--interactive</span> <span class="at">--tty</span> rag-pgvector-demo psql <span class="at">-U</span> postgres</span></code></pre></div>
+<p>Create the table and load the existing five canonical passage IDs.
+The two-dimensional vectors are the same pedagogical coordinates used in
+the exact-search example; they are not model embeddings. The abbreviated
+SQL records only the metadata needed for this query, not a complete
+ingestion schema.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> EXTENSION <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> vector;</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> passage (</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    passage_id text <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    parent_id text <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    generation text <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    source_kind text <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    approval_state text <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    valid_from <span class="dt">date</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    valid_until <span class="dt">date</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    allowed_groups text[] <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">body</span> text <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    embedding vector(<span class="dv">2</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    search_vector tsvector <span class="kw">GENERATED</span> ALWAYS <span class="kw">AS</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        (to_tsvector(<span class="st">&#39;english&#39;</span>, <span class="kw">body</span>)) STORED</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> passage (</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    passage_id, parent_id, generation, source_kind, approval_state,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    valid_from, valid_until, allowed_groups, <span class="kw">body</span>, embedding</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>) <span class="kw">VALUES</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>(<span class="st">&#39;policy-2026-01#retention&#39;</span>, <span class="st">&#39;policy-2026-01&#39;</span>, <span class="st">&#39;fixture-rag-v1&#39;</span>,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;policy&#39;</span>, <span class="st">&#39;approved&#39;</span>, <span class="st">&#39;2026-01-01&#39;</span>, <span class="kw">NULL</span>, <span class="dt">ARRAY</span>[<span class="st">&#39;all-staff&#39;</span>],</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;Incident logs must be retained for seven years from closure. &#39;</span> <span class="op">||</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;Records under legal hold are excluded from ordinary deletion &#39;</span> <span class="op">||</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;and remain subject to the hold.&#39;</span>, <span class="st">&#39;[1,0]&#39;</span>),</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>(<span class="st">&#39;policy-2026-01#legal-hold&#39;</span>, <span class="st">&#39;policy-2026-01&#39;</span>, <span class="st">&#39;fixture-rag-v1&#39;</span>,</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;policy&#39;</span>, <span class="st">&#39;approved&#39;</span>, <span class="st">&#39;2026-01-01&#39;</span>, <span class="kw">NULL</span>, <span class="dt">ARRAY</span>[<span class="st">&#39;all-staff&#39;</span>],</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;When Legal places a hold, preserve the identified incident &#39;</span> <span class="op">||</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;records until Legal releases it. The hold overrides the &#39;</span> <span class="op">||</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;ordinary seven-year deletion schedule.&#39;</span>, <span class="st">&#39;[0.6,0.8]&#39;</span>),</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>(<span class="st">&#39;policy-2025-06#retention&#39;</span>, <span class="st">&#39;policy-2025-06&#39;</span>, <span class="st">&#39;fixture-rag-v1&#39;</span>,</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;policy&#39;</span>, <span class="st">&#39;approved&#39;</span>, <span class="st">&#39;2025-06-01&#39;</span>, <span class="st">&#39;2026-01-01&#39;</span>, <span class="dt">ARRAY</span>[<span class="st">&#39;all-staff&#39;</span>],</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;Incident logs must be retained for five years from closure. &#39;</span> <span class="op">||</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;This version was superseded by Policy v3 on 1 January 2026.&#39;</span>, <span class="st">&#39;[0,1]&#39;</span>),</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>(<span class="st">&#39;minutes-2026-02#decision&#39;</span>, <span class="st">&#39;minutes-2026-02&#39;</span>, <span class="st">&#39;fixture-rag-v1&#39;</span>,</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;minutes&#39;</span>, <span class="st">&#39;approved&#39;</span>, <span class="st">&#39;2026-02-18&#39;</span>, <span class="kw">NULL</span>, <span class="dt">ARRAY</span>[<span class="st">&#39;all-staff&#39;</span>],</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;The February meeting confirmed seven years for incident logs &#39;</span> <span class="op">||</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;and asked Legal to document the legal-hold exception.&#39;</span>, <span class="st">&#39;[0.8,0.6]&#39;</span>),</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>(<span class="st">&#39;draft-legal#exception&#39;</span>, <span class="st">&#39;draft-legal&#39;</span>, <span class="st">&#39;fixture-rag-v1&#39;</span>,</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;proposal&#39;</span>, <span class="st">&#39;draft&#39;</span>, <span class="st">&#39;2026-02-20&#39;</span>, <span class="kw">NULL</span>, <span class="dt">ARRAY</span>[<span class="st">&#39;legal&#39;</span>],</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;Draft proposal: regional teams may retain incident logs &#39;</span> <span class="op">||</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;indefinitely when a manager approves an exception.&#39;</span>, <span class="st">&#39;[-1,0]&#39;</span>);</span></code></pre></div>
+<h2 data-number="6.1" id="exact-vector-search-and-metadata-predicates"><span class="header-section-number">6.1</span> Exact Vector Search and
+Metadata Predicates</h2>
+<p>Run this query before creating an ANN index. The predicates define
+the fixture’s eligible policy set for an <code>all-staff</code> caller
+on 28 February 2026; the vector operator only orders those rows. Given
+the fixed coordinates and the two-row limit, the expected IDs are A and
+B. That result follows from the fixture; it is not captured database
+output.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> passage_id, embedding <span class="op">&lt;=&gt;</span> <span class="st">&#39;[0.9,0.1]&#39;</span>:<span class="ch">:vector</span> <span class="kw">AS</span> cosine_distance</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> passage</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> generation <span class="op">=</span> <span class="st">&#39;fixture-rag-v1&#39;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> source_kind <span class="op">=</span> <span class="st">&#39;policy&#39;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> approval_state <span class="op">=</span> <span class="st">&#39;approved&#39;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> valid_from <span class="op">&lt;=</span> <span class="dt">DATE</span> <span class="st">&#39;2026-02-28&#39;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> (valid_until <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">OR</span> <span class="dt">DATE</span> <span class="st">&#39;2026-02-28&#39;</span> <span class="op">&lt;</span> valid_until)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> allowed_groups &amp;&amp; <span class="dt">ARRAY</span>[<span class="st">&#39;all-staff&#39;</span>]:<span class="ch">:text</span>[]</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> embedding <span class="op">&lt;=&gt;</span> <span class="st">&#39;[0.9,0.1]&#39;</span>:<span class="ch">:vector</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">2</span>;</span></code></pre></div>
+<p>This is exact search over the rows left by the SQL predicates. The
+expression <code>embedding &lt;=&gt; query</code> is cosine distance, so
+smaller values sort first. The SQL group predicate illustrates the
+fixture only: trusted caller groups must come from authentication, and
+the application must enforce all source and tenant rules before
+returning text, identifiers, or scores. A filter is a search constraint,
+not an authorisation system.</p>
+<h2 data-number="6.2" id="postgresql-full-text-ranking-is-not-bm25"><span class="header-section-number">6.2</span> PostgreSQL Full-Text Ranking Is
+Not BM25</h2>
+<p>PostgreSQL’s <code>tsvector</code> and <code>tsquery</code> types
+support lexical matching; <code>ts_rank</code> and
+<code>ts_rank_cd</code> rank matches according to PostgreSQL’s
+text-search functions. A GIN index can accelerate matching. These
+functions are not BM25: they do not implement BM25’s term-frequency
+saturation and document-length normalisation. Do not call their scores
+BM25 or compare them directly with cosine distance. PostgreSQL documents
+its <a href="https://www.postgresql.org/docs/18/datatype-textsearch.html">text-search
+types</a>, <a href="https://www.postgresql.org/docs/18/functions-textsearch.html">ranking
+functions</a>, and <a href="https://www.postgresql.org/docs/18/gin.html">GIN indexes</a>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> passage_search_gin <span class="kw">ON</span> passage <span class="kw">USING</span> GIN (search_vector);</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> <span class="kw">query</span> <span class="kw">AS</span> (</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> websearch_to_tsquery(<span class="st">&#39;english&#39;</span>, <span class="st">&#39;ordinary incident logs&#39;</span>) <span class="kw">AS</span> terms</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> passage_id,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>       ts_rank_cd(search_vector, <span class="kw">query</span>.terms) <span class="kw">AS</span> lexical_rank</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> passage <span class="kw">CROSS</span> <span class="kw">JOIN</span> <span class="kw">query</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> search_vector @@ <span class="kw">query</span>.terms</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> lexical_rank <span class="kw">DESC</span>, passage_id</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div>
+<p>This is a PostgreSQL lexical path, while the earlier SQLite code
+remains the executable BM25 teaching calculation. If a PostgreSQL
+deployment specifically needs BM25, select and verify a separate
+implementation rather than treating <code>ts_rank_cd</code> as an
+equivalent.</p>
+<h2 data-number="6.3" id="optional-ann-index-and-its-limits"><span class="header-section-number">6.3</span> Optional ANN Index and Its
+Limits</h2>
+<p>On a larger vector table, pgvector can build an HNSW index with a
+cosine operator class:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> passage_embedding_hnsw</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> passage <span class="kw">USING</span> hnsw (embedding vector_cosine_ops);</span></code></pre></div>
+<p>The five-row fixture is too small to establish a useful ANN result;
+PostgreSQL may choose a sequential scan, and this section reports no
+plan or performance measurement. On a larger corpus, compare ANN with
+exact search using the same snapshot, metric, date and permission
+predicates, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+In pgvector 0.8.7, approximate-index filtering can leave fewer than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+rows because filtering is applied after candidate selection; iterative
+scans and other documented approaches may help, with release-specific
+limits. Confirm operator-class and filtering details in the <a href="https://github.com/pgvector/pgvector/tree/v0.8.7">pgvector 0.8.7
+documentation</a>. Measure overlap with exact neighbours separately from
+labelled task recall. Neither is proof that the returned passages
+support an answer.</p>
+<h2 data-number="6.4" id="choosing-a-search-store"><span class="header-section-number">6.4</span> Choosing a Search Store</h2>
+<p>These options occupy different places in an architecture; the right
+comparison is operational fit and measured behaviour on the intended
+workload, not a general product ranking.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Fit to examine</th>
+<th>Cost or limit to examine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL + pgvector</td>
+<td>Passage metadata and application records already use PostgreSQL; one
+SQL boundary is useful</td>
+<td>ANN filtering, index maintenance, and vector workload alongside
+database traffic; <a href="https://github.com/pgvector/pgvector/tree/v0.8.7">pgvector
+0.8.7</a></td>
+</tr>
+<tr>
+<td>Elasticsearch</td>
+<td>A search cluster is already used for lexical retrieval and vector
+ranking</td>
+<td>Separate indexing and cluster operations; see its <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html">BM25</a>
+and <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html">kNN</a>
+documentation</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>A dedicated vector-search service with payload filtering fits the
+deployment</td>
+<td>Another service and data lifecycle to operate; verify its <a href="https://qdrant.tech/documentation/concepts/filtering/">filtering
+behaviour</a> against the caller’s query mix</td>
+</tr>
+</tbody>
+</table>
+<p>Stop the disposable database when finished; its container and
+anonymous storage are removed.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> stop rag-pgvector-demo</span></code></pre></div>
+<h1 data-number="7" id="combining-and-refining-candidates"><span class="header-section-number">7</span> Combining and Refining
 Candidates</h1>
 <p>Lexical and dense retrieval solve complementary problems. Lexical
 methods such as BM25 are often strong for exact identifiers, uncommon
@@ -2412,7 +2643,7 @@ reaches a generator. Resolve time and authority from metadata and the
 question’s contract, not from RRF arithmetic. Preserve different
 revisions as different stable IDs even if their wording is nearly
 identical.</p>
-<h2 data-number="6.1" id="reranking-must-be-able-to-change-the-order"><span class="header-section-number">6.1</span> Reranking Must Be Able to
+<h2 data-number="7.1" id="reranking-must-be-able-to-change-the-order"><span class="header-section-number">7.1</span> Reranking Must Be Able to
 Change the Order</h2>
 <p>A second-stage reranker receives the query and each candidate
 together and estimates their relevance. A bi-encoder computes vectors
@@ -2473,7 +2704,7 @@ input limit. Bound candidate count and text length, since inference cost
 and latency rise with the number and size of query–passage pairs. If a
 reranker is unavailable, a timeout or error should leave a defined
 fallback order rather than an empty result or uncontrolled retry.</p>
-<h2 data-number="6.2" id="worked-example-one-query-through-the-funnel"><span class="header-section-number">6.2</span> Worked Example: One Query
+<h2 data-number="7.2" id="worked-example-one-query-through-the-funnel"><span class="header-section-number">7.2</span> Worked Example: One Query
 Through the Funnel</h2>
 <p>Use the question “How long do we keep ordinary incident logs, and who
 releases a hold?” The required claims are the seven-year period from
@@ -2551,21 +2782,21 @@ it.</p>
 <p>The fusion implementation below uses the same declared convention:
 one-based ranks, zero contribution for absence, stable-ID deduplication
 within each list, and deterministic ties.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fuse(rankings, c<span class="op">=</span><span class="dv">60</span>):</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> c <span class="op">&lt;</span> <span class="dv">0</span>:</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;c must be non-negative&quot;</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    totals <span class="op">=</span> defaultdict(<span class="bu">float</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ranking <span class="kw">in</span> rankings:</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        unique <span class="op">=</span> <span class="bu">list</span>(<span class="bu">dict</span>.fromkeys(ranking))</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> rank, cid <span class="kw">in</span> <span class="bu">enumerate</span>(unique, <span class="dv">1</span>):</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            totals[cid] <span class="op">+=</span> <span class="dv">1</span> <span class="op">/</span> (c <span class="op">+</span> rank)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(totals.items(), key<span class="op">=</span><span class="kw">lambda</span> item: (<span class="op">-</span>item[<span class="dv">1</span>], item[<span class="dv">0</span>]))</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>fused <span class="op">=</span> fuse([[A, B, D], [D, A]])</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [cid <span class="cf">for</span> cid, score <span class="kw">in</span> fused] <span class="op">==</span> [A, D, B]</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([<span class="bu">round</span>(score, <span class="dv">5</span>) <span class="cf">for</span> cid, score <span class="kw">in</span> fused])</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fuse(rankings, c<span class="op">=</span><span class="dv">60</span>):</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> c <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;c must be non-negative&quot;</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    totals <span class="op">=</span> defaultdict(<span class="bu">float</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ranking <span class="kw">in</span> rankings:</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        unique <span class="op">=</span> <span class="bu">list</span>(<span class="bu">dict</span>.fromkeys(ranking))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> rank, cid <span class="kw">in</span> <span class="bu">enumerate</span>(unique, <span class="dv">1</span>):</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>            totals[cid] <span class="op">+=</span> <span class="dv">1</span> <span class="op">/</span> (c <span class="op">+</span> rank)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(totals.items(), key<span class="op">=</span><span class="kw">lambda</span> item: (<span class="op">-</span>item[<span class="dv">1</span>], item[<span class="dv">0</span>]))</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>fused <span class="op">=</span> fuse([[A, B, D], [D, A]])</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [cid <span class="cf">for</span> cid, score <span class="kw">in</span> fused] <span class="op">==</span> [A, D, B]</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([<span class="bu">round</span>(score, <span class="dv">5</span>) <span class="cf">for</span> cid, score <span class="kw">in</span> fused])</span></code></pre></div>
 <p>The displayed scores are 0.03252, 0.03227, and 0.01613. Full
 precision places A above D. Deduplication prevents a duplicated A inside
 one retriever’s list from receiving an extra vote. Appearing once in
@@ -2582,7 +2813,7 @@ appearances; decreasing it emphasises the earliest positions. Neither
 choice makes a draft authoritative. Candidate depth also matters: a
 deeper list can add a new object or an additional contribution to an
 existing one. Tune these together with the final evidence budget.</p>
-<h2 data-number="6.3" id="routing-and-bounded-decomposition"><span class="header-section-number">6.3</span> Routing and Bounded
+<h2 data-number="7.3" id="routing-and-bounded-decomposition"><span class="header-section-number">7.3</span> Routing and Bounded
 Decomposition</h2>
 <p>Some hard requirements should choose a route before fusion. An
 explicit passage ID calls for an authorised lookup. A historical date
@@ -2608,7 +2839,7 @@ fallback that yields A and D should trigger a partial answer for the
 combined question rather than fabricate Legal’s release authority.
 Availability behaviour is part of answer support, not merely an
 infrastructure concern.</p>
-<h2 data-number="6.4" id="context-packing-can-destroy-the-qualification"><span class="header-section-number">6.4</span> Context Packing Can Destroy the
+<h2 data-number="7.4" id="context-packing-can-destroy-the-qualification"><span class="header-section-number">7.4</span> Context Packing Can Destroy the
 Qualification</h2>
 <p>The final context is not only the top
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
@@ -2619,32 +2850,20 @@ exception, status, source version, and provenance. Select passages
 jointly where their relation matters. Deduplicate repeated copies of the
 same stable passage, but do not deduplicate distinct revisions just
 because their text overlaps.</p>
-<p>The running corpus makes qualification loss concrete. The passage
-<code>policy-2026-01#retention</code> states both the seven-year rule
-and that records under legal hold are excluded from ordinary deletion
-and remain subject to the hold. <code>policy-2026-01#legal-hold</code>
-says preserve identified records until Legal releases them and that the
-hold overrides the ordinary schedule. If a packer keeps only the first
-sentence of the retention passage, it can support “seven years” but
-cannot support “all records are deleted after seven years”. If it keeps
-the second sentence but drops the heading or antecedent, “the hold
-overrides the schedule” may be unclear. If it extracts “seven years” and
-“legal hold” as disconnected snippets, the relation between ordinary
-retention and exception may disappear.</p>
-<p>Consider a strict budget that admits only one short passage. A
-question asks, “Can records under a legal hold be deleted after seven
-years?” Keeping only <code>policy-2026-01#retention</code> truncated
-after its first sentence yields a dangerous answer: “Yes, the ordinary
-period is seven years.” That answer reverses the policy’s qualified
-meaning. For this hold-specific question, complete B alone is
-sufficient: it states preservation until release and that the hold
-overrides the ordinary schedule. For a broader question requiring the
-seven-year period <em>from closure</em> and release authority, A and B
-are jointly necessary. The packer should choose sufficient evidence for
-the actual claims rather than always demanding two passages. The packer
-must be allowed to spend tokens on a necessary qualification, even if
-that means excluding a merely corroborating passage such as
-<code>minutes-2026-02#decision</code>.</p>
+<p>The running corpus makes qualification loss concrete. A states the
+ordinary period and its hold exclusion; B states preservation until
+Legal releases the hold. If a packer keeps only A’s first sentence, it
+can support “seven years” but not “all records are deleted after seven
+years”. If it removes the heading or antecedent from a qualification,
+the remaining phrase may be unclear. Selecting isolated matches can also
+sever the relation between the ordinary rule and its exception.</p>
+<p>For “Can records under a legal hold be deleted after seven years?”,
+complete B alone is sufficient: it states preservation until release and
+that the hold overrides the ordinary schedule. A and B are jointly
+necessary for the broader question about the period from closure and
+release authority. Choose enough evidence for the actual claims; do not
+require two passages for every question or let corroborating D displace
+a necessary qualification.</p>
 <p>Treat packing as a constrained coverage problem. First reserve space
 for stable IDs, source/version, heading path, effective status, and
 complete answer-bearing spans. Then add definitions, adjacent sentences,
@@ -2656,7 +2875,7 @@ middle, and end; include tables where the row value is uninterpretable
 without column headings. A generated summary can be a convenience view,
 but the original passage and offsets must remain available for
 audit.</p>
-<h1 data-number="7" id="from-retrieved-passages-to-a-supported-answer"><span class="header-section-number">7</span> From Retrieved Passages to a
+<h1 data-number="8" id="from-retrieved-passages-to-a-supported-answer"><span class="header-section-number">8</span> From Retrieved Passages to a
 Supported Answer</h1>
 <p>Retrieval-augmented generation (RAG) supplies retrieved text to a
 generative model alongside the question. The architecture does not make
@@ -2706,7 +2925,7 @@ supported by both passages. A citation appended to a paragraph is not
 automatically evidence: the identifier must resolve, the caller must be
 entitled to the source, and the passage must actually bear on the
 attached claim.</p>
-<h2 data-number="7.1" id="map-claims-to-passages"><span class="header-section-number">7.1</span> Map Claims to Passages</h2>
+<h2 data-number="8.1" id="map-claims-to-passages"><span class="header-section-number">8.1</span> Map Claims to Passages</h2>
 <p>Answers often combine several propositions. Split them into material
 claims and check support claim by claim. A passage may be relevant but
 insufficient; multiple passages may jointly establish a conclusion; one
@@ -2778,7 +2997,7 @@ a model returning a citation-shaped string. Resolve each ID against the
 retrieved package, then inspect whether its span supports the claim. If
 the answer contains a number, unit, date, comparison, or exception,
 validate that detail explicitly.</p>
-<h2 data-number="7.2" id="a-claim-ledger-and-an-explicit-packing-budget"><span class="header-section-number">7.2</span> A Claim Ledger and an Explicit
+<h2 data-number="8.2" id="a-claim-ledger-and-an-explicit-packing-budget"><span class="header-section-number">8.2</span> A Claim Ledger and an Explicit
 Packing Budget</h2>
 <p>The evidence package should serve the requested claims rather than a
 fixed number of citations. A useful internal ledger records each claim,
@@ -2788,27 +3007,27 @@ distinguish duration, starting event, exception, and release
 authority.</p>
 <p>For the combined period-and-release question, the ledger might
 be:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;corpus_generation&quot;</span><span class="fu">:</span> <span class="st">&quot;fixture-rag-v1&quot;</span><span class="fu">,</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;index_generation&quot;</span><span class="fu">:</span> <span class="st">&quot;G10&quot;</span><span class="fu">,</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;interpretation_date&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-02-28&quot;</span><span class="fu">,</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;claims&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;Ordinary incident logs are retained seven years from closure.&quot;</span><span class="fu">,</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;support&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;policy-2026-01#retention&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;supported&quot;</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;Preserve held records until Legal releases the hold.&quot;</span><span class="fu">,</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;support&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;policy-2026-01#legal-hold&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;supported&quot;</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;consumed_passages&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;policy-2026-01#retention&quot;</span><span class="ot">,</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;policy-2026-01#legal-hold&quot;</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;corpus_generation&quot;</span><span class="fu">:</span> <span class="st">&quot;fixture-rag-v1&quot;</span><span class="fu">,</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;index_generation&quot;</span><span class="fu">:</span> <span class="st">&quot;G10&quot;</span><span class="fu">,</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;interpretation_date&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-02-28&quot;</span><span class="fu">,</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;claims&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;Ordinary incident logs are retained seven years from closure.&quot;</span><span class="fu">,</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;support&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;policy-2026-01#retention&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;supported&quot;</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;Preserve held records until Legal releases the hold.&quot;</span><span class="fu">,</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;support&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;policy-2026-01#legal-hold&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;supported&quot;</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;consumed_passages&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;policy-2026-01#retention&quot;</span><span class="ot">,</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;policy-2026-01#legal-hold&quot;</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>The consumed-passage list includes every passage sent to the
 generator, not only cited passages. This supports dependency checks when
 content is withdrawn. If D is consumed but omitted from citations, its
@@ -2841,7 +3060,7 @@ such as “draft” becoming “approved”. Numeric and temporal claims also
 need explicit checks. Semantic entailment remains a separate judgement:
 an existing source with the same number is not necessarily evidence for
 the attributed event or scope.</p>
-<h2 data-number="7.3" id="supported-partial-answers"><span class="header-section-number">7.3</span> Supported Partial Answers</h2>
+<h2 data-number="8.3" id="supported-partial-answers"><span class="header-section-number">8.3</span> Supported Partial Answers</h2>
 <p>A partial answer is useful when it tells the reader which requested
 part is established. With A and D but no B, state the ordinary
 seven-year period from closure and hold exclusion, then explain that the
@@ -2858,7 +3077,7 @@ authorised evidence does not establish a Brazilian exception” is bounded
 to the available collection. “Brazil has no exception” asserts a fact
 the collection cannot establish. This wording difference is part of
 correctness, not a cosmetic disclaimer.</p>
-<h2 data-number="7.4" id="conflict-missing-evidence-and-abstention"><span class="header-section-number">7.4</span> Conflict, Missing Evidence, and
+<h2 data-number="8.4" id="conflict-missing-evidence-and-abstention"><span class="header-section-number">8.4</span> Conflict, Missing Evidence, and
 Abstention</h2>
 <p>Absence and conflict are different states. <em>Insufficient
 evidence</em> means no accessible, answer-bearing passage was found or
@@ -2919,7 +3138,7 @@ answerable questions. Citation presence, citation resolution, claim
 coverage, factual support, correct abstention, and permission compliance
 are different measures. A system that improves recall but begins citing
 stale or restricted text has not improved the user-facing result.</p>
-<h1 data-number="8" id="evaluating-the-whole-pipeline"><span class="header-section-number">8</span> Evaluating the Whole
+<h1 data-number="9" id="evaluating-the-whole-pipeline"><span class="header-section-number">9</span> Evaluating the Whole
 Pipeline</h1>
 <p>Evaluate the evidence path before judging the prose. A retrieval
 system can supply a correct policy to a generator that misreads it; it
@@ -2930,7 +3149,7 @@ packed evidence, answer, and citations so that you can distinguish them.
 Link to <a href="../primer_evaluation_loop/primer_evaluation_loop.html">The
 Evaluation Loop</a> for broader rubric design and judge calibration; the
 task here is to make retrieval-specific judgements inspectable.</p>
-<h2 data-number="8.1" id="labels-that-describe-the-actual-question"><span class="header-section-number">8.1</span> Labels That Describe the Actual
+<h2 data-number="9.1" id="labels-that-describe-the-actual-question"><span class="header-section-number">9.1</span> Labels That Describe the Actual
 Question</h2>
 <p>Use the canonical A–E aliases and freeze a serving release, G10, of
 <code>fixture-rag-v1</code>. Use 28 February 2026 as the interpretation
@@ -3034,7 +3253,7 @@ rewarding unnecessary extra retrieval or treating topical similarity as
 complete evidence. In a larger collection, record alternative sufficient
 evidence sets when another authorised passage expresses the same
 facts.</p>
-<h2 data-number="8.2" id="per-query-recall-and-reciprocal-rank"><span class="header-section-number">8.2</span> Per-Query Recall and Reciprocal
+<h2 data-number="9.2" id="per-query-recall-and-reciprocal-rank"><span class="header-section-number">9.2</span> Per-Query Recall and Reciprocal
 Rank</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>q</mi></msub><annotation encoding="application/x-tex">R_q</annotation></semantics></math>
@@ -3175,7 +3394,7 @@ recall because Q3 contributes two required passages; that is a different
 denominator. Report the convention and per-query results. Six
 hand-labelled questions demonstrate arithmetic and failure attribution,
 not deployment accuracy or statistical significance.</p>
-<h2 data-number="8.3" id="a-metric-calculation-fixture-for-baselines-and-ablations"><span class="header-section-number">8.3</span> A Metric Calculation Fixture
+<h2 data-number="9.3" id="a-metric-calculation-fixture-for-baselines-and-ablations"><span class="header-section-number">9.3</span> A Metric Calculation Fixture
 for Baselines and Ablations</h2>
 <p>Use a controlled comparison: the same snapshot, callers, temporal
 rules, two-passage packing budget, and answer contract. First-stage
@@ -3187,40 +3406,40 @@ rankings to score. They are not claimed to be the output of the earlier
 illustrative <code>fuse()</code> call, and none is a measured quality
 claim about a model. If these rankings were produced by a live pipeline,
 derive them in code and retain the inputs alongside the output.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statistics <span class="im">import</span> mean</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A–E are full-ID variables defined with the canonical fixture above.</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [{A}, {B}, {A, B}, {C}, {D}, {E}]</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>lexical <span class="op">=</span> [[A, D, B], [D, B, A], [A, D, B], [C],</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>           [D, A, B], [E, A, B]]</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>dense <span class="op">=</span> [[D, A, B], [A, B, D], [D, A, B], [],</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>         [D, B, A], [A, B, D]]</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>hybrid <span class="op">=</span> [[A, D, B], [A, B, D], [A, D, B], [C],</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>          [D, A, B], [A, E, B]]</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>reranked <span class="op">=</span> [[A, D, B], [B, A, D], [A, B, D], [C],</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>            [D, A, B], [E, A, B]]</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> metrics(ranked, relevant, k<span class="op">=</span><span class="dv">2</span>):</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> relevant:</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;score no-answer queries separately&quot;</span>)</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    top <span class="op">=</span> <span class="bu">list</span>(<span class="bu">dict</span>.fromkeys(ranked))[:k]</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    recall <span class="op">=</span> <span class="bu">len</span>(<span class="bu">set</span>(top) <span class="op">&amp;</span> relevant) <span class="op">/</span> <span class="bu">len</span>(relevant)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    rr <span class="op">=</span> <span class="bu">next</span>((<span class="dv">1</span> <span class="op">/</span> rank <span class="cf">for</span> rank, item <span class="kw">in</span> <span class="bu">enumerate</span>(top, <span class="dv">1</span>)</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>               <span class="cf">if</span> item <span class="kw">in</span> relevant), <span class="fl">0.0</span>)</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> recall, rr</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, rankings <span class="kw">in</span> [(<span class="st">&quot;lexical&quot;</span>, lexical), (<span class="st">&quot;dense&quot;</span>, dense),</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>                       (<span class="st">&quot;hybrid&quot;</span>, hybrid), (<span class="st">&quot;reranked&quot;</span>, reranked)]:</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [metrics(rank, label)</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>              <span class="cf">for</span> rank, label <span class="kw">in</span> <span class="bu">zip</span>(rankings, labels, strict<span class="op">=</span><span class="va">True</span>)]</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="ss">f&quot;recall=</span><span class="sc">{</span>mean(s[<span class="dv">0</span>] <span class="cf">for</span> s <span class="kw">in</span> scores)<span class="sc">:.4f}</span><span class="ss">&quot;</span>,</span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MRR=</span><span class="sc">{</span>mean(s[<span class="dv">1</span>] <span class="cf">for</span> s <span class="kw">in</span> scores)<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> query, (ranked, relevant) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(hybrid, labels, strict<span class="op">=</span><span class="va">True</span>), <span class="dv">1</span>):</span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    recall, rr <span class="op">=</span> metrics(ranked, relevant)</span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Q</span><span class="sc">{</span>query<span class="sc">}</span><span class="ss">: recall=</span><span class="sc">{</span>recall<span class="sc">:.4f}</span><span class="ss">, RR=</span><span class="sc">{</span>rr<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statistics <span class="im">import</span> mean</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A–E are full-ID variables defined with the canonical fixture above.</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [{A}, {B}, {A, B}, {C}, {D}, {E}]</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>lexical <span class="op">=</span> [[A, D, B], [D, B, A], [A, D, B], [C],</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>           [D, A, B], [E, A, B]]</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>dense <span class="op">=</span> [[D, A, B], [A, B, D], [D, A, B], [],</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>         [D, B, A], [A, B, D]]</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>hybrid <span class="op">=</span> [[A, D, B], [A, B, D], [A, D, B], [C],</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>          [D, A, B], [A, E, B]]</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>reranked <span class="op">=</span> [[A, D, B], [B, A, D], [A, B, D], [C],</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>            [D, A, B], [E, A, B]]</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> metrics(ranked, relevant, k<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> relevant:</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;score no-answer queries separately&quot;</span>)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    top <span class="op">=</span> <span class="bu">list</span>(<span class="bu">dict</span>.fromkeys(ranked))[:k]</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    recall <span class="op">=</span> <span class="bu">len</span>(<span class="bu">set</span>(top) <span class="op">&amp;</span> relevant) <span class="op">/</span> <span class="bu">len</span>(relevant)</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    rr <span class="op">=</span> <span class="bu">next</span>((<span class="dv">1</span> <span class="op">/</span> rank <span class="cf">for</span> rank, item <span class="kw">in</span> <span class="bu">enumerate</span>(top, <span class="dv">1</span>)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>               <span class="cf">if</span> item <span class="kw">in</span> relevant), <span class="fl">0.0</span>)</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> recall, rr</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, rankings <span class="kw">in</span> [(<span class="st">&quot;lexical&quot;</span>, lexical), (<span class="st">&quot;dense&quot;</span>, dense),</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>                       (<span class="st">&quot;hybrid&quot;</span>, hybrid), (<span class="st">&quot;reranked&quot;</span>, reranked)]:</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [metrics(rank, label)</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>              <span class="cf">for</span> rank, label <span class="kw">in</span> <span class="bu">zip</span>(rankings, labels, strict<span class="op">=</span><span class="va">True</span>)]</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="ss">f&quot;recall=</span><span class="sc">{</span>mean(s[<span class="dv">0</span>] <span class="cf">for</span> s <span class="kw">in</span> scores)<span class="sc">:.4f}</span><span class="ss">&quot;</span>,</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MRR=</span><span class="sc">{</span>mean(s[<span class="dv">1</span>] <span class="cf">for</span> s <span class="kw">in</span> scores)<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> query, (ranked, relevant) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(hybrid, labels, strict<span class="op">=</span><span class="va">True</span>), <span class="dv">1</span>):</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>    recall, rr <span class="op">=</span> metrics(ranked, relevant)</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Q</span><span class="sc">{</span>query<span class="sc">}</span><span class="ss">: recall=</span><span class="sc">{</span>recall<span class="sc">:.4f}</span><span class="ss">, RR=</span><span class="sc">{</span>rr<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <p>The deterministic fixture output is:</p>
 <pre class="text"><code>lexical recall=0.9167 MRR=0.9167
 dense recall=0.5833 MRR=0.4167
@@ -3247,7 +3466,7 @@ its hold exclusion: ranking recall is unchanged, but the usable support
 changes. Measure stage latency, token use, and failures under
 representative concurrency; do not attach invented milliseconds to these
 fixtures.</p>
-<h2 data-number="8.4" id="answer-judgements-and-worked-failure-diagnosis"><span class="header-section-number">8.4</span> Answer Judgements and Worked
+<h2 data-number="9.4" id="answer-judgements-and-worked-failure-diagnosis"><span class="header-section-number">9.4</span> Answer Judgements and Worked
 Failure Diagnosis</h2>
 <p>Assess correctness, coverage, citation resolution, citation support,
 and disclosure separately. Resolution asks whether an ID exists; support
@@ -3325,7 +3544,7 @@ separate measurements for retrieval context and faithful generation;
 that framework’s paper does not establish that an automated judge will
 recognise this corpus’s permission or effective-date rules. Keep
 disputed examples, judge revision, and human adjudication visible.</p>
-<h2 data-number="8.5" id="sufficient-evidence-and-paired-comparisons"><span class="header-section-number">8.5</span> Sufficient Evidence and Paired
+<h2 data-number="9.5" id="sufficient-evidence-and-paired-comparisons"><span class="header-section-number">9.5</span> Sufficient Evidence and Paired
 Comparisons</h2>
 <p>Passage recall treats each labelled object as an item. Some tasks
 need a conjunction of facts, while others admit alternative passages
@@ -3342,15 +3561,15 @@ but insufficient coverage, while one of two alternative complete
 passages may be sufficient.</p>
 <p>The following small kernel uses stable IDs and refuses to label an
 empty list of alternatives as an answerable task.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sufficient_ids(packed_ids, alternatives):</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> alternatives <span class="kw">or</span> <span class="bu">any</span>(<span class="kw">not</span> option <span class="cf">for</span> option <span class="kw">in</span> alternatives):</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;answerable labels need non-empty evidence sets&quot;</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    packed <span class="op">=</span> <span class="bu">set</span>(packed_ids)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">any</span>(option <span class="op">&lt;=</span> packed <span class="cf">for</span> option <span class="kw">in</span> alternatives)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sufficient_ids([A, B], [{A, B}])</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> sufficient_ids([A, D], [{A, B}])</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sufficient_ids([B], [{A}, {B}])</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sufficient_ids(packed_ids, alternatives):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> alternatives <span class="kw">or</span> <span class="bu">any</span>(<span class="kw">not</span> option <span class="cf">for</span> option <span class="kw">in</span> alternatives):</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;answerable labels need non-empty evidence sets&quot;</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    packed <span class="op">=</span> <span class="bu">set</span>(packed_ids)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">any</span>(option <span class="op">&lt;=</span> packed <span class="cf">for</span> option <span class="kw">in</span> alternatives)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sufficient_ids([A, B], [{A, B}])</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> sufficient_ids([A, D], [{A, B}])</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sufficient_ids([B], [{A}, {B}])</span></code></pre></div>
 <p>This checks identity coverage only. A packed A whose exception has
 been clipped still passes an ID check, so span-level or claim-level
 review is necessary. Keep the source text, excerpt offsets, and
@@ -3380,7 +3599,7 @@ over-abstention on answerable questions too: a system can avoid
 unsupported claims by refusing everything. A useful gate requires both
 supported completion where evidence exists and bounded refusal where it
 does not.</p>
-<h2 data-number="8.6" id="a-release-gate-that-can-refuse-an-attractive-score"><span class="header-section-number">8.6</span> A Release Gate That Can Refuse
+<h2 data-number="9.6" id="a-release-gate-that-can-refuse-an-attractive-score"><span class="header-section-number">9.6</span> A Release Gate That Can Refuse
 an Attractive Score</h2>
 <p>For this tutorial, require all six answerable questions to receive
 sufficient authorised evidence and correctly supported complete answers.
@@ -3403,7 +3622,7 @@ defined interval. These are proposed requirements, not measurements or
 universal defaults. If policy requires immediate revocation, a
 background purge alone cannot meet it: deny access through serving
 policy first, then remove stored copies asynchronously.</p>
-<h1 data-number="9" id="operating-and-updating-a-retrieval-system"><span class="header-section-number">9</span> Operating and Updating a
+<h1 data-number="10" id="operating-and-updating-a-retrieval-system"><span class="header-section-number">10</span> Operating and Updating a
 Retrieval System</h1>
 <p>An index release combines source versions, extraction, chunks,
 lexical representations, vectors, metadata, and query code. Record their
@@ -3420,7 +3639,7 @@ stores. “Atomic” describes that pointer switch, not a distributed
 transaction across arbitrary databases. Requests should bind to one
 manifest and reject missing components rather than quietly mixing
 generations.</p>
-<h2 data-number="9.1" id="worked-update-publication-rollback-and-withdrawal"><span class="header-section-number">9.1</span> Worked Update, Publication,
+<h2 data-number="10.1" id="worked-update-publication-rollback-and-withdrawal"><span class="header-section-number">10.1</span> Worked Update, Publication,
 Rollback, and Withdrawal</h2>
 <p>Start with G10 serving the canonical corpus. The following extension
 is hypothetical; it does not alter the evaluation fixture. On 13 October
@@ -3524,7 +3743,7 @@ replicas, exports, and backups. Retained audit evidence may require a
 separate restricted lifecycle; an inaccessible backup is not
 automatically proof of completed erasure. A recovery process must replay
 later withdrawal records before allowing restored data to serve.</p>
-<h2 data-number="9.2" id="cache-identity-freshness-and-operating-evidence"><span class="header-section-number">9.2</span> Cache Identity, Freshness, and
+<h2 data-number="10.2" id="cache-identity-freshness-and-operating-evidence"><span class="header-section-number">10.2</span> Cache Identity, Freshness, and
 Operating Evidence</h2>
 <p>A response cache stores conclusions derived from evidence, so its
 dependencies matter as much as its key. Record every supporting source
@@ -3534,15 +3753,15 @@ retrieval, reranking, evidence, and answer caches. If that dependency
 graph is unavailable, conservatively clear the affected cache scope.</p>
 <p>An application cache key can include the following fields; this is a
 design sketch, not a universal implementation.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;tenant&quot;</span><span class="fu">:</span> <span class="st">&quot;example-organisation&quot;</span><span class="fu">,</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;subject&quot;</span><span class="fu">:</span> <span class="st">&quot;authenticated-user-id&quot;</span><span class="fu">,</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions_revision&quot;</span><span class="fu">:</span> <span class="st">&quot;p17&quot;</span><span class="fu">,</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;index_generation&quot;</span><span class="fu">:</span> <span class="st">&quot;G11&quot;</span><span class="fu">,</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;effective_interval&quot;</span><span class="fu">:</span> <span class="st">&quot;policy-period-2026-01&quot;</span><span class="fu">,</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;query_digest&quot;</span><span class="fu">:</span> <span class="st">&quot;digest-of-question-and-explicit-filters&quot;</span><span class="fu">,</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;pipeline_revision&quot;</span><span class="fu">:</span> <span class="st">&quot;retrieval-and-prompt-config-r6&quot;</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;tenant&quot;</span><span class="fu">:</span> <span class="st">&quot;example-organisation&quot;</span><span class="fu">,</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;subject&quot;</span><span class="fu">:</span> <span class="st">&quot;authenticated-user-id&quot;</span><span class="fu">,</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions_revision&quot;</span><span class="fu">:</span> <span class="st">&quot;p17&quot;</span><span class="fu">,</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;index_generation&quot;</span><span class="fu">:</span> <span class="st">&quot;G11&quot;</span><span class="fu">,</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;effective_interval&quot;</span><span class="fu">:</span> <span class="st">&quot;policy-period-2026-01&quot;</span><span class="fu">,</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;query_digest&quot;</span><span class="fu">:</span> <span class="st">&quot;digest-of-question-and-explicit-filters&quot;</span><span class="fu">,</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;pipeline_revision&quot;</span><span class="fu">:</span> <span class="st">&quot;retrieval-and-prompt-config-r6&quot;</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>The effective interval changes at a scheduled policy transition even
 if no build occurs that morning. A coarse date bucket that crosses that
 transition is unsafe. User-specific keys are a conservative starting
@@ -3564,7 +3783,7 @@ access and retention controls. A trace needed to debug Q7 must not
 become an operator-readable copy of E. Measure tail latency under load,
 retries, and cache misses; stage medians cannot be added to obtain
 end-to-end p95.</p>
-<h2 data-number="9.3" id="deadlines-degradation-and-replayable-incidents"><span class="header-section-number">9.3</span> Deadlines, Degradation, and
+<h2 data-number="10.3" id="deadlines-degradation-and-replayable-incidents"><span class="header-section-number">10.3</span> Deadlines, Degradation, and
 Replayable Incidents</h2>
 <p>An operational request needs an end-to-end deadline shared by
 retrieval, reranking, packing, generation, and validation. Independent
@@ -3605,7 +3824,7 @@ thresholds and owners for freshness, latency, disclosure, support
 failures, and purge completion. A successful index build establishes
 that a process completed; it does not establish that the published
 answers meet these requirements.</p>
-<h1 data-number="10" id="security-and-trust-boundary-walkthroughs"><span class="header-section-number">10</span> Security and Trust-Boundary
+<h1 data-number="11" id="security-and-trust-boundary-walkthroughs"><span class="header-section-number">11</span> Security and Trust-Boundary
 Walkthroughs</h1>
 <p>Security depends on where information can cross from data into
 instructions, from one principal into another’s access, or from model
@@ -3617,7 +3836,7 @@ access controls, cache isolation, and derived-data deletion as separate
 concerns. The following walkthroughs are design examples using the
 policy corpus, rather than demonstrated attacks on a deployed
 service.</p>
-<h2 data-number="10.1" id="an-instruction-hidden-in-meeting-evidence"><span class="header-section-number">10.1</span> An Instruction Hidden in
+<h2 data-number="11.1" id="an-instruction-hidden-in-meeting-evidence"><span class="header-section-number">11.1</span> An Instruction Hidden in
 Meeting Evidence</h2>
 <p>In a separate adversarial fixture, replace D with a poisoned version
 that preserves its meeting text and appends an instruction. Never
@@ -3664,7 +3883,7 @@ a detection aid: encoded, multilingual, or distributed instructions can
 evade literal patterns. An injected instruction can also contaminate an
 answer without invoking a tool, so assess false policy claims and
 citation manipulation too.</p>
-<h2 data-number="10.2" id="a-permission-leak-through-an-answer-cache"><span class="header-section-number">10.2</span> A Permission Leak Through an
+<h2 data-number="11.2" id="a-permission-leak-through-an-answer-cache"><span class="header-section-number">11.2</span> A Permission Leak Through an
 Answer Cache</h2>
 <p>Consider Q6 from Priya, an authenticated legal-group member. The
 service retrieves E and caches a correct draft summary using only the
@@ -3673,31 +3892,20 @@ submits the identical wording in Q7. A cache hit returns Priya’s answer
 before retrieval or permission checking occurs. No vector-store filter
 failed; the leak happened because a derived response bypassed the access
 boundary.</p>
-<p>The trace should show the cache entry’s creator context, consumed
-evidence IDs, permission revision, and serving decision. Test Priya
-warming the cache followed by Sam querying it. Then reverse the order to
-ensure an unauthorised abstention does not suppress a legal user’s
-permitted answer. Also test identical questions across tenants, a
-citation-link fetch by Sam, and a legal user whose group membership was
-revoked after warming the cache.</p>
-<p>Fix both reuse identity and delivery checks. Authenticate before
-lookup; bind the key to tenant and caller scope; reject stale permission
-revisions; check current access and withdrawal state for the entry’s
-dependencies. If any consumed passage is no longer permitted, invalidate
-and recompute. Merely removing E’s citation from a cached paragraph
-leaves its content disclosed. The citation resolver must independently
-authorise the requested source version, even when its ID is guessed or
-copied. <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html#validate-the-permissions-on-every-request">OWASP’s
+<p>Test both cache warm-up orders: Priya’s permitted answer followed by
+Sam’s Q7 must not disclose E, and Sam’s abstention must not suppress
+Priya’s Q6 answer. Include cross-tenant reuse, a citation-link fetch,
+and revoked membership. The cache key, dependency tracking,
+invalidation, and per-request permission checks are described under <a href="#cache-identity-freshness-and-operating-evidence">Cache Identity,
+Freshness, and Operating Evidence</a>; a valid cached citation still
+needs fresh authorisation at resolution time. <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html#validate-the-permissions-on-every-request">OWASP’s
 authorisation guidance</a> requires permission validation on every
 request.</p>
-<p>The same leak can occur before answer caching. Shared query-rewrite
-caches may preserve secret entities; reranking services may receive
-forbidden passages; debug logs may expose raw candidates. Keep internal
-raw candidate IDs and scores within the trusted retrieval boundary,
-apply authorisation before text reaches another service, and never
-expose forbidden result counts or titles to an unauthorised caller. Test
-failure responses as well as successful answers.</p>
-<h2 data-number="10.3" id="source-intake-and-derived-data-boundaries"><span class="header-section-number">10.3</span> Source Intake and Derived-Data
+<p>Apply the same boundary review to query-rewrite caches, reranking
+services, and logs. Keep raw restricted IDs and scores internal; send
+text only to components authorised to process it, and test error
+responses for leaks through titles, counts, or diagnostics.</p>
+<h2 data-number="11.3" id="source-intake-and-derived-data-boundaries"><span class="header-section-number">11.3</span> Source Intake and Derived-Data
 Boundaries</h2>
 <p>A retrieved document crosses a boundary before it becomes model
 context: the ingestion service must acquire and parse it. Authenticate
@@ -3726,9 +3934,184 @@ For the cache example, it includes caller-bound reuse and current
 dependency checks. A model refusing an injected command is useful
 evidence about that input; it does not replace the application boundary
 or prove resistance to all variants.</p>
-<h1 data-number="11" id="exercises-and-worked-solutions"><span class="header-section-number">11</span> Exercises and Worked
+<h1 data-number="12" id="putting-a-corpus-release-together"><span class="header-section-number">12</span> Putting a Corpus Release
+Together</h1>
+<p>The release path below follows the canonical fixture from ingestion
+to an evaluated answer and then through a policy update. Its five
+passages are synthetic teaching data. Their fixed vectors and
+constructed rankings make the local examples repeatable, but they do not
+model a large semantic corpus or establish production quality. The
+PostgreSQL chapter can be run against these five rows after the pinned
+image has been acquired; this checkout contains no larger corpus
+generator or measured ingestion run, so no throughput or ANN result is
+claimed here.</p>
+<h2 data-number="12.1" id="fix-the-release-inputs"><span class="header-section-number">12.1</span> Fix the Release Inputs</h2>
+<p>Treat <code>fixture-rag-v1</code>, its A–E passage identities, and
+the existing Q1–Q9 labels as immutable inputs. Record source and body
+digests, parser and chunking revisions, the lexical and vector
+generation, ranking configuration, evaluation-label revision, and the
+date and trusted caller groups for each request. For a real corpus-scale
+release, the same manifest must also identify the complete source
+inventory and each batch’s accepted, rejected, retried, and reconciled
+records. Never inflate the evaluation set by cloning A–E under new IDs:
+duplicate passages do not add independent evidence or query
+coverage.</p>
+<p>The following Python-like contract skeleton shows where those records
+move. It is pipeline pseudocode, not runnable code from this repository:
+discovery, storage, and embedding implementations are intentionally
+unspecified. The embedding call is a boundary, not a model or a claim
+about output quality.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>manifest <span class="op">=</span> discover_sources(snapshot<span class="op">=</span>source_snapshot)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>generation <span class="op">=</span> begin_generation(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    manifest_digest<span class="op">=</span>manifest.digest,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    parser_revision<span class="op">=</span>parser_revision,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    chunker_revision<span class="op">=</span>chunker_revision,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    embedding_contract<span class="op">=</span>embedding_contract,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> manifest.batches(size<span class="op">=</span>batch_size):</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    passages, failures <span class="op">=</span> extract_and_chunk(batch, generation<span class="op">=</span>generation)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    upsert_passages(</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        passages,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        key<span class="op">=</span>(generation.<span class="bu">id</span>, <span class="st">&quot;passage_id&quot;</span>, <span class="st">&quot;body_sha256&quot;</span>),</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    vectors <span class="op">=</span> embedding_boundary.encode(</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>        passages, contract<span class="op">=</span>embedding_contract,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    upsert_vectors(</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        vectors,</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        key<span class="op">=</span>(generation.<span class="bu">id</span>, <span class="st">&quot;passage_id&quot;</span>, embedding_contract.revision),</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    commit_checkpoint(generation.<span class="bu">id</span>, batch.last_source_id, failures)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>build_lexical_index(generation.<span class="bu">id</span>)</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>validate_counts_digests_and_labels(generation.<span class="bu">id</span>, manifest)</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>publish_only_if_complete(generation.<span class="bu">id</span>)</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>eligible <span class="op">=</span> enforce_time_and_access(</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    generation.<span class="bu">id</span>, query, trusted_caller, interpretation_date,</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>lexical <span class="op">=</span> lexical_retrieve(query, eligible)</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>dense <span class="op">=</span> vector_retrieve(query, eligible, embedding_boundary)</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>evidence <span class="op">=</span> pack_sufficient_spans(query, fuse_and_rerank(lexical, dense))</span></code></pre></div>
+<p>Resume from the last committed source checkpoint and repeat any
+uncertain batch safely: generation-scoped keys make passage and vector
+upserts idempotent. Do not serve a partly built generation; publish it
+only after reconciliation and the fixed labels pass. The five-passage
+fixture remains the semantic test set, while any separately generated
+scale workload can measure batching and recovery mechanics without being
+scored as independent policy evidence.</p>
+<p>Run the fixed queries under their labelled contexts. Q1 tests the
+current rule from A; Q4 tests historical C on 30 June 2025. Q6 lets a
+legal caller ask about E as a proposal. Q7 must not disclose or confirm
+E to an <code>all-staff</code> caller. Q8 has no evidence for a
+Brazil-specific period, and Q9 has no evidence that the proposal became
+effective policy. These cases exercise time, permission, corpus
+coverage, and premise handling; a generic “no answer” label would hide
+those different requirements.</p>
+<h2 data-number="12.2" id="trace-retrieval-evidence-and-generation-separately"><span class="header-section-number">12.2</span> Trace Retrieval, Evidence, and
+Generation Separately</h2>
+<p>For Q3, “How long do we keep ordinary incident logs, and who releases
+a hold?”, reuse the existing <a href="#worked-example-one-query-through-the-funnel">one-query
+funnel</a>: lexical candidates A, B, D; dense candidates D, A; union A,
+B, D; RRF order A, D, B; illustrative reranked order A, B, D. The
+funnel’s rankings remain constructed examples, not output from
+PostgreSQL or a live embedding model. Bind them to the request’s date,
+caller, source policy, and generation before using them.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Release trace field</th>
+<th>Q3 record</th>
+<th>Review question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request scope</td>
+<td>Date <code>2026-02-28</code>; caller group <code>all-staff</code>;
+policy intent</td>
+<td>Were time and identity supplied by trusted context?</td>
+</tr>
+<tr>
+<td>Corpus and pipeline</td>
+<td><code>fixture-rag-v1</code>; index <code>G10</code>; parser,
+chunker, and query revisions</td>
+<td>Can the request be tied to one coherent generation?</td>
+</tr>
+<tr>
+<td>Eligible evidence</td>
+<td>A, B, D; C is historical for this date; E is inaccessible to this
+caller</td>
+<td>Were hard constraints applied before disclosure?</td>
+</tr>
+<tr>
+<td>Retrieved and ranked</td>
+<td>Existing lexical, dense, RRF, and reranker lists</td>
+<td>Which stage first lost an answer-bearing candidate?</td>
+</tr>
+<tr>
+<td>Packed evidence</td>
+<td>Complete A and B with source versions and spans</td>
+<td>Did both required claims reach generation with their
+qualifications?</td>
+</tr>
+<tr>
+<td>Generated claims</td>
+<td>Seven years from closure; preserve held records until Legal releases
+them</td>
+<td>What did the generator actually assert?</td>
+</tr>
+<tr>
+<td>Validation and evaluation</td>
+<td>First claim supported by A; second by B; Q3 complete</td>
+<td>Do citations resolve and support each claim, and does the case pass
+its label?</td>
+</tr>
+</tbody>
+</table>
+<p>Retrieval establishes candidate discovery. Evidence review
+establishes that authorised, applicable source text was selected and
+preserved. Generation produces claims from the package. Evaluation
+compares each stage and the final answer with fixed labels and release
+criteria. A correct phrase guessed without B is not a supported Q3
+success; strong retrieval metrics do not repair a leak or a clipped
+exception.</p>
+<h2 data-number="12.3" id="update-withdraw-and-replay"><span class="header-section-number">12.3</span> Update, Withdraw, and
+Replay</h2>
+<p>Apply the already described hypothetical v4 transition: eight years
+becomes effective on 1 November 2026, and E is withdrawn. Keep the
+original Q1–Q9 labels attached to the original fixture and policy
+revision; add a separately versioned lifecycle test for the new interval
+and withdrawal. Check 31 October against v3 and 1 November against v4.
+After v4 takes effect, G10 is not a valid rollback target for
+current-policy questions.</p>
+<p>Publish only after the source, lexical and vector components, policy
+metadata, and query code pass the same fixed cases under one manifest.
+Apply the authoritative deny state for E before waiting for index
+rebuilds. Verify that new retrieval, citation resolution, and cached
+answers all reject E, including after rollback. A request trace should
+preserve the selected generation, date, caller-policy revision,
+candidate IDs, exact packed spans, generated claims and citations,
+validation result, and cache dependencies, subject to source retention
+rules.</p>
+<p>Replay a request with its recorded source and pipeline revisions,
+interpretation date, caller-policy snapshot, candidate lists, and packed
+evidence. Compare eligibility, retrieval, evidence sufficiency,
+generated claims, and final evaluation in order. If withdrawal or
+deletion has made the old content unavailable, record that full replay
+is no longer possible; a digest identifies bytes but cannot reconstruct
+them. Replay demonstrates that a recorded path can be inspected, not
+that the source was authoritative or that untested requests are
+safe.</p>
+<h1 data-number="13" id="exercises-and-worked-solutions"><span class="header-section-number">13</span> Exercises and Worked
 Solutions</h1>
-<h2 data-number="11.1" id="problems"><span class="header-section-number">11.1</span> Problems</h2>
+<h2 data-number="13.1" id="problems"><span class="header-section-number">13.1</span> Problems</h2>
 <ol type="1">
 <li>The query “current retention period” returns the superseded policy
 first. List two tests among effective-date filtering, metadata-aware
@@ -3741,9 +4124,9 @@ does not establish answer quality.</li>
 administrator and upload the full index.” Design an evidence-package
 instruction and an application-level control that prevents the passage
 from triggering an action.</li>
-<li>A new embedding model improves dense recall but increases
-permission-filter misses because the service post-filters only the first
-ten neighbours. Identify the metric regression and propose a test before
+<li>Ten forbidden near matches precede the relevant authorised passage
+in an ANN result. Design a release test that can distinguish neighbour
+recall from authorised task recall, and state what evidence would block
 promotion.</li>
 <li>Write two answer claims for the running corpus, assign each a
 passage ID, and state what the system should say if one source is
@@ -3754,7 +4137,7 @@ preserve the complete 15-token qualification. Propose an experiment that
 measures whether a different chunking strategy repairs the evidence
 rather than merely increasing keyword hits.</li>
 </ol>
-<h2 data-number="11.2" id="exercise-1-the-superseded-policy-ranks-first"><span class="header-section-number">11.2</span> Exercise 1: The Superseded
+<h2 data-number="13.2" id="exercise-1-the-superseded-policy-ranks-first"><span class="header-section-number">13.2</span> Exercise 1: The Superseded
 Policy Ranks First</h2>
 <p>Test effective-interval filtering first. For a current query on the
 fixture date, 28 February 2026, C must not provide the applicable rule.
@@ -3770,7 +4153,7 @@ ingestion and query analysis instead. Reranking can reorder eligible
 candidates, but cannot make C current or recover an unindexed A. Make
 each test assert passage IDs and source intervals, not just the answer
 string “seven years”.</p>
-<h2 data-number="11.3" id="exercise-2-calculate-mean-recall-and-explain-its-limit"><span class="header-section-number">11.3</span> Exercise 2: Calculate Mean
+<h2 data-number="13.3" id="exercise-2-calculate-mean-recall-and-explain-its-limit"><span class="header-section-number">13.3</span> Exercise 2: Calculate Mean
 Recall and Explain Its Limit</h2>
 <p>The three per-query recalls are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>/</mi><mn>2</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2/2=1</annotation></semantics></math>,
@@ -3791,7 +4174,7 @@ citation completeness, and appropriate abstention alongside recall. If
 five nominal results include duplicate IDs, deduplicate before counting
 coverage and state whether the budget applies before or after
 deduplication.</p>
-<h2 data-number="11.4" id="exercise-3-prevent-document-instructions-from-triggering-actions"><span class="header-section-number">11.4</span> Exercise 3: Prevent Document
+<h2 data-number="13.4" id="exercise-3-prevent-document-instructions-from-triggering-actions"><span class="header-section-number">13.4</span> Exercise 3: Prevent Document
 Instructions From Triggering Actions</h2>
 <p>Label the passage as untrusted evidence, preserve its source and
 access metadata, and tell the generator to extract supported facts
@@ -3807,24 +4190,24 @@ arguments. Verify that the adversarial fixture creates no action attempt
 and no unauthorised disclosure, then inspect the answer for
 contamination. Prompt-only resistance is insufficient evidence that the
 boundary holds.</p>
-<h2 data-number="11.5" id="exercise-4-diagnose-post-filtering-misses"><span class="header-section-number">11.5</span> Exercise 4: Diagnose
-Post-Filtering Misses</h2>
-<p>Measure recall against authorised relevant passages, not raw nearest
-neighbours. In a separate expanded test fixture, suppose ten forbidden
-near matches occupy the raw top ten and the relevant permitted policy is
-eleventh. Post-filtering returns zero eligible passages, so authorised
-recall is zero even if approximate search perfectly reproduces the exact
-unfiltered top ten. The new embedding model’s raw quality gain does not
-resolve this failure.</p>
-<p>Compare exact search restricted to eligible passages with
-filter-aware search and with bounded overfetch followed by trusted
-filtering. Measure eligible recall, returned result count, latency, and
-zero forbidden exposure. Increasing depth to eleven fixes only this
-constructed case; it is no guarantee for another permission
-distribution. Test restricted-neighbour clusters, empty permitted sets,
-and revoked access before promotion, and fail safely if the chosen index
-cannot meet the authorised contract.</p>
-<h2 data-number="11.6" id="exercise-5-assign-claims-to-current-and-historical-evidence"><span class="header-section-number">11.6</span> Exercise 5: Assign Claims to
+<h2 data-number="13.5" id="exercise-4-set-an-authorised-recall-promotion-gate"><span class="header-section-number">13.5</span> Exercise 4: Set an
+Authorised-Recall Promotion Gate</h2>
+<p>The approximate index can have perfect recall against the unfiltered
+exact top ten and still return no permitted result. Establish the
+exact-neighbour baseline within each query’s authorised set, then run
+the proposed ANN configuration under the same snapshot, query, date,
+caller policy, metric, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+Separately score task-relevant evidence after eligibility and assert
+that no forbidden ID or text crosses the retrieval boundary.</p>
+<p>The test set should include restricted near-match clusters, empty
+permitted sets, and revoked access. Record eligible result count and
+latency as well as task recall. Set acceptable thresholds and the
+zero-exposure condition before comparing configurations; do not treat an
+overfetch depth of eleven as a general fix merely because it retrieves
+the constructed eleventh neighbour. Block promotion if the authorised
+contract fails, even when unfiltered neighbour recall improves.</p>
+<h2 data-number="13.6" id="exercise-5-assign-claims-to-current-and-historical-evidence"><span class="header-section-number">13.6</span> Exercise 5: Assign Claims to
 Current and Historical Evidence</h2>
 <p>Use claim one, “The ordinary incident-log retention period is seven
 years from closure”, supported by A. Use claim two, “Legal releases the
@@ -3841,7 +4224,7 @@ explain the historical change when the question requests it. If metadata
 instead shows genuinely conflicting effective rules, apply documented
 precedence or expose the conflict and abstain from choosing an invented
 resolution.</p>
-<h2 data-number="11.7" id="exercise-6-overlap-without-sufficient-evidence"><span class="header-section-number">11.7</span> Exercise 6: Overlap Without
+<h2 data-number="13.7" id="exercise-6-overlap-without-sufficient-evidence"><span class="header-section-number">13.7</span> Exercise 6: Overlap Without
 Sufficient Evidence</h2>
 <p>The stride is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>12</mn><mo>−</mo><mn>4</mn><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">12-4=8</annotation></semantics></math>,
@@ -3868,7 +4251,7 @@ because A is already a coherent 25-token paragraph. That does not
 establish a universal chunk size for longer documents. Extend the
 experiment to long sections and tables, then check whether parent
 expansion remains permitted and within budget.</p>
-<h1 data-number="12" id="further-reading"><span class="header-section-number">12</span> Further Reading</h1>
+<h1 data-number="14" id="further-reading"><span class="header-section-number">14</span> Further Reading</h1>
 <ul>
 <li><p><a href="https://www.sqlite.org/fts5.html">SQLite FTS5
 Extension</a> — primary documentation for embedded full-text indexing,
