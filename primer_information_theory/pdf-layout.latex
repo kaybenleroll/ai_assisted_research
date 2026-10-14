@@ -1,0 +1,6 @@
+% The exercise headings reach 10.16; article.cls's default subsection
+% number column is too narrow for that label at the chosen font size.
+\makeatletter
+\renewcommand{\l@subsection}{\@dottedtocline{2}{3.8em}{4.2em}}
+\makeatother
+
