@@ -607,7 +607,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Information Theory: Surprise,
 Compression, and Communication</span>
-    <span class="navbar-meta">12 October 2026</span>
+    <span class="navbar-meta">14 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -651,7 +651,7 @@ Markov Chains</a></li>
 </ul></li>
 <li><a href="#continuous-variables-probability-is-mass-density-is-not" id="toc-continuous-variables-probability-is-mass-density-is-not"><span class="toc-section-number">2.4</span> Continuous Variables: Probability
 Is Mass, Density Is Not</a></li>
-<li><a href="#python-and-base-r-inspect-a-joint-law" id="toc-python-and-base-r-inspect-a-joint-law"><span class="toc-section-number">2.5</span> Python and Base R: Inspect a Joint
+<li><a href="#base-r-and-python-inspect-a-joint-law" id="toc-base-r-and-python-inspect-a-joint-law"><span class="toc-section-number">2.5</span> Base R and Python: Inspect a Joint
 Law</a></li>
 </ul></li>
 <li><a href="#entropy-and-divergences" id="toc-entropy-and-divergences"><span class="toc-section-number">3</span> Entropy and Divergences</a>
@@ -676,7 +676,7 @@ Variable</a>
 <li><a href="#continuous-entropy-and-relative-entropy" id="toc-continuous-entropy-and-relative-entropy"><span class="toc-section-number">3.4.1</span> Continuous Entropy and Relative
 Entropy</a></li>
 </ul></li>
-<li><a href="#python-and-base-r-calculations" id="toc-python-and-base-r-calculations"><span class="toc-section-number">3.5</span> Python and Base R
+<li><a href="#base-r-and-python-calculations" id="toc-base-r-and-python-calculations"><span class="toc-section-number">3.5</span> Base R and Python
 Calculations</a></li>
 </ul></li>
 <li><a href="#information-between-variables" id="toc-information-between-variables"><span class="toc-section-number">4</span> Information Between Variables</a>
@@ -694,12 +694,8 @@ Interaction</a></li>
 Inequality</a></li>
 <li><a href="#continuous-variables-and-mutual-information" id="toc-continuous-variables-and-mutual-information"><span class="toc-section-number">4.5</span> Continuous Variables and Mutual
 Information</a></li>
-<li><a href="#python-calculation-from-a-joint-table" id="toc-python-calculation-from-a-joint-table"><span class="toc-section-number">4.6</span> Python Calculation From a Joint
-Table</a>
-<ul>
-<li><a href="#idiomatic-base-r-calculation" id="toc-idiomatic-base-r-calculation"><span class="toc-section-number">4.6.1</span> Idiomatic Base R
-Calculation</a></li>
-</ul></li>
+<li><a href="#base-r-and-python-calculation-from-a-joint-table" id="toc-base-r-and-python-calculation-from-a-joint-table"><span class="toc-section-number">4.6</span> Base R and Python Calculation From
+a Joint Table</a></li>
 </ul></li>
 <li><a href="#lossless-source-coding" id="toc-lossless-source-coding"><span class="toc-section-number">5</span> Lossless Source Coding</a>
 <ul>
@@ -714,7 +710,7 @@ Redundancy Bound</a></li>
 <li><a href="#huffman-coding-and-a-complete-example" id="toc-huffman-coding-and-a-complete-example"><span class="toc-section-number">5.3</span> Huffman Coding and a Complete
 Example</a>
 <ul>
-<li><a href="#python-and-base-r-for-expected-length" id="toc-python-and-base-r-for-expected-length"><span class="toc-section-number">5.3.1</span> Python and Base R for Expected
+<li><a href="#base-r-and-python-for-expected-length" id="toc-base-r-and-python-for-expected-length"><span class="toc-section-number">5.3.1</span> Base R and Python for Expected
 Length</a></li>
 </ul></li>
 <li><a href="#block-coding-and-the-noiseless-source-coding-theorem" id="toc-block-coding-and-the-noiseless-source-coding-theorem"><span class="toc-section-number">5.4</span> Block Coding and the Noiseless
@@ -868,10 +864,17 @@ emphasis is on knowing which quantity answers which question and what
 hypotheses make a theorem true.</p>
 <p>You should know algebra, logarithms, introductory probability, and
 enough calculus to follow expectations and elementary inequalities.
-Familiarity with Python is useful for the examples but not required.
-Examples use Python’s standard library where practical and selected
-idiomatic base R; each is a direct calculation intended to expose
-conventions and assumptions, not a production compressor.</p>
+Basic familiarity with R vectors, matrices, and functions is useful for
+running the examples, but the mathematical explanations do not require
+programming. Examples are available in both R and Python, with R as the
+primary presentation and the default HTML tab. The R examples use base R
+and require no additional packages; the Python examples use the standard
+library except for the empirical mutual-information calculation, which
+requires NumPy. Both implementations remain visible in PDF and print.
+Each is a direct calculation intended to expose conventions and
+assumptions, not a production compressor. Run the code blocks in order
+within each section; later R estimation examples reuse the
+<code>mi_bits()</code> function defined in that section.</p>
 <h2 data-number="1.2" id="reading-route"><span class="header-section-number">1.2</span> Reading Route</h2>
 <p>Start with probability if conditional laws and expectations are
 unfamiliar. Entropy and divergence describe one distribution or compare
@@ -1196,34 +1199,42 @@ the marginal and product rules. Mixed discrete-continuous laws require
 sums and integrals over their respective components. A fully general
 treatment uses probability measures and Radon–Nikodym derivatives; no
 claim here assumes that every distribution has a density.</p>
-<h2 data-number="2.5" id="python-and-base-r-inspect-a-joint-law"><span class="header-section-number">2.5</span> Python and Base R: Inspect a
+<h2 data-number="2.5" id="base-r-and-python-inspect-a-joint-law"><span class="header-section-number">2.5</span> Base R and Python: Inspect a
 Joint Law</h2>
 <p>The same joint table can be represented as a matrix whose rows index
-<span class="math inline">\(X\)</span> and columns index <span class="math inline">\(Y\)</span>. The code checks the total mass and
-computes marginals. In NumPy’s <code>sum</code> method,
-<code>axis=1</code> sums across columns, leaving row totals.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>joint <span class="op">=</span> [[<span class="fl">0.4</span>, <span class="fl">0.1</span>],</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>         [<span class="fl">0.1</span>, <span class="fl">0.4</span>]]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>row_marginals <span class="op">=</span> [<span class="bu">sum</span>(row) <span class="cf">for</span> row <span class="kw">in</span> joint]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>column_marginals <span class="op">=</span> [<span class="bu">sum</span>(joint[i][j] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>))</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> <span class="bu">sum</span>(row_marginals)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(total <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(row_marginals, column_marginals)</span></code></pre></div>
-<p>Base R’s column-major matrix layout is visible here.
-<code>rowSums</code> and <code>colSums</code> avoid indexing conventions
-becoming hidden in a loop.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>joint <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.1</span>,</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.1</span>, <span class="fl">0.4</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>row_marginals <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(joint)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>column_marginals <span class="ot">&lt;-</span> <span class="fu">colSums</span>(joint)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">abs</span>(<span class="fu">sum</span>(joint) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>row_marginals</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>column_marginals</span></code></pre></div>
+<span class="math inline">\(X\)</span> and columns index <span class="math inline">\(Y\)</span>. R fills matrices by column unless
+<code>byrow = TRUE</code> is supplied; here that argument keeps the
+entries in the row order of the displayed table. The code checks that
+the entries are finite, non-negative, and sum to one, then computes
+marginals with <code>rowSums()</code> and <code>colSums()</code>.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>joint <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.1</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.1</span>, <span class="fl">0.4</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">is.finite</span>(joint)), <span class="fu">all</span>(joint <span class="sc">&gt;=</span> <span class="dv">0</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">abs</span>(<span class="fu">sum</span>(joint) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>row_marginals <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(joint)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>column_marginals <span class="ot">&lt;-</span> <span class="fu">colSums</span>(joint)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>row_marginals</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>column_marginals</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>joint <span class="op">=</span> [[<span class="fl">0.4</span>, <span class="fl">0.1</span>],</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>         [<span class="fl">0.1</span>, <span class="fl">0.4</span>]]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> joint <span class="kw">and</span> joint[<span class="dv">0</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(<span class="bu">len</span>(row) <span class="op">==</span> <span class="bu">len</span>(joint[<span class="dv">0</span>]) <span class="cf">for</span> row <span class="kw">in</span> joint)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(isfinite(p) <span class="kw">and</span> p <span class="op">&gt;=</span> <span class="dv">0</span> <span class="cf">for</span> row <span class="kw">in</span> joint <span class="cf">for</span> p <span class="kw">in</span> row)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>row_marginals <span class="op">=</span> [<span class="bu">sum</span>(row) <span class="cf">for</span> row <span class="kw">in</span> joint]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>column_marginals <span class="op">=</span> [<span class="bu">sum</span>(column) <span class="cf">for</span> column <span class="kw">in</span> <span class="bu">zip</span>(<span class="op">*</span>joint)]</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(<span class="bu">sum</span>(row_marginals) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(row_marginals, column_marginals)</span></code></pre></div>
+</div>
+<p>Both marginals are <code>c(0.5, 0.5)</code>, matching the fair-bit
+distributions in the table.</p>
 <p>The probability rules above are enough to begin calculating
 information, but a calculation is meaningful only after the random
 experiment has been specified. A joint table from repeated independent
@@ -1538,56 +1549,88 @@ entropies are individually well-defined and the cancellation is
 legitimate. The KL definition is more robust: differential entropy terms
 may be infinite even when mutual information is finite. See <a href="#continuous-variables-and-mutual-information">Continuous Variables
 and Mutual Information</a>.</p>
-<h2 data-number="3.5" id="python-and-base-r-calculations"><span class="header-section-number">3.5</span> Python and Base R
+<h2 data-number="3.5" id="base-r-and-python-calculations"><span class="header-section-number">3.5</span> Base R and Python
 Calculations</h2>
-<p>For a finite probability vector, define <span class="math inline">\(0\log 0\)</span> by omitting zero terms. Python’s
-<code>math.log2</code> and base R’s <code>log2</code> implement the
-chosen units.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> log2</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entropy(probabilities):</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(p <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">for</span> p <span class="kw">in</span> probabilities):</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probabilities must be non-negative&quot;</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(<span class="bu">sum</span>(probabilities) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&gt;</span> <span class="fl">1e-12</span>:</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probabilities must sum to one&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="bu">sum</span>(p <span class="op">*</span> log2(p) <span class="cf">for</span> p <span class="kw">in</span> probabilities <span class="cf">if</span> p <span class="op">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(entropy([<span class="fl">0.4</span>, <span class="fl">0.6</span>]))</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>entropy <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">abs</span>(<span class="fu">sum</span>(p) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  positive <span class="ot">&lt;-</span> p <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fu">sum</span>(p[positive] <span class="sc">*</span> <span class="fu">log2</span>(p[positive]))</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>))</span></code></pre></div>
-<p>The validation is part of the example: normalising arbitrary
-non-negative weights silently changes the supplied model, so code should
-either require a probability vector or make normalisation an explicit
-operation.</p>
+<p>For a finite probability vector, define <span class="math inline">\(0\log 0\)</span> by omitting zero terms. Base R’s
+<code>log2()</code> gives results in bits. Logical indexing selects the
+positive probabilities before logarithms are evaluated.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>entropy <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(p), <span class="fu">length</span>(p) <span class="sc">&gt;</span> <span class="dv">0</span><span class="dt">L</span>, <span class="fu">all</span>(<span class="fu">is.finite</span>(p)),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">abs</span>(<span class="fu">sum</span>(p) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  positive <span class="ot">&lt;-</span> p <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fu">sum</span>(p[positive] <span class="sc">*</span> <span class="fu">log2</span>(p[positive]))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite, log2</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entropy(probabilities):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    probabilities <span class="op">=</span> <span class="bu">list</span>(probabilities)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> probabilities <span class="kw">or</span> <span class="bu">any</span>(<span class="kw">not</span> isfinite(p) <span class="kw">or</span> p <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">for</span> p <span class="kw">in</span> probabilities):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probabilities must be finite and non-negative&quot;</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">abs</span>(<span class="bu">sum</span>(probabilities) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span>:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probabilities must sum to one&quot;</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="bu">sum</span>(p <span class="op">*</span> log2(p) <span class="cf">for</span> p <span class="kw">in</span> probabilities <span class="cf">if</span> p <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(entropy([<span class="fl">0.4</span>, <span class="fl">0.6</span>]))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(entropy([<span class="fl">0.5</span>, <span class="fl">0.5</span>]))</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(entropy([<span class="dv">1</span>, <span class="dv">0</span>]))</span></code></pre></div>
+</div>
+<p>The results are approximately <span class="math inline">\(0.971\)</span>, <span class="math inline">\(1\)</span>, and <span class="math inline">\(0\)</span> bits. The validation is part of the
+example: normalising arbitrary non-negative weights silently changes the
+supplied model, so code should either require a probability vector or
+make normalisation an explicit operation.</p>
 <p>To compare two distributions, handle support violations before
-evaluating logarithms.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> log2</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_divergence(p, q):</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(p) <span class="op">!=</span> <span class="bu">len</span>(q) <span class="kw">or</span> <span class="bu">abs</span>(<span class="bu">sum</span>(p) <span class="op">-</span> <span class="dv">1</span>) <span class="op">&gt;</span> <span class="fl">1e-12</span>:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;incompatible probability vectors&quot;</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(<span class="bu">sum</span>(q) <span class="op">-</span> <span class="dv">1</span>) <span class="op">&gt;</span> <span class="fl">1e-12</span> <span class="kw">or</span> <span class="bu">any</span>(v <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">for</span> v <span class="kw">in</span> p <span class="op">+</span> q):</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;invalid probability vector&quot;</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(pi <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> qi <span class="op">==</span> <span class="dv">0</span> <span class="cf">for</span> pi, qi <span class="kw">in</span> <span class="bu">zip</span>(p, q)):</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">float</span>(<span class="st">&quot;inf&quot;</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(pi <span class="op">*</span> log2(pi <span class="op">/</span> qi)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>               <span class="cf">for</span> pi, qi <span class="kw">in</span> <span class="bu">zip</span>(p, q) <span class="cf">if</span> pi <span class="op">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kl_divergence([<span class="fl">0.4</span>, <span class="fl">0.6</span>], [<span class="fl">0.5</span>, <span class="fl">0.5</span>]))</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>kl_divergence <span class="ot">&lt;-</span> <span class="cf">function</span>(p, q) {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">length</span>(p) <span class="sc">==</span> <span class="fu">length</span>(q), <span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">all</span>(q <span class="sc">&gt;=</span> <span class="dv">0</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abs</span>(<span class="fu">sum</span>(p) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>, <span class="fu">abs</span>(<span class="fu">sum</span>(q) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">any</span>(p <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> q <span class="sc">==</span> <span class="dv">0</span>)) <span class="fu">return</span>(<span class="cn">Inf</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> p <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(p[keep] <span class="sc">*</span> <span class="fu">log2</span>(p[keep] <span class="sc">/</span> q[keep]))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>), <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span></code></pre></div>
+evaluating logarithms. Supply both vectors in the same category order:
+equal lengths alone do not establish that corresponding entries
+represent the same outcome.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kl_divergence <span class="ot">&lt;-</span> <span class="cf">function</span>(p, q) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(p), <span class="fu">is.numeric</span>(q), <span class="fu">length</span>(p) <span class="sc">&gt;</span> <span class="dv">0</span><span class="dt">L</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">length</span>(p) <span class="sc">==</span> <span class="fu">length</span>(q), <span class="fu">all</span>(<span class="fu">is.finite</span>(p)), <span class="fu">all</span>(<span class="fu">is.finite</span>(q)),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">all</span>(q <span class="sc">&gt;=</span> <span class="dv">0</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abs</span>(<span class="fu">sum</span>(p) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>, <span class="fu">abs</span>(<span class="fu">sum</span>(q) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">any</span>(p <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> q <span class="sc">==</span> <span class="dv">0</span>)) <span class="fu">return</span>(<span class="cn">Inf</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> p <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(p[keep] <span class="sc">*</span> <span class="fu">log2</span>(p[keep] <span class="sc">/</span> q[keep]))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>), <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite, log2</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_divergence(p, q):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    p, q <span class="op">=</span> <span class="bu">list</span>(p), <span class="bu">list</span>(q)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> p <span class="kw">or</span> <span class="bu">len</span>(p) <span class="op">!=</span> <span class="bu">len</span>(q):</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probability vectors must have equal, non-zero lengths&quot;</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> probabilities <span class="kw">in</span> (p, q):</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">any</span>(<span class="kw">not</span> isfinite(v) <span class="kw">or</span> v <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">for</span> v <span class="kw">in</span> probabilities):</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probabilities must be finite and non-negative&quot;</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">abs</span>(<span class="bu">sum</span>(probabilities) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span>:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probabilities must sum to one&quot;</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(pi <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> qi <span class="op">==</span> <span class="dv">0</span> <span class="cf">for</span> pi, qi <span class="kw">in</span> <span class="bu">zip</span>(p, q)):</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">float</span>(<span class="st">&quot;inf&quot;</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(pi <span class="op">*</span> log2(pi <span class="op">/</span> qi) <span class="cf">for</span> pi, qi <span class="kw">in</span> <span class="bu">zip</span>(p, q) <span class="cf">if</span> pi <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kl_divergence([<span class="fl">0.4</span>, <span class="fl">0.6</span>], [<span class="fl">0.5</span>, <span class="fl">0.5</span>]))</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kl_divergence([<span class="fl">0.5</span>, <span class="fl">0.5</span>], [<span class="dv">1</span>, <span class="dv">0</span>]))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kl_divergence([<span class="dv">1</span>, <span class="dv">0</span>], [<span class="fl">0.5</span>, <span class="fl">0.5</span>]))</span></code></pre></div>
+</div>
+<p>The first result is approximately <span class="math inline">\(0.029\)</span> bits; the last two are
+<code>Inf</code> and <span class="math inline">\(1\)</span> bit,
+reproducing the support and direction example above.</p>
 <p>These functions are suitable for small examples. For large or extreme
 probability vectors, compute with stable log-probabilities and avoid
 underflow; do not interpret a tiny negative floating-point result as
@@ -1841,50 +1884,56 @@ covariance of <span class="math inline">\(X\)</span> and <span class="math inlin
 model the MI is generally infinite. Adding measurement noise changes
 that value. State both the distributional family and measurement
 resolution before using correlation as an information proxy.</p>
-<h2 data-number="4.6" id="python-calculation-from-a-joint-table"><span class="header-section-number">4.6</span> Python Calculation From a Joint
-Table</h2>
+<h2 data-number="4.6" id="base-r-and-python-calculation-from-a-joint-table"><span class="header-section-number">4.6</span> Base R and Python Calculation
+From a Joint Table</h2>
 <p>For a small finite joint distribution, mutual information can be
 computed from the ratio of joint mass to the product of marginals. This
-form makes the independence comparison explicit.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> log2</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>joint <span class="op">=</span> [[<span class="fl">0.4</span>, <span class="fl">0.1</span>],</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         [<span class="fl">0.1</span>, <span class="fl">0.4</span>]]</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>px <span class="op">=</span> [<span class="bu">sum</span>(row) <span class="cf">for</span> row <span class="kw">in</span> joint]</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>py <span class="op">=</span> [<span class="bu">sum</span>(joint[i][j] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)]</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>information <span class="op">=</span> <span class="bu">sum</span>(</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    joint[i][j] <span class="op">*</span> log2(joint[i][j] <span class="op">/</span> (px[i] <span class="op">*</span> py[j]))</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> joint[i][j] <span class="op">&gt;</span> <span class="dv">0</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(information)</span></code></pre></div>
+form makes the independence comparison explicit. Matrix margins provide
+the marginals and logical indexing selects positive cells.
+<code>outer()</code> constructs the product-marginal matrix with the
+same dimensions as the joint table.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>joint <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.1</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.1</span>, <span class="fl">0.4</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">is.finite</span>(joint)), <span class="fu">all</span>(joint <span class="sc">&gt;=</span> <span class="dv">0</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">abs</span>(<span class="fu">sum</span>(joint) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(joint)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>py <span class="ot">&lt;-</span> <span class="fu">colSums</span>(joint)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>independent <span class="ot">&lt;-</span> <span class="fu">outer</span>(px, py)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>positive <span class="ot">&lt;-</span> joint <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>information <span class="ot">&lt;-</span> <span class="fu">sum</span>(joint[positive] <span class="sc">*</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">log2</span>(joint[positive] <span class="sc">/</span> independent[positive]))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>information</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite, log2</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>joint <span class="op">=</span> [[<span class="fl">0.4</span>, <span class="fl">0.1</span>],</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>         [<span class="fl">0.1</span>, <span class="fl">0.4</span>]]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> joint <span class="kw">and</span> joint[<span class="dv">0</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(<span class="bu">len</span>(row) <span class="op">==</span> <span class="bu">len</span>(joint[<span class="dv">0</span>]) <span class="cf">for</span> row <span class="kw">in</span> joint)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(isfinite(p) <span class="kw">and</span> p <span class="op">&gt;=</span> <span class="dv">0</span> <span class="cf">for</span> row <span class="kw">in</span> joint <span class="cf">for</span> p <span class="kw">in</span> row)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(<span class="bu">sum</span>(<span class="bu">sum</span>(row) <span class="cf">for</span> row <span class="kw">in</span> joint) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>px <span class="op">=</span> [<span class="bu">sum</span>(row) <span class="cf">for</span> row <span class="kw">in</span> joint]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>py <span class="op">=</span> [<span class="bu">sum</span>(column) <span class="cf">for</span> column <span class="kw">in</span> <span class="bu">zip</span>(<span class="op">*</span>joint)]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>information <span class="op">=</span> <span class="bu">sum</span>(</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    p <span class="op">*</span> log2(p <span class="op">/</span> (px[i] <span class="op">*</span> py[j]))</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, row <span class="kw">in</span> <span class="bu">enumerate</span>(joint) <span class="cf">for</span> j, p <span class="kw">in</span> <span class="bu">enumerate</span>(row)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(information)</span></code></pre></div>
+</div>
 <p>The result is approximately <span class="math inline">\(0.278\)</span> bits. This is population mutual
 information for the specified table, not an estimate from sampled
-observations. For empirical data, zero-count cells, bias, and alphabet
-size affect the estimate; see the later <strong>Estimating Information
-in Practice</strong> section.</p>
-<h3 data-number="4.6.1" id="idiomatic-base-r-calculation"><span class="header-section-number">4.6.1</span> Idiomatic Base R
-Calculation</h3>
-<p>In base R, matrix margins provide the marginals and logical indexing
-selects positive cells. <code>outer</code> constructs the
-product-marginal matrix with the same dimensions as the joint table.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>joint <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.1</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.1</span>, <span class="fl">0.4</span>),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(joint)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>py <span class="ot">&lt;-</span> <span class="fu">colSums</span>(joint)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>independent <span class="ot">&lt;-</span> <span class="fu">outer</span>(px, py)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>positive <span class="ot">&lt;-</span> joint <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>information <span class="ot">&lt;-</span> <span class="fu">sum</span>(joint[positive] <span class="sc">*</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">log2</span>(joint[positive] <span class="sc">/</span> independent[positive]))</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>information</span></code></pre></div>
-<p>This calculation assumes a valid normalised joint distribution. For
-data frames of observations, first make the state space and handling of
-unobserved category combinations explicit; <code>table</code> can
+observations. The validation requires a normalised joint distribution.
+For data frames of observations, first make the state space and handling
+of unobserved category combinations explicit; <code>table()</code> can
 construct empirical counts, but naive plug-in mutual information is
-biased upward in many finite-sample settings.</p>
+biased upward in many finite-sample settings. See <a href="#estimating-information-from-data">Estimating Information from
+Data</a>.</p>
 <h1 data-number="5" id="lossless-source-coding"><span class="header-section-number">5</span> Lossless Source Coding</h1>
 <h2 data-number="5.1" id="from-probabilities-to-code-lengths"><span class="header-section-number">5.1</span> From Probabilities to Code
 Lengths</h2>
@@ -2060,36 +2109,60 @@ choosing the two least probable symbols at each step is optimal. This
 argument assumes symbol-wise coding, binary branches, and known
 probabilities; it says nothing about finite-block global optimality or
 model cost.</p>
-<h3 data-number="5.3.1" id="python-and-base-r-for-expected-length"><span class="header-section-number">5.3.1</span> Python and Base R for
+<h3 data-number="5.3.1" id="base-r-and-python-for-expected-length"><span class="header-section-number">5.3.1</span> Base R and Python for
 Expected Length</h3>
-<p>For a known codebook, expected length is a weighted sum. The check
-below catches a missing symbol or a malformed probability vector but
-does not independently prove prefix-freeness.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>probability <span class="op">=</span> {<span class="st">&quot;a&quot;</span>: <span class="fl">0.4</span>, <span class="st">&quot;b&quot;</span>: <span class="fl">0.3</span>, <span class="st">&quot;c&quot;</span>: <span class="fl">0.2</span>, <span class="st">&quot;d&quot;</span>: <span class="fl">0.1</span>}</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>code <span class="op">=</span> {<span class="st">&quot;a&quot;</span>: <span class="st">&quot;0&quot;</span>, <span class="st">&quot;b&quot;</span>: <span class="st">&quot;10&quot;</span>, <span class="st">&quot;c&quot;</span>: <span class="st">&quot;110&quot;</span>, <span class="st">&quot;d&quot;</span>: <span class="st">&quot;111&quot;</span>}</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> probability.keys() <span class="op">==</span> code.keys()</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(<span class="bu">sum</span>(probability.values()) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(<span class="kw">not</span> right.startswith(left)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>           <span class="cf">for</span> left <span class="kw">in</span> code.values() <span class="cf">for</span> right <span class="kw">in</span> code.values()</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>           <span class="cf">if</span> left <span class="op">!=</span> right)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>expected_length <span class="op">=</span> <span class="bu">sum</span>(probability[symbol] <span class="op">*</span> <span class="bu">len</span>(code[symbol])</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">for</span> symbol <span class="kw">in</span> probability)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(expected_length)</span></code></pre></div>
-<p>In base R, named vectors keep probabilities and code lengths aligned
-by symbol. This computes the cost of the supplied code; it does not
-construct a Huffman tree.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>probability <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="fl">0.4</span>, <span class="at">b =</span> <span class="fl">0.3</span>, <span class="at">c =</span> <span class="fl">0.2</span>, <span class="at">d =</span> <span class="fl">0.1</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="st">&quot;0&quot;</span>, <span class="at">b =</span> <span class="st">&quot;10&quot;</span>, <span class="at">c =</span> <span class="st">&quot;110&quot;</span>, <span class="at">d =</span> <span class="st">&quot;111&quot;</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">identical</span>(<span class="fu">names</span>(probability), <span class="fu">names</span>(code)),</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">abs</span>(<span class="fu">sum</span>(probability) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>expected_length <span class="ot">&lt;-</span> <span class="fu">sum</span>(probability <span class="sc">*</span> <span class="fu">nchar</span>(code))</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>expected_length</span></code></pre></div>
-<p>Avoid presenting a short hand-written tree builder as
-production-quality Huffman code. Tie handling, zero-probability symbols,
-arbitrary alphabets, and canonical-code serialisation deserve deliberate
-design. The example’s purpose is to audit the expected-length
-arithmetic.</p>
+<p>For a known codebook, expected length is a weighted sum. Named
+vectors keep probabilities and codewords aligned by symbol. The checks
+below require matching, unique symbol names, a valid probability vector,
+and distinct binary codewords. They also verify prefix-freeness: for
+each codeword, <code>startsWith()</code> checks whether any other
+codeword begins with it. This computes the cost of the supplied code; it
+does not construct a Huffman tree.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>probability <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="fl">0.4</span>, <span class="at">b =</span> <span class="fl">0.3</span>, <span class="at">c =</span> <span class="fl">0.2</span>, <span class="at">d =</span> <span class="fl">0.1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="st">&quot;0&quot;</span>, <span class="at">b =</span> <span class="st">&quot;10&quot;</span>, <span class="at">c =</span> <span class="st">&quot;110&quot;</span>, <span class="at">d =</span> <span class="st">&quot;111&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">names</span>(probability)), <span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">names</span>(code)),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>          <span class="sc">!</span><span class="fu">anyDuplicated</span>(<span class="fu">names</span>(probability)), <span class="sc">!</span><span class="fu">anyDuplicated</span>(<span class="fu">names</span>(code)),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">setequal</span>(<span class="fu">names</span>(probability), <span class="fu">names</span>(code)),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">all</span>(<span class="fu">is.finite</span>(probability)), <span class="fu">all</span>(probability <span class="sc">&gt;=</span> <span class="dv">0</span>),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">abs</span>(<span class="fu">sum</span>(probability) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> code[<span class="fu">names</span>(probability)]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">anyNA</span>(code), <span class="sc">!</span><span class="fu">anyDuplicated</span>(code), <span class="fu">grepl</span>(<span class="st">&quot;^[01]+$&quot;</span>, code))</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>has_prefix <span class="ot">&lt;-</span> <span class="fu">vapply</span>(<span class="fu">seq_along</span>(code), <span class="cf">function</span>(i) {</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">any</span>(<span class="fu">startsWith</span>(code[<span class="sc">-</span>i], code[i]))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>}, <span class="fu">logical</span>(<span class="dv">1</span>))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">any</span>(has_prefix))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>expected_length <span class="ot">&lt;-</span> <span class="fu">sum</span>(probability <span class="sc">*</span> <span class="fu">nchar</span>(code))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>expected_length</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>probability <span class="op">=</span> {<span class="st">&quot;a&quot;</span>: <span class="fl">0.4</span>, <span class="st">&quot;b&quot;</span>: <span class="fl">0.3</span>, <span class="st">&quot;c&quot;</span>: <span class="fl">0.2</span>, <span class="st">&quot;d&quot;</span>: <span class="fl">0.1</span>}</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>code <span class="op">=</span> {<span class="st">&quot;a&quot;</span>: <span class="st">&quot;0&quot;</span>, <span class="st">&quot;b&quot;</span>: <span class="st">&quot;10&quot;</span>, <span class="st">&quot;c&quot;</span>: <span class="st">&quot;110&quot;</span>, <span class="st">&quot;d&quot;</span>: <span class="st">&quot;111&quot;</span>}</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> probability.keys() <span class="op">==</span> code.keys()</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(isfinite(p) <span class="kw">and</span> p <span class="op">&gt;=</span> <span class="dv">0</span> <span class="cf">for</span> p <span class="kw">in</span> probability.values())</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(<span class="bu">sum</span>(probability.values()) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-12</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> <span class="bu">list</span>(code.values())</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(<span class="bu">isinstance</span>(word, <span class="bu">str</span>) <span class="kw">and</span> word <span class="kw">and</span> <span class="bu">set</span>(word) <span class="op">&lt;=</span> {<span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>}</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>           <span class="cf">for</span> word <span class="kw">in</span> words)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(words)) <span class="op">==</span> <span class="bu">len</span>(words)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(<span class="kw">not</span> right.startswith(left)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>           <span class="cf">for</span> i, left <span class="kw">in</span> <span class="bu">enumerate</span>(words) <span class="cf">for</span> j, right <span class="kw">in</span> <span class="bu">enumerate</span>(words)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>           <span class="cf">if</span> i <span class="op">!=</span> j)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>expected_length <span class="op">=</span> <span class="bu">sum</span>(probability[symbol] <span class="op">*</span> <span class="bu">len</span>(code[symbol])</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">for</span> symbol <span class="kw">in</span> probability)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(expected_length)</span></code></pre></div>
+</div>
+<p>The result is <span class="math inline">\(1.9\)</span> bits per
+symbol, matching the worked calculation. Avoid presenting a short
+hand-written tree builder as production-quality Huffman code. Tie
+handling, zero-probability symbols, arbitrary alphabets, and
+canonical-code serialisation deserve deliberate design. The example
+checks the supplied non-empty codewords and expected-length arithmetic;
+a one-symbol alphabet can instead use an empty codeword when framing
+supplies the symbol count.</p>
 <h2 data-number="5.4" id="block-coding-and-the-noiseless-source-coding-theorem"><span class="header-section-number">5.4</span> Block Coding and the Noiseless
 Source-Coding Theorem</h2>
 <p>Single-symbol codes pay an integer-length penalty on each symbol. A
@@ -2319,42 +2392,55 @@ the maximum over distributions. Likewise, the capacity does not mean
 uncoded bits can be transmitted at that rate with low error. A block
 code is needed to turn the channel’s statistical information supply into
 reliable messages.</p>
-<p>For numerical checks, the following Python function handles endpoints
-without evaluating <span class="math inline">\(\log_2(0)\)</span> and
-computes both quantities separately.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> h2(p):</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> p <span class="op">==</span> <span class="dv">1</span>:</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>p <span class="op">*</span> math.log2(p) <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> p) <span class="op">*</span> math.log2(<span class="dv">1</span> <span class="op">-</span> p)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bsc_mutual_information(input_one, crossover):</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    output_one <span class="op">=</span> crossover <span class="op">+</span> input_one <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> crossover)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h2(output_one) <span class="op">-</span> h2(crossover)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>epsilon <span class="op">=</span> <span class="fl">0.1</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>achieved <span class="op">=</span> bsc_mutual_information(<span class="fl">0.1</span>, epsilon)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>capacity <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> h2(epsilon)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;achieved at a=0.1: </span><span class="sc">{</span>achieved<span class="sc">:.3f}</span><span class="ss"> bits/use&quot;</span>)</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;capacity:          </span><span class="sc">{</span>capacity<span class="sc">:.3f}</span><span class="ss"> bits/use&quot;</span>)</span></code></pre></div>
-<p>An idiomatic base-R calculation can exploit vectorised arithmetic,
-while defining the endpoints explicitly.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  interior <span class="ot">&lt;-</span> p <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> p <span class="sc">&lt;</span> <span class="dv">1</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  out[interior] <span class="ot">&lt;-</span> <span class="sc">-</span>p[interior] <span class="sc">*</span> <span class="fu">log2</span>(p[interior]) <span class="sc">-</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span> <span class="sc">-</span> p[interior]) <span class="sc">*</span> <span class="fu">log2</span>(<span class="dv">1</span> <span class="sc">-</span> p[interior])</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  out</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>output_one <span class="ot">&lt;-</span> epsilon <span class="sc">+</span> a <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> epsilon)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>achieved <span class="ot">&lt;-</span> <span class="fu">h2</span>(output_one) <span class="sc">-</span> <span class="fu">h2</span>(epsilon)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>capacity <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">h2</span>(epsilon)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">input_one =</span> a, <span class="at">achieved_bits_per_use =</span> achieved,</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">capacity_bits_per_use =</span> <span class="fu">rep</span>(capacity, <span class="fu">length</span>(a)))</span></code></pre></div>
+<p>For numerical checks, the following base R function uses vectorised
+arithmetic and defines the endpoints explicitly, avoiding <span class="math inline">\(\log_2(0)\)</span>. It rejects non-finite values
+and probabilities outside <span class="math inline">\([0,1]\)</span>.
+The calculation then reports achieved mutual information and capacity
+separately for two input laws.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(p), <span class="fu">all</span>(<span class="fu">is.finite</span>(p)), <span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> p <span class="sc">&lt;=</span> <span class="dv">1</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  interior <span class="ot">&lt;-</span> p <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> p <span class="sc">&lt;</span> <span class="dv">1</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  out[interior] <span class="ot">&lt;-</span> <span class="sc">-</span>p[interior] <span class="sc">*</span> <span class="fu">log2</span>(p[interior]) <span class="sc">-</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span> <span class="sc">-</span> p[interior]) <span class="sc">*</span> <span class="fu">log2</span>(<span class="dv">1</span> <span class="sc">-</span> p[interior])</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  out</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>output_one <span class="ot">&lt;-</span> epsilon <span class="sc">+</span> a <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> epsilon)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>achieved <span class="ot">&lt;-</span> <span class="fu">h2</span>(output_one) <span class="sc">-</span> <span class="fu">h2</span>(epsilon)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>capacity <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">h2</span>(epsilon)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">input_one =</span> a, <span class="at">achieved_bits_per_use =</span> achieved,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">capacity_bits_per_use =</span> <span class="fu">rep</span>(capacity, <span class="fu">length</span>(a)))</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> h2(p):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> math.isfinite(p) <span class="kw">or</span> <span class="kw">not</span> <span class="dv">0</span> <span class="op">&lt;=</span> p <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;probability must be finite and between zero and one&quot;</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> p <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>p <span class="op">*</span> math.log2(p) <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> p) <span class="op">*</span> math.log2(<span class="dv">1</span> <span class="op">-</span> p)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bsc_mutual_information(input_one, crossover):</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> math.isfinite(input_one) <span class="kw">or</span> <span class="kw">not</span> <span class="dv">0</span> <span class="op">&lt;=</span> input_one <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;input probability must be finite and between zero and one&quot;</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    noise_entropy <span class="op">=</span> h2(crossover)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    output_one <span class="op">=</span> crossover <span class="op">+</span> input_one <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> crossover)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h2(output_one) <span class="op">-</span> noise_entropy</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>epsilon <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>capacity <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> h2(epsilon)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> (<span class="fl">0.1</span>, <span class="fl">0.5</span>):</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    achieved <span class="op">=</span> bsc_mutual_information(a, epsilon)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;a=</span><span class="sc">{</span>a<span class="sc">:.1f}</span><span class="ss">: achieved=</span><span class="sc">{</span>achieved<span class="sc">:.3f}</span><span class="ss">, capacity=</span><span class="sc">{</span>capacity<span class="sc">:.3f}</span><span class="ss"> bits/use&quot;</span>)</span></code></pre></div>
+</div>
 <p>The <span class="math inline">\(a=1/2\)</span> row reaches capacity;
 the <span class="math inline">\(a=0.1\)</span> row does not. Keep those
 labels in plots and tables. A curve of <span class="math inline">\(I_a(X;Y)\)</span> against <span class="math inline">\(a\)</span> is not a curve of capacity unless each
@@ -2976,44 +3062,64 @@ marginals and</p>
 proof that the population variables share information. A null comparison
 that repeats the sampling process clarifies how unusual a value of this
 size would be under independence.</p>
-<p>The following Python snippet computes the plug-in value from a
-contingency table. Zero cells contribute zero; the marginals are kept
-explicit.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> empirical_mi_bits(counts):</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> np.asarray(counts, dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    joint <span class="op">=</span> counts <span class="op">/</span> counts.<span class="bu">sum</span>()</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    px <span class="op">=</span> joint.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    py <span class="op">=</span> joint.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    expected <span class="op">=</span> px <span class="op">@</span> py</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    occupied <span class="op">=</span> joint <span class="op">&gt;</span> <span class="dv">0</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(joint[occupied] <span class="op">*</span> np.log2(</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        joint[occupied] <span class="op">/</span> expected[occupied]</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> np.array([[<span class="dv">12</span>, <span class="dv">8</span>], [<span class="dv">8</span>, <span class="dv">12</span>]])</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;empirical MI: </span><span class="sc">{</span>empirical_mi_bits(counts)<span class="sc">:.3f}</span><span class="ss"> bits/pair&quot;</span>)</span></code></pre></div>
-<p>The analogous base-R form uses matrix margins and indexes only
-positive cells.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mi_bits <span class="ot">&lt;-</span> <span class="cf">function</span>(counts) {</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  joint <span class="ot">&lt;-</span> counts <span class="sc">/</span> <span class="fu">sum</span>(counts)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  expected <span class="ot">&lt;-</span> <span class="fu">outer</span>(<span class="fu">rowSums</span>(joint), <span class="fu">colSums</span>(joint))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  occupied <span class="ot">&lt;-</span> joint <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(joint[occupied] <span class="sc">*</span> <span class="fu">log2</span>(joint[occupied] <span class="sc">/</span> expected[occupied]))</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">8</span>, <span class="dv">12</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mi_bits</span>(counts)</span></code></pre></div>
-<p>These functions return point estimates only. They do not account for
-paired sampling, missing data, repeated subjects, selection of the
-variables after looking at the data, or uncertainty in categories and
+<p>The following base R function computes the plug-in value from a
+contingency table. It requires a numeric matrix or two-way table of
+finite, non-negative counts with a positive, finite total. Matrix
+margins keep the marginals explicit, and logical indexing selects only
+positive cells, so zero cells contribute zero. The Python implementation
+uses NumPy arrays with the same validation; <code>axis=1</code> sums
+across columns to leave row totals, and <code>axis=0</code> leaves
+column totals.</p>
+<div class="code-group">
+<p><strong>R</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mi_bits <span class="ot">&lt;-</span> <span class="cf">function</span>(counts) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.matrix</span>(counts), <span class="fu">is.numeric</span>(counts), <span class="fu">all</span>(<span class="fu">is.finite</span>(counts)),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(counts <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">is.finite</span>(<span class="fu">sum</span>(counts)), <span class="fu">sum</span>(counts) <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  joint <span class="ot">&lt;-</span> counts <span class="sc">/</span> <span class="fu">sum</span>(counts)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  expected <span class="ot">&lt;-</span> <span class="fu">outer</span>(<span class="fu">rowSums</span>(joint), <span class="fu">colSums</span>(joint))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  occupied <span class="ot">&lt;-</span> joint <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(joint[occupied] <span class="sc">*</span> <span class="fu">log2</span>(joint[occupied] <span class="sc">/</span> expected[occupied]))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">8</span>, <span class="dv">12</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mi_bits</span>(counts)</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> empirical_mi_bits(counts):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> np.asarray(counts, dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> counts.ndim <span class="op">!=</span> <span class="dv">2</span> <span class="kw">or</span> counts.size <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;counts must be a non-empty two-dimensional table&quot;</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> np.<span class="bu">all</span>(np.isfinite(counts)) <span class="kw">or</span> np.<span class="bu">any</span>(counts <span class="op">&lt;</span> <span class="dv">0</span>):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;counts must be finite and non-negative&quot;</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> counts.<span class="bu">sum</span>()</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> np.isfinite(total) <span class="kw">or</span> total <span class="op">&lt;=</span> <span class="dv">0</span>:</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;counts must have a positive, finite total&quot;</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    joint <span class="op">=</span> counts <span class="op">/</span> total</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    px <span class="op">=</span> joint.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    py <span class="op">=</span> joint.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    expected <span class="op">=</span> px <span class="op">@</span> py</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    occupied <span class="op">=</span> joint <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.<span class="bu">sum</span>(joint[occupied] <span class="op">*</span> np.log2(</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        joint[occupied] <span class="op">/</span> expected[occupied]</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    )))</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> np.array([[<span class="dv">12</span>, <span class="dv">8</span>], [<span class="dv">8</span>, <span class="dv">12</span>]])</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;empirical MI: </span><span class="sc">{</span>empirical_mi_bits(counts)<span class="sc">:.3f}</span><span class="ss"> bits/pair&quot;</span>)</span></code></pre></div>
+</div>
+<p>The result is approximately <span class="math inline">\(0.029\)</span> bits per pair. This function
+returns a point estimate only. It does not account for the sampling
+design, missing data, repeated subjects, selection of the variables
+after looking at the data, or uncertainty in categories and
 preprocessing. Add those parts to the analysis plan.</p>
 <p>For raw categorical vectors, base R can produce the joint proportions
-without hand-entering a matrix. The factor levels state the planned
-support; unused levels remain visible as zero-count cells. The
-orientation of the table is explicit: rows are source categories and
-columns are observed categories.</p>
+without hand-entering a matrix. Reuse <code>mi_bits()</code> from the
+preceding block. The factor levels state the planned support; unused
+levels remain visible as zero-count cells. The orientation of the table
+is explicit: rows are source categories and columns are observed
+categories.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>source_bit <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>observed_bit <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">table</span>(source_bit, observed_bit)</span>
@@ -3030,10 +3136,10 @@ It does not prove that the population transition probability is zero. If
 a level was impossible by design, document that separately and exclude
 it from models that require positive support.</p>
 <p>We can expose the upward bias under independence with repeated
-simulated samples. This simulation fixes independent fair population
-variables and repeats the same estimator, so its distribution measures
-finite-sample behaviour under a known null rather than uncertainty about
-an unknown real dataset.</p>
+simulated samples, again using <code>mi_bits()</code>. This simulation
+fixes independent fair population variables and repeats the same
+estimator, so its distribution measures finite-sample behaviour under a
+known null rather than uncertainty about an unknown real dataset.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">163</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>null_mi <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="dv">40</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>)</span>

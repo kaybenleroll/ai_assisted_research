@@ -10,7 +10,7 @@ The organising questions are: how uncertain is the next outcome before it arrive
 
 This primer develops the finite-alphabet foundations and the main regular continuous-variable cautions. It is an advanced technical primer rather than a measure-theoretic probability text, a complete coding-theory course, or a communications-engineering handbook. The emphasis is on knowing which quantity answers which question and what hypotheses make a theorem true.
 
-You should know algebra, logarithms, introductory probability, and enough calculus to follow expectations and elementary inequalities. Familiarity with Python is useful for the examples but not required. Examples use Python's standard library where practical and selected idiomatic base R; each is a direct calculation intended to expose conventions and assumptions, not a production compressor.
+You should know algebra, logarithms, introductory probability, and enough calculus to follow expectations and elementary inequalities. Basic familiarity with R vectors, matrices, and functions is useful for running the examples, but the mathematical explanations do not require programming. Examples are available in both R and Python, with R as the primary presentation and the default HTML tab. The R examples use base R and require no additional packages; the Python examples use the standard library except for the empirical mutual-information calculation, which requires NumPy. Both implementations remain visible in PDF and print. Each is a direct calculation intended to expose conventions and assumptions, not a production compressor. Run the code blocks in order within each section; later R estimation examples reuse the `mi_bits()` function defined in that section.
 
 ### Reading Route
 
@@ -148,36 +148,47 @@ A continuous random variable is described by a probability density function (pdf
 
 For jointly continuous variables, the joint density $f_{XY}$ and conditional density $f_{X\mid Y}$ obey integral analogues of the marginal and product rules. Mixed discrete-continuous laws require sums and integrals over their respective components. A fully general treatment uses probability measures and Radon–Nikodym derivatives; no claim here assumes that every distribution has a density.
 
-### Python and Base R: Inspect a Joint Law
+### Base R and Python: Inspect a Joint Law
 
-The same joint table can be represented as a matrix whose rows index $X$ and columns index $Y$. The code checks the total mass and computes marginals. In NumPy's `sum` method, `axis=1` sums across columns, leaving row totals.
+The same joint table can be represented as a matrix whose rows index $X$ and columns index $Y$. R fills matrices by column unless `byrow = TRUE` is supplied; here that argument keeps the entries in the row order of the displayed table. The code checks that the entries are finite, non-negative, and sum to one, then computes marginals with `rowSums()` and `colSums()`.
 
-```python
-joint = [[0.4, 0.1],
-         [0.1, 0.4]]
+::: {.code-group}
 
-row_marginals = [sum(row) for row in joint]
-column_marginals = [sum(joint[i][j] for i in range(2))
-                    for j in range(2)]
-total = sum(row_marginals)
-
-assert abs(total - 1.0) < 1e-12
-print(row_marginals, column_marginals)
-```
-
-Base R's column-major matrix layout is visible here. `rowSums` and `colSums` avoid indexing conventions becoming hidden in a loop.
+**R**
 
 ```r
 joint <- matrix(c(0.4, 0.1,
                   0.1, 0.4),
                 nrow = 2, byrow = TRUE)
 
+stopifnot(all(is.finite(joint)), all(joint >= 0),
+          abs(sum(joint) - 1) < 1e-12)
 row_marginals <- rowSums(joint)
 column_marginals <- colSums(joint)
-stopifnot(abs(sum(joint) - 1) < 1e-12)
 row_marginals
 column_marginals
 ```
+
+**Python**
+
+```python
+from math import isfinite
+
+joint = [[0.4, 0.1],
+         [0.1, 0.4]]
+
+assert joint and joint[0]
+assert all(len(row) == len(joint[0]) for row in joint)
+assert all(isfinite(p) and p >= 0 for row in joint for p in row)
+row_marginals = [sum(row) for row in joint]
+column_marginals = [sum(column) for column in zip(*joint)]
+assert abs(sum(row_marginals) - 1.0) < 1e-12
+print(row_marginals, column_marginals)
+```
+
+:::
+
+Both marginals are `c(0.5, 0.5)`, matching the fair-bit distributions in the table.
 
 The probability rules above are enough to begin calculating information, but a calculation is meaningful only after the random experiment has been specified. A joint table from repeated independent trials describes a different experiment from a single trajectory of a time series. If observations share a latent cause, treating their rows as independent can give apparently precise frequencies while understating uncertainty about the population law. Information identities still hold for the population distribution; what changes is whether the table in hand estimates it reliably.
 
@@ -345,56 +356,62 @@ when $P,Q$ have densities $f,g$ and the integral is defined. Under suitable abso
 
 For jointly continuous variables, mutual information is safely defined as a KL divergence between the joint law and the product of its marginals. It can also be expressed as $h(X)+h(Y)-h(X,Y)$ when these differential entropies are individually well-defined and the cancellation is legitimate. The KL definition is more robust: differential entropy terms may be infinite even when mutual information is finite. See [Continuous Variables and Mutual Information](#continuous-variables-and-mutual-information).
 
-### Python and Base R Calculations
+### Base R and Python Calculations
 
-For a finite probability vector, define $0\log 0$ by omitting zero terms. Python's `math.log2` and base R's `log2` implement the chosen units.
+For a finite probability vector, define $0\log 0$ by omitting zero terms. Base R's `log2()` gives results in bits. Logical indexing selects the positive probabilities before logarithms are evaluated.
 
-```python
-from math import log2
+::: {.code-group}
 
-def entropy(probabilities):
-    if any(p < 0 for p in probabilities):
-        raise ValueError("probabilities must be non-negative")
-    if abs(sum(probabilities) - 1.0) > 1e-12:
-        raise ValueError("probabilities must sum to one")
-    return -sum(p * log2(p) for p in probabilities if p > 0)
-
-print(entropy([0.4, 0.6]))
-```
+**R**
 
 ```r
 entropy <- function(p) {
-  stopifnot(all(p >= 0), abs(sum(p) - 1) < 1e-12)
+  stopifnot(is.numeric(p), length(p) > 0L, all(is.finite(p)),
+            all(p >= 0), abs(sum(p) - 1) < 1e-12)
   positive <- p > 0
   -sum(p[positive] * log2(p[positive]))
 }
 
 entropy(c(0.4, 0.6))
+entropy(c(0.5, 0.5))
+entropy(c(1, 0))
 ```
 
-The validation is part of the example: normalising arbitrary non-negative weights silently changes the supplied model, so code should either require a probability vector or make normalisation an explicit operation.
-
-To compare two distributions, handle support violations before evaluating logarithms.
+**Python**
 
 ```python
-from math import log2
+from math import isfinite, log2
 
-def kl_divergence(p, q):
-    if len(p) != len(q) or abs(sum(p) - 1) > 1e-12:
-        raise ValueError("incompatible probability vectors")
-    if abs(sum(q) - 1) > 1e-12 or any(v < 0 for v in p + q):
-        raise ValueError("invalid probability vector")
-    if any(pi > 0 and qi == 0 for pi, qi in zip(p, q)):
-        return float("inf")
-    return sum(pi * log2(pi / qi)
-               for pi, qi in zip(p, q) if pi > 0)
 
-print(kl_divergence([0.4, 0.6], [0.5, 0.5]))
+def entropy(probabilities):
+    probabilities = list(probabilities)
+    if not probabilities or any(not isfinite(p) or p < 0 for p in probabilities):
+        raise ValueError("probabilities must be finite and non-negative")
+    if not abs(sum(probabilities) - 1.0) < 1e-12:
+        raise ValueError("probabilities must sum to one")
+    return -sum(p * log2(p) for p in probabilities if p > 0)
+
+
+print(entropy([0.4, 0.6]))
+print(entropy([0.5, 0.5]))
+print(entropy([1, 0]))
 ```
+
+:::
+
+The results are approximately $0.971$, $1$, and $0$ bits. The validation is part of the example: normalising arbitrary non-negative weights silently changes the supplied model, so code should either require a probability vector or make normalisation an explicit operation.
+
+To compare two distributions, handle support violations before evaluating logarithms. Supply both vectors in the same category order: equal lengths alone do not establish that corresponding entries represent the same outcome.
+
+::: {.code-group}
+
+**R**
 
 ```r
 kl_divergence <- function(p, q) {
-  stopifnot(length(p) == length(q), all(p >= 0), all(q >= 0),
+  stopifnot(is.numeric(p), is.numeric(q), length(p) > 0L,
+            length(p) == length(q), all(is.finite(p)), all(is.finite(q)),
+            all(p >= 0), all(q >= 0),
             abs(sum(p) - 1) < 1e-12, abs(sum(q) - 1) < 1e-12)
   if (any(p > 0 & q == 0)) return(Inf)
   keep <- p > 0
@@ -402,7 +419,38 @@ kl_divergence <- function(p, q) {
 }
 
 kl_divergence(c(0.4, 0.6), c(0.5, 0.5))
+kl_divergence(c(0.5, 0.5), c(1, 0))
+kl_divergence(c(1, 0), c(0.5, 0.5))
 ```
+
+**Python**
+
+```python
+from math import isfinite, log2
+
+
+def kl_divergence(p, q):
+    p, q = list(p), list(q)
+    if not p or len(p) != len(q):
+        raise ValueError("probability vectors must have equal, non-zero lengths")
+    for probabilities in (p, q):
+        if any(not isfinite(v) or v < 0 for v in probabilities):
+            raise ValueError("probabilities must be finite and non-negative")
+        if not abs(sum(probabilities) - 1.0) < 1e-12:
+            raise ValueError("probabilities must sum to one")
+    if any(pi > 0 and qi == 0 for pi, qi in zip(p, q)):
+        return float("inf")
+    return sum(pi * log2(pi / qi) for pi, qi in zip(p, q) if pi > 0)
+
+
+print(kl_divergence([0.4, 0.6], [0.5, 0.5]))
+print(kl_divergence([0.5, 0.5], [1, 0]))
+print(kl_divergence([1, 0], [0.5, 0.5]))
+```
+
+:::
+
+The first result is approximately $0.029$ bits; the last two are `Inf` and $1$ bit, reproducing the support and direction example above.
 
 These functions are suitable for small examples. For large or extreme probability vectors, compute with stable log-probabilities and avoid underflow; do not interpret a tiny negative floating-point result as evidence that KL divergence is mathematically negative.
 
@@ -518,36 +566,20 @@ For jointly Gaussian scalar variables with non-degenerate variances and correlat
 
 At $\rho=0.6$, the jointly Gaussian formula gives $-\tfrac12\log_2(0.64)\approx0.322$ bits. Because a jointly Gaussian pair with zero correlation is independent, the formula gives zero at $\rho=0$. Neither conclusion extends to an arbitrary joint law. For example, let a symmetric continuous $X$ have finite variance and set $Y=X^2$. The covariance of $X$ and $Y$ can be zero by symmetry while $Y$ is completely determined by $X$; in the ideal noise-free continuous model the MI is generally infinite. Adding measurement noise changes that value. State both the distributional family and measurement resolution before using correlation as an information proxy.
 
-### Python Calculation From a Joint Table
+### Base R and Python Calculation From a Joint Table
 
-For a small finite joint distribution, mutual information can be computed from the ratio of joint mass to the product of marginals. This form makes the independence comparison explicit.
+For a small finite joint distribution, mutual information can be computed from the ratio of joint mass to the product of marginals. This form makes the independence comparison explicit. Matrix margins provide the marginals and logical indexing selects positive cells. `outer()` constructs the product-marginal matrix with the same dimensions as the joint table.
 
-```python
-from math import log2
+::: {.code-group}
 
-joint = [[0.4, 0.1],
-         [0.1, 0.4]]
-px = [sum(row) for row in joint]
-py = [sum(joint[i][j] for i in range(2)) for j in range(2)]
-
-information = sum(
-    joint[i][j] * log2(joint[i][j] / (px[i] * py[j]))
-    for i in range(2) for j in range(2)
-    if joint[i][j] > 0
-)
-print(information)
-```
-
-The result is approximately $0.278$ bits. This is population mutual information for the specified table, not an estimate from sampled observations. For empirical data, zero-count cells, bias, and alphabet size affect the estimate; see the later **Estimating Information in Practice** section.
-
-#### Idiomatic Base R Calculation
-
-In base R, matrix margins provide the marginals and logical indexing selects positive cells. `outer` constructs the product-marginal matrix with the same dimensions as the joint table.
+**R**
 
 ```r
 joint <- matrix(c(0.4, 0.1,
                   0.1, 0.4),
                 nrow = 2, byrow = TRUE)
+stopifnot(all(is.finite(joint)), all(joint >= 0),
+          abs(sum(joint) - 1) < 1e-12)
 px <- rowSums(joint)
 py <- colSums(joint)
 independent <- outer(px, py)
@@ -558,7 +590,31 @@ information <- sum(joint[positive] *
 information
 ```
 
-This calculation assumes a valid normalised joint distribution. For data frames of observations, first make the state space and handling of unobserved category combinations explicit; `table` can construct empirical counts, but naive plug-in mutual information is biased upward in many finite-sample settings.
+**Python**
+
+```python
+from math import isfinite, log2
+
+joint = [[0.4, 0.1],
+         [0.1, 0.4]]
+assert joint and joint[0]
+assert all(len(row) == len(joint[0]) for row in joint)
+assert all(isfinite(p) and p >= 0 for row in joint for p in row)
+assert abs(sum(sum(row) for row in joint) - 1.0) < 1e-12
+px = [sum(row) for row in joint]
+py = [sum(column) for column in zip(*joint)]
+
+information = sum(
+    p * log2(p / (px[i] * py[j]))
+    for i, row in enumerate(joint) for j, p in enumerate(row)
+    if p > 0
+)
+print(information)
+```
+
+:::
+
+The result is approximately $0.278$ bits. This is population mutual information for the specified table, not an estimate from sampled observations. The validation requires a normalised joint distribution. For data frames of observations, first make the state space and handling of unobserved category combinations explicit; `table()` can construct empirical counts, but naive plug-in mutual information is biased upward in many finite-sample settings. See [Estimating Information from Data](#estimating-information-from-data).
 
 ## Lossless Source Coding
 
@@ -646,36 +702,58 @@ The mismatch cost for a fixed integer code is not exactly a KL divergence. KL de
 
 **Proof sketch of Huffman optimality.** In an optimal binary prefix tree, the two least probable symbols can be chosen as sibling leaves at maximum depth: if not, swapping a lower-probability symbol deeper cannot increase cost. Merge those two leaves into a single symbol whose probability is their sum. Any code for the reduced source expands to a code for the original source by appending one bit to each of the two merged symbols; the expected length increases by exactly their combined probability. Induction on alphabet size proves that choosing the two least probable symbols at each step is optimal. This argument assumes symbol-wise coding, binary branches, and known probabilities; it says nothing about finite-block global optimality or model cost.
 
-#### Python and Base R for Expected Length
+#### Base R and Python for Expected Length
 
-For a known codebook, expected length is a weighted sum. The check below catches a missing symbol or a malformed probability vector but does not independently prove prefix-freeness.
+For a known codebook, expected length is a weighted sum. Named vectors keep probabilities and codewords aligned by symbol. The checks below require matching, unique symbol names, a valid probability vector, and distinct binary codewords. They also verify prefix-freeness: for each codeword, `startsWith()` checks whether any other codeword begins with it. This computes the cost of the supplied code; it does not construct a Huffman tree.
+
+::: {.code-group}
+
+**R**
+
+```r
+probability <- c(a = 0.4, b = 0.3, c = 0.2, d = 0.1)
+code <- c(a = "0", b = "10", c = "110", d = "111")
+stopifnot(!is.null(names(probability)), !is.null(names(code)),
+          !anyDuplicated(names(probability)), !anyDuplicated(names(code)),
+          setequal(names(probability), names(code)),
+          all(is.finite(probability)), all(probability >= 0),
+          abs(sum(probability) - 1) < 1e-12)
+code <- code[names(probability)]
+stopifnot(!anyNA(code), !anyDuplicated(code), grepl("^[01]+$", code))
+has_prefix <- vapply(seq_along(code), function(i) {
+  any(startsWith(code[-i], code[i]))
+}, logical(1))
+stopifnot(!any(has_prefix))
+expected_length <- sum(probability * nchar(code))
+expected_length
+```
+
+**Python**
 
 ```python
+from math import isfinite
+
 probability = {"a": 0.4, "b": 0.3, "c": 0.2, "d": 0.1}
 code = {"a": "0", "b": "10", "c": "110", "d": "111"}
 
 assert probability.keys() == code.keys()
+assert all(isfinite(p) and p >= 0 for p in probability.values())
 assert abs(sum(probability.values()) - 1.0) < 1e-12
+words = list(code.values())
+assert all(isinstance(word, str) and word and set(word) <= {"0", "1"}
+           for word in words)
+assert len(set(words)) == len(words)
 assert all(not right.startswith(left)
-           for left in code.values() for right in code.values()
-           if left != right)
+           for i, left in enumerate(words) for j, right in enumerate(words)
+           if i != j)
 expected_length = sum(probability[symbol] * len(code[symbol])
                       for symbol in probability)
 print(expected_length)
 ```
 
-In base R, named vectors keep probabilities and code lengths aligned by symbol. This computes the cost of the supplied code; it does not construct a Huffman tree.
+:::
 
-```r
-probability <- c(a = 0.4, b = 0.3, c = 0.2, d = 0.1)
-code <- c(a = "0", b = "10", c = "110", d = "111")
-stopifnot(identical(names(probability), names(code)),
-          abs(sum(probability) - 1) < 1e-12)
-expected_length <- sum(probability * nchar(code))
-expected_length
-```
-
-Avoid presenting a short hand-written tree builder as production-quality Huffman code. Tie handling, zero-probability symbols, arbitrary alphabets, and canonical-code serialisation deserve deliberate design. The example's purpose is to audit the expected-length arithmetic.
+The result is $1.9$ bits per symbol, matching the worked calculation. Avoid presenting a short hand-written tree builder as production-quality Huffman code. Tie handling, zero-probability symbols, arbitrary alphabets, and canonical-code serialisation deserve deliberate design. The example checks the supplied non-empty codewords and expected-length arithmetic; a one-symbol alphabet can instead use an empty codeword when framing supplies the symbol count.
 
 ### Block Coding and the Noiseless Source-Coding Theorem
 
@@ -772,31 +850,15 @@ $$
 
 The channel has not changed: its capacity remains about $0.531$ bits per use. The particular biased input achieves only about $0.211$ bits per use. Calling $I_{0.1}(X;Y)$ "the capacity" would confuse a value at one operating distribution with the maximum over distributions. Likewise, the capacity does not mean uncoded bits can be transmitted at that rate with low error. A block code is needed to turn the channel's statistical information supply into reliable messages.
 
-For numerical checks, the following Python function handles endpoints without evaluating $\log_2(0)$ and computes both quantities separately.
+For numerical checks, the following base R function uses vectorised arithmetic and defines the endpoints explicitly, avoiding $\log_2(0)$. It rejects non-finite values and probabilities outside $[0,1]$. The calculation then reports achieved mutual information and capacity separately for two input laws.
 
-```python
-import math
+::: {.code-group}
 
-def h2(p):
-    if p == 0 or p == 1:
-        return 0.0
-    return -p * math.log2(p) - (1 - p) * math.log2(1 - p)
-
-def bsc_mutual_information(input_one, crossover):
-    output_one = crossover + input_one * (1 - 2 * crossover)
-    return h2(output_one) - h2(crossover)
-
-epsilon = 0.1
-achieved = bsc_mutual_information(0.1, epsilon)
-capacity = 1 - h2(epsilon)
-print(f"achieved at a=0.1: {achieved:.3f} bits/use")
-print(f"capacity:          {capacity:.3f} bits/use")
-```
-
-An idiomatic base-R calculation can exploit vectorised arithmetic, while defining the endpoints explicitly.
+**R**
 
 ```r
 h2 <- function(p) {
+  stopifnot(is.numeric(p), all(is.finite(p)), all(p >= 0 & p <= 1))
   out <- numeric(length(p))
   interior <- p > 0 & p < 1
   out[interior] <- -p[interior] * log2(p[interior]) -
@@ -812,6 +874,37 @@ capacity <- 1 - h2(epsilon)
 data.frame(input_one = a, achieved_bits_per_use = achieved,
            capacity_bits_per_use = rep(capacity, length(a)))
 ```
+
+**Python**
+
+```python
+import math
+
+
+def h2(p):
+    if not math.isfinite(p) or not 0 <= p <= 1:
+        raise ValueError("probability must be finite and between zero and one")
+    if p == 0 or p == 1:
+        return 0.0
+    return -p * math.log2(p) - (1 - p) * math.log2(1 - p)
+
+
+def bsc_mutual_information(input_one, crossover):
+    if not math.isfinite(input_one) or not 0 <= input_one <= 1:
+        raise ValueError("input probability must be finite and between zero and one")
+    noise_entropy = h2(crossover)
+    output_one = crossover + input_one * (1 - 2 * crossover)
+    return h2(output_one) - noise_entropy
+
+
+epsilon = 0.1
+capacity = 1 - h2(epsilon)
+for a in (0.1, 0.5):
+    achieved = bsc_mutual_information(a, epsilon)
+    print(f"a={a:.1f}: achieved={achieved:.3f}, capacity={capacity:.3f} bits/use")
+```
+
+:::
 
 The $a=1/2$ row reaches capacity; the $a=0.1$ row does not. Keep those labels in plots and tables. A curve of $I_a(X;Y)$ against $a$ is not a curve of capacity unless each point has itself been maximised over every other permitted channel choice.
 
@@ -1054,30 +1147,18 @@ $$
 
 This number describes empirical dependence in this table. It is not proof that the population variables share information. A null comparison that repeats the sampling process clarifies how unusual a value of this size would be under independence.
 
-The following Python snippet computes the plug-in value from a contingency table. Zero cells contribute zero; the marginals are kept explicit.
+\newpage
 
-```python
-import numpy as np
+The following base R function computes the plug-in value from a contingency table. It requires a numeric matrix or two-way table of finite, non-negative counts with a positive, finite total. Matrix margins keep the marginals explicit, and logical indexing selects only positive cells, so zero cells contribute zero. The Python implementation uses NumPy arrays with the same validation; `axis=1` sums across columns to leave row totals, and `axis=0` leaves column totals.
 
-def empirical_mi_bits(counts):
-    counts = np.asarray(counts, dtype=float)
-    joint = counts / counts.sum()
-    px = joint.sum(axis=1, keepdims=True)
-    py = joint.sum(axis=0, keepdims=True)
-    expected = px @ py
-    occupied = joint > 0
-    return np.sum(joint[occupied] * np.log2(
-        joint[occupied] / expected[occupied]
-    ))
+::: {.code-group}
 
-counts = np.array([[12, 8], [8, 12]])
-print(f"empirical MI: {empirical_mi_bits(counts):.3f} bits/pair")
-```
-
-The analogous base-R form uses matrix margins and indexes only positive cells.
+**R**
 
 ```r
 mi_bits <- function(counts) {
+  stopifnot(is.matrix(counts), is.numeric(counts), all(is.finite(counts)),
+            all(counts >= 0), is.finite(sum(counts)), sum(counts) > 0)
   joint <- counts / sum(counts)
   expected <- outer(rowSums(joint), colSums(joint))
   occupied <- joint > 0
@@ -1088,9 +1169,40 @@ counts <- matrix(c(12, 8, 8, 12), nrow = 2, byrow = TRUE)
 mi_bits(counts)
 ```
 
-These functions return point estimates only. They do not account for paired sampling, missing data, repeated subjects, selection of the variables after looking at the data, or uncertainty in categories and preprocessing. Add those parts to the analysis plan.
+**Python**
 
-For raw categorical vectors, base R can produce the joint proportions without hand-entering a matrix. The factor levels state the planned support; unused levels remain visible as zero-count cells. The orientation of the table is explicit: rows are source categories and columns are observed categories.
+```python
+import numpy as np
+
+
+def empirical_mi_bits(counts):
+    counts = np.asarray(counts, dtype=float)
+    if counts.ndim != 2 or counts.size == 0:
+        raise ValueError("counts must be a non-empty two-dimensional table")
+    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
+        raise ValueError("counts must be finite and non-negative")
+    total = counts.sum()
+    if not np.isfinite(total) or total <= 0:
+        raise ValueError("counts must have a positive, finite total")
+    joint = counts / total
+    px = joint.sum(axis=1, keepdims=True)
+    py = joint.sum(axis=0, keepdims=True)
+    expected = px @ py
+    occupied = joint > 0
+    return float(np.sum(joint[occupied] * np.log2(
+        joint[occupied] / expected[occupied]
+    )))
+
+
+counts = np.array([[12, 8], [8, 12]])
+print(f"empirical MI: {empirical_mi_bits(counts):.3f} bits/pair")
+```
+
+:::
+
+The result is approximately $0.029$ bits per pair. This function returns a point estimate only. It does not account for the sampling design, missing data, repeated subjects, selection of the variables after looking at the data, or uncertainty in categories and preprocessing. Add those parts to the analysis plan.
+
+For raw categorical vectors, base R can produce the joint proportions without hand-entering a matrix. Reuse `mi_bits()` from the preceding block. The factor levels state the planned support; unused levels remain visible as zero-count cells. The orientation of the table is explicit: rows are source categories and columns are observed categories.
 
 ```r
 source_bit <- factor(c(0, 0, 0, 1, 1, 1), levels = c(0, 1))
@@ -1103,7 +1215,7 @@ mi_bits(counts)
 
 Here `table()` records counts and `prop.table()` divides by their total. The `mi_bits()` function normalises internally, so passing `joint` instead of `counts` gives the same numerical answer, but the counts should be retained for interpreting sampling error. A zero in this table means no observation in that cell. It does not prove that the population transition probability is zero. If a level was impossible by design, document that separately and exclude it from models that require positive support.
 
-We can expose the upward bias under independence with repeated simulated samples. This simulation fixes independent fair population variables and repeats the same estimator, so its distribution measures finite-sample behaviour under a known null rather than uncertainty about an unknown real dataset.
+We can expose the upward bias under independence with repeated simulated samples, again using `mi_bits()`. This simulation fixes independent fair population variables and repeats the same estimator, so its distribution measures finite-sample behaviour under a known null rather than uncertainty about an unknown real dataset.
 
 ```r
 set.seed(163)
