@@ -17,7 +17,7 @@ This repository publishes technical primers and related documents. Sources and r
 
 ## Document Classes
 
-- Pandoc primers use thin per-project Justfiles and `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_complex_analysis`, `primer_containerization`, `primer_deep_learning`, `primer_digital_signal_processing`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_information_theory`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_pi_coding_agent`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`, `primer_retrieval_rag`.
+- Pandoc primers use thin per-project Justfiles and `_shared/common.just`. Directories: `primer_building_ai_agents`, `primer_claude_code_alternative`, `primer_codex_for_claude_code_users`, `primer_comparative_religion`, `primer_complex_analysis`, `primer_containerization`, `primer_deep_learning`, `primer_digital_signal_processing`, `primer_evaluation_loop`, `primer_hermes_server`, `primer_information_theory`, `primer_linux_git_workflows`, `primer_military_structure`, `primer_numerical_analysis`, `primer_ohmyzsh`, `primer_openclaw`, `primer_pi_coding_agent`, `primer_political_systems`, `primer_python_for_r_users`, `primer_research_local_llms`, `primer_retrieval_rag`.
 - Gaming materials in `gaming_silo_rpg/` share the Pandoc infrastructure and retain their `gaming_` filenames.
 - The repository-authored information theory article is being replaced by `primer_information_theory` under #163.
 - `workbook_catmodel_elt_documents/` uses Quarto, R, and Python, with its own build system and `workbook_` filenames.
