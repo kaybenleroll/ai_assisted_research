@@ -667,12 +667,11 @@ Workflows</a></li>
 <li><a href="#recovery-inspect-before-you-repair" id="toc-recovery-inspect-before-you-repair"><span class="toc-section-number">10</span> Recovery: Inspect Before You
 Repair</a>
 <ul>
-<li><a href="#inspect-before-repair" id="toc-inspect-before-repair"><span class="toc-section-number">10.1</span> Inspect Before Repair</a></li>
-<li><a href="#recovery-walkthrough-a-commit-hidden-by-reference-movement" id="toc-recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="toc-section-number">10.2</span> Recovery Walkthrough: A Commit
+<li><a href="#recovery-walkthrough-a-commit-hidden-by-reference-movement" id="toc-recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="toc-section-number">10.1</span> Recovery Walkthrough: A Commit
 Hidden by Reference Movement</a></li>
-<li><a href="#reset-restore-clean-and-other-risk-boundaries" id="toc-reset-restore-clean-and-other-risk-boundaries"><span class="toc-section-number">10.3</span> Reset, Restore, Clean, and Other
+<li><a href="#reset-restore-clean-and-other-risk-boundaries" id="toc-reset-restore-clean-and-other-risk-boundaries"><span class="toc-section-number">10.2</span> Reset, Restore, Clean, and Other
 Risk Boundaries</a></li>
-<li><a href="#reflogs-and-worktrees" id="toc-reflogs-and-worktrees"><span class="toc-section-number">10.4</span> Reflogs and Worktrees</a></li>
+<li><a href="#reflogs-and-worktrees" id="toc-reflogs-and-worktrees"><span class="toc-section-number">10.3</span> Reflogs and Worktrees</a></li>
 </ul></li>
 <li><a href="#reproducible-environments-and-developer-lifecycle" id="toc-reproducible-environments-and-developer-lifecycle"><span class="toc-section-number">11</span> Reproducible Environments and
 Developer Lifecycle</a>
@@ -751,11 +750,13 @@ features exist. Product names, version-specific behaviour, and current
 hosting policy are not treated as timeless facts: verify them against
 the linked primary documentation before relying on them.</p>
 <h1 data-number="4" id="how-to-read-this-primer"><span class="header-section-number">4</span> How to Read This Primer</h1>
-<p>Read the Linux and shell sections first if you are new to
-command-line systems. Read the Git sections next if your immediate
-problem is a branch, merge, rebase, or lost commit. Read the
-reproducibility and lifecycle sections when you need to make a result
-repeatable across machines or reviewable by someone else.</p>
+<p>Read the <a href="#linux-processes-and-the-shell-boundary">Linux and
+shell sections</a> first if you are new to command-line systems. Read
+the <a href="#gits-object-and-repository-model">Git sections</a> next if
+your immediate problem is a branch, merge, rebase, or lost commit. Read
+the <a href="#reproducible-environments-and-developer-lifecycle">reproducibility
+and lifecycle sections</a> when you need to make a result repeatable
+across machines or reviewable by someone else.</p>
 <p>The recurring diagnostic loop is:</p>
 <ol type="1">
 <li>contain the operation and preserve the current state;</li>
@@ -765,7 +766,8 @@ status;</li>
 <li>change one hypothesis at a time;</li>
 <li>verify both the repair and the absence of collateral damage.</li>
 </ol>
-<!-- Verified against primary sources for Linux, Bash, Git, reproducibility, and repository build sections; current product defaults and hosting policies are not asserted without inline sources. -->
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
 <h1 data-number="5" id="linux-processes-and-the-shell-boundary"><span class="header-section-number">5</span> Linux Processes and the Shell
 Boundary</h1>
 <p>Linux and a shell solve different parts of a command-line task. The
@@ -1002,17 +1004,21 @@ value into multiple words and wildcard characters may expand against
 matching filenames. Bash’s <a href="https://www.gnu.org/software/bash/manual/bash.html#Quoting">quoting</a>
 and <a href="https://www.gnu.org/software/bash/manual/bash.html#Word-Splitting">word-splitting</a>
 sections define these rules.</p>
-<p>Expansion order matters. The shell expands parameters such as
-<code>$HOME</code>, substitutes command output in
-<code>$(command)</code>, performs word splitting on eligible unquoted
-results, expands filename patterns such as <code>*.log</code>, and then
-removes quoting syntax. A quoted wildcard such as <code>&#39;*.log&#39;</code>
-is passed literally; an unquoted <code>*.log</code> usually becomes one
-argument per matching name. If no name matches, behaviour depends on the
-shell and its options. Do not assume that a command receives the text
-you see in the script: inspect the quoted form and, for a safe
-diagnostic, use <code>printf &#39;&lt;%s&gt;\n&#39; &quot;$value&quot;</code> to make
-argument boundaries visible.</p>
+<p>For the examples here, the relevant expansion order is that the shell
+expands parameters such as <code>$HOME</code>, substitutes command
+output in <code>$(command)</code>, performs word splitting on eligible
+unquoted results, expands filename patterns such as <code>*.log</code>,
+and then removes quoting syntax. Bash also has earlier or interleaved
+stages, including brace, tilde, arithmetic, and process substitution;
+consult its <a href="https://www.gnu.org/software/bash/manual/bash.html#Shell-Expansions">complete
+expansion rules</a> when exact ordering matters. A quoted wildcard such
+as <code>&#39;*.log&#39;</code> is passed literally; an unquoted
+<code>*.log</code> usually becomes one argument per matching name. If no
+name matches, behaviour depends on the shell and its options. Do not
+assume that a command receives the text you see in the script: inspect
+the quoted form and, for a safe diagnostic, use
+<code>printf &#39;&lt;%s&gt;\n&#39; &quot;$value&quot;</code> to make argument boundaries
+visible.</p>
 <p>Command substitution captures standard output and removes trailing
 newline characters. It is useful for values, but it obscures status
 handling if used casually. For example,
@@ -1349,7 +1355,6 @@ Delete a topic branch only after verifying the merged change is present
 and no remaining work depends on that branch.</p>
 <h1 data-number="10" id="recovery-inspect-before-you-repair"><span class="header-section-number">10</span> Recovery: Inspect Before You
 Repair</h1>
-<h2 data-number="10.1" id="inspect-before-repair"><span class="header-section-number">10.1</span> Inspect Before Repair</h2>
 <p>When something looks lost, first preserve evidence. Stop running
 commands that move references or overwrite files. Do not start with
 <code>reset --hard</code>, <code>clean</code>, <code>gc</code>, pruning,
@@ -1383,7 +1388,7 @@ tag, a worktree, or a backup may retain the commit even after local
 reflog evidence is gone. If a commit is absent from all refs and object
 storage has pruned it, Git cannot recreate its content from the commit
 ID alone.</p>
-<h2 data-number="10.2" id="recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="header-section-number">10.2</span> Recovery Walkthrough: A Commit
+<h2 data-number="10.1" id="recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="header-section-number">10.1</span> Recovery Walkthrough: A Commit
 Hidden by Reference Movement</h2>
 <p>This example uses a disposable repository. It simulates two branch
 movements after a useful commit, leaving the commit absent from the
@@ -1393,8 +1398,7 @@ resets only in this throwaway repository, with no uncommitted changes.
 Do not copy those reset commands into a working repository as a generic
 recovery recipe.</p>
 <p>Create an isolated repository and make a baseline commit followed by
-a useful commit. The tag is an extra safety reference for the
-demonstration setup, not a step in the recovery itself.</p>
+a useful commit.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">sandbox_dir</span><span class="op">=</span><span class="va">$(</span><span class="fu">mktemp</span> <span class="at">-d</span> /tmp/git-recovery.XXXXXX<span class="va">)</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> init <span class="at">-q</span> <span class="at">-b</span> main</span>
@@ -1404,14 +1408,12 @@ demonstration setup, not a step in the recovery itself.</p>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> add notes.txt</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> commit <span class="at">-qm</span> <span class="st">&#39;Add baseline note&#39;</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;drafted on topic\n&#39;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo/notes.txt&quot;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> commit <span class="at">-qam</span> <span class="st">&#39;Add a useful draft&#39;</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> tag before-rebase</span></code></pre></div>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> commit <span class="at">-qam</span> <span class="st">&#39;Add a useful draft&#39;</span></span></code></pre></div>
 <p>Now move the <code>review</code> branch and then <code>main</code>
 back one commit each. This deliberately contrived setup removes the
-useful commit from both branch tips. The tag still points to it, but
-pretend the tag was also absent or not known: the reflog remains the
-evidence source. The branch names point to the baseline, and the working
-tree is clean.</p>
+useful commit from both branch tips and leaves no tag naming it. The
+reflog remains the evidence source. The branch names point to the
+baseline, and the working tree is clean.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> checkout <span class="at">-qb</span> review</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> reset <span class="at">--hard</span> HEAD~1</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> checkout <span class="at">-q</span> main</span>
@@ -1425,7 +1427,6 @@ demonstration run):</p>
 373f2c16884893dfa83594754a9df157ff9a7cc8 HEAD
 373f2c16884893dfa83594754a9df157ff9a7cc8 refs/heads/main
 373f2c16884893dfa83594754a9df157ff9a7cc8 refs/heads/review
-0a7e9737602a3b490e2e680251ddc25edaff7a85 refs/tags/before-rebase
 373f2c1 HEAD@{2026-10-15 22:54:36 +0100}: reset: moving to HEAD~1
 0a7e973 HEAD@{2026-10-15 22:54:36 +0100}: checkout: moving from review to main
 373f2c1 HEAD@{2026-10-15 22:54:36 +0100}: reset: moving to HEAD~1
@@ -1436,16 +1437,18 @@ demonstration run):</p>
 plausible. Resolve the candidate and inspect its metadata and patch.
 Here, <code>HEAD@{1}</code> names the useful commit in the captured
 state, but reflog selectors are relative and change as new operations
-occur. Copy the full object ID from the evidence when practical, or
-immediately create a branch after confirming the selected entry.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show <span class="at">--stat</span> <span class="at">--oneline</span> <span class="st">&#39;HEAD@{1}&#39;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show <span class="st">&#39;HEAD@{1}&#39;</span> <span class="at">--</span></span></code></pre></div>
+occur. Resolve the candidate to a full object ID before creating the
+rescue branch, so later commands cannot change what the selector
+means.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">candidate</span><span class="op">=</span><span class="va">$(</span><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> rev-parse <span class="st">&#39;HEAD@{1}&#39;</span><span class="va">)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show <span class="at">--stat</span> <span class="at">--oneline</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span> <span class="at">--</span></span></code></pre></div>
 <p>The inspection reports <code>Add a useful draft</code> and one added
 line in <code>notes.txt</code>. If that is the desired commit, preserve
 it with a new reference before doing further work.
 <code>git branch</code> creates the branch without changing the
 checked-out branch or working tree.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> branch rescue/draft <span class="st">&#39;HEAD@{1}&#39;</span></span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> branch rescue/draft <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> log <span class="at">--oneline</span> <span class="at">--decorate</span> <span class="at">--all</span> <span class="at">-4</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show rescue/draft:notes.txt</span></code></pre></div>
 <p>The captured verification showed <code>rescue/draft</code> pointing
@@ -1457,9 +1460,8 @@ intended target, create a new branch from the right base, and
 cherry-pick or merge only after confirming the desired history. Keep the
 rescue branch until the integrated result is reviewed and backed up. Do
 not delete the temporary repository until you no longer need the
-evidence; it was created under
-<code>/tmp/129-git-recovery.yWU2RW/repo</code> for this captured
-run.</p>
+evidence; it is under <code>$sandbox_dir/repo</code> until you remove
+it.</p>
 <p>This approach also applies after an accidental rebase or branch
 switch. Rebase commonly leaves old commits discoverable through reflogs,
 although selectors and exact reflog entries depend on the commands run.
@@ -1469,7 +1471,7 @@ rescue branch such as
 <code>git branch rescue/old-topic &lt;candidate&gt;</code>. Reflog
 recovery restores a reference to existing objects; it does not
 reconstruct edits that were never committed or saved.</p>
-<h2 data-number="10.3" id="reset-restore-clean-and-other-risk-boundaries"><span class="header-section-number">10.3</span> Reset, Restore, Clean, and
+<h2 data-number="10.2" id="reset-restore-clean-and-other-risk-boundaries"><span class="header-section-number">10.2</span> Reset, Restore, Clean, and
 Other Risk Boundaries</h2>
 <p>Git commands that sound like “undo” act on different layers.
 <code>git restore &lt;path&gt;</code> can replace working-tree content
@@ -1500,7 +1502,7 @@ after inspection. The <a href="https://git-scm.com/docs/git-reset">Git
 reset documentation</a>, <a href="https://git-scm.com/docs/git-restore">restore documentation</a>,
 and <a href="https://git-scm.com/docs/git-clean">clean documentation</a>
 define the affected layers and options.</p>
-<h2 data-number="10.4" id="reflogs-and-worktrees"><span class="header-section-number">10.4</span> Reflogs and Worktrees</h2>
+<h2 data-number="10.3" id="reflogs-and-worktrees"><span class="header-section-number">10.3</span> Reflogs and Worktrees</h2>
 <p>The reflog records recent updates to references in a local
 repository. <code>HEAD</code> has a reflog in typical repositories, and
 branch references may have their own. <code>git reflog show --all</code>
@@ -1794,19 +1796,21 @@ visual validation.</p>
 <p>The following worked example uses the repository’s published primer
 as a model. It changes a source file in a throwaway clone, commits that
 change without rendering, and runs the history-aware freshness check.
-The commands are to be run only in a disposable copy with the project’s
-container runtime available; they do not touch the main checkout or its
-history.</p>
+Run it from this repository’s root, or set <code>REPOSITORY_PATH</code>
+to another checkout. The clone copies real repository history, but all
+mutations and generated data remain in the disposable copy; the
+project’s container runtime is also required.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">scratch</span><span class="op">=</span><span class="va">$(</span><span class="fu">mktemp</span> <span class="at">-d</span><span class="va">)</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--no-hardlinks</span> <span class="at">--local</span> /path/to/ai_assisted_research <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> config user.name <span class="st">&#39;Disposable Example&#39;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> config user.email disposable@example.invalid</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;\nFreshness probe.\n&#39;</span> <span class="op">&gt;&gt;</span> <span class="dt">\</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo/primer_evaluation_loop/primer_evaluation_loop.md&quot;</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> add primer_evaluation_loop/primer_evaluation_loop.md</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> commit <span class="at">-m</span> <span class="st">&#39;Probe stale published output&#39;</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> check-fresh</span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="va">repository_path</span><span class="op">=</span><span class="va">${REPOSITORY_PATH</span><span class="op">:-</span><span class="va">$PWD}</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--no-hardlinks</span> <span class="at">--local</span> <span class="st">&quot;</span><span class="va">$repository_path</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> config user.name <span class="st">&#39;Disposable Example&#39;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> config user.email disposable@example.invalid</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;\nFreshness probe.\n&#39;</span> <span class="op">&gt;&gt;</span> <span class="dt">\</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo/primer_evaluation_loop/primer_evaluation_loop.md&quot;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> add primer_evaluation_loop/primer_evaluation_loop.md</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> commit <span class="at">-m</span> <span class="st">&#39;Probe stale published output&#39;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> check-fresh</span></code></pre></div>
 <p>The source commit is newer than the last commits that changed its
 HTML and PDF, so <code>check-fresh</code> reports both outputs as older
 than their source and exits unsuccessfully. The recovery is to
@@ -1912,26 +1916,48 @@ important input and gate a maintenance route so reproducibility remains
 a practice rather than a one-time snapshot.</p>
 <h1 data-number="14" id="glossary"><span class="header-section-number">14</span> Glossary</h1>
 <ul>
-<li><strong>Artefact:</strong> a file produced by a build or workflow,
-whether it is a published output, report, or temporary result.</li>
-<li><strong>Branch:</strong> a movable Git reference naming a
-commit.</li>
-<li><strong>Child process:</strong> a process started by another
-process, which may inherit selected attributes from its parent.</li>
-<li><strong>Environment:</strong> the name-value strings and other
-external conditions visible to a process.</li>
-<li><strong>File descriptor:</strong> a process-local integer referring
-to an open file, pipe, socket, or similar object.</li>
-<li><strong>Index:</strong> Git’s staging area and proposed content for
-the next commit.</li>
-<li><strong>Lockfile:</strong> a file recording a selected dependency
-resolution for repeatable installation.</li>
-<li><strong>Reflog:</strong> a local log of movements of references such
-as HEAD and branches.</li>
-<li><strong>Reproducible build:</strong> a build whose specified inputs
-produce the claimed level of repeatable output.</li>
-<li><strong>Working tree:</strong> the files checked out for a Git
-repository at the current HEAD.</li>
+<li><strong><a href="#users-groups-and-privilege">ACL</a>:</strong> an
+access-control list that adds rules beyond ordinary Unix mode bits.</li>
+<li><strong><a href="#treat-generated-artefacts-as-published-interfaces">Artefact</a>:</strong>
+a file produced by a build or workflow, whether it is a published
+output, report, or temporary result.</li>
+<li><strong><a href="#branches-integration-and-collaboration">Branch</a>:</strong> a
+movable Git reference naming a commit.</li>
+<li><strong><a href="#what-a-process-is">Child process</a>:</strong> a
+process started by another process, which may inherit selected
+attributes from its parent.</li>
+<li><strong><a href="#environment-variables-and-inheritance">Environment</a>:</strong>
+the name-value strings and other external conditions visible to a
+process.</li>
+<li><strong><a href="#file-descriptors-where-input-and-output-go">File
+descriptor</a>:</strong> a process-local integer referring to an open
+file, pipe, socket, or similar object.</li>
+<li><strong><a href="#working-tree-index-and-head">Index</a>:</strong>
+Git’s staging area and proposed content for the next commit.</li>
+<li><strong><a href="#declare-dependencies-and-preserve-resolution">Lockfile</a>:</strong>
+a file recording a selected dependency resolution for repeatable
+installation.</li>
+<li><strong><a href="#paths-filesystems-and-mounts">Mount
+namespace</a>:</strong> a process view of mounted filesystems that can
+differ from another process’s view.</li>
+<li><strong><a href="#what-git-stores">Object</a>:</strong> content in
+Git’s object database, such as a blob, tree, or commit.</li>
+<li><strong><a href="#treat-generated-artefacts-as-published-interfaces">Provenance</a>:</strong>
+evidence connecting an output to its source, build inputs, and
+production process.</li>
+<li><strong><a href="#commits-and-references">Reference</a>:</strong> a
+named pointer, such as a branch or tag, that identifies an object.</li>
+<li><strong><a href="#recovery-inspect-before-you-repair">Reflog</a>:</strong> a local
+log of movements of references such as HEAD and branches.</li>
+<li><strong><a href="#reproducible-environments-and-developer-lifecycle">Reproducible
+build</a>:</strong> a build whose specified inputs produce the claimed
+level of repeatable output.</li>
+<li><strong><a href="#quoting-expansion-and-globbing">Shell
+expansion</a>:</strong> the shell’s transformation of parsed words into
+command arguments.</li>
+<li><strong><a href="#working-tree-index-and-head">Working
+tree</a>:</strong> the files checked out for a Git repository at the
+current HEAD.</li>
 </ul>
 <h1 data-number="15" id="further-reading"><span class="header-section-number">15</span> Further Reading</h1>
 <ul>
