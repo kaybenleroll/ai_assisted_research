@@ -21,7 +21,7 @@ Apply the R and C rules in the Style Guide. Until #142 adds those rule IDs, use 
 
 ## Pass 2: Prose and Structure
 
-- Check that the introduction delivers its stated promise and orients the intended reader.
+- Check that one coherent opening orientation block delivers the stated promise, explains scope and exclusions, states prerequisites, and gives the reader a route through the document. Do not accept separate top-level headings for each orientation item unless a documented navigation need justifies them.
 - For each section with child headings, check for a brief framing paragraph that explains its scope or internal relationship. Review one-paragraph subsections: consolidate those that merely split continuous reasoning, while retaining short subsections with a distinct conceptual, practical, comparative, or navigational purpose.
 - Check that the main route is dependency-led: introduce the organising model before enumerating components, keep optional or reference-heavy branches clearly marked, and provide a comparison, synthesis, or decision framework after a broad survey where readers need one.
 - Give every core concept an example: worked code, proof, case, comparison, counterexample, or failure case. Prefer explanatory prose to a dump of bullets.

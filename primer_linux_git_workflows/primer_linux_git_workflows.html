@@ -618,88 +618,86 @@ Workflows</span>
       <div class="sidebar-tools">
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
-<li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1</span> What This Primer Covers</a></li>
-<li><a href="#what-this-primer-is-not" id="toc-what-this-primer-is-not"><span class="toc-section-number">2</span> What This Primer Is Not</a></li>
-<li><a href="#assumed-background" id="toc-assumed-background"><span class="toc-section-number">3</span> Assumed Background</a></li>
-<li><a href="#how-to-read-this-primer" id="toc-how-to-read-this-primer"><span class="toc-section-number">4</span> How to Read This Primer</a></li>
-<li><a href="#linux-processes-and-the-shell-boundary" id="toc-linux-processes-and-the-shell-boundary"><span class="toc-section-number">5</span> Linux Processes and the Shell
+<li><a href="#orientation-scope-background-and-reading-route" id="toc-orientation-scope-background-and-reading-route"><span class="toc-section-number">1</span> Orientation: Scope, Background, and
+Reading Route</a></li>
+<li><a href="#linux-processes-and-the-shell-boundary" id="toc-linux-processes-and-the-shell-boundary"><span class="toc-section-number">2</span> Linux Processes and the Shell
 Boundary</a>
 <ul>
-<li><a href="#what-a-process-is" id="toc-what-a-process-is"><span class="toc-section-number">5.1</span> What a Process Is</a></li>
-<li><a href="#signals-and-shutdown" id="toc-signals-and-shutdown"><span class="toc-section-number">5.2</span> Signals and Shutdown</a></li>
-<li><a href="#file-descriptors-where-input-and-output-go" id="toc-file-descriptors-where-input-and-output-go"><span class="toc-section-number">5.3</span> File Descriptors: Where Input and
+<li><a href="#what-a-process-is" id="toc-what-a-process-is"><span class="toc-section-number">2.1</span> What a Process Is</a></li>
+<li><a href="#signals-and-shutdown" id="toc-signals-and-shutdown"><span class="toc-section-number">2.2</span> Signals and Shutdown</a></li>
+<li><a href="#file-descriptors-where-input-and-output-go" id="toc-file-descriptors-where-input-and-output-go"><span class="toc-section-number">2.3</span> File Descriptors: Where Input and
 Output Go</a></li>
-<li><a href="#paths-filesystems-and-mounts" id="toc-paths-filesystems-and-mounts"><span class="toc-section-number">5.4</span> Paths, Filesystems, and
+<li><a href="#paths-filesystems-and-mounts" id="toc-paths-filesystems-and-mounts"><span class="toc-section-number">2.4</span> Paths, Filesystems, and
 Mounts</a></li>
-<li><a href="#users-groups-and-privilege" id="toc-users-groups-and-privilege"><span class="toc-section-number">5.5</span> Users, Groups, and
+<li><a href="#users-groups-and-privilege" id="toc-users-groups-and-privilege"><span class="toc-section-number">2.5</span> Users, Groups, and
 Privilege</a></li>
-<li><a href="#environment-variables-and-inheritance" id="toc-environment-variables-and-inheritance"><span class="toc-section-number">5.6</span> Environment Variables and
+<li><a href="#environment-variables-and-inheritance" id="toc-environment-variables-and-inheritance"><span class="toc-section-number">2.6</span> Environment Variables and
 Inheritance</a></li>
 </ul></li>
-<li><a href="#how-a-shell-turns-text-into-a-process" id="toc-how-a-shell-turns-text-into-a-process"><span class="toc-section-number">6</span> How a Shell Turns Text Into a
+<li><a href="#how-a-shell-turns-text-into-a-process" id="toc-how-a-shell-turns-text-into-a-process"><span class="toc-section-number">3</span> How a Shell Turns Text Into a
 Process</a>
 <ul>
-<li><a href="#command-lookup-and-arguments" id="toc-command-lookup-and-arguments"><span class="toc-section-number">6.1</span> Command Lookup and
+<li><a href="#command-lookup-and-arguments" id="toc-command-lookup-and-arguments"><span class="toc-section-number">3.1</span> Command Lookup and
 Arguments</a></li>
-<li><a href="#quoting-expansion-and-globbing" id="toc-quoting-expansion-and-globbing"><span class="toc-section-number">6.2</span> Quoting, Expansion, and
+<li><a href="#quoting-expansion-and-globbing" id="toc-quoting-expansion-and-globbing"><span class="toc-section-number">3.2</span> Quoting, Expansion, and
 Globbing</a></li>
-<li><a href="#pipelines-redirection-and-exit-status" id="toc-pipelines-redirection-and-exit-status"><span class="toc-section-number">6.3</span> Pipelines, Redirection, and Exit
+<li><a href="#pipelines-redirection-and-exit-status" id="toc-pipelines-redirection-and-exit-status"><span class="toc-section-number">3.3</span> Pipelines, Redirection, and Exit
 Status</a></li>
-<li><a href="#diagnostic-discipline" id="toc-diagnostic-discipline"><span class="toc-section-number">6.4</span> Diagnostic Discipline</a></li>
+<li><a href="#diagnostic-discipline" id="toc-diagnostic-discipline"><span class="toc-section-number">3.4</span> Diagnostic Discipline</a></li>
 </ul></li>
-<li><a href="#worked-example-finding-and-recovering-a-failed-pipeline" id="toc-worked-example-finding-and-recovering-a-failed-pipeline"><span class="toc-section-number">7</span> Worked Example: Finding and
+<li><a href="#worked-example-finding-and-recovering-a-failed-pipeline" id="toc-worked-example-finding-and-recovering-a-failed-pipeline"><span class="toc-section-number">4</span> Worked Example: Finding and
 Recovering a Failed Pipeline</a></li>
-<li><a href="#gits-object-and-repository-model" id="toc-gits-object-and-repository-model"><span class="toc-section-number">8</span> Git’s Object and Repository
+<li><a href="#gits-object-and-repository-model" id="toc-gits-object-and-repository-model"><span class="toc-section-number">5</span> Git’s Object and Repository
 Model</a>
 <ul>
-<li><a href="#what-git-stores" id="toc-what-git-stores"><span class="toc-section-number">8.1</span> What Git Stores</a></li>
-<li><a href="#working-tree-index-and-head" id="toc-working-tree-index-and-head"><span class="toc-section-number">8.2</span> Working Tree, Index, and
+<li><a href="#what-git-stores" id="toc-what-git-stores"><span class="toc-section-number">5.1</span> What Git Stores</a></li>
+<li><a href="#working-tree-index-and-head" id="toc-working-tree-index-and-head"><span class="toc-section-number">5.2</span> Working Tree, Index, and
 <code>HEAD</code></a></li>
-<li><a href="#commits-and-references" id="toc-commits-and-references"><span class="toc-section-number">8.3</span> Commits and References</a></li>
+<li><a href="#commits-and-references" id="toc-commits-and-references"><span class="toc-section-number">5.3</span> Commits and References</a></li>
 </ul></li>
-<li><a href="#branches-integration-and-collaboration" id="toc-branches-integration-and-collaboration"><span class="toc-section-number">9</span> Branches, Integration, and
+<li><a href="#branches-integration-and-collaboration" id="toc-branches-integration-and-collaboration"><span class="toc-section-number">6</span> Branches, Integration, and
 Collaboration</a>
 <ul>
-<li><a href="#merge-and-rebase" id="toc-merge-and-rebase"><span class="toc-section-number">9.1</span> Merge and Rebase</a></li>
-<li><a href="#review-and-protected-main-workflows" id="toc-review-and-protected-main-workflows"><span class="toc-section-number">9.2</span> Review and Protected-Main
+<li><a href="#merge-and-rebase" id="toc-merge-and-rebase"><span class="toc-section-number">6.1</span> Merge and Rebase</a></li>
+<li><a href="#review-and-protected-main-workflows" id="toc-review-and-protected-main-workflows"><span class="toc-section-number">6.2</span> Review and Protected-Main
 Workflows</a></li>
 </ul></li>
-<li><a href="#recovery-inspect-before-you-repair" id="toc-recovery-inspect-before-you-repair"><span class="toc-section-number">10</span> Recovery: Inspect Before You
+<li><a href="#recovery-inspect-before-you-repair" id="toc-recovery-inspect-before-you-repair"><span class="toc-section-number">7</span> Recovery: Inspect Before You
 Repair</a>
 <ul>
-<li><a href="#recovery-walkthrough-a-commit-hidden-by-reference-movement" id="toc-recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="toc-section-number">10.1</span> Recovery Walkthrough: A Commit
+<li><a href="#recovery-walkthrough-a-commit-hidden-by-reference-movement" id="toc-recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="toc-section-number">7.1</span> Recovery Walkthrough: A Commit
 Hidden by Reference Movement</a></li>
-<li><a href="#reset-restore-clean-and-other-risk-boundaries" id="toc-reset-restore-clean-and-other-risk-boundaries"><span class="toc-section-number">10.2</span> Reset, Restore, Clean, and Other
+<li><a href="#reset-restore-clean-and-other-risk-boundaries" id="toc-reset-restore-clean-and-other-risk-boundaries"><span class="toc-section-number">7.2</span> Reset, Restore, Clean, and Other
 Risk Boundaries</a></li>
-<li><a href="#reflogs-and-worktrees" id="toc-reflogs-and-worktrees"><span class="toc-section-number">10.3</span> Reflogs and Worktrees</a></li>
+<li><a href="#reflogs-and-worktrees" id="toc-reflogs-and-worktrees"><span class="toc-section-number">7.3</span> Reflogs and Worktrees</a></li>
 </ul></li>
-<li><a href="#reproducible-environments-and-developer-lifecycle" id="toc-reproducible-environments-and-developer-lifecycle"><span class="toc-section-number">11</span> Reproducible Environments and
+<li><a href="#reproducible-environments-and-developer-lifecycle" id="toc-reproducible-environments-and-developer-lifecycle"><span class="toc-section-number">8</span> Reproducible Environments and
 Developer Lifecycle</a>
 <ul>
-<li><a href="#declare-dependencies-and-preserve-resolution" id="toc-declare-dependencies-and-preserve-resolution"><span class="toc-section-number">11.1</span> Declare Dependencies and Preserve
+<li><a href="#declare-dependencies-and-preserve-resolution" id="toc-declare-dependencies-and-preserve-resolution"><span class="toc-section-number">8.1</span> Declare Dependencies and Preserve
 Resolution</a></li>
-<li><a href="#isolate-the-environment" id="toc-isolate-the-environment"><span class="toc-section-number">11.2</span> Isolate the Environment</a></li>
-<li><a href="#pin-tools-and-images-at-the-right-boundary" id="toc-pin-tools-and-images-at-the-right-boundary"><span class="toc-section-number">11.3</span> Pin Tools and Images at the Right
+<li><a href="#isolate-the-environment" id="toc-isolate-the-environment"><span class="toc-section-number">8.2</span> Isolate the Environment</a></li>
+<li><a href="#pin-tools-and-images-at-the-right-boundary" id="toc-pin-tools-and-images-at-the-right-boundary"><span class="toc-section-number">8.3</span> Pin Tools and Images at the Right
 Boundary</a></li>
-<li><a href="#use-containers-as-build-boundaries" id="toc-use-containers-as-build-boundaries"><span class="toc-section-number">11.4</span> Use Containers as Build
+<li><a href="#use-containers-as-build-boundaries" id="toc-use-containers-as-build-boundaries"><span class="toc-section-number">8.4</span> Use Containers as Build
 Boundaries</a></li>
-<li><a href="#design-ci-as-an-independent-recheck" id="toc-design-ci-as-an-independent-recheck"><span class="toc-section-number">11.5</span> Design CI as an Independent
+<li><a href="#design-ci-as-an-independent-recheck" id="toc-design-ci-as-an-independent-recheck"><span class="toc-section-number">8.5</span> Design CI as an Independent
 Recheck</a></li>
-<li><a href="#treat-generated-artefacts-as-published-interfaces" id="toc-treat-generated-artefacts-as-published-interfaces"><span class="toc-section-number">11.6</span> Treat Generated Artefacts as
+<li><a href="#treat-generated-artefacts-as-published-interfaces" id="toc-treat-generated-artefacts-as-published-interfaces"><span class="toc-section-number">8.6</span> Treat Generated Artefacts as
 Published Interfaces</a></li>
-<li><a href="#freshness-validation-and-the-stale-output-failure" id="toc-freshness-validation-and-the-stale-output-failure"><span class="toc-section-number">11.7</span> Freshness, Validation, and the
+<li><a href="#freshness-validation-and-the-stale-output-failure" id="toc-freshness-validation-and-the-stale-output-failure"><span class="toc-section-number">8.7</span> Freshness, Validation, and the
 Stale-Output Failure</a></li>
 </ul></li>
-<li><a href="#review-release-and-safe-lifecycle" id="toc-review-release-and-safe-lifecycle"><span class="toc-section-number">12</span> Review, Release, and Safe
+<li><a href="#review-release-and-safe-lifecycle" id="toc-review-release-and-safe-lifecycle"><span class="toc-section-number">9</span> Review, Release, and Safe
 Lifecycle</a>
 <ul>
-<li><a href="#repository-hygiene-and-reviewable-changes" id="toc-repository-hygiene-and-reviewable-changes"><span class="toc-section-number">12.1</span> Repository Hygiene and Reviewable
+<li><a href="#repository-hygiene-and-reviewable-changes" id="toc-repository-hygiene-and-reviewable-changes"><span class="toc-section-number">9.1</span> Repository Hygiene and Reviewable
 Changes</a></li>
-<li><a href="#release-workflow-and-safe-lifecycle" id="toc-release-workflow-and-safe-lifecycle"><span class="toc-section-number">12.2</span> Release Workflow and Safe
+<li><a href="#release-workflow-and-safe-lifecycle" id="toc-release-workflow-and-safe-lifecycle"><span class="toc-section-number">9.2</span> Release Workflow and Safe
 Lifecycle</a></li>
 </ul></li>
-<li><a href="#glossary" id="toc-glossary"><span class="toc-section-number">13</span> Glossary</a></li>
-<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14</span> Further Reading</a></li>
+<li><a href="#glossary" id="toc-glossary"><span class="toc-section-number">10</span> Glossary</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">11</span> Further Reading</a></li>
 </ul></div>
 
     </aside>
@@ -708,7 +706,8 @@ Lifecycle</a></li>
 
     <main class="content">
       <div class="content-inner">
-<h1 data-number="1" id="what-this-primer-covers"><span class="header-section-number">1</span> What This Primer Covers</h1>
+<h1 data-number="1" id="orientation-scope-background-and-reading-route"><span class="header-section-number">1</span> Orientation: Scope, Background,
+and Reading Route</h1>
 <p>Software work is a chain of state changes. A shell turns text into a
 process; the operating system decides what that process can see and do;
 Git records source state and collaboration history; a build environment
@@ -727,7 +726,6 @@ failure-and-recovery scenarios.</p>
 should be able to state which layer owns the behaviour, gather evidence
 without destroying useful state, make the smallest justified repair, and
 verify the result.</p>
-<h1 data-number="2" id="what-this-primer-is-not"><span class="header-section-number">2</span> What This Primer Is Not</h1>
 <p>This is not a Linux administration manual, a shell-language
 reference, a catalogue of Git commands, or a container-engine
 comparison. It does not teach kernel development, shell customisation,
@@ -742,7 +740,6 @@ disposable directories, disposable repositories, or documented build
 containers. They are not run against this repository’s real history.
 Examples are designed to teach transferable reasoning, not to prescribe
 one project’s only workflow.</p>
-<h1 data-number="3" id="assumed-background"><span class="header-section-number">3</span> Assumed Background</h1>
 <p>You should be comfortable opening a terminal, editing a text file,
 running a program, and reading a basic error message. You do not need to
 know Git’s internal object types or Linux system calls in advance. The
@@ -753,7 +750,6 @@ POSIX rules instead of assuming that pipefail, arrays, or other Bash
 features exist. Product names, version-specific behaviour, and current
 hosting policy are not treated as timeless facts: verify them against
 the linked primary documentation before relying on them.</p>
-<h1 data-number="4" id="how-to-read-this-primer"><span class="header-section-number">4</span> How to Read This Primer</h1>
 <p>Read the <a href="#linux-processes-and-the-shell-boundary">Linux and
 shell sections</a> first if you are new to command-line systems. Read
 the <a href="#gits-object-and-repository-model">Git sections</a> next if
@@ -772,7 +768,7 @@ status;</li>
 </ol>
 <p><em>Verified against primary sources for all sections; unverified
 claims are flagged inline.</em></p>
-<h1 data-number="5" id="linux-processes-and-the-shell-boundary"><span class="header-section-number">5</span> Linux Processes and the Shell
+<h1 data-number="2" id="linux-processes-and-the-shell-boundary"><span class="header-section-number">2</span> Linux Processes and the Shell
 Boundary</h1>
 <p>Linux and a shell solve different parts of a command-line task. The
 kernel schedules processes, enforces access controls, and provides
@@ -782,7 +778,7 @@ kernel to start another program. When a command behaves unexpectedly,
 identify which layer owns the behaviour before changing configuration. A
 shell expansion problem is not a permissions problem; a process that
 ignores a signal is not fixed by changing <code>PATH</code>.</p>
-<h2 data-number="5.1" id="what-a-process-is"><span class="header-section-number">5.1</span> What a Process Is</h2>
+<h2 data-number="2.1" id="what-a-process-is"><span class="header-section-number">2.1</span> What a Process Is</h2>
 <p>A process is a running instance of a program, with its own execution
 state and resources such as a virtual address space, open file
 descriptors, current working directory, credentials, and environment.
@@ -811,7 +807,7 @@ may be truncated, altered by the program, or contain secrets. Do not
 treat it as an authoritative record of what the process has done.
 Establish which process you mean using more than a remembered PID,
 especially before sending a signal.</p>
-<h2 data-number="5.2" id="signals-and-shutdown"><span class="header-section-number">5.2</span> Signals and Shutdown</h2>
+<h2 data-number="2.2" id="signals-and-shutdown"><span class="header-section-number">2.2</span> Signals and Shutdown</h2>
 <p>A signal is a small asynchronous notification delivered to a process
 or process group. Interactive terminals commonly send
 <code>SIGINT</code> when you press Ctrl+C. <code>SIGTERM</code> requests
@@ -840,7 +836,7 @@ other processes. For a service, use the service manager’s stop operation
 so that the configured shutdown path runs. After sending
 <code>SIGTERM</code>, check whether it exits; escalation is a decision
 based on observed state, not a reflex.</p>
-<h2 data-number="5.3" id="file-descriptors-where-input-and-output-go"><span class="header-section-number">5.3</span> File Descriptors: Where Input
+<h2 data-number="2.3" id="file-descriptors-where-input-and-output-go"><span class="header-section-number">2.3</span> File Descriptors: Where Input
 and Output Go</h2>
 <p>Programs normally interact with input and output through file
 descriptors, small integers maintained by the kernel for an individual
@@ -867,7 +863,7 @@ error messages may still be on the terminal because descriptor 2 was
 never connected. Bash documents redirections and pipelines in its <a href="https://www.gnu.org/software/bash/manual/bash.html#Redirections">reference
 manual</a> and <a href="https://www.gnu.org/software/bash/manual/bash.html#Pipelines">pipelines
 section</a>; descriptor duplication is also described by <a href="https://man7.org/linux/man-pages/man2/dup.2.html"><code>dup(2)</code></a>.</p>
-<h2 data-number="5.4" id="paths-filesystems-and-mounts"><span class="header-section-number">5.4</span> Paths, Filesystems, and
+<h2 data-number="2.4" id="paths-filesystems-and-mounts"><span class="header-section-number">2.4</span> Paths, Filesystems, and
 Mounts</h2>
 <p>A path is a name interpreted from a starting point. An absolute path
 begins at <code>/</code>, the process’s filesystem root. A relative path
@@ -915,7 +911,7 @@ before applying broad changes such as recursive ownership updates. The
 kernel’s documented permission check is summarised in <a href="https://man7.org/linux/man-pages/man7/path_resolution.7.html"><code>path_resolution(7)</code></a>;
 see also <a href="https://man7.org/linux/man-pages/man1/chmod.1.html"><code>chmod(1)</code></a>
 and <a href="https://man7.org/linux/man-pages/man5/acl.5.html"><code>acl(5)</code></a>.</p>
-<h2 data-number="5.5" id="users-groups-and-privilege"><span class="header-section-number">5.5</span> Users, Groups, and
+<h2 data-number="2.5" id="users-groups-and-privilege"><span class="header-section-number">2.5</span> Users, Groups, and
 Privilege</h2>
 <p>The kernel associates credentials with a process, including a real
 and effective user ID, group IDs, and supplementary groups. A program
@@ -937,7 +933,7 @@ pipelines unless you understand which side receives elevated
 credentials: in <code>producer | sudo consumer</code>, only
 <code>consumer</code> is elevated. The pipe itself connects processes;
 it does not transfer one process’s credentials to another.</p>
-<h2 data-number="5.6" id="environment-variables-and-inheritance"><span class="header-section-number">5.6</span> Environment Variables and
+<h2 data-number="2.6" id="environment-variables-and-inheritance"><span class="header-section-number">2.6</span> Environment Variables and
 Inheritance</h2>
 <p>An environment is a set of name-value strings passed to a newly
 executed program. In a shell, an ordinary assignment such as
@@ -959,13 +955,13 @@ can include credentials or tokens. Inspect selectively and redact before
 sharing. The interfaces are documented by <a href="https://man7.org/linux/man-pages/man7/environ.7.html"><code>environ(7)</code></a>
 and the <a href="https://www.gnu.org/software/bash/manual/bash.html#Environment">Bash
 manual’s environment section</a>.</p>
-<h1 data-number="6" id="how-a-shell-turns-text-into-a-process"><span class="header-section-number">6</span> How a Shell Turns Text Into a
+<h1 data-number="3" id="how-a-shell-turns-text-into-a-process"><span class="header-section-number">3</span> How a Shell Turns Text Into a
 Process</h1>
 <p>The shell section follows one command from text to execution and
 status. First establish how a name becomes a program and how text
 becomes arguments; then examine quoting, expansion, pipes, redirection,
 and the evidence needed when a stage fails.</p>
-<h2 data-number="6.1" id="command-lookup-and-arguments"><span class="header-section-number">6.1</span> Command Lookup and
+<h2 data-number="3.1" id="command-lookup-and-arguments"><span class="header-section-number">3.1</span> Command Lookup and
 Arguments</h2>
 <p>The shell does not pass a typed command line verbatim to a program.
 It parses shell syntax, performs expansions, applies redirections, and
@@ -998,7 +994,7 @@ hazard. Prefer explicit paths for local scripts and avoid adding
 writable, untrusted directories ahead of trusted system locations. See
 the <a href="https://www.gnu.org/software/bash/manual/bash.html#Command-Search-and-Execution">Bash
 command search documentation</a> and <a href="https://man7.org/linux/man-pages/man2/execve.2.html"><code>execve(2)</code></a>.</p>
-<h2 data-number="6.2" id="quoting-expansion-and-globbing"><span class="header-section-number">6.2</span> Quoting, Expansion, and
+<h2 data-number="3.2" id="quoting-expansion-and-globbing"><span class="header-section-number">3.2</span> Quoting, Expansion, and
 Globbing</h2>
 <p>Quoting controls which characters the shell treats as syntax. Single
 quotes preserve every enclosed character literally, except that a single
@@ -1036,7 +1032,7 @@ substitution’s status in Bash, but more complicated declarations or
 surrounding commands can mask it. Check failures explicitly when the
 result matters. Avoid <code>eval</code>: it asks the shell to parse a
 second time and can turn data into executable syntax.</p>
-<h2 data-number="6.3" id="pipelines-redirection-and-exit-status"><span class="header-section-number">6.3</span> Pipelines, Redirection, and
+<h2 data-number="3.3" id="pipelines-redirection-and-exit-status"><span class="header-section-number">3.3</span> Pipelines, Redirection, and
 Exit Status</h2>
 <p>In <code>first | second</code>, the shell starts commands connected
 by a pipe. Each stage normally runs in a separate process environment,
@@ -1069,7 +1065,7 @@ standard output. To send both streams through a pipe in Bash, use
 while remembering that combining streams loses the distinction between
 data and diagnostics. Keep diagnostics separate when a later stage
 expects structured or clean data.</p>
-<h2 data-number="6.4" id="diagnostic-discipline"><span class="header-section-number">6.4</span> Diagnostic Discipline</h2>
+<h2 data-number="3.4" id="diagnostic-discipline"><span class="header-section-number">3.4</span> Diagnostic Discipline</h2>
 <p>Troubleshooting works best as a sequence of small, reversible
 observations. First record the exact command, working directory,
 identity, relevant environment, and complete error output. Then state
@@ -1096,7 +1092,7 @@ evidence is needed and access is appropriate. <code>man</code> pages,
 <code>--help</code> output, and official documentation should be checked
 for the exact program and version rather than trusting a similar
 command’s conventions.</p>
-<h1 data-number="7" id="worked-example-finding-and-recovering-a-failed-pipeline"><span class="header-section-number">7</span> Worked Example: Finding and
+<h1 data-number="4" id="worked-example-finding-and-recovering-a-failed-pipeline"><span class="header-section-number">4</span> Worked Example: Finding and
 Recovering a Failed Pipeline</h1>
 <p>Suppose a report is meant to select lines containing
 <code>READY</code>, sort them, and write the result to a file. A
@@ -1156,13 +1152,13 @@ workflow often writes to a temporary output in the same filesystem,
 validates it, and renames it into place only after success. The key
 habit is to ask what each stage did, which status survived, and which
 output side effects occurred before declaring recovery complete.</p>
-<h1 data-number="8" id="gits-object-and-repository-model"><span class="header-section-number">8</span> Git’s Object and Repository
+<h1 data-number="5" id="gits-object-and-repository-model"><span class="header-section-number">5</span> Git’s Object and Repository
 Model</h1>
 <p>Git’s stored objects and movable references explain the working tree,
 commits, collaboration, and recovery that follow. Start with the object
 graph, then separate the working tree and index from <code>HEAD</code>,
 before examining commits and the names that make them reachable.</p>
-<h2 data-number="8.1" id="what-git-stores"><span class="header-section-number">8.1</span> What Git Stores</h2>
+<h2 data-number="5.1" id="what-git-stores"><span class="header-section-number">5.1</span> What Git Stores</h2>
 <p>Git is a content-addressed database with a versioned directory tree
 and a set of references that name commits. This model explains both
 ordinary collaboration and why an apparently lost commit can often be
@@ -1196,7 +1192,7 @@ not edit these files directly. Commands such as
 and relationships. The official <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git
 object model documentation</a> describes the object types and how trees
 and commits refer to them.</p>
-<h2 data-number="8.2" id="working-tree-index-and-head"><span class="header-section-number">8.2</span> Working Tree, Index, and
+<h2 data-number="5.2" id="working-tree-index-and-head"><span class="header-section-number">5.2</span> Working Tree, Index, and
 <code>HEAD</code></h2>
 <p>The working tree is the set of checked-out paths on disk. The index,
 also called the staging area, is the proposed content for the next
@@ -1234,7 +1230,7 @@ detached-<code>HEAD</code> state, it names a commit directly. Detached
 state is useful for inspection and experiments, but a new commit may not
 be reachable by a named branch after checkout elsewhere. If you need to
 keep it, create a branch at that commit before moving away.</p>
-<h2 data-number="8.3" id="commits-and-references"><span class="header-section-number">8.3</span> Commits and References</h2>
+<h2 data-number="5.3" id="commits-and-references"><span class="header-section-number">5.3</span> Commits and References</h2>
 <p>A commit freezes the index as a tree and records its parent or
 parents. It does not include unstaged changes. Good commits describe a
 coherent change, use a useful message, and keep generated artefacts and
@@ -1265,7 +1261,7 @@ and tags. The <a href="https://git-scm.com/docs/gitglossary">Git
 glossary</a> is useful when terms such as “reachable”, “tracking
 branch”, “index”, and “refspec” appear in command output or
 documentation.</p>
-<h1 data-number="9" id="branches-integration-and-collaboration"><span class="header-section-number">9</span> Branches, Integration, and
+<h1 data-number="6" id="branches-integration-and-collaboration"><span class="header-section-number">6</span> Branches, Integration, and
 Collaboration</h1>
 <p>Local branches are names in your repository. A remote is a configured
 name and URL, commonly <code>origin</code>, used to fetch from and push
@@ -1302,7 +1298,7 @@ bypass them and they cannot replace server-side permissions and required
 checks. Consult the hosting provider’s current documentation for its
 exact rule names and behaviour; Git itself defines the repository
 operations, not a universal pull-request process.</p>
-<h2 data-number="9.1" id="merge-and-rebase"><span class="header-section-number">9.1</span> Merge and Rebase</h2>
+<h2 data-number="6.1" id="merge-and-rebase"><span class="header-section-number">6.1</span> Merge and Rebase</h2>
 <p>A merge integrates histories by finding a common ancestor and
 combining the changes since that point. If one side is already an
 ancestor of the other, Git can fast-forward the target reference without
@@ -1337,7 +1333,7 @@ inspect status, reflog, and saved work before trying a reset.
 and staged; <code>git rebase --skip</code> omits the current patch and
 can discard the change it represents, so use it only when that omission
 is intentional.</p>
-<h2 data-number="9.2" id="review-and-protected-main-workflows"><span class="header-section-number">9.2</span> Review and Protected-Main
+<h2 data-number="6.2" id="review-and-protected-main-workflows"><span class="header-section-number">6.2</span> Review and Protected-Main
 Workflows</h2>
 <p>Review works best when the proposed change is explicit and small
 enough to reason about. On a topic branch, inspect the full difference
@@ -1365,7 +1361,7 @@ remote depends on which method was used. Fetch, inspect the
 remote-tracking reference, then update local branches deliberately.
 Delete a topic branch only after verifying the merged change is present
 and no remaining work depends on that branch.</p>
-<h1 data-number="10" id="recovery-inspect-before-you-repair"><span class="header-section-number">10</span> Recovery: Inspect Before You
+<h1 data-number="7" id="recovery-inspect-before-you-repair"><span class="header-section-number">7</span> Recovery: Inspect Before You
 Repair</h1>
 <p>When something looks lost, first preserve evidence. Stop running
 commands that move references or overwrite files. Do not start with
@@ -1400,7 +1396,7 @@ tag, a worktree, or a backup may retain the commit even after local
 reflog evidence is gone. If a commit is absent from all refs and object
 storage has pruned it, Git cannot recreate its content from the commit
 ID alone.</p>
-<h2 data-number="10.1" id="recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="header-section-number">10.1</span> Recovery Walkthrough: A Commit
+<h2 data-number="7.1" id="recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="header-section-number">7.1</span> Recovery Walkthrough: A Commit
 Hidden by Reference Movement</h2>
 <p>This example uses a disposable repository. It simulates two branch
 movements after a useful commit, leaving the commit absent from the
@@ -1483,7 +1479,7 @@ rescue branch such as
 <code>git branch rescue/old-topic &lt;candidate&gt;</code>. Reflog
 recovery restores a reference to existing objects; it does not
 reconstruct edits that were never committed or saved.</p>
-<h2 data-number="10.2" id="reset-restore-clean-and-other-risk-boundaries"><span class="header-section-number">10.2</span> Reset, Restore, Clean, and
+<h2 data-number="7.2" id="reset-restore-clean-and-other-risk-boundaries"><span class="header-section-number">7.2</span> Reset, Restore, Clean, and
 Other Risk Boundaries</h2>
 <p>Git commands that sound like “undo” act on different layers.
 <code>git restore &lt;path&gt;</code> can replace working-tree content
@@ -1514,7 +1510,7 @@ after inspection. The <a href="https://git-scm.com/docs/git-reset">Git
 reset documentation</a>, <a href="https://git-scm.com/docs/git-restore">restore documentation</a>,
 and <a href="https://git-scm.com/docs/git-clean">clean documentation</a>
 define the affected layers and options.</p>
-<h2 data-number="10.3" id="reflogs-and-worktrees"><span class="header-section-number">10.3</span> Reflogs and Worktrees</h2>
+<h2 data-number="7.3" id="reflogs-and-worktrees"><span class="header-section-number">7.3</span> Reflogs and Worktrees</h2>
 <p>The reflog records recent updates to references in a local
 repository. <code>HEAD</code> has a reflog in typical repositories, and
 branch references may have their own. <code>git reflog show --all</code>
@@ -1540,7 +1536,7 @@ documentation</a> and <a href="https://git-scm.com/docs/git-worktree">worktree d
 cover retention and management details. For long-lived recovery, use an
 independent clone, remote, bundle, or filesystem backup in addition to
 local reflogs.</p>
-<h1 data-number="11" id="reproducible-environments-and-developer-lifecycle"><span class="header-section-number">11</span> Reproducible Environments and
+<h1 data-number="8" id="reproducible-environments-and-developer-lifecycle"><span class="header-section-number">8</span> Reproducible Environments and
 Developer Lifecycle</h1>
 <p>A reproducible build begins with a clear answer to four questions:
 which source revision is being built, which tools and dependencies are
@@ -1574,7 +1570,7 @@ The root <code>Justfile</code> provides selected entry points, while the
 project recipe controls the complete build. The repository’s <a href="../CONTRIBUTING.md">contribution guide</a> documents which recipes
 apply and why generated HTML and PDF are committed alongside their
 source.</p>
-<h2 data-number="11.1" id="declare-dependencies-and-preserve-resolution"><span class="header-section-number">11.1</span> Declare Dependencies and
+<h2 data-number="8.1" id="declare-dependencies-and-preserve-resolution"><span class="header-section-number">8.1</span> Declare Dependencies and
 Preserve Resolution</h2>
 <p>A dependency declaration expresses what the project needs; a lockfile
 records a particular resolution of those needs. These answer different
@@ -1615,7 +1611,7 @@ review the effect separately from ordinary dependency updates. A clean
 install from a fresh environment is stronger evidence than a successful
 install over an old environment that may contain undeclared
 packages.</p>
-<h2 data-number="11.2" id="isolate-the-environment"><span class="header-section-number">11.2</span> Isolate the Environment</h2>
+<h2 data-number="8.2" id="isolate-the-environment"><span class="header-section-number">8.2</span> Isolate the Environment</h2>
 <p>Isolation limits accidental interaction between projects and makes
 the environment easier to reconstruct. Language-specific virtual
 environments, package-manager-managed toolchains, and containers solve
@@ -1648,7 +1644,7 @@ outward. Run unfamiliar generators and third-party build scripts with
 the smallest necessary filesystem and credential access. Container
 implementation and operating-system isolation details belong in the <a href="../primer_containerization/primer_containerization.html">containerisation
 primer</a>.</p>
-<h2 data-number="11.3" id="pin-tools-and-images-at-the-right-boundary"><span class="header-section-number">11.3</span> Pin Tools and Images at the
+<h2 data-number="8.3" id="pin-tools-and-images-at-the-right-boundary"><span class="header-section-number">8.3</span> Pin Tools and Images at the
 Right Boundary</h2>
 <p>Pinning gives a build a stable name for each important tool input.
 Pin a runtime or compiler version in the project’s supported version
@@ -1683,7 +1679,7 @@ changes. Avoid copying the same pin into many files; centralised
 declarations reduce drift. If architecture-specific manifests or
 platform variants are involved, identify which one the pin selects and
 whether the project expects the same platform everywhere.</p>
-<h2 data-number="11.4" id="use-containers-as-build-boundaries"><span class="header-section-number">11.4</span> Use Containers as Build
+<h2 data-number="8.4" id="use-containers-as-build-boundaries"><span class="header-section-number">8.4</span> Use Containers as Build
 Boundaries</h2>
 <p>A container is useful here because it packages build tools and system
 libraries behind a repeatable command. The build recipe should make the
@@ -1712,7 +1708,7 @@ when the question becomes “what isolation does this container provide?”
 The reproducibility question is narrower: does the build run with
 declared inputs, and can a reviewer inspect how those inputs were
 selected?</p>
-<h2 data-number="11.5" id="design-ci-as-an-independent-recheck"><span class="header-section-number">11.5</span> Design CI as an Independent
+<h2 data-number="8.5" id="design-ci-as-an-independent-recheck"><span class="header-section-number">8.5</span> Design CI as an Independent
 Recheck</h2>
 <p>Continuous integration (CI) should reconstruct the project from the
 checked-out revision and report whether the required checks pass. Its
@@ -1754,7 +1750,7 @@ validate a pull request before merge; choose triggers and branch
 protections that match the intended gate. For a product-specific
 workflow reference, consult the provider’s maintained documentation
 rather than copying a stale example.</p>
-<h2 data-number="11.6" id="treat-generated-artefacts-as-published-interfaces"><span class="header-section-number">11.6</span> Treat Generated Artefacts as
+<h2 data-number="8.6" id="treat-generated-artefacts-as-published-interfaces"><span class="header-section-number">8.6</span> Treat Generated Artefacts as
 Published Interfaces</h2>
 <p>An artefact is a file produced by a build or workflow. It may be a
 binary, package, report, website, notebook output, model, or the
@@ -1794,7 +1790,7 @@ Name artefacts with enough context to identify the workflow and source
 revision, and avoid ambiguous names such as <code>output.zip</code> in a
 release archive. When downloading an artefact, verify that it came from
 the intended run and commit before using or publishing it.</p>
-<h2 data-number="11.7" id="freshness-validation-and-the-stale-output-failure"><span class="header-section-number">11.7</span> Freshness, Validation, and the
+<h2 data-number="8.7" id="freshness-validation-and-the-stale-output-failure"><span class="header-section-number">8.7</span> Freshness, Validation, and the
 Stale-Output Failure</h2>
 <p>Freshness is a relation between a source revision and the output
 built from it. File modification times are weak evidence: archive
@@ -1846,13 +1842,13 @@ pages where layout changed. For a compiled package, they might include
 executable tests, metadata checks, dependency inventories, and a smoke
 test in a clean runtime. Make the gate explain which property it checks
 and which properties remain for reviewers.</p>
-<h1 data-number="12" id="review-release-and-safe-lifecycle"><span class="header-section-number">12</span> Review, Release, and Safe
+<h1 data-number="9" id="review-release-and-safe-lifecycle"><span class="header-section-number">9</span> Review, Release, and Safe
 Lifecycle</h1>
 <p>The final workflow section connects a reviewable patch to a validated
 release and its maintenance path. First make the change legible to
 reviewers; then identify the build, release, recovery, and maintenance
 states that keep the result trustworthy.</p>
-<h2 data-number="12.1" id="repository-hygiene-and-reviewable-changes"><span class="header-section-number">12.1</span> Repository Hygiene and
+<h2 data-number="9.1" id="repository-hygiene-and-reviewable-changes"><span class="header-section-number">9.1</span> Repository Hygiene and
 Reviewable Changes</h2>
 <p>Keep one coherent change per branch or pull request. A source edit,
 lockfile update, generated output, and build-recipe change may belong
@@ -1882,7 +1878,7 @@ change, but it does not replace the source or a reproducible build. If a
 check could not run because the required image or external service was
 unavailable, state that plainly and provide the strongest independent
 check that did run.</p>
-<h2 data-number="12.2" id="release-workflow-and-safe-lifecycle"><span class="header-section-number">12.2</span> Release Workflow and Safe
+<h2 data-number="9.2" id="release-workflow-and-safe-lifecycle"><span class="header-section-number">9.2</span> Release Workflow and Safe
 Lifecycle</h2>
 <p>A safe developer lifecycle is a sequence of explicit states. Start by
 checking repository instructions, branch state, and the issue or change
@@ -1932,7 +1928,7 @@ workflow when the source tree changes. A pin without an owner becomes
 stale; a check with no failure response becomes theatre. Give each
 important input and gate a maintenance route so reproducibility remains
 a practice rather than a one-time snapshot.</p>
-<h1 data-number="13" id="glossary"><span class="header-section-number">13</span> Glossary</h1>
+<h1 data-number="10" id="glossary"><span class="header-section-number">10</span> Glossary</h1>
 <ul>
 <li><strong><a href="#users-groups-and-privilege">ACL</a>:</strong> an
 access-control list that adds rules beyond ordinary Unix mode bits.</li>
@@ -1977,7 +1973,7 @@ command arguments.</li>
 tree</a>:</strong> the files checked out for a Git repository at the
 current HEAD.</li>
 </ul>
-<h1 data-number="14" id="further-reading"><span class="header-section-number">14</span> Further Reading</h1>
+<h1 data-number="11" id="further-reading"><span class="header-section-number">11</span> Further Reading</h1>
 <ul>
 <li><a href="https://www.gnu.org/software/bash/manual/bash.html">Bash
 Reference Manual</a> — parsing, expansions, redirections, pipelines,

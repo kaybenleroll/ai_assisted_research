@@ -1,6 +1,6 @@
 # Linux, Git, and Reproducible Developer Workflows
 
-## What This Primer Covers
+## Orientation: Scope, Background, and Reading Route
 
 Software work is a chain of state changes. A shell turns text into a process; the operating system decides what that process can see and do; Git records source state and collaboration history; a build environment turns source into artefacts; and review or release checks decide whether those artefacts are fit to publish. A failure at one boundary can look like a failure at another.
 
@@ -8,19 +8,13 @@ This primer develops the mental models beneath those boundaries. It covers Linux
 
 The emphasis is diagnosis and recovery. When a command fails, you should be able to state which layer owns the behaviour, gather evidence without destroying useful state, make the smallest justified repair, and verify the result.
 
-## What This Primer Is Not
-
 This is not a Linux administration manual, a shell-language reference, a catalogue of Git commands, or a container-engine comparison. It does not teach kernel development, shell customisation, Kubernetes, coding-agent operation, or AI evaluation in depth. Use the [containerisation primer](../primer_containerization/primer_containerization.html) for namespaces, cgroups, image layers, runtimes, and orchestration; the [Oh My Zsh primer](../primer_ohmyzsh/primer_ohmyzsh.html) for Zsh configuration; and the [Pi coding-agent primer](../primer_pi_coding_agent/primer_pi_coding_agent.html) for agent sessions and trust boundaries.
 
 The commands and outputs shown in the worked examples are produced in disposable directories, disposable repositories, or documented build containers. They are not run against this repository's real history. Examples are designed to teach transferable reasoning, not to prescribe one project's only workflow.
 
-## Assumed Background
-
 You should be comfortable opening a terminal, editing a text file, running a program, and reading a basic error message. You do not need to know Git's internal object types or Linux system calls in advance. The primer introduces those concepts when they become useful.
 
 The main shell examples use Bash. Bash extensions are identified where they matter; portable shell scripts should follow the relevant POSIX rules instead of assuming that pipefail, arrays, or other Bash features exist. Product names, version-specific behaviour, and current hosting policy are not treated as timeless facts: verify them against the linked primary documentation before relying on them.
-
-## How to Read This Primer
 
 Read the [Linux and shell sections](#linux-processes-and-the-shell-boundary) first if you are new to command-line systems. Read the [Git sections](#gits-object-and-repository-model) next if your immediate problem is a branch, merge, rebase, or lost commit. Read the [reproducibility and lifecycle sections](#reproducible-environments-and-developer-lifecycle) when you need to make a result repeatable across machines or reviewable by someone else.
 
