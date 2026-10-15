@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux, Git, and Reproducible Developer Workflows</title>
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--nav-h: 56px;
+--sidebar-w: 320px;
+--sidebar-min: 240px;
+--sidebar-max: 520px;
+--accent: #2563eb;
+--accent-dark: #1d4ed8;
+--bg: #f9fafb;
+--surface: #ffffff;
+--border: #e5e7eb;
+--text: #111827;
+--muted: #6b7280;
+--code-bg: #1e1e2e;
+--radius: 6px;
+--font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+font-family: var(--font-sans);
+color: var(--text);
+background: var(--bg);
+line-height: 1.7;
+}
+
+.navbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(--nav-h);
+background: var(--accent);
+color: #fff;
+display: flex;
+align-items: center;
+padding: 0 1.5rem;
+z-index: 100;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+gap: 1rem;
+}
+.navbar-brand {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: -.01em;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+flex: 1;
+}
+.navbar-meta {
+font-size: .8rem;
+opacity: .75;
+white-space: nowrap;
+}
+
+.layout {
+display: flex;
+margin-top: var(--nav-h);
+min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+width: clamp(var(--sidebar-min), var(--sidebar-w), var(--sidebar-max));
+min-width: var(--sidebar-min);
+max-width: var(--sidebar-max);
+flex-shrink: 0;
+position: sticky;
+top: var(--nav-h);
+height: calc(100vh - var(--nav-h));
+overflow-y: auto;
+overflow-x: hidden;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 1.25rem 0;
+}
+.sidebar-resizer {
+width: 10px;
+flex: 0 0 10px;
+cursor: col-resize;
+background: linear-gradient(to right, transparent 0, transparent 40%, var(--border) 40%, var(--border) 60%, transparent 60%, transparent 100%);
+user-select: none;
+touch-action: none;
+}
+.layout.is-resizing,
+.layout.is-resizing * {
+cursor: col-resize;
+user-select: none;
+}
+.sidebar-heading {
+font-size: .7rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: .08em;
+color: var(--muted);
+padding: 0 1.25rem .5rem;
+}
+.sidebar-tools {
+padding: 0 1.25rem .75rem;
+}
+.math-mode-btn {
+width: 100%;
+border: 1px solid var(--border);
+background: #f8fafc;
+color: #334155;
+border-radius: 6px;
+padding: .4rem .55rem;
+font-size: .75rem;
+line-height: 1.2;
+cursor: pointer;
+transition: background .15s, color .15s, border-color .15s;
+}
+.math-mode-btn:hover,
+.math-mode-btn:focus {
+background: #eff6ff;
+color: var(--accent);
+border-color: #bfdbfe;
+}
+
+#TOC {
+font-size: .83rem;
+}
+#TOC ul {
+list-style: none;
+padding: 0;
+}
+#TOC > ul { padding: 0; }
+#TOC li { line-height: 1.4; }
+#TOC a {
+display: block;
+padding: .3rem 1.25rem;
+color: var(--muted);
+text-decoration: none;
+border-left: 2px solid transparent;
+transition: color .15s, border-color .15s, background .15s;
+}
+#TOC a:hover {
+color: var(--accent);
+background: #eff6ff;
+border-left-color: var(--accent);
+}
+
+#TOC ul ul a { padding-left: 2rem; font-size: .78rem; }
+#TOC ul ul ul a { padding-left: 2.75rem; font-size: .75rem; }
+#TOC li.has-toggle {
+display: flex;
+flex-wrap: wrap;
+align-items: baseline;
+}
+#TOC li.has-toggle > .toc-toggle {
+flex: 0 0 auto;
+margin-right: .2rem;
+vertical-align: middle;
+}
+#TOC li.has-toggle > a.toc-link-inline {
+display: inline-block;
+flex: 1 1 0%;
+min-width: 0;
+padding-left: 0;
+border-left: none;
+vertical-align: middle;
+}
+#TOC li.has-toggle.toc-depth-2 > .toc-toggle { margin-left: 2rem; }
+#TOC li.has-toggle.toc-depth-3 > .toc-toggle { margin-left: 2.75rem; }
+#TOC li.has-toggle > ul {
+flex: 1 0 100%;
+width: 100%;
+}
+
+.toc-toggle {
+background: none;
+border: none;
+padding: 0 .3em 0 0;
+margin: 0;
+cursor: pointer;
+color: #9399b2;
+font-size: 1em;
+line-height: 1;
+vertical-align: middle;
+outline: none;
+transition: color .15s;
+}
+.toc-toggle:focus,
+.toc-toggle:hover {
+color: var(--accent);
+}
+.toc-arrow {
+display: inline-block;
+transition: transform .15s;
+}
+.toc-toggle.expanded .toc-arrow {
+transform: rotate(90deg);
+}
+.toc-toggle.collapsed .toc-arrow {
+transform: rotate(0deg);
+}
+
+.content {
+flex: 1;
+min-width: 0;
+
+padding: 2.5rem clamp(1.25rem, 3vw, 3rem);
+max-width: 1400px;
+}
+.content-inner {
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+}
+.content-inner > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote) {
+max-width: 100ch;
+}
+.content-inner > :where(pre, .code-tabs, .code-details, div.sourceCode) {
+width: 100%;
+max-width: none;
+}
+.content-inner > :where(table, .broad-table, .compact-table) {
+align-self: flex-start;
+}
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-weight: 700;
+line-height: 1.25;
+margin-top: 2em;
+margin-bottom: .6em;
+color: var(--text);
+scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+h1 { font-size: 2rem; }
+h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
+p { margin-bottom: 1rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 650; }
+em { font-style: italic; }
+hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 2.5rem 0;
+}
+
+table {
+width: fit-content;
+max-width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+margin: 1.5rem 0;
+background: var(--surface);
+border-radius: var(--radius);
+overflow: hidden;
+box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+.content-inner > :where(table:has(tr > :nth-child(4)), .broad-table) {
+width: 100%;
+max-width: none;
+}
+.broad-table > table {
+width: 100%;
+max-width: none;
+}
+/* Pandoc derives <col> percentages from Markdown separator widths. */
+    .compact-table {
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .compact-table > table {
+      width: max-content;
+      max-width: none;
+      table-layout: auto;
+    }
+
+    .compact-table > table colgroup > col {
+      width: auto !important;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 650;
+      text-align: left;
+      padding: .6rem .9rem;
+      border-bottom: 2px solid var(--border);
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    td {
+      padding: .55rem .9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    /* ── Code ──────────────────────────────────────────────────────── */
+    code {
+      font-family: var(--font-mono);
+      font-size: .85em;
+      background: #f3f4f6;
+      color: #be185d;
+      padding: .15em .4em;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #cdd6f4;
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: .83rem;
+      line-height: 1.6;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* ── Blockquotes ───────────────────────────────────────────────── */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 1.5rem 0;
+      padding: .75rem 1.25rem;
+      background: #eff6ff;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #1e3a5f;
+      font-style: italic;
+    }
+
+    /* ── Lists ─────────────────────────────────────────────────────── */
+    ul, ol {
+      padding-left: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    li { margin-bottom: .3rem; }
+
+    /* ── Syntax highlight overrides (tango theme base) ─────────────── */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #232629;
+    color: #7a7c7d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #7a7c7d;  padding-left: 4px; }
+div.sourceCode
+  { color: #cfcfc2; background-color: #232629; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #cfcfc2; } /* Normal */
+code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+code span.an { color: #3f8058; } /* Annotation */
+code span.at { color: #2980b9; } /* Attribute */
+code span.bn { color: #f67400; } /* BaseN */
+code span.bu { color: #7f8c8d; } /* BuiltIn */
+code span.cf { color: #fdbc4b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #3daee9; } /* Char */
+code span.cn { color: #27aeae; font-weight: bold; } /* Constant */
+code span.co { color: #7a7c7d; } /* Comment */
+code span.cv { color: #7f8c8d; } /* CommentVar */
+code span.do { color: #a43340; } /* Documentation */
+code span.dt { color: #2980b9; } /* DataType */
+code span.dv { color: #f67400; } /* DecVal */
+code span.er { color: #da4453; text-decoration: underline; } /* Error */
+code span.ex { color: #0099ff; font-weight: bold; } /* Extension */
+code span.fl { color: #f67400; } /* Float */
+code span.fu { color: #8e44ad; } /* Function */
+code span.im { color: #27ae60; } /* Import */
+code span.in { color: #c45b00; } /* Information */
+code span.kw { color: #cfcfc2; font-weight: bold; } /* Keyword */
+code span.op { color: #cfcfc2; } /* Operator */
+code span.ot { color: #27ae60; } /* Other */
+code span.pp { color: #27ae60; } /* Preprocessor */
+code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #da4453; } /* SpecialString */
+code span.st { color: #f44f4f; } /* String */
+code span.va { color: #27aeae; } /* Variable */
+code span.vs { color: #da4453; } /* VerbatimString */
+code span.wa { color: #da4453; } /* Warning */
+
+    /* ── Code tabs ─────────────────────────────────────────────────── */
+    .code-tabs {
+      margin: 1.25rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .code-tab-bar {
+      display: flex;
+      background: #16161f;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 0 .5rem;
+      gap: .15rem;
+    }
+
+    .code-tab-btn {
+      padding: .45rem 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #9399b2;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+      white-space: nowrap;
+    }
+
+    .code-tab-btn:hover { color: #cdd6f4; }
+    .code-tab-btn.active { color: #89b4fa; border-bottom-color: #89b4fa; }
+
+    .code-tab-btn:focus-visible, .code-tab-panel:focus-visible {
+      outline: 2px solid #89b4fa;
+      outline-offset: -2px;
+    }
+
+    .code-tab-panel[hidden] { display: none; }
+    .code-tabs .code-tab-label { display: none; }
+
+    .code-tab-panel > div.sourceCode > pre {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    /* ── Collapsible single code blocks ─────────────────────────────── */
+    .code-details {
+      margin: 1.25rem 0;
+    }
+
+    .code-details > div.sourceCode {
+      margin: 0;
+    }
+
+    .code-details > div.sourceCode > pre {
+      margin: 0;
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    .code-summary {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .4rem .85rem;
+      background: #16161f;
+      color: #9399b2;
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      cursor: pointer;
+      border-radius: var(--radius) var(--radius) 0 0;
+      list-style: none;
+      user-select: none;
+    }
+
+    .code-summary::-webkit-details-marker { display: none; }
+
+    .code-summary::before {
+      content: '▶';
+      font-size: .6rem;
+      transition: transform .15s;
+      flex-shrink: 0;
+    }
+
+    details[open] .code-summary::before { transform: rotate(90deg); }
+
+    details:not([open]) .code-details > div.sourceCode > pre {
+      border-radius: 0;
+    }
+
+    /* ── Responsive: convert sidebar to top TOC on small screens ────── */
+    @media (max-width: 768px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: block;
+        position: static;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: .75rem 0;
+      }
+
+      .sidebar-heading {
+        padding-bottom: .25rem;
+      }
+
+      #TOC a {
+        padding-top: .4rem;
+        padding-bottom: .4rem;
+      }
+
+      .sidebar-resizer { display: none; }
+      .navbar-meta { display: none; }
+
+      .content {
+        max-width: 100%;
+        padding-top: 1.25rem;
+      }
+      .content-inner > :where(table, .broad-table, .compact-table) {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .content-inner > .broad-table > table {
+        min-width: 48rem;
+      }
+      .content-inner > .compact-table > table {
+        width: max-content;
+      }
+      .code-tab-bar {
+        overflow-x: auto;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .sidebar {
+        width: 260px;
+        min-width: 220px;
+      }
+    }
+
+    /* ── Print ─────────────────────────────────────────────────────── */
+    @media print {
+      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .content { padding: 0; max-width: 100%; }
+      .code-tab-bar { display: none; }
+      .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
+      .code-tabs .code-tab-panel { display: block !important; }
+      .code-tabs .code-tab-label {
+        display: block;
+        color: #000;
+        margin: 1rem 0 .5rem;
+        break-after: avoid;
+      }
+    }
+
+    /* ── Custom code color overrides for readability ── */
+    code span.fu { color: #c792ea !important; } /* function names: lighter purple */
+  </style>
+
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">Linux, Git, and Reproducible Developer
+Workflows</span>
+    <span class="navbar-meta">15 October 2026</span>
+    <span class="navbar-meta">Mick Cooney</span>
+
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-heading">Contents</p>
+      <div class="sidebar-tools">
+      </div>
+      <div id="TOC" aria-label="Table of contents"><ul>
+<li><a href="#orientation-scope-background-and-reading-route" id="toc-orientation-scope-background-and-reading-route"><span class="toc-section-number">1</span> Orientation: Scope, Background, and
+Reading Route</a></li>
+<li><a href="#linux-processes-and-the-shell-boundary" id="toc-linux-processes-and-the-shell-boundary"><span class="toc-section-number">2</span> Linux Processes and the Shell
+Boundary</a>
+<ul>
+<li><a href="#what-a-process-is" id="toc-what-a-process-is"><span class="toc-section-number">2.1</span> What a Process Is</a></li>
+<li><a href="#signals-and-shutdown" id="toc-signals-and-shutdown"><span class="toc-section-number">2.2</span> Signals and Shutdown</a></li>
+<li><a href="#file-descriptors-where-input-and-output-go" id="toc-file-descriptors-where-input-and-output-go"><span class="toc-section-number">2.3</span> File Descriptors: Where Input and
+Output Go</a></li>
+<li><a href="#paths-filesystems-and-mounts" id="toc-paths-filesystems-and-mounts"><span class="toc-section-number">2.4</span> Paths, Filesystems, and
+Mounts</a></li>
+<li><a href="#users-groups-and-privilege" id="toc-users-groups-and-privilege"><span class="toc-section-number">2.5</span> Users, Groups, and
+Privilege</a></li>
+<li><a href="#environment-variables-and-inheritance" id="toc-environment-variables-and-inheritance"><span class="toc-section-number">2.6</span> Environment Variables and
+Inheritance</a></li>
+</ul></li>
+<li><a href="#how-a-shell-turns-text-into-a-process" id="toc-how-a-shell-turns-text-into-a-process"><span class="toc-section-number">3</span> How a Shell Turns Text Into a
+Process</a>
+<ul>
+<li><a href="#command-lookup-and-arguments" id="toc-command-lookup-and-arguments"><span class="toc-section-number">3.1</span> Command Lookup and
+Arguments</a></li>
+<li><a href="#quoting-expansion-and-globbing" id="toc-quoting-expansion-and-globbing"><span class="toc-section-number">3.2</span> Quoting, Expansion, and
+Globbing</a></li>
+<li><a href="#pipelines-redirection-and-exit-status" id="toc-pipelines-redirection-and-exit-status"><span class="toc-section-number">3.3</span> Pipelines, Redirection, and Exit
+Status</a></li>
+<li><a href="#diagnostic-discipline" id="toc-diagnostic-discipline"><span class="toc-section-number">3.4</span> Diagnostic Discipline</a></li>
+</ul></li>
+<li><a href="#worked-example-finding-and-recovering-a-failed-pipeline" id="toc-worked-example-finding-and-recovering-a-failed-pipeline"><span class="toc-section-number">4</span> Worked Example: Finding and
+Recovering a Failed Pipeline</a></li>
+<li><a href="#gits-object-and-repository-model" id="toc-gits-object-and-repository-model"><span class="toc-section-number">5</span> Git’s Object and Repository
+Model</a>
+<ul>
+<li><a href="#what-git-stores" id="toc-what-git-stores"><span class="toc-section-number">5.1</span> What Git Stores</a></li>
+<li><a href="#working-tree-index-and-head" id="toc-working-tree-index-and-head"><span class="toc-section-number">5.2</span> Working Tree, Index, and
+<code>HEAD</code></a></li>
+<li><a href="#commits-and-references" id="toc-commits-and-references"><span class="toc-section-number">5.3</span> Commits and References</a></li>
+</ul></li>
+<li><a href="#branches-integration-and-collaboration" id="toc-branches-integration-and-collaboration"><span class="toc-section-number">6</span> Branches, Integration, and
+Collaboration</a>
+<ul>
+<li><a href="#merge-and-rebase" id="toc-merge-and-rebase"><span class="toc-section-number">6.1</span> Merge and Rebase</a></li>
+<li><a href="#review-and-protected-main-workflows" id="toc-review-and-protected-main-workflows"><span class="toc-section-number">6.2</span> Review and Protected-Main
+Workflows</a></li>
+</ul></li>
+<li><a href="#recovery-inspect-before-you-repair" id="toc-recovery-inspect-before-you-repair"><span class="toc-section-number">7</span> Recovery: Inspect Before You
+Repair</a>
+<ul>
+<li><a href="#recovery-walkthrough-a-commit-hidden-by-reference-movement" id="toc-recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="toc-section-number">7.1</span> Recovery Walkthrough: A Commit
+Hidden by Reference Movement</a></li>
+<li><a href="#reset-restore-clean-and-other-risk-boundaries" id="toc-reset-restore-clean-and-other-risk-boundaries"><span class="toc-section-number">7.2</span> Reset, Restore, Clean, and Other
+Risk Boundaries</a></li>
+<li><a href="#reflogs-and-worktrees" id="toc-reflogs-and-worktrees"><span class="toc-section-number">7.3</span> Reflogs and Worktrees</a></li>
+</ul></li>
+<li><a href="#reproducible-environments-and-developer-lifecycle" id="toc-reproducible-environments-and-developer-lifecycle"><span class="toc-section-number">8</span> Reproducible Environments and
+Developer Lifecycle</a>
+<ul>
+<li><a href="#declare-dependencies-and-preserve-resolution" id="toc-declare-dependencies-and-preserve-resolution"><span class="toc-section-number">8.1</span> Declare Dependencies and Preserve
+Resolution</a></li>
+<li><a href="#isolate-the-environment" id="toc-isolate-the-environment"><span class="toc-section-number">8.2</span> Isolate the Environment</a></li>
+<li><a href="#pin-tools-and-images-at-the-right-boundary" id="toc-pin-tools-and-images-at-the-right-boundary"><span class="toc-section-number">8.3</span> Pin Tools and Images at the Right
+Boundary</a></li>
+<li><a href="#use-containers-as-build-boundaries" id="toc-use-containers-as-build-boundaries"><span class="toc-section-number">8.4</span> Use Containers as Build
+Boundaries</a></li>
+<li><a href="#design-ci-as-an-independent-recheck" id="toc-design-ci-as-an-independent-recheck"><span class="toc-section-number">8.5</span> Design CI as an Independent
+Recheck</a></li>
+<li><a href="#treat-generated-artefacts-as-published-interfaces" id="toc-treat-generated-artefacts-as-published-interfaces"><span class="toc-section-number">8.6</span> Treat Generated Artefacts as
+Published Interfaces</a></li>
+<li><a href="#freshness-validation-and-the-stale-output-failure" id="toc-freshness-validation-and-the-stale-output-failure"><span class="toc-section-number">8.7</span> Freshness, Validation, and the
+Stale-Output Failure</a></li>
+</ul></li>
+<li><a href="#review-release-and-safe-lifecycle" id="toc-review-release-and-safe-lifecycle"><span class="toc-section-number">9</span> Review, Release, and Safe
+Lifecycle</a>
+<ul>
+<li><a href="#repository-hygiene-and-reviewable-changes" id="toc-repository-hygiene-and-reviewable-changes"><span class="toc-section-number">9.1</span> Repository Hygiene and Reviewable
+Changes</a></li>
+<li><a href="#release-workflow-and-safe-lifecycle" id="toc-release-workflow-and-safe-lifecycle"><span class="toc-section-number">9.2</span> Release Workflow and Safe
+Lifecycle</a></li>
+</ul></li>
+<li><a href="#glossary" id="toc-glossary"><span class="toc-section-number">10</span> Glossary</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">11</span> Further Reading</a></li>
+</ul></div>
+
+    </aside>
+
+    <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
+
+    <main class="content">
+      <div class="content-inner">
+<h1 data-number="1" id="orientation-scope-background-and-reading-route"><span class="header-section-number">1</span> Orientation: Scope, Background,
+and Reading Route</h1>
+<p>Software work is a chain of state changes. A shell turns text into a
+process; the operating system decides what that process can see and do;
+Git records source state and collaboration history; a build environment
+turns source into artefacts; and review or release checks decide whether
+those artefacts are fit to publish. A failure at one boundary can look
+like a failure at another.</p>
+<p>This primer develops the mental models beneath those boundaries. It
+covers Linux processes, filesystems, permissions, users, groups,
+environment variables, shell execution, pipelines, redirection, exit
+status, Git objects and references, branches, merges, rebases, reflogs,
+worktrees, reproducible environments, dependency state, containers as
+build boundaries, CI, and artefact validation. It uses short command
+sequences to make those models concrete and ends with three
+failure-and-recovery scenarios.</p>
+<p>The emphasis is diagnosis and recovery. When a command fails, you
+should be able to state which layer owns the behaviour, gather evidence
+without destroying useful state, make the smallest justified repair, and
+verify the result.</p>
+<p>This is not a Linux administration manual, a shell-language
+reference, a catalogue of Git commands, or a container-engine
+comparison. It does not teach kernel development, shell customisation,
+Kubernetes, coding-agent operation, or AI evaluation in depth. Use the
+<a href="../primer_containerization/primer_containerization.html">containerisation
+primer</a> for namespaces, cgroups, image layers, runtimes, and
+orchestration; the <a href="../primer_ohmyzsh/primer_ohmyzsh.html">Oh My
+Zsh primer</a> for Zsh configuration; and the <a href="../primer_pi_coding_agent/primer_pi_coding_agent.html">Pi
+coding-agent primer</a> for agent sessions and trust boundaries.</p>
+<p>The commands and outputs shown in the worked examples are produced in
+disposable directories, disposable repositories, or documented build
+containers. They are not run against this repository’s real history.
+Examples are designed to teach transferable reasoning, not to prescribe
+one project’s only workflow.</p>
+<p>You should be comfortable opening a terminal, editing a text file,
+running a program, and reading a basic error message. You do not need to
+know Git’s internal object types or Linux system calls in advance. The
+primer introduces those concepts when they become useful.</p>
+<p>The main shell examples use Bash. Bash extensions are identified
+where they matter; portable shell scripts should follow the relevant
+POSIX rules instead of assuming that pipefail, arrays, or other Bash
+features exist. Product names, version-specific behaviour, and current
+hosting policy are not treated as timeless facts: verify them against
+the linked primary documentation before relying on them.</p>
+<p>Read the <a href="#linux-processes-and-the-shell-boundary">Linux and
+shell sections</a> first if you are new to command-line systems. Read
+the <a href="#gits-object-and-repository-model">Git sections</a> next if
+your immediate problem is a branch, merge, rebase, or lost commit. Read
+the <a href="#reproducible-environments-and-developer-lifecycle">reproducibility
+and lifecycle sections</a> when you need to make a result repeatable
+across machines or reviewable by someone else.</p>
+<p>The recurring diagnostic loop is:</p>
+<ol type="1">
+<li>contain the operation and preserve the current state;</li>
+<li>record the exact command, location, identity, inputs, output, and
+status;</li>
+<li>inspect the layer that owns the observed behaviour;</li>
+<li>change one hypothesis at a time;</li>
+<li>verify both the repair and the absence of collateral damage.</li>
+</ol>
+<p><em>Verified against primary sources for all sections; unverified
+claims are flagged inline.</em></p>
+<h1 data-number="2" id="linux-processes-and-the-shell-boundary"><span class="header-section-number">2</span> Linux Processes and the Shell
+Boundary</h1>
+<p>Linux and a shell solve different parts of a command-line task. The
+kernel schedules processes, enforces access controls, and provides
+interfaces to files and devices. A shell reads command text, applies its
+language rules, and either performs an operation itself or asks the
+kernel to start another program. When a command behaves unexpectedly,
+identify which layer owns the behaviour before changing configuration. A
+shell expansion problem is not a permissions problem; a process that
+ignores a signal is not fixed by changing <code>PATH</code>.</p>
+<h2 data-number="2.1" id="what-a-process-is"><span class="header-section-number">2.1</span> What a Process Is</h2>
+<p>A process is a running instance of a program, with its own execution
+state and resources such as a virtual address space, open file
+descriptors, current working directory, credentials, and environment.
+The executable on disk is not the process: running the same executable
+twice creates distinct process instances. The kernel assigns each
+process a process ID (PID), which is useful for observation and
+signalling but is not a durable identity. PIDs can be reused after a
+process exits.</p>
+<p>When a process starts another process, the new process is commonly
+described as its child and the starter as its parent. On Unix-like
+systems, a shell typically creates a child and then replaces that
+child’s program image with the requested executable. The child inherits
+selected process attributes, including open descriptors, working
+directory, credentials, and environment, subject to changes made at
+launch. A parent can wait for a child and collect its termination
+status. This relationship explains why a command launched in a terminal
+usually ends when it finishes, while a background command can continue
+after the shell returns to its prompt. It does not guarantee that the
+process will survive logout: session management, terminal hangup
+handling, service managers, and shell behaviour also matter.</p>
+<p>Inspect processes as a changing snapshot. <code>ps</code> reports
+process information; <code>pgrep</code> can select by name or other
+criteria, and <code>/proc/&lt;pid&gt;/</code> exposes Linux-specific
+process information while the process exists. A displayed command line
+may be truncated, altered by the program, or contain secrets. Do not
+treat it as an authoritative record of what the process has done.
+Establish which process you mean using more than a remembered PID,
+especially before sending a signal.</p>
+<h2 data-number="2.2" id="signals-and-shutdown"><span class="header-section-number">2.2</span> Signals and Shutdown</h2>
+<p>A signal is a small asynchronous notification delivered to a process
+or process group. Interactive terminals commonly send
+<code>SIGINT</code> when you press Ctrl+C. <code>SIGTERM</code> requests
+termination and gives a program a chance to clean up;
+<code>SIGKILL</code> forces termination and cannot be caught, blocked,
+or ignored. The distinction is operational: start with a graceful
+request, allow time for cleanup, inspect the process, and use a forced
+kill only when it is necessary. A process in uninterruptible kernel
+sleep may not disappear until the kernel operation completes, even after
+a kill request.</p>
+<p>The <code>kill</code> command’s name is historical: it sends a
+signal, not only a termination request. With no explicit signal, it
+normally sends <code>SIGTERM</code>. For example,
+<code>kill -TERM 4172</code> requests graceful termination of PID 4172.
+A negative PID can address a process group, so do not add or remove a
+minus sign casually. Permission checks apply: an unprivileged process
+generally may signal processes with matching credentials, while a
+privileged process has broader authority. See <a href="https://man7.org/linux/man-pages/man2/kill.2.html"><code>kill(2)</code></a>,
+<a href="https://man7.org/linux/man-pages/man7/signal.7.html"><code>signal(7)</code></a>,
+and the <a href="https://www.gnu.org/software/coreutils/manual/html_node/kill-invocation.html">GNU
+Coreutils <code>kill</code> manual</a>.</p>
+<p>Do not begin by killing a process whose role you have not identified.
+First inspect its owner, parent, command, and relevant logs. A process
+may hold an unsaved edit, perform a database transaction, or supervise
+other processes. For a service, use the service manager’s stop operation
+so that the configured shutdown path runs. After sending
+<code>SIGTERM</code>, check whether it exits; escalation is a decision
+based on observed state, not a reflex.</p>
+<h2 data-number="2.3" id="file-descriptors-where-input-and-output-go"><span class="header-section-number">2.3</span> File Descriptors: Where Input
+and Output Go</h2>
+<p>Programs normally interact with input and output through file
+descriptors, small integers maintained by the kernel for an individual
+process. By convention descriptor 0 is standard input, 1 is standard
+output, and 2 is standard error. These descriptors may refer to a
+terminal, regular file, pipe, socket, or another kernel object. They are
+conventions rather than special streams: a program can redirect or close
+them, and a child can inherit them.</p>
+<p>This model explains redirection and pipelines.
+<code>command &gt;result.txt</code> arranges for standard output to
+refer to the file before the command runs.
+<code>command 2&gt;errors.txt</code> does the same for standard error.
+<code>command &gt;all.txt 2&gt;&amp;1</code> first directs descriptor 1
+to the file, then makes descriptor 2 refer to the same destination.
+Order matters: <code>command 2&gt;&amp;1 &gt;all.txt</code> duplicates
+the original standard output to standard error before changing standard
+output, so errors may remain on the terminal. The shell, not the
+program, opens the redirection target. If opening it fails, the program
+may never start.</p>
+<p>A pipe connects one process’s standard output to another process’s
+standard input. It does not automatically carry standard error. This
+distinction is useful when a pipeline appears to lose diagnostics: the
+error messages may still be on the terminal because descriptor 2 was
+never connected. Bash documents redirections and pipelines in its <a href="https://www.gnu.org/software/bash/manual/bash.html#Redirections">reference
+manual</a> and <a href="https://www.gnu.org/software/bash/manual/bash.html#Pipelines">pipelines
+section</a>; descriptor duplication is also described by <a href="https://man7.org/linux/man-pages/man2/dup.2.html"><code>dup(2)</code></a>.</p>
+<h2 data-number="2.4" id="paths-filesystems-and-mounts"><span class="header-section-number">2.4</span> Paths, Filesystems, and
+Mounts</h2>
+<p>A path is a name interpreted from a starting point. An absolute path
+begins at <code>/</code>, the process’s filesystem root. A relative path
+begins at the process’s current working directory. <code>.</code> names
+the current directory and <code>..</code> its parent in the path view
+available to that process. The shell maintains a current directory for
+its own commands; a child process inherits the directory at launch.
+Changing directory in a child cannot change the parent’s working
+directory, which is why <code>cd</code> must normally be a shell
+built-in.</p>
+<p>Linux presents filesystems through one directory tree. A mount
+attaches a filesystem at a directory, making that filesystem’s contents
+visible below the mount point. The path <code>/home/sam/data</code> says
+where a file is named in the current mount view; it does not reveal
+which physical device or remote filesystem supplies it. The same path
+can resolve differently in different mount namespaces, containers,
+chroots, or service configurations. <code>findmnt</code> reports mount
+relationships, <code>df</code> reports capacity for a path’s filesystem,
+and <code>stat</code> reports metadata for a path. Use
+<code>findmnt --target /some/path</code> or
+<code>df -h /some/path</code> to ask about the actual location instead
+of assuming that directory names imply storage boundaries. The kernel’s
+path resolution and mount interfaces are described in <a href="https://man7.org/linux/man-pages/man7/path_resolution.7.html"><code>path_resolution(7)</code></a>
+and <a href="https://man7.org/linux/man-pages/man7/mount_namespaces.7.html"><code>mount_namespaces(7)</code></a>.</p>
+<p>Permissions are checked against the object reached through path
+resolution. Ordinary Unix mode bits distinguish an owning user, an
+owning group, and other users, with read, write, and execute/search bits
+for each class. On a regular file, execute permits running it subject to
+other checks; on a directory, execute means search permission —
+traversing or looking up names inside it. Reading a file may therefore
+fail because you lack search permission on one of its parent
+directories. Writing a file may require write permission on the
+containing directory if you need to create, remove, or rename a name.
+This is why <code>chmod</code> on the file is not a universal repair for
+“permission denied”.</p>
+<p>Use <code>id</code> to inspect your effective identity and groups,
+<code>namei -l /path/to/file</code> to inspect permissions along a path,
+and <code>stat</code> or <code>ls -l</code> to inspect an object. A
+leading <code>d</code> in the mode shown by <code>ls -l</code> means
+directory; the remaining mode characters describe the three permission
+classes. ACLs, mandatory access controls such as SELinux, mount flags,
+capabilities, and read-only filesystems can add constraints beyond those
+mode bits. When basic permissions look correct, check those layers
+before applying broad changes such as recursive ownership updates. The
+kernel’s documented permission check is summarised in <a href="https://man7.org/linux/man-pages/man7/path_resolution.7.html"><code>path_resolution(7)</code></a>;
+see also <a href="https://man7.org/linux/man-pages/man1/chmod.1.html"><code>chmod(1)</code></a>
+and <a href="https://man7.org/linux/man-pages/man5/acl.5.html"><code>acl(5)</code></a>.</p>
+<h2 data-number="2.5" id="users-groups-and-privilege"><span class="header-section-number">2.5</span> Users, Groups, and
+Privilege</h2>
+<p>The kernel associates credentials with a process, including a real
+and effective user ID, group IDs, and supplementary groups. A program
+may have an effective identity different from the user who launched it,
+for example through a set-user-ID executable or a privileged service.
+<code>id</code> describes your current shell’s identity; it does not
+necessarily describe a service or another process. To inspect a process,
+use tools such as
+<code>ps -o pid,ppid,user,group,stat,args -p &lt;pid&gt;</code> and,
+where permissions allow, inspect
+<code>/proc/&lt;pid&gt;/status</code>.</p>
+<p><code>sudo</code> runs an authorised command with credentials granted
+by policy. It does not make a questionable command safe, and it does not
+repair a misunderstanding about which path or account is involved.
+Before using elevated privileges, verify the command, target, and
+working directory. Prefer a narrow privileged operation over launching
+an entire interactive shell as root. Avoid <code>sudo</code> with shell
+pipelines unless you understand which side receives elevated
+credentials: in <code>producer | sudo consumer</code>, only
+<code>consumer</code> is elevated. The pipe itself connects processes;
+it does not transfer one process’s credentials to another.</p>
+<h2 data-number="2.6" id="environment-variables-and-inheritance"><span class="header-section-number">2.6</span> Environment Variables and
+Inheritance</h2>
+<p>An environment is a set of name-value strings passed to a newly
+executed program. In a shell, an ordinary assignment such as
+<code>MODE=debug</code> changes a shell variable.
+<code>export MODE</code> marks it for inclusion in the environment of
+subsequently launched children. Thus <code>MODE=debug command</code>
+sets the variable for that command’s environment without permanently
+changing the shell’s exported value. A child cannot change its parent’s
+environment after launch; it can only affect processes it later
+starts.</p>
+<p>Environment variables commonly configure programs: <code>HOME</code>
+names the user’s home directory, <code>LANG</code> and related variables
+influence locale behaviour, and <code>PATH</code> helps locate
+executable commands. The values are not inherently trustworthy. A
+service may receive a deliberately small environment; a shell may
+inherit variables from a terminal, login manager, container runtime, or
+script. <code>env</code> displays the current environment, but output
+can include credentials or tokens. Inspect selectively and redact before
+sharing. The interfaces are documented by <a href="https://man7.org/linux/man-pages/man7/environ.7.html"><code>environ(7)</code></a>
+and the <a href="https://www.gnu.org/software/bash/manual/bash.html#Environment">Bash
+manual’s environment section</a>.</p>
+<h1 data-number="3" id="how-a-shell-turns-text-into-a-process"><span class="header-section-number">3</span> How a Shell Turns Text Into a
+Process</h1>
+<p>The shell section follows one command from text to execution and
+status. First establish how a name becomes a program and how text
+becomes arguments; then examine quoting, expansion, pipes, redirection,
+and the evidence needed when a stage fails.</p>
+<h2 data-number="3.1" id="command-lookup-and-arguments"><span class="header-section-number">3.1</span> Command Lookup and
+Arguments</h2>
+<p>The shell does not pass a typed command line verbatim to a program.
+It parses shell syntax, performs expansions, applies redirections, and
+constructs an argument vector. The program receives arguments as
+separate strings: argument zero conventionally names the invoked
+program, followed by the arguments you supplied. Spaces separate words
+unless quoting or escaping keeps them together. Consequently, a path
+containing spaces must be quoted when you intend it to be one
+argument.</p>
+<p>For a command name without a slash, shells such as Bash search
+functions, built-ins, and executable files found through
+<code>PATH</code> according to shell rules. An explicit path such as
+<code>./script</code> or <code>/usr/bin/tool</code> bypasses the
+<code>PATH</code> search. <code>type -a command</code> in Bash can show
+whether a name resolves to an alias, function, builtin, or one or more
+executable files; <code>command -v command</code> gives a concise
+resolution. <code>which</code> may be an external utility and can
+disagree with shell lookup when aliases or functions are involved. If
+the wrong version runs, inspect <code>type -a</code>, the ordered
+<code>PATH</code>, and the executable’s identity with
+<code>command -v</code> and <code>ls -l</code> before reinstalling
+anything.</p>
+<p>The order of directories in <code>PATH</code> matters. The first
+matching executable normally wins, so a project shim or user-level tool
+directory can take precedence over a system installation. An empty
+component in <code>PATH</code> can mean the current directory in some
+shell and system configurations; including <code>.</code> can make
+command execution depend on the current directory and is a security
+hazard. Prefer explicit paths for local scripts and avoid adding
+writable, untrusted directories ahead of trusted system locations. See
+the <a href="https://www.gnu.org/software/bash/manual/bash.html#Command-Search-and-Execution">Bash
+command search documentation</a> and <a href="https://man7.org/linux/man-pages/man2/execve.2.html"><code>execve(2)</code></a>.</p>
+<h2 data-number="3.2" id="quoting-expansion-and-globbing"><span class="header-section-number">3.2</span> Quoting, Expansion, and
+Globbing</h2>
+<p>Quoting controls which characters the shell treats as syntax. Single
+quotes preserve every enclosed character literally, except that a single
+quote cannot occur inside a single-quoted string. Double quotes preserve
+most characters while still allowing parameter expansion, command
+substitution, and selected backslash behaviour. A backslash can quote
+the next character outside single quotes. Prefer quoting a variable
+expansion when it represents one intended argument:
+<code>tool &quot;$filename&quot;</code>. Without quotes, spaces split the expanded
+value into multiple words and wildcard characters may expand against
+matching filenames. Bash’s <a href="https://www.gnu.org/software/bash/manual/bash.html#Quoting">quoting</a>
+and <a href="https://www.gnu.org/software/bash/manual/bash.html#Word-Splitting">word-splitting</a>
+sections define these rules.</p>
+<p>For the examples here, the relevant expansion order is that the shell
+expands parameters such as <code>$HOME</code>, substitutes command
+output in <code>$(command)</code>, performs word splitting on eligible
+unquoted results, expands filename patterns such as <code>*.log</code>,
+and then removes quoting syntax. Bash also has earlier or interleaved
+stages, including brace, tilde, arithmetic, and process substitution;
+consult its <a href="https://www.gnu.org/software/bash/manual/bash.html#Shell-Expansions">complete
+expansion rules</a> when exact ordering matters. A quoted wildcard such
+as <code>&#39;*.log&#39;</code> is passed literally; an unquoted
+<code>*.log</code> usually becomes one argument per matching name. If no
+name matches, behaviour depends on the shell and its options. Do not
+assume that a command receives the text you see in the script: inspect
+the quoted form and, for a safe diagnostic, use
+<code>printf &#39;&lt;%s&gt;\n&#39; &quot;$value&quot;</code> to make argument boundaries
+visible.</p>
+<p>Command substitution captures standard output and removes trailing
+newline characters. It is useful for values, but it obscures status
+handling if used casually. For example,
+<code>value=$(some_command)</code> runs the command in a substitution
+environment; the assignment’s status generally reflects the
+substitution’s status in Bash, but more complicated declarations or
+surrounding commands can mask it. Check failures explicitly when the
+result matters. Avoid <code>eval</code>: it asks the shell to parse a
+second time and can turn data into executable syntax.</p>
+<h2 data-number="3.3" id="pipelines-redirection-and-exit-status"><span class="header-section-number">3.3</span> Pipelines, Redirection, and
+Exit Status</h2>
+<p>In <code>first | second</code>, the shell starts commands connected
+by a pipe. Each stage normally runs in a separate process environment,
+although shell details govern built-ins and pipeline subshells. The
+pipeline’s status is usually the status of its final command. This can
+hide an earlier failure: if a producer fails but a consumer successfully
+reads an empty stream, the overall status may be zero. Bash’s
+<code>set -o pipefail</code> changes the pipeline status to the
+rightmost non-zero status, allowing an earlier stage’s failure to be
+noticed. This option is Bash-specific; POSIX shell scripts should not
+assume it exists. Consult Bash’s <a href="https://www.gnu.org/software/bash/manual/bash.html#Pipelines">pipeline
+exit-status rules</a> and <a href="https://www.gnu.org/software/bash/manual/bash.html#The-Set-Builtin">the
+<code>set</code> builtin</a>.</p>
+<p><code>$?</code> expands to the status of the most recently completed
+foreground pipeline. Zero conventionally indicates success; a non-zero
+value indicates failure or another documented condition. It is not a
+universal error vocabulary: each program defines its own statuses, and
+shells may encode signal termination using a value such as 128 plus the
+signal number. Capture the status immediately if you need it, because
+the next command replaces <code>$?</code>. In a compound operation, use
+explicit conditionals or store the value rather than relying on a later
+prompt indicator.</p>
+<p>Redirection can change what evidence you see. <code>&gt;</code>
+creates or truncates a file; <code>&gt;&gt;</code> appends;
+<code>&lt;</code> supplies input; <code>2&gt;</code> captures
+diagnostics; <code>2&gt;&amp;1</code> duplicates standard error to the
+current standard output destination. A pipeline generally connects only
+standard output. To send both streams through a pipe in Bash, use
+<code>2&gt;&amp;1 |</code> or the Bash shorthand <code>|&amp;</code>,
+while remembering that combining streams loses the distinction between
+data and diagnostics. Keep diagnostics separate when a later stage
+expects structured or clean data.</p>
+<h2 data-number="3.4" id="diagnostic-discipline"><span class="header-section-number">3.4</span> Diagnostic Discipline</h2>
+<p>Troubleshooting works best as a sequence of small, reversible
+observations. First record the exact command, working directory,
+identity, relevant environment, and complete error output. Then state
+what was expected and what happened. Avoid paraphrasing an error before
+preserving it; a single word such as “permission”, “not found”, or
+“busy” can point to a different layer.</p>
+<p>Next, split the command into boundaries. Confirm what the shell
+resolved (<code>type -a</code>), what arguments it formed (careful
+<code>printf</code> or shell tracing in a safe environment), which files
+and mounts the path refers to (<code>stat</code>, <code>findmnt</code>,
+<code>df</code>), and which user and groups apply (<code>id</code>). For
+a running program, check the actual process, parent, status, and logs
+rather than inferring them from a prompt. Observe exit statuses one
+stage at a time. Change one hypothesis at a time and rerun the smallest
+command that can disprove it.</p>
+<p>Shell tracing (<code>set -x</code> in Bash) prints commands after
+expansion. It can expose unexpected splitting or variable values, but it
+can also disclose passwords, tokens, and private paths in logs. Enable
+it only around a narrow, non-sensitive operation, and turn it off with
+<code>set +x</code>. For system calls, <code>strace</code> can show file
+opens, process creation, and failed kernel calls, but it produces
+detailed output and may expose data; use it only when process-level
+evidence is needed and access is appropriate. <code>man</code> pages,
+<code>--help</code> output, and official documentation should be checked
+for the exact program and version rather than trusting a similar
+command’s conventions.</p>
+<h1 data-number="4" id="worked-example-finding-and-recovering-a-failed-pipeline"><span class="header-section-number">4</span> Worked Example: Finding and
+Recovering a Failed Pipeline</h1>
+<p>Suppose a report is meant to select lines containing
+<code>READY</code>, sort them, and write the result to a file. A
+producer occasionally fails because its input file is absent. Without
+pipeline failure handling, <code>sort</code> can receive an empty stream
+and successfully write an empty result, making the whole command appear
+successful. The following Bash session reproduces the problem and
+repairs it in a newly created temporary directory. The output shown is
+from that isolated run; no repository files or history are involved.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">work</span><span class="op">=</span><span class="va">$(</span><span class="fu">mktemp</span> <span class="at">-d</span><span class="va">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$work</span><span class="st">&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;READY: one\nWAIT: two\nREADY: three\n&#39;</span> <span class="op">&gt;</span> events.log</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;READY&#39;</span> missing.log <span class="kw">|</span> <span class="fu">sort</span> <span class="op">&gt;</span> report.txt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;status=%s\n&#39;</span> <span class="st">&quot;</span><span class="va">$?</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Expected output:</p>
+<pre class="text"><code>grep: missing.log: No such file or directory
+status=0</code></pre>
+<p>The non-zero <code>grep</code> failure was hidden because
+<code>sort</code>, the final pipeline stage, completed successfully. The
+shell created or truncated <code>report.txt</code> before starting the
+pipeline, so the output file exists but contains no selected records.
+That is a meaningful partial side effect: an empty file is not proof
+that the input contained no matches.</p>
+<p>First make pipeline status report earlier failures. Then rerun the
+original command. The expected status is non-zero, even though
+<code>sort</code> itself can process an empty stream:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-o</span> pipefail</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;READY&#39;</span> missing.log <span class="kw">|</span> <span class="fu">sort</span> <span class="op">&gt;</span> report.txt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;status=%s\n&#39;</span> <span class="st">&quot;</span><span class="va">$?</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Expected output:</p>
+<pre class="text"><code>grep: missing.log: No such file or directory
+status=2</code></pre>
+<p>The status value comes from this <code>grep</code> implementation and
+invocation; the important diagnostic is that the pipeline failed. Now
+check the path and recover using the existing input. The check prevents
+an absent input from being confused with a valid file containing no
+matching lines:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">test</span> <span class="at">-r</span> events.log <span class="kw">&amp;&amp;</span> <span class="fu">grep</span> <span class="st">&#39;READY&#39;</span> events.log <span class="kw">|</span> <span class="fu">sort</span> <span class="op">&gt;</span> report.txt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="va">status</span><span class="op">=</span><span class="va">$?</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;status=%s\n&#39;</span> <span class="st">&quot;</span><span class="va">$status</span><span class="st">&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;%s\n&#39;</span> <span class="st">&#39;--- report ---&#39;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> report.txt</span></code></pre></div>
+<p>Expected output:</p>
+<pre class="text"><code>status=0
+--- report ---
+READY: one
+READY: three</code></pre>
+<p>The corrected command verifies that the intended input exists and is
+readable, then uses <code>pipefail</code> so a producer or sorting
+failure reaches the caller. For a reusable script, handle each possible
+status deliberately: a missing input is an error, while no matching
+lines may be an expected result depending on the task. Preserve the
+original file until the replacement has been produced and checked when
+overwriting it would destroy useful data. A more careful production
+workflow often writes to a temporary output in the same filesystem,
+validates it, and renames it into place only after success. The key
+habit is to ask what each stage did, which status survived, and which
+output side effects occurred before declaring recovery complete.</p>
+<h1 data-number="5" id="gits-object-and-repository-model"><span class="header-section-number">5</span> Git’s Object and Repository
+Model</h1>
+<p>Git’s stored objects and movable references explain the working tree,
+commits, collaboration, and recovery that follow. Start with the object
+graph, then separate the working tree and index from <code>HEAD</code>,
+before examining commits and the names that make them reachable.</p>
+<h2 data-number="5.1" id="what-git-stores"><span class="header-section-number">5.1</span> What Git Stores</h2>
+<p>Git is a content-addressed database with a versioned directory tree
+and a set of references that name commits. This model explains both
+ordinary collaboration and why an apparently lost commit can often be
+recovered. Git does not store a sequence of full directory copies, nor
+is a branch a container holding files. Most commands create, inspect, or
+move objects and references; the working tree is a checked-out view
+assembled from them.</p>
+<p>Git hashes the content and type of each object to produce its object
+ID. Repositories created with SHA-1 use 40 hexadecimal characters;
+repositories configured for SHA-256 use a different object format and
+longer identifiers. Treat IDs as opaque names and use the full value
+when precision matters. A commit records its root tree, parent commit or
+commits, author and committer metadata, timestamp, and message. A tree
+records names, modes, and object IDs for files and subdirectories. A
+blob stores file content. An annotated tag is another object that points
+to an object, usually a commit, and can include a message and signature.
+These relationships form a directed graph, usually with commits pointing
+backwards to parents.</p>
+<p>Identical blobs or trees can be shared by many commits. A commit
+therefore describes a snapshot by referring to trees, not a patch
+applied to the preceding commit. A diff is a useful comparison Git
+calculates between snapshots; it is not the underlying storage format. A
+commit with one parent extends a line of history. A merge commit has two
+or more parents and records the point where histories were joined. Root
+commits have no parents.</p>
+<p>Most objects are initially loose files under
+<code>.git/objects</code>, but Git can pack them for space and speed. Do
+not edit these files directly. Commands such as
+<code>git cat-file</code>, <code>git ls-tree</code>, and
+<code>git show</code> provide supported ways to inspect object contents
+and relationships. The official <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git
+object model documentation</a> describes the object types and how trees
+and commits refer to them.</p>
+<h2 data-number="5.2" id="working-tree-index-and-head"><span class="header-section-number">5.2</span> Working Tree, Index, and
+<code>HEAD</code></h2>
+<p>The working tree is the set of checked-out paths on disk. The index,
+also called the staging area, is the proposed content for the next
+commit. <code>HEAD</code> usually names the current branch; the branch
+reference in turn names its current tip. The three are related, but they
+are not interchangeable. A file can have one version in the current
+commit, another version staged in the index, and a third version in the
+working tree.</p>
+<p><code>git status</code> summarises differences across these
+boundaries. “Changes to be committed” means the index differs from
+<code>HEAD</code>. “Changes not staged for commit” means the working
+tree differs from the index. “Untracked files” have no indexed or
+committed version. A clean status means those comparisons reveal no
+changes; it does not prove that the current branch is correct, that a
+commit is reachable from the expected remote, or that ignored files are
+safe to delete.</p>
+<p><code>git add</code> copies the current file content into the index.
+It does not permanently mark the path for all future changes: editing
+the file again creates a working-tree difference that must be staged
+separately. <code>git diff</code> compares the working tree with the
+index; <code>git diff --staged</code> compares the index with
+<code>HEAD</code>; <code>git diff HEAD</code> compares the working tree
+with the current commit. Review the staged diff immediately before
+committing because it is the actual proposed snapshot.</p>
+<p>The index also tracks file modes and merge state. During a conflict
+it can hold multiple unmerged entries for a path, rather than one final
+version. <code>git status</code> reports these paths. Resolve a conflict
+in the working tree, inspect the result, then stage the resolved path to
+replace the unmerged index entries. A merge is not complete until every
+conflict is resolved and the operation is committed or deliberately
+aborted.</p>
+<p>In a normal branch checkout, <code>HEAD</code> is a symbolic
+reference such as <code>ref: refs/heads/main</code>. In
+detached-<code>HEAD</code> state, it names a commit directly. Detached
+state is useful for inspection and experiments, but a new commit may not
+be reachable by a named branch after checkout elsewhere. If you need to
+keep it, create a branch at that commit before moving away.</p>
+<h2 data-number="5.3" id="commits-and-references"><span class="header-section-number">5.3</span> Commits and References</h2>
+<p>A commit freezes the index as a tree and records its parent or
+parents. It does not include unstaged changes. Good commits describe a
+coherent change, use a useful message, and keep generated artefacts and
+secrets out unless the project explicitly requires them. Before
+committing, inspect <code>git status</code>, <code>git diff</code>, and
+<code>git diff --staged</code>; after committing, inspect the new commit
+with <code>git show --stat --oneline HEAD</code>.</p>
+<p>A reference is a human-readable name that resolves to an object.
+Branches, tags, and remote-tracking branches are references. A branch
+such as <code>main</code> is a movable pointer to a commit. Creating a
+branch is cheap because it creates a name, not a copy of the repository.
+<code>HEAD</code> usually follows the checked-out local branch. A
+lightweight tag is a reference directly to an object; an annotated tag
+is a Git object that can carry a message and signature and is preferred
+for release labels.</p>
+<p>References can move. Creating a commit advances the checked-out
+branch. <code>git reset</code> moves a branch reference and may also
+change the index or working tree, depending on its mode.
+<code>git commit --amend</code> creates a replacement commit and moves
+the branch to it. These operations do not rewrite objects in place; the
+old commits may remain in the object database for a time, but if no
+reference reaches them they become unreachable and eventually eligible
+for pruning. This distinction makes recovery possible, but it is not a
+reason to treat unreachable data as permanent backup.</p>
+<p>The <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-References">Git
+reference documentation</a> explains references, symbolic references,
+and tags. The <a href="https://git-scm.com/docs/gitglossary">Git
+glossary</a> is useful when terms such as “reachable”, “tracking
+branch”, “index”, and “refspec” appear in command output or
+documentation.</p>
+<h1 data-number="6" id="branches-integration-and-collaboration"><span class="header-section-number">6</span> Branches, Integration, and
+Collaboration</h1>
+<p>Local branches are names in your repository. A remote is a configured
+name and URL, commonly <code>origin</code>, used to fetch from and push
+to another repository. A remote-tracking branch such as
+<code>origin/main</code> records the last fetched view of a remote
+branch. It is not a live connection and does not update until a fetch or
+another network operation updates it. <code>git remote -v</code> shows
+configured URLs; <code>git branch -vv</code> shows local branches and
+their upstream relationships.</p>
+<p><code>git fetch</code> obtains objects and updates remote-tracking
+references without changing the current branch, index, or working tree.
+It is a good first step before comparing local and remote history.
+<code>git pull</code> is broadly a fetch followed by integration,
+usually merge or rebase according to configuration. Since the
+integration may alter local history or produce conflicts, separate
+<code>fetch</code> and <code>merge</code>/<code>rebase</code> steps are
+easier to inspect when the state is uncertain.</p>
+<p>A local branch often has an upstream, for example
+<code>origin/main</code>. <code>git status</code> can then report
+commits ahead of or behind that upstream, but only relative to the last
+fetched information. <code>git push</code> sends reachable objects and
+asks the remote to update a reference. A non-fast-forward rejection
+means the remote reference no longer has the local tip as an ancestor;
+fetch and inspect the divergence before deciding how to integrate it. Do
+not force-push to overcome a rejection without understanding who else
+uses the branch.</p>
+<p>For shared work, prefer short-lived topic branches, explicit review,
+and a protected default branch. A protected-main workflow keeps
+<code>main</code> available as an agreed integration point: changes
+arrive through reviewed pull requests, required checks, and controlled
+merges. Branch protection is server policy, not a property enforced by
+local Git. Local hooks can help catch mistakes, but a developer can
+bypass them and they cannot replace server-side permissions and required
+checks. Consult the hosting provider’s current documentation for its
+exact rule names and behaviour; Git itself defines the repository
+operations, not a universal pull-request process.</p>
+<h2 data-number="6.1" id="merge-and-rebase"><span class="header-section-number">6.1</span> Merge and Rebase</h2>
+<p>A merge integrates histories by finding a common ancestor and
+combining the changes since that point. If one side is already an
+ancestor of the other, Git can fast-forward the target reference without
+creating a merge commit. Otherwise, a merge commit records both parent
+histories. Merging preserves the fact that two lines of work were
+joined. It does not change the commits that already exist.</p>
+<p>A rebase selects commits from one line, replays their changes onto
+another base, and creates new commits with new object IDs. The original
+commits remain distinct objects; the rebased commits have different
+identities because their parent and commit data changed. Rebasing can
+make a topic branch appear linear, but it changes history and can make
+review or collaboration confusing if others built work on the original
+commits. Rebase commits that only you control; coordinate before
+rewriting shared branches.</p>
+<p>Before either operation, check the branch and working tree. Save or
+commit work in progress, fetch if remote state matters, inspect
+<code>git log --graph --oneline --decorate --all</code>, and choose the
+intended base explicitly. During a conflict, read
+<code>git status</code> and inspect each path in context. Conflict
+markers show alternative text, not a guaranteed correct answer. The
+right resolution may combine both sides, retain one side, or redesign
+the change. Run relevant checks and inspect the complete diff after
+staging the resolution.</p>
+<p>For a conflicted merge, <code>git merge --abort</code> attempts to
+return to the pre-merge state. For a conflicted rebase,
+<code>git rebase --abort</code> returns to the branch state from before
+that rebase. An abort is a deliberate state-changing action: first
+inspect uncommitted work and understand whether the operation began with
+a clean tree. If an abort fails or the result looks wrong, stop and
+inspect status, reflog, and saved work before trying a reset.
+<code>git rebase --continue</code> proceeds after conflicts are resolved
+and staged; <code>git rebase --skip</code> omits the current patch and
+can discard the change it represents, so use it only when that omission
+is intentional.</p>
+<h2 data-number="6.2" id="review-and-protected-main-workflows"><span class="header-section-number">6.2</span> Review and Protected-Main
+Workflows</h2>
+<p>Review works best when the proposed change is explicit and small
+enough to reason about. On a topic branch, inspect the full difference
+from its base, not just the most recent commit:
+<code>git diff origin/main...HEAD</code> compares the branch’s merge
+base with its tip. Confirm the target base, file list, generated
+outputs, and test or build evidence. A reviewer should be able to
+connect each change to the issue or design decision and see how
+important behaviour was checked.</p>
+<p>After review comments, make focused follow-up commits or amend the
+topic history if that branch is private to the contributor and the
+project prefers a clean series. If reviewers or collaborators have based
+work on the branch, rewriting it can disrupt them. Before updating a
+pull request after rebasing, inspect the range being replaced and use
+<code>--force-with-lease</code> only when rewriting is intended and the
+lease confirms the remote ref has not moved unexpectedly.
+<code>--force-with-lease</code> reduces one class of overwrite risk; it
+does not make a careless force-push safe.</p>
+<p>Once checks and review are complete, merge according to project
+policy. A merge commit retains branch topology; a squash merge creates
+one combined commit on the target; a rebase merge replays commits onto
+the target. Hosting services may implement these choices with policies
+that differ in detail. A local branch’s post-merge relationship to the
+remote depends on which method was used. Fetch, inspect the
+remote-tracking reference, then update local branches deliberately.
+Delete a topic branch only after verifying the merged change is present
+and no remaining work depends on that branch.</p>
+<h1 data-number="7" id="recovery-inspect-before-you-repair"><span class="header-section-number">7</span> Recovery: Inspect Before You
+Repair</h1>
+<p>When something looks lost, first preserve evidence. Stop running
+commands that move references or overwrite files. Do not start with
+<code>reset --hard</code>, <code>clean</code>, <code>gc</code>, pruning,
+or another cleanup operation. Record the current directory and
+repository, then inspect:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--short</span> <span class="at">--branch</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-avv</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--graph</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--all</span> <span class="at">-30</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> reflog <span class="at">--all</span> <span class="at">--date</span><span class="op">=</span>iso</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> stash list</span></code></pre></div>
+<p>These commands answer different questions. <code>status</code>
+reveals tracked and untracked working-tree changes. Branch listings show
+which names still point to commits and their recorded upstreams. The
+graph shows reachable history. Reflogs record recent local movements of
+references such as <code>HEAD</code> and branches. Stashes may contain
+saved tracked changes and, depending on how they were created, untracked
+files. None of these views alone is a complete backup.</p>
+<p>The worktree itself may contain valuable uncommitted edits. Copy
+important files or create a safe patch before recovery operations,
+taking care not to overwrite the only copy. A patch does not preserve
+every property, such as untracked files, file modes in every workflow,
+or repository metadata. For consequential recovery, make a filesystem
+copy or a bundle when possible, and verify that it can be read. Do not
+copy an actively changing repository as though the copy were
+automatically consistent.</p>
+<p>A commit is recoverable while its object remains available, even if
+no branch names it. The reflog is often the easiest route to an
+unreachable commit, but reflog entries expire according to configuration
+and unreachable objects can later be pruned. A remote, another clone, a
+tag, a worktree, or a backup may retain the commit even after local
+reflog evidence is gone. If a commit is absent from all refs and object
+storage has pruned it, Git cannot recreate its content from the commit
+ID alone.</p>
+<h2 data-number="7.1" id="recovery-walkthrough-a-commit-hidden-by-reference-movement"><span class="header-section-number">7.1</span> Recovery Walkthrough: A Commit
+Hidden by Reference Movement</h2>
+<p>This example uses a disposable repository. It simulates two branch
+movements after a useful commit, leaving the commit absent from the
+visible branch tips. The reflog identifies the prior commit; inspection
+confirms its content; a new branch preserves it. The example uses hard
+resets only in this throwaway repository, with no uncommitted changes.
+Do not copy those reset commands into a working repository as a generic
+recovery recipe.</p>
+<p>Create an isolated repository and make a baseline commit followed by
+a useful commit.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">sandbox_dir</span><span class="op">=</span><span class="va">$(</span><span class="fu">mktemp</span> <span class="at">-d</span> /tmp/git-recovery.XXXXXX<span class="va">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> init <span class="at">-q</span> <span class="at">-b</span> main</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> config user.name <span class="st">&#39;Primer Example&#39;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> config user.email <span class="st">&#39;primer@example.invalid&#39;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;baseline\n&#39;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo/notes.txt&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> add notes.txt</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> commit <span class="at">-qm</span> <span class="st">&#39;Add baseline note&#39;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;drafted on topic\n&#39;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo/notes.txt&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> commit <span class="at">-qam</span> <span class="st">&#39;Add a useful draft&#39;</span></span></code></pre></div>
+<p>Now move the <code>review</code> branch and then <code>main</code>
+back one commit each. This deliberately contrived setup removes the
+useful commit from both branch tips and leaves no tag naming it. The
+reflog remains the evidence source. The branch names point to the
+baseline, and the working tree is clean.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> checkout <span class="at">-qb</span> review</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> reset <span class="at">--hard</span> HEAD~1</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> checkout <span class="at">-q</span> main</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> reset <span class="at">--hard</span> HEAD~1</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> status <span class="at">--short</span> <span class="at">--branch</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show-ref <span class="at">--head</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> reflog <span class="at">-6</span> <span class="at">--date</span><span class="op">=</span>iso</span></code></pre></div>
+<p>Captured output from this run (the object IDs are specific to the
+demonstration run):</p>
+<pre class="text"><code>## main
+373f2c16884893dfa83594754a9df157ff9a7cc8 HEAD
+373f2c16884893dfa83594754a9df157ff9a7cc8 refs/heads/main
+373f2c16884893dfa83594754a9df157ff9a7cc8 refs/heads/review
+373f2c1 HEAD@{2026-10-15 22:54:36 +0100}: reset: moving to HEAD~1
+0a7e973 HEAD@{2026-10-15 22:54:36 +0100}: checkout: moving from review to main
+373f2c1 HEAD@{2026-10-15 22:54:36 +0100}: reset: moving to HEAD~1
+0a7e973 HEAD@{2026-10-15 22:54:36 +0100}: checkout: moving from main to review
+0a7e973 HEAD@{2026-10-15 22:54:36 +0100}: commit: Add a useful draft
+373f2c1 HEAD@{2026-10-15 22:54:36 +0100}: commit (initial): Add baseline note</code></pre>
+<p>Do not choose a reflog entry only because its position looks
+plausible. Resolve the candidate and inspect its metadata and patch.
+Here, <code>HEAD@{1}</code> names the useful commit in the captured
+state, but reflog selectors are relative and change as new operations
+occur. Resolve the candidate to a full object ID before creating the
+rescue branch, so later commands cannot change what the selector
+means.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">candidate</span><span class="op">=</span><span class="va">$(</span><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> rev-parse <span class="st">&#39;HEAD@{1}&#39;</span><span class="va">)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show <span class="at">--stat</span> <span class="at">--oneline</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span> <span class="at">--</span></span></code></pre></div>
+<p>The inspection reports <code>Add a useful draft</code> and one added
+line in <code>notes.txt</code>. If that is the desired commit, preserve
+it with a new reference before doing further work.
+<code>git branch</code> creates the branch without changing the
+checked-out branch or working tree.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> branch rescue/draft <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> log <span class="at">--oneline</span> <span class="at">--decorate</span> <span class="at">--all</span> <span class="at">-4</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$sandbox_dir</span><span class="st">/repo&quot;</span> show rescue/draft:notes.txt</span></code></pre></div>
+<p>The captured verification showed <code>rescue/draft</code> pointing
+at <code>0a7e973</code>, and the file contained both
+<code>baseline</code> and <code>drafted on topic</code>. The recovery is
+complete in the narrow sense that a branch now keeps the commit
+reachable. Decide separately how to integrate it: compare it with the
+intended target, create a new branch from the right base, and
+cherry-pick or merge only after confirming the desired history. Keep the
+rescue branch until the integrated result is reviewed and backed up. Do
+not delete the temporary repository until you no longer need the
+evidence; it is under <code>$sandbox_dir/repo</code> until you remove
+it.</p>
+<p>This approach also applies after an accidental rebase or branch
+switch. Rebase commonly leaves old commits discoverable through reflogs,
+although selectors and exact reflog entries depend on the commands run.
+Inspect <code>git reflog --all</code>, find the old tip, use
+<code>git show &lt;candidate&gt;</code> to verify it, then create a
+rescue branch such as
+<code>git branch rescue/old-topic &lt;candidate&gt;</code>. Reflog
+recovery restores a reference to existing objects; it does not
+reconstruct edits that were never committed or saved.</p>
+<h2 data-number="7.2" id="reset-restore-clean-and-other-risk-boundaries"><span class="header-section-number">7.2</span> Reset, Restore, Clean, and
+Other Risk Boundaries</h2>
+<p>Git commands that sound like “undo” act on different layers.
+<code>git restore &lt;path&gt;</code> can replace working-tree content
+from the index; <code>git restore --staged &lt;path&gt;</code> can
+remove a path from the index using <code>HEAD</code> as the default
+source. These operations can discard changes at the layer they replace.
+Inspect the source and destination with <code>git status</code> and
+diffs first. To unstage a file while retaining working-tree edits,
+<code>git restore --staged &lt;path&gt;</code> is usually clearer than
+resetting the entire branch.</p>
+<p><code>git reset --soft &lt;commit&gt;</code> moves the current branch
+while leaving the index and working tree in place.
+<code>git reset --mixed &lt;commit&gt;</code> (the default) moves the
+branch and resets the index while retaining working-tree changes.
+<code>git reset --hard &lt;commit&gt;</code> moves the branch, resets
+the index, and overwrites tracked working-tree paths; untracked files
+are not a reliable safety net and can be removed by related commands.
+<code>git clean</code> removes untracked files and directories, with
+force and directory options making the scope broader. Preview clean
+candidates with <code>git clean -nd</code> before any removal, and check
+ignored files separately if they may contain valuable local data.</p>
+<p>Before a destructive operation, identify the exact repository,
+branch, paths, and target commit. Run status and inspect the relevant
+diffs. Preserve uncommitted work and establish a recovery reference for
+commits that may become unreachable. Prefer a targeted operation with a
+clear source to a broad reset. If the intended state is uncertain, stop
+after inspection. The <a href="https://git-scm.com/docs/git-reset">Git
+reset documentation</a>, <a href="https://git-scm.com/docs/git-restore">restore documentation</a>,
+and <a href="https://git-scm.com/docs/git-clean">clean documentation</a>
+define the affected layers and options.</p>
+<h2 data-number="7.3" id="reflogs-and-worktrees"><span class="header-section-number">7.3</span> Reflogs and Worktrees</h2>
+<p>The reflog records recent updates to references in a local
+repository. <code>HEAD</code> has a reflog in typical repositories, and
+branch references may have their own. <code>git reflog show --all</code>
+can reveal a commit reached before a reset, rebase, checkout, or amend.
+Reflogs are local records, not part of the commit graph shared by fetch
+and push. A fresh clone does not normally inherit another clone’s
+reflog. Expiry settings and garbage collection mean reflogs are
+temporary recovery aids, not archives.</p>
+<p><code>git worktree</code> creates additional working directories
+attached to one repository, usually with a different branch checked out
+in each. It is useful when you need to compare or test branches without
+repeatedly changing the primary working tree. Worktrees share most
+object storage and references, but have separate working directories and
+per-worktree <code>HEAD</code> state. A branch normally cannot be
+checked out in two worktrees at once, which prevents accidental
+concurrent edits to one branch tip. <code>git worktree list</code> shows
+attached worktrees; <code>git worktree remove</code> removes one, so
+first inspect its uncommitted and untracked files. Worktrees are not
+independent backups because they share the same repository objects and
+many references.</p>
+<p>The <a href="https://git-scm.com/docs/git-reflog">Git reflog
+documentation</a> and <a href="https://git-scm.com/docs/git-worktree">worktree documentation</a>
+cover retention and management details. For long-lived recovery, use an
+independent clone, remote, bundle, or filesystem backup in addition to
+local reflogs.</p>
+<h1 data-number="8" id="reproducible-environments-and-developer-lifecycle"><span class="header-section-number">8</span> Reproducible Environments and
+Developer Lifecycle</h1>
+<p>A reproducible build begins with a clear answer to four questions:
+which source revision is being built, which tools and dependencies are
+inputs, what command transforms them, and which outputs count as the
+result? A version-controlled build recipe is the executable part of that
+contract. A README can explain the workflow, but if its command
+disagrees with the actual build file, the build file and observed
+behaviour are stronger evidence.</p>
+<p>“Reproducible” has more than one useful strength. At the weakest
+level, a new contributor can follow documented steps and obtain a
+working result. A stronger claim is that specified inputs reliably
+produce functionally equivalent outputs. The strict reproducible-build
+definition is bit-for-bit identity when source, build environment, and
+instructions are the same; cryptographic hashes can compare those output
+bytes. State which level matters. A PDF containing a generation
+timestamp may be useful and repeatable without being byte-identical. <a href="https://reproducible-builds.org/docs/definition/">Reproducible
+Builds defines the strict form and its inputs</a>.</p>
+<p>Record the inputs that can affect the outcome: source commit,
+dependency versions, system libraries, compiler or interpreter, build
+flags, environment variables, locale, time zone, network-fetched data,
+and relevant external services. Then reduce that list. An environment
+variable that does not affect output need not become a formal input; one
+that selects a locale or endpoint may be essential. Hidden defaults are
+still inputs, even when they are not written in a manifest.</p>
+<p>Use the project’s normal build entry point. For a primer in this
+repository, that means the directory’s <code>Justfile</code> and shared
+recipes in <code>_shared/common.just</code>, not a command reconstructed
+from memory. The recipe chooses a pinned Pandoc build image, passes
+title and date metadata, mounts the source tree, and defines outputs.
+The root <code>Justfile</code> provides selected entry points, while the
+project recipe controls the complete build. The repository’s <a href="../CONTRIBUTING.md">contribution guide</a> documents which recipes
+apply and why generated HTML and PDF are committed alongside their
+source.</p>
+<h2 data-number="8.1" id="declare-dependencies-and-preserve-resolution"><span class="header-section-number">8.1</span> Declare Dependencies and
+Preserve Resolution</h2>
+<p>A dependency declaration expresses what the project needs; a lockfile
+records a particular resolution of those needs. These answer different
+questions. A declaration such as “any compatible version from this major
+release” can be appropriate for a library, but it leaves a package
+manager room to select different transitive dependencies over time. A
+lockfile can capture the resolved versions and often their integrity
+hashes, making installation more repeatable. Neither file records every
+operating-system library, compiler, or network service used by the
+build.</p>
+<p>Use the dependency mechanism native to the ecosystem and commit its
+lockfile when the project’s tooling supports one. Keep the declaration
+and lockfile consistent, and update them through the package manager
+rather than hand-editing resolved graphs. Review lockfile changes as
+code: ask which top-level request caused a large transitive shift,
+whether a package source changed, and whether checks still exercise the
+intended versions. A lockfile is input data, not noise to regenerate on
+every machine.</p>
+<p>Distinguish application dependencies from developer and build
+dependencies. Test runners, formatters, documentation generators, code
+generators, and compilers can change published output or gate acceptance
+even if they are absent from the runtime program. Declare them in the
+appropriate development or build group. If a tool is installed globally
+or invoked through an unpinned <code>npx</code>/<code>pipx</code>/shell
+download command, it is still a dependency; it is only an undeclared
+one.</p>
+<p>Hashes strengthen a lock by checking that downloaded package bytes
+match the reviewed resolution. They do not establish that the package is
+benign, maintained, or suitable. Verify the source, licence, release
+provenance, and install-time behaviour according to the project’s risk.
+Private credentials belong in a secret store or local environment, never
+in a dependency file or committed lockfile.</p>
+<p>A dependency update is a controlled change: update the declared range
+only when intent changes, refresh the lock through the ecosystem’s
+resolver, inspect the diff, and run the project checks with that
+resolution. If a lockfile format changes or a resolver is upgraded,
+review the effect separately from ordinary dependency updates. A clean
+install from a fresh environment is stronger evidence than a successful
+install over an old environment that may contain undeclared
+packages.</p>
+<h2 data-number="8.2" id="isolate-the-environment"><span class="header-section-number">8.2</span> Isolate the Environment</h2>
+<p>Isolation limits accidental interaction between projects and makes
+the environment easier to reconstruct. Language-specific virtual
+environments, package-manager-managed toolchains, and containers solve
+related but different problems. A virtual environment separates one
+language’s packages from system or neighbouring project packages. A
+version manager selects a runtime or compiler. A container packages a
+user space and its tools. None automatically pins every input or makes
+untrusted code safe.</p>
+<p>Build in a disposable environment when practical. Start from a clean
+checkout, create or restore the project environment from its
+declarations and lock, then run the documented build. Avoid relying on
+packages left in a global interpreter, shell customisation, user
+configuration, or credentials inherited from your login session. Pass
+only the environment variables the build needs. Keep caches outside the
+project’s declared inputs and make the build succeed when a cache is
+empty; a cache may accelerate reconstruction but must not be required
+for correctness.</p>
+<p>Separate generated files from source and temporary state. Put
+disposable build directories in an ignored location such as
+<code>.build/</code>; keep credentials and local overrides out of
+version control; and do not let an ignored file silently become a
+required dependency. A useful diagnostic is a clean checkout in a new
+directory or worktree. If the build passes only in the long-lived
+working directory, inspect ignored files, environment variables, and
+globally installed tools before changing the recipe.</p>
+<p>Isolation is also a safety boundary, but not a complete one. A
+container with the project directory mounted read-write can still change
+those files, and a process with network access can still send data
+outward. Run unfamiliar generators and third-party build scripts with
+the smallest necessary filesystem and credential access. Container
+implementation and operating-system isolation details belong in the <a href="../primer_containerization/primer_containerization.html">containerisation
+primer</a>.</p>
+<h2 data-number="8.3" id="pin-tools-and-images-at-the-right-boundary"><span class="header-section-number">8.3</span> Pin Tools and Images at the
+Right Boundary</h2>
+<p>Pinning gives a build a stable name for each important tool input.
+Pin a runtime or compiler version in the project’s supported version
+file; pin package versions in its lockfile; pin CI actions and reusable
+workflows to reviewed immutable revisions where the platform permits it;
+and use an image digest when the exact container image matters. A
+human-readable tag or version label is convenient but may point to
+changed bytes later. A digest identifies content, while a tag is a label
+that maintainers may move. Docker’s <a href="https://docs.docker.com/reference/cli/docker/image/pull/#pull-an-image-by-digest">image
+reference documentation</a> describes digest references.</p>
+<p>Pinning everything forever is not the objective. It creates a
+maintenance obligation: someone must check for fixes, assess changes,
+refresh the pin, and rerun the build. Choose a policy that matches the
+consequence of drift. A stable release branch may require exact tool and
+image inputs. A development tool may accept a supported version range,
+with a scheduled update and a lockfile recording the current resolution.
+Record where each pin is maintained and how to update it.</p>
+<p>Prefer one documented build boundary that owns the compiler,
+renderer, and system packages needed to create the output. This
+repository uses a shared Pandoc container so a host installation of
+XeLaTeX or a particular Pandoc release does not become an invisible
+prerequisite. The root <code>Justfile</code> builds or fetches shared
+images through <code>just setup</code>; project Justfiles import the
+shared recipes. This boundary improves consistency, but the source
+mount, runtime, host kernel, architecture, and external services can
+still affect a build. Describe it as a controlled environment, not as
+proof of complete determinism.</p>
+<p>Updates should be deliberate and observable. Confirm an upstream
+release or digest from its primary source, update the central
+declaration, rebuild a representative project, and inspect output
+changes. Avoid copying the same pin into many files; centralised
+declarations reduce drift. If architecture-specific manifests or
+platform variants are involved, identify which one the pin selects and
+whether the project expects the same platform everywhere.</p>
+<h2 data-number="8.4" id="use-containers-as-build-boundaries"><span class="header-section-number">8.4</span> Use Containers as Build
+Boundaries</h2>
+<p>A container is useful here because it packages build tools and system
+libraries behind a repeatable command. The build recipe should make the
+boundary visible: image, mounted source path, working directory,
+environment, command, and output location. Developers should invoke the
+same recipe locally and in CI wherever possible. Parallel shell commands
+that “happen to work” weaken the contract because they create separate
+build definitions.</p>
+<p>Treat the image as an input, not as a magic guarantee. Pin or
+otherwise control its source, document how it is updated, and make image
+creation reproducible enough for the project’s goal. Keep credentials
+out of image layers and avoid writing generated outputs into an
+unexpected host path. A read-only source mount is ideal for verification
+jobs that should not modify tracked files; a build job that must write
+outputs needs an explicit output directory.</p>
+<p>The boundary should be narrow and boring. Install only the tools
+required for that task, use a non-root user where supported, and do not
+mount the container engine socket unless the build genuinely requires
+it. An image build that fetches unpinned packages at a later step may
+drift even when its base image is pinned. Capture that remaining
+variability in the contract or remove it by using a package snapshot,
+checked-in lock, or verified artefact.</p>
+<p>Do not duplicate the container primer’s account of namespaces, image
+layers, runtimes, rootless modes, or orchestration. Link to that primer
+when the question becomes “what isolation does this container provide?”
+The reproducibility question is narrower: does the build run with
+declared inputs, and can a reviewer inspect how those inputs were
+selected?</p>
+<h2 data-number="8.5" id="design-ci-as-an-independent-recheck"><span class="header-section-number">8.5</span> Design CI as an Independent
+Recheck</h2>
+<p>Continuous integration (CI) should reconstruct the project from the
+checked-out revision and report whether the required checks pass. Its
+value is independence: CI starts from a defined runner image or hosted
+environment rather than inheriting your untracked local state. Keep the
+CI commands aligned with the documented local recipes. If CI contains
+bespoke build logic, explain why it differs and ensure both paths remain
+covered.</p>
+<p>A useful pipeline separates fast feedback from publication. First
+check formatting, source structure, dependency consistency, and static
+rules. Then install or restore dependencies, run tests, build the
+outputs, and validate the result. For a release, add any required
+licence, security, provenance, or manual approval checks. Do not make
+every edit wait for an expensive release-only check, but do not let
+speed turn a non-blocking signal into an unreviewed release gate.</p>
+<p>Make failures legible. Preserve the command, exit status, logs, test
+reports, and build outputs needed for diagnosis. A shell pipeline can
+hide an earlier command’s failure if it returns only the final command’s
+status; use the shell’s pipeline-failure mode or capture each status
+explicitly. CI should fail when a required step fails, not merely print
+a red-looking line and continue to upload a success report.</p>
+<p>Treat workflow configuration as executable code. Limit token
+permissions to what each job needs, avoid exposing secrets to jobs that
+process untrusted pull requests, and pin third-party actions to a full
+commit SHA when using GitHub Actions. GitHub describes a full SHA as the
+immutable way to select an action revision in its <a href="https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions#using-third-party-actions">security
+hardening guidance</a>. A pin still needs review and updates; it
+identifies code, not trustworthiness.</p>
+<p>Use caches only to save time. A cache key should include the inputs
+that affect the cached data, such as the operating system and dependency
+lock. A cache miss must trigger normal reconstruction. Do not use a
+mutable cache as the only copy of a build result or as evidence that a
+release was built from a particular commit.</p>
+<p>CI is not a substitute for local verification or review. It tests a
+finite path under a specific configuration. Record what it did, retain
+useful logs, and inspect warnings that indicate skipped or unsupported
+checks. If a workflow runs only on the default branch, it cannot
+validate a pull request before merge; choose triggers and branch
+protections that match the intended gate. For a product-specific
+workflow reference, consult the provider’s maintained documentation
+rather than copying a stale example.</p>
+<h2 data-number="8.6" id="treat-generated-artefacts-as-published-interfaces"><span class="header-section-number">8.6</span> Treat Generated Artefacts as
+Published Interfaces</h2>
+<p>An artefact is a file produced by a build or workflow. It may be a
+binary, package, report, website, notebook output, model, or the
+committed HTML and PDF paired with a primer source. Decide whether each
+generated file is a deliverable, a temporary intermediate, a diagnostic
+report, or a cache entry. Each category has different retention and
+review requirements.</p>
+<p>If users consume a generated file directly, validate and publish it
+as a first-class output. Record the source revision and build inputs
+that produced it, and keep the source and output changes together when
+the repository’s policy requires that pairing. In this repository,
+rendered primer HTML and PDF are committed because they are the
+publication target. Mermaid intermediates and ordinary build scratch
+stay under ignored build directories; the generation script and intended
+figures are committed when they are part of the document’s reproducible
+production path.</p>
+<p>Validation should match the artefact. Check that expected files
+exist, are non-empty, and can be parsed or opened. Compare metadata such
+as title, author, version, and page count where relevant. Run link and
+structural checks over the published HTML, not only its Markdown source,
+because rendering can change anchors and embedded resources. For a PDF,
+inspect extracted text and representative pages; a zero exit code cannot
+reveal clipped content or broken page layout. Hashes can confirm that
+two files are byte-identical, but only if the build is expected to be
+deterministic and both hashes refer to the same specified artefact.</p>
+<p>Separate validation from provenance. A test result says something
+about behaviour under its test conditions. A checksum identifies bytes.
+An attestation can connect an artefact with a repository, workflow, and
+commit. None alone proves the artefact is correct for its users.
+GitHub’s <a href="https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts">workflow
+artefact documentation</a> distinguishes artefacts used to preserve and
+share outputs from caches used to accelerate reconstruction, and
+describes attestations as build provenance evidence.</p>
+<p>Store transient CI artefacts for the period needed to diagnose or
+review a run; make long-term retention explicit for release outputs.
+Name artefacts with enough context to identify the workflow and source
+revision, and avoid ambiguous names such as <code>output.zip</code> in a
+release archive. When downloading an artefact, verify that it came from
+the intended run and commit before using or publishing it.</p>
+<h2 data-number="8.7" id="freshness-validation-and-the-stale-output-failure"><span class="header-section-number">8.7</span> Freshness, Validation, and the
+Stale-Output Failure</h2>
+<p>Freshness is a relation between a source revision and the output
+built from it. File modification times are weak evidence: archive
+extraction, clock skew, checkout operations, or copying can alter them.
+Git history can establish ordering: if the source changed in commit A
+and the output was last changed in an ancestor of A, the output is stale
+relative to that source change. This still does not prove that a later
+output was built correctly; a reviewer can commit an old file after the
+source edit. Freshness checks are one gate among build, structural, and
+visual validation.</p>
+<p>The following worked example uses the repository’s published primer
+as a model. It changes a source file in a throwaway clone, commits that
+change without rendering, and runs the history-aware freshness check.
+Run it from this repository’s root, or set <code>REPOSITORY_PATH</code>
+to another checkout. The clone copies real repository history, but all
+mutations and generated data remain in the disposable copy; the
+project’s container runtime is also required.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">scratch</span><span class="op">=</span><span class="va">$(</span><span class="fu">mktemp</span> <span class="at">-d</span><span class="va">)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="va">repository_path</span><span class="op">=</span><span class="va">${REPOSITORY_PATH</span><span class="op">:-</span><span class="va">$PWD}</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--no-hardlinks</span> <span class="at">--local</span> <span class="st">&quot;</span><span class="va">$repository_path</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> config user.name <span class="st">&#39;Disposable Example&#39;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> config user.email disposable@example.invalid</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">&#39;\nFreshness probe.\n&#39;</span> <span class="op">&gt;&gt;</span> <span class="dt">\</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo/primer_evaluation_loop/primer_evaluation_loop.md&quot;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> add primer_evaluation_loop/primer_evaluation_loop.md</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-C</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span> commit <span class="at">-m</span> <span class="st">&#39;Probe stale published output&#39;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$scratch</span><span class="st">/repo&quot;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> check-fresh</span></code></pre></div>
+<p>The source commit is newer than the last commits that changed its
+HTML and PDF, so <code>check-fresh</code> reports both outputs as older
+than their source and exits unsuccessfully. The recovery is to
+regenerate both outputs with the project’s documented container build,
+inspect the resulting files, and commit them with the source change. Run
+<code>just check-fresh</code> again; then run the relevant render QA and
+repository checks. Discard the clone when finished. Do not test this by
+editing the live source and trying to undo the commit afterwards.</p>
+<p>This gate deliberately makes a modest claim. It detects the common
+omission “source changed, committed outputs were not rebuilt”. It does
+not parse the output to prove that it reflects the source, validate its
+layout, or detect a build that produced the wrong content and was
+committed later. A strong release combines history or manifest checks
+with rebuilding and artefact-specific validation. This repository’s <a href="../CONTRIBUTING.md#checks">check documentation</a> documents the
+freshness recipe and its disposable negative-test method.</p>
+<p>When exact byte equality is not a realistic target, define useful
+semantic checks instead. For a rendered document, those might include
+expected headings and anchors, no raw Mermaid fences, a valid PDF with
+extractable text, successful relative links, and human inspection of
+pages where layout changed. For a compiled package, they might include
+executable tests, metadata checks, dependency inventories, and a smoke
+test in a clean runtime. Make the gate explain which property it checks
+and which properties remain for reviewers.</p>
+<h1 data-number="9" id="review-release-and-safe-lifecycle"><span class="header-section-number">9</span> Review, Release, and Safe
+Lifecycle</h1>
+<p>The final workflow section connects a reviewable patch to a validated
+release and its maintenance path. First make the change legible to
+reviewers; then identify the build, release, recovery, and maintenance
+states that keep the result trustworthy.</p>
+<h2 data-number="9.1" id="repository-hygiene-and-reviewable-changes"><span class="header-section-number">9.1</span> Repository Hygiene and
+Reviewable Changes</h2>
+<p>Keep one coherent change per branch or pull request. A source edit,
+lockfile update, generated output, and build-recipe change may belong
+together when they implement one outcome; unrelated formatting or
+dependency churn makes it harder to establish cause. Inspect the working
+tree before starting, stage explicit paths, and review the staged diff.
+Ignore rules should exclude caches, local configuration, credentials,
+and intermediates without hiding source or required deliverables.</p>
+<p>A clean patch is not necessarily a correct patch. Review changes to
+generated outputs alongside their source. Large generated diffs can be
+legitimate after a renderer update, but they deserve a representative
+inspection and a note describing why the output changed. Do not
+hand-edit a generated file to make it appear fresh: update the source or
+build process and regenerate it. Preserve build logs outside the commit
+unless they are intentional project records.</p>
+<p>Commit messages should identify the intent, not merely the operation.
+Each commit should leave the repository in a state another developer can
+inspect. Avoid committing secrets, local paths, machine-specific
+configuration, or outputs produced from untracked source. Before review,
+verify the branch contains only expected files, inspect whitespace
+errors, and check whether the documented build and validation commands
+succeeded.</p>
+<p>Reviewers need evidence that connects the change to the result:
+source diff, dependency changes, commands run, exit status, artefact
+inspection, and known limitations. A screenshot can help with a visual
+change, but it does not replace the source or a reproducible build. If a
+check could not run because the required image or external service was
+unavailable, state that plainly and provide the strongest independent
+check that did run.</p>
+<h2 data-number="9.2" id="release-workflow-and-safe-lifecycle"><span class="header-section-number">9.2</span> Release Workflow and Safe
+Lifecycle</h2>
+<p>A safe developer lifecycle is a sequence of explicit states. Start by
+checking repository instructions, branch state, and the issue or change
+request. Identify the source, dependencies, build recipe, expected
+outputs, and acceptance checks before editing. Create an isolated branch
+or worktree, then make the smallest coherent change. This keeps the work
+recoverable and makes it possible to compare the result with the
+starting revision.</p>
+<p>Before building, reconstruct the declared environment from a clean
+state where feasible. Confirm the runtime and container image inputs,
+restore dependencies from the lockfile, and avoid carrying untracked
+files into the result. Run focused checks as you work, then the
+project’s full required checks before review. Build every published
+artefact from the exact source revision intended for review. Inspect the
+source diff and generated diff together, then validate the artefacts
+using both automated checks and human inspection where layout or meaning
+requires it.</p>
+<p>Open a review with a concise account of the problem, the change, and
+the evidence. Identify dependency or image updates, generated outputs,
+verification commands, and any checks that were not run. Ensure required
+CI checks correspond to the same commit under review. Respond to review
+by changing the source of truth, rebuilding affected outputs, and
+rerunning checks. Avoid pushing an artefact from one commit while
+describing another as its source.</p>
+<p>A release candidate should have a stable identity: repository and
+commit, dependency resolution, tool and image references, build command,
+and output names or hashes. If the release is built after merge, make
+the release pipeline build from the merged commit and retain a link or
+manifest tying outputs to that revision. If an approved artefact is
+promoted between environments, promote the same bytes rather than
+rebuilding them under subtly different inputs. Store provenance and
+validation results beside the release record.</p>
+<p>After publication, keep a recovery path. Preserve the prior
+known-good release and its input record for the retention period the
+project requires. A rollback should restore a compatible set of source,
+dependencies, and artefacts; changing only one layer may create a
+combination that was never validated. If a release is withdrawn or a
+dependency is found unsafe, identify all outputs that contain or depend
+on it, stop further distribution, and record what was replaced. For
+data-producing workflows, retain the manifest and source snapshot needed
+to explain the result while respecting deletion and privacy
+requirements.</p>
+<p>The lifecycle closes with maintenance. Schedule dependency and
+base-image updates, check whether the documented build still works from
+a clean checkout, remove obsolete generated files, and update the
+workflow when the source tree changes. A pin without an owner becomes
+stale; a check with no failure response becomes theatre. Give each
+important input and gate a maintenance route so reproducibility remains
+a practice rather than a one-time snapshot.</p>
+<h1 data-number="10" id="glossary"><span class="header-section-number">10</span> Glossary</h1>
+<ul>
+<li><strong><a href="#users-groups-and-privilege">ACL</a>:</strong> an
+access-control list that adds rules beyond ordinary Unix mode bits.</li>
+<li><strong><a href="#treat-generated-artefacts-as-published-interfaces">Artefact</a>:</strong>
+a file produced by a build or workflow, whether it is a published
+output, report, or temporary result.</li>
+<li><strong><a href="#branches-integration-and-collaboration">Branch</a>:</strong> a
+movable Git reference naming a commit.</li>
+<li><strong><a href="#what-a-process-is">Child process</a>:</strong> a
+process started by another process, which may inherit selected
+attributes from its parent.</li>
+<li><strong><a href="#environment-variables-and-inheritance">Environment</a>:</strong>
+the name-value strings and other external conditions visible to a
+process.</li>
+<li><strong><a href="#file-descriptors-where-input-and-output-go">File
+descriptor</a>:</strong> a process-local integer referring to an open
+file, pipe, socket, or similar object.</li>
+<li><strong><a href="#working-tree-index-and-head">Index</a>:</strong>
+Git’s staging area and proposed content for the next commit.</li>
+<li><strong><a href="#declare-dependencies-and-preserve-resolution">Lockfile</a>:</strong>
+a file recording a selected dependency resolution for repeatable
+installation.</li>
+<li><strong><a href="#paths-filesystems-and-mounts">Mount
+namespace</a>:</strong> a process view of mounted filesystems that can
+differ from another process’s view.</li>
+<li><strong><a href="#what-git-stores">Object</a>:</strong> content in
+Git’s object database, such as a blob, tree, or commit.</li>
+<li><strong><a href="#treat-generated-artefacts-as-published-interfaces">Provenance</a>:</strong>
+evidence connecting an output to its source, build inputs, and
+production process.</li>
+<li><strong><a href="#commits-and-references">Reference</a>:</strong> a
+named pointer, such as a branch or tag, that identifies an object.</li>
+<li><strong><a href="#recovery-inspect-before-you-repair">Reflog</a>:</strong> a local
+log of movements of references such as HEAD and branches.</li>
+<li><strong><a href="#reproducible-environments-and-developer-lifecycle">Reproducible
+build</a>:</strong> a build whose specified inputs produce the claimed
+level of repeatable output.</li>
+<li><strong><a href="#quoting-expansion-and-globbing">Shell
+expansion</a>:</strong> the shell’s transformation of parsed words into
+command arguments.</li>
+<li><strong><a href="#working-tree-index-and-head">Working
+tree</a>:</strong> the files checked out for a Git repository at the
+current HEAD.</li>
+</ul>
+<h1 data-number="11" id="further-reading"><span class="header-section-number">11</span> Further Reading</h1>
+<ul>
+<li><a href="https://www.gnu.org/software/bash/manual/bash.html">Bash
+Reference Manual</a> — parsing, expansions, redirections, pipelines,
+status, and command search.</li>
+<li><a href="https://man7.org/linux/man-pages/">Linux man-pages
+project</a> — process, signal, environment, path, mount, and permission
+interfaces.</li>
+<li><a href="https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html">POSIX
+Shell Command Language</a> — portable shell behaviour and the boundary
+between POSIX rules and Bash extensions.</li>
+<li><a href="https://git-scm.com/docs">Git documentation</a> —
+maintained command references; consult the exact page before destructive
+operations.</li>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git
+Book: Objects and References</a> — conceptual explanation of objects,
+trees, commits, and names.</li>
+<li><a href="https://git-scm.com/docs/git-reflog">Git reflog
+documentation</a> — local reference history and recovery
+considerations.</li>
+<li><a href="https://reproducible-builds.org/docs/definition/">Reproducible
+Builds: Definition</a> — the strict reproducibility claim and its
+required inputs.</li>
+<li><a href="../CONTRIBUTING.md">Repository contribution guide</a> —
+this repository’s build, artefact, freshness, and render-QA
+procedures.</li>
+</ul>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    // Robust collapsible TOC logic: wait for #TOC, add logging
+    function firstChildByTag(parent, tagName) {
+      var children = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === tagName) {
+          return children[i];
+        }
+      }
+      return null;
+    }
+
+    function tocDepth(li, tocRoot) {
+      var depth = 0;
+      var node = li;
+      while (node && node !== tocRoot) {
+        if (node.tagName === 'UL') {
+          depth += 1;
+        }
+        node = node.parentElement;
+      }
+      return depth;
+    }
+
+    function makeTOCCollapsible() {
+      var toc = document.getElementById('TOC');
+      if (!toc) { return false; }
+      // Only run once
+      if (toc.classList.contains('collapsible-ready')) { return true; }
+      toc.classList.add('collapsible-ready');
+
+      Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
+        var depth = tocDepth(li, toc);
+        li.classList.add('toc-depth-' + String(depth));
+
+        var sublist = firstChildByTag(li, 'UL');
+        if (sublist && depth >= 1) {
+          var btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.className = 'toc-toggle';
+          btn.innerHTML = '<span class="toc-arrow">▶</span>';
+          btn.setAttribute('aria-label', 'Expand/collapse section');
+          var firstLink = firstChildByTag(li, 'A');
+          li.classList.add('has-toggle');
+          if (firstLink) {
+            firstLink.classList.add('toc-link-inline');
+            li.insertBefore(btn, firstLink);
+          } else {
+            li.insertBefore(btn, li.firstChild);
+          }
+          sublist.style.display = 'none';
+          btn.classList.add('collapsed');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            var open = sublist.style.display !== 'none';
+            sublist.style.display = open ? 'none' : '';
+            btn.classList.toggle('collapsed', open);
+            btn.classList.toggle('expanded', !open);
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        }
+      });
+      console.log('[TOC] Collapsible TOC initialized');
+      return true;
+    }
+
+    // Try on DOMContentLoaded, then poll for late-injected TOC
+    function initTOCWithRetries() {
+      var tries = 0;
+      var maxTries = 20;
+      var interval = setInterval(function () {
+        var done = makeTOCCollapsible();
+        if (done || ++tries > maxTries) clearInterval(interval);
+      }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOCWithRetries);
+    } else {
+      initTOCWithRetries();
+    }
+
+
+      // Sidebar resizer logic (existing)
+      var root = document.documentElement;
+      var layout = document.querySelector('.layout');
+      var sidebar = document.querySelector('.sidebar');
+      var resizer = document.querySelector('.sidebar-resizer');
+      var STORAGE_KEY = 'llm_primer_sidebar_width';
+
+      // if (!layout || !sidebar || !resizer) {
+      //   return;
+      // }
+
+
+      function cssPxVar(name, fallback) {
+        var raw = getComputedStyle(root).getPropertyValue(name).trim();
+        var n = parseFloat(raw);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function applyWidth(px) {
+        root.style.setProperty('--sidebar-w', px + 'px');
+      }
+
+      var min = cssPxVar('--sidebar-min', 240);
+      var max = cssPxVar('--sidebar-max', 520);
+
+      var saved = parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+      if (Number.isFinite(saved)) {
+        applyWidth(clamp(saved, min, max));
+      }
+
+      var dragging = false;
+
+      function onMove(ev) {
+        if (!dragging) {
+          return;
+        }
+        var next = clamp(ev.clientX, min, max);
+        applyWidth(next);
+      }
+
+      function onUp() {
+        if (!dragging) {
+          return;
+        }
+        dragging = false;
+        layout.classList.remove('is-resizing');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        localStorage.setItem(STORAGE_KEY, parseFloat(getComputedStyle(root).getPropertyValue('--sidebar-w')) || min);
+      }
+
+      resizer.addEventListener('pointerdown', function (ev) {
+        dragging = true;
+        layout.classList.add('is-resizing');
+        resizer.setPointerCapture(ev.pointerId);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LANG_NAMES = {
+        python: 'Python', r: 'R', julia: 'Julia',
+        bash: 'Shell', sh: 'Shell', text: 'Output', markdown: 'Markdown'
+      };
+
+      function getLang(sourceDiv) {
+        var pre = sourceDiv.querySelector('pre');
+        if (!pre) return 'Code';
+        var classes = Array.prototype.slice.call(pre.classList);
+        for (var i = 0; i < classes.length; i++) {
+          var cls = classes[i];
+          if (cls === 'sourceCode') continue;
+          return LANG_NAMES[cls] || (cls.charAt(0).toUpperCase() + cls.slice(1));
+        }
+        return 'Code';
+      }
+
+      // A <p><strong>…</strong></p> language label inserted by the markdown author
+      function isLangLabel(node) {
+        if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'P') return false;
+        var nonEmpty = Array.prototype.filter.call(node.childNodes, function (n) {
+          return !(n.nodeType === Node.TEXT_NODE && n.textContent.trim() === '');
+        });
+        return nonEmpty.length === 1 && nonEmpty[0].tagName === 'STRONG';
+      }
+
+      function isWhitespace(node) {
+        return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+      }
+
+      // Sibling blocks may have whitespace or labels between them. Fenced .code-group
+      // wrappers bound explicit groups; unwrapped automatic groups still work as before.
+      function areConsecutive(a, b) {
+        var node = a.nextSibling;
+        while (node) {
+          if (node === b) return true;
+          if (isWhitespace(node) || isLangLabel(node)) { node = node.nextSibling; continue; }
+          return false;
+        }
+        return false;
+      }
+
+      function groupConsecutive(divs) {
+        var groups = [];
+        var i = 0;
+        while (i < divs.length) {
+          var run = [divs[i]];
+          while (i + 1 < divs.length && areConsecutive(run[run.length - 1], divs[i + 1])) {
+            i++;
+            run.push(divs[i]);
+          }
+          groups.push(run);
+          i++;
+        }
+        return groups;
+      }
+
+      var tabGroups = [];
+      var nextTabId = 0;
+
+      function uniqueId() {
+        var id;
+        do { id = 'code-tab-' + (++nextTabId); } while (document.getElementById(id));
+        return id;
+      }
+
+      function makeTabs(run, labels) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-tabs';
+
+        var tabBar = document.createElement('div');
+        tabBar.className = 'code-tab-bar';
+        tabBar.setAttribute('role', 'tablist');
+        tabBar.setAttribute('aria-label', 'Code examples by language');
+        wrapper.appendChild(tabBar);
+
+        var buttons = [];
+        var panels = [];
+
+        function activate(index, focus) {
+          buttons.forEach(function (button, i) {
+            var selected = i === index;
+            button.classList.toggle('active', selected);
+            button.setAttribute('aria-selected', String(selected));
+            button.tabIndex = selected ? 0 : -1;
+            panels[i].hidden = !selected;
+          });
+          if (focus) buttons[index].focus();
+        }
+
+        run.forEach(function (div, idx) {
+          // Keep authored labels (and any fragment IDs); create labels for automatic groups.
+          var label = labels[idx];
+          if (!label) {
+            label = document.createElement('p');
+            var strong = document.createElement('strong');
+            strong.textContent = getLang(div);
+            label.appendChild(strong);
+          }
+          label.classList.add('code-tab-label');
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.id = uniqueId();
+          btn.className = 'code-tab-btn';
+          btn.textContent = getLang(div);
+          btn.setAttribute('role', 'tab');
+          tabBar.appendChild(btn);
+          buttons.push(btn);
+
+          var panel = document.createElement('div');
+          panel.id = uniqueId();
+          panel.className = 'code-tab-panel';
+          panel.setAttribute('role', 'tabpanel');
+          panel.setAttribute('aria-labelledby', btn.id);
+          panel.tabIndex = 0;
+          btn.setAttribute('aria-controls', panel.id);
+          panel.appendChild(label);
+          panel.appendChild(div);
+          wrapper.appendChild(panel);
+          panels.push(panel);
+
+          btn.addEventListener('click', function () { activate(idx, false); });
+          btn.addEventListener('keydown', function (e) {
+            var index;
+            if (e.key === 'ArrowRight') index = (idx + 1) % run.length;
+            else if (e.key === 'ArrowLeft') index = (idx + run.length - 1) % run.length;
+            else if (e.key === 'Home') index = 0;
+            else if (e.key === 'End') index = run.length - 1;
+            else return;
+            e.preventDefault();
+            activate(index, true);
+          });
+        });
+
+        activate(0, false);
+        tabGroups.push({ buttons: buttons, panels: panels, activate: activate });
+        return wrapper;
+      }
+
+      function revealFragment(hash, scroll) {
+        if (!hash) return;
+        var id;
+        try { id = decodeURIComponent(hash.slice(1)); } catch (e) { return; }
+        var target = document.getElementById(id);
+        if (!target) return;
+        var scrollTarget = target;
+        tabGroups.forEach(function (group) {
+          group.panels.forEach(function (panel, index) {
+            if (panel.contains(target) || group.buttons[index] === target) {
+              group.activate(index, false);
+              // Authored language labels are hidden on screen after enhancement.
+              if (target.closest('.code-tab-label')) scrollTarget = panel;
+            }
+          });
+        });
+        for (var ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+          if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+        }
+        if (scroll) scrollTarget.scrollIntoView();
+      }
+
+      function makeCollapsible(div) {
+        var details = document.createElement('details');
+        details.className = 'code-details';
+        details.open = true;
+
+        var summary = document.createElement('summary');
+        summary.className = 'code-summary';
+        summary.textContent = getLang(div);
+        details.appendChild(summary);
+
+        div.parentNode.insertBefore(details, div);
+        details.appendChild(div);
+      }
+
+      function applyTabs(run) {
+        var parent = run[0].parentNode;
+
+        // Collect lang-label <p> nodes immediately preceding each code block in the run
+        var labels = run.map(function (div) {
+          var prev = div.previousSibling;
+          while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+          return isLangLabel(prev) ? prev : null;
+        });
+
+        // Insertion point: the label before the first block (if it exists), else the first block
+        var insertionPoint = labels[0] || run[0];
+
+        var placeholder = document.createTextNode('');
+        parent.insertBefore(placeholder, insertionPoint);
+
+        var widget = makeTabs(run, labels);
+        parent.replaceChild(widget, placeholder);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var all = Array.prototype.slice.call(
+          document.querySelectorAll('.content div.sourceCode')
+        );
+        var groups = groupConsecutive(all);
+        groups.forEach(function (run) {
+          if (run.length >= 2) {
+            applyTabs(run);
+          } else {
+            makeCollapsible(run[0]);
+          }
+        });
+        revealFragment(window.location.hash, true);
+        window.addEventListener('hashchange', function () {
+          revealFragment(window.location.hash, true);
+        });
+        // Also reveal an already-current fragment after its panel has been switched away.
+        document.addEventListener('click', function (e) {
+          var link = e.target.closest('a[href]');
+          if (!link || e.defaultPrevented || e.button !== 0 ||
+              e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+          var url = new URL(link.href, window.location.href);
+          if (url.origin === window.location.origin && url.pathname === window.location.pathname &&
+              url.search === window.location.search && url.hash) {
+            revealFragment(url.hash, true);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

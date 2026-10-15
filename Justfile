@@ -175,6 +175,15 @@ codex-claude-docs:
 research-html:
   cd primer_research_local_llms && just html
 
+linux-git-html:
+  cd primer_linux_git_workflows && just html
+
+linux-git-pdf:
+  cd primer_linux_git_workflows && just pdf
+
+linux-git-all:
+  cd primer_linux_git_workflows && just all
+
 catmodel-html-dev:
   cd workbook_catmodel_elt_documents && just render-dev-container
 
@@ -296,11 +305,11 @@ retrieval-rag-all:
   cd primer_retrieval_rag && just all
 
 # Common daily build across active document projects
-html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
+html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -310,6 +319,7 @@ clean-generated:
   cd primer_openclaw && just clobber
   cd primer_hermes_server && just clobber
   cd primer_research_local_llms && just clobber
+  cd primer_linux_git_workflows && just clobber
   cd primer_claude_code_alternative && just clobber
   cd primer_codex_for_claude_code_users && just clobber
   cd gaming_silo_rpg && just silo-clobber

@@ -15,11 +15,11 @@ These are the five most recently reviewed primary documents across the catalogue
 
 | Document | Category | Last reviewed |
 |----------|----------|---------------|
+| [Linux, Git, and Reproducible Developer Workflows](primer_linux_git_workflows/primer_linux_git_workflows.html) · [PDF](primer_linux_git_workflows/primer_linux_git_workflows.pdf) | Developer Tooling | 2026-10-15 |
 | [Information Theory](primer_information_theory/primer_information_theory.html) · [PDF](primer_information_theory/primer_information_theory.pdf) | Quantitative Foundations | 2026-10-14 |
 | [Information Retrieval, Embeddings, and Retrieval-Augmented Generation](primer_retrieval_rag/primer_retrieval_rag.html) · [PDF](primer_retrieval_rag/primer_retrieval_rag.pdf) | AI Agents and Coding Tools | 2026-10-14 |
 | [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 | [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | AI Agents and Coding Tools | 2026-10-12 |
-| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -46,6 +46,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | Document | Last reviewed | Description |
 |----------|---------------|-------------|
 | [Containerisation: Docker, Podman, and How Kubernetes Fits In](primer_containerization/primer_containerization.html) · [PDF](primer_containerization/primer_containerization.pdf) | 2026-10-12 | Container fundamentals and the OCI spec, Docker's daemon architecture versus Podman's daemonless model, and how Kubernetes orchestrates it all |
+| [Linux, Git, and Reproducible Developer Workflows](primer_linux_git_workflows/primer_linux_git_workflows.html) · [PDF](primer_linux_git_workflows/primer_linux_git_workflows.pdf) | 2026-10-15 | Processes, shell execution, Git history and recovery, reproducible environments, CI, and artefact validation |
 | [Oh My Zsh: A Practical Guide](primer_ohmyzsh/primer_ohmyzsh.html) · [PDF](primer_ohmyzsh/primer_ohmyzsh.pdf) | 2026-10-12 | ZSH fundamentals, Oh My Zsh architecture, deep plugin coverage, themes, advanced features, and a personalised setup audit |
 | [Python for Expert R Users](primer_python_for_r_users/primer_python_for_r_users.html) · [PDF](primer_python_for_r_users/primer_python_for_r_users.pdf) | 2026-10-12 | Comprehensive migration guide for experienced tidyverse, purrr, and furrr users, with deep ggplot2 replacement strategy |
 

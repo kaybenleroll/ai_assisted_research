@@ -52,11 +52,15 @@ A local preference does not silently override the guide. Declare a necessary dep
 
 **S2.** Use one H1 as the canonical title, equal to the Justfile `TITLE`, with no refresh stamps in either. Sections start at `##`; do not skip heading levels or select levels for visual appearance. Normally stop at H4; use H5 only for exercise solutions or where a documented heading demotion requires it. For numbered Pandoc builds with a leading H1 and `##` sections, pass `--shift-heading-level-by=-1` with `--number-sections`, as specified in [CLAUDE.md](CLAUDE.md#primer-build-and-render-notes). [check: review]
 
-**S3.** Open with an orientation triad: what the document covers and which problem or gap it addresses, what it is not, and the assumed background. Make these explicit in introductory prose or subsections rather than requiring a fixed pair of headings. Include an annotated Further Reading section; maths primers also require a Notation section, with details assigned to issue #146. Exercises are optional; a glossary is optional and particularly useful above about 15 specialist terms. Learning objectives are not mandatory. New primers follow these requirements from their first draft; existing primers adopt them through their content-audit row in issue #138, and a maths primer's temporary Notation exemption ends when its row is finished. [check: review]
+**S3.** Open with one coherent orientation block: state what the document covers and which problem or gap it addresses, what it is not, the assumed background, and how to read it. Do not create a separate top-level heading for each item in this triad; use one opening section or integrated introductory prose, with short child headings only when they materially improve navigation. Include an annotated Further Reading section; maths primers also require a Notation section, with details assigned to issue #146. Exercises are optional; a glossary is optional and particularly useful above about 15 specialist terms. Learning objectives are not mandatory. New primers follow these requirements from their first draft; existing primers adopt them through their content-audit row in issue #138, and a maths primer's temporary Notation exemption ends when its row is finished. [check: review]
 
-**S4.** Give long documents a contents or another clear navigation aid, and make individual sections useful to readers consulting them out of order. Use headings to aid navigation without fragmenting continuous reasoning. [check: review]
+**S4.** Give long documents a contents or another clear navigation aid, and make individual sections useful to readers consulting them out of order. Where readers have materially different goals or a substantial optional path, provide concise task-based routes and identify reference material separately from the main narrative. Use headings to aid navigation without fragmenting continuous reasoning. [check: review]
 
 **S5.** Write explanatory prose in paragraphs. Use lists for genuinely parallel items, sequences, options, or checklists, and tables for comparisons or mappings. A reference list can complement an explanation; it should not replace the reasoning that teaches the reader. [check: review]
+
+**S6.** When a section contains subsections, introduce them with a brief framing paragraph that explains the section's scope, organising question, or relationship between its parts. Do not merely repeat the heading or list the subsection titles. A navigation-only section is exempt when it contains no substantive exposition. Avoid one-paragraph subsections when they divide a continuous explanation without adding a distinct concept, task, comparison, decision, or useful navigation point; consolidate such material under a broader heading. [check: review]
+
+**S7.** Order the main route so that each stage establishes concepts needed by the next. Introduce the organising model before enumerating components, products, or options. Keep optional catalogues, advanced branches, extended scenarios, and operational reference material behind clear routes or headings; after a broad survey, provide a comparison, synthesis, or decision framework. [check: review]
 
 ## Exposition and Examples
 
@@ -65,6 +69,8 @@ A local preference does not silently override the guide. Declare a necessary dep
 **E2.** Define unavoidable specialist terms and expand acronyms at first meaningful use, then use the chosen terminology consistently. Give a concept from another field a short grounding; explain a general concept before introducing a vendor's exact term. Where definitions compete, state which one the document uses. [check: review]
 
 **E3.** Prefer worked examples for technical concepts, including small examples within a section, when they let the reader apply or test the idea. Use a proof, historical case, comparison, counterexample, or failure case when it teaches the subject better. Pair abstract explanation with the appropriate teaching device rather than replacing explanation with an example alone. [check: review]
+
+**E4.** Close the example loop. After an example, explain what it demonstrates, which assumptions or decisions it exposes, and where it stops applying. Prefer a small number of coherent running examples when they let concepts build across sections; state whether an example is synthetic, illustrative, executable, or measured. [check: review]
 
 For example, introduce Newton's method in prose, then show its iteration and error:
 
@@ -77,7 +83,7 @@ for step in range(10):
     print(f"step {step}: x={x:.10f}, error={abs(x - 2**0.5):.2e}")
 ```
 
-**E4.** Keep conceptual grounding inline so a new reader can follow without outside reference; primers are long-form by design. Prefer accurate version-agnostic explanations, and link volatile product and version facts to maintained authoritative sources rather than duplicating them across primers. Link important or contestable claims to the strongest available source, preferring primary documentation, standards, and official data; identify the relevant version or date for claims that can change. Do not pad or compress away necessary reasoning, and do not impose one academic citation system on every subject. [check: review]
+**E5.** Keep conceptual grounding inline so a new reader can follow without outside reference; primers are long-form by design. Prefer accurate version-agnostic explanations, and link volatile product and version facts to maintained authoritative sources rather than duplicating them across primers. Link important or contestable claims to the strongest available source, preferring primary documentation, standards, and official data; identify the relevant version or date for claims that can change. Do not pad or compress away necessary reasoning, and do not impose one academic citation system on every subject. [check: review]
 
 The following current passages illustrate clear problem framing and scope boundaries:
 
@@ -117,7 +123,7 @@ Source: [primer_numerical_analysis/primer_numerical_analysis.md](primer_numerica
 
 **R4.** State evidence strength separately from likelihood: never combine a confidence term and a likelihood term in one sentence, and do not impose a fixed scale. [check: review]
 
-**R5.** Apply E4's duplicate-versus-self-contained tie-break: link volatile product and version facts, but keep conceptual grounding inline. [check: review]
+**R5.** Apply E5's duplicate-versus-self-contained tie-break: link volatile product and version facts, but keep conceptual grounding inline. [check: review]
 
 **R6.** A primer needs a one-line verification note when it contains time-sensitive claims, including named products or versions, prices, limits, benchmark figures, current office-holders, or statements about the current state of a field; decide and record this per primer during its sources pass, without naming a fixed set of primers. Write the note only after checking the sources, leave it undated, and place it directly after the orientation block: *Verified against primary sources for sections X–Y; unverified claims are flagged inline.* Replace X–Y with the verified section range or "all sections". Mechanical passes do not add or edit this note. [check: review]
 

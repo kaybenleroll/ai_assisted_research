@@ -21,11 +21,14 @@ Apply the R and C rules in the Style Guide. Until #142 adds those rule IDs, use 
 
 ## Pass 2: Prose and Structure
 
-- Check that the introduction delivers its stated promise and orients the intended reader.
+- Check that one coherent opening orientation block delivers the stated promise, explains scope and exclusions, states prerequisites, and gives the reader a route through the document. Do not accept separate top-level headings for each orientation item unless a documented navigation need justifies them.
+- For each section with child headings, check for a brief framing paragraph that explains its scope or internal relationship. Review one-paragraph subsections: consolidate those that merely split continuous reasoning, while retaining short subsections with a distinct conceptual, practical, comparative, or navigational purpose.
+- Check that the main route is dependency-led: introduce the organising model before enumerating components, keep optional or reference-heavy branches clearly marked, and provide a comparison, synthesis, or decision framework after a broad survey where readers need one.
 - Give every core concept an example: worked code, proof, case, comparison, counterexample, or failure case. Prefer explanatory prose to a dump of bullets.
 - Apply D10: banned hedges are errors; filler is a suggestion. Review density above two filler terms in a paragraph or above 1.0 per 1,000 words, then fix the cause rather than swapping words.
 - Check terminology consistency by searching for the main alternative term. Expand acronyms at first meaningful use; use the first-use helper below and review its candidates by hand.
 - Apply D8: address the reader as “you”; use “we” in derivations. Apply D14 by keeping evidence strength and likelihood in separate uncertainty sentences. Apply D16 by giving each table a lead-in sentence.
+- Check that examples are interpreted after they appear: state what each demonstrates, its assumptions or decisions, and its limits. For a long primer, record whether a running example or a set of local examples best serves the subject.
 
 From the repository root, set `md` to the Markdown source under review. Until #159 supplies the automated hedge check, this command must return no matches:
 

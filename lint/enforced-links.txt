@@ -43,6 +43,7 @@ primer_research_local_llms/primer-running-llms-locally.html
 primer_retrieval_rag/primer_retrieval_rag.html
 primer_retrieval_rag/primer_retrieval_rag.mathjax.html
 primer_retrieval_rag/primer_retrieval_rag.mathml.html
+primer_linux_git_workflows/primer_linux_git_workflows.html
 workbook_catmodel_elt_documents/outputs/workbook_elt.html
 workbook_catmodel_elt_documents/outputs/workbook_executable_index.html
 workbook_catmodel_elt_documents/outputs/workbook_quickstart.html
