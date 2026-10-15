@@ -242,10 +242,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
