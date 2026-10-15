@@ -86,6 +86,8 @@ Environment variables commonly configure programs: `HOME` names the user's home 
 
 ## How a Shell Turns Text Into a Process
 
+The shell section follows one command from text to execution and status. First establish how a name becomes a program and how text becomes arguments; then examine quoting, expansion, pipes, redirection, and the evidence needed when a stage fails.
+
 ### Command Lookup and Arguments
 
 The shell does not pass a typed command line verbatim to a program. It parses shell syntax, performs expansions, applies redirections, and constructs an argument vector. The program receives arguments as separate strings: argument zero conventionally names the invoked program, followed by the arguments you supplied. Spaces separate words unless quoting or escaping keeps them together. Consequently, a path containing spaces must be quoted when you intend it to be one argument.
@@ -179,6 +181,8 @@ READY: three
 The corrected command verifies that the intended input exists and is readable, then uses `pipefail` so a producer or sorting failure reaches the caller. For a reusable script, handle each possible status deliberately: a missing input is an error, while no matching lines may be an expected result depending on the task. Preserve the original file until the replacement has been produced and checked when overwriting it would destroy useful data. A more careful production workflow often writes to a temporary output in the same filesystem, validates it, and renames it into place only after success. The key habit is to ask what each stage did, which status survived, and which output side effects occurred before declaring recovery complete.
 
 ## Git's Object and Repository Model
+
+Git's stored objects and movable references explain the working tree, commits, collaboration, and recovery that follow. Start with the object graph, then separate the working tree and index from `HEAD`, before examining commits and the names that make them reachable.
 
 ### What Git Stores
 
@@ -445,7 +449,11 @@ This gate deliberately makes a modest claim. It detects the common omission "sou
 
 When exact byte equality is not a realistic target, define useful semantic checks instead. For a rendered document, those might include expected headings and anchors, no raw Mermaid fences, a valid PDF with extractable text, successful relative links, and human inspection of pages where layout changed. For a compiled package, they might include executable tests, metadata checks, dependency inventories, and a smoke test in a clean runtime. Make the gate explain which property it checks and which properties remain for reviewers.
 
-## Repository Hygiene and Reviewable Changes
+## Review, Release, and Safe Lifecycle
+
+The final workflow section connects a reviewable patch to a validated release and its maintenance path. First make the change legible to reviewers; then identify the build, release, recovery, and maintenance states that keep the result trustworthy.
+
+### Repository Hygiene and Reviewable Changes
 
 Keep one coherent change per branch or pull request. A source edit, lockfile update, generated output, and build-recipe change may belong together when they implement one outcome; unrelated formatting or dependency churn makes it harder to establish cause. Inspect the working tree before starting, stage explicit paths, and review the staged diff. Ignore rules should exclude caches, local configuration, credentials, and intermediates without hiding source or required deliverables.
 
@@ -455,7 +463,7 @@ Commit messages should identify the intent, not merely the operation. Each commi
 
 Reviewers need evidence that connects the change to the result: source diff, dependency changes, commands run, exit status, artefact inspection, and known limitations. A screenshot can help with a visual change, but it does not replace the source or a reproducible build. If a check could not run because the required image or external service was unavailable, state that plainly and provide the strongest independent check that did run.
 
-## Release Workflow and Safe Lifecycle
+### Release Workflow and Safe Lifecycle
 
 A safe developer lifecycle is a sequence of explicit states. Start by checking repository instructions, branch state, and the issue or change request. Identify the source, dependencies, build recipe, expected outputs, and acceptance checks before editing. Create an isolated branch or worktree, then make the smallest coherent change. This keeps the work recoverable and makes it possible to compare the result with the starting revision.
 

@@ -690,12 +690,16 @@ Published Interfaces</a></li>
 <li><a href="#freshness-validation-and-the-stale-output-failure" id="toc-freshness-validation-and-the-stale-output-failure"><span class="toc-section-number">11.7</span> Freshness, Validation, and the
 Stale-Output Failure</a></li>
 </ul></li>
-<li><a href="#repository-hygiene-and-reviewable-changes" id="toc-repository-hygiene-and-reviewable-changes"><span class="toc-section-number">12</span> Repository Hygiene and Reviewable
+<li><a href="#review-release-and-safe-lifecycle" id="toc-review-release-and-safe-lifecycle"><span class="toc-section-number">12</span> Review, Release, and Safe
+Lifecycle</a>
+<ul>
+<li><a href="#repository-hygiene-and-reviewable-changes" id="toc-repository-hygiene-and-reviewable-changes"><span class="toc-section-number">12.1</span> Repository Hygiene and Reviewable
 Changes</a></li>
-<li><a href="#release-workflow-and-safe-lifecycle" id="toc-release-workflow-and-safe-lifecycle"><span class="toc-section-number">13</span> Release Workflow and Safe
+<li><a href="#release-workflow-and-safe-lifecycle" id="toc-release-workflow-and-safe-lifecycle"><span class="toc-section-number">12.2</span> Release Workflow and Safe
 Lifecycle</a></li>
-<li><a href="#glossary" id="toc-glossary"><span class="toc-section-number">14</span> Glossary</a></li>
-<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">15</span> Further Reading</a></li>
+</ul></li>
+<li><a href="#glossary" id="toc-glossary"><span class="toc-section-number">13</span> Glossary</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14</span> Further Reading</a></li>
 </ul></div>
 
     </aside>
@@ -957,6 +961,10 @@ and the <a href="https://www.gnu.org/software/bash/manual/bash.html#Environment"
 manual’s environment section</a>.</p>
 <h1 data-number="6" id="how-a-shell-turns-text-into-a-process"><span class="header-section-number">6</span> How a Shell Turns Text Into a
 Process</h1>
+<p>The shell section follows one command from text to execution and
+status. First establish how a name becomes a program and how text
+becomes arguments; then examine quoting, expansion, pipes, redirection,
+and the evidence needed when a stage fails.</p>
 <h2 data-number="6.1" id="command-lookup-and-arguments"><span class="header-section-number">6.1</span> Command Lookup and
 Arguments</h2>
 <p>The shell does not pass a typed command line verbatim to a program.
@@ -1150,6 +1158,10 @@ habit is to ask what each stage did, which status survived, and which
 output side effects occurred before declaring recovery complete.</p>
 <h1 data-number="8" id="gits-object-and-repository-model"><span class="header-section-number">8</span> Git’s Object and Repository
 Model</h1>
+<p>Git’s stored objects and movable references explain the working tree,
+commits, collaboration, and recovery that follow. Start with the object
+graph, then separate the working tree and index from <code>HEAD</code>,
+before examining commits and the names that make them reachable.</p>
 <h2 data-number="8.1" id="what-git-stores"><span class="header-section-number">8.1</span> What Git Stores</h2>
 <p>Git is a content-addressed database with a versioned directory tree
 and a set of references that name commits. This model explains both
@@ -1834,8 +1846,14 @@ pages where layout changed. For a compiled package, they might include
 executable tests, metadata checks, dependency inventories, and a smoke
 test in a clean runtime. Make the gate explain which property it checks
 and which properties remain for reviewers.</p>
-<h1 data-number="12" id="repository-hygiene-and-reviewable-changes"><span class="header-section-number">12</span> Repository Hygiene and
-Reviewable Changes</h1>
+<h1 data-number="12" id="review-release-and-safe-lifecycle"><span class="header-section-number">12</span> Review, Release, and Safe
+Lifecycle</h1>
+<p>The final workflow section connects a reviewable patch to a validated
+release and its maintenance path. First make the change legible to
+reviewers; then identify the build, release, recovery, and maintenance
+states that keep the result trustworthy.</p>
+<h2 data-number="12.1" id="repository-hygiene-and-reviewable-changes"><span class="header-section-number">12.1</span> Repository Hygiene and
+Reviewable Changes</h2>
 <p>Keep one coherent change per branch or pull request. A source edit,
 lockfile update, generated output, and build-recipe change may belong
 together when they implement one outcome; unrelated formatting or
@@ -1864,8 +1882,8 @@ change, but it does not replace the source or a reproducible build. If a
 check could not run because the required image or external service was
 unavailable, state that plainly and provide the strongest independent
 check that did run.</p>
-<h1 data-number="13" id="release-workflow-and-safe-lifecycle"><span class="header-section-number">13</span> Release Workflow and Safe
-Lifecycle</h1>
+<h2 data-number="12.2" id="release-workflow-and-safe-lifecycle"><span class="header-section-number">12.2</span> Release Workflow and Safe
+Lifecycle</h2>
 <p>A safe developer lifecycle is a sequence of explicit states. Start by
 checking repository instructions, branch state, and the issue or change
 request. Identify the source, dependencies, build recipe, expected
@@ -1914,7 +1932,7 @@ workflow when the source tree changes. A pin without an owner becomes
 stale; a check with no failure response becomes theatre. Give each
 important input and gate a maintenance route so reproducibility remains
 a practice rather than a one-time snapshot.</p>
-<h1 data-number="14" id="glossary"><span class="header-section-number">14</span> Glossary</h1>
+<h1 data-number="13" id="glossary"><span class="header-section-number">13</span> Glossary</h1>
 <ul>
 <li><strong><a href="#users-groups-and-privilege">ACL</a>:</strong> an
 access-control list that adds rules beyond ordinary Unix mode bits.</li>
@@ -1959,7 +1977,7 @@ command arguments.</li>
 tree</a>:</strong> the files checked out for a Git repository at the
 current HEAD.</li>
 </ul>
-<h1 data-number="15" id="further-reading"><span class="header-section-number">15</span> Further Reading</h1>
+<h1 data-number="14" id="further-reading"><span class="header-section-number">14</span> Further Reading</h1>
 <ul>
 <li><a href="https://www.gnu.org/software/bash/manual/bash.html">Bash
 Reference Manual</a> — parsing, expansions, redirections, pipelines,
