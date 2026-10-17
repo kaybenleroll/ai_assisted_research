@@ -729,8 +729,11 @@ Compatibility</a></li>
 <li><a href="#local-llm-support-ollama-lm-studio" id="toc-local-llm-support-ollama-lm-studio"><span class="toc-section-number">10.1.2</span> Local LLM Support (Ollama / LM
 Studio)</a></li>
 </ul></li>
-<li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">10.2</span> Feature Comparison
-Matrix</a></li>
+<li><a href="#feature-comparison-matrix" id="toc-feature-comparison-matrix"><span class="toc-section-number">10.2</span> Feature Comparison Matrix</a>
+<ul>
+<li><a href="#group-5-kiro-antigravity" id="toc-group-5-kiro-antigravity"><span class="toc-section-number">10.2.5</span> Group 5: Kiro,
+Antigravity</a></li>
+</ul></li>
 <li><a href="#extensibility-deep-dive" id="toc-extensibility-deep-dive"><span class="toc-section-number">10.3</span> Extensibility Deep Dive</a>
 <ul>
 <li><a href="#claude-codes-extension-architecture" id="toc-claude-codes-extension-architecture"><span class="toc-section-number">10.3.1</span> Claude Code’s Extension
@@ -1487,8 +1490,8 @@ the largest MoE families: Mistral’s <a href="https://mistral.ai/news/devstral-
 describes a 24B small model as well as the larger model. Quantisation,
 context allocation, and the serving stack still determine whether your
 machine can sustain an agent loop.</p>
-<p>Separate those checkpoints from hosted lifecycle status. Mistral
-currently marks the <a href="https://docs.mistral.ai/models/devstral-2-25-12">Devstral 2
+<p>Separate those checkpoints from hosted lifecycle status. As of
+October 2026, Mistral marks the <a href="https://docs.mistral.ai/models/devstral-2-25-12">Devstral 2
 endpoint deprecated</a> and points new integrations to <a href="https://docs.mistral.ai/models/mistral-medium-3-5-26-04">Mistral
 Medium 3.5</a>, a multimodal model optimised for coding and agentic use
 with 256K context and open weights under a Modified MIT licence. That
@@ -2123,8 +2126,8 @@ a distinctive planning-first approach. Rather than immediately executing
 changes, it plans multi-file, multi-step tasks and builds up pending
 changes for user review before applying.</p>
 <p><strong>Author and licence:</strong> Created by Dane Schneider (<span class="citation" data-cites="danenania">@danenania</span>). MIT licence.
-Open source at <code>github.com/plandex-ai/plandex</code>. Roughly
-mid-teens-thousands GitHub stars as of late July 2026, currently at
+Open source at <code>github.com/plandex-ai/plandex</code>. As of late
+July 2026, it had roughly mid-teens-thousands GitHub stars and was at
 v2.2.1.</p>
 <p><strong>Architecture:</strong> Plandex is written in Go and uses a
 client-server architecture. The server can be run locally or self-hosted
@@ -2834,12 +2837,11 @@ with a sandboxed execution environment. This is the key architectural
 difference from CLI tools — it doesn’t run directly on your machine; it
 runs in an isolated environment with full access to the shell,
 filesystem, and browser within that sandbox. This makes it safer for
-autonomous long-running tasks but adds Docker as a dependency. The
-project has recently restructured its core: the agent code now lives in
-separate repos (<code>software-agent-sdk</code>,
-<code>agent-canvas</code>), and the primary interface is the
-browser-based <strong>Agent Canvas</strong> rather than the older “Web
-UI” branding.</p>
+autonomous long-running tasks but adds Docker as a dependency. As of
+October 2026, the agent code lives in separate repos
+(<code>software-agent-sdk</code>, <code>agent-canvas</code>), and the
+primary interface is the browser-based <strong>Agent Canvas</strong>
+rather than the older “Web UI” branding.</p>
 <p><strong>Interfaces:</strong></p>
 <ul>
 <li><strong>Agent Canvas</strong> — the primary interface, a
@@ -2991,8 +2993,9 @@ subscriptions on 30 April 2027; new Q Developer account and subscription
 signups closed 15 May 2026. Amazon Q Developer in the AWS console and
 other first-party AWS experiences is not covered by that IDE sunset.
 <strong>AWS Kiro is the designated successor for IDE/CLI
-development</strong> (see above) — do not recommend Q Developer as a new
-IDE investment without flagging this scope and date.</p>
+development</strong> (see <a href="#aws-kiro-ide-and-cli">AWS Kiro IDE
+and CLI</a>) — do not recommend Q Developer as a new IDE investment
+without flagging this scope and date.</p>
 <p><strong>Strengths:</strong> - Best-in-class for AWS-heavy workflows -
 Security vulnerability scanning, IAM policy generation - CLI agentic
 mode is now genuinely general-purpose, not AWS-console-limited</p>
@@ -3446,7 +3449,8 @@ and hardware feasibility require separate evaluation.</p>
 legibility. Products and model surfaces change faster than this table,
 so read it with the dated product profiles and model section.</p>
 <div class="broad-table">
-<p><strong>Group 1: Claude Code, Aider, OpenCode, Cline</strong></p>
+<h3 data-number="10.2.1" id="group-1-claude-code-aider-opencode-cline"><span class="header-section-number">10.2.1</span> Group 1: Claude Code, Aider,
+OpenCode, Cline</h3>
 <table>
 <colgroup>
 <col style="width: 20%" />
@@ -3565,8 +3569,8 @@ so read it with the dated product profiles and model section.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Group 2: Continue.dev, Goose, Gemini CLI,
-OpenHands</strong></p>
+<h3 data-number="10.2.2" id="group-2-continue.dev-goose-gemini-cli-openhands"><span class="header-section-number">10.2.2</span> Group 2: Continue.dev,
+Goose, Gemini CLI, OpenHands</h3>
 <table>
 <colgroup>
 <col style="width: 20%" />
@@ -3685,7 +3689,8 @@ OpenHands</strong></p>
 </tr>
 </tbody>
 </table>
-<p><strong>Group 3: Cursor, Windsurf, Codex CLI, Amp</strong></p>
+<h3 data-number="10.2.3" id="group-3-cursor-windsurf-codex-cli-amp"><span class="header-section-number">10.2.3</span> Group 3: Cursor, Windsurf,
+Codex CLI, Amp</h3>
 <table>
 <colgroup>
 <col style="width: 20%" />
@@ -3805,7 +3810,8 @@ credits</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Group 4: Devin, Grok Bot, Copilot</strong></p>
+<h3 data-number="10.2.4" id="group-4-devin-grok-bot-copilot"><span class="header-section-number">10.2.4</span> Group 4: Devin, Grok Bot,
+Copilot</h3>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -3909,7 +3915,8 @@ credits</td>
 </tbody>
 </table>
 </div>
-<p><strong>Group 5: Kiro, Antigravity</strong></p>
+<h3 data-number="10.2.5" id="group-5-kiro-antigravity"><span class="header-section-number">10.2.5</span> Group 5: Kiro,
+Antigravity</h3>
 <div class="compact-table">
 <table>
 <colgroup>
@@ -4108,11 +4115,11 @@ itself can consume it through <code>CLAUDE.md</code> imports.</p>
 systems); AGENTS.md standardises <em>project-instruction</em>
 portability (how an agent learns a repo’s conventions, build steps, and
 constraints). They’re complementary, not competing — a tool can support
-one, both, or neither. For anyone currently maintaining a pile of
-per-tool rule files (<code>.clinerules</code>,
-<code>.cursorrules</code>, <code>CLAUDE.md</code>), AGENTS.md is worth
-tracking as a potential single source of truth that many tools can read
-natively, reducing the duplication of instructions across tools.</p>
+one, both, or neither. If you maintain several per-tool rule files
+(<code>.clinerules</code>, <code>.cursorrules</code>,
+<code>CLAUDE.md</code>), AGENTS.md is worth tracking as a potential
+single source of truth that many tools can read natively, reducing the
+duplication of instructions across tools.</p>
 <h3 data-number="10.3.4" id="what-this-means-for-migration"><span class="header-section-number">10.3.4</span> What This Means for
 Migration</h3>
 <p>If you have heavily invested in Claude Code’s extensibility system
@@ -4131,14 +4138,14 @@ the bigger migration cost, look at consolidating onto AGENTS.md — it is
 now adopted across tens of thousands of projects, and Claude Code can
 import it into <code>CLAUDE.md</code>.</p>
 <h2 data-number="10.4" id="cost-analysis"><span class="header-section-number">10.4</span> Cost Analysis</h2>
-<p>If you are a heavy Claude Code user currently on a Max plan, what
-would the same usage cost on each alternative? Note first that
-“unlimited usage” is not an accurate description of the Max plan: Max 5x
-($100/month) and Max 20x ($200/month) both carry a five-hour session
-limit and a separate weekly limit, with further caps and model-specific
-effects possible. Anthropic’s live help page is the authority for the
-current limits; do not convert them into a fixed message count because
-message capacity depends on model, context, and workload.</p>
+<p>If you are a heavy Claude Code user on a Max plan, what would the
+same usage cost on each alternative? Note first that “unlimited usage”
+is not an accurate description of the Max plan: Max 5x ($100/month) and
+Max 20x ($200/month) both carry a five-hour session limit and a separate
+weekly limit, with further caps and model-specific effects possible.
+Anthropic’s live help page is the authority for the limits; do not
+convert them into a fixed message count because message capacity depends
+on model, context, and workload.</p>
 <h3 data-number="10.4.1" id="defining-heavy-usage"><span class="header-section-number">10.4.1</span> Defining “Heavy Usage”</h3>
 <p>For this analysis, heavy usage means: - ~4-8 hours of active coding
 per day - Typical session: long context (50k-200k tokens input), many
@@ -4284,8 +4291,8 @@ quote as universal.</td>
 <td>$0</td>
 <td>$0</td>
 <td>GPU hardware cost only</td>
-<td>Choose a currently supported local coding model and validate its
-quantisation/context fit.</td>
+<td>Choose a local coding model supported by your installed runtime and
+validate its quantisation/context fit.</td>
 </tr>
 <tr>
 <td>OpenCode + DeepSeek <code>deepseek-flash</code></td>
@@ -4915,14 +4922,14 @@ separate controls.</td>
 <tr>
 <td><strong>Together AI</strong></td>
 <td>Open an account, purchase prepaid credits, create a scoped key, and
-use <code>TOGETHER_API_KEY</code>. Together currently requires at least
-$5 in credits for API keys and supports auto-recharge.</td>
+use <code>TOGETHER_API_KEY</code>. As of October 2026, Together requires
+at least $5 in credits for API keys and supports auto-recharge.</td>
 <td>Shared or dedicated inference for Qwen, DeepSeek, and other open
 checkpoints when throughput, hardware, or provider-specific pricing
 beats the gateway.</td>
-<td>Treat retention as provider-specific; the current public material
-does not establish a ZDR guarantee sufficient for sensitive
-repositories. Review the current contract before use.</td>
+<td>Treat retention as provider-specific; the public material available
+for this review does not establish a ZDR guarantee sufficient for
+sensitive repositories. Review the applicable contract before use.</td>
 </tr>
 <tr>
 <td><strong>Fireworks</strong></td>

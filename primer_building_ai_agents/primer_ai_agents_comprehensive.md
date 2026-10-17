@@ -95,7 +95,7 @@ Mini example: an IT access agent receives "Grant dashboard access." It checks us
 
 ### The Misconception: LLMs as Black Boxes
 
-Many people assume LLMs are mysterious, but for agent-building purposes, you can think of them simply as:
+For agent-building purposes, one useful view of LLMs is:
 
 **Pattern matchers that are excellent at understanding context and producing structured outputs.**
 

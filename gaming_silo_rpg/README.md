@@ -36,7 +36,7 @@ Agents must read `gaming_silo_index.md` first when asked about Silo lore, rules,
 
 ## Style-Guide Applicability
 
-Use UK English in all repository-authored prose. The Style Guide applies to Silo with these existing mechanics exceptions: use `*` bullets, retain manual heading numbers such as `## 1. ...`, and do not use `--number-sections`. Use descriptive Title Case headings, following D5. Recipe titles in `Justfile` are currently ALL-CAPS; heading-case sweep #161 will recase them.
+Use UK English in all repository-authored prose. The Style Guide applies to Silo with these existing mechanics exceptions: use `*` bullets, retain manual heading numbers such as `## 1. ...`, and do not use `--number-sections`. Use descriptive Title Case headings, following D5. Recipe titles in `Justfile` are ALL-CAPS; heading-case sweep #161 will recase them.
 
 Tables and callouts follow STYLE_GUIDE (D15, D16) in the five Silo documents. In the four reference sheets a table may follow its heading directly; the heading is the lead-in. This D16 layout exception applies only to [gaming_reference_silo_index.md](gaming_reference_silo_index.md), [gaming_reference_silo_player.md](gaming_reference_silo_player.md), [gaming_reference_silo_gm.md](gaming_reference_silo_gm.md), and [gaming_reference_silo_campaign.md](gaming_reference_silo_campaign.md).
 

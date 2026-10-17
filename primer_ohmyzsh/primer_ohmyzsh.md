@@ -413,7 +413,7 @@ x archive.rar
 
 You never need to remember whether it's `tar -xzf` or `tar -xjf` or `unzip` or `7z x`. The plugin detects the format and uses the right tool. It works as long as the relevant tool is installed on the system.
 
-### colored-man-pages
+### colored-man-pages <!-- typos: ignore-line --> <!-- Preserve the exact plugin name. -->
 
 Makes `man` pages render with colour instead of monochrome. The improvement is significant for readability, especially for long man pages with lots of structure. No configuration needed; just include it in your plugins list.
 

@@ -411,45 +411,45 @@ That is the practical payoff of importing Karpathy's loop into instruction desig
 
 This is a reference checklist, not part of the main narrative. Use it to run a single improvement cycle on a workflow instruction. Copy it, fill it in, file the result, and repeat. Over time the one-line logs from step 7 become your instruction-wording audit trail.
 
-**1. Identify the failure pattern**
+#### 1. Identify the Failure Pattern {.unnumbered}
 
 - [ ] Review 3–5 recent transcripts of this skill.
 - [ ] Describe the specific failure in behaviour terms (not "feels off" or "wrong", but "X appeared before Y in the transcript").
 - [ ] Estimate frequency: does this failure appear in 1/5 sessions? 3/5? Every session?
 
-**2. Write behavioural anchors**
+#### 2. Write Behavioural Anchors {.unnumbered}
 
 - [ ] Define 2–4 binary criteria that would let you check if the failure occurred.
 - [ ] For each criterion, write explicit pass and fail conditions.
 - [ ] Verify: could you hand these criteria to someone unfamiliar with the skill and they could score a transcript?
 
-**3. Identify the ambiguous phrase**
+#### 3. Identify the Ambiguous Phrase {.unnumbered}
 
 - [ ] Read the skill file and locate the phrase most likely to permit the failure.
 - [ ] Is it a gate condition? A criterion description? An exit condition?
 - [ ] Make sure it is one phrase, not a paragraph — you are editing a pinpoint, not a rewrite.
 
-**4. Rewrite for observability**
+#### 4. Rewrite for Observability {.unnumbered}
 
 - [ ] Replace vague adjectives with evidence requirements appropriate to the task (e.g., "thorough exploration" -> "cite the relevant files and summarise what each establishes").
 - [ ] Add explicit gating language if this is a gate ("before X is done, never do Y").
 - [ ] Add explicit artefact requirements if this controls evidence ("produce a runnable test" not "understand the problem").
 
-**5. A/B test on real work**
+#### 5. A/B Test on Real Work {.unnumbered}
 
 - [ ] Apply old and new wording to comparable tasks, randomising their order when practical.
 - [ ] If sessions are sequential instead, record task and context differences.
 - [ ] Score all sessions against the anchors from step 2.
 - [ ] Record pass rate for each anchor under A and B.
 
-**6. Decide: keep, revert, or iterate**
+#### 6. Decide: Keep, Revert, or Iterate {.unnumbered}
 
 - [ ] Compare each anchor on matched tasks and report its numerator and denominator.
 - [ ] Inspect regressions and task differences; one or two sessions are not a calibrated noise threshold.
 - [ ] Keep the change provisionally if the observed improvements justify another trial and no material regression appears.
 - [ ] Otherwise revert, revise the phrase, or collect more evidence.
 
-**7. Log the result**
+#### 7. Log the Result {.unnumbered}
 
 Copy and paste this line into an instruction-wording changelog:
 
@@ -466,7 +466,9 @@ workflow=diagnostic-repro | date=2026-06-18 | change="add repro hard gate: 'befo
 sample=8 sessions | repro_gate=+50pp | loop_quality=+25pp | transition_discipline=+25pp | decision=KEEP | notes="provisional; four tasks per condition do not establish a general effect"
 ```
 
-**8. Move to the next skill or repeat**
+<!-- vale House.HeadingCase = NO -->
+#### 8. Move to the next Skill or Repeat {.unnumbered}
+<!-- vale House.HeadingCase = YES -->
 
 - [ ] If you logged a KEEP, let it run for another 5–10 sessions to check for side effects.
 - [ ] If you logged a REVERT, file a note of what didn't work so you don't try the same edit again.
@@ -529,7 +531,7 @@ Volume and output type are the two thresholds at which the full four-move appara
 
 If the instruction you are iterating produces **text outputs** — documents, reports, structured artefacts — and you can collect comparable outputs, pairwise comparison is a useful entry point. Run both wordings on matched tasks, randomise presentation order, and inspect disagreements. Fit a rating model only if the comparison design and volume warrant it; an automated judge also needs calibration for this task. The §3 methods need adaptation to the smaller, paired sample.
 
-If the instruction prescribes a **workflow process** rather than generating a document, or if the invocation volume is simply too low for statistical aggregation to be meaningful, the lightweight loop above is the right tool. The transition between the two is not a precise boundary — it is a question of whether your data volume is sufficient to trust a statistical estimate, and whether your output type admits of comparison at all. When in doubt, start with the rubric and inspection; add scoring infrastructure when you have enough data to make calibration worthwhile.
+If the instruction prescribes a **workflow process** rather than generating a document, or if the invocation volume is too low for statistical aggregation to be meaningful, the lightweight loop above is the right tool. The transition between the two is not a precise boundary — it is a question of whether your data volume is sufficient to trust a statistical estimate, and whether your output type admits of comparison at all. When in doubt, start with the rubric and inspection; add scoring infrastructure when you have enough data to make calibration worthwhile.
 
 The underlying principle is the one this primer has been building since §1: a control loop is only as good as its sensor. For instruction editing at low volume, the sensor is a human reading a transcript against a rubric. For high-volume text output, the sensor is an LLM judge reading pairwise comparisons. The evaluate step is load-bearing in both cases; only its implementation changes with the scale.
 
@@ -748,7 +750,7 @@ In a [2025 randomised controlled trial by METR](https://metr.org/blog/2025-07-10
 
 ### What This Means for the Loop
 
-Evaluating agents requires three things that single-turn output evaluation does not: process-level visibility into intermediate steps, multi-step credit assignment across long episodes, and robust harness isolation so the agent cannot attack the evaluator instead of the task. All three are harder and more expensive than running a pairwise comparison or reading a judge's log-probabilities.
+Evaluating agents requires three things that single-turn output evaluation does not: process-level visibility into intermediate steps, multi-step credit assignment across long episodes, and isolation of the evaluation harness from agent actions so the agent cannot attack the evaluator instead of the task. All three are harder and more expensive than running a pairwise comparison or reading a judge's log-probabilities.
 
 Some agent platforms support trace-level evaluation: a run can be assessed on its final answer and intermediate tool use, as described in the [OpenAI agent-evaluation guidance](https://developers.openai.com/api/docs/guides/agent-evals). A captured trajectory can help diagnose failures, but the available fields and graders depend on the platform. Trace inspection alone does not solve credit assignment or evaluator gaming.
 
@@ -758,21 +760,21 @@ SWE-bench measures whether an agent's patch passes a specified test harness. The
 
 Given how fragile all of this gets, it is fair to ask how the organisations at the frontier actually run the loop in production. The theory is clean: measure quality, train against the measurement, iterate. The practice is messier. Here is what three organisations actually do when they sit down to operationalise the loop described in this primer.
 
-**Anchor 1: Anthropic's RSP and the ASL gate**
+### Anchor 1: Anthropic's RSP and the ASL Gate
 
 Anthropic's [Responsible Scaling Policy](https://www.anthropic.com/responsible-scaling-policy) (RSP) links capability thresholds to required safeguards. Its AI Safety Level (ASL) standards govern deployment and security measures, rather than stating that every model above a threshold is unshippable. Anthropic [activated ASL-3 protections for the Claude Opus 4 launch in May 2025](https://www.anthropic.com/news/activating-asl3-protections) as a precaution: it said at the time that it had not determined whether the model definitively crossed the ASL-3 capability threshold. This shows an evaluation-informed deployment decision under uncertainty; check the policy version before applying its thresholds to a later launch.
 
 Anthropic's [Claude 4 System Card](https://www-cdn.anthropic.com/6d8a8055020700718b0c49369f60816ba2a7c285.pdf) reports prompt-injection evaluations of specific model and safeguard configurations. Such before-and-after results can support a mitigation decision within that test set. They do not, by themselves, establish how quickly a red-team finding became a deployed fix or how a safeguard performs against unseen attacks.
 
-**Anchor 2: OpenAI's Preparedness Framework**
+### Anchor 2: OpenAI's Preparedness Framework
 
 OpenAI's [April 2025 Preparedness Framework update](https://openai.com/index/updating-our-preparedness-framework/) tracks biological and chemical, cybersecurity, and AI self-improvement capabilities. It distinguishes a High threshold from a Critical threshold and calls for safeguards and review before deployment at higher risk levels. Persuasion is handled outside that version of the framework. The policy differs from Anthropic's RSP in categories and governance details, but both use capability evaluations to inform risk decisions.
 
-**Anchor 3: Chatbot Arena as ecosystem-level evaluation**
+### Anchor 3: Chatbot Arena as Ecosystem-Level Evaluation
 
 The [2024 Chatbot Arena paper](https://arxiv.org/abs/2403.04132) describes public, anonymous pairwise comparisons and ratings derived from the collected votes. It is the Compare and Aggregate pipeline from §3 at platform scale. The paper reported more than 240,000 votes at publication; that is a dated sample, not a live total. Its rankings summarise preferences among the users and prompts represented in the data, with the usual limits of an opt-in rater pool.
 
-**What running this actually costs**
+### What Running This Costs
 
 The operational work includes specifying the target behaviour, inspecting failures, maintaining the test distribution, and deciding what action a score should trigger. A binary gate is suitable when the requirement is genuinely binary, such as whether a patch passes a required test. A graded rubric is more useful when partial success matters. Neither format removes the need to inspect disagreements and update the evaluation when the task changes.
 
@@ -780,29 +782,29 @@ The operational work includes specifying the target behaviour, inspecting failur
 
 The remaining problems arise when a useful proxy is mistaken for the full outcome, when raters disagree for substantive reasons, or when the person judging an output lacks the expertise to verify it. Each admits partial mitigations, but none has a single method that works across every task.
 
-**Goodhart's treadmill has no exit**
+### Goodhart's Treadmill Has No Exit
 
 A proxy can lose value under optimisation when the model learns a shortcut or the task distribution changes. A fresh holdout set, private tests, and human review can reveal different failures, but each covers only part of the target outcome. Reassess the benchmark when its scores stop discriminating among systems or fail to predict performance on new cases. The maintenance interval depends on the task and the pressure placed on the measure.
 
-**Disagreement as signal versus noise**
+### Disagreement as Signal Versus Noise
 
 Some disagreement between raters is annotation noise; some reflects different, defensible preferences. Aggregating pairwise votes with Bradley-Terry estimates a population-level tendency, but the result depends on who was asked and which prompts they saw. If a rater pool does not represent the users of a system, its fitted preference signal may not represent those users either. Report subgroup results where sample sizes and consent permit, and avoid presenting one pooled rating as a universal measure of quality.
 
-**Benchmark scores and productivity measure different outcomes**
+### Benchmark Scores and Productivity Measure Different Outcomes
 
 The [METR trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found a 19% increase in task completion time when early-2025 AI tools were allowed in its sample, despite participants estimating a 20% speed-up afterwards. It did not compare that result with a specific benchmark score, so it cannot demonstrate a measured benchmark–productivity gap. It shows why productivity for this group and workflow needs direct measurement. Different tasks, tools, and forms of human review require their own studies.
 
-**Superhuman oversight: the hardest problem**
+### Superhuman Oversight: The Hardest Problem
 
 If a system produces answers that a human evaluator cannot reliably check, a preference label can cease to track correctness. This is especially relevant in tasks that require specialised knowledge or long chains of reasoning; it does not follow that every more capable model is beyond human evaluation. The evaluation design then needs evidence beyond an unaided preference vote.
 
 Three research approaches examine this regime. **Weak-to-strong generalisation** ([Burns et al., 2023](https://arxiv.org/abs/2312.09390)) tests whether imperfect labels from a weaker supervisor can elicit capabilities from a stronger model. **Debate** ([Irving et al., 2018](https://arxiv.org/abs/1805.00899)) asks whether an adjudicator can more reliably identify a flawed argument when two systems present opposing cases. **Iterated distillation and amplification** ([Christiano et al., 2018](https://openai.com/index/learning-complex-goals-with-iterated-amplification/)), or IDA, decomposes hard tasks into parts that a weaker supervisor can evaluate, then uses those parts to train and repeat. These approaches investigate scalable oversight under particular assumptions; their experiments do not yet establish a general solution for outputs humans cannot verify directly.
 
-**A brief note on test-time compute**
+### A Brief Note on Test-Time Compute
 
 Models that spend more inference-time compute — chain-of-thought, tree search, self-critique passes — often score higher on benchmarks. This does not resolve the measurement problem; it relocates it. The question "how do you know the answer is good?" does not go away because the model thought longer. It becomes "how do you know the longer thinking produced a better answer?" — which is the same question, recursively.
 
-**The closing motif**
+### The Closing Motif
 
 Evaluation cases and training examples may describe the same task, but they need different roles. Training examples guide an update; held-out evaluation cases test whether the update generalises. Reusing the same labelled items for both can make the evaluation overstate performance. Improve the specification of success through error analysis, then keep an independent test set to check whether the next change helped beyond the cases it saw.
 

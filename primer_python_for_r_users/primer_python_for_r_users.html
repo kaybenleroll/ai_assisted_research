@@ -983,7 +983,7 @@ surface area.</p>
 <li>clear, auditable transformation logic</li>
 <li>predictable missing-data behaviour</li>
 <li>composable functional abstractions</li>
-<li>robust execution with explicit error handling</li>
+<li>execution with explicit error handling</li>
 <li>communication-quality visual output</li>
 <li>reproducibility across machines and teammates</li>
 </ul>
@@ -1420,8 +1420,8 @@ would otherwise be copy-pasted.</p>
 <span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> last_err</span>
 <span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> wrapped</span>
 <span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> deco</span></code></pre></div>
-<p>These patterns are key when moving from exploratory notebooks to
-robust services.</p>
+<p>These patterns help move exploratory notebook code into services that
+handle failures explicitly.</p>
 <h2 data-number="4.7" id="generators-and-lazy-pipelines"><span class="header-section-number">4.7</span> Generators and Lazy
 Pipelines</h2>
 <p>Generators are a major memory and architecture tool in Python. They
@@ -1540,7 +1540,7 @@ production analytics code.</p>
 <h2 data-number="4.12" id="practical-functional-style-guidelines"><span class="header-section-number">4.12</span> Practical Functional Style
 Guidelines</h2>
 <p>Prefer pure functions for transformation logic where feasible, and
-push side effects to clearly named boundaries such as I/O, logging, and
+push side effects to named boundaries such as I/O, logging, and
 persistence layers. Use closures for configuration and local state
 instead of scattering mutable globals through a codebase. Use decorators
 for cross-cutting concerns so behaviour stays consistent across call
@@ -1849,10 +1849,9 @@ accidental over-engineering.</p>
 <h2 data-number="5.16" id="advanced-multicore-pattern-partition-by-file-instead-of-partition-by-object"><span class="header-section-number">5.16</span> Advanced Multicore Pattern:
 Partition-by-File Instead of Partition-by-Object</h2>
 <p>A lot of process-pool disappointment comes from serialising large
-in-memory DataFrames into worker processes. One robust alternative is to
-partition once to Parquet and parallelize by file path. That design
-usually transfers less data between processes and is easier to resume
-after failures.</p>
+in-memory DataFrames into worker processes. Partition once to Parquet
+and parallelize by file path. That design usually transfers less data
+between processes and is easier to resume after failures.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score_partition_file(path):</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    part <span class="op">=</span> pd.read_parquet(path)</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    part[<span class="st">&quot;score&quot;</span>] <span class="op">=</span> part[<span class="st">&quot;x&quot;</span>] <span class="op">*</span> part[<span class="st">&quot;y&quot;</span>]</span>
@@ -1959,8 +1958,8 @@ Statistical modelling in Python is not all done through
 choose libraries by modelling intent rather than by brand
 familiarity.</p>
 <p>Use <code>scikit-learn</code> when your primary goal is prediction
-workflows: robust preprocessing pipelines, cross-validation,
-hyperparameter tuning, and consistent deployment interfaces. Use
+workflows: preprocessing pipelines, cross-validation, hyperparameter
+tuning, and consistent deployment interfaces. Use
 <code>statsmodels</code> when your primary goal is inference and
 interpretation: explicit formulas, standard errors, p-values, confidence
 intervals, and classical diagnostics.</p>
@@ -2343,7 +2342,8 @@ Usually the Wrong Goal</h2>
 <p>Trying to force one Python library to replace all ggplot2 use cases
 creates unnecessary frustration. Different chart classes and audiences
 benefit from different tools.</p>
-<p>A robust approach is:</p>
+<p>Choose the plotting tool by the kind of chart and output you
+need:</p>
 <ul>
 <li>plotnine for grammar continuity</li>
 <li>seaborn for rapid statistical plotting</li>
@@ -3099,8 +3099,7 @@ Real modelling workflows include data prep assumptions, leakage
 controls, split policies, calibration, threshold governance, and
 monitoring. If you do not port those behaviours too, you may get a model
 that matches in-sample numbers but fails in operations.</p>
-<p>A robust migration flow for an existing R modelling workflow usually
-looks like this:</p>
+<p>For an existing R modelling workflow, use this sequence:</p>
 <ol type="1">
 <li>establish baseline artefacts from R</li>
 <li>recreate feature table in Python with parity checks</li>
@@ -3311,12 +3310,12 @@ by Wave Instead of by Technology Layer</h2>
 <p>Many migrations are planned as “first rewrite all wrangling, then all
 models, then all dashboards”. That looks tidy and often fails because
 business value delivery is delayed too long.</p>
-<p>A more robust strategy is wave-based by workflow value. Wave 1 should
-target high-value, medium-complexity workflows with strong testability
-so the team can build confidence quickly. Wave 2 should tackle
-high-value, high-complexity workflows after migration muscle is built.
-Wave 3 should include low-value or legacy workflows only when
-maintenance burden clearly justifies the effort.</p>
+<p>Plan waves by workflow value. Wave 1 should target high-value,
+medium-complexity workflows with strong testability so the team can
+build confidence quickly. Wave 2 should tackle high-value,
+high-complexity workflows after migration muscle is built. Wave 3 should
+include low-value or legacy workflows only when maintenance burden
+justifies the effort.</p>
 <p>Each wave should produce shippable outcomes and update your migration
 playbook based on actual lessons learned.</p>
 <h2 data-number="12.8" id="playbook-8-a-12-week-intensive-program-to-reach-stable-python-fluency"><span class="header-section-number">12.8</span> Playbook 8: A 12-Week
@@ -3346,9 +3345,9 @@ maintainable systems, and analyst trust.</p>
 including disciplined transformation logic, clear naming and metric
 semantics, honest model validation, and communication-quality visuals.
 Then adopt the parts of Python that solve the problems you actually
-face: explicit contracts and interfaces, robust execution control,
-scalable packaging of reusable components, and production-oriented model
-and pipeline tooling.</p>
+face: explicit contracts and interfaces, execution control with error
+handling and retries, scalable packaging of reusable components, and
+production-oriented model and pipeline tooling.</p>
 <p>If you combine those wisely, your team does not lose identity by
 migrating. It upgrades capability.</p>
 <h1 data-number="13" id="extended-deep-dives-the-stuff-that-usually-decides-whether-migration-succeeds"><span class="header-section-number">13</span> Extended Deep Dives: The Stuff
@@ -3482,7 +3481,8 @@ review and deployment needs.</p>
 <p>The inference-facing path helps analysts and statisticians evaluate
 coefficients, standard errors, and diagnostics in a language they
 recognise. The operations-facing path helps engineers deploy consistent
-preprocessing and scoring behaviour with robust interfaces.</p>
+preprocessing and scoring behaviour with explicit input and output
+contracts.</p>
 <p>You can even formalise the relationship between the two:</p>
 <ul>
 <li>formula model for interpretive review</li>
@@ -3603,8 +3603,7 @@ allowing iterative improvement.</p>
 Parallel Workflows Without Creating Ops Debt</h2>
 <p>Parallel execution is seductive because speedups are visible. It is
 also where hidden ops debt can explode if process design is weak.</p>
-<p>A healthy productionization pattern is to split responsibilities
-clearly:</p>
+<p>Split responsibilities between these components:</p>
 <ul>
 <li>worker code is deterministic and stateless</li>
 <li>orchestration code handles retries, scheduling, and run
@@ -3732,8 +3731,8 @@ implicitly but not explicitly: row-count checkpoints at major joins,
 null-rate checks on critical features, threshold-drift warnings, and run
 metadata that records timestamp, input snapshot ID, and code
 version.</p>
-<p>Once those are in place, the Python version is often more robust than
-the legacy pipeline.</p>
+<p>Those checks can catch regressions and drift that the legacy pipeline
+did not expose.</p>
 <h2 data-number="14.2" id="scenario-2-you-are-migrating-a-financial-reporting-workflow-with-strict-auditability"><span class="header-section-number">14.2</span> Scenario 2: You Are Migrating
 a Financial Reporting Workflow With Strict Auditability</h2>
 <p>Financial reporting migrations create a different kind of pressure.

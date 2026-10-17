@@ -871,8 +871,8 @@ explains where the boundaries actually are and why, which is the
 prerequisite for hardening, but it stops short of a control
 checklist.</p>
 <p>It is also not neutral where neutrality would be dishonest. Where one
-option is clearly better for a stated purpose, the primer says so and
-gives the reasoning. Where the evidence is soft — adoption surveys,
+option is better for a stated purpose, the primer says so and gives the
+reasoning. Where the evidence is soft — adoption surveys,
 vendor-published performance numbers, market-share claims — it says that
 too, rather than laundering marketing figures into facts.</p>
 <h2 data-number="1.3" id="assumed-background"><span class="header-section-number">1.3</span> Assumed Background</h2>
@@ -898,10 +898,9 @@ specifications.</p>
 claims are flagged inline.</em></p>
 <h1 data-number="2" id="what-a-container-actually-is"><span class="header-section-number">2</span> What a Container Actually Is</h1>
 <p>A container is a process. That is the single most useful sentence in
-this primer, and it is worth resisting every instinct to complicate it.
-When you run a container on a Linux host, the host kernel starts an
-ordinary process — you can see it in <code>ps</code> on the host, kill
-it with <code>kill</code>, and read its memory maps in
+this primer. When you run a container on a Linux host, the host kernel
+starts an ordinary process — you can see it in <code>ps</code> on the
+host, kill it with <code>kill</code>, and read its memory maps in
 <code>/proc</code>. There is no guest operating system, no virtual
 hardware, no second kernel. What makes it a <em>container</em> rather
 than just a process is that the kernel has been asked to lie to it about
@@ -945,10 +944,10 @@ understanding all of it.</p>
 <p>Docker’s contribution in 2013 was not a new isolation mechanism. It
 was packaging: a single CLI, a declarative build file, a layered image
 format, and a public registry, wrapping primitives that had existed for
-years. That is worth internalising, because it explains why the
-container ecosystem fragmented the way it did. The hard part was never
-the kernel; it was the developer experience and the distribution format.
-Once those were standardised, the engines became interchangeable.</p>
+years. This explains why the container ecosystem fragmented as it did.
+The hard part was never the kernel; it was the developer experience and
+the distribution format. Once those were standardised, the engines
+became interchangeable.</p>
 <h2 data-number="2.2" id="namespaces-controlling-what-a-process-can-see"><span class="header-section-number">2.2</span> Namespaces: Controlling What a
 Process Can See</h2>
 <p>A namespace wraps a global system resource so that processes inside
@@ -957,12 +956,12 @@ typical container uses most of them at once:</p>
 <ul>
 <li><strong>PID (process ID) namespace</strong> — the process gets its
 own process-ID tree. The first process in the namespace is PID 1, and
-processes outside the namespace are simply not visible in
-<code>/proc</code>. This is why <code>ps</code> inside a container shows
-two or three processes rather than the host’s several hundred, and it is
-also why a container’s main process inherits PID 1’s special
-responsibilities — notably reaping orphaned child processes, which most
-application binaries were never written to do.</li>
+processes outside the namespace are not visible in <code>/proc</code>.
+This is why <code>ps</code> inside a container shows two or three
+processes rather than the host’s several hundred, and it is also why a
+container’s main process inherits PID 1’s special responsibilities,
+including reaping orphaned child processes, which most application
+binaries were never written to do.</li>
 <li><strong>Network namespace</strong> — its own network interfaces,
 routing table, <code>iptables</code> rules, and socket ports. Two
 containers can each bind port 8080 without conflict because each has a
@@ -1088,14 +1087,14 @@ argument-validation code. Escaping it requires a kernel vulnerability,
 and the kernel is a vastly larger attack surface than a hypervisor.</p>
 <p>Everything else follows. Containers start in milliseconds because
 there is no kernel to boot and no hardware to enumerate; VMs take
-seconds. Containers have essentially no steady-state overhead because
-the processes inside are just host processes; VMs pay for a second
-kernel and its memory. Containers must share the host’s kernel version
-and its Linux-ness, so a Linux container cannot run on a Windows kernel
-— which is why Docker Desktop on macOS and Windows runs a Linux VM and
-puts your containers inside it, a detail that explains most of the
-performance and filesystem-mount weirdness on those platforms. VMs can
-run any guest OS.</p>
+seconds. Containers do not need a second kernel: the processes inside
+are host processes, while VMs pay for a guest kernel and its memory.
+Containers must share the host’s kernel version and its Linux-ness, so a
+Linux container cannot run on a Windows kernel — which is why Docker
+Desktop on macOS and Windows runs a Linux VM and puts your containers
+inside it, a detail that explains most of the performance and
+filesystem-mount weirdness on those platforms. VMs can run any guest
+OS.</p>
 <p>And the security asymmetry is real, not theoretical. Container
 escapes via kernel vulnerabilities have happened repeatedly. If your
 threat model includes hostile code — multi-tenant workloads,
@@ -1175,7 +1174,8 @@ privileges; a container that does not need <code>NET_ADMIN</code> or
 which system calls a process may make. SELinux and AppArmor apply
 mandatory access-control policy outside the process’s own view.
 Read-only root filesystems, dropped capabilities, and no-new-privileges
-reduce the consequences of a compromise.</p>
+reduce the consequences of a compromise. <!-- typos: ignore-line -->
+<!-- Preserve exact Linux security terms. --></p>
 <p>The dangerous shortcuts are <code>--privileged</code>, mounting
 sensitive host paths, and exposing a root-equivalent engine socket.
 Rootless containers improve the default blast radius by mapping
@@ -1423,7 +1423,8 @@ GitHub Container Registry, Amazon ECR, Google Artifact Registry, and
 Quay all have serious adoption. The distribution specification is what
 makes moving between them a configuration change rather than a rewrite,
 and Skopeo, covered shortly, is the tool that makes mirroring
-straightforward.</p>
+straightforward. <!-- typos: ignore-line -->
+<!-- Preserve official product names. --></p>
 <h1 data-number="6" id="podman"><span class="header-section-number">6</span> Podman</h1>
 <p>Podman is an OCI-compliant container engine developed primarily by
 Red Hat, designed around two architectural decisions that differ from
@@ -2239,7 +2240,7 @@ machine goes away.</p>
 of disk, or lose network connectivity. On a single host,
 <code>systemd</code> or a restart policy handles a crashed process, and
 that covers a lot. Neither handles a dead node — the containers that
-were on it are simply gone, and something has to notice and place them
+were on it are gone, and something has to notice and place them
 elsewhere.</p>
 <p>Kubernetes handles this through continuous reconciliation rather than
 event handling, which is a distinction worth dwelling on. There is no
@@ -2510,14 +2511,13 @@ tells you when to use it.</p>
 containers that share a network namespace, an IPC namespace, and any
 volumes you define, and that are always placed on the same node and
 scheduled as a unit.</p>
-<p>The question everyone asks is why the unit is not simply a container.
-The answer is that some containers are genuinely inseparable. A
-log-shipping agent that reads files your application writes needs the
-same filesystem and the same lifecycle. A proxy handling inbound TLS for
-your application needs the same network namespace so it can forward to
-<code>localhost</code>. Scheduling those independently would be wrong in
-every case. The Pod exists so that “these must be co-located and share
-resources” is expressible.</p>
+<p>Why is the unit a Pod rather than a container? Some containers are
+inseparable. A log-shipping agent that reads files your application
+writes needs the same filesystem and the same lifecycle. A proxy
+handling inbound TLS for your application needs the same network
+namespace so it can forward to <code>localhost</code>. Scheduling those
+independently would be wrong in every case. The Pod exists so that
+“these must be co-located and share resources” is expressible.</p>
 <p>This does not mean you should put your application and its database
 in one Pod. The test is whether the containers must share a lifecycle
 and a machine; if they can be scaled, updated, or placed independently,
@@ -2782,9 +2782,9 @@ namespace scope. It is deliberately general. Teams that need
 organisation-specific rules commonly add a policy engine such as Kyverno
 or Gatekeeper, and supply-chain policy can use the same admission point
 to verify image signatures. Policy is part of the platform contract:
-test it against real workloads, report violations clearly, and keep an
-emergency path that is audited rather than relying on undocumented
-cluster-admin exceptions.</p>
+test it against real workloads, report violations with enough detail to
+fix them, and keep an emergency path that is audited rather than relying
+on undocumented cluster-admin exceptions.</p>
 <h2 data-number="13.5" id="observability-and-debugging"><span class="header-section-number">13.5</span> Observability and
 Debugging</h2>
 <p>Containers change where the useful evidence lives. Application output
@@ -2995,9 +2995,8 @@ resources — “this node has 4 of <code>nvidia.com/gpu</code>” — while DRA
 models devices as claimable resources with attributes and structured
 parameters. That lets the scheduler reason about properties such as
 memory, topology, and device relationships without requiring every
-workload to understand the hardware layout. Device plugins are not
-simply disappearing; the two models will coexist while drivers and
-managed Kubernetes services catch up.</p>
+workload to understand the hardware layout. The two models will coexist
+while drivers and managed Kubernetes services catch up.</p>
 <p>DRA is one layer of a stack that has stabilised around the following
 division of labour. <strong>Kueue</strong> handles admission and quota:
 it holds jobs in queues and admits them only when their full resource

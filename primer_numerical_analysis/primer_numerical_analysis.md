@@ -4,7 +4,7 @@
 
 Most introductions to numerical analysis land in one of two camps: short and hand-wavey, easy to read but hard to use, or rigorous and dense to the point where they become difficult to apply in real work. The first type leaves you unable to reason about whether your code is correct. The second type is technically complete but often inaccessible until you already have the background it assumes.
 
-This primer tries to sit in the middle. The goal is not to water anything down. The goal is to explain real numerical ideas in plain language, with enough detail that you can build useful code, understand why it works, and — crucially — know when it might fail.
+This primer tries to sit in the middle. The goal is not to water anything down. The goal is to explain real numerical ideas in plain language, with enough detail that you can build useful code, understand why it works, and know when it might fail.
 
 You will still see maths throughout, because numerical analysis is mathematics plus computation and there is no way around that. But the style here is practical and conversational, and every major method comes with examples in Python, R, and Julia written in each language's own idiom rather than a forced one-size-fits-all style.
 
@@ -12,7 +12,7 @@ You will still see maths throughout, because numerical analysis is mathematics p
 
 Numerical analysis is the craft of getting trustworthy approximate answers to mathematical problems on finite machines.
 
-That single sentence contains three big constraints worth unpacking. First, the answers are approximate, because many important problems simply do not have clean symbolic solutions — nobody is going to write down a closed form for the stress distribution in an irregular turbine blade. Second, the answers must be trustworthy, which means you need to be able to reason about their error: a number you cannot bound or validate is not really an answer, it is an unverified estimate. Third, your machine is finite — it represents real numbers imperfectly, runs in finite time, and has a hard memory ceiling.
+That single sentence contains three big constraints worth unpacking. First, the answers are approximate, because many important problems do not have clean symbolic solutions — nobody is going to write down a closed form for the stress distribution in an irregular turbine blade. Second, the answers must be trustworthy, which means you need to be able to reason about their error: a number you cannot bound or validate is not really an answer, it is an unverified estimate. Third, your machine is finite — it represents real numbers imperfectly, runs in finite time, and has a hard memory ceiling.
 
 If you only remember one thing from this primer, remember this:
 
@@ -80,7 +80,7 @@ Direct methods are the right tool when the problem is moderate in size and when 
 #### Iterative Methods
 Iterative methods produce a sequence of approximations, often improving until a stopping rule is met.
 
-Iterative methods become attractive — and often necessary — when problems outgrow what direct factorisation can handle. For very large or sparse systems, forming and storing a dense factorisation is simply infeasible: memory costs scale quadratically or worse, and fill-in during factorisation can destroy the sparsity that made the problem tractable to begin with. Iterative methods sidestep this by working entirely through matrix-vector products, which remain cheap if the matrix is sparse or structured. The payoff is a controllable trade-off between accuracy and runtime: you can stop early if a rough answer suffices, or iterate longer to tighten the result. Conjugate gradient (CG) and the generalised minimum residual (GMRES) method are two workhorses of iterative linear algebra. Newton iterations, fixed-point iterations, and gradient-based optimisation methods all belong in this family too, even when the underlying problem is not a linear system.
+Iterative methods become attractive — and often necessary — when problems outgrow what direct factorisation can handle. For very large or sparse systems, forming and storing a dense factorisation is infeasible: memory costs scale quadratically or worse, and fill-in during factorisation can destroy the sparsity that made the problem tractable to begin with. Iterative methods sidestep this by working entirely through matrix-vector products, which remain cheap if the matrix is sparse or structured. The payoff is a controllable trade-off between accuracy and runtime: you can stop early if a rough answer suffices, or iterate longer to tighten the result. Conjugate gradient (CG) and the generalised minimum residual (GMRES) method are two workhorses of iterative linear algebra. Newton iterations, fixed-point iterations, and gradient-based optimisation methods all belong in this family too, even when the underlying problem is not a linear system.
 
 
 ```mermaid
@@ -251,19 +251,19 @@ In Julia, the situation is strikingly different from both Python and R. Julia's 
 
 ### Example: Inspect Machine Epsilon in All Three Languages
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 
 print(np.finfo(float).eps)
 ```
 
-**R**
+**R**{.code-label}
 ```r
 print(.Machine$double.eps)
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 println(eps(Float64))
 ```
@@ -287,7 +287,7 @@ Absolute error is scale-dependent. Relative error is usually more meaningful acr
 
 ### Forward Error vs Backward Error
 
-The **forward error** is the most intuitive notion of error: it is simply the difference between the computed answer and the true answer. If you compute $\hat{x}$ and the truth is $x^*$, the forward error is $\|\hat{x} - x^*\|$. This is what most people mean when they ask how accurate the result is.
+The **forward error** is the most intuitive notion of error: it is the difference between the computed answer and the true answer. If you compute $\hat{x}$ and the truth is $x^*$, the forward error is $\|\hat{x} - x^*\|$. This is what most people mean when they ask how accurate the result is.
 
 The **backward error** frames the question differently. Instead of asking how far the computed answer is from the true answer, it asks: what is the smallest perturbation to the input data that would make the computed answer exactly correct? In other words, for what nearby problem is the algorithm’s output the exact solution? If the backward error is small, the algorithm is behaving well — it may have introduced errors, but those errors are no larger than what you would get from a tiny change in the input data.
 
@@ -310,7 +310,7 @@ A critical point that often gets missed: conditioning is a property of the probl
 
 Stability is a property of the algorithm rather than the problem. A numerically stable algorithm is one that does not amplify internal rounding errors beyond what the problem’s conditioning warrants. In practice, stability means that the total error in the output is roughly proportional to the product of the condition number and the floating-point unit roundoff — the algorithm does not make things worse than the problem and the arithmetic inherently require.
 
-An important and often-confused point: a stable algorithm applied to an ill-conditioned problem can still produce poor results, and that is not a failure of the algorithm. If the problem amplifies small perturbations by a factor of $10^{10}$ and you are working in double precision, you can expect to lose roughly ten digits of accuracy no matter how careful the implementation is. The algorithm is doing its job; the problem is simply sensitive. The practical implication is that diagnosing numerical failures requires separating the two questions: is the algorithm stable, and is the problem well-conditioned?
+An important and often-confused point: a stable algorithm applied to an ill-conditioned problem can still produce poor results, and that is not a failure of the algorithm. If the problem amplifies small perturbations by a factor of $10^{10}$ and you are working in double precision, you can expect to lose roughly ten digits of accuracy no matter how careful the implementation is. The algorithm is doing its job; the problem is sensitive to perturbations. The practical implication is that diagnosing numerical failures requires separating the two questions: is the algorithm stable, and is the problem well-conditioned?
 
 ### Consistency, Stability, Convergence (for Discretisations)
 
@@ -340,7 +340,7 @@ Setting up this budget explicitly before starting prevents a common and expensiv
 
 ### Example: Condition Number and Solve Quality
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 
@@ -354,7 +354,7 @@ print("x =", x)
 print("cond(A) =", cond_A)
 ```
 
-**R**
+**R**{.code-label}
 ```r
 A <- matrix(c(1, 1, 1, 1.000001), nrow = 2, byrow = TRUE)
 b <- c(2, 2.000001)
@@ -366,7 +366,7 @@ cat("x =", x, "\n")
 cat("cond(A) =", cond_A, "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using LinearAlgebra
 
@@ -434,11 +434,11 @@ Checking only that the residual is small — $|f(x_n)| < \tau_f$ — can fail wh
 
 Checking only that the step size is small can fail when the function has a steep slope near the root, where small steps in $x$ correspond to large residuals.
 
-A robust stopping rule combines both: check that the residual is below tolerance and that the step size is below a relative tolerance (relative to the current scale of $x$), and impose a hard iteration cap as a safety net against infinite loops:
+A stopping rule checks both convergence signals: require the residual to be below tolerance and the step size to be below a relative tolerance (relative to the current scale of $x$), and impose a hard iteration cap as a safety net against infinite loops:
 
 $$|f(x_n)| < \tau_f \quad \text{and} \quad |x_n - x_{n-1}| < \tau_x (1 + |x_n|)$$
 
-The iteration cap should be generous enough that it only triggers for genuinely non-converging runs, not for difficult but solvable problems. And when the cap is hit, the code should signal it clearly rather than silently returning an under-converged result.
+The iteration cap should be generous enough that it only triggers for genuinely non-converging runs, not for difficult but solvable problems. When the cap is hit, the code should report non-convergence rather than silently returning an under-converged result.
 
 
 ### Newton's Method for Systems
@@ -475,7 +475,7 @@ where $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$. The update is designed s
 
 $$F_1(x_1, x_2) = x_1^2 + x_2^2 - 4, \qquad F_2(x_1, x_2) = x_1 x_2 - 1$$
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 from scipy.optimize import fsolve
@@ -490,7 +490,7 @@ print("solution:", sol[0])
 print("residual norm:", np.linalg.norm(F(sol[0])))
 ```
 
-**R**
+**R**{.code-label}
 ```r
 library(nleqslv)
 
@@ -504,7 +504,7 @@ cat("solution:", sol$x, "\n")
 cat("residual norm:", sqrt(sum(F(sol$x)^2)), "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using NLsolve
 
@@ -518,13 +518,13 @@ println("solution: ", result.zero)
 println("residual norm: ", result.residual_norm)
 ```
 
-All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a hybridised MINPACK routine (essentially Newton with step controls), `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
+All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpart. `scipy.optimize.fsolve` uses a MINPACK hybrid solver with step controls, `nleqslv` defaults to Newton with a line search, and `NLsolve.jl` also defaults to Newton, with the Jacobian estimated by finite differences unless you provide it analytically.
 
 ### Shared Example: Find Root of $f(x)=\cos(x)-x$
 
 This function has a root near $0.739085...$
 
-**Python**
+**Python**{.code-label}
 ```python
 from math import cos, sin
 
@@ -571,7 +571,7 @@ print("bisection:", bisection(f, 0.0, 1.0))
 print("newton:", newton(f, df, 0.5))
 ```
 
-**R**
+**R**{.code-label}
 ```r
 bisection <- function(f, a, b, tol = 1e-12, max_iter = 200) {
   fa <- f(a)
@@ -631,7 +631,7 @@ cat("bisection:", bisection(f, 0, 1), "\n")
 cat("newton:", newton(f, df, 0.5), "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 function bisection(f, a, b; tol=1e-12, max_iter=200)
     fa, fb = f(a), f(b)
@@ -897,7 +897,7 @@ A = \begin{bmatrix}
 b = \begin{bmatrix}1 \\ 2 \\ 0\end{bmatrix}
 $$
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 
@@ -917,7 +917,7 @@ print("x:", x)
 print("residual norm:", residual)
 ```
 
-**R**
+**R**{.code-label}
 ```r
 A <- matrix(
   c(4, 1, 0,
@@ -935,7 +935,7 @@ cat("x:", x, "\n")
 cat("residual norm:", residual, "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using LinearAlgebra
 
@@ -955,7 +955,7 @@ println("residual norm: ", residual)
 
 Fit $y \approx \beta_0 + \beta_1 x$ to data.
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 
@@ -968,7 +968,7 @@ beta, *_ = np.linalg.lstsq(X, y, rcond=None)
 print("beta0, beta1:", beta)
 ```
 
-**R**
+**R**{.code-label}
 ```r
 x <- c(0, 1, 2, 3, 4)
 y <- c(1.0, 1.9, 3.2, 3.9, 5.1)
@@ -977,7 +977,7 @@ fit <- lm(y ~ x)
 print(coef(fit))
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using LinearAlgebra
 
@@ -1102,7 +1102,7 @@ For non-SPD **B**, you fall back to the general LAPACK routine `dggev`, exposed 
 
 The examples below show the most common eigenvalue computations in each language. Each uses the appropriate specialist function rather than a generic solver, and shows how to check the result.
 
-**Python**
+**Python**{.code-label}
 
 For a dense symmetric matrix, `numpy.linalg.eigh` is the right call — it is faster than `eig`, returns real eigenvalues sorted in ascending order, and is numerically more stable:
 
@@ -1149,7 +1149,7 @@ eigenvalues, eigenvectors = eigh(A, B)
 print("generalised eigenvalues:", eigenvalues)
 ```
 
-**R**
+**R**{.code-label}
 
 R's base `eigen()` handles dense matrices. For large sparse problems, `RSpectra` wraps ARPACK and is the standard choice:
 
@@ -1181,7 +1181,7 @@ cat("5 largest eigenvalues:", sort(result_sparse$values, decreasing = TRUE), "\n
 
 Note that `eigen(A, symmetric = TRUE)` is meaningfully faster than `eigen(A)` on symmetric matrices and guarantees real output — always set this flag when you know your matrix is symmetric.
 
-**Julia**
+**Julia**{.code-label}
 
 Julia's `LinearAlgebra` standard library provides `eigen` (dense) and the `Arpack` package handles large sparse problems:
 
@@ -1308,7 +1308,7 @@ Understanding interpolation error requires thinking about several interacting fa
 
 Data: sample $\sin(x)$ on coarse grid and estimate at intermediate points.
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 from scipy.interpolate import interp1d, CubicSpline
@@ -1326,7 +1326,7 @@ print("spline:", spline_interp(xq))
 print("truth:", np.sin(xq))
 ```
 
-**R**
+**R**{.code-label}
 ```r
 x <- seq(0, pi, length.out = 7)
 y <- sin(x)
@@ -1341,7 +1341,7 @@ cat("spline:", spline_vals, "\n")
 cat("truth:", sin(xq), "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using Interpolations
 
@@ -1413,7 +1413,7 @@ But the asymptotic regime requires a fine enough grid to resolve the function's 
 
 ### Shared Example A: Central Difference Derivative of $\exp(x)$ at $x=1$
 
-**Python**
+**Python**{.code-label}
 ```python
 import math
 
@@ -1430,7 +1430,7 @@ for h in [1e-1, 1e-3, 1e-5, 1e-7]:
     print(f"h={h:1.0e}, approx={approx:.12f}, err={err:.3e}")
 ```
 
-**R**
+**R**{.code-label}
 ```r
 central_diff <- function(f, x, h) {
   (f(x + h) - f(x - h)) / (2 * h)
@@ -1446,7 +1446,7 @@ for (h in c(1e-1, 1e-3, 1e-5, 1e-7)) {
 }
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 central_diff(f, x, h) = (f(x + h) - f(x - h)) / (2h)
 
@@ -1464,7 +1464,7 @@ end
 
 No elementary antiderivative, ideal for quadrature demo.
 
-**Python**
+**Python**{.code-label}
 ```python
 import math
 from scipy.integrate import quad
@@ -1482,7 +1482,7 @@ print("trapezoid n=1000:", trapezoid(f, 0.0, 1.0, 1000))
 print("scipy quad:", quad(f, 0.0, 1.0)[0])
 ```
 
-**R**
+**R**{.code-label}
 ```r
 trapezoid <- function(f, a, b, n) {
   x <- seq(a, b, length.out = n + 1)
@@ -1497,7 +1497,7 @@ cat("trapezoid n=1000:", trapezoid(f, 0, 1, 1000), "\n")
 cat("integrate():", integrate(f, lower = 0, upper = 1)$value, "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using QuadGK
 
@@ -1529,7 +1529,7 @@ The other apparent alternative is symbolic differentiation: feed the expression 
 
 ### What AD Is Not
 
-Automatic differentiation (AD) is neither of these things, and the distinction matters enough to state clearly before getting into mechanics.
+Automatic differentiation (AD) is neither of these things. The distinction matters before getting into the mechanics.
 
 It is not finite differences. AD computes derivatives that are exact to machine precision — not approximate. There is no step size to tune, no truncation error, no cancellation problem. You do not get a derivative-like number that happens to be close to the true derivative; you get the derivative, computed to the same floating-point accuracy as the function evaluation itself.
 
@@ -1621,7 +1621,7 @@ The contribution of the AD framing is that it makes clear backpropagation is not
 
 ### Code
 
-**Python (JAX)**
+**Python (JAX)**{.code-label}
 
 JAX provides clean, composable AD. `jax.grad` gives reverse-mode gradients; `jax.jacfwd` and `jax.jacrev` give full Jacobians in forward and reverse mode respectively.
 
@@ -1645,7 +1645,7 @@ print(jax.jacfwd(F)(x0))   # forward mode: 2 inputs, so 2 passes
 print(jax.jacrev(F)(x0))   # reverse mode: 3 outputs, so 3 passes
 ```
 
-**Julia (ForwardDiff.jl / Zygote.jl)**
+**Julia (ForwardDiff.jl / Zygote.jl)**{.code-label}
 
 Julia's ecosystem has mature, production-quality AD libraries for both modes.
 
@@ -1666,7 +1666,7 @@ x0 = [1.0, 2.0]
 println(ForwardDiff.jacobian(F, x0))
 ```
 
-**R: what you would have used before AD, and why it is worse**
+**R: what you would have used before AD, and why it is worse**{.code-label}
 
 R does not have a mature AD library. The standard tool is `numDeriv::grad`, which uses finite differences — exactly what the primer's differentiation section warned you about.
 
@@ -1912,7 +1912,7 @@ $$
 
 Euler and classical fourth-order Runge–Kutta (RK4) are worth comparing because they represent two different philosophies. Euler uses one slope evaluation per step and is first-order accurate globally, so errors shrink linearly with $h$. Classical RK4 uses four carefully weighted slope evaluations per step; those weights are chosen so low-order truncation terms cancel, giving fourth-order global accuracy on smooth problems. In practice, RK4 usually delivers far smaller error at the same step size, while Euler is mainly useful as a baseline and for intuition.
 
-**Python**
+**Python**{.code-label}
 ```python
 import math
 
@@ -1948,7 +1948,7 @@ print("Euler:", y_euler, "error:", abs(y_euler - y_true))
 print("RK4  :", y_rk4, "error:", abs(y_rk4 - y_true))
 ```
 
-**R**
+**R**{.code-label}
 ```r
 euler <- function(f, t0, y0, h, n_steps) {
   t <- t0
@@ -1986,7 +1986,7 @@ cat("Euler:", y_euler, "error:", abs(y_euler - y_true), "\n")
 cat("RK4  :", y_rk4, "error:", abs(y_rk4 - y_true), "\n")
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 function euler(f, t0, y0, h, n_steps)
     t, y = t0, y0
@@ -2026,7 +2026,7 @@ println("RK4  : ", y_rk4, " error: ", abs(y_rk4 - y_true))
 
 This is where idiomatic language differences shine.
 
-**Python (SciPy)**
+**Python (SciPy)**{.code-label}
 ```python
 import numpy as np
 from scipy.integrate import solve_ivp
@@ -2040,7 +2040,7 @@ print("y(1) ~", sol.y[0, -1])
 print("steps:", len(sol.t) - 1)
 ```
 
-**R (deSolve)**
+**R (deSolve)**{.code-label}
 ```r
 library(deSolve)
 
@@ -2054,7 +2054,7 @@ out <- ode(y = c(y = 1), times = times, func = rhs, parms = NULL,
 print(out)
 ```
 
-**Julia (DifferentialEquations.jl)**
+**Julia (DifferentialEquations.jl)**{.code-label}
 ```julia
 using DifferentialEquations
 
@@ -2088,9 +2088,9 @@ A practical intuition: for small enough steps, the first-order model points down
 
 **Newton's method** for optimisation uses second-order information — the Hessian matrix of second derivatives — to build a quadratic model near the current point and jump to its minimum. This gives quadratic convergence near a solution, but computing and inverting the Hessian is expensive for large problems.
 
-Near a well-behaved minimiser, the objective looks almost quadratic, and Newton is basically solving that local quadratic directly. That is where the fast convergence comes from. Farther away, raw Newton can overshoot or even point uphill, which is why production solvers add damping, line search, or trust-region safeguards.
+Near a well-behaved minimiser, the objective looks almost quadratic, and Newton's step minimises its local quadratic model. That is where the fast convergence comes from. Farther away, raw Newton can overshoot or even point uphill, which is why production solvers add damping, line search, or trust-region safeguards.
 
-**Quasi-Newton methods: Broyden–Fletcher–Goldfarb–Shanno (BFGS) and limited-memory BFGS (L-BFGS)**
+#### Quasi-Newton Methods: Broyden–Fletcher–Goldfarb–Shanno (BFGS) and Limited-Memory BFGS (L-BFGS)
 
 BFGS — named for Broyden, Fletcher, Goldfarb, and Shanno — is the practical workhorse for smooth unconstrained optimisation. The core idea is to approximate the *inverse* Hessian $\mathbf{H}^{-1}$ directly, so that each iteration requires only a matrix-vector product rather than a linear solve. At each step the approximation is updated using information from the most recent gradient change, without ever computing a second derivative.
 
@@ -2152,7 +2152,7 @@ In **nonconvex optimisation**, the objective landscape may have many local minim
 
 ### Constraints
 
-Real-world optimisation problems almost always come with constraints. **Equality constraints** fix the value of some function of the variables. **Inequality constraints** restrict variables to a region. **Bound constraints** simply clamp each variable to a range. The differences between these categories matter for which algorithms work well, but the underlying theory runs through a single set of conditions.
+Real-world optimisation problems almost always come with constraints. **Equality constraints** fix the value of some function of the variables. **Inequality constraints** restrict variables to a region. **Bound constraints** set a range for each variable. The differences between these categories matter for which algorithms work well, but the underlying theory runs through a single set of conditions.
 
 **Karush–Kuhn–Tucker (KKT) conditions.** These first-order optimality conditions for a constrained problem For a problem with equality constraints $c_i(\mathbf{x}) = 0$ and inequality constraints $g_j(\mathbf{x}) \leq 0$, a feasible point $\mathbf{x}^*$ is a local minimum only if there exist multipliers $\lambda_i$ and $\mu_j \geq 0$ satisfying: stationarity of the Lagrangian $\nabla f(\mathbf{x}^*) + \sum \lambda_i \nabla c_i(\mathbf{x}^*) + \sum \mu_j \nabla g_j(\mathbf{x}^*) = 0$; primal feasibility ($c_i = 0$, $g_j \leq 0$); dual feasibility ($\mu_j \geq 0$); and complementary slackness ($\mu_j g_j(\mathbf{x}^*) = 0$ — each inequality is either active or its multiplier is zero). These conditions tell you what a solution must look like. They do not tell you how to find one — that is the job of the algorithm.
 
@@ -2280,7 +2280,7 @@ $$
 
 Estimate parameters $(a,b)$ from noisy data.
 
-**Python**
+**Python**{.code-label}
 ```python
 import numpy as np
 from scipy.optimize import least_squares
@@ -2298,7 +2298,7 @@ res = least_squares(residuals, x0=np.array([5.0, 0.5]))
 print("a, b:", res.x)
 ```
 
-**R**
+**R**{.code-label}
 ```r
 t <- c(0, 1, 2, 3, 4)
 y <- c(5.1, 3.0, 1.9, 1.2, 0.8)
@@ -2307,7 +2307,7 @@ fit <- nls(y ~ a * exp(-b * t), start = list(a = 5, b = 0.5))
 print(coef(fit))
 ```
 
-**Julia**
+**Julia**{.code-label}
 ```julia
 using LsqFit
 
@@ -2347,7 +2347,7 @@ If you keep only the $k$ largest singular values — those large enough to be tr
 
 $$\mathbf{x}_k = \sum_{i=1}^{k} \frac{\mathbf{u}_i^{\top} \mathbf{b}}{\sigma_i} \mathbf{v}_i$$
 
-The remaining singular components, where $\sigma_i < \sigma_{\min}^{\text{thresh}}$, are simply set to zero in the pseudo-inverse rather than amplifying noise. The result is stable but biased: you are effectively solving a projected version of the original problem.
+The remaining singular components, where $\sigma_i < \sigma_{\min}^{\text{thresh}}$, are set to zero in the pseudo-inverse rather than amplifying noise. The result is stable but biased: you are effectively solving a projected version of the original problem.
 
 Choosing the truncation threshold $k$ is the hard part. The right signal is a gap in the singular value spectrum: if $\sigma_1 \geq \cdots \geq \sigma_k \gg \sigma_{k+1} \approx \cdots \approx \sigma_n$, the gap at index $k$ tells you the problem has effective rank $k$, and truncating there is natural. If the singular values decay smoothly with no gap, truncated SVD is a blunt instrument and Tikhonov regularisation is usually a better choice.
 
@@ -2401,7 +2401,7 @@ The **discrepancy principle** is appropriate when you have a reliable estimate o
 
 ### Code
 
-**Python**
+**Python**{.code-label}
 
 ```python
 import numpy as np
@@ -2424,7 +2424,7 @@ lasso.fit(A, b)
 
 Note the factor convention: `scipy.sparse.linalg.lsqr` uses `damp` as $\sqrt{\mu}$ in the objective $\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \text{damp}^2\|\mathbf{x}\|_2^2$, and `sklearn.linear_model.Lasso` uses a slightly different scaling by default — check the docstring before assuming parameters are comparable across libraries.
 
-**R**
+**R**{.code-label}
 
 The `glmnet` package handles both ridge and LASSO cleanly, including automatic $\mu$ selection by cross-validation.
 
@@ -2444,7 +2444,7 @@ x_lasso_cv <- coef(cv_fit, s = "lambda.min")
 
 Note that `glmnet` uses `lambda` where this primer uses $\mu$ — the two are the same thing. The package normalises the penalty internally, so `lambda` values are not directly comparable to $\mu$ in the theoretical formulas above without accounting for the scaling.
 
-**Julia**
+**Julia**{.code-label}
 
 ```julia
 using Lasso, GLM
@@ -2543,7 +2543,7 @@ Julia was designed so readable numerical code can still run fast. Its just-in-ti
 
 Seeing the same algorithm in all three languages exposes something that is easy to miss when you work in just one: the underlying numerical method is language-agnostic, but the shape of the code that implements it reveals what each language values. The algorithm here is bisection — simple enough that no library machinery is needed, but concrete enough that idiomatic choices are visible.
 
-**Python**
+**Python**{.code-label}
 
 ```python
 # Explicit loop
@@ -2565,7 +2565,7 @@ root = brentq(lambda x: x**3 - 2, 0, 2)
 
 The `brentq` one-liner is how you would actually solve this in production Python. The loop version demonstrates that Python has no built-in type constraints — `f` is any callable, `a` and `b` are any comparable values, and the function applies to floats, complex numbers, or anything else that supports the arithmetic without any declaration change.
 
-**R**
+**R**{.code-label}
 
 ```r
 # Explicit loop
@@ -2585,7 +2585,7 @@ root <- uniroot(function(x) x^3 - 2, c(0, 2))$root
 
 Notice that `uniroot` returns a list, not a scalar — you extract `$root` explicitly. R functions almost always return structured objects, and this is a deliberate design choice: the return value carries convergence diagnostics alongside the answer, so you pay attention to what the solver actually found. The `<-` assignment operator is functionally equivalent to `=` here, but it is a strong community norm and you will see it in all idiomatic R code.
 
-**Julia**
+**Julia**{.code-label}
 
 ```julia
 # Explicit loop
@@ -2630,7 +2630,7 @@ Look at consecutive differences: $|I_{2n} - I_n|$ should shrink by about 4 each 
 
 Here is the refinement study in code. The target is $I = \int_0^1 e^{-x^2}\, dx$; the true value is available from `scipy.integrate.quad` (Python), `integrate` (R), or `quadgk` (Julia) at near-machine-precision accuracy.
 
-**Python**
+**Python**{.code-label}
 
 ```python
 import numpy as np
@@ -2668,9 +2668,9 @@ The ratio column should converge towards 4, confirming second-order convergence.
 
 $$T^* = T(h/2) + \frac{T(h/2) - T(h)}{3}$$
 
-The factor of 3 comes from the fact that halving $h$ reduces the leading error term by 4, so $T(h/2) = I + c(h/2)^2 + \cdots$ and $T(h) = I + ch^2 + \cdots$, giving $T^* = T(h/2) + (T(h/2) - T(h))/3 = I + O(h^4)$. Richardson extrapolation essentially buys you two extra orders of accuracy from two second-order estimates, which is why the error typically drops by a factor of 16 or more beyond what the finest grid alone achieves.
+The factor of 3 comes from the fact that halving $h$ reduces the leading error term by 4, so $T(h/2) = I + c(h/2)^2 + \cdots$ and $T(h) = I + ch^2 + \cdots$, giving $T^* = T(h/2) + (T(h/2) - T(h))/3 = I + O(h^4)$. Richardson extrapolation cancels the second-order error term, giving a fourth-order estimate from two second-order estimates; the error typically drops by a factor of 16 or more beyond what the finest grid alone achieves.
 
-**R**
+**R**{.code-label}
 
 ```r
 trapezoid <- function(f, a, b, n) {
@@ -2705,7 +2705,7 @@ cat(sprintf("\nRichardson extrapolation: %.15f\n", T_rich))
 cat(sprintf("Richardson error:         %.3e\n", abs(T_rich - true_val)))
 ```
 
-**Julia**
+**Julia**{.code-label}
 
 ```julia
 using QuadGK
@@ -2791,7 +2791,7 @@ If data is noisy and you force exact interpolation (high-degree polynomial or a 
 
 Stopping purely on iteration count does not guarantee convergence. Stopping purely on step size can declare success when the iterate has stalled rather than converged. Stopping purely on residual can miss roots or solutions where the function is flat nearby.
 
-**Fix**: combine at least two conditions — residual below tolerance and step below relative tolerance — and impose a hard iteration cap as a safety net. When the cap fires, signal it clearly rather than silently returning an under-converged result.
+**Fix**: combine at least two conditions — residual below tolerance and step below relative tolerance — and impose a hard iteration cap as a safety net. When the cap fires, report failure to converge rather than silently returning an under-converged result.
 
 ### No Validation Harness
 
@@ -2923,7 +2923,7 @@ Each topic in this primer is a doorway into a much larger field.
 
 **Uncertainty quantification** addresses how to propagate uncertainty from inputs to outputs, covering Monte Carlo methods, polynomial chaos expansions, and sensitivity analysis. It is increasingly central to any serious computational modelling workflow.
 
-**Automatic differentiation** has transformed numerical optimisation and machine learning by making exact derivative computation of essentially arbitrary programs practical. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood. Griewank and Walther's *Evaluating Derivatives* is the rigorous reference.
+**Automatic differentiation** has transformed numerical optimisation and machine learning by making exact derivative computation practical for a broad class of differentiable programs. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood. Griewank and Walther's *Evaluating Derivatives* is the rigorous reference.
 
 **High-performance computing** covers everything that happens when problems are too large for a single core: memory hierarchy effects, cache-friendly data layouts, parallelisation strategies, and GPU-aware algorithms.
 

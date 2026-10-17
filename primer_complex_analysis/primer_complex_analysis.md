@@ -38,7 +38,7 @@ Uniform convergence on a contour is different from uniform convergence throughou
 
 There is a second real-analysis distinction behind contour arguments: a small function value at some distant points does not control an integral along a growing path. Let $\gamma_R$ have length $L_R$ and suppose $|f|\le M_R$ on it. The useful estimate is $|\int_{\gamma_R}f\,dz|\le M_RL_R$. If $M_R\to0$ but $M_RL_R$ does not, the integral need not vanish. For example, $1/z$ has size $1/R$ on the circle $|z|=R$, whose length is $2\pi R$; its integral remains $2\pi i$ for every $R$. This is a good diagnostic before you start a large-semicircle residue calculation: record both the size of the integrand and the length of the added path.
 
-Compactness supplies the missing margins in these estimates. Suppose $K$ is compact and contained in an open set $D$. For each $z\in K$ there is a disk around $z$ lying in $D$. A finite subcover gives a uniform positive radius small enough for local arguments around every point of $K$. Equivalently, $\operatorname{dist}(K,\mathbb C\setminus D)>0$ when the complement is nonempty. This is why the phrase “$f$ is holomorphic near the closed disk” is stronger than “$f$ is holomorphic in the open disk”: the former gives room to choose an enclosing circle and a bound on it. If a singularity sits on the proposed boundary, shrinking the circle may repair the argument; simply evaluating the formula at boundary sample points does not.
+Compactness supplies the missing margins in these estimates. Suppose $K$ is compact and contained in an open set $D$. For each $z\in K$ there is a disk around $z$ lying in $D$. A finite subcover gives a uniform positive radius small enough for local arguments around every point of $K$. Equivalently, $\operatorname{dist}(K,\mathbb C\setminus D)>0$ when the complement is nonempty. This is why the phrase “$f$ is holomorphic near the closed disk” is stronger than “$f$ is holomorphic in the open disk”: the former gives room to choose an enclosing circle and a bound on it. If a singularity sits on the proposed boundary, shrinking the circle may repair the argument; evaluating the formula at boundary sample points does not.
 
 Absolute convergence is another practical guardrail. If $\sum |a_n|<\infty$, rearranging terms cannot change $\sum a_n$, and the tails have a numerical bound independent of order. Conditional convergence lacks that freedom. Laurent series separate positive and negative powers, and both tails converge absolutely on compact subannuli. That is why we can integrate or differentiate those tails term by term there. A formal expression with both positive and negative powers is not enough: you need an annulus where both tails actually converge.
 
@@ -94,10 +94,14 @@ You can predict several pictures before drawing them. Under $z\mapsto z^2$, a ra
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 Try these before moving on. Full outline solutions are in Appendix B; use Appendix A only when you need a nudge.
 
 1. Let $f_n(x)=x^n$ on $[0,1]$. Show that $f_n\to f$ pointwise but not uniformly, and explain why the same sequence converges uniformly on $[0,r]$ for every $r<1$. Identify the theorem that would be contradicted by uniform convergence on $[0,1]$. ([Solution 1](#solution-1))
 2. A contour $\gamma$ has length $L$ and $|f_n(z)-f(z)|\le M_n$ on $\gamma$. Prove an explicit bound for $\left|\int_\gamma(f_n-f)\,dz\right|$ and state a sufficient condition on $M_n$ for convergence. ([Solution 2](#solution-2))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 1–2](#appendix-b-outline-solutions).
 
@@ -159,7 +163,7 @@ For a chosen logarithm branch $L$, define $z^\alpha=e^{\alpha L(z)}$. Changing $
 
 An explicit discontinuity shows what the cut does. Approach the negative real point $-1$ from above: the principal argument tends to $\pi$, so $\operatorname{Log}z\to i\pi$. Approach it from below: the principal argument tends to $-\pi$, so $\operatorname{Log}z\to-i\pi$. The values differ by $2\pi i$. The function $1/z$ is perfectly regular near $-1$; the jump belongs to our chosen inverse of the exponential. If an application needs continuity across the negative real axis but never crosses the positive real axis, move the cut to the positive ray and use an argument interval such as $(0,2\pi)$ instead.
 
-For complex $\alpha$, the branch choice can change not only phase but modulus: $|e^{2\pi i\alpha}|=e^{-2\pi\Im\alpha}$. This is why a complex power is not simply “the usual power with a complex input.” Its definition includes a domain and an angle convention. In later contour integrals involving $z^\alpha$, the two sides of a cut may carry genuinely different weights. The residue theorem applies only to regions where the chosen branch is single-valued and holomorphic; a keyhole contour keeps track of both sides of the removed ray.
+For complex $\alpha$, the branch choice can change not only phase but modulus: $|e^{2\pi i\alpha}|=e^{-2\pi\Im\alpha}$. A complex power requires more than “the usual power with a complex input”: its definition includes a domain and an angle convention. In later contour integrals involving $z^\alpha$, the two sides of a cut may carry genuinely different weights. The residue theorem applies only to regions where the chosen branch is single-valued and holomorphic; a keyhole contour keeps track of both sides of the removed ray.
 
 Define $\sin z=(e^{iz}-e^{-iz})/(2i)$ and $\cos z=(e^{iz}+e^{-iz})/2$. They are holomorphic everywhere. Unlike real sine and cosine, they are unbounded in imaginary directions: $\sin(iy)=i\sinh y$. This matters when choosing a large contour; familiar real-axis bounds do not follow the function into the upper half-plane.
 
@@ -216,9 +220,13 @@ There is a useful direction to the correspondence. If you can identify a holomor
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 3. Test the claim that $f(z)=\overline z$ is complex differentiable at $0$ but nowhere else. Use the difference quotient and explain what the Cauchy–Riemann equations can and cannot establish at a single point. ([Solution 3](#solution-3))
 4. Suppose $f$ has continuous first partial derivatives and its components satisfy the Cauchy–Riemann equations on a region. State what follows and why the regularity assumption matters. Give a counterexample to the claim that the equations at one point alone imply differentiability there. ([Solution 4](#solution-4))
 5. Let $u(x,y)=x^2-y^2$. Find every harmonic conjugate and the resulting analytic functions. Contrast this with $u=\log|z|$ on the punctured plane. ([Solution 5](#solution-5))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 3–5](#appendix-b-outline-solutions).
 
@@ -298,7 +306,7 @@ The topology is visible even without a meromorphic singularity. A branch of $\lo
 
 The index is locally constant as a function of the reference point $a$ away from the contour. One way to see this is to choose $a$ and $b$ so close that $|a-b|<\min_{z\in\gamma}|z-a|$. Then the paths $\gamma(t)-a$ and $\gamma(t)-b$ can be connected by straight segments without passing through zero. Their winding numbers agree. Since an integer cannot vary continuously except by jumping, the index changes only when the reference point crosses the trace of the contour. For a simple Jordan curve this gives the familiar inside value $1$ and outside value $0$ after choosing positive orientation. For a multiply traced curve there may be regions with index $2$ or $-1$; the same local-constancy argument still applies.
 
-This gives a practical method for checking a proposed residue sum. Mark the singularities and ask which connected component of the complement of the contour contains each one. A slight movement of a pole within its component cannot change its index weight. If an answer changes under such a movement while no pole crosses the path, either the proposed formula or the chosen contour is wrong. The principle is topological, but it works as a robust arithmetic check in ordinary calculations.
+This gives a practical method for checking a proposed residue sum. Mark the singularities and ask which connected component of the complement of the contour contains each one. A slight movement of a pole within its component cannot change its index weight. If an answer changes under such a movement while no pole crosses the path, either the proposed formula or the chosen contour is wrong. This topological principle also checks the arithmetic of an ordinary residue calculation.
 
 For piecewise smooth curves the bound $|\int_\gamma f\,dz|\le L\sup_\gamma|f|$ is immediate, but its use depends on finding a bound valid on *every* part of the path. Suppose $f(z)=1/(z^2+1)$ and the circle $|z|=R$ has $R>1$. The reverse triangle inequality gives $|z^2+1|\ge R^2-1$, so the full-circle integral is bounded in modulus by $2\pi R/(R^2-1)$. It tends to zero as $R\to\infty$. Indeed the residues at $i$ and $-i$ cancel. If the integrand were $z/(z^2+1)$, the analogous bound would be of order one, and the integral is actually $2\pi i$. The estimate detects when a limit is plausible; when it does not vanish, it does not prove the limit is nonzero, but it tells you more argument is needed.
 
@@ -418,8 +426,12 @@ The filled-region hypothesis is easy to test with a counterexample. Set $f(z)=1/
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 6. A student claims that $1/z$ has an antiderivative on $\mathbb C\setminus\{0\}$ because it is holomorphic there. Identify the error using a closed-contour integral, and give a topological condition that guarantees primitives. ([Solution 6](#solution-6))
 7. Use Cauchy's formula to evaluate $\oint_{|z|=2}e^z/(z-1)^3\,dz$. State every hypothesis you use and explain why the derivative order is two. ([Solution 7](#solution-7))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 6–7](#appendix-b-outline-solutions).
 
@@ -427,7 +439,7 @@ See [Appendix B, Solutions 6–7](#appendix-b-outline-solutions).
 
 Cauchy's formula supplies the expansions that make local behaviour calculable. Taylor series describe regular points, while Laurent series distinguish removable singularities, poles, and essential singularities on punctured neighbourhoods. The examples emphasise convergence regions as well as coefficients, since both determine what an expansion can establish.
 
-### Taylor Series Come from a Contour, Not a Smoothness Guess
+### Taylor Series Come From a Contour, Not a Smoothness Guess
 
 Suppose $f$ is holomorphic on an open disk $|z-a|<R_0$. Choose $0<R<R_0$. Cauchy's formula on the circle $|\zeta-a|=R$ says that for $|z-a|<R$,
 $$
@@ -618,9 +630,13 @@ Do not infer the type of an isolated singularity from one approach path. The fun
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 8. Find the Laurent series of $z/(z-1)$ about zero on $0<|z|<1$ and on $|z|>1$. Give the convergence region of each and explain why the expansions differ. ([Solution 8](#solution-8))
 9. Find the coefficient of $z^{-1}$ in the Laurent expansion of $g(z)=\exp(1/z)/z^2$ at zero, then give it its usual name and classify the singularity. Explain why a zero value of this coefficient does not imply a regular point. ([Solution 9](#solution-9))
 10. Expand $z/(z-1)$ on the annulus $|z|>1$ and use the coefficient of $1/z$ to evaluate $\oint_{|z|=2}(z^2+1)/(z(z-1))\,dz$. ([Solution 10](#solution-10))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 8–10](#appendix-b-outline-solutions).
 
@@ -668,7 +684,7 @@ As a rational example, let $C:|z|=3$ and $f(z)=z/(z^2+1)$. Both poles $i$ and $-
 
 ### Choosing and Checking a Residue Calculation
 
-Residue calculations are fastest when you choose the method that exposes the coefficient with the least algebra. For a simple pole of $g/h$ where $h(a)=0$ and $h'(a)\ne0$, use $g(a)/h'(a)$. For a repeated rational pole, expand the analytic factor or use the derivative formula. For products of an exponential and a rational function, a short Taylor expansion often shows the answer more clearly than repeated quotient differentiation. Before applying any formula, factor the denominator, locate the contour, and cancel removable factors. The residue is local, but the contour integral also needs a global inventory of which singularities are enclosed.
+Residue calculations are fastest when you choose the method that exposes the coefficient with the least algebra. For a simple pole of $g/h$ where $h(a)=0$ and $h'(a)\ne0$, use $g(a)/h'(a)$. For a repeated rational pole, expand the analytic factor or use the derivative formula. For products of an exponential and a rational function, a short Taylor expansion often requires less algebra than repeated quotient differentiation. Before applying any formula, factor the denominator, locate the contour, and cancel removable factors. The residue is local, but the contour integral also needs a global inventory of which singularities are enclosed.
 
 Take
 $$
@@ -912,7 +928,11 @@ The numerical experiment is especially clean here because the parametrised integ
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 11. Classify the finite singularities of $e^z/(z^2+1)$, calculate both residues, and separately use a semicircular contour to evaluate $\int_{-\infty}^{\infty}(x^2+1)^{-1}\,dx$. State which function is integrated on the contour and why the arc vanishes. ([Solution 11](#solution-11))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solution 11](#appendix-b-outline-solutions).
 
@@ -920,7 +940,7 @@ See [Appendix B, Solution 11](#appendix-b-outline-solutions).
 
 The local theory now yields statements about whole regions. Factorisation and the argument principle turn zeros into winding counts; maximum-modulus results constrain possible values; and conformal maps transfer geometry while preserving angles and harmonicity. Together these theorems explain how local rigidity governs global shape.
 
-### Local Factorisation Turns Zeros into Integers
+### Local Factorisation Turns Zeros Into Integers
 
 Let $f$ be holomorphic on a connected domain $D$ and not identically zero. Its zeros are isolated. Indeed, at a zero $a$, Taylor's theorem gives a first nonzero coefficient unless every coefficient vanishes. If every coefficient vanishes, $f$ vanishes on a disk; by propagating overlapping Taylor disks through the connected domain, the *identity theorem* then makes $f$ identically zero, contrary to assumption. Thus for a unique positive integer $m$,
 $$
@@ -1107,11 +1127,15 @@ The six sections now form one chain. Complex differentiation restricts local beh
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 12. Use Rouché's theorem to count the zeros of $p(z)=z^5+3z+1$ in $|z|<1$, in $|z|<2$, and in $1<|z|<2$. Verify the strict inequality on each circle. ([Solution 12](#solution-12))
 13. Apply the argument principle to $f(z)=z^2+1$ on $|z|=2$ and $|z|=1/2$. Evaluate the change in argument and explain the zero count. ([Solution 13](#solution-13))
 14. Find a Möbius transformation mapping the upper half-plane to the unit disk and sending $i$ to $0$. Locate the images of $0,1,\infty$ and explain which side maps to the interior. ([Solution 14](#solution-14))
 15. Describe the image of $0<\operatorname{Re}z<1$ under $w=e^{\pi z}$. Is the map one-to-one? Identify the period. ([Solution 15](#solution-15))
 16. Let $f$ be holomorphic near $z_0$ with $f'(z_0)\ne0$. Explain local conformality and give an example of a conformal map that is not globally one-to-one. ([Solution 16](#solution-16))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 12–16](#appendix-b-outline-solutions).
 
@@ -1242,7 +1266,7 @@ $$
 \widetilde U(w)=1-\frac{1}{\pi}\arg\left(i\frac{1+w}{1-w}\right),
 \qquad |w|<1,
 $$
-where the argument is chosen in $(0,\pi)$ for the inverse image in the upper half-plane. This expression is correct but not the most convenient disk formula. A geometric simplification comes from the harmonic measure of a semicircle: the disk solution is the angular fraction of the Poisson kernel over the lower semicircle. The Möbius map transports both the interior point and the boundary labels; simply declaring “lower half gets 1” without checking which real interval maps there would reverse the answer.
+where the argument is chosen in $(0,\pi)$ for the inverse image in the upper half-plane. This expression is correct but not the most convenient disk formula. A geometric simplification comes from the harmonic measure of a semicircle: the disk solution is the angular fraction of the Poisson kernel over the lower semicircle. The Möbius map transports both the interior point and the boundary labels; declaring “lower half gets 1” without checking which real interval maps there would reverse the answer.
 
 The map makes the boundary discontinuity visually simple, but it does not remove it. Near the two jump points on the circle, the solution changes rapidly. The Poisson integral remains bounded between zero and one, and its interior values are smooth. This is a useful distinction in applied work: a conformal change of coordinates can simplify geometry and preserve harmonicity, while the regularity of the boundary data remains a separate issue.
 
@@ -1310,10 +1334,14 @@ One standard sufficient setting is a real integral over a fixed interval or the 
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 17. State the maximum principle for a harmonic function on a bounded domain and explain what it implies for uniqueness of a Dirichlet problem. Why does it not prove existence? ([Solution 17](#solution-17))
 18. For $F(z)=Uz+a/z$, with real $U,a>0$, find the stagnation points and derive the nontrivial streamline. Explain the physical idealisations. ([Solution 18](#solution-18))
 19. Explain how a conformal map transfers a Dirichlet problem to a disk and back. State what is preserved, what is rescaled, and why the method does not automatically produce an explicit solution. ([Solution 19](#solution-19))
 20. Consider $I(\lambda)=\int_{-\infty}^{\infty}e^{-\lambda x^2}\,dx$ for real $\lambda>0$. Explain the real-variable derivation and what complex analysis contributes when the exponent or contour is generalised. Name one condition needed before moving a contour. ([Solution 20](#solution-20))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 17–20](#appendix-b-outline-solutions).
 
@@ -1328,7 +1356,7 @@ Numerical work is most useful here as a way to inspect geometry, test a derivati
 
 ::: {.code-group}
 
-**Python**
+**Python**{.code-label}
 
 ```python
 import numpy as np
@@ -1360,7 +1388,7 @@ plt.title("Domain coloring of the principal logarithm")
 plt.show()
 ```
 
-**R**
+**R**{.code-label}
 
 ```r
 x <- seq(-2, 2, length.out = 501)
@@ -1444,7 +1472,7 @@ For a numerical contour check, parameterize the circle $z(t)=Re^{it}$, so $dz=iR
 
 ::: {.code-group}
 
-**Python**
+**Python**{.code-label}
 
 ```python
 import mpmath as mp
@@ -1461,7 +1489,7 @@ value = mp.quad(integrand_on_circle, [0, 2 * mp.pi])
 print(value)
 ```
 
-**R**
+**R**{.code-label}
 
 ```r
 n <- 200000L
@@ -1516,9 +1544,13 @@ Domain colouring and mapped grids are similarly diagnostic. A phase seam can be 
 
 ### Practice
 
+<!-- markdownlint-disable MD051 -->
+
 21. Parameterise $\gamma_R(t)=Re^{it}$ and approximate $\oint_{\gamma_R}dz/(z-1)$ with the periodic trapezoidal rule for $R=2$ and $R=1/2$. Use arbitrary precision or observable values of $N$, compare with the exact answers, and explain the geometric error. ([Solution 21](#solution-21))
 22. Plot the real and imaginary parts of the principal logarithm on $[-2,2]^2$, masking the negative real axis and the origin. Mark the branch jump and choose a simply connected subregion with a continuous argument. ([Solution 22](#solution-22))
 23. Use a computer algebra system to expand $\sin z/z^3$ at zero and compute its residue. Compare with a hand derivation and identify the variable and centre supplied to the software. ([Solution 23](#solution-23))
+
+<!-- markdownlint-enable MD051 -->
 
 See [Appendix B, Solutions 21–23](#appendix-b-outline-solutions).
 

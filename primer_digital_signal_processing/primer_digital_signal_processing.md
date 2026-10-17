@@ -75,12 +75,12 @@ The categories overlap imperfectly in practical finite records. A finite audio c
 
 The basic operations are simple but form the vocabulary of every later derivation:
 
-* **Shift:** $x[n-n_0]$ delays a sequence by $n_0$ samples; $x[n+n_0]$ advances it.
-* **Reversal:** $x[-n]$ reflects the sequence around $n=0$.
-* **Scaling:** $A x[n]$ changes amplitude; $x[Mn]$ keeps every $M$th sample and is decimation without anti-alias filtering.
-* **Expansion:** $x[\frac{n}{L}]$ when $n$ is a multiple of $L$, with zeros elsewhere, is upsampling by $L$.
-* **Difference:** $x[n]-x[n-1]$ emphasises changes and approximates a derivative after scaling by the sample interval.
-* **Running sum:** $\sum_{k=-\infty}^{n}x[k]$ approximates integration and is the discrete-time accumulator.
+- **Shift:** $x[n-n_0]$ delays a sequence by $n_0$ samples; $x[n+n_0]$ advances it.
+- **Reversal:** $x[-n]$ reflects the sequence around $n=0$.
+- **Scaling:** $A x[n]$ changes amplitude; $x[Mn]$ keeps every $M$th sample and is decimation without anti-alias filtering.
+- **Expansion:** $x[\frac{n}{L}]$ when $n$ is a multiple of $L$, with zeros elsewhere, is upsampling by $L$.
+- **Difference:** $x[n]-x[n-1]$ emphasises changes and approximates a derivative after scaling by the sample interval.
+- **Running sum:** $\sum_{k=-\infty}^{n}x[k]$ approximates integration and is the discrete-time accumulator.
 
 The notation $x[2n]$ does not mean “make the signal twice as fast” in isolation. It selects an even-indexed subsequence and changes the sampling rate's interpretation only when a physical sample interval is attached to the sequence.
 
@@ -88,10 +88,10 @@ The notation $x[2n]$ does not mean “make the signal twice as fast” in isolat
 
 A system maps an input signal to an output: $y = \mathcal{T}\{x\}$. Four properties matter constantly.
 
-* **Linearity:** $\mathcal{T}\{a x_1 + b x_2\}=a\mathcal{T}\{x_1\}+b\mathcal{T}\{x_2\}$.
-* **Time invariance:** delaying the input delays the output by the same amount. If $y[n]=\mathcal{T}\{x[n]\}$, then $\mathcal{T}\{x[n-n_0]\}=y[n-n_0]$.
-* **Causality:** $y[n]$ depends only on samples at or before $n$. A noncausal system can use future samples and is possible for an offline record, but not for a live stream without adding delay.
-* **Stability:** in the bounded-input, bounded-output (BIBO) sense, every bounded input produces a bounded output.
+- **Linearity:** $\mathcal{T}\{a x_1 + b x_2\}=a\mathcal{T}\{x_1\}+b\mathcal{T}\{x_2\}$.
+- **Time invariance:** delaying the input delays the output by the same amount. If $y[n]=\mathcal{T}\{x[n]\}$, then $\mathcal{T}\{x[n-n_0]\}=y[n-n_0]$.
+- **Causality:** $y[n]$ depends only on samples at or before $n$. A noncausal system can use future samples and is possible for an offline record, but not for a live stream without adding delay.
+- **Stability:** in the bounded-input, bounded-output (BIBO) sense, every bounded input produces a bounded output.
 
 Linear time-invariant (LTI) systems are the centre of classical DSP because they are both expressive and analysable. A nonlinear or time-varying system can be useful, but its behaviour cannot be inferred from one impulse response and one frequency-response curve.
 
@@ -428,7 +428,7 @@ uses the base `cos` and vectorised arithmetic:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -439,7 +439,7 @@ x_3k = np.cos(2 * np.pi * 3_000 / 10_000 * n)
 print(np.max(np.abs(x_7k - x_3k)))  # approximately 0
 ```
 
-**R**
+R
 
 ```r
 n <- 0:11
@@ -454,7 +454,7 @@ The two analogue explanations produce the same real-valued sequence. Once the AD
 
 ![Aliasing: 3 kHz and 7 kHz analogue candidates produce the same samples at 10 kHz](figures/sampling_aliasing.png)
 
-*Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates sampled at 10 kHz. Each candidate passes through the same sample values; they are alternative analogue interpretations, not simultaneous reconstructions of one baseband signal. The frequency view shows spectral folding across the 5 kHz Nyquist boundary. An acquisition chain must suppress the unwanted candidate before sampling because the digital samples alone cannot distinguish them.*
+Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates sampled at 10 kHz. Each candidate passes through the same sample values; they are alternative analogue interpretations, not simultaneous reconstructions of one baseband signal. The frequency view shows spectral folding across the 5 kHz Nyquist boundary. An acquisition chain must suppress the unwanted candidate before sampling because the digital samples alone cannot distinguish them.
 
 The anti-aliasing filter must therefore be analogue, or must occur before the sampling operation at an earlier, faster sampling rate. In a practical acquisition chain:
 
@@ -663,7 +663,7 @@ nonnegative frequencies for this real-valued record:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -689,7 +689,7 @@ assert np.isclose(psd.sum() * df, weighted_mean_square)
 assert np.isclose(peak_amplitude[np.argmin(abs(f - 50))], 0.8)
 ```
 
-**R**
+R
 
 ```r
 fs <- 1000.0
@@ -738,11 +738,11 @@ up to the transform's normalisation. The window's main lobe controls how close t
 
 Common windows encode different trade-offs:
 
-* **Rectangular:** narrowest main lobe for a given record, but high sidelobes. Suitable when the record contains an integer number of cycles and leakage is not a problem.
-* **Hann:** good general-purpose reduction of sidelobes with moderate main-lobe widening.
-* **Hamming:** lower first sidelobe than rectangular, with a different sidelobe decay pattern.
-* **Blackman:** stronger sidelobe suppression at the cost of wider peaks.
-* **Kaiser:** adjustable parameter that makes the trade-off explicit.
+- **Rectangular:** narrowest main lobe for a given record, but high sidelobes. Suitable when the record contains an integer number of cycles and leakage is not a problem.
+- **Hann:** good general-purpose reduction of sidelobes with moderate main-lobe widening.
+- **Hamming:** lower first sidelobe than rectangular, with a different sidelobe decay pattern.
+- **Blackman:** stronger sidelobe suppression at the cost of wider peaks.
+- **Kaiser:** adjustable parameter that makes the trade-off explicit.
 
 Use a window because you can state what trade-off you want, not because a plotting recipe says to. For amplitude measurement, correct for coherent gain. For power spectral density, use the window's mean-square normalisation and the sampling rate.
 
@@ -764,7 +764,7 @@ The correct response depends on the question. If you need to estimate a known si
 
 ![DFT leakage and the windowing trade-off for on-bin and off-bin tones](figures/dft_windowing.png)
 
-*Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid; the 50.5 Hz tone lies halfway between bins. The repeated-record view exposes their different boundary continuations. Rectangular and Hann spectra use a shared dB reference and coherent-gain amplitude correction, showing Hann sidelobe suppression and main-lobe widening. Windowing changes the finite-observation response; it does not create physical tones or extend the observation duration.*
+Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid; the 50.5 Hz tone lies halfway between bins. The repeated-record view exposes their different boundary continuations. Rectangular and Hann spectra use a shared dB reference and coherent-gain amplitude correction, showing Hann sidelobe suppression and main-lobe widening. Windowing changes the finite-observation response; it does not create physical tones or extend the observation duration.
 
 ### Why the Naive DFT Is Expensive
 
@@ -802,7 +802,7 @@ The same FFT conventions can be made explicit in base R:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -824,7 +824,7 @@ peak_frequency = f[np.argmax(amplitude)]
 print(f"peak ~= {peak_frequency:.1f} Hz")
 ```
 
-**R**
+R
 
 ```r
 fs <- 2000.0
@@ -987,7 +987,7 @@ For a real-coefficient filter, non-real poles and zeros occur in conjugate pairs
 
 For a causal rational filter, the ROC is outside the outermost pole. BIBO stability requires the unit circle to lie in the ROC, which for the causal case means all poles are strictly inside it. A pole exactly on the unit circle is a boundary case: it may produce a bounded response for some inputs but is not BIBO stable.
 
-### Difference Equations from $H(z)$
+### Difference Equations From $H(z)$
 
 Starting with
 
@@ -1079,18 +1079,18 @@ has a frequency response whose phase is linear apart from sign changes. Its grou
 
 The exact, zero-phase ideal low-pass filter has a two-sided sinc impulse response and therefore cannot run in real time without an approximation and delay. Offline forward-backward filtering can cancel phase, but it squares the magnitude response and introduces edge-handling choices. “Zero phase” is a property of an offline procedure, not a free causal filter design.
 
-### Start with a Specification
+### Start With a Specification
 
 “Remove the noise” is not a filter specification. A usable specification states the signal band, unwanted band, acceptable gain error, attenuation, phase or delay requirement, sample rate, available computation, and whether the system is causal.
 
 For a low-pass filter, write down at least:
 
-* passband edge $f_p$;
-* stopband edge $f_s$ (use a different symbol from sampling frequency when documenting; $f_{\mathrm{stop}}$ is clearer);
-* maximum passband ripple $R_p$ in dB;
-* minimum stopband attenuation $A_s$ in dB;
-* allowed group delay and transient length;
-* sample rate and expected coefficient representation.
+- passband edge $f_p$;
+- stopband edge $f_s$ (use a different symbol from sampling frequency when documenting; $f_{\mathrm{stop}}$ is clearer);
+- maximum passband ripple $R_p$ in dB;
+- minimum stopband attenuation $A_s$ in dB;
+- allowed group delay and transient length;
+- sample rate and expected coefficient representation.
 
 The transition width $f_{\mathrm{stop}}-f_p$ controls the order. A narrower transition needs more taps for an FIR or a higher order for an IIR. Increasing stopband attenuation also costs order. If the specification does not mention the transition band, the design problem is underspecified.
 
@@ -1111,7 +1111,7 @@ appropriate when the production coefficients are not exactly symmetric.
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -1149,7 +1149,7 @@ print(pass_db.min(), pass_db.max(), ripple_db, attenuation_db,
       delay_ms.min(), delay_ms.max())
 ```
 
-**R**
+R
 
 ```r
 fs_design <- 48000.0
@@ -1230,7 +1230,7 @@ windowed-sinc construction and a zero-padded FFT for the response grid:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -1253,7 +1253,7 @@ print("passband ripple (dB):", 20 * np.log10(passband.max() / passband.min()))
 print("stopband attenuation (dB):", -20 * np.log10(stopband.max()))
 ```
 
-**R**
+R
 
 ```r
 fs <- 48000.0
@@ -1367,7 +1367,7 @@ changing the streaming pattern.
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -1399,7 +1399,7 @@ print("max batch/stream difference:", np.max(np.abs(y_batch - y_stream)))
 np.testing.assert_allclose(y_stream, y_batch, atol=1e-12, rtol=1e-12)
 ```
 
-**R**
+R
 
 ```r
 fs <- 48000.0
@@ -1479,12 +1479,12 @@ A real-time DSP process does not merely need a low average runtime. It must fini
 
 Budget separately:
 
-* **latency:** time from an input event to the corresponding output;
-* **throughput:** sustained samples or frames per second;
-* **memory:** coefficient, state, buffers, and temporary workspace;
-* **jitter:** variation in execution or sampling time;
-* **energy:** important for battery and thermally constrained devices;
-* **precision:** enough bits for the required dynamic range and noise floor.
+- **latency:** time from an input event to the corresponding output;
+- **throughput:** sustained samples or frames per second;
+- **memory:** coefficient, state, buffers, and temporary workspace;
+- **jitter:** variation in execution or sampling time;
+- **energy:** important for battery and thermally constrained devices;
+- **precision:** enough bits for the required dynamic range and noise floor.
 
 An FFT with good throughput can still violate latency if its block is too long. A sample-by-sample IIR can have tiny algorithmic latency but poor cache behaviour or an unstable fixed-point state. Profile the deployed structure and worst-case inputs.
 
@@ -1606,7 +1606,7 @@ inspect its boundary convention and response.
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -1619,7 +1619,7 @@ x = np.zeros(48_000)  # one second of illustrative input at fs_in
 y = signal.resample_poly(x, up=147, down=160, window=("kaiser", 8.6))
 ```
 
-**R**
+R
 
 ```r
 fs_in <- 48000.0
@@ -1811,7 +1811,7 @@ them behind a package default:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -1838,7 +1838,7 @@ print("peak tone frequency:", f[tone_band][np.argmax(psd[tone_band])])
 print("noise power in selected bins:", psd[noise_band].sum() * (f[1] - f[0]))
 ```
 
-**R**
+R
 
 ```r
 fs <- 10000.0
@@ -2102,7 +2102,7 @@ The window, hop, FFT length, centring convention, and boundary padding all affec
 
 ![STFT window length trade-off for a short two-tone burst](figures/stft_tradeoff.png)
 
-*Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their supports are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and 15.625 Hz. The short-window spectrogram localises burst edges more closely, while the long window separates the tones in the spectrogram and representative frame spectra. Shared relative-dB scales support comparison. Zero-padding the short frame would not give it the long frame's discrimination.*
+Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their supports are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and 15.625 Hz. The short-window spectrogram localises burst edges more closely, while the long window separates the tones in the spectrogram and representative frame spectra. Shared relative-dB scales support comparison. Zero-padding the short frame would not give it the long frame's discrimination.
 
 For reconstruction, separate the analysis window from the synthesis window. Let frame $m$ start at $s_m=mR$, and let $w_a[n]$ be an analysis window of length $N$. The analysis coefficients are
 
@@ -2164,7 +2164,7 @@ R leaves the inverse-transform normalisation to the caller.
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -2189,7 +2189,7 @@ x_roundtrip = accum[keep] / denom[keep]
 np.testing.assert_allclose(x_roundtrip, x_stft, atol=1e-12, rtol=0)
 ```
 
-**R**
+R
 
 ```r
 set.seed(31)
@@ -2318,13 +2318,13 @@ Close with the engineering loop: define the question, choose a method, quantify 
 
 Before choosing an FFT, filter, or resampler, answer:
 
-* What is measured, and in what physical units?
-* Which frequencies or time events carry the information?
-* Is the signal stationary over the record or only locally?
-* Is future data available?
-* What error, latency, throughput, and memory limits apply?
-* Is the output for display, estimation, control, detection, storage, or reconstruction?
-* Which assumptions are testable from the data and metadata?
+- What is measured, and in what physical units?
+- Which frequencies or time events carry the information?
+- Is the signal stationary over the record or only locally?
+- Is future data available?
+- What error, latency, throughput, and memory limits apply?
+- Is the output for display, estimation, control, detection, storage, or reconstruction?
+- Which assumptions are testable from the data and metadata?
 
 If the answer is “I need to see what is there”, start with a calibrated, windowed exploratory spectrum and a time-domain plot, but label it exploratory. If the answer is “estimate power”, use a PSD method and integrate it. If the answer is “remove a known band”, design a filter against explicit edges and attenuation. If the answer is “detect a known waveform”, begin with correlation or matched filtering and model the noise.
 
@@ -2365,17 +2365,17 @@ If a measured effect is smaller than the combined uncertainty, reporting many de
 
 For a custom implementation, test invariants rather than only a few expected arrays:
 
-* impulse response against the coefficients;
-* constant input against DC gain;
-* complex sinusoid against the predicted $H(e^{j\omega})$;
-* linearity with two inputs and arbitrary scalar coefficients;
-* time invariance away from explicitly tested boundaries;
-* batch/streaming equivalence with irregular block lengths;
-* Parseval energy agreement under the documented FFT normalisation;
-* reconstruction after upsample/filter/downsample or STFT analysis/synthesis;
-* PSD integration against time-domain variance;
-* alias rejection using tones just inside and outside the intended band;
-* long-run state behaviour with zero input and full-scale input.
+- impulse response against the coefficients;
+- constant input against DC gain;
+- complex sinusoid against the predicted $H(e^{j\omega})$;
+- linearity with two inputs and arbitrary scalar coefficients;
+- time invariance away from explicitly tested boundaries;
+- batch/streaming equivalence with irregular block lengths;
+- Parseval energy agreement under the documented FFT normalisation;
+- reconstruction after upsample/filter/downsample or STFT analysis/synthesis;
+- PSD integration against time-domain variance;
+- alias rejection using tones just inside and outside the intended band;
+- long-run state behaviour with zero input and full-scale input.
 
 Property tests catch sign conventions and boundary mistakes that a single plot can hide.
 
@@ -2414,7 +2414,7 @@ number generators produce different noise samples despite the shared seed.
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 import numpy as np
@@ -2433,7 +2433,7 @@ x = (
 )
 ```
 
-**R**
+R
 
 ```r
 set.seed(2026)
@@ -2462,7 +2462,7 @@ carry its returned state across blocks.
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 f0 = 2_400.0
@@ -2474,7 +2474,7 @@ sos = signal.tf2sos(b, a)
 y = signal.sosfiltfilt(sos, x)
 ```
 
-**R**
+R
 
 ```r
 f0 <- 2400.0
@@ -2510,7 +2510,7 @@ Reuse the `welch_psd` helper from the Welch section for the R calculation:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 f, pxx = signal.welch(
@@ -2534,7 +2534,7 @@ print("total estimated mean square:", pxx.sum() * (f[1] - f[0]))
 print("time-domain variance:", np.var(y))
 ```
 
-**R**
+R
 
 ```r
 estimate <- welch_psd(y, fs, nperseg = 16384, noverlap = 8192)
@@ -2563,7 +2563,7 @@ values from one block to the next:
 
 ::: {.code-group}
 
-**Python**
+Python
 
 ```python
 initial_state = signal.sosfilt_zi(sos) * x[0]
@@ -2589,7 +2589,7 @@ np.testing.assert_allclose(y_causal, y_causal_batch, atol=1e-12, rtol=1e-12)
 np.testing.assert_allclose(state, final_batch_state, atol=1e-12, rtol=1e-12)
 ```
 
-**R**
+R
 
 ```r
 initial <- c(0, 0)
@@ -2631,7 +2631,7 @@ are written against the R coefficients actually used above.
 \newpage
 ```
 
-**Python**
+Python
 
 ```python
 # Deterministic reference; reuse fs and sos from the notch example.
@@ -2667,7 +2667,7 @@ assert abs(H_ref[0]) > 10**(-0.01 / 20)  # Wanted-tone loss below 0.01 dB.
 assert abs(H_ref[1]) < 1e-10             # Exact-frequency notch reference.
 ```
 
-**R**
+R
 
 ```r
 # Deterministic reference; reuse fs, b, and a from the notch example.
@@ -2793,14 +2793,14 @@ Always check:
 
 Use several diagnostics because no one view catches every problem:
 
-* `freqz` or an equivalent dense response for magnitude and phase;
-* unwrapped phase and group delay for timing distortion;
-* an impulse response for coefficient order and stability;
-* a step response for overshoot and settling;
-* a logarithmic swept sine for audible or measurable passband/stopband defects;
-* white-noise PSD before and after filtering for the $|H|^2$ relationship;
-* pole-zero geometry for resonances and minimum-phase claims;
-* max internal state under full-scale and crest-factor-heavy signals.
+- `freqz` or an equivalent dense response for magnitude and phase;
+- unwrapped phase and group delay for timing distortion;
+- an impulse response for coefficient order and stability;
+- a step response for overshoot and settling;
+- a logarithmic swept sine for audible or measurable passband/stopband defects;
+- white-noise PSD before and after filtering for the $|H|^2$ relationship;
+- pole-zero geometry for resonances and minimum-phase claims;
+- max internal state under full-scale and crest-factor-heavy signals.
 
 The diagnostics should be run on the exact coefficient format and exact structure used in production. A floating-point transfer function is not a substitute for a fixed-point cascade test.
 
@@ -2836,17 +2836,17 @@ The checklists are intentionally mundane. Most production DSP failures are not f
 
 The following references cover the subject more fully and provide the derivations behind the shortcuts used here.
 
-* [MIT OpenCourseWare: Digital Signal Processing, RES.6-008](https://ocw.mit.edu/courses/res-6-008-digital-signal-processing-spring-2011/) — a compact graduate-level sequence covering discrete-time systems, convolution, the $z$-transform, the DFT, filter design, and the FFT.
-* [MIT OpenCourseWare: Signals and Systems, 6.003](https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/) — useful foundations for continuous-time Fourier analysis, sampling, modulation, and the relationship between continuous and discrete representations.
-* [Oppenheim, Schafer, and Buck, *Discrete-Time Signal Processing*](https://www.pearson.com/en-us/subject-catalog/p/discrete-time-signal-processing/P200000003355) — the main reference for classical discrete-time DSP.
-* [Smith, *The Scientist and Engineer's Guide to Digital Signal Processing*](https://dspguide.com/) — an accessible companion for intuition and practical examples; use a formal text for proofs and exact specifications.
-* [Smith, *Spectral Audio Signal Processing*](https://dsprelated.com/freebooks/sasp/) — especially useful for windows, spectral measurement, and STFT analysis/synthesis.
-* [Cooley and Tukey, “An algorithm for the machine calculation of complex Fourier series”](https://doi.org/10.1090/S0025-5718-1965-0178586-1) — the classic FFT paper. The FFT computes the DFT; it does not define a new transform.
-* [Parks and McClellan, “Chebyshev approximation for nonrecursive digital filters with linear phase”](https://doi.org/10.1109/TCT.1972.1083419) — original reference for equiripple linear-phase FIR design.
-* [Vaidyanathan, “Multirate digital filters, filter banks, polyphase networks, and applications”](https://authors.library.caltech.edu/records/x720m-mr760) — a substantial tutorial on multirate structures and filter banks.
-* [NumPy FFT reference](https://numpy.org/doc/stable/reference/routines.fft.html) — array conventions, real transforms, frequency helpers, and normalisation.
-* [SciPy signal reference](https://docs.scipy.org/doc/scipy/reference/signal.html) — filter design, filtering, resampling, spectral analysis, and analytic-signal routines.
-* [Welch, “The use of fast Fourier transform for the estimation of power spectra”](https://doi.org/10.1109/TAU.1967.1161901) — original reference for the averaged modified-periodogram method.
+- [MIT OpenCourseWare: Digital Signal Processing, RES.6-008](https://ocw.mit.edu/courses/res-6-008-digital-signal-processing-spring-2011/) — a compact graduate-level sequence covering discrete-time systems, convolution, the $z$-transform, the DFT, filter design, and the FFT.
+- [MIT OpenCourseWare: Signals and Systems, 6.003](https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/) — useful foundations for continuous-time Fourier analysis, sampling, modulation, and the relationship between continuous and discrete representations.
+- [Oppenheim, Schafer, and Buck, *Discrete-Time Signal Processing*](https://www.pearson.com/en-us/subject-catalog/p/discrete-time-signal-processing/P200000003355) — the main reference for classical discrete-time DSP.
+- [Smith, *The Scientist and Engineer's Guide to Digital Signal Processing*](https://dspguide.com/) — an accessible companion for intuition and practical examples; use a formal text for proofs and exact specifications.
+- [Smith, *Spectral Audio Signal Processing*](https://dsprelated.com/freebooks/sasp/) — especially useful for windows, spectral measurement, and STFT analysis/synthesis.
+- [Cooley and Tukey, “An algorithm for the machine calculation of complex Fourier series”](https://doi.org/10.1090/S0025-5718-1965-0178586-1) — the classic FFT paper. The FFT computes the DFT; it does not define a new transform.
+- [Parks and McClellan, “Chebyshev approximation for nonrecursive digital filters with linear phase”](https://doi.org/10.1109/TCT.1972.1083419) — original reference for equiripple linear-phase FIR design.
+- [Vaidyanathan, “Multirate digital filters, filter banks, polyphase networks, and applications”](https://authors.library.caltech.edu/records/x720m-mr760) — a substantial tutorial on multirate structures and filter banks.
+- [NumPy FFT reference](https://numpy.org/doc/stable/reference/routines.fft.html) — array conventions, real transforms, frequency helpers, and normalisation.
+- [SciPy signal reference](https://docs.scipy.org/doc/scipy/reference/signal.html) — filter design, filtering, resampling, spectral analysis, and analytic-signal routines.
+- [Welch, “The use of fast Fourier transform for the estimation of power spectra”](https://doi.org/10.1109/TAU.1967.1161901) — original reference for the averaged modified-periodogram method.
 
 The durable habit to take from DSP is simple: model the signal chain, write down the transform convention, and verify the result against an identity or a controlled experiment. The mathematics gives you the relationships; the engineering work is making sure the conditions for those relationships are actually true.
 

@@ -242,10 +242,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -606,7 +608,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Digital Signal Processing: A Technical
 Primer</span>
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -712,7 +714,7 @@ Stability</a>
 Convergence</a></li>
 <li><a href="#transfer-functions-poles-and-zeros" id="toc-transfer-functions-poles-and-zeros"><span class="toc-section-number">6.2</span> Transfer Functions, Poles, and
 Zeros</a></li>
-<li><a href="#difference-equations-from-hz" id="toc-difference-equations-from-hz"><span class="toc-section-number">6.3</span> Difference Equations from <span class="math inline">\(H(z)\)</span></a></li>
+<li><a href="#difference-equations-from-hz" id="toc-difference-equations-from-hz"><span class="toc-section-number">6.3</span> Difference Equations From <span class="math inline">\(H(z)\)</span></a></li>
 <li><a href="#resonators-and-a-pole-pair" id="toc-resonators-and-a-pole-pair"><span class="toc-section-number">6.4</span> Resonators and a Pole
 Pair</a></li>
 <li><a href="#minimum-phase-and-invertibility" id="toc-minimum-phase-and-invertibility"><span class="toc-section-number">6.5</span> Minimum Phase and
@@ -721,7 +723,7 @@ Invertibility</a></li>
 <li><a href="#designing-digital-filters" id="toc-designing-digital-filters"><span class="toc-section-number">7</span> Designing Digital Filters</a>
 <ul>
 <li><a href="#fir-linear-phase" id="toc-fir-linear-phase"><span class="toc-section-number">7.1</span> FIR Linear Phase</a></li>
-<li><a href="#start-with-a-specification" id="toc-start-with-a-specification"><span class="toc-section-number">7.2</span> Start with a
+<li><a href="#start-with-a-specification" id="toc-start-with-a-specification"><span class="toc-section-number">7.2</span> Start With a
 Specification</a></li>
 <li><a href="#fir-versus-iir" id="toc-fir-versus-iir"><span class="toc-section-number">7.3</span> FIR Versus IIR</a></li>
 <li><a href="#windowed-sinc-fir-design" id="toc-windowed-sinc-fir-design"><span class="toc-section-number">7.4</span> Windowed-Sinc FIR Design</a></li>
@@ -852,6 +854,7 @@ Checks</a></li>
 </ul></li>
 <li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources"><span class="toc-section-number">15</span> Further Reading and
 Resources</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">16</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -1016,7 +1019,7 @@ stream without adding delay.</li>
 (BIBO) sense, every bounded input produces a bounded output.</li>
 </ul>
 <p>Linear time-invariant (LTI) systems are the centre of classical DSP
-because they are both expressive and analyzable. A nonlinear or
+because they are both expressive and analysable. A nonlinear or
 time-varying system can be useful, but its behaviour cannot be inferred
 from one impulse response and one frequency-response curve.</p>
 <p>You can test these properties with numbers before introducing
@@ -1139,7 +1142,7 @@ vector:</p>
 <p><span class="math display">\[
 y[n] = h[0]x[n] + h[1]x[n-1]+\cdots+h[M]x[n-M].
 \]</span></p>
-<p>The coefficients are not “the frequencies to keep.” They are
+<p>The coefficients are not “the frequencies to keep”. They are
 time-domain weights whose collective response determines the frequency
 behaviour. A moving average with <span class="math inline">\(M\)</span>
 taps,</p>
@@ -1257,7 +1260,7 @@ X(e^{j\omega})e^{j\omega n}\,d\omega.
 \]</span></p>
 <p>The DTFT is continuous in <span class="math inline">\(\omega\)</span>
 but periodic with period <span class="math inline">\(2\pi\)</span>.
-Normalized frequency <span class="math inline">\(\omega\)</span> is
+Normalised frequency <span class="math inline">\(\omega\)</span> is
 radians per sample. If the sample rate is <span class="math inline">\(f_s\)</span>, physical frequency is <span class="math inline">\(f=\frac{\omega f_s}{2\pi}\)</span>, and the
 interval <span class="math inline">\([-\pi,\pi)\)</span> corresponds to
 <span class="math inline">\([-\frac{f_s}{2},\frac{f_s}{2})\)</span>.</p>
@@ -1569,14 +1572,14 @@ came from a 3 kHz or 7 kHz analogue sinusoid.</p>
 <p>You can see the irreversibility directly from the samples. The R
 version uses the base <code>cos</code> and vectorised arithmetic:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(<span class="dv">12</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>x_7k <span class="op">=</span> np.cos(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">7_000</span> <span class="op">/</span> <span class="dv">10_000</span> <span class="op">*</span> n)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>x_3k <span class="op">=</span> np.cos(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">3_000</span> <span class="op">/</span> <span class="dv">10_000</span> <span class="op">*</span> n)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">max</span>(np.<span class="bu">abs</span>(x_7k <span class="op">-</span> x_3k)))  <span class="co"># approximately 0</span></span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x_7k <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">7000</span> <span class="sc">/</span> <span class="dv">10000</span> <span class="sc">*</span> n)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_3k <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">3000</span> <span class="sc">/</span> <span class="dv">10000</span> <span class="sc">*</span> n)</span>
@@ -1590,13 +1593,13 @@ correct explanation.</p>
 <figcaption aria-hidden="true">Aliasing: 3 kHz and 7 kHz analogue
 candidates produce the same samples at 10 kHz</figcaption>
 </figure>
-<p><em>Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates
+<p>Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates
 sampled at 10 kHz. Each candidate passes through the same sample values;
 they are alternative analogue interpretations, not simultaneous
 reconstructions of one baseband signal. The frequency view shows
 spectral folding across the 5 kHz Nyquist boundary. An acquisition chain
 must suppress the unwanted candidate before sampling because the digital
-samples alone cannot distinguish them.</em></p>
+samples alone cannot distinguish them.</p>
 <p>The anti-aliasing filter must therefore be analogue, or must occur
 before the sampling operation at an earlier, faster sampling rate. In a
 practical acquisition chain:</p>
@@ -1642,8 +1645,8 @@ hold contributes a sinc-shaped envelope and the staircase contains
 images at multiples of <span class="math inline">\(f_s\)</span>. An
 analogue reconstruction filter removes those images and often
 compensates, approximately, for the hold’s passband droop.</p>
-<p>When DSP documentation says “the output is a 1 kHz sine,” ask whether
-it means the discrete sequence has a normalized digital frequency, the
+<p>When DSP documentation says “the output is a 1 kHz sine”, ask whether
+it means the discrete sequence has a normalised digital frequency, the
 DAC output has a 1 kHz analogue component, or the entire reconstruction
 chain has been characterised. Those are related but not identical
 statements.</p>
@@ -1708,7 +1711,7 @@ SNR about 74.0 dB. A 10 mV peak sine has RMS 7.071 mV and only about
 34.0 dB relative to the same noise floor. Amplifying the small signal
 before conversion can use more codes, but the amplifier’s noise, gain
 uncertainty, and overload margin then enter the budget. Digital gain
-afterward scales the signal and the already acquired errors
+afterwards scales the signal and the already acquired errors
 together.</p>
 <p>If uncorrelated front-end noise contributes 100 <span class="math inline">\(\mu\)</span>V RMS, combining it with the ideal
 quantisation noise gives <span class="math inline">\(\sqrt{141^2+100^2}=172.9\)</span> <span class="math inline">\(\mu\)</span>V RMS. This root-sum-square addition
@@ -1731,7 +1734,7 @@ coherent inputs. A constant voltage between two decision thresholds
 always maps to the same code; a low-level sine can generate a repeating,
 harmonic-rich error sequence. Dither deliberately randomises threshold
 crossings. A subtractive scheme adds a known random signal before
-quantisation and subtracts it afterward; with an appropriate uniform
+quantisation and subtracts it afterwards; with an appropriate uniform
 dither and no overload, the residual error can be uniform and
 independent of the input. A common nonsubtractive triangular dither,
 formed by summing two independent uniforms each spanning one LSB
@@ -1762,7 +1765,7 @@ less deterministic distortion, paid for with additional noise. This does
 not make every aspect of the error statistically independent of the
 input.</p>
 <p>Subtractive dither is different: add a known dither before
-quantisation and subtract that same value afterward. With suitable
+quantisation and subtract that same value afterwards. With suitable
 independent uniform dither, the remaining error can be uniform and
 independent with variance <span class="math inline">\(\frac{\Delta^2}{12}\)</span>. An ADC usually
 cannot remove analogue dither perfectly because the exact voltage
@@ -1776,9 +1779,10 @@ still have to be reported.</p>
 <h2 data-number="4.7" id="clock-jitter-and-aperture-effects"><span class="header-section-number">4.7</span> Clock Jitter and Aperture
 Effects</h2>
 <p>Sampling time errors matter more at high frequency and high slew
-rate. If the intended sample time is <span class="math inline">\(t_n=nT\)</span> but the actual time is <span class="math inline">\(t_n+\epsilon_n\)</span>, then to first order</p>
+rate. If the intended sample time is <span class="math inline">\(t_n=nT\)</span> but the actual time is <span class="math inline">\(t_n+\varepsilon_n\)</span>, then to first
+order</p>
 <p><span class="math display">\[
-x(t_n+\epsilon_n)\approx x(t_n)+\epsilon_n x&#39;(t_n).
+x(t_n+\varepsilon_n)\approx x(t_n)+\varepsilon_n x&#39;(t_n).
 \]</span></p>
 <p>For a sinusoid, timing jitter creates amplitude error proportional to
 frequency. A useful approximate jitter-limited signal-to-noise ratio
@@ -2056,7 +2060,7 @@ transform has the same unnormalised convention as NumPy’s forward FFT.
 The slice keeps the nonnegative frequencies for this real-valued
 record:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2078,7 +2082,7 @@ record:</p>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>weighted_mean_square <span class="op">=</span> np.<span class="bu">sum</span>((w <span class="op">*</span> x)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(w<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(psd.<span class="bu">sum</span>() <span class="op">*</span> df, weighted_mean_square)</span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(peak_amplitude[np.argmin(<span class="bu">abs</span>(f <span class="op">-</span> <span class="dv">50</span>))], <span class="fl">0.8</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">1000.0</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(N <span class="sc">-</span> <span class="dv">1</span>)</span>
@@ -2194,14 +2198,14 @@ is more appropriate.</p>
 <figcaption aria-hidden="true">DFT leakage and the windowing trade-off
 for on-bin and off-bin tones</figcaption>
 </figure>
-<p><em>Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate
+<p>Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate
 with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid;
 the 50.5 Hz tone lies halfway between bins. The repeated-record view
 exposes their different boundary continuations. Rectangular and Hann
 spectra use a shared dB reference and coherent-gain amplitude
 correction, showing Hann sidelobe suppression and main-lobe widening.
 Windowing changes the finite-observation response; it does not create
-physical tones or extend the observation duration.</em></p>
+physical tones or extend the observation duration.</p>
 <h2 data-number="5.8" id="why-the-naive-dft-is-expensive"><span class="header-section-number">5.8</span> Why the Naive DFT Is
 Expensive</h2>
 <p>The direct DFT evaluates <span class="math inline">\(N\)</span> sums,
@@ -2246,7 +2250,7 @@ the <span class="math inline">\(\frac{1}{N}\)</span> scaling;
 to <code>rfft</code>.</p>
 <p>The same FFT conventions can be made explicit in base R:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> <span class="fl">2_000.0</span></span>
@@ -2264,7 +2268,7 @@ to <code>rfft</code>.</p>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>amplitude[[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]] <span class="op">/=</span> <span class="dv">2</span>  <span class="co"># DC and Nyquist are not doubled.</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>peak_frequency <span class="op">=</span> f[np.argmax(amplitude)]</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;peak ~= </span><span class="sc">{</span>peak_frequency<span class="sc">:.1f}</span><span class="ss"> Hz&quot;</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">2000.0</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, duration <span class="sc">-</span> <span class="fl">1.0</span> <span class="sc">/</span> fs, <span class="at">by =</span> <span class="fl">1.0</span> <span class="sc">/</span> fs)</span>
@@ -2297,7 +2301,7 @@ y[n]=\sum_{k=0}^{N-1}x[k]h[(n-k)\bmod N].
 <p>If you need linear convolution of sequences of lengths <span class="math inline">\(L\)</span> and <span class="math inline">\(M\)</span>, zero-pad both to at least <span class="math inline">\(L+M-1\)</span> before multiplying their FFTs. For
 streaming signals, overlap-add and overlap-save divide the input into
 blocks, manage the boundary samples, and reuse one filter transform.
-Forgetting this distinction creates wraparound artifacts that can look
+Forgetting this distinction creates wraparound artefacts that can look
 like instability or ringing.</p>
 <p>Here is the wraparound in a sequence small enough to calculate by
 hand. Let <span class="math inline">\(x=[1,2,3]\)</span> and <span class="math inline">\(h=[10,1]\)</span>. Their linear convolution is</p>
@@ -2361,7 +2365,7 @@ any threshold derived from it, even when the peak location looks
 correct.</p>
 <p>Correlation with a template is therefore a projection onto shifted
 template vectors. Matched filtering is not a mysterious “pattern
-recognizer”; it is a projection weighted according to the noise
+recogniser”; it is a projection weighted according to the noise
 geometry. If the noise covariance is <span class="math inline">\(R\)</span>, the relevant inner product is <span class="math inline">\(x^HR^{-1}y\)</span>. Whitening transforms that
 inner product back into the ordinary Euclidean one.</p>
 <p>Whitening means filtering or linearly transforming data so that the
@@ -2512,7 +2516,7 @@ BIBO stability requires the unit circle to lie in the ROC, which for the
 causal case means all poles are strictly inside it. A pole exactly on
 the unit circle is a boundary case: it may produce a bounded response
 for some inputs but is not BIBO stable.</p>
-<h2 data-number="6.3" id="difference-equations-from-hz"><span class="header-section-number">6.3</span> Difference Equations from <span class="math inline">\(H(z)\)</span></h2>
+<h2 data-number="6.3" id="difference-equations-from-hz"><span class="header-section-number">6.3</span> Difference Equations From <span class="math inline">\(H(z)\)</span></h2>
 <p>Starting with</p>
 <p><span class="math display">\[
 H(z)=\frac{b_0+b_1z^{-1}+b_2z^{-2}}
@@ -2641,7 +2645,7 @@ approximation and delay. Offline forward-backward filtering can cancel
 phase, but it squares the magnitude response and introduces
 edge-handling choices. “Zero phase” is a property of an offline
 procedure, not a free causal filter design.</p>
-<h2 data-number="7.2" id="start-with-a-specification"><span class="header-section-number">7.2</span> Start with a Specification</h2>
+<h2 data-number="7.2" id="start-with-a-specification"><span class="header-section-number">7.2</span> Start With a Specification</h2>
 <p>“Remove the noise” is not a filter specification. A usable
 specification states the signal band, unwanted band, acceptable gain
 error, attenuation, phase or delay requirement, sample rate, available
@@ -2717,7 +2721,7 @@ FIR, the group delay is known from its length; measuring it from the
 unwrapped phase is also appropriate when the production coefficients are
 not exactly symmetric.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2751,7 +2755,7 @@ not exactly symmetric.</p>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(step[<span class="dv">180</span>:], <span class="fl">1.0</span>, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pass_db.<span class="bu">min</span>(), pass_db.<span class="bu">max</span>(), ripple_db, attenuation_db,</span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>      delay_ms.<span class="bu">min</span>(), delay_ms.<span class="bu">max</span>())</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fs_design <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>numtaps <span class="ot">&lt;-</span> <span class="dv">181</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(numtaps <span class="sc">-</span> <span class="dv">1</span>)</span>
@@ -2861,7 +2865,7 @@ bands.</p>
 windowed-sinc construction and a zero-padded FFT for the response
 grid:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2880,7 +2884,7 @@ grid:</p>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>stopband <span class="op">=</span> np.<span class="bu">abs</span>(H[w <span class="op">&gt;=</span> <span class="dv">10_000</span>])</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;passband ripple (dB):&quot;</span>, <span class="dv">20</span> <span class="op">*</span> np.log10(passband.<span class="bu">max</span>() <span class="op">/</span> passband.<span class="bu">min</span>()))</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;stopband attenuation (dB):&quot;</span>, <span class="op">-</span><span class="dv">20</span> <span class="op">*</span> np.log10(stopband.<span class="bu">max</span>()))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>numtaps <span class="ot">&lt;-</span> <span class="dv">161</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="fl">8000.0</span></span>
@@ -2996,7 +3000,7 @@ H(z)=K\frac{1-2\cos(\omega_0)z^{-1}+z^{-2}}
 arithmetic. The nearby poles restore gain around the notch and determine
 selectivity. In finite precision, the zero angle and coefficient values
 are quantised, so the measured notch depth may be much shallower than
-the mathematical one. Normalize <span class="math inline">\(K\)</span>
+the mathematical one. Normalise <span class="math inline">\(K\)</span>
 at the frequency where unity gain matters; do not assume the unscaled
 numerator has the desired passband gain.</p>
 <h1 data-number="8" id="implementing-filters-state-precision-and-real-time-constraints"><span class="header-section-number">8</span> Implementing Filters: State,
@@ -3036,7 +3040,7 @@ These filters have different responses, but demonstrate the same state
 hand-off. A production R implementation can replace the recurrence with
 a biquad cascade without changing the streaming pattern.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3064,7 +3068,7 @@ a biquad cascade without changing the streaming pattern.</p>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;max batch/stream difference:&quot;</span>, np.<span class="bu">max</span>(np.<span class="bu">abs</span>(y_batch <span class="op">-</span> y_stream)))</span>
 <span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(y_stream, y_batch, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="fl">2000.0</span> <span class="sc">/</span> fs)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
@@ -3249,7 +3253,7 @@ contributions. A 64-bit accumulator is convenient for a software
 reference; a hardware implementation may use fewer bits after
 establishing a worst-case bound.</p>
 <p>For a length-<span class="math inline">\(K\)</span> FIR with
-coefficient-rounding errors <span class="math inline">\(|\epsilon_k|\le2^{-16}\)</span> and input bound
+coefficient-rounding errors <span class="math inline">\(|\varepsilon_k|\le2^{-16}\)</span> and input bound
 <span class="math inline">\(A\)</span>, the output perturbation obeys
 <span class="math inline">\(|\Delta y[n]|\le AK2^{-16}\)</span> before
 final rounding. In frequency, <span class="math inline">\(|\Delta
@@ -3392,7 +3396,7 @@ phases:</p>
 h[r+Lp],\qquad r=0,\ldots,L-1.
 \]</span></p>
 <p>Here “polyphase” means “organised by the residue, or phase, of an
-index modulo <span class="math inline">\(L\)</span>.” The zero-stuffed
+index modulo <span class="math inline">\(L\)</span>”. The zero-stuffed
 signal has nonzero samples only at intermediate-rate indices divisible
 by <span class="math inline">\(L\)</span>. For an intermediate output
 index <span class="math inline">\(q\)</span>, write <span class="math inline">\(q=r\pmod L\)</span>. In the convolution</p>
@@ -3440,7 +3444,7 @@ reversed in the multiply loop; the point of the toy numbers is only to
 make “phase” an operation on coefficient indices rather than a label on
 a plot.</p>
 <p>This timing view also explains why a resampler needs a low-pass
-prototype even when its code appears to be “just selecting phases.” Zero
+prototype even when its code appears to be “just selecting phases”. Zero
 insertion creates images, and the downsampling operation would alias
 intermediate frequencies unless the prototype removes them. The phase
 branches do not each represent independent frequency bands; they are
@@ -3462,7 +3466,7 @@ reproduce Python’s filter response or boundary handling. Production code
 should use a tested polyphase routine and inspect its boundary
 convention and response.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3471,7 +3475,7 @@ convention and response.</p>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.zeros(<span class="dv">48_000</span>)  <span class="co"># one second of illustrative input at fs_in</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 48 kHz -&gt; 44.1 kHz. The output length is approximately len(x) * 147 / 160.</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> signal.resample_poly(x, up<span class="op">=</span><span class="dv">147</span>, down<span class="op">=</span><span class="dv">160</span>, window<span class="op">=</span>(<span class="st">&quot;kaiser&quot;</span>, <span class="fl">8.6</span>))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fs_in <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fs_out <span class="ot">&lt;-</span> <span class="fl">44100.0</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(fs_in)  <span class="co"># one second of illustrative input at fs_in</span></span>
@@ -3782,7 +3786,7 @@ but it is not a theorem that 50% is always optimal.</p>
 makes the segment loop and the one-sided PSD normalisation visible
 instead of hiding them behind a package default:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3805,7 +3809,7 @@ instead of hiding them behind a package default:</p>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>noise_band <span class="op">=</span> (f <span class="op">&gt;</span> <span class="dv">2_000</span>) <span class="op">&amp;</span> (f <span class="op">&lt;</span> <span class="dv">3_000</span>)</span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;peak tone frequency:&quot;</span>, f[tone_band][np.argmax(psd[tone_band])])</span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;noise power in selected bins:&quot;</span>, psd[noise_band].<span class="bu">sum</span>() <span class="op">*</span> (f[<span class="dv">1</span>] <span class="op">-</span> f[<span class="dv">0</span>]))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">10000.0</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="fl">20.0</span> <span class="sc">-</span> <span class="fl">1.0</span> <span class="sc">/</span> fs, <span class="at">by =</span> <span class="fl">1.0</span> <span class="sc">/</span> fs)</span>
@@ -3945,7 +3949,7 @@ and <span class="math inline">\(x[n]\)</span> is an observed input. A
 linear estimator</p>
 <p><span class="math display">\[
 \hat d[n]=w^Hu[n]=\sum_{k=0}^{M}w_k^*x[n-k],
-\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^T
+\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^{\top}
 \]</span></p>
 <p>can be chosen to minimise mean-square error <span class="math inline">\(\mathbb{E}|d[n]-\hat d[n]|^2\)</span>.
 Differentiating with respect to the coefficient vector gives the
@@ -3994,7 +3998,7 @@ threshold.</p>
 standard deviation. In a real-valued white-noise problem with variance
 <span class="math inline">\(\sigma^2\)</span>, define</p>
 <p><span class="math display">\[
-z=\frac{s^Ty}{\sigma\,\|s\|_2}.
+z=\frac{s^{\top}y}{\sigma\,\|s\|_2}.
 \]</span></p>
 <p>Under noise alone, <span class="math inline">\(z\)</span> is standard
 normal. A one-sided threshold of <span class="math inline">\(3\)</span>
@@ -4007,7 +4011,7 @@ be</p>
 \]</span></p>
 <p>To target a global false-alarm probability near 1% over that search,
 a rough independent-trial threshold is <span class="math inline">\(z&gt;4.27\)</span> because <span class="math inline">\(P(z&gt;4.27)\approx10^{-5}\)</span>. In terms of
-the raw correlation, this is <span class="math inline">\(s^Ty&gt;4.27\,\sigma\|s\|_2\)</span>. Real
+the raw correlation, this is <span class="math inline">\(s^{\top}y&gt;4.27\,\sigma\|s\|_2\)</span>. Real
 correlation outputs overlap and are not independent, so the effective
 number of trials must be measured or modelled, but the direction is
 important: a threshold is tied to the search scope, not only to the
@@ -4053,7 +4057,7 @@ polarity calls for <span class="math inline">\(|z|\)</span> and a
 two-tail Gaussian threshold. Unknown complex phase calls for a magnitude
 statistic with a different null distribution. For proper complex
 Gaussian noise with covariance <span class="math inline">\(R\)</span>,
-meaning zero pseudocovariance <span class="math inline">\(\mathbb{E}[vv^T]\)</span>, define</p>
+meaning zero pseudocovariance <span class="math inline">\(\mathbb{E}[vv^{\top}]\)</span>, define</p>
 <p><span class="math display">\[
 T=\frac{|s^HR^{-1}y|^2}{s^HR^{-1}s}.
 \]</span></p>
@@ -4070,13 +4074,13 @@ when the denominator is random.</p>
 <span class="math inline">\(R=LL^H\)</span> is a Cholesky factorisation,
 solve <span class="math inline">\(L\tilde y=y\)</span> and <span class="math inline">\(L\tilde s=s\)</span>. Then <span class="math inline">\(\tilde s^H\tilde y=s^HR^{-1}y\)</span>.
 Correlating a whitened observation with an unwhitened template solves a
-different problem. In a two-coordinate example with <span class="math inline">\(R=\operatorname{diag}(1,100)\)</span> and <span class="math inline">\(s=[1,1]^T\)</span>, ordinary matched correlation
-has signal mean divided by noise standard deviation <span class="math inline">\(\frac{2}{\sqrt{101}}=0.199\)</span> for unit
-signal amplitude. Whitening gives <span class="math inline">\(\sqrt{s^TR^{-1}s}=\sqrt{1.01}=1.005\)</span>: it
-suppresses the second coordinate’s large noise instead of assigning both
-coordinates equal weight. Nearly singular estimated covariance requires
-regularisation and held-out noise checks; an artificially tiny estimated
-PSD can otherwise create enormous scores.</p>
+different problem. In a two-coordinate example with <span class="math inline">\(R=\operatorname{diag}(1,100)\)</span> and <span class="math inline">\(s=[1,1]^{\top}\)</span>, ordinary matched
+correlation has signal mean divided by noise standard deviation <span class="math inline">\(\frac{2}{\sqrt{101}}=0.199\)</span> for unit
+signal amplitude. Whitening gives <span class="math inline">\(\sqrt{s^{\top}R^{-1}s}=\sqrt{1.01}=1.005\)</span>:
+it suppresses the second coordinate’s large noise instead of assigning
+both coordinates equal weight. Nearly singular estimated covariance
+requires regularisation and held-out noise checks; an artificially tiny
+estimated PSD can otherwise create enormous scores.</p>
 <h2 data-number="11.3" id="deconvolution"><span class="header-section-number">11.3</span> Deconvolution</h2>
 <p>If an observation is <span class="math inline">\(y=h*x+v\)</span>,
 where <span class="math inline">\(v\)</span> is noise, the
@@ -4128,18 +4132,19 @@ directions with small eigenvalues converge slowly.</p>
 <p>Normalised LMS (NLMS) compensates for the instantaneous input
 energy:</p>
 <p><span class="math display">\[
-w[n+1]=w[n]+\frac{\mu}{\epsilon+\|u[n]\|^2}e^*[n]u[n].
+w[n+1]=w[n]+\frac{\mu}{\varepsilon+\|u[n]\|^2}e^*[n]u[n].
 \]</span></p>
-<p>Here <span class="math inline">\(\epsilon&gt;0\)</span> prevents
+<p>Here <span class="math inline">\(\varepsilon&gt;0\)</span> prevents
 division by zero and <span class="math inline">\(\mu\)</span> is
-dimensionless. For a one-tap filter with <span class="math inline">\(x[n]=2\)</span>, <span class="math inline">\(d[n]=3\)</span>, <span class="math inline">\(w[0]=0\)</span>, and an <span class="math inline">\(\epsilon\)</span> negligible compared with <span class="math inline">\(\|u[n]\|^2=4\)</span>, choosing <span class="math inline">\(\mu=0.5\)</span> gives <span class="math inline">\(e[0]=3\)</span> and, ignoring that tiny <span class="math inline">\(\epsilon\)</span> for the arithmetic,</p>
+dimensionless. For a one-tap filter with <span class="math inline">\(x[n]=2\)</span>, <span class="math inline">\(d[n]=3\)</span>, <span class="math inline">\(w[0]=0\)</span>, and an <span class="math inline">\(\varepsilon\)</span> negligible compared with
+<span class="math inline">\(\|u[n]\|^2=4\)</span>, choosing <span class="math inline">\(\mu=0.5\)</span> gives <span class="math inline">\(e[0]=3\)</span> and, ignoring that tiny <span class="math inline">\(\varepsilon\)</span> for the arithmetic,</p>
 <p><span class="math display">\[
 w[1]\approx0+0.5\frac{3\cdot2}{2^2}=0.75.
 \]</span></p>
 <p>Normalisation reduces sensitivity to input amplitude, but it does not
 provide an amplitude-independent bound on the coefficient update. Its
-norm is <span class="math inline">\(\frac{\mu|e|\|u\|}{\epsilon+\|u\|^2}\)</span>,
-whose multiplier can reach <span class="math inline">\(\frac{\mu}{2\sqrt\epsilon}\)</span>. If <span class="math inline">\(\epsilon\)</span> is tiny and the reference is
+norm is <span class="math inline">\(\frac{\mu|e|\|u\|}{\varepsilon+\|u\|^2}\)</span>,
+whose multiplier can reach <span class="math inline">\(\frac{\mu}{2\sqrt\varepsilon}\)</span>. If <span class="math inline">\(\varepsilon\)</span> is tiny and the reference is
 weak while the desired signal remains large, coefficients can jump
 substantially. Without the floor, that norm grows as <span class="math inline">\(\frac{\mu|e|}{\|u\|}\)</span>. Freeze adaptation
 below a measured reference-energy threshold when such frames provide no
@@ -4318,7 +4323,7 @@ the time-frequency uncertainty trade-off, not a software limitation.</p>
 and reconstruction below. A global-origin definition using <span class="math inline">\(e^{-j\omega n}\)</span> instead equals <span class="math inline">\(e^{-j\omega mR}X(m,\omega)\)</span>. The
 magnitudes coincide, but the phases require that deterministic rotation
 when exchanging coefficients between conventions.</p>
-<p>The window, hop, FFT length, centering convention, and boundary
+<p>The window, hop, FFT length, centring convention, and boundary
 padding all affect the picture. FFT zero-padding can make each frame’s
 displayed frequency curve smoother without improving the window’s
 ability to separate nearby components.</p>
@@ -4334,14 +4339,14 @@ the time scale you are willing to blur.</p>
 <figcaption aria-hidden="true">STFT window length trade-off for a short
 two-tone burst</figcaption>
 </figure>
-<p><em>Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled
-at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their
-supports are 16 and 64 ms; their unpadded frequency grids are spaced by
-62.5 and 15.625 Hz. The short-window spectrogram localises burst edges
-more closely, while the long window separates the tones in the
-spectrogram and representative frame spectra. Shared relative-dB scales
-support comparison. Zero-padding the short frame would not give it the
-long frame’s discrimination.</em></p>
+<p>Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16
+kHz, analysed with 256- and 1,024-sample Hann windows. Their supports
+are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and
+15.625 Hz. The short-window spectrogram localises burst edges more
+closely, while the long window separates the tones in the spectrogram
+and representative frame spectra. Shared relative-dB scales support
+comparison. Zero-padding the short frame would not give it the long
+frame’s discrimination.</p>
 <p>For reconstruction, separate the analysis window from the synthesis
 window. Let frame <span class="math inline">\(m\)</span> start at <span class="math inline">\(s_m=mR\)</span>, and let <span class="math inline">\(w_a[n]\)</span> be an analysis window of length
 <span class="math inline">\(N\)</span>. The analysis coefficients
@@ -4470,7 +4475,7 @@ explicit. <code>fft(..., inverse = TRUE)</code> is divided by the frame
 length because R leaves the inverse-transform normalisation to the
 caller.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4491,7 +4496,7 @@ caller.</p>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.<span class="bu">min</span>(denom[keep]) <span class="op">&gt;</span> <span class="dv">0</span></span>
 <span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>x_roundtrip <span class="op">=</span> accum[keep] <span class="op">/</span> denom[keep]</span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(x_roundtrip, x_stft, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>x_stft <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">4097</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>N_stft <span class="ot">&lt;-</span> <span class="dv">256</span></span>
@@ -4713,12 +4718,12 @@ pipeline with the deployed one.</p>
 or reconstruction?</li>
 <li>Which assumptions are testable from the data and metadata?</li>
 </ul>
-<p>If the answer is “I need to see what is there,” start with a
+<p>If the answer is “I need to see what is there”, start with a
 calibrated, windowed exploratory spectrum and a time-domain plot, but
-label it exploratory. If the answer is “estimate power,” use a PSD
-method and integrate it. If the answer is “remove a known band,” design
+label it exploratory. If the answer is “estimate power”, use a PSD
+method and integrate it. If the answer is “remove a known band”, design
 a filter against explicit edges and attenuation. If the answer is
-“detect a known waveform,” begin with correlation or matched filtering
+“detect a known waveform”, begin with correlation or matched filtering
 and model the noise.</p>
 <h2 data-number="13.2" id="method-selection-heuristics"><span class="header-section-number">13.2</span> Method Selection
 Heuristics</h2>
@@ -4876,7 +4881,7 @@ Signal</h2>
 random number generators produce different noise samples despite the
 shared seed.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4891,7 +4896,7 @@ shared seed.</p>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="fl">2_400.0</span> <span class="op">*</span> t <span class="op">+</span> <span class="fl">0.4</span>)</span>
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="fl">0.08</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>t.size)</span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">12000.0</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fl">8.0</span></span>
@@ -4915,7 +4920,7 @@ zero-phase filtering, but their responses and edge transients differ. A
 live path should call <code>iir_filter</code> once and carry its
 returned state across blocks.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f0 <span class="op">=</span> <span class="fl">2_400.0</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>quality <span class="op">=</span> <span class="fl">35.0</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>b, a <span class="op">=</span> signal.iirnotch(w0<span class="op">=</span>f0, Q<span class="op">=</span>quality, fs<span class="op">=</span>fs)</span>
@@ -4923,7 +4928,7 @@ returned state across blocks.</p>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Offline result; a live system would use sosfilt and accept phase/latency.</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> signal.sosfiltfilt(sos, x)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fl">2400.0</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>quality <span class="ot">&lt;-</span> <span class="fl">35.0</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>omega0 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> f0 <span class="sc">/</span> fs</span>
@@ -4956,7 +4961,7 @@ PSD</h2>
 <p>Reuse the <code>welch_psd</code> helper from the Welch section for
 the R calculation:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>f, pxx <span class="op">=</span> signal.welch(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    y,</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    fs<span class="op">=</span>fs,</span>
@@ -4976,7 +4981,7 @@ the R calculation:</p>
 <span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;2.4-kHz band power:&quot;</span>, band_power(f, pxx, <span class="dv">2_350</span>, <span class="dv">2_450</span>))</span>
 <span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;total estimated mean square:&quot;</span>, pxx.<span class="bu">sum</span>() <span class="op">*</span> (f[<span class="dv">1</span>] <span class="op">-</span> f[<span class="dv">0</span>]))</span>
 <span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;time-domain variance:&quot;</span>, np.var(y))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">&lt;-</span> <span class="fu">welch_psd</span>(y, fs, <span class="at">nperseg =</span> <span class="dv">16384</span>, <span class="at">noverlap =</span> <span class="dv">8192</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> estimate<span class="sc">$</span>f</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>pxx <span class="ot">&lt;-</span> estimate<span class="sc">$</span>psd</span>
@@ -5005,7 +5010,7 @@ Block Path</h2>
 <p>The R streaming check uses the same recurrence and carries its two
 state values from one block to the next:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>initial_state <span class="op">=</span> signal.sosfilt_zi(sos) <span class="op">*</span> x[<span class="dv">0</span>]</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>y_causal_batch, final_batch_state <span class="op">=</span> signal.sosfilt(</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    sos, x, zi<span class="op">=</span>initial_state.copy()</span>
@@ -5027,7 +5032,7 @@ state values from one block to the next:</p>
 <span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;causal output length:&quot;</span>, <span class="bu">len</span>(y_causal))</span>
 <span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(y_causal, y_causal_batch, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span>
 <span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(state, final_batch_state, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>initial <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>y_causal_batch <span class="ot">&lt;-</span> <span class="fu">iir_filter</span>(x, b, a, initial)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>y_causal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
@@ -5069,7 +5074,7 @@ differ slightly from SciPy’s <code>iirnotch</code> parameterisation, so
 the response assertions are written against the R coefficients actually
 used above.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic reference; reuse fs and sos from the notch example.</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>n_ref <span class="op">=</span> np.arange(<span class="dv">12_000</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_ref <span class="op">=</span> n_ref <span class="op">/</span> fs</span>
@@ -5101,7 +5106,7 @@ used above.</p>
 <span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    np.testing.assert_allclose(measured_gain, <span class="bu">abs</span>(gain), atol<span class="op">=</span><span class="fl">1e-10</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(H_ref[<span class="dv">0</span>]) <span class="op">&gt;</span> <span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="fl">0.01</span> <span class="op">/</span> <span class="dv">20</span>)  <span class="co"># Wanted-tone loss below 0.01 dB.</span></span>
 <span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(H_ref[<span class="dv">1</span>]) <span class="op">&lt;</span> <span class="fl">1e-10</span>             <span class="co"># Exact-frequency notch reference.</span></span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic reference; reuse fs, b, and a from the notch example.</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>n_ref <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11999</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>t_ref <span class="ot">&lt;-</span> n_ref <span class="sc">/</span> fs</span>
@@ -5226,8 +5231,8 @@ two, while a 6 dB power error is also roughly a factor of four in
 power.</p>
 <h2 data-number="14.5" id="fir-order-intuition"><span class="header-section-number">14.5</span> FIR Order Intuition</h2>
 <p>For a windowed-sinc FIR, order grows approximately inversely with
-normalized transition width. If the sample rate doubles while the
-physical transition width stays fixed, the normalized transition narrows
+normalised transition width. If the sample rate doubles while the
+physical transition width stays fixed, the normalised transition narrows
 and the required number of taps rises. This is why multirate systems
 often filter after an early rate reduction when the signal band permits
 it.</p>
@@ -5244,7 +5249,7 @@ can miss a narrow ripple peak and falsely certify a filter.</p>
 <h2 data-number="14.6" id="iir-order-and-warp-checks"><span class="header-section-number">14.6</span> IIR Order and Warp Checks</h2>
 <p>An analogue prototype order function usually works with prewarped
 passband and stopband frequencies. The resulting digital response must
-still be measured after the bilinear transform. At low normalized
+still be measured after the bilinear transform. At low normalised
 frequencies the tangent mapping is nearly linear; near Nyquist it is
 strongly warped. A design that looks correct in an analogue frequency
 table can miss its digital edge if the conversion is applied
@@ -5252,7 +5257,7 @@ incorrectly.</p>
 <p>Always check:</p>
 <ol type="1">
 <li>the prototype’s frequency units;</li>
-<li>whether the API expects a half-cycle-normalized cutoff or
+<li>whether the API expects a half-cycle-normalised cutoff or
 hertz;</li>
 <li>whether prewarping is internal or must be supplied;</li>
 <li>coefficient ordering and feedback sign convention;</li>
@@ -5360,6 +5365,83 @@ write down the transform convention, and verify the result against an
 identity or a controlled experiment. The mathematics gives you the
 relationships; the engineering work is making sure the conditions for
 those relationships are actually true.</p>
+<h1 data-number="16" id="notation"><span class="header-section-number">16</span> Notation</h1>
+<p>The table records the symbols used repeatedly in the derivations.
+Local definitions still appear where an equation introduces a variable
+or adopts a transform convention.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(x[n]\)</span></td>
+<td>Discrete-time signal sample at index <span class="math inline">\(n\)</span></td>
+<td>Signal and system definitions</td>
+</tr>
+<tr>
+<td><span class="math inline">\(y[n]\)</span></td>
+<td>Output sample of a discrete-time system</td>
+<td>Signal and system definitions</td>
+</tr>
+<tr>
+<td><span class="math inline">\(j\)</span></td>
+<td>Imaginary unit, with <span class="math inline">\(j^2=-1\)</span></td>
+<td>Fourier representations</td>
+</tr>
+<tr>
+<td><span class="math inline">\(f_s\)</span></td>
+<td>Sampling frequency</td>
+<td>Sampling and aliasing</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\omega\)</span></td>
+<td>Angular frequency in radians per sample</td>
+<td>The DTFT</td>
+</tr>
+<tr>
+<td><span class="math inline">\(X(e^{j\omega})\)</span></td>
+<td>Discrete-time Fourier transform of <span class="math inline">\(x[n]\)</span></td>
+<td>The DTFT</td>
+</tr>
+<tr>
+<td><span class="math inline">\(H(e^{j\omega})\)</span></td>
+<td>Frequency response of a system</td>
+<td>LTI systems</td>
+</tr>
+<tr>
+<td><span class="math inline">\(z\)</span></td>
+<td>Complex <span class="math inline">\(z\)</span>-transform
+variable</td>
+<td>The <span class="math inline">\(z\)</span>-transform</td>
+</tr>
+<tr>
+<td><span class="math inline">\(h[n]\)</span></td>
+<td>Impulse response</td>
+<td>Convolution</td>
+</tr>
+<tr>
+<td><span class="math inline">\(R\)</span></td>
+<td>Passband ripple or a covariance matrix, according to context</td>
+<td>Filter specifications and matched filtering</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\varepsilon\)</span></td>
+<td>Small positive numerical-stability or timing-error quantity,
+according to context</td>
+<td>Adaptive filtering and sampling jitter</td>
+</tr>
+</tbody>
+</table>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
@@ -5458,7 +5540,7 @@ those relationships are actually true.</p>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
-      var defaultMathRenderer = 'mathmlmathjax';
+      var defaultMathRenderer = 'mathjaxmathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';

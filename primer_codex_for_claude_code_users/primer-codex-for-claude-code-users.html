@@ -1481,10 +1481,10 @@ September 2026) lists the files Claude Code loads, and
 instructions live in <code>AGENTS.md</code> gives Claude Code nothing.
 The agent still works — it reads code, runs tests, follows your prompt —
 but your build commands, generated-file policy, and review rules are
-simply absent from its context, and nothing in the session announces
-their absence. That is the worst shape of failure for an instruction
-system: silent, and indistinguishable from a model that chose to ignore
-the rules.</p>
+absent from its context, and nothing in the session announces their
+absence. That is the worst shape of failure for an instruction system:
+silent, and indistinguishable from a model that chose to ignore the
+rules.</p>
 <p>Anthropic documents two fixes, and both are officially recommended
 rather than community workarounds. The first is a one-line
 <code>CLAUDE.md</code>:</p>
@@ -1776,9 +1776,9 @@ because each tool wants the same information in a different file
 format.</p>
 <p>The most mature tool aimed at exactly this problem is
 <strong>Ruler</strong> (<code>github.com/intellectronica/ruler</code>,
-published to npm as <code>@intellectronica/ruler</code>). At the time of
-writing it has roughly 2,900 GitHub stars and 160 forks, over 1,000
-commits, an MIT licence, and real continuous integration. That
+published to npm as <code>@intellectronica/ruler</code>). As of
+September 2026, it had roughly 2,900 GitHub stars and 160 forks, over
+1,000 commits, an MIT licence, and real continuous integration. That
 combination matters more than the star count: this is a category where
 half-finished scripts are common, and Ruler is the one with evidence of
 sustained maintenance.</p>
@@ -2620,7 +2620,7 @@ one-to-one feature. Use a different layer of the system.</li>
 </ul>
 <p>The labels describe the capability, not the product quality. A
 partial equivalent can be the better tool for a particular job. It
-simply requires a deliberate translation.</p>
+requires a deliberate translation.</p>
 <h2 data-number="7.1" id="start-with-the-job-not-the-feature-name"><span class="header-section-number">7.1</span> Start With the Job, Not the
 Feature Name</h2>
 <p>Claude Code users often carry a feature-shaped mental model into
@@ -2778,8 +2778,7 @@ mostly procedural guidance:</p>
 harness-specific behaviour. Examples include a special invocation
 syntax, a particular subagent type, a lifecycle hook, or an assumed tool
 name. Preserve the workflow and rewrite the parts that refer to those
-mechanisms. Do not preserve a command name simply because it appears in
-the old skill.</p>
+mechanisms. The old command name alone is no reason to preserve it.</p>
 <p>Keep three kinds of guidance separate:</p>
 <ul>
 <li><strong>Repository guidance:</strong> conventions that should apply
@@ -3080,7 +3079,7 @@ server entry carries a <code>type</code> field — <code>stdio</code>,
 that costs people an afternoon: an entry with a <code>url</code> but no
 explicit <code>type</code> is read as <code>stdio</code>, which cannot
 work for a remote server, and the entry is skipped. The failure is a
-server that simply is not there, not an error message. Always set
+server that is not there, not an error message. Always set
 <code>type</code> explicitly.</p>
 <p>Codex CLI reads TOML tables from <code>~/.codex/config.toml</code>
 for user scope, or <code>.codex/config.toml</code> for project scope.
@@ -3741,10 +3740,10 @@ new file and hides whatever else changed inside it.</p>
 <p>Do not copy a large <code>CLAUDE.md</code> into
 <code>AGENTS.md</code> instead of importing it. Duplication looks
 convenient during the first migration and becomes a maintenance defect
-as soon as a command, directory name, test rule, or safety constraint
-changes in one file but not the other. A duplicated instruction can also
-be more dangerous than a missing instruction: the agent receives two
-plausible rules and has to guess which one wins.</p>
+when a command, directory name, test rule, or safety constraint changes
+in one file but not the other. A duplicated instruction can also be more
+dangerous than a missing instruction: the agent receives two plausible
+rules and has to guess which one wins.</p>
 <p>Verify the result rather than assuming it. Open a read-only session
 in each harness and ask it to name the repository’s build command, its
 source-of-truth document, and one specific constraint that appears only
@@ -3804,8 +3803,8 @@ important shared context: the primer layout, containerised rendering
 requirement, <code>STYLE_GUIDE.md</code>, and the instruction to
 preserve unrelated work. A Codex bridge should point at those rules
 rather than restating them. If a rule later proves useful to both
-harnesses but is currently buried in Claude-specific prose, extract that
-rule into a neutral document and make both adapters reference it.</p>
+harnesses but is buried in Claude-specific prose, extract that rule into
+a neutral document and make both adapters reference it.</p>
 <h2 data-number="9.3" id="roll-out-in-a-branch-one-capability-at-a-time"><span class="header-section-number">9.3</span> Roll Out in a Branch, One
 Capability at a Time</h2>
 <p>Do the first Codex run on a branch or worktree with a clean, known
@@ -4391,10 +4390,10 @@ schemas change between releases.</li>
 configuration example in this primer was accurate against the
 documentation cited, and a renamed or relocated key will fail quietly
 rather than loudly — a misspelled field in a TOML or JSON configuration
-file usually means the feature is simply not configured, not that you
-get an error. Sanity-check exact field names against current
-documentation before automating anything, and prefer a test that proves
-the setting took effect over an assumption that the file is correct.</p>
+file usually means the feature is not configured, not that you get an
+error. Sanity-check exact field names against current documentation
+before automating anything, and prefer a test that proves the setting
+took effect over an assumption that the file is correct.</p>
 <p>The architectural advice around those details does not depend on
 them. A single canonical instruction file with a real import, a bounded
 rollout, an explicit safety boundary, and a fair evaluation method

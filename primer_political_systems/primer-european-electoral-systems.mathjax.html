@@ -242,10 +242,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -614,7 +616,7 @@ Became Governments</a>
 <li><a href="#sweden" id="toc-sweden"><span class="toc-section-number">5.1.9</span> Sweden</a></li>
 <li><a href="#romania" id="toc-romania"><span class="toc-section-number">5.1.10</span> Romania</a></li>
 </ul></li>
-<li><a href="#vote-to-seat-snapshot-table-illustrative-rounded" id="toc-vote-to-seat-snapshot-table-illustrative-rounded"><span class="toc-section-number">5.2</span> Vote-To-Seat Snapshot Table
+<li><a href="#vote-to-seat-snapshot-table-illustrative-rounded" id="toc-vote-to-seat-snapshot-table-illustrative-rounded"><span class="toc-section-number">5.2</span> Vote-to-Seat Snapshot Table
 (Illustrative, Rounded)</a></li>
 <li><a href="#comparative-summary" id="toc-comparative-summary"><span class="toc-section-number">5.3</span> Comparative Summary</a>
 <ul>
@@ -1465,7 +1467,7 @@ the 2024 election and formation figures, not the current composition of
 a later cabinet. Sources: <a href="https://data.ipu.org/parliament/RO/RO-LC01/election/RO-LC01-E20241201/">IPU’s
 parliament-supplied seat record</a> and <a href="https://www.romania-actualitati.ro/news-in-english/centralization-of-parliamentary-election-votes-completed-id202704.html">Radio
 România’s report of the electoral authority’s completed count</a>.</p>
-<h2 data-number="5.2" id="vote-to-seat-snapshot-table-illustrative-rounded"><span class="header-section-number">5.2</span> Vote-To-Seat Snapshot Table
+<h2 data-number="5.2" id="vote-to-seat-snapshot-table-illustrative-rounded"><span class="header-section-number">5.2</span> Vote-to-Seat Snapshot Table
 (Illustrative, Rounded)</h2>
 <p>The table below is intentionally approximate and decision-oriented.
 It is designed to anchor pattern recognition, not replace official
@@ -2313,7 +2315,7 @@ and party-list elections.</li>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
-      var defaultMathRenderer = 'mathmlmathjax';
+      var defaultMathRenderer = 'mathjaxmathjax';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';

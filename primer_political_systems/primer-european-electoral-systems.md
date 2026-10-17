@@ -385,7 +385,7 @@ Sweden's 13 September 2026 election gave Socialdemokraterna 28.02 percent and 99
 
 Romania's 1 December 2024 parliamentary election gave PSD about 22 percent of the Chamber of Deputies vote and 86 of the 331 seats at that election. Seven parties won ordinary list seats, alongside 19 minority representatives; no party held a majority. The government formed after the election brought together PSD, PNL, and UDMR, with support from the minority group. Governing consequence: thresholds reduced the field without eliminating coalition bargaining; the separately elected presidency did not replace the need for parliamentary support. These are the 2024 election and formation figures, not the current composition of a later cabinet. Sources: [IPU's parliament-supplied seat record](https://data.ipu.org/parliament/RO/RO-LC01/election/RO-LC01-E20241201/) and [Radio România's report of the electoral authority's completed count](https://www.romania-actualitati.ro/news-in-english/centralization-of-parliamentary-election-votes-completed-id202704.html).
 
-### Vote-To-Seat Snapshot Table (Illustrative, Rounded)
+### Vote-to-Seat Snapshot Table (Illustrative, Rounded)
 
 The table below is intentionally approximate and decision-oriented. It is designed to anchor pattern recognition, not replace official electoral returns.
 

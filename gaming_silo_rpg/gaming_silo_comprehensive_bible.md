@@ -22,7 +22,7 @@ The Silo is a perfect cylinder, roughly 100 meters in diameter, extending approx
 The Silo is built of "Silo-Crete"—a specialised, high-density, self-healing concrete reinforced with a proprietary titanium-steel alloy.
 *   **The Rim Walls:** The exterior walls are 5 meters thick, designed to withstand seismic shifts and the immense pressure of the earth.
 *   **Surfaces:** In the Up Top, concrete is polished or covered in synthetic tiles. In the Down Deep, the concrete is bare, stained with oil, and chipped from decades of industrial use.
-*   **The "Seams":** Every 12 levels, there is a "Structural Seam"—a massive expansion joint. These levels (12, 24, 36, etc.) are prone to "creaking" during minor tremors, which citizens call "The Silo's Breath."
+*   **The "Seams":** Every 12 levels, there is a "Structural Seam"—a massive expansion joint. These levels (12, 24, 36, etc.) are prone to "creaking" during minor tremors, which citizens call "The Silo's Breath".
 
 #### 1.1.3 The Stairs: Vertical Life
 The staircase is not just a path; it is the most important piece of infrastructure in the Silo.
@@ -31,7 +31,7 @@ The staircase is not just a path; it is the most important piece of infrastructu
 *   **Drafting and Lane Etiquette:** 
     *   *The Fast Lane (Inner Rail):* Reserved for Porters and emergency personnel. 
     *   *The Slow Lane (Outer Wall):* For the elderly, those carrying heavy loads, and resting travellers.
-    *   *Drafting:* Porters often walk in "chains," with the lead Porter breaking the air resistance. It is a social faux pas for a non-Porter to attempt to draft.
+    *   *Drafting:* Porters often walk in "chains", with the lead Porter breaking the air resistance. It is a social faux pas for a non-Porter to attempt to draft.
 *   **Vertical Distance:** There are approximately 50 steps between levels. A traveller from Level 1 to Level 144 must climb or descend over 7,000 individual steps.
 
 ---
@@ -46,7 +46,7 @@ The Silo uses a "Labour-Value Exchange" managed by the Supply Department and enf
     *   *White Chits (1 Unit):* The price of a baseline algae-paste meal.
     *   *Blue Chits (10 Units):* A day's wages for a labourer.
     *   *Red Chits (100 Units):* A month's savings for most. Used for major purchases like a new coat or a cohabitation permit fee.
-*   **The Black Market (Scrap):** Because "Chits" are tracked, illegal transactions use "Scrap."
+*   **The Black Market (Scrap):** Because "Chits" are tracked, illegal transactions use "Scrap".
     *   *High-Value Scrap:* Copper wire, un-pitted screws, functional LED bulbs, and "relic" plastic.
 
 #### 1.2.2 Detailed Price List (Sample Costs)
@@ -59,11 +59,11 @@ The Silo uses a "Labour-Value Exchange" managed by the Supply Department and enf
 *   **Cohabitation Permit Application:** 250 Units (Non-refundable)
 
 #### 1.2.3 Scarcity and the "Rule of Three"
-In the Silo, nothing is ever "new." Everything is on its third, fourth, or fifth life.
+In the Silo, nothing is ever "new". Everything is on its third, fourth, or fifth life.
 1.  **Primary Use:** The item serves its intended function (e.g., a welding torch).
 2.  **Repurposed Use:** The item breaks and is turned into something else (e.g., the torch handle becomes a door handle).
 3.  **Scrap Use:** The item is melted down or stripped for raw elements (e.g., the metal is melted for rebar).
-*   *GM Tip:* When players find "loot," never describe it as a "new flashlight." It is a "dim, cracked flashlight with a taped-together battery housing."
+*   *GM Tip:* When players find "loot", never describe it as a "new flashlight". It is a "dim, cracked flashlight with a taped-together battery housing".
 
 ---
 
@@ -75,20 +75,20 @@ The Silo is a managed population. Every individual is a resource to be optimised
 The population is strictly capped at 10,000. 
 *   **The Lottery Draw:** When a death is registered, a Lottery Draw is scheduled for exactly 48 hours later. 
 *   **The Eligibility Points:** Couples gain points for their labour records, lack of disciplinary history, and genetic health. These points translate into "tokens" in the digital lottery drum.
-*   **The Window:** If you win, you have 365 days. If the woman does not conceive in that time, the Medical Department reinstalls the birth control implant. This leads to a culture of extreme pressure, "conception rituals," and often, the breakdown of marriages if the window closes without success.
+*   **The Window:** If you win, you have 365 days. If the woman does not conceive in that time, the Medical Department reinstalls the birth control implant. This leads to a culture of extreme pressure, "conception rituals", and often, the breakdown of marriages if the window closes without success.
 
 #### 1.3.2 Education: The Indoctrination Years
-*   **Ages 5-10 (Foundation):** Children attend "Level Schools." The curriculum is 50% literacy/math and 50% "Pact Memorisation." They are taught to recite the history of the "Great Ruin" caused by those who lived before the Silo.
+*   **Ages 5-10 (Foundation):** Children attend "Level Schools". The curriculum is 50% literacy/math and 50% "Pact Memorisation". They are taught to recite the history of the "Great Ruin" caused by those who lived before the Silo.
 *   **Ages 11-14 (Assessment):** Children are tested weekly on their aptitudes.
     *   *Visual-Spatial:* Candidates for Mechanical/Mining.
     *   *Linguistic/Logic:* Candidates for IT/Judicial/Supply.
     *   *Interpersonal:* Candidates for Nursing/Mayor's Office/Porters.
-*   **The Shadow Day:** On their 14th birthday, the child is matched with an adult "Shadow." They leave their family apartment and move into the apprentice dorms or the Shadow's apartment.
+*   **The Shadow Day:** On their 14th birthday, the child is matched with an adult "Shadow". They leave their family apartment and move into the apprentice dorms or the Shadow's apartment.
 
 #### 1.3.3 Marriage and the Space Crisis
 *   **Vertical Mobility:** Marriage is the only way many citizens can move to a better level. An ambitious Mechanical worker might marry an IT clerk to move from Level 130 to Level 30.
 *   **The Permit:** Judicial must approve all marriages. They check for genetic compatibility (to prevent inbreeding) and political stability.
-*   **The Partition Life:** Most families live in "Tiers." A 20-square-meter apartment might house a married couple and their Shadow. Privacy is a luxury afforded only to the Up Top.
+*   **The Partition Life:** Most families live in "Tiers". A 20-square-meter apartment might house a married couple and their Shadow. Privacy is a luxury afforded only to the Up Top.
 
 #### 1.3.4 Death: The Final Harvest
 *   **The Composting Protocol:** Death is not a time for grief; it is a time for reclamation.
@@ -97,11 +97,9 @@ The population is strictly capped at 10,000.
 
 ---
 
-*(Continuing to Chapter 2...)*
-
 ## Chapter 2: The Law & the Panopticon
 
-In the Silo, "justice" is a secondary concern to "order." The legal system is designed to identify and remove biological and social friction. To the Game Master, Chapter 2 outlines the mechanics of fear, the rigid hierarchy of enforcement, and the specific ways Judicial maintains a state of perpetual, low-level paranoia.
+In the Silo, "justice" is a secondary concern to "order". The legal system is designed to identify and remove biological and social friction. To the Game Master, Chapter 2 outlines the mechanics of fear, the rigid hierarchy of enforcement, and the specific ways Judicial maintains a state of perpetual, low-level paranoia.
 
 ### 2.1 The Two Faces of Order
 
@@ -109,7 +107,7 @@ The Silo's enforcement is split between the civilian-facing Sheriff and the shad
 
 #### 2.1.1 The Sheriff (The Peacekeeper)
 The Sheriff’s Office is an ancient institution, established by the Founders to handle interpersonal conflict. 
-*   **The Mandate:** Investigating theft, assault, domestic disturbances, and "public nuisance." The Sheriff is tasked with keeping the citizens from killing each other.
+*   **The Mandate:** Investigating theft, assault, domestic disturbances, and "public nuisance". The Sheriff is tasked with keeping the citizens from killing each other.
 *   **The Election:** Every 4 years, the Sheriff is elected by a popular vote. This makes the Sheriff beholden to public opinion, unlike any other department.
 *   **The Deputies:** A small, professional force. They are the only citizens authorised to use physical force, yet they are strictly forbidden from carrying firearms. Their primary tools are:
     *   *The Baton:* A heavy, vulcanised rubber club.
@@ -123,13 +121,13 @@ Judicial is not elected. They are an opaque, self-perpetuating bureaucracy that 
 *   **The Clerks:** Judicial "Clerks" are more than administrators; they are inquisitors. They spend decades studying the millions of words in The Pact to find precedents for any action they wish to take.
 *   **The Secret Police (Friends of the Silo):** Judicial does not have a uniformed military. Instead, they command a shadow network of informants. 
     *   *Recruitment:* Judicial "recruits" by catching citizens in minor infractions and offering them immunity in exchange for names.
-    *   *Operation:* They report on "Shadow Talk," relic possession, and signs of "The Syndrome."
+    *   *Operation:* They report on "Shadow Talk", relic possession, and signs of "The Syndrome".
 
 ---
 
 ### 2.2 The Justice Process
 
-The Silo does not recognise the concept of a "fair trial." There are no defence attorneys, no juries, and no appeals.
+The Silo does not recognise the concept of a "fair trial". There are no defence attorneys, no juries, and no appeals.
 
 #### 2.2.1 The Arrest and the Holding Cells
 Most arrests happen in the middle of the night. 
@@ -154,7 +152,7 @@ A Hearing is a ritual of confirmation, not an inquiry.
 The Silo is a Panopticon—a structure designed so that the inhabitants never know when they are being watched.
 
 #### 2.3.1 The Camera Grid
-*   **Visible Cameras:** Located at stair landings and cafeteria entrances. They are bulky, slow-moving, and often used as "decoys." Citizens know where they are and avoid them.
+*   **Visible Cameras:** Located at stair landings and cafeteria entrances. They are bulky, slow-moving, and often used as "decoys". Citizens know where they are and avoid them.
 *   **Hidden "Pinhole" Cameras:** Maintained by IT but accessed by Judicial. These are hidden in light fixtures, air vents, and even inside certain pieces of machinery. 
 *   **Technical Degradation:** Many cameras are 200 years old. The images are grainy, black-and-white, and often fail. This creates "Blind Spots"—the only places where real rebellion can be planned.
 
@@ -182,12 +180,12 @@ Owning a "Relic" is the fastest way to The Cleaning.
 #### 2.4.2 Sedition and "The Desired Word"
 The most dangerous thing in the Silo is a thought that travels. 
 *   **"I want to go outside":** These are the five words that end a life. Under The Pact, once these words are spoken and witnessed, they cannot be retracted. Even the Mayor cannot pardon you.
-*   **The Mechanism:** The words are seen as a biological contagion. The person who says them is "infected" with a desire that could spread and cause a Silo-wide uprising. Execution (Cleaning) is the only "cure."
+*   **The Mechanism:** The words are seen as a biological contagion. The person who says them is "infected" with a desire that could spread and cause a Silo-wide uprising. Execution (Cleaning) is the only "cure".
 
 
 ## Chapter 3: The Departments (the Five Pillars)
 
-The Silo is not a monolith; it is an uneasy alliance of five major bureaucratic and industrial powers. Each department is a silo within the Silo—possessing its own culture, its own secrets, and its own unique leverage over the others. A citizen’s primary identity is not "Silo resident," but "Mechanic," "Supply Clerk," or "IT Tech."
+The Silo is not a monolith; it is an uneasy alliance of five major bureaucratic and industrial powers. Each department is a silo within the Silo—possessing its own culture, its own secrets, and its own unique leverage over the others. A citizen’s primary identity is not "Silo resident", but "Mechanic", "Supply Clerk", or "IT Tech".
 
 ### 3.1 IT (Information Technology): The Wardens of Knowledge
 IT is the most powerful and the most hated department. They are located on Levels 33 and 34, a physical and social barrier between the Up Top and the Mids.
@@ -195,7 +193,7 @@ IT is the most powerful and the most hated department. They are located on Level
 #### 3.1.1 The Cultural Aesthetic
 IT levels are unnervingly quiet. While the rest of the Silo is a cacophony of voices and machinery, IT is the domain of low-frequency humming and clicking keyboards. 
 *   **The Climate:** Because the server mainframes generate immense heat but require cool air to function, IT levels are kept at a constant 15°C (60°F). IT workers are identifiable by their pale skin and their heavy, multi-layered "Vests"—knitted garments worn over their blue uniforms.
-*   **The Temperament:** IT techs are groomed for detachment. They are taught that they are the keepers of "The Order." They view the other departments as "The Friction"—necessary but chaotic elements that must be managed.
+*   **The Temperament:** IT techs are groomed for detachment. They are taught that they are the keepers of "The Order". They view the other departments as "The Friction"—necessary but chaotic elements that must be managed.
 
 #### 3.1.2 Internal Hierarchy
 *   **The Head of IT:** Frequently the most powerful person in the Silo, even more so than the Mayor. They control the servers that run the Lottery, the digital ledgers, and the internal comms.
@@ -213,7 +211,7 @@ Mechanical is the soul of the Down Deep. Based primarily on Level 144, they are 
 #### 3.2.1 The Brotherhood of Oil
 Mechanical operates less like a department and more like a massive, extended family. 
 *   **The Culture:** They value physical strength, technical ingenuity, and fierce loyalty. They have their own code of honour: "The Steam Must Flow." They are the only department that routinely ignores Judicial's minor mandates, knowing that Judicial is too afraid to come down to Level 144 to enforce them.
-*   **The Language:** They speak the thickest "Deep Talk." It is a language of short, punchy commands and technical jargon that outsiders find impenetrable.
+*   **The Language:** They speak the thickest "Deep Talk". It is a language of short, punchy commands and technical jargon that outsiders find impenetrable.
 
 #### 3.2.2 The Great Generator (The Heart)
 Level 144 is a cathedral of steel. The Generator is a massive steam turbine, three stories tall, that converts geothermal heat into the Silo’s lifeblood. 
@@ -249,12 +247,12 @@ Medical is a department defined by the constant, agonising reality of limited re
 #### 3.4.1 The Ethics of Scarcity
 Every doctor and nurse in the Silo is a master of triage. They are taught from day one: "You cannot save everyone."
 *   **The Pharmaceutical Vault:** The most guarded place in the Silo after the IT server rooms. They possess the last remaining stocks of pre-Silo antibiotics and anaesthetics. These are used only for "High-Value Citizens" or in extreme emergencies.
-*   **The Syndrome:** Medical is the primary investigator of "The Syndrome." They treat it not as a political crime, but as a neurological failure. They are the ones who prescribe the "docility drugs" often added to a dissident's rations.
+*   **The Syndrome:** Medical is the primary investigator of "The Syndrome". They treat it not as a political crime, but as a neurological failure. They are the ones who prescribe the "docility drugs" often added to a dissident's rations.
 
 #### 3.4.2 Population Control (The Implant)
 Medical’s most important task is the management of the birth control implants. 
 *   **The Surgery:** It is a routine, five-minute procedure, but it is the ultimate symbol of the Silo’s control over its citizens' bodies.
-*   **The Mystery:** Occasionally, an implant fails "naturally." Medical must determine if it was a technical failure or an illegal tampering.
+*   **The Mystery:** Occasionally, an implant fails "naturally". Medical must determine if it was a technical failure or an illegal tampering.
 
 #### 3.4.3 Departmental Leverage: Health Records
 Everyone visits Medical. Everyone has secrets—unregistered illnesses, signs of addiction, or physical evidence of a fight. Medical's leverage is their database of every citizen's physical and mental vulnerabilities.
@@ -274,7 +272,7 @@ They are seen as simple "Dirt Farmers" by the Up Top, but they are incredibly sa
 *   **The Rivalry with Supply:** Hydroponics hates Supply for taking the majority of their yields while providing the lowest-quality seeds and fertilisers.
 
 #### 3.5.3 Departmental Leverage: Famine
-Hydroponics can trigger a famine with a single "fungal outbreak." They can also manipulate the oxygen levels in specific sectors, inducing lethargy or euphoria to suit their political needs.
+Hydroponics can trigger a famine with a single "fungal outbreak". They can also manipulate the oxygen levels in specific sectors, inducing lethargy or euphoria to suit their political needs.
 
 
 ## Chapter 4: The 144 Levels (the Gazetteer)
@@ -285,7 +283,7 @@ To the citizens, the Silo is a vertical continent. A person born on Level 130 mi
 *Acoustics: Low, humming silence. Lighting: Bright, sterile white. Smell: Floor wax and cold air.*
 
 *   **Level 1: The Threshold.**
-    *   *The Cafeteria:* A massive, semicircular room containing the Viewport—a 10-meter screen showing the dead hills outside. It is the only place in the Silo with a view of "distance."
+    *   *The Cafeteria:* A massive, semicircular room containing the Viewport—a 10-meter screen showing the dead hills outside. It is the only place in the Silo with a view of "distance".
     *   *The Sheriff’s Station:* High-security, containing the armorary (batons/pepper spray) and the primary holding cells.
     *   *The Airlock:* A massive, three-stage circular vault door. It has not been opened in 20 years.
 *   **Levels 2-10: The Judicial Labyrinth.**
@@ -303,7 +301,7 @@ To the citizens, the Silo is a vertical continent. A person born on Level 130 mi
     *   The landings here are widened illegally by the residents. Thousands of people gather here daily to trade physical chits for black-market goods. It is the most vibrant and chaotic place in the Silo.
 *   **Levels 60-80: The Hydroponic Rings.**
     *   *Level 60 (The Orchard):* Contains the rare, stunted fruit trees. Heavily guarded.
-    *   *Level 72 (The Soil Vats):* The location of "Soil Duty." A humid, silent floor where the dead are processed.
+    *   *Level 72 (The Soil Vats):* The location of "Soil Duty". A humid, silent floor where the dead are processed.
 *   **Level 84: Water Reclamation.**
     *   Home to the "Sand Beds"—massive, multi-story filters. The sound of rushing water is deafening.
 *   **Levels 90-96: The Textile Sweatshops.**
@@ -334,7 +332,7 @@ To understand the Silo, you must understand the "Invisible World"—the traditio
 
 *   **The Up Top "High Speak":** Precise, slow, and overly formal. They use complex grammar to show status. They say "It is necessary to maintain the air scrubbers."
 *   **The Mids "Chit-Talk":** Fast, slang-heavy, and focused on barter. They say "Need a new filter? What's your chit count?"
-*   **The Down Deep "Deep Talk":** Grunted, truncated, and shouted. They speak in "Vibrations." They say "Scrubber. Bad. Fix. Now."
+*   **The Down Deep "Deep Talk":** Grunted, truncated, and shouted. They speak in "Vibrations". They say "Scrubber. Bad. Fix. Now."
 
 ### 5.2 Cultural Rituals
 
@@ -342,15 +340,15 @@ To understand the Silo, you must understand the "Invisible World"—the traditio
 When a Cleaning is announced, the Silo stops. It is a day of terrifying celebration. 
 *   **The Viewing:** Cafeterias are packed. People climb on tables to see the Viewport. 
 *   **The Cheer:** When the lens is wiped, the crowd erupts. It is a release of tension. For a few seconds, they see a "beautiful" world (though they don't know it's a projection).
-*   **The Silence:** When the Cleaner falls and dies, the Silo goes into a 24-hour period of "Pact Silence." No one is supposed to speak above a whisper.
+*   **The Silence:** When the Cleaner falls and dies, the Silo goes into a 24-hour period of "Pact Silence". No one is supposed to speak above a whisper.
 
 #### 5.2.2 The "Naming" Day
 Because names are reused (to save space in the digital ledgers), children are not "named" at birth. They are given a number. On their 5th birthday, if they have survived, they are "Gifted" the name of a deceased ancestor in a communal ceremony.
 
 ### 5.3 Illegal Sub-Factions
 
-*   **The Flame Watchers:** A cult that believes fire is a purifying force. They hoard matches and lighters (strictly illegal due to oxygen consumption). They believe the Silo is a "tomb" and that fire will "wake the world."
-*   **The Scrap Syndicates:** The mafia of the Mids. They hijack Supply shipments and run illegal gambling rings. Their leader, "Auntie Cinder," is said to have more chits than the Mayor.
+*   **The Flame Watchers:** A cult that believes fire is a purifying force. They hoard matches and lighters (strictly illegal due to oxygen consumption). They believe the Silo is a "tomb" and that fire will "wake the world".
+*   **The Scrap Syndicates:** The mafia of the Mids. They hijack Supply shipments and run illegal gambling rings. Their leader, "Auntie Cinder", is said to have more chits than the Mayor.
 *   **The Shadow Doctors:** Desperate medics who have stolen enough supplies to set up clandestine clinics. They perform the "Illegal Cut"—removing birth control implants for couples who lost the Lottery.
 
 
@@ -372,7 +370,7 @@ Located on Levels 20, 50, 80, 110, and 140, these are massive, room-sized machin
 
 #### 6.1.2 Signs of Failure
 *   **Stage 1 (The Headache):** PR 10. Citizens become irritable and sluggish. 
-*   **Stage 2 (The Panic):** PR 25. Vision blurs. The air feels "thick" and "tastes like pennies."
+*   **Stage 2 (The Panic):** PR 25. Vision blurs. The air feels "thick" and "tastes like pennies".
 *   **Stage 3 (Hypoxia):** PR 50. Unconsciousness occurs. Death follows within 20 minutes.
 *   *GM Tip:* Use an air scrubber failure to force players to climb. If the Level 110 scrubber fails, the players must climb to Level 80 to find breathable air, fighting through the panicked crowds on the stairs.
 
@@ -396,7 +394,7 @@ The "Sand Beds" are multi-story filters filled with progressively finer layers o
 The Generator (Level 144) is the only source of electricity. 
 *   **The Steam Loop:** Water is pumped down into the geothermal hot-spot beneath the Silo. It returns as high-pressure steam that spins the turbine.
 *   **The Batteries:** There are no large-scale batteries in the Silo. Electricity must be consumed as it is produced. This is why "Surplus Power" is never wasted; IT uses it to run complex background calculations, and Mechanical uses it for heavy smelting.
-*   **Load Shedding:** If the Generator is struggling, the Mayor orders "Load Shedding." Power is cut to non-essential levels (usually the Slums or the Mids) to keep IT and Medical functioning. This is a primary source of civil unrest.
+*   **Load Shedding:** If the Generator is struggling, the Mayor orders "Load Shedding". Power is cut to non-essential levels (usually the Slums or the Mids) to keep IT and Medical functioning. This is a primary source of civil unrest.
 
 ---
 
@@ -406,9 +404,9 @@ Medicine in the Silo is a blend of high-tech remnants and desperate herbalism.
 
 ### 7.1 The Triage Protocol
 
-Doctors are trained in "The Math of Mercy."
+Doctors are trained in "The Math of Mercy".
 *   **Productivity Rating:** A citizen's priority for surgery or rare medicine is tied to their work record. A "Friend of the Silo" or a senior Mechanic is always treated before a "unshadowed" labourer or a retiree.
-*   **The Pharmaceuticals:** Antibiotics are the "Golden Chits." They are locked in a vault requiring two keys (one held by the Chief Medical Officer, one by Judicial). They are only used for infections that threaten to become Silo-wide epidemics.
+*   **The Pharmaceuticals:** Antibiotics are the "Golden Chits". They are locked in a vault requiring two keys (one held by the Chief Medical Officer, one by Judicial). They are only used for infections that threaten to become Silo-wide epidemics.
 
 ### 7.2 The Syndrome (The Madness of Walls)
 
@@ -416,8 +414,8 @@ Doctors are trained in "The Math of Mercy."
 
 #### 7.2.1 Symptoms
 *   **Stage 1:** Involuntary twitching of the hands. An obsession with the Viewport. 
-*   **Stage 2:** "The Whispers." The patient begins to hear the wind or see "the green" in their dreams. 
-*   **Stage 3:** The Breakdown. The patient begins to run or climb frantically, screaming that they "need to breathe."
+*   **Stage 2:** "The Whispers". The patient begins to hear the wind or see "the green" in their dreams.
+*   **Stage 3:** The Breakdown. The patient begins to run or climb frantically, screaming that they "need to breathe".
 *   *The Treatment:* In the early stages, "Docility Drugs" (lithium and sedatives) are added to the patient's water. In the late stages, the patient is arrested by the Sheriff and usually sent to The Cleaning.
 
 ---
@@ -448,24 +446,24 @@ Items that an adventurer in another game would ignore are priceless in the Silo.
 
 ## Chapter 9: The Daily Simulation (Routines and Calendars)
 
-To make the Silo feel "alive," the GM must manage the passage of time. Life in the Silo is rhythmic, punctuated by the mechanical cycles of the structure.
+To make the Silo feel "alive", the GM must manage the passage of time. Life in the Silo is rhythmic, punctuated by the mechanical cycles of the structure.
 
 ### 9.1 The "Clock" of the Silo
 
 There is no sun to mark the day. Time is defined by the **Illumination Cycle**.
-*   **06:00 (The Dawn Glow):** The main halogen lights in the hallways and stairwells flicker from dim red to warm yellow. This is "Morning."
-*   **06:00 - 08:00 (The Rush):** The stairs are at their most congested. 10,000 people are moving to their workplaces. Porters are running "Express Routes."
+*   **06:00 (The Dawn Glow):** The main halogen lights in the hallways and stairwells flicker from dim red to warm yellow. This is "Morning".
+*   **06:00 - 08:00 (The Rush):** The stairs are at their most congested. 10,000 people are moving to their workplaces. Porters are running "Express Routes".
 *   **12:00 (Mid-Cycle):** The lights pulse three times. This is the official lunch hour. Cafeterias on every level are at maximum capacity.
 *   **18:00 - 20:00 (The Return):** The evening rush back to the residential rings. 
-*   **22:00 (The Dimming):** The main lights fade to a low, orange "Night Light." Level curfew is not officially enforced except Up Top, but being on the stairs at night is considered suspicious and will draw the attention of the Sheriff's night deputies.
+*   **22:00 (The Dimming):** The main lights fade to a low, orange "Night Light". Level curfew is not officially enforced except Up Top, but being on the stairs at night is considered suspicious and will draw the attention of the Sheriff's night deputies.
 
 ### 9.2 The Calendar of the Dead
 
-The Silo doesn't use months like "January." They use "Cycle Months" based on the age of the Silo.
-*   **Year 242, Month 4:** This marks the time since the "Founding."
+The Silo doesn't use months like "January". They use "Cycle Months" based on the age of the Silo.
+*   **Year 242, Month 4:** This marks the time since the "Founding".
 *   **Commemoration Days:**
     *   *Founders’ Week:* A seven-day period of extra labour to "honour" the builders. Rations are often increased by 5% to prevent riots.
-    *   *The Day of the Viewport:* A day where the Mayor gives a speech about the "Horror of the Outside."
+    *   *The Day of the Viewport:* A day where the Mayor gives a speech about the "Horror of the Outside".
     *   *Legacy Day:* A holiday where citizens are encouraged to visit their ancestors' names in the digital archives.
 
 ---
@@ -498,15 +496,15 @@ Between the "Outer Ring" (living space) and the "Inner Ring" (conduits) lies a 1
 *   **The Hazard:** These shafts are used for waste-pipe maintenance. They are dark, slippery, and infested with the Silo's hardy, oversized rats. 
 
 ### 11.2 The "Ghost" Levels
-Every few decades, a level is abandoned due to structural failure, toxic leak, or "political quarantine."
+Every few decades, a level is abandoned due to structural failure, toxic leak, or "political quarantine".
 *   **Level 40 (The Sealed Library):** Rumoured to contain physical books from the Before. The airlocks are welded shut. Judicial guards this level 24/7.
-*   **Level 101 (The Flooded Tier):** A water main burst fifty years ago, and the level was never fully drained. It is a swampy, dark ruin used as a hideout for "The Syndicates."
+*   **Level 101 (The Flooded Tier):** A water main burst fifty years ago, and the level was never fully drained. It is a swampy, dark ruin used as a hideout for "The Syndicates".
 
 ---
 
 ## Chapter 12: The Syndrome and the Psychology of Walls
 
-To truly GM the Silo, you must understand the "Agoraphobia of the Soul."
+To truly GM the Silo, you must understand the "Agoraphobia of the Soul".
 
 ### 12.1 The Terror of the Open
 Citizens are not just trapped; they are *afraid* of the idea of not being trapped. 
@@ -517,7 +515,7 @@ Citizens are not just trapped; they are *afraid* of the idea of not being trappe
 In the cafeterias, people speak in code. 
 *   "The air is thin today" = Judicial is watching.
 *   "The steam is high" = Mechanical is planning a strike.
-*   "The Viewport is clear" = Someone is planning to say "The Words."
+*   "The Viewport is clear" = Someone is planning to say "The Words".
 
 
 ---
@@ -624,18 +622,18 @@ In a world of total scarcity, every object has a story, and every crime is an ac
 
 The GM should classify illegal items to determine the risk of discovery.
 
-*   **Class C (Nuisance):** Extra sugar rations, home-brewed "potato gin," unapproved clothing dyes, gambling chits. 
+*   **Class C (Nuisance):** Extra sugar rations, home-brewed "potato gin", unapproved clothing dyes, gambling chits.
     *   *Penalty:* Loss of 1 month's wages and "The Shaming" (cleaning the cafeteria floors for a week).
 *   **Class B (Theft/Sabotage):** Stolen medical supplies (non-narcotic), unauthorised tools, bypass-keys for maintenance hatches, "Deep Talk" dictionaries.
     *   *Penalty:* 2-5 years in the Mines.
-*   **Class A (Treason):** Relics (pre-Silo artefacts), maps of the "Before," radio transmitters, firearms, and birth-control tampering kits.
+*   **Class A (Treason):** Relics (pre-Silo artefacts), maps of the "Before", radio transmitters, firearms, and birth-control tampering kits.
     *   *Penalty:* The Cleaning.
 
 ### 16.2 The Anatomy of a Black Market Deal
 Transactions in the Mids don't happen in the open. 
 *   **The "Handshake":** A specialised sequence of hand signals used to identify a buyer or seller.
 *   **The Dead Drop:** Money (chits or scrap) is left in a specific stair-railing notch; the goods are left in a different location (usually an air duct or a laundry bin) an hour later.
-*   **The "Wash":** To use stolen chits, they must be "washed" through a Supply clerk who can alter the digital ledger to show the chits were earned through "Overtime Labour."
+*   **The "Wash":** To use stolen chits, they must be "washed" through a Supply clerk who can alter the digital ledger to show the chits were earned through "Overtime Labour".
 
 ---
 
@@ -657,7 +655,7 @@ The social distance between Level 1 and Level 144 is greater than the physical d
 
 ## Chapter 18: The Architecture of the "Inner Ring"
 
-While the citizens live in the "Outer Ring," the "Inner Ring" is the Silo's hidden nervous system.
+While the citizens live in the "Outer Ring", the "Inner Ring" is the Silo's hidden nervous system.
 
 ### 18.1 The Conduits
 *   **The Water Main:** A massive 1-meter wide steel pipe that carries the Silo’s lifeblood. It is always cold and sweating with condensation.
@@ -711,11 +709,11 @@ The following tables are designed for quick-generation of sensory details and mi
 | **1** | A Porter "Chain" (6+ people) running full tilt; move or be trampled. |
 | **2** | A grieving family moving a body down to the Compost. |
 | **3** | A pedlar selling "Fresh" Algae-Crisps (3 White Chits). |
-| **4** | A Sheriff’s Deputy checking IDs for a "Random Inspection." |
+| **4** | A Sheriff’s Deputy checking IDs for a "Random Inspection". |
 | **5** | A group of children playing "The Drop" with a piece of scrap. |
 | **6** | A mechanic covered in black grease, arguing with a Supply clerk. |
 | **7** | A "Shadow" crying because they hate their assigned mentor. |
-| **8** | An old man staring at the wall, whispering "The Words." |
+| **8** | An old man staring at the wall, whispering "The Words". |
 | **9** | A Judicial Clerk being carried in a sedan-chair (Extreme luxury). |
 | **10** | A sudden, localised blackout; everyone freezes in the dark. |
 
@@ -725,7 +723,7 @@ The following tables are designed for quick-generation of sensory details and mi
 
 The following is the only history allowed to be taught in the Silo schools. Any variation from this text is sedition.
 
-*   **The Age of Hubris:** Before the Silo, humanity lived on the "Surface." They built cities that touched the clouds and flew through the air in metal birds. They forgot the earth that fed them.
+*   **The Age of Hubris:** Before the Silo, humanity lived on the "Surface". They built cities that touched the clouds and flew through the air in metal birds. They forgot the earth that fed them.
 *   **The Great Fire:** Because of their greed, the people of the Before fought a war that set the sky on fire. The air became poison, and the soil became ash. 
 *   **The Founders' Sacrifice:** Foreseeing the end, the Wise Founders built the 144 Levels. They gathered the last 10,000 righteous people and sealed the doors. 
 *   **The Pact:** To ensure the Great Fire never happened again, the Founders wrote The Pact—the laws that keep us safe from our own nature. 
@@ -751,7 +749,7 @@ The Suit used in The Cleaning is a masterpiece of deceptive engineering.
 *   **The Inner Layer:** Comfortable cotton. It makes the condemned feel safe.
 *   **The Outer Layer:** A thin, synthetic polymer. It looks airtight, but it is porous to the specific nanobots of the outside. 
 *   **The Visor:** A dual-layered glass. Between the layers is a liquid-crystal display. When the airlock opens, the display activates, showing a pre-recorded, 360-degree loop of a green, lush world. 
-*   **The Seal (Heat-Tape):** This is the "kill switch." IT provides a specific tape that looks like industrial sealant but is designed to dissolve in exactly 180 seconds when exposed to the outside atmosphere. Once the tape fails, the toxic air breaches the suit.
+*   **The Seal (Heat-Tape):** This is the "kill switch". IT provides a specific tape that looks like industrial sealant but is designed to dissolve in exactly 180 seconds when exposed to the outside atmosphere. Once the tape fails, the toxic air breaches the suit.
 
 ---
 
@@ -765,7 +763,7 @@ The Suit used in The Cleaning is a masterpiece of deceptive engineering.
 
 ## Chapter 25: A Final Word on Atmosphere
 
-To run the Silo correctly, the GM must never let the players feel "safe." 
+To run the Silo correctly, the GM must never let the players feel "safe".
 *   The lights should always be a little too dim. 
 *   The air should always be a little too stale. 
 *   The food should always be a little too bland. 
@@ -777,12 +775,12 @@ The Silo is not just a building. It is a tomb that hasn't been closed yet.
 
 ## Chapter 26: The Faces of the Silo (NPC Roster)
 
-To run a setting driven by political tension and scarcity, the GM needs a robust cast of characters whose motivations intersect and conflict. Below is a roster of key NPCs across the sectors.
+To run a setting driven by political tension and scarcity, the GM needs characters whose motivations intersect and conflict. Below is a roster of key NPCs across the sectors.
 
 ### 26.1 The Up Top (the Elite & the Enforcers)
 
 *   **Mayor Tamsin Rook (The Pragmatist):** 
-    *   *Role:* The elected leader of the Silo. Currently on Level 5.
+    *   *Role:* The elected leader of the Silo, based on Level 5.
     *   *Appearance:* Elderly, sharp-eyed, uses a walking cane carved from an ancient desk leg.
     *   *Motivation:* Maintaining the balance between IT and Mechanical. She hates Judicial but knows she cannot openly oppose them.
     *   *The Secret:* She is quietly stockpiling unrecorded antibiotics, suspecting an impending conflict.
@@ -799,7 +797,7 @@ To run a setting driven by political tension and scarcity, the GM needs a robust
 *   **Merrow Hale (Head of IT):**
     *   *Role:* The true power in the Silo. Level 34.
     *   *Appearance:* Soft, pale, and constantly sweating despite the cold of the servers.
-    *   *Motivation:* Protecting "The Order." He views the citizens as livestock to be managed for the 500-year plan.
+    *   *Motivation:* Protecting "The Order". He views the citizens as livestock to be managed for the 500-year plan.
     *   *The Secret:* He holds the key to the secret elevator and regularly communicates with Silo 1.
 
 ### 26.2 The Mids (the Hustlers & the Harvesters)
@@ -998,7 +996,7 @@ These tools are meant to sit beside the GM during play. They are not new lore; t
 
 ## Chapter 31: Core Play Procedure (System-Agnostic)
 
-The Silo works best when risk feels cumulative. Use the following procedures with any base system to keep pressure rising even when the PCs technically "succeed."
+The Silo works best when risk feels cumulative. Use the following procedures with any base system to keep pressure rising even when the PCs technically "succeed".
 
 ### 31.1 When to Call for Uncertainty
 
@@ -1007,7 +1005,7 @@ Call for a roll, test, or move only when at least one of the following is true:
 *   The action risks official notice.
 *   The action risks bodily harm, exhaustion, or contamination.
 *   The action could cost scarce time, rations, tools, or social trust.
-*   Failure would make the next scene more dangerous rather than simply stop play.
+*   Failure would make the next scene more dangerous rather than stop play.
 
 If none apply, let the PCs do it. Life in the Silo is already hard enough.
 
@@ -1102,9 +1100,9 @@ These generators keep the campaign grounded in the daily grind before the big re
 | **3** | A family from another level has been reassigned into an already crowded apartment. |
 | **4** | The ration clerk's ledger does not match the actual grain sacks. |
 | **5** | A dead body cannot be moved until paperwork arrives, and everyone has to live around it. |
-| **6** | The hallway lights burn out and Supply says replacements are "pending." |
+| **6** | The hallway lights burn out and Supply says replacements are "pending". |
 | **7** | A child found something metallic in a wall cavity and refuses to say where. |
-| **8** | A local deputy is shaking people down for "inspection fees." |
+| **8** | A local deputy is shaking people down for "inspection fees". |
 | **9** | Mould creeps through an entire sleeping tier. |
 | **10** | The floor's unofficial fixer vanishes with everyone's chit box. |
 | **11** | A marriage permit is denied and both families blame each other. |

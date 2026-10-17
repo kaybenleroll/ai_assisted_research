@@ -122,7 +122,7 @@ Produce two outputs:
    - approximate words added,
    - any sections merged/trimmed.
 
-## Self-Check Before Finalizing
+## Self-Check Before Finalising
 
 Verify all checks pass:
 

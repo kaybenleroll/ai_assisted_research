@@ -325,7 +325,7 @@ Neither product becomes safe merely because its HTTP port is bound to localhost.
 
 ### When to Use OpenClaw
 
-Choose OpenClaw when one Gateway serving many channels, device nodes, WebChat, and a typed control-plane protocol are central requirements. Its Podman workflow is also attractive when you want the Gateway container and host CLI to have clearly defined roles.
+Choose OpenClaw when one Gateway serving many channels, device nodes, WebChat, and a typed control-plane protocol are central requirements. Its Podman workflow is also attractive when you want the Gateway container and host CLI to have distinct roles.
 
 ### When to Use Hermes Server
 
