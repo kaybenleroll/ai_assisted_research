@@ -37,7 +37,7 @@ Pi is mainly the second part, with a useful default tool set and a terminal inte
 
 A request follows this shape:
 
-~~~text
+```text
 your instruction
   -> session and system prompt
   -> provider and model
@@ -45,7 +45,7 @@ your instruction
   -> Pi executes the tool
   -> result enters the session
   -> model continues
-~~~
+```
 
 The model decides what it wants to do, Pi executes the request, and the operating system decides what the process may actually do.
 
@@ -55,9 +55,9 @@ Pi supplies a terminal UI, provider and model selection, context-file discovery,
 
 That is enough for:
 
-~~~text
+```text
 inspect repository -> edit file -> run tests -> inspect failure -> edit again
-~~~
+```
 
 Pi includes an MCP client as a built-in extension, while planning, subagents, browser automation, and general web search remain workflow choices. Optional `codemode` lets the model compose tool calls in JavaScript; it is off by default unless selected or enabled by an MCP server. See the [CLI tool reference](https://pi.dev/docs/latest/cli) and [codemode reference](https://pi.dev/docs/latest/codemode). You can install a package, write an extension, create a skill, or keep other capabilities outside Pi and feed their results into the session.
 
@@ -104,7 +104,7 @@ The migration order follows the table: first use existing context files and a re
 
 Pi is a Node.js package. The npm route needs Node.js 22.19 or newer; the installer checks for Node and offers to install it. The [quickstart](https://pi.dev/docs/latest/quickstart) distinguishes the managed installer, which pins dependencies, from npm, which no longer pins transitive dependencies. The two routes are alternatives, not a sequence:
 
-~~~bash
+```bash
 # Option A: the installer (macOS and Linux). Download and read it before running.
 curl -fsSL https://pi.dev/install.sh -o pi-install.sh
 grep -n 'npm install\|curl' pi-install.sh   # ~1,700 lines; find what it runs
@@ -116,7 +116,7 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 # Either way:
 pi --version
 pi --help
-~~~
+```
 
 Older tutorials use `@mariozechner/pi-coding-agent` or the `badlogic/pi-mono` repository. That npm package is deprecated and frozen at 0.73.1; new releases exist only as `@earendil-works/pi-coding-agent`, and the repository now lives at `earendil-works/pi`. Some companion repositories, including `badlogic/pi-skills`, still sit under the original account.
 
@@ -128,12 +128,12 @@ The commands above target macOS and Linux. Pi also documents [native Windows and
 
 The first session should prove the complete control loop, not demonstrate how much work Pi can do unattended. Use a disposable project:
 
-~~~bash
+```bash
 mkdir -p ~/tmp/pi-first-run && cd ~/tmp/pi-first-run
 git init
 printf '# Pi test project\n' > README.md
 pi --version
-~~~
+```
 
 Then work through this sequence:
 
@@ -143,10 +143,10 @@ Then work through this sequence:
 4. **Make one supervised change.** Restart without `--tools`. Choose a small documentation or test change. Ask Pi to explain its plan, edit only the named files, run one check, and stop.
 5. **Inspect independently.** Run `git status`, `git diff`, and the project's check command yourself. Keep or revert the change on evidence, not on Pi's confidence.
 
-~~~text
+```text
 Inspect this repository. Report the files, likely project type,
 and three useful next checks.
-~~~
+```
 
 Keep the first change deliberately observable: for example, ask Pi to add one sentence to the disposable README and then stop. Before accepting it, check the diff yourself and compare the reported check command with what actually ran. If Pi tries to install a package, alter configuration, or inspect files outside the toy project, abort and inspect the session. The exercise establishes three separate facts: whether the selected model can use tools, whether Pi loaded the intended local context, and whether the files match the task contract. A fluent answer alone establishes none of them.
 
@@ -166,14 +166,14 @@ Pi reaches a model through a provider. This section covers signing in to a hoste
 
 Either export an API key, or sign in from inside Pi. These are alternatives:
 
-~~~bash
+```bash
 export ANTHROPIC_API_KEY='<your-api-key>'   # environment variable: suits ephemeral runs
 pi
-~~~
+```
 
-~~~text
+```text
 /login
-~~~
+```
 
 `/login` stores an API key or, for some providers, a subscription credential in `~/.pi/agent/auth.json`. Protect that file, and keep secrets out of settings files, prompts, skills, and committed scripts. When several sources exist, Pi uses a `--api-key` flag first, then `auth.json`, then a `models.json` `apiKey`, then environment variables, so a stale stored login beats a freshly exported variable. `pi auth check --provider <name>` reports `ready`, `not_ready`, or `invalid` without printing a secret. Run `/model` afterwards to select a model.
 
@@ -191,7 +191,7 @@ Choose the connection by what the endpoint actually speaks. Use `/login` and `/m
 
 Ollama, LM Studio, vLLM, and SGLang (inference servers) can expose OpenAI-compatible endpoints. Pi reads them from `~/.pi/agent/models.json`, with no code:
 
-~~~json
+```json
 {
   "providers": {
     "ollama": {
@@ -202,7 +202,7 @@ Ollama, LM Studio, vLLM, and SGLang (inference servers) can expose OpenAI-compat
     }
   }
 }
-~~~
+```
 
 The `apiKey` is a dummy: Pi needs a key to treat the model as available, and Ollama ignores it. Replace the placeholder with the exact model ID served by your installation, then test its tool calling; a small model's ability to answer chat questions is insufficient. Check the context window the server allocates before blaming Pi for a lost instruction, because the server sets it. For an authenticated proxy, keep a real key out of committed JSON and use the environment interpolation documented in [models](https://pi.dev/docs/latest/models). Test one harmless tool call and one long-context task before assigning production work; protocol compatibility alone does not prove equivalent streaming, tool schemas, or token accounting.
 
@@ -215,7 +215,7 @@ A useful arrangement is a local model for routine exploration, with a hosted mod
 
 Pi has a dedicated integration with [llama.cpp](https://github.com/ggml-org/llama.cpp)'s router server, which discovers several GGUF files (llama.cpp's model file format) and loads them on demand. Start `llama-server` without `--model`, `-m`, or `-hf`; passing a model starts single-model mode, and Pi's router integration then fails. It needs a llama.cpp build with router support.
 
-~~~bash
+```bash
 llama-server \
   --models-dir ~/models \
   --no-models-autoload \
@@ -224,7 +224,7 @@ llama-server \
   --port 8080 \
   -ngl 999 \
   -c 32768
-~~~
+```
 
 `--models-dir` is where the GGUF files live, `--no-models-autoload` keeps loading explicit, `-ngl 999` offloads all layers to the GPU, and `-c 32768` sets the context per loaded model (omit it for the model's native context, which may need much more memory). The `--jinja` flag enables the model's chat template and tool calling; without it, tool calls are unreliable.
 
@@ -244,19 +244,19 @@ The table compares Pi's main execution modes and the work each suits.
 | RPC (`--mode rpc`) | JSON Lines commands on stdin, responses and events on stdout, long-lived | Another program drives Pi (RPC is remote procedure call: commands and replies over a pipe) |
 | SDK | TypeScript library inside your Node.js or Bun process | You embed Pi in an application |
 
-~~~bash
+```bash
 pi --print 'Summarize this repository without editing it'
 git diff --no-ext-diff | pi --print 'Review this diff. Return findings only.'
 pi --no-session --print 'Explain this directory'     # in-memory session, nothing saved
 pi --mode json 'Inspect the repository and report its test commands' > pi-events.jsonl
 pi --mode rpc --no-session   # driven by another program; not interactive
-~~~
+```
 
 When stdin or stdout is redirected and no mode is chosen, Pi uses print mode, and piped stdin is prepended to the prompt. For read-only review, restrict the tools:
 
-~~~bash
+```bash
 pi --no-mcp --tools read,grep,find,ls --print 'Review without changing files'
-~~~
+```
 
 `--tools` selects built-in, extension, and custom tools, but retains MCP unless an entry begins with `mcp__`. Use `--no-mcp` to disable the built-in MCP client for this review; a replacement extension needs its own controls. The [CLI reference](https://pi.dev/docs/latest/cli) lists every flag. Tool selection still runs the agent process with your operating-system permissions.
 
@@ -264,7 +264,7 @@ The distinction between print and JSON matters for automation. Print yields the 
 
 RPC keeps a Pi subprocess alive and accepts one JSON object per input line. Its `prompt` response reports acceptance, queuing, or handling, not task completion; `agent_end` can precede retry, recovery, or queued work. Wait for `agent_settled` before treating a run as finished. This small Python client illustrates the protocol for one prompt; it deliberately uses `--no-session` and a read-only tool set. Run it in a disposable directory with an authenticated model, and use the [RPC command reference](https://pi.dev/docs/latest/rpc-commands) if you add state or session operations:
 
-~~~python
+```python
 import json
 import subprocess
 
@@ -297,13 +297,13 @@ try:
 finally:
     process.terminate()
     process.wait()
-~~~
+```
 
 The client must continue draining stdout, including unrelated session events, while the agent runs; a full pipe can stall the child. In a long-lived client, correlate replies by command ID, subscribe before sending the prompt, process extension UI requests if your extensions ask questions, impose a timeout, and inspect the final assistant message for provider or tool failure. Pi's checked [typed RPC client example](https://pi.dev/docs/latest/cli-integration) provides those lifecycle details for Node.js applications.
 
 Use the [TypeScript SDK](https://pi.dev/docs/latest/sdk) when Pi should run in your Node.js or Bun process. It is not a CLI output mode. `prompt()` resolves after the run, and you dispose of the session when finished. Supply `cwd` explicitly when the target repository differs from the host process's current directory: that path determines resource discovery, context files, session grouping, and built-in tool paths. A persistent session is the default, so choose an in-memory manager when you do not want a transcript file:
 
-~~~typescript
+```typescript
 import { createAgentSession, SessionManager } from "@earendil-works/pi-coding-agent";
 
 const { session } = await createAgentSession({
@@ -316,7 +316,7 @@ try {
 } finally {
   session.dispose();
 }
-~~~
+```
 
 The SDK shares the host process's trust and credentials. In particular, embedding does not isolate an extension from your application, and the SDK does not load Pi's built-in MCP, codemode, or tool-search extensions automatically. Add them to the resource loader only when your application needs them; the [SDK](https://pi.dev/docs/latest/sdk) and [MCP](https://pi.dev/docs/latest/mcp) pages give the current setup. Choose RPC when a separate Pi process and a language-neutral protocol are useful; choose the SDK when you need direct TypeScript control of sessions, tools, and events.
 
@@ -332,13 +332,13 @@ Keep the mechanisms separate. A context file is always-on project guidance. A pr
 
 Prompt templates play the role of Claude Code's custom slash commands. A Markdown file in `~/.pi/agent/prompts/` or `.pi/prompts/` becomes a command named after the file, and `$1`, `$@`, and `${1:-default}` substitute arguments. This one, saved as `review.md`, gives you `/review` and `/review concurrency`:
 
-~~~markdown
+```markdown
 ---
 description: Review staged git changes
 argument-hint: "[focus]"
 ---
 Review the staged changes. Focus on ${1:-correctness, security, and error handling}.
-~~~
+```
 
 Run `/reload` after editing a template in an active session.
 
@@ -348,7 +348,7 @@ A skill is on-demand instructions with optional scripts, references, and assets.
 
 A project skill is a directory such as `.pi/skills/web-research/` holding a `SKILL.md`, plus optional `scripts/` and `references/`. The `SKILL.md` stays a short procedure:
 
-~~~markdown
+```markdown
 ---
 name: web-research
 description: Research a question from dated primary sources. Use for current docs and releases.
@@ -357,7 +357,7 @@ description: Research a question from dated primary sources. Use for current doc
 # Web research
 
 Follow references/source-policy.md. Run scripts/search.sh "<query>".
-~~~
+```
 
 If a skill needs a model-callable tool, it is becoming an extension. Project skills load only after you trust the project.
 
@@ -365,20 +365,20 @@ If a skill needs a model-callable tool, it is becoming an extension. Project ski
 
 Extensions are TypeScript modules executed inside Pi, which runs them directly with no build step. They can register tools, slash commands, lifecycle handlers, custom UI, provider adapters, and context or compaction behaviour. For a Claude Code user, one mechanism covers hooks, custom tools, and plugin code.
 
-~~~bash
+```bash
 pi --extension ./my-extension.ts     # or -e; repeatable
-~~~
+```
 
-~~~text
+```text
 ~/.pi/agent/extensions/       # global
 .pi/extensions/               # project-local; loads only after you trust the project
-~~~
+```
 
 A subdirectory containing `index.ts` also loads, and `/reload` picks up changes. The `project_trust` event can be handled only by personal and command-line extensions.
 
 A custom tool has a name, a parameter schema, and an `execute` function. This one counts the words in a string, adapted from Pi's `hello.ts` example:
 
-~~~typescript
+```typescript
 import { Type } from "@earendil-works/pi-ai";
 import { defineTool, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
@@ -402,13 +402,13 @@ const countWords = defineTool({
 export default function (pi: ExtensionAPI) {
   pi.registerTool(countWords);
 }
-~~~
+```
 
 Throwing from `execute` is how a tool reports failure; returning an object does not mark an error. A tool that touches the filesystem must validate its inputs, because it lets the model reach anything the user can.
 
 The counterpart to Claude Code's permission prompts is a `tool_call` handler, which can change a call's input or block it. This gate, trimmed from the shipped `permission-gate.ts`, asks before a dangerous shell command and blocks it when there is no UI to ask (print and JSON modes; an RPC client can answer the dialog):
 
-~~~typescript
+```typescript
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 export default function (pi: ExtensionAPI) {
@@ -423,7 +423,7 @@ export default function (pi: ExtensionAPI) {
     return undefined;
   });
 }
-~~~
+```
 
 Start from the [shipped examples](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions) rather than from scratch: `permission-gate.ts`, `protected-paths.ts` (blocks writes to `.env`, `.git/`, and `node_modules/`), `confirm-destructive.ts`, `plan-mode/`, `subagent/`, `todo.ts`, `handoff.ts`, and `claude-rules.ts`. From a checkout of the repository, `pi -e packages/coding-agent/examples/extensions/permission-gate.ts` gives you the gate above. These are prompts inside the Pi process, not a security boundary: a regular expression is easy to evade, and the extension runs with your permissions. An extension can read credentials, alter prompts, intercept tool calls, and start child processes. Review it like application code.
 
@@ -431,7 +431,7 @@ Start from the [shipped examples](https://github.com/earendil-works/pi/tree/main
 
 A package bundles extensions, skills, prompt templates, and themes (JSON colour files) for distribution through npm or Git; it is the counterpart of a Claude Code plugin. The [package catalogue](https://pi.dev/packages) lists packages that carry the `pi-package` npm keyword. It is for discovery, not a security review.
 
-~~~bash
+```bash
 pi install npm:@scope/package@1.2.3      # scoped npm package, version-pinned
 pi install git:github.com/vendor/repo@<reviewed-commit>
 pi install -l npm:@scope/package@1.2.3   # project scope; read only after trust
@@ -439,7 +439,7 @@ pi -e npm:@scope/package                  # try for one run, without installing
 pi list
 pi config                                 # enable or disable resources
 pi remove npm:@scope/package@1.2.3
-~~~
+```
 
 Versioned npm specifications, Git tags, and commits are pinned: `pi update --extensions` reconciles installations but does not move a configured ref. Read the source, installation scripts, and network calls before installing, and test third-party packages in a disposable project. A package declares its resources through conventional `extensions/`, `skills/`, `prompts/`, and `themes/` directories or a `pi` key in `package.json`.
 
@@ -447,11 +447,11 @@ Versioned npm specifications, Git tags, and commits are pinned: `pi update --ext
 
 Pi's [built-in MCP client](https://pi.dev/docs/latest/mcp) connects to stdio or Streamable HTTP servers. A server provides operations; Pi's client merely connects and exposes them. Choose a reviewed server with the narrowest credentials and tool set for the task. The following is the verified Pi syntax, with an illustrative URL that you must replace with a real, read-only server endpoint:
 
-~~~bash
+```bash
 pi mcp add docs --url https://mcp.example.com/docs
 pi mcp list
 pi
-~~~
+```
 
 Inside Pi, `/mcp` shows connection state, tools, and exposure; after changing a server outside an active session, run `/reload`. `pi mcp add` writes a user server to `~/.pi/agent/mcp.json`; `-l` writes `.pi/mcp.json`, which loads only after project trust. `pi mcp list` actually connects and reports errors, so inspect its output before asking the model to use a tool. For an stdio server, [the MCP guide](https://pi.dev/docs/latest/mcp) uses `pi mcp add <name> -- <command> [args...]`. Do not put bearer tokens or OAuth tokens in a project file. The built-in OAuth flow stores its credentials in `~/.pi/agent/mcp-auth.json`; inspect the server's documented authentication route before connecting.
 
@@ -485,12 +485,12 @@ Pi ships no general browser or web-search tool. A task that needs current docume
 
 When you already know the authoritative repository or URL, retrieve that source directly. This avoids search-result summaries and makes the version visible in the command. The first and third commands below pin Pi's source at `v1.3.0`; the release API deliberately asks for the most recent release, so record its returned tag and date before citing it.
 
-~~~bash
+```bash
 curl -fsSL -o extensions.md \
   https://raw.githubusercontent.com/earendil-works/pi/v1.3.0/packages/coding-agent/docs/extensions.md
 curl -fsSL https://api.github.com/repos/earendil-works/pi/releases/latest
 git clone --depth 1 --branch v1.3.0 https://github.com/earendil-works/pi.git ~/src/pi
-~~~
+```
 
 This suits raw Markdown, JSON APIs, release metadata, and source trees. The `v1.3.0` paths are version-pinned source examples; use the linked latest docs for subsequent releases. A plain HTTP request does not search, render JavaScript, keep signed-in sessions, or extract readable text from a complex page. A successful status can still return only an application shell: the near-empty HTML page that a JavaScript app fills in later. Do not ask Pi to "search the web" and accept model-memory guesses; give it an explicit tool, source policy, evidence format, and stop condition.
 
@@ -498,35 +498,35 @@ This suits raw Markdown, JSON APIs, release metadata, and source trees. The `v1.
 
 The [`pi-skills`](https://github.com/badlogic/pi-skills) repository is kept under Pi's original author's account and includes Brave web search and browser automation alongside unrelated integrations. Review the specific skill and its helper dependencies at the commit you choose. Install it outside Pi's automatically scanned skills directories, then load only that skill for the research run; this keeps unrelated skill descriptions out of the model's prompt. The commands below assume the checked-out commit contains the `brave-search` paths shown in its README:
 
-~~~bash
+```bash
 git clone https://github.com/badlogic/pi-skills ~/src/pi-skills
 git -C ~/src/pi-skills checkout <reviewed-commit>
 (cd ~/src/pi-skills/brave-search && npm install --ignore-scripts)
 pi --skill ~/src/pi-skills/brave-search
-~~~
+```
 
 The skill needs a Brave Search API key. Follow the [skill's own setup instructions](https://github.com/badlogic/pi-skills/tree/main/brave-search) for the account and current terms, then set `BRAVE_API_KEY` only in the shell that launches Pi. Queries go to Brave. To keep a reviewed skill available in every session, copy only its directory into `~/.pi/agent/skills/` or add its path in the `skills` setting. Review the version before refreshing either copy.
 
 `/skill:name` forces a skill to load, which matters because a model can fail to load a relevant skill on its own; text after the command is appended as your request (the same pattern as Claude Code's `/name`). Use `Shift+Enter` for line breaks so the text is one message:
 
-~~~text
+```text
 /skill:brave-search
 
 Research the current Pi extension API. Search official documentation first,
 then the repository, issues, discussions, and release notes. For each important
 claim record URL, date, source type, and confidence. Do not install packages or
 modify files. Return a source table before the synthesis.
-~~~
+```
 
 These are the helper scripts the skill tells the model to run; run them yourself to test your key:
 
-~~~bash
+```bash
 ~/src/pi-skills/brave-search/search.js \
   'Pi extension registerTool' -n 10 --content --freshness pm
 
 ~/src/pi-skills/brave-search/content.js \
   https://raw.githubusercontent.com/earendil-works/pi/v1.3.0/packages/coding-agent/docs/extensions.md
-~~~
+```
 
 `-n` sets the result count (default 5, maximum 20), `--content` fetches each page as Markdown, `--freshness` filters by `pd`, `pw`, `pm`, `py`, or a `YYYY-MM-DDtoYYYY-MM-DD` range, and `--country` sets the region (default US). Prefer a raw Markdown URL to a GitHub `blob` page, whose HTML adds navigation noise. Keep the API key in the environment, not in the skill.
 
@@ -557,22 +557,22 @@ Use this decision rule:
 
 `gh` is the GitHub command-line client; run `gh auth login` first, because code search needs authentication.
 
-~~~bash
+```bash
 gh search code registerTool --repo earendil-works/pi
 gh search issues 'MCP' --repo earendil-works/pi
 gh api repos/earendil-works/pi/discussions \
   --jq '.[] | "\(.number)\t\(.title)\t\(.html_url)"'
-~~~
+```
 
 Search results are leads, not evidence: read the issue, check its date and status, and distinguish a maintainer statement from a user workaround. A useful research brief states the decision it must support, the source order (official docs and source, release notes, issues, then community material), the required freshness, the evidence format (URL, date, claim, confidence), and a stop condition such as ten sources or three independent confirmations. For example:
 
-~~~text
+```text
 Determine whether Pi currently has a built-in MCP client.
 Search the official repository and docs first, then issues and the package
 catalogue. Do not infer core support from an extension. Return URL, date,
 source type, exact claim, and confidence. Stop after the current README, docs
 index, source tree, and five relevant issues or package entries.
-~~~
+```
 
 The answer for Pi 1.3.0 is yes: the [official MCP documentation](https://pi.dev/docs/latest/mcp) describes the built-in client, configuration, transports, and tool exposure. Older material correctly described earlier releases without it. This brief guards against treating an old design essay or forum answer as current behaviour, and against confusing a community adapter with the shipped client.
 
@@ -584,12 +584,12 @@ This section covers how Pi stores and branches conversations, how to carry work 
 
 Pi sessions are persistent conversation records stored as JSON Lines files under `~/.pi/agent/sessions/`, grouped by working directory. Override the location with `--session-dir`, `PI_CODING_AGENT_SESSION_DIR`, or the `sessionDir` setting. The active conversation is one branch of a tree in that file.
 
-~~~bash
+```bash
 pi --continue        # reopen the latest session for this directory (as in Claude Code)
 pi --resume          # pick a saved session
 pi --name research   # name a session; /name does the same from inside
 pi --no-session      # in-memory only
-~~~
+```
 
 | Command | Result | Use it when |
 | --- | --- | --- |
@@ -607,14 +607,14 @@ Pi compacts automatically as the active context approaches the model's limit: th
 
 Sessions may contain source code, prompts, command output, URLs, tool arguments, and accidental secrets. Treat them as sensitive data. Pi's [sessions guide](https://pi.dev/docs/latest/sessions) says `/share` uploads a session to a Radius artefact when Radius authentication is configured and otherwise uses a private GitHub gist. Pi 1.3.0 adds `sessionShareDestination` to force `gist` or `radius`, or retain `auto`; a private gist is still accessible to anyone with its URL, and Radius visibility depends on the organisation's artefact settings. Inspect the actual destination and scrub the transcript before sharing. `/bug` can include a transcript in a report, so review its options too. An `/export` file stays local until you move it, but it needs the same inspection. For a durable hand-off, write:
 
-~~~text
+```text
 objective
 files changed
 commands run and results
 open questions
 assumptions
 next safe step
-~~~
+```
 
 The shipped `handoff.ts` example extension can create a new session with a generated prompt through `/handoff <next task>`. Review that prompt and its source links before using it; a summary is not a substitute for the original evidence. When handing a task to another person, a concise note often reveals less than a full session export.
 
@@ -659,7 +659,7 @@ For untrusted repositories, unattended runs, production credentials, or browser 
 
 Plain Docker is the simplest. Pi's documentation builds the image from this `Dockerfile.pi`:
 
-~~~dockerfile
+```dockerfile
 FROM node:24-bookworm-slim
 RUN apt-get update \
   && apt-get install -y --no-install-recommends bash ca-certificates git ripgrep \
@@ -667,16 +667,16 @@ RUN apt-get update \
 RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 WORKDIR /workspace
 ENTRYPOINT ["pi"]
-~~~
+```
 
-~~~bash
+```bash
 docker build -t pi-sandbox -f Dockerfile.pi .
 docker run --rm -it \
   -e ANTHROPIC_API_KEY \
   -v "$PWD:/workspace" \
   -v pi-agent-home:/root/.pi/agent \
   pi-sandbox
-~~~
+```
 
 `podman run` works the same way; on an SELinux host add `:Z` to the bind mount. Passing `-e ANTHROPIC_API_KEY` puts the key inside the container, where every process, extension, and tool call can read it. The named `pi-agent-home` volume keeps settings, credentials, and sessions between runs; mounting the host's `~/.pi/agent` instead would expose your real credentials, extensions, and sessions. Do not mount the whole host home directory or a real browser profile, and give research extensions only the keys and network routes they require.
 
@@ -729,7 +729,7 @@ Build a small "daily temperature quality" project. The input is a fictional CSV 
 
 The repository layout:
 
-~~~text
+```text
 pi-temperature-starter/
   AGENTS.md
   data/raw/station_readings.csv
@@ -747,35 +747,35 @@ pi-temperature-starter/
   .gitignore
   Justfile
   README.md
-~~~
+```
 
 `AGENTS.md` carries the rules Pi must follow, and Pi loads it automatically at startup:
 
-~~~markdown
+```markdown
 # Project rules
 - Run all analysis inside the container with `just qa`. Never run R or pip on the host.
 - Do not edit `data/raw/`, `data/expected/`, `Justfile`, or `Containerfile`.
 - Read the contract in `README.md`. Stop and ask if it is ambiguous.
-~~~
+```
 
 Start with a deliberately small fixture. One group has two valid readings, so the mean, minimum, and maximum differ; the last row forms a group of only missing data:
 
-~~~csv
+```csv
 date,station_id,temp_c,quality_flag
 2026-01-01,A,5.1,ok
 2026-01-01,A,6.3,ok
 2026-01-01,A,,missing
 2026-01-01,B,3.4,ok
 2026-01-02,A,,missing
-~~~
+```
 
 The expected output is part of the contract, not something Pi may invent after seeing its own result. Write it by hand:
 
-~~~csv
+```csv
 date,station_id,n_valid,mean_temp_c,min_temp_c,max_temp_c
 2026-01-01,A,2,5.70,5.10,6.30
 2026-01-01,B,1,3.40,3.40,3.40
-~~~
+```
 
 The fixture has no unknown flag or malformed date, so those failure cases live in the unit tests as small in-memory inputs. The acceptance gate is `scripts/compare_outputs.py`, which you write, not Pi. It reads `outputs/daily_summary_r.csv` and `outputs/daily_summary_py.csv`, checks each header, compares each row with the expected file (exact keys and counts, `mean_temp_c` within the tolerance), and exits non-zero on any difference. Row-by-row comparison against a sorted file also checks the sort order.
 
@@ -785,26 +785,26 @@ Use a separate, named session for each phase. The fixture, expected output, and 
 
 Phase 1 restricts tools: `pi --name contract --no-mcp --tools read,grep,find,ls`.
 
-~~~text
+```text
 Inspect the repository rules and propose the file contract for this project.
 Do not write files or install packages. Identify assumptions and test cases.
-~~~
+```
 
 Phase 2 needs a search skill and `bash`: `pi --name research --skill ~/src/pi-skills/brave-search` (see "Web research"). Without a search skill, drop this step and supply the documentation URLs yourself; otherwise Pi answers from model memory.
 
-~~~text
+```text
 Research the current official documentation for readr, dplyr, testthat,
 Python csv handling, and pytest. Return URLs and version constraints only.
 Do not modify the repository.
-~~~
+```
 
 Phase 3 is implementation in a fresh session, `pi --name implement`, with the research hand-off note pasted in (see "Sharing and hand-off"):
 
-~~~text
+```text
 Implement the R and Python cleaners from the checked-in contract. Add tests
 for missing values, unknown flags, malformed dates, and cross-language
 agreement. Use `just qa` (defined below) and stop if the contract is ambiguous.
-~~~
+```
 
 The model drafts the code. The fixture, expected output, container build, and comparison decide whether it is correct. Pi also writes some tests, so review them: a test written to match the model's own output proves nothing.
 
@@ -812,11 +812,11 @@ The model drafts the code. The fixture, expected output, container build, and co
 
 Rocker's versioned tags are not immutable: the images are rebuilt periodically, so `4.6.1` today need not be byte-identical to `4.6.1` last month (Rocker's [reproducibility guide](https://rocker-project.org/use/reproducibility.html) says to use a digest if you need the same image). Pin the multi-architecture image index digest, so the pin works on amd64 and arm64. The digest below was recorded for the worked example on 24 September 2026; later tag movement does not change that pinned image. To update the example deliberately, inspect the current index digest and change *both* the Containerfile and the lockfile-generation command together. `podman image inspect` reports a single-platform manifest digest, which is the wrong source for the cross-platform pin.
 
-~~~bash
+```bash
 skopeo inspect --format '{{.Digest}}' docker://ghcr.io/rocker-org/tidyverse:4.6.1
-~~~
+```
 
-~~~dockerfile
+```dockerfile
 ARG ROCKER_IMAGE=ghcr.io/rocker-org/tidyverse:4.6.1
 ARG ROCKER_DIGEST=sha256:94a4cdb7be4d1214f9039bca4937e8919253d2ad90d8bed084e9a8af685a50c7
 FROM ${ROCKER_IMAGE}@${ROCKER_DIGEST}
@@ -841,18 +841,18 @@ RUN R -q -e 'install.packages("renv")' \
  && rm -rf /tmp/downloaded_packages
 
 USER rstudio
-~~~
+```
 
 The virtual environment isolates the pinned Python packages from the Ubuntu system Python. Tag pinning alone does not make the R packages reproducible, because Rocker installs the selected R version from a moving CRAN snapshot; that is why the image uses `renv`. Four details matter:
 
 - `renv::restore()` in a project that is not activated installs into the image's system library and can overwrite Rocker's own packages. An incomplete lockfile, or one taken from another machine, can downgrade packages that the tidyverse relies on, and the image then fails at load time. Generate `renv.lock` from a container running this same image, so it records Rocker's package set as well as yours:
 
-~~~bash
+```bash
 podman run --rm -v "$PWD:/w:Z" -w /w \
   ghcr.io/rocker-org/tidyverse:4.6.1@sha256:94a4cdb7be4d1214f9039bca4937e8919253d2ad90d8bed084e9a8af685a50c7 \
   R -q -e 'install.packages("renv"); renv::snapshot(type = "all", lockfile = "renv.lock",
   prompt = FALSE)'
-~~~
+```
 
 - The bootstrap installs whatever `renv` version the mirror serves that day; the lockfile records `renv`'s version but this step does not honour it.
 - `requirements.txt` must carry hashes. Write direct dependencies (here `pytest`) in `requirements.in` and run `pip-compile --generate-hashes requirements.in`, or `uv pip compile --generate-hashes requirements.in -o requirements.txt`.
@@ -862,7 +862,7 @@ podman run --rm -v "$PWD:/w:Z" -w /w \
 
 A small `Justfile` exposes the workflow without hiding the container boundary. These recipes were built and run against a toy implementation with Podman 5.7.0 on Ubuntu, and the toy project passed `just qa`:
 
-~~~just
+```just
 set shell := ["bash", "-ceu"]
 
 IMAGE   := "localhost/pi-temperature:dev"
@@ -893,7 +893,7 @@ pipeline:
   {{RUN}} {{OUTPUTS}} {{IMAGE}} python scripts/compare_outputs.py
 
 qa: test-r test-python pipeline
-~~~
+```
 
 Only `outputs/` is writable, so a buggy or malicious script cannot alter the fixture or expected output. Mounting only the needed sub-directories keeps `.git/config` (which may hold remote URLs or tokens) and `.git/hooks` out of the container, and matters because `:Z` relabels the mounted tree for SELinux hosts (and is ignored elsewhere). `outputs/` must exist before Podman starts, since Podman refuses a bind mount with a missing source, so `pipeline` creates it. `-p no:cacheprovider` and `PYTHONDONTWRITEBYTECODE` stop pytest and Python writing into read-only mounts, and `--network=none` means the runs cannot fetch anything.
 
@@ -936,7 +936,7 @@ Do not install another extension until you know which layer failed.
 
 The [configuration reference](https://pi.dev/docs/latest/configuration) distinguishes personal files in the agent directory from project resources under `.pi/`. The separate [MCP guide](https://pi.dev/docs/latest/mcp) documents `mcp-auth.json`, which holds OAuth credentials for remote MCP servers. Back up or migrate credentials and sessions intentionally; do not copy these files into a repository merely to reproduce a tool setup.
 
-~~~text
+```text
 ~/.pi/agent/                    agent directory (override: PI_CODING_AGENT_DIR)
   settings.json                 user settings, defaults, package declarations
   models.json                   custom providers and models
@@ -955,7 +955,7 @@ The [configuration reference](https://pi.dev/docs/latest/configuration) distingu
   SYSTEM.md  APPEND_SYSTEM.md
 .agents/skills/                 portable project skills (also trust-gated)
 AGENTS.md | CLAUDE.md           project instructions (loaded regardless of trust)
-~~~
+```
 
 ### Glossary
 
@@ -982,7 +982,7 @@ These terms recur across the practical route. The links point to the first fulle
 
 ### Further Reading
 
-**Pi documentation**
+#### Pi Documentation
 
 - [Pi repository](https://github.com/earendil-works/pi), [documentation index](https://pi.dev/docs/latest), [quickstart](https://pi.dev/docs/latest/quickstart), and [how Pi works](https://pi.dev/docs/latest/how-pi-works): start here.
 - [Pi changelog](https://pi.dev/changelog) and [1.3.0 release](https://pi.dev/changelog/releases/1.3.0): the 16 October 2026 verification baseline.
@@ -994,7 +994,7 @@ These terms recur across the practical route. The links point to the first fulle
 - [CLI integration](https://pi.dev/docs/latest/cli-integration), [JSON events](https://pi.dev/docs/latest/json), [RPC](https://pi.dev/docs/latest/rpc), and the [SDK](https://pi.dev/docs/latest/sdk): print, event streams, long-lived subprocess control, and embedding.
 - [Package catalogue](https://pi.dev/packages) and [model catalogue](https://pi.dev/models); [extension examples](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions); [releases](https://github.com/earendil-works/pi/releases).
 
-**Design and ecosystem**
+#### Design and Ecosystem
 
 - Mario Zechner, [What I learned building an opinionated and minimal coding agent](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/): the design rationale behind everything in "Why Pi is built this way".
 - Mario Zechner, [I've sold out](https://mariozechner.at/posts/2026-04-08-ive-sold-out/): the move to Earendil and the licensing plan.
@@ -1002,13 +1002,13 @@ These terms recur across the practical route. The links point to the first fulle
 - [Agent Skills specification](https://agentskills.io/specification), the format shared with Claude Code.
 - [Radius](https://radius.earendil.com/docs), Earendil's hosted gateway for Pi.
 
-**Containers and reproducibility**
+#### Containers and Reproducibility
 
 - [Podman run](https://docs.podman.io/en/stable/markdown/podman-run.1.html) and [Podman build](https://docs.podman.io/en/stable/markdown/podman-build.1.html) references.
 - Rocker: [versioned images](https://rocker-project.org/images/versioned/r-ver.html), [reproducibility](https://rocker-project.org/use/reproducibility.html), [rootless Podman](https://rocker-project.org/use/rootless-podman.html), and [extending images](https://rocker-project.org/use/extending.html).
 - [`renv` and Docker](https://rstudio.github.io/renv/articles/docker.html), [pip hash-checking](https://pip.pypa.io/en/stable/topics/secure-installs/), and the [`just` manual](https://just.systems/man/en/).
 
-**Other agents and related primers**
+#### Other Agents and Related Primers
 
 - [Aider](https://aider.chat/docs/usage/commands.html), [OpenCode](https://opencode.ai/docs/tools/), [Claude Code](https://code.claude.com/docs/en/overview), and [Codex CLI](https://learn.chatgpt.com/docs/codex/cli).
 - [Claude Code alternatives primer](../primer_claude_code_alternative/primer-claude-code-alternatives.html), [Codex for Claude Code users primer](../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html), and [OpenClaw primer](../primer_openclaw/primer_openclaw.html).
