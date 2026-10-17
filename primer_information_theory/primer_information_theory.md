@@ -2,7 +2,7 @@
 
 ## Orientation and Notation
 
-The sections that follow build from probability models to information quantities and then to coding consequences. This orientation fixes the scope, reading route, and notation used throughout, so later formulas can be read against a clearly stated model and unit.
+The sections that follow build from probability models to information quantities and then to coding consequences. This orientation fixes the scope, reading route, and notation used throughout, so later formulas can be read against the stated model and unit.
 
 ### Purpose, Scope, and Background
 
@@ -177,7 +177,7 @@ The same joint table can be represented as a matrix whose rows index $X$ and col
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 joint <- matrix(c(0.4, 0.1,
@@ -192,7 +192,7 @@ row_marginals
 column_marginals
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 from math import isfinite
@@ -407,7 +407,7 @@ $$
 
 when $P,Q$ have densities $f,g$ and the integral is defined. Under suitable absolute continuity and integrability assumptions it is non-negative and invariant under a one-to-one change of coordinates applied to both distributions. If $P$ has mass where $Q$ has none, it is infinite. General distributions need not possess densities; the measure-theoretic definition uses a Radon–Nikodym derivative when $P$ is absolutely continuous with respect to $Q$, and is infinite otherwise.
 
-For jointly continuous variables, mutual information is safely defined as a KL divergence between the joint law and the product of its marginals. It can also be expressed as $h(X)+h(Y)-h(X,Y)$ when these differential entropies are individually well-defined and the cancellation is legitimate. The KL definition is more robust: differential entropy terms may be infinite even when mutual information is finite. See [Continuous Variables and Mutual Information](#continuous-variables-and-mutual-information).
+For jointly continuous variables, mutual information is safely defined as a KL divergence between the joint law and the product of its marginals. It can also be expressed as $h(X)+h(Y)-h(X,Y)$ when these differential entropies are individually well-defined and the cancellation is legitimate. The KL definition remains valid when individual differential entropy terms are infinite but mutual information is finite. See [Continuous Variables and Mutual Information](#continuous-variables-and-mutual-information).
 
 ### Base R and Python Calculations
 
@@ -415,7 +415,7 @@ For a finite probability vector, define $0\log 0$ by omitting zero terms. Base R
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 entropy <- function(p) {
@@ -430,7 +430,7 @@ entropy(c(0.5, 0.5))
 entropy(c(1, 0))
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 from math import isfinite, log2
@@ -458,7 +458,7 @@ To compare two distributions, handle support violations before evaluating logari
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 kl_divergence <- function(p, q) {
@@ -476,7 +476,7 @@ kl_divergence(c(0.5, 0.5), c(1, 0))
 kl_divergence(c(1, 0), c(0.5, 0.5))
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 from math import isfinite, log2
@@ -631,7 +631,7 @@ For a small finite joint distribution, mutual information can be computed from t
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 joint <- matrix(c(0.4, 0.1,
@@ -649,7 +649,7 @@ information <- sum(joint[positive] *
 information
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 from math import isfinite, log2
@@ -748,7 +748,7 @@ $$
 
 for a finite source after an appropriate prefix code is assigned. The lower bound is Theorem 5.2; the upper bound follows by averaging $\ell(x)<-\log_2p(x)+1$.
 
-The code is often called a Shannon code, but the name can refer to closely related constructions in different texts. The robust claim is the length assignment and its bound. A code word length is an integer, while surprisal is generally fractional; the ceiling is the rounding loss. This construction need not be optimal among one-symbol prefix codes.
+The code is often called a Shannon code, but the name can refer to closely related constructions in different texts. The length assignment and its bound hold for the construction given here. A code word length is an integer, while surprisal is generally fractional; the ceiling is the rounding loss. This construction need not be optimal among one-symbol prefix codes.
 
 ### Huffman Coding and a Complete Example
 
@@ -783,7 +783,7 @@ For a known codebook, expected length is a weighted sum. Named vectors keep prob
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 probability <- c(a = 0.4, b = 0.3, c = 0.2, d = 0.1)
@@ -803,7 +803,7 @@ expected_length <- sum(probability * nchar(code))
 expected_length
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 from math import isfinite
@@ -850,7 +850,7 @@ There are two different meanings of "rate" in nearby coding statements. Here rat
 
 For a stationary source with memory, the relevant asymptotic rate is generally the entropy rate $\lim_{n\to\infty}H(X^n)/n$ when this limit exists, not necessarily the one-symbol entropy $H(X_1)$. A stationary ergodic finite-alphabet source has an entropy rate and a corresponding asymptotic equipartition property. Do not call a dependent source memoryless or substitute $H(X_1)$ for its entropy rate.
 
-#### What "lossless" Means in Practice
+#### What "Lossless" Means in Practice
 
 Lossless coding requires exact recovery of the encoded source sequence under the declared code and decoding rule. A compression algorithm may be lossless relative to a byte sequence even if an earlier data-cleaning step discarded information; the boundary of what counts as the source must be specified.
 
@@ -935,7 +935,7 @@ For numerical checks, the following base R function uses vectorised arithmetic a
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 h2 <- function(p) {
@@ -956,7 +956,7 @@ data.frame(input_one = a, achieved_bits_per_use = achieved,
            capacity_bits_per_use = rep(capacity, length(a)))
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 import math
@@ -1099,7 +1099,7 @@ The achievability intuition uses a Gaussian input with variance $P$, which maxim
 
 For example, if $P/N=3$, capacity is $\frac12\log_2(4)=1$ bit per real use. This is not one bit on every use, and a practical finite-block system may need a margin below it. A complex baseband convention often has no factor $1/2$ because each complex use represents two real dimensions; the unit convention must be stated before comparing formulas. Bandwidth, sampling, and spectral-efficiency conversions need additional definitions. Coloured noise, fading, peak-power limits, non-Gaussian noise, and channel memory require a different optimisation or theorem.
 
-The average-power condition is a property of the allowed ensemble or code sequence, according to the chosen operational formulation. It does not mean every transmitted sample has squared magnitude at most $P$. A Gaussian input has unbounded tails and would violate a strict peak-amplitude bound, even though its average squared value is $P$. Under a peak constraint, the capacity-achieving input need not be Gaussian and the displayed formula should not be reused without proof. Likewise, "white" in this scalar memoryless model means independent, identically distributed noise across uses; a time-correlated Gaussian process cannot simply be assigned the same per-use capacity from its marginal variance.
+The average-power condition is a property of the allowed ensemble or code sequence, according to the chosen operational formulation. It does not mean every transmitted sample has squared magnitude at most $P$. A Gaussian input has unbounded tails and would violate a strict peak-amplitude bound, even though its average squared value is $P$. Under a peak constraint, the capacity-achieving input need not be Gaussian and the displayed formula should not be reused without proof. Likewise, "white" in this scalar memoryless model means independent, identically distributed noise across uses; the marginal variance of a time-correlated Gaussian process alone does not determine its per-use capacity.
 
 Compare units before interpreting a measured link. A sample rate of $r$ real channel uses per second gives the ideal ceiling $rC$ bits per second under this model. If bandwidth $B$ hertz is used to justify a sample rate, the relationship between $B$, real dimensions, and signalling convention must be stated. Framing, pilot symbols, modulation restrictions, finite codes, and protocol retransmissions can reduce application throughput. A reported signal-to-noise ratio also needs a reference point: receiver input power, post-filter noise variance, and per-symbol energy are not interchangeable without a system model.
 
@@ -1166,7 +1166,7 @@ The formula is an asymptotic rate in bits per real-valued source sample. At $D=\
 
 To see the lower-bound mechanism, suppose a reconstruction has mean-squared error at most $D$. The error entropy is maximised by a Gaussian at fixed variance, while the source-reconstruction mutual information is at least the difference between source entropy and that conditional error entropy. This yields $I(X;\widehat X)\geq\frac12\log_2(\sigma^2/D)$. A Gaussian test channel with appropriately chosen independent Gaussian error attains the bound. The full coding theorem turns this single-letter optimisation into achievable long-block compression.
 
-For the attaining test channel at $0<D<\sigma^2$, take an independent Gaussian error $E\sim\mathcal{N}(0,D)$ and a reconstruction $\widehat X\sim\mathcal{N}(0,\sigma^2-D)$, then set $X=\widehat X+E$. The resulting $X$ has the required $\mathcal{N}(0,\sigma^2)$ law and expected squared error $D$. Moreover $h(X\mid\widehat X)=h(E)$, so $I(X;\widehat X)=\frac12\log_2(\sigma^2/D)$. Describing the test channel in this direction avoids an easy mistake: adding independent noise of variance $D$ *to* an already fixed Gaussian source gives a different mutual information, $\frac12\log_2(1+\sigma^2/D)$, and does not attain the rate–distortion bound.
+For the attaining test channel at $0<D<\sigma^2$, take an independent Gaussian error $E\sim\mathcal{N}(0,D)$ and a reconstruction $\widehat X\sim\mathcal{N}(0,\sigma^2-D)$, then set $X=\widehat X+E$. The resulting $X$ has the required $\mathcal{N}(0,\sigma^2)$ law and expected squared error $D$. Since $h(X\mid\widehat X)=h(E)$, it follows that $I(X;\widehat X)=\frac12\log_2(\sigma^2/D)$. Describing the test channel in this direction avoids an easy mistake: adding independent noise of variance $D$ *to* an already fixed Gaussian source gives a different mutual information, $\frac12\log_2(1+\sigma^2/D)$, and does not attain the rate–distortion bound.
 
 The source mean is irrelevant if it is known to both sides: subtract it before coding and add it back after reconstruction. If the mean or variance must be learned and transmitted, their description and estimation errors are extra costs. The iid hypothesis is more consequential. A correlated Gaussian sequence can be compressed by exploiting predictability, and its rate–distortion function involves the source spectrum rather than only one marginal variance. Conversely, a non-Gaussian source with the same variance does not inherit the Gaussian formula merely because squared error is used.
 
@@ -1192,7 +1192,7 @@ An operational comparison helps prevent unit errors:
 | How many bits permit a stated average loss? | $R(D)$ | bits per source symbol | Source law and distortion measure |
 | How many bits cross a system per second? | Throughput | bits per second | Uses per second, coding, overhead, and implementation |
 
-## Estimating Information from Data
+## Estimating Information From Data
 
 The definitions above concern a probability model. In applied work, the model is usually unknown and the analyst has a finite sample. Replacing probabilities by observed frequencies is a natural first step, but it does not remove uncertainty. Estimators have bias and variance, sparse outcomes are easily missed, dependence invalidates independent-sample formulas, and analysis choices can inflate apparent dependence.
 
@@ -1263,7 +1263,7 @@ The following base R function computes the plug-in value from a contingency tabl
 
 ::: {.code-group}
 
-**R**
+**R**{.code-label}
 
 ```r
 mi_bits <- function(counts) {
@@ -1279,7 +1279,7 @@ counts <- matrix(c(12, 8, 8, 12), nrow = 2, byrow = TRUE)
 mi_bits(counts)
 ```
 
-**Python**
+**Python**{.code-label}
 
 ```python
 import numpy as np
@@ -1437,7 +1437,7 @@ A predictor is calibrated when, among cases assigned probability $r$ to an event
 
 Reliability diagrams compare predicted probability bins with observed frequencies, though the binning and sample size matter. For multiclass forecasts, calibration can be defined in several ways (top-label, classwise, or stronger conditional forms); a paper should say which one it evaluates. A model calibrated on one distribution can become miscalibrated after prevalence shift or covariate shift. If deployment decisions have asymmetric costs, threshold selection should use those costs rather than treating 0.5 as universally optimal.
 
-Information-theoretic scoring and calibration are complementary. A lower held-out cross-entropy indicates better average probabilistic predictions on that test distribution, but it does not show that every subgroup is calibrated, that the model is robust to shift, or that a decision based on its outputs improves outcomes. Inspect the relevant subgroup and shift behaviour directly.
+Information-theoretic scoring and calibration are complementary. A lower held-out cross-entropy indicates better average probabilistic predictions on that test distribution, but it does not show that every subgroup is calibrated, that predictive performance holds under shift, or that a decision based on its outputs improves outcomes. Inspect the relevant subgroup and shift behaviour directly.
 
 **Worked Example (A Forecast That Changes an Action).** In an invented, independently sampled, untreated validation set, 100 cases receive event probability 0.10 and another 100 receive 0.40. There are 20 events in the low-forecast group and 30 in the high-forecast group. Their observed event frequencies are 0.20 and 0.30, respectively. The forecast ranks the groups in the right order, but its two predefined probability groups are miscalibrated in opposite directions. Their empirical mean log losses are $-0.2\log_2(0.10)-0.8\log_2(0.90)\approx0.786$ and $-0.3\log_2(0.40)-0.7\log_2(0.60)\approx0.912$ bits per case. These scores assess probability assignments; they do not price an intervention.
 

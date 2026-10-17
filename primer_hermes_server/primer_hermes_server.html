@@ -667,7 +667,7 @@ State</a>
 <li><a href="#memory-curated-continuity-not-an-infinite-transcript" id="toc-memory-curated-continuity-not-an-infinite-transcript"><span class="toc-section-number">3.3.1</span> Memory: Curated Continuity, Not
 an Infinite Transcript</a></li>
 <li><a href="#skills-procedural-knowledge-with-a-write-boundary" id="toc-skills-procedural-knowledge-with-a-write-boundary"><span class="toc-section-number">3.3.2</span> Skills: Procedural Knowledge
-with a Write Boundary</a></li>
+With a Write Boundary</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#set-the-execution-boundary" id="toc-set-the-execution-boundary"><span class="toc-section-number">4</span> Set the Execution Boundary</a>
@@ -686,7 +686,7 @@ Separate Installs</a></li>
 </ul></li>
 <li><a href="#deploy-and-supervise" id="toc-deploy-and-supervise"><span class="toc-section-number">6</span> Deploy and Supervise</a>
 <ul>
-<li><a href="#run-hermes-in-a-container" id="toc-run-hermes-in-a-container"><span class="toc-section-number">6.1</span> Run Hermes in a container</a>
+<li><a href="#run-hermes-in-a-container" id="toc-run-hermes-in-a-container"><span class="toc-section-number">6.1</span> Run Hermes in a Container</a>
 <ul>
 <li><a href="#podman" id="toc-podman"><span class="toc-section-number">6.1.1</span> Podman</a></li>
 <li><a href="#compose-shape" id="toc-compose-shape"><span class="toc-section-number">6.1.2</span> Compose Shape</a></li>
@@ -1117,7 +1117,7 @@ write memory, and each can load the other’s writes into its next system
 prompt. Use profiles for independent agents and an external memory
 provider when deliberate sharing is required.</p>
 <h3 data-number="3.3.2" id="skills-procedural-knowledge-with-a-write-boundary"><span class="header-section-number">3.3.2</span> Skills: Procedural Knowledge
-with a Write Boundary</h3>
+With a Write Boundary</h3>
 <p>Skills are on-demand knowledge documents, normally
 <code>SKILL.md</code> files under <code>~/.hermes/skills/</code>. Hermes
 reads short descriptions cheaply and loads a skill’s full procedure when
@@ -1144,11 +1144,10 @@ Treat skill content as executable policy: a malicious or careless skill
 can tell the model to exfiltrate secrets, weaken a terminal boundary, or
 approve a dangerous workflow.</p>
 <h1 data-number="4" id="set-the-execution-boundary"><span class="header-section-number">4</span> Set the Execution Boundary</h1>
-<p>The terminal backend determines where commands execute. Hermes
-currently supports local, Docker, SSH, Modal, Daytona, Vercel Sandbox,
-and Singularity/Apptainer backends. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuration/">Terminal
-Backend section of Configuration</a> is the reference for options and
-optional dependencies.</p>
+<p>The terminal backend determines where commands execute. Consult the
+<a href="https://hermes-agent.nousresearch.com/docs/user-guide/configuration/">Terminal
+Backend section of Configuration</a> for supported options and optional
+dependencies.</p>
 <p>This table contrasts where each backend runs commands and the
 isolation it provides.</p>
 <table>
@@ -1434,7 +1433,7 @@ sandbox container.</li>
 <p>Confusing these leads to missing state or an accidentally unsandboxed
 terminal. The <a href="https://hermes-agent.nousresearch.com/docs/user-guide/docker/">official
 Docker guide</a> covers both patterns.</p>
-<h2 data-number="6.1" id="run-hermes-in-a-container"><span class="header-section-number">6.1</span> Run Hermes in a container</h2>
+<h2 data-number="6.1" id="run-hermes-in-a-container"><span class="header-section-number">6.1</span> Run Hermes in a Container</h2>
 <p>The official Docker image uses
 <code>nousresearch/hermes-agent</code>. Configure the mounted home
 first:</p>

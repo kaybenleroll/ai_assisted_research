@@ -247,7 +247,7 @@ Hermes also supports external memory provider plugins. The [Memory Providers gui
 
 Do not run two agent processes against one Hermes home. Both can write memory, and each can load the other's writes into its next system prompt. Use profiles for independent agents and an external memory provider when deliberate sharing is required.
 
-#### Skills: Procedural Knowledge with a Write Boundary
+#### Skills: Procedural Knowledge With a Write Boundary
 
 Skills are on-demand knowledge documents, normally `SKILL.md` files under `~/.hermes/skills/`. Hermes reads short descriptions cheaply and loads a skill's full procedure when the task needs it. This progressive disclosure pattern lets you add detailed workflows without injecting every instruction into every request.
 
@@ -271,7 +271,7 @@ Then review pending changes with the documented `/skills pending`, `/skills diff
 
 ## Set the Execution Boundary
 
-The terminal backend determines where commands execute. Hermes currently supports local, Docker, SSH, Modal, Daytona, Vercel Sandbox, and Singularity/Apptainer backends. The [Terminal Backend section of Configuration](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) is the reference for options and optional dependencies.
+The terminal backend determines where commands execute. Consult the [Terminal Backend section of Configuration](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) for supported options and optional dependencies.
 
 This table contrasts where each backend runs commands and the isolation it provides.
 
@@ -461,7 +461,7 @@ There are two different container questions:
 
 Confusing these leads to missing state or an accidentally unsandboxed terminal. The [official Docker guide](https://hermes-agent.nousresearch.com/docs/user-guide/docker/) covers both patterns.
 
-### Run Hermes in a container
+### Run Hermes in a Container
 
 The official Docker image uses `nousresearch/hermes-agent`. Configure the mounted home first:
 

@@ -24,7 +24,7 @@ Your standards include:
 - clear, auditable transformation logic
 - predictable missing-data behaviour
 - composable functional abstractions
-- robust execution with explicit error handling
+- execution with explicit error handling
 - communication-quality visual output
 - reproducibility across machines and teammates
 
@@ -510,7 +510,7 @@ def retry(max_attempts=3, delay=0.5):
     return deco
 ```
 
-These patterns are key when moving from exploratory notebooks to robust services.
+These patterns help move exploratory notebook code into services that handle failures explicitly.
 
 ### Generators and Lazy Pipelines
 
@@ -636,7 +636,7 @@ The deeper point is architectural: functional decomposition is not only style. I
 
 ### Practical Functional Style Guidelines
 
-Prefer pure functions for transformation logic where feasible, and push side effects to clearly named boundaries such as I/O, logging, and persistence layers. Use closures for configuration and local state instead of scattering mutable globals through a codebase. Use decorators for cross-cutting concerns so behaviour stays consistent across call sites and does not degrade into wrapper copy-paste. When a helper appears in multiple workflows, promote it into a shared module with tests and a short docstring contract. The deeper pattern is consistency: functional style helps most when it is applied as a team-level operating language rather than as a personal preference.
+Prefer pure functions for transformation logic where feasible, and push side effects to named boundaries such as I/O, logging, and persistence layers. Use closures for configuration and local state instead of scattering mutable globals through a codebase. Use decorators for cross-cutting concerns so behaviour stays consistent across call sites and does not degrade into wrapper copy-paste. When a helper appears in multiple workflows, promote it into a shared module with tests and a short docstring contract. The deeper pattern is consistency: functional style helps most when it is applied as a team-level operating language rather than as a personal preference.
 
 ## Multicore and Parallelism: A Deep `furrr-to-Python` Guide
 
@@ -910,7 +910,7 @@ This progression keeps complexity proportional to actual need.
 
 ### Advanced Multicore Pattern: Partition-by-File Instead of Partition-by-Object
 
-A lot of process-pool disappointment comes from serialising large in-memory DataFrames into worker processes. One robust alternative is to partition once to Parquet and parallelize by file path. That design usually transfers less data between processes and is easier to resume after failures.
+A lot of process-pool disappointment comes from serialising large in-memory DataFrames into worker processes. Partition once to Parquet and parallelize by file path. That design usually transfers less data between processes and is easier to resume after failures.
 
 ```python
 def score_partition_file(path):
@@ -1003,7 +1003,7 @@ Neither is better in general. They are better for different intents.
 
 This distinction is important enough to call out directly. Statistical modelling in Python is not all done through `scikit-learn`, and many teams get better outcomes when they choose libraries by modelling intent rather than by brand familiarity.
 
-Use `scikit-learn` when your primary goal is prediction workflows: robust preprocessing pipelines, cross-validation, hyperparameter tuning, and consistent deployment interfaces. Use `statsmodels` when your primary goal is inference and interpretation: explicit formulas, standard errors, p-values, confidence intervals, and classical diagnostics.
+Use `scikit-learn` when your primary goal is prediction workflows: preprocessing pipelines, cross-validation, hyperparameter tuning, and consistent deployment interfaces. Use `statsmodels` when your primary goal is inference and interpretation: explicit formulas, standard errors, p-values, confidence intervals, and classical diagnostics.
 
 Then layer in specialised libraries when the problem demands it. For Bayesian workflows, many teams use `PyMC` (or a Stan interface) to express hierarchical priors and full posterior uncertainty. For survival analysis, `lifelines` and `scikit-survival` cover common time-to-event patterns such as Cox models and competing-risk style workflows. For panel and econometric settings, `linearmodels` adds fixed-effects, random-effects, IV, and related estimators that are awkward to reproduce cleanly with generic ML tools.
 
@@ -1384,7 +1384,7 @@ The practical mistake to avoid is treating plotting migration as a purely aesthe
 
 Trying to force one Python library to replace all ggplot2 use cases creates unnecessary frustration. Different chart classes and audiences benefit from different tools.
 
-A robust approach is:
+Choose the plotting tool by the kind of chart and output you need:
 
 - plotnine for grammar continuity
 - seaborn for rapid statistical plotting
@@ -2138,7 +2138,7 @@ A final note on pipeline readability: do not treat method chaining as a purity t
 
 Teams often believe modelling migration means "fit the same model in Python and compare coefficients". That is necessary and not sufficient. Real modelling workflows include data prep assumptions, leakage controls, split policies, calibration, threshold governance, and monitoring. If you do not port those behaviours too, you may get a model that matches in-sample numbers but fails in operations.
 
-A robust migration flow for an existing R modelling workflow usually looks like this:
+For an existing R modelling workflow, use this sequence:
 
 1. establish baseline artefacts from R
 2. recreate feature table in Python with parity checks
@@ -2313,7 +2313,7 @@ A pragmatic tip: preserve domain terminology from R systems where possible. If b
 
 Many migrations are planned as "first rewrite all wrangling, then all models, then all dashboards". That looks tidy and often fails because business value delivery is delayed too long.
 
-A more robust strategy is wave-based by workflow value. Wave 1 should target high-value, medium-complexity workflows with strong testability so the team can build confidence quickly. Wave 2 should tackle high-value, high-complexity workflows after migration muscle is built. Wave 3 should include low-value or legacy workflows only when maintenance burden clearly justifies the effort.
+Plan waves by workflow value. Wave 1 should target high-value, medium-complexity workflows with strong testability so the team can build confidence quickly. Wave 2 should tackle high-value, high-complexity workflows after migration muscle is built. Wave 3 should include low-value or legacy workflows only when maintenance burden justifies the effort.
 
 Each wave should produce shippable outcomes and update your migration playbook based on actual lessons learned.
 
@@ -2326,7 +2326,7 @@ If your team wants a concrete, aggressive plan, structure it in six two-week pha
 
 The biggest lesson across successful migrations is straightforward: do not optimise for ideological purity. Optimise for reliable outcomes, maintainable systems, and analyst trust.
 
-Keep the parts of your R practice that are genuinely strong, including disciplined transformation logic, clear naming and metric semantics, honest model validation, and communication-quality visuals. Then adopt the parts of Python that solve the problems you actually face: explicit contracts and interfaces, robust execution control, scalable packaging of reusable components, and production-oriented model and pipeline tooling.
+Keep the parts of your R practice that are genuinely strong, including disciplined transformation logic, clear naming and metric semantics, honest model validation, and communication-quality visuals. Then adopt the parts of Python that solve the problems you actually face: explicit contracts and interfaces, execution control with error handling and retries, scalable packaging of reusable components, and production-oriented model and pipeline tooling.
 
 If you combine those wisely, your team does not lose identity by migrating. It upgrades capability.
 
@@ -2448,7 +2448,7 @@ Tool selection is never purely technical. It shapes who can review, maintain, an
 
 For R-heavy teams, keep an inference-facing path in statsmodels and an operations-facing path in sklearn. The two paths serve different review and deployment needs.
 
-The inference-facing path helps analysts and statisticians evaluate coefficients, standard errors, and diagnostics in a language they recognise. The operations-facing path helps engineers deploy consistent preprocessing and scoring behaviour with robust interfaces.
+The inference-facing path helps analysts and statisticians evaluate coefficients, standard errors, and diagnostics in a language they recognise. The operations-facing path helps engineers deploy consistent preprocessing and scoring behaviour with explicit input and output contracts.
 
 You can even formalise the relationship between the two:
 
@@ -2560,7 +2560,7 @@ A final temporal recommendation: keep one frozen "simulation replay" dataset for
 
 Parallel execution is seductive because speedups are visible. It is also where hidden ops debt can explode if process design is weak.
 
-A healthy productionization pattern is to split responsibilities clearly:
+Split responsibilities between these components:
 
 - worker code is deterministic and stateless
 - orchestration code handles retries, scheduling, and run metadata
@@ -2669,7 +2669,7 @@ The key review question with stakeholders should be: "Does this chart support th
 
 Finally, add operational checks that legacy R workflows often had implicitly but not explicitly: row-count checkpoints at major joins, null-rate checks on critical features, threshold-drift warnings, and run metadata that records timestamp, input snapshot ID, and code version.
 
-Once those are in place, the Python version is often more robust than the legacy pipeline.
+Those checks can catch regressions and drift that the legacy pipeline did not expose.
 
 ### Scenario 2: You Are Migrating a Financial Reporting Workflow With Strict Auditability
 

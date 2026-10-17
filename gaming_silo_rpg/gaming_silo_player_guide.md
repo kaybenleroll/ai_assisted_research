@@ -1,6 +1,6 @@
 # Silo System: Player's Survival Guide
 
-**"We do not know why we are here. We do not know who built the Silo. We only know that the world outside is dead, and the Silo is life."**
+> "We do not know why we are here. We do not know who built the Silo. We only know that the world outside is dead, and the Silo is life."
 
 Welcome to the Silo. This is your entire universe. It is a massive, subterranean cylinder of concrete and steel, extending 144 levels deep into the earth. There are no elevators. A single, colossal spiral staircase acts as the central artery for thousands of citizens. 
 
@@ -22,7 +22,7 @@ There is no constitution, no bill of rights, and no forgiving judge. There is on
 
 ### 3. The Cleaning Is Our Burden
 The ultimate punishment for any major crime—or for uttering the forbidden words, *"I want to go outside"*—is The Cleaning. 
-The condemned is fitted with a hazmat suit and sent out the airlock to die. But before they die, as the toxic air eats through their suit, they are compelled by some profound, tragic realisation to take a wool pad and clean the lenses of the Silo’s external cameras. They wipe away the grime so those inside can clearly see the wasteland, reminding everyone why they must stay inside.
+The condemned is fitted with a hazmat suit and sent out the airlock to die. But before they die, as the toxic air eats through their suit, they are compelled by some profound, tragic realisation to take a wool pad and clean the lenses of the Silo’s external cameras. They wipe away the grime so those inside can see the wasteland, reminding everyone why they must stay inside.
 
 ---
 
@@ -42,7 +42,7 @@ You likely rarely leave a tight three-level radius around your home and workplac
 
 ### Down Deep (Levels 97–144)
 *   **The Vibe:** Sweltering heat, the deafening roar of machinery, and the taste of metallic dust and crude oil in the air. Dimly lit by bare emergency bulbs.
-*   **The People:** The "grease." Mechanics, miners, and oil drillers. They are physically imposing, covered in permanent grease stains, and speak "Deep Talk"—a guttural slang that cuts through the noise of the generator. They resent the Up Top elites who reap the benefits of their backbreaking labour.
+*   **The People:** The "grease". Mechanics, miners, and oil drillers. They are physically imposing, covered in permanent grease stains, and speak "Deep Talk"—a guttural slang that cuts through the noise of the generator. They resent the Up Top elites who reap the benefits of their backbreaking labour.
 *   **The Danger:** Industrial death. A bursting steam pipe, a collapsed mine shaft, or a failing air scrubber are daily threats. The Down Deep is dangerous, but the people there know that without them, the entire Silo dies in the dark.
 
 ---
@@ -106,7 +106,7 @@ You may never have met these people, but if you live in this part of the Silo, y
 
 ### The Famous People Everyone Knows
 
-*   **Mayor Tamsin Rook:** The official voice of the Silo. Lower-tier citizens know her as an old, careful leader who appears during speeches, crises, and public rituals. People argue constantly about whether she is powerless, wise, or simply too far away to matter.
+*   **Mayor Tamsin Rook:** The official voice of the Silo. Lower-tier citizens know her as an old, careful leader who appears during speeches, crises, and public rituals. People argue constantly about whether she is powerless, wise, or too far away to matter.
 *   **Chief Deputy Harlan Fiske:** The Sheriff's hard edge. He is known as the man who appears when a problem has already become serious. In common talk, his name means inspections, arrests, and "don't be stupid on the stairs."
 *   **Inquisitor Sel Verin:** A senior Judicial name spoken with caution. Even people who have never seen him know he is tied to investigations, sealed orders, and the kind of legal attention that ruins whole families.
 *   **Merrow Hale, Head of IT:** More rumour than man to most lower-level citizens. People know IT answers to him, that his levels are cold and quiet, and that asking too many questions about computers is a good way to get noticed.
@@ -199,7 +199,7 @@ Use these prompts when building characters so the party feels like citizens from
 3. What minor law did you break as a child and get away with?
 4. Who taught you how to survive the stairs, the queues, or the inspections?
 5. What rumour about the Silo do you secretly hope is true?
-6. What debt, favour, or shame keeps you from simply walking away from trouble?
+6. What debt, favour, or shame keeps you from walking away from trouble?
 
 ---
 
@@ -224,7 +224,7 @@ Use these prompts when building characters so the party feels like citizens from
 
 The Silo is not just a place; it is a living, breathing entity that wants to maintain the status quo at all costs. 
 
-As you go about your life, remember that Judicial commands a network of secret informants known as the **"Friends of the Silo."** They do not wear uniforms. They are your neighbour, the bartender who serves your synthetic gin, or the doctor setting your broken arm.
+As you go about your life, remember that Judicial commands a network of secret informants known as the **"Friends of the Silo".** They do not wear uniforms. They are your neighbour, the bartender who serves your synthetic gin, or the doctor setting your broken arm.
 
 Keep your head down. Do not ask about the "Before" time. Do not horde relics of the old world. Do not ask why the IT servers are locked behind steel doors. 
 

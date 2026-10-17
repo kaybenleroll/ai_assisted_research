@@ -200,7 +200,7 @@ Kimi is relevant to long implementation sessions and visually informed work such
 
 Devstral is Mistral's coding-agent family, trained for repository exploration and multi-file software-engineering work. Its smaller downloadable variants offer a more realistic workstation experiment than the largest MoE families: Mistral's [Devstral release](https://mistral.ai/news/devstral-2-vibe-cli/) describes a 24B small model as well as the larger model. Quantisation, context allocation, and the serving stack still determine whether your machine can sustain an agent loop.
 
-Separate those checkpoints from hosted lifecycle status. Mistral currently marks the [Devstral 2 endpoint deprecated](https://docs.mistral.ai/models/devstral-2-25-12) and points new integrations to [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04), a multimodal model optimised for coding and agentic use with 256K context and open weights under a Modified MIT licence. That does not invalidate an existing local Devstral checkpoint, nor establish that Medium fits the same hardware. Evaluate the exact release, licence, and deployment instructions.
+Separate those checkpoints from hosted lifecycle status. As of October 2026, Mistral marks the [Devstral 2 endpoint deprecated](https://docs.mistral.ai/models/devstral-2-25-12) and points new integrations to [Mistral Medium 3.5](https://docs.mistral.ai/models/mistral-medium-3-5-26-04), a multimodal model optimised for coding and agentic use with 256K context and open weights under a Modified MIT licence. That does not invalidate an existing local Devstral checkpoint, nor establish that Medium fits the same hardware. Evaluate the exact release, licence, and deployment instructions.
 
 #### OpenAI / gpt-oss
 
@@ -534,7 +534,7 @@ gemini
 
 **What it is:** Plandex is an open-source CLI agent with a distinctive planning-first approach. Rather than immediately executing changes, it plans multi-file, multi-step tasks and builds up pending changes for user review before applying.
 
-**Author and licence:** Created by Dane Schneider (@danenania). MIT licence. Open source at `github.com/plandex-ai/plandex`. Roughly mid-teens-thousands GitHub stars as of late July 2026, currently at v2.2.1.
+**Author and licence:** Created by Dane Schneider (@danenania). MIT licence. Open source at `github.com/plandex-ai/plandex`. As of late July 2026, it had roughly mid-teens-thousands GitHub stars and was at v2.2.1.
 
 **Architecture:** Plandex is written in Go and uses a client-server architecture. The server can be run locally or self-hosted on a cloud provider. Changes are accumulated in a "pending changes" buffer that you can review, modify, or reject before applying to the working tree. This makes Plandex the most review-oriented tool in the category — it assumes you want to understand what's happening before it happens.
 
@@ -1006,7 +1006,7 @@ Current Cursor pricing documentation also lists MCPs, skills, and hooks on its p
 
 **Community size:** Roughly high-70k to low-80k GitHub stars and 7,000+ commits (late-July 2026 snapshot). One of the largest open-source AI coding projects by community size.
 
-**Architecture:** OpenHands runs in a Docker container with a sandboxed execution environment. This is the key architectural difference from CLI tools — it doesn't run directly on your machine; it runs in an isolated environment with full access to the shell, filesystem, and browser within that sandbox. This makes it safer for autonomous long-running tasks but adds Docker as a dependency. The project has recently restructured its core: the agent code now lives in separate repos (`software-agent-sdk`, `agent-canvas`), and the primary interface is the browser-based **Agent Canvas** rather than the older "Web UI" branding.
+**Architecture:** OpenHands runs in a Docker container with a sandboxed execution environment. This is the key architectural difference from CLI tools — it doesn't run directly on your machine; it runs in an isolated environment with full access to the shell, filesystem, and browser within that sandbox. This makes it safer for autonomous long-running tasks but adds Docker as a dependency. As of October 2026, the agent code lives in separate repos (`software-agent-sdk`, `agent-canvas`), and the primary interface is the browser-based **Agent Canvas** rather than the older "Web UI" branding.
 
 **Interfaces:**
 
@@ -1116,7 +1116,7 @@ Devin now sits alongside a sibling product, **Devin Desktop** (formerly Windsurf
 - **Free** — 50 agentic requests/month
 - **Pro** — $19/user/month; 10,000 inference calls (~1,000 user requests)
 
-**Important — deprecation in progress:** AWS will discontinue support for Amazon Q Developer IDE plugins and paid subscriptions on 30 April 2027; new Q Developer account and subscription signups closed 15 May 2026. Amazon Q Developer in the AWS console and other first-party AWS experiences is not covered by that IDE sunset. **AWS Kiro is the designated successor for IDE/CLI development** (see above) — do not recommend Q Developer as a new IDE investment without flagging this scope and date.
+**Important — deprecation in progress:** AWS will discontinue support for Amazon Q Developer IDE plugins and paid subscriptions on 30 April 2027; new Q Developer account and subscription signups closed 15 May 2026. Amazon Q Developer in the AWS console and other first-party AWS experiences is not covered by that IDE sunset. **AWS Kiro is the designated successor for IDE/CLI development** (see [AWS Kiro IDE and CLI](#aws-kiro-ide-and-cli)) — do not recommend Q Developer as a new IDE investment without flagging this scope and date.
 
 **Strengths:**
 - Best-in-class for AWS-heavy workflows
@@ -1268,7 +1268,7 @@ The matrix is a shortlist rather than a complete catalogue; it spans 17 represen
 
 ::: {.broad-table}
 
-**Group 1: Claude Code, Aider, OpenCode, Cline**
+#### Group 1: Claude Code, Aider, OpenCode, Cline
 
 | Feature | Claude Code | Aider | OpenCode | Cline |
 |---|---|---|---|---|
@@ -1287,7 +1287,7 @@ The matrix is a shortlist rather than a complete catalogue; it spans 17 represen
 | **Cost model** | Max plan or API | API only | API or subscription | Hosted provider, API, or local |
 | **Self-hosted option** | No | N/A | N/A | N/A |
 
-**Group 2: Continue.dev, Goose, Gemini CLI, OpenHands**
+#### Group 2: Continue.dev, Goose, Gemini CLI, OpenHands
 
 | Feature | Continue.dev | Goose | Gemini CLI | OpenHands |
 |---|---|---|---|---|
@@ -1306,7 +1306,7 @@ The matrix is a shortlist rather than a complete catalogue; it spans 17 represen
 | **Cost model** | API only | API/provider keys | Enterprise, API, or Vertex; consumer status disputed¶ | API only |
 | **Self-hosted option** | N/A | N/A | N/A | Yes |
 
-**Group 3: Cursor, Windsurf, Codex CLI, Amp**
+#### Group 3: Cursor, Windsurf, Codex CLI, Amp
 
 | Feature | Cursor | Windsurf | Codex CLI | Amp |
 |---|---|---|---|---|
@@ -1325,7 +1325,7 @@ The matrix is a shortlist rather than a complete catalogue; it spans 17 represen
 | **Cost model** | $20-200/mo + API | Free / $20 / $200 / Teams | Bundled ChatGPT | Free / $20 Individual (orb minutes) / Teams+Enterprise pooled credits |
 | **Self-hosted option** | No | No | No | Partial: self-hosted Orbs on Enterprise |
 
-**Group 4: Devin, Grok Bot, Copilot**
+#### Group 4: Devin, Grok Bot, Copilot
 
 | Feature | Devin | Grok Bot | Copilot |
 |---|---|---|---|
@@ -1346,7 +1346,7 @@ The matrix is a shortlist rather than a complete catalogue; it spans 17 represen
 
 :::
 
-**Group 5: Kiro, Antigravity**
+#### Group 5: Kiro, Antigravity
 
 ::: {.compact-table}
 
@@ -1409,7 +1409,7 @@ For context, Claude Code's three-layer system works as follows:
 
 Alongside MCP, a second cross-cutting convention has emerged that matters for anyone comparing extensibility stories: **AGENTS.md**, an open standard for project-level agent instructions. It was released in August 2025 and donated to the Linux Foundation's Agentic AI Foundation in December 2025. OpenAI's current announcement says it has been adopted by more than 60,000 open-source projects and agent frameworks, including Amp, Codex, Cursor, Devin, Factory, Gemini CLI, GitHub Copilot, Jules, and VS Code. This is an adoption claim from OpenAI, not an independent census. Claude Code itself can consume it through `CLAUDE.md` imports.
 
-The distinction from MCP matters: MCP standardises *tool/capability* portability (how an agent reaches external systems); AGENTS.md standardises *project-instruction* portability (how an agent learns a repo's conventions, build steps, and constraints). They're complementary, not competing — a tool can support one, both, or neither. For anyone currently maintaining a pile of per-tool rule files (`.clinerules`, `.cursorrules`, `CLAUDE.md`), AGENTS.md is worth tracking as a potential single source of truth that many tools can read natively, reducing the duplication of instructions across tools.
+The distinction from MCP matters: MCP standardises *tool/capability* portability (how an agent reaches external systems); AGENTS.md standardises *project-instruction* portability (how an agent learns a repo's conventions, build steps, and constraints). They're complementary, not competing — a tool can support one, both, or neither. If you maintain several per-tool rule files (`.clinerules`, `.cursorrules`, `CLAUDE.md`), AGENTS.md is worth tracking as a potential single source of truth that many tools can read natively, reducing the duplication of instructions across tools.
 
 #### What This Means for Migration
 
@@ -1417,7 +1417,7 @@ If you have heavily invested in Claude Code's extensibility system (skills, hook
 
 ### Cost Analysis
 
-If you are a heavy Claude Code user currently on a Max plan, what would the same usage cost on each alternative? Note first that "unlimited usage" is not an accurate description of the Max plan: Max 5x ($100/month) and Max 20x ($200/month) both carry a five-hour session limit and a separate weekly limit, with further caps and model-specific effects possible. Anthropic's live help page is the authority for the current limits; do not convert them into a fixed message count because message capacity depends on model, context, and workload.
+If you are a heavy Claude Code user on a Max plan, what would the same usage cost on each alternative? Note first that "unlimited usage" is not an accurate description of the Max plan: Max 5x ($100/month) and Max 20x ($200/month) both carry a five-hour session limit and a separate weekly limit, with further caps and model-specific effects possible. Anthropic's live help page is the authority for the limits; do not convert them into a fixed message count because message capacity depends on model, context, and workload.
 
 #### Defining "Heavy Usage"
 
@@ -1488,7 +1488,7 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 | Aider + Claude Haiku 4.5 | $0 tool + API | ~$225/mo | N/A | Cheaper same-vendor fallback; the "reduce cost, stay on Claude" scenario. |
 | Aider + DeepSeek `deepseek-flash` (OpenRouter) | $0 tool + API | Provider/model-dependent | N/A | Current gateway pricing can differ from direct DeepSeek pricing and may include cache or peak/off-peak rates. |
 | Aider + a low-cost OpenRouter model | $0 tool + API | Provider/model-dependent | N/A | Use the provider's live rate card; do not treat a single gateway quote as universal. |
-| Aider + Ollama (local) | $0 | $0 | GPU hardware cost only | Choose a currently supported local coding model and validate its quantisation/context fit. |
+| Aider + Ollama (local) | $0 | $0 | GPU hardware cost only | Choose a local coding model supported by your installed runtime and validate its quantisation/context fit. |
 | OpenCode + DeepSeek `deepseek-flash` | $0 tool + API | ~$32–$63/mo | N/A | Uses DeepSeek V4.1 Flash direct rates for the stated off-peak/peak workload before any gateway markup. |
 | OpenCode (ChatGPT-native) | $0 tool + ChatGPT subscription | Bundled — see Codex CLI row (same OpenAI subscription tiers apply since the Jan 2026 OpenAI partnership) | N/A | New row. |
 | Cline + OpenRouter (model varies) | $0 tool + API | Varies by provider/model | N/A | Route cheaply via OpenRouter; use current provider pricing. |
@@ -1658,7 +1658,7 @@ Create one separate API key for this coding harness, give it a small spending li
 | **Z.ai direct** | Create an API account/key and store `ZAI_API_KEY`; verify the current GLM API endpoint and model ID in the account documentation. | GLM 5.3/Flash when you want a direct commercial relationship, a different provider failure domain, or a second review route. | Z.ai's API DPA states that customer content is not stored on its servers for the API service, while other account and service data may be retained and processing is generally in Singapore. Confirm the applicable contract and region before relying on this for regulated data. |
 | **Qwen / Alibaba Model Studio (DashScope)** | Create a region-specific Alibaba Model Studio account, activate the service, create a key, and use `DASHSCOPE_API_KEY`. Billing, endpoints, quotas, and model names vary by region; coding plans and metered API billing are separate products. | Qwen3 Coder Plus/Flash/Next when you want the model owner's endpoint, regional routing, or a direct price comparison against OpenRouter. | Treat the region's current Alibaba terms and data controls as authoritative. Do not assume that a China-region free quota, an OpenRouter endpoint policy, and a US/EU Model Studio account have the same retention or training terms. |
 | **Mistral direct** | Activate Mistral Studio, create a key, and export `MISTRAL_API_KEY`. Free mode is suitable for a smoke test; paid usage uses API credits/pay-as-you-go. Use the EU endpoint when regional processing is required and supported. | Devstral and Mistral's open-weight coding models, especially when EU processing, direct support, or predictable regional routing matters. | Mistral's paid API policy describes up to 30 rolling days of retention for abuse monitoring unless ZDR is enabled; ZDR requires an eligible paid organisation and approval. Training opt-out and ZDR are separate controls. |
-| **Together AI** | Open an account, purchase prepaid credits, create a scoped key, and use `TOGETHER_API_KEY`. Together currently requires at least $5 in credits for API keys and supports auto-recharge. | Shared or dedicated inference for Qwen, DeepSeek, and other open checkpoints when throughput, hardware, or provider-specific pricing beats the gateway. | Treat retention as provider-specific; the current public material does not establish a ZDR guarantee sufficient for sensitive repositories. Review the current contract before use. |
+| **Together AI** | Open an account, purchase prepaid credits, create a scoped key, and use `TOGETHER_API_KEY`. As of October 2026, Together requires at least $5 in credits for API keys and supports auto-recharge. | Shared or dedicated inference for Qwen, DeepSeek, and other open checkpoints when throughput, hardware, or provider-specific pricing beats the gateway. | Treat retention as provider-specific; the public material available for this review does not establish a ZDR guarantee sufficient for sensitive repositories. Review the applicable contract before use. |
 | **Fireworks** | Create an account and `FIREWORKS_API_KEY`; the hosted serverless API is a direct endpoint, while dedicated deployments have separate billing. | Fast serverless testing of Qwen, DeepSeek, Kimi, and other open models, with a different provider failure domain from OpenRouter. | Fireworks documents no persistent prompt/generation logging unless you opt in, but its Responses API stores conversations by default for up to 30 days; set `store=false` and verify the endpoint mode. |
 | **Groq or Cerebras** | Create a project/key and use `GROQ_API_KEY` or `CEREBRAS_API_KEY`. Groq has free/developer limits and paid monthly caps; Cerebras offers a free key and separate paid channels. | Very fast supplementary routes for bounded work, triage, and review; coverage is narrower than OpenRouter. | Groq documents no customer-content retention by default but can retain reliability/abuse logs unless ZDR is enabled. Cerebras states that prompts, outputs, and request/response logs are not retained, while operational and billing metrics remain. Verify current terms before treating either as a regulated-data route. |
 | **NVIDIA NIM or local serving** | Use a Developer Program key for prototyping or an `NGC_API_KEY` to pull self-hosted containers; local Ollama, vLLM, SGLang, or llama.cpp needs no hosted credit account. | Shared GPU inference or full local control for Qwen, DeepSeek, Devstral, GLM, and other checkpoints. | Self-hosting can keep prompts local, but the NVIDIA hosted developer service has non-production restrictions. Local serving does not prevent telemetry or external MCP/editor integrations from exporting data. |

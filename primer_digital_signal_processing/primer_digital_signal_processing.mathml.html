@@ -242,10 +242,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -606,7 +608,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Digital Signal Processing: A Technical
 Primer</span>
-    <span class="navbar-meta">September 2026</span>
+    <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -712,7 +714,7 @@ Stability</a>
 Convergence</a></li>
 <li><a href="#transfer-functions-poles-and-zeros" id="toc-transfer-functions-poles-and-zeros"><span class="toc-section-number">6.2</span> Transfer Functions, Poles, and
 Zeros</a></li>
-<li><a href="#difference-equations-from-hz" id="toc-difference-equations-from-hz"><span class="toc-section-number">6.3</span> Difference Equations from
+<li><a href="#difference-equations-from-hz" id="toc-difference-equations-from-hz"><span class="toc-section-number">6.3</span> Difference Equations From
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(z)</annotation></semantics></math></a></li>
 <li><a href="#resonators-and-a-pole-pair" id="toc-resonators-and-a-pole-pair"><span class="toc-section-number">6.4</span> Resonators and a Pole
 Pair</a></li>
@@ -722,7 +724,7 @@ Invertibility</a></li>
 <li><a href="#designing-digital-filters" id="toc-designing-digital-filters"><span class="toc-section-number">7</span> Designing Digital Filters</a>
 <ul>
 <li><a href="#fir-linear-phase" id="toc-fir-linear-phase"><span class="toc-section-number">7.1</span> FIR Linear Phase</a></li>
-<li><a href="#start-with-a-specification" id="toc-start-with-a-specification"><span class="toc-section-number">7.2</span> Start with a
+<li><a href="#start-with-a-specification" id="toc-start-with-a-specification"><span class="toc-section-number">7.2</span> Start With a
 Specification</a></li>
 <li><a href="#fir-versus-iir" id="toc-fir-versus-iir"><span class="toc-section-number">7.3</span> FIR Versus IIR</a></li>
 <li><a href="#windowed-sinc-fir-design" id="toc-windowed-sinc-fir-design"><span class="toc-section-number">7.4</span> Windowed-Sinc FIR Design</a></li>
@@ -854,6 +856,7 @@ Checks</a></li>
 </ul></li>
 <li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources"><span class="toc-section-number">15</span> Further Reading and
 Resources</a></li>
+<li><a href="#notation" id="toc-notation"><span class="toc-section-number">16</span> Notation</a></li>
 </ul></div>
 
     </aside>
@@ -1055,7 +1058,7 @@ record, but not for a live stream without adding delay.</li>
 (BIBO) sense, every bounded input produces a bounded output.</li>
 </ul>
 <p>Linear time-invariant (LTI) systems are the centre of classical DSP
-because they are both expressive and analyzable. A nonlinear or
+because they are both expressive and analysable. A nonlinear or
 time-varying system can be useful, but its behaviour cannot be inferred
 from one impulse response and one frequency-response curve.</p>
 <p>You can test these properties with numbers before introducing
@@ -1239,7 +1242,7 @@ reversed coefficient vector:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mi>⋯</mi><mo>+</mo><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 y[n] = h[0]x[n] + h[1]x[n-1]+\cdots+h[M]x[n-M].
 </annotation></semantics></math></p>
-<p>The coefficients are not “the frequencies to keep.” They are
+<p>The coefficients are not “the frequencies to keep”. They are
 time-domain weights whose collective response determines the frequency
 behaviour. A moving average with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
@@ -1388,7 +1391,7 @@ X(e^{j\omega})e^{j\omega n}\,d\omega.
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
 but periodic with period
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>.
-Normalized frequency
+Normalised frequency
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
 is radians per sample. If the sample rate is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>s</mi></msub><annotation encoding="application/x-tex">f_s</annotation></semantics></math>,
@@ -1757,14 +1760,14 @@ the sample sequence came from a 3 kHz or 7 kHz analogue sinusoid.</p>
 <p>You can see the irreversibility directly from the samples. The R
 version uses the base <code>cos</code> and vectorised arithmetic:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(<span class="dv">12</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>x_7k <span class="op">=</span> np.cos(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">7_000</span> <span class="op">/</span> <span class="dv">10_000</span> <span class="op">*</span> n)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>x_3k <span class="op">=</span> np.cos(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">3_000</span> <span class="op">/</span> <span class="dv">10_000</span> <span class="op">*</span> n)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">max</span>(np.<span class="bu">abs</span>(x_7k <span class="op">-</span> x_3k)))  <span class="co"># approximately 0</span></span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x_7k <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">7000</span> <span class="sc">/</span> <span class="dv">10000</span> <span class="sc">*</span> n)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_3k <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">3000</span> <span class="sc">/</span> <span class="dv">10000</span> <span class="sc">*</span> n)</span>
@@ -1778,13 +1781,13 @@ correct explanation.</p>
 <figcaption aria-hidden="true">Aliasing: 3 kHz and 7 kHz analogue
 candidates produce the same samples at 10 kHz</figcaption>
 </figure>
-<p><em>Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates
+<p>Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates
 sampled at 10 kHz. Each candidate passes through the same sample values;
 they are alternative analogue interpretations, not simultaneous
 reconstructions of one baseband signal. The frequency view shows
 spectral folding across the 5 kHz Nyquist boundary. An acquisition chain
 must suppress the unwanted candidate before sampling because the digital
-samples alone cannot distinguish them.</em></p>
+samples alone cannot distinguish them.</p>
 <p>The anti-aliasing filter must therefore be analogue, or must occur
 before the sampling operation at an earlier, faster sampling rate. In a
 practical acquisition chain:</p>
@@ -1833,8 +1836,8 @@ images at multiples of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>s</mi></msub><annotation encoding="application/x-tex">f_s</annotation></semantics></math>.
 An analogue reconstruction filter removes those images and often
 compensates, approximately, for the hold’s passband droop.</p>
-<p>When DSP documentation says “the output is a 1 kHz sine,” ask whether
-it means the discrete sequence has a normalized digital frequency, the
+<p>When DSP documentation says “the output is a 1 kHz sine”, ask whether
+it means the discrete sequence has a normalised digital frequency, the
 DAC output has a 1 kHz analogue component, or the entire reconstruction
 chain has been characterised. Those are related but not identical
 statements.</p>
@@ -1949,7 +1952,7 @@ V and ideal quantisation SNR about 74.0 dB. A 10 mV peak sine has RMS
 7.071 mV and only about 34.0 dB relative to the same noise floor.
 Amplifying the small signal before conversion can use more codes, but
 the amplifier’s noise, gain uncertainty, and overload margin then enter
-the budget. Digital gain afterward scales the signal and the already
+the budget. Digital gain afterwards scales the signal and the already
 acquired errors together.</p>
 <p>If uncorrelated front-end noise contributes 100
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>V
@@ -1976,7 +1979,7 @@ coherent inputs. A constant voltage between two decision thresholds
 always maps to the same code; a low-level sine can generate a repeating,
 harmonic-rich error sequence. Dither deliberately randomises threshold
 crossings. A subtractive scheme adds a known random signal before
-quantisation and subtracts it afterward; with an appropriate uniform
+quantisation and subtracts it afterwards; with an appropriate uniform
 dither and no overload, the residual error can be uniform and
 independent of the input. A common nonsubtractive triangular dither,
 formed by summing two independent uniforms each spanning one LSB
@@ -2012,7 +2015,7 @@ error statistics and less deterministic distortion, paid for with
 additional noise. This does not make every aspect of the error
 statistically independent of the input.</p>
 <p>Subtractive dither is different: add a known dither before
-quantisation and subtract that same value afterward. With suitable
+quantisation and subtract that same value afterwards. With suitable
 independent uniform dither, the remaining error can be uniform and
 independent with variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><msup><mi mathvariant="normal">Δ</mi><mn>2</mn></msup><mn>12</mn></mfrac><annotation encoding="application/x-tex">\frac{\Delta^2}{12}</annotation></semantics></math>.
@@ -2030,10 +2033,10 @@ Effects</h2>
 rate. If the intended sample time is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>=</mo><mi>n</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">t_n=nT</annotation></semantics></math>
 but the actual time is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ϵ</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">t_n+\epsilon_n</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">t_n+\varepsilon_n</annotation></semantics></math>,
 then to first order</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ϵ</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>ϵ</mi><mi>n</mi></msub><msup><mi>x</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-x(t_n+\epsilon_n)\approx x(t_n)+\epsilon_n x&#39;(t_n).
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mi>x</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>ε</mi><mi>n</mi></msub><msup><mi>x</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+x(t_n+\varepsilon_n)\approx x(t_n)+\varepsilon_n x&#39;(t_n).
 </annotation></semantics></math></p>
 <p>For a sinusoid, timing jitter creates amplitude error proportional to
 frequency. A useful approximate jitter-limited signal-to-noise ratio
@@ -2451,7 +2454,7 @@ transform has the same unnormalised convention as NumPy’s forward FFT.
 The slice keeps the nonnegative frequencies for this real-valued
 record:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2473,7 +2476,7 @@ record:</p>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>weighted_mean_square <span class="op">=</span> np.<span class="bu">sum</span>((w <span class="op">*</span> x)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(w<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(psd.<span class="bu">sum</span>() <span class="op">*</span> df, weighted_mean_square)</span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(peak_amplitude[np.argmin(<span class="bu">abs</span>(f <span class="op">-</span> <span class="dv">50</span>))], <span class="fl">0.8</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">1000.0</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(N <span class="sc">-</span> <span class="dv">1</span>)</span>
@@ -2604,14 +2607,14 @@ is more appropriate.</p>
 <figcaption aria-hidden="true">DFT leakage and the windowing trade-off
 for on-bin and off-bin tones</figcaption>
 </figure>
-<p><em>Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate
+<p>Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate
 with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid;
 the 50.5 Hz tone lies halfway between bins. The repeated-record view
 exposes their different boundary continuations. Rectangular and Hann
 spectra use a shared dB reference and coherent-gain amplitude
 correction, showing Hann sidelobe suppression and main-lobe widening.
 Windowing changes the finite-observation response; it does not create
-physical tones or extend the observation duration.</em></p>
+physical tones or extend the observation duration.</p>
 <h2 data-number="5.8" id="why-the-naive-dft-is-expensive"><span class="header-section-number">5.8</span> Why the Naive DFT Is
 Expensive</h2>
 <p>The direct DFT evaluates
@@ -2674,7 +2677,7 @@ scaling; <code>rfft</code> exploits Hermitian symmetry for real input.
 to <code>rfft</code>.</p>
 <p>The same FFT conventions can be made explicit in base R:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> <span class="fl">2_000.0</span></span>
@@ -2692,7 +2695,7 @@ to <code>rfft</code>.</p>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>amplitude[[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]] <span class="op">/=</span> <span class="dv">2</span>  <span class="co"># DC and Nyquist are not doubled.</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>peak_frequency <span class="op">=</span> f[np.argmax(amplitude)]</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;peak ~= </span><span class="sc">{</span>peak_frequency<span class="sc">:.1f}</span><span class="ss"> Hz&quot;</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">2000.0</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, duration <span class="sc">-</span> <span class="fl">1.0</span> <span class="sc">/</span> fs, <span class="at">by =</span> <span class="fl">1.0</span> <span class="sc">/</span> fs)</span>
@@ -2733,7 +2736,7 @@ zero-pad both to at least
 before multiplying their FFTs. For streaming signals, overlap-add and
 overlap-save divide the input into blocks, manage the boundary samples,
 and reuse one filter transform. Forgetting this distinction creates
-wraparound artifacts that can look like instability or ringing.</p>
+wraparound artefacts that can look like instability or ringing.</p>
 <p>Here is the wraparound in a sequence small enough to calculate by
 hand. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x=[1,2,3]</annotation></semantics></math>
@@ -2819,7 +2822,7 @@ any threshold derived from it, even when the peak location looks
 correct.</p>
 <p>Correlation with a template is therefore a projection onto shifted
 template vectors. Matched filtering is not a mysterious “pattern
-recognizer”; it is a projection weighted according to the noise
+recogniser”; it is a projection weighted according to the noise
 geometry. If the noise covariance is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>,
 the relevant inner product is
@@ -3031,7 +3034,7 @@ BIBO stability requires the unit circle to lie in the ROC, which for the
 causal case means all poles are strictly inside it. A pole exactly on
 the unit circle is a boundary case: it may produce a bounded response
 for some inputs but is not BIBO stable.</p>
-<h2 data-number="6.3" id="difference-equations-from-hz"><span class="header-section-number">6.3</span> Difference Equations from
+<h2 data-number="6.3" id="difference-equations-from-hz"><span class="header-section-number">6.3</span> Difference Equations From
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(z)</annotation></semantics></math></h2>
 <p>Starting with</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><msub><mi>b</mi><mn>0</mn></msub><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><msup><mi>z</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><msup><mi>z</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup></mrow><mrow><mn>1</mn><mo>+</mo><msub><mi>a</mi><mn>1</mn></msub><msup><mi>z</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>+</mo><msub><mi>a</mi><mn>2</mn></msub><msup><mi>z</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
@@ -3196,7 +3199,7 @@ approximation and delay. Offline forward-backward filtering can cancel
 phase, but it squares the magnitude response and introduces
 edge-handling choices. “Zero phase” is a property of an offline
 procedure, not a free causal filter design.</p>
-<h2 data-number="7.2" id="start-with-a-specification"><span class="header-section-number">7.2</span> Start with a Specification</h2>
+<h2 data-number="7.2" id="start-with-a-specification"><span class="header-section-number">7.2</span> Start With a Specification</h2>
 <p>“Remove the noise” is not a filter specification. A usable
 specification states the signal band, unwanted band, acceptable gain
 error, attenuation, phase or delay requirement, sample rate, available
@@ -3302,7 +3305,7 @@ FIR, the group delay is known from its length; measuring it from the
 unwrapped phase is also appropriate when the production coefficients are
 not exactly symmetric.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3336,7 +3339,7 @@ not exactly symmetric.</p>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(step[<span class="dv">180</span>:], <span class="fl">1.0</span>, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pass_db.<span class="bu">min</span>(), pass_db.<span class="bu">max</span>(), ripple_db, attenuation_db,</span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>      delay_ms.<span class="bu">min</span>(), delay_ms.<span class="bu">max</span>())</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fs_design <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>numtaps <span class="ot">&lt;-</span> <span class="dv">181</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(numtaps <span class="sc">-</span> <span class="dv">1</span>)</span>
@@ -3457,7 +3460,7 @@ bands.</p>
 windowed-sinc construction and a zero-padded FFT for the response
 grid:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3476,7 +3479,7 @@ grid:</p>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>stopband <span class="op">=</span> np.<span class="bu">abs</span>(H[w <span class="op">&gt;=</span> <span class="dv">10_000</span>])</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;passband ripple (dB):&quot;</span>, <span class="dv">20</span> <span class="op">*</span> np.log10(passband.<span class="bu">max</span>() <span class="op">/</span> passband.<span class="bu">min</span>()))</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;stopband attenuation (dB):&quot;</span>, <span class="op">-</span><span class="dv">20</span> <span class="op">*</span> np.log10(stopband.<span class="bu">max</span>()))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>numtaps <span class="ot">&lt;-</span> <span class="dv">161</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="fl">8000.0</span></span>
@@ -3609,7 +3612,7 @@ H(z)=K\frac{1-2\cos(\omega_0)z^{-1}+z^{-2}}
 arithmetic. The nearby poles restore gain around the notch and determine
 selectivity. In finite precision, the zero angle and coefficient values
 are quantised, so the measured notch depth may be much shallower than
-the mathematical one. Normalize
+the mathematical one. Normalise
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 at the frequency where unity gain matters; do not assume the unscaled
 numerator has the desired passband gain.</p>
@@ -3650,7 +3653,7 @@ These filters have different responses, but demonstrate the same state
 hand-off. A production R implementation can replace the recurrence with
 a biquad cascade without changing the streaming pattern.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3678,7 +3681,7 @@ a biquad cascade without changing the streaming pattern.</p>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;max batch/stream difference:&quot;</span>, np.<span class="bu">max</span>(np.<span class="bu">abs</span>(y_batch <span class="op">-</span> y_stream)))</span>
 <span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(y_stream, y_batch, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="fl">2000.0</span> <span class="sc">/</span> fs)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
@@ -3889,7 +3892,7 @@ establishing a worst-case bound.</p>
 <p>For a
 length-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 FIR with coefficient-rounding errors
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>ϵ</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>≤</mo><msup><mn>2</mn><mrow><mi>−</mi><mn>16</mn></mrow></msup></mrow><annotation encoding="application/x-tex">|\epsilon_k|\le2^{-16}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>ε</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>≤</mo><msup><mn>2</mn><mrow><mi>−</mi><mn>16</mn></mrow></msup></mrow><annotation encoding="application/x-tex">|\varepsilon_k|\le2^{-16}</annotation></semantics></math>
 and input bound
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>,
 the output perturbation obeys
@@ -4066,7 +4069,7 @@ h[r+Lp],\qquad r=0,\ldots,L-1.
 </annotation></semantics></math></p>
 <p>Here “polyphase” means “organised by the residue, or phase, of an
 index modulo
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>.”
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>”.
 The zero-stuffed signal has nonzero samples only at intermediate-rate
 indices divisible by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>.
@@ -4160,7 +4163,7 @@ coefficients would normally be reversed in the multiply loop; the point
 of the toy numbers is only to make “phase” an operation on coefficient
 indices rather than a label on a plot.</p>
 <p>This timing view also explains why a resampler needs a low-pass
-prototype even when its code appears to be “just selecting phases.” Zero
+prototype even when its code appears to be “just selecting phases”. Zero
 insertion creates images, and the downsampling operation would alias
 intermediate frequencies unless the prototype removes them. The phase
 branches do not each represent independent frequency bands; they are
@@ -4183,7 +4186,7 @@ reproduce Python’s filter response or boundary handling. Production code
 should use a tested polyphase routine and inspect its boundary
 convention and response.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4192,7 +4195,7 @@ convention and response.</p>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.zeros(<span class="dv">48_000</span>)  <span class="co"># one second of illustrative input at fs_in</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 48 kHz -&gt; 44.1 kHz. The output length is approximately len(x) * 147 / 160.</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> signal.resample_poly(x, up<span class="op">=</span><span class="dv">147</span>, down<span class="op">=</span><span class="dv">160</span>, window<span class="op">=</span>(<span class="st">&quot;kaiser&quot;</span>, <span class="fl">8.6</span>))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fs_in <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fs_out <span class="ot">&lt;-</span> <span class="fl">44100.0</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(fs_in)  <span class="co"># one second of illustrative input at fs_in</span></span>
@@ -4556,7 +4559,7 @@ but it is not a theorem that 50% is always optimal.</p>
 makes the segment loop and the one-sided PSD normalisation visible
 instead of hiding them behind a package default:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4579,7 +4582,7 @@ instead of hiding them behind a package default:</p>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>noise_band <span class="op">=</span> (f <span class="op">&gt;</span> <span class="dv">2_000</span>) <span class="op">&amp;</span> (f <span class="op">&lt;</span> <span class="dv">3_000</span>)</span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;peak tone frequency:&quot;</span>, f[tone_band][np.argmax(psd[tone_band])])</span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;noise power in selected bins:&quot;</span>, psd[noise_band].<span class="bu">sum</span>() <span class="op">*</span> (f[<span class="dv">1</span>] <span class="op">-</span> f[<span class="dv">0</span>]))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">10000.0</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="fl">20.0</span> <span class="sc">-</span> <span class="fl">1.0</span> <span class="sc">/</span> fs, <span class="at">by =</span> <span class="fl">1.0</span> <span class="sc">/</span> fs)</span>
@@ -4759,9 +4762,9 @@ response. Those are objective- and noise-model-dependent problems.</p>
 is a desired signal and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x[n]</annotation></semantics></math>
 is an observed input. A linear estimator</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>d</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi>w</mi><mi>H</mi></msup><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>M</mi></munderover><msubsup><mi>w</mi><mi>k</mi><mo>*</mo></msubsup><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>…</mi><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>d</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msup><mi>w</mi><mi>H</mi></msup><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>M</mi></munderover><msubsup><mi>w</mi><mi>k</mi><mo>*</mo></msubsup><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mi>…</mi><mo>,</mo><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>−</mo><mi>M</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">]</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">
 \hat d[n]=w^Hu[n]=\sum_{k=0}^{M}w_k^*x[n-k],
-\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^T
+\qquad u[n]=[x[n],x[n-1],\ldots,x[n-M]]^{\top}
 </annotation></semantics></math></p>
 <p>can be chosen to minimise mean-square error
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>−</mo><mover><mi>d</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb{E}|d[n]-\hat d[n]|^2</annotation></semantics></math>.
@@ -4839,8 +4842,8 @@ arbitrary absolute threshold.</p>
 standard deviation. In a real-valued white-noise problem with variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>,
 define</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mfrac><mrow><msup><mi>s</mi><mi>T</mi></msup><mi>y</mi></mrow><mrow><mi>σ</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
-z=\frac{s^Ty}{\sigma\,\|s\|_2}.
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mfrac><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>y</mi></mrow><mrow><mi>σ</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+z=\frac{s^{\top}y}{\sigma\,\|s\|_2}.
 </annotation></semantics></math></p>
 <p>Under noise alone,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
@@ -4860,7 +4863,7 @@ a rough independent-trial threshold is
 because
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>&gt;</mo><mn>4.27</mn><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P(z&gt;4.27)\approx10^{-5}</annotation></semantics></math>.
 In terms of the raw correlation, this is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>T</mi></msup><mi>y</mi><mo>&gt;</mo><mn>4.27</mn><mspace width="0.167em"></mspace><mi>σ</mi><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">s^Ty&gt;4.27\,\sigma\|s\|_2</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>y</mi><mo>&gt;</mo><mn>4.27</mn><mspace width="0.167em"></mspace><mi>σ</mi><mo stretchy="false" form="postfix">∥</mo><mi>s</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">s^{\top}y&gt;4.27\,\sigma\|s\|_2</annotation></semantics></math>.
 Real correlation outputs overlap and are not independent, so the
 effective number of trials must be measured or modelled, but the
 direction is important: a threshold is tied to the search scope, not
@@ -4927,7 +4930,7 @@ magnitude statistic with a different null distribution. For proper
 complex Gaussian noise with covariance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>,
 meaning zero pseudocovariance
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>v</mi><msup><mi>v</mi><mi>T</mi></msup><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb{E}[vv^T]</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>v</mi><msup><mi>v</mi><mi>⊤</mi></msup><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb{E}[vv^{\top}]</annotation></semantics></math>,
 define</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">|</mo><msup><mi>s</mi><mi>H</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>y</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup></mrow><mrow><msup><mi>s</mi><mi>H</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>s</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
 T=\frac{|s^HR^{-1}y|^2}{s^HR^{-1}s}.
@@ -4958,12 +4961,12 @@ Correlating a whitened observation with an unwhitened template solves a
 different problem. In a two-coordinate example with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>100</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">R=\operatorname{diag}(1,100)</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">s=[1,1]^T</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">s=[1,1]^{\top}</annotation></semantics></math>,
 ordinary matched correlation has signal mean divided by noise standard
 deviation
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>2</mn><msqrt><mn>101</mn></msqrt></mfrac><mo>=</mo><mn>0.199</mn></mrow><annotation encoding="application/x-tex">\frac{2}{\sqrt{101}}=0.199</annotation></semantics></math>
 for unit signal amplitude. Whitening gives
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><msup><mi>s</mi><mi>T</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>s</mi></mrow></msqrt><mo>=</mo><msqrt><mn>1.01</mn></msqrt><mo>=</mo><mn>1.005</mn></mrow><annotation encoding="application/x-tex">\sqrt{s^TR^{-1}s}=\sqrt{1.01}=1.005</annotation></semantics></math>:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><msup><mi>s</mi><mi>⊤</mi></msup><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>s</mi></mrow></msqrt><mo>=</mo><msqrt><mn>1.01</mn></msqrt><mo>=</mo><mn>1.005</mn></mrow><annotation encoding="application/x-tex">\sqrt{s^{\top}R^{-1}s}=\sqrt{1.01}=1.005</annotation></semantics></math>:
 it suppresses the second coordinate’s large noise instead of assigning
 both coordinates equal weight. Nearly singular estimated covariance
 requires regularisation and held-out noise checks; an artificially tiny
@@ -5041,11 +5044,11 @@ the direction with the largest eigenvalue limits stability while
 directions with small eigenvalues converge slowly.</p>
 <p>Normalised LMS (NLMS) compensates for the instantaneous input
 energy:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mfrac><mi>μ</mi><mrow><mi>ϵ</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><msup><mi>e</mi><mo>*</mo></msup><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-w[n+1]=w[n]+\frac{\mu}{\epsilon+\|u[n]\|^2}e^*[n]u[n].
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>+</mo><mfrac><mi>μ</mi><mrow><mi>ε</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><msup><mi>e</mi><mo>*</mo></msup><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+w[n+1]=w[n]+\frac{\mu}{\varepsilon+\|u[n]\|^2}e^*[n]u[n].
 </annotation></semantics></math></p>
 <p>Here
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\epsilon&gt;0</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\varepsilon&gt;0</annotation></semantics></math>
 prevents division by zero and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
 is dimensionless. For a one-tap filter with
@@ -5053,7 +5056,7 @@ is dimensionless. For a one-tap filter with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">d[n]=3</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">w[0]=0</annotation></semantics></math>,
 and an
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 negligible compared with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\|u[n]\|^2=4</annotation></semantics></math>,
 choosing
@@ -5061,7 +5064,7 @@ choosing
 gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">e[0]=3</annotation></semantics></math>
 and, ignoring that tiny
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 for the arithmetic,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>≈</mo><mn>0</mn><mo>+</mo><mn>0.5</mn><mfrac><mrow><mn>3</mn><mo>⋅</mo><mn>2</mn></mrow><msup><mn>2</mn><mn>2</mn></msup></mfrac><mo>=</mo><mn>0.75</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
 w[1]\approx0+0.5\frac{3\cdot2}{2^2}=0.75.
@@ -5069,11 +5072,11 @@ w[1]\approx0+0.5\frac{3\cdot2}{2^2}=0.75.
 <p>Normalisation reduces sensitivity to input amplitude, but it does not
 provide an amplitude-independent bound on the coefficient update. Its
 norm is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>μ</mi><mo stretchy="false" form="prefix">|</mo><mi>e</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="postfix">∥</mo></mrow><mrow><mi>ϵ</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu|e|\|u\|}{\epsilon+\|u\|^2}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>μ</mi><mo stretchy="false" form="prefix">|</mo><mi>e</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><mo stretchy="false" form="postfix">∥</mo></mrow><mrow><mi>ε</mi><mi>+</mi><mo stretchy="false" form="postfix">∥</mo><mi>u</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu|e|\|u\|}{\varepsilon+\|u\|^2}</annotation></semantics></math>,
 whose multiplier can reach
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mi>μ</mi><mrow><mn>2</mn><msqrt><mi>ϵ</mi></msqrt></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu}{2\sqrt\epsilon}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mi>μ</mi><mrow><mn>2</mn><msqrt><mi>ε</mi></msqrt></mrow></mfrac><annotation encoding="application/x-tex">\frac{\mu}{2\sqrt\varepsilon}</annotation></semantics></math>.
 If
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
 is tiny and the reference is weak while the desired signal remains
 large, coefficients can jump substantially. Without the floor, that norm
 grows as
@@ -5334,7 +5337,7 @@ instead equals
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mi>−</mi><mi>j</mi><mi>ω</mi><mi>m</mi><mi>R</mi></mrow></msup><mi>X</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>,</mo><mi>ω</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">e^{-j\omega mR}X(m,\omega)</annotation></semantics></math>.
 The magnitudes coincide, but the phases require that deterministic
 rotation when exchanging coefficients between conventions.</p>
-<p>The window, hop, FFT length, centering convention, and boundary
+<p>The window, hop, FFT length, centring convention, and boundary
 padding all affect the picture. FFT zero-padding can make each frame’s
 displayed frequency curve smoother without improving the window’s
 ability to separate nearby components.</p>
@@ -5350,14 +5353,14 @@ the time scale you are willing to blur.</p>
 <figcaption aria-hidden="true">STFT window length trade-off for a short
 two-tone burst</figcaption>
 </figure>
-<p><em>Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled
-at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their
-supports are 16 and 64 ms; their unpadded frequency grids are spaced by
-62.5 and 15.625 Hz. The short-window spectrogram localises burst edges
-more closely, while the long window separates the tones in the
-spectrogram and representative frame spectra. Shared relative-dB scales
-support comparison. Zero-padding the short frame would not give it the
-long frame’s discrimination.</em></p>
+<p>Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16
+kHz, analysed with 256- and 1,024-sample Hann windows. Their supports
+are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and
+15.625 Hz. The short-window spectrogram localises burst edges more
+closely, while the long window separates the tones in the spectrogram
+and representative frame spectra. Shared relative-dB scales support
+comparison. Zero-padding the short frame would not give it the long
+frame’s discrimination.</p>
 <p>For reconstruction, separate the analysis window from the synthesis
 window. Let frame
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
@@ -5516,7 +5519,7 @@ explicit. <code>fft(..., inverse = TRUE)</code> is divided by the frame
 length because R leaves the inverse-transform normalisation to the
 caller.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5537,7 +5540,7 @@ caller.</p>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.<span class="bu">min</span>(denom[keep]) <span class="op">&gt;</span> <span class="dv">0</span></span>
 <span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>x_roundtrip <span class="op">=</span> accum[keep] <span class="op">/</span> denom[keep]</span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(x_roundtrip, x_stft, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>x_stft <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">4097</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>N_stft <span class="ot">&lt;-</span> <span class="dv">256</span></span>
@@ -5813,12 +5816,12 @@ pipeline with the deployed one.</p>
 or reconstruction?</li>
 <li>Which assumptions are testable from the data and metadata?</li>
 </ul>
-<p>If the answer is “I need to see what is there,” start with a
+<p>If the answer is “I need to see what is there”, start with a
 calibrated, windowed exploratory spectrum and a time-domain plot, but
-label it exploratory. If the answer is “estimate power,” use a PSD
-method and integrate it. If the answer is “remove a known band,” design
+label it exploratory. If the answer is “estimate power”, use a PSD
+method and integrate it. If the answer is “remove a known band”, design
 a filter against explicit edges and attenuation. If the answer is
-“detect a known waveform,” begin with correlation or matched filtering
+“detect a known waveform”, begin with correlation or matched filtering
 and model the noise.</p>
 <h2 data-number="13.2" id="method-selection-heuristics"><span class="header-section-number">13.2</span> Method Selection
 Heuristics</h2>
@@ -5977,7 +5980,7 @@ Signal</h2>
 random number generators produce different noise samples despite the
 shared seed.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5992,7 +5995,7 @@ shared seed.</p>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="fl">2_400.0</span> <span class="op">*</span> t <span class="op">+</span> <span class="fl">0.4</span>)</span>
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="fl">0.08</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>t.size)</span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">12000.0</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fl">8.0</span></span>
@@ -6016,7 +6019,7 @@ zero-phase filtering, but their responses and edge transients differ. A
 live path should call <code>iir_filter</code> once and carry its
 returned state across blocks.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f0 <span class="op">=</span> <span class="fl">2_400.0</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>quality <span class="op">=</span> <span class="fl">35.0</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>b, a <span class="op">=</span> signal.iirnotch(w0<span class="op">=</span>f0, Q<span class="op">=</span>quality, fs<span class="op">=</span>fs)</span>
@@ -6024,7 +6027,7 @@ returned state across blocks.</p>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Offline result; a live system would use sosfilt and accept phase/latency.</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> signal.sosfiltfilt(sos, x)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fl">2400.0</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>quality <span class="ot">&lt;-</span> <span class="fl">35.0</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>omega0 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> f0 <span class="sc">/</span> fs</span>
@@ -6057,7 +6060,7 @@ PSD</h2>
 <p>Reuse the <code>welch_psd</code> helper from the Welch section for
 the R calculation:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>f, pxx <span class="op">=</span> signal.welch(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    y,</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    fs<span class="op">=</span>fs,</span>
@@ -6077,7 +6080,7 @@ the R calculation:</p>
 <span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;2.4-kHz band power:&quot;</span>, band_power(f, pxx, <span class="dv">2_350</span>, <span class="dv">2_450</span>))</span>
 <span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;total estimated mean square:&quot;</span>, pxx.<span class="bu">sum</span>() <span class="op">*</span> (f[<span class="dv">1</span>] <span class="op">-</span> f[<span class="dv">0</span>]))</span>
 <span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;time-domain variance:&quot;</span>, np.var(y))</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">&lt;-</span> <span class="fu">welch_psd</span>(y, fs, <span class="at">nperseg =</span> <span class="dv">16384</span>, <span class="at">noverlap =</span> <span class="dv">8192</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> estimate<span class="sc">$</span>f</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>pxx <span class="ot">&lt;-</span> estimate<span class="sc">$</span>psd</span>
@@ -6106,7 +6109,7 @@ Block Path</h2>
 <p>The R streaming check uses the same recurrence and carries its two
 state values from one block to the next:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>initial_state <span class="op">=</span> signal.sosfilt_zi(sos) <span class="op">*</span> x[<span class="dv">0</span>]</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>y_causal_batch, final_batch_state <span class="op">=</span> signal.sosfilt(</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    sos, x, zi<span class="op">=</span>initial_state.copy()</span>
@@ -6128,7 +6131,7 @@ state values from one block to the next:</p>
 <span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;causal output length:&quot;</span>, <span class="bu">len</span>(y_causal))</span>
 <span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(y_causal, y_causal_batch, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span>
 <span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(state, final_batch_state, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>initial <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>y_causal_batch <span class="ot">&lt;-</span> <span class="fu">iir_filter</span>(x, b, a, initial)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>y_causal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
@@ -6171,7 +6174,7 @@ differ slightly from SciPy’s <code>iirnotch</code> parameterisation, so
 the response assertions are written against the R coefficients actually
 used above.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p>Python</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic reference; reuse fs and sos from the notch example.</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>n_ref <span class="op">=</span> np.arange(<span class="dv">12_000</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_ref <span class="op">=</span> n_ref <span class="op">/</span> fs</span>
@@ -6203,7 +6206,7 @@ used above.</p>
 <span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    np.testing.assert_allclose(measured_gain, <span class="bu">abs</span>(gain), atol<span class="op">=</span><span class="fl">1e-10</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(H_ref[<span class="dv">0</span>]) <span class="op">&gt;</span> <span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="fl">0.01</span> <span class="op">/</span> <span class="dv">20</span>)  <span class="co"># Wanted-tone loss below 0.01 dB.</span></span>
 <span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(H_ref[<span class="dv">1</span>]) <span class="op">&lt;</span> <span class="fl">1e-10</span>             <span class="co"># Exact-frequency notch reference.</span></span></code></pre></div>
-<p><strong>R</strong></p>
+<p>R</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic reference; reuse fs, b, and a from the notch example.</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>n_ref <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11999</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>t_ref <span class="ot">&lt;-</span> n_ref <span class="sc">/</span> fs</span>
@@ -6378,8 +6381,8 @@ two, while a 6 dB power error is also roughly a factor of four in
 power.</p>
 <h2 data-number="14.5" id="fir-order-intuition"><span class="header-section-number">14.5</span> FIR Order Intuition</h2>
 <p>For a windowed-sinc FIR, order grows approximately inversely with
-normalized transition width. If the sample rate doubles while the
-physical transition width stays fixed, the normalized transition narrows
+normalised transition width. If the sample rate doubles while the
+physical transition width stays fixed, the normalised transition narrows
 and the required number of taps rises. This is why multirate systems
 often filter after an early rate reduction when the signal band permits
 it.</p>
@@ -6398,7 +6401,7 @@ can miss a narrow ripple peak and falsely certify a filter.</p>
 <h2 data-number="14.6" id="iir-order-and-warp-checks"><span class="header-section-number">14.6</span> IIR Order and Warp Checks</h2>
 <p>An analogue prototype order function usually works with prewarped
 passband and stopband frequencies. The resulting digital response must
-still be measured after the bilinear transform. At low normalized
+still be measured after the bilinear transform. At low normalised
 frequencies the tangent mapping is nearly linear; near Nyquist it is
 strongly warped. A design that looks correct in an analogue frequency
 table can miss its digital edge if the conversion is applied
@@ -6406,7 +6409,7 @@ incorrectly.</p>
 <p>Always check:</p>
 <ol type="1">
 <li>the prototype’s frequency units;</li>
-<li>whether the API expects a half-cycle-normalized cutoff or
+<li>whether the API expects a half-cycle-normalised cutoff or
 hertz;</li>
 <li>whether prewarping is internal or must be supplied;</li>
 <li>coefficient ordering and feedback sign convention;</li>
@@ -6516,6 +6519,88 @@ write down the transform convention, and verify the result against an
 identity or a controlled experiment. The mathematics gives you the
 relationships; the engineering work is making sure the conditions for
 those relationships are actually true.</p>
+<h1 data-number="16" id="notation"><span class="header-section-number">16</span> Notation</h1>
+<p>The table records the symbols used repeatedly in the derivations.
+Local definitions still appear where an equation introduces a variable
+or adopts a transform convention.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x[n]</annotation></semantics></math></td>
+<td>Discrete-time signal sample at index
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math></td>
+<td>Signal and system definitions</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">y[n]</annotation></semantics></math></td>
+<td>Output sample of a discrete-time system</td>
+<td>Signal and system definitions</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math></td>
+<td>Imaginary unit, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>j</mi><mn>2</mn></msup><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">j^2=-1</annotation></semantics></math></td>
+<td>Fourier representations</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>s</mi></msub><annotation encoding="application/x-tex">f_s</annotation></semantics></math></td>
+<td>Sampling frequency</td>
+<td>Sampling and aliasing</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math></td>
+<td>Angular frequency in radians per sample</td>
+<td>The DTFT</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X(e^{j\omega})</annotation></semantics></math></td>
+<td>Discrete-time Fourier transform of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">x[n]</annotation></semantics></math></td>
+<td>The DTFT</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><mrow><mi>j</mi><mi>ω</mi></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(e^{j\omega})</annotation></semantics></math></td>
+<td>Frequency response of a system</td>
+<td>LTI systems</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math></td>
+<td>Complex
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>-transform
+variable</td>
+<td>The
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>-transform</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false" form="prefix">[</mo><mi>n</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">h[n]</annotation></semantics></math></td>
+<td>Impulse response</td>
+<td>Convolution</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math></td>
+<td>Passband ripple or a covariance matrix, according to context</td>
+<td>Filter specifications and matched filtering</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></td>
+<td>Small positive numerical-stability or timing-error quantity,
+according to context</td>
+<td>Adaptive filtering and sampling jitter</td>
+</tr>
+</tbody>
+</table>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
@@ -6614,7 +6699,7 @@ those relationships are actually true.</p>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
-      var defaultMathRenderer = 'mathmlmathml';
+      var defaultMathRenderer = 'mathjaxmathml';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';

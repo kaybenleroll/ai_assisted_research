@@ -467,7 +467,7 @@ settled from the primary source. Anthropic's own memory documentation
 Claude Code loads, and `AGENTS.md` is not among them. A repository whose only
 agent instructions live in `AGENTS.md` gives Claude Code nothing. The agent
 still works — it reads code, runs tests, follows your prompt — but your build
-commands, generated-file policy, and review rules are simply absent from its
+commands, generated-file policy, and review rules are absent from its
 context, and nothing in the session announces their absence. That is the worst
 shape of failure for an instruction system: silent, and indistinguishable from
 a model that chose to ignore the rules.
@@ -720,7 +720,7 @@ information in a different file format.
 
 The most mature tool aimed at exactly this problem is **Ruler**
 (`github.com/intellectronica/ruler`, published to npm as
-`@intellectronica/ruler`). At the time of writing it has roughly 2,900 GitHub
+`@intellectronica/ruler`). As of September 2026, it had roughly 2,900 GitHub
 stars and 160 forks, over 1,000 commits, an MIT licence, and real continuous
 integration. That combination matters more than the star count: this is a
 category where half-finished scripts are common, and Ruler is the one with
@@ -1226,7 +1226,7 @@ This section uses three labels:
 - **Partial equivalent** means the goal can be achieved, but the lifecycle, scope, or guarantees differ enough that a copy-and-paste migration is unsafe.
 - **Non-equivalent** means there is no reliable one-to-one feature. Use a different layer of the system.
 
-The labels describe the capability, not the product quality. A partial equivalent can be the better tool for a particular job. It simply requires a deliberate translation.
+The labels describe the capability, not the product quality. A partial equivalent can be the better tool for a particular job. It requires a deliberate translation.
 
 ### Start With the Job, Not the Feature Name
 
@@ -1280,7 +1280,7 @@ When asked to change a database schema:
 5. Report the migration and its rollback path.
 ```
 
-The translation becomes partial when the Claude Code skill depends on harness-specific behaviour. Examples include a special invocation syntax, a particular subagent type, a lifecycle hook, or an assumed tool name. Preserve the workflow and rewrite the parts that refer to those mechanisms. Do not preserve a command name simply because it appears in the old skill.
+The translation becomes partial when the Claude Code skill depends on harness-specific behaviour. Examples include a special invocation syntax, a particular subagent type, a lifecycle hook, or an assumed tool name. Preserve the workflow and rewrite the parts that refer to those mechanisms. The old command name alone is no reason to preserve it.
 
 Keep three kinds of guidance separate:
 
@@ -1492,7 +1492,7 @@ top-level `mcpServers` object, and each server entry carries a `type` field —
 `command`, `args`, and `env` for a local process, or `url` for a remote server.
 There is a documented gotcha here that costs people an afternoon: an entry with
 a `url` but no explicit `type` is read as `stdio`, which cannot work for a
-remote server, and the entry is skipped. The failure is a server that simply is
+remote server, and the entry is skipped. The failure is a server that is
 not there, not an error message. Always set `type` explicitly.
 
 Codex CLI reads TOML tables from `~/.codex/config.toml` for user scope, or
@@ -2104,7 +2104,7 @@ history of the instruction file survives. Bundling the rename with content
 edits produces a diff that looks like a new file and hides whatever else
 changed inside it.
 
-Do not copy a large `CLAUDE.md` into `AGENTS.md` instead of importing it. Duplication looks convenient during the first migration and becomes a maintenance defect as soon as a command, directory name, test rule, or safety constraint changes in one file but not the other. A duplicated instruction can also be more dangerous than a missing instruction: the agent receives two plausible rules and has to guess which one wins.
+Do not copy a large `CLAUDE.md` into `AGENTS.md` instead of importing it. Duplication looks convenient during the first migration and becomes a maintenance defect when a command, directory name, test rule, or safety constraint changes in one file but not the other. A duplicated instruction can also be more dangerous than a missing instruction: the agent receives two plausible rules and has to guess which one wins.
 
 Verify the result rather than assuming it. Open a read-only session in each
 harness and ask it to name the repository's build command, its source-of-truth
@@ -2145,7 +2145,7 @@ repository/
 
 The layout is illustrative, not a requirement. Do not create empty `.claude/` or `.codex/` directories merely to make the tree look symmetrical. Add a directory when it contains configuration or reusable behaviour that the corresponding harness actually needs.
 
-For this primer’s repository, the existing project rules are the important shared context: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, and the instruction to preserve unrelated work. A Codex bridge should point at those rules rather than restating them. If a rule later proves useful to both harnesses but is currently buried in Claude-specific prose, extract that rule into a neutral document and make both adapters reference it.
+For this primer’s repository, the existing project rules are the important shared context: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, and the instruction to preserve unrelated work. A Codex bridge should point at those rules rather than restating them. If a rule later proves useful to both harnesses but is buried in Claude-specific prose, extract that rule into a neutral document and make both adapters reference it.
 
 ### Roll Out in a Branch, One Capability at a Time
 
@@ -2493,7 +2493,7 @@ What remains genuinely volatile, and should be rechecked before you rely on it:
 That last point deserves emphasis over the others. Every configuration example
 in this primer was accurate against the documentation cited, and a renamed or
 relocated key will fail quietly rather than loudly — a misspelled field in a
-TOML or JSON configuration file usually means the feature is simply not
+TOML or JSON configuration file usually means the feature is not
 configured, not that you get an error. Sanity-check exact field names against
 current documentation before automating anything, and prefer a test that proves
 the setting took effect over an assumption that the file is correct.

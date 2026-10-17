@@ -662,7 +662,7 @@ Rigidity</a></li>
 </ul></li>
 <li><a href="#series-and-singularities" id="toc-series-and-singularities"><span class="toc-section-number">4</span> Series and Singularities</a>
 <ul>
-<li><a href="#taylor-series-come-from-a-contour-not-a-smoothness-guess" id="toc-taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="toc-section-number">4.1</span> Taylor Series Come from a Contour,
+<li><a href="#taylor-series-come-from-a-contour-not-a-smoothness-guess" id="toc-taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="toc-section-number">4.1</span> Taylor Series Come From a Contour,
 Not a Smoothness Guess</a></li>
 <li><a href="#laurent-series-separate-the-two-sides-of-a-hole" id="toc-laurent-series-separate-the-two-sides-of-a-hole"><span class="toc-section-number">4.2</span> Laurent Series Separate the Two
 Sides of a Hole</a></li>
@@ -695,7 +695,7 @@ Pole</a></li>
 Structure</a>
 <ul>
 <li><a href="#local-factorisation-turns-zeros-into-integers" id="toc-local-factorisation-turns-zeros-into-integers"><span class="toc-section-number">6.1</span> Local Factorisation Turns Zeros
-into Integers</a></li>
+Into Integers</a></li>
 <li><a href="#argument-principle-and-rouchés-theorem" id="toc-argument-principle-and-rouchés-theorem"><span class="toc-section-number">6.2</span> Argument Principle and Rouché’s
 Theorem</a></li>
 <li><a href="#zero-counts-and-strict-boundary-margins" id="toc-zero-counts-and-strict-boundary-margins"><span class="toc-section-number">6.3</span> Zero Counts and Strict Boundary
@@ -926,7 +926,7 @@ D)&gt;0\)</span> when the complement is nonempty. This is why the phrase
 disk” is stronger than “<span class="math inline">\(f\)</span> is
 holomorphic in the open disk”: the former gives room to choose an
 enclosing circle and a bound on it. If a singularity sits on the
-proposed boundary, shrinking the circle may repair the argument; simply
+proposed boundary, shrinking the circle may repair the argument;
 evaluating the formula at boundary sample points does not.</p>
 <p>Absolute convergence is another practical guardrail. If <span class="math inline">\(\sum |a_n|&lt;\infty\)</span>, rearranging terms
 cannot change <span class="math inline">\(\sum a_n\)</span>, and the
@@ -1061,6 +1061,7 @@ grid to another conformal grid</figcaption>
 of the two grid families while doubling arguments and changing
 scale.</em></p>
 <h2 data-number="1.4" id="practice"><span class="header-section-number">1.4</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <p>Try these before moving on. Full outline solutions are in Appendix B;
 use Appendix A only when you need a nudge.</p>
 <ol type="1">
@@ -1073,6 +1074,7 @@ be contradicted by uniform convergence on <span class="math inline">\([0,1]\)</s
 state a sufficient condition on <span class="math inline">\(M_n\)</span>
 for convergence. (<a href="#solution-2">Solution 2</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 1–2</a>.</p>
 <h1 data-number="2" id="complex-functions-and-analyticity"><span class="header-section-number">2</span> Complex Functions and
@@ -1195,10 +1197,10 @@ inverse of the exponential. If an application needs continuity across
 the negative real axis but never crosses the positive real axis, move
 the cut to the positive ray and use an argument interval such as <span class="math inline">\((0,2\pi)\)</span> instead.</p>
 <p>For complex <span class="math inline">\(\alpha\)</span>, the branch
-choice can change not only phase but modulus: <span class="math inline">\(|e^{2\pi i\alpha}|=e^{-2\pi\Im\alpha}\)</span>.
-This is why a complex power is not simply “the usual power with a
-complex input.” Its definition includes a domain and an angle
-convention. In later contour integrals involving <span class="math inline">\(z^\alpha\)</span>, the two sides of a cut may
+choice can change not only phase but modulus: <span class="math inline">\(|e^{2\pi i\alpha}|=e^{-2\pi\Im\alpha}\)</span>. A
+complex power requires more than “the usual power with a complex input”:
+its definition includes a domain and an angle convention. In later
+contour integrals involving <span class="math inline">\(z^\alpha\)</span>, the two sides of a cut may
 carry genuinely different weights. The residue theorem applies only to
 regions where the chosen branch is single-valued and holomorphic; a
 keyhole contour keeps track of both sides of the removed ray.</p>
@@ -1369,6 +1371,7 @@ physics, one must also check what <span class="math inline">\(u\)</span>
 and <span class="math inline">\(v\)</span> represent and what
 assumptions make a potential description valid.</p>
 <h2 data-number="2.5" id="practice-1"><span class="header-section-number">2.5</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="3" type="1">
 <li>Test the claim that <span class="math inline">\(f(z)=\overline
 z\)</span> is complex differentiable at <span class="math inline">\(0\)</span> but nowhere else. Use the difference
@@ -1384,6 +1387,7 @@ harmonic conjugate and the resulting analytic functions. Contrast this
 with <span class="math inline">\(u=\log|z|\)</span> on the punctured
 plane. (<a href="#solution-5">Solution 5</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 3–5</a>.</p>
 <h1 data-number="3" id="contours-and-cauchy-theory"><span class="header-section-number">3</span> Contours and Cauchy Theory</h1>
@@ -1547,9 +1551,9 @@ Mark the singularities and ask which connected component of the
 complement of the contour contains each one. A slight movement of a pole
 within its component cannot change its index weight. If an answer
 changes under such a movement while no pole crosses the path, either the
-proposed formula or the chosen contour is wrong. The principle is
-topological, but it works as a robust arithmetic check in ordinary
-calculations.</p>
+proposed formula or the chosen contour is wrong. This topological
+principle also checks the arithmetic of an ordinary residue
+calculation.</p>
 <p>For piecewise smooth curves the bound <span class="math inline">\(|\int_\gamma f\,dz|\le L\sup_\gamma|f|\)</span> is
 immediate, but its use depends on finding a bound valid on
 <em>every</em> part of the path. Suppose <span class="math inline">\(f(z)=1/(z^2+1)\)</span> and the circle <span class="math inline">\(|z|=R\)</span> has <span class="math inline">\(R&gt;1\)</span>. The reverse triangle inequality
@@ -1850,6 +1854,7 @@ is useful because <span class="math inline">\(f\)</span> is perfectly
 holomorphic near the <em>contour</em>, so checking only the boundary
 would miss the problem.</p>
 <h2 data-number="3.7" id="practice-2"><span class="header-section-number">3.7</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="6" type="1">
 <li>A student claims that <span class="math inline">\(1/z\)</span> has
 an antiderivative on <span class="math inline">\(\mathbb
@@ -1859,6 +1864,7 @@ that guarantees primitives. (<a href="#solution-6">Solution 6</a>)</li>
 <li>Use Cauchy’s formula to evaluate <span class="math inline">\(\oint_{|z|=2}e^z/(z-1)^3\,dz\)</span>. State every
 hypothesis you use and explain why the derivative order is two. (<a href="#solution-7">Solution 7</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 6–7</a>.</p>
 <h1 data-number="4" id="series-and-singularities"><span class="header-section-number">4</span> Series and Singularities</h1>
@@ -1868,7 +1874,7 @@ distinguish removable singularities, poles, and essential singularities
 on punctured neighbourhoods. The examples emphasise convergence regions
 as well as coefficients, since both determine what an expansion can
 establish.</p>
-<h2 data-number="4.1" id="taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="header-section-number">4.1</span> Taylor Series Come from a
+<h2 data-number="4.1" id="taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="header-section-number">4.1</span> Taylor Series Come From a
 Contour, Not a Smoothness Guess</h2>
 <p>Suppose <span class="math inline">\(f\)</span> is holomorphic on an
 open disk <span class="math inline">\(|z-a|&lt;R_0\)</span>. Choose
@@ -2258,6 +2264,7 @@ complicated but you can prove it bounded on a punctured disk, the
 removable-singularity theorem settles the issue without a full series
 expansion.</p>
 <h2 data-number="4.6" id="practice-3"><span class="header-section-number">4.6</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="8" type="1">
 <li>Find the Laurent series of <span class="math inline">\(z/(z-1)\)</span> about zero on <span class="math inline">\(0&lt;|z|&lt;1\)</span> and on <span class="math inline">\(|z|&gt;1\)</span>. Give the convergence region of
 each and explain why the expansions differ. (<a href="#solution-8">Solution 8</a>)</li>
@@ -2269,6 +2276,7 @@ this coefficient does not imply a regular point. (<a href="#solution-9">Solution
 <span class="math inline">\(|z|&gt;1\)</span> and use the coefficient of
 <span class="math inline">\(1/z\)</span> to evaluate <span class="math inline">\(\oint_{|z|=2}(z^2+1)/(z(z-1))\,dz\)</span>. (<a href="#solution-10">Solution 10</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 8–10</a>.</p>
 <h1 data-number="5" id="residues-and-contour-methods"><span class="header-section-number">5</span> Residues and Contour Methods</h1>
@@ -2360,7 +2368,7 @@ exposes the coefficient with the least algebra. For a simple pole of
 <span class="math inline">\(g/h\)</span> where <span class="math inline">\(h(a)=0\)</span> and <span class="math inline">\(h&#39;(a)\ne0\)</span>, use <span class="math inline">\(g(a)/h&#39;(a)\)</span>. For a repeated rational
 pole, expand the analytic factor or use the derivative formula. For
 products of an exponential and a rational function, a short Taylor
-expansion often shows the answer more clearly than repeated quotient
+expansion often requires less algebra than repeated quotient
 differentiation. Before applying any formula, factor the denominator,
 locate the contour, and cancel removable factors. The residue is local,
 but the contour integral also needs a global inventory of which
@@ -2790,12 +2798,14 @@ is most trustworthy when you inspect the parametrised integrand and the
 minimum distance from the path to each singularity, not just the final
 printed number.</p>
 <h2 data-number="5.8" id="practice-4"><span class="header-section-number">5.8</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="11" type="1">
 <li>Classify the finite singularities of <span class="math inline">\(e^z/(z^2+1)\)</span>, calculate both residues, and
 separately use a semicircular contour to evaluate <span class="math inline">\(\int_{-\infty}^{\infty}(x^2+1)^{-1}\,dx\)</span>.
 State which function is integrated on the contour and why the arc
 vanishes. (<a href="#solution-11">Solution 11</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solution
 11</a>.</p>
 <h1 data-number="6" id="global-theorems-and-geometric-structure"><span class="header-section-number">6</span> Global Theorems and Geometric
@@ -2806,7 +2816,7 @@ maximum-modulus results constrain possible values; and conformal maps
 transfer geometry while preserving angles and harmonicity. Together
 these theorems explain how local rigidity governs global shape.</p>
 <h2 data-number="6.1" id="local-factorisation-turns-zeros-into-integers"><span class="header-section-number">6.1</span> Local Factorisation Turns Zeros
-into Integers</h2>
+Into Integers</h2>
 <p>Let <span class="math inline">\(f\)</span> be holomorphic on a
 connected domain <span class="math inline">\(D\)</span> and not
 identically zero. Its zeros are isolated. Indeed, at a zero <span class="math inline">\(a\)</span>, Taylor’s theorem gives a first nonzero
@@ -3276,6 +3286,7 @@ chain, but they also have to respect its hypotheses: the domain, its
 holes, the contour orientation, the location of singularities, and the
 branch of any multivalued function.</p>
 <h2 data-number="6.7" id="practice-5"><span class="header-section-number">6.7</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="12" type="1">
 <li>Use Rouché’s theorem to count the zeros of <span class="math inline">\(p(z)=z^5+3z+1\)</span> in <span class="math inline">\(|z|&lt;1\)</span>, in <span class="math inline">\(|z|&lt;2\)</span>, and in <span class="math inline">\(1&lt;|z|&lt;2\)</span>. Verify the strict
 inequality on each circle. (<a href="#solution-12">Solution 12</a>)</li>
@@ -3291,6 +3302,7 @@ Identify the period. (<a href="#solution-15">Solution 15</a>)</li>
 conformality and give an example of a conformal map that is not globally
 one-to-one. (<a href="#solution-16">Solution 16</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 12–16</a>.</p>
 <h1 data-number="7" id="harmonic-functions-and-applications"><span class="header-section-number">7</span> Harmonic Functions and
@@ -3579,9 +3591,9 @@ upper half-plane. This expression is correct but not the most convenient
 disk formula. A geometric simplification comes from the harmonic measure
 of a semicircle: the disk solution is the angular fraction of the
 Poisson kernel over the lower semicircle. The Möbius map transports both
-the interior point and the boundary labels; simply declaring “lower half
-gets 1” without checking which real interval maps there would reverse
-the answer.</p>
+the interior point and the boundary labels; declaring “lower half gets
+1” without checking which real interval maps there would reverse the
+answer.</p>
 <p>The map makes the boundary discontinuity visually simple, but it does
 not remove it. Near the two jump points on the circle, the solution
 changes rapidly. The Poisson integral remains bounded between zero and
@@ -3714,6 +3726,7 @@ the minimum. The picture motivates the local scaling argument, but the
 asymptotic error still depends on smoothness and tail
 hypotheses.</em></p>
 <h2 data-number="7.5" id="practice-6"><span class="header-section-number">7.5</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="17" type="1">
 <li>State the maximum principle for a harmonic function on a bounded
 domain and explain what it implies for uniqueness of a Dirichlet
@@ -3731,6 +3744,7 @@ derivation and what complex analysis contributes when the exponent or
 contour is generalised. Name one condition needed before moving a
 contour. (<a href="#solution-20">Solution 20</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 17–20</a>.</p>
 <h1 data-number="8" id="computational-complex-analysis"><span class="header-section-number">8</span> Computational Complex
@@ -3750,7 +3764,7 @@ singularities. Python is the canonical language in these examples. The
 arrays below represent a rectangular grid in the complex plane; the hue
 records argument and brightness records modulus.</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p><strong>Python</strong>{.code-label}</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3778,7 +3792,7 @@ records argument and brightness records modulus.</p>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Im z&quot;</span>)</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Domain coloring of the principal logarithm&quot;</span>)</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<p><strong>R</strong></p>
+<p><strong>R</strong>{.code-label}</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> y, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
@@ -3885,7 +3899,7 @@ command.</p>
 <p>For a numerical contour check, parameterize the circle <span class="math inline">\(z(t)=Re^{it}\)</span>, so <span class="math inline">\(dz=iRe^{it}dt\)</span>. The following two tabs
 integrate counterclockwise around <span class="math inline">\(|z|=2\)</span> and should return <span class="math inline">\(2\pi i\)</span> for <span class="math inline">\(1/(z-i)\)</span>:</p>
 <div class="code-group">
-<p><strong>Python</strong></p>
+<p><strong>Python</strong>{.code-label}</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mpmath <span class="im">as</span> mp</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>mp.mp.dps <span class="op">=</span> <span class="dv">40</span></span>
@@ -3898,7 +3912,7 @@ integrate counterclockwise around <span class="math inline">\(|z|=2\)</span> and
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> mp.quad(integrand_on_circle, [<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> mp.pi])</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(value)</span></code></pre></div>
-<p><strong>R</strong></p>
+<p><strong>R</strong>{.code-label}</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200000</span><span class="dt">L</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>radius <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="fu">seq_len</span>(n) <span class="sc">-</span> <span class="fl">0.5</span>) <span class="sc">/</span> n</span>
@@ -4034,6 +4048,7 @@ quadrature</a>.</li>
 <code>integrate</code></a>. Asymptotic methods: <a href="https://dlmf.nist.gov/2">NIST DLMF, Chapter 2</a>.</li>
 </ul>
 <h2 data-number="8.5" id="practice-7"><span class="header-section-number">8.5</span> Practice</h2>
+<!-- markdownlint-disable MD051 -->
 <ol start="21" type="1">
 <li>Parameterise <span class="math inline">\(\gamma_R(t)=Re^{it}\)</span> and approximate <span class="math inline">\(\oint_{\gamma_R}dz/(z-1)\)</span> with the
 periodic trapezoidal rule for <span class="math inline">\(R=2\)</span>
@@ -4050,6 +4065,7 @@ residue. Compare with a hand derivation and identify the variable and
 centre supplied to the software. (<a href="#solution-23">Solution
 23</a>)</li>
 </ol>
+<!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 21–23</a>.</p>
 <h1 data-number="9" id="appendices-hints-outline-solutions-and-further-reading"><span class="header-section-number">9</span> Appendices: Hints, Outline

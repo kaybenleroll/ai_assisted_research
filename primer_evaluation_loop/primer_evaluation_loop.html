@@ -656,7 +656,23 @@ Skill Wording Edit</a></li>
 <li><a href="#from-fuzzy-intuition-to-controlled-iteration" id="toc-from-fuzzy-intuition-to-controlled-iteration"><span class="toc-section-number">4.7</span> From Fuzzy Intuition to Controlled
 Iteration</a></li>
 <li><a href="#companion-checklist-evaluate-and-improve-one-workflow-instruction" id="toc-companion-checklist-evaluate-and-improve-one-workflow-instruction"><span class="toc-section-number">4.8</span> Companion Checklist: Evaluate and
-Improve One Workflow Instruction</a></li>
+Improve One Workflow Instruction</a>
+<ul>
+<li><a href="#identify-the-failure-pattern" id="toc-identify-the-failure-pattern">1. Identify the Failure
+Pattern</a></li>
+<li><a href="#write-behavioural-anchors" id="toc-write-behavioural-anchors">2. Write Behavioural Anchors</a></li>
+<li><a href="#identify-the-ambiguous-phrase" id="toc-identify-the-ambiguous-phrase">3. Identify the Ambiguous
+Phrase</a></li>
+<li><a href="#rewrite-for-observability" id="toc-rewrite-for-observability">4. Rewrite for Observability</a></li>
+<li><a href="#ab-test-on-real-work" id="toc-ab-test-on-real-work">5. A/B
+Test on Real Work</a></li>
+<li><a href="#decide-keep-revert-or-iterate" id="toc-decide-keep-revert-or-iterate">6. Decide: Keep, Revert, or
+Iterate</a></li>
+<li><a href="#log-the-result" id="toc-log-the-result">7. Log the
+Result</a></li>
+<li><a href="#move-to-the-next-skill-or-repeat" id="toc-move-to-the-next-skill-or-repeat">8. Move to the next Skill or
+Repeat</a></li>
+</ul></li>
 <li><a href="#companion-prompt-template-copy-and-paste-to-evaluate-a-workflow-instruction" id="toc-companion-prompt-template-copy-and-paste-to-evaluate-a-workflow-instruction"><span class="toc-section-number">4.9</span> Companion Prompt Template: Copy
 and Paste to Evaluate a Workflow Instruction</a></li>
 <li><a href="#what-you-can-and-cannot-measure" id="toc-what-you-can-and-cannot-measure">What You Can and Cannot
@@ -702,9 +718,30 @@ Found</a></li>
 Loop</a></li>
 </ul></li>
 <li><a href="#how-frontier-labs-actually-run-this" id="toc-how-frontier-labs-actually-run-this"><span class="toc-section-number">10</span> How Frontier Labs Actually Run
-This</a></li>
-<li><a href="#what-is-genuinely-unresolved" id="toc-what-is-genuinely-unresolved"><span class="toc-section-number">11</span> What Is Genuinely
-Unresolved</a></li>
+This</a>
+<ul>
+<li><a href="#anchor-1-anthropics-rsp-and-the-asl-gate" id="toc-anchor-1-anthropics-rsp-and-the-asl-gate"><span class="toc-section-number">10.1</span> Anchor 1: Anthropic’s RSP and the
+ASL Gate</a></li>
+<li><a href="#anchor-2-openais-preparedness-framework" id="toc-anchor-2-openais-preparedness-framework"><span class="toc-section-number">10.2</span> Anchor 2: OpenAI’s Preparedness
+Framework</a></li>
+<li><a href="#anchor-3-chatbot-arena-as-ecosystem-level-evaluation" id="toc-anchor-3-chatbot-arena-as-ecosystem-level-evaluation"><span class="toc-section-number">10.3</span> Anchor 3: Chatbot Arena as
+Ecosystem-Level Evaluation</a></li>
+<li><a href="#what-running-this-costs" id="toc-what-running-this-costs"><span class="toc-section-number">10.4</span> What Running This Costs</a></li>
+</ul></li>
+<li><a href="#what-is-genuinely-unresolved" id="toc-what-is-genuinely-unresolved"><span class="toc-section-number">11</span> What Is Genuinely Unresolved</a>
+<ul>
+<li><a href="#goodharts-treadmill-has-no-exit" id="toc-goodharts-treadmill-has-no-exit"><span class="toc-section-number">11.1</span> Goodhart’s Treadmill Has No
+Exit</a></li>
+<li><a href="#disagreement-as-signal-versus-noise" id="toc-disagreement-as-signal-versus-noise"><span class="toc-section-number">11.2</span> Disagreement as Signal Versus
+Noise</a></li>
+<li><a href="#benchmark-scores-and-productivity-measure-different-outcomes" id="toc-benchmark-scores-and-productivity-measure-different-outcomes"><span class="toc-section-number">11.3</span> Benchmark Scores and Productivity
+Measure Different Outcomes</a></li>
+<li><a href="#superhuman-oversight-the-hardest-problem" id="toc-superhuman-oversight-the-hardest-problem"><span class="toc-section-number">11.4</span> Superhuman Oversight: The Hardest
+Problem</a></li>
+<li><a href="#a-brief-note-on-test-time-compute" id="toc-a-brief-note-on-test-time-compute"><span class="toc-section-number">11.5</span> A Brief Note on Test-Time
+Compute</a></li>
+<li><a href="#the-closing-motif" id="toc-the-closing-motif"><span class="toc-section-number">11.6</span> The Closing Motif</a></li>
+</ul></li>
 <li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources"><span class="toc-section-number">12</span> Further Reading and
 Resources</a></li>
 </ul></div>
@@ -1476,7 +1513,8 @@ and Improve One Workflow Instruction</h2>
 to run a single improvement cycle on a workflow instruction. Copy it,
 fill it in, file the result, and repeat. Over time the one-line logs
 from step 7 become your instruction-wording audit trail.</p>
-<p><strong>1. Identify the failure pattern</strong></p>
+<h3 class="unnumbered" id="identify-the-failure-pattern">1. Identify the
+Failure Pattern</h3>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Review 3–5 recent transcripts of
 this skill.</label></li>
@@ -1486,7 +1524,8 @@ the transcript”).</label></li>
 <li><label><input type="checkbox"></input>Estimate frequency: does this
 failure appear in 1/5 sessions? 3/5? Every session?</label></li>
 </ul>
-<p><strong>2. Write behavioural anchors</strong></p>
+<h3 class="unnumbered" id="write-behavioural-anchors">2. Write
+Behavioural Anchors</h3>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Define 2–4 binary criteria that
 would let you check if the failure occurred.</label></li>
@@ -1496,7 +1535,8 @@ pass and fail conditions.</label></li>
 criteria to someone unfamiliar with the skill and they could score a
 transcript?</label></li>
 </ul>
-<p><strong>3. Identify the ambiguous phrase</strong></p>
+<h3 class="unnumbered" id="identify-the-ambiguous-phrase">3. Identify
+the Ambiguous Phrase</h3>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Read the skill file and locate the
 phrase most likely to permit the failure.</label></li>
@@ -1505,7 +1545,8 @@ description? An exit condition?</label></li>
 <li><label><input type="checkbox"></input>Make sure it is one phrase, not a
 paragraph — you are editing a pinpoint, not a rewrite.</label></li>
 </ul>
-<p><strong>4. Rewrite for observability</strong></p>
+<h3 class="unnumbered" id="rewrite-for-observability">4. Rewrite for
+Observability</h3>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Replace vague adjectives with
 evidence requirements appropriate to the task (e.g., “thorough
@@ -1517,7 +1558,8 @@ is a gate (“before X is done, never do Y”).</label></li>
 if this controls evidence (“produce a runnable test” not “understand the
 problem”).</label></li>
 </ul>
-<p><strong>5. A/B test on real work</strong></p>
+<h3 class="unnumbered" id="ab-test-on-real-work">5. A/B Test on Real
+Work</h3>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Apply old and new wording to
 comparable tasks, randomising their order when practical.</label></li>
@@ -1528,7 +1570,8 @@ anchors from step 2.</label></li>
 <li><label><input type="checkbox"></input>Record pass rate for each anchor
 under A and B.</label></li>
 </ul>
-<p><strong>6. Decide: keep, revert, or iterate</strong></p>
+<h3 class="unnumbered" id="decide-keep-revert-or-iterate">6. Decide:
+Keep, Revert, or Iterate</h3>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>Compare each anchor on matched tasks
 and report its numerator and denominator.</label></li>
@@ -1541,7 +1584,7 @@ appears.</label></li>
 <li><label><input type="checkbox"></input>Otherwise revert, revise the phrase,
 or collect more evidence.</label></li>
 </ul>
-<p><strong>7. Log the result</strong></p>
+<h3 class="unnumbered" id="log-the-result">7. Log the Result</h3>
 <p>Copy and paste this line into an instruction-wording changelog:</p>
 <pre class="text"><code>workflow=WORKFLOW_NAME | date=YYYY-MM-DD | change=&quot;DESCRIBE THE REWRITE&quot; |
 sample=N sessions | anchor1_delta=±Npp | anchor2_delta=±Npp |
@@ -1549,7 +1592,10 @@ anchor3_delta=±Npp | decision=KEEP/REVERT | notes=&quot;ANYTHING INTERESTING&qu
 <p>Hypothetical example with four sessions per condition:</p>
 <pre class="text"><code>workflow=diagnostic-repro | date=2026-06-18 | change=&quot;add repro hard gate: &#39;before any hypothesis, execute repro twice with matching failure&#39;&quot; |
 sample=8 sessions | repro_gate=+50pp | loop_quality=+25pp | transition_discipline=+25pp | decision=KEEP | notes=&quot;provisional; four tasks per condition do not establish a general effect&quot;</code></pre>
-<p><strong>8. Move to the next skill or repeat</strong></p>
+<!-- vale House.HeadingCase = NO -->
+<h3 class="unnumbered" id="move-to-the-next-skill-or-repeat">8. Move to
+the next Skill or Repeat</h3>
+<!-- vale House.HeadingCase = YES -->
 <ul class="task-list">
 <li><label><input type="checkbox"></input>If you logged a KEEP, let it run for
 another 5–10 sessions to check for side effects.</label></li>
@@ -1635,14 +1681,14 @@ design and volume warrant it; an automated judge also needs calibration
 for this task. The §3 methods need adaptation to the smaller, paired
 sample.</p>
 <p>If the instruction prescribes a <strong>workflow process</strong>
-rather than generating a document, or if the invocation volume is simply
-too low for statistical aggregation to be meaningful, the lightweight
-loop above is the right tool. The transition between the two is not a
-precise boundary — it is a question of whether your data volume is
-sufficient to trust a statistical estimate, and whether your output type
-admits of comparison at all. When in doubt, start with the rubric and
-inspection; add scoring infrastructure when you have enough data to make
-calibration worthwhile.</p>
+rather than generating a document, or if the invocation volume is too
+low for statistical aggregation to be meaningful, the lightweight loop
+above is the right tool. The transition between the two is not a precise
+boundary — it is a question of whether your data volume is sufficient to
+trust a statistical estimate, and whether your output type admits of
+comparison at all. When in doubt, start with the rubric and inspection;
+add scoring infrastructure when you have enough data to make calibration
+worthwhile.</p>
 <p>The underlying principle is the one this primer has been building
 since §1: a control loop is only as good as its sensor. For instruction
 editing at low volume, the sensor is a human reading a transcript
@@ -2126,10 +2172,11 @@ different outcomes.</p>
 Loop</h2>
 <p>Evaluating agents requires three things that single-turn output
 evaluation does not: process-level visibility into intermediate steps,
-multi-step credit assignment across long episodes, and robust harness
-isolation so the agent cannot attack the evaluator instead of the task.
-All three are harder and more expensive than running a pairwise
-comparison or reading a judge’s log-probabilities.</p>
+multi-step credit assignment across long episodes, and isolation of the
+evaluation harness from agent actions so the agent cannot attack the
+evaluator instead of the task. All three are harder and more expensive
+than running a pairwise comparison or reading a judge’s
+log-probabilities.</p>
 <p>Some agent platforms support trace-level evaluation: a run can be
 assessed on its final answer and intermediate tool use, as described in
 the <a href="https://developers.openai.com/api/docs/guides/agent-evals">OpenAI
@@ -2152,7 +2199,8 @@ theory is clean: measure quality, train against the measurement,
 iterate. The practice is messier. Here is what three organisations
 actually do when they sit down to operationalise the loop described in
 this primer.</p>
-<p><strong>Anchor 1: Anthropic’s RSP and the ASL gate</strong></p>
+<h2 data-number="10.1" id="anchor-1-anthropics-rsp-and-the-asl-gate"><span class="header-section-number">10.1</span> Anchor 1: Anthropic’s RSP and
+the ASL Gate</h2>
 <p>Anthropic’s <a href="https://www.anthropic.com/responsible-scaling-policy">Responsible
 Scaling Policy</a> (RSP) links capability thresholds to required
 safeguards. Its AI Safety Level (ASL) standards govern deployment and
@@ -2169,7 +2217,8 @@ and safeguard configurations. Such before-and-after results can support
 a mitigation decision within that test set. They do not, by themselves,
 establish how quickly a red-team finding became a deployed fix or how a
 safeguard performs against unseen attacks.</p>
-<p><strong>Anchor 2: OpenAI’s Preparedness Framework</strong></p>
+<h2 data-number="10.2" id="anchor-2-openais-preparedness-framework"><span class="header-section-number">10.2</span> Anchor 2: OpenAI’s
+Preparedness Framework</h2>
 <p>OpenAI’s <a href="https://openai.com/index/updating-our-preparedness-framework/">April
 2025 Preparedness Framework update</a> tracks biological and chemical,
 cybersecurity, and AI self-improvement capabilities. It distinguishes a
@@ -2178,8 +2227,8 @@ review before deployment at higher risk levels. Persuasion is handled
 outside that version of the framework. The policy differs from
 Anthropic’s RSP in categories and governance details, but both use
 capability evaluations to inform risk decisions.</p>
-<p><strong>Anchor 3: Chatbot Arena as ecosystem-level
-evaluation</strong></p>
+<h2 data-number="10.3" id="anchor-3-chatbot-arena-as-ecosystem-level-evaluation"><span class="header-section-number">10.3</span> Anchor 3: Chatbot Arena as
+Ecosystem-Level Evaluation</h2>
 <p>The <a href="https://arxiv.org/abs/2403.04132">2024 Chatbot Arena
 paper</a> describes public, anonymous pairwise comparisons and ratings
 derived from the collected votes. It is the Compare and Aggregate
@@ -2187,7 +2236,7 @@ pipeline from §3 at platform scale. The paper reported more than 240,000
 votes at publication; that is a dated sample, not a live total. Its
 rankings summarise preferences among the users and prompts represented
 in the data, with the usual limits of an opt-in rater pool.</p>
-<p><strong>What running this actually costs</strong></p>
+<h2 data-number="10.4" id="what-running-this-costs"><span class="header-section-number">10.4</span> What Running This Costs</h2>
 <p>The operational work includes specifying the target behaviour,
 inspecting failures, maintaining the test distribution, and deciding
 what action a score should trigger. A binary gate is suitable when the
@@ -2202,7 +2251,8 @@ full outcome, when raters disagree for substantive reasons, or when the
 person judging an output lacks the expertise to verify it. Each admits
 partial mitigations, but none has a single method that works across
 every task.</p>
-<p><strong>Goodhart’s treadmill has no exit</strong></p>
+<h2 data-number="11.1" id="goodharts-treadmill-has-no-exit"><span class="header-section-number">11.1</span> Goodhart’s Treadmill Has No
+Exit</h2>
 <p>A proxy can lose value under optimisation when the model learns a
 shortcut or the task distribution changes. A fresh holdout set, private
 tests, and human review can reveal different failures, but each covers
@@ -2210,7 +2260,8 @@ only part of the target outcome. Reassess the benchmark when its scores
 stop discriminating among systems or fail to predict performance on new
 cases. The maintenance interval depends on the task and the pressure
 placed on the measure.</p>
-<p><strong>Disagreement as signal versus noise</strong></p>
+<h2 data-number="11.2" id="disagreement-as-signal-versus-noise"><span class="header-section-number">11.2</span> Disagreement as Signal Versus
+Noise</h2>
 <p>Some disagreement between raters is annotation noise; some reflects
 different, defensible preferences. Aggregating pairwise votes with
 Bradley-Terry estimates a population-level tendency, but the result
@@ -2219,8 +2270,8 @@ does not represent the users of a system, its fitted preference signal
 may not represent those users either. Report subgroup results where
 sample sizes and consent permit, and avoid presenting one pooled rating
 as a universal measure of quality.</p>
-<p><strong>Benchmark scores and productivity measure different
-outcomes</strong></p>
+<h2 data-number="11.3" id="benchmark-scores-and-productivity-measure-different-outcomes"><span class="header-section-number">11.3</span> Benchmark Scores and
+Productivity Measure Different Outcomes</h2>
 <p>The <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">METR
 trial</a> found a 19% increase in task completion time when early-2025
 AI tools were allowed in its sample, despite participants estimating a
@@ -2229,7 +2280,8 @@ benchmark score, so it cannot demonstrate a measured
 benchmark–productivity gap. It shows why productivity for this group and
 workflow needs direct measurement. Different tasks, tools, and forms of
 human review require their own studies.</p>
-<p><strong>Superhuman oversight: the hardest problem</strong></p>
+<h2 data-number="11.4" id="superhuman-oversight-the-hardest-problem"><span class="header-section-number">11.4</span> Superhuman Oversight: The
+Hardest Problem</h2>
 <p>If a system produces answers that a human evaluator cannot reliably
 check, a preference label can cease to track correctness. This is
 especially relevant in tasks that require specialised knowledge or long
@@ -2248,7 +2300,8 @@ weaker supervisor can evaluate, then uses those parts to train and
 repeat. These approaches investigate scalable oversight under particular
 assumptions; their experiments do not yet establish a general solution
 for outputs humans cannot verify directly.</p>
-<p><strong>A brief note on test-time compute</strong></p>
+<h2 data-number="11.5" id="a-brief-note-on-test-time-compute"><span class="header-section-number">11.5</span> A Brief Note on Test-Time
+Compute</h2>
 <p>Models that spend more inference-time compute — chain-of-thought,
 tree search, self-critique passes — often score higher on benchmarks.
 This does not resolve the measurement problem; it relocates it. The
@@ -2256,7 +2309,7 @@ question “how do you know the answer is good?” does not go away because
 the model thought longer. It becomes “how do you know the longer
 thinking produced a better answer?” — which is the same question,
 recursively.</p>
-<p><strong>The closing motif</strong></p>
+<h2 data-number="11.6" id="the-closing-motif"><span class="header-section-number">11.6</span> The Closing Motif</h2>
 <p>Evaluation cases and training examples may describe the same task,
 but they need different roles. Training examples guide an update;
 held-out evaluation cases test whether the update generalises. Reusing

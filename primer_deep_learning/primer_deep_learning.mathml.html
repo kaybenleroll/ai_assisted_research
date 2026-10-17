@@ -242,10 +242,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -844,7 +846,7 @@ splits). You should have working knowledge of classical models — at
 minimum decision trees and SVMs — enough to have an opinion about when a
 linear model is the wrong choice.</p>
 <p>On the mathematics, you need linear algebra and calculus at the level
-of “knows what a matrix multiplication is and what a derivative means.”
+of “knows what a matrix multiplication is and what a derivative means”.
 You do not need to remember how to invert a matrix by hand or to recite
 the proof of the chain rule. You do need to be willing to read an
 equation slowly. Every piece of notation introduced here is explained
@@ -873,7 +875,7 @@ Backpropagation, the algorithm that trains modern networks, was
 understood and published in the 1980s. Multilayer networks, the
 universal approximation theorem, even convolutional architectures — the
 core ideas were all in the literature decades before deep learning
-“happened.” So the interesting question is not who invented neural
+“happened”. So the interesting question is not who invented neural
 networks. It is why they sat largely dormant for thirty years and then,
 around 2012, abruptly became the most important technology in computing.
 The answer is not a single breakthrough. It is the simultaneous arrival
@@ -962,7 +964,7 @@ and the output flattens, so the derivative goes to nearly zero. Stack
 many such layers and the gradients shrink towards nothing as they
 propagate backward, leaving the early layers learning at a crawl. This
 is the vanishing gradient problem, derived fully in the training
-section. The fix was the rectified linear unit, ReLU, which is simply
+section. The fix was the rectified linear unit, ReLU, defined by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\max(0, z)</annotation></semantics></math>.
 For any positive input its derivative is exactly 1, so it does not
 squash gradients on their way back. Swapping sigmoid for ReLU is a
@@ -970,17 +972,17 @@ one-line change that suddenly made deep networks trainable.</p>
 <p>Dropout arrived as a regularisation technique tailored to large
 networks: during training you randomly switch off a fraction of the
 neurons on each step, which prevents the network from leaning too hard
-on any single feature and forces it to build redundant, robust
-representations. Better weight initialisation schemes (Xavier and He,
-both covered in the training section) ensured that signals neither
-vanished nor exploded as they passed through a fresh, untrained network
-— a problem that had quietly sabotaged earlier attempts at depth. And
-batch normalisation, introduced in 2015, stabilised the distribution of
-activations inside the network during training, which let practitioners
-use higher learning rates and worry less about the exact initialisation.
-None of these is conceptually deep. Together they are most of the reason
-a ten-layer network in 2015 trained where a ten-layer network in 1995
-would have stalled.</p>
+on any single feature and forces it to build redundant representations.
+Better weight initialisation schemes (Xavier and He, both covered in the
+training section) ensured that signals neither vanished nor exploded as
+they passed through a fresh, untrained network — a problem that had
+quietly sabotaged earlier attempts at depth. And batch normalisation,
+introduced in 2015, stabilised the distribution of activations inside
+the network during training, which let practitioners use higher learning
+rates and worry less about the exact initialisation. None of these is
+conceptually deep. Together they are most of the reason a ten-layer
+network in 2015 trained where a ten-layer network in 1995 would have
+stalled.</p>
 <h2 data-number="2.4" id="why-classical-ml-hits-a-ceiling"><span class="header-section-number">2.4</span> Why Classical ML Hits a
 Ceiling</h2>
 <p>There is a deeper reason all of this matters, and it explains why
@@ -1020,16 +1022,16 @@ convolutional network called AlexNet won with a top-5 error rate around
 percentage points, in a competition where a single point was hard-won,
 was not an improvement. It was a different category of result.</p>
 <p>What that gap meant to the field was unambiguous: the hand-engineered
-approach that everyone had been refining was simply outclassed by a
-network that learned its own features. Within a couple of years the
-entire competition had switched to deep learning, error rates kept
-tumbling, and the centre of gravity in computer vision — and soon
-natural language processing — moved decisively to neural networks.
-AlexNet did not introduce a fundamentally new idea; convolutional
-networks and backpropagation were old. What it did was demonstrate, on a
-benchmark nobody could argue with, that the three ingredients had
-finally arrived together. That is why deep learning is a story about
-2012 and not about 1986.</p>
+approach that everyone had been refining was outperformed by a network
+that learned its own features. Within a couple of years the entire
+competition had switched to deep learning, error rates kept tumbling,
+and the centre of gravity in computer vision — and later natural
+language processing — moved decisively to neural networks. AlexNet did
+not introduce a fundamentally new idea; convolutional networks and
+backpropagation were old. What it did was demonstrate, on a benchmark
+nobody could argue with, that the three ingredients had finally arrived
+together. That is why deep learning is a story about 2012 and not about
+1986.</p>
 <h1 data-number="3" id="neural-network-fundamentals"><span class="header-section-number">3</span> Neural Network Fundamentals</h1>
 <h2 data-number="3.1" id="the-perceptron"><span class="header-section-number">3.1</span> The Perceptron</h2>
 <p>The neural network’s founding metaphor is the biological neuron. A
@@ -1264,8 +1266,8 @@ efficiency. A shallow network can represent anything in principle, but
 the width required may be utterly impractical, whereas a deep network —
 through the function composition discussed earlier — often represents
 the same function with a fraction of the parameters. So the universal
-approximation theorem explains why neural networks are not obviously
-limited, but it does not explain why deep networks work. The reason
+approximation theorem explains why neural networks can approximate many
+functions, but it does not explain why deep networks work. The reason
 depth wins in practice is efficiency, not representability: practical
 depth beats impractical width.</p>
 <h1 data-number="4" id="training-deep-networks"><span class="header-section-number">4</span> Training Deep Networks</h1>
@@ -1275,7 +1277,7 @@ those weights so the predictions become good — and for a deep network
 that means computing, for every one of potentially billions of weights,
 how a small change to it would change the loss, then nudging each weight
 in the direction that reduces the loss. This section is about how that
-happens: the loss functions that define “good,” the backpropagation
+happens: the loss functions that define “good”, the backpropagation
 algorithm that computes the gradients, the optimisers that apply them,
 and the many ways the process goes wrong.</p>
 <h2 data-number="4.1" id="loss-functions"><span class="header-section-number">4.1</span> Loss Functions</h2>
@@ -1323,7 +1325,7 @@ values from one operation to the next. The loss sits at the far end.
 Backpropagation traverses this same graph in reverse. Starting from the
 loss, it walks backward node by node, and at each node it uses the chain
 rule to convert “how the loss depends on my output” into “how the loss
-depends on my inputs.” The local derivative at each node is something
+depends on my inputs”. The local derivative at each node is something
 you can write down by hand; the chain rule stitches the local
 derivatives together into the global gradient. That is the entire
 algorithm. The forward pass builds the graph; the backward pass
@@ -1485,7 +1487,7 @@ ten sigmoid layers, even at this most favourable value, the gradient is
 scaled by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0.25</mn><mn>10</mn></msup><mo>≈</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">0.25^{10} \approx 10^{-6}</annotation></semantics></math>.
 A factor of a million reduction in the learning signal, in the best
-case, simply from stacking ten layers. Away from
+case, from stacking ten layers. Away from
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z = 0</annotation></semantics></math>
 it is far worse.</p>
 <p>The exploding gradient problem is the mirror image. If the weights
@@ -1618,8 +1620,8 @@ training. In practice, every modern framework implements the equivalent
 <em>inverted dropout</em>: it does the rescaling at training time
 instead, dividing the surviving activations by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1 - p)</annotation></semantics></math>
-on every training step, so inference needs no scaling at all and can
-simply run the network as-is. Same expected activation, but the
+on every training step, so inference needs no scaling at all and runs
+the network without dropout scaling. Same expected activation, but the
 correction moves to training so the inference path stays untouched. The
 reason dropout works is that it prevents co-adaptation. When any neuron
 might vanish on the next step, the network cannot afford to build
@@ -1635,7 +1637,8 @@ it stops improving and starts to rise. The rising validation loss is the
 signature of overfitting beginning — the model is now learning the
 training set’s noise rather than its signal — and halting at the bottom
 of the validation curve keeps the model at its best-generalising point.
-It costs nothing and is essentially always worth doing.</p>
+It adds little computation and is worth testing when validation loss
+rises while training loss falls.</p>
 <h2 data-number="4.7" id="batch-normalisation"><span class="header-section-number">4.7</span> Batch Normalisation</h2>
 <p>Batch normalisation is one of the techniques that made very deep
 networks practical, and it works by normalising the activations as they
@@ -1809,7 +1812,7 @@ where the parameter savings come from. The second is <strong>local
 connectivity</strong>: each output value depends only on a small
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>×</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">k \times k</annotation></semantics></math>
 neighbourhood of the input, not on the entire image. A neuron in a conv
-layer has a small “receptive field,” which matches the reality that
+layer has a small “receptive field”, which matches the reality that
 low-level visual features are local. The third is <strong>translation
 equivariance</strong>: if you shift a feature in the input — slide the
 cat two pixels to the right — the corresponding activation in the output
@@ -1989,11 +1992,11 @@ a genuinely useful empirical fact about what CNNs learn. The early
 layers of an ImageNet-trained network learn general-purpose, low-level
 features: oriented edge detectors that look strikingly like Gabor
 filters, colour blobs, simple textures. These are not specific to
-ImageNet’s thousand categories — they are the building blocks of
-essentially any natural image. As you move deeper, the features grow
-more abstract and more task-specific: textures combine into motifs,
-motifs into object parts, parts into whole-object detectors tuned to the
-training categories.</p>
+ImageNet’s thousand categories — they are the building blocks of many
+natural images. As you move deeper, the features grow more abstract and
+more task-specific: textures combine into motifs, motifs into object
+parts, parts into whole-object detectors tuned to the training
+categories.</p>
 <p>This layered generality is what you exploit. You take a network
 pretrained on ImageNet and reuse it on your own, much smaller, dataset.
 Two strategies sit on a spectrum. In <strong>feature
@@ -2047,12 +2050,12 @@ relationships that matter in language are not what convolution is built
 for, which is why transformers dominate there. On small datasets without
 any pretraining to lean on, CNNs are data-hungry enough to overfit
 badly, and you may be better served by classical methods or heavy
-transfer learning. And data that simply is not grid-shaped — point
-clouds, molecular graphs, social networks, anything where the
-relationships between elements are not “lives at fixed coordinates next
-to its neighbours” — breaks convolution’s core assumption entirely.
-Graph neural networks generalise the idea of convolution to arbitrary
-graph structure, and transformers handle sets and sequences with learned
+transfer learning. Data that is not grid-shaped — point clouds,
+molecular graphs, social networks, anything where the relationships
+between elements are not “lives at fixed coordinates next to its
+neighbours” — breaks convolution’s core assumption entirely. Graph
+neural networks generalise the idea of convolution to arbitrary graph
+structure, and transformers handle sets and sequences with learned
 relationships; for non-grid data, reach for those instead.</p>
 <h2 data-number="4.16" id="code-a-small-convnet-in-three-frameworks"><span class="header-section-number">4.16</span> Code: A Small ConvNet in Three
 Frameworks</h2>
@@ -2268,7 +2271,7 @@ input.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒇</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{f}_t</annotation></semantics></math>
 looks at the current situation and decides, element by element, how much
 of the old cell state to keep — close to 1 means “hold on to this
-memory,” close to 0 means “wipe it.” The <strong>input gate</strong>
+memory”, close to 0 means “wipe it”. The <strong>input gate</strong>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒊</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{i}_t</annotation></semantics></math>
 decides how much of the freshly computed candidate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi mathvariant="bold-italic">𝒄</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\tilde{\mathbf{c}}_t</annotation></semantics></math>
@@ -2283,7 +2286,7 @@ step.</p>
 update. Look again at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒄</mi><mi>t</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝒇</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi mathvariant="bold-italic">𝒄</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi mathvariant="bold-italic">𝒊</mi><mi>t</mi></msub><mo>⊙</mo><msub><mover><mi mathvariant="bold-italic">𝒄</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{c}_t = \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{c}}_t</annotation></semantics></math>.
 When the forget gate is near 1, the cell state is carried forward almost
-unchanged, and crucially the gradient flowing backward through
+unchanged, and the gradient flowing backward through
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝒄</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{c}_t</annotation></semantics></math>
 is multiplied by roughly
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒇</mi><mi>t</mi></msub><mo>≈</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\mathbf{f}_t \approx 1</annotation></semantics></math>
@@ -2448,7 +2451,7 @@ this. You have a <strong>query</strong>
 — a vector describing what you are currently looking for. You have a set
 of <strong>keys</strong>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒌</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi mathvariant="bold-italic">𝒌</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{k}_1, \ldots, \mathbf{k}_n</annotation></semantics></math>,
-one per item of context, each describing what that item is “about.” And
+one per item of context, each describing what that item is “about”. And
 you have a set of <strong>values</strong>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒗</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi mathvariant="bold-italic">𝒗</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{v}_1, \ldots, \mathbf{v}_n</annotation></semantics></math>,
 the actual content of each item. Rather than retrieve a single exact
@@ -2541,8 +2544,8 @@ so that splitting
 across
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>
 heads keeps the total computation roughly the same as a single
-full-width attention — you get the diversity of multiple heads at
-essentially no extra cost.</p>
+full-width attention — you get the diversity of multiple heads with
+roughly the same attention compute as a single head.</p>
 <h2 data-number="6.4" id="positional-encoding"><span class="header-section-number">6.4</span> Positional Encoding</h2>
 <p>Self-attention has a property that is both a feature and a problem:
 it is permutation-equivariant. Because attention computes weighted sums
@@ -2806,7 +2809,7 @@ stacked self-attention layers mix information across positions, and a
 final linear layer projects back to a distribution over the vocabulary.
 The architectural insight belongs to §7. The LLM insight is about what
 happens when you take that machine and make it enormous, then train it
-on essentially all the text humans have written down.</p>
+on very large text corpora.</p>
 <p>That distinction matters because it sets your expectations correctly.
 If you go looking for a clever new layer type that explains why GPT-4
 can write code, you will not find one. What you will find is scale, a
@@ -3103,9 +3106,9 @@ on — these appear without any task-specific objective.</p>
 <em>abruptly</em>. Plot performance on such a task against model scale
 and you often see a flat line near chance for a long stretch, then a
 sharp rise once the model crosses some size threshold — not a gradual,
-smooth improvement. A capability that is essentially absent in a
-10-billion-parameter model is solidly present in a 100-billion one, with
-little warning from the smaller models.</p>
+smooth improvement. A capability that scores near chance in a
+10-billion-parameter model can perform much better in a 100-billion one,
+with little warning from the smaller models.</p>
 <p>Why this happens is not fully understood, and you should be honest
 about that rather than pretend otherwise. The leading hypothesis is that
 an emergent task secretly decomposes into several sub-skills, each with
@@ -3500,8 +3503,8 @@ uses this version.</p>
 GAN pathology. The generator’s goal is to produce outputs the
 discriminator accepts — and nothing in that goal demands variety. If the
 generator finds a single output, or a small cluster of outputs, that
-reliably fools the current discriminator, it can simply produce those
-over and over. Train a GAN on a dataset of handwritten digits and a
+reliably fools the current discriminator, it can produce those over and
+over. Train a GAN on a dataset of handwritten digits and a
 mode-collapsed generator might produce only convincing 7s, ignoring the
 other nine digits entirely. The generator has converged, the
 discriminator may even be fooled, but the model has captured a sliver of
@@ -3532,10 +3535,10 @@ GAN</strong> (Arjovsky et al., 2017) attacks this at the root by
 changing the distance being minimised.</p>
 <p>Instead of JSD it uses the <strong>Earth Mover</strong> or
 Wasserstein-1 distance, which measures the minimum cost of transporting
-probability mass to turn one distribution into the other. Crucially, it
-varies smoothly with the distributions even when they don’t overlap —
-there is always a meaningful “how far apart” even when one distribution
-sits entirely beside the other, so there is always a gradient. The
+probability mass to turn one distribution into the other. It varies
+smoothly with the distributions even when they don’t overlap — there is
+always a meaningful “how far apart” even when one distribution sits
+entirely beside the other, so there is always a gradient. The
 Wasserstein distance has a dual form that is what you actually
 compute:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi></mrow></msub><mo>,</mo><msub><mi>p</mi><mi>G</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mi mathvariant="normal">sup</mi><mrow><mo stretchy="false" form="postfix">∥</mo><mi>f</mi><msub><mo stretchy="false" form="postfix">∥</mo><mi>L</mi></msub><mo>≤</mo><mn>1</mn></mrow></munder><msub><mi mathvariant="double-struck">𝔼</mi><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>∼</mo><msub><mi>p</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi></mrow></msub></mrow></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>−</mo><msub><mi mathvariant="double-struck">𝔼</mi><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>∼</mo><msub><mi>p</mi><mi>G</mi></msub></mrow></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">W(p_{\mathrm{data}}, p_G) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{\mathbf{x} \sim p_{\mathrm{data}}}\big[f(\mathbf{x})\big] - \mathbb{E}_{\mathbf{x} \sim p_G}\big[f(\mathbf{x})\big],</annotation></semantics></math></p>
@@ -3745,7 +3748,7 @@ of research. The <strong>score</strong> of a distribution is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi mathvariant="bold-italic">𝒙</mi></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒙</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\nabla_\mathbf{x} \log p(\mathbf{x})</annotation></semantics></math>
 — the gradient of log-density, pointing in the direction of steepest
 increase in probability, i.e. “which way is more like real data from
-here.” If you knew the score everywhere, you could generate by starting
+here”. If you knew the score everywhere, you could generate by starting
 somewhere random and repeatedly stepping uphill in density. It turns out
 the noise the network predicts is, up to a scale factor, the
 <em>negative</em> score of the noised data distribution: predicting
@@ -3762,9 +3765,9 @@ the faster samplers come from. A close relative worth a name-check is
 velocity field along a chosen path from noise to data rather than a
 noise-prediction target. Sampling then integrates that learned vector
 field from the noise endpoint towards the data endpoint. The path and
-numerical solver become part of the design, so flow matching is related
-to diffusion but is not simply “diffusion with a different name”; it
-offers another route to fast, high-quality continuous generation.</p>
+numerical solver become part of the design; flow matching uses a
+different training objective from diffusion and offers another route to
+fast, high-quality continuous generation.</p>
 <h2 data-number="10.4" id="ddim-fewer-steps"><span class="header-section-number">10.4</span> DDIM: Fewer Steps</h2>
 <p>The DDPM sampler has one serious practical drawback: it wants on the
 order of 1000 steps, one per noise level, and each step is a full
@@ -4131,7 +4134,7 @@ payoff was that the engine could optimise and distribute a graph it
 could see in full. The cost was that this programming model felt alien
 to Python programmers — you were writing code that built a description
 of a computation rather than performing the computation, and debugging
-meant reasoning about a graph you could not simply step through.
+meant reasoning about a graph you could not step through directly.
 TensorFlow 2.0, released in 2019, switched to eager execution by default
 and adopted Keras as its high-level API, which was a large ergonomic
 improvement and closed much of the usability gap with PyTorch.</p>
@@ -4171,7 +4174,7 @@ JAX gives you a small set of transformations you can apply to any pure
 function and stack on top of each other.</p>
 <p>Four primitives carry most of the weight. <code>jit</code>
 just-in-time compiles a function to XLA, which makes it run much faster
-on accelerators — but it requires the function to be “pure,” meaning no
+on accelerators — but it requires the function to be “pure”, meaning no
 side effects and no Python-level branching that depends on the actual
 values inside arrays, because the compiler traces the function once and
 bakes the control flow in. <code>grad</code> takes the gradient of any
@@ -4747,7 +4750,7 @@ variable.</p>
       var path = window.location.pathname || '';
       var targetPath = '';
       var label = '';
-      var defaultMathRenderer = 'mathmlmathml';
+      var defaultMathRenderer = 'mathjaxmathml';
 
       if (path.endsWith('.mathml.html')) {
         targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';

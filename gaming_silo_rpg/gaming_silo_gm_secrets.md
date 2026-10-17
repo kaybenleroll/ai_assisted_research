@@ -1,10 +1,10 @@
 # Silo System: Game Master's Secrets & Macro-Lore
 
-**RESTRICTED ACCESS // FOR GAME MASTER EYES ONLY**
+> RESTRICTED ACCESS // FOR GAME MASTER EYES ONLY
 
 While the *Operational & Narrative Primer* details the Silo as the players and citizens understand it, this document contains the absolute truth of the world based on the "Operation Fifty" initiative. 
 
-Crucially, **these secrets should not be the focus of the early or mid-game**. A compelling Silo campaign is rooted in the claustrophobia, politics, and daily survival of the citizens. The overarching mysteries outlined below are designed to be the ultimate, late-game paradigm shift.
+**These secrets should not be the focus of the early or mid-game.** A compelling Silo campaign is rooted in the claustrophobia, politics, and daily survival of the citizens. The overarching mysteries outlined below are designed to be the ultimate, late-game paradigm shift.
 
 ---
 
@@ -36,7 +36,7 @@ The Pact's own internal records — locked in Silo 1 — estimate that approxima
 The nanobot dome that players sometimes hear referenced is **not** the global atmosphere. It is a secondary, denser local barrier specifically concentrated over the Atlanta grid — a deliberate kill-layer deployed to prevent any surface survivor from stumbling into the Silo entrances and contaminating the experiment.
 
 #### The 500-Year Plan (the Full Mechanism)
-The plan is not simply "wait underground." It is a staged, multi-century program to re-seed civilisation from scratch, with the Pact's ideology baked into its foundations. The key phases:
+The plan goes beyond "wait underground". It is a staged, multi-century program to re-seed civilisation from scratch, with the Pact's ideology baked into its foundations. The key phases:
 
 *   **Years 0–50 (Stabilisation):** The 49 populated Silos are sealed. Internal governance structures (seeded by Pact operatives placed among the initial population) organise along the lines of the Order document. Silo 1 monitors population stability, resource consumption, and rebellion indicators. Any Silo showing early systemic failure is "culled" — Silo 1 terminates its power and water remotely.
 *   **Years 50–450 (The Pressure Cycle):** The Silos are deliberately under-resourced. Births are controlled. Rations are calculated to keep populations just above starvation, maintaining a permanent low-level desperation that suppresses long-term rebellious thinking. Silo 1's models show that comfortable populations philosophise and revolt. Hungry ones focus on survival. The scarcity is *engineered*.
@@ -46,7 +46,7 @@ The plan is not simply "wait underground." It is a staged, multi-century program
 **The current year of the campaign is approximately Year 182.** The players are living in the Pressure Cycle. The selection has not yet happened. Every Silo is still technically viable.
 
 #### Silo 1 (the Control Silo)
-Silo 1 does not contain a civilian populace. It contains cryo-pods. The architects of the Silos — and their trained successors — work in "shifts," waking for a few decades to monitor the other 49 Silos before returning to cryo-sleep. Institutionally, they refer to themselves simply as **the Order** and to their function as **Oversight**.
+Silo 1 does not contain a civilian populace. It contains cryo-pods. The architects of the Silos — and their trained successors — work in "shifts", waking for a few decades to monitor the other 49 Silos before returning to cryo-sleep. Institutionally, they refer to themselves as **the Order** and to their function as **Oversight**.
 
 *   Silo 1 has direct kill-switch authority over every other Silo: power, water, and atmospheric processors can all be terminated remotely.
 *   Silo 1 does not know everything. The long cryo-cycles create institutional memory gaps. Some of the Order's staff have been awoken to find their predecessor's notes incomplete, corrupted, or ideologically drifted. The Pact's original plan has been interpreted and re-interpreted across generations. **What the current Order believes the plan is may not be identical to what the original architects intended.**
@@ -58,8 +58,8 @@ The air outside the Silo is not naturally toxic; it is saturated with weaponized
 
 ### 1.3 The Execution Mechanism (The Cleaning)
 The Cleaning is a rigged execution designed to ensure compliance.
-*   **The Hologram:** The visor of the suit projects a pre-recorded, flawless green world. The condemned cleans the camera because they want the people inside to see the "truth."
-*   **The Argon Gas & The Tape:** The airlock doesn't just pump in outside air; it floods the chamber with deadly Argon gas. More importantly, the heat-tape used by IT to seal the suits is intentionally faulty. It degrades within three minutes of exposure to the outside nanobots, ensuring the Cleaner dies precisely at the top of the hill, in full view of the camera, reinforcing the terror of the outside. 
+*   **The Hologram:** The visor of the suit projects a pre-recorded, flawless green world. The condemned cleans the camera because they want the people inside to see the "truth".
+*   **The Argon Gas & The Tape:** The airlock doesn't just pump in outside air; it floods the chamber with deadly Argon gas. The heat-tape used by IT to seal the suits is intentionally faulty. It degrades within three minutes of exposure to the outside nanobots, ensuring the Cleaner dies precisely at the top of the hill, in full view of the camera, reinforcing the terror of the outside.
 
 ---
 
@@ -71,7 +71,7 @@ IT is not just the computer department; they are the wardens of the Silo.
 *   **The Secret Elevator:** Unknown to everyone, there is a hidden, single-person elevator shaft running parallel to the IT servers, allowing the Head of IT to travel rapidly between the top levels and the Mids without using the stairs. 
 
 ### 2.2 The Reset Button & Amnesia
-Uprisings are factored into the Silo's mathematical models. When a Silo rebels and threatens to breach the doors, Silo 1 orders a "reset."
+Uprisings are factored into the Silo's mathematical models. When a Silo rebels and threatens to breach the doors, Silo 1 orders a "reset".
 *   **The Water Supply:** IT introduces a powerful, targeted amnesiac drug into the water supply. 
 *   **The Purge:** The rebellion is violently put down, the survivors are drugged, and history is literally rewritten. This is why there are no records of the "Before" or of past rebellions.
 
@@ -93,25 +93,29 @@ The surface is lethal. Any tunnel to another Silo would require boring through h
 The grand lore is fascinating, but if introduced too early, it destroys the intimate, claustrophobic tension of the setting. The players must care about the Silo as their entire universe before they can care about the universe outside it.
 
 ### Phase 1: The Local Radius (Levels 1-20 Scope)
-**Focus: Daily Grinds, Scarcity, and Local Politics**
+**Focus:** Daily Grinds, Scarcity, and Local Politics
+
 *   Do not mention outside, IT conspiracies, or relics. 
 *   The players should be hyper-focused on their jobs. The drama comes from a broken water filter, a stolen chit for extra rations, or a violent dispute between two families in the Hydroponics sector.
 *   *Tension:* The players are struggling to survive the crushing bureaucracy and brutal labour of their daily lives. The Sheriff is a looming, terrifying threat for minor infractions.
 
 ### Phase 2: The Vertical Climb (Cross-Sector Scope)
-**Focus: Inter-departmental Cold Wars and "Glitches"**
+**Focus:** Inter-departmental Cold Wars and "Glitches"
+
 *   The players are forced to travel outside their comfort zone (e.g., Porters, investigating a cross-level crime, or trading black market goods).
 *   They get caught in the political crossfire between Mechanical and IT, or the Mayor and Judicial. 
 *   *The Hook:* Introduce tiny, seemingly mundane anomalies. A mechanic notices that Supply provides two different types of heat-tape, but they are forbidden from using the "good" tape on the Cleaning suits. A doctor realises a patient's memory of a traumatic event is completely gone after drinking water from a specific reservoir.
 
 ### Phase 3: The Veil Thins (High-Level Scope)
-**Focus: The Shadow, Relics, and True Danger**
+**Focus:** The Shadow, Relics, and True Danger
+
 *   The players find something they shouldn't. An ancient hard drive (a relic), a blueprint showing a space below Level 144, or they stumble upon the entrance to IT's secret elevator.
 *   Judicial and the Friends of the Silo actively hunt them. The campaign shifts from a social/survival game to a paranoid espionage thriller. 
 *   *The Hook:* They intercept a garbled radio transmission that isn't originating from their Silo. 
 
 ### Phase 4: The Paradigm Shift (Endgame)
-**Focus: Breaking the Silo**
+**Focus:** Breaking the Silo
+
 *   This is the climax of the campaign. The players uncover the truth of Operation Fifty. 
 *   They might gain access to the Head of IT's terminal, discover the Digger beneath the oil, or synthesise good heat-tape to survive a Cleaning and walk over the hill to another Silo.
 *   *The Hook:* They are no longer fighting for their lives; they are fighting to overthrow the 500-year plan.
