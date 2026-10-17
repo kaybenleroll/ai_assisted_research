@@ -15,11 +15,11 @@ These are the five most recently reviewed primary documents across the catalogue
 
 | Document | Category | Last reviewed |
 |----------|----------|---------------|
+| [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | AI Agents and Coding Tools | 2026-10-16 |
 | [Linux, Git, and Reproducible Developer Workflows](primer_linux_git_workflows/primer_linux_git_workflows.html) · [PDF](primer_linux_git_workflows/primer_linux_git_workflows.pdf) | Developer Tooling | 2026-10-15 |
 | [Information Theory](primer_information_theory/primer_information_theory.html) · [PDF](primer_information_theory/primer_information_theory.pdf) | Quantitative Foundations | 2026-10-14 |
 | [Information Retrieval, Embeddings, and Retrieval-Augmented Generation](primer_retrieval_rag/primer_retrieval_rag.html) · [PDF](primer_retrieval_rag/primer_retrieval_rag.pdf) | AI Agents and Coding Tools | 2026-10-14 |
 | [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | AI Agents and Coding Tools | 2026-10-12 |
-| [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | AI Agents and Coding Tools | 2026-10-12 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -38,7 +38,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Information Retrieval, Embeddings, and Retrieval-Augmented Generation](primer_retrieval_rag/primer_retrieval_rag.html) · [PDF](primer_retrieval_rag/primer_retrieval_rag.pdf) | 2026-10-14 | Retrieval pipelines, lexical and dense search, embeddings, RAG evaluation, provenance, freshness, and production boundaries |
 | [Hermes Agent Server](primer_hermes_server/primer_hermes_server.html) · [PDF](primer_hermes_server/primer_hermes_server.pdf) | 2026-10-12 | Guide to the Hermes Server framework |
 | [OpenClaw](primer_openclaw/primer_openclaw.html) · [PDF](primer_openclaw/primer_openclaw.pdf) | 2026-10-12 | Podman-first guide to the OpenClaw framework |
-| [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | 2026-10-12 | Practical primer on Pi’s architecture, local and hosted models, web research, extensions, and coding-agent comparisons |
+| [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | 2026-10-16 | Practical primer on Pi’s architecture, local and hosted models, web research, extensions, and coding-agent comparisons |
 | [Running LLMs Locally](primer_research_local_llms/primer-running-llms-locally.html) · [PDF](primer_research_local_llms/primer-running-llms-locally.pdf) | 2026-10-12 | Landscape of options for running language models on local hardware |
 
 ## Developer Tooling
