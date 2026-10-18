@@ -59,6 +59,7 @@ DOCUMENTS = (
     Document("Comparative Religion", CATEGORIES[3], "Scripture, doctrine, community structure, liturgy, and internal diversity across Judaism, Christianity, Islam, Hinduism, Sikhism, Buddhism, and Shinto", "primer_comparative_religion/primer-comparative-religion.html", "primer_comparative_religion/primer-comparative-religion.pdf", "primer_comparative_religion/Justfile"),
     Document("European Electoral Systems", CATEGORIES[3], "Practical primer on electoral systems across European democracies", "primer_political_systems/primer-european-electoral-systems.html", "primer_political_systems/primer-european-electoral-systems.pdf", "primer_political_systems/Justfile"),
     Document("Military Organisation, Ranks, and Doctrine", CATEGORIES[3], "How armies are structured from fire team to army group, how ranks map to command levels, and naval/air force equivalents", "primer_military_structure/primer_military_structure.html", "primer_military_structure/primer_military_structure.pdf", "primer_military_structure/Justfile"),
+    Document("Optimisation for Machine Learning", CATEGORIES[2], "Objective formulation, gradients, convexity, numerical methods, neural-network training, and optimisation diagnostics", "primer_ml_optimisation/primer_ml_optimisation.html", "primer_ml_optimisation/primer_ml_optimisation.pdf", "primer_ml_optimisation/Justfile"),
     Document("Document Index", CATEGORIES[4], "Navigation map for all Silo RPG source documents", "gaming_silo_rpg/gaming_silo_index.html", "gaming_silo_rpg/gaming_silo_index.pdf", "gaming_silo_rpg/Justfile"),
     Document("Reference-Sheet Index", CATEGORIES[4], "GM routing map for the four compact Silo reference sheets", "gaming_silo_rpg/gaming_reference_silo_index.html", "gaming_silo_rpg/gaming_reference_silo_index.pdf", "gaming_silo_rpg/Justfile", "REF_INDEX_DATE"),
     Document("Player Reference Sheet", CATEGORIES[4], "Player-safe reminders for sectors, roles, everyday life, and party bonds", "gaming_silo_rpg/gaming_reference_silo_player.html", "gaming_silo_rpg/gaming_reference_silo_player.pdf", "gaming_silo_rpg/Justfile", "REF_PLAYER_DATE"),
@@ -147,7 +148,25 @@ def replace_marked(text: str, name: str, replacement: str) -> str:
     return pattern.sub(lambda _match: replacement, text, count=1)
 
 
+def validate_primer_registry() -> None:
+    """Reject new primer projects that are absent from the README registry."""
+    registered = {Path(document.justfile).parent for document in DOCUMENTS}
+    discovered = {
+        path.parent.relative_to(ROOT)
+        for path in ROOT.glob("primer_*/Justfile")
+    }
+    missing = sorted(discovered - registered)
+    if missing:
+        paths = ", ".join(str(path) for path in missing)
+        raise ValueError(
+            "Unregistered primer project(s): "
+            f"{paths}. Add each project to DOCUMENTS in "
+            "scripts/update_readme_recent.py."
+        )
+
+
 def generate(current: str) -> str:
+    validate_primer_registry()
     dates = {}
     for document in DOCUMENTS:
         checked_path(document.html)
