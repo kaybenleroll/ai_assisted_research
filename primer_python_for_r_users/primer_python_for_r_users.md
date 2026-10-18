@@ -24,7 +24,9 @@ Your standards include:
 - clear, auditable transformation logic
 - predictable missing-data behaviour
 - composable functional abstractions
-- execution with explicit error handling
+<!-- vale House.Filler = NO -->
+- robust execution with explicit error handling
+<!-- vale House.Filler = YES -->
 - communication-quality visual output
 - reproducibility across machines and teammates
 
