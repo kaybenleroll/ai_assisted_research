@@ -8,7 +8,7 @@ from pathlib import Path
 
 def terms() -> list[str]:
     source = Path(".vale/styles/House/Filler.yml").read_text(encoding="utf-8")
-    values = re.findall(r"^  - ([a-z ]+)$", source, re.MULTILINE)
+    values = re.findall(r"^  - ((?:\(\?<!not \))?[a-z ]+)$", source, re.MULTILINE)
     if not values:
         raise ValueError("House/Filler.yml has no filler terms")
     return values
@@ -26,7 +26,7 @@ def prose(source: str) -> str:
 
 def main() -> int:
     patterns = terms()
-    filler = re.compile(r"\b(?:" + "|".join(re.escape(t) for t in patterns) + r")\b", re.I)
+    filler = re.compile(r"\b(?:" + "|".join(t if t.startswith("(?<!") else re.escape(t) for t in patterns) + r")\b", re.I)
     for path in sys.argv[1:]:
         text = prose(Path(path).read_text(encoding="utf-8"))
         words = len(re.findall(r"\b[\w'-]+\b", text))

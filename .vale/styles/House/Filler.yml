@@ -6,7 +6,7 @@ scope: ~blockquote
 tokens:
   - clearly
   - obviously
-  - simply
+  - (?<!not )simply
   - essentially
   - basically
   - notably
