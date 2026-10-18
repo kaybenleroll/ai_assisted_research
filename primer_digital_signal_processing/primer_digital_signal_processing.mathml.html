@@ -601,6 +601,24 @@ code span.wa { color: #da4453; } /* Warning */
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
+    // The MathML variants ignore this block.
+    window.MathJax = {
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();        MathJax.startup.defaultReady();
+      } }
+    };
+  </script>
 
 </head>
 <body>
@@ -1760,14 +1778,14 @@ the sample sequence came from a 3 kHz or 7 kHz analogue sinusoid.</p>
 <p>You can see the irreversibility directly from the samples. The R
 version uses the base <code>cos</code> and vectorised arithmetic:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(<span class="dv">12</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>x_7k <span class="op">=</span> np.cos(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">7_000</span> <span class="op">/</span> <span class="dv">10_000</span> <span class="op">*</span> n)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>x_3k <span class="op">=</span> np.cos(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">3_000</span> <span class="op">/</span> <span class="dv">10_000</span> <span class="op">*</span> n)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">max</span>(np.<span class="bu">abs</span>(x_7k <span class="op">-</span> x_3k)))  <span class="co"># approximately 0</span></span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x_7k <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">7000</span> <span class="sc">/</span> <span class="dv">10000</span> <span class="sc">*</span> n)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_3k <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">3000</span> <span class="sc">/</span> <span class="dv">10000</span> <span class="sc">*</span> n)</span>
@@ -1781,13 +1799,13 @@ correct explanation.</p>
 <figcaption aria-hidden="true">Aliasing: 3 kHz and 7 kHz analogue
 candidates produce the same samples at 10 kHz</figcaption>
 </figure>
-<p>Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates
+<p><em>Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates
 sampled at 10 kHz. Each candidate passes through the same sample values;
 they are alternative analogue interpretations, not simultaneous
 reconstructions of one baseband signal. The frequency view shows
 spectral folding across the 5 kHz Nyquist boundary. An acquisition chain
 must suppress the unwanted candidate before sampling because the digital
-samples alone cannot distinguish them.</p>
+samples alone cannot distinguish them.</em></p>
 <p>The anti-aliasing filter must therefore be analogue, or must occur
 before the sampling operation at an earlier, faster sampling rate. In a
 practical acquisition chain:</p>
@@ -2454,7 +2472,7 @@ transform has the same unnormalised convention as NumPy’s forward FFT.
 The slice keeps the nonnegative frequencies for this real-valued
 record:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2476,7 +2494,7 @@ record:</p>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>weighted_mean_square <span class="op">=</span> np.<span class="bu">sum</span>((w <span class="op">*</span> x)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(w<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(psd.<span class="bu">sum</span>() <span class="op">*</span> df, weighted_mean_square)</span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(peak_amplitude[np.argmin(<span class="bu">abs</span>(f <span class="op">-</span> <span class="dv">50</span>))], <span class="fl">0.8</span>)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">1000.0</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(N <span class="sc">-</span> <span class="dv">1</span>)</span>
@@ -2607,14 +2625,14 @@ is more appropriate.</p>
 <figcaption aria-hidden="true">DFT leakage and the windowing trade-off
 for on-bin and off-bin tones</figcaption>
 </figure>
-<p>Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate
+<p><em>Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate
 with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid;
 the 50.5 Hz tone lies halfway between bins. The repeated-record view
 exposes their different boundary continuations. Rectangular and Hann
 spectra use a shared dB reference and coherent-gain amplitude
 correction, showing Hann sidelobe suppression and main-lobe widening.
 Windowing changes the finite-observation response; it does not create
-physical tones or extend the observation duration.</p>
+physical tones or extend the observation duration.</em></p>
 <h2 data-number="5.8" id="why-the-naive-dft-is-expensive"><span class="header-section-number">5.8</span> Why the Naive DFT Is
 Expensive</h2>
 <p>The direct DFT evaluates
@@ -2677,7 +2695,7 @@ scaling; <code>rfft</code> exploits Hermitian symmetry for real input.
 to <code>rfft</code>.</p>
 <p>The same FFT conventions can be made explicit in base R:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> <span class="fl">2_000.0</span></span>
@@ -2695,7 +2713,7 @@ to <code>rfft</code>.</p>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>amplitude[[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]] <span class="op">/=</span> <span class="dv">2</span>  <span class="co"># DC and Nyquist are not doubled.</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>peak_frequency <span class="op">=</span> f[np.argmax(amplitude)]</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;peak ~= </span><span class="sc">{</span>peak_frequency<span class="sc">:.1f}</span><span class="ss"> Hz&quot;</span>)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">2000.0</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, duration <span class="sc">-</span> <span class="fl">1.0</span> <span class="sc">/</span> fs, <span class="at">by =</span> <span class="fl">1.0</span> <span class="sc">/</span> fs)</span>
@@ -3305,7 +3323,7 @@ FIR, the group delay is known from its length; measuring it from the
 unwrapped phase is also appropriate when the production coefficients are
 not exactly symmetric.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3339,7 +3357,7 @@ not exactly symmetric.</p>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(step[<span class="dv">180</span>:], <span class="fl">1.0</span>, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pass_db.<span class="bu">min</span>(), pass_db.<span class="bu">max</span>(), ripple_db, attenuation_db,</span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>      delay_ms.<span class="bu">min</span>(), delay_ms.<span class="bu">max</span>())</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fs_design <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>numtaps <span class="ot">&lt;-</span> <span class="dv">181</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(numtaps <span class="sc">-</span> <span class="dv">1</span>)</span>
@@ -3460,7 +3478,7 @@ bands.</p>
 windowed-sinc construction and a zero-padded FFT for the response
 grid:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3479,7 +3497,7 @@ grid:</p>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>stopband <span class="op">=</span> np.<span class="bu">abs</span>(H[w <span class="op">&gt;=</span> <span class="dv">10_000</span>])</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;passband ripple (dB):&quot;</span>, <span class="dv">20</span> <span class="op">*</span> np.log10(passband.<span class="bu">max</span>() <span class="op">/</span> passband.<span class="bu">min</span>()))</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;stopband attenuation (dB):&quot;</span>, <span class="op">-</span><span class="dv">20</span> <span class="op">*</span> np.log10(stopband.<span class="bu">max</span>()))</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>numtaps <span class="ot">&lt;-</span> <span class="dv">161</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="fl">8000.0</span></span>
@@ -3653,7 +3671,7 @@ These filters have different responses, but demonstrate the same state
 hand-off. A production R implementation can replace the recurrence with
 a biquad cascade without changing the streaming pattern.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3681,7 +3699,7 @@ a biquad cascade without changing the streaming pattern.</p>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;max batch/stream difference:&quot;</span>, np.<span class="bu">max</span>(np.<span class="bu">abs</span>(y_batch <span class="op">-</span> y_stream)))</span>
 <span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(y_stream, y_batch, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="fl">2000.0</span> <span class="sc">/</span> fs)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
@@ -4186,7 +4204,7 @@ reproduce Python’s filter response or boundary handling. Production code
 should use a tested polyphase routine and inspect its boundary
 convention and response.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4195,7 +4213,7 @@ convention and response.</p>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.zeros(<span class="dv">48_000</span>)  <span class="co"># one second of illustrative input at fs_in</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 48 kHz -&gt; 44.1 kHz. The output length is approximately len(x) * 147 / 160.</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> signal.resample_poly(x, up<span class="op">=</span><span class="dv">147</span>, down<span class="op">=</span><span class="dv">160</span>, window<span class="op">=</span>(<span class="st">&quot;kaiser&quot;</span>, <span class="fl">8.6</span>))</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fs_in <span class="ot">&lt;-</span> <span class="fl">48000.0</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fs_out <span class="ot">&lt;-</span> <span class="fl">44100.0</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">numeric</span>(fs_in)  <span class="co"># one second of illustrative input at fs_in</span></span>
@@ -4559,7 +4577,7 @@ but it is not a theorem that 50% is always optimal.</p>
 makes the segment loop and the one-sided PSD normalisation visible
 instead of hiding them behind a package default:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4582,7 +4600,7 @@ instead of hiding them behind a package default:</p>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>noise_band <span class="op">=</span> (f <span class="op">&gt;</span> <span class="dv">2_000</span>) <span class="op">&amp;</span> (f <span class="op">&lt;</span> <span class="dv">3_000</span>)</span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;peak tone frequency:&quot;</span>, f[tone_band][np.argmax(psd[tone_band])])</span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;noise power in selected bins:&quot;</span>, psd[noise_band].<span class="bu">sum</span>() <span class="op">*</span> (f[<span class="dv">1</span>] <span class="op">-</span> f[<span class="dv">0</span>]))</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">10000.0</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="fl">20.0</span> <span class="sc">-</span> <span class="fl">1.0</span> <span class="sc">/</span> fs, <span class="at">by =</span> <span class="fl">1.0</span> <span class="sc">/</span> fs)</span>
@@ -5353,14 +5371,14 @@ the time scale you are willing to blur.</p>
 <figcaption aria-hidden="true">STFT window length trade-off for a short
 two-tone burst</figcaption>
 </figure>
-<p>Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16
-kHz, analysed with 256- and 1,024-sample Hann windows. Their supports
-are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and
-15.625 Hz. The short-window spectrogram localises burst edges more
-closely, while the long window separates the tones in the spectrogram
-and representative frame spectra. Shared relative-dB scales support
-comparison. Zero-padding the short frame would not give it the long
-frame’s discrimination.</p>
+<p><em>Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled
+at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their
+supports are 16 and 64 ms; their unpadded frequency grids are spaced by
+62.5 and 15.625 Hz. The short-window spectrogram localises burst edges
+more closely, while the long window separates the tones in the
+spectrogram and representative frame spectra. Shared relative-dB scales
+support comparison. Zero-padding the short frame would not give it the
+long frame’s discrimination.</em></p>
 <p>For reconstruction, separate the analysis window from the synthesis
 window. Let frame
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
@@ -5519,7 +5537,7 @@ explicit. <code>fft(..., inverse = TRUE)</code> is divided by the frame
 length because R leaves the inverse-transform normalisation to the
 caller.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5540,7 +5558,7 @@ caller.</p>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.<span class="bu">min</span>(denom[keep]) <span class="op">&gt;</span> <span class="dv">0</span></span>
 <span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>x_roundtrip <span class="op">=</span> accum[keep] <span class="op">/</span> denom[keep]</span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(x_roundtrip, x_stft, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>x_stft <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">4097</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>N_stft <span class="ot">&lt;-</span> <span class="dv">256</span></span>
@@ -5980,7 +5998,7 @@ Signal</h2>
 random number generators produce different noise samples despite the
 shared seed.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> signal</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5995,7 +6013,7 @@ shared seed.</p>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="fl">2_400.0</span> <span class="op">*</span> t <span class="op">+</span> <span class="fl">0.4</span>)</span>
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> <span class="fl">0.08</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>t.size)</span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fl">12000.0</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fl">8.0</span></span>
@@ -6019,7 +6037,7 @@ zero-phase filtering, but their responses and edge transients differ. A
 live path should call <code>iir_filter</code> once and carry its
 returned state across blocks.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f0 <span class="op">=</span> <span class="fl">2_400.0</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>quality <span class="op">=</span> <span class="fl">35.0</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>b, a <span class="op">=</span> signal.iirnotch(w0<span class="op">=</span>f0, Q<span class="op">=</span>quality, fs<span class="op">=</span>fs)</span>
@@ -6027,7 +6045,7 @@ returned state across blocks.</p>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Offline result; a live system would use sosfilt and accept phase/latency.</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> signal.sosfiltfilt(sos, x)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fl">2400.0</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>quality <span class="ot">&lt;-</span> <span class="fl">35.0</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>omega0 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> f0 <span class="sc">/</span> fs</span>
@@ -6060,7 +6078,7 @@ PSD</h2>
 <p>Reuse the <code>welch_psd</code> helper from the Welch section for
 the R calculation:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>f, pxx <span class="op">=</span> signal.welch(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    y,</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    fs<span class="op">=</span>fs,</span>
@@ -6080,7 +6098,7 @@ the R calculation:</p>
 <span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;2.4-kHz band power:&quot;</span>, band_power(f, pxx, <span class="dv">2_350</span>, <span class="dv">2_450</span>))</span>
 <span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;total estimated mean square:&quot;</span>, pxx.<span class="bu">sum</span>() <span class="op">*</span> (f[<span class="dv">1</span>] <span class="op">-</span> f[<span class="dv">0</span>]))</span>
 <span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;time-domain variance:&quot;</span>, np.var(y))</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">&lt;-</span> <span class="fu">welch_psd</span>(y, fs, <span class="at">nperseg =</span> <span class="dv">16384</span>, <span class="at">noverlap =</span> <span class="dv">8192</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> estimate<span class="sc">$</span>f</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>pxx <span class="ot">&lt;-</span> estimate<span class="sc">$</span>psd</span>
@@ -6109,7 +6127,7 @@ Block Path</h2>
 <p>The R streaming check uses the same recurrence and carries its two
 state values from one block to the next:</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>initial_state <span class="op">=</span> signal.sosfilt_zi(sos) <span class="op">*</span> x[<span class="dv">0</span>]</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>y_causal_batch, final_batch_state <span class="op">=</span> signal.sosfilt(</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    sos, x, zi<span class="op">=</span>initial_state.copy()</span>
@@ -6131,7 +6149,7 @@ state values from one block to the next:</p>
 <span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;causal output length:&quot;</span>, <span class="bu">len</span>(y_causal))</span>
 <span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(y_causal, y_causal_batch, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span>
 <span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(state, final_batch_state, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>initial <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>y_causal_batch <span class="ot">&lt;-</span> <span class="fu">iir_filter</span>(x, b, a, initial)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>y_causal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
@@ -6174,7 +6192,7 @@ differ slightly from SciPy’s <code>iirnotch</code> parameterisation, so
 the response assertions are written against the R coefficients actually
 used above.</p>
 <div class="code-group">
-<p>Python</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic reference; reuse fs and sos from the notch example.</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>n_ref <span class="op">=</span> np.arange(<span class="dv">12_000</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_ref <span class="op">=</span> n_ref <span class="op">/</span> fs</span>
@@ -6206,7 +6224,7 @@ used above.</p>
 <span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    np.testing.assert_allclose(measured_gain, <span class="bu">abs</span>(gain), atol<span class="op">=</span><span class="fl">1e-10</span>, rtol<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(H_ref[<span class="dv">0</span>]) <span class="op">&gt;</span> <span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="fl">0.01</span> <span class="op">/</span> <span class="dv">20</span>)  <span class="co"># Wanted-tone loss below 0.01 dB.</span></span>
 <span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(H_ref[<span class="dv">1</span>]) <span class="op">&lt;</span> <span class="fl">1e-10</span>             <span class="co"># Exact-frequency notch reference.</span></span></code></pre></div>
-<p>R</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic reference; reuse fs, b, and a from the notch example.</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>n_ref <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11999</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>t_ref <span class="ot">&lt;-</span> n_ref <span class="sc">/</span> fs</span>

@@ -1389,7 +1389,7 @@ and Brier score only after fitting. The validation figures describe this
 one fixed split; they are not uncertainty intervals or evidence of
 population generalisation.</p>
 <div class="code-group">
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> exp, hypot, isfinite, log1p, sqrt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1522,7 +1522,7 @@ population generalisation.</p>
 <span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;validation: log_loss=</span><span class="sc">{</span>validation_loss<span class="sc">:.6f}</span><span class="ss"> &quot;</span></span>
 <span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;accuracy=</span><span class="sc">{</span>validation_accuracy<span class="sc">:.3f}</span><span class="ss"> brier=</span><span class="sc">{</span>validation_brier<span class="sc">:.6f}</span><span class="ss">&quot;</span>)</span>
 <span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;directional derivative relative error: </span><span class="sc">{</span>relative_error<span class="sc">:.3e}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>LAMBDA <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ITERATIONS <span class="ot">&lt;-</span> <span class="dv">60</span><span class="dt">L</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>CHECKPOINTS <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">2</span><span class="dt">L</span>, <span class="dv">5</span><span class="dt">L</span>, <span class="dv">10</span><span class="dt">L</span>, <span class="dv">20</span><span class="dt">L</span>, <span class="dv">50</span><span class="dt">L</span>, <span class="dv">60</span><span class="dt">L</span>)</span>
@@ -1944,7 +1944,7 @@ value, gradient norm, and parameter error separately; checks the
 analytic gradient by a directional finite difference; and asserts
 monotone objective descent only for the two gradient-descent traces.</p>
 <div class="code-group">
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> cos, hypot, isfinite, pi, sin, sqrt</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2054,7 +2054,7 @@ monotone objective descent only for the two gradient-descent traces.</p>
 <span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;</span><span class="sc">{</span>grad_norm<span class="sc">:14.6e}</span><span class="ss">  </span><span class="sc">{</span>distance<span class="sc">:14.6e}</span><span class="ss">&quot;</span>)</span>
 <span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;directional derivative relative error: &quot;</span></span>
 <span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;</span><span class="sc">{</span><span class="bu">abs</span>(fd <span class="op">-</span> analytic) <span class="op">/</span> <span class="bu">abs</span>(analytic)<span class="sc">:.3e}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>MU <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ANGLE <span class="ot">&lt;-</span> pi <span class="sc">/</span> <span class="dv">6</span></span>
