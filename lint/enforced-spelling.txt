@@ -19,3 +19,4 @@ primer_complex_analysis/primer_complex_analysis.md
 primer_numerical_analysis/primer_numerical_analysis.md
 primer_retrieval_rag/primer_retrieval_rag.md
 primer_linux_git_workflows/primer_linux_git_workflows.md
+primer_ml_optimisation/primer_ml_optimisation.md
