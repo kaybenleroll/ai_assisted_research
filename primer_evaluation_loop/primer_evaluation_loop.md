@@ -760,21 +760,21 @@ SWE-bench measures whether an agent's patch passes a specified test harness. The
 
 Given how fragile all of this gets, it is fair to ask how the organisations at the frontier actually run the loop in production. The theory is clean: measure quality, train against the measurement, iterate. The practice is messier. Here is what three organisations actually do when they sit down to operationalise the loop described in this primer.
 
-### Anchor 1: Anthropic's RSP and the ASL Gate
+### Anchor 1: Anthropic's RSP and the ASL Gate {.unnumbered}
 
 Anthropic's [Responsible Scaling Policy](https://www.anthropic.com/responsible-scaling-policy) (RSP) links capability thresholds to required safeguards. Its AI Safety Level (ASL) standards govern deployment and security measures, rather than stating that every model above a threshold is unshippable. Anthropic [activated ASL-3 protections for the Claude Opus 4 launch in May 2025](https://www.anthropic.com/news/activating-asl3-protections) as a precaution: it said at the time that it had not determined whether the model definitively crossed the ASL-3 capability threshold. This shows an evaluation-informed deployment decision under uncertainty; check the policy version before applying its thresholds to a later launch.
 
 Anthropic's [Claude 4 System Card](https://www-cdn.anthropic.com/6d8a8055020700718b0c49369f60816ba2a7c285.pdf) reports prompt-injection evaluations of specific model and safeguard configurations. Such before-and-after results can support a mitigation decision within that test set. They do not, by themselves, establish how quickly a red-team finding became a deployed fix or how a safeguard performs against unseen attacks.
 
-### Anchor 2: OpenAI's Preparedness Framework
+### Anchor 2: OpenAI's Preparedness Framework {.unnumbered}
 
 OpenAI's [April 2025 Preparedness Framework update](https://openai.com/index/updating-our-preparedness-framework/) tracks biological and chemical, cybersecurity, and AI self-improvement capabilities. It distinguishes a High threshold from a Critical threshold and calls for safeguards and review before deployment at higher risk levels. Persuasion is handled outside that version of the framework. The policy differs from Anthropic's RSP in categories and governance details, but both use capability evaluations to inform risk decisions.
 
-### Anchor 3: Chatbot Arena as Ecosystem-Level Evaluation
+### Anchor 3: Chatbot Arena as Ecosystem-Level Evaluation {.unnumbered}
 
 The [2024 Chatbot Arena paper](https://arxiv.org/abs/2403.04132) describes public, anonymous pairwise comparisons and ratings derived from the collected votes. It is the Compare and Aggregate pipeline from §3 at platform scale. The paper reported more than 240,000 votes at publication; that is a dated sample, not a live total. Its rankings summarise preferences among the users and prompts represented in the data, with the usual limits of an opt-in rater pool.
 
-### What Running This Costs
+### What Running This Costs {.unnumbered}
 
 The operational work includes specifying the target behaviour, inspecting failures, maintaining the test distribution, and deciding what action a score should trigger. A binary gate is suitable when the requirement is genuinely binary, such as whether a patch passes a required test. A graded rubric is more useful when partial success matters. Neither format removes the need to inspect disagreements and update the evaluation when the task changes.
 
@@ -782,29 +782,31 @@ The operational work includes specifying the target behaviour, inspecting failur
 
 The remaining problems arise when a useful proxy is mistaken for the full outcome, when raters disagree for substantive reasons, or when the person judging an output lacks the expertise to verify it. Each admits partial mitigations, but none has a single method that works across every task.
 
-### Goodhart's Treadmill Has No Exit
+### Goodhart's Treadmill Has No Exit {.unnumbered}
 
 A proxy can lose value under optimisation when the model learns a shortcut or the task distribution changes. A fresh holdout set, private tests, and human review can reveal different failures, but each covers only part of the target outcome. Reassess the benchmark when its scores stop discriminating among systems or fail to predict performance on new cases. The maintenance interval depends on the task and the pressure placed on the measure.
 
-### Disagreement as Signal Versus Noise
+### Disagreement as Signal Versus Noise {.unnumbered}
 
 Some disagreement between raters is annotation noise; some reflects different, defensible preferences. Aggregating pairwise votes with Bradley-Terry estimates a population-level tendency, but the result depends on who was asked and which prompts they saw. If a rater pool does not represent the users of a system, its fitted preference signal may not represent those users either. Report subgroup results where sample sizes and consent permit, and avoid presenting one pooled rating as a universal measure of quality.
 
-### Benchmark Scores and Productivity Measure Different Outcomes
+### Benchmark Scores and Productivity Measure Different Outcomes {.unnumbered}
 
 The [METR trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found a 19% increase in task completion time when early-2025 AI tools were allowed in its sample, despite participants estimating a 20% speed-up afterwards. It did not compare that result with a specific benchmark score, so it cannot demonstrate a measured benchmark–productivity gap. It shows why productivity for this group and workflow needs direct measurement. Different tasks, tools, and forms of human review require their own studies.
 
-### Superhuman Oversight: The Hardest Problem
+### Superhuman Oversight: The Hardest Problem {.unnumbered}
 
 If a system produces answers that a human evaluator cannot reliably check, a preference label can cease to track correctness. This is especially relevant in tasks that require specialised knowledge or long chains of reasoning; it does not follow that every more capable model is beyond human evaluation. The evaluation design then needs evidence beyond an unaided preference vote.
 
 Three research approaches examine this regime. **Weak-to-strong generalisation** ([Burns et al., 2023](https://arxiv.org/abs/2312.09390)) tests whether imperfect labels from a weaker supervisor can elicit capabilities from a stronger model. **Debate** ([Irving et al., 2018](https://arxiv.org/abs/1805.00899)) asks whether an adjudicator can more reliably identify a flawed argument when two systems present opposing cases. **Iterated distillation and amplification** ([Christiano et al., 2018](https://openai.com/index/learning-complex-goals-with-iterated-amplification/)), or IDA, decomposes hard tasks into parts that a weaker supervisor can evaluate, then uses those parts to train and repeat. These approaches investigate scalable oversight under particular assumptions; their experiments do not yet establish a general solution for outputs humans cannot verify directly.
 
-### A Brief Note on Test-Time Compute
+### A Brief Note on Test-Time Compute {.unnumbered}
 
 Models that spend more inference-time compute — chain-of-thought, tree search, self-critique passes — often score higher on benchmarks. This does not resolve the measurement problem; it relocates it. The question "how do you know the answer is good?" does not go away because the model thought longer. It becomes "how do you know the longer thinking produced a better answer?" — which is the same question, recursively.
 
-### The Closing Motif
+<!-- vale House.HeadingCase = NO -->
+### The Closing Motif {.unnumbered}
+<!-- vale House.HeadingCase = YES -->
 
 Evaluation cases and training examples may describe the same task, but they need different roles. Training examples guide an update; held-out evaluation cases test whether the update generalises. Reusing the same labelled items for both can make the evaluation overstate performance. Improve the specification of success through error analysis, then keep an independent test set to check whether the next change helped beyond the cases it saw.
 
