@@ -22,7 +22,7 @@ Each route has a different stopping point. A reader who needs to understand a co
 
 ### What This Primer Is Not
 
-This is not a proof-based optimisation textbook, a catalogue of solver APIs, or a claim that one optimiser is best across machine-learning tasks. Proof sketches are included where they expose an assumption or a failure mode, but the Further Reading section points to complete treatments. Code uses only the Python standard library so that the calculations remain visible; production work should use tested numerical kernels and solver implementations.
+This is not a proof-based optimisation textbook, a catalogue of solver APIs, or a claim that one optimiser is best across machine-learning tasks. Proof sketches are included where they expose an assumption or a failure mode, but the Further Reading section points to complete treatments. The core calculations use the Python standard library so that their assumptions remain visible; the automatic-differentiation section adds explicitly labelled Python, R, and Julia examples that require the stated packages. Production work should use tested numerical kernels and solver implementations.
 
 The primer does not re-derive automatic differentiation, floating-point analysis, linear-system algorithms, or neural-network architectures. It also does not cover discrete or mixed-integer optimisation, optimal control, reinforcement-learning policy optimisation, or a complete theory of derivative-free global search. Hyperparameter optimisation appears only far enough to separate the outer model-selection problem from the inner parameter-fitting problem.
 
@@ -38,7 +38,7 @@ The primer therefore treats failure as information. Divergence can indicate a st
 
 ### Assumed Background
 
-You should be comfortable with vectors, matrices, matrix multiplication, derivatives of scalar functions, and elementary probability. The primer defines optimisation-specific terms such as smoothness, strong convexity, stationarity, duality, and conditioning before using their guarantees. Familiarity with Python helps with the executable example, but no package-specific knowledge is required.
+You should be comfortable with vectors, matrices, matrix multiplication, derivatives of scalar functions, and elementary probability. The primer defines optimisation-specific terms such as smoothness, strong convexity, stationarity, duality, and conditioning before using their guarantees. Familiarity with Python helps with the core executable examples; the package-specific automatic-differentiation examples name their R and Julia dependencies explicitly.
 
 The most useful preparation is operational rather than encyclopaedic. You should be able to read a scalar objective, identify the shape of every term, and distinguish a vector from a scalar-valued function of a vector. You should know that a gradient is a direction in parameter space, a Jacobian maps perturbations of one vector to perturbations of another, and a Hessian describes the local change of the gradient. You need not derive every identity from first principles, but you should be willing to check dimensions and test a derivative numerically.
 
@@ -979,6 +979,179 @@ $$
 Truncation error dominates when $h$ is too large, while cancellation and round-off dominate when $h$ is too small. Check several logarithmically spaced values and compare directional derivatives rather than every component when $d$ is large. Run the check in a deterministic, smooth regime: disable stochastic layers, fix the batch, and avoid points exactly at a non-differentiable kink.
 
 For the quadratic example, the gradient check should approach the analytic directional derivative and then deteriorate at very small $h$. For logistic regression, compare the analytic gradient against finite differences before trusting an optimiser trace. A passed check supports the derivative implementation at the tested points; it does not prove the whole training system correct.
+
+### Automatic Differentiation for Optimisation
+
+Automatic differentiation (AD) is the bridge between the mathematical derivatives in this chapter and the derivatives supplied to an optimiser. The [Numerical Analysis primer's automatic-differentiation chapter](../primer_numerical_analysis/primer_numerical_analysis.html#automatic-differentiation) develops dual numbers, computation tapes, and the mechanics of forward and reverse mode. Here the practical question is different: which derivative object does an optimisation method need, how should it be computed, and what evidence supports the claim that it is the derivative of the intended objective?
+
+#### The Derivative Object the Solver Needs
+
+Let $r:\mathbb{R}^d\to\mathbb{R}^m$ be a vector-valued computation with Jacobian $\mathbf{J}_r\in\mathbb{R}^{m\times d}$. A forward-mode calculation seeded by a tangent $\mathbf{v}\in\mathbb{R}^d$ returns the Jacobian-vector product (JVP)
+
+$$
+\mathbf{J}_r(\boldsymbol{\theta})\mathbf{v}\in\mathbb{R}^m.
+$$
+
+A reverse-mode calculation seeded by a cotangent $\mathbf{u}\in\mathbb{R}^m$ returns the vector-Jacobian product (VJP)
+
+$$
+\mathbf{J}_r(\boldsymbol{\theta})^{\top}\mathbf{u}\in\mathbb{R}^d.
+$$
+
+Neither operation requires storing the complete Jacobian. For a scalar objective $F$, reverse mode with output seed $1$ gives $\nabla F$. This is why reverse mode is usually natural for a loss with millions of parameters and one scalar output. Forward mode is attractive when there are few input directions or many outputs. A full Jacobian needs roughly one seed per input direction in forward mode or one seed per output direction in reverse mode; memory and primitive implementation details also affect the actual cost.
+
+These products map directly to optimisation methods. A Gauss--Newton action is
+
+$$
+\mathbf{J}_r^{\top}(\mathbf{J}_r\mathbf{v}),
+$$
+
+so a JVP followed by a VJP can apply it without materialising $\mathbf{J}_r$. For a scalar objective, an HVP is
+
+$$
+\nabla^2F(\boldsymbol{\theta})\mathbf{v}
+=D_{\mathbf{v}}\bigl(\nabla F\bigr)(\boldsymbol{\theta}).
+$$
+
+Forward-over-reverse computes this by applying a JVP to the gradient function. This is useful for Krylov and truncated-Newton methods, curvature probes, and some hypergradient calculations. An HVP is an action of the Hessian, not the Hessian itself; forming a dense matrix merely to multiply by one vector wastes memory on a large problem.
+
+The familiar backpropagation pass is reverse-mode accumulation through a model and its scalar loss. The optimiser receives the gradient of the complete implemented objective, including reductions, masks, regularisation, and transformations between parameters and predictions. A gradient of the network output before the loss reduction is not necessarily the gradient that the optimiser should use.
+
+#### From a Written Loss to an Executable Objective
+
+Consider the regularised logistic objective already used in this primer:
+
+$$
+F(\boldsymbol{\theta})
+=\frac{1}{n}\sum_{i=1}^{n}
+\left[\operatorname{softplus}(\mathbf{x}_i^{\top}\boldsymbol{\theta})
+-y_i\mathbf{x}_i^{\top}\boldsymbol{\theta}\right]
++\frac{\lambda}{2}\|\boldsymbol{\theta}\|^2.
+$$
+
+Its executable graph contains a matrix product, a stable elementwise loss, a mean reduction, and a penalty. Omitting the mean multiplies the data gradient by $n$ while leaving the penalty unchanged. Penalising an intercept that the mathematical statement excludes changes the problem. AD can differentiate either implementation accurately; it cannot decide which one was intended.
+
+The same warning applies to graph boundaries. Converting a differentiable value to an ordinary number, detaching it, passing through an unsupported external operation, or updating a parameter under a no-gradient context can remove a path that appears in the written derivation. Control flow can select a different executed branch at another parameter value. A successful derivative call therefore establishes a derivative of the executed program, subject to the rules supplied for its operations, not a proof that the program expresses the stated model.
+
+#### Memory, State, and Non-Smooth Operations
+
+Reverse mode normally retains or reconstructs intermediate values needed by the backward pass. Deep models, long unrolled optimisers, and large batches can therefore be limited by activation memory rather than arithmetic. Checkpointing or rematerialisation trades additional forward computation for lower memory. Record such choices when they affect feasible batch size or measured cost.
+
+Stochastic and stateful computations need an explicit boundary. With a fixed batch and random state, AD differentiates the realised computation. Across random batches it produces a sequence of minibatch gradients; whether their expectation estimates the full objective is a property of sampling and reduction, not of AD. Batch-dependent normalisation, running statistics, mutable buffers, training/evaluation mode, and unrolled optimiser state can all change the function being differentiated. Freeze or record those quantities during derivative checks.
+
+At a non-smooth operation such as $\max(0,s)$, the classical derivative may not exist at the kink. A framework must choose a convention there, while clipping, sorting, top-$k$ selection, and hard thresholds can make nearby branch changes invisible to a local derivative. For an $\ell_1$ penalty, a proximal method may express the intended problem more faithfully than treating one selected subgradient as an ordinary smooth gradient. Check the solver's regularity assumptions against the operations in the graph.
+
+#### Worked Derivative Products
+
+The following small example uses the same four-point logistic data in three ecosystems. The Python and R blocks use reverse-mode AD for the gradient and a mixed-mode or nested construction for the HVP. The Julia block contrasts `ForwardDiff.jl`'s forward-mode gradient with `Zygote.jl`'s reverse-mode gradient and HVP. These package examples demonstrate derivative objects; they are not performance benchmarks.
+
+::: {.code-group}
+
+**Python:**
+
+```python
+import torch
+from torch.func import grad, jvp, vjp
+
+torch.set_default_dtype(torch.float64)
+X = torch.tensor([[1., 0.], [1., 1.], [1., 2.], [1., -1.]])
+y = torch.tensor([0., 1., 1., 0.])
+lam = 0.1
+theta = torch.tensor([0.2, -0.3])
+v = torch.tensor([0.4, -0.2])
+
+def logits(t):
+    return X @ t
+
+def objective(t):
+    s = logits(t)
+    return (torch.nn.functional.softplus(s) - y * s).mean() \
+        + 0.5 * lam * (t @ t)
+
+gradient = grad(objective)
+g = gradient(theta)
+_, hv = jvp(gradient, (theta,), (v,))
+_, pullback = vjp(logits, theta)
+_, jvp_logits = jvp(logits, (theta,), (v,))
+
+weights = torch.sigmoid(logits(theta)) * (1 - torch.sigmoid(logits(theta)))
+expected_hv = X.T @ (weights * (X @ v)) / len(y) + lam * v
+assert torch.allclose(hv, expected_hv, atol=1e-12, rtol=1e-12)
+assert torch.allclose(jvp_logits, X @ v, atol=1e-12, rtol=1e-12)
+print("gradient:", g, "HVP:", hv)
+```
+
+**R:**
+
+```r
+library(torch)
+
+dtype <- torch_float64()
+X <- torch_tensor(rbind(c(1, 0), c(1, 1), c(1, 2), c(1, -1)), dtype = dtype)
+y <- torch_tensor(c(0, 1, 1, 0), dtype = dtype)
+lam <- 0.1
+theta <- torch_tensor(c(0.2, -0.3), dtype = dtype, requires_grad = TRUE)
+v <- torch_tensor(c(0.4, -0.2), dtype = dtype)
+
+objective <- function(t) {
+  s <- torch_matmul(X, t)
+  (nnf_softplus(s) - y * s)$mean() + 0.5 * lam * (t * t)$sum()
+}
+
+loss <- objective(theta)
+g <- autograd_grad(loss, list(theta), create_graph = TRUE)[[1]]
+hv <- autograd_grad((g * v)$sum(), list(theta))[[1]]
+print(list(gradient = as_array(g$detach()), hvp = as_array(hv$detach())))
+```
+
+**Julia:**
+
+```julia
+using ForwardDiff
+using Zygote
+using LinearAlgebra
+using Statistics
+
+X = [1.0 0.0; 1.0 1.0; 1.0 2.0; 1.0 -1.0]
+y = [0.0, 1.0, 1.0, 0.0]
+λ = 0.1
+θ = [0.2, -0.3]
+v = [0.4, -0.2]
+
+softplus(s) = max(s, 0) + log1p(exp(-abs(s)))
+objective(t) = mean(softplus.(X * t) - y .* (X * t)) + λ / 2 * dot(t, t)
+logits(t) = X * t
+
+forward_gradient = ForwardDiff.gradient(objective, θ)
+reverse_gradient = Zygote.gradient(objective, θ)[1]
+jvp_logits = ForwardDiff.derivative(a -> logits(θ .+ a .* v), 0.0)
+hvp = Zygote.hessian(objective, θ) * v  # dense reference for this tiny case
+
+@assert isapprox(forward_gradient, reverse_gradient; atol = 1e-10)
+@assert isapprox(jvp_logits, X * v; atol = 1e-10)
+println("gradient = ", forward_gradient, ", HVP = ", hvp)
+```
+
+:::
+
+The Python JVP pushes one parameter perturbation through the logit map; its VJP pullback maps an output weighting back to parameter space. The R example uses `create_graph = TRUE` so the first derivative remains available to the second derivative calculation. The Julia example uses different AD modes deliberately: `ForwardDiff.gradient` and the scalar-seeded JVP use forward sensitivities, while Zygote constructs the reverse-mode gradient. Its dense Hessian is only a reference for this two-parameter fixture; larger problems should use matrix-free products and choose modes according to dimensions, memory, and the solver's request.
+
+#### Validate AD Independently
+
+Begin with a deterministic fixture and write down the exact scalar objective, reduction, parameter mask, regularisation coefficient, and computation mode. Check value-level invariants first, such as permutation invariance for an unweighted full-batch mean. Then compare the AD directional derivative $\nabla F(\boldsymbol{\theta})^{\top}\mathbf{v}$ with a central difference of objective values and compare an HVP with a central difference of gradients. Use several step sizes: one large step can cross significant curvature or a branch, while one tiny step can be dominated by cancellation.
+
+For a vector-valued map, the identity
+
+$$
+\mathbf{u}^{\top}(\mathbf{J}_r\mathbf{v})
+=(\mathbf{J}_r^{\top}\mathbf{u})^{\top}\mathbf{v}
+$$
+
+checks a JVP and VJP pair without constructing the Jacobian. Probe multiple points and directions, including broadcasting, masks, regularisation, and parameter blocks that should receive no gradient. Freeze batches, random masks, and stateful layers during these tests.
+
+A passing AD check is local evidence about a derivative calculation. It does not establish that the intended objective was encoded, that a custom derivative rule is correct everywhere, that the computation is numerically stable, or that the optimiser has converged. Record the objective definition, derivative test, solver settings, and termination evidence together.
+
+For API details, see the official [JAX differentiation guide](https://docs.jax.dev/en/latest/jacobian-vector-products.html), R `torch` documentation for [autograd](https://torch.mlverse.org/docs/articles/using-autograd) and [`autograd_grad`](https://torch.mlverse.org/docs/reference/autograd_grad), and Julia documentation for [ForwardDiff.jl](https://juliadiff.org/ForwardDiff.jl/stable/user/api/) and [Zygote higher-order derivatives](https://fluxml.ai/Flux.jl/dev/reference/training/gradients/). Package APIs were checked against these official pages on 18 October 2026; exact installed versions and execution remain unverified in this workspace.
 
 ### Conditioning Beyond One Number
 
