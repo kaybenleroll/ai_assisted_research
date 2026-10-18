@@ -9,6 +9,8 @@ The host needs Git, `just`, and a container runtime (Podman preferred; Docker al
 | Pandoc renders | `localhost/primers-pandoc:latest`, built from `docker.io/pandoc/latex@sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8` | `IMAGE` | Verify the new base digest and Pandoc version, update `_shared/Dockerfile`, run `just setup`, and check sample renders. |
 | R figures | `docker.io/rocker/tidyverse:4.5.1@sha256:e58774bc0b3e15dd67d4eef5b3f7b77b1fd01b9a85e1ff5ecdd376bb06f74acc` | `ROCKER` | Verify the new digest and R version, update `_shared/images.just`, run `just setup`, and check plot recipes. |
 | README generation | `docker.io/library/python:3-slim@sha256:cfe2e24a75302a15934d37c2d86412893c0aa934dc3a97cbb439d04c01890ca9` | `PYTHON_IMAGE` | Verify the new digest, update `_shared/images.just`, then run `just readme-check`. |
+| Executable-example Python | `localhost/primers-python-runtime:3.12.15`, built from `python:3.12.15-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258` | `PYTHON_RUNTIME_IMAGE` | Review `_shared/runtime/python/requirements.lock`, verify the base digest and package releases, then run `just build-python-runtime probe-python-runtime`. |
+| Executable-example CPU PyTorch | `localhost/primers-python-torch:2.14.1`, built on the executable-example Python image | `PYTHON_TORCH_IMAGE` | Review `_shared/runtime/python/requirements-pytorch.lock`, verify the PyTorch CPU wheel support, then run `just build-python-torch probe-python-torch`. |
 | Spelling lint | `localhost/primers-lint:1.51.1`, built from the same digest-pinned `PYTHON_IMAGE` and checksum-verified `typos` 1.51.1 | `LINT_IMAGE` | Verify the release asset digest in `_shared/Dockerfile.lint`, run `just build-lint-image`, then probe and run `just lint`. |
 | Markdown structure lint | `docker.io/davidanson/markdownlint-cli2:v0.23.3` | `MDLINT_IMAGE` | Verify the new image tag, probe Pandoc syntax and Silo configuration, then run `just lint-md`. |
 | Prose lint | `docker.io/jdkato/vale:v3.24.0` (observed digest `sha256:f51196961ed91e514047cd95d45ec8bc2ff8d54a285af29e56166b975a37e3bf`) | `VALE_IMAGE` | Verify the tag and digest, run `just lint-prose-test`, then run `just lint-prose` and review the advisory baseline. |
@@ -24,6 +26,8 @@ Issue titles start with `[infra]` or the primer's short name (directory name wit
 ## Building
 
 The policy and architecture for selected runnable primer examples is documented in [docs/executable-examples.md](docs/executable-examples.md). Example execution is opt-in through per-primer manifests; ordinary fenced snippets remain illustrative unless explicitly listed.
+
+Build and probe the shared Python example runtimes with `just build-python-runtimes`, `just probe-python-runtime`, and `just probe-python-torch`. These images are separate from the repository-check `PYTHON_IMAGE`, the Rocker figure image, and the catastrophe workbook image.
 
 Run the command from the named directory (`cd <directory> && just <recipe>`). This table was checked against the current Justfiles and `_shared/common.just` on 10 October 2026. `html` and `pdf` are imported shared recipes; project-specific wrappers are shown where they perform additional work. Use `just --list` in the directory to inspect other recipes.
 
@@ -52,7 +56,7 @@ Run the command from the named directory (`cd <directory> && just <recipe>`). Th
 
 The root `Justfile` has selected project targets; use the directory recipes for complete project control. Root `html-dev` and `html-full` also run the workbook and may build PDFs through dependencies, so they are unsuitable for HTML-only sweeps. For those sweeps, run `html` per primer, `quick-html` for the Building AI companion, `html-variants` for the six opted-in maths primers, and `silo-html` for Silo.
 
-Run `just readme` to generate the README catalogue and Recently Updated block, then `just readme-check` to verify them. Edit document titles, descriptions, links, and row order in the registry in `scripts/update_readme_recent.py`; update the relevant Justfile `DATE` after a substantive review. Do not edit generated README rows directly.
+Run `just readme` to generate the README catalogue and update block, then `just readme-check` to verify them. Edit document titles, descriptions, links, and row order in the registry in `scripts/update_readme_recent.py`; update the relevant Justfile `DATE` after a substantive review. Do not edit generated README rows directly.
 
 Use wrapper recipes such as `full` to chain shared targets; `just` does not override an imported recipe. Render plots through the Rocker container and commit the generation script with figure outputs. The Mermaid Lua filter and Puppeteer configuration live in `_shared/filters/`; generated PNGs remain project-local in `.build/mermaid`. Prefer Mermaid to ASCII diagrams where PDF font coverage is unreliable. Set DejaVu Sans Mono for code containing Greek, because the default monospaced font lacks those glyphs. With a leading body H1 and numbered `##` sections, pair `--number-sections` with `--shift-heading-level-by=-1` so sections number from 1.
 

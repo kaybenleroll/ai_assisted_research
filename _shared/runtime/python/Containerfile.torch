@@ -1,0 +1,15 @@
+ARG BASE_IMAGE=localhost/primers-python-runtime:3.12.15
+FROM ${BASE_IMAGE}
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+COPY requirements-pytorch.lock /tmp/requirements-pytorch.lock
+COPY torch-cpu.lock /tmp/torch-cpu.lock
+RUN python -m pip install --no-cache-dir --no-deps --requirement /tmp/requirements-pytorch.lock \
+    && python -m pip install --no-cache-dir --no-deps --requirement /tmp/torch-cpu.lock \
+    && rm /tmp/requirements-pytorch.lock /tmp/torch-cpu.lock
+
+COPY probe.py /usr/local/bin/primer-python-probe
+ENTRYPOINT ["python", "/usr/local/bin/primer-python-probe"]

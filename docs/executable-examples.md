@@ -105,6 +105,33 @@ The Python, R, and Julia images are independent. A failure in one language
 must identify that language and must not silently fall back to the Pandoc,
 R-figure, lint, or workbook images.
 
+### Python Runtime Profiles
+
+Issue #310 provides two deliberately separate Python profiles. The base image
+uses Python 3.12.15 on the digest-pinned `python:3.12.15-slim-bookworm` image
+and installs the exact versions in
+`_shared/runtime/python/requirements.lock`: NumPy, SciPy, and Matplotlib.
+The CPU PyTorch profile is built on that image and adds the exact versions in
+`requirements-pytorch.lock` plus PyTorch 2.14.1 from the official CPU wheel
+index recorded in `torch-cpu.lock`. PyTorch is not part of
+the base image because it is large and only a subset of numerical examples
+needs automatic differentiation.
+
+The image entrypoints run `probe.py`. The probe asserts the Python minor
+version, imports every shared package, performs a small NumPy/SciPy operation,
+and, for the PyTorch profile, differentiates a scalar square. Run
+`just build-python-runtimes` followed by `just probe-python-runtime` and
+`just probe-python-torch` after changing a pin. Both probes must pass with
+network access disabled. The profile is intended for the host
+architectures for which the selected upstream wheels are published; adding
+another architecture requires a separate build and probe review.
+
+The lock inputs are updated as a reviewed set. A runtime update must record
+the new base digest or package pins, rebuild both images from a clean local
+cache, rerun the probes, and measure image size and cold-build time before CI
+adoption. The repository-check `PYTHON_IMAGE` remains independent and must
+not be used as an executable-example runtime.
+
 ## Runner Contract
 
 The common runner will be exposed through shared `just` recipes and thin
