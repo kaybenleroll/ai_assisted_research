@@ -64,6 +64,10 @@ A local preference does not silently override the guide. Declare a necessary dep
 
 ## Exposition and Examples
 
+For the repository's distinction between executable and illustrative code, and
+the container and manifest contract for runnable examples, see
+[docs/executable-examples.md](docs/executable-examples.md).
+
 **E1.** Keep real technical depth: precise terminology, hypotheses, exceptions, proofs, competing interpretations, and failure modes. Assume general technical literacy rather than domain expertise; explain what a condition number is, why it matters, and what goes wrong when it is ignored. Adapt the method to the subject: mathematical reasoning needs hypotheses, and humanities explanations distinguish evidence, attribution, and interpretation. [check: review]
 
 **E2.** Define unavoidable specialist terms and expand acronyms at first meaningful use, then use the chosen terminology consistently. Give a concept from another field a short grounding; explain a general concept before introducing a vendor's exact term. Where definitions compete, state which one the document uses. [check: review]

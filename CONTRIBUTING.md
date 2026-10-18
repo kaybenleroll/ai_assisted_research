@@ -23,6 +23,8 @@ Issue titles start with `[infra]` or the primer's short name (directory name wit
 
 ## Building
 
+The policy and architecture for selected runnable primer examples is documented in [docs/executable-examples.md](docs/executable-examples.md). Example execution is opt-in through per-primer manifests; ordinary fenced snippets remain illustrative unless explicitly listed.
+
 Run the command from the named directory (`cd <directory> && just <recipe>`). This table was checked against the current Justfiles and `_shared/common.just` on 10 October 2026. `html` and `pdf` are imported shared recipes; project-specific wrappers are shown where they perform additional work. Use `just --list` in the directory to inspect other recipes.
 
 | Directory | Main HTML | Main PDF | Full or Additional Output |
