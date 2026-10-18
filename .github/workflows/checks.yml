@@ -7,9 +7,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    # Deliberate pin: ubuntu-latest moves to Ubuntu 26 from 2026-10-19. Revisit when migrating.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     env:
       OCI: docker
       BASE_REF: origin/${{ github.base_ref }}
@@ -23,7 +29,8 @@ jobs:
       - run: just check
 
   pr-body:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
