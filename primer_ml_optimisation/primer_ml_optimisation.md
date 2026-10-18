@@ -1,6 +1,8 @@
 # Machine Learning Optimisation: Objectives, Algorithms, and Diagnostics
 
-## What This Primer Covers
+## Orientation, Scope, and Notation
+
+### Purpose, Scope, and Reading Route
 
 Optimisation is the part of machine learning that turns a model, data, and a loss into fitted parameters. The optimiser does not decide whether the model is useful, whether the data represent the deployment population, or whether the reported metric answers the real question. It solves, or approximately solves, the mathematical problem it is given. This primer develops the judgement needed to formulate that problem, select an algorithm, interpret its guarantees, and diagnose a run that has gone wrong.
 
@@ -14,11 +16,11 @@ Two synthetic examples recur throughout. The first is a rotated, ill-conditioned
 
 These examples are deliberately complementary. The quadratic isolates geometry: if an iteration is slow, oscillatory, or unstable, the objective and its spectrum make the reason visible. Logistic regression then adds the concerns that make machine-learning optimisation different from a textbook quadratic: a finite sample, a statistical loss, a regularisation choice, minibatch noise, numerical overflow, and a distinction between training and held-out evidence. The examples are not presented as recipes to copy into production. They are controlled experiments for learning how to ask whether an observed optimisation trace is plausible.
 
-You can read the primer in three ways. For a mathematical route, read Sections 4–10 in order. For a training-debugging route, read Sections 5–7, then Sections 11–12. For a method-selection route, begin with the guarantee table in Section 7, compare Sections 8–10, and finish with the workflow in Section 12. The [Numerical Analysis primer](../primer_numerical_analysis/primer_numerical_analysis.html) supplies broader numerical context, while the [Deep Learning primer](../primer_deep_learning/primer_deep_learning.html) develops neural architectures and backpropagation.
+You can read the primer in three ways. For a mathematical route, read Sections 2–7 in order. For a training-debugging route, read Sections 2–4, then Sections 8–9. For a method-selection route, begin with the guarantee table in Section 4, compare Sections 5–7, and finish with the workflow in Section 9. The [Numerical Analysis primer](../primer_numerical_analysis/primer_numerical_analysis.html) supplies broader numerical context, while the [Deep Learning primer](../primer_deep_learning/primer_deep_learning.html) develops neural architectures and backpropagation.
 
 Each route has a different stopping point. A reader who needs to understand a convergence claim can stop after the problem-class and method sections, provided the assumptions are recorded. A reader debugging a training run should continue to the diagnostics section even if the chosen optimiser is conventional. A reader designing a benchmark should read the workflow and the discussion of validation leakage: comparing methods on a repeatedly reused validation set can turn the benchmark itself into an uncontrolled outer optimisation loop. The intended outcome is not memorisation of algorithm names, but a defensible account of what was optimised, under which assumptions, and why the reported result is credible.
 
-## What This Primer Is Not
+### What This Primer Is Not
 
 This is not a proof-based optimisation textbook, a catalogue of solver APIs, or a claim that one optimiser is best across machine-learning tasks. Proof sketches are included where they expose an assumption or a failure mode, but the Further Reading section points to complete treatments. Code uses only the Python standard library so that the calculations remain visible; production work should use tested numerical kernels and solver implementations.
 
@@ -34,7 +36,7 @@ There are also limits on what a convergence statement can establish. “Converge
 
 The primer therefore treats failure as information. Divergence can indicate a step-size error, an indefinite curvature model, a broken gradient, or a scale mismatch. A flat training curve can indicate convergence, saturation, a data pipeline problem, or a metric that hides progress. An excellent validation score can indicate a useful model, a lucky split, or leakage. The final workflow asks the reader to distinguish these possibilities with measurements rather than attributing every outcome to the optimiser's brand name.
 
-## Assumed Background
+### Assumed Background
 
 You should be comfortable with vectors, matrices, matrix multiplication, derivatives of scalar functions, and elementary probability. The primer defines optimisation-specific terms such as smoothness, strong convexity, stationarity, duality, and conditioning before using their guarantees. Familiarity with Python helps with the executable example, but no package-specific knowledge is required.
 
@@ -60,7 +62,7 @@ A quick readiness check is useful. Given a proposed update, can you say whether 
 
 The notation in the primer is intentionally explicit about these distinctions. Bold symbols denote vectors or matrices, a function argument shows which quantity is being differentiated, and subscripts identify examples or iterations rather than silently changing the object being discussed. The same convention carries into the code: arrays have named roles, intermediate quantities are not hidden behind a framework call, and numerical output is treated as evidence that can be checked.
 
-## Notation
+### Notation
 
 Vectors and matrices are bold. For Latin symbols this is written with `\mathbf`; for Greek symbols, whose bold forms are not reliably produced by `\mathbf` in every TeX renderer, this primer uses `\boldsymbol`. A superscript $^{\top}$ denotes transpose. All vector norms are Euclidean unless another norm is named, and matrix norms are the corresponding induced norms. The same letter may receive a local subscript for a training example or iteration, but the underlying meaning stays fixed. The HTML build is checked in both MathJax and MathML modes because a notation that looks acceptable in one output is not automatically portable to the other.
 
@@ -103,6 +105,8 @@ There are three recurring layers of notation. Problem data such as $z_i$, $\math
 The notation for a derivative also carries a promise about what is held fixed. $\nabla F(\boldsymbol{\theta})$ differentiates the stated objective with respect to its parameter argument. A partial derivative may hold hyperparameters, data, or a constraint multiplier fixed. In a bilevel problem, $\boldsymbol{\theta}^*(\boldsymbol{\eta})$ is itself a function of the outer variable $\boldsymbol{\eta}$; treating it as constant changes the outer derivative. Later sections call out these distinctions when they affect an algorithm or a guarantee.
 
 Displayed equations use the same symbols as the executable examples. When a formula is implemented, the implementation should preserve the mathematical grouping: stable log-loss expressions should not form probabilities and then take logarithms at extreme scores; a Hessian-vector product should not be confused with a materialised Hessian; and a stochastic gradient should not be described as exact merely because automatic differentiation produced it. These are notation and semantics checks as much as coding checks.
+
+*Verified against primary sources for all sections; unverified claims are flagged inline.*
 
 ## From a Learning Task to an Optimisation Problem
 
