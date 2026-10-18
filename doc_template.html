@@ -579,10 +579,20 @@ $highlighting-css$
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
   <script>
-    // Define the small macro used by maths primers without loading an
-    // extension dynamically; embedded MathJax pages have no external loader.
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from that
+    // release over the vendored file; `just check-mathjax` enforces the match.
+    // The MathML variants ignore this block.
     window.MathJax = {
-      tex: { macros: { boldsymbol: ['\\mathbf{#1}', 1] } }
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+${_shared/vendor/mathjax/boldsymbol.js()}
+        MathJax.startup.defaultReady();
+      } }
     };
   </script>
 $math$
