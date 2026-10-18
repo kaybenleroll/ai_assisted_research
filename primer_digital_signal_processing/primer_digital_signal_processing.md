@@ -428,7 +428,7 @@ uses the base `cos` and vectorised arithmetic:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -439,7 +439,7 @@ x_3k = np.cos(2 * np.pi * 3_000 / 10_000 * n)
 print(np.max(np.abs(x_7k - x_3k)))  # approximately 0
 ```
 
-R
+**R:**
 
 ```r
 n <- 0:11
@@ -454,7 +454,7 @@ The two analogue explanations produce the same real-valued sequence. Once the AD
 
 ![Aliasing: 3 kHz and 7 kHz analogue candidates produce the same samples at 10 kHz](figures/sampling_aliasing.png)
 
-Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates sampled at 10 kHz. Each candidate passes through the same sample values; they are alternative analogue interpretations, not simultaneous reconstructions of one baseband signal. The frequency view shows spectral folding across the 5 kHz Nyquist boundary. An acquisition chain must suppress the unwanted candidate before sampling because the digital samples alone cannot distinguish them.
+*Figure: Unit-amplitude 3 kHz and 7 kHz analogue cosine candidates sampled at 10 kHz. Each candidate passes through the same sample values; they are alternative analogue interpretations, not simultaneous reconstructions of one baseband signal. The frequency view shows spectral folding across the 5 kHz Nyquist boundary. An acquisition chain must suppress the unwanted candidate before sampling because the digital samples alone cannot distinguish them.*
 
 The anti-aliasing filter must therefore be analogue, or must occur before the sampling operation at an earlier, faster sampling rate. In a practical acquisition chain:
 
@@ -663,7 +663,7 @@ nonnegative frequencies for this real-valued record:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -689,7 +689,7 @@ assert np.isclose(psd.sum() * df, weighted_mean_square)
 assert np.isclose(peak_amplitude[np.argmin(abs(f - 50))], 0.8)
 ```
 
-R
+**R:**
 
 ```r
 fs <- 1000.0
@@ -764,7 +764,7 @@ The correct response depends on the question. If you need to estimate a known si
 
 ![DFT leakage and the windowing trade-off for on-bin and off-bin tones](figures/dft_windowing.png)
 
-Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid; the 50.5 Hz tone lies halfway between bins. The repeated-record view exposes their different boundary continuations. Rectangular and Hann spectra use a shared dB reference and coherent-gain amplitude correction, showing Hann sidelobe suppression and main-lobe widening. Windowing changes the finite-observation response; it does not create physical tones or extend the observation duration.
+*Figure: DFT boundary behaviour and leakage at a 1 kHz sample rate with a 1,000-sample record. The 50 Hz tone lies on the 1 Hz bin grid; the 50.5 Hz tone lies halfway between bins. The repeated-record view exposes their different boundary continuations. Rectangular and Hann spectra use a shared dB reference and coherent-gain amplitude correction, showing Hann sidelobe suppression and main-lobe widening. Windowing changes the finite-observation response; it does not create physical tones or extend the observation duration.*
 
 ### Why the Naive DFT Is Expensive
 
@@ -802,7 +802,7 @@ The same FFT conventions can be made explicit in base R:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -824,7 +824,7 @@ peak_frequency = f[np.argmax(amplitude)]
 print(f"peak ~= {peak_frequency:.1f} Hz")
 ```
 
-R
+**R:**
 
 ```r
 fs <- 2000.0
@@ -1111,7 +1111,7 @@ appropriate when the production coefficients are not exactly symmetric.
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -1149,7 +1149,7 @@ print(pass_db.min(), pass_db.max(), ripple_db, attenuation_db,
       delay_ms.min(), delay_ms.max())
 ```
 
-R
+**R:**
 
 ```r
 fs_design <- 48000.0
@@ -1230,7 +1230,7 @@ windowed-sinc construction and a zero-padded FFT for the response grid:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -1253,7 +1253,7 @@ print("passband ripple (dB):", 20 * np.log10(passband.max() / passband.min()))
 print("stopband attenuation (dB):", -20 * np.log10(stopband.max()))
 ```
 
-R
+**R:**
 
 ```r
 fs <- 48000.0
@@ -1367,7 +1367,7 @@ changing the streaming pattern.
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -1399,7 +1399,7 @@ print("max batch/stream difference:", np.max(np.abs(y_batch - y_stream)))
 np.testing.assert_allclose(y_stream, y_batch, atol=1e-12, rtol=1e-12)
 ```
 
-R
+**R:**
 
 ```r
 fs <- 48000.0
@@ -1606,7 +1606,7 @@ inspect its boundary convention and response.
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -1619,7 +1619,7 @@ x = np.zeros(48_000)  # one second of illustrative input at fs_in
 y = signal.resample_poly(x, up=147, down=160, window=("kaiser", 8.6))
 ```
 
-R
+**R:**
 
 ```r
 fs_in <- 48000.0
@@ -1811,7 +1811,7 @@ them behind a package default:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -1838,7 +1838,7 @@ print("peak tone frequency:", f[tone_band][np.argmax(psd[tone_band])])
 print("noise power in selected bins:", psd[noise_band].sum() * (f[1] - f[0]))
 ```
 
-R
+**R:**
 
 ```r
 fs <- 10000.0
@@ -2102,7 +2102,7 @@ The window, hop, FFT length, centring convention, and boundary padding all affec
 
 ![STFT window length trade-off for a short two-tone burst](figures/stft_tradeoff.png)
 
-Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their supports are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and 15.625 Hz. The short-window spectrogram localises burst edges more closely, while the long window separates the tones in the spectrogram and representative frame spectra. Shared relative-dB scales support comparison. Zero-padding the short frame would not give it the long frame's discrimination.
+*Figure: A 500 Hz plus 600 Hz burst from 0.45 to 0.55 s, sampled at 16 kHz, analysed with 256- and 1,024-sample Hann windows. Their supports are 16 and 64 ms; their unpadded frequency grids are spaced by 62.5 and 15.625 Hz. The short-window spectrogram localises burst edges more closely, while the long window separates the tones in the spectrogram and representative frame spectra. Shared relative-dB scales support comparison. Zero-padding the short frame would not give it the long frame's discrimination.*
 
 For reconstruction, separate the analysis window from the synthesis window. Let frame $m$ start at $s_m=mR$, and let $w_a[n]$ be an analysis window of length $N$. The analysis coefficients are
 
@@ -2164,7 +2164,7 @@ R leaves the inverse-transform normalisation to the caller.
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -2189,7 +2189,7 @@ x_roundtrip = accum[keep] / denom[keep]
 np.testing.assert_allclose(x_roundtrip, x_stft, atol=1e-12, rtol=0)
 ```
 
-R
+**R:**
 
 ```r
 set.seed(31)
@@ -2414,7 +2414,7 @@ number generators produce different noise samples despite the shared seed.
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 import numpy as np
@@ -2433,7 +2433,7 @@ x = (
 )
 ```
 
-R
+**R:**
 
 ```r
 set.seed(2026)
@@ -2462,7 +2462,7 @@ carry its returned state across blocks.
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 f0 = 2_400.0
@@ -2474,7 +2474,7 @@ sos = signal.tf2sos(b, a)
 y = signal.sosfiltfilt(sos, x)
 ```
 
-R
+**R:**
 
 ```r
 f0 <- 2400.0
@@ -2510,7 +2510,7 @@ Reuse the `welch_psd` helper from the Welch section for the R calculation:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 f, pxx = signal.welch(
@@ -2534,7 +2534,7 @@ print("total estimated mean square:", pxx.sum() * (f[1] - f[0]))
 print("time-domain variance:", np.var(y))
 ```
 
-R
+**R:**
 
 ```r
 estimate <- welch_psd(y, fs, nperseg = 16384, noverlap = 8192)
@@ -2563,7 +2563,7 @@ values from one block to the next:
 
 ::: {.code-group}
 
-Python
+**Python:**
 
 ```python
 initial_state = signal.sosfilt_zi(sos) * x[0]
@@ -2589,7 +2589,7 @@ np.testing.assert_allclose(y_causal, y_causal_batch, atol=1e-12, rtol=1e-12)
 np.testing.assert_allclose(state, final_batch_state, atol=1e-12, rtol=1e-12)
 ```
 
-R
+**R:**
 
 ```r
 initial <- c(0, 0)
@@ -2631,7 +2631,7 @@ are written against the R coefficients actually used above.
 \newpage
 ```
 
-Python
+**Python:**
 
 ```python
 # Deterministic reference; reuse fs and sos from the notch example.
@@ -2667,7 +2667,7 @@ assert abs(H_ref[0]) > 10**(-0.01 / 20)  # Wanted-tone loss below 0.01 dB.
 assert abs(H_ref[1]) < 1e-10             # Exact-frequency notch reference.
 ```
 
-R
+**R:**
 
 ```r
 # Deterministic reference; reuse fs, b, and a from the notch example.

@@ -3782,7 +3782,7 @@ singularities. Python is the canonical language in these examples. The
 arrays below represent a rectangular grid in the complex plane; the hue
 records argument and brightness records modulus.</p>
 <div class="code-group">
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3810,7 +3810,7 @@ records argument and brightness records modulus.</p>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Im z&quot;</span>)</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Domain coloring of the principal logarithm&quot;</span>)</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> y, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
@@ -3917,7 +3917,7 @@ command.</p>
 <p>For a numerical contour check, parameterize the circle <span class="math inline">\(z(t)=Re^{it}\)</span>, so <span class="math inline">\(dz=iRe^{it}dt\)</span>. The following two tabs
 integrate counterclockwise around <span class="math inline">\(|z|=2\)</span> and should return <span class="math inline">\(2\pi i\)</span> for <span class="math inline">\(1/(z-i)\)</span>:</p>
 <div class="code-group">
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mpmath <span class="im">as</span> mp</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>mp.mp.dps <span class="op">=</span> <span class="dv">40</span></span>
@@ -3930,7 +3930,7 @@ integrate counterclockwise around <span class="math inline">\(|z|=2\)</span> and
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> mp.quad(integrand_on_circle, [<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> mp.pi])</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(value)</span></code></pre></div>
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200000</span><span class="dt">L</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>radius <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="fu">seq_len</span>(n) <span class="sc">-</span> <span class="fl">0.5</span>) <span class="sc">/</span> n</span>

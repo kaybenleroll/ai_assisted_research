@@ -113,6 +113,8 @@ Source: [primer_numerical_analysis/primer_numerical_analysis.md](primer_numerica
 
 **M8.** Use `> **Note:**` and `> **Warning:**` blockquotes for callouts, sparingly; reserve warnings for material risk or an action the reader must not take. The only allowed fenced-div classes are `.broad-table`, `.compact-table`, and `.code-group`, defined in [doc_template.html](doc_template.html). Use the existing template without adding CSS or filters for callouts. [check: review]
 
+**M9.** For multi-language examples, put consecutive fenced code blocks one after another; the HTML template turns them into tabs, and print and PDF show them in sequence. Label each block with a bold paragraph on its own line that ends in a colon, such as `**Python:**`, `**R:**`, or `**Python (SciPy):**`. The trailing colon also satisfies markdownlint MD036, which otherwise treats a bold-only line as a pseudo-heading. Never add Pandoc attributes to bold text: `**Python**{.code-label}` renders the literal text `{.code-label}` and breaks the tabs. A `::: {.code-group}` fenced div may bound a group. [check: review]
+
 ## Evidence and Sources
 
 **R1.** Cite the strongest available source for an important factual claim; prefer primary documentation, standards, and official data, and use a paper when it is the strongest evidence. [check: review]

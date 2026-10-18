@@ -602,6 +602,24 @@ code span.wa { color: #da4453; } /* Warning */
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
+    // The MathML variants ignore this block.
+    window.MathJax = {
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();        MathJax.startup.defaultReady();
+      } }
+    };
+  </script>
 
 </head>
 <body>
@@ -1507,7 +1525,7 @@ table. The code checks that the entries are finite, non-negative, and
 sum to one, then computes marginals with <code>rowSums()</code> and
 <code>colSums()</code>.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>joint <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.1</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.1</span>, <span class="fl">0.4</span>),</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
@@ -1518,7 +1536,7 @@ sum to one, then computes marginals with <code>rowSums()</code> and
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>column_marginals <span class="ot">&lt;-</span> <span class="fu">colSums</span>(joint)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>row_marginals</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>column_marginals</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>joint <span class="op">=</span> [[<span class="fl">0.4</span>, <span class="fl">0.1</span>],</span>
@@ -2149,7 +2167,7 @@ by omitting zero terms. Base R’s <code>log2()</code> gives results in
 bits. Logical indexing selects the positive probabilities before
 logarithms are evaluated.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>entropy <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(p), <span class="fu">length</span>(p) <span class="sc">&gt;</span> <span class="dv">0</span><span class="dt">L</span>, <span class="fu">all</span>(<span class="fu">is.finite</span>(p)),</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">abs</span>(<span class="fu">sum</span>(p) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
@@ -2160,7 +2178,7 @@ logarithms are evaluated.</p>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>))</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">entropy</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite, log2</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2191,7 +2209,7 @@ evaluating logarithms. Supply both vectors in the same category order:
 equal lengths alone do not establish that corresponding entries
 represent the same outcome.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kl_divergence <span class="ot">&lt;-</span> <span class="cf">function</span>(p, q) {</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(p), <span class="fu">is.numeric</span>(q), <span class="fu">length</span>(p) <span class="sc">&gt;</span> <span class="dv">0</span><span class="dt">L</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">length</span>(p) <span class="sc">==</span> <span class="fu">length</span>(q), <span class="fu">all</span>(<span class="fu">is.finite</span>(p)), <span class="fu">all</span>(<span class="fu">is.finite</span>(q)),</span>
@@ -2205,7 +2223,7 @@ represent the same outcome.</p>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>), <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">kl_divergence</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite, log2</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2752,7 +2770,7 @@ the marginals and logical indexing selects positive cells.
 <code>outer()</code> constructs the product-marginal matrix with the
 same dimensions as the joint table.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>joint <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.1</span>,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.1</span>, <span class="fl">0.4</span>),</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
@@ -2766,7 +2784,7 @@ same dimensions as the joint table.</p>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>information <span class="ot">&lt;-</span> <span class="fu">sum</span>(joint[positive] <span class="sc">*</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">log2</span>(joint[positive] <span class="sc">/</span> independent[positive]))</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>information</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite, log2</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>joint <span class="op">=</span> [[<span class="fl">0.4</span>, <span class="fl">0.1</span>],</span>
@@ -3103,7 +3121,7 @@ each codeword, <code>startsWith()</code> checks whether any other
 codeword begins with it. This computes the cost of the supplied code; it
 does not construct a Huffman tree.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>probability <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="fl">0.4</span>, <span class="at">b =</span> <span class="fl">0.3</span>, <span class="at">c =</span> <span class="fl">0.2</span>, <span class="at">d =</span> <span class="fl">0.1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="st">&quot;0&quot;</span>, <span class="at">b =</span> <span class="st">&quot;10&quot;</span>, <span class="at">c =</span> <span class="st">&quot;110&quot;</span>, <span class="at">d =</span> <span class="st">&quot;111&quot;</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">names</span>(probability)), <span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">names</span>(code)),</span>
@@ -3119,7 +3137,7 @@ does not construct a Huffman tree.</p>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">any</span>(has_prefix))</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>expected_length <span class="ot">&lt;-</span> <span class="fu">sum</span>(probability <span class="sc">*</span> <span class="fu">nchar</span>(code))</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>expected_length</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isfinite</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>probability <span class="op">=</span> {<span class="st">&quot;a&quot;</span>: <span class="fl">0.4</span>, <span class="st">&quot;b&quot;</span>: <span class="fl">0.3</span>, <span class="st">&quot;c&quot;</span>: <span class="fl">0.2</span>, <span class="st">&quot;d&quot;</span>: <span class="fl">0.1</span>}</span>
@@ -3537,7 +3555,7 @@ It rejects non-finite values and probabilities outside
 The calculation then reports achieved mutual information and capacity
 separately for two input laws.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.numeric</span>(p), <span class="fu">all</span>(<span class="fu">is.finite</span>(p)), <span class="fu">all</span>(p <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> p <span class="sc">&lt;=</span> <span class="dv">1</span>))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p))</span>
@@ -3554,7 +3572,7 @@ separately for two input laws.</p>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>capacity <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">h2</span>(epsilon)</span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">input_one =</span> a, <span class="at">achieved_bits_per_use =</span> achieved,</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">capacity_bits_per_use =</span> <span class="fu">rep</span>(capacity, <span class="fu">length</span>(a)))</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4577,7 +4595,7 @@ uses NumPy arrays with the same validation; <code>axis=1</code> sums
 across columns to leave row totals, and <code>axis=0</code> leaves
 column totals.</p>
 <div class="code-group">
-<p><strong>R</strong>{.code-label}</p>
+<p><strong>R:</strong></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mi_bits <span class="ot">&lt;-</span> <span class="cf">function</span>(counts) {</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.matrix</span>(counts), <span class="fu">is.numeric</span>(counts), <span class="fu">all</span>(<span class="fu">is.finite</span>(counts)),</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(counts <span class="sc">&gt;=</span> <span class="dv">0</span>), <span class="fu">is.finite</span>(<span class="fu">sum</span>(counts)), <span class="fu">sum</span>(counts) <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
@@ -4589,7 +4607,7 @@ column totals.</p>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">8</span>, <span class="dv">12</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mi_bits</span>(counts)</span></code></pre></div>
-<p><strong>Python</strong>{.code-label}</p>
+<p><strong>Python:</strong></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>

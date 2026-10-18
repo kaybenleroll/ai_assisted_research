@@ -251,19 +251,19 @@ In Julia, the situation is strikingly different from both Python and R. Julia's 
 
 ### Example: Inspect Machine Epsilon in All Three Languages
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 
 print(np.finfo(float).eps)
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 print(.Machine$double.eps)
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 println(eps(Float64))
 ```
@@ -340,7 +340,7 @@ Setting up this budget explicitly before starting prevents a common and expensiv
 
 ### Example: Condition Number and Solve Quality
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 
@@ -354,7 +354,7 @@ print("x =", x)
 print("cond(A) =", cond_A)
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 A <- matrix(c(1, 1, 1, 1.000001), nrow = 2, byrow = TRUE)
 b <- c(2, 2.000001)
@@ -366,7 +366,7 @@ cat("x =", x, "\n")
 cat("cond(A) =", cond_A, "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using LinearAlgebra
 
@@ -475,7 +475,7 @@ where $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$. The update is designed s
 
 $$F_1(x_1, x_2) = x_1^2 + x_2^2 - 4, \qquad F_2(x_1, x_2) = x_1 x_2 - 1$$
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 from scipy.optimize import fsolve
@@ -490,7 +490,7 @@ print("solution:", sol[0])
 print("residual norm:", np.linalg.norm(F(sol[0])))
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 library(nleqslv)
 
@@ -504,7 +504,7 @@ cat("solution:", sol$x, "\n")
 cat("residual norm:", sqrt(sum(F(sol$x)^2)), "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using NLsolve
 
@@ -524,7 +524,7 @@ All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpa
 
 This function has a root near $0.739085...$
 
-**Python**{.code-label}
+**Python:**
 ```python
 from math import cos, sin
 
@@ -571,7 +571,7 @@ print("bisection:", bisection(f, 0.0, 1.0))
 print("newton:", newton(f, df, 0.5))
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 bisection <- function(f, a, b, tol = 1e-12, max_iter = 200) {
   fa <- f(a)
@@ -631,7 +631,7 @@ cat("bisection:", bisection(f, 0, 1), "\n")
 cat("newton:", newton(f, df, 0.5), "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 function bisection(f, a, b; tol=1e-12, max_iter=200)
     fa, fb = f(a), f(b)
@@ -897,7 +897,7 @@ A = \begin{bmatrix}
 b = \begin{bmatrix}1 \\ 2 \\ 0\end{bmatrix}
 $$
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 
@@ -917,7 +917,7 @@ print("x:", x)
 print("residual norm:", residual)
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 A <- matrix(
   c(4, 1, 0,
@@ -935,7 +935,7 @@ cat("x:", x, "\n")
 cat("residual norm:", residual, "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using LinearAlgebra
 
@@ -955,7 +955,7 @@ println("residual norm: ", residual)
 
 Fit $y \approx \beta_0 + \beta_1 x$ to data.
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 
@@ -968,7 +968,7 @@ beta, *_ = np.linalg.lstsq(X, y, rcond=None)
 print("beta0, beta1:", beta)
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 x <- c(0, 1, 2, 3, 4)
 y <- c(1.0, 1.9, 3.2, 3.9, 5.1)
@@ -977,7 +977,7 @@ fit <- lm(y ~ x)
 print(coef(fit))
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using LinearAlgebra
 
@@ -1102,7 +1102,7 @@ For non-SPD **B**, you fall back to the general LAPACK routine `dggev`, exposed 
 
 The examples below show the most common eigenvalue computations in each language. Each uses the appropriate specialist function rather than a generic solver, and shows how to check the result.
 
-**Python**{.code-label}
+**Python:**
 
 For a dense symmetric matrix, `numpy.linalg.eigh` is the right call — it is faster than `eig`, returns real eigenvalues sorted in ascending order, and is numerically more stable:
 
@@ -1149,7 +1149,7 @@ eigenvalues, eigenvectors = eigh(A, B)
 print("generalised eigenvalues:", eigenvalues)
 ```
 
-**R**{.code-label}
+**R:**
 
 R's base `eigen()` handles dense matrices. For large sparse problems, `RSpectra` wraps ARPACK and is the standard choice:
 
@@ -1181,7 +1181,7 @@ cat("5 largest eigenvalues:", sort(result_sparse$values, decreasing = TRUE), "\n
 
 Note that `eigen(A, symmetric = TRUE)` is meaningfully faster than `eigen(A)` on symmetric matrices and guarantees real output — always set this flag when you know your matrix is symmetric.
 
-**Julia**{.code-label}
+**Julia:**
 
 Julia's `LinearAlgebra` standard library provides `eigen` (dense) and the `Arpack` package handles large sparse problems:
 
@@ -1308,7 +1308,7 @@ Understanding interpolation error requires thinking about several interacting fa
 
 Data: sample $\sin(x)$ on coarse grid and estimate at intermediate points.
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 from scipy.interpolate import interp1d, CubicSpline
@@ -1326,7 +1326,7 @@ print("spline:", spline_interp(xq))
 print("truth:", np.sin(xq))
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 x <- seq(0, pi, length.out = 7)
 y <- sin(x)
@@ -1341,7 +1341,7 @@ cat("spline:", spline_vals, "\n")
 cat("truth:", sin(xq), "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using Interpolations
 
@@ -1413,7 +1413,7 @@ But the asymptotic regime requires a fine enough grid to resolve the function's 
 
 ### Shared Example A: Central Difference Derivative of $\exp(x)$ at $x=1$
 
-**Python**{.code-label}
+**Python:**
 ```python
 import math
 
@@ -1430,7 +1430,7 @@ for h in [1e-1, 1e-3, 1e-5, 1e-7]:
     print(f"h={h:1.0e}, approx={approx:.12f}, err={err:.3e}")
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 central_diff <- function(f, x, h) {
   (f(x + h) - f(x - h)) / (2 * h)
@@ -1446,7 +1446,7 @@ for (h in c(1e-1, 1e-3, 1e-5, 1e-7)) {
 }
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 central_diff(f, x, h) = (f(x + h) - f(x - h)) / (2h)
 
@@ -1464,7 +1464,7 @@ end
 
 No elementary antiderivative, ideal for quadrature demo.
 
-**Python**{.code-label}
+**Python:**
 ```python
 import math
 from scipy.integrate import quad
@@ -1482,7 +1482,7 @@ print("trapezoid n=1000:", trapezoid(f, 0.0, 1.0, 1000))
 print("scipy quad:", quad(f, 0.0, 1.0)[0])
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 trapezoid <- function(f, a, b, n) {
   x <- seq(a, b, length.out = n + 1)
@@ -1497,7 +1497,7 @@ cat("trapezoid n=1000:", trapezoid(f, 0, 1, 1000), "\n")
 cat("integrate():", integrate(f, lower = 0, upper = 1)$value, "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using QuadGK
 
@@ -1621,7 +1621,7 @@ The contribution of the AD framing is that it makes clear backpropagation is not
 
 ### Code
 
-**Python (JAX)**{.code-label}
+**Python (JAX):**
 
 JAX provides clean, composable AD. `jax.grad` gives reverse-mode gradients; `jax.jacfwd` and `jax.jacrev` give full Jacobians in forward and reverse mode respectively.
 
@@ -1645,7 +1645,7 @@ print(jax.jacfwd(F)(x0))   # forward mode: 2 inputs, so 2 passes
 print(jax.jacrev(F)(x0))   # reverse mode: 3 outputs, so 3 passes
 ```
 
-**Julia (ForwardDiff.jl / Zygote.jl)**{.code-label}
+**Julia (ForwardDiff.jl / Zygote.jl):**
 
 Julia's ecosystem has mature, production-quality AD libraries for both modes.
 
@@ -1666,7 +1666,7 @@ x0 = [1.0, 2.0]
 println(ForwardDiff.jacobian(F, x0))
 ```
 
-**R: what you would have used before AD, and why it is worse**{.code-label}
+**R (what you would have used before AD, and why it is worse):**
 
 R does not have a mature AD library. The standard tool is `numDeriv::grad`, which uses finite differences — exactly what the primer's differentiation section warned you about.
 
@@ -1912,7 +1912,7 @@ $$
 
 Euler and classical fourth-order Runge–Kutta (RK4) are worth comparing because they represent two different philosophies. Euler uses one slope evaluation per step and is first-order accurate globally, so errors shrink linearly with $h$. Classical RK4 uses four carefully weighted slope evaluations per step; those weights are chosen so low-order truncation terms cancel, giving fourth-order global accuracy on smooth problems. In practice, RK4 usually delivers far smaller error at the same step size, while Euler is mainly useful as a baseline and for intuition.
 
-**Python**{.code-label}
+**Python:**
 ```python
 import math
 
@@ -1948,7 +1948,7 @@ print("Euler:", y_euler, "error:", abs(y_euler - y_true))
 print("RK4  :", y_rk4, "error:", abs(y_rk4 - y_true))
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 euler <- function(f, t0, y0, h, n_steps) {
   t <- t0
@@ -1986,7 +1986,7 @@ cat("Euler:", y_euler, "error:", abs(y_euler - y_true), "\n")
 cat("RK4  :", y_rk4, "error:", abs(y_rk4 - y_true), "\n")
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 function euler(f, t0, y0, h, n_steps)
     t, y = t0, y0
@@ -2026,7 +2026,7 @@ println("RK4  : ", y_rk4, " error: ", abs(y_rk4 - y_true))
 
 This is where idiomatic language differences shine.
 
-**Python (SciPy)**{.code-label}
+**Python (SciPy):**
 ```python
 import numpy as np
 from scipy.integrate import solve_ivp
@@ -2040,7 +2040,7 @@ print("y(1) ~", sol.y[0, -1])
 print("steps:", len(sol.t) - 1)
 ```
 
-**R (deSolve)**{.code-label}
+**R (deSolve):**
 ```r
 library(deSolve)
 
@@ -2054,7 +2054,7 @@ out <- ode(y = c(y = 1), times = times, func = rhs, parms = NULL,
 print(out)
 ```
 
-**Julia (DifferentialEquations.jl)**{.code-label}
+**Julia (DifferentialEquations.jl):**
 ```julia
 using DifferentialEquations
 
@@ -2280,7 +2280,7 @@ $$
 
 Estimate parameters $(a,b)$ from noisy data.
 
-**Python**{.code-label}
+**Python:**
 ```python
 import numpy as np
 from scipy.optimize import least_squares
@@ -2298,7 +2298,7 @@ res = least_squares(residuals, x0=np.array([5.0, 0.5]))
 print("a, b:", res.x)
 ```
 
-**R**{.code-label}
+**R:**
 ```r
 t <- c(0, 1, 2, 3, 4)
 y <- c(5.1, 3.0, 1.9, 1.2, 0.8)
@@ -2307,7 +2307,7 @@ fit <- nls(y ~ a * exp(-b * t), start = list(a = 5, b = 0.5))
 print(coef(fit))
 ```
 
-**Julia**{.code-label}
+**Julia:**
 ```julia
 using LsqFit
 
@@ -2401,7 +2401,7 @@ The **discrepancy principle** is appropriate when you have a reliable estimate o
 
 ### Code
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 import numpy as np
@@ -2424,7 +2424,7 @@ lasso.fit(A, b)
 
 Note the factor convention: `scipy.sparse.linalg.lsqr` uses `damp` as $\sqrt{\mu}$ in the objective $\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 + \text{damp}^2\|\mathbf{x}\|_2^2$, and `sklearn.linear_model.Lasso` uses a slightly different scaling by default — check the docstring before assuming parameters are comparable across libraries.
 
-**R**{.code-label}
+**R:**
 
 The `glmnet` package handles both ridge and LASSO cleanly, including automatic $\mu$ selection by cross-validation.
 
@@ -2444,7 +2444,7 @@ x_lasso_cv <- coef(cv_fit, s = "lambda.min")
 
 Note that `glmnet` uses `lambda` where this primer uses $\mu$ — the two are the same thing. The package normalises the penalty internally, so `lambda` values are not directly comparable to $\mu$ in the theoretical formulas above without accounting for the scaling.
 
-**Julia**{.code-label}
+**Julia:**
 
 ```julia
 using Lasso, GLM
@@ -2543,7 +2543,7 @@ Julia was designed so readable numerical code can still run fast. Its just-in-ti
 
 Seeing the same algorithm in all three languages exposes something that is easy to miss when you work in just one: the underlying numerical method is language-agnostic, but the shape of the code that implements it reveals what each language values. The algorithm here is bisection — simple enough that no library machinery is needed, but concrete enough that idiomatic choices are visible.
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 # Explicit loop
@@ -2565,7 +2565,7 @@ root = brentq(lambda x: x**3 - 2, 0, 2)
 
 The `brentq` one-liner is how you would actually solve this in production Python. The loop version demonstrates that Python has no built-in type constraints — `f` is any callable, `a` and `b` are any comparable values, and the function applies to floats, complex numbers, or anything else that supports the arithmetic without any declaration change.
 
-**R**{.code-label}
+**R:**
 
 ```r
 # Explicit loop
@@ -2585,7 +2585,7 @@ root <- uniroot(function(x) x^3 - 2, c(0, 2))$root
 
 Notice that `uniroot` returns a list, not a scalar — you extract `$root` explicitly. R functions almost always return structured objects, and this is a deliberate design choice: the return value carries convergence diagnostics alongside the answer, so you pay attention to what the solver actually found. The `<-` assignment operator is functionally equivalent to `=` here, but it is a strong community norm and you will see it in all idiomatic R code.
 
-**Julia**{.code-label}
+**Julia:**
 
 ```julia
 # Explicit loop
@@ -2630,7 +2630,7 @@ Look at consecutive differences: $|I_{2n} - I_n|$ should shrink by about 4 each 
 
 Here is the refinement study in code. The target is $I = \int_0^1 e^{-x^2}\, dx$; the true value is available from `scipy.integrate.quad` (Python), `integrate` (R), or `quadgk` (Julia) at near-machine-precision accuracy.
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 import numpy as np
@@ -2670,7 +2670,7 @@ $$T^* = T(h/2) + \frac{T(h/2) - T(h)}{3}$$
 
 The factor of 3 comes from the fact that halving $h$ reduces the leading error term by 4, so $T(h/2) = I + c(h/2)^2 + \cdots$ and $T(h) = I + ch^2 + \cdots$, giving $T^* = T(h/2) + (T(h/2) - T(h))/3 = I + O(h^4)$. Richardson extrapolation cancels the second-order error term, giving a fourth-order estimate from two second-order estimates; the error typically drops by a factor of 16 or more beyond what the finest grid alone achieves.
 
-**R**{.code-label}
+**R:**
 
 ```r
 trapezoid <- function(f, a, b, n) {
@@ -2705,7 +2705,7 @@ cat(sprintf("\nRichardson extrapolation: %.15f\n", T_rich))
 cat(sprintf("Richardson error:         %.3e\n", abs(T_rich - true_val)))
 ```
 
-**Julia**{.code-label}
+**Julia:**
 
 ```julia
 using QuadGK
