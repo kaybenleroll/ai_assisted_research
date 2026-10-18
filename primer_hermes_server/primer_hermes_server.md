@@ -271,7 +271,7 @@ Then review pending changes with the documented `/skills pending`, `/skills diff
 
 ## Set the Execution Boundary
 
-The terminal backend determines where commands execute. Consult the [Terminal Backend section of Configuration](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) for supported options and optional dependencies.
+The terminal backend determines where commands execute. Hermes currently supports local, Docker, SSH, Modal, Daytona, Vercel Sandbox, and Singularity/Apptainer backends. The [Terminal Backend section of Configuration](https://hermes-agent.nousresearch.com/docs/user-guide/configuration/) is the reference for options and optional dependencies.
 
 This table contrasts where each backend runs commands and the isolation it provides.
 
