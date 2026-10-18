@@ -177,7 +177,7 @@ The same joint table can be represented as a matrix whose rows index $X$ and col
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 joint <- matrix(c(0.4, 0.1,
@@ -192,7 +192,7 @@ row_marginals
 column_marginals
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import isfinite
@@ -415,7 +415,7 @@ For a finite probability vector, define $0\log 0$ by omitting zero terms. Base R
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 entropy <- function(p) {
@@ -430,7 +430,7 @@ entropy(c(0.5, 0.5))
 entropy(c(1, 0))
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import isfinite, log2
@@ -458,7 +458,7 @@ To compare two distributions, handle support violations before evaluating logari
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 kl_divergence <- function(p, q) {
@@ -476,7 +476,7 @@ kl_divergence(c(0.5, 0.5), c(1, 0))
 kl_divergence(c(1, 0), c(0.5, 0.5))
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import isfinite, log2
@@ -631,7 +631,7 @@ For a small finite joint distribution, mutual information can be computed from t
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 joint <- matrix(c(0.4, 0.1,
@@ -649,7 +649,7 @@ information <- sum(joint[positive] *
 information
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import isfinite, log2
@@ -783,7 +783,7 @@ For a known codebook, expected length is a weighted sum. Named vectors keep prob
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 probability <- c(a = 0.4, b = 0.3, c = 0.2, d = 0.1)
@@ -803,7 +803,7 @@ expected_length <- sum(probability * nchar(code))
 expected_length
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import isfinite
@@ -935,7 +935,7 @@ For numerical checks, the following base R function uses vectorised arithmetic a
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 h2 <- function(p) {
@@ -956,7 +956,7 @@ data.frame(input_one = a, achieved_bits_per_use = achieved,
            capacity_bits_per_use = rep(capacity, length(a)))
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 import math
@@ -1263,7 +1263,7 @@ The following base R function computes the plug-in value from a contingency tabl
 
 ::: {.code-group}
 
-**R**{.code-label}
+**R:**
 
 ```r
 mi_bits <- function(counts) {
@@ -1279,7 +1279,7 @@ counts <- matrix(c(12, 8, 8, 12), nrow = 2, byrow = TRUE)
 mi_bits(counts)
 ```
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 import numpy as np

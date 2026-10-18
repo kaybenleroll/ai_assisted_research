@@ -221,7 +221,7 @@ The code uses stable softplus and sigmoid calculations, asserts monotone trainin
 
 ::: {.code-group}
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import exp, hypot, isfinite, log1p, sqrt
@@ -358,7 +358,7 @@ print(f"validation: log_loss={validation_loss:.6f} "
 print(f"directional derivative relative error: {relative_error:.3e}")
 ```
 
-**R**{.code-label}
+**R:**
 
 ```r
 LAMBDA <- 0.1
@@ -681,7 +681,7 @@ This deterministic experiment uses the recurring quadratic with eigenvalues 1 an
 
 ::: {.code-group}
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 from math import cos, hypot, isfinite, pi, sin, sqrt
@@ -795,7 +795,7 @@ print(f"directional derivative relative error: "
       f"{abs(fd - analytic) / abs(analytic):.3e}")
 ```
 
-**R**{.code-label}
+**R:**
 
 ```r
 MU <- 1

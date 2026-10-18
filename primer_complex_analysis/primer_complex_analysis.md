@@ -1356,7 +1356,7 @@ Numerical work is most useful here as a way to inspect geometry, test a derivati
 
 ::: {.code-group}
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 import numpy as np
@@ -1388,7 +1388,7 @@ plt.title("Domain coloring of the principal logarithm")
 plt.show()
 ```
 
-**R**{.code-label}
+**R:**
 
 ```r
 x <- seq(-2, 2, length.out = 501)
@@ -1472,7 +1472,7 @@ For a numerical contour check, parameterize the circle $z(t)=Re^{it}$, so $dz=iR
 
 ::: {.code-group}
 
-**Python**{.code-label}
+**Python:**
 
 ```python
 import mpmath as mp
@@ -1489,7 +1489,7 @@ value = mp.quad(integrand_on_circle, [0, 2 * mp.pi])
 print(value)
 ```
 
-**R**{.code-label}
+**R:**
 
 ```r
 n <- 200000L
