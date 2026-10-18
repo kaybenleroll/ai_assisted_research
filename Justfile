@@ -117,6 +117,25 @@ lint-spell *FILES:
 build-image:
   {{OCI}} build -t {{IMAGE}} -f _shared/Dockerfile _shared/
 
+# Build the shared scientific Python runtime used by executable examples
+build-python-runtime:
+  {{OCI}} build -t {{PYTHON_RUNTIME_IMAGE}} -f _shared/runtime/python/Containerfile _shared/runtime/python/
+
+# Build the opt-in CPU PyTorch profile on top of the shared Python runtime
+build-python-torch: build-python-runtime
+  {{OCI}} build --build-arg BASE_IMAGE={{PYTHON_RUNTIME_IMAGE}} -t {{PYTHON_TORCH_IMAGE}} -f _shared/runtime/python/Containerfile.torch _shared/runtime/python/
+
+# Build both Python example runtimes
+build-python-runtimes: build-python-runtime build-python-torch
+
+# Run the offline probe for the scientific Python runtime
+probe-python-runtime: build-python-runtime
+  {{OCI}} run --rm --network=none {{PYTHON_RUNTIME_IMAGE}} --profile base
+
+# Run the offline probe for the CPU PyTorch profile
+probe-python-torch: build-python-torch
+  {{OCI}} run --rm --network=none {{PYTHON_TORCH_IMAGE}} --profile torch
+
 # Configure hooks and fetch the two images used by primer builds
 setup:
   git config core.hooksPath .githooks

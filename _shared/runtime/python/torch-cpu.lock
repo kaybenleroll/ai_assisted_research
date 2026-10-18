@@ -1,0 +1,3 @@
+# The index is part of the lock: PyPI's torch wheel is CUDA-enabled.
+--index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1
