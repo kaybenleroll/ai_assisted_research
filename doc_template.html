@@ -578,6 +578,13 @@ $highlighting-css$
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // Define the small macro used by maths primers without loading an
+    // extension dynamically; embedded MathJax pages have no external loader.
+    window.MathJax = {
+      tex: { macros: { boldsymbol: ['\\mathbf{#1}', 1] } }
+    };
+  </script>
 $math$
 </head>
 <body>
