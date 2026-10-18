@@ -67,7 +67,7 @@ These are starting points, not definitions. A Jewish household, a Catholic paris
 
 “Religions of the Book” is a familiar English expression for Judaism, Christianity, and Islam. It points to their shared history of scripture, prophecy, monotheism, and an Abrahamic family resemblance. It is not a neutral technical category that perfectly describes how each tradition understands itself.
 
-The Qur’an uses the expression *Ahl al-Kitāb*, “People of the Book,” especially for communities connected with earlier revelation. That Qur’anic category has a meaning within Islamic scripture beyond its use as a modern comparative-religion label, and it does not imply that Judaism, Christianity, and Islam have identical ideas of scripture. The Jewish *Torah*, the Christian Bible, and the Qur’an occupy different places in their respective accounts of revelation, history, law, and community.
+The Qur’an uses the expression *Ahl al-Kitāb*, “People of the Book,” especially for communities connected with earlier revelation. That Qur’anic category is not simply a modern comparative-religion label, and it does not imply that Judaism, Christianity, and Islam have identical ideas of scripture. The Jewish *Torah*, the Christian Bible, and the Qur’an occupy different places in their respective accounts of revelation, history, law, and community.
 
 “Book” can also mislead when it suggests that religion is primarily a text. In all three traditions, scripture is interpreted through sound, memory, ritual, law, preaching, and communal life. A Torah scroll is handled and read; the Gospel is proclaimed within worship; the Qur’an is recited in Arabic as an act of worship, not merely consulted as an information source.
 
@@ -91,7 +91,7 @@ Jewish authority is therefore distributed. The rabbi matters, but so do the pray
 
 The Hebrew Bible is commonly divided into Torah, Nevi’im (Prophets), and Ketuvim (Writings), together forming the *Tanakh*. The Torah, in the narrow sense, is the Five Books of Moses. In a wider sense, *Torah* means teaching: the written text, its interpretation, and the ongoing process of learning how to live faithfully.
 
-Rabbinic Judaism developed through the Mishnah, Talmud, midrash, legal codes, commentary, and responsa. *Halakha*, literally “the way” or “walking,” is the body of Jewish law and practice as interpreted through this tradition. Jewish law covers prayer, food, Shabbat, festivals, business ethics, family life, charity, ritual objects, and much more. It governs more than prohibitions; it is a way of making ordinary time and action answerable to covenant.
+Rabbinic Judaism developed through the Mishnah, Talmud, midrash, legal codes, commentary, and responsa. *Halakha*, literally “the way” or “walking,” is the body of Jewish law and practice as interpreted through this tradition. Jewish law covers prayer, food, Shabbat, festivals, business ethics, family life, charity, ritual objects, and much more. It is not simply a list of prohibitions; it is a way of making ordinary time and action answerable to covenant.
 
 Jewish theology is strongly monotheistic, but it often presents doctrine through narrative, commandment, argument, and prayer rather than a single creed. Core themes include the unity and holiness of God, creation, covenant, revelation, the Exodus, the responsibility to pursue justice, repentance, and the sanctification of time. Ideas about the Messiah, resurrection, the afterlife, angels, and divine providence vary in emphasis across Jewish communities. Judaism generally gives greater practical weight to how one lives than to assent to a fixed list of metaphysical propositions.
 
@@ -181,7 +181,7 @@ The Catholic Church is a communion of churches in union with the Bishop of Rome,
 
 Catholic doctrine gives authority to Scripture and apostolic Tradition as interpreted by the teaching office of the church, or Magisterium. The Catechism presents seven sacraments: Baptism, Confirmation, Eucharist, Penance, Anointing of the Sick, Holy Orders, and Matrimony. The Eucharist is the source and summit of Catholic life. The liturgy of the Roman rite is commonly called the Mass, and it includes a Liturgy of the Word and a Liturgy of the Eucharist. Catholic devotional life also includes the Liturgy of the Hours, the rosary, pilgrimage, veneration of saints, and many local devotions.
 
-Catholicism also contains churches with Middle Eastern and African historical identities. The Maronite, Chaldean, Syriac, Armenian, Coptic, Ethiopian, and Eritrean Catholic churches are Eastern Catholic churches with their own patriarchs, liturgical rites, saints, calendars, and histories, while sharing communion with Rome. They are distinct from Roman parishes. This distinction prevents a common mistake: treating “Catholic” as synonymous with Latin European Christianity.
+Catholicism also contains churches with Middle Eastern and African historical identities. The Maronite, Chaldean, Syriac, Armenian, Coptic, Ethiopian, and Eritrean Catholic churches are not simply Roman parishes with different music. They are Eastern Catholic churches with their own patriarchs, liturgical rites, saints, calendars, and histories, while sharing communion with Rome. This distinction prevents a common mistake: treating “Catholic” as synonymous with Latin European Christianity.
 
 #### Eastern Orthodoxy
 
@@ -211,7 +211,11 @@ Malankara churches in India preserve ancient Saint Thomas Christian traditions c
 
 The Church of the East developed in the Persian Empire and Mesopotamia, outside the Roman imperial church. Its history is associated with Edessa, Nisibis, Seleucia-Ctesiphon, and an East Syriac liturgical and theological tradition. It sent bishops, monks, and missionaries across Persia, Central Asia, India, and, for a period, China. Its communities lived under different empires and political pressures from those experienced by Greek- and Latin-speaking churches.
 
-The Assyrian Church of the East is the best-known modern representative, though its history includes internal divisions and related churches. The Chaldean Catholic Church is an Eastern Catholic church in communion with Rome and shares East Syriac roots; shared use of “Chaldean” or “Assyrian” historical language does not make it the same church as the Assyrian Church of the East. East Syriac Christianity demonstrates that the history of Christianity was not confined to the Roman Empire or the Mediterranean. It was also a Persian, Mesopotamian, Asian, and trading-network religion.
+<!-- vale House.Filler = NO -->
+
+The Assyrian Church of the East is the best-known modern representative, though its history includes internal divisions and related churches. The Chaldean Catholic Church is an Eastern Catholic church in communion with Rome and shares East Syriac roots; it should not be confused with the Assyrian Church of the East simply because both use “Chaldean” or “Assyrian” historical language. East Syriac Christianity demonstrates that the history of Christianity was not confined to the Roman Empire or the Mediterranean. It was also a Persian, Mesopotamian, Asian, and trading-network religion.
+
+<!-- vale House.Filler = YES -->
 
 #### Christianity in Africa and the Middle East Beyond the Major Labels
 
@@ -219,7 +223,11 @@ Africa was not a late mission field waiting for Christianity to arrive from Euro
 
 Christian communities also endured in Nubia and the medieval kingdoms along the Nile, while the Middle East retained Greek, Syriac, Armenian, Coptic, Maronite, Chaldean, Assyrian, and other Christian populations. Modern Christian life in the region includes ancient patriarchates, Catholic Eastern churches, Orthodox churches, Protestant communities, evangelical institutions, monastic communities, and diaspora congregations. “Middle Eastern Christianity” is therefore a region containing several families, not one denomination.
 
-Modern African Christianity adds further branches. Catholic and Protestant missions expanded dramatically from the nineteenth century, but African Christians also founded independent churches and movements. African Initiated or Instituted Churches, including Aladura, Zion, Kimbanguist, Ethiopianist, and many other traditions, often combine Christian scripture and baptism with prophetic leadership, healing, exorcism, disciplined prayer, indigenous languages, and local forms of community organisation. Some have close relations with older denominations; others insist on their ecclesial independence. Their existence complicates any story in which Christianity travelled from Europe to Africa unchanged.
+<!-- vale House.Filler = NO -->
+
+Modern African Christianity adds further branches. Catholic and Protestant missions expanded dramatically from the nineteenth century, but African Christians also founded independent churches and movements. African Initiated or Instituted Churches, including Aladura, Zion, Kimbanguist, Ethiopianist, and many other traditions, often combine Christian scripture and baptism with prophetic leadership, healing, exorcism, disciplined prayer, indigenous languages, and local forms of community organisation. Some have close relations with older denominations; others insist on their ecclesial independence. Their existence complicates any story in which Christianity simply travels from Europe to Africa unchanged.
+
+<!-- vale House.Filler = YES -->
 
 ### Protestant Families: History, Branches, and Contrasts
 
@@ -441,7 +449,7 @@ The gurdwara is the Sikh place of worship, learning, community, and hospitality.
 
 The *sangat* is the gathered community. *Seva*, selfless service, and *langar*, the free communal kitchen, make theology visible as institution. People of any background may enter a gurdwara respectfully, share the meal, and participate in community life. Sikh institutions include local gurdwaras, the Akal Takht as a seat of temporal authority, the Shiromani Gurdwara Parbandhak Committee in relevant contexts, educational bodies, and the worldwide Panth. No single administrator controls every Sikh community.
 
-Sikhism developed in the religious and political world of early modern Punjab, where Muslim, Hindu, Sufi, Bhakti, and local traditions were already in conversation and conflict. The Gurus' teaching established more than an abstract creed. It created a community with its own scripture, sung language, institutions, discipline, and public ethic. The Khalsa's formation in 1699 intensified this communal and political identity, especially as Sikhs faced persecution and changing imperial power. Sikh history therefore matters to doctrine: remembrance of the Gurus, martyrdom, resistance, and service are not optional historical decorations but part of how Sikh identity is learned.
+Sikhism developed in the religious and political world of early modern Punjab, where Muslim, Hindu, Sufi, Bhakti, and local traditions were already in conversation and conflict. The Gurus' teaching was not simply a new abstract creed. It created a community with its own scripture, sung language, institutions, discipline, and public ethic. The Khalsa's formation in 1699 intensified this communal and political identity, especially as Sikhs faced persecution and changing imperial power. Sikh history therefore matters to doctrine: remembrance of the Gurus, martyrdom, resistance, and service are not optional historical decorations but part of how Sikh identity is learned.
 
 If you want the Sikh chapter in one image, picture the Guru Granth Sahib enthroned, hymns being sung, people sitting together without status distinction, and food being cooked for anyone who comes. Scripture, music, equality, service, and community are not separate departments here. They are the same religious logic made visible.
 
@@ -534,7 +542,7 @@ Zen or Chan emphasises direct practice, meditation, teacher-student transmission
 
 ### Vajrayana and Tibetan Buddhism
 
-Vajrayana uses tantric methods within a Mahayana framework. It may include initiation, mantra, mandala, visualisation of deities, ritual implements, guru devotion, and highly structured meditative practice. “Deity” in this context does not imply worship of a separate creator god. A deity practice can function as a method for transforming perception, cultivating awakened qualities, and realising emptiness, though interpretations vary.
+Vajrayana uses tantric methods within a Mahayana framework. It may include initiation, mantra, mandala, visualisation of deities, ritual implements, guru devotion, and highly structured meditative practice. “Deity” in this context does not simply mean worshipping a separate creator god. A deity practice can function as a method for transforming perception, cultivating awakened qualities, and realising emptiness, though interpretations vary.
 
 Tibetan Buddhism includes the major schools of Nyingma, Kagyu, Sakya, and Gelug, together with many lineages and institutions. The Dalai Lama is a major figure in the Gelug and wider Tibetan world, but no single person governs all Tibetan Buddhism. Monasteries, reincarnate lamas, scholars, householders, retreat centres, and local protectors all shape religious life.
 
@@ -548,17 +556,21 @@ At a Shinto shrine, the first act is often a pause at the *torii*. A visitor was
 
 ### A Shrine-Centred Tradition
 
-Shinto, “the way of the *kami*,” is a Japanese tradition centred on sacred presences, shrine ritual, festivals, land, ancestors, and the maintenance of relationship between people and the more-than-human world. *Kami* do not map neatly onto the Western category “god.” They can include deities, ancestors, forces of nature, exceptional persons, places, and presences associated with particular histories.
+Shinto, “the way of the *kami*,” is a Japanese tradition centred on sacred presences, shrine ritual, festivals, land, ancestors, and the maintenance of relationship between people and the more-than-human world. *Kami* are not simply equivalent to the Western category “god.” They can include deities, ancestors, forces of nature, exceptional persons, places, and presences associated with particular histories.
 
 Shinto has no single founder, universal creed, or canonical theology in the way that Christianity, Islam, or Buddhism have developed them. The Kojiki and Nihon Shoki preserve important mythic and imperial narratives, while shrine traditions, norito prayers, ritual manuals, local histories, and priestly training transmit practice. Buddhism, Confucianism, folk religion, and Shinto have influenced one another for centuries; modern religious life often remains more mixed than tidy labels imply.
 
 The shrine, or *jinja*, is the basic institution. A *kannushi* or Shinto priest performs rites; *miko* may assist with ritual and shrine activity. The Association of Shinto Shrines coordinates many shrines, but Shinto is not a single centrally standardised organisation. Each shrine has its own enshrined kami, history, festival calendar, parish community, and local relationships.
 
-Many shrines are ancient, but treating “Shinto” as a religion with fixed boundaries is partly a modern classification. Earlier Japanese religious life commonly combined kami worship with Buddhist temples, imported Chinese ideas, court ritual, and local customs. Shrine and temple institutions were formally separated during the nineteenth-century Meiji period, when the state recast shrine practice as a national tradition. That history explains why a shrine can be at once a sacred place, a neighbourhood institution, a heritage site, and a symbol whose political meanings have changed over time.
+<!-- vale House.Filler = NO -->
+
+Many shrines are ancient, but “Shinto” as a clearly bounded religion is partly a modern classification. Earlier Japanese religious life commonly combined kami worship with Buddhist temples, imported Chinese ideas, court ritual, and local customs. Shrine and temple institutions were formally separated during the nineteenth-century Meiji period, when the state recast shrine practice as a national tradition. That history explains why a shrine can be at once a sacred place, a neighbourhood institution, a heritage site, and a symbol whose political meanings have changed over time.
+
+<!-- vale House.Filler = YES -->
 
 ### Worldview and Practice
 
-Shinto places strong emphasis on purity, sincerity, gratitude, harmony, continuity, and the flourishing of community. *Kegare* is often translated as impurity or defilement, but moral guilt does not capture its meaning. It can involve contact with death, blood, illness, misfortune, or conditions that disrupt ritual and social balance. *Harae* and *misogi* are forms of purification that restore readiness for relationship.
+Shinto places strong emphasis on purity, sincerity, gratitude, harmony, continuity, and the flourishing of community. *Kegare* is often translated as impurity or defilement, but it is not simply moral guilt. It can involve contact with death, blood, illness, misfortune, or conditions that disrupt ritual and social balance. *Harae* and *misogi* are forms of purification that restore readiness for relationship.
 
 Shinto does not usually ask the worshipper to affirm a single systematic account of salvation after death. It focuses more on right relationship in this world: respect for kami, ancestors, place, seasonal cycles, family, community, and the responsibilities of ordinary life. That does not mean Shinto has no ideas about the dead or the cosmos. It means ritual relationship usually comes before dogmatic system.
 
@@ -594,7 +606,7 @@ All seven traditions use authoritative sources, but “scripture” does differe
 
 In Judaism, authority gathers around Torah, rabbinic interpretation, public reading, argument, and lived custom. In Christianity, the Bible is read with different combinations of creeds, councils, catechisms, liturgical books, denominational confessions, preaching, and personal study. In Islam, the Qur’an is recited as revelation and interpreted through hadith, commentary, jurisprudence, legal schools, theology, and devotional tradition.
 
-Hindu authority flows through Veda, Upanishads, epics, the Gita, Puranas, Agamas, guru texts, temple practice, and lineage. Sikh scripture has a role beyond consultation by a congregation: the Guru Granth Sahib is enthroned, sung, read, and treated as the community’s living Guru. Buddhist communities use sutras, the Pali canon, Vinaya, tantras, commentaries, and lineage instructions through monastic learning, philosophical debate, meditation, and ritual transmission. Shinto draws on mythic chronicles, *norito*, shrine records, ritual manuals, inherited forms, and local precedent.
+Hindu authority flows through Veda, Upanishads, epics, the Gita, Puranas, Agamas, guru texts, temple practice, and lineage. Sikh scripture is not simply a book consulted by a congregation: the Guru Granth Sahib is enthroned, sung, read, and treated as the community’s living Guru. Buddhist communities use sutras, the Pali canon, Vinaya, tantras, commentaries, and lineage instructions through monastic learning, philosophical debate, meditation, and ritual transmission. Shinto draws on mythic chronicles, *norito*, shrine records, ritual manuals, inherited forms, and local precedent.
 
 Authority lives in the relationship between source and practice. People learn how to read through teachers, institutions, languages, rituals, and communities. A text becomes part of a religious world through the way people recite it, argue about it, sing it, teach it, and build a life around it.
 
