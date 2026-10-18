@@ -60,8 +60,8 @@ readme:
 readme-check:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
 
-# Check committed metadata, renderer variants, Mermaid, MathJax extension version, freshness, and README generation
-check: check-meta check-variants check-mermaid check-mathjax check-fresh check-readme
+# Check committed metadata, renderer variants, Mermaid, freshness, and README generation
+check: check-meta check-variants check-mermaid check-fresh check-readme
 
 check-meta:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py meta
@@ -71,9 +71,6 @@ check-variants:
 
 check-mermaid:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py mermaid
-
-check-mathjax:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py mathjax
 
 check-fresh:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py fresh

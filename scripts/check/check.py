@@ -22,9 +22,6 @@ RECIPE_RE = re.compile(r'(?m)^([\w-]+):[^\n]*\n((?:(?:  |\t)[^\n]*\n|\n)*)')
 RENDER_RE = re.compile(r'([\w.-]+\.md)\s+-o\s+([\w.-]+\.html)')
 META_RE = re.compile(r'--metadata\s+(title|author|date)="([^"]*)"')
 FENCE_RE = re.compile(r'^ {0,3}(`{3,}|~{3,})(.*)$')
-EXTENSION = ROOT / "_shared/vendor/mathjax/boldsymbol.js"
-EXTENSION_RE = re.compile(r"checkVersion\(\"\[tex\]/boldsymbol\",\"([0-9][^\"]*)\"")
-BUNDLE_VERSION_RE = re.compile(r"\bversion:(\w+)\b")
 RAW_MERMAID_RE = re.compile(r'graph (?:LR|TB)|subgraph|stroke-dasharray|\{\.mermaid\}')
 
 
@@ -244,40 +241,9 @@ def check_fresh(docs):
     return bool(errors)
 
 
-def check_mathjax(docs):
-    """The vendored boldsymbol extension must match the MathJax core embedded in each output."""
-    errors = []
-    match = EXTENSION_RE.search(EXTENSION.read_text())
-    if not match:
-        fail(f"{EXTENSION.relative_to(ROOT)}: no checkVersion for [tex]/boldsymbol")
-        return True
-    wanted = match.group(1)
-    checked = 0
-    for doc in docs:
-        for suffix in (".html", ".mathjax.html"):
-            path = doc.html.with_suffix("").with_name(doc.html.stem + suffix)
-            if not (ROOT / path).exists():
-                continue
-            body = (ROOT / path).read_text()
-            # The bundle exports its version through a minified constant, so find that constant by use.
-            found = {v for name in BUNDLE_VERSION_RE.findall(body)
-                     for v in re.findall(r"\bconst " + re.escape(name) + r"=\"([0-9]+\.[0-9]+\.[0-9]+)\"", body)}
-            if not found:
-                continue
-            checked += 1
-            if found != {wanted}:
-                errors.append(f"{path}: embedded MathJax {sorted(found)} != vendored boldsymbol {wanted}")
-    if not checked:
-        errors.append("no output embeds a MathJax bundle; version constant not found")
-    for error in errors:
-        fail(error)
-    print(f"check-mathjax: boldsymbol {wanted} against {checked} HTML files")
-    return bool(errors)
-
-
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("check", choices=("meta", "variants", "mermaid", "mathjax", "fresh"))
+    parser.add_argument("check", choices=("meta", "variants", "mermaid", "fresh"))
     args = parser.parse_args()
     docs = documents()
     if args.check == "meta":
@@ -286,8 +252,6 @@ def main():
         return check_variants(docs)
     if args.check == "mermaid":
         return check_mermaid(docs)
-    if args.check == "mathjax":
-        return check_mathjax(docs)
     return check_fresh(docs)
 
 

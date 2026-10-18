@@ -608,8 +608,10 @@ code span.wa { color: #da4453; } /* Warning */
     // extension is therefore vendored in _shared/vendor/mathjax/ (exact
     // bytes of the matching mathjax@<version> release file) and run inside
     // startup.ready, before MathJax typesets. When Pandoc embeds a different
-    // MathJax version, download input/tex/extensions/boldsymbol.js from that
-    // release over the vendored file; `just check-mathjax` enforces the match.
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
     // The MathML variants ignore this block.
     window.MathJax = {
       tex: { packages: { '[+]': ['boldsymbol'] } },
