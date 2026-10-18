@@ -673,7 +673,21 @@ Bounds</a></li>
 Ill-Conditioned Quadratic</a></li>
 <li><a href="#derivative-checks-and-numerical-limits" id="toc-derivative-checks-and-numerical-limits"><span class="toc-section-number">3.4</span> Derivative Checks and Numerical
 Limits</a></li>
-<li><a href="#conditioning-beyond-one-number" id="toc-conditioning-beyond-one-number"><span class="toc-section-number">3.5</span> Conditioning Beyond One
+<li><a href="#automatic-differentiation-for-optimisation" id="toc-automatic-differentiation-for-optimisation"><span class="toc-section-number">3.5</span> Automatic Differentiation for
+Optimisation</a>
+<ul>
+<li><a href="#the-derivative-object-the-solver-needs" id="toc-the-derivative-object-the-solver-needs"><span class="toc-section-number">3.5.1</span> The Derivative Object the Solver
+Needs</a></li>
+<li><a href="#from-a-written-loss-to-an-executable-objective" id="toc-from-a-written-loss-to-an-executable-objective"><span class="toc-section-number">3.5.2</span> From a Written Loss to an
+Executable Objective</a></li>
+<li><a href="#memory-state-and-non-smooth-operations" id="toc-memory-state-and-non-smooth-operations"><span class="toc-section-number">3.5.3</span> Memory, State, and Non-Smooth
+Operations</a></li>
+<li><a href="#worked-derivative-products" id="toc-worked-derivative-products"><span class="toc-section-number">3.5.4</span> Worked Derivative
+Products</a></li>
+<li><a href="#validate-ad-independently" id="toc-validate-ad-independently"><span class="toc-section-number">3.5.5</span> Validate AD
+Independently</a></li>
+</ul></li>
+<li><a href="#conditioning-beyond-one-number" id="toc-conditioning-beyond-one-number"><span class="toc-section-number">3.6</span> Conditioning Beyond One
 Number</a></li>
 </ul></li>
 <li><a href="#problem-classes-and-convergence-claims" id="toc-problem-classes-and-convergence-claims"><span class="toc-section-number">4</span> Problem Classes and Convergence
@@ -872,9 +886,11 @@ why the reported result is credible.</p>
 solver APIs, or a claim that one optimiser is best across
 machine-learning tasks. Proof sketches are included where they expose an
 assumption or a failure mode, but the Further Reading section points to
-complete treatments. Code uses only the Python standard library so that
-the calculations remain visible; production work should use tested
-numerical kernels and solver implementations.</p>
+complete treatments. The core calculations use the Python standard
+library so that their assumptions remain visible; the
+automatic-differentiation section adds explicitly labelled Python, R,
+and Julia examples that require the stated packages. Production work
+should use tested numerical kernels and solver implementations.</p>
 <p>The primer does not re-derive automatic differentiation,
 floating-point analysis, linear-system algorithms, or neural-network
 architectures. It also does not cover discrete or mixed-integer
@@ -933,7 +949,8 @@ multiplication, derivatives of scalar functions, and elementary
 probability. The primer defines optimisation-specific terms such as
 smoothness, strong convexity, stationarity, duality, and conditioning
 before using their guarantees. Familiarity with Python helps with the
-executable example, but no package-specific knowledge is required.</p>
+core executable examples; the package-specific automatic-differentiation
+examples name their R and Julia dependencies explicitly.</p>
 <p>The most useful preparation is operational rather than encyclopaedic.
 You should be able to read a scalar objective, identify the shape of
 every term, and distinguish a vector from a scalar-valued function of a
@@ -2262,7 +2279,245 @@ analytic gradient against finite differences before trusting an
 optimiser trace. A passed check supports the derivative implementation
 at the tested points; it does not prove the whole training system
 correct.</p>
-<h2 data-number="3.5" id="conditioning-beyond-one-number"><span class="header-section-number">3.5</span> Conditioning Beyond One
+<h2 data-number="3.5" id="automatic-differentiation-for-optimisation"><span class="header-section-number">3.5</span> Automatic Differentiation for
+Optimisation</h2>
+<p>Automatic differentiation (AD) is the bridge between the mathematical
+derivatives in this chapter and the derivatives supplied to an
+optimiser. The <a href="../primer_numerical_analysis/primer_numerical_analysis.html#automatic-differentiation">Numerical
+Analysis primer’s automatic-differentiation chapter</a> develops dual
+numbers, computation tapes, and the mechanics of forward and reverse
+mode. Here the practical question is different: which derivative object
+does an optimisation method need, how should it be computed, and what
+evidence supports the claim that it is the derivative of the intended
+objective?</p>
+<h3 data-number="3.5.1" id="the-derivative-object-the-solver-needs"><span class="header-section-number">3.5.1</span> The Derivative Object the
+Solver Needs</h3>
+<p>Let <span class="math inline">\(r:\mathbb{R}^d\to\mathbb{R}^m\)</span> be a
+vector-valued computation with Jacobian <span class="math inline">\(\mathbf{J}_r\in\mathbb{R}^{m\times d}\)</span>. A
+forward-mode calculation seeded by a tangent <span class="math inline">\(\mathbf{v}\in\mathbb{R}^d\)</span> returns the
+Jacobian-vector product (JVP)</p>
+<p><span class="math display">\[
+\mathbf{J}_r(\boldsymbol{\theta})\mathbf{v}\in\mathbb{R}^m.
+\]</span></p>
+<p>A reverse-mode calculation seeded by a cotangent <span class="math inline">\(\mathbf{u}\in\mathbb{R}^m\)</span> returns the
+vector-Jacobian product (VJP)</p>
+<p><span class="math display">\[
+\mathbf{J}_r(\boldsymbol{\theta})^{\top}\mathbf{u}\in\mathbb{R}^d.
+\]</span></p>
+<p>Neither operation requires storing the complete Jacobian. For a
+scalar objective <span class="math inline">\(F\)</span>, reverse mode
+with output seed <span class="math inline">\(1\)</span> gives <span class="math inline">\(\nabla F\)</span>. This is why reverse mode is
+usually natural for a loss with millions of parameters and one scalar
+output. Forward mode is attractive when there are few input directions
+or many outputs. A full Jacobian needs roughly one seed per input
+direction in forward mode or one seed per output direction in reverse
+mode; memory and primitive implementation details also affect the actual
+cost.</p>
+<p>These products map directly to optimisation methods. A Gauss–Newton
+action is</p>
+<p><span class="math display">\[
+\mathbf{J}_r^{\top}(\mathbf{J}_r\mathbf{v}),
+\]</span></p>
+<p>so a JVP followed by a VJP can apply it without materialising <span class="math inline">\(\mathbf{J}_r\)</span>. For a scalar objective, an
+HVP is</p>
+<p><span class="math display">\[
+\nabla^2F(\boldsymbol{\theta})\mathbf{v}
+=D_{\mathbf{v}}\bigl(\nabla F\bigr)(\boldsymbol{\theta}).
+\]</span></p>
+<p>Forward-over-reverse computes this by applying a JVP to the gradient
+function. This is useful for Krylov and truncated-Newton methods,
+curvature probes, and some hypergradient calculations. An HVP is an
+action of the Hessian, not the Hessian itself; forming a dense matrix
+merely to multiply by one vector wastes memory on a large problem.</p>
+<p>The familiar backpropagation pass is reverse-mode accumulation
+through a model and its scalar loss. The optimiser receives the gradient
+of the complete implemented objective, including reductions, masks,
+regularisation, and transformations between parameters and predictions.
+A gradient of the network output before the loss reduction is not
+necessarily the gradient that the optimiser should use.</p>
+<h3 data-number="3.5.2" id="from-a-written-loss-to-an-executable-objective"><span class="header-section-number">3.5.2</span> From a Written Loss to an
+Executable Objective</h3>
+<p>Consider the regularised logistic objective already used in this
+primer:</p>
+<p><span class="math display">\[
+F(\boldsymbol{\theta})
+=\frac{1}{n}\sum_{i=1}^{n}
+\left[\operatorname{softplus}(\mathbf{x}_i^{\top}\boldsymbol{\theta})
+-y_i\mathbf{x}_i^{\top}\boldsymbol{\theta}\right]
++\frac{\lambda}{2}\|\boldsymbol{\theta}\|^2.
+\]</span></p>
+<p>Its executable graph contains a matrix product, a stable elementwise
+loss, a mean reduction, and a penalty. Omitting the mean multiplies the
+data gradient by <span class="math inline">\(n\)</span> while leaving
+the penalty unchanged. Penalising an intercept that the mathematical
+statement excludes changes the problem. AD can differentiate either
+implementation accurately; it cannot decide which one was intended.</p>
+<p>The same warning applies to graph boundaries. Converting a
+differentiable value to an ordinary number, detaching it, passing
+through an unsupported external operation, or updating a parameter under
+a no-gradient context can remove a path that appears in the written
+derivation. Control flow can select a different executed branch at
+another parameter value. A successful derivative call therefore
+establishes a derivative of the executed program, subject to the rules
+supplied for its operations, not a proof that the program expresses the
+stated model.</p>
+<h3 data-number="3.5.3" id="memory-state-and-non-smooth-operations"><span class="header-section-number">3.5.3</span> Memory, State, and Non-Smooth
+Operations</h3>
+<p>Reverse mode normally retains or reconstructs intermediate values
+needed by the backward pass. Deep models, long unrolled optimisers, and
+large batches can therefore be limited by activation memory rather than
+arithmetic. Checkpointing or rematerialisation trades additional forward
+computation for lower memory. Record such choices when they affect
+feasible batch size or measured cost.</p>
+<p>Stochastic and stateful computations need an explicit boundary. With
+a fixed batch and random state, AD differentiates the realised
+computation. Across random batches it produces a sequence of minibatch
+gradients; whether their expectation estimates the full objective is a
+property of sampling and reduction, not of AD. Batch-dependent
+normalisation, running statistics, mutable buffers, training/evaluation
+mode, and unrolled optimiser state can all change the function being
+differentiated. Freeze or record those quantities during derivative
+checks.</p>
+<p>At a non-smooth operation such as <span class="math inline">\(\max(0,s)\)</span>, the classical derivative may
+not exist at the kink. A framework must choose a convention there, while
+clipping, sorting, top-<span class="math inline">\(k\)</span> selection,
+and hard thresholds can make nearby branch changes invisible to a local
+derivative. For an <span class="math inline">\(\ell_1\)</span> penalty,
+a proximal method may express the intended problem more faithfully than
+treating one selected subgradient as an ordinary smooth gradient. Check
+the solver’s regularity assumptions against the operations in the
+graph.</p>
+<h3 data-number="3.5.4" id="worked-derivative-products"><span class="header-section-number">3.5.4</span> Worked Derivative
+Products</h3>
+<p>The following small example uses the same four-point logistic data in
+three ecosystems. The Python and R blocks use reverse-mode AD for the
+gradient and a mixed-mode or nested construction for the HVP. The Julia
+block contrasts <code>ForwardDiff.jl</code>’s forward-mode gradient with
+<code>Zygote.jl</code>’s reverse-mode gradient and HVP. These package
+examples demonstrate derivative objects; they are not performance
+benchmarks.</p>
+<div class="code-group">
+<p><strong>Python:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.func <span class="im">import</span> grad, jvp, vjp</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>torch.set_default_dtype(torch.float64)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> torch.tensor([[<span class="fl">1.</span>, <span class="fl">0.</span>], [<span class="fl">1.</span>, <span class="fl">1.</span>], [<span class="fl">1.</span>, <span class="fl">2.</span>], [<span class="fl">1.</span>, <span class="op">-</span><span class="fl">1.</span>]])</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> torch.tensor([<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">1.</span>, <span class="fl">0.</span>])</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>lam <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> torch.tensor([<span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.3</span>])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> torch.tensor([<span class="fl">0.4</span>, <span class="op">-</span><span class="fl">0.2</span>])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logits(t):</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X <span class="op">@</span> t</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> objective(t):</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> logits(t)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (torch.nn.functional.softplus(s) <span class="op">-</span> y <span class="op">*</span> s).mean() <span class="op">\</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> lam <span class="op">*</span> (t <span class="op">@</span> t)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>gradient <span class="op">=</span> grad(objective)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gradient(theta)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>_, hv <span class="op">=</span> jvp(gradient, (theta,), (v,))</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>_, pullback <span class="op">=</span> vjp(logits, theta)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>_, jvp_logits <span class="op">=</span> jvp(logits, (theta,), (v,))</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> torch.sigmoid(logits(theta)) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> torch.sigmoid(logits(theta)))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>expected_hv <span class="op">=</span> X.T <span class="op">@</span> (weights <span class="op">*</span> (X <span class="op">@</span> v)) <span class="op">/</span> <span class="bu">len</span>(y) <span class="op">+</span> lam <span class="op">*</span> v</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> torch.allclose(hv, expected_hv, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> torch.allclose(jvp_logits, X <span class="op">@</span> v, atol<span class="op">=</span><span class="fl">1e-12</span>, rtol<span class="op">=</span><span class="fl">1e-12</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;gradient:&quot;</span>, g, <span class="st">&quot;HVP:&quot;</span>, hv)</span></code></pre></div>
+<p><strong>R:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(torch)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dtype <span class="ot">&lt;-</span> <span class="fu">torch_float64</span>()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)), <span class="at">dtype =</span> dtype)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">dtype =</span> dtype)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>lam <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="sc">-</span><span class="fl">0.3</span>), <span class="at">dtype =</span> dtype, <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="sc">-</span><span class="fl">0.2</span>), <span class="at">dtype =</span> dtype)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>objective <span class="ot">&lt;-</span> <span class="cf">function</span>(t) {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">torch_matmul</span>(X, t)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">nnf_softplus</span>(s) <span class="sc">-</span> y <span class="sc">*</span> s)<span class="sc">$</span><span class="fu">mean</span>() <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> lam <span class="sc">*</span> (t <span class="sc">*</span> t)<span class="sc">$</span><span class="fu">sum</span>()</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>loss <span class="ot">&lt;-</span> <span class="fu">objective</span>(theta)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">autograd_grad</span>(loss, <span class="fu">list</span>(theta), <span class="at">create_graph =</span> <span class="cn">TRUE</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>hv <span class="ot">&lt;-</span> <span class="fu">autograd_grad</span>((g <span class="sc">*</span> v)<span class="sc">$</span><span class="fu">sum</span>(), <span class="fu">list</span>(theta))[[<span class="dv">1</span>]]</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">list</span>(<span class="at">gradient =</span> <span class="fu">as_array</span>(g<span class="sc">$</span><span class="fu">detach</span>()), <span class="at">hvp =</span> <span class="fu">as_array</span>(hv<span class="sc">$</span><span class="fu">detach</span>())))</span></code></pre></div>
+<p><strong>Julia:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">ForwardDiff</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Zygote</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> [<span class="fl">1.0</span> <span class="fl">0.0</span>; <span class="fl">1.0</span> <span class="fl">1.0</span>; <span class="fl">1.0</span> <span class="fl">2.0</span>; <span class="fl">1.0</span> <span class="op">-</span><span class="fl">1.0</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>λ <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>θ <span class="op">=</span> [<span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.3</span>]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> [<span class="fl">0.4</span>, <span class="op">-</span><span class="fl">0.2</span>]</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">softplus</span>(s) <span class="op">=</span> <span class="fu">max</span>(s, <span class="fl">0</span>) <span class="op">+</span> <span class="fu">log1p</span>(<span class="fu">exp</span>(<span class="fu">-abs</span>(s)))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">objective</span>(t) <span class="op">=</span> <span class="fu">mean</span>(<span class="fu">softplus</span>.(X <span class="op">*</span> t) <span class="op">-</span> y <span class="op">.*</span> (X <span class="op">*</span> t)) <span class="op">+</span> λ <span class="op">/</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu">dot</span>(t, t)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">logits</span>(t) <span class="op">=</span> X <span class="op">*</span> t</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>forward_gradient <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(objective, θ)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>reverse_gradient <span class="op">=</span> Zygote.<span class="fu">gradient</span>(objective, θ)[<span class="fl">1</span>]</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>jvp_logits <span class="op">=</span> ForwardDiff.<span class="fu">derivative</span>(a <span class="op">-&gt;</span> <span class="fu">logits</span>(θ <span class="op">.+</span> a <span class="op">.*</span> v), <span class="fl">0.0</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>hvp <span class="op">=</span> Zygote.<span class="fu">hessian</span>(objective, θ) <span class="op">*</span> v  <span class="co"># dense reference for this tiny case</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="pp">@assert</span> <span class="fu">isapprox</span>(forward_gradient, reverse_gradient; atol <span class="op">=</span> <span class="fl">1e-10</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="pp">@assert</span> <span class="fu">isapprox</span>(jvp_logits, X <span class="op">*</span> v; atol <span class="op">=</span> <span class="fl">1e-10</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;gradient = &quot;</span>, forward_gradient, <span class="st">&quot;, HVP = &quot;</span>, hvp)</span></code></pre></div>
+</div>
+<p>The Python JVP pushes one parameter perturbation through the logit
+map; its VJP pullback maps an output weighting back to parameter space.
+The R example uses <code>create_graph = TRUE</code> so the first
+derivative remains available to the second derivative calculation. The
+Julia example uses different AD modes deliberately:
+<code>ForwardDiff.gradient</code> and the scalar-seeded JVP use forward
+sensitivities, while Zygote constructs the reverse-mode gradient. Its
+dense Hessian is only a reference for this two-parameter fixture; larger
+problems should use matrix-free products and choose modes according to
+dimensions, memory, and the solver’s request.</p>
+<h3 data-number="3.5.5" id="validate-ad-independently"><span class="header-section-number">3.5.5</span> Validate AD
+Independently</h3>
+<p>Begin with a deterministic fixture and write down the exact scalar
+objective, reduction, parameter mask, regularisation coefficient, and
+computation mode. Check value-level invariants first, such as
+permutation invariance for an unweighted full-batch mean. Then compare
+the AD directional derivative <span class="math inline">\(\nabla
+F(\boldsymbol{\theta})^{\top}\mathbf{v}\)</span> with a central
+difference of objective values and compare an HVP with a central
+difference of gradients. Use several step sizes: one large step can
+cross significant curvature or a branch, while one tiny step can be
+dominated by cancellation.</p>
+<p>For a vector-valued map, the identity</p>
+<p><span class="math display">\[
+\mathbf{u}^{\top}(\mathbf{J}_r\mathbf{v})
+=(\mathbf{J}_r^{\top}\mathbf{u})^{\top}\mathbf{v}
+\]</span></p>
+<p>checks a JVP and VJP pair without constructing the Jacobian. Probe
+multiple points and directions, including broadcasting, masks,
+regularisation, and parameter blocks that should receive no gradient.
+Freeze batches, random masks, and stateful layers during these
+tests.</p>
+<p>A passing AD check is local evidence about a derivative calculation.
+It does not establish that the intended objective was encoded, that a
+custom derivative rule is correct everywhere, that the computation is
+numerically stable, or that the optimiser has converged. Record the
+objective definition, derivative test, solver settings, and termination
+evidence together.</p>
+<p>For API details, see the official <a href="https://docs.jax.dev/en/latest/jacobian-vector-products.html">JAX
+differentiation guide</a>, R <code>torch</code> documentation for <a href="https://torch.mlverse.org/docs/articles/using-autograd">autograd</a>
+and <a href="https://torch.mlverse.org/docs/reference/autograd_grad"><code>autograd_grad</code></a>,
+and Julia documentation for <a href="https://juliadiff.org/ForwardDiff.jl/stable/user/api/">ForwardDiff.jl</a>
+and <a href="https://fluxml.ai/Flux.jl/dev/reference/training/gradients/">Zygote
+higher-order derivatives</a>. Package APIs were checked against these
+official pages on 18 October 2026; exact installed versions and
+execution remain unverified in this workspace.</p>
+<h2 data-number="3.6" id="conditioning-beyond-one-number"><span class="header-section-number">3.6</span> Conditioning Beyond One
 Number</h2>
 <p>The ratio <span class="math inline">\(L/\mu\)</span> summarises the
 worst curvature scales for a strongly convex smooth problem, but it can
