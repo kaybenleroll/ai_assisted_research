@@ -10,19 +10,97 @@ permissions:
 
 jobs:
   links:
-    runs-on: ubuntu-latest
-    continue-on-error: true
+    # Pinned deliberately: ubuntu-latest moves to Ubuntu 26 on 2026-10-19.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
     env:
       OCI: docker
+      REPORT: .scratch/lychee-online-report.txt
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       - uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4
-      - name: Report external links
+      - name: Run external link report
         run: |
           mkdir -p .scratch
-          just lint-links-online > .scratch/lychee-online-report.txt 2>&1
-          sed -n '1,240p' .scratch/lychee-online-report.txt
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+          just lint-links-online > "$REPORT" 2>&1
+          # The recipe always exits 0; a missing lychee summary means the
+          # checker itself failed, which must fail the job.
+          grep -q '^🔍 Total' "$REPORT" || {
+            echo '::error::lychee produced no summary; the checker did not complete'
+            tail -n 40 "$REPORT"
+            exit 1
+          }
+      - name: Publish job summary
+        if: always()
+        run: |
+          [ -f "$REPORT" ] || exit 0
+          {
+            echo '## External link report'
+            echo
+            echo 'Report only: known errors do not fail this job. Findings are tracked in the issue titled "[infra] Weekly external link report".'
+            echo
+            echo '```text'
+            sed -n '/Summary/,/^Errors in /p' "$REPORT" | sed '$d'
+            echo '```'
+            echo
+            echo '### Findings by status code'
+            echo
+            echo '```text'
+            grep -oE '^\[[0-9]+\]' "$REPORT" | sort | uniq -c | sort -rn
+            echo '```'
+            echo
+            echo '### Likely dead links (404, 410)'
+            echo
+            echo '```text'
+            grep -E '^\[(404|410)\]' "$REPORT" | cut -d'|' -f1 || true
+            echo '```'
+            echo
+            echo "Other classes (403 bot blocks, 429/503 rate limits, 202, TLS and timeouts) are often transient. The full report is in the \`lychee-online-report\` artefact."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Update tracking issue
+        if: always()
+        run: |
+          [ -f "$REPORT" ] || exit 0
+          title='[infra] Weekly external link report'
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          errors=$(grep -c '^\[[0-9]*\]' "$REPORT" || true)
+          number=$(gh issue list --state open --search "\"$title\" in:title" \
+            --json number,title --jq "[.[] | select(.title == \"$title\")][0].number // empty")
+          if [ "$errors" -eq 0 ]; then
+            if [ -n "$number" ]; then
+              gh issue close "$number" --comment "No link findings in $run_url."
+            fi
+            exit 0
+          fi
+          {
+            echo "Latest run: $run_url ($errors findings; $(date -u +%F))."
+            echo
+            echo 'Counts by status code:'
+            echo
+            echo '```text'
+            grep -oE '^\[[0-9]+\]' "$REPORT" | sort | uniq -c | sort -rn
+            echo '```'
+            echo
+            echo 'Likely dead links (404, 410):'
+            echo
+            echo '```text'
+            grep -E '^\[(404|410)\]' "$REPORT" | cut -d'|' -f1 | head -n 200 || true
+            echo '```'
+            echo
+            echo "This issue is rewritten by \`.github/workflows/links.yml\` after each run and closed when a run is clean. 403, 429, 5xx, 202 and TLS findings are often transient; verify before fixing."
+          } > .scratch/tracking-body.md
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file .scratch/tracking-body.md
+          else
+            gh issue create --title "$title" --body-file .scratch/tracking-body.md \
+              --label 'type: tech-debt' --label 'area: devtools' \
+              --label 'P3: backlog' --label 'effort: XS'
+          fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: lychee-online-report
