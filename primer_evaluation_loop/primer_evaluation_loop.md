@@ -804,7 +804,9 @@ Three research approaches examine this regime. **Weak-to-strong generalisation**
 
 Models that spend more inference-time compute — chain-of-thought, tree search, self-critique passes — often score higher on benchmarks. This does not resolve the measurement problem; it relocates it. The question "how do you know the answer is good?" does not go away because the model thought longer. It becomes "how do you know the longer thinking produced a better answer?" — which is the same question, recursively.
 
+<!-- vale House.HeadingCase = NO -->
 ### The Closing Motif {.unnumbered}
+<!-- vale House.HeadingCase = YES -->
 
 Evaluation cases and training examples may describe the same task, but they need different roles. Training examples guide an update; held-out evaluation cases test whether the update generalises. Reusing the same labelled items for both can make the evaluation overstate performance. Improve the specification of success through error analysis, then keep an independent test set to check whether the next change helped beyond the cases it saw.
 
