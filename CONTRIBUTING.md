@@ -2,7 +2,7 @@
 
 ## Setup
 
-The host needs Git, `just`, and a container runtime (Podman preferred; Docker also works). Run `just setup` from the repository root to configure Git hooks, build the shared Pandoc image, and pull the R figure image. The command is safe to repeat. Set `IMAGE` or `ROCKER` in the environment to override the respective image. Install rendering libraries inside containers, never on the host.
+The host needs Git, `just`, and a container runtime (Podman preferred; Docker also works). Run `just setup` from the repository root to configure Git hooks, build the shared Pandoc image, and pull the R figure image. The command is safe to repeat. Set `IMAGE`, `ROCKER`, or the relevant runtime image variable in the environment to override an image. Install rendering libraries inside containers, never on the host.
 
 | Role | Image and Pin | Override | Update |
 |---|---|---|---|
@@ -11,6 +11,7 @@ The host needs Git, `just`, and a container runtime (Podman preferred; Docker al
 | README generation | `docker.io/library/python:3-slim@sha256:cfe2e24a75302a15934d37c2d86412893c0aa934dc3a97cbb439d04c01890ca9` | `PYTHON_IMAGE` | Verify the new digest, update `_shared/images.just`, then run `just readme-check`. |
 | Executable-example Python | `localhost/primers-python-runtime:3.12.15`, built from `python:3.12.15-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258` | `PYTHON_RUNTIME_IMAGE` | Review `_shared/runtime/python/requirements.lock`, verify the base digest and package releases, then run `just build-python-runtime probe-python-runtime`. |
 | Executable-example CPU PyTorch | `localhost/primers-python-torch:2.14.1`, built on the executable-example Python image | `PYTHON_TORCH_IMAGE` | Review `_shared/runtime/python/requirements-pytorch.lock`, verify the PyTorch CPU wheel support, then run `just build-python-torch probe-python-torch`. |
+| Executable-example R | `localhost/primers-r-runtime:4.5.3`, built from `rocker/r-ver:4.5.3@sha256:35394dcbf419ac29056848522006de3cd33c33191377abed182acaecd48eba37` and its P3M CRAN snapshot | `R_RUNTIME_IMAGE` | Review `_shared/runtime/r/`, the snapshot date, and the native torch lock, then run `just build-r-runtime probe-r-runtime`. |
 | Spelling lint | `localhost/primers-lint:1.51.1`, built from the same digest-pinned `PYTHON_IMAGE` and checksum-verified `typos` 1.51.1 | `LINT_IMAGE` | Verify the release asset digest in `_shared/Dockerfile.lint`, run `just build-lint-image`, then probe and run `just lint`. |
 | Markdown structure lint | `docker.io/davidanson/markdownlint-cli2:v0.23.3` | `MDLINT_IMAGE` | Verify the new image tag, probe Pandoc syntax and Silo configuration, then run `just lint-md`. |
 | Prose lint | `docker.io/jdkato/vale:v3.24.0` (observed digest `sha256:f51196961ed91e514047cd95d45ec8bc2ff8d54a285af29e56166b975a37e3bf`) | `VALE_IMAGE` | Verify the tag and digest, run `just lint-prose-test`, then run `just lint-prose` and review the advisory baseline. |
@@ -28,6 +29,10 @@ Issue titles start with `[infra]` or the primer's short name (directory name wit
 The policy and architecture for selected runnable primer examples is documented in [docs/executable-examples.md](docs/executable-examples.md). Example execution is opt-in through per-primer manifests; ordinary fenced snippets remain illustrative unless explicitly listed.
 
 Build and probe the shared Python example runtimes with `just build-python-runtimes`, `just probe-python-runtime`, and `just probe-python-torch`. These images are separate from the repository-check `PYTHON_IMAGE`, the Rocker figure image, and the catastrophe workbook image.
+
+Build and probe the separate executable-example R runtime with `just build-r-runtime probe-r-runtime`. Its image tag defaults to `localhost/primers-r-runtime:4.5.3` and can be overridden with `R_RUNTIME_IMAGE`. The digest-pinned Rocker base supplies the explicit P3M CRAN snapshot; the MLverse CPU `torch` package and native payload are the documented exception. The existing `ROCKER` image and figure recipes remain unchanged.
+
+The R runtime's last clean local build took 66 seconds on x86_64 and produced an image of 2,099,951,961 bytes. This is a measurement for planning, not a CI guarantee. Its direct package expectations are recorded in `_shared/runtime/r/packages.lock`, the CRAN snapshot date is in the Containerfile, and the CPU `torch` native payload is recorded in `_shared/runtime/r/native.lock`; the offline probe checks the R, package, and LibTorch versions.
 
 Run the command from the named directory (`cd <directory> && just <recipe>`). This table was checked against the current Justfiles and `_shared/common.just` on 10 October 2026. `html` and `pdf` are imported shared recipes; project-specific wrappers are shown where they perform additional work. Use `just --list` in the directory to inspect other recipes.
 

@@ -136,6 +136,14 @@ probe-python-runtime: build-python-runtime
 probe-python-torch: build-python-torch
   {{OCI}} run --rm --network=none {{PYTHON_TORCH_IMAGE}} --profile torch
 
+# Build the R runtime used by executable examples
+build-r-runtime:
+  {{OCI}} build -t {{R_RUNTIME_IMAGE}} -f _shared/runtime/r/Containerfile _shared/runtime/r/
+
+# Run the offline probe for the R example runtime
+probe-r-runtime: build-r-runtime
+  {{OCI}} run --rm --network=none {{R_RUNTIME_IMAGE}}
+
 # Configure hooks and fetch the two images used by primer builds
 setup:
   git config core.hooksPath .githooks
