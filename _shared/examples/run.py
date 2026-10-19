@@ -178,21 +178,22 @@ def container_command(oci: str, primer: Path, entry: dict, output: Path, repo_ro
 def run_example(oci: str, primer: Path, entry: dict, repo_root: Path = REPO_ROOT) -> bool:
     with tempfile.TemporaryDirectory(prefix="primer-example-") as directory:
         command = container_command(oci, primer, entry, Path(directory), repo_root)
+        label = f"{primer.relative_to(repo_root)}/{entry['id']} [{entry['language']}]"
         print(f"[{primer.relative_to(repo_root)}/{entry['id']}] {entry['language']} ({entry['profile']}): {shlex.join(command)}", flush=True)
         try:
             completed = subprocess.run(command, capture_output=True, text=True, timeout=entry["timeout"])
         except subprocess.TimeoutExpired as exc:
             subprocess.run([oci, "rm", "-f", command[4]], capture_output=True, timeout=15, check=False)
-            print(f"FAIL {entry['id']}: timed out after {entry['timeout']}s", file=sys.stderr)
+            print(f"FAIL {label}: timed out after {entry['timeout']}s", file=sys.stderr)
             for stream in (exc.stdout, exc.stderr):
                 if stream:
                     print(stream.decode(errors="replace") if isinstance(stream, bytes) else stream, file=sys.stderr)
             return False
         except OSError as exc:
-            print(f"FAIL {entry['id']}: {exc}", file=sys.stderr)
+            print(f"FAIL {label}: {exc}", file=sys.stderr)
             return False
         if completed.returncode:
-            print(f"FAIL {entry['id']}: exit {completed.returncode}", file=sys.stderr)
+            print(f"FAIL {label}: exit {completed.returncode}", file=sys.stderr)
             if completed.stdout:
                 print("stdout:\n" + completed.stdout, file=sys.stderr)
             if completed.stderr:

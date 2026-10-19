@@ -1,0 +1,7 @@
+schema_version = 1
+
+[[examples]]
+id = "fft-parseval-python"
+language = "python"
+script = "examples/fft_parseval.py"
+profile = "python-base"

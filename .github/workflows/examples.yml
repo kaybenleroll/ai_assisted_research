@@ -1,0 +1,46 @@
+name: Opt-in executable examples
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    paths:
+      - ".github/workflows/examples.yml"
+      - "Justfile"
+      - "_shared/common.just"
+      - "_shared/examples.just"
+      - "_shared/examples/**"
+      - "_shared/runtime/**"
+      - "primer_ml_optimisation/examples/**"
+      - "primer_numerical_analysis/examples/**"
+      - "primer_digital_signal_processing/examples/**"
+      - "docs/executable-examples.md"
+      - "docs/executable-example-migration.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  examples:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OCI: docker
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          fetch-depth: 1
+      - uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4
+      - name: Build selected runtime profiles
+        run: just build-python-runtime build-r-runtime build-julia-runtime
+      - name: Probe selected runtime profiles offline
+        run: just probe-python-runtime probe-r-runtime probe-julia-runtime
+      - name: Run opted-in primer examples
+        run: |
+          just examples ml_optimisation
+          just examples numerical_analysis
+          just examples digital_signal_processing

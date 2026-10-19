@@ -89,6 +89,7 @@ class RunnerTests(unittest.TestCase):
             self.assertFalse(runner.run_example("podman", FIXTURE, entry))
             printed = " ".join(str(call) for call in stderr.write.call_args_list)
             self.assertIn("AssertionError", printed)
+            self.assertIn("_shared/examples/fixtures/primer_runner/failing-assertion [python]", printed)
 
 
 if __name__ == "__main__":
