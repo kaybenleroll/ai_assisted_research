@@ -265,9 +265,17 @@ above. It must not make every existing code fence a mandatory test. A failed
 example should identify the manifest entry and preserve enough logs to
 diagnose it.
 
-The migration issue will begin with representative examples from the ML
-optimisation, numerical analysis, and digital signal processing primers, then
-expand only when the manifest and runtime contracts have proved stable.
+Issue #314 records the first migration in
+[the executable-example inventory](executable-example-migration.md). It begins
+with representative examples from the ML optimisation, numerical analysis,
+and digital signal processing primers, then expands only when the manifest and
+runtime contracts have proved stable.
+
+The corresponding GitHub Actions job is path-scoped and opt-in. It builds only
+the runtime profiles used by the migrated entries, probes them with networking
+disabled, and runs the three selected manifests. It is deliberately separate
+from the general repository checks so image-build time and example failures do
+not obscure rendering, lint, or workbook failures.
 
 ## Work Decomposition
 

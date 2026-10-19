@@ -1,0 +1,13 @@
+schema_version = 1
+
+[[examples]]
+id = "regularised-logistic"
+language = "python"
+profile = "python-base"
+script = "examples/regularised_logistic.py"
+
+[[examples]]
+id = "logistic-ad"
+language = "julia"
+profile = "julia"
+script = "examples/logistic_ad.jl"

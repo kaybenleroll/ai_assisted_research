@@ -1,0 +1,19 @@
+schema_version = 1
+
+[[examples]]
+id = "linear-solve-python"
+language = "python"
+script = "examples/linear_solve.py"
+profile = "python-base"
+
+[[examples]]
+id = "linear-solve-r"
+language = "r"
+script = "examples/linear_solve.R"
+profile = "r"
+
+[[examples]]
+id = "linear-solve-julia"
+language = "julia"
+script = "examples/linear_solve.jl"
+profile = "julia"
