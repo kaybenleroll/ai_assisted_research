@@ -3596,7 +3596,7 @@ both modes.</p>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(ForwardDiff.<span class="fu">derivative</span>(f, <span class="cn">π</span><span class="op">/</span><span class="fl">4</span>))</span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse mode via Zygote</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(f<span class="op">&#39;</span>(<span class="cn">π</span><span class="op">/</span><span class="fl">4</span>))  <span class="co"># Zygote hooks into Julia&#39;s function composition syntax</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">first</span>(Zygote.<span class="fu">gradient</span>(f, <span class="cn">π</span><span class="op">/</span><span class="fl">4</span>)))</span>
 <span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Jacobian of a vector function — forward mode</span></span>
 <span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="fu">F</span>(x) <span class="op">=</span> [<span class="fu">sin</span>(x[<span class="fl">1</span>]), x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>], <span class="fu">exp</span>(x[<span class="fl">2</span>])]</span>

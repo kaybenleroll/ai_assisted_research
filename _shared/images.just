@@ -5,4 +5,5 @@ PYTHON_IMAGE := env_var_or_default("PYTHON_IMAGE", "docker.io/library/python:3-s
 PYTHON_RUNTIME_IMAGE := env_var_or_default("PYTHON_RUNTIME_IMAGE", "localhost/primers-python-runtime:3.12.15")
 PYTHON_TORCH_IMAGE := env_var_or_default("PYTHON_TORCH_IMAGE", "localhost/primers-python-torch:2.14.1")
 R_RUNTIME_IMAGE := env_var_or_default("R_RUNTIME_IMAGE", "localhost/primers-r-runtime:4.5.3")
+JULIA_RUNTIME_IMAGE := env_var_or_default("JULIA_RUNTIME_IMAGE", "localhost/primers-julia-runtime:1.12.7")
 LINT_IMAGE := env_var_or_default("LINT_IMAGE", "localhost/primers-lint:1.51.1")

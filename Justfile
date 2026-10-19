@@ -144,6 +144,14 @@ build-r-runtime:
 probe-r-runtime: build-r-runtime
   {{OCI}} run --rm --network=none {{R_RUNTIME_IMAGE}}
 
+# Build the Julia runtime used by executable examples
+build-julia-runtime:
+  {{OCI}} build -t {{JULIA_RUNTIME_IMAGE}} -f _shared/runtime/julia/Containerfile _shared/runtime/julia/
+
+# Run the offline probe for the Julia example runtime
+probe-julia-runtime: build-julia-runtime
+  {{OCI}} run --rm --network=none {{JULIA_RUNTIME_IMAGE}}
+
 # Configure hooks and fetch the two images used by primer builds
 setup:
   git config core.hooksPath .githooks
