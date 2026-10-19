@@ -1,10 +1,15 @@
 set shell := ["bash", "-c"]
 
 import '_shared/images.just'
+import '_shared/examples.just'
 
 OCI := env_var_or_default("OCI", `command -v podman >/dev/null 2>&1 && echo podman || echo docker`)
 PYTHON_OCI_FLAGS := if OCI == "podman" { "--userns=keep-id" } else { "--user=" + `id -u` + ":" + `id -g` }
 MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
+
+# Run all opted-in examples, or selected IDs, in one primer.
+examples primer *IDS:
+  just --justfile "{{justfile_directory()}}/Justfile" run-examples "{{justfile_directory()}}" "primer_{{primer}}" {{IDS}}
 
 default:
   @just --list

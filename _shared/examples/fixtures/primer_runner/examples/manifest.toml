@@ -1,0 +1,32 @@
+schema_version = 1
+
+[[examples]]
+id = "python-script"
+language = "python"
+profile = "python-base"
+script = "examples/check.py"
+
+[[examples]]
+id = "r-script"
+language = "r"
+profile = "r"
+script = "examples/check.R"
+
+[[examples]]
+id = "julia-script"
+language = "julia"
+profile = "julia"
+script = "examples/check.jl"
+
+[[examples]]
+id = "python-fence"
+language = "python"
+profile = "python-base"
+markdown = "primer_runner.md"
+fence = "runnable-python"
+
+[[examples]]
+id = "failing-assertion"
+language = "python"
+profile = "python-base"
+script = "examples/fail.py"
