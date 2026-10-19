@@ -1,0 +1,7 @@
+# Direct packages used by the executable examples.
+# CRAN dependencies, including transitive dependencies, come from the Rocker
+# P3M snapshot in R_REPOS_SNAPSHOT. The MLverse torch channel is the exception.
+# Format: package|version.
+Matrix|1.7-5
+numDeriv|2016.8-1.1
+torch|0.17.0

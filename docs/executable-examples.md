@@ -1,9 +1,9 @@
 # Executable Primer Examples
 
 This document defines the policy and build contract for running selected code
-examples from the technical primers. It is an architecture document for the
-shared Python, R, and Julia runtimes; it does not itself add a runtime image or
-make existing examples executable.
+examples from the technical primers. The shared Python and R runtimes are
+available; the Julia runtime and executable-example runner are separate work.
+This policy does not make existing examples executable.
 
 ## Purpose and Boundary
 
@@ -15,9 +15,10 @@ explicitly rather than treating every fenced code block as a test.
 
 The executable-example system covers selected Python, R, and Julia examples in
 Pandoc primers. It is separate from document rendering: the Pandoc image
-continues to render primers, the existing Rocker image continues to generate
-R figures, and the workbook retains its independent Quarto image and render
-workflow. This system does not replace or broaden those images.
+continues to render primers, the executable-example R runtime uses
+`localhost/primers-r-runtime:4.5.3`, the existing Rocker image continues to
+generate R figures, and the workbook retains its independent Quarto image and
+render workflow. This system does not replace or broaden those images.
 
 ## What Is Executable
 
@@ -132,6 +133,20 @@ cache, rerun the probes, and measure image size and cold-build time before CI
 adoption. The repository-check `PYTHON_IMAGE` remains independent and must
 not be used as an executable-example runtime.
 
+### R Runtime
+
+Issue #311 provides a separate executable-example R runtime tagged
+`localhost/primers-r-runtime:4.5.3` by default. Build and run its offline probe
+from the repository root with `just build-r-runtime probe-r-runtime`. Set
+`R_RUNTIME_IMAGE` to override the tag. The existing `ROCKER` image and its
+figure recipes remain unchanged; they continue to serve plot generation. The
+digest-pinned `rocker/r-ver` base supplies the dated P3M CRAN snapshot for
+direct and transitive CRAN packages. The MLverse CPU `torch` package and its
+LibTorch/Lantern payload are explicit exceptions recorded under
+`_shared/runtime/r/`. The probe checks the installed R, direct package, and
+native torch versions with networking disabled. The last clean local build took
+66 seconds and produced 2,099,951,961 bytes on x86_64.
+
 ## Runner Contract
 
 The common runner will be exposed through shared `just` recipes and thin
@@ -155,10 +170,10 @@ closed when a manifest entry is malformed or names an unsupported language.
 
 Base image references are pinned by digest. Language package versions are
 recorded in the image build context: Python uses a locked requirements input,
-R uses a repository-visible package lock or equivalent reproducible record, and
-Julia uses both `Project.toml` and `Manifest.toml`. The selected mechanism may
-vary by ecosystem, but an unbounded install such as `pip install package` or
-`install.packages("package")` is not an acceptable runtime contract.
+R uses a dated Rocker/P3M CRAN snapshot plus a direct-package expectation file,
+and Julia uses both `Project.toml` and `Manifest.toml`. The selected mechanism
+may vary by ecosystem, but an unbounded install such as `pip install package`
+or `install.packages("package")` is not an acceptable runtime contract.
 
 Each image issue must record the versions and digests it adopts, provide a
 clean-build probe, and state how updates are reviewed. Updating a runtime must

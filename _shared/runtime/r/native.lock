@@ -1,0 +1,7 @@
+# CPU native payload selected by torch 0.17.0 on x86_64 Linux.
+libtorch_version=2.8.0+cpu
+libtorch_url=https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.8.0%2Bcpu.zip
+lantern_url=https://torch-cdn.mlverse.org/binaries/refs/heads/cran/v0.17.0/latest/lantern-0.17.0+cpu+x86_64-Linux.zip
+
+# The Lantern URL is the official torch 0.17.0 CPU channel's current build.
+# Rebuilds must re-run the probe and review the resulting native build metadata.

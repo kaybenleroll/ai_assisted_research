@@ -1,0 +1,18 @@
+FROM docker.io/rocker/r-ver:4.5.3@sha256:35394dcbf419ac29056848522006de3cd33c33191377abed182acaecd48eba37
+
+ENV R_LIBS_USER=/opt/R/library \
+    R_REPOS_SNAPSHOT=https://p3m.dev/cran/__linux__/noble/2026-04-23 \
+    TORCH_INSTALL_DEBUG=1 \
+    CUDA=cpu
+
+RUN mkdir -p /opt/R/library
+
+COPY packages.lock /tmp/packages.lock
+COPY native.lock /tmp/native.lock
+COPY install.R /tmp/install.R
+RUN Rscript /tmp/install.R \
+    && rm /tmp/packages.lock /tmp/native.lock /tmp/install.R \
+    && rm -rf /tmp/Rtmp* /root/.cache
+
+COPY probe.R /usr/local/bin/primer-r-probe.R
+ENTRYPOINT ["Rscript", "/usr/local/bin/primer-r-probe.R"]
