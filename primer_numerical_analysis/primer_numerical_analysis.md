@@ -1658,7 +1658,7 @@ f(x) = sin(x^2)
 println(ForwardDiff.derivative(f, π/4))
 
 # Reverse mode via Zygote
-println(f'(π/4))  # Zygote hooks into Julia's function composition syntax
+println(first(Zygote.gradient(f, π/4)))
 
 # Jacobian of a vector function — forward mode
 F(x) = [sin(x[1]), x[1]*x[2], exp(x[2])]

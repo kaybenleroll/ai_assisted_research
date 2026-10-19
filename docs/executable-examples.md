@@ -1,9 +1,9 @@
 # Executable Primer Examples
 
 This document defines the policy and build contract for running selected code
-examples from the technical primers. The shared Python and R runtimes are
-available; the Julia runtime and executable-example runner are separate work.
-This policy does not make existing examples executable.
+examples from the technical primers. The shared Python, R, and Julia runtimes
+are available; the executable-example runner is separate work. This policy does
+not make existing examples executable.
 
 ## Purpose and Boundary
 
@@ -17,8 +17,10 @@ The executable-example system covers selected Python, R, and Julia examples in
 Pandoc primers. It is separate from document rendering: the Pandoc image
 continues to render primers, the executable-example R runtime uses
 `localhost/primers-r-runtime:4.5.3`, the existing Rocker image continues to
-generate R figures, and the workbook retains its independent Quarto image and
-render workflow. This system does not replace or broaden those images.
+generate R figures, the executable-example Julia runtime uses
+`localhost/primers-julia-runtime:1.12.7`, and the workbook retains its
+independent Quarto image and render workflow. This system does not replace or
+broaden those images.
 
 ## What Is Executable
 
@@ -146,6 +148,28 @@ LibTorch/Lantern payload are explicit exceptions recorded under
 `_shared/runtime/r/`. The probe checks the installed R, direct package, and
 native torch versions with networking disabled. The last clean local build took
 66 seconds and produced 2,099,951,961 bytes on x86_64.
+
+### Julia Runtime
+
+Issue #312 provides a separate executable-example Julia runtime tagged
+`localhost/primers-julia-runtime:1.12.7` by default. Build and run its offline
+probe from the repository root with `just build-julia-runtime probe-julia-runtime`.
+Set `JULIA_RUNTIME_IMAGE` to override the tag. The image
+uses the amd64 digest-pinned official `julia:1.12.7-bookworm` base. Its
+committed `Project.toml` and generated `Manifest.toml` provide the shared
+ForwardDiff and Zygote environment used by the automatic-differentiation
+examples. The Containerfile instantiates and precompiles that environment
+during the network-enabled build; the probe checks Julia, package versions, and
+deterministic derivative values with networking disabled.
+
+The manifest pins Julia package source trees and versions, but it does not make
+binary artifacts identical across architectures. The initial runtime therefore
+records amd64 as its supported build target. Update the Julia base and the
+project/manifest together, rebuild from a clean cache, rerun the offline probe,
+and record cold-build time and image size before adopting a new version. The
+initial clean local build took 75 seconds and produced an image of
+1,315,152,893 bytes on x86_64; this is a planning measurement, not a CI
+guarantee.
 
 ## Runner Contract
 
