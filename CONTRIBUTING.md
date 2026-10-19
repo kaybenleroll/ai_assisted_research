@@ -27,7 +27,7 @@ Issue titles start with `[infra]` or the primer's short name (directory name wit
 
 ## Building
 
-The policy and architecture for selected runnable primer examples is documented in [docs/executable-examples.md](docs/executable-examples.md). Example execution is opt-in through per-primer manifests; ordinary fenced snippets remain illustrative unless explicitly listed.
+The policy, manifest schema, and execution contract for selected runnable primer examples are documented in [docs/executable-examples.md](docs/executable-examples.md). Example execution is opt-in through per-primer manifests; ordinary fenced snippets remain illustrative unless explicitly listed. Build the required runtime image from the repository root, then run `just examples <primer> [ids...]` there or `just examples [ids...]` from a primer directory. Omitting IDs runs every manifest entry; listing IDs runs only those entries in manifest order. The runner uses host `python3 -I` and dispatches to the selected OCI runtime image; it does not build images implicitly.
 
 Build and probe the shared Python example runtimes with `just build-python-runtimes`, `just probe-python-runtime`, and `just probe-python-torch`. These images are separate from the repository-check `PYTHON_IMAGE`, the Rocker figure image, and the catastrophe workbook image.
 

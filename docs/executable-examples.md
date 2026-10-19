@@ -2,8 +2,8 @@
 
 This document defines the policy and build contract for running selected code
 examples from the technical primers. The shared Python, R, and Julia runtimes
-are available; the executable-example runner is separate work. This policy does
-not make existing examples executable.
+are available, together with the opt-in executable-example runner. This policy
+does not make existing examples executable.
 
 ## Purpose and Boundary
 
@@ -74,11 +74,38 @@ primer_<name>/
     ...              # scripts or extracted runnable examples
 ```
 
-The exact manifest schema is part of #313, but it must identify at least the
-language, script or source block, expected execution mode, and any output or
-assertion policy needed by the runner. A primer may keep a runnable example in
-its Markdown when that is the clearest presentation; extracting a script is
-preferred when the same example needs substantial setup or repeated execution.
+Each manifest is `examples/manifest.toml`, with a top-level integer
+`schema_version` (currently `1`) and one `[[examples]]` table per executable
+entry. Entries use this schema:
+
+```toml
+schema_version = 1
+
+[[examples]]
+id = "gradient-check"
+language = "python"
+script = "examples/gradient_check.py"
+profile = "python-base"
+working_dir = "."
+timeout_seconds = 30
+```
+
+`id` is unique within the primer and is the selector accepted by `just
+examples`. `language` is one of `python`, `r`, or `julia`. Each entry uses
+exactly one of `script` or `markdown` plus `fence`; these are paths contained
+by the primer directory. `profile` must be `python-base`, `python-torch`, `r`,
+or `julia`, and must match the language. `timeout_seconds` is an optional
+integer from 1 to 600. Unknown keys, duplicate IDs, unsupported
+language/profile pairs, invalid timeouts, and paths that escape the primer
+directory fail closed. `working_dir` is an optional directory within the primer
+and controls the container working directory. Example scripts must assert
+meaningful results themselves; a zero exit status is the success condition, and
+stdout/stderr are retained in the runner report. The runner processes entries
+in manifest order and stops on the first failure.
+
+Keep an example in its script when possible. A script may read its own
+read-only primer tree and may write only below the runner-provided temporary
+output directory. Do not place generated files in the primer checkout.
 
 The runner must use repository-relative paths and reject manifest entries that
 escape the primer directory. It must report the primer, example identifier,
@@ -173,8 +200,27 @@ guarantee.
 
 ## Runner Contract
 
-The common runner will be exposed through shared `just` recipes and thin
-per-primer wrappers. Its container invocation must:
+The runner is exposed through repository-root and shared per-primer `just`
+recipes:
+
+```sh
+# From the repository root: run every entry in one primer
+just examples numerical_analysis
+
+# From the repository root: run selected IDs in manifest order
+just examples numerical_analysis gradient-check matrix-solve
+
+# From a primer directory: run every entry or selected IDs for this primer
+just examples
+just examples gradient-check
+```
+
+The root recipe takes a primer directory name without `primer_` (for example,
+`numerical_analysis`); the per-primer recipe needs no primer argument. The
+runner is invoked with host `python3 -I` and uses the repository's existing
+Podman-first/Docker-fallback selection, Podman keep-ID user namespace, and
+SELinux mount suffix conventions for runtime containers. It exposes no host
+credentials and disables networking. Its container invocation must:
 
 - use the repository's existing Podman/Docker detection and user/mount flags;
 - mount source material read-only wherever the example does not need to edit
@@ -184,6 +230,12 @@ per-primer wrappers. Its container invocation must:
 - run from a stable container path with a predictable locale and environment;
 - clean up the container and temporary output on success or failure; and
 - leave the Git working tree unchanged.
+
+Build the needed language image before running examples: `just
+build-python-runtimes`, `just build-r-runtime`, or `just build-julia-runtime`
+from the repository root. The runner does not build images implicitly. Use
+`just --list` in a primer directory or at the repository root to inspect the
+available recipes.
 
 Examples that intentionally write files must write only below the temporary
 output directory and must assert or enumerate the expected artefacts. The

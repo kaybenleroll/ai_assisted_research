@@ -9,6 +9,7 @@
 #   PDF_EXTRA   — per-project extra PDF  pandoc flags (may be empty string "")
 
 import 'images.just'
+import 'examples.just'
 
 # OCI runtime detection (podman preferred, fall back to docker)
 OCI := `command -v podman >/dev/null 2>&1 && echo podman || echo docker`
@@ -22,6 +23,10 @@ MERMAID_FILTER := "/repo/_shared/filters/mermaid-to-image.lua"
 
 # Repo root: justfile_directory() is the calling project dir (one level below repo root)
 REPO_ROOT := justfile_directory() / ".."
+
+# Run all opted-in examples, or the named manifest IDs, for this primer.
+examples *ids:
+  just --justfile "{{justfile_directory()}}/Justfile" run-examples "{{REPO_ROOT}}" "{{PROJECT_DIR}}" {{ids}}
 
 # Derived stem (strips .md extension)
 SOURCE_MD_STEM := file_stem(SOURCE_MD)
