@@ -1,6 +1,6 @@
 # Fluid Mechanics: From Conservation Laws to Verified Flow Models
 
-## Orientation and Reading Routes
+## Orientation, Notation, and Reading Routes
 
 Fluid mechanics describes how liquids and gases move and how their motion interacts with forces, boundaries, and other physical processes. A useful route through the subject is to start with the continuum model, learn how to describe motion at a point, and then apply balances of mass, momentum, and energy. Constitutive relations — such as a relation between viscous stress and rate of deformation — close those balances for a particular material. Boundary and initial conditions then define a problem whose equations can be analysed or solved numerically. Later sections can build on this route towards verified flow models: a plausible computed picture is not enough unless the governing assumptions, numerical evidence, and relevant physical checks are also clear.
 
@@ -12,7 +12,7 @@ This is not a production-CFD manual or a complete treatment of turbulence, multi
 
 *Verified against primary sources for all sections; unverified claims are flagged inline.*
 
-## Notation
+### Notation
 
 The following table establishes the notation used in this section. Symbols are defined again where a local calculation introduces a narrower meaning.
 
@@ -43,7 +43,7 @@ Pressure also needs a scale. Dynamic pressure $\rho U^2$, hydrostatic pressure $
 
 An order-of-magnitude estimate need not be accurate to be useful. If a measured pressure drop is $50\,\mathrm{Pa}$ and the neglected hydrostatic correction is $30\,\mathrm{kPa}$, the proposed comparison is ill-posed. If the predicted viscous stress is $0.2\,\mathrm{Pa}$ and the instrument resolution is $1\,\mathrm{Pa}$, a wall-stress validation claim is unsupported. Scales connect equations to experimental design and to the precision that a result can reasonably carry.
 
-## Continuum Description
+## Foundations: Continuum and Kinematics
 
 In the continuum model, quantities such as density, velocity, pressure, and temperature are fields: they assign a value to every position and time in the model domain. They represent averages over a small sampling volume that is large relative to molecular scales but small relative to the length scales of interest. This scale separation is an assumption, not a claim that fluids are microscopically continuous. Near rarefied gases, very small devices, sharp interfaces, or molecularly thin films, a continuum description can fail or require specialised boundary models.
 
@@ -96,7 +96,7 @@ $$
 
 where $\Omega$ is a fixed control volume. The last term is the net outward advective flux. This form assumes the fields are integrable and the moving boundary travels with the local fluid velocity. It is the bridge from particle-following physics to fixed-region accounting.
 
-## Kinematics: Describing Motion
+### Kinematics: Describing Motion
 
 Let a particle labelled by its initial position $\mathbf{X}$ occupy position $\mathbf{x}(\mathbf{X},t)$ at time $t$. Its velocity is the time derivative at fixed particle label. The Eulerian velocity field $\mathbf{u}(\mathbf{x},t)$ instead records velocity at a location in space. For any scalar field $f$, the rate experienced by a moving particle is the material derivative:
 
@@ -746,7 +746,7 @@ For an ideal-gas example, check the following in order: the units and sign of th
 
 The checklist is deliberately redundant. A code can calculate a pressure ratio from a hard-coded formula while its conservative update uses a different energy convention. Independent calculation and executable assertions reduce that risk. The example in this primer remains an analytical isentropic calculation rather than a shock solver, so its contract is limited to the stated relations.
 
-## Constitutive Behaviour and Properties
+## Constitutive Behaviour, Properties, and Energy
 
 Conservation laws constrain changes in mass, momentum, and energy, but they do not tell us how a particular material responds. Constitutive relations close the model. The choice of relation is part of the physics and should be recorded with the equations, not hidden inside a library call or solver option.
 
@@ -776,7 +776,7 @@ Before solving, make a property table with symbols, values, units, temperature, 
 
 Property interpolation can introduce another source of error. If viscosity is interpolated from a table, document whether interpolation is in temperature, pressure, or another variable and whether values are extrapolated. If a property is uncertain, propagate that uncertainty through the requested output rather than reporting a long decimal value that the data do not support.
 
-## Energy, Heat, and Coupled Flow
+### Energy, Heat, and Coupled Flow
 
 Low-speed fluid problems are often introduced without an energy equation because the velocity and pressure field can be solved under an isothermal or constant-property approximation. That simplification is useful, but it has a boundary. Viscous dissipation, compression, phase change, imposed heating, and temperature-dependent properties can couple the energy field back to momentum and density.
 
@@ -1282,7 +1282,7 @@ Contours are useful for locating gradients, recirculation, fronts, and approxima
 
 Streamlines show the direction of an instantaneous vector field, not necessarily the path followed by a marked particle. In unsteady flow, a streakline from a continuous source and a pathline from one particle can differ. If a visualisation is used to support a transport claim, label which construction was plotted and compare it with an integral or particle diagnostic. A contour is an aid to reasoning, not a substitute for the governing balance.
 
-## Worked Computational Pattern: A Conservative Periodic Scalar
+## Computational Examples and Evidence
 
 The periodic-advection example provides a small numerical laboratory. Consider a scalar $q(x,t)$ on $0\leq x<L$ satisfying
 
@@ -1323,7 +1323,7 @@ Python is convenient for the numerical-analysis example because array operations
 
 The executable examples verify their own stated calculations. They do not establish that a particular water channel is laminar, that a real wall is smooth, that an ideal-gas nozzle is adiabatic, or that a first-order scalar scheme is suitable for a production CFD calculation. Those are physical and numerical claims outside the examples' contracts. This boundary should be printed near the code, not inferred from the fact that the scripts exit successfully.
 
-## Executable Example Specification
+### Executable Example Specification
 
 Keep the examples short, deterministic, offline, and assertion-driven. Register them in `examples/manifest.toml`, using only existing Python base, R, and Julia profiles. A suitable set of identifiers and contracts is:
 
