@@ -1,0 +1,23 @@
+SOURCE_MD   := "primer_fluid_mechanics.md"
+PROJECT_DIR := "primer_fluid_mechanics"
+TITLE       := "Fluid Mechanics: From Conservation Laws to Verified Flow Models"
+AUTHOR      := "Mick Cooney"
+DATE        := "23 October 2026"
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
+
+# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
+# MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
+
+# Generate reproducible figures in the pinned R runtime.
+plots:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{ROCKER}} \
+    Rscript generate_plots.R
+
+full: plots html pdf
+
+import '../_shared/common.just'

@@ -1,0 +1,31 @@
+schema_version = 1
+
+[[examples]]
+id = "channel-poiseuille-python"
+language = "python"
+script = "examples/channel_poiseuille.py"
+profile = "python-base"
+
+[[examples]]
+id = "compressible-isentropic-python"
+language = "python"
+script = "examples/compressible_isentropic.py"
+profile = "python-base"
+
+[[examples]]
+id = "fv-periodic-advection"
+language = "python"
+script = "examples/periodic_advection.py"
+profile = "python-base"
+
+[[examples]]
+id = "channel-poiseuille-r"
+language = "r"
+script = "examples/channel_poiseuille.R"
+profile = "r"
+
+[[examples]]
+id = "channel-poiseuille-julia"
+language = "julia"
+script = "examples/channel_poiseuille.jl"
+profile = "julia"
