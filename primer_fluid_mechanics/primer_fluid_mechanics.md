@@ -162,6 +162,8 @@ For an incompressible two-dimensional velocity field, a streamfunction $\psi$ ma
 
 ## Conservation Laws
 
+Mass, momentum, and energy balances describe different quantities crossing the same chosen boundary. The local equations show how those quantities change at a point, while control-volume balances account for their accumulation, fluxes, and sources over a region. The following derivations use both views; each requires a stated system boundary, force or flux convention, and set of material assumptions before its result can be applied to a flow model.
+
 ### Mass Conservation
 
 Mass conservation says that the mass of every material volume remains constant. Applying transport to a fixed control volume gives the integral balance, and for smooth fields the local continuity equation:
@@ -489,7 +491,7 @@ Boundary layers illustrate the singular-looking high-$Re$ limit. Away from a wal
 
 For external flow, report which length defines $Re$, whether $U$ is free-stream or bulk speed, and which force coefficient is being compared. A drag coefficient such as $C_D=F_D/(\tfrac12\rho U^2A)$ is a dimensionless reporting convention, not a material constant. The reference area, orientation, surface condition, and flow regime belong with the number. Comparing coefficients with different reference choices can create a false disagreement.
 
-### Nondimensional Equations
+### Nondimensional Equations and Model Tests
 
 Nondimensionalisation is more than a way to produce a dimensionless number. It exposes which terms are small under a declared scaling and therefore makes a reduction auditable. Write
 
@@ -510,6 +512,19 @@ If gravity is the body force and $|\mathbf{b}|=g$, the last coefficient can be w
 The pressure reference deserves care. In a low-speed incompressible flow, pressure variations associated with viscous or gravitational effects may be much smaller than $\rho U^2$, so a dynamic pressure scale can make the pressure variable numerically small. That is not a reason to discard pressure; it is a signal to choose a scale that reflects the balance being studied. In hydrostatics, $\rho gL$ may be the more informative pressure scale. A good nondimensionalisation makes the dominant balance order one.
 
 Dimensionless equations also expose similarity requirements. Two geometrically similar experiments with the same $Re$ and $Fr$ can have related flow fields if the remaining relevant ratios and boundary conditions match. Matching one number while changing roughness, inlet disturbance, compressibility, or surface condition does not guarantee dynamic similarity. Similarity is a statement about the complete nondimensional problem, not a licence to scale one reported number.
+
+Dimensionless numbers are not labels to attach after the calculation. Choose characteristic scales $L$, $U$, $\rho_0$, and a pressure scale before nondimensionalising. With $\mathbf{x}=L\mathbf{x}^*$, $t=(L/U)t^*$, and $\mathbf{u}=U\mathbf{u}^*$, the incompressible momentum equation becomes, schematically,
+
+$$
+\frac{\partial\mathbf{u}^*}{\partial t^*}+\mathbf{u}^*\cdot\nabla^*\mathbf{u}^*
+=-\nabla^*p^*+\frac{1}{Re}\nabla^{*2}\mathbf{u}^*+\frac{1}{Fr^2}\mathbf{b}^*.
+$$
+
+The Reynolds number $Re=UL/\nu$ compares inertia with viscous diffusion, while the Froude number $Fr=U/\sqrt{gL}$ compares inertia with gravity. If the relevant motion is a small-amplitude wave, $L$ may be a wavelength rather than a device length. If the important length is a boundary-layer thickness, using the full apparatus length can obscure the dominant balance. A dimensionless group is meaningful only with its scale definitions.
+
+For free-surface problems, the Weber number $We=\rho U^2L/\gamma$ compares inertia with surface tension, where $\gamma$ is interfacial tension. The capillary length $\ell_c=\sqrt{\gamma/(\rho g)}$ separates gravity-dominated and surface-tension-dominated deformations. A Bond number $Bo=\rho gL^2/\gamma$ is equivalent to $We/Fr^2$ under the same scales. These numbers help choose a free-surface model: a nearly flat interface with $Bo\gg1$ may support a gravity-led approximation, whereas a microfluidic meniscus can be controlled by capillarity even at modest speeds.
+
+The Strouhal number $St=fL/U$ compares an imposed or observed oscillation frequency with the advection rate. A small $St$ can support a quasi-steady approximation only if the other terms and boundary conditions are compatible. A large $St$ does not automatically mean that advection is negligible; it says that unsteady change is rapid relative to the chosen advective scale. Always return to the dimensional terms after using a dimensionless number. “$Re$ is large” is incomplete unless the length, speed, property, and output affected by that statement are named.
 
 ### Transition and Turbulence as a Boundary
 
@@ -558,21 +573,6 @@ The practical lesson is not to memorise one critical Reynolds number. Ask which 
 As a bounded external-flow estimate, take air with $U=10\,\mathrm{m\,s^{-1}}$, kinematic viscosity $\nu=1.5\times10^{-5}\,\mathrm{m^2\,s^{-1}}$, density $\rho=1.2\,\mathrm{kg\,m^{-3}}$, and a smooth plate of length $L=0.5\,\mathrm{m}$ and width $b=0.2\,\mathrm{m}$. The Reynolds number based on length is $Re_L=UL/\nu\approx3.3\times10^5$. A simple laminar flat-plate estimate uses $\delta/L\sim5/\sqrt{Re_L}$, giving a trailing-edge thickness scale of roughly $4.3\,\mathrm{mm}$. It is a scale estimate, not a resolved profile.
 
 For a laminar plate with a zero-pressure-gradient idealisation, the mean skin-friction coefficient is often approximated as $\overline C_f\approx1.328/\sqrt{Re_L}$. The corresponding integrated skin-friction drag estimate is $D_f=\tfrac12\rho U^2(bL)\overline C_f$, which is about $0.015\,\mathrm{N}$ for these values. The estimate excludes pressure drag, leading-edge details, roughness, free-stream turbulence, transition, and three-dimensional edge effects. Since the Reynolds number is near a regime where disturbances can matter, the result should be treated as a laminar lower-order baseline. A measured drag substantially above it would not be surprising and would not, by itself, identify the missing mechanism.
-
-### Dimensionless Groups as Model Tests
-
-Dimensionless numbers are not labels to attach after the calculation. Choose characteristic scales $L$, $U$, $\rho_0$, and a pressure scale before nondimensionalising. With $\mathbf{x}=L\mathbf{x}^*$, $t=(L/U)t^*$, and $\mathbf{u}=U\mathbf{u}^*$, the incompressible momentum equation becomes, schematically,
-
-$$
-\frac{\partial\mathbf{u}^*}{\partial t^*}+\mathbf{u}^*\cdot\nabla^*\mathbf{u}^*
-=-\nabla^*p^*+\frac{1}{Re}\nabla^{*2}\mathbf{u}^*+\frac{1}{Fr^2}\mathbf{b}^*.
-$$
-
-The Reynolds number $Re=UL/\nu$ compares inertia with viscous diffusion, while the Froude number $Fr=U/\sqrt{gL}$ compares inertia with gravity. If the relevant motion is a small-amplitude wave, $L$ may be a wavelength rather than a device length. If the important length is a boundary-layer thickness, using the full apparatus length can obscure the dominant balance. A dimensionless group is meaningful only with its scale definitions.
-
-For free-surface problems, the Weber number $We=\rho U^2L/\gamma$ compares inertia with surface tension, where $\gamma$ is interfacial tension. The capillary length $\ell_c=\sqrt{\gamma/(\rho g)}$ separates gravity-dominated and surface-tension-dominated deformations. A Bond number $Bo=\rho gL^2/\gamma$ is equivalent to $We/Fr^2$ under the same scales. These numbers help choose a free-surface model: a nearly flat interface with $Bo\gg1$ may support a gravity-led approximation, whereas a microfluidic meniscus can be controlled by capillarity even at modest speeds.
-
-The Strouhal number $St=fL/U$ compares an imposed or observed oscillation frequency with the advection rate. A small $St$ can support a quasi-steady approximation only if the other terms and boundary conditions are compatible. A large $St$ does not automatically mean that advection is negligible; it says that unsteady change is rapid relative to the chosen advective scale. Always return to the dimensional terms after using a dimensionless number. “$Re$ is large” is incomplete unless the length, speed, property, and output affected by that statement are named.
 
 ### Similarity and Scaling Limits
 
@@ -939,15 +939,23 @@ Taking the divergence and imposing $\nabla\cdot\mathbf{u}^{n+1}=0$ produces a pr
 
 Pressure is defined only up to an additive constant in many closed incompressible problems. Fixing a reference pressure or imposing a zero-mean constraint removes that null space without changing velocity. A solver that reports a singular matrix is not necessarily revealing a physical instability; it may be exposing an unremoved pressure gauge freedom. Conversely, arbitrarily pinning a pressure value at a boundary can alter the intended pressure-drop problem. State the gauge choice separately from physical pressure differences.
 
-### Meshes and Geometry
+The pressure Poisson equation in an incompressible projection method has a solvability condition. The prescribed normal fluxes and volume sources must be compatible with zero net volume accumulation in a closed domain. If the inlet flow rate exceeds the outlet flow rate in an incompressible fixed-volume domain, no pressure field can make the velocity divergence-free without an additional storage or compressibility mechanism. A linear solver may expose this as a singular or inconsistent system, but the underlying issue is physical compatibility.
+
+The pressure correction also depends on the discrete boundary treatment. A Neumann condition derived from a wall-normal velocity is not the same as imposing a static pressure. At a periodic boundary, pressure differences and velocity fluxes must be paired consistently; otherwise the pressure null space can be disturbed. Check the net corrected flux after the pressure solve rather than relying only on the linear residual.
+
+Checkerboard pressure modes illustrate a different failure. On some collocated arrangements, pressure values can oscillate between neighbouring cells while producing weakly coupled face velocities. The resulting pressure contour may look structured, but the mass flux is wrong. Face interpolation or a staggered arrangement should be chosen with this coupling in mind. A pressure visualisation is not a substitute for a discrete divergence norm.
+
+A minimal pressure-correction example makes the compatibility condition concrete. Suppose two equal cells have a tentative face flux of $+2$ at the internal face, an inlet flux of $+1$, and an outlet flux of $+3$, with outward flux positive. The tentative cell balances are not both zero: the pressure correction must alter the internal and boundary face fluxes so that each cell has zero net accumulation. If the inlet and outlet are instead both $+2$, the total boundary flux is compatible with a closed incompressible domain and the correction can redistribute flux internally without changing the domain volume.
+
+In a real discretisation the correction comes from a pressure equation assembled from the discrete divergence and gradient. The pressure is determined only up to a constant, so one cell value or the domain mean must be fixed. The important diagnostic is not the absolute corrected pressure but the residual net flux and the cellwise divergence. If the boundary fluxes imply a net volume increase in a fixed domain, no pressure gauge choice can make the system compatible; the model needs storage, a moving boundary, compressibility, or corrected boundary data.
+
+### Meshes, Geometry, and Resolution
 
 The grid is part of the numerical model. A mesh must resolve the scales relevant to the requested output: a wall shear stress needs near-wall gradients, while a bulk flow rate may tolerate a coarser interior. Refining uniformly is not always efficient, but local refinement introduces interfaces and interpolation choices that require their own checks. A visually smooth mesh is not evidence that the boundary layer, wake, or scalar front is resolved.
 
 The simplest grid should be chosen first for a verification case. Cartesian cells make flux accounting and expected symmetry transparent. Once the implementation agrees with an analytical or manufactured solution, geometric complexity can be introduced one element at a time. If a solver fails only after adding curved boundaries, the change has narrowed the search: investigate geometry representation, face normals, metric factors, and boundary fluxes before changing the physical model.
 
 For an educational primer, a two-dimensional cavity is attractive because it exposes wall boundary conditions and pressure coupling, but it also invites overinterpretation. The steady cavity flow depends on Reynolds number, lid treatment, grid, and numerical method; a colourful streamline plot is not a universal benchmark. A periodic scalar advection example is less visually impressive but makes conservation and convergence easier to measure. Choose examples for the evidence they can support, not for the complexity of their pictures.
-
-### Mesh Quality and Resolution
 
 Mesh quality is more than cell count. Skewness, aspect ratio, non-orthogonality, abrupt size changes, and alignment with a boundary layer affect the accuracy and stability of flux approximations. A structured grid with many cells can be less useful than a modest grid aligned with the dominant gradient. A refinement study should preserve a meaningful family of meshes so that changes in cell shape do not masquerade as resolution effects.
 
@@ -983,20 +991,6 @@ Coupled flow calculations often contain linear systems from diffusion, pressure,
 For a steady problem, distinguish three stopping events: the nonlinear or pseudo-time residual has reached a threshold; the requested output has stopped changing materially; and the global physical balances close to tolerance. These thresholds need not coincide. A residual may stagnate above its target because the boundary data are incompatible, or it may decrease while the output remains under-resolved. Report all three when they matter. For a transient calculation, do not use a steady residual as the only success criterion.
 
 Solver tolerances should be selected relative to the uncertainty required in the output. If the pressure drop must be accurate to one percent, driving an algebraic residual to machine precision may be unnecessary, while a residual that allows a ten percent mass imbalance is unacceptable. Perform a tolerance perturbation on at least one representative case and include the result in the verification record.
-
-### Pressure-Correction Compatibility
-
-The pressure Poisson equation in an incompressible projection method has a solvability condition. The prescribed normal fluxes and volume sources must be compatible with zero net volume accumulation in a closed domain. If the inlet flow rate exceeds the outlet flow rate in an incompressible fixed-volume domain, no pressure field can make the velocity divergence-free without an additional storage or compressibility mechanism. A linear solver may expose this as a singular or inconsistent system, but the underlying issue is physical compatibility.
-
-The pressure correction also depends on the discrete boundary treatment. A Neumann condition derived from a wall-normal velocity is not the same as imposing a static pressure. At a periodic boundary, pressure differences and velocity fluxes must be paired consistently; otherwise the pressure null space can be disturbed. Check the net corrected flux after the pressure solve rather than relying only on the linear residual.
-
-Checkerboard pressure modes illustrate a different failure. On some collocated arrangements, pressure values can oscillate between neighbouring cells while producing weakly coupled face velocities. The resulting pressure contour may look structured, but the mass flux is wrong. Face interpolation or a staggered arrangement should be chosen with this coupling in mind. A pressure visualisation is not a substitute for a discrete divergence norm.
-
-### A One-Dimensional Pressure Correction
-
-A minimal pressure-correction example makes the compatibility condition concrete. Suppose two equal cells have a tentative face flux of $+2$ at the internal face, an inlet flux of $+1$, and an outlet flux of $+3$, with outward flux positive. The tentative cell balances are not both zero: the pressure correction must alter the internal and boundary face fluxes so that each cell has zero net accumulation. If the inlet and outlet are instead both $+2$, the total boundary flux is compatible with a closed incompressible domain and the correction can redistribute flux internally without changing the domain volume.
-
-In a real discretisation the correction comes from a pressure equation assembled from the discrete divergence and gradient. The pressure is determined only up to a constant, so one cell value or the domain mean must be fixed. The important diagnostic is not the absolute corrected pressure but the residual net flux and the cellwise divergence. If the boundary fluxes imply a net volume increase in a fixed domain, no pressure gauge choice can make the system compatible; the model needs storage, a moving boundary, compressibility, or corrected boundary data.
 
 ### Conservation at Interfaces and Refinement Boundaries
 
@@ -1120,75 +1114,49 @@ The table prevents a narrow verification result from being silently promoted int
 
 Fluid calculations often fail through small inconsistencies rather than through an inability to solve a difficult equation. A review should look for the following patterns.
 
-### Changing Assumptions Silently
+### Assumptions and Comparison Quantities
 
-An argument may begin with an incompressible fluid, use a constant-density continuity equation, introduce an ideal-gas sound speed, and end with a compressible pressure ratio without identifying the transition. Each formula can be correct in its own setting while the chain is incoherent. Mark the boundary between models and repeat the inputs that change. The same applies to viscosity: a property held constant in a laminar benchmark cannot silently become a temperature-dependent quantity in a later comparison.
+**Changing Assumptions Silently:** An argument may begin with an incompressible fluid, use a constant-density continuity equation, introduce an ideal-gas sound speed, and end with a compressible pressure ratio without identifying the transition. Each formula can be correct in its own setting while the chain is incoherent. Mark the boundary between models and repeat the inputs that change. The same applies to viscosity: a property held constant in a laminar benchmark cannot silently become a temperature-dependent quantity in a later comparison.
 
-### Confusing Local and Mean Quantities
+**Confusing Local and Mean Quantities:** Centreline velocity, bulk velocity, area-averaged velocity, mass-averaged velocity, and a sensor reading are different quantities. A pressure gradient can be uniform while the velocity profile is not. A simulation may report a cell-centre value where an experiment reports an average over a finite probe. Define the averaging operator and use the same operator in the comparison.
 
-Centreline velocity, bulk velocity, area-averaged velocity, mass-averaged velocity, and a sensor reading are different quantities. A pressure gradient can be uniform while the velocity profile is not. A simulation may report a cell-centre value where an experiment reports an average over a finite probe. Define the averaging operator and use the same operator in the comparison.
+**Treating a Correlation as a Law:** A friction factor, drag coefficient, or heat-transfer correlation summarises data and assumptions over a range of regimes. It is not a conservation law. Check its geometry, roughness, property range, reference length, transition range, and uncertainty. If it is used outside its documented range, label the result as an extrapolation and test sensitivity to the choice.
 
-### Treating a Correlation as a Law
+### Interpreting Results and References
 
-A friction factor, drag coefficient, or heat-transfer correlation summarises data and assumptions over a range of regimes. It is not a conservation law. Check its geometry, roughness, property range, reference length, transition range, and uncertainty. If it is used outside its documented range, label the result as an extrapolation and test sensitivity to the choice.
+**Mistaking Solver Convergence for Physical Adequacy:** Reducing a nonlinear residual proves only that the discrete equations have been approached under the selected algorithm and stopping rule. It does not prove that the mesh resolves the wall, the time interval is long enough, the boundary condition is realistic, or the turbulence closure is appropriate. Report both solver convergence and model evidence.
 
-### Mistaking Solver Convergence for Physical Adequacy
+**Overinterpreting a Picture:** Streamlines, contours, and animations are useful ways to inspect a field, but colour scales can hide conservation errors and interpolation can create visual smoothness. Every important picture should have a numerical companion: a balance, an integral quantity, a reference solution, or a measured comparison. Use a fixed scale when comparing cases and state whether the field is instantaneous, time averaged, or ensemble averaged.
 
-Reducing a nonlinear residual proves only that the discrete equations have been approached under the selected algorithm and stopping rule. It does not prove that the mesh resolves the wall, the time interval is long enough, the boundary condition is realistic, or the turbulence closure is appropriate. Report both solver convergence and model evidence.
+**Forgetting the Reference State:** Pressure is often defined up to a constant in an incompressible calculation, while pressure differences drive many decisions. Gauge and absolute pressure are not interchangeable in a compressible or cavitating problem. Likewise, potential energy depends on a selected datum even though a difference is observable. State the reference and compare invariant differences where possible.
 
-### Overinterpreting a Picture
+### Reporting and Model Checks
 
-Streamlines, contours, and animations are useful ways to inspect a field, but colour scales can hide conservation errors and interpolation can create visual smoothness. Every important picture should have a numerical companion: a balance, an integral quantity, a reference solution, or a measured comparison. Use a fixed scale when comparing cases and state whether the field is instantaneous, time averaged, or ensemble averaged.
-
-### Forgetting the Reference State
-
-Pressure is often defined up to a constant in an incompressible calculation, while pressure differences drive many decisions. Gauge and absolute pressure are not interchangeable in a compressible or cavitating problem. Likewise, potential energy depends on a selected datum even though a difference is observable. State the reference and compare invariant differences where possible.
-
-### Reporting Precision Unsupported by the Model
-
-If viscosity is known to two significant figures and the inlet flow rate is uncertain by several per cent, printing a pressure drop to twelve decimal places is presentation rather than information. Numerical tolerances should be tighter than the accuracy needed to distinguish decisions, but output precision should reflect input and model uncertainty. A precise numerical solution of an uncertain model is not a precise physical prediction.
+**Reporting Precision Unsupported by the Model:** If viscosity is known to two significant figures and the inlet flow rate is uncertain by several per cent, printing a pressure drop to twelve decimal places is presentation rather than information. Numerical tolerances should be tighter than the accuracy needed to distinguish decisions, but output precision should reflect input and model uncertainty. A precise numerical solution of an uncertain model is not a precise physical prediction.
 
 The review response to a failure should be specific. Name the violated assumption, the affected output, the evidence needed to repair it, and whether the current result remains useful as a bounded baseline. “The CFD is inaccurate” is less useful than “the grid is adequate for flow rate but not for wall shear, so the pressure result is retained and the shear claim is withdrawn”.
 
-### Misreading Conservation as Accuracy
+**Misreading Conservation as Accuracy:** Conservation is necessary for a trustworthy flow calculation, but it is not sufficient. A conservative scheme can preserve total mass while using an incorrect wall flux, excessive numerical diffusion, or an invalid equation of state. Pair global balances with an independent solution, refinement, limiting-case tests, and a physical measurement where relevant. If only one check can be run, choose the one tied most directly to the decision and state what it leaves untested.
 
-Conservation is necessary for a trustworthy flow calculation, but it is not sufficient. A conservative scheme can preserve total mass while using an incorrect wall flux, excessive numerical diffusion, or an invalid equation of state. Pair global balances with an independent solution, refinement, limiting-case tests, and a physical measurement where relevant. If only one check can be run, choose the one tied most directly to the decision and state what it leaves untested.
-
-### Treating Software Defaults as Physics
-
-Solver defaults can select a turbulence closure, pressure reference, wall function, limiter, property correlation, or convergence criterion without making the choice visible in the report. Defaults are convenient for exploration, not a substitute for a model ledger. Record the version, selected schemes, boundary conditions, and tolerances. When a result changes after a software upgrade, compare the effective settings rather than assuming the physical model stayed fixed.
+**Treating Software Defaults as Physics:** Solver defaults can select a turbulence closure, pressure reference, wall function, limiter, property correlation, or convergence criterion without making the choice visible in the report. Defaults are convenient for exploration, not a substitute for a model ledger. Record the version, selected schemes, boundary conditions, and tolerances. When a result changes after a software upgrade, compare the effective settings rather than assuming the physical model stayed fixed.
 
 ## A Reproducible Flow-Study Workflow
 
 The equations and code are only one part of a defensible flow study. A reproducible workflow keeps the physical question, numerical model, evidence, and reported decision connected.
 
-### 1. State the Decision
+1. **State the Decision.** Write the output in a form that can be checked: pressure drop below a limit, mean temperature at a location, time to fill a volume, or a qualitative question such as whether separation occurs before a sensor. State the operating range and what would count as a materially different answer. This prevents a study from expanding into a general-purpose simulation without a decision criterion.
 
-Write the output in a form that can be checked: pressure drop below a limit, mean temperature at a location, time to fill a volume, or a qualitative question such as whether separation occurs before a sensor. State the operating range and what would count as a materially different answer. This prevents a study from expanding into a general-purpose simulation without a decision criterion.
+2. **Establish a Baseline.** Use a dimensional estimate, conservation balance, correlation, or analytical solution before opening a solver. Calculate characteristic scales and dimensionless groups. The baseline provides an order-of-magnitude check and often reveals that a complex calculation is unnecessary. If a later result differs by three orders of magnitude, investigate units, reference areas, pressure gauges, and geometry before attributing the difference to an interesting physical effect.
 
-### 2. Establish a Baseline
+3. **Write the Model Ledger.** Record the equations, properties, geometry, dimensionality, boundary and initial conditions, sources, and outputs. Mark assumptions as measured, supplied by a standard, inferred, or provisional. A provisional assumption is not a weakness when it is visible; an invisible assumption is difficult to challenge and impossible to audit.
 
-Use a dimensional estimate, conservation balance, correlation, or analytical solution before opening a solver. Calculate characteristic scales and dimensionless groups. The baseline provides an order-of-magnitude check and often reveals that a complex calculation is unnecessary. If a later result differs by three orders of magnitude, investigate units, reference areas, pressure gauges, and geometry before attributing the difference to an interesting physical effect.
+4. **Build the Smallest Verification Case.** Start with a geometry and forcing that has a reference solution or a simple global balance. Exercise one new feature at a time: first an interior flux, then a wall, then a source, then a variable property or complex geometry. Keep the case deterministic and cheap enough to run after every code change. The first objective is not a realistic picture but a trustworthy balance.
 
-### 3. Write the Model Ledger
+5. **Refine and Perturb.** Vary the grid, time step, solver tolerance, and important physical inputs separately. Compare the requested output and diagnostic quantities. A grid refinement that changes the answer is information: the current result is not resolution-independent. A parameter perturbation that changes the answer more than numerical refinement identifies a physical input that deserves measurement or uncertainty analysis.
 
-Record the equations, properties, geometry, dimensionality, boundary and initial conditions, sources, and outputs. Mark assumptions as measured, supplied by a standard, inferred, or provisional. A provisional assumption is not a weakness when it is visible; an invisible assumption is difficult to challenge and impossible to audit.
+6. **Compare with Independent Evidence.** Use a second implementation, an analytical solution, a manufactured solution, a benchmark, or measurements. Independence matters. Comparing two programs that share the same discretisation mistake is weaker than comparing one program with a derivation based on a different method. Explain what the comparison tests and what it cannot test.
 
-### 4. Build the Smallest Verification Case
-
-Start with a geometry and forcing that has a reference solution or a simple global balance. Exercise one new feature at a time: first an interior flux, then a wall, then a source, then a variable property or complex geometry. Keep the case deterministic and cheap enough to run after every code change. The first objective is not a realistic picture but a trustworthy balance.
-
-### 5. Refine and Perturb
-
-Vary the grid, time step, solver tolerance, and important physical inputs separately. Compare the requested output and diagnostic quantities. A grid refinement that changes the answer is information: the current result is not resolution-independent. A parameter perturbation that changes the answer more than numerical refinement identifies a physical input that deserves measurement or uncertainty analysis.
-
-### 6. Compare with Independent Evidence
-
-Use a second implementation, an analytical solution, a manufactured solution, a benchmark, or measurements. Independence matters. Comparing two programs that share the same discretisation mistake is weaker than comparing one program with a derivation based on a different method. Explain what the comparison tests and what it cannot test.
-
-### 7. Report the Boundary of the Claim
-
-The final report should state the model, result, uncertainty, verification evidence, validation evidence, and excluded mechanisms. A useful conclusion has the form: under assumptions A–D, the computed quantity is X with numerical sensitivity Y; the result has been verified against Z; physical validation remains open because Q was not measured. This is more valuable than a single high-resolution image with no statement of scope.
+7. **Report the Boundary of the Claim.** The final report should state the model, result, uncertainty, verification evidence, validation evidence, and excluded mechanisms. A useful conclusion has the form: under assumptions A–D, the computed quantity is X with numerical sensitivity Y; the result has been verified against Z; physical validation remains open because Q was not measured. This is more valuable than a single high-resolution image with no statement of scope.
 
 The workflow is iterative. A failed check may require a new boundary condition, a different constitutive law, or a narrower claim rather than a smaller residual tolerance. Keeping the record of those decisions makes the calculation reusable and prevents the same modelling error from being rediscovered in a later project.
 
@@ -1222,13 +1190,19 @@ Pressure data should identify the reference, tap location, elevation, and whethe
 
 Forces can be obtained by integrating pressure and shear over a surface, by a load cell, or by a control-volume momentum balance. These are not automatically equivalent in practice because the measurement surfaces and unmeasured supports differ. A validation plan should state which force definition is being compared and how omitted surfaces are handled.
 
-### Design of a Comparison
+### Designing a Comparison for Flow Models
 
 Choose comparison cases that vary the mechanism being tested. One operating point can show agreement by accident. A small matrix of speeds, viscosities, pressure gradients, or geometries can expose an incorrect exponent or an omitted effect. Keep some cases for development and reserve others for assessment. If the data are used to tune a parameter, label them calibration data and do not call the same comparison independent validation.
 
 Plot the difference against the measurement uncertainty, not only as a percentage of the measured value. A small absolute error can be large relative to a near-zero quantity, while a large percentage error may be irrelevant to a high-value design threshold. Include the uncertainty of both model input and measurement. If a systematic residual grows with Reynolds number or distance from the inlet, treat that pattern as evidence about the model rather than averaging it away.
 
 The aim of comparison is not to force a model to match every observation. A disagreement can identify a missing wall condition, a property error, three-dimensional flow, an unsteady regime, or an instrument bias. The useful outcome is a revised model ledger and a clearer claim about which physical mechanism has been tested.
+
+An experiment should be designed around the model discrepancy it is intended to resolve. If the uncertainty is whether the straight-channel relation applies, measure pressure at several streamwise stations rather than only at the inlet and outlet. A linear pressure trend supports a fully developed segment; curvature or local jumps identify entrance, fitting, or separation effects. If the uncertainty is the velocity profile, a bulk flow meter is insufficient because many profiles can have the same integral flow rate.
+
+Vary one controlling scale at a time where possible. Changing speed changes Reynolds number, dynamic pressure, residence time, and often the measurement signal. Changing fluid viscosity can separate viscous scaling from inertial scaling but may also change wetting and temperature. A design matrix should list the intended variation and the mechanisms it changes. Replicates at one condition estimate repeatability; they do not establish the trend across conditions.
+
+Instrument placement should be part of the model. A pressure tap near a contraction measures a local pressure affected by gradients and possibly separation. A velocity probe has a finite sensing volume and can disturb a small flow. Optical methods require seeding, illumination, and image-correlation assumptions. Document the coordinate transform and filtering used to turn raw data into the compared quantity. If preprocessing removes fluctuations, the simulation should be averaged or filtered in a comparable way.
 
 ### Uncertainty Budgets
 
@@ -1254,29 +1228,19 @@ A failed verification or validation check is a result. Report the case, expected
 
 Likewise, an experiment that disagrees with the model can be valuable even when no replacement model is immediately available. Preserve the raw comparison, the measurement conditions, and the model ledger. A systematic residual that grows with speed may point to an omitted inertial or roughness effect; a constant offset may indicate a pressure reference or calibration issue. The next action should follow the residual pattern rather than the desire to make the plot look closer.
 
-### Experimental Design for Flow Models
-
-An experiment should be designed around the model discrepancy it is intended to resolve. If the uncertainty is whether the straight-channel relation applies, measure pressure at several streamwise stations rather than only at the inlet and outlet. A linear pressure trend supports a fully developed segment; curvature or local jumps identify entrance, fitting, or separation effects. If the uncertainty is the velocity profile, a bulk flow meter is insufficient because many profiles can have the same integral flow rate.
-
-Vary one controlling scale at a time where possible. Changing speed changes Reynolds number, dynamic pressure, residence time, and often the measurement signal. Changing fluid viscosity can separate viscous scaling from inertial scaling but may also change wetting and temperature. A design matrix should list the intended variation and the mechanisms it changes. Replicates at one condition estimate repeatability; they do not establish the trend across conditions.
-
-Instrument placement should be part of the model. A pressure tap near a contraction measures a local pressure affected by gradients and possibly separation. A velocity probe has a finite sensing volume and can disturb a small flow. Optical methods require seeding, illumination, and image-correlation assumptions. Document the coordinate transform and filtering used to turn raw data into the compared quantity. If preprocessing removes fluctuations, the simulation should be averaged or filtered in a comparable way.
-
 ### Dimensionless Comparison of Data
 
 Plotting dimensional data can hide similarity. If pressure drop is expected to scale with $\rho U^2$, plot a pressure coefficient; if a laminar channel relation predicts $\Delta p\propto\mu LU/h^2$, plot the measured ratio against the corresponding Reynolds number or geometry ratio. Use dimensionless plots only after defining the reference scales. A collapse is evidence for the proposed scaling over the tested range, not proof that all omitted mechanisms are absent.
 
 Residual plots are often more revealing than parity plots. Plot measured minus predicted pressure against speed, position, temperature, and Reynolds number. A residual with zero mean but a clear trend is not random agreement. Also inspect residuals against the instrument uncertainty: if the trend is smaller than the uncertainty, it may not affect the decision; if it is larger, the model or experiment needs attention.
 
-### Figures as Evidence
+### Figures and Contours as Evidence
 
 A figure should answer a question stated in its caption. A velocity-profile plot can show whether a boundary condition and shape are plausible; it cannot show that the pressure gradient has the right units. A pressure-versus-position plot can show entrance development or a local loss; it cannot identify a property error without an independent property estimate. A convergence plot can show numerical sensitivity; it cannot validate a turbulence closure. Captions should name the data, reference, assumptions, and quantity that the reader should inspect.
 
 Use visual encodings that preserve comparison. Keep units on axes, use the same scale when comparing cases, distinguish initial, exact, and numerical states in the legend, and avoid colour gradients that imply a physical ordering not present in the data. For a field plot, state whether values are cell-centred, interpolated, instantaneous, or averaged. For a line plot, state whether the line is an analytical relation, a measurement, a fit, or a numerical result.
 
 The primer's figures are generated from scripts rather than edited by hand. This makes them part of the reproducible evidence: a change to the equation, input, or plotting convention can be reviewed and rerun. The figures are intentionally modest. A clean profile, pressure baseline, or refinement curve often carries more diagnostic information than a photorealistic flow rendering with no reference quantity.
-
-### Reading a Contour Without Overclaiming
 
 Contours are useful for locating gradients, recirculation, fronts, and approximate symmetry. They are also easy to misread. Interpolation can create extrema between cells, a nonlinear colour scale can hide sign changes, and an automatic range can make two cases appear equally different when their physical magnitudes differ. Use fixed colour limits for comparisons, mark the zero level when sign matters, and report extrema from the stored field rather than from a rendered image.
 

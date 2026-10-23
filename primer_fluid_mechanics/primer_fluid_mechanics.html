@@ -696,7 +696,8 @@ Developed Flow</a></li>
 </ul></li>
 <li><a href="#scaling-and-external-flow" id="toc-scaling-and-external-flow"><span class="toc-section-number">6</span> Scaling and External Flow</a>
 <ul>
-<li><a href="#nondimensional-equations" id="toc-nondimensional-equations"><span class="toc-section-number">6.1</span> Nondimensional Equations</a></li>
+<li><a href="#nondimensional-equations-and-model-tests" id="toc-nondimensional-equations-and-model-tests"><span class="toc-section-number">6.1</span> Nondimensional Equations and Model
+Tests</a></li>
 <li><a href="#transition-and-turbulence-as-a-boundary" id="toc-transition-and-turbulence-as-a-boundary"><span class="toc-section-number">6.2</span> Transition and Turbulence as a
 Boundary</a></li>
 <li><a href="#instability-as-a-modelling-boundary" id="toc-instability-as-a-modelling-boundary"><span class="toc-section-number">6.3</span> Instability as a Modelling
@@ -704,9 +705,7 @@ Boundary</a></li>
 <li><a href="#boundary-layer-reasoning" id="toc-boundary-layer-reasoning"><span class="toc-section-number">6.4</span> Boundary-Layer Reasoning</a></li>
 <li><a href="#worked-flat-plate-scaling-estimate" id="toc-worked-flat-plate-scaling-estimate"><span class="toc-section-number">6.5</span> Worked Flat-Plate Scaling
 Estimate</a></li>
-<li><a href="#dimensionless-groups-as-model-tests" id="toc-dimensionless-groups-as-model-tests"><span class="toc-section-number">6.6</span> Dimensionless Groups as Model
-Tests</a></li>
-<li><a href="#similarity-and-scaling-limits" id="toc-similarity-and-scaling-limits"><span class="toc-section-number">6.7</span> Similarity and Scaling
+<li><a href="#similarity-and-scaling-limits" id="toc-similarity-and-scaling-limits"><span class="toc-section-number">6.6</span> Similarity and Scaling
 Limits</a></li>
 </ul></li>
 <li><a href="#canonical-flow-families" id="toc-canonical-flow-families"><span class="toc-section-number">7</span> Canonical Flow Families</a>
@@ -780,20 +779,15 @@ Fluxes</a></li>
 Stability</a></li>
 <li><a href="#pressure-and-incompressibility" id="toc-pressure-and-incompressibility"><span class="toc-section-number">11.3</span> Pressure and
 Incompressibility</a></li>
-<li><a href="#meshes-and-geometry" id="toc-meshes-and-geometry"><span class="toc-section-number">11.4</span> Meshes and Geometry</a></li>
-<li><a href="#mesh-quality-and-resolution" id="toc-mesh-quality-and-resolution"><span class="toc-section-number">11.5</span> Mesh Quality and
+<li><a href="#meshes-geometry-and-resolution" id="toc-meshes-geometry-and-resolution"><span class="toc-section-number">11.4</span> Meshes, Geometry, and
 Resolution</a></li>
-<li><a href="#boundary-conditions-in-a-discrete-balance" id="toc-boundary-conditions-in-a-discrete-balance"><span class="toc-section-number">11.6</span> Boundary Conditions in a Discrete
+<li><a href="#boundary-conditions-in-a-discrete-balance" id="toc-boundary-conditions-in-a-discrete-balance"><span class="toc-section-number">11.5</span> Boundary Conditions in a Discrete
 Balance</a></li>
-<li><a href="#a-minimal-finite-volume-update" id="toc-a-minimal-finite-volume-update"><span class="toc-section-number">11.7</span> A Minimal Finite-Volume
+<li><a href="#a-minimal-finite-volume-update" id="toc-a-minimal-finite-volume-update"><span class="toc-section-number">11.6</span> A Minimal Finite-Volume
 Update</a></li>
-<li><a href="#solvers-residuals-and-stopping-rules" id="toc-solvers-residuals-and-stopping-rules"><span class="toc-section-number">11.8</span> Solvers, Residuals, and Stopping
+<li><a href="#solvers-residuals-and-stopping-rules" id="toc-solvers-residuals-and-stopping-rules"><span class="toc-section-number">11.7</span> Solvers, Residuals, and Stopping
 Rules</a></li>
-<li><a href="#pressure-correction-compatibility" id="toc-pressure-correction-compatibility"><span class="toc-section-number">11.9</span> Pressure-Correction
-Compatibility</a></li>
-<li><a href="#a-one-dimensional-pressure-correction" id="toc-a-one-dimensional-pressure-correction"><span class="toc-section-number">11.10</span> A One-Dimensional Pressure
-Correction</a></li>
-<li><a href="#conservation-at-interfaces-and-refinement-boundaries" id="toc-conservation-at-interfaces-and-refinement-boundaries"><span class="toc-section-number">11.11</span> Conservation at Interfaces and
+<li><a href="#conservation-at-interfaces-and-refinement-boundaries" id="toc-conservation-at-interfaces-and-refinement-boundaries"><span class="toc-section-number">11.8</span> Conservation at Interfaces and
 Refinement Boundaries</a></li>
 </ul></li>
 <li><a href="#verification-and-validation" id="toc-verification-and-validation"><span class="toc-section-number">12</span> Verification and Validation</a>
@@ -821,42 +815,19 @@ Result</a></li>
 </ul></li>
 <li><a href="#common-modelling-failures" id="toc-common-modelling-failures"><span class="toc-section-number">14</span> Common Modelling Failures</a>
 <ul>
-<li><a href="#changing-assumptions-silently" id="toc-changing-assumptions-silently"><span class="toc-section-number">14.1</span> Changing Assumptions
-Silently</a></li>
-<li><a href="#confusing-local-and-mean-quantities" id="toc-confusing-local-and-mean-quantities"><span class="toc-section-number">14.2</span> Confusing Local and Mean
+<li><a href="#assumptions-and-comparison-quantities" id="toc-assumptions-and-comparison-quantities"><span class="toc-section-number">14.1</span> Assumptions and Comparison
 Quantities</a></li>
-<li><a href="#treating-a-correlation-as-a-law" id="toc-treating-a-correlation-as-a-law"><span class="toc-section-number">14.3</span> Treating a Correlation as a
-Law</a></li>
-<li><a href="#mistaking-solver-convergence-for-physical-adequacy" id="toc-mistaking-solver-convergence-for-physical-adequacy"><span class="toc-section-number">14.4</span> Mistaking Solver Convergence for
-Physical Adequacy</a></li>
-<li><a href="#overinterpreting-a-picture" id="toc-overinterpreting-a-picture"><span class="toc-section-number">14.5</span> Overinterpreting a
-Picture</a></li>
-<li><a href="#forgetting-the-reference-state" id="toc-forgetting-the-reference-state"><span class="toc-section-number">14.6</span> Forgetting the Reference
-State</a></li>
-<li><a href="#reporting-precision-unsupported-by-the-model" id="toc-reporting-precision-unsupported-by-the-model"><span class="toc-section-number">14.7</span> Reporting Precision Unsupported
-by the Model</a></li>
-<li><a href="#misreading-conservation-as-accuracy" id="toc-misreading-conservation-as-accuracy"><span class="toc-section-number">14.8</span> Misreading Conservation as
-Accuracy</a></li>
-<li><a href="#treating-software-defaults-as-physics" id="toc-treating-software-defaults-as-physics"><span class="toc-section-number">14.9</span> Treating Software Defaults as
-Physics</a></li>
+<li><a href="#interpreting-results-and-references" id="toc-interpreting-results-and-references"><span class="toc-section-number">14.2</span> Interpreting Results and
+References</a></li>
+<li><a href="#reporting-and-model-checks" id="toc-reporting-and-model-checks"><span class="toc-section-number">14.3</span> Reporting and Model
+Checks</a></li>
 </ul></li>
 <li><a href="#a-reproducible-flow-study-workflow" id="toc-a-reproducible-flow-study-workflow"><span class="toc-section-number">15</span> A Reproducible Flow-Study
 Workflow</a>
 <ul>
-<li><a href="#state-the-decision" id="toc-state-the-decision"><span class="toc-section-number">15.1</span> 1. State the Decision</a></li>
-<li><a href="#establish-a-baseline" id="toc-establish-a-baseline"><span class="toc-section-number">15.2</span> 2. Establish a Baseline</a></li>
-<li><a href="#write-the-model-ledger" id="toc-write-the-model-ledger"><span class="toc-section-number">15.3</span> 3. Write the Model
-Ledger</a></li>
-<li><a href="#build-the-smallest-verification-case" id="toc-build-the-smallest-verification-case"><span class="toc-section-number">15.4</span> 4. Build the Smallest
-Verification Case</a></li>
-<li><a href="#refine-and-perturb" id="toc-refine-and-perturb"><span class="toc-section-number">15.5</span> 5. Refine and Perturb</a></li>
-<li><a href="#compare-with-independent-evidence" id="toc-compare-with-independent-evidence"><span class="toc-section-number">15.6</span> 6. Compare with Independent
-Evidence</a></li>
-<li><a href="#report-the-boundary-of-the-claim" id="toc-report-the-boundary-of-the-claim"><span class="toc-section-number">15.7</span> 7. Report the Boundary of the
-Claim</a></li>
-<li><a href="#a-compact-handover-record" id="toc-a-compact-handover-record"><span class="toc-section-number">15.8</span> A Compact Handover
+<li><a href="#a-compact-handover-record" id="toc-a-compact-handover-record"><span class="toc-section-number">15.1</span> A Compact Handover
 Record</a></li>
-<li><a href="#a-review-meeting-in-questions" id="toc-a-review-meeting-in-questions"><span class="toc-section-number">15.9</span> A Review Meeting in
+<li><a href="#a-review-meeting-in-questions" id="toc-a-review-meeting-in-questions"><span class="toc-section-number">15.2</span> A Review Meeting in
 Questions</a></li>
 </ul></li>
 <li><a href="#measurements-and-model-comparison" id="toc-measurements-and-model-comparison"><span class="toc-section-number">16</span> Measurements and Model
@@ -865,17 +836,15 @@ Comparison</a>
 <li><a href="#sampling-and-averaging" id="toc-sampling-and-averaging"><span class="toc-section-number">16.1</span> Sampling and Averaging</a></li>
 <li><a href="#pressure-and-force-measurements" id="toc-pressure-and-force-measurements"><span class="toc-section-number">16.2</span> Pressure and Force
 Measurements</a></li>
-<li><a href="#design-of-a-comparison" id="toc-design-of-a-comparison"><span class="toc-section-number">16.3</span> Design of a Comparison</a></li>
+<li><a href="#designing-a-comparison-for-flow-models" id="toc-designing-a-comparison-for-flow-models"><span class="toc-section-number">16.3</span> Designing a Comparison for Flow
+Models</a></li>
 <li><a href="#uncertainty-budgets" id="toc-uncertainty-budgets"><span class="toc-section-number">16.4</span> Uncertainty Budgets</a></li>
 <li><a href="#reporting-a-negative-result" id="toc-reporting-a-negative-result"><span class="toc-section-number">16.5</span> Reporting a Negative
 Result</a></li>
-<li><a href="#experimental-design-for-flow-models" id="toc-experimental-design-for-flow-models"><span class="toc-section-number">16.6</span> Experimental Design for Flow
-Models</a></li>
-<li><a href="#dimensionless-comparison-of-data" id="toc-dimensionless-comparison-of-data"><span class="toc-section-number">16.7</span> Dimensionless Comparison of
+<li><a href="#dimensionless-comparison-of-data" id="toc-dimensionless-comparison-of-data"><span class="toc-section-number">16.6</span> Dimensionless Comparison of
 Data</a></li>
-<li><a href="#figures-as-evidence" id="toc-figures-as-evidence"><span class="toc-section-number">16.8</span> Figures as Evidence</a></li>
-<li><a href="#reading-a-contour-without-overclaiming" id="toc-reading-a-contour-without-overclaiming"><span class="toc-section-number">16.9</span> Reading a Contour Without
-Overclaiming</a></li>
+<li><a href="#figures-and-contours-as-evidence" id="toc-figures-and-contours-as-evidence"><span class="toc-section-number">16.7</span> Figures and Contours as
+Evidence</a></li>
 </ul></li>
 <li><a href="#computational-examples-and-evidence" id="toc-computational-examples-and-evidence"><span class="toc-section-number">17</span> Computational Examples and
 Evidence</a>
@@ -1426,6 +1395,13 @@ streaklines</figcaption>
 in an unsteady field. The source point shown here continuously emits the
 streakline, while the pathline follows one marked particle.</em></p>
 <h1 data-number="3" id="conservation-laws"><span class="header-section-number">3</span> Conservation Laws</h1>
+<p>Mass, momentum, and energy balances describe different quantities
+crossing the same chosen boundary. The local equations show how those
+quantities change at a point, while control-volume balances account for
+their accumulation, fluxes, and sources over a region. The following
+derivations use both views; each requires a stated system boundary,
+force or flux convention, and set of material assumptions before its
+result can be applied to a flow model.</p>
 <h2 data-number="3.1" id="mass-conservation"><span class="header-section-number">3.1</span> Mass Conservation</h2>
 <p>Mass conservation says that the mass of every material volume remains
 constant. Applying transport to a fixed control volume gives the
@@ -2211,7 +2187,8 @@ is a dimensionless reporting convention, not a material constant. The
 reference area, orientation, surface condition, and flow regime belong
 with the number. Comparing coefficients with different reference choices
 can create a false disagreement.</p>
-<h2 data-number="6.1" id="nondimensional-equations"><span class="header-section-number">6.1</span> Nondimensional Equations</h2>
+<h2 data-number="6.1" id="nondimensional-equations-and-model-tests"><span class="header-section-number">6.1</span> Nondimensional Equations and
+Model Tests</h2>
 <p>Nondimensionalisation is more than a way to produce a dimensionless
 number. It exposes which terms are small under a declared scaling and
 therefore makes a reduction auditable. Write</p>
@@ -2260,6 +2237,62 @@ inlet disturbance, compressibility, or surface condition does not
 guarantee dynamic similarity. Similarity is a statement about the
 complete nondimensional problem, not a licence to scale one reported
 number.</p>
+<p>Dimensionless numbers are not labels to attach after the calculation.
+Choose characteristic scales
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ρ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\rho_0</annotation></semantics></math>,
+and a pressure scale before nondimensionalising. With
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><mi>L</mi><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\mathbf{x}=L\mathbf{x}^*</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>L</mi><mi>/</mi><mi>U</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>t</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">t=(L/U)t^*</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒖</mi><mo>=</mo><mi>U</mi><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\mathbf{u}=U\mathbf{u}^*</annotation></semantics></math>,
+the incompressible momentum equation becomes, schematically,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup></mrow><mrow><mi>∂</mi><msup><mi>t</mi><mo>*</mo></msup></mrow></mfrac><mo>+</mo><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>⋅</mo><msup><mi>∇</mi><mo>*</mo></msup><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>=</mo><mi>−</mi><msup><mi>∇</mi><mo>*</mo></msup><msup><mi>p</mi><mo>*</mo></msup><mo>+</mo><mfrac><mn>1</mn><mrow><mi>R</mi><mi>e</mi></mrow></mfrac><msup><mi>∇</mi><mrow><mi>*</mi><mn>2</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>+</mo><mfrac><mn>1</mn><mrow><mi>F</mi><msup><mi>r</mi><mn>2</mn></msup></mrow></mfrac><msup><mi mathvariant="bold-italic">𝒃</mi><mo>*</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\frac{\partial\mathbf{u}^*}{\partial t^*}+\mathbf{u}^*\cdot\nabla^*\mathbf{u}^*
+=-\nabla^*p^*+\frac{1}{Re}\nabla^{*2}\mathbf{u}^*+\frac{1}{Fr^2}\mathbf{b}^*.
+</annotation></semantics></math></p>
+<p>The Reynolds number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><mo>=</mo><mi>U</mi><mi>L</mi><mi>/</mi><mi>ν</mi></mrow><annotation encoding="application/x-tex">Re=UL/\nu</annotation></semantics></math>
+compares inertia with viscous diffusion, while the Froude number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mi>r</mi><mo>=</mo><mi>U</mi><mi>/</mi><msqrt><mrow><mi>g</mi><mi>L</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">Fr=U/\sqrt{gL}</annotation></semantics></math>
+compares inertia with gravity. If the relevant motion is a
+small-amplitude wave,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+may be a wavelength rather than a device length. If the important length
+is a boundary-layer thickness, using the full apparatus length can
+obscure the dominant balance. A dimensionless group is meaningful only
+with its scale definitions.</p>
+<p>For free-surface problems, the Weber number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>e</mi><mo>=</mo><mi>ρ</mi><msup><mi>U</mi><mn>2</mn></msup><mi>L</mi><mi>/</mi><mi>γ</mi></mrow><annotation encoding="application/x-tex">We=\rho U^2L/\gamma</annotation></semantics></math>
+compares inertia with surface tension, where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+is interfacial tension. The capillary length
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mi>c</mi></msub><mo>=</mo><msqrt><mrow><mi>γ</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>ρ</mi><mi>g</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex">\ell_c=\sqrt{\gamma/(\rho g)}</annotation></semantics></math>
+separates gravity-dominated and surface-tension-dominated deformations.
+A Bond number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>o</mi><mo>=</mo><mi>ρ</mi><mi>g</mi><msup><mi>L</mi><mn>2</mn></msup><mi>/</mi><mi>γ</mi></mrow><annotation encoding="application/x-tex">Bo=\rho gL^2/\gamma</annotation></semantics></math>
+is equivalent to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>e</mi><mi>/</mi><mi>F</mi><msup><mi>r</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">We/Fr^2</annotation></semantics></math>
+under the same scales. These numbers help choose a free-surface model: a
+nearly flat interface with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>o</mi><mo>≫</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Bo\gg1</annotation></semantics></math>
+may support a gravity-led approximation, whereas a microfluidic meniscus
+can be controlled by capillarity even at modest speeds.</p>
+<p>The Strouhal number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mo>=</mo><mi>f</mi><mi>L</mi><mi>/</mi><mi>U</mi></mrow><annotation encoding="application/x-tex">St=fL/U</annotation></semantics></math>
+compares an imposed or observed oscillation frequency with the advection
+rate. A small
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">St</annotation></semantics></math>
+can support a quasi-steady approximation only if the other terms and
+boundary conditions are compatible. A large
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">St</annotation></semantics></math>
+does not automatically mean that advection is negligible; it says that
+unsteady change is rapid relative to the chosen advective scale. Always
+return to the dimensional terms after using a dimensionless number.
+“<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Re</annotation></semantics></math>
+is large” is incomplete unless the length, speed, property, and output
+affected by that statement are named.</p>
 <h2 data-number="6.2" id="transition-and-turbulence-as-a-boundary"><span class="header-section-number">6.2</span> Transition and Turbulence as a
 Boundary</h2>
 <p>At sufficiently high Reynolds number, disturbances can be amplified
@@ -2391,65 +2424,7 @@ regime where disturbances can matter, the result should be treated as a
 laminar lower-order baseline. A measured drag substantially above it
 would not be surprising and would not, by itself, identify the missing
 mechanism.</p>
-<h2 data-number="6.6" id="dimensionless-groups-as-model-tests"><span class="header-section-number">6.6</span> Dimensionless Groups as Model
-Tests</h2>
-<p>Dimensionless numbers are not labels to attach after the calculation.
-Choose characteristic scales
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ρ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\rho_0</annotation></semantics></math>,
-and a pressure scale before nondimensionalising. With
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><mi>L</mi><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\mathbf{x}=L\mathbf{x}^*</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>L</mi><mi>/</mi><mi>U</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>t</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">t=(L/U)t^*</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒖</mi><mo>=</mo><mi>U</mi><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\mathbf{u}=U\mathbf{u}^*</annotation></semantics></math>,
-the incompressible momentum equation becomes, schematically,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup></mrow><mrow><mi>∂</mi><msup><mi>t</mi><mo>*</mo></msup></mrow></mfrac><mo>+</mo><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>⋅</mo><msup><mi>∇</mi><mo>*</mo></msup><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>=</mo><mi>−</mi><msup><mi>∇</mi><mo>*</mo></msup><msup><mi>p</mi><mo>*</mo></msup><mo>+</mo><mfrac><mn>1</mn><mrow><mi>R</mi><mi>e</mi></mrow></mfrac><msup><mi>∇</mi><mrow><mi>*</mi><mn>2</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>+</mo><mfrac><mn>1</mn><mrow><mi>F</mi><msup><mi>r</mi><mn>2</mn></msup></mrow></mfrac><msup><mi mathvariant="bold-italic">𝒃</mi><mo>*</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
-\frac{\partial\mathbf{u}^*}{\partial t^*}+\mathbf{u}^*\cdot\nabla^*\mathbf{u}^*
-=-\nabla^*p^*+\frac{1}{Re}\nabla^{*2}\mathbf{u}^*+\frac{1}{Fr^2}\mathbf{b}^*.
-</annotation></semantics></math></p>
-<p>The Reynolds number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><mo>=</mo><mi>U</mi><mi>L</mi><mi>/</mi><mi>ν</mi></mrow><annotation encoding="application/x-tex">Re=UL/\nu</annotation></semantics></math>
-compares inertia with viscous diffusion, while the Froude number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mi>r</mi><mo>=</mo><mi>U</mi><mi>/</mi><msqrt><mrow><mi>g</mi><mi>L</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">Fr=U/\sqrt{gL}</annotation></semantics></math>
-compares inertia with gravity. If the relevant motion is a
-small-amplitude wave,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
-may be a wavelength rather than a device length. If the important length
-is a boundary-layer thickness, using the full apparatus length can
-obscure the dominant balance. A dimensionless group is meaningful only
-with its scale definitions.</p>
-<p>For free-surface problems, the Weber number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>e</mi><mo>=</mo><mi>ρ</mi><msup><mi>U</mi><mn>2</mn></msup><mi>L</mi><mi>/</mi><mi>γ</mi></mrow><annotation encoding="application/x-tex">We=\rho U^2L/\gamma</annotation></semantics></math>
-compares inertia with surface tension, where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
-is interfacial tension. The capillary length
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mi>c</mi></msub><mo>=</mo><msqrt><mrow><mi>γ</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>ρ</mi><mi>g</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex">\ell_c=\sqrt{\gamma/(\rho g)}</annotation></semantics></math>
-separates gravity-dominated and surface-tension-dominated deformations.
-A Bond number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>o</mi><mo>=</mo><mi>ρ</mi><mi>g</mi><msup><mi>L</mi><mn>2</mn></msup><mi>/</mi><mi>γ</mi></mrow><annotation encoding="application/x-tex">Bo=\rho gL^2/\gamma</annotation></semantics></math>
-is equivalent to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>e</mi><mi>/</mi><mi>F</mi><msup><mi>r</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">We/Fr^2</annotation></semantics></math>
-under the same scales. These numbers help choose a free-surface model: a
-nearly flat interface with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>o</mi><mo>≫</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Bo\gg1</annotation></semantics></math>
-may support a gravity-led approximation, whereas a microfluidic meniscus
-can be controlled by capillarity even at modest speeds.</p>
-<p>The Strouhal number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mo>=</mo><mi>f</mi><mi>L</mi><mi>/</mi><mi>U</mi></mrow><annotation encoding="application/x-tex">St=fL/U</annotation></semantics></math>
-compares an imposed or observed oscillation frequency with the advection
-rate. A small
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">St</annotation></semantics></math>
-can support a quasi-steady approximation only if the other terms and
-boundary conditions are compatible. A large
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">St</annotation></semantics></math>
-does not automatically mean that advection is negligible; it says that
-unsteady change is rapid relative to the chosen advective scale. Always
-return to the dimensional terms after using a dimensionless number.
-“<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Re</annotation></semantics></math>
-is large” is incomplete unless the length, speed, property, and output
-affected by that statement are named.</p>
-<h2 data-number="6.7" id="similarity-and-scaling-limits"><span class="header-section-number">6.7</span> Similarity and Scaling
+<h2 data-number="6.6" id="similarity-and-scaling-limits"><span class="header-section-number">6.6</span> Similarity and Scaling
 Limits</h2>
 <p>Two flows are dynamically similar when their nondimensional governing
 equations, geometry ratios, boundary conditions, and initial conditions
@@ -3497,7 +3472,56 @@ physical instability; it may be exposing an unremoved pressure gauge
 freedom. Conversely, arbitrarily pinning a pressure value at a boundary
 can alter the intended pressure-drop problem. State the gauge choice
 separately from physical pressure differences.</p>
-<h2 data-number="11.4" id="meshes-and-geometry"><span class="header-section-number">11.4</span> Meshes and Geometry</h2>
+<p>The pressure Poisson equation in an incompressible projection method
+has a solvability condition. The prescribed normal fluxes and volume
+sources must be compatible with zero net volume accumulation in a closed
+domain. If the inlet flow rate exceeds the outlet flow rate in an
+incompressible fixed-volume domain, no pressure field can make the
+velocity divergence-free without an additional storage or
+compressibility mechanism. A linear solver may expose this as a singular
+or inconsistent system, but the underlying issue is physical
+compatibility.</p>
+<p>The pressure correction also depends on the discrete boundary
+treatment. A Neumann condition derived from a wall-normal velocity is
+not the same as imposing a static pressure. At a periodic boundary,
+pressure differences and velocity fluxes must be paired consistently;
+otherwise the pressure null space can be disturbed. Check the net
+corrected flux after the pressure solve rather than relying only on the
+linear residual.</p>
+<p>Checkerboard pressure modes illustrate a different failure. On some
+collocated arrangements, pressure values can oscillate between
+neighbouring cells while producing weakly coupled face velocities. The
+resulting pressure contour may look structured, but the mass flux is
+wrong. Face interpolation or a staggered arrangement should be chosen
+with this coupling in mind. A pressure visualisation is not a substitute
+for a discrete divergence norm.</p>
+<p>A minimal pressure-correction example makes the compatibility
+condition concrete. Suppose two equal cells have a tentative face flux
+of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">+2</annotation></semantics></math>
+at the internal face, an inlet flux of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">+1</annotation></semantics></math>,
+and an outlet flux of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">+3</annotation></semantics></math>,
+with outward flux positive. The tentative cell balances are not both
+zero: the pressure correction must alter the internal and boundary face
+fluxes so that each cell has zero net accumulation. If the inlet and
+outlet are instead both
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">+2</annotation></semantics></math>,
+the total boundary flux is compatible with a closed incompressible
+domain and the correction can redistribute flux internally without
+changing the domain volume.</p>
+<p>In a real discretisation the correction comes from a pressure
+equation assembled from the discrete divergence and gradient. The
+pressure is determined only up to a constant, so one cell value or the
+domain mean must be fixed. The important diagnostic is not the absolute
+corrected pressure but the residual net flux and the cellwise
+divergence. If the boundary fluxes imply a net volume increase in a
+fixed domain, no pressure gauge choice can make the system compatible;
+the model needs storage, a moving boundary, compressibility, or
+corrected boundary data.</p>
+<h2 data-number="11.4" id="meshes-geometry-and-resolution"><span class="header-section-number">11.4</span> Meshes, Geometry, and
+Resolution</h2>
 <p>The grid is part of the numerical model. A mesh must resolve the
 scales relevant to the requested output: a wall shear stress needs
 near-wall gradients, while a bulk flow rate may tolerate a coarser
@@ -3521,8 +3545,6 @@ streamline plot is not a universal benchmark. A periodic scalar
 advection example is less visually impressive but makes conservation and
 convergence easier to measure. Choose examples for the evidence they can
 support, not for the complexity of their pictures.</p>
-<h2 data-number="11.5" id="mesh-quality-and-resolution"><span class="header-section-number">11.5</span> Mesh Quality and
-Resolution</h2>
 <p>Mesh quality is more than cell count. Skewness, aspect ratio,
 non-orthogonality, abrupt size changes, and alignment with a boundary
 layer affect the accuracy and stability of flux approximations. A
@@ -3543,7 +3565,7 @@ recirculation region. A periodic direction that is too short can force
 coherent structures to interact with their own copies. Increase the
 domain as a sensitivity test when the quantity of interest depends on an
 outer boundary or a long downstream development region.</p>
-<h2 data-number="11.6" id="boundary-conditions-in-a-discrete-balance"><span class="header-section-number">11.6</span> Boundary Conditions in a
+<h2 data-number="11.5" id="boundary-conditions-in-a-discrete-balance"><span class="header-section-number">11.5</span> Boundary Conditions in a
 Discrete Balance</h2>
 <p>A boundary condition is implemented through a numerical flux, not
 merely by assigning a value to the nearest cell. For a scalar Dirichlet
@@ -3569,7 +3591,7 @@ remain constant. With a prescribed inflow and a passive scalar, the
 inflow value should influence the interior only after the expected
 transport time. These tests are more diagnostic than immediately running
 a complicated geometry.</p>
-<h2 data-number="11.7" id="a-minimal-finite-volume-update"><span class="header-section-number">11.7</span> A Minimal Finite-Volume
+<h2 data-number="11.6" id="a-minimal-finite-volume-update"><span class="header-section-number">11.6</span> A Minimal Finite-Volume
 Update</h2>
 <p>For a one-dimensional conservation law on cells of width
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta x</annotation></semantics></math>,
@@ -3602,7 +3624,7 @@ truncation error and stability behaviour. The right comparison is not
 “upwind versus centred” in the abstract; it is the measured
 conservation, boundedness, phase error, and convergence of the complete
 update under the stated boundary and time-step choices.</p>
-<h2 data-number="11.8" id="solvers-residuals-and-stopping-rules"><span class="header-section-number">11.8</span> Solvers, Residuals, and
+<h2 data-number="11.7" id="solvers-residuals-and-stopping-rules"><span class="header-section-number">11.7</span> Solvers, Residuals, and
 Stopping Rules</h2>
 <p>Coupled flow calculations often contain linear systems from
 diffusion, pressure, or implicit time integration. An iterative solver
@@ -3627,60 +3649,8 @@ unnecessary, while a residual that allows a ten percent mass imbalance
 is unacceptable. Perform a tolerance perturbation on at least one
 representative case and include the result in the verification
 record.</p>
-<h2 data-number="11.9" id="pressure-correction-compatibility"><span class="header-section-number">11.9</span> Pressure-Correction
-Compatibility</h2>
-<p>The pressure Poisson equation in an incompressible projection method
-has a solvability condition. The prescribed normal fluxes and volume
-sources must be compatible with zero net volume accumulation in a closed
-domain. If the inlet flow rate exceeds the outlet flow rate in an
-incompressible fixed-volume domain, no pressure field can make the
-velocity divergence-free without an additional storage or
-compressibility mechanism. A linear solver may expose this as a singular
-or inconsistent system, but the underlying issue is physical
-compatibility.</p>
-<p>The pressure correction also depends on the discrete boundary
-treatment. A Neumann condition derived from a wall-normal velocity is
-not the same as imposing a static pressure. At a periodic boundary,
-pressure differences and velocity fluxes must be paired consistently;
-otherwise the pressure null space can be disturbed. Check the net
-corrected flux after the pressure solve rather than relying only on the
-linear residual.</p>
-<p>Checkerboard pressure modes illustrate a different failure. On some
-collocated arrangements, pressure values can oscillate between
-neighbouring cells while producing weakly coupled face velocities. The
-resulting pressure contour may look structured, but the mass flux is
-wrong. Face interpolation or a staggered arrangement should be chosen
-with this coupling in mind. A pressure visualisation is not a substitute
-for a discrete divergence norm.</p>
-<h2 data-number="11.10" id="a-one-dimensional-pressure-correction"><span class="header-section-number">11.10</span> A One-Dimensional Pressure
-Correction</h2>
-<p>A minimal pressure-correction example makes the compatibility
-condition concrete. Suppose two equal cells have a tentative face flux
-of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">+2</annotation></semantics></math>
-at the internal face, an inlet flux of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">+1</annotation></semantics></math>,
-and an outlet flux of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">+3</annotation></semantics></math>,
-with outward flux positive. The tentative cell balances are not both
-zero: the pressure correction must alter the internal and boundary face
-fluxes so that each cell has zero net accumulation. If the inlet and
-outlet are instead both
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">+2</annotation></semantics></math>,
-the total boundary flux is compatible with a closed incompressible
-domain and the correction can redistribute flux internally without
-changing the domain volume.</p>
-<p>In a real discretisation the correction comes from a pressure
-equation assembled from the discrete divergence and gradient. The
-pressure is determined only up to a constant, so one cell value or the
-domain mean must be fixed. The important diagnostic is not the absolute
-corrected pressure but the residual net flux and the cellwise
-divergence. If the boundary fluxes imply a net volume increase in a
-fixed domain, no pressure gauge choice can make the system compatible;
-the model needs storage, a moving boundary, compressibility, or
-corrected boundary data.</p>
-<h2 data-number="11.11" id="conservation-at-interfaces-and-refinement-boundaries"><span class="header-section-number">11.11</span> Conservation at Interfaces
-and Refinement Boundaries</h2>
+<h2 data-number="11.8" id="conservation-at-interfaces-and-refinement-boundaries"><span class="header-section-number">11.8</span> Conservation at Interfaces and
+Refinement Boundaries</h2>
 <p>A mesh with local refinement has faces between cells of different
 size. The numerical flux across that interface must be single-valued and
 the area-weighted contribution must cancel in the neighbouring control
@@ -4083,62 +4053,60 @@ piece of work.</p>
 <p>Fluid calculations often fail through small inconsistencies rather
 than through an inability to solve a difficult equation. A review should
 look for the following patterns.</p>
-<h2 data-number="14.1" id="changing-assumptions-silently"><span class="header-section-number">14.1</span> Changing Assumptions
-Silently</h2>
-<p>An argument may begin with an incompressible fluid, use a
-constant-density continuity equation, introduce an ideal-gas sound
-speed, and end with a compressible pressure ratio without identifying
-the transition. Each formula can be correct in its own setting while the
-chain is incoherent. Mark the boundary between models and repeat the
-inputs that change. The same applies to viscosity: a property held
-constant in a laminar benchmark cannot silently become a
-temperature-dependent quantity in a later comparison.</p>
-<h2 data-number="14.2" id="confusing-local-and-mean-quantities"><span class="header-section-number">14.2</span> Confusing Local and Mean
+<h2 data-number="14.1" id="assumptions-and-comparison-quantities"><span class="header-section-number">14.1</span> Assumptions and Comparison
 Quantities</h2>
-<p>Centreline velocity, bulk velocity, area-averaged velocity,
-mass-averaged velocity, and a sensor reading are different quantities. A
-pressure gradient can be uniform while the velocity profile is not. A
-simulation may report a cell-centre value where an experiment reports an
-average over a finite probe. Define the averaging operator and use the
-same operator in the comparison.</p>
-<h2 data-number="14.3" id="treating-a-correlation-as-a-law"><span class="header-section-number">14.3</span> Treating a Correlation as a
-Law</h2>
-<p>A friction factor, drag coefficient, or heat-transfer correlation
-summarises data and assumptions over a range of regimes. It is not a
-conservation law. Check its geometry, roughness, property range,
-reference length, transition range, and uncertainty. If it is used
-outside its documented range, label the result as an extrapolation and
-test sensitivity to the choice.</p>
-<h2 data-number="14.4" id="mistaking-solver-convergence-for-physical-adequacy"><span class="header-section-number">14.4</span> Mistaking Solver Convergence
-for Physical Adequacy</h2>
-<p>Reducing a nonlinear residual proves only that the discrete equations
+<p><strong>Changing Assumptions Silently:</strong> An argument may begin
+with an incompressible fluid, use a constant-density continuity
+equation, introduce an ideal-gas sound speed, and end with a
+compressible pressure ratio without identifying the transition. Each
+formula can be correct in its own setting while the chain is incoherent.
+Mark the boundary between models and repeat the inputs that change. The
+same applies to viscosity: a property held constant in a laminar
+benchmark cannot silently become a temperature-dependent quantity in a
+later comparison.</p>
+<p><strong>Confusing Local and Mean Quantities:</strong> Centreline
+velocity, bulk velocity, area-averaged velocity, mass-averaged velocity,
+and a sensor reading are different quantities. A pressure gradient can
+be uniform while the velocity profile is not. A simulation may report a
+cell-centre value where an experiment reports an average over a finite
+probe. Define the averaging operator and use the same operator in the
+comparison.</p>
+<p><strong>Treating a Correlation as a Law:</strong> A friction factor,
+drag coefficient, or heat-transfer correlation summarises data and
+assumptions over a range of regimes. It is not a conservation law. Check
+its geometry, roughness, property range, reference length, transition
+range, and uncertainty. If it is used outside its documented range,
+label the result as an extrapolation and test sensitivity to the
+choice.</p>
+<h2 data-number="14.2" id="interpreting-results-and-references"><span class="header-section-number">14.2</span> Interpreting Results and
+References</h2>
+<p><strong>Mistaking Solver Convergence for Physical Adequacy:</strong>
+Reducing a nonlinear residual proves only that the discrete equations
 have been approached under the selected algorithm and stopping rule. It
 does not prove that the mesh resolves the wall, the time interval is
 long enough, the boundary condition is realistic, or the turbulence
 closure is appropriate. Report both solver convergence and model
 evidence.</p>
-<h2 data-number="14.5" id="overinterpreting-a-picture"><span class="header-section-number">14.5</span> Overinterpreting a
-Picture</h2>
-<p>Streamlines, contours, and animations are useful ways to inspect a
-field, but colour scales can hide conservation errors and interpolation
-can create visual smoothness. Every important picture should have a
-numerical companion: a balance, an integral quantity, a reference
-solution, or a measured comparison. Use a fixed scale when comparing
-cases and state whether the field is instantaneous, time averaged, or
-ensemble averaged.</p>
-<h2 data-number="14.6" id="forgetting-the-reference-state"><span class="header-section-number">14.6</span> Forgetting the Reference
-State</h2>
-<p>Pressure is often defined up to a constant in an incompressible
-calculation, while pressure differences drive many decisions. Gauge and
-absolute pressure are not interchangeable in a compressible or
-cavitating problem. Likewise, potential energy depends on a selected
-datum even though a difference is observable. State the reference and
-compare invariant differences where possible.</p>
-<h2 data-number="14.7" id="reporting-precision-unsupported-by-the-model"><span class="header-section-number">14.7</span> Reporting Precision
-Unsupported by the Model</h2>
-<p>If viscosity is known to two significant figures and the inlet flow
-rate is uncertain by several per cent, printing a pressure drop to
-twelve decimal places is presentation rather than information. Numerical
+<p><strong>Overinterpreting a Picture:</strong> Streamlines, contours,
+and animations are useful ways to inspect a field, but colour scales can
+hide conservation errors and interpolation can create visual smoothness.
+Every important picture should have a numerical companion: a balance, an
+integral quantity, a reference solution, or a measured comparison. Use a
+fixed scale when comparing cases and state whether the field is
+instantaneous, time averaged, or ensemble averaged.</p>
+<p><strong>Forgetting the Reference State:</strong> Pressure is often
+defined up to a constant in an incompressible calculation, while
+pressure differences drive many decisions. Gauge and absolute pressure
+are not interchangeable in a compressible or cavitating problem.
+Likewise, potential energy depends on a selected datum even though a
+difference is observable. State the reference and compare invariant
+differences where possible.</p>
+<h2 data-number="14.3" id="reporting-and-model-checks"><span class="header-section-number">14.3</span> Reporting and Model
+Checks</h2>
+<p><strong>Reporting Precision Unsupported by the Model:</strong> If
+viscosity is known to two significant figures and the inlet flow rate is
+uncertain by several per cent, printing a pressure drop to twelve
+decimal places is presentation rather than information. Numerical
 tolerances should be tighter than the accuracy needed to distinguish
 decisions, but output precision should reflect input and model
 uncertainty. A precise numerical solution of an uncertain model is not a
@@ -4149,19 +4117,17 @@ it, and whether the current result remains useful as a bounded baseline.
 “The CFD is inaccurate” is less useful than “the grid is adequate for
 flow rate but not for wall shear, so the pressure result is retained and
 the shear claim is withdrawn”.</p>
-<h2 data-number="14.8" id="misreading-conservation-as-accuracy"><span class="header-section-number">14.8</span> Misreading Conservation as
-Accuracy</h2>
-<p>Conservation is necessary for a trustworthy flow calculation, but it
-is not sufficient. A conservative scheme can preserve total mass while
-using an incorrect wall flux, excessive numerical diffusion, or an
-invalid equation of state. Pair global balances with an independent
-solution, refinement, limiting-case tests, and a physical measurement
-where relevant. If only one check can be run, choose the one tied most
-directly to the decision and state what it leaves untested.</p>
-<h2 data-number="14.9" id="treating-software-defaults-as-physics"><span class="header-section-number">14.9</span> Treating Software Defaults as
-Physics</h2>
-<p>Solver defaults can select a turbulence closure, pressure reference,
-wall function, limiter, property correlation, or convergence criterion
+<p><strong>Misreading Conservation as Accuracy:</strong> Conservation is
+necessary for a trustworthy flow calculation, but it is not sufficient.
+A conservative scheme can preserve total mass while using an incorrect
+wall flux, excessive numerical diffusion, or an invalid equation of
+state. Pair global balances with an independent solution, refinement,
+limiting-case tests, and a physical measurement where relevant. If only
+one check can be run, choose the one tied most directly to the decision
+and state what it leaves untested.</p>
+<p><strong>Treating Software Defaults as Physics:</strong> Solver
+defaults can select a turbulence closure, pressure reference, wall
+function, limiter, property correlation, or convergence criterion
 without making the choice visible in the report. Defaults are convenient
 for exploration, not a substitute for a model ledger. Record the
 version, selected schemes, boundary conditions, and tolerances. When a
@@ -4172,66 +4138,63 @@ Workflow</h1>
 <p>The equations and code are only one part of a defensible flow study.
 A reproducible workflow keeps the physical question, numerical model,
 evidence, and reported decision connected.</p>
-<h2 data-number="15.1" id="state-the-decision"><span class="header-section-number">15.1</span> 1. State the Decision</h2>
-<p>Write the output in a form that can be checked: pressure drop below a
-limit, mean temperature at a location, time to fill a volume, or a
-qualitative question such as whether separation occurs before a sensor.
-State the operating range and what would count as a materially different
-answer. This prevents a study from expanding into a general-purpose
-simulation without a decision criterion.</p>
-<h2 data-number="15.2" id="establish-a-baseline"><span class="header-section-number">15.2</span> 2. Establish a Baseline</h2>
-<p>Use a dimensional estimate, conservation balance, correlation, or
-analytical solution before opening a solver. Calculate characteristic
-scales and dimensionless groups. The baseline provides an
-order-of-magnitude check and often reveals that a complex calculation is
-unnecessary. If a later result differs by three orders of magnitude,
-investigate units, reference areas, pressure gauges, and geometry before
-attributing the difference to an interesting physical effect.</p>
-<h2 data-number="15.3" id="write-the-model-ledger"><span class="header-section-number">15.3</span> 3. Write the Model Ledger</h2>
-<p>Record the equations, properties, geometry, dimensionality, boundary
-and initial conditions, sources, and outputs. Mark assumptions as
-measured, supplied by a standard, inferred, or provisional. A
-provisional assumption is not a weakness when it is visible; an
-invisible assumption is difficult to challenge and impossible to
-audit.</p>
-<h2 data-number="15.4" id="build-the-smallest-verification-case"><span class="header-section-number">15.4</span> 4. Build the Smallest
-Verification Case</h2>
-<p>Start with a geometry and forcing that has a reference solution or a
-simple global balance. Exercise one new feature at a time: first an
-interior flux, then a wall, then a source, then a variable property or
-complex geometry. Keep the case deterministic and cheap enough to run
-after every code change. The first objective is not a realistic picture
-but a trustworthy balance.</p>
-<h2 data-number="15.5" id="refine-and-perturb"><span class="header-section-number">15.5</span> 5. Refine and Perturb</h2>
-<p>Vary the grid, time step, solver tolerance, and important physical
-inputs separately. Compare the requested output and diagnostic
-quantities. A grid refinement that changes the answer is information:
-the current result is not resolution-independent. A parameter
-perturbation that changes the answer more than numerical refinement
-identifies a physical input that deserves measurement or uncertainty
-analysis.</p>
-<h2 data-number="15.6" id="compare-with-independent-evidence"><span class="header-section-number">15.6</span> 6. Compare with Independent
-Evidence</h2>
-<p>Use a second implementation, an analytical solution, a manufactured
-solution, a benchmark, or measurements. Independence matters. Comparing
-two programs that share the same discretisation mistake is weaker than
-comparing one program with a derivation based on a different method.
-Explain what the comparison tests and what it cannot test.</p>
-<h2 data-number="15.7" id="report-the-boundary-of-the-claim"><span class="header-section-number">15.7</span> 7. Report the Boundary of the
-Claim</h2>
-<p>The final report should state the model, result, uncertainty,
-verification evidence, validation evidence, and excluded mechanisms. A
-useful conclusion has the form: under assumptions A–D, the computed
-quantity is X with numerical sensitivity Y; the result has been verified
-against Z; physical validation remains open because Q was not measured.
-This is more valuable than a single high-resolution image with no
-statement of scope.</p>
+<ol type="1">
+<li><p><strong>State the Decision.</strong> Write the output in a form
+that can be checked: pressure drop below a limit, mean temperature at a
+location, time to fill a volume, or a qualitative question such as
+whether separation occurs before a sensor. State the operating range and
+what would count as a materially different answer. This prevents a study
+from expanding into a general-purpose simulation without a decision
+criterion.</p></li>
+<li><p><strong>Establish a Baseline.</strong> Use a dimensional
+estimate, conservation balance, correlation, or analytical solution
+before opening a solver. Calculate characteristic scales and
+dimensionless groups. The baseline provides an order-of-magnitude check
+and often reveals that a complex calculation is unnecessary. If a later
+result differs by three orders of magnitude, investigate units,
+reference areas, pressure gauges, and geometry before attributing the
+difference to an interesting physical effect.</p></li>
+<li><p><strong>Write the Model Ledger.</strong> Record the equations,
+properties, geometry, dimensionality, boundary and initial conditions,
+sources, and outputs. Mark assumptions as measured, supplied by a
+standard, inferred, or provisional. A provisional assumption is not a
+weakness when it is visible; an invisible assumption is difficult to
+challenge and impossible to audit.</p></li>
+<li><p><strong>Build the Smallest Verification Case.</strong> Start with
+a geometry and forcing that has a reference solution or a simple global
+balance. Exercise one new feature at a time: first an interior flux,
+then a wall, then a source, then a variable property or complex
+geometry. Keep the case deterministic and cheap enough to run after
+every code change. The first objective is not a realistic picture but a
+trustworthy balance.</p></li>
+<li><p><strong>Refine and Perturb.</strong> Vary the grid, time step,
+solver tolerance, and important physical inputs separately. Compare the
+requested output and diagnostic quantities. A grid refinement that
+changes the answer is information: the current result is not
+resolution-independent. A parameter perturbation that changes the answer
+more than numerical refinement identifies a physical input that deserves
+measurement or uncertainty analysis.</p></li>
+<li><p><strong>Compare with Independent Evidence.</strong> Use a second
+implementation, an analytical solution, a manufactured solution, a
+benchmark, or measurements. Independence matters. Comparing two programs
+that share the same discretisation mistake is weaker than comparing one
+program with a derivation based on a different method. Explain what the
+comparison tests and what it cannot test.</p></li>
+<li><p><strong>Report the Boundary of the Claim.</strong> The final
+report should state the model, result, uncertainty, verification
+evidence, validation evidence, and excluded mechanisms. A useful
+conclusion has the form: under assumptions A–D, the computed quantity is
+X with numerical sensitivity Y; the result has been verified against Z;
+physical validation remains open because Q was not measured. This is
+more valuable than a single high-resolution image with no statement of
+scope.</p></li>
+</ol>
 <p>The workflow is iterative. A failed check may require a new boundary
 condition, a different constitutive law, or a narrower claim rather than
 a smaller residual tolerance. Keeping the record of those decisions
 makes the calculation reusable and prevents the same modelling error
 from being rediscovered in a later project.</p>
-<h2 data-number="15.8" id="a-compact-handover-record"><span class="header-section-number">15.8</span> A Compact Handover Record</h2>
+<h2 data-number="15.1" id="a-compact-handover-record"><span class="header-section-number">15.1</span> A Compact Handover Record</h2>
 <p>At the end of a study, a second person should be able to reproduce
 the result without a conversation with the original analyst. The
 handover should contain the repository or project revision, command used
@@ -4252,7 +4215,7 @@ condition, or new measurement should be traceable. Do not overwrite a
 baseline merely because the new result looks better. The comparison
 between old and new outputs can reveal which assumption was controlling
 the earlier conclusion.</p>
-<h2 data-number="15.9" id="a-review-meeting-in-questions"><span class="header-section-number">15.9</span> A Review Meeting in
+<h2 data-number="15.2" id="a-review-meeting-in-questions"><span class="header-section-number">15.2</span> A Review Meeting in
 Questions</h2>
 <p>An effective technical review can be structured as questions. What
 exactly is the quantity of interest? What is the control volume? Which
@@ -4310,7 +4273,8 @@ are not automatically equivalent in practice because the measurement
 surfaces and unmeasured supports differ. A validation plan should state
 which force definition is being compared and how omitted surfaces are
 handled.</p>
-<h2 data-number="16.3" id="design-of-a-comparison"><span class="header-section-number">16.3</span> Design of a Comparison</h2>
+<h2 data-number="16.3" id="designing-a-comparison-for-flow-models"><span class="header-section-number">16.3</span> Designing a Comparison for
+Flow Models</h2>
 <p>Choose comparison cases that vary the mechanism being tested. One
 operating point can show agreement by accident. A small matrix of
 speeds, viscosities, pressure gradients, or geometries can expose an
@@ -4330,6 +4294,29 @@ observation. A disagreement can identify a missing wall condition, a
 property error, three-dimensional flow, an unsteady regime, or an
 instrument bias. The useful outcome is a revised model ledger and a
 clearer claim about which physical mechanism has been tested.</p>
+<p>An experiment should be designed around the model discrepancy it is
+intended to resolve. If the uncertainty is whether the straight-channel
+relation applies, measure pressure at several streamwise stations rather
+than only at the inlet and outlet. A linear pressure trend supports a
+fully developed segment; curvature or local jumps identify entrance,
+fitting, or separation effects. If the uncertainty is the velocity
+profile, a bulk flow meter is insufficient because many profiles can
+have the same integral flow rate.</p>
+<p>Vary one controlling scale at a time where possible. Changing speed
+changes Reynolds number, dynamic pressure, residence time, and often the
+measurement signal. Changing fluid viscosity can separate viscous
+scaling from inertial scaling but may also change wetting and
+temperature. A design matrix should list the intended variation and the
+mechanisms it changes. Replicates at one condition estimate
+repeatability; they do not establish the trend across conditions.</p>
+<p>Instrument placement should be part of the model. A pressure tap near
+a contraction measures a local pressure affected by gradients and
+possibly separation. A velocity probe has a finite sensing volume and
+can disturb a small flow. Optical methods require seeding, illumination,
+and image-correlation assumptions. Document the coordinate transform and
+filtering used to turn raw data into the compared quantity. If
+preprocessing removes fluctuations, the simulation should be averaged or
+filtered in a comparable way.</p>
 <h2 data-number="16.4" id="uncertainty-budgets"><span class="header-section-number">16.4</span> Uncertainty Budgets</h2>
 <p>An uncertainty budget lists the inputs and modelling choices that can
 move the output. For the plane-channel estimate, viscosity, gap, length,
@@ -4375,32 +4362,7 @@ inertial or roughness effect; a constant offset may indicate a pressure
 reference or calibration issue. The next action should follow the
 residual pattern rather than the desire to make the plot look
 closer.</p>
-<h2 data-number="16.6" id="experimental-design-for-flow-models"><span class="header-section-number">16.6</span> Experimental Design for Flow
-Models</h2>
-<p>An experiment should be designed around the model discrepancy it is
-intended to resolve. If the uncertainty is whether the straight-channel
-relation applies, measure pressure at several streamwise stations rather
-than only at the inlet and outlet. A linear pressure trend supports a
-fully developed segment; curvature or local jumps identify entrance,
-fitting, or separation effects. If the uncertainty is the velocity
-profile, a bulk flow meter is insufficient because many profiles can
-have the same integral flow rate.</p>
-<p>Vary one controlling scale at a time where possible. Changing speed
-changes Reynolds number, dynamic pressure, residence time, and often the
-measurement signal. Changing fluid viscosity can separate viscous
-scaling from inertial scaling but may also change wetting and
-temperature. A design matrix should list the intended variation and the
-mechanisms it changes. Replicates at one condition estimate
-repeatability; they do not establish the trend across conditions.</p>
-<p>Instrument placement should be part of the model. A pressure tap near
-a contraction measures a local pressure affected by gradients and
-possibly separation. A velocity probe has a finite sensing volume and
-can disturb a small flow. Optical methods require seeding, illumination,
-and image-correlation assumptions. Document the coordinate transform and
-filtering used to turn raw data into the compared quantity. If
-preprocessing removes fluctuations, the simulation should be averaged or
-filtered in a comparable way.</p>
-<h2 data-number="16.7" id="dimensionless-comparison-of-data"><span class="header-section-number">16.7</span> Dimensionless Comparison of
+<h2 data-number="16.6" id="dimensionless-comparison-of-data"><span class="header-section-number">16.6</span> Dimensionless Comparison of
 Data</h2>
 <p>Plotting dimensional data can hide similarity. If pressure drop is
 expected to scale with
@@ -4418,7 +4380,8 @@ random agreement. Also inspect residuals against the instrument
 uncertainty: if the trend is smaller than the uncertainty, it may not
 affect the decision; if it is larger, the model or experiment needs
 attention.</p>
-<h2 data-number="16.8" id="figures-as-evidence"><span class="header-section-number">16.8</span> Figures as Evidence</h2>
+<h2 data-number="16.7" id="figures-and-contours-as-evidence"><span class="header-section-number">16.7</span> Figures and Contours as
+Evidence</h2>
 <p>A figure should answer a question stated in its caption. A
 velocity-profile plot can show whether a boundary condition and shape
 are plausible; it cannot show that the pressure gradient has the right
@@ -4440,8 +4403,6 @@ equation, input, or plotting convention can be reviewed and rerun. The
 figures are intentionally modest. A clean profile, pressure baseline, or
 refinement curve often carries more diagnostic information than a
 photorealistic flow rendering with no reference quantity.</p>
-<h2 data-number="16.9" id="reading-a-contour-without-overclaiming"><span class="header-section-number">16.9</span> Reading a Contour Without
-Overclaiming</h2>
 <p>Contours are useful for locating gradients, recirculation, fronts,
 and approximate symmetry. They are also easy to misread. Interpolation
 can create extrema between cells, a nonlinear colour scale can hide sign
