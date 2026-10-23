@@ -3,10 +3,10 @@ PROJECT_DIR := "primer_fluid_mechanics"
 TITLE       := "Fluid Mechanics: From Conservation Laws to Verified Flow Models"
 AUTHOR      := "Mick Cooney"
 DATE        := "23 October 2026"
-HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
 
-# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# The shared build emits MathML and MathJax variants when mathvariants=true.
 # Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
 # MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
 
@@ -18,6 +18,6 @@ plots:
     {{ROCKER}} \
     Rscript generate_plots.R
 
-full: plots html pdf
+full: plots html-variants html pdf
 
 import '../_shared/common.just'
