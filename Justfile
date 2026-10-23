@@ -74,6 +74,10 @@ check-meta:
 check-variants:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py variants
 
+# Report H2 sections whose first H3 appears before any prose; editorial, advisory check.
+check-structure:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py structure
+
 check-mermaid:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py mermaid
 
