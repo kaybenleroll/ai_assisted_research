@@ -74,6 +74,10 @@ check-meta:
 check-variants:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py variants
 
+# Report H2 sections whose first H3 appears before any prose; editorial, advisory check.
+check-structure:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py structure
+
 check-mermaid:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py mermaid
 
@@ -181,6 +185,15 @@ numerical-html:
 
 numerical-all:
   cd primer_numerical_analysis && just full
+
+fluid-mechanics-html:
+  cd primer_fluid_mechanics && just html
+
+fluid-mechanics-pdf:
+  cd primer_fluid_mechanics && just pdf
+
+fluid-mechanics-all:
+  cd primer_fluid_mechanics && just full
 
 ml-optimisation-html:
   cd primer_ml_optimisation && just html
@@ -354,17 +367,18 @@ retrieval-rag-all:
   cd primer_retrieval_rag && just all
 
 # Common daily build across active document projects
-html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
+html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
   cd primer_building_ai_agents && just clobber
   cd primer_political_systems && just clobber
   cd primer_numerical_analysis && just clobber
+  cd primer_fluid_mechanics && just clobber
   cd primer_ml_optimisation && just clobber
   cd primer_openclaw && just clobber
   cd primer_hermes_server && just clobber
