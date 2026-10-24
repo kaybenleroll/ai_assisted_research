@@ -23,6 +23,8 @@ RENDER_RE = re.compile(r'([\w.-]+\.md)\s+-o\s+([\w.-]+\.html)')
 META_RE = re.compile(r'--metadata\s+(title|author|date)="([^"]*)"')
 FENCE_RE = re.compile(r'^ {0,3}(`{3,}|~{3,})(.*)$')
 RAW_MERMAID_RE = re.compile(r'graph (?:LR|TB)|subgraph|stroke-dasharray|\{\.mermaid\}')
+HEADING_RE = re.compile(r'^ {0,3}(#{1,6})(?:[ \t]+|$)(.*)$')
+NAVIGATION_ONLY = '<!-- check-structure: navigation-only -->'
 
 
 @dataclass(frozen=True)
@@ -93,6 +95,99 @@ def first_h1(source):
         if kind == "text" and line.startswith("# "):
             return re.sub(r"\s+#+\s*$", "", line[2:]).strip()
     return None
+
+
+def without_comments(line, in_comment):
+    """Remove HTML comments, including comments spanning source lines."""
+    visible = []
+    position = 0
+    while position < len(line):
+        if in_comment:
+            end = line.find('-->', position)
+            if end < 0:
+                return ''.join(visible), True
+            position = end + 3
+            in_comment = False
+        else:
+            start = line.find('<!--', position)
+            if start < 0:
+                visible.append(line[position:])
+                break
+            visible.append(line[position:start])
+            position = start + 4
+            in_comment = True
+    return ''.join(visible), in_comment
+
+
+def is_prose_line(line):
+    """Recognise ordinary paragraph text, not other Markdown block types."""
+    stripped = line.strip()
+    if not stripped or re.match(r'(?:[-*+]\s|\d+[.)]\s|>|\||:::|\$\$|\\\[|!\[|<|(?:---+|___+|\*\*\*+)\s*$)', stripped):
+        return False
+    if re.fullmatch(r'\[[^]]+\]\([^)]+\)', stripped):
+        return False
+    return bool(re.search(r'[A-Za-z]{2,}', without_inline_code(stripped)))
+
+
+def structural_findings(source):
+    """Return (line number, H2 title) for H2s lacking prose before their first H3.
+
+    A navigation-only H2 may put <!-- check-structure: navigation-only -->
+    on the first nonblank line after its heading. This is a report-only
+    diagnostic; whether the prose is substantive remains a review decision.
+    """
+    findings = []
+    h2 = None
+    has_prose = False
+    navigation_only = False
+    marker_slot = False
+    fence = None
+    in_comment = False
+    for number, raw in enumerate(source.splitlines(), 1):
+        if fence:
+            match = FENCE_RE.match(raw)
+            if match and match.group(1)[0] == fence[0] and len(match.group(1)) >= len(fence) and not match.group(2).strip():
+                fence = None
+            continue
+        if not in_comment and h2 and marker_slot and raw.strip() == NAVIGATION_ONLY:
+            navigation_only = True
+            marker_slot = False
+            continue
+        line, in_comment = without_comments(raw, in_comment)
+        match = FENCE_RE.match(line)
+        if match:
+            fence = match.group(1)
+            marker_slot = False
+            continue
+        heading = HEADING_RE.match(line)
+        if heading:
+            level = len(heading.group(1))
+            if level <= 2:
+                h2 = (number, re.sub(r'\s+#+\s*$', '', heading.group(2)).strip()) if level == 2 else None
+                has_prose = False
+                navigation_only = False
+                marker_slot = level == 2
+            elif level == 3 and h2:
+                if not has_prose and not navigation_only:
+                    findings.append(h2)
+                h2 = None
+            continue
+        if line.strip():
+            marker_slot = False
+        if h2 and is_prose_line(line):
+            has_prose = True
+    return findings
+
+
+def check_structure(paths):
+    """Print advisory findings without affecting the command's exit status."""
+    count = 0
+    for path in paths:
+        for number, title in structural_findings(path.read_text()):
+            print(f"{path}:{number}: ADVISORY: H2 {title!r} has an H3 before any prose")
+            count += 1
+    print(f"check-structure: {len(paths)} Markdown files, {count} advisory findings")
+    return 0
 
 
 def known_mismatches():
@@ -242,9 +337,18 @@ def check_fresh(docs):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("check", choices=("meta", "variants", "mermaid", "fresh"))
+    parser = argparse.ArgumentParser(epilog=(
+        "structure is report-only. Use <!-- check-structure: navigation-only --> "
+        "as the first nonblank line after a navigation-only H2. "
+        "Optional paths limit the report; by default it scans built primer Markdown."))
+    parser.add_argument("check", choices=("meta", "variants", "mermaid", "fresh", "structure"))
+    parser.add_argument("paths", nargs="*", type=Path, help="Markdown paths for structure (default: built primers)")
     args = parser.parse_args()
+    if args.check == "structure":
+        paths = args.paths or sorted({ROOT / doc.source for doc in documents() if doc.source.parts[0].startswith("primer_")})
+        return check_structure(paths)
+    if args.paths:
+        parser.error("paths are only accepted by the structure check")
     docs = documents()
     if args.check == "meta":
         return check_meta(docs)

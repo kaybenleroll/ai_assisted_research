@@ -15,11 +15,11 @@ These are the five most recently reviewed primary documents across the catalogue
 
 | Document | Category | Last reviewed |
 |----------|----------|---------------|
+| [Fluid Mechanics](primer_fluid_mechanics/primer_fluid_mechanics.html) · [PDF](primer_fluid_mechanics/primer_fluid_mechanics.pdf) | Quantitative Foundations | 2026-10-24 |
 | [Optimisation for Machine Learning](primer_ml_optimisation/primer_ml_optimisation.html) · [PDF](primer_ml_optimisation/primer_ml_optimisation.pdf) | Quantitative Foundations | 2026-10-18 |
 | [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | AI Agents and Coding Tools | 2026-10-16 |
 | [Linux, Git, and Reproducible Developer Workflows](primer_linux_git_workflows/primer_linux_git_workflows.html) · [PDF](primer_linux_git_workflows/primer_linux_git_workflows.pdf) | Developer Tooling | 2026-10-15 |
 | [Information Theory](primer_information_theory/primer_information_theory.html) · [PDF](primer_information_theory/primer_information_theory.pdf) | Quantitative Foundations | 2026-10-14 |
-| [Information Retrieval, Embeddings, and Retrieval-Augmented Generation](primer_retrieval_rag/primer_retrieval_rag.html) · [PDF](primer_retrieval_rag/primer_retrieval_rag.pdf) | AI Agents and Coding Tools | 2026-10-14 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -59,6 +59,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Digital Signal Processing](primer_digital_signal_processing/primer_digital_signal_processing.html) · [PDF](primer_digital_signal_processing/primer_digital_signal_processing.pdf) | 2026-10-12 | Sampling, Fourier analysis, filtering, spectral estimation, multirate systems, and practical DSP workflows |
 | [Complex Analysis](primer_complex_analysis/primer_complex_analysis.html) · [PDF](primer_complex_analysis/primer_complex_analysis.pdf) | 2026-10-12 | Holomorphic functions, contour integration, residues, conformal maps, harmonic functions, applications, and computation |
 | [Numerical Analysis](primer_numerical_analysis/primer_numerical_analysis.html) · [PDF](primer_numerical_analysis/primer_numerical_analysis.pdf) | 2026-10-12 | Floating-point arithmetic, linear algebra, root finding, ODEs, optimisation, eigenvalues, AD, and regularisation |
+| [Fluid Mechanics](primer_fluid_mechanics/primer_fluid_mechanics.html) · [PDF](primer_fluid_mechanics/primer_fluid_mechanics.pdf) | 2026-10-24 | Continuum models, conservation laws, viscous and compressible flow, introductory CFD, and verified computational examples |
 | [Information Theory](primer_information_theory/primer_information_theory.html) · [PDF](primer_information_theory/primer_information_theory.pdf) | 2026-10-14 | Surprise, entropy, compression, mutual information, noisy channels, capacity, error correction, and rate–distortion |
 | [Optimisation for Machine Learning](primer_ml_optimisation/primer_ml_optimisation.html) · [PDF](primer_ml_optimisation/primer_ml_optimisation.pdf) | 2026-10-18 | Objective formulation, gradients, convexity, numerical methods, neural-network training, and optimisation diagnostics |
 
