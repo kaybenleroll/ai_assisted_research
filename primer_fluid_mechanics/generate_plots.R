@@ -113,13 +113,15 @@ boundary_plot <- ggplot(boundary_data, aes(velocity, height, colour = profile,
                                           linetype = profile)) +
   geom_vline(xintercept = 0.99, colour = "grey55", linetype = "dotted") +
   geom_line(linewidth = 1.05) +
-  annotate("text", x = 0.78, y = 3.65, label = "99% reference",
+  annotate("text", x = 0.78, y = 3.65, label = "u/Ue = 0.99",
            colour = "grey35", family = "DejaVu Sans", size = 3.5) +
   scale_colour_manual(values = c(BLUE, RED)) +
   scale_linetype_manual(values = c("solid", "dashed")) +
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.25)) +
   scale_y_continuous(limits = c(0, 4), breaks = 0:4) +
-  labs(title = "Idealised Boundary-Layer Profiles", x = "u / Ue", y = "y / delta") +
+  labs(title = "Idealised Boundary-Layer Profiles",
+       subtitle = "delta_ref is a shared illustrative scale, not a 99% thickness",
+       x = "u / Ue", y = "eta = y / delta_ref") +
   guides(colour = guide_legend(nrow = 1)) + plot_theme()
 save_plot("figures/boundary_layer_profiles.png", boundary_plot, width = 9.6)
 
