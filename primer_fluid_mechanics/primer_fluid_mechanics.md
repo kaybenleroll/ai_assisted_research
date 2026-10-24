@@ -63,10 +63,6 @@ maps an infinitesimal reference line element to its current line element. Its de
 
 The distinction is useful even in elementary flow. A fixed probe may observe a changing velocity because a transient pattern passes it, whereas a particle may experience a different change because it moves through that pattern. Confusing the two leads directly to an incorrect material derivative. A numerical implementation also has a choice: a moving-mesh method follows changing cells, while a fixed-grid method accounts for transport through cell faces. Neither is intrinsically more physical; the balance and geometric terms must be consistent with the choice.
 
-![Temperature field over position and time, with a fixed probe and a moving particle path](figures/material_derivative_field.png)
-
-*Figure: illustrative temperature field used in the material-derivative calculation below. The fixed probe sees a local change of $0.5\,\mathrm{K\,s^{-1}}$; the moving particle also crosses the spatial gradient, giving $6.5\,\mathrm{K\,s^{-1}}$ in total.*
-
 ### Local Versus Integral Statements
 
 Differential equations are local limits of integral balances. To obtain a local equation, assume enough regularity to apply the divergence theorem and then require the balance to hold for every sufficiently small region. This operation is powerful but has a cost: it can conceal the boundary fluxes and can fail at discontinuities. A shock, contact surface, or material interface is better treated by a control volume that straddles the feature.
@@ -117,6 +113,10 @@ $$
 $$
 
 The particle warms faster than a stationary thermometer because it also moves into warmer fluid. This calculation assumes the stated smooth field and constant particle velocity over the instant considered; it distinguishes temporal change from transport without implying that temperature itself is conserved.
+
+![Temperature field over position and time, with a fixed probe and a moving particle path](figures/material_derivative_field.png)
+
+*Figure: illustrative temperature field used in the material-derivative calculation above. The fixed probe sees a local change of $0.5\,\mathrm{K\,s^{-1}}$; the moving particle also crosses the spatial gradient, giving $6.5\,\mathrm{K\,s^{-1}}$ in total.*
 
 The velocity gradient $\nabla\mathbf{u}$ describes local changes in velocity across neighbouring points. Its symmetric part is the rate-of-deformation tensor, and its antisymmetric part describes local rigid-body rotation:
 
@@ -170,7 +170,7 @@ Mass, momentum, and energy balances describe different quantities crossing the s
 
 ![One duct with common inlet and outlet and separate mass, momentum, and energy balances](figures/conservation_balances.png)
 
-*Figure: illustrative balance ledger for one duct and one outward-positive port convention. Mass, streamwise momentum, and total energy have different fluxes and source terms; the labels represent flux averages.*
+*Figure: illustrative balance ledger for one duct and one outward-positive port convention. The schematic stores total energy including gravitational potential energy and uses total enthalpy $H=h+|\mathbf{u}|^2/2+gz$ for its energy port fluxes. This absorbs work by steady, conservative gravity into the potential-energy terms; work by other body forces requires a separate source. The port labels represent flux averages.*
 
 ### Mass Conservation
 
@@ -227,7 +227,7 @@ The control-volume method and a finite-volume discretisation share the same acco
 
 ### Energy Conservation
 
-Energy conservation tracks changes in kinetic and internal energy due to work and heat transfer. With specific internal energy $e$, total specific energy $E=e+\tfrac{1}{2}\mathbf{u}\cdot\mathbf{u}$, heat flux $\mathbf{q}$, and body force $\mathbf{b}$, a common local statement is:
+Energy conservation tracks changes in kinetic and internal energy due to work and heat transfer. Unlike the schematic above, the following local equation excludes gravitational potential energy from its specific energy $E=e+\tfrac{1}{2}\mathbf{u}\cdot\mathbf{u}$ and retains body-force work explicitly. With heat flux $\mathbf{q}$ and body force $\mathbf{b}$, a common local statement is:
 
 $$
 \rho\frac{DE}{Dt}
@@ -247,7 +247,7 @@ The Reynolds transport theorem is easiest to use when the extensive property is 
 
 ![Fixed and right-moving control volumes with fluid fluxes crossing their boundaries](figures/moving_control_volume.png)
 
-*Figure: illustrative fixed and moving boundaries for the same flow. Surface flux uses fluid velocity relative to the boundary, $\mathbf{u}-\mathbf{w}$; the fixed case has $\mathbf{w}=0$.*
+*Figure: illustrative fixed and moving boundaries for the same flow. Surface flux uses fluid velocity relative to the boundary, $\mathbf{u}-\mathbf{w}$; the fixed case has $\mathbf{w}=0$. The drawn inlet and outlet directions assume rightward fluid flow faster than the right-moving boundary, $u_x>w_x>0$; otherwise the sign of a relative flux can reverse.*
 
 Suppose a fixed tank is filled through one pipe and drained through another. Applying the mass theorem gives
 
@@ -385,7 +385,7 @@ The no-slip condition sets the fluid velocity equal to a stationary solid wall i
 
 ### Couette Flow
 
-Two stationary parallel plates separated by distance $h$ contain a Newtonian fluid. The upper plate moves at speed $U_w$ and there is no imposed pressure gradient. A steady, fully developed solution has only a streamwise velocity $u(y)$, and the streamwise momentum balance becomes $\mu d^2u/dy^2=0$. Applying $u(0)=0$ and $u(h)=U_w$ gives
+Two parallel plates separated by distance $h$ contain a Newtonian fluid. The lower plate is stationary and the upper plate moves at speed $U_w$; there is no imposed pressure gradient. A steady, fully developed solution has only a streamwise velocity $u(y)$, and the streamwise momentum balance becomes $\mu d^2u/dy^2=0$. Applying $u(0)=0$ and $u(h)=U_w$ gives
 
 $$
 u(y)=U_w\frac{y}{h},
@@ -489,7 +489,7 @@ Network models are useful because they solve for flow rates without resolving ev
 
 ## Scaling and External Flow
 
-Nondimensionalisation turns a long equation into a comparison of mechanisms. Let $L$ and $U$ be characteristic length and speed, and scale pressure by $\rho U^2$. The ratio of inertial to viscous terms in momentum is
+Nondimensionalisation turns a long equation into a comparison of mechanisms. Let $L$ and $U$ be characteristic length and speed. A pressure variation of order $\rho U^2$ is appropriate when pressure gradients balance inertia; viscous or hydrostatic pressure variations may exceed that scale. Choose the pressure-variation scale from the dominant momentum balance, such as a viscous pressure drop or $\rho gL$ for hydrostatics. The ratio of inertial to viscous terms in momentum is
 
 $$
 Re=\frac{\rho U L}{\mu}.
@@ -582,7 +582,7 @@ The practical lesson is not to memorise one critical Reynolds number. Ask which 
 
 ![Idealised boundary-layer profiles](figures/boundary_layer_profiles.png)
 
-*Figure: boundary-layer thickness and integral measures depend on the selected profile and definition. The curves are illustrative, not a universal laminar–turbulent transition prediction.*
+*Figure: illustrative laminar-like and turbulent-like velocity profiles use a shared reference length, with $u/U_e=0.99$ marked as one possible thickness criterion. Displacement and momentum thickness are defined in the text but are not plotted; these curves do not predict a universal laminar–turbulent transition.*
 
 ### Worked Flat-Plate Scaling Estimate
 
@@ -736,13 +736,13 @@ The calculation also illustrates how a back-pressure experiment can diagnose a m
 
 ### Thermodynamic State and Stagnation Quantities
 
-Static quantities describe the local state seen by a fluid moving with the flow. Stagnation quantities describe the state obtained by bringing that fluid to rest through an idealised adiabatic, reversible deceleration. They are not measurements at a special physical point unless the apparatus actually creates the assumed process. For an ideal gas with constant $\gamma$, the stagnation temperature relation is
+Static quantities describe the local state seen by a fluid moving with the flow. Stagnation quantities describe the state obtained by bringing that fluid to rest through an idealised adiabatic, reversible deceleration. They are not measurements at a special physical point unless the apparatus actually creates the assumed process. For a calorically perfect ideal gas with constant $\gamma$, the stagnation temperature relation is
 
 $$
 \frac{T_0}{T}=1+\frac{\gamma-1}{2}Ma^2,
 $$
 
-and the pressure and density relations follow from the isentropic equations. The kinetic-energy term is converted into enthalpy during the ideal deceleration. A shock, viscous layer, or heat exchanger changes the relation because entropy or heat transfer is present.
+and the pressure and density relations follow from the isentropic equations. The kinetic-energy term is converted into enthalpy during the ideal deceleration. The temperature relation also holds on each side of, and across, a steady adiabatic shock with no shaft work when stagnation enthalpy is conserved and the gas remains calorically perfect. The isentropic pressure and density relations do not hold across the shock: entropy rises and stagnation pressure falls. Heat transfer or other energy input can change stagnation temperature.
 
 Use these quantities as a bookkeeping device. If a computed compressible field has a large increase in stagnation temperature in an adiabatic inviscid region, inspect the energy flux, equation of state, and boundary treatment. If stagnation pressure falls, determine whether the model contains a shock or viscous loss that can explain the entropy increase. A static pressure decrease is not by itself evidence of energy loss: acceleration in a smooth nozzle can lower static pressure while preserving stagnation enthalpy.
 
@@ -1317,7 +1317,7 @@ Use the cell-average exact solution when the numerical state is a cell average. 
 
 ### A Language-Parity Contract
 
-The R and Julia channel scripts are not separate scientific models. They are independent implementations of the same dimensional calculation, chosen to demonstrate that a short formula can be reproduced without hidden language-specific state. The registered parity checks fix the nominal input values, equations, output names, and expected Reynolds number, pressure drop, and flow rate in SI units. Each script uses a relative-tolerance parameter of $10^{-12}$ for those three values; the Python assertions also use NumPy's default absolute tolerance. The scripts do not require identical syntax or formatting.
+The R and Julia channel scripts are not separate scientific models. They are independent implementations of the same dimensional calculation, chosen to demonstrate that a short formula can be reproduced without hidden language-specific state. The registered parity checks fix the nominal input values, equations, output names, and expected Reynolds number, pressure drop, and flow rate in SI units. Each script uses a relative-tolerance parameter of $10^{-12}$ for those three values; the Python flow-rate assertion sets zero absolute tolerance so its small value receives the stated relative check. The other Python nominal-output assertions retain NumPy's default absolute tolerance. The scripts do not require identical syntax or formatting.
 
 For the channel case, useful additional scaling checks are straightforward. If mean speed is zero, the pressure drop is zero. If viscosity or length doubles with all other inputs fixed, the pressure drop doubles. If the gap doubles at fixed mean speed, pressure drop decreases by a factor of four in the plane-channel relation. The registered scripts assert the nominal case; they do not run these perturbation checks.
 
@@ -1368,8 +1368,8 @@ flow_rate = mean_speed * width * h
 
 | ID | Language and purpose | Inputs | Required assertions |
 |---|---|---|---|
-| `channel-poiseuille-python` | Python analytical baseline | $h,w,L,\mu,\rho,U$ as above | Asserts $Re_h=20$, $\Delta p=48\,\mathrm{Pa}$, and $Q=4.0\times10^{-7}\,\mathrm{m^3\,s^{-1}}$ with `np.isclose(rtol=1e-12)` and its default absolute tolerance; also checks profile endpoints and its numerical mean. |
-| `fv-periodic-advection` | Python conservative finite-volume demonstration | Periodic smooth initial scalar field, fixed domain, declared velocity and CFL values | Periodic total scalar changes by at most $10^{-12}$ relative over a fixed run; the update uses one shared flux per face; an $N,2N,4N$ study reports an error norm and shows decreasing error against the translated exact field; a CFL violation is rejected. |
+| `channel-poiseuille-python` | Python analytical baseline | $h,w,L,\mu,\rho,U$ as above | Asserts $Re_h=20$, $\Delta p=48\,\mathrm{Pa}$, and $Q=4.0\times10^{-7}\,\mathrm{m^3\,s^{-1}}$ with `np.isclose(rtol=1e-12)`; the flow-rate check uses `atol=0.0`, while the other two retain NumPy's default absolute tolerance. Also checks profile endpoints and its numerical mean. |
+| `fv-periodic-advection` | Python conservative finite-volume demonstration | Periodic smooth initial scalar field, fixed domain, positive velocity, default target CFL $0.4$, and a separate target CFL $2.0$ for the rejection check | At $N=32,64,128$, asserts absolute periodic-total change below $10^{-12}$ for unit initial total, decreasing root-mean-square error against the translated exact cell averages, and computed CFL at most $0.4$. The update shares each face flux; a requested target CFL $2.0$ yields computed CFL $1.6$ at $N=32$ and raises `ValueError` because it exceeds one. |
 | `channel-poiseuille-r` | R parity implementation | Same six nominal physical inputs and equations | Asserts the same three nominal outputs with `all.equal(tolerance = 1e-12)` and prints the same output labels. |
 | `channel-poiseuille-julia` | Julia parity implementation | Same six nominal physical inputs and equations | Asserts the same three nominal outputs with `isapprox(rtol=1e-12)` and prints the same output labels. |
 

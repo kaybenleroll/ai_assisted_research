@@ -70,12 +70,12 @@ p <- line(p, 7.9, 4.45, 9.1, 4.45, GREEN, 1, TRUE)
 p <- label(p, 9.42, 4.45, "w", 4, GREEN, hjust = 0)
 p <- label(p, 2.75, 1.15, "w = 0; outward flux = rho u · n", 3.7)
 p <- label(p, 8.75, 1.15, "outward flux = rho (u - w) · n", 3.7)
-p <- label(p, 6, 0.43, "n points out of each control volume; inlet flux is negative, outlet flux positive.", 3.5)
+p <- label(p, 6, 0.43, "Signs shown assume (u - w)·n < 0 at inlet and > 0 at outlet; reversed flow reverses the signs.", 3.4)
 save("moving_control_volume", p)
 
 # 2. One duct and one sign convention for three extensive balances.
 p <- canvas("Three balances through the same duct",
-            "Single inlet and outlet; positive port flux points out of the control volume.")
+            "Stationary duct with one inlet and outlet; positive port flux points out of the control volume.")
 p <- box(p, 2.45, 9.55, 3.55, 4.75)
 p <- label(p, 6, 4.15, "stored mass, x-momentum and total energy", 4.1)
 p <- line(p, 0.85, 4.15, 2.35, 4.15, ORANGE, 1.1, TRUE)
@@ -87,8 +87,8 @@ p <- label(p, 3.05, 2.9, "dM/dt = m_in - m_out", 4.1, hjust = 0)
 p <- label(p, 0.7, 2.1, "MOMENTUM", 3.8, BLUE, hjust = 0, face = "bold")
 p <- label(p, 3.05, 2.1, "dP_x/dt = (m u)_in - (m u)_out + F_pressure + F_wall + F_body", 3.45, hjust = 0)
 p <- label(p, 0.7, 1.3, "ENERGY", 3.8, BLUE, hjust = 0, face = "bold")
-p <- label(p, 3.05, 1.3, "dE/dt = (m H)_in - (m H)_out + Q_heat - W_shaft", 3.55, hjust = 0)
-p <- label(p, 6, 0.43, "m denotes mass rate; H = h + u²/2 + gz. Port values represent flux averages; forces and transfers are signed.", 3.25)
+p <- label(p, 3.05, 1.3, "dE_CV/dt = (m H)_in - (m H)_out + Q_in - W_shaft + W_body", 3.25, hjust = 0)
+p <- label(p, 6, 0.52, "E_CV = ∫rho E dV; E = e + u²/2; H = h + u²/2; W_body = ∫rho b·u dV.\nm is mass rate; ports are flux averages. Heat in and shaft work out are positive.", 3.0)
 save("conservation_balances", p)
 
 # 3. Escalation is driven by evidence and a decision-specific error tolerance.

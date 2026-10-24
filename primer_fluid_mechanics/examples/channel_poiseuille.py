@@ -16,7 +16,7 @@ profile = 1.5 * mean_speed * (1.0 - (2.0 * y / h) ** 2)
 
 assert np.isclose(re, 20.0, rtol=1e-12)
 assert np.isclose(pressure_drop, 48.0, rtol=1e-12)
-assert np.isclose(flow_rate, 4.0e-7, rtol=1e-12)
+assert np.isclose(flow_rate, 4.0e-7, rtol=1e-12, atol=0.0)
 assert np.isclose(profile[0], 0.0, atol=1e-14)
 assert np.isclose(profile[-1], 0.0, atol=1e-14)
 assert np.isclose(np.trapezoid(profile, y) / h, mean_speed, rtol=2e-4)

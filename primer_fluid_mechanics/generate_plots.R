@@ -101,11 +101,16 @@ unlink(metrics_device)
 save_plot("figures/hydrostatic_and_bernoulli.png", two_panels,
           width = 11.2, height = 5.4)
 
-# 3. Boundary-layer profiles and integral thicknesses.
+# 3. Illustrative boundary-layer profiles and a 99% velocity reference.
 cat("  figures/boundary_layer_profiles.png\n")
-eta <- seq(0, 4, length.out = 300)
-laminar <- 1 - exp(-eta) * (1 + eta)
-turbulent <- pmin(1, (eta / 1.6)^(1 / 7))
+eta <- seq(0, 5, length.out = 300)
+# This illustrative laminar-like shape has a finite, positive wall slope and
+# reaches 99% at eta = log(100), within the plotted range.
+laminar <- 1 - exp(-eta)
+# Regularise the outer-layer power law at the wall to avoid infinite shear.
+wall_offset <- 0.2
+turbulent <- pmin(1, ((eta + wall_offset)^(1 / 7) - wall_offset^(1 / 7)) /
+                    ((1.6 + wall_offset)^(1 / 7) - wall_offset^(1 / 7)))
 boundary_data <- data.frame(
   velocity = c(laminar, turbulent), height = rep(eta, 2),
   profile = factor(rep(c("Smooth laminar-like profile",
@@ -117,14 +122,14 @@ boundary_plot <- ggplot(boundary_data, aes(velocity, height, colour = profile,
                                           linetype = profile)) +
   geom_vline(xintercept = 0.99, colour = "grey55", linetype = "dotted") +
   geom_line(linewidth = 1.05) +
-  annotate("text", x = 0.78, y = 3.65, label = "u/Ue = 0.99",
+  annotate("text", x = 0.78, y = 4.55, label = "u/Ue = 0.99",
            colour = "grey35", family = "DejaVu Sans", size = 3.5) +
   scale_colour_manual(values = c(BLUE, RED)) +
   scale_linetype_manual(values = c("solid", "dashed")) +
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.25)) +
-  scale_y_continuous(limits = c(0, 4), breaks = 0:4) +
+  scale_y_continuous(limits = c(0, 5), breaks = 0:5) +
   labs(title = "Idealised Boundary-Layer Profiles",
-       subtitle = "delta_ref is a shared illustrative scale, not a 99% thickness",
+       subtitle = "Shared delta_ref is not delta_99; no integral thicknesses are plotted",
        x = "u / Ue", y = "eta = y / delta_ref") +
   guides(colour = guide_legend(nrow = 1)) + plot_theme()
 save_plot("figures/boundary_layer_profiles.png", boundary_plot, width = 9.6)
@@ -156,20 +161,24 @@ save_plot("figures/isentropic_ratios.png", ratio_plot)
 # 5. Conservative advection: exact translation and diffusive upwind result.
 cat("  figures/periodic_advection.png\n")
 n <- 80
-x <- (seq_len(n) - 0.5) / n
+dx <- 1 / n
+x <- (seq_len(n) - 0.5) * dx
 u <- 1
-dt <- 0.8 / n
+dt <- 0.8 * dx
 steps <- 40
-q0 <- 0.5 + 0.5 * sin(2 * pi * x)
+# Integrating the sine over each cell gives this sinc amplitude factor.
+factor <- sin(pi / n) / (pi / n)
+q0 <- 0.5 + 0.5 * factor * sin(2 * pi * x)
 q <- q0
-for (step in seq_len(steps)) q <- q - u * dt / (1 / n) * (q - c(q[n], q[-n]))
+for (step in seq_len(steps)) q <- q - u * dt / dx * (q - c(q[n], q[-n]))
 t_final <- steps * dt
-exact <- 0.5 + 0.5 * sin(2 * pi * ((x - u * t_final) %% 1))
+exact <- 0.5 + 0.5 * factor * sin(2 * pi * ((x - u * t_final) %% 1))
 advection_data <- data.frame(
   position = rep(x, 3), scalar = c(q0, exact, q),
-  series = factor(rep(c("Initial", "Exact translation", "Upwind result"),
+  series = factor(rep(c("Initial cell averages", "Exact cell averages", "Upwind cell averages"),
                       each = length(x)),
-                  levels = c("Initial", "Exact translation", "Upwind result"))
+                  levels = c("Initial cell averages", "Exact cell averages",
+                             "Upwind cell averages"))
 )
 advection_plot <- ggplot(advection_data, aes(position, scalar, colour = series,
                                              linetype = series)) +
