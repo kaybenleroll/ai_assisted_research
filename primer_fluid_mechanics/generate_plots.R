@@ -38,12 +38,16 @@ save_plot <- function(path, plot, width = 8.4, height = 5.5) {
 
 cat("Generating fluid-mechanics figures...\n")
 
-# 1. Couette and Poiseuille profiles.
+# 1. Couette and Poiseuille profiles on the same moving-wall speed scale.
 cat("  figures/velocity_profiles.png\n")
 y <- seq(0, 1, length.out = 300)
+# Let eta = y/h and use U_w > 0 as the common speed scale. Choose the
+# pressure gradient so the pressure-only centreline speed is U_w:
+# -dp/dx = 8 mu U_w/h^2. Linearity then gives
+# u/U_w = eta + 4 eta(1 - eta) for the combined case.
 couette <- y
 poiseuille <- 4 * y * (1 - y)
-combined <- 0.35 * couette + 0.65 * poiseuille
+combined <- couette + poiseuille
 velocity_data <- data.frame(
   velocity = c(couette, poiseuille, combined),
   height = rep(y, 3),
@@ -57,9 +61,9 @@ velocity_plot <- ggplot(velocity_data, aes(velocity, height, colour = profile,
   geom_path(linewidth = 1.05) +
   scale_colour_manual(values = c(BLUE, ORANGE, GREEN)) +
   scale_linetype_manual(values = c("solid", "dashed", "dotdash")) +
-  scale_x_continuous(limits = c(0, 1.15), breaks = seq(0, 1, 0.25)) +
+  scale_x_continuous(limits = c(0, 1.65), breaks = seq(0, 1.5, 0.25)) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) +
-  labs(title = "Parallel-Plate Velocity Profiles", x = "u / U", y = "y / h") +
+  labs(title = "Parallel-Plate Velocity Profiles", x = "u / U_w", y = "y / h") +
   guides(colour = guide_legend(nrow = 1)) + plot_theme()
 save_plot("figures/velocity_profiles.png", velocity_plot, width = 9.8)
 
@@ -320,5 +324,10 @@ faces_plot <- ggplot() +
   coord_fixed(xlim = c(0, 10), ylim = c(0, 5), expand = FALSE) +
   labs(title = "Finite-Volume Face Fluxes") + schematic_theme()
 save_plot("figures/finite_volume_faces.png", faces_plot, width = 9.2, height = 5.6)
+
+# Keep the companion scripts in separate environments: their plotting helpers
+# and temporary data names are local to each script.
+source("plots_quantitative.R", local = new.env(parent = globalenv()))
+source("plots_schematics.R", local = new.env(parent = globalenv()))
 
 cat("Figures complete.\n")
