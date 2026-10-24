@@ -596,6 +596,12 @@ Two flows are dynamically similar when their nondimensional governing equations,
 
 Scaling also changes which measurements are trustworthy. A small model may have a relative roughness different from the full device, and its wall layer may occupy a different fraction of the geometry. A low-speed water experiment may not reproduce compressible aerodynamic effects even if its streamline pattern looks similar. Similarity analysis should therefore be written as a list of matched groups and unmatched groups, followed by a statement of how the mismatch affects the decision.
 
+The dye streaks in the following water-tunnel photograph reveal how flow over a scale model can develop coherent vortices and a less orderly downstream region. They help identify a mechanism to investigate, but the photograph alone supplies neither an airspeed nor a transferable full-scale force coefficient.
+
+![Coloured dye streams curling over an F-18 scale model in a water tunnel and breaking down downstream](figures/external/f18_water_tunnel.jpg)
+
+*Figure: dye injected over a 1/48-scale F-18 model in NASA Dryden's water tunnel makes leading-edge-extension vortices and downstream vortex breakdown visible. This is a qualitative flow visualisation, not a velocity or force measurement. Credit: NASA Dryden Flight Research Center; [source file](https://commons.wikimedia.org/wiki/File:F-18_model_in_water_tunnel_with_dye_injections_(side_view).jpg); [public-domain licence (PD-USGov-NASA)](https://commons.wikimedia.org/wiki/Template:PD-USGov-NASA). The local copy is unmodified.*
+
 ## Canonical Flow Families
 
 Canonical flows are deliberately simplified problems that isolate one mechanism. Their value is not that real apparatuses look exactly like them; it is that the assumptions, scales, and limiting behaviour can be inspected. A canonical result should be used as a benchmark with its geometry and regime attached.
@@ -702,6 +708,12 @@ For air with $\gamma=1.4$ at $Ma=0.5$, the pressure ratio is approximately $0.84
 *Figure: the ideal-gas isentropic relations decrease static pressure and density relative to stagnation values as Mach number increases. The vertical marker at $Ma=1$ is a regime boundary, not a shock solution.*
 
 The compressible case makes the hierarchy of models visible. Start with the full conservation laws and state the equation of state. Add the ideal-gas and adiabatic assumptions only when justified. Use the isentropic relations for a smooth region, and then state explicitly that a shock is a discontinuity requiring integral conservation and entropy production rather than the smooth isentropic formula. This primer stops at that boundary: detailed shock-capturing schemes and high-speed CFD deserve a separate treatment.
+
+Schlieren photography makes gradients in air density visible around the T-38 below. The dark bands indicate where the optical density field changes sharply; their appearance does not give a pressure jump or shock strength without further calibration and analysis.
+
+![Schlieren image of a T-38 aircraft with dark oblique shock-wave bands extending from its airframe](figures/external/t38_shock_waves.jpg)
+
+*Figure: shock-wave pattern around a T-38 in flight, recorded with schlieren imaging. Read the bands as evidence of sharp density gradients, not as a measured pressure field. Credit: Leonard Weinstein / NASA; [source file](https://commons.wikimedia.org/wiki/File:Schlieren_photograph_of_T-38_shock_waves.jpg); [public-domain licence (PD-USGov-NASA)](https://commons.wikimedia.org/wiki/Template:PD-USGov-NASA). The local pixel data is unmodified; its invalid source DPI metadata was normalised for PDF rendering.*
 
 ### Worked Isentropic Nozzle Estimate
 
@@ -1214,6 +1226,12 @@ The questions are intentionally repetitive across flow types. They work for a hy
 
 Measurements connect a model to a physical system, but they do not arrive as perfect values at mathematical points. A pressure tap samples a local pressure only under assumptions about its port, tubing, and flow disturbance. A thermocouple has finite size and response time. Particle-image or smoke measurements infer velocity through image processing and seeding assumptions. The comparison operator belongs in the model ledger.
 
+The particle-image velocimetry (PIV) example below overlays estimated velocity vectors and a shear-rate display on flow past a stalled plate. It shows the kind of processed field that must be traced back to image pairs, calibration, interrogation settings, and a stated scale before numerical values can be compared with a model.
+
+![Processed PIV view of a tilted stalled flat plate, with velocity arrows and a coloured shear-rate field](figures/external/piv_stalled_plate.jpg)
+
+*Figure: PIV analysis of a stalled flat plate, displayed as vectors over a colour field labelled shear rate. The image illustrates a measurement workflow and separated flow; without its underlying calibration and scale it does not establish quantitative agreement with a simulation. Credit: Willa; [source file](https://commons.wikimedia.org/wiki/File:PIV_analysis_of_a_stalled_flat_plate.jpg); [licence (CC BY-SA 3.0)](https://creativecommons.org/licenses/by-sa/3.0/). The local copy is unmodified.*
+
 ### Sampling and Averaging
 
 A numerical field can be sampled at a sensor location, averaged over a probe volume, or averaged over a time window. These operations are different. If the flow is unsteady, the time average of a nonlinear function is not generally the same as the function evaluated at the time-averaged field. For example, dynamic pressure depends on $u^2$, so $\overline{u^2}$ and $\overline{u}^{,2}$ differ when velocity fluctuates. Compare the measured quantity with the corresponding numerical quantity, not with a convenient surrogate.
@@ -1280,7 +1298,7 @@ A figure should answer a question stated in its caption. A velocity-profile plot
 
 Use visual encodings that preserve comparison. Keep units on axes, use the same scale when comparing cases, distinguish initial, exact, and numerical states in the legend, and avoid colour gradients that imply a physical ordering not present in the data. For a field plot, state whether values are cell-centred, interpolated, instantaneous, or averaged. For a line plot, state whether the line is an analytical relation, a measurement, a fit, or a numerical result.
 
-The primer's figures are generated from scripts rather than edited by hand. This makes them part of the reproducible evidence: a change to the equation, input, or plotting convention can be reviewed and rerun. The figures are intentionally modest. A clean profile, pressure baseline, or refinement curve often carries more diagnostic information than a photorealistic flow rendering with no reference quantity.
+The primer's analytical plots and schematics are generated from scripts rather than edited by hand. This makes them part of the reproducible evidence: a change to the equation, input, or plotting convention can be reviewed and rerun. The external photographs and processed PIV example serve a different purpose: they show physical flow features or a measurement workflow, with their sources and limits stated in the captions. A clean profile, pressure baseline, or refinement curve often carries more diagnostic information than a photorealistic flow rendering with no reference quantity.
 
 Contours are useful for locating gradients, recirculation, fronts, and approximate symmetry. They are also easy to misread. Interpolation can create extrema between cells, a nonlinear colour scale can hide sign changes, and an automatic range can make two cases appear equally different when their physical magnitudes differ. Use fixed colour limits for comparisons, mark the zero level when sign matters, and report extrema from the stored field rather than from a rendered image.
 
@@ -1524,7 +1542,7 @@ The checklist is not a bureaucratic gate. It is a compact way to prevent a calcu
 
 The central habit is to keep three layers connected. The first layer is the physical story: fluid, geometry, forcing, boundaries, scales, and desired output. The second is the mathematical model: conservation laws, constitutive relations, state equations, reductions, and initial data. The third is the evidence: executable checks, figures, refinement studies, measurements, and uncertainty. A change in one layer should prompt a review of the others. Adding compressibility changes the state variables and boundary information; adding a wall measurement changes the output definition; changing the grid changes the numerical evidence but not the physical model.
 
-The figures serve the same purpose as the code. The profile plots make local shape and boundary conditions visible; the pressure plot separates hydrostatic and acceleration effects; the boundary-layer plot shows why a thickness definition matters; and the isentropic plot places a numerical ratio in a wider Mach-number context. The advection plots then connect a discrete update to its qualitative effect and its quantitative convergence. The conceptual schematics show how the same flux idea appears in a control volume, a finite-volume cell, and the description of particle motion. In each case the visual is paired with a formula or check so that it supports reasoning rather than replacing it.
+The generated figures serve the same purpose as the code. The profile plots make local shape and boundary conditions visible; the pressure plot separates hydrostatic and acceleration effects; the boundary-layer plot shows why a thickness definition matters; and the isentropic plot places a numerical ratio in a wider Mach-number context. The advection plots then connect a discrete update to its qualitative effect and its quantitative convergence. The conceptual schematics show how the same flux idea appears in a control volume, a finite-volume cell, and the description of particle motion. The external images add qualitative examples of shocks, vortices, and processed PIV data. Each visual is paired with a stated interpretation and limit so that it supports reasoning rather than replacing a model check or measurement.
 
 The visual review should ask whether a reader can identify the independent variable, dependent variable, units, reference state, and source of every curve. It should also ask whether a caption prevents a common misreading. For example, the boundary-layer figure is not a transition map, the pressure panels do not share an x-axis, and the convergence line is a reference slope rather than a fitted law. These distinctions are part of technical correctness. A figure that is attractive but ambiguous can create more error than a short table.
 
