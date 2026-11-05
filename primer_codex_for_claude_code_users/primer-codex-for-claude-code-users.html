@@ -1949,10 +1949,14 @@ detailed tool-specific guidance stays separate. This can be appropriate
 when a harness cannot reliably follow references, but it creates a
 maintenance obligation. Keep the duplicated section short and make drift
 detectable in review.</p>
-<p>For this project, the first design is sufficient. The repository
-already has a substantial <code>CLAUDE.md</code>, and the desired Codex
-adaptation is intentionally lightweight. A migration should not
-reorganise every instruction merely to introduce a second reader.</p>
+<p>For this project, the second design is now the repository pattern.
+The shared contract lives in <code>docs/project-contract.md</code>;
+<code>AGENTS.md</code> and <code>CLAUDE.md</code> are thin discovery
+adapters, while <code>.claude/rules/</code> remains Claude-specific. The
+contract also routes to <code>docs/agent-collaboration.md</code> for
+handoffs and smoke tests. This keeps repository policy neutral without
+pretending that native skills, hooks, permissions, or subagent formats
+are portable.</p>
 <h2 data-number="4.6" id="generating-each-harnesss-files-from-one-source"><span class="header-section-number">4.6</span> Generating Each Harness’s Files
 From One Source</h2>
 <p>Two harnesses is manageable by hand. Two harnesses plus an editor
@@ -4074,13 +4078,15 @@ not split the underlying safety rule or definition of done.</p>
 the tree look symmetrical. Add a directory when it contains
 configuration or reusable behaviour that the corresponding harness
 actually needs.</p>
-<p>For this primer’s repository, the existing project rules are the
-important shared context: the primer layout, containerised rendering
-requirement, <code>STYLE_GUIDE.md</code>, and the instruction to
-preserve unrelated work. A Codex bridge should point at those rules
-rather than restating them. If a rule later proves useful to both
-harnesses but is buried in Claude-specific prose, extract that rule into
-a neutral document and make both adapters reference it.</p>
+<p>For this primer’s repository, the shared context is in
+<code>docs/project-contract.md</code>: the primer layout, containerised
+rendering requirement, <code>STYLE_GUIDE.md</code>, issue workflow, Silo
+routing, and the instruction to preserve unrelated work.
+<code>AGENTS.md</code> and <code>CLAUDE.md</code> point at that contract
+rather than restating it. <code>.claude/rules/</code> remains a
+Claude-specific adapter. If a rule later proves useful to both harnesses
+but is buried in tool-specific prose, extract that rule into the
+contract and keep the adapters thin.</p>
 <h2 data-number="9.3" id="roll-out-in-a-branch-one-capability-at-a-time"><span class="header-section-number">9.3</span> Roll Out in a Branch, One
 Capability at a Time</h2>
 <p>Do the first Codex run on a branch or worktree with a clean, known

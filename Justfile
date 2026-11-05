@@ -54,7 +54,7 @@ new-primer $short $title:
     '  - Add top-level Justfile targets.' \
     '  - Register source and outputs in scripts/update_readme_recent.py; run just readme.' \
     '  - Add and synchronise an area label in .github/labels.json if this is a new class.' \
-    '  - Add the directory to the CLAUDE.md document-class list.' \
+    '  - Add the directory to the docs/project-contract.md document-class list.' \
     '  - Render in containers and commit the source, Justfile, HTML and PDF together.'
 
 # Generate the README document tables from Justfile review dates
@@ -66,7 +66,11 @@ readme-check:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
 
 # Check committed metadata, renderer variants, Mermaid, freshness, and README generation
-check: check-meta check-variants check-mermaid check-fresh check-readme
+check: check-agent-contract check-meta check-variants check-mermaid check-fresh check-readme
+
+check-agent-contract:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check_agent_contract.py
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_agent_contract.py'
 
 check-meta:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py meta
