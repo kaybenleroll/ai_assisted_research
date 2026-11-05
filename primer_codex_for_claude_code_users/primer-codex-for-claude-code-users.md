@@ -850,10 +850,12 @@ tool-specific guidance stays separate. This can be appropriate when a harness
 cannot reliably follow references, but it creates a maintenance obligation.
 Keep the duplicated section short and make drift detectable in review.
 
-For this project, the first design is sufficient. The repository already has a
-substantial `CLAUDE.md`, and the desired Codex adaptation is intentionally
-lightweight. A migration should not reorganise every instruction merely to
-introduce a second reader.
+For this project, the second design is now the repository pattern. The shared
+contract lives in `docs/project-contract.md`; `AGENTS.md` and `CLAUDE.md` are
+thin discovery adapters, while `.claude/rules/` remains Claude-specific. The
+contract also routes to `docs/agent-collaboration.md` for handoffs and smoke
+tests. This keeps repository policy neutral without pretending that native
+skills, hooks, permissions, or subagent formats are portable.
 
 ### Generating Each Harness's Files From One Source
 
@@ -2331,7 +2333,7 @@ repository/
 
 The layout is illustrative, not a requirement. Do not create empty `.claude/` or `.codex/` directories merely to make the tree look symmetrical. Add a directory when it contains configuration or reusable behaviour that the corresponding harness actually needs.
 
-For this primer’s repository, the existing project rules are the important shared context: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, and the instruction to preserve unrelated work. A Codex bridge should point at those rules rather than restating them. If a rule later proves useful to both harnesses but is buried in Claude-specific prose, extract that rule into a neutral document and make both adapters reference it.
+For this primer’s repository, the shared context is in `docs/project-contract.md`: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, issue workflow, Silo routing, and the instruction to preserve unrelated work. `AGENTS.md` and `CLAUDE.md` point at that contract rather than restating it. `.claude/rules/` remains a Claude-specific adapter. If a rule later proves useful to both harnesses but is buried in tool-specific prose, extract that rule into the contract and keep the adapters thin.
 
 ### Roll Out in a Branch, One Capability at a Time
 
