@@ -1,0 +1,28 @@
+ARG BASE_IMAGE=localhost/primers-r-runtime:4.5.3
+FROM ${BASE_IMAGE}
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       libfontconfig1-dev \
+       libfreetype6-dev \
+       libfribidi-dev \
+       libglpk-dev \
+       libgmp-dev \
+       libharfbuzz-dev \
+       libjpeg-dev \
+       libpng-dev \
+       libtiff5-dev \
+       libwebp-dev \
+       libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY packages.lock /tmp/graph-packages.lock
+COPY install.R /tmp/install-graph.R
+RUN Rscript /tmp/install-graph.R \
+    && rm /tmp/graph-packages.lock /tmp/install-graph.R \
+    && rm -rf /tmp/Rtmp* /root/.cache
+
+COPY probe.R /usr/local/bin/primer-r-graph-probe.R
+ENTRYPOINT ["Rscript", "/usr/local/bin/primer-r-graph-probe.R"]

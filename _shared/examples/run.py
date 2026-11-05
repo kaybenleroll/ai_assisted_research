@@ -21,6 +21,7 @@ PROFILES = {
     "python-base": ("python", "PYTHON_RUNTIME_IMAGE", "localhost/primers-python-runtime:3.12.15", "python", ".py"),
     "python-torch": ("python", "PYTHON_TORCH_IMAGE", "localhost/primers-python-torch:2.14.1", "python", ".py"),
     "r": ("r", "R_RUNTIME_IMAGE", "localhost/primers-r-runtime:4.5.3", "Rscript", ".R"),
+    "r-graph": ("r", "R_GRAPH_RUNTIME_IMAGE", "localhost/primers-r-graph-runtime:4.5.3", "Rscript", ".R"),
     "julia": ("julia", "JULIA_RUNTIME_IMAGE", "localhost/primers-julia-runtime:1.12.7", "julia", ".jl"),
 }
 ROOT_FIELDS = {"schema_version", "examples"}
