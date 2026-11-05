@@ -15,11 +15,11 @@ These are the five most recently reviewed primary documents across the catalogue
 
 | Document | Category | Last reviewed |
 |----------|----------|---------------|
+| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-11-05 |
 | [Spectral Graph Theory: Connectivity, Diffusion, and Computation](primer_spectral_graph_theory/primer_spectral_graph_theory.html) · [PDF](primer_spectral_graph_theory/primer_spectral_graph_theory.pdf) | Quantitative Foundations | 2026-11-04 |
 | [Fluid Mechanics](primer_fluid_mechanics/primer_fluid_mechanics.html) · [PDF](primer_fluid_mechanics/primer_fluid_mechanics.pdf) | Quantitative Foundations | 2026-10-24 |
 | [Optimisation for Machine Learning](primer_ml_optimisation/primer_ml_optimisation.html) · [PDF](primer_ml_optimisation/primer_ml_optimisation.pdf) | Quantitative Foundations | 2026-10-18 |
 | [Pi Coding Agent](primer_pi_coding_agent/primer_pi_coding_agent.html) · [PDF](primer_pi_coding_agent/primer_pi_coding_agent.pdf) | AI Agents and Coding Tools | 2026-10-16 |
-| [Linux, Git, and Reproducible Developer Workflows](primer_linux_git_workflows/primer_linux_git_workflows.html) · [PDF](primer_linux_git_workflows/primer_linux_git_workflows.pdf) | Developer Tooling | 2026-10-15 |
 
 <!-- END RECENTLY UPDATED -->
 
@@ -33,7 +33,7 @@ These are the five most recently reviewed primary documents across the catalogue
 |----------|---------------|-------------|
 | [Building Autonomous AI Agents](primer_building_ai_agents/primer_ai_agents_comprehensive.html) · [PDF](primer_building_ai_agents/primer_ai_agents_comprehensive.pdf) | 2026-10-12 | Comprehensive guide to designing and implementing agentic AI systems. Companion: [Agent Architecture Quick Reference](primer_building_ai_agents/primer_agent_quick_reference.html) |
 | [Claude Code Alternatives](primer_claude_code_alternative/primer-claude-code-alternatives.html) · [PDF](primer_claude_code_alternative/primer-claude-code-alternatives.pdf) | 2026-10-12 | Survey of AI coding agents, October 2026 refresh |
-| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | 2026-10-12 | Practical guide to running Codex alongside Claude Code in one repository |
+| [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | 2026-11-05 | Practical guide to running Codex alongside Claude Code in one repository |
 | [The Evaluation Loop](primer_evaluation_loop/primer_evaluation_loop.html) · [PDF](primer_evaluation_loop/primer_evaluation_loop.pdf) | 2026-10-12 | Turning subjective AI task quality into numeric evals: verifiable rewards, RLHF/DSPy, and Goodhart failure modes |
 | [Information Retrieval, Embeddings, and Retrieval-Augmented Generation](primer_retrieval_rag/primer_retrieval_rag.html) · [PDF](primer_retrieval_rag/primer_retrieval_rag.pdf) | 2026-10-14 | Retrieval pipelines, lexical and dense search, embeddings, RAG evaluation, provenance, freshness, and production boundaries |
 | [Hermes Agent Server](primer_hermes_server/primer_hermes_server.html) · [PDF](primer_hermes_server/primer_hermes_server.pdf) | 2026-10-12 | Guide to the Hermes Server framework |
