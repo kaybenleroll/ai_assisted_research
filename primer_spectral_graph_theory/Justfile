@@ -1,0 +1,18 @@
+SOURCE_MD   := "primer_spectral_graph_theory.md"
+PROJECT_DIR := "primer_spectral_graph_theory"
+TITLE       := "Spectral Graph Theory: Connectivity, Diffusion, and Computation"
+AUTHOR      := "Mick Cooney"
+DATE        := "4 November 2026"
+HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --include-in-header='proof-mark.latex' --number-sections --shift-heading-level-by=-1"
+
+# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
+# MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
+
+figures:
+  python3 generate_figures.py
+
+full: figures html pdf
+
+import '../_shared/common.just'

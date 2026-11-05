@@ -1,0 +1,36 @@
+schema_version = 1
+
+[[examples]]
+id = "four-vertex"
+language = "python"
+script = "examples/four_vertex.py"
+profile = "python-base"
+timeout_seconds = 30
+
+[[examples]]
+id = "resistance-path"
+language = "python"
+script = "examples/resistance_path.py"
+profile = "python-base"
+timeout_seconds = 30
+
+[[examples]]
+id = "triangle-tree"
+language = "python"
+script = "examples/triangle_tree.py"
+profile = "python-base"
+timeout_seconds = 30
+
+[[examples]]
+id = "openflights-case"
+language = "python"
+script = "examples/openflights_case.py"
+profile = "python-base"
+timeout_seconds = 30
+
+[[examples]]
+id = "igraph-tidygraph-smoke"
+language = "r"
+script = "examples/igraph_tidygraph_smoke.R"
+profile = "r-graph"
+timeout_seconds = 120

@@ -1,0 +1,22 @@
+Provenance and attribution
+================================
+
+This is a small, deterministic synthetic fixture for the spectral graph theory
+primer. It is deliberately shaped like the historical OpenFlights route-table
+format: each row records an airline, source airport, destination airport, and
+the customary route metadata fields.
+
+The airport codes A01--A10, identifiers, airlines, and route rows were invented
+for this repository. No OpenFlights records were downloaded or copied, and the
+fixture is not real current aviation data, a timetable, a traffic sample, or a
+measure of passenger capacity. The values are only a teaching graph with a
+weak bridge between two dense synthetic regions.
+
+Attribution: the column layout is informed by the historical OpenFlights route
+data convention. This note is the provenance record for the repository-owned
+synthetic rows; it does not claim that the rows originate from OpenFlights.
+
+The example converts the directional-looking rows to an undirected graph by
+canonicalising each unordered airport pair. The binary variant keeps one edge
+per pair. The count variant sums repeated route records, including reverse
+records, as an explicitly defined synthetic edge weight.
