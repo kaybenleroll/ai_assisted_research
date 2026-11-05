@@ -41,6 +41,7 @@ primer_political_systems/primer-european-electoral-systems.mathml.html
 primer_python_for_r_users/primer_python_for_r_users.html
 primer_research_local_llms/primer-running-llms-locally.html
 primer_retrieval_rag/primer_retrieval_rag.html
+primer_spectral_graph_theory/primer_spectral_graph_theory.html
 primer_retrieval_rag/primer_retrieval_rag.mathjax.html
 primer_retrieval_rag/primer_retrieval_rag.mathml.html
 primer_linux_git_workflows/primer_linux_git_workflows.html

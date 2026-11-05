@@ -22,7 +22,9 @@ RECIPE_RE = re.compile(r'(?m)^([\w-]+):[^\n]*\n((?:(?:  |\t)[^\n]*\n|\n)*)')
 RENDER_RE = re.compile(r'([\w.-]+\.md)\s+-o\s+([\w.-]+\.html)')
 META_RE = re.compile(r'--metadata\s+(title|author|date)="([^"]*)"')
 FENCE_RE = re.compile(r'^ {0,3}(`{3,}|~{3,})(.*)$')
-RAW_MERMAID_RE = re.compile(r'graph (?:LR|TB)|subgraph|stroke-dasharray|\{\.mermaid\}')
+RAW_MERMAID_RE = re.compile(
+    r'\bgraph (?:LR|TB)\b|stroke-dasharray|\{\.mermaid\}'
+)
 HEADING_RE = re.compile(r'^ {0,3}(#{1,6})(?:[ \t]+|$)(.*)$')
 NAVIGATION_ONLY = '<!-- check-structure: navigation-only -->'
 

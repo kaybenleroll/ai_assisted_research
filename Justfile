@@ -153,6 +153,14 @@ build-r-runtime:
 probe-r-runtime: build-r-runtime
   {{OCI}} run --rm --network=none {{R_RUNTIME_IMAGE}}
 
+# Build the opt-in graph-analysis R profile used by spectral graph examples
+build-r-graph-runtime: build-r-runtime
+  {{OCI}} build --build-arg BASE_IMAGE={{R_RUNTIME_IMAGE}} -t {{R_GRAPH_RUNTIME_IMAGE}} -f _shared/runtime/r-graph/Containerfile _shared/runtime/r-graph/
+
+# Run the offline probe for the graph-analysis R profile
+probe-r-graph-runtime: build-r-graph-runtime
+  {{OCI}} run --rm --network=none {{R_GRAPH_RUNTIME_IMAGE}}
+
 # Build the Julia runtime used by executable examples
 build-julia-runtime:
   {{OCI}} build -t {{JULIA_RUNTIME_IMAGE}} -f _shared/runtime/julia/Containerfile _shared/runtime/julia/
@@ -194,6 +202,15 @@ fluid-mechanics-pdf:
 
 fluid-mechanics-all:
   cd primer_fluid_mechanics && just full
+
+spectral-graph-theory-html:
+  cd primer_spectral_graph_theory && just html
+
+spectral-graph-theory-pdf:
+  cd primer_spectral_graph_theory && just pdf
+
+spectral-graph-theory-all:
+  cd primer_spectral_graph_theory && just all
 
 ml-optimisation-html:
   cd primer_ml_optimisation && just html
@@ -379,6 +396,7 @@ clean-generated:
   cd primer_political_systems && just clobber
   cd primer_numerical_analysis && just clobber
   cd primer_fluid_mechanics && just clobber
+  cd primer_spectral_graph_theory && just clobber
   cd primer_ml_optimisation && just clobber
   cd primer_openclaw && just clobber
   cd primer_hermes_server && just clobber

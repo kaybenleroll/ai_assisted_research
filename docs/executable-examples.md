@@ -94,7 +94,7 @@ timeout_seconds = 30
 examples`. `language` is one of `python`, `r`, or `julia`. Each entry uses
 exactly one of `script` or `markdown` plus `fence`; these are paths contained
 by the primer directory. `profile` must be `python-base`, `python-torch`, `r`,
-or `julia`, and must match the language. `timeout_seconds` is an optional
+`r-graph`, or `julia`, and must match the language. `timeout_seconds` is an optional
 integer from 1 to 600. Unknown keys, duplicate IDs, unsupported
 language/profile pairs, invalid timeouts, and paths that escape the primer
 directory fail closed. `working_dir` is an optional directory within the primer
@@ -175,6 +175,18 @@ LibTorch/Lantern payload are explicit exceptions recorded under
 `_shared/runtime/r/`. The probe checks the installed R, direct package, and
 native torch versions with networking disabled. The last clean local build took
 66 seconds and produced 2,099,951,961 bytes on x86_64.
+
+### Graph-analysis R Runtime
+
+The opt-in `r-graph` profile is tagged
+`localhost/primers-r-graph-runtime:4.5.3` by default. It is derived from the
+minimal R runtime and adds pinned `igraph`, `tidygraph`, `ggraph`, and `dplyr`
+packages plus the native libraries needed by the plotting stack. Build and
+probe it with `just build-r-graph-runtime probe-r-graph-runtime`. Its purpose is
+to keep graph examples reproducible without enlarging every other R example
+environment. The probe imports the packages, checks their versions, constructs
+a Laplacian, mutates a tidy graph, and verifies the graph plotting stack with
+networking disabled.
 
 ### Julia Runtime
 
