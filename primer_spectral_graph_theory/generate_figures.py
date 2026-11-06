@@ -86,8 +86,14 @@ def save_bridge() -> None:
         gaps.append(values[1])
         normalised_gaps.append(normalised_values[1])
     fig, axis = plt.subplots(figsize=(7.2, 4.2))
-    axis.loglog(epsilons, gaps, label="$\\lambda_2(L)$")
-    axis.loglog(epsilons, normalised_gaps, label="$\\nu_2(\\mathcal{L})$")
+    axis.loglog(
+        epsilons, gaps, label="$\\lambda_2(L)$", linestyle="-", marker="o",
+        markevery=12, linewidth=1.5,
+    )
+    axis.loglog(
+        epsilons, normalised_gaps, label="$\\nu_2(\\mathcal{L})$",
+        linestyle="--", marker="s", markevery=12, linewidth=1.5,
+    )
     axis.set_xlabel("bridge weight $\\varepsilon$")
     axis.set_ylabel("spectral gap")
     axis.set_title("Quantitative connectivity changes before disconnection")
@@ -101,10 +107,17 @@ def save_bridge() -> None:
 def save_filters() -> None:
     eigenvalues = np.linspace(0, 2, 400)
     fig, axes = plt.subplots(1, 2, figsize=(8.2, 3.6), sharey=True)
-    for time in (0.25, 1, 4):
-        axes[0].plot(eigenvalues, np.exp(-time * eigenvalues), label=f"$t={time:g}$")
-    for tau in (0.25, 1, 4):
-        axes[1].plot(eigenvalues, 1 / (1 + tau * eigenvalues), label=f"$\\tau={tau:g}$")
+    styles = (("-", "o"), ("--", "s"), (":", "^"))
+    for (time, (linestyle, marker)) in zip((0.25, 1, 4), styles):
+        axes[0].plot(
+            eigenvalues, np.exp(-time * eigenvalues), label=f"$t={time:g}$",
+            linestyle=linestyle, marker=marker, markevery=55,
+        )
+    for (tau, (linestyle, marker)) in zip((0.25, 1, 4), styles):
+        axes[1].plot(
+            eigenvalues, 1 / (1 + tau * eigenvalues), label=f"$\\tau={tau:g}$",
+            linestyle=linestyle, marker=marker, markevery=55,
+        )
     axes[0].set_title("Heat response")
     axes[1].set_title("Tikhonov response")
     for axis in axes:
