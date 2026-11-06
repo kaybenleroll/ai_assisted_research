@@ -11,7 +11,11 @@ PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont
 # MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
 
 figures:
-  python3 generate_figures.py
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    {{PYTHON_RUNTIME_IMAGE}} \
+    python generate_figures.py
 
 full: figures html pdf
 

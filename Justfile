@@ -186,6 +186,9 @@ building-ai-html:
 building-ai-docs:
   cd primer_building_ai_agents && just docs
 
+building-ai-all:
+  cd primer_building_ai_agents && just all-retained
+
 political-html:
   cd primer_political_systems && just html
 
@@ -214,7 +217,7 @@ spectral-graph-theory-pdf:
   cd primer_spectral_graph_theory && just pdf
 
 spectral-graph-theory-all:
-  cd primer_spectral_graph_theory && just all
+  cd primer_spectral_graph_theory && just full
 
 ml-optimisation-html:
   cd primer_ml_optimisation && just html
@@ -388,11 +391,11 @@ retrieval-rag-all:
   cd primer_retrieval_rag && just all
 
 # Common daily build across active document projects
-html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html spectral-graph-theory-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: pi-agent-all building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
+html-full: pi-agent-all building-ai-all political-all numerical-all fluid-mechanics-all spectral-graph-theory-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
