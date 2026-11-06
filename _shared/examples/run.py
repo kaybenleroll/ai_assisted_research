@@ -147,6 +147,15 @@ def load_manifest(primer: Path, repo_root: Path = REPO_ROOT) -> list[dict]:
     return result
 
 
+def discover_primers(repo_root: Path = REPO_ROOT) -> list[Path]:
+    """Return primer directories with manifests in deterministic order."""
+    return sorted(
+        path.parent.parent
+        for path in repo_root.glob("primer_*/examples/manifest.toml")
+        if path.is_file()
+    )
+
+
 def container_command(oci: str, primer: Path, entry: dict, output: Path, repo_root: Path = REPO_ROOT) -> list[str]:
     language, image_var, default_image, interpreter, suffix = PROFILES[entry["profile"]]
     image = os.environ.get(image_var, default_image)
@@ -210,28 +219,35 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("example_pos", nargs="*", help="run only these example IDs")
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT, help="repository root containing the primer")
     parser.add_argument("--primer", dest="primer_option", type=Path, help="primer directory, relative to --repo-root or absolute")
+    parser.add_argument("--all", action="store_true", help="run every primer with an examples/manifest.toml")
     parser.add_argument("--example", action="append", default=[], help="run only the named example (repeatable)")
     args = parser.parse_args(argv)
     try:
         if args.primer_pos is not None and args.primer_option is not None:
             parser.error("use either a positional primer or --primer, not both")
-        primer_arg = args.primer_option or args.primer_pos
-        if primer_arg is None:
-            parser.error("a primer directory is required")
+        if args.all and (args.primer_pos is not None or args.primer_option is not None or args.example_pos or args.example):
+            parser.error("--all cannot be combined with a primer or example selector")
         repo_root = args.repo_root.resolve()
-        primer = primer_arg if primer_arg.is_absolute() else repo_root / primer_arg
-        entries = load_manifest(primer, repo_root)
-        requested = args.example + args.example_pos
-        missing = set(requested) - {entry["id"] for entry in entries}
-        if missing:
-            raise ManifestError(f"unknown example IDs: {', '.join(sorted(missing))}")
+        if args.all:
+            primers = discover_primers(repo_root)
+        else:
+            primer_arg = args.primer_option or args.primer_pos
+            if primer_arg is None:
+                parser.error("a primer directory is required, or use --all")
+            primers = [(primer_arg if primer_arg.is_absolute() else repo_root / primer_arg).resolve()]
         oci = os.environ.get("OCI") or ("podman" if shutil.which("podman") else "docker")
         if oci not in ("podman", "docker") or not shutil.which(oci):
             raise ManifestError(f"container runtime unavailable: {oci}")
-        selected = [entry for entry in entries if not requested or entry["id"] in requested]
-        for entry in selected:
-            if not run_example(oci, primer.resolve(), entry, repo_root):
-                return 1
+        for primer in primers:
+            entries = load_manifest(primer, repo_root)
+            requested = args.example + args.example_pos
+            missing = set(requested) - {entry["id"] for entry in entries}
+            if missing:
+                raise ManifestError(f"unknown example IDs: {', '.join(sorted(missing))}")
+            selected = [entry for entry in entries if not requested or entry["id"] in requested]
+            for entry in selected:
+                if not run_example(oci, primer, entry, repo_root):
+                    return 1
         return 0
     except ManifestError as exc:
         print(f"error: {exc}", file=sys.stderr)

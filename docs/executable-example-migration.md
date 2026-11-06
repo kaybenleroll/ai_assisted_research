@@ -44,9 +44,10 @@ measured.
 
 The first CI job is opt-in by path: it runs on changes to the migrated
 manifests/scripts, the shared runner and runtime definitions, the Justfiles,
-or this workflow. It builds only the Python base, R, and Julia profiles used by
-the selected entries, probes them offline, and runs all three opted-in
-manifests. It does not make every primer snippet mandatory.
+or this workflow. It builds only the Python base, R, graph-analysis R, and
+Julia profiles used by the selected entries, probes them offline, and runs
+every manifest discovered by `just examples-all`. It does not make every
+primer snippet mandatory.
 
 The existing local planning measurements are 66 seconds and about 2.10 GB for
 the R runtime, and 75 seconds and about 1.32 GB for the Julia runtime on
