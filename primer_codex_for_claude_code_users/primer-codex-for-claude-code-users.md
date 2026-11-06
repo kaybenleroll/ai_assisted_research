@@ -1339,6 +1339,36 @@ broader redesign without explaining why the local fix would be unsafe.
 
 The prompt helps the agent spend effort on uncertainty rather than on ceremony. You can then raise the effort setting for the same task if the investigation remains inconclusive, without changing the task contract.
 
+### Worked Example: Escalating a Repository Task
+
+Consider the request: “update the primer build so the PDF uses the
+repository's pinned container, regenerate the committed outputs, and run the
+relevant checks.” A fast, lower-effort setting is a reasonable first choice
+when the `Justfile` already names the runtime and the expected files are clear.
+The task contract should still name the source, generated outputs, and build
+command. The evidence for a successful first pass is a small source diff,
+regenerated HTML and PDF, and checks that inspect the outputs rather than only
+their timestamps.
+
+Now suppose the first run finds two competing recipes, one figure generator
+that runs on the host, and a failed PDF check whose error does not identify the
+source of the problem. This is a visible escalation signal: the implementation
+crosses several files, the repository invariant is unclear, and the first
+verification path has contradicted the plan. Move to a stronger model or
+higher reasoning effort, retain the same task contract, and ask it to compare
+the recipes and trace the failure before editing. Record the decision:
+
+| Stage | Configuration | Evidence | Decision |
+| --- | --- | --- | --- |
+| First pass | Faster setting | Found the source recipe but missed a host-side figure path | Escalate |
+| Second pass | Stronger setting with deliberate reasoning | Identified the bypass, repaired the recipe, and passed the focused build | Keep this configuration for the task |
+
+The model setting changed because the repository evidence showed unresolved
+cross-file reasoning. The scope, safety boundary, and acceptance checks did
+not change. If the command had been blocked by a missing container runtime,
+changing the model would have been the wrong response; the execution
+environment would need fixing instead.
+
 ### Fast, Strong, and Specialised Are Not Permanent Categories
 
 Product documentation may describe models using categories such as fast, general-purpose, reasoning-focused, coding-focused, or preview. Treat those categories as useful orientation, not permanent technical properties. A model can be renamed, retired, reclassified, made available in a different interface, or exposed with different controls. The same label may also behave differently across a chat product, command-line tool, application programming interface (API), or hosted execution environment.
@@ -1401,6 +1431,39 @@ A useful translation has four parts:
 4. **Scope:** did it apply to one session, one repository, one user, or the whole organisation?
 
 For example, a Claude Code hook that runs a formatter after an edit has a different translation from a hook that rejects access to production credentials. The first can often move to a formatter command, pre-commit check, or CI job. The second needs a security boundary that does not depend on an instruction to the model.
+
+### Worked Example: Translating a Claude Code Hook and Skill
+
+Suppose a Claude Code project contains a `PostToolUse` hook that runs a
+Markdown linter after edits, and a `/primer-audit` skill that tells Claude how
+to inspect the resulting HTML and PDF. They are related, but they do different
+jobs. The hook is deterministic feedback: it should run after the relevant
+edit without asking the model to remember it. The skill is procedural
+knowledge: it tells the agent how to interpret failures and what evidence to
+record.
+
+Translate the behaviour in four steps:
+
+1. Move the linter command to a repository-owned `just lint-md` recipe or CI
+   check. That gives both harnesses the same executable check and makes the
+   failure visible even when no agent is present.
+2. Keep the portable audit procedure in `.agents/skills/primer-audit/SKILL.md`
+   and expose a Claude Code wrapper under `.claude/skills/primer-audit/` only
+   if Claude needs different invocation or tool names.
+3. In Codex, run the same recipe first and then invoke the skill or give the
+   agent the same audit contract: inspect source, map snippets to tests, render
+   representative pages, and report unresolved evidence separately.
+4. Test the failure boundary by introducing a harmless Markdown error in a
+   disposable branch. The linter should fail without relying on the model to
+   notice the error; the audit procedure should explain the failure and identify
+   the file and command that produced it.
+
+The original trigger, authority, and side effects are now explicit. The
+repository check owns deterministic enforcement, the shared skill owns
+reasoning about evidence, and the harness-specific wrapper owns only
+invocation. If Codex has no hook with the same event semantics, do not pretend
+that a prompt saying “always run the linter” is equivalent enforcement. Keep
+the command in `just` or CI and use the prompt as a reminder.
 
 The table below is a starting map. It is intentionally about responsibilities rather than exact command names or file paths.
 
@@ -2543,6 +2606,15 @@ notes: "Changed source and regenerated outputs in the required container."
 
 The date and identifiers in this example are placeholders for a real run record. Do not treat the model, setting, or result values as a claim about product performance.
 
+The record becomes useful only when it changes a decision. For example, if
+Codex completes four containerised primer tasks with the same correctness and
+safety scores as Claude Code, but needs 12 minutes of review compared with 25,
+the evidence supports routing bounded primer maintenance to Codex. If the
+fifth task exposes a generated-output omission, the conclusion should be
+narrower: Codex is promising for source-only edits, while rendered-output work
+still needs an explicit output audit. A result table without that
+interpretation is an archive, not an evaluation.
+
 #### Fair Bake-Off Checklist
 
 - Define one repository-specific evaluation question.
@@ -2705,6 +2777,8 @@ names and controls change.
 ## References
 
 - [Codex CLI documentation](https://learn.chatgpt.com/docs/codex/cli)
+- [Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide)
+- [Iterating Development Workflows with Codex](https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex)
 - [Codex CLI developer commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 - [Codex model and reasoning guidance](https://learn.chatgpt.com/docs/models)
 - [OpenAI API model guidance](https://developers.openai.com/api/docs/guides/latest-model)
@@ -2713,6 +2787,8 @@ names and controls change.
 - [GPT-6 Luna model documentation](https://developers.openai.com/api/docs/models/gpt-6-luna)
 - [OpenAI API conversation state](https://developers.openai.com/api/docs/guides/conversation-state)
 - [OpenAI API compaction](https://developers.openai.com/api/docs/guides/compaction)
+- [Claude Code settings and precedence](https://code.claude.com/docs/en/settings)
+- [Claude Code features overview](https://code.claude.com/docs/en/features-overview)
 - [ChatGPT Codex chat history and deletion](https://help.openai.com/en/articles/20001333-how-to-archive-and-delete-chats-in-codex)
 - [Codex project instructions with AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 - [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
