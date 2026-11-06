@@ -52,8 +52,12 @@ Run the command from the named directory (`cd <directory> && just <recipe>`). Th
 | `primer_deep_learning` | `html` | `pdf` | `all` includes both maths variants |
 | `primer_digital_signal_processing` | `html` | `pdf` | `full` runs plot generation/checks and `all`, including both maths variants |
 | `primer_evaluation_loop` | `html` | `pdf` | `all` includes both maths variants |
+| `primer_fluid_mechanics` | `html` | `pdf` | `full` runs plots, both maths variants, and main HTML/PDF |
 | `primer_hermes_server` | `html` | `pdf` | `all` |
+| `primer_information_theory` | `html` | `pdf` | `all` includes both maths variants |
+| `primer_linux_git_workflows` | `html` | `pdf` | `all` |
 | `primer_military_structure` | `html` | `pdf` | `all` |
+| `primer_ml_optimisation` | `html` | `pdf` | `all` includes both maths variants |
 | `primer_numerical_analysis` | `html` | `pdf` | `full` runs plots, both maths variants, and main HTML/PDF |
 | `primer_ohmyzsh` | `html` | `pdf` | `all` |
 | `primer_openclaw` | `html` | `pdf` | `all` |
@@ -61,16 +65,18 @@ Run the command from the named directory (`cd <directory> && just <recipe>`). Th
 | `primer_political_systems` | `html` | `pdf` | `all` includes both maths variants |
 | `primer_python_for_r_users` | `html` | `pdf` | `all` |
 | `primer_research_local_llms` | `html` | `pdf` | `all` |
+| `primer_retrieval_rag` | `html` | `pdf` | `all` includes both maths variants |
+| `primer_spectral_graph_theory` | `html` | `pdf` | `full` runs figures and main HTML/PDF |
 | `gaming_silo_rpg` | `silo-html` | `silo-pdf` | `silo-all` builds the index, four source documents, and four reference sheets |
 | `workbook_catmodel_elt_documents` | `render-dev-container` | — | `render-full-container` renders the full Quarto package |
 
-The root `Justfile` has selected project targets; use the directory recipes for complete project control. Root `html-dev` and `html-full` also run the workbook and may build PDFs through dependencies, so they are unsuitable for HTML-only sweeps. For those sweeps, run `html` per primer, `quick-html` for the Building AI companion, `html-variants` for the six opted-in maths primers, and `silo-html` for Silo.
+The root `Justfile` has selected project targets; use the directory recipes for complete project control. Root `html-dev` and `html-full` also run the workbook and may build PDFs through dependencies, so they are unsuitable for HTML-only sweeps. `html-full` routes projects with specialist `full` or complete recipes through those recipes; inspect its dependency list before relying on it for a release. For an HTML-only sweep, run `html` per primer, `quick-html` for the Building AI companion, `html-variants` for each opted-in maths primer, and `silo-html` for Silo.
 
 Run `just readme` to generate the README catalogue and update block, then `just readme-check` to verify them. Edit document titles, descriptions, links, and row order in the registry in `scripts/update_readme_recent.py`; update the relevant Justfile `DATE` after a substantive review. Do not edit generated README rows directly.
 
 Use wrapper recipes such as `full` to chain shared targets; `just` does not override an imported recipe. Render plots through the Rocker container and commit the generation script with figure outputs. The Mermaid Lua filter and Puppeteer configuration live in `_shared/filters/`; generated PNGs remain project-local in `.build/mermaid`. Prefer Mermaid to ASCII diagrams where PDF font coverage is unreliable. Set DejaVu Sans Mono for code containing Greek, because the default monospaced font lacks those glyphs. With a leading body H1 and numbered `##` sections, pair `--number-sections` with `--shift-heading-level-by=-1` so sections number from 1.
 
-Maths variants use shared `html-mathml`, `html-mathjax`, and `html-variants` recipes. Opt in through `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants using the main page's structural flags. The opted-in primers are complex analysis, deep learning, digital signal processing, evaluation loop, information theory, numerical analysis, and political systems. All seven default to MathJax. A project without the opt-in cannot run `html-variants`. `doc_template.html` runs the MathJax `boldsymbol` extension, vendored in `_shared/vendor/mathjax/boldsymbol.js`, because an embedded bundle cannot load it. When Pandoc embeds a new MathJax version, replace the vendored file with `input/tex/extensions/boldsymbol.js` from `https://cdn.jsdelivr.net/npm/mathjax@<version>/` and re-render the maths primers; no check enforces the match, and MathJax's runtime `checkVersion` warns in the browser console on drift.
+Maths variants use shared `html-mathml`, `html-mathjax`, and `html-variants` recipes. Opt in through `--metadata mathvariants=true` in `HTML_EXTRA`; `all` then builds both variants using the main page's structural flags. The opted-in primers are complex analysis, deep learning, digital signal processing, evaluation loop, fluid mechanics, information theory, ML optimisation, numerical analysis, political systems, and retrieval/RAG. All ten explicitly default to MathJax. A project without the opt-in cannot run `html-variants`. `doc_template.html` runs the MathJax `boldsymbol` extension, vendored in `_shared/vendor/mathjax/boldsymbol.js`, because an embedded bundle cannot load it. When Pandoc embeds a new MathJax version, replace the vendored file with `input/tex/extensions/boldsymbol.js` from `https://cdn.jsdelivr.net/npm/mathjax@<version>/` and re-render the maths primers; no check enforces the match, and MathJax's runtime `checkVersion` warns in the browser console on drift.
 
 ## Render QA
 
