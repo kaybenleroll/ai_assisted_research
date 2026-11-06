@@ -133,6 +133,11 @@ routes in [CONTRIBUTING.md](../CONTRIBUTING.md) and
 - representative visual pages and their pass/fail result;
 - link and source checks, including known limitations or offline checks.
 
+Use `just render-qa <primer-directory>` to collect the mechanical HTML/PDF
+evidence and raster candidates in one ignored bundle. Treat its page choices as
+sampling suggestions, open each generated PNG, and record the human result in
+the report and PR; the command does not replace visual inspection.
+
 Generated outputs are part of the deliverable. Never claim a render or example
 was checked from the existence of a file alone.
 

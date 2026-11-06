@@ -130,6 +130,10 @@ lint-changed:
 lint-spell *FILES:
   bash scripts/lint.sh --spell {{FILES}}
 
+# Collect HTML/PDF checks and raster candidates for human visual inspection
+render-qa project:
+  python3 -I scripts/render_qa.py "{{project}}"
+
 # Build the shared pandoc image used by all primer projects
 build-image:
   {{OCI}} build -t {{IMAGE}} -f _shared/Dockerfile _shared/

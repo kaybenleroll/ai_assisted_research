@@ -64,6 +64,14 @@ Follow [CONTRIBUTING.md — Render QA](../CONTRIBUTING.md#render-qa) for builds 
 
 **Visual QA** means rasterising and inspecting four PDF page types: the first page, a page with a table, a page with code, and a page with a figure or equation. Record each page number and pass or fail in the PR. This runnable example uses the pinned Pandoc base image and installs Poppler only inside the disposable container. The sample page numbers target `primer_evaluation_loop`; change them for the document under review. Run from the repository root; output stays under `.scratch`:
 
+The reusable route is `just render-qa <primer-directory>`. It checks the
+committed HTML, extracts PDF metadata and text in the configured Pandoc
+container, and writes candidate page PNGs plus a report under
+`.scratch/render-qa/<primer-directory>/`. The page choices are heuristics for
+finding likely tables, code, and figures or equations; open each PNG and
+replace `pending` in the report with the human result. The command does not
+claim that rasterisation alone is visual QA.
+
 ```bash
 podman run --rm --entrypoint sh -v "$PWD":/work:Z -w /work docker.io/pandoc/latex@sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8 -c 'apk add --no-cache poppler-utils >/dev/null && mkdir -p .scratch/review-pages && for page in 1 17 13 3; do pdftoppm -f "$page" -l "$page" -png -r 120 primer_evaluation_loop/primer_evaluation_loop.pdf ".scratch/review-pages/page-$page"; done'
 ```
