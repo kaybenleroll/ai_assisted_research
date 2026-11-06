@@ -6,7 +6,7 @@ A graph represents objects and relationships. A vertex might represent a junctio
 
 The approach exists because ordinary row-wise summaries lose the routes by which information or influence travels. Assessing a transport bottleneck, finding coherent document topics, or detecting an anomalous sensor reading requires combining local information along paths of different lengths. Counting neighbours answers a one-step question; shortest paths emphasise a single route and can be unstable under ties. Two data sets can have identical degree counts but very different bottlenecks. Two pairs of vertices can have the same shortest-path distance but very different numbers of alternative routes. Two clusters can have the same within-group density but different volume relative to their boundary. Spectral quantities compress these global relationships into coordinates, modes, gaps, and quadratic forms that can be compared across scales.
 
-These global questions share a mathematical starting point: several apparently different problems reduce to the same quadratic form. If an edge means that two vertices should have similar values, then a useful signal should make $(x_i-x_j)^2$ small on heavily weighted edges. Summing those penalties gives the Laplacian energy. Minimising energy under constraints produces smooth coordinates; evolving according to the associated operator produces diffusion; and relaxing a discrete partition objective produces spectral clustering. The shared operator is a modelling advantage, but it is also a risk: an incorrect edge meaning propagates into every downstream interpretation.
+These global questions share a mathematical starting point: several apparently different problems reduce to the same quadratic form. If an edge means that two vertices should have similar values, then a useful signal should make the squared difference between those values small on heavily weighted edges. Summing those penalties gives the Laplacian energy. Minimising energy under constraints produces smooth coordinates; evolving according to the associated operator produces diffusion; and relaxing a discrete partition objective produces spectral clustering. The shared operator is a modelling advantage, but it is also a risk: an incorrect edge meaning propagates into every downstream interpretation.
 
 That compression is useful precisely because it is selective. A Laplacian spectrum preserves some global geometry while discarding vertex labels and much of the original edge-level detail. An eigenvector supplies a coordinate that can make a cut or diffusion pattern visible, but it does not preserve every property of the graph. The right question is therefore not whether spectral analysis finds “the structure”, but which structure the chosen operator preserves and which information it deliberately ignores.
 
@@ -14,7 +14,7 @@ The matrices are not neutral summaries of data. A connection whose weight means 
 
 Before asking for an eigenvalue, write down the graph-construction contract. Specify the vertex universe and stable key; what an edge means; whether direction and loops are retained; how duplicate or reverse records are aggregated; whether a larger weight means stronger coupling; how distances, similarities, exposure, and missing values are transformed; and how isolates and disconnected components are retained or handled. The baseline route in this primer uses a finite, loopless, undirected graph with finite strictly positive weights on retained edges. Its Laplacian treats a larger weight as a stronger penalty for disagreement. Passing a distance directly as a weight reverses that interpretation, so distances must be transformed or handled by a different model. Every spectrum reported later is conditional on this contract.
 
-The mathematical running example is two dense groups joined by one bridge of weight $\varepsilon$. For every $\varepsilon>0$ the graph is connected, but as $\varepsilon$ becomes small the bridge is a weak route between otherwise coherent regions. This one graph lets us ask the same question in several languages: how much edge energy does a separating signal require, how does the second Laplacian eigenvalue respond, what cut does a sweep recover, and how quickly does diffusion cross the bridge? A small eigenvalue is evidence of a bottleneck in the declared weighted graph, not proof of a social, physical, or causal boundary.
+The mathematical running example is two dense groups joined by one bridge of positive weight. The graph remains connected however small that weight becomes, but a small weight makes the bridge a weak route between otherwise coherent regions. This one graph lets us ask the same question in several languages: how much edge energy does a separating signal require, how does the second Laplacian eigenvalue respond, what cut does a sweep recover, and how quickly does diffusion cross the bridge? A small eigenvalue is evidence of a bottleneck in the declared weighted graph, not proof of a social, physical, or causal boundary.
 
 Three questions should be separated throughout:
 
@@ -39,7 +39,7 @@ The common background is vectors, matrix multiplication, quadratic forms, and ei
 
 *Verification note. The mathematical claims are checked against the listed primary sources, and the executable examples are checked against the repository's pinned Python and R runtimes. Claims about package interfaces are dated where they may change; the synthetic case study is verified against its checked-in fixture rather than external route data.*
 
-### Notation and Conventions
+## Notation
 
 The table provides a reference for the main symbols; each derivation defines its variables locally.
 
@@ -1196,14 +1196,14 @@ The harmonic calculation is worth deriving because it gives a direct interpretat
 $$
 \frac{1}{2}\mathbf{x}_U^{\top}L_{UU}\mathbf{x}_U
 +\mathbf{x}_U^{\top}L_{UL}\mathbf{x}_L
-\text{constant}.
++\text{constant}.
 $$
 
 Differentiating gives $L_{UU}\mathbf{x}_U=-L_{UL}\mathbf{x}_L$. If every connected component contains a labelled vertex, $L_{UU}$ is positive definite and the solution is unique. At an unlabelled vertex the equation is a weighted average of neighbouring values, so the algebra and the intuitive “smooth interpolation” story agree. If a component has no label, its block retains a constant null direction and no amount of numerical precision identifies an absolute prediction there.
 
 This model also clarifies what a validation set must test. A low-energy prediction may be deliberately wrong when labels change sharply across a strong edge. Hold out labels within each component, compare against a non-graph baseline, and vary the graph bandwidth, neighbourhood size, and weight transform. If performance changes substantially under plausible graph constructions, the graph is acting as an influential prior and the uncertainty should be reported as model sensitivity rather than hidden in a single selected spectrum.
 
-For a six-vertex path, suppose the first and last vertices have fixed values 1 and 0. The unlabelled solution is a linear interpolation, because every interior vertex has zero Laplacian residual. If the middle edge is weakened, the interpolation develops a sharper change there: the graph is saying that the two sides are less obliged to agree. If the middle edge is removed, the problem separates into components and one side has no fixed value unless another label is supplied. The nullspace theorem is therefore an identifiability condition for a prediction problem.
+For a six-vertex path with unit edge weights, suppose the first and last vertices have fixed values 1 and 0. The unlabelled solution is $(1,4/5,3/5,2/5,1/5,0)^{\top}$, a linear interpolation, because every interior vertex has zero Laplacian residual. If the middle edge is weakened, the interpolation develops a sharper change there: the graph is saying that the two sides are less obliged to agree. If the middle edge between vertices 3 and 4 is removed, both resulting components retain a labelled endpoint. The solution remains unique and becomes $(1,1,1,0,0,0)^{\top}$. By contrast, if only vertex 1 were labelled, removing that edge would leave the component containing vertices 4, 5, and 6 without a fixed value; any constant on that component would minimise its energy. The nullspace theorem is therefore an identifiability condition for a prediction problem.
 
 The regularised version makes the trade-off explicit. With observations on all vertices, minimise
 
@@ -1645,7 +1645,7 @@ The document's examples follow this pattern at different scales. The four-vertex
 
 `igraph` is a natural construction and matrix layer, `tidygraph` is useful when node and edge metadata need tidy transformations, and `ggraph` is a visual inspection layer. Keep those roles separate. Construct and validate the operator with numerical code, attach component labels and computed diagnostics as graph attributes, and only then plot. A force-directed or stress layout is useful for checking labels and missing edges, but it is not a spectral embedding, a geographic map, or evidence of metric distance.
 
-The repository provides a separate pinned `r-graph` example image; the [example manifest](examples/manifest.toml) records its package versions. The manifest's `igraph-tidygraph-smoke` example is the executable smoke example: it runs the construction, Laplacian invariants, tidy node mutation, stress layout, and PNG output offline. The profile is separate from the minimal shared R image because the graph package dependency closure is substantial. The snippets below are illustrative companion snippets, not individually manifest-backed scripts; some also assume objects created by earlier snippets. The dense base-R examples remain useful diagnostics that do not require the graph image.
+The repository provides a separate pinned `r-graph` example image. The [example manifest](examples/manifest.toml) selects that runtime profile and records example sources and timeouts; the graph-package lock at `_shared/runtime/r-graph/packages.lock` records direct graph-package versions. The base R runtime Containerfile at `_shared/runtime/r/Containerfile` pins the R image and dated P3M snapshot used to resolve transitive dependencies. Both paths are relative to the repository root. The manifest's `igraph-tidygraph-smoke` example runs the construction, Laplacian invariants, tidy node mutation, stress layout, and PNG output offline. The profile is separate from the minimal shared R image because the graph package dependency closure is substantial. The snippets in this subsection are illustrative companion snippets, not individually manifest-backed scripts; some also assume objects created by earlier snippets. The complete R route companion in the following case study is registered separately. The dense base-R examples remain useful diagnostics that do not require the graph image.
 
 ```r
 library(igraph)
@@ -1855,16 +1855,21 @@ The largest-component restriction is often convenient for plotting and random-wa
 
 An example output table should include vertex count, edge count, component count, isolate count, largest-component size, minimum and median conductance among evaluated sweep cuts, and the smallest non-zero eigenvalues with solver residuals. A figure can show the component-size distribution and a spectral embedding coloured by component or by a transparent route category. Layout coordinates should never be used to imply geographic distance unless geographic coordinates are separately plotted.
 
-The same construction can be expressed idiomatically in R without hiding the aggregation rule. The fixture is comma-separated, so the example uses `read_csv()` and the file's named `source_airport` and `destination_airport` columns. The important step is to canonicalise endpoint order only for the undirected variants; the raw directional-looking rows remain available for an audit.
+The same construction can be expressed idiomatically in R without hiding the aggregation rule. The fixture is comma-separated, so the example uses base R's `read.csv()` and the file's named `source_airport` and `destination_airport` columns. This reader is available in the pinned runtime without adding a package dependency. The important step is to canonicalise endpoint order only for the undirected variants; the raw directional-looking rows remain available for an audit. Run from the primer directory so the fixture's relative path resolves.
 
-```r
+```r {#openflights-r-companion}
 library(dplyr)
 library(igraph)
 library(tidygraph)
 
-routes <- readr::read_csv(
+routes <- read.csv(
   "examples/data/openflights_synthetic_routes.dat",
-  show_col_types = FALSE
+  stringsAsFactors = FALSE
+)
+stopifnot(
+  nrow(routes) == 27L,
+  ncol(routes) == 9L,
+  all(c("source_airport", "destination_airport") %in% names(routes))
 )
 
 undirected_edges <- routes |>
@@ -1875,7 +1880,7 @@ undirected_edges <- routes |>
   count(from, to, name = "weight")
 
 vertices <- tibble::tibble(
-  name = sort(unique(c(routes$from, routes$to)))
+  name = sort(unique(c(routes$source_airport, routes$destination_airport)))
 )
 
 binary_edges <- undirected_edges |>
@@ -1898,9 +1903,22 @@ annotate_graph <- function(g) {
 
 count_graph <- annotate_graph(g_count)
 binary_graph <- annotate_graph(g_binary)
+
+stopifnot(
+  identical(V(g_count)$name, sprintf("A%02d", 1:10)),
+  identical(V(g_count)$name, V(g_binary)$name),
+  ecount(g_count) == 17L, ecount(g_binary) == 17L,
+  components(g_count)$no == 1L, components(g_binary)$no == 1L,
+  sum(E(g_count)$weight) == nrow(routes),
+  sum(E(g_binary)$weight) == 17L,
+  identical(as_tibble(count_graph)$component, components(g_count)$membership),
+  sum(as_tibble(count_graph)$degree) == 54,
+  sum(as_tibble(binary_graph)$degree) == 34
+)
+message("R route companion passed: 27 rows, 10 vertices, 17 undirected edges")
 ```
 
-The two graph objects share the same vertex universe and differ only in the weight rule. That makes the subsequent comparison interpretable. A `tidygraph` mutation can add a spectral coordinate after the operator has been calculated, while `ggraph(count_graph, layout = "stress")` can inspect labels and components. If the intended figure is a spectral embedding, calculate two eigenvectors and pass a layout data frame in the same vertex order; a stress layout should not be labelled as spectral. The repository's Python case remains the executable fixture authority, and this R code is an idiomatic companion pattern that reuses its offline input.
+The two graph objects share the same vertex universe and differ only in the weight rule. That makes the subsequent comparison interpretable. The assertions check the fixture inventory, vertex order, connectivity, aggregated weights, and node annotations. The [example manifest](examples/manifest.toml) registers this exact published block as `openflights-r-companion` in the pinned `r-graph` runtime; run it from the repository root with `just examples spectral_graph_theory openflights-r-companion`. The Python case supplies the spectral diagnostics and sweep-cut checks, while this R companion verifies graph construction and annotation against the same offline fixture. A `tidygraph` mutation can add a spectral coordinate after the operator has been calculated, while `ggraph(count_graph, layout = "stress")` can inspect labels and components. If the intended figure is a spectral embedding, calculate two eigenvectors and pass a layout data frame in the same vertex order; a stress layout should not be labelled as spectral.
 
 The comparison should be reported as a small table rather than only as two coloured plots. Include the aggregation rule, vertex and edge counts, components, isolates, total volume, $\lambda_2$, the normalised gap, selected threshold, and conductance. Then explain which differences are mathematical consequences of the weight rule and which would require external evidence about aviation. This turns an attractive route-network example into a reproducible lesson about graph construction.
 

@@ -34,3 +34,11 @@ language = "r"
 script = "examples/igraph_tidygraph_smoke.R"
 profile = "r-graph"
 timeout_seconds = 120
+
+[[examples]]
+id = "openflights-r-companion"
+language = "r"
+markdown = "primer_spectral_graph_theory.md"
+fence = "openflights-r-companion"
+profile = "r-graph"
+timeout_seconds = 120
