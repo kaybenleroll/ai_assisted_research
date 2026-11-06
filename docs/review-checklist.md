@@ -64,8 +64,19 @@ For another document, replace the PDF path and page numbers 17, 13, and 3 with p
 
 ## PR Description Template
 
+The first line identifies the primary issue. Put each additional issue reference
+on its own line, using `Refs #N` for a related or partially addressed issue.
+Use a closing keyword only when this milestone completes that issue; record
+remaining work in the issue.
+
 ```markdown
 Closes #N
+
+Refs #N
+
+Milestone:
+- Outcome and acceptance criteria:
+- Issue coverage: completed work and remaining work for each linked issue:
 
 Profile:
 - Passes and commands run, with results:

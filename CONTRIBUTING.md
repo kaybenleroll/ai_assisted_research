@@ -23,7 +23,7 @@ The host needs Git, `just`, and a container runtime (Podman preferred; Docker al
 
 Most documents live in `primer_<short>/` with a thin `Justfile`, one source Markdown file, and committed HTML and PDF. New sources use `<dir>.md`, retaining underscores; existing hyphenated filenames are frozen rather than renamed. The source H1 is the canonical title and must match the Justfile `TITLE`. Do not add refresh stamps to the H1 or title. The Silo project uses `gaming_` filenames; the catastrophe workbook uses `workbook_` filenames and a separate Quarto build.
 
-Issue titles start with `[infra]` or the primer's short name (directory name without `primer_`, with hyphens). Use `<type>/<issue#>-<slug>` for branches. Keep generated intermediates out of commits. Before a content migration, compare old and proposed material to establish the actual scope; inspect companion documents and configuration or ignore-file outliers as well as the primary source.
+Issue titles start with `[infra]` or the primer's short name (directory name without `primer_`, with hyphens). Use `<type>/<issue#>-<slug>` for branches, using the primary issue number. Keep generated intermediates out of commits. Before a content migration, compare old and proposed material to establish the actual scope; inspect companion documents and configuration or ignore-file outliers as well as the primary source.
 
 ## Building
 
@@ -131,7 +131,26 @@ A PR that changes a Silo bible's content updates its companion reference sheet i
 
 ## Pull Request Workflow
 
-Work issue-first and keep one issue per PR. Typos and single-line fixes may use a PR without a separate issue. Start the PR body with `Closes #N` for its issue; `Fixes #N` and `Resolves #N` are also accepted. Per-primer PRs under a sweep issue use `Refs #N` for the sweep; only the owner-designated final PR uses `Closes #N` for it. Cross-repository references such as `Closes owner/repo#N` are accepted. For a typo or single-line fix without an issue, start the body with `No-issue: <non-empty reason>`, for example `No-issue: typo in README`. The first non-blank line is checked on PR opening, editing, synchronisation, and reopening. Serialise work on a primer through #136, heading case, #141, and #138; avoid two open PRs on the same primer. A cross-primer sweep has one tracking issue with a per-primer checklist.
+Work issue-first and keep one coherent milestone per PR: a bounded,
+independently reviewable outcome with explicit acceptance criteria. A milestone
+may complete several related issues or a defined part of a larger issue. Split
+unrelated outcomes into separate PRs. Select a primary issue for the branch name
+and reference every issue addressed in the PR body. Start the first non-blank
+line with a reference to the primary issue. Use `Closes #N`, `Fixes #N`, or
+`Resolves #N` only when the PR completes that issue; otherwise use `Refs #N`.
+Put each additional issue reference on its own line, repeating the keyword. Do
+not put multiple closing keywords on the first line: GitHub's comma-separated
+form closes only the first issue. For partially addressed issues, state what
+this milestone completes and record the remaining work in the issue. Typos and
+single-line fixes may use a PR without a separate issue. For a typo or
+single-line fix without an issue, start the body with
+`No-issue: <non-empty reason>`, for example `No-issue: typo in README`.
+Cross-repository references
+such as `Closes owner/repo#N` are accepted. The first non-blank line is checked
+on PR opening, editing, synchronisation, and reopening. Serialise work on a
+primer through #136, heading case, #141, and #138; avoid two open PRs on the
+same primer. A cross-primer sweep has one tracking issue with a per-primer
+checklist.
 
 The PR workflow reports separate `checks` and `pr-body` statuses. `checks` builds the lint image, runs `just lint-changed` against the base branch, and runs `just check` with Docker. `pr-body` checks the opening reference or no-issue reason. The workflow does not render documents or check online links. Repository owners must require both statuses on `main` in Settings, Rules; the workflow cannot set that protection itself.
 
