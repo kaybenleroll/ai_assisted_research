@@ -1745,8 +1745,9 @@ Lsym <- as.matrix(laplacian_matrix(
   g, weights = E(g)$weight, normalization = "symmetric", sparse = FALSE
 ))
 decomp <- eigen(Lsym, symmetric = TRUE)
-positive <- which(decomp$values > 1e-10)[1]
-z <- decomp$vectors[, positive]
+positive <- which(decomp$values > 1e-10)
+mode <- positive[which.min(decomp$values[positive])]
+z <- decomp$vectors[, mode]
 degree <- strength(g, weights = E(g)$weight)
 f <- z / sqrt(pmax(degree, .Machine$double.eps))
 ord <- order(f)
@@ -1765,7 +1766,7 @@ conductance <- vapply(prefixes, function(side) {
 data.frame(threshold = seq_len(vcount(g) - 1L), conductance)
 ```
 
-The code is a teaching pattern rather than a general sparse implementation. It is connected-example-only: it uses a tolerance only for the small, unit-scale example, does not define how an isolate should be handled, and assumes that the first positive eigenvalue is the desired mode. In a disconnected graph, compute components first, choose the positive-degree target component explicitly, and apply the same component-level Fiedler policy before forming the sweep coordinate. The value of the snippet is that it exposes the transformation from the symmetric eigenvector to the degree-corrected sweep coordinate instead of hiding it inside a convenience function.
+The code is a teaching pattern rather than a general sparse implementation. It is connected-example-only: it uses a tolerance only for the small, unit-scale example, does not define how an isolate should be handled, and selects the smallest positive eigenvalue as the desired mode. In a disconnected graph, compute components first, choose the positive-degree target component explicitly, and apply the same component-level Fiedler policy before forming the sweep coordinate. The value of the snippet is that it exposes the transformation from the symmetric eigenvector to the degree-corrected sweep coordinate instead of hiding it inside a convenience function.
 
 For graph-regularised prediction, the same R workflow can solve a labelled/unlabelled block without introducing a machine-learning package. Construct a Laplacian in the declared vertex order, keep the label vector keyed by vertex name, and solve the unlabelled block. Then compare the result with the known labels in a held-out experiment. A graph that gives a smooth interpolation but poor held-out error is not rescued by a visually attractive embedding; it tells you that the smoothness prior or its weight scale is not suitable for that prediction task.
 
@@ -1854,23 +1855,22 @@ The largest-component restriction is often convenient for plotting and random-wa
 
 An example output table should include vertex count, edge count, component count, isolate count, largest-component size, minimum and median conductance among evaluated sweep cuts, and the smallest non-zero eigenvalues with solver residuals. A figure can show the component-size distribution and a spectral embedding coloured by component or by a transparent route category. Layout coordinates should never be used to imply geographic distance unless geographic coordinates are separately plotted.
 
-The same construction can be expressed idiomatically in R without hiding the aggregation rule. The important step is to canonicalise endpoint order only for the undirected variants; the raw directional-looking rows remain available for an audit.
+The same construction can be expressed idiomatically in R without hiding the aggregation rule. The fixture is comma-separated, so the example uses `read_csv()` and the file's named `source_airport` and `destination_airport` columns. The important step is to canonicalise endpoint order only for the undirected variants; the raw directional-looking rows remain available for an audit.
 
 ```r
 library(dplyr)
 library(igraph)
 library(tidygraph)
 
-routes <- readr::read_tsv(
+routes <- readr::read_csv(
   "examples/data/openflights_synthetic_routes.dat",
-  col_names = c("airline", "from", "to"),
   show_col_types = FALSE
 )
 
 undirected_edges <- routes |>
   transmute(
-    from = pmin(from, to),
-    to = pmax(from, to)
+    from = pmin(source_airport, destination_airport),
+    to = pmax(source_airport, destination_airport)
   ) |>
   count(from, to, name = "weight")
 
