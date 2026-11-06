@@ -1950,13 +1950,13 @@ when a harness cannot reliably follow references, but it creates a
 maintenance obligation. Keep the duplicated section short and make drift
 detectable in review.</p>
 <p>For this project, the second design is now the repository pattern.
-The shared contract lives in <code>docs/project-contract.md</code>;
-<code>AGENTS.md</code> and <code>CLAUDE.md</code> are thin discovery
-adapters, while <code>.claude/rules/</code> remains Claude-specific. The
-contract also routes to <code>docs/agent-collaboration.md</code> for
-handoffs and smoke tests. This keeps repository policy neutral without
-pretending that native skills, hooks, permissions, or subagent formats
-are portable.</p>
+The shared contract lives in <code>docs/project-contract.md</code>, and
+<code>AGENTS.md</code> is the canonical root entry point. The contract
+also routes to <code>docs/agent-collaboration.md</code> for handoffs and
+smoke tests. Claude-specific settings may remain under
+<code>.claude/</code>, but they are not a second repository policy
+manual. This keeps repository policy neutral without pretending that
+native skills, hooks, permissions, or subagent formats are portable.</p>
 <h2 data-number="4.6" id="generating-each-harnesss-files-from-one-source"><span class="header-section-number">4.6</span> Generating Each Harness’s Files
 From One Source</h2>
 <p>Two harnesses is manageable by hand. Two harnesses plus an editor
@@ -4001,17 +4001,21 @@ project’s tooling.</p>
 <h2 data-number="9.1" id="move-the-canonical-text-to-agents.md-and-import-it"><span class="header-section-number">9.1</span> Move the Canonical Text to
 <code>AGENTS.md</code> and Import It</h2>
 <p>If a repository already has a carefully maintained
-<code>CLAUDE.md</code>, the migration is two commits and no rewriting.
-The first commit is a pure rename:</p>
+<code>CLAUDE.md</code>, the simplest portable migration is to move its
+shared text to <code>AGENTS.md</code> and verify each harness before
+removing any tool-specific adapter:</p>
 <pre class="shell"><code>git mv CLAUDE.md AGENTS.md</code></pre>
-<p>The second creates the import that keeps Claude Code working:</p>
+<p>If the Claude Code version or repository policy requires a
+Claude-specific adapter, the compatibility arrangement is:</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>@AGENTS.md</span></code></pre></div>
-<p>That is the entire contents of the new <code>CLAUDE.md</code>. Codex
-now discovers <code>AGENTS.md</code> through its own root-to-cwd walk,
-Claude Code resolves the import and receives the same text, and there is
-exactly one file for a reviewer to read. Append Claude-specific lines
-below the import when you have some; leave the file at one line when you
-do not.</p>
+<p>That is the entire contents of the adapter. Codex discovers
+<code>AGENTS.md</code> through its own root-to-cwd walk, while Claude
+Code resolves the import and receives the same text. Append
+Claude-specific lines below the import only when they express real
+Claude-only behaviour. If current Claude Code can discover
+<code>AGENTS.md</code> directly and no Claude-only adapter is needed,
+remove the root <code>CLAUDE.md</code> instead; do not keep an empty
+compatibility file merely for symmetry.</p>
 <p>Keeping the two commits separate is worth the extra step. The rename
 shows up in <code>git log --follow</code> and in review as a move rather
 than a rewrite, so the history of the instruction file survives.
@@ -4046,11 +4050,12 @@ stronger when the repository already keeps its policy in project
 documentation rather than in an agent file. A split pattern is
 appropriate only for genuinely harness-specific behaviour.</p>
 <p>In the import pattern, <code>AGENTS.md</code> is canonical and
-<code>CLAUDE.md</code> is an <code>@AGENTS.md</code> import. Repository
-rules, build commands, style guidance, and safety constraints all live
-in one file that both harnesses read in full. This is the right first
-step for an existing project because it changes discovery without
-reorganising anything else.</p>
+<code>CLAUDE.md</code> is an <code>@AGENTS.md</code> compatibility
+import. Repository rules, build commands, style guidance, and safety
+constraints all live in one file that both harnesses read in full. This
+is useful when a Claude Code version or local configuration does not
+discover <code>AGENTS.md</code> directly; it is not required when direct
+discovery is verified.</p>
 <p>In the shared-neutral pattern, stable repository rules move into a
 neutral file such as <code>docs/agent-instructions.md</code>. Each
 harness-specific file becomes a short adapter that names the shared file
@@ -4082,11 +4087,11 @@ actually needs.</p>
 <code>docs/project-contract.md</code>: the primer layout, containerised
 rendering requirement, <code>STYLE_GUIDE.md</code>, issue workflow, Silo
 routing, and the instruction to preserve unrelated work.
-<code>AGENTS.md</code> and <code>CLAUDE.md</code> point at that contract
-rather than restating it. <code>.claude/rules/</code> remains a
-Claude-specific adapter. If a rule later proves useful to both harnesses
-but is buried in tool-specific prose, extract that rule into the
-contract and keep the adapters thin.</p>
+<code>AGENTS.md</code> is the canonical root entry point and points at
+that contract. There is no competing root <code>CLAUDE.md</code>; retain
+Claude-specific files only when they express behaviour that is genuinely
+Claude-specific. If a rule later proves useful to every harness but is
+buried in tool-specific prose, extract it into the contract.</p>
 <h2 data-number="9.3" id="roll-out-in-a-branch-one-capability-at-a-time"><span class="header-section-number">9.3</span> Roll Out in a Branch, One
 Capability at a Time</h2>
 <p>Do the first Codex run on a branch or worktree with a clean, known

@@ -50,3 +50,20 @@ task, and Silo task. An unavailable harness is **unverified**, not a pass.
 The static contract check verifies paths and structure only. It cannot prove
 that a model followed an instruction, that a harness loaded a linked file, or
 that permissions and sandboxing are equivalent.
+
+## Repository discovery evidence
+
+As of 6 November 2026, this repository uses `AGENTS.md` as its sole canonical
+root instruction file. Record the Claude Code, Codex, and Pi versions with
+every discovery smoke test because support and selection rules are
+version- and configuration-dependent. Claude Code can discover `AGENTS.md`
+directly when no higher-precedence `CLAUDE.md` applies, while Codex and Pi
+have their own discovery chains. Native Claude Code rules, skills, hooks,
+permissions, and Codex or Pi equivalents are not implied by the shared file.
+
+A local session cannot establish Claude Code's default selection rule when
+user settings explicitly request combined instruction loading. A valid smoke
+test therefore records the harness version, working directory, relevant
+settings, discovered files, and exact task. A file the model later opens is
+not evidence that the harness discovered it automatically. Record unavailable
+harnesses as unverified rather than as passes.

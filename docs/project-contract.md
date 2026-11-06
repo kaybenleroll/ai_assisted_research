@@ -105,8 +105,8 @@ are small enough to read whole after consulting the index.
 
 ## Adapters and Limits
 
-`AGENTS.md` and `CLAUDE.md` are discovery adapters, not competing policy
-manuals. The active harness may discover one, both, or neither, and may apply
-additional user or managed instructions. Read this contract explicitly when a
+`AGENTS.md` is the canonical repository entry point. The active harness may
+discover it, apply additional user or managed instructions, or use a
+harness-specific adapter elsewhere. Read this contract explicitly when a
 harness does not automatically follow local links. Nothing here grants tools,
 permissions, network access, hooks, skills, or subagent isolation.

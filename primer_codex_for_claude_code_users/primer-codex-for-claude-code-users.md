@@ -851,11 +851,12 @@ cannot reliably follow references, but it creates a maintenance obligation.
 Keep the duplicated section short and make drift detectable in review.
 
 For this project, the second design is now the repository pattern. The shared
-contract lives in `docs/project-contract.md`; `AGENTS.md` and `CLAUDE.md` are
-thin discovery adapters, while `.claude/rules/` remains Claude-specific. The
-contract also routes to `docs/agent-collaboration.md` for handoffs and smoke
-tests. This keeps repository policy neutral without pretending that native
-skills, hooks, permissions, or subagent formats are portable.
+contract lives in `docs/project-contract.md`, and `AGENTS.md` is the canonical
+root entry point. The contract also routes to `docs/agent-collaboration.md` for
+handoffs and smoke tests. Claude-specific settings may remain under `.claude/`,
+but they are not a second repository policy manual. This keeps repository
+policy neutral without pretending that native skills, hooks, permissions, or
+subagent formats are portable.
 
 ### Generating Each Harness's Files From One Source
 
@@ -2267,24 +2268,28 @@ This cookbook assumes that Claude Code remains the primary harness. Codex become
 
 ### Move the Canonical Text to `AGENTS.md` and Import It
 
-If a repository already has a carefully maintained `CLAUDE.md`, the migration is
-two commits and no rewriting. The first commit is a pure rename:
+If a repository already has a carefully maintained `CLAUDE.md`, the simplest
+portable migration is to move its shared text to `AGENTS.md` and verify each
+harness before removing any tool-specific adapter:
 
 ```shell
 git mv CLAUDE.md AGENTS.md
 ```
 
-The second creates the import that keeps Claude Code working:
+If the Claude Code version or repository policy requires a Claude-specific
+adapter, the compatibility arrangement is:
 
 ```markdown
 @AGENTS.md
 ```
 
-That is the entire contents of the new `CLAUDE.md`. Codex now discovers
-`AGENTS.md` through its own root-to-cwd walk, Claude Code resolves the import
-and receives the same text, and there is exactly one file for a reviewer to
-read. Append Claude-specific lines below the import when you have some; leave
-the file at one line when you do not.
+That is the entire contents of the adapter. Codex discovers `AGENTS.md`
+through its own root-to-cwd walk, while Claude Code resolves the import and
+receives the same text. Append Claude-specific lines below the import only
+when they express real Claude-only behaviour. If current Claude Code can
+discover `AGENTS.md` directly and no Claude-only adapter is needed, remove the
+root `CLAUDE.md` instead; do not keep an empty compatibility file merely for
+symmetry.
 
 Keeping the two commits separate is worth the extra step. The rename shows up
 in `git log --follow` and in review as a move rather than a rewrite, so the
@@ -2312,7 +2317,12 @@ state, not a team convention.
 
 There are three reasonable arrangements. The import pattern is the least disruptive and the most reliable. A shared-neutral pattern is stronger when the repository already keeps its policy in project documentation rather than in an agent file. A split pattern is appropriate only for genuinely harness-specific behaviour.
 
-In the import pattern, `AGENTS.md` is canonical and `CLAUDE.md` is an `@AGENTS.md` import. Repository rules, build commands, style guidance, and safety constraints all live in one file that both harnesses read in full. This is the right first step for an existing project because it changes discovery without reorganising anything else.
+In the import pattern, `AGENTS.md` is canonical and `CLAUDE.md` is an
+`@AGENTS.md` compatibility import. Repository rules, build commands, style
+guidance, and safety constraints all live in one file that both harnesses read
+in full. This is useful when a Claude Code version or local configuration does
+not discover `AGENTS.md` directly; it is not required when direct discovery is
+verified.
 
 In the shared-neutral pattern, stable repository rules move into a neutral file such as `docs/agent-instructions.md`. Each harness-specific file becomes a short adapter that names the shared file and adds only the behaviour specific to that harness. The neutral file should contain facts that remain true regardless of who is acting: which directories are source, how to run tests, what must not be modified, and how generated artefacts are handled.
 
@@ -2333,7 +2343,7 @@ repository/
 
 The layout is illustrative, not a requirement. Do not create empty `.claude/` or `.codex/` directories merely to make the tree look symmetrical. Add a directory when it contains configuration or reusable behaviour that the corresponding harness actually needs.
 
-For this primer’s repository, the shared context is in `docs/project-contract.md`: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, issue workflow, Silo routing, and the instruction to preserve unrelated work. `AGENTS.md` and `CLAUDE.md` point at that contract rather than restating it. `.claude/rules/` remains a Claude-specific adapter. If a rule later proves useful to both harnesses but is buried in tool-specific prose, extract that rule into the contract and keep the adapters thin.
+For this primer’s repository, the shared context is in `docs/project-contract.md`: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, issue workflow, Silo routing, and the instruction to preserve unrelated work. `AGENTS.md` is the canonical root entry point and points at that contract. There is no competing root `CLAUDE.md`; retain Claude-specific files only when they express behaviour that is genuinely Claude-specific. If a rule later proves useful to every harness but is buried in tool-specific prose, extract it into the contract.
 
 ### Roll Out in a Branch, One Capability at a Time
 
