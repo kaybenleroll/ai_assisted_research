@@ -2947,12 +2947,12 @@ enforcement. Keep the command in <code>just</code> or CI and use the
 prompt as a reminder.</p>
 <p>The table below is a starting map. It is intentionally about
 responsibilities rather than exact command names or file paths.</p>
-<table>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 27%" />
+<col style="width: 31%" />
+<col style="width: 16%" />
+<col style="width: 24%" />
 </colgroup>
 <thead>
 <tr>
@@ -2965,53 +2965,54 @@ responsibilities rather than exact command names or file paths.</p>
 <tbody>
 <tr>
 <td>Project instructions (<code>CLAUDE.md</code>)</td>
-<td><code>AGENTS.md</code>, plus per-directory
-<code>AGENTS.override.md</code></td>
+<td><code>AGENTS.md</code></td>
 <td>Direct capability, different discovery</td>
 <td>Recent Claude Code releases can read <code>AGENTS.md</code>, but the
 default selects <code>CLAUDE.md</code> over it when both exist.</td>
 </tr>
 <tr>
-<td>Skills (<code>.claude/skills/&lt;name&gt;/SKILL.md</code>)</td>
-<td>Skills (<code>.agents/skills/&lt;name&gt;/SKILL.md</code>)</td>
+<td>Project skills</td>
+<td>Project skills</td>
 <td>Direct; same specification</td>
-<td>Different directory, shared format. Skill text that names
-harness-specific mechanisms is still harness-specific.</td>
+<td>Claude uses <code>.claude/skills/&lt;name&gt;/SKILL.md</code>; Codex
+uses <code>.agents/skills/&lt;name&gt;/SKILL.md</code>. Skill text that
+names harness-specific mechanisms is still harness-specific.</td>
 </tr>
 <tr>
-<td>Custom slash commands (<code>.claude/commands/*.md</code>)</td>
-<td><code>~/.codex/prompts/*.md</code>, deprecated in favour of
-skills</td>
+<td>Custom commands</td>
+<td>Custom prompts</td>
 <td>Partial, and shrinking</td>
-<td>Flat directory only, no subdirectories. OpenAI points new work at
-skills.</td>
+<td>Claude uses <code>.claude/commands/*.md</code>; Codex’s
+<code>~/.codex/prompts/*.md</code> is deprecated in favour of skills.
+Flat directory only, no subdirectories.</td>
 </tr>
 <tr>
-<td>Subagents (<code>.claude/agents/*.md</code>, YAML frontmatter)</td>
-<td>Subagents (<code>~/.codex/agents/*.toml</code>,
-<code>.codex/agents/*.toml</code>)</td>
+<td>Subagents</td>
+<td>Subagents</td>
 <td>Direct in concept, non-portable in format</td>
-<td>Markdown with frontmatter against TOML; no translation tool exists.
-Do not rely on description-only selection; use an explicit delegation
-contract.</td>
+<td>Claude uses <code>.claude/agents/*.md</code>; Codex uses
+<code>~/.codex/agents/*.toml</code> or
+<code>.codex/agents/*.toml</code>. Markdown with frontmatter and TOML
+have no official translation tool.</td>
 </tr>
 <tr>
-<td>Hooks (<code>.claude/settings.json</code>)</td>
-<td>Hooks (<code>hooks.json</code> or a <code>[hooks]</code> block in
-<code>config.toml</code>)</td>
+<td>Hooks</td>
+<td>Hooks</td>
 <td>Direct in concept, non-portable in format</td>
-<td>Event names largely overlap; matcher syntax, payload shape, and the
-trust model differ. Codex requires hash-keyed trust approval before a
-hook runs.</td>
+<td>Claude uses <code>.claude/settings.json</code>; Codex uses
+<code>hooks.json</code> or a <code>[hooks]</code> block in
+<code>config.toml</code>. Event names, payloads, and trust models
+differ.</td>
 </tr>
 <tr>
-<td>MCP servers (<code>.mcp.json</code>)</td>
-<td><code>[mcp_servers.&lt;name&gt;]</code> tables in
-<code>config.toml</code></td>
+<td>MCP servers</td>
+<td>MCP servers</td>
 <td>Direct at the protocol level, non-equivalent at the configuration
 level</td>
-<td>No shared file, no official converter. Field names and nesting
-differ, not just syntax.</td>
+<td>Claude uses <code>.mcp.json</code>; Codex uses
+<code>[mcp_servers.&lt;name&gt;]</code> tables in
+<code>config.toml</code>. There is no shared configuration file or
+official converter.</td>
 </tr>
 <tr>
 <td>Permissions (<code>allow</code>/<code>deny</code>/<code>ask</code>

@@ -1468,13 +1468,13 @@ the command in `just` or CI and use the prompt as a reminder.
 The table below is a starting map. It is intentionally about responsibilities rather than exact command names or file paths.
 
 | Claude Code concept | Codex-facing translation | Status | Main caution |
-| --- | --- | --- | --- |
-| Project instructions (`CLAUDE.md`) | `AGENTS.md`, plus per-directory `AGENTS.override.md` | Direct capability, different discovery | Recent Claude Code releases can read `AGENTS.md`, but the default selects `CLAUDE.md` over it when both exist. |
-| Skills (`.claude/skills/<name>/SKILL.md`) | Skills (`.agents/skills/<name>/SKILL.md`) | Direct; same specification | Different directory, shared format. Skill text that names harness-specific mechanisms is still harness-specific. |
-| Custom slash commands (`.claude/commands/*.md`) | `~/.codex/prompts/*.md`, deprecated in favour of skills | Partial, and shrinking | Flat directory only, no subdirectories. OpenAI points new work at skills. |
-| Subagents (`.claude/agents/*.md`, YAML frontmatter) | Subagents (`~/.codex/agents/*.toml`, `.codex/agents/*.toml`) | Direct in concept, non-portable in format | Markdown with frontmatter against TOML; no translation tool exists. Do not rely on description-only selection; use an explicit delegation contract. |
-| Hooks (`.claude/settings.json`) | Hooks (`hooks.json` or a `[hooks]` block in `config.toml`) | Direct in concept, non-portable in format | Event names largely overlap; matcher syntax, payload shape, and the trust model differ. Codex requires hash-keyed trust approval before a hook runs. |
-| MCP servers (`.mcp.json`) | `[mcp_servers.<name>]` tables in `config.toml` | Direct at the protocol level, non-equivalent at the configuration level | No shared file, no official converter. Field names and nesting differ, not just syntax. |
+| ------------------------------ | ---------------------------------- | ------------------ | -------------------------- |
+| Project instructions (`CLAUDE.md`) | `AGENTS.md` | Direct capability, different discovery | Recent Claude Code releases can read `AGENTS.md`, but the default selects `CLAUDE.md` over it when both exist. |
+| Project skills | Project skills | Direct; same specification | Claude uses `.claude/skills/<name>/SKILL.md`; Codex uses `.agents/skills/<name>/SKILL.md`. Skill text that names harness-specific mechanisms is still harness-specific. |
+| Custom commands | Custom prompts | Partial, and shrinking | Claude uses `.claude/commands/*.md`; Codex's `~/.codex/prompts/*.md` is deprecated in favour of skills. Flat directory only, no subdirectories. |
+| Subagents | Subagents | Direct in concept, non-portable in format | Claude uses `.claude/agents/*.md`; Codex uses `~/.codex/agents/*.toml` or `.codex/agents/*.toml`. Markdown with frontmatter and TOML have no official translation tool. |
+| Hooks | Hooks | Direct in concept, non-portable in format | Claude uses `.claude/settings.json`; Codex uses `hooks.json` or a `[hooks]` block in `config.toml`. Event names, payloads, and trust models differ. |
+| MCP servers | MCP servers | Direct at the protocol level, non-equivalent at the configuration level | Claude uses `.mcp.json`; Codex uses `[mcp_servers.<name>]` tables in `config.toml`. There is no shared configuration file or official converter. |
 | Permissions (`allow`/`deny`/`ask` rules) | `approval_policy` in `config.toml` | Partial | Claude Code matches patterns against tool calls; Codex decides how often to ask, not which commands match. |
 | Sandboxing | `sandbox_mode` plus `[sandbox_workspace_write]` | Non-equivalent scope | Both harnesses have sandboxing, but Codex exposes a broader OS-level filesystem/network policy in this configuration model, while Claude Code's Bash sandbox does not automatically constrain file tools, MCP servers, or hooks. |
 | Enterprise policy | `requirements.toml` and `managed_config.toml` | Different policy models | Codex can centrally constrain sandbox and approval settings; Claude Code has managed settings that can require its Bash sandbox and control instructions and permissions. |
