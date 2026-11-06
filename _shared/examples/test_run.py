@@ -15,6 +15,17 @@ FIXTURE = Path(__file__).parent / "fixtures/primer_runner"
 
 
 class RunnerTests(unittest.TestCase):
+    def test_discovers_manifested_primers_in_order(self):
+        primers = runner.discover_primers(runner.REPO_ROOT)
+        self.assertEqual(primers, sorted(primers))
+        self.assertEqual({path.name for path in primers}, {
+            "primer_digital_signal_processing",
+            "primer_fluid_mechanics",
+            "primer_ml_optimisation",
+            "primer_numerical_analysis",
+            "primer_spectral_graph_theory",
+        })
+
     def test_fixture_loads_only_listed_examples(self):
         entries = runner.load_manifest(FIXTURE)
         self.assertEqual([entry["id"] for entry in entries], [

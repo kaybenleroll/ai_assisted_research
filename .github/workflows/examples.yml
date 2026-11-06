@@ -10,11 +10,7 @@ on:
       - "_shared/examples.just"
       - "_shared/examples/**"
       - "_shared/runtime/**"
-      - "primer_ml_optimisation/examples/**"
-      - "primer_numerical_analysis/examples/**"
-      - "primer_digital_signal_processing/examples/**"
-      - "primer_fluid_mechanics/examples/**"
-      - "primer_spectral_graph_theory/examples/**"
+      - "primer_*/examples/**"
       - "docs/executable-examples.md"
       - "docs/executable-example-migration.md"
   workflow_dispatch:
@@ -42,9 +38,4 @@ jobs:
       - name: Probe selected runtime profiles offline
         run: just probe-python-runtime probe-r-runtime probe-r-graph-runtime probe-julia-runtime
       - name: Run opted-in primer examples
-        run: |
-          just examples ml_optimisation
-          just examples numerical_analysis
-          just examples digital_signal_processing
-          just examples fluid_mechanics
-          just examples spectral_graph_theory
+        run: just examples-all

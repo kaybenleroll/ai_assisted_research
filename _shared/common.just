@@ -101,4 +101,4 @@ clean:
   @echo "No intermediate build files to clean in {{PROJECT_DIR}}"
 
 clobber:
-  rm -fv {{SOURCE_MD_STEM}}.html {{SOURCE_MD_STEM}}.pdf
+  rm -fv {{SOURCE_MD_STEM}}.html {{SOURCE_MD_STEM}}.pdf {{SOURCE_MD_STEM}}.mathml.html {{SOURCE_MD_STEM}}.mathjax.html

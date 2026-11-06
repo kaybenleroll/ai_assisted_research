@@ -225,11 +225,17 @@ just examples numerical_analysis gradient-check matrix-solve
 # From a primer directory: run every entry or selected IDs for this primer
 just examples
 just examples gradient-check
+
+# From the repository root: run every primer with a manifest
+just examples-all
 ```
 
 The root recipe takes a primer directory name without `primer_` (for example,
 `numerical_analysis`); the per-primer recipe needs no primer argument. The
-runner is invoked with host `python3 -I` and uses the repository's existing
+`examples-all` recipe discovers every `primer_*/examples/manifest.toml` in
+deterministic path order, so adding a manifest does not require a second CI
+allowlist edit. The runner is invoked with host `python3 -I` and uses the
+repository's existing
 Podman-first/Docker-fallback selection, Podman keep-ID user namespace, and
 SELinux mount suffix conventions for runtime containers. It exposes no host
 credentials and disables networking. Its container invocation must:

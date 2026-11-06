@@ -11,6 +11,10 @@ MOUNT_SUFFIX := if OCI == "podman" { ":z" } else { "" }
 examples primer *IDS:
   just --justfile "{{justfile_directory()}}/Justfile" run-examples "{{justfile_directory()}}" "primer_{{primer}}" {{IDS}}
 
+# Run every primer that has an executable-example manifest.
+examples-all:
+  python3 -I _shared/examples/run.py --repo-root "{{justfile_directory()}}" --all
+
 default:
   @just --list
 
