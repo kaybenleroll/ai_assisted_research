@@ -936,8 +936,8 @@ the product name as the decision;</li>
 <li>how to translate familiar concepts such as <code>CLAUDE.md</code>,
 skills, hooks, Model Context Protocol (MCP), subagents, approvals, and
 sandboxing;</li>
-<li>how to write prompts that state scope, authority, and verification
-clearly;</li>
+<li>how to write prompts that state scope, authority, and
+verification;</li>
 <li>how to inspect, test, and review changes when two agents may work on
 the same codebase; and</li>
 <li>how to evaluate the two workflows using real tasks instead of
@@ -3487,9 +3487,9 @@ implement a small independent change. This is an area where the answer
 has changed: early 2025 Codex had nothing comparable, and current Codex
 has subagents as a generally available feature with its own
 configuration format, scoping rules, and concurrency controls. Simon
-Willison, reviewing the feature when it shipped, described it as “very
-similar to the Claude Code implementation.” That is a fair assessment of
-the concept. It is not true of the files.</p>
+Willison, reviewing the feature when it shipped, described the concept
+as “very similar to the Claude Code implementation”. That is a fair
+assessment of the concept. It is not true of the files.</p>
 <h3 data-number="7.6.1" id="how-codex-subagents-are-defined"><span class="header-section-number">7.6.1</span> How Codex Subagents Are
 Defined</h3>
 <p>A Codex subagent is a TOML file. Personal definitions live in
@@ -3783,7 +3783,7 @@ management (MDM), or a plain filesystem drop at
 permissions, but no documented equivalent that pins a sandbox mode
 organisation-wide, because it has no operating-system sandbox mode to
 pin. If your requirement is “no engineer in this organisation can run an
-agent with unrestricted filesystem access,” Codex has a mechanism for
+agent with unrestricted filesystem access”, Codex has a mechanism for
 that and Claude Code does not — which is a real difference in kind, not
 a gap that better configuration closes.</p>
 <p>None of the cross-tool synchronisation tools described earlier

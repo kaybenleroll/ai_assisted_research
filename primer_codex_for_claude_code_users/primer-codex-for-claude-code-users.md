@@ -20,7 +20,7 @@ The guide builds a working mental model before it gives you recipes. It explains
 - how Claude Code and Codex can share a repository while keeping their own instruction conventions;
 - how to choose a harness and model for a task rather than treating the product name as the decision;
 - how to translate familiar concepts such as `CLAUDE.md`, skills, hooks, Model Context Protocol (MCP), subagents, approvals, and sandboxing;
-- how to write prompts that state scope, authority, and verification clearly;
+- how to write prompts that state scope, authority, and verification;
 - how to inspect, test, and review changes when two agents may work on the same codebase; and
 - how to evaluate the two workflows using real tasks instead of anecdotes.
 
@@ -1814,7 +1814,7 @@ Confirm the current Codex surface's MCP support, supported transports, configura
 
 ### Subagents: Delegation Is Not Parallelism by Itself
 
-Claude Code users may use subagents to give a bounded task to a separate context: inspect tests, review a design, search for callers, or implement a small independent change. This is an area where the answer has changed: early 2025 Codex had nothing comparable, and current Codex has subagents as a generally available feature with its own configuration format, scoping rules, and concurrency controls. Simon Willison, reviewing the feature when it shipped, described it as "very similar to the Claude Code implementation." That is a fair assessment of the concept. It is not true of the files.
+Claude Code users may use subagents to give a bounded task to a separate context: inspect tests, review a design, search for callers, or implement a small independent change. This is an area where the answer has changed: early 2025 Codex had nothing comparable, and current Codex has subagents as a generally available feature with its own configuration format, scoping rules, and concurrency controls. Simon Willison, reviewing the feature when it shipped, described the concept as "very similar to the Claude Code implementation". That is a fair assessment of the concept. It is not true of the files.
 
 #### How Codex Subagents Are Defined
 
@@ -2013,7 +2013,7 @@ Claude Code has a managed policy file for instructions and permissions, but no
 documented equivalent that pins a sandbox mode organisation-wide, because it
 has no operating-system sandbox mode to pin. If your requirement is "no
 engineer in this organisation can run an agent with unrestricted filesystem
-access," Codex has a mechanism for that and Claude Code does not — which is a
+access", Codex has a mechanism for that and Claude Code does not — which is a
 real difference in kind, not a gap that better configuration closes.
 
 None of the cross-tool synchronisation tools described earlier attempt to
