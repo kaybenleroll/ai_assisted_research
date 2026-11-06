@@ -19,6 +19,7 @@ permissions, network access, sandboxing, and approval policy.
 | Content review passes and visual QA | [Review checklist](review-checklist.md) |
 | New or substantially revised primer | [Primer production procedure](primer-production-procedure.md) |
 | Portable primer workflow skills | [Workflow skills](primer-workflow-skills.md) |
+| Retrospective primer audits | [Wave 1 audit](retrospective-audit-wave-1.md) |
 | Cross-harness handoffs and smoke tests | [Agent collaboration notes](agent-collaboration.md) |
 | Catastrophe workbook | [Workbook README](../workbook_catmodel_elt_documents/README.md), then its Justfile |
 | Silo RPG content | [Silo index](../gaming_silo_rpg/gaming_silo_index.md) first; use the mandate below |
