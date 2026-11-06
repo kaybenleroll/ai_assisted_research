@@ -233,9 +233,10 @@ just examples-all
 The root recipe takes a primer directory name without `primer_` (for example,
 `numerical_analysis`); the per-primer recipe needs no primer argument. The
 `examples-all` recipe discovers every `primer_*/examples/manifest.toml` in
-deterministic path order, so adding a manifest does not require a second CI
-allowlist edit. The runner is invoked with host `python3 -I` and uses the
-repository's existing
+deterministic path order, validates each manifest before execution, and
+rejects absolute, traversal, missing, or symlinked inputs. Adding a manifest
+does not require a second CI allowlist edit. The runner is invoked with host
+`python3 -I` and uses the repository's existing
 Podman-first/Docker-fallback selection, Podman keep-ID user namespace, and
 SELinux mount suffix conventions for runtime containers. It exposes no host
 credentials and disables networking. Its container invocation must:
