@@ -75,8 +75,12 @@ DOCUMENTS = (
 
 
 def checked_path(path: str) -> Path:
+    if not isinstance(path, str) or not path or Path(path).is_absolute():
+        raise ValueError(f"Registry path must be repository-relative: {path!r}")
     resolved = ROOT / path
-    if not resolved.is_file():
+    if not resolved.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError(f"Registry path escapes repository: {path!r}")
+    if not resolved.is_file() or resolved.is_symlink():
         raise ValueError(f"Registry path does not exist: {path}")
     return resolved
 
@@ -167,7 +171,40 @@ def validate_primer_registry() -> None:
         )
 
 
+def validate_document_registry() -> None:
+    """Reject ambiguous or unrenderable catalogue entries."""
+    if not DOCUMENTS:
+        raise ValueError("Document registry must not be empty")
+
+    fields = {
+        "title": [document.title.casefold() for document in DOCUMENTS],
+        "justfile/date variable": [
+            (document.justfile, document.date_variable) for document in DOCUMENTS
+        ],
+        "html": [document.html for document in DOCUMENTS],
+        "pdf": [document.pdf for document in DOCUMENTS if document.pdf],
+    }
+    for field, values in fields.items():
+        duplicates = sorted({value for value in values if values.count(value) > 1})
+        if duplicates:
+            formatted = ", ".join(str(value) for value in duplicates)
+            raise ValueError(f"Duplicate registry {field}: {formatted}")
+
+    for document in DOCUMENTS:
+        if "|" in document.title or "|" in document.description:
+            raise ValueError(
+                f"README table fields must not contain an unescaped pipe: {document.title}"
+            )
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", document.date_variable):
+            raise ValueError(f"Invalid date variable for {document.title}: {document.date_variable}")
+        checked_path(document.justfile)
+        checked_path(document.html)
+        if document.pdf:
+            checked_path(document.pdf)
+
+
 def generate(current: str) -> str:
+    validate_document_registry()
     validate_primer_registry()
     dates = {}
     for document in DOCUMENTS:
