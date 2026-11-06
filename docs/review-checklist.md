@@ -19,6 +19,14 @@ Apply the R and C rules in the Style Guide, especially R1–R6 for sources and C
 - Date volatile claims with “as of” wording. Attribute contested claims and separate evidence from interpretation.
 - Record sources checked, corrections made, and any remaining uncertainty in the PR.
 
+For a new document or substantive content revision, read the complete source
+once for coverage and coherence. Then use representative sampling for local
+depth and render risks: sample the opening orientation, a difficult formal
+passage, a worked example, a practical case, and pages containing code, tables,
+figures, or equations. Record the scope and method of both passes. Sampling is
+not a substitute for whole-document review, and whole-document review does not
+replace visual inspection of representative rendered pages.
+
 ## Pass 2: Prose and Structure
 
 - Check that one coherent opening orientation block delivers the stated promise, explains scope and exclusions, states prerequisites, and gives the reader a route through the document. Do not accept separate top-level headings for each orientation item unless a documented navigation need justifies them.
