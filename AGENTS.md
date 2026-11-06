@@ -12,7 +12,7 @@ invariants, task routes, collaboration rules, and definition of done.
 - Preserve unrelated tracked and untracked work. Before editing, inspect
   `git status`, the current branch, and the relevant diff.
 - Never commit or push directly to `main`. Work issue-first on a branch named
-  `<type>/<issue#>-<slug>` and use one issue per pull request.
+  `<type>/<issue#>-<slug>` and use one coherent milestone per pull request.
 - Render published documents in the repository's pinned containers. Commit
   source documents and their required HTML/PDF outputs together; do not commit
   intermediate files.

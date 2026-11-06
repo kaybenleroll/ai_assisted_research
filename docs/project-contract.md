@@ -70,15 +70,18 @@ similar names imply equivalent semantics.
 
 ## Issues and Pull Requests
 
-Work issue-first, with one issue per PR. Branches follow
+Work issue-first, with one coherent milestone per PR. A milestone may span
+several tightly coupled issues, but it must have one primary issue, name related
+issues explicitly, and contain no unrelated work. Branches follow
 `<type>/<issue#>-<slug>`. `.github/labels.json` is the source of truth for
 priority, type, area, and effort labels. Use `[infra]` or the primer short name
-in issue titles. Open the PR body with `Closes #N` for its issue. For a
-per-primer PR under a sweep issue, use `Refs #N`; only the owner-designated
-final PR uses `Closes #N` for the sweep. A typo or single-line fix may use
-`No-issue: <reason>` as documented in [CONTRIBUTING.md](../CONTRIBUTING.md).
-Squash merge by default; use a merge commit when retaining a stacked chain or
-individual commits matters.
+in issue titles. Open the PR body with `Closes #N` for its primary issue. Use
+`Refs #N` for related issues unless the PR deliberately owns their closure as
+well. Do not put multiple closing keywords on the first line: GitHub's
+comma-separated form closes only the first issue. For a typo or single-line fix,
+`No-issue: <reason>` is allowed as documented in
+[CONTRIBUTING.md](../CONTRIBUTING.md). Squash merge by default; use a merge
+commit when retaining a stacked chain or individual commits matters.
 
 ## Silo Context Navigation Mandate
 
@@ -98,7 +101,7 @@ are small enough to read whole after consulting the index.
 
 ## Definition of Done
 
-1. Confirm the issue scope and inspect the affected source, companion documents, and build recipes.
+1. Confirm the milestone scope, acceptance criteria, and linked issues, then inspect the affected source, companion documents, and build recipes.
 2. Run the relevant commands in [CONTRIBUTING.md](../CONTRIBUTING.md): recipe checks, container renders where outputs change, render QA, and repository checks appropriate to the change.
 3. Check links, committed outputs, `git diff --check`, and the exact changed-path scope before opening the PR.
 4. State the commands run, results, and limitations in the PR, and link or reference the issue as required.
