@@ -4127,8 +4127,12 @@ Foundation’s Agentic AI Foundation in December 2025. OpenAI’s current
 announcement says it has been adopted by more than 60,000 open-source
 projects and agent frameworks, including Amp, Codex, Cursor, Devin,
 Factory, Gemini CLI, GitHub Copilot, Jules, and VS Code. This is an
-adoption claim from OpenAI, not an independent census. Claude Code
-itself can consume it through <code>CLAUDE.md</code> imports.</p>
+adoption claim from OpenAI, not an independent census. Claude Code can
+also discover it directly in recent releases when no higher-precedence
+<code>CLAUDE.md</code> applies; an explicit <code>@AGENTS.md</code>
+import remains a compatibility option when a repository needs a
+Claude-specific adapter or supports older or differently configured
+releases.</p>
 <p>The distinction from MCP matters: MCP standardises
 <em>tool/capability</em> portability (how an agent reaches external
 systems); AGENTS.md standardises <em>project-instruction</em>

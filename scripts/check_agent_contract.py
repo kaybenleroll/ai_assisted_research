@@ -19,7 +19,7 @@ REQUIRED_H2 = [
     "Definition of Done",
     "Adapters and Limits",
 ]
-ADAPTERS = {"AGENTS.md", "CLAUDE.md"}
+ADAPTERS = {"AGENTS.md"}
 
 
 def headings(text: str) -> list[str]:
@@ -47,6 +47,9 @@ def check(root: Path) -> list[str]:
     actual = headings(contract_text)
     if actual != REQUIRED_H2:
         errors.append(f"contract H2 sequence is {actual!r}, expected {REQUIRED_H2!r}")
+    root_claude = root / "CLAUDE.md"
+    if root_claude.exists() or root_claude.is_symlink():
+        errors.append("root CLAUDE.md must not exist; AGENTS.md is canonical")
     for name in ADAPTERS:
         path = root / name
         if not path.is_file():
@@ -67,7 +70,8 @@ def check(root: Path) -> list[str]:
         errors.append("project contract must not link to an adapter")
     local_paths = [
         "../CONTRIBUTING.md", "../STYLE_GUIDE.md", "math-notation.md",
-        "review-checklist.md", "../workbook_catmodel_elt_documents/README.md",
+        "review-checklist.md", "agent-collaboration.md",
+        "../workbook_catmodel_elt_documents/README.md",
         "../gaming_silo_rpg/gaming_silo_index.md",
     ]
     for target in local_paths:

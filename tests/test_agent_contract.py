@@ -26,12 +26,11 @@ class AgentContractTests(unittest.TestCase):
         (root / "docs/project-contract.md").write_text(CONTRACT, encoding="utf-8")
         for path in ("CONTRIBUTING.md", "STYLE_GUIDE.md"):
             (root / path).write_text("x", encoding="utf-8")
-        for path in ("math-notation.md", "review-checklist.md"):
+        for path in ("math-notation.md", "review-checklist.md", "agent-collaboration.md"):
             (root / "docs" / path).write_text("x", encoding="utf-8")
         (root / "workbook_catmodel_elt_documents/README.md").write_text("x", encoding="utf-8")
         (root / "gaming_silo_rpg/gaming_silo_index.md").write_text("x", encoding="utf-8")
         (root / "AGENTS.md").write_text(ADAPTER, encoding="utf-8")
-        (root / "CLAUDE.md").write_text(ADAPTER, encoding="utf-8")
         return temp, root
 
     def test_valid_contract(self):
@@ -42,8 +41,20 @@ class AgentContractTests(unittest.TestCase):
     def test_missing_adapter_link_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        (root / "CLAUDE.md").write_text("# Adapter\n", encoding="utf-8")
-        self.assertTrue(any("CLAUDE.md" in error for error in check(root)))
+        (root / "AGENTS.md").write_text("# Adapter\n", encoding="utf-8")
+        self.assertTrue(any("AGENTS.md" in error for error in check(root)))
+
+    def test_missing_agents_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "AGENTS.md").unlink()
+        self.assertTrue(any("missing AGENTS.md" in error for error in check(root)))
+
+    def test_root_claude_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "CLAUDE.md").write_text("# Obsolete\n", encoding="utf-8")
+        self.assertTrue(any("root CLAUDE.md" in error for error in check(root)))
 
     def test_reordered_heading_is_rejected(self):
         temp, root = self.make_root()
