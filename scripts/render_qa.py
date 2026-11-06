@@ -13,6 +13,7 @@ import argparse
 import base64
 from io import BytesIO
 from html.parser import HTMLParser
+import json
 import os
 from pathlib import Path
 import re
@@ -24,6 +25,8 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_IMAGE = "localhost/primers-pandoc:latest"
+OUTPUT_SUFFIXES = (".mathml.html", ".mathjax.html", ".html", ".pdf")
+COMMAND_LOG: list[str] = []
 
 
 class HTMLAudit(HTMLParser):
@@ -62,10 +65,74 @@ def source_stem(project: Path) -> str:
     return Path(match.group(1)).stem
 
 
+def oci_runtime() -> str:
+    for candidate in ("podman", "docker"):
+        if subprocess.run(["sh", "-c", f"command -v {candidate}"], capture_output=True).returncode == 0:
+            return candidate
+    raise RuntimeError("neither podman nor docker is available")
+
+
+def tracked_published_outputs(project: Path) -> list[Path]:
+    relative = project.relative_to(ROOT).as_posix()
+    result = subprocess.run(
+        ["git", "ls-files", "-z", "--", relative],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+    )
+    outputs = []
+    for raw in result.stdout.split(b"\0"):
+        if not raw:
+            continue
+        path = ROOT / raw.decode()
+        if path.parent == project and path.name.endswith(OUTPUT_SUFFIXES) and source_for_output(path).is_file():
+            outputs.append(path)
+    if not outputs:
+        raise RuntimeError(f"no tracked HTML/PDF outputs found for {relative}")
+    return sorted(outputs)
+
+
+def source_for_output(output: Path) -> Path:
+    for suffix in OUTPUT_SUFFIXES:
+        if output.name.endswith(suffix):
+            return output.with_name(output.name[: -len(suffix)] + ".md")
+    raise ValueError(f"unsupported published output: {output}")
+
+
+def source_image_references(source: Path) -> list[str]:
+    references = []
+    in_fence = False
+    image = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
+    for line in source.read_text().splitlines():
+        if line.lstrip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            references.extend(image.findall(line))
+    return [ref for ref in references if not ref.startswith(("http:", "https:", "data:", "#"))]
+
+
+def git_provenance() -> tuple[str, str]:
+    revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True, check=True).stdout.strip()
+    dirty = subprocess.run(["git", "status", "--porcelain=v1"], cwd=ROOT, text=True, capture_output=True, check=True).stdout.strip()
+    return revision, dirty or "clean"
+
+
+def image_identity(oci: str, image: str) -> str:
+    result = subprocess.run([oci, "image", "inspect", image], text=True, capture_output=True)
+    if result.returncode:
+        return f"unavailable ({result.stderr.strip() or 'image inspect failed'})"
+    try:
+        data = json.loads(result.stdout)[0]
+        image_id = data.get("Id", "unknown")
+        digests = ", ".join(data.get("RepoDigests") or []) or "none reported"
+        return f"id={image_id}; repo-digests={digests}"
+    except (ValueError, IndexError, TypeError, KeyError):
+        return "unavailable (unrecognised image inspect output)"
+
+
 def run_container(args: list[str], capture=True) -> str:
-    oci = os.environ.get("OCI") or ("podman" if subprocess.run(
-        ["sh", "-c", "command -v podman >/dev/null"], capture_output=True
-    ).returncode == 0 else "docker")
+    oci = os.environ.get("OCI") or oci_runtime()
     image = os.environ.get("IMAGE", DEFAULT_IMAGE)
     mount = f"{ROOT}:/work" + (":Z" if oci == "podman" else "")
     # Poppler is installed during the disposable run, so the container must
@@ -74,18 +141,31 @@ def run_container(args: list[str], capture=True) -> str:
     flags = []
     command = [oci, "run", "--rm", *flags, "--entrypoint", "sh", "-v", mount,
                "-w", "/work", image, "-c", *args]
+    COMMAND_LOG.append(shlex.join(command))
     result = subprocess.run(command, text=True, capture_output=capture)
     if result.returncode:
         raise RuntimeError(result.stderr.strip() or "container command failed")
     return result.stdout
 
 
-def pdf_probe(pdf: Path) -> tuple[str, str]:
+def pdf_probe(pdf: Path) -> tuple[str, str, list[str]]:
     relative = pdf.relative_to(ROOT).as_posix()
-    command = f"apk add --no-cache poppler-utils >/dev/null && pdfinfo {shlex.quote(relative)} && printf '\\n---TEXT---\\n' && pdftotext -layout {shlex.quote(relative)} -"
+    command = (
+        "apk add --no-cache poppler-utils >/dev/null && "
+        "printf '%s\\n' 'pandoc:' && pandoc --version | head -1 && "
+        "printf '%s\\n' 'pdfinfo:' && pdfinfo -v 2>&1 | head -1 && "
+        "printf '%s\\n' 'pdftotext:' && pdftotext -v 2>&1 | head -1 && "
+        "printf '%s\\n' 'pdftoppm:' && pdftoppm -v 2>&1 | head -1 && "
+        f"printf '\\n---PDFINFO---\\n' && pdfinfo {shlex.quote(relative)} && "
+        f"printf '\\n---TEXT---\\n' && pdftotext -layout {shlex.quote(relative)} -"
+    )
     output = run_container([command])
-    metadata, text = output.split("\n---TEXT---\n", 1)
-    return metadata, text
+    versions, remainder = output.split("\n---PDFINFO---\n", 1)
+    metadata, text = remainder.split("\n---TEXT---\n", 1)
+    pages_match = re.search(r"^Pages:\s+(\d+)", metadata, re.M)
+    if not pages_match or int(pages_match.group(1)) < 1 or not text.strip():
+        raise RuntimeError(f"PDF probe found no usable pages or text: {pdf.relative_to(ROOT)}")
+    return metadata, text, versions.splitlines()
 
 
 def choose_pages(text: str) -> dict[str, int]:
@@ -126,6 +206,29 @@ def choose_pages(text: str) -> dict[str, int]:
     return candidates
 
 
+def audit_html(html: Path, source: Path) -> tuple[HTMLAudit, list[str]]:
+    parser_html = HTMLAudit()
+    parser_html.feed(html.read_text())
+    duplicate_ids = sorted({value for value in parser_html.ids if parser_html.ids.count(value) > 1})
+    local_images = [src for src in parser_html.images if src and not src.startswith(("data:", "http:", "https:", "#"))]
+    missing_images = [src for src in local_images if not (html.parent / src).exists()]
+    source_refs = source_image_references(source)
+    missing_source_assets = [ref for ref in source_refs if not (source.parent / ref).exists()]
+    if not parser_html.title.strip() or not parser_html.headings:
+        raise RuntimeError(f"HTML structure is incomplete: {html.relative_to(ROOT)}")
+    if duplicate_ids or missing_images or missing_source_assets:
+        raise RuntimeError(
+            f"HTML QA failed for {html.relative_to(ROOT)}: duplicate IDs={duplicate_ids}, "
+            f"missing images={missing_images}, missing source assets={missing_source_assets}"
+        )
+    if source_refs and len(parser_html.images) < len(source_refs):
+        raise RuntimeError(
+            f"HTML image parity failed for {html.relative_to(ROOT)}: "
+            f"source references={len(source_refs)}, output images={len(parser_html.images)}"
+        )
+    return parser_html, source_refs
+
+
 def raster_pages(pdf: Path, output: Path, pages: dict[str, int]) -> None:
     relative = pdf.relative_to(ROOT).as_posix()
     requests = " ".join(f"{shlex.quote(label)}:{page}" for label, page in pages.items())
@@ -150,57 +253,94 @@ def main() -> int:
     project = (ROOT / args.project).resolve()
     if project.parent != ROOT or not project.is_dir():
         parser.error("project must be a primer directory directly under the repository root")
-    stem = source_stem(project)
-    html = project / f"{stem}.html"
-    pdf = project / f"{stem}.pdf"
-    for path in (html, pdf):
+    COMMAND_LOG.clear()
+    outputs = tracked_published_outputs(project)
+    for path in outputs:
         if not path.is_file() or path.stat().st_size == 0:
             raise SystemExit(f"missing or empty committed output: {path.relative_to(ROOT)}")
+    html_outputs = [path for path in outputs if path.name.endswith(".html")]
+    pdf_outputs = [path for path in outputs if path.name.endswith(".pdf")]
+    html_audits = []
+    for html in html_outputs:
+        source = source_for_output(html)
+        if not source.is_file():
+            raise SystemExit(f"published output has no source: {html.relative_to(ROOT)} -> {source.relative_to(ROOT)}")
+        parser_html, source_refs = audit_html(html, source)
+        html_audits.append((html, parser_html, source_refs))
 
-    parser_html = HTMLAudit()
-    parser_html.feed(html.read_text())
-    duplicate_ids = sorted({value for value in parser_html.ids if parser_html.ids.count(value) > 1})
-    local_images = [src for src in parser_html.images if src and not src.startswith(("data:", "http:", "https:", "#"))]
-    missing_images = [src for src in local_images if not (html.parent / src).exists()]
-    if not parser_html.title.strip() or not parser_html.headings:
-        raise SystemExit(f"HTML structure is incomplete: {html.relative_to(ROOT)}")
-    if duplicate_ids or missing_images:
-        raise SystemExit(f"HTML QA failed: duplicate IDs={duplicate_ids}, missing images={missing_images}")
+    pdf_audits = []
+    all_versions = []
+    for pdf in pdf_outputs:
+        source = source_for_output(pdf)
+        if not source.is_file():
+            raise SystemExit(f"published output has no source: {pdf.relative_to(ROOT)} -> {source.relative_to(ROOT)}")
+        metadata, text, versions = pdf_probe(pdf)
+        pages_match = re.search(r"^Pages:\s+(\d+)", metadata, re.M)
+        page_count = int(pages_match.group(1)) if pages_match else len(text.split("\f"))
+        pdf_audits.append((pdf, page_count, choose_pages(text)))
+        all_versions.extend(versions)
 
-    metadata, text = pdf_probe(pdf)
-    pages_match = re.search(r"^Pages:\s+(\d+)", metadata, re.M)
-    page_count = int(pages_match.group(1)) if pages_match else len(text.split("\f"))
-    pages = choose_pages(text)
     output = args.output or (ROOT / ".scratch" / "render-qa" / project.name)
     output = output.resolve()
     if output.parent != (ROOT / ".scratch" / "render-qa") and not str(output).startswith(str(ROOT / ".scratch")):
         parser.error("output must be under .scratch")
-    raster_pages(pdf, output, pages)
+    for pdf, _page_count, pages in pdf_audits:
+        raster_output = output if len(pdf_audits) == 1 else output / pdf.stem
+        raster_pages(pdf, raster_output, pages)
     report = output / "report.md"
     report.parent.mkdir(parents=True, exist_ok=True)
+    oci = os.environ.get("OCI") or oci_runtime()
+    image = os.environ.get("IMAGE", DEFAULT_IMAGE)
+    revision, dirty = git_provenance()
     lines = [
         f"# Render QA evidence: `{project.name}`",
         "",
         "This report is generated by `just render-qa`. Page choices are heuristic candidates for human visual inspection; rasterisation is not a visual pass.",
         "",
+        "## Provenance",
+        "",
+        f"- Git revision: `{revision}`",
+        f"- Working tree: `{dirty}`",
+        f"- Invocation: `{shlex.join([sys.executable, *sys.argv])}`",
+        f"- OCI runtime: `{oci}`",
+        f"- OCI image: `{image}`",
+        f"- Image identity: `{image_identity(oci, image)}`",
+        "- Tool versions:",
+        *[f"  - `{version}`" for version in dict.fromkeys(all_versions) if version],
+        "",
         "## Commands and outputs",
         "",
-        f"- HTML: `{html.relative_to(ROOT)}` ({html.stat().st_size} bytes)",
-        f"- PDF: `{pdf.relative_to(ROOT)}` ({pdf.stat().st_size} bytes; {page_count} pages)",
-        "- PDF tools: installed inside the configured Pandoc container for this run",
-        f"- HTML title: {parser_html.title.strip()}",
-        f"- HTML headings: {len(parser_html.headings)}; embedded images: {len(parser_html.images)}",
-        "- Duplicate HTML IDs: none",
-        "- Missing local HTML images: none",
+        *[f"- `{path.relative_to(ROOT)}` ({path.stat().st_size} bytes)" for path in outputs],
+        "",
+        "## HTML and source-asset checks",
+        "",
+        "| Output | Source | Title | Headings | Source images | Output images |",
+        "|---|---|---|---:|---:|---:|",
+        *[
+            f"| `{html.relative_to(ROOT)}` | `{source_for_output(html).relative_to(ROOT)}` | {parser.title.strip()} | {len(parser.headings)} | {len(refs)} | {len(parser.images)} |"
+            for html, parser, refs in html_audits
+        ],
         "",
         "## Raster candidates",
         "",
-        "| Purpose | Page | Evidence file | Human inspection |",
-        "|---|---:|---|---|",
+        "| Output | Purpose | Page | Evidence file | Human inspection |",
+        "|---|---|---:|---|---|",
     ]
-    for label, page in pages.items():
-        lines.append(f"| {label} | {page} | `{label}-*.png` | pending |")
-    lines += ["", "Update the final column after opening each PNG and record any layout defect in the PR.", ""]
+    for pdf, _page_count, pages in pdf_audits:
+        prefix = "" if len(pdf_audits) == 1 else f"{pdf.stem}/"
+        for label, page in pages.items():
+            lines.append(f"| `{pdf.relative_to(ROOT)}` | {label} | {page} | `{prefix}{label}-*.png` | pending |")
+    lines += [
+        "",
+        "Automated checks cover committed output presence, HTML structure, local assets, source-image assets, image-count parity, PDF metadata/text, and raster generation. They do not establish semantic correctness, factual accuracy, caption meaning, accessibility quality, or human visual acceptability.",
+        "",
+        "## Container commands",
+        "",
+        *[f"- `{command}`" for command in COMMAND_LOG],
+        "",
+        "Open every generated PNG and replace `pending` with the human inspection result and any defect before using this report as release evidence.",
+        "",
+    ]
     report.write_text("\n".join(lines))
     print(report.relative_to(ROOT))
     return 0

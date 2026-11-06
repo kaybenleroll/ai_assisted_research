@@ -1,5 +1,7 @@
 import importlib.util
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import unittest
 
 
@@ -34,6 +36,45 @@ class RenderQATests(unittest.TestCase):
         self.assertEqual(audit.title, "Primer")
         self.assertEqual(audit.ids, ["one"])
         self.assertEqual(len(audit.images), 1)
+
+    def test_source_for_output_strips_variant_suffixes(self):
+        project = MODULE.ROOT / "primer_spectral_graph_theory"
+        self.assertEqual(
+            MODULE.source_for_output(project / "primer_spectral_graph_theory.mathml.html").name,
+            "primer_spectral_graph_theory.md",
+        )
+        self.assertEqual(
+            MODULE.source_for_output(project / "primer_spectral_graph_theory.pdf").name,
+            "primer_spectral_graph_theory.md",
+        )
+
+    def test_tracked_output_discovery_is_limited_to_published_files(self):
+        project = MODULE.ROOT / "primer_spectral_graph_theory"
+        result = type("Result", (), {"stdout": (
+            b"primer_spectral_graph_theory/primer_spectral_graph_theory.html\0"
+            b"primer_spectral_graph_theory/primer_spectral_graph_theory.pdf\0"
+            b"primer_spectral_graph_theory/Rplots.pdf\0"
+        )})()
+        with patch.object(MODULE.subprocess, "run", return_value=result):
+            outputs = MODULE.tracked_published_outputs(project)
+        self.assertEqual([path.name for path in outputs], [
+            "primer_spectral_graph_theory.html",
+            "primer_spectral_graph_theory.pdf",
+        ])
+
+    def test_source_image_references_ignore_fenced_examples(self):
+        with TemporaryDirectory(dir=MODULE.ROOT / ".scratch") as directory:
+            source = Path(directory) / "example.md"
+            source.write_text(
+                "![real](figures/real.png)\n\n````markdown\n![code](figures/not-an-asset.png)\n````\n"
+            )
+            self.assertEqual(MODULE.source_image_references(source), ["figures/real.png"])
+
+    def test_image_identity_reports_unavailable_inspection(self):
+        result = type("Result", (), {"returncode": 1, "stderr": "not found"})()
+        with patch.object(MODULE.subprocess, "run", return_value=result):
+            identity = MODULE.image_identity("podman", "missing:image")
+        self.assertIn("unavailable", identity)
 
 
 if __name__ == "__main__":
