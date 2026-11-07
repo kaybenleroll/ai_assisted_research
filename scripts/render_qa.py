@@ -168,22 +168,41 @@ def pdf_probe(pdf: Path) -> tuple[str, str, list[str]]:
     return metadata, text, versions.splitlines()
 
 
-def choose_pages(text: str) -> dict[str, int]:
-    pages = text.split("\f")
+def choose_pages(text: str) -> tuple[dict[str, int], dict[str, str]]:
+    pages = text.rstrip("\f").split("\f")
     candidates = {"opening": 1}
+    reasons = {"opening": "First page"}
     # The opening page and table of contents often contain the same words as
     # later examples. Prefer substantive pages after the front matter.
     substantive = list(enumerate(pages[3:], 4)) or list(enumerate(pages, 1))
     table_header = re.compile(r"\btable\s+\d+\b", re.I)
-    table_rows = re.compile(r"^\s*\S(?:.*\S)?\s{3,}\S", re.M)
-    table_page = next((i for i, value in substantive if table_header.search(value)), None)
-    if table_page is None:
-        scored = [(len(table_rows.findall(value)), i) for i, value in substantive]
-        score, table_page = max(scored, default=(0, None))
-        if score < 5:
-            table_page = None
+    table_row = re.compile(r"^\s*\S(?:.*\S)?\s{3,}\S")
+    code_line = re.compile(r"<-|\b(?:def|import|from|library|function|return|for|if)\b|[{};]|(?:==|\$|\[|\]\s*<-)")
+    contents_entry = re.compile(r"^\s*\d+(?:\.\d+)*\s+.+\s{3,}\d+\s*$")
+    scored = []
+    for i, value in substantive:
+        lines = value.splitlines()
+        rows = [line for line in lines if table_row.search(line) and not code_line.search(line)]
+        # Contents often continues beyond page three and has aligned page numbers.
+        if re.search(r"^\s*(?:table of )?contents\s*$", value, re.I | re.M):
+            continue
+        if rows and sum(bool(contents_entry.match(line)) for line in rows) >= max(3, len(rows) / 2):
+            continue
+        # A caption alone can be a reference in prose. Prefer actual aligned rows;
+        # count only short runs so isolated indentation does not dominate.
+        run = longest = 0
+        for line in lines:
+            if line in rows:
+                run += 1
+                longest = max(longest, run)
+            elif line.strip():
+                run = 0
+        if longest >= 3:
+            scored.append((longest, bool(table_header.search(value)), -i, i))
+    table_page = max(scored)[-1] if scored else None
     if table_page:
         candidates["table"] = table_page
+        reasons["table"] = "Uncertain: aligned text rows; confirm an actual table"
 
     code_pattern = re.compile(r"\b(import|library)\s*\(|\bdef\s+\w+\s*\(|\bfunction\s*\(|\s<-\s")
     scored = [(len(code_pattern.findall(value)), i) for i, value in substantive]
@@ -192,18 +211,21 @@ def choose_pages(text: str) -> dict[str, int]:
         code_page = None
     if code_page:
         candidates["code"] = code_page
+        reasons["code"] = "Code-pattern match; confirm visually"
 
     figure_page = next((i for i, value in substantive if re.search(r"\bfigure\s+\d+\b", value, re.I)), None)
     if figure_page is None:
         figure_page = next((i for i, value in substantive if re.search(r"∑|λ|∫", value)), None)
     if figure_page:
         candidates["figure-or-equation"] = figure_page
+        reasons["figure-or-equation"] = "Figure or equation pattern; confirm visually"
 
-    if len(pages) > 1:
-        fallback = max(1, len(pages) // 2)
-        for label in ("table", "code", "figure-or-equation"):
-            candidates.setdefault(label, fallback)
-    return candidates
+    fallback = max(1, len(pages) // 2)
+    for label in ("table", "code", "figure-or-equation"):
+        if label not in candidates:
+            candidates[label] = fallback
+            reasons[label] = "Uncertain: fallback page; find a suitable example"
+    return candidates, reasons
 
 
 def audit_html(html: Path, source: Path) -> tuple[HTMLAudit, list[str]]:
@@ -277,14 +299,15 @@ def main() -> int:
         metadata, text, versions = pdf_probe(pdf)
         pages_match = re.search(r"^Pages:\s+(\d+)", metadata, re.M)
         page_count = int(pages_match.group(1)) if pages_match else len(text.split("\f"))
-        pdf_audits.append((pdf, page_count, choose_pages(text)))
+        pages, reasons = choose_pages(text)
+        pdf_audits.append((pdf, page_count, pages, reasons))
         all_versions.extend(versions)
 
     output = args.output or (ROOT / ".scratch" / "render-qa" / project.name)
     output = output.resolve()
     if output.parent != (ROOT / ".scratch" / "render-qa") and not str(output).startswith(str(ROOT / ".scratch")):
         parser.error("output must be under .scratch")
-    for pdf, _page_count, pages in pdf_audits:
+    for pdf, _page_count, pages, _reasons in pdf_audits:
         raster_output = output if len(pdf_audits) == 1 else output / pdf.stem
         raster_pages(pdf, raster_output, pages)
     report = output / "report.md"
@@ -323,13 +346,14 @@ def main() -> int:
         "",
         "## Raster candidates",
         "",
-        "| Output | Purpose | Page | Evidence file | Human inspection |",
-        "|---|---|---:|---|---|",
+        "| Output | Purpose | Page | Selection | Evidence file | Human inspection |",
+        "|---|---|---:|---|---|---|",
     ]
-    for pdf, _page_count, pages in pdf_audits:
+    for pdf, page_count, pages, reasons in pdf_audits:
         prefix = "" if len(pdf_audits) == 1 else f"{pdf.stem}/"
         for label, page in pages.items():
-            lines.append(f"| `{pdf.relative_to(ROOT)}` | {label} | {page} | `{prefix}{label}-*.png` | pending |")
+            filename = f"{label}-{page:0{len(str(page_count))}d}.png"
+            lines.append(f"| `{pdf.relative_to(ROOT)}` | {label} | {page} | {reasons[label]} | `{prefix}{filename}` | pending |")
     lines += [
         "",
         "Automated checks cover committed output presence, HTML structure, local assets, source-image assets, image-count parity, PDF metadata/text, and raster generation. They do not establish semantic correctness, factual accuracy, caption meaning, accessibility quality, or human visual acceptability.",
@@ -338,7 +362,7 @@ def main() -> int:
         "",
         *[f"- `{command}`" for command in COMMAND_LOG],
         "",
-        "Open every generated PNG and replace `pending` with the human inspection result and any defect before using this report as release evidence.",
+        "Open every PNG listed above and replace `pending` with the human inspection result and any defect before using this report as release evidence.",
         "",
     ]
     report.write_text("\n".join(lines))
