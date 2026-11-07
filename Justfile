@@ -70,7 +70,10 @@ readme-check:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
 
 # Check committed metadata, renderer variants, Mermaid, freshness, and README generation
-check: check-agent-contract check-meta check-variants check-mermaid check-fresh check-readme
+check: check-agent-contract check-render-qa check-meta check-variants check-mermaid check-fresh check-readme
+
+check-render-qa:
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_render_qa.py'
 
 check-agent-contract:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check_agent_contract.py

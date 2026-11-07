@@ -24,11 +24,43 @@ class RenderQATests(unittest.TestCase):
             "R code\nvertices <- data.frame()\nlibrary(igraph)",
             "Figure 1: a graph\nThe result.",
         ]
-        candidates = MODULE.choose_pages("\f".join(pages))
+        candidates, reasons = MODULE.choose_pages("\f".join(pages))
         self.assertEqual(candidates["opening"], 1)
         self.assertEqual(candidates["table"], 5)
         self.assertEqual(candidates["code"], 7)
         self.assertEqual(candidates["figure-or-equation"], 8)
+        self.assertIn("Uncertain", reasons["table"])
+
+    def test_table_candidate_prefers_rows_to_contents_and_code(self):
+        pages = [
+            "cover", "contents", "contents continued",
+            "Contents\n1 Introduction   7\n2 Methods   9\n3 Results   12\n4 Appendix   15",
+            "R code\n" + "\n".join(f"  value{i} <- function(x)    x + {i}" for i in range(12)),
+            "Results\nFit   Four neighbours   Eight neighbours\nHard   7.8874   9.3015\n"
+            "Soft 0.1   8.7449   11.3494\nSoft 1   14.0720   17.9993",
+        ]
+        candidates, reasons = MODULE.choose_pages("\f".join(pages) + "\f")
+        self.assertEqual(candidates["table"], 6)
+        self.assertIn("Uncertain", reasons["table"])
+
+    def test_fallback_is_explicit_for_code_and_contents_only(self):
+        text = "cover\fintro\fintro\f1 Introduction   7\n2 Methods   9\n3 Results   12\f" + (
+            "\n".join(f"  value{i} <- function(x)    x + {i}" for i in range(8))
+        )
+        candidates, reasons = MODULE.choose_pages(text)
+        self.assertEqual(candidates["table"], 2)
+        self.assertIn("Uncertain: fallback", reasons["table"])
+        self.assertIn("Uncertain: fallback", MODULE.choose_pages("cover")[1]["table"])
+
+    def test_table_can_share_page_with_code(self):
+        page = (
+            "  result <- function(x)    x + 1\n  print(result)\n\n"
+            "Fit   Four neighbours   Eight neighbours\n"
+            "Hard   7.8874   9.3015\nSoft 0.1   8.7449   11.3494\n"
+            "Soft 1   14.0720   17.9993\n"
+        )
+        candidates, _ = MODULE.choose_pages("cover\fintro\fintro\f" + page)
+        self.assertEqual(candidates["table"], 4)
 
     def test_html_audit_collects_ids_images_and_title(self):
         audit = MODULE.HTMLAudit()
