@@ -95,7 +95,9 @@ class RenderQATests(unittest.TestCase):
         ])
 
     def test_source_image_references_ignore_fenced_examples(self):
-        with TemporaryDirectory(dir=MODULE.ROOT / ".scratch") as directory:
+        scratch = MODULE.ROOT / ".scratch"
+        scratch.mkdir(exist_ok=True)
+        with TemporaryDirectory(dir=scratch) as directory:
             source = Path(directory) / "example.md"
             source.write_text(
                 "![real](figures/real.png)\n\n````markdown\n![code](figures/not-an-asset.png)\n````\n"
