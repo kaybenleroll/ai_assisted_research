@@ -6,6 +6,9 @@ compatibility: Requires repository access and the documented primer workflow.
 
 # Plan a primer
 
+Resolve repository documents and recipes from the owning repository root;
+resolve references bundled with this skill from the skill directory.
+
 Use `docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. Planning precedes drafting; stop at the agreed plan unless drafting
 is authorised.

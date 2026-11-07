@@ -41,11 +41,26 @@ transcripts out of it.
 
 ## Harness Smoke Test
 
-When adding or changing a native adapter, use a disposable checkout and a
-read-only task. Record the harness and version, working directory, discovered
-entry files, contract sections it actually opened, selected task route, and
-available permission/tool controls. Test at least a primer task, workbook
-task, and Silo task. An unavailable harness is **unverified**, not a pass.
+Before adding or changing a native adapter, use a disposable checkout and
+read-only tasks. Test at least a primer task, workbook task, and Silo task.
+For skills, record separately:
+
+- Startup catalogue discovery: whether each skill appears before a task or
+  manual file read, and what evidence the harness exposes.
+- Explicit activation: whether a named skill can be invoked and its
+  instructions are loaded.
+- Model-selected activation: whether an unprompted skill choice occurs for a
+  suitable task and what evidence shows it was loaded.
+- Manual fallback: whether opening the linked `SKILL.md` and following its
+  instructions works when native discovery or activation is unavailable.
+
+Record the harness and version, relevant settings, working directory, results
+from both the repository root and a nested directory, discovered entry files,
+contract sections actually opened, exact tasks and routes, permission/tool
+controls, and limitations. A file opened later does not prove startup
+discovery; a catalogue entry alone does not prove activation. An unavailable
+harness or unsupported observation is **unverified**, not a pass. Use this
+evidence to decide whether a separate adapter is needed.
 
 The static contract check verifies paths and structure only. It cannot prove
 that a model followed an instruction, that a harness loaded a linked file, or

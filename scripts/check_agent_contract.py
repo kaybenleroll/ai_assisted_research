@@ -20,6 +20,7 @@ REQUIRED_H2 = [
     "Adapters and Limits",
 ]
 ADAPTERS = {"AGENTS.md"}
+SKILLS = ("primer-plan", "primer-audit", "primer-render-qa", "primer-handoff")
 
 
 def headings(text: str) -> list[str]:
@@ -77,6 +78,23 @@ def check(root: Path) -> list[str]:
     for target in local_paths:
         if not (contract.parent / target).is_file():
             errors.append(f"contract link target is missing: {target}")
+    router = root / "docs/primer-workflow-skills.md"
+    if not router.is_file():
+        errors.append("missing docs/primer-workflow-skills.md")
+    else:
+        try:
+            router_text = router.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            errors.append("docs/primer-workflow-skills.md is not UTF-8")
+        else:
+            links = re.findall(r"\[`([^`]+)`\]\(([^)]+)\)", router_text)
+            for skill in SKILLS:
+                target = f"../.agents/skills/{skill}/SKILL.md"
+                actual_targets = [link for name, link in links if name == skill]
+                if actual_targets != [target]:
+                    errors.append(f"skill {skill} must link exactly once to {target}; found {actual_targets!r}")
+                if not (router.parent / target).is_file():
+                    errors.append(f"skill link target is missing: {target}")
     return errors
 
 

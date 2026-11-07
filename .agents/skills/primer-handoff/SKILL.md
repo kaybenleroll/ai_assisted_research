@@ -6,6 +6,9 @@ compatibility: Requires Git state and the repository handoff template.
 
 # Handoff or release
 
+Resolve repository documents and recipes from the owning repository root;
+resolve references bundled with this skill from the skill directory.
+
 Use `docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. A handoff can occur at any bounded stage; it does not itself
 authorise repair or release.
