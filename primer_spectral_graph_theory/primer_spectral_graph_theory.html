@@ -6124,11 +6124,13 @@ operator, threshold, or random restart.</p>
 <p>The following complete R companion snippet constructs the data, fits
 both operators, evaluates cuts, joins results to a
 <code>tidygraph</code> by vertex name, and supplies calculated
-coordinates to <code>ggraph</code>. It is illustrative and is not
-registered in the example manifest. It needs the <code>r-graph</code>
-package set described above, but no objects from earlier snippets. Its
-dense matrices and exhaustive prefix scoring are intended for this small
-graph.</p>
+coordinates to <code>ggraph</code>. This Karate Club snippet is
+illustrative and is not registered in the example manifest; the earlier
+route-case R companion is registered as
+<code>openflights-r-companion</code> and is executable. This snippet
+needs the <code>r-graph</code> package set described above, but no
+objects from earlier snippets. Its dense matrices and exhaustive prefix
+scoring are intended for this small graph.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidygraph)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>

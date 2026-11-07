@@ -1938,7 +1938,13 @@ The external affiliation vector is the mapping documented in the [NetworkX datas
 
 The first operator is the symmetric normalised Laplacian. Degrees range from 1 to 17, so comparing boundary weight relative to incident volume is a meaningful alternative to comparing cardinalities alone. We cluster the row-normalised first two eigenvectors, including the stationary zero direction, using two-means with a fixed seed and fifty starts. Separately, we sweep the degree-corrected second eigenvector and select the lowest-conductance prefix. We also compare ordinary two-means on the first two combinatorial eigenvectors, without row normalisation, as an explicitly different relaxation. No affiliation labels select the operator, threshold, or random restart.
 
-The following complete R companion snippet constructs the data, fits both operators, evaluates cuts, joins results to a `tidygraph` by vertex name, and supplies calculated coordinates to `ggraph`. It is illustrative and is not registered in the example manifest. It needs the `r-graph` package set described above, but no objects from earlier snippets. Its dense matrices and exhaustive prefix scoring are intended for this small graph.
+The following complete R companion snippet constructs the data, fits both operators, evaluates cuts, joins results to a `tidygraph` by vertex name, and supplies calculated coordinates to `ggraph`. This Karate Club snippet is illustrative and is not registered in the example manifest; the earlier route-case R companion is registered as `openflights-r-companion` and is executable. This snippet needs the `r-graph` package set described above, but no objects from earlier snippets. Its dense matrices and exhaustive prefix scoring are intended for this small graph.
+
+```{=latex}
+% Keep the shared compact-code hook from overlapping this paragraph.
+\begingroup
+\csdef{@beforebegin@Shaded@hook}{}
+```
 
 ```r
 library(igraph)
@@ -2024,6 +2030,10 @@ plot_case <- ggraph(tg_case, layout = "manual", x = sx, y = sy) +
   geom_node_point(aes(colour = cluster, shape = cluster), size = 3) +
   theme_graph(base_family = "sans")
 print(plot_case)
+```
+
+```{=latex}
+\endgroup
 ```
 
 The display uses the second and third symmetric eigenvectors as two nonconstant coordinates. The two-means fit uses a different, declared object: the row-normalised first and second eigenvectors. Colour and shape show that fit's labels on the display; the picture is not a claim that two-means was applied to the displayed plane. A zero symmetric mode is proportional to square-root degree, whereas the combinatorial zero mode is constant. Retaining the correct zero direction is part of each algorithm. The [ggraph manual-layout documentation](https://ggraph.data-imaginist.com/reference/layout_tbl_graph_manual.html) requires coordinates to follow node order; the keyed join and index assertions enforce that condition.
