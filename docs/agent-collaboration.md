@@ -66,6 +66,19 @@ The static contract check verifies paths and structure only. It cannot prove
 that a model followed an instruction, that a harness loaded a linked file, or
 that permissions and sandboxing are equivalent.
 
+## Claude Primer Skill Adapter
+
+Claude Code 2.1.319 failed to discover the four canonical skills under `.agents/skills/` in the reported smoke test; Pi and Codex discovered them. The tracked `.claude/skills/` directory supplies the following relative directory symlinks:
+
+| Claude entry | Relative target |
+|---|---|
+| `primer-plan` | `../../.agents/skills/primer-plan` |
+| `primer-audit` | `../../.agents/skills/primer-audit` |
+| `primer-render-qa` | `../../.agents/skills/primer-render-qa` |
+| `primer-handoff` | `../../.agents/skills/primer-handoff` |
+
+Edit the canonical `.agents/skills/<name>/SKILL.md`, not a copied adapter. The links require a checkout and filesystem that preserve symlinks; otherwise, open the canonical files manually. Static validation checks the link paths and targets, not Claude's discovery or activation. Test startup discovery, explicit activation, and model-selected activation separately as described above; the earlier failure does not establish that this adapter works in every runtime or configuration.
+
 ## Repository discovery evidence
 
 As of 6 November 2026, this repository uses `AGENTS.md` as its sole canonical

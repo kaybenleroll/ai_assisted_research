@@ -44,13 +44,9 @@ A failed check identifies work to report; it does not itself authorise repair.
 
 ## Harness policy
 
-The neutral `.agents/skills/` location is the source of truth. A harness may
-discover it directly, expose it through a native skills directory, or require a
-thin adapter. Discovery is not assumed from similar filenames. Do not add a
-`.claude/skills/` adapter, copied skill bodies, or a root `CLAUDE.md` for this
-purpose without evidence from the read-only [harness smoke test](agent-collaboration.md#harness-smoke-test)
-that an adapter is needed. Any justified adapter is separate work. An
-unavailable harness is unverified, not a pass.
+Claude Code 2.1.319 failed to discover the canonical skills in `.agents/skills/`; Pi and Codex discovered them. The tracked `.claude/skills/` directory provides relative directory symlinks for Claude. Each name maps to the same name under `.agents/skills/`: `primer-plan`, `primer-audit`, `primer-render-qa`, and `primer-handoff`. Edit only the canonical `.agents/skills/<name>/SKILL.md`; do not copy skill bodies or add a root `CLAUDE.md` for this purpose.
+
+The adapter requires a checkout and filesystem that preserve symlinks. Where they do not, open the canonical files manually. The static contract check validates the links and targets; it does not establish runtime discovery or activation. Use the [harness smoke test](agent-collaboration.md#harness-smoke-test) to record those separately. An unavailable harness is unverified, not a pass.
 
 The skills do not override user scope, force publication, select a vendor or
 model, or require a particular number of agents. Delegation is capability-based:

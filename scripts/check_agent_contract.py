@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -69,6 +70,18 @@ def check(root: Path) -> list[str]:
             errors.append(f"{name} must explicitly instruct the reader to read the project contract")
     if re.search(r"\]\((?:\.\./)*AGENTS\.md\)|\]\((?:\.\./)*CLAUDE\.md\)", contract_text):
         errors.append("project contract must not link to an adapter")
+    claude_skills = root / ".claude/skills"
+    if claude_skills.is_symlink() or not claude_skills.is_dir():
+        errors.append(".claude/skills must be a real directory")
+    for skill in SKILLS:
+        adapter = claude_skills / skill
+        expected = f"../../.agents/skills/{skill}"
+        if not adapter.is_symlink():
+            errors.append(f"Claude skill adapter {skill} must be a symlink to {expected}")
+        elif os.readlink(adapter) != expected:
+            errors.append(f"Claude skill adapter {skill} must point exactly to {expected}")
+        elif not adapter.is_dir() or not (adapter / "SKILL.md").is_file():
+            errors.append(f"Claude skill adapter {skill} is dangling or missing SKILL.md")
     local_paths = [
         "../CONTRIBUTING.md", "../STYLE_GUIDE.md", "math-notation.md",
         "review-checklist.md", "agent-collaboration.md",
