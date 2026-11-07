@@ -170,7 +170,7 @@ Mass, momentum, and energy balances describe different quantities crossing the s
 
 ![One duct with common inlet and outlet and separate mass, momentum, and energy balances](figures/conservation_balances.png)
 
-*Figure: illustrative balance ledger for one duct and one outward-positive port convention. The schematic stores total energy including gravitational potential energy and uses total enthalpy $H=h+|\mathbf{u}|^2/2+gz$ for its energy port fluxes. This absorbs work by steady, conservative gravity into the potential-energy terms; work by other body forces requires a separate source. The port labels represent flux averages.*
+*Figure: illustrative balance ledger for one duct and one outward-positive port convention. The schematic stores internal plus kinetic energy, $E=e+|\mathbf{u}|^2/2$, and uses $H=h+|\mathbf{u}|^2/2$ for its energy port fluxes. Gravitational potential energy is excluded, so work by gravity and other body forces enters explicitly through $W_{\mathrm{body}}$. The port labels represent flux averages.*
 
 ### Mass Conservation
 
@@ -194,7 +194,7 @@ $$
 \rho\frac{D\mathbf{u}}{Dt}=\nabla\cdot\boldsymbol{\sigma}+\rho\mathbf{b}.
 $$
 
-For a simple fluid, split stress into isotropic pressure and deviatoric stress $\boldsymbol{\tau}$:
+For a simple fluid, split stress into thermodynamic pressure and viscous extra stress $\boldsymbol{\tau}$:
 
 $$
 \boldsymbol{\sigma}=-p\mathbf{I}+\boldsymbol{\tau},
@@ -227,7 +227,7 @@ The control-volume method and a finite-volume discretisation share the same acco
 
 ### Energy Conservation
 
-Energy conservation tracks changes in kinetic and internal energy due to work and heat transfer. Unlike the schematic above, the following local equation excludes gravitational potential energy from its specific energy $E=e+\tfrac{1}{2}\mathbf{u}\cdot\mathbf{u}$ and retains body-force work explicitly. With heat flux $\mathbf{q}$ and body force $\mathbf{b}$, a common local statement is:
+Energy conservation tracks changes in kinetic and internal energy due to work and heat transfer. Like the schematic above, the following local equation excludes gravitational potential energy from its specific energy $E=e+\tfrac{1}{2}\mathbf{u}\cdot\mathbf{u}$ and retains body-force work explicitly. Alternatively, for steady conservative gravity, adding $gz$ to both stored specific energy and port enthalpy absorbs gravitational work; retaining that work as a source as well would count it twice. With heat flux $\mathbf{q}$ and body force $\mathbf{b}$, a common local statement is:
 
 $$
 \rho\frac{DE}{Dt}
@@ -529,14 +529,7 @@ The pressure reference deserves care. In a low-speed incompressible flow, pressu
 
 Dimensionless equations also expose similarity requirements. Two geometrically similar experiments with the same $Re$ and $Fr$ can have related flow fields if the remaining relevant ratios and boundary conditions match. Matching one number while changing roughness, inlet disturbance, compressibility, or surface condition does not guarantee dynamic similarity. Similarity is a statement about the complete nondimensional problem, not a licence to scale one reported number.
 
-Dimensionless numbers are not labels to attach after the calculation. Choose characteristic scales $L$, $U$, $\rho_0$, and a pressure scale before nondimensionalising. With $\mathbf{x}=L\mathbf{x}^*$, $t=(L/U)t^*$, and $\mathbf{u}=U\mathbf{u}^*$, the incompressible momentum equation becomes, schematically,
-
-$$
-\frac{\partial\mathbf{u}^*}{\partial t^*}+\mathbf{u}^*\cdot\nabla^*\mathbf{u}^*
-=-\nabla^*p^*+\frac{1}{Re}\nabla^{*2}\mathbf{u}^*+\frac{1}{Fr^2}\mathbf{b}^*.
-$$
-
-The Reynolds number $Re=UL/\nu$ compares inertia with viscous diffusion, while the Froude number $Fr=U/\sqrt{gL}$ compares inertia with gravity. If the relevant motion is a small-amplitude wave, $L$ may be a wavelength rather than a device length. If the important length is a boundary-layer thickness, using the full apparatus length can obscure the dominant balance. A dimensionless group is meaningful only with its scale definitions.
+The same scale definitions must travel with each comparison. If the relevant motion is a small-amplitude wave, $L$ may be a wavelength rather than a device length. If the important length is a boundary-layer thickness, using the full apparatus length can obscure the dominant balance. A dimensionless group is meaningful only with its scale definitions.
 
 For free-surface problems, the Weber number $We=\rho U^2L/\gamma$ compares inertia with surface tension, where $\gamma$ is interfacial tension. The capillary length $\ell_c=\sqrt{\gamma/(\rho g)}$ separates gravity-dominated and surface-tension-dominated deformations. A Bond number $Bo=\rho gL^2/\gamma$ is equivalent to $We/Fr^2$ under the same scales. These numbers help choose a free-surface model: a nearly flat interface with $Bo\gg1$ may support a gravity-led approximation, whereas a microfluidic meniscus can be controlled by capillarity even at modest speeds.
 
@@ -619,7 +612,7 @@ The wall speeds set the linear part and the pressure gradient sets the curvature
 
 ### Stokes Flow
 
-When $Re\ll1$, inertia is small relative to viscosity. The momentum equation becomes approximately linear,
+When $Re\ll1$, advective inertia is small relative to viscosity. For steady flow, or forcing with a characteristic time $T$ sufficiently long that $\rho L^2/(\mu T)\ll1$, unsteady inertia is also negligible. The momentum equation then becomes approximately linear,
 
 $$
 0=-\nabla p+\mu\nabla^2\mathbf{u}+\rho\mathbf{b},
@@ -788,7 +781,7 @@ $$
 \boldsymbol{\tau}=2\mu\mathbf{D}+\lambda(\nabla\cdot\mathbf{u})\mathbf{I},
 $$
 
-where $\lambda$ is a second viscosity coefficient. The exact relation and thermodynamic restrictions depend on the material model. One should not insert an incompressible stress law into a high-speed calculation merely because the code accepts the tensor dimensions.
+where $\lambda$ is a second viscosity coefficient. Here $\boldsymbol{\tau}$ is the full viscous extra stress: in three dimensions its trace is $(2\mu+3\lambda)\nabla\cdot\mathbf{u}$, which need not vanish. Its deviatoric part is $\boldsymbol{\tau}-\tfrac13\operatorname{tr}(\boldsymbol{\tau})\mathbf{I}=2\mu[\mathbf{D}-\tfrac13(\nabla\cdot\mathbf{u})\mathbf{I}]$; for incompressible flow, this equals the full extra stress. The exact relation and thermodynamic restrictions depend on the material model. One should not insert an incompressible stress law into a high-speed calculation merely because the code accepts the tensor dimensions.
 
 The dynamic viscosity $\mu$ has units of $\mathrm{Pa\,s}$, while kinematic viscosity $\nu=\mu/\rho$ has units of $\mathrm{m^2\,s^{-1}}$. Confusing them changes Reynolds number by a factor of density. Viscosity can also depend strongly on temperature. A calculation that treats water as having a constant viscosity may be reasonable over a narrow temperature range and poor over a heated bearing or a cryogenic flow. Report the property value, source, temperature, and whether it was held constant.
 
@@ -1132,7 +1125,7 @@ The outcome is a decision with conditions: use the analytical prediction for pre
 
 ### Sensitivity of the Channel Estimate
 
-The formula also makes sensitivity visible. Holding $L$, $h$, and $U$ fixed, the pressure drop is proportional to viscosity. A five percent uncertainty in viscosity produces a five percent uncertainty in the predicted pressure drop before numerical error is considered. The gap enters quadratically: a five percent error in $h$ changes the pressure estimate by approximately ten percent in the opposite direction for small perturbations. If the channel height is measured less precisely than the water temperature, improving the height measurement may be more valuable than adding solver resolution.
+The formula also makes sensitivity visible. Holding $L$, $h$, and $U$ fixed, the pressure drop is proportional to viscosity. A five percent uncertainty in viscosity produces a five percent uncertainty in the predicted pressure drop before numerical error is considered. At fixed mean speed $U$, the gap enters with exponent $-2$: a five percent error in $h$ changes the pressure estimate by approximately ten percent in the opposite direction for small perturbations. For the specified-flow-rate decision, however, $U=Q/(wh)$ changes with the gap, so $\Delta p=12\mu LQ/(wh^3)$. At fixed $Q$ and width, the gap exponent is $-3$, giving approximately fifteen percent pressure sensitivity to a five percent gap error. If the channel height is measured less precisely than the water temperature, improving the height measurement may be more valuable than adding solver resolution.
 
 The flow-rate form is
 
@@ -1264,7 +1257,7 @@ Instrument placement should be part of the model. A pressure tap near a contract
 
 ### Uncertainty Budgets
 
-An uncertainty budget lists the inputs and modelling choices that can move the output. For the plane-channel estimate, viscosity, gap, length, width, and mean speed are obvious inputs; entrance losses and side-wall effects are model-form contributions. A first-order local sensitivity can be read from the logarithmic derivatives of the formula:
+An uncertainty budget lists the inputs and modelling choices that can move the output. For the plane-channel estimate, viscosity, gap, length, and either mean speed or flow rate and width are inputs; entrance losses and side-wall effects are model-form contributions. With $U$ treated as an independent input, the logarithmic derivatives of $\Delta p=12\mu LU/h^2$, holding the other inputs fixed in each derivative, are:
 
 $$
 \frac{\partial\log\Delta p}{\partial\log\mu}=1,
@@ -1275,6 +1268,8 @@ $$
 \quad
 \frac{\partial\log\Delta p}{\partial\log h}=-2.
 $$
+
+For the fixed-flow-rate decision, use $\Delta p=12\mu LQ/(wh^3)$ instead. The logarithmic sensitivities to $\mu$, $L$, and $Q$ are each $1$, to $w$ are $-1$, and to $h$ are $-3$, with the other inputs held fixed. Mean speed is then a derived quantity, so its uncertainty must not be added independently of $Q$, $w$, and $h$.
 
 If input uncertainties are independent and small, a linearised variance estimate can combine their squared contributions. Correlation between inputs changes the result, and model-form uncertainty is not automatically represented by the same arithmetic. The purpose of the budget is prioritisation: identify the measurements and checks that can change the decision, not manufacture a spurious decimal precision.
 
@@ -1345,9 +1340,9 @@ Python is convenient for the numerical-analysis example because array operations
 
 The executable examples verify their own stated calculations. They do not establish that a particular water channel is laminar, that a real wall is smooth, that an ideal-gas nozzle is adiabatic, or that a first-order scalar scheme is suitable for a production CFD calculation. Those are physical and numerical claims outside the examples' contracts. This boundary should be printed near the code, not inferred from the fact that the scripts exit successfully.
 
-### Executable Example Specification
+### Delivered Executable Examples
 
-Keep the examples short, deterministic, offline, and assertion-driven. Register them in `examples/manifest.toml`, using only existing Python base, R, and Julia profiles. A suitable set of identifiers and contracts is:
+The five scripts registered in [the example manifest](examples/manifest.toml) run offline in the repository's Python base, R, and Julia profiles. The table records their delivered inputs and assertions; the listings are abbreviated teaching fragments.
 
 The analytical channel calculation is intentionally small enough to translate without changing the mathematics. Each version computes the same Reynolds number, pressure drop, and volumetric flow rate independently. The scripts in `examples/` add assertions; the abbreviated listing shows the language-neutral structure.
 
@@ -1384,18 +1379,28 @@ flow_rate = mean_speed * width * h
 @assert abs(pressure_drop - 48.0) < 1e-10
 ```
 
-| ID | Language and purpose | Inputs | Required assertions |
-|---|---|---|---|
-| `channel-poiseuille-python` | Python analytical baseline | $h,w,L,\mu,\rho,U$ as above | Asserts $Re_h=20$, $\Delta p=48\,\mathrm{Pa}$, and $Q=4.0\times10^{-7}\,\mathrm{m^3\,s^{-1}}$ with `np.isclose(rtol=1e-12)`; the flow-rate check uses `atol=0.0`, while the other two retain NumPy's default absolute tolerance. Also checks profile endpoints and its numerical mean. |
-| `fv-periodic-advection` | Python conservative finite-volume demonstration | Periodic smooth initial scalar field, fixed domain, positive velocity, default target CFL $0.4$, and a separate target CFL $2.0$ for the rejection check | At $N=32,64,128$, asserts absolute periodic-total change below $10^{-12}$ for unit initial total, decreasing root-mean-square error against the translated exact cell averages, and computed CFL at most $0.4$. The update shares each face flux; a requested target CFL $2.0$ yields computed CFL $1.6$ at $N=32$ and raises `ValueError` because it exceeds one. |
-| `channel-poiseuille-r` | R parity implementation | Same six nominal physical inputs and equations | Asserts the same three nominal outputs with `all.equal(tolerance = 1e-12)` and prints the same output labels. |
-| `channel-poiseuille-julia` | Julia parity implementation | Same six nominal physical inputs and equations | Asserts the same three nominal outputs with `isapprox(rtol=1e-12)` and prints the same output labels. |
+The registered scripts have the following contracts:
 
-Use the parity case to test agreement on the three nominal outputs, not syntax similarity or scaling behaviour across perturbed inputs. Each implementation independently calculates the quantities and asserts numerical closeness rather than comparing formatted strings. The shared inputs and outputs are documented beside the examples. Python is the reference presentation, but R and Julia do not call Python or read its results. Avoid adding a CFD package for this case. The advection example tests a discrete conservation property and refinement behaviour; it does not validate the incompressible channel model. A separate manifested educational incompressible solver is reasonable only if it remains bounded, has a meaningful independent check, and can run quickly in the existing runtime. Otherwise present its algorithm as carefully labelled pseudocode and keep executable coverage focused on the verifiable scalar solver and analytical case.
+| ID | Language and purpose | Inputs | Assertions |
+|---|---|---|---|
+| `channel-poiseuille-python` | [Python analytical baseline](examples/channel_poiseuille.py) | $h,w,L,\mu,\rho,U$ as above | Asserts $Re_h=20$, $\Delta p=48\,\mathrm{Pa}$, and $Q=4.0\times10^{-7}\,\mathrm{m^3\,s^{-1}}$ with `np.isclose` and `rtol=1e-12`; the flow-rate check uses `atol=0.0`, while the other two retain NumPy's default absolute tolerance. Also checks profile endpoints and its numerical mean. |
+| `compressible-isentropic-python` | [Python ideal-gas isentropic ratios](examples/compressible_isentropic.py) | Heat-capacity ratio $\gamma=1.4$, Mach number $Ma=0.5$ | Asserts $p/p_0\approx0.8430191754$, $\rho/\rho_0\approx0.8851701342$ with `np.isclose` and `rtol=1e-9` (default absolute tolerance), and $0<\rho/\rho_0<1$. |
+| `fv-periodic-advection` | [Python conservative finite-volume demonstration](examples/periodic_advection.py) | Periodic smooth initial scalar field, fixed domain, positive velocity, default target CFL $0.4$, and a separate target CFL $2.0$ for the rejection check | At $N=32,64,128$, asserts absolute periodic-total change below $10^{-12}$ for unit initial total, decreasing root-mean-square error against the translated exact cell averages, and computed CFL at most $0.4$. The update shares each face flux; a requested target CFL $2.0$ yields computed CFL $1.6$ at $N=32$ and raises `ValueError` because it exceeds one. |
+| `channel-poiseuille-r` | [R parity implementation](examples/channel_poiseuille.R) | Same six nominal physical inputs and equations | Asserts the same three nominal outputs with `all.equal` and `tolerance = 1e-12` and prints the same output labels. |
+| `channel-poiseuille-julia` | [Julia parity implementation](examples/channel_poiseuille.jl) | Same six nominal physical inputs and equations | Asserts the same three nominal outputs with `isapprox` and `rtol=1e-12` and prints the same output labels. |
+
+The parity case tests agreement on the three nominal outputs rather than scaling behaviour across perturbed inputs. Each implementation independently calculates the quantities and asserts numerical closeness rather than comparing formatted strings. Python is the reference presentation, but R and Julia do not call Python or read its results. The isentropic script checks analytical ideal-gas ratios; the advection script checks discrete conservation and refinement behaviour. Neither validates the incompressible channel model, and the registered set contains no incompressible CFD solver.
 
 ### Finite-Volume Code in Three Languages
 
 The following snippets show the core periodic upwind update in three languages. They intentionally use plain arrays and explicit loops so that the face pairing is visible. They are teaching fragments rather than replacements for the registered script, which also computes the exact translated solution and refinement diagnostics. The common contract is a periodic domain, positive constant speed, cell-centred values, and one shared flux per face.
+
+```{=latex}
+\begingroup
+% Cancel compact-code spacing locally to keep labels clear of these blocks.
+\BeforeBeginEnvironment{Shaded}{\vspace{0.55em}}
+\AfterEndEnvironment{Shaded}{\vspace{0.55em}}
+```
 
 **Python:**
 
@@ -1457,6 +1462,10 @@ end
 ```
 
 Julia's one-based indexing makes the periodic wrap explicit in the conditional. The three fragments should agree on a small vector before they are used with a smooth wave. A useful unit test is $q=(1,2,4,8)$ with one selected CFL value, for which the expected result can be calculated by hand. A second test should use a constant vector: every update must return the same constant vector to round-off.
+
+```{=latex}
+\endgroup
+```
 
 ### Code Review Questions
 
