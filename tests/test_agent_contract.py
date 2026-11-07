@@ -36,10 +36,14 @@ class AgentContractTests(unittest.TestCase):
         (root / "gaming_silo_rpg/gaming_silo_index.md").write_text("x", encoding="utf-8")
         (root / "AGENTS.md").write_text(ADAPTER, encoding="utf-8")
         (root / "docs/primer-workflow-skills.md").write_text(ROUTER, encoding="utf-8")
+        (root / ".claude/skills").mkdir(parents=True)
         for skill in SKILLS:
             skill_dir = root / ".agents/skills" / skill
             skill_dir.mkdir(parents=True)
             (skill_dir / "SKILL.md").write_text("x", encoding="utf-8")
+            (root / ".claude/skills" / skill).symlink_to(
+                f"../../.agents/skills/{skill}", target_is_directory=True
+            )
         return temp, root
 
     def test_valid_contract(self):
@@ -87,6 +91,43 @@ class AgentContractTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         (root / ".agents/skills/primer-audit/SKILL.md").unlink()
         self.assertTrue(any("skill link target is missing" in error for error in check(root)))
+
+    def test_claude_adapters_reject_missing_copied_absolute_and_wrong_links(self):
+        for skill in SKILLS:
+            for defect in ("missing", "copied", "absolute", "wrong", "equivalent"):
+                with self.subTest(skill=skill, defect=defect):
+                    temp, root = self.make_root()
+                    try:
+                        adapter = root / ".claude/skills" / skill
+                        adapter.unlink()
+                        if defect == "copied":
+                            adapter.mkdir()
+                            (adapter / "SKILL.md").write_text("x", encoding="utf-8")
+                        elif defect == "absolute":
+                            adapter.symlink_to(root / ".agents/skills" / skill)
+                        elif defect == "wrong":
+                            adapter.symlink_to("../../.agents/skills/primer-other")
+                        elif defect == "equivalent":
+                            adapter.symlink_to(f"../../.agents/skills/./{skill}")
+                        self.assertTrue(any(f"Claude skill adapter {skill}" in e for e in check(root)))
+                    finally:
+                        temp.cleanup()
+
+    def test_claude_adapter_rejects_dangling_target(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        skill_dir = root / ".agents/skills/primer-plan"
+        (skill_dir / "SKILL.md").unlink()
+        skill_dir.rmdir()
+        self.assertTrue(any("Claude skill adapter primer-plan is dangling" in e for e in check(root)))
+
+    def test_claude_skills_directory_must_be_real(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        skills_dir = root / ".claude/skills"
+        skills_dir.rename(root / ".claude/other")
+        skills_dir.symlink_to("other", target_is_directory=True)
+        self.assertIn(".claude/skills must be a real directory", check(root))
 
     def test_missing_skill_router_is_rejected(self):
         temp, root = self.make_root()
