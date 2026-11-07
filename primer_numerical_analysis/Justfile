@@ -3,7 +3,9 @@ PROJECT_DIR := "primer_numerical_analysis"
 TITLE       := "Numerical Analysis Primer: Practical, Detailed, and Friendly"
 AUTHOR      := "Mick Cooney"
 DATE        := "12 October 2026"
-HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
+# The template defaults to MathJax; leave mathrenderer metadata to the variant
+# recipes, since repeated Pandoc metadata values accumulate rather than replace.
+HTML_EXTRA  := "--mathjax --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "--lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1 --include-in-header=extra-fonts.latex"
 
 # Generate R figures (inside rocker container)

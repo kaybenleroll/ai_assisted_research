@@ -151,11 +151,12 @@ local({
   }
 
   png("figures/eigenvalue_convergence.png", width = 800, height = 500, res = FIGDPI)
-  par(mar = c(4, 5.5, 3, 1))
+  # Split the long title and reserve enough top margin for both lines.
+  par(mar = c(4, 5.5, 4, 1))
   plot(seq_len(max_iters), residuals, type = "l", lwd = 2, col = BLUE, log = "y",
        xlab = "Iteration",
        ylab = expression(group("||", bold(A)*bold(v)[k] - hat(lambda)[k]*bold(v)[k], "||")[2]),
-       main = "Power Iteration Convergence (20×20 Symmetric Matrix)",
+       main = "Power Iteration Convergence\n(20×20 Symmetric Matrix)",
        cex.main = 1.1)
   points(seq(1, max_iters, by = 5), residuals[seq(1, max_iters, by = 5)],
          col = BLUE, pch = 19, cex = 0.8)
