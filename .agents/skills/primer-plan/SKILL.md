@@ -6,6 +6,10 @@ compatibility: Requires repository access and the documented primer workflow.
 
 # Plan a primer
 
+Use `docs/primer-workflow-skills.md` for routing and the shared decision
+checklist. Planning precedes drafting; stop at the agreed plan unless drafting
+is authorised.
+
 Read `docs/primer-production-procedure.md`, `docs/templates/primer-brief.md`,
 `STYLE_GUIDE.md`, and the relevant task routes in `docs/project-contract.md`.
 Read the repository state before proposing edits: issue, branch, dirty paths,

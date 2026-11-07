@@ -6,6 +6,10 @@ compatibility: Requires Git state and the repository handoff template.
 
 # Handoff or release
 
+Use `docs/primer-workflow-skills.md` for routing and the shared decision
+checklist. A handoff can occur at any bounded stage; it does not itself
+authorise repair or release.
+
 Read `docs/agent-collaboration.md`, `docs/primer-production-procedure.md`, and
 the project contract. Recheck live Git state immediately before writing the
 handoff. Use the portable template and include objective/issue, branch and
