@@ -813,7 +813,7 @@ $$
 
 Deleting the third row and column leaves a $2$ by $2$ matrix with determinant $3$, matching the three trees. For any edge, $w_e=1$ and the endpoint resistance is $2/3$, so the marginal inclusion probability is $2/3$. Summing the three marginals gives $2$, the number of edges in every spanning tree on three vertices. This last equality is a useful sanity check, but it does not establish independence: the sampled tree always contains exactly two edges.
 
-The same edge-marginal identity gives a useful interpretation of resistance. An edge has high resistance when its endpoints are difficult to connect through the rest of the network, so it is structurally important to a random spanning tree. An edge with low resistance is replaceable by many alternative paths. This interpretation is probabilistic and global; it should not be confused with the local resistance $1/w_e$ of the edge considered in isolation.
+The same edge-marginal identity gives a qualified interpretation of resistance. For fixed edge conductance $w_e$, higher endpoint resistance $R_e$ means higher inclusion probability in a weighted random spanning tree. Across edges with different conductances, compare $w_eR_e$, not resistance alone: a high-resistance edge need not have high inclusion probability if its conductance is small. This interpretation is probabilistic and global; effective resistance should not be confused with the local resistance $1/w_e$ of the edge considered in isolation.
 
 Resistance also links directly to random-walk time. For a connected undirected graph with total volume $M$, the expected commute time from $s$ to $t$ and back is
 
@@ -827,7 +827,15 @@ The electrical and walk views also clarify scaling. If all conductances are mult
 
 ### What the Analogy Does and Does Not Preserve
 
-The walk, diffusion, and network descriptions agree because they are built from the same symmetric conductance matrix. The stationary measure is degree volume, the Laplacian energy is expected squared voltage disagreement under a stationary edge traversal, hitting times solve grounded Laplacian systems, commute times equal volume times resistance, and spanning-tree weights are Laplacian cofactors. These are linked statements, not interchangeable definitions.
+The walk, diffusion, and network descriptions agree because they are built from the same symmetric conductance matrix. The stationary measure is degree volume. For the ordinary discrete walk on a connected graph, put $M=\sum_i d_i$, sample $X$ from $\pi_i=d_i/M$, and take one step $Y$ with $P_{ij}=A_{ij}/d_i$. For a vertex voltage vector $\mathbf{v}$,
+
+$$
+\mathbb{E}\bigl[(v_X-v_Y)^2\bigr]
+=\frac{1}{M}\sum_{i,j}A_{ij}(v_i-v_j)^2
+=\frac{2}{M}\mathbf{v}^{\top}L\mathbf{v}.
+$$
+
+The sum counts both traversal directions of each undirected edge, whereas $\mathbf{v}^{\top}L\mathbf{v}$ counts each edge once. Hitting times solve grounded Laplacian systems, commute times equal volume times resistance, and spanning-tree weights are Laplacian cofactors. These are linked statements, not interchangeable definitions.
 
 Several convention changes break a careless transfer. Multiplying all conductances by $c>0$ leaves $P$ and $\pi$ unchanged, because both numerator and degree scale by $c$, but multiplies $L$ by $c$, divides physical resistances by $c$, and therefore leaves the discrete commute time $MR_{st}$ unchanged because $M$ also scales by $c$. Continuous-time diffusion with generator $-L$ does change speed under this scaling: its clock runs $c$ times as fast. A statement about “time” must therefore specify discrete steps or the continuous-time generator.
 
@@ -1170,7 +1178,7 @@ The same reasoning applies to document, biological, and transaction graphs, but 
 
 Use the two-triangle bridge as a controlled benchmark before interpreting a data-derived partition. Let the internal triangle edges have weight one and the bridge have weight $\varepsilon$. A vector that is nearly constant on each triangle pays little energy inside either group and pays approximately $4\varepsilon$ across the bridge when the two group levels differ by two. Its Rayleigh quotient therefore decreases with $\varepsilon$, which explains why the low mode separates the triangles. The calculation demonstrates a mechanism, not a universal community law: a graph with several comparable bridges, heterogeneous degree, or overlapping groups can produce a rotated or unstable low-dimensional subspace.
 
-For more than two groups, the first $k$ non-trivial modes form an embedding rather than a partition. The rows of the embedding can be clustered, but that second clustering step introduces its own distance, scaling, and number-of-clusters choices. A useful report gives the eigenvalue gaps, the embedding dimension, the rounding method, the cut or modularity-like score used for comparison, and the stability under resampling or edge perturbation. If the graph has an exact component structure, component labels should be reported before any spectral clustering result because the first modes may reproduce that structure.
+For more than two groups, follow the normalised pipeline above: use the $k$ smallest-eigenvalue modes of $\mathcal{L}$, including the stationary zero mode proportional to $D^{1/2}\mathbf{1}$ on a connected graph. Thus the embedding uses that zero mode and $k-1$ positive modes; normalise each row to unit length and cluster the rows into $k$ groups with $k$-means. This rounding step introduces its own distance, scaling, and initialisation choices. A useful report gives the eigenvalue gaps, the embedding dimension, the rounding method, the cut or modularity-like score used for comparison, and the stability under resampling or edge perturbation. If the graph has an exact component structure, component labels should be reported before any spectral clustering result because the first modes may reproduce that structure.
 
 The number of groups is not supplied by the Laplacian automatically. A visible gap after the first few eigenvalues can motivate an embedding dimension, but the gap can disappear when the similarity bandwidth or edge threshold changes. Compare candidate dimensions against a downstream objective and against stability. If the result is exploratory, show several plausible dimensions; if it drives an allocation, pre-specify the rounding rule and report how the allocation changes under the alternatives.
 
@@ -1812,7 +1820,12 @@ The selection uses the first positive eigenvalue rather than a fixed column inde
 
 The repository example uses a small deterministic fixture with the historical shape of an OpenFlights route table. Its airport codes, identifiers, airlines, and route rows are invented; no OpenFlights records are downloaded or copied. This keeps the example offline and reproducible while preserving the modelling questions that arise with a route table. It is not current aviation data, a timetable, a traffic sample, or a measure of passenger capacity.
 
-The fixture contains 27 directional-looking records over ten synthetic airports. The example explicitly converts the rows to an undirected graph and compares two interpretations: a binary edge keeps one edge per unordered pair, whereas a count-weighted edge sums repeated and reverse records. Both variants have 17 undirected edges and one connected component, but their spectra and best sweep cuts differ. The offline script reports:
+The fixture contains 27 directional-looking records over ten synthetic airports. The example explicitly converts the rows to an undirected graph and compares two interpretations: a binary edge keeps one edge per unordered pair, whereas a count-weighted edge sums repeated and reverse records. Both variants have 17 undirected edges and one connected component. Their spectra and sweep conductances differ, but the selected sides are complements and therefore represent the same partition: $\{\mathrm{A01},\ldots,\mathrm{A05}\}$ versus $\{\mathrm{A06},\ldots,\mathrm{A10}\}$. The script sweeps the second eigenvector of the combinatorial Laplacian $L=D-A$ and reports the normalised gap separately. The offline script reports:
+
+```{=latex}
+% Offset the shared compact-code spacing at this prose/output boundary.
+\vspace{0.8\baselineskip}
+```
 
 ```text
 binary: edges=17; components=1; lambda2=0.184351;
@@ -1924,7 +1937,7 @@ The comparison should be reported as a small table rather than only as two colou
 
 This case is valuable precisely because the data invite over-interpretation. The spectral machinery identifies structural bottlenecks in the synthetic graph. If applied to historical route observations, it would describe that recorded graph; it could not turn the record into a current timetable, traffic model, or causal explanation for airline decisions. Those limits are part of the result.
 
-The interpretation ledger should be written beside the output table. A component count describes connectivity in the fixture. A low sweep conductance describes a candidate separation under the selected normalised operator. A high-degree airport is a hub in the recorded graph, not necessarily a high-volume or strategically important airport. A high effective resistance is structural importance under the conductance model, not a failure probability. A difference between the binary and count-weighted spectra demonstrates sensitivity to aggregation, not a change in aviation reality.
+The interpretation ledger should be written beside the output table. A component count describes connectivity in the fixture. A low sweep conductance scores a candidate separation from the combinatorial Fiedler-vector ordering; computing the normalised gap separately does not make this a normalised-operator sweep or give it the normalised Cheeger guarantee. A high-degree airport is a hub in the recorded graph, not necessarily a high-volume or strategically important airport. An edge's $w_eR_e$ is its weighted spanning-tree inclusion probability under the conductance model, not a failure probability. A difference between the binary and count-weighted spectra demonstrates sensitivity to aggregation, not a change in aviation reality.
 
 If actual route files are substituted later, the offline fixture should remain unchanged as a regression test. The new analysis must retain the input checksum and retrieval date, review licensing and attribution, report unmatched endpoint records, and document how duplicate and reverse-direction rows were treated. It should also retain the full component inventory even if a largest-component analysis is used for a plot. Removing smaller components can make an embedding easier to display while changing the stationary distribution and hiding disconnected systems.
 
@@ -1938,7 +1951,14 @@ The external affiliation vector is the mapping documented in the [NetworkX datas
 
 The first operator is the symmetric normalised Laplacian. Degrees range from 1 to 17, so comparing boundary weight relative to incident volume is a meaningful alternative to comparing cardinalities alone. We cluster the row-normalised first two eigenvectors, including the stationary zero direction, using two-means with a fixed seed and fifty starts. Separately, we sweep the degree-corrected second eigenvector and select the lowest-conductance prefix. We also compare ordinary two-means on the first two combinatorial eigenvectors, without row normalisation, as an explicitly different relaxation. No affiliation labels select the operator, threshold, or random restart.
 
-The following complete R companion snippet constructs the data, fits both operators, evaluates cuts, joins results to a `tidygraph` by vertex name, and supplies calculated coordinates to `ggraph`. It is illustrative and is not registered in the example manifest. It needs the `r-graph` package set described above, but no objects from earlier snippets. Its dense matrices and exhaustive prefix scoring are intended for this small graph.
+The following complete R companion snippet constructs the data, fits both operators, evaluates cuts, joins results to a `tidygraph` by vertex name, and supplies calculated coordinates to `ggraph`. This Karate Club snippet is illustrative and is not registered in the example manifest; the earlier route-case R companion is registered as `openflights-r-companion` and is executable. This snippet needs the `r-graph` package set described above, but no objects from earlier snippets. Its dense matrices and exhaustive prefix scoring are intended for this small graph.
+
+```{=latex}
+% Keep the shared compact-code hook from overlapping this paragraph.
+\begingroup
+\csdef{@beforebegin@Shaded@hook}{}
+\vspace{0.8\baselineskip}
+```
 
 ```r
 library(igraph)
@@ -2024,6 +2044,10 @@ plot_case <- ggraph(tg_case, layout = "manual", x = sx, y = sy) +
   geom_node_point(aes(colour = cluster, shape = cluster), size = 3) +
   theme_graph(base_family = "sans")
 print(plot_case)
+```
+
+```{=latex}
+\endgroup
 ```
 
 The display uses the second and third symmetric eigenvectors as two nonconstant coordinates. The two-means fit uses a different, declared object: the row-normalised first and second eigenvectors. Colour and shape show that fit's labels on the display; the picture is not a claim that two-means was applied to the displayed plane. A zero symmetric mode is proportional to square-root degree, whereas the combinatorial zero mode is constant. Retaining the correct zero direction is part of each algorithm. The [ggraph manual-layout documentation](https://ggraph.data-imaginist.com/reference/layout_tbl_graph_manual.html) requires coordinates to follow node order; the keyed join and index assertions enforce that condition.
