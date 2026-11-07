@@ -3,7 +3,9 @@ PROJECT_DIR := "primer_fluid_mechanics"
 TITLE       := "Fluid Mechanics: From Conservation Laws to Verified Flow Models"
 AUTHOR      := "Mick Cooney"
 DATE        := "24 October 2026"
-HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
+# The template defaults to MathJax; leave mathrenderer metadata to the variant
+# recipes, since repeated Pandoc metadata values accumulate rather than replace.
+HTML_EXTRA  := "--mathjax --number-sections --shift-heading-level-by=-1 --metadata mathvariants=true"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
 
 # The shared build emits MathML and MathJax variants when mathvariants=true.
