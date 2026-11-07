@@ -976,7 +976,7 @@ The pressure Poisson equation in an incompressible projection method has a solva
 
 The pressure correction also depends on the discrete boundary treatment. A Neumann condition derived from a wall-normal velocity is not the same as imposing a static pressure. At a periodic boundary, pressure differences and velocity fluxes must be paired consistently; otherwise the pressure null space can be disturbed. Check the net corrected flux after the pressure solve rather than relying only on the linear residual.
 
-Checkerboard pressure modes illustrate a different failure. On some collocated arrangements, pressure values can oscillate between neighbouring cells while producing weakly coupled face velocities. The resulting pressure contour may look structured, but the mass flux is wrong. Face interpolation or a staggered arrangement should be chosen with this coupling in mind. A pressure visualisation is not a substitute for a discrete divergence norm.
+Chequerboard pressure modes illustrate a different failure. On some collocated arrangements, pressure values can oscillate between neighbouring cells while producing weakly coupled face velocities. The resulting pressure contour may look structured, but the mass flux is wrong. Face interpolation or a staggered arrangement should be chosen with this coupling in mind. A pressure visualisation is not a substitute for a discrete divergence norm.
 
 A minimal pressure-correction example makes the compatibility condition concrete. Take the internal face flux as positive from the left cell to the right cell, and boundary fluxes as positive outward from the domain. With a tentative internal flux of $+2$, signed inlet flux of $-1$, and signed outlet flux of $+3$, the net boundary flux is $+2$: no correction of the internal face alone can make both cells divergence-free while those boundary fluxes remain prescribed. For a compatible pair, prescribe inlet flux $-2$ and outlet flux $+2$. If the tentative internal flux is $+1$, the left and right cell outward-flux sums are $-1$ and $+1$ respectively; correcting the internal flux to $+2$ makes both sums zero without changing either prescribed boundary flux.
 
@@ -1245,7 +1245,7 @@ Plot the difference against the measurement uncertainty, not only as a percentag
 
 ![Illustrative channel pressure prediction, synthetic observations with assumed intervals, and their residuals](figures/measurement_comparison.png)
 
-*Figure: synthetic channel observations and assumed uncertainty intervals compared with a model curve, with residuals shown below. These teaching data demonstrate a comparison method; they are not experimental validation.*
+*Figure: synthetic channel observations and assumed uncertainty intervals compared with a model curve, with residuals in the lower panel. These teaching data demonstrate a comparison method; they are not experimental validation.*
 
 The aim of comparison is not to force a model to match every observation. A disagreement can identify a missing wall condition, a property error, three-dimensional flow, an unsteady regime, or an instrument bias. The useful outcome is a revised model ledger and a clearer claim about which physical mechanism has been tested.
 
@@ -1565,6 +1565,9 @@ The following route is deliberately task-oriented rather than a bibliography wit
 - **Compressible flow:** NASA Glenn's [Beginner's Guide to Aeronautics: Nozzle Design](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/nozzle-design/) gives an accessible route into Mach number, choking, and nozzle reasoning. It is useful for intuition; detailed high-speed modelling needs a specialist text and shock relations.
 - **Finite-volume CFD:** The [MFiX documentation](https://mfix.netl.doe.gov/products/mfix/mfix-documentation/) and the [OpenFOAM User Guide](https://doc.openfoam.com/2306/) show how mature solver software exposes meshes, fields, boundary conditions, and discretisation controls. They document particular software systems, so they should not be treated as neutral definitions of numerical validity.
 - **Verification and validation:** The [ASME V&V 20 standard](https://www.asme.org/codes-standards/find-codes-standards/standard-for-verification-and-validation-in-computational-fluid-dynamics-and-heat-transfer/2009/print-book) is the relevant standards route for comparing CFD results with benchmark or experimental data. It is more formal than this primer and is aimed at defensible validation studies rather than introductory coding exercises.
-- **Advanced models:** The [NASA Turbulence Modeling Resource](https://turbmodels.larc.nasa.gov/) collects turbulence-model descriptions and benchmark cases. It is an appropriate next step for readers who need Reynolds-averaged modelling, but its presence does not make turbulence a single settled closure choice.
+<!-- Vale exception: exact proper name; see STYLE_GUIDE L2. -->
+<!-- vale off -->
+- **Advanced models:** The [NASA Turbulence Modeling Resource](https://turbmodels.larc.nasa.gov/) collects turbulence-model descriptions and benchmark cases. It is an appropriate next step for readers who need Reynolds-averaged modelling, but its presence does not make turbulence a single settled closure choice. <!-- typos: ignore-line -->
+<!-- vale on -->
 
 Use a textbook for systematic derivations, a standards document for claims about verification and validation practice, and software documentation for implementation details. Keep those roles distinct. Further reading can expose a model's alternatives and limitations; it cannot turn an unmeasured calculation into physical validation.

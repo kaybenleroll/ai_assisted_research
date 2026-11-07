@@ -3196,7 +3196,7 @@ pressure differences and velocity fluxes must be paired consistently;
 otherwise the pressure null space can be disturbed. Check the net
 corrected flux after the pressure solve rather than relying only on the
 linear residual.</p>
-<p>Checkerboard pressure modes illustrate a different failure. On some
+<p>Chequerboard pressure modes illustrate a different failure. On some
 collocated arrangements, pressure values can oscillate between
 neighbouring cells while producing weakly coupled face velocities. The
 resulting pressure contour may look structured, but the mass flux is
@@ -3968,9 +3968,9 @@ synthetic observations with assumed intervals, and their
 residuals</figcaption>
 </figure>
 <p><em>Figure: synthetic channel observations and assumed uncertainty
-intervals compared with a model curve, with residuals shown below. These
-teaching data demonstrate a comparison method; they are not experimental
-validation.</em></p>
+intervals compared with a model curve, with residuals in the lower
+panel. These teaching data demonstrate a comparison method; they are not
+experimental validation.</em></p>
 <p>The aim of comparison is not to force a model to match every
 observation. A disagreement can identify a missing wall condition, a
 property error, three-dimensional flow, an unsteady regime, or an
@@ -4629,12 +4629,14 @@ validity.</li>
 V&amp;V 20 standard</a> is the relevant standards route for comparing
 CFD results with benchmark or experimental data. It is more formal than
 this primer and is aimed at defensible validation studies rather than
-introductory coding exercises.</li>
+introductory coding exercises.
+<!-- Vale exception: exact proper name; see STYLE_GUIDE L2. -->
+<!-- vale off --></li>
 <li><strong>Advanced models:</strong> The <a href="https://turbmodels.larc.nasa.gov/">NASA Turbulence Modeling
 Resource</a> collects turbulence-model descriptions and benchmark cases.
 It is an appropriate next step for readers who need Reynolds-averaged
 modelling, but its presence does not make turbulence a single settled
-closure choice.</li>
+closure choice. <!-- typos: ignore-line --> <!-- vale on --></li>
 </ul>
 <p>Use a textbook for systematic derivations, a standards document for
 claims about verification and validation practice, and software
