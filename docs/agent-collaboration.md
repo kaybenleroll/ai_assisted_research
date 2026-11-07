@@ -68,13 +68,15 @@ that permissions and sandboxing are equivalent.
 
 ## Cross-Harness Skill Evidence
 
-The following post-adapter smoke-test observations are dated 7 November 2026. Discovery covered `primer-plan`, `primer-audit`, `primer-render-qa`, and `primer-handoff` at the repository root and a nested directory. The precise nested directory, full prompts, commands, and settings were not recorded in this summary, so the observations are not a complete reproduction recipe.
+The following post-adapter smoke-test observations are dated 7 November 2026. Discovery covered `primer-plan`, `primer-audit`, `primer-render-qa`, and `primer-handoff` at the repository root and `primer_fluid_mechanics/`. The probes used fresh sessions, read-only or no-edit settings, and temporary harness state where required. They were evidence-gathering runs, not a substitute for the full task-specific smoke tests below.
 
 | Harness | Discovery | Explicit activation | Automatic selection |
 |---|---|---|---|
 | Claude Code 2.1.319 | Pass: all four skills at root and nested directory. | `/primer-plan` reached the skill workflow, but behavioural completion was inconclusive: the run expanded into tools and subagent work and was stopped. | Unverified. |
 | Codex 0.166.0 | Pass: all four skills at root and nested directory. | Pass: `primer-plan` activation identified the canonical `.agents/skills/primer-plan/SKILL.md` and two instructions; the exact prompt and instruction excerpts are not recorded here. | Pass: `primer-plan` was selected automatically for a suitable task. |
 | Pi 0.99.2 | Pass: all four skills at root and nested directory. | Pass for native loading and explicit activation; the configured `llamacpp-local` model connection failed before a response, so behavioural completion is unverified. | Unverified. |
+
+Representative activation invocations were: Claude Code `claude -p '/primer-plan ...' --no-session-persistence --permission-mode plan --output-format json`; Codex `codex -a never -s read-only exec --ephemeral --json -C <directory> '... $primer-plan ...'`; and Pi `pi --mode json --no-session --approve --tools read,grep,find,ls -p '/skill:primer-plan ...'`. The Codex explicit run reported `/home/mcooney/workspace/ai_assisted_research/.agents/skills/primer-plan/SKILL.md` and the instructions to stop at the agreed plan and not publish merely because the skill was invoked. Pi's event stream showed the same canonical skill body loaded before its model connection error. Claude's event stream showed the project skill entry and workflow invocation, but the bounded response requirement was not met.
 
 For manual fallback, open the relevant canonical `.agents/skills/<name>/SKILL.md` and follow it with the project contract. This remains available independently of native discovery and activation; these observations do not establish a separate manual-fallback behavioural test.
 
