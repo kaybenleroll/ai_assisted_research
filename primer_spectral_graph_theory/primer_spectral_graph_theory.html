@@ -3346,13 +3346,18 @@ Summing the three marginals gives
 the number of edges in every spanning tree on three vertices. This last
 equality is a useful sanity check, but it does not establish
 independence: the sampled tree always contains exactly two edges.</p>
-<p>The same edge-marginal identity gives a useful interpretation of
-resistance. An edge has high resistance when its endpoints are difficult
-to connect through the rest of the network, so it is structurally
-important to a random spanning tree. An edge with low resistance is
-replaceable by many alternative paths. This interpretation is
-probabilistic and global; it should not be confused with the local
-resistance
+<p>The same edge-marginal identity gives a qualified interpretation of
+resistance. For fixed edge conductance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mi>e</mi></msub><annotation encoding="application/x-tex">w_e</annotation></semantics></math>,
+higher endpoint resistance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>e</mi></msub><annotation encoding="application/x-tex">R_e</annotation></semantics></math>
+means higher inclusion probability in a weighted random spanning tree.
+Across edges with different conductances, compare
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>e</mi></msub><msub><mi>R</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">w_eR_e</annotation></semantics></math>,
+not resistance alone: a high-resistance edge need not have high
+inclusion probability if its conductance is small. This interpretation
+is probabilistic and global; effective resistance should not be confused
+with the local resistance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msub><mi>w</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">1/w_e</annotation></semantics></math>
 of the edge considered in isolation.</p>
 <p>Resistance also links directly to random-walk time. For a connected
@@ -3399,11 +3404,31 @@ between simulations and formulas.</p>
 Not Preserve</h2>
 <p>The walk, diffusion, and network descriptions agree because they are
 built from the same symmetric conductance matrix. The stationary measure
-is degree volume, the Laplacian energy is expected squared voltage
-disagreement under a stationary edge traversal, hitting times solve
-grounded Laplacian systems, commute times equal volume times resistance,
-and spanning-tree weights are Laplacian cofactors. These are linked
-statements, not interchangeable definitions.</p>
+is degree volume. For the ordinary discrete walk on a connected graph,
+put
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">M=\sum_i d_i</annotation></semantics></math>,
+sample
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><msub><mi>d</mi><mi>i</mi></msub><mi>/</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">\pi_i=d_i/M</annotation></semantics></math>,
+and take one step
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mi>/</mi><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">P_{ij}=A_{ij}/d_i</annotation></semantics></math>.
+For a vertex voltage vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒗</mi><annotation encoding="application/x-tex">\mathbf{v}</annotation></semantics></math>,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">[</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>v</mi><mi>X</mi></msub><mo>−</mo><msub><mi>v</mi><mi>Y</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">]</mo><mo>=</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>−</mo><msub><mi>v</mi><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mfrac><mn>2</mn><mi>M</mi></mfrac><msup><mi mathvariant="bold-italic">𝒗</mi><mi>⊤</mi></msup><mi>L</mi><mi mathvariant="bold-italic">𝒗</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathbb{E}\bigl[(v_X-v_Y)^2\bigr]
+=\frac{1}{M}\sum_{i,j}A_{ij}(v_i-v_j)^2
+=\frac{2}{M}\mathbf{v}^{\top}L\mathbf{v}.
+</annotation></semantics></math></p>
+<p>The sum counts both traversal directions of each undirected edge,
+whereas
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒗</mi><mi>⊤</mi></msup><mi>L</mi><mi mathvariant="bold-italic">𝒗</mi></mrow><annotation encoding="application/x-tex">\mathbf{v}^{\top}L\mathbf{v}</annotation></semantics></math>
+counts each edge once. Hitting times solve grounded Laplacian systems,
+commute times equal volume times resistance, and spanning-tree weights
+are Laplacian cofactors. These are linked statements, not
+interchangeable definitions.</p>
 <p>Several convention changes break a careless transfer. Multiplying all
 conductances by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c&gt;0</annotation></semantics></math>
@@ -4210,17 +4235,27 @@ which explains why the low mode separates the triangles. The calculation
 demonstrates a mechanism, not a universal community law: a graph with
 several comparable bridges, heterogeneous degree, or overlapping groups
 can produce a rotated or unstable low-dimensional subspace.</p>
-<p>For more than two groups, the first
+<p>For more than two groups, follow the normalised pipeline above: use
+the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-non-trivial modes form an embedding rather than a partition. The rows of
-the embedding can be clustered, but that second clustering step
-introduces its own distance, scaling, and number-of-clusters choices. A
-useful report gives the eigenvalue gaps, the embedding dimension, the
-rounding method, the cut or modularity-like score used for comparison,
-and the stability under resampling or edge perturbation. If the graph
-has an exact component structure, component labels should be reported
-before any spectral clustering result because the first modes may
-reproduce that structure.</p>
+smallest-eigenvalue modes of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℒ</mi><annotation encoding="application/x-tex">\mathcal{L}</annotation></semantics></math>,
+including the stationary zero mode proportional to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>D</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mn mathvariant="bold">𝟏</mn></mrow><annotation encoding="application/x-tex">D^{1/2}\mathbf{1}</annotation></semantics></math>
+on a connected graph. Thus the embedding uses that zero mode and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">k-1</annotation></semantics></math>
+positive modes; normalise each row to unit length and cluster the rows
+into
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+groups with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-means.
+This rounding step introduces its own distance, scaling, and
+initialisation choices. A useful report gives the eigenvalue gaps, the
+embedding dimension, the rounding method, the cut or modularity-like
+score used for comparison, and the stability under resampling or edge
+perturbation. If the graph has an exact component structure, component
+labels should be reported before any spectral clustering result because
+the first modes may reproduce that structure.</p>
 <p>The number of groups is not supplied by the Laplacian automatically.
 A visible gap after the first few eigenvalues can motivate an embedding
 dimension, but the gap can disappear when the similarity bandwidth or
@@ -5872,8 +5907,16 @@ synthetic airports. The example explicitly converts the rows to an
 undirected graph and compares two interpretations: a binary edge keeps
 one edge per unordered pair, whereas a count-weighted edge sums repeated
 and reverse records. Both variants have 17 undirected edges and one
-connected component, but their spectra and best sweep cuts differ. The
-offline script reports:</p>
+connected component. Their spectra and sweep conductances differ, but
+the selected sides are complements and therefore represent the same
+partition:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mrow><mi mathvariant="normal">A</mi><mn mathvariant="normal">01</mn></mrow><mo>,</mo><mi>…</mi><mo>,</mo><mrow><mi mathvariant="normal">A</mi><mn mathvariant="normal">05</mn></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{\mathrm{A01},\ldots,\mathrm{A05}\}</annotation></semantics></math>
+versus
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mrow><mi mathvariant="normal">A</mi><mn mathvariant="normal">06</mn></mrow><mo>,</mo><mi>…</mi><mo>,</mo><mrow><mi mathvariant="normal">A</mi><mn mathvariant="normal">10</mn></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{\mathrm{A06},\ldots,\mathrm{A10}\}</annotation></semantics></math>.
+The script sweeps the second eigenvector of the combinatorial Laplacian
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>D</mi><mo>−</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">L=D-A</annotation></semantics></math>
+and reports the normalised gap separately. The offline script
+reports:</p>
 <pre class="text"><code>binary: edges=17; components=1; lambda2=0.184351;
   normalised_lambda2=0.053864; sweep conductance=0.066667
 count: edges=17; components=1; lambda2=0.195229;
@@ -6060,10 +6103,14 @@ explanation for airline decisions. Those limits are part of the
 result.</p>
 <p>The interpretation ledger should be written beside the output table.
 A component count describes connectivity in the fixture. A low sweep
-conductance describes a candidate separation under the selected
-normalised operator. A high-degree airport is a hub in the recorded
-graph, not necessarily a high-volume or strategically important airport.
-A high effective resistance is structural importance under the
+conductance scores a candidate separation from the combinatorial
+Fiedler-vector ordering; computing the normalised gap separately does
+not make this a normalised-operator sweep or give it the normalised
+Cheeger guarantee. A high-degree airport is a hub in the recorded graph,
+not necessarily a high-volume or strategically important airport. An
+edge’s
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>e</mi></msub><msub><mi>R</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">w_eR_e</annotation></semantics></math>
+is its weighted spanning-tree inclusion probability under the
 conductance model, not a failure probability. A difference between the
 binary and count-weighted spectra demonstrates sensitivity to
 aggregation, not a change in aviation reality.</p>
