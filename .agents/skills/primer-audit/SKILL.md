@@ -6,6 +6,9 @@ compatibility: Requires the repository review checklist and an auditable working
 
 # Audit a primer
 
+Resolve repository documents and recipes from the owning repository root;
+resolve references bundled with this skill from the skill directory.
+
 Use `docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. Report findings and evidence within scope; a failed check does not
 authorise repair.

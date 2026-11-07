@@ -10,10 +10,16 @@ and handoff template remain the authoritative sources.
 
 | Need | Inputs | Output | Stopping boundary |
 |---|---|---|---|
-| `primer-plan`: define a new or substantial revision | Issue, existing material, repository state and brief template | Brief, outline, examples and evidence plan | Stop at the agreed scope; draft only if authorised. |
-| `primer-audit`: review content after drafting or revision | Brief, complete source, outputs and review guidance | Findings, evidence and unresolved risks | Report findings within scope; a failed check does not authorise repair. |
-| `primer-render-qa`: check published outputs and build evidence | Committed outputs, build recipe, runtime and permitted scope | Check results, provenance and visual observations | Stop when a required check cannot run safely; do not overwrite outputs outside authorised scope. |
-| `primer-handoff`: transfer work at any bounded stage | Live repository state, decisions and available evidence | Handoff with remaining work and next owner | Stop at the handoff; release requires authorisation and required evidence. |
+| [`primer-plan`](../.agents/skills/primer-plan/SKILL.md): define a new or substantial revision | Issue, existing material, repository state and brief template | Brief, outline, examples and evidence plan | Stop at the agreed scope; draft only if authorised. |
+| [`primer-audit`](../.agents/skills/primer-audit/SKILL.md): review content after drafting or revision | Brief, complete source, outputs and review guidance | Findings, evidence and unresolved risks | Report findings within scope; a failed check does not authorise repair. |
+| [`primer-render-qa`](../.agents/skills/primer-render-qa/SKILL.md): check published outputs and build evidence | Committed outputs, build recipe, runtime and permitted scope | Check results, provenance and visual observations | Stop when a required check cannot run safely; do not overwrite outputs outside authorised scope. |
+| [`primer-handoff`](../.agents/skills/primer-handoff/SKILL.md): transfer work at any bounded stage | Live repository state, decisions and available evidence | Handoff with remaining work and next owner | Stop at the handoff; release requires authorisation and required evidence. |
+
+If your harness does not discover or activate skills, choose a task above,
+open its linked `SKILL.md`, and follow its instructions manually alongside the
+project contract and applicable repository guidance. Resolve repository
+documents and recipes from the owning repository root; resolve references
+bundled with a skill from that skill's directory.
 
 Plan before drafting a new primer or substantial revision. Audit and render QA
 are complementary: content review does not establish output quality, and a
@@ -40,9 +46,10 @@ A failed check identifies work to report; it does not itself authorise repair.
 
 The neutral `.agents/skills/` location is the source of truth. A harness may
 discover it directly, expose it through a native skills directory, or require a
-thin adapter. Discovery is not assumed from similar filenames. Before adding an
-adapter, run the read-only smoke test in `docs/agent-collaboration.md` and
-record the harness version, settings, discovered files, and task route. An
+thin adapter. Discovery is not assumed from similar filenames. Do not add a
+`.claude/skills/` adapter, copied skill bodies, or a root `CLAUDE.md` for this
+purpose without evidence from the read-only [harness smoke test](agent-collaboration.md#harness-smoke-test)
+that an adapter is needed. Any justified adapter is separate work. An
 unavailable harness is unverified, not a pass.
 
 The skills do not override user scope, force publication, select a vendor or

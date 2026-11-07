@@ -6,6 +6,9 @@ compatibility: Requires the repository's pinned container runtime and project re
 
 # Render and verify
 
+Resolve repository documents and recipes from the owning repository root;
+resolve references bundled with this skill from the skill directory.
+
 Use `docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. Inspect existing committed outputs when in scope and distinguish
 that evidence from a new build. A failed check does not authorise repair.
