@@ -855,8 +855,8 @@ Result</a></li>
 Contract</a></li>
 <li><a href="#what-the-examples-do-not-establish" id="toc-what-the-examples-do-not-establish"><span class="toc-section-number">17.3</span> What the Examples Do Not
 Establish</a></li>
-<li><a href="#executable-example-specification" id="toc-executable-example-specification"><span class="toc-section-number">17.4</span> Executable Example
-Specification</a></li>
+<li><a href="#delivered-executable-examples" id="toc-delivered-executable-examples"><span class="toc-section-number">17.4</span> Delivered Executable
+Examples</a></li>
 <li><a href="#finite-volume-code-in-three-languages" id="toc-finite-volume-code-in-three-languages"><span class="toc-section-number">17.5</span> Finite-Volume Code in Three
 Languages</a></li>
 <li><a href="#code-review-questions" id="toc-code-review-questions"><span class="toc-section-number">17.6</span> Code Review Questions</a></li>
@@ -1420,13 +1420,15 @@ result can be applied to a flow model.</p>
 separate mass, momentum, and energy balances</figcaption>
 </figure>
 <p><em>Figure: illustrative balance ledger for one duct and one
-outward-positive port convention. The schematic stores total energy
-including gravitational potential energy and uses total enthalpy
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mi>h</mi><mo>+</mo><mo stretchy="false" form="prefix">|</mo><mi mathvariant="bold-italic">𝒖</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>+</mo><mi>g</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">H=h+|\mathbf{u}|^2/2+gz</annotation></semantics></math>
-for its energy port fluxes. This absorbs work by steady, conservative
-gravity into the potential-energy terms; work by other body forces
-requires a separate source. The port labels represent flux
-averages.</em></p>
+outward-positive port convention. The schematic stores internal plus
+kinetic energy,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo>=</mo><mi>e</mi><mo>+</mo><mo stretchy="false" form="prefix">|</mo><mi mathvariant="bold-italic">𝒖</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">E=e+|\mathbf{u}|^2/2</annotation></semantics></math>,
+and uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mi>h</mi><mo>+</mo><mo stretchy="false" form="prefix">|</mo><mi mathvariant="bold-italic">𝒖</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">H=h+|\mathbf{u}|^2/2</annotation></semantics></math>
+for its energy port fluxes. Gravitational potential energy is excluded,
+so work by gravity and other body forces enters explicitly through
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>W</mi><mrow><mi mathvariant="normal">b</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">y</mi></mrow></msub><annotation encoding="application/x-tex">W_{\mathrm{body}}</annotation></semantics></math>.
+The port labels represent flux averages.</em></p>
 <h2 data-number="3.1" id="mass-conservation"><span class="header-section-number">3.1</span> Mass Conservation</h2>
 <p>Mass conservation says that the mass of every material volume remains
 constant. Applying transport to a fixed control volume gives the
@@ -1475,8 +1477,8 @@ body force per unit mass, the local balance is:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mfrac><mrow><mi>D</mi><mi mathvariant="bold-italic">𝒖</mi></mrow><mrow><mi>D</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>∇</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝝈</mi><mo>+</mo><mi>ρ</mi><mi mathvariant="bold-italic">𝒃</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \rho\frac{D\mathbf{u}}{Dt}=\nabla\cdot\boldsymbol{\sigma}+\rho\mathbf{b}.
 </annotation></semantics></math></p>
-<p>For a simple fluid, split stress into isotropic pressure and
-deviatoric stress
+<p>For a simple fluid, split stress into thermodynamic pressure and
+viscous extra stress
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝉</mi><annotation encoding="application/x-tex">\boldsymbol{\tau}</annotation></semantics></math>:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝈</mi><mo>=</mo><mi>−</mi><mi>p</mi><mi mathvariant="bold-italic">𝑰</mi><mo>+</mo><mi mathvariant="bold-italic">𝝉</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>ρ</mi><mfrac><mrow><mi>D</mi><mi mathvariant="bold-italic">𝒖</mi></mrow><mrow><mi>D</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>−</mi><mi>∇</mi><mi>p</mi><mo>+</mo><mi>∇</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝝉</mi><mo>+</mo><mi>ρ</mi><mi mathvariant="bold-italic">𝒃</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \boldsymbol{\sigma}=-p\mathbf{I}+\boldsymbol{\tau},
@@ -1563,11 +1565,16 @@ should recover the control-volume result up to source, boundary, and
 solver tolerances.</p>
 <h2 data-number="3.4" id="energy-conservation"><span class="header-section-number">3.4</span> Energy Conservation</h2>
 <p>Energy conservation tracks changes in kinetic and internal energy due
-to work and heat transfer. Unlike the schematic above, the following
-local equation excludes gravitational potential energy from its specific
+to work and heat transfer. Like the schematic above, the following local
+equation excludes gravitational potential energy from its specific
 energy
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo>=</mo><mi>e</mi><mo>+</mo><mstyle displaystyle="false"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mi mathvariant="bold-italic">𝒖</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒖</mi></mrow><annotation encoding="application/x-tex">E=e+\tfrac{1}{2}\mathbf{u}\cdot\mathbf{u}</annotation></semantics></math>
-and retains body-force work explicitly. With heat flux
+and retains body-force work explicitly. Alternatively, for steady
+conservative gravity, adding
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">gz</annotation></semantics></math>
+to both stored specific energy and port enthalpy absorbs gravitational
+work; retaining that work as a source as well would count it twice. With
+heat flux
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒒</mi><annotation encoding="application/x-tex">\mathbf{q}</annotation></semantics></math>
 and body force
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒃</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>,
@@ -2302,27 +2309,8 @@ inlet disturbance, compressibility, or surface condition does not
 guarantee dynamic similarity. Similarity is a statement about the
 complete nondimensional problem, not a licence to scale one reported
 number.</p>
-<p>Dimensionless numbers are not labels to attach after the calculation.
-Choose characteristic scales
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ρ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\rho_0</annotation></semantics></math>,
-and a pressure scale before nondimensionalising. With
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><mi>L</mi><msup><mi mathvariant="bold-italic">𝒙</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\mathbf{x}=L\mathbf{x}^*</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>L</mi><mi>/</mi><mi>U</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>t</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">t=(L/U)t^*</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒖</mi><mo>=</mo><mi>U</mi><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup></mrow><annotation encoding="application/x-tex">\mathbf{u}=U\mathbf{u}^*</annotation></semantics></math>,
-the incompressible momentum equation becomes, schematically,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup></mrow><mrow><mi>∂</mi><msup><mi>t</mi><mo>*</mo></msup></mrow></mfrac><mo>+</mo><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>⋅</mo><msup><mi>∇</mi><mo>*</mo></msup><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>=</mo><mi>−</mi><msup><mi>∇</mi><mo>*</mo></msup><msup><mi>p</mi><mo>*</mo></msup><mo>+</mo><mfrac><mn>1</mn><mrow><mi>R</mi><mi>e</mi></mrow></mfrac><msup><mi>∇</mi><mrow><mi>*</mi><mn>2</mn></mrow></msup><msup><mi mathvariant="bold-italic">𝒖</mi><mo>*</mo></msup><mo>+</mo><mfrac><mn>1</mn><mrow><mi>F</mi><msup><mi>r</mi><mn>2</mn></msup></mrow></mfrac><msup><mi mathvariant="bold-italic">𝒃</mi><mo>*</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
-\frac{\partial\mathbf{u}^*}{\partial t^*}+\mathbf{u}^*\cdot\nabla^*\mathbf{u}^*
-=-\nabla^*p^*+\frac{1}{Re}\nabla^{*2}\mathbf{u}^*+\frac{1}{Fr^2}\mathbf{b}^*.
-</annotation></semantics></math></p>
-<p>The Reynolds number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><mo>=</mo><mi>U</mi><mi>L</mi><mi>/</mi><mi>ν</mi></mrow><annotation encoding="application/x-tex">Re=UL/\nu</annotation></semantics></math>
-compares inertia with viscous diffusion, while the Froude number
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mi>r</mi><mo>=</mo><mi>U</mi><mi>/</mi><msqrt><mrow><mi>g</mi><mi>L</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">Fr=U/\sqrt{gL}</annotation></semantics></math>
-compares inertia with gravity. If the relevant motion is a
-small-amplitude wave,
+<p>The same scale definitions must travel with each comparison. If the
+relevant motion is a small-amplitude wave,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
 may be a wavelength rather than a device length. If the important length
 is a boundary-layer thickness, using the full apparatus length can
@@ -2556,7 +2544,12 @@ body or pressure forcing at once.</p>
 <h2 data-number="7.2" id="stokes-flow"><span class="header-section-number">7.2</span> Stokes Flow</h2>
 <p>When
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><mo>≪</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Re\ll1</annotation></semantics></math>,
-inertia is small relative to viscosity. The momentum equation becomes
+advective inertia is small relative to viscosity. For steady flow, or
+forcing with a characteristic time
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+sufficiently long that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><msup><mi>L</mi><mn>2</mn></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>μ</mi><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>≪</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\rho L^2/(\mu T)\ll1</annotation></semantics></math>,
+unsteady inertia is also negligible. The momentum equation then becomes
 approximately linear,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>=</mo><mi>−</mi><mi>∇</mi><mi>p</mi><mo>+</mo><mi>μ</mi><msup><mi>∇</mi><mn>2</mn></msup><mi mathvariant="bold-italic">𝒖</mi><mo>+</mo><mi>ρ</mi><mi mathvariant="bold-italic">𝒃</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
 0=-\nabla p+\mu\nabla^2\mathbf{u}+\rho\mathbf{b},
@@ -3025,10 +3018,16 @@ depend on the velocity divergence. A common linear form is</p>
 </annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
-is a second viscosity coefficient. The exact relation and thermodynamic
-restrictions depend on the material model. One should not insert an
-incompressible stress law into a high-speed calculation merely because
-the code accepts the tensor dimensions.</p>
+is a second viscosity coefficient. Here
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝉</mi><annotation encoding="application/x-tex">\boldsymbol{\tau}</annotation></semantics></math>
+is the full viscous extra stress: in three dimensions its trace is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>μ</mi><mo>+</mo><mn>3</mn><mi>λ</mi><mo stretchy="false" form="postfix">)</mo><mi>∇</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒖</mi></mrow><annotation encoding="application/x-tex">(2\mu+3\lambda)\nabla\cdot\mathbf{u}</annotation></semantics></math>,
+which need not vanish. Its deviatoric part is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝉</mi><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>1</mn><mn>3</mn></mfrac></mstyle><mrow><mi mathvariant="normal">tr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝝉</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝑰</mi><mo>=</mo><mn>2</mn><mi>μ</mi><mo stretchy="false" form="prefix">[</mo><mi mathvariant="bold-italic">𝑫</mi><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>1</mn><mn>3</mn></mfrac></mstyle><mo stretchy="false" form="prefix">(</mo><mi>∇</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒖</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝑰</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\tau}-\tfrac13\operatorname{tr}(\boldsymbol{\tau})\mathbf{I}=2\mu[\mathbf{D}-\tfrac13(\nabla\cdot\mathbf{u})\mathbf{I}]</annotation></semantics></math>;
+for incompressible flow, this equals the full extra stress. The exact
+relation and thermodynamic restrictions depend on the material model.
+One should not insert an incompressible stress law into a high-speed
+calculation merely because the code accepts the tensor dimensions.</p>
 <p>The dynamic viscosity
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
 has units of
@@ -4142,13 +4141,27 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
 fixed, the pressure drop is proportional to viscosity. A five percent
 uncertainty in viscosity produces a five percent uncertainty in the
-predicted pressure drop before numerical error is considered. The gap
-enters quadratically: a five percent error in
+predicted pressure drop before numerical error is considered. At fixed
+mean speed
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>,
+the gap enters with exponent
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">-2</annotation></semantics></math>:
+a five percent error in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
 changes the pressure estimate by approximately ten percent in the
-opposite direction for small perturbations. If the channel height is
-measured less precisely than the water temperature, improving the height
-measurement may be more valuable than adding solver resolution.</p>
+opposite direction for small perturbations. For the specified-flow-rate
+decision, however,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><mi>Q</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>w</mi><mi>h</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">U=Q/(wh)</annotation></semantics></math>
+changes with the gap, so
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>p</mi><mo>=</mo><mn>12</mn><mi>μ</mi><mi>L</mi><mi>Q</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>w</mi><msup><mi>h</mi><mn>3</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Delta p=12\mu LQ/(wh^3)</annotation></semantics></math>.
+At fixed
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
+and width, the gap exponent is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">-3</annotation></semantics></math>,
+giving approximately fifteen percent pressure sensitivity to a five
+percent gap error. If the channel height is measured less precisely than
+the water temperature, improving the height measurement may be more
+valuable than adding solver resolution.</p>
 <p>The flow-rate form is</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mfrac><mrow><mi>w</mi><msup><mi>h</mi><mn>3</mn></msup></mrow><mrow><mn>12</mn><mi>μ</mi><mi>L</mi></mrow></mfrac><mi mathvariant="normal">Δ</mi><mi>p</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
 Q=\frac{w h^3}{12\mu L}\Delta p,
@@ -4523,9 +4536,12 @@ filtered in a comparable way.</p>
 <h2 data-number="16.4" id="uncertainty-budgets"><span class="header-section-number">16.4</span> Uncertainty Budgets</h2>
 <p>An uncertainty budget lists the inputs and modelling choices that can
 move the output. For the plane-channel estimate, viscosity, gap, length,
-width, and mean speed are obvious inputs; entrance losses and side-wall
-effects are model-form contributions. A first-order local sensitivity
-can be read from the logarithmic derivatives of the formula:</p>
+and either mean speed or flow rate and width are inputs; entrance losses
+and side-wall effects are model-form contributions. With
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
+treated as an independent input, the logarithmic derivatives of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>p</mi><mo>=</mo><mn>12</mn><mi>μ</mi><mi>L</mi><mi>U</mi><mi>/</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\Delta p=12\mu LU/h^2</annotation></semantics></math>,
+holding the other inputs fixed in each derivative, are:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi mathvariant="normal">Δ</mi><mi>p</mi></mrow><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>μ</mi></mrow></mfrac><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi mathvariant="normal">Δ</mi><mi>p</mi></mrow><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>L</mi></mrow></mfrac><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi mathvariant="normal">Δ</mi><mi>p</mi></mrow><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>U</mi></mrow></mfrac><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi mathvariant="normal">Δ</mi><mi>p</mi></mrow><mrow><mi>∂</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>h</mi></mrow></mfrac><mo>=</mo><mi>−</mi><mn>2</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \frac{\partial\log\Delta p}{\partial\log\mu}=1,
 \quad
@@ -4535,6 +4551,29 @@ can be read from the logarithmic derivatives of the formula:</p>
 \quad
 \frac{\partial\log\Delta p}{\partial\log h}=-2.
 </annotation></semantics></math></p>
+<p>For the fixed-flow-rate decision, use
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>p</mi><mo>=</mo><mn>12</mn><mi>μ</mi><mi>L</mi><mi>Q</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>w</mi><msup><mi>h</mi><mn>3</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Delta p=12\mu LQ/(wh^3)</annotation></semantics></math>
+instead. The logarithmic sensitivities to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
+are each
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>,
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>
+are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math>,
+and to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">-3</annotation></semantics></math>,
+with the other inputs held fixed. Mean speed is then a derived quantity,
+so its uncertainty must not be added independently of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>.</p>
 <p>If input uncertainties are independent and small, a linearised
 variance estimate can combine their squared contributions. Correlation
 between inputs changes the result, and model-form uncertainty is not
@@ -4744,12 +4783,12 @@ first-order scalar scheme is suitable for a production CFD calculation.
 Those are physical and numerical claims outside the examples’ contracts.
 This boundary should be printed near the code, not inferred from the
 fact that the scripts exit successfully.</p>
-<h2 data-number="17.4" id="executable-example-specification"><span class="header-section-number">17.4</span> Executable Example
-Specification</h2>
-<p>Keep the examples short, deterministic, offline, and
-assertion-driven. Register them in <code>examples/manifest.toml</code>,
-using only existing Python base, R, and Julia profiles. A suitable set
-of identifiers and contracts is:</p>
+<h2 data-number="17.4" id="delivered-executable-examples"><span class="header-section-number">17.4</span> Delivered Executable
+Examples</h2>
+<p>The five scripts registered in <a href="examples/manifest.toml">the
+example manifest</a> run offline in the repository’s Python base, R, and
+Julia profiles. The table records their delivered inputs and assertions;
+the listings are abbreviated teaching fragments.</p>
 <p>The analytical channel calculation is intentionally small enough to
 translate without changing the mathematics. Each version computes the
 same Reynolds number, pressure drop, and volumetric flow rate
@@ -4776,6 +4815,7 @@ abbreviated listing shows the language-neutral structure.</p>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>pressure_drop <span class="op">=</span> <span class="fl">12.0</span> <span class="op">*</span> mu <span class="op">*</span> length <span class="op">*</span> mean_speed <span class="op">/</span> h<span class="op">^</span><span class="fl">2</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>flow_rate <span class="op">=</span> mean_speed <span class="op">*</span> width <span class="op">*</span> h</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="pp">@assert</span> <span class="fu">abs</span>(pressure_drop <span class="op">-</span> <span class="fl">48.0</span>) <span class="op">&lt;</span> <span class="fl">1e-10</span></span></code></pre></div>
+<p>The registered scripts have the following contracts:</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -4788,13 +4828,14 @@ abbreviated listing shows the language-neutral structure.</p>
 <th>ID</th>
 <th>Language and purpose</th>
 <th>Inputs</th>
-<th>Required assertions</th>
+<th>Assertions</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>channel-poiseuille-python</code></td>
-<td>Python analytical baseline</td>
+<td><a href="examples/channel_poiseuille.py">Python analytical
+baseline</a></td>
 <td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>,</mo><mi>w</mi><mo>,</mo><mi>L</mi><mo>,</mo><mi>μ</mi><mo>,</mo><mi>ρ</mi><mo>,</mo><mi>U</mi></mrow><annotation encoding="application/x-tex">h,w,L,\mu,\rho,U</annotation></semantics></math>
 as above</td>
 <td>Asserts
@@ -4802,14 +4843,30 @@ as above</td>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>p</mi><mo>=</mo><mn>48</mn><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">a</mi></mrow></mrow><annotation encoding="application/x-tex">\Delta p=48\,\mathrm{Pa}</annotation></semantics></math>,
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mn>4.0</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>7</mn></mrow></msup><mspace width="0.167em"></mspace><mrow><msup><mi mathvariant="normal">m</mi><mn mathvariant="normal">3</mn></msup><mspace width="0.167em"></mspace><msup><mi mathvariant="normal">s</mi><mrow><mi mathvariant="normal">−</mi><mn mathvariant="normal">1</mn></mrow></msup></mrow></mrow><annotation encoding="application/x-tex">Q=4.0\times10^{-7}\,\mathrm{m^3\,s^{-1}}</annotation></semantics></math>
-with <code>np.isclose(rtol=1e-12)</code>; the flow-rate check uses
-<code>atol=0.0</code>, while the other two retain NumPy’s default
-absolute tolerance. Also checks profile endpoints and its numerical
-mean.</td>
+with <code>np.isclose</code> and <code>rtol=1e-12</code>; the flow-rate
+check uses <code>atol=0.0</code>, while the other two retain NumPy’s
+default absolute tolerance. Also checks profile endpoints and its
+numerical mean.</td>
+</tr>
+<tr>
+<td><code>compressible-isentropic-python</code></td>
+<td><a href="examples/compressible_isentropic.py">Python ideal-gas
+isentropic ratios</a></td>
+<td>Heat-capacity ratio
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>1.4</mn></mrow><annotation encoding="application/x-tex">\gamma=1.4</annotation></semantics></math>,
+Mach number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>a</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">Ma=0.5</annotation></semantics></math></td>
+<td>Asserts
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>/</mi><msub><mi>p</mi><mn>0</mn></msub><mo>≈</mo><mn>0.8430191754</mn></mrow><annotation encoding="application/x-tex">p/p_0\approx0.8430191754</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mi>/</mi><msub><mi>ρ</mi><mn>0</mn></msub><mo>≈</mo><mn>0.8851701342</mn></mrow><annotation encoding="application/x-tex">\rho/\rho_0\approx0.8851701342</annotation></semantics></math>
+with <code>np.isclose</code> and <code>rtol=1e-9</code> (default
+absolute tolerance), and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>ρ</mi><mi>/</mi><msub><mi>ρ</mi><mn>0</mn></msub><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;\rho/\rho_0&lt;1</annotation></semantics></math>.</td>
 </tr>
 <tr>
 <td><code>fv-periodic-advection</code></td>
-<td>Python conservative finite-volume demonstration</td>
+<td><a href="examples/periodic_advection.py">Python conservative
+finite-volume demonstration</a></td>
 <td>Periodic smooth initial scalar field, fixed domain, positive
 velocity, default target CFL
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.4</mn><annotation encoding="application/x-tex">0.4</annotation></semantics></math>,
@@ -4833,36 +4890,32 @@ and raises <code>ValueError</code> because it exceeds one.</td>
 </tr>
 <tr>
 <td><code>channel-poiseuille-r</code></td>
-<td>R parity implementation</td>
+<td><a href="examples/channel_poiseuille.R">R parity
+implementation</a></td>
 <td>Same six nominal physical inputs and equations</td>
-<td>Asserts the same three nominal outputs with
-<code>all.equal(tolerance = 1e-12)</code> and prints the same output
+<td>Asserts the same three nominal outputs with <code>all.equal</code>
+and <code>tolerance = 1e-12</code> and prints the same output
 labels.</td>
 </tr>
 <tr>
 <td><code>channel-poiseuille-julia</code></td>
-<td>Julia parity implementation</td>
+<td><a href="examples/channel_poiseuille.jl">Julia parity
+implementation</a></td>
 <td>Same six nominal physical inputs and equations</td>
-<td>Asserts the same three nominal outputs with
-<code>isapprox(rtol=1e-12)</code> and prints the same output
-labels.</td>
+<td>Asserts the same three nominal outputs with <code>isapprox</code>
+and <code>rtol=1e-12</code> and prints the same output labels.</td>
 </tr>
 </tbody>
 </table>
-<p>Use the parity case to test agreement on the three nominal outputs,
-not syntax similarity or scaling behaviour across perturbed inputs. Each
-implementation independently calculates the quantities and asserts
-numerical closeness rather than comparing formatted strings. The shared
-inputs and outputs are documented beside the examples. Python is the
-reference presentation, but R and Julia do not call Python or read its
-results. Avoid adding a CFD package for this case. The advection example
-tests a discrete conservation property and refinement behaviour; it does
-not validate the incompressible channel model. A separate manifested
-educational incompressible solver is reasonable only if it remains
-bounded, has a meaningful independent check, and can run quickly in the
-existing runtime. Otherwise present its algorithm as carefully labelled
-pseudocode and keep executable coverage focused on the verifiable scalar
-solver and analytical case.</p>
+<p>The parity case tests agreement on the three nominal outputs rather
+than scaling behaviour across perturbed inputs. Each implementation
+independently calculates the quantities and asserts numerical closeness
+rather than comparing formatted strings. Python is the reference
+presentation, but R and Julia do not call Python or read its results.
+The isentropic script checks analytical ideal-gas ratios; the advection
+script checks discrete conservation and refinement behaviour. Neither
+validates the incompressible channel model, and the registered set
+contains no incompressible CFD solver.</p>
 <h2 data-number="17.5" id="finite-volume-code-in-three-languages"><span class="header-section-number">17.5</span> Finite-Volume Code in Three
 Languages</h2>
 <p>The following snippets show the core periodic upwind update in three
