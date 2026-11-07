@@ -66,6 +66,18 @@ The static contract check verifies paths and structure only. It cannot prove
 that a model followed an instruction, that a harness loaded a linked file, or
 that permissions and sandboxing are equivalent.
 
+## Cross-Harness Skill Evidence
+
+The following post-adapter smoke-test observations are dated 7 November 2026. Discovery covered `primer-plan`, `primer-audit`, `primer-render-qa`, and `primer-handoff` at the repository root and a nested directory. The precise nested directory, full prompts, commands, and settings were not recorded in this summary, so the observations are not a complete reproduction recipe.
+
+| Harness | Discovery | Explicit activation | Automatic selection |
+|---|---|---|---|
+| Claude Code 2.1.319 | Pass: all four skills at root and nested directory. | `/primer-plan` reached the skill workflow, but behavioural completion was inconclusive: the run expanded into tools and subagent work and was stopped. | Unverified. |
+| Codex 0.166.0 | Pass: all four skills at root and nested directory. | Pass: `primer-plan` activation identified the canonical `.agents/skills/primer-plan/SKILL.md` and two instructions; the exact prompt and instruction excerpts are not recorded here. | Pass: `primer-plan` was selected automatically for a suitable task. |
+| Pi 0.99.2 | Pass: all four skills at root and nested directory. | Pass for native loading and explicit activation; the configured `llamacpp-local` model connection failed before a response, so behavioural completion is unverified. | Unverified. |
+
+For manual fallback, open the relevant canonical `.agents/skills/<name>/SKILL.md` and follow it with the project contract. This remains available independently of native discovery and activation; these observations do not establish a separate manual-fallback behavioural test.
+
 ## Claude Primer Skill Adapter
 
 Claude Code 2.1.319 failed to discover the four canonical skills under `.agents/skills/` in the reported smoke test; Pi and Codex discovered them. The tracked `.claude/skills/` directory supplies the following relative directory symlinks:
