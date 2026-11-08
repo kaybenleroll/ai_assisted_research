@@ -2,7 +2,7 @@
 
 This is a long-form, operational guide for Claude Code users who want Codex as a second coding-agent harness while keeping their existing repository workflow intact.
 
-*Product snapshot · 7 November 2026. Bounded interoperability review of instruction discovery, selective import, sandbox scope, and remote/data boundaries; earlier checks retain their stated dates and were not all repeated.*
+*Product snapshot · 7 November 2026. Bounded documentation checks cover instruction discovery, selective import, sandbox scope, model routing, and the hook/skill migration example. Earlier checks retain their stated dates; examples remain unexecuted.*
 
 ## Introduction
 
@@ -40,7 +40,7 @@ You should be comfortable working in a terminal, reading a git diff, running a p
 
 You do not need to know Codex's configuration syntax in advance. You do need to bring the habits that make any coding agent safe to use: give it a bounded task, keep the working tree understandable, inspect its proposed changes, and run the checks that establish whether the result is correct.
 
-*Verified against primary sources for Instruction Systems and Feature Translation (discovery, selective import, and sandbox scope), and Workflow Differences (remote/data boundaries); other product claims retain their earlier snapshot dates and verification limits.*
+*Verified against primary sources for Instruction Systems (discovery), Models and Reasoning Effort (model snapshot and routing controls), and Feature Translation (selective import, sandbox scope, and the hook/skill example); Workflow Differences retains its earlier remote/data verification boundary, and other unverified details are flagged inline.*
 
 All prompts, shell commands, configuration blocks, and worked scenarios are illustrative and unexecuted unless explicitly identified otherwise. This primer has no executable-example manifest. The verification snapshot distinguishes documentation checks from runtime tests; a configuration example is not a tested deployment.
 
@@ -88,15 +88,7 @@ One harness may naturally spend the session in an investigation-and-plan phase. 
 
 The harness also determines how repository guidance is discovered, and this is the first place where the two tools genuinely disagree rather than merely differ. Claude Code and Codex can both read `AGENTS.md`, but they do not choose or combine instruction files in the same way. A project `CLAUDE.md` normally takes precedence in Claude Code, while Codex walks an `AGENTS.md` chain and supports `AGENTS.override.md`. Putting operational rules in two files without testing the effective instruction chain can therefore produce sessions with different contracts, even when both agents appear to have loaded project guidance.
 
-The safest default is one canonical file plus a real include or an explicitly configured both-files policy, not two manuals. Claude Code supports an `@path` import, so a one-line `CLAUDE.md` can pull in the whole of `AGENTS.md`:
-
-```markdown
-@AGENTS.md
-```
-
-That is a resolved import rather than a suggestion to the model, which is what makes it reliable. The reverse arrangement — a prose `AGENTS.md` linking to `CLAUDE.md` — is not equivalent, because Codex reads the contents of the file it discovers and does not treat a Markdown link inside it as an include directive. The instruction-systems chapter covers both directions, the supported Codex configuration key for the reverse case, and what each one actually guarantees.
-
-This still does not claim that Codex and Claude Code will interpret every instruction identically. It gives both sessions the same text, while leaving room to state a real difference when one exists. For instance, an instruction about a particular approval mode belongs with the harness that implements that mode; a command for building the project belongs in the shared canonical file.
+Use one canonical repository contract with native entry points. The [instruction-systems chapter](#instruction-systems) explains Claude's resolved import, conditional direct discovery, and Codex's fallback precedence. Those mechanisms can supply shared text; they do not make permission settings or feature behaviour interchangeable. Keep build policy shared and real interface differences in adapters.
 
 ### The Interface Is Where You Steer the Session
 
@@ -353,12 +345,7 @@ the repository needs a service token for tests, use the project’s existing
 secret-management procedure and confirm that the token is not included in
 command output or the diff.
 
-Before the first write-capable session, establish what the client is allowed
-to do. “Approval” means whether you permit a proposed action. “Sandbox” means
-what the execution environment permits even if the action is approved. They
-are related, but they are not the same control. A command can require approval,
-and an approved command can still fail because the sandbox blocks network
-access, a filesystem path, a container runtime, or another capability.
+Before the first write-capable session, establish the effective approval and execution settings using [Permissions and Sandboxing Are Different Controls](#permissions-and-sandboxing-are-different-controls). Record the workspace, writable paths, network policy, and available runtime so an authorisation problem can be distinguished from an execution failure.
 
 The names and defaults for these controls vary by Codex interface and release.
 Treat any command-line flags, configuration keys, or UI labels as provisional
@@ -742,40 +729,13 @@ chapter.
 
 #### Point `CLAUDE.md` at `AGENTS.md`, With an Import
 
-The most explicit bridge uses a real include primitive. Put the canonical
-instructions in `AGENTS.md` and make `CLAUDE.md` an import of it:
-
-```markdown
-@AGENTS.md
-```
-
-Claude Code resolves `@AGENTS.md` when it assembles context, so the full text
-is present in the session. Codex finds `AGENTS.md` by its own discovery walk.
-One file holds the repository contract, both harnesses receive it, and the
-arrangement remains explicit even when Claude Code's default discovery rule
-changes. If Claude Code needs extra
-instructions that mean nothing to Codex, append them below the import:
+Use this bridge when `AGENTS.md` is canonical and you want an explicit Claude Code entry point, especially when the repository needs a visible adapter. The earlier [Claude Code discovery discussion](#how-claude-code-discovers-instructions) sets out the full import and symlink explanation, the Windows caveat, and the Project instructions option for loading both files; choose among them based on portability and whether Claude-specific additions are needed.
 
 ```markdown
 @AGENTS.md
 
-### Claude Code Specifics
-
-- Use the `render-primer` skill for build work; it wraps the container recipe.
-- The pre-commit hook in `.claude/settings.json` blocks committed intermediates.
+- Use `.claude/settings.json` for Claude-specific hook settings.
 ```
-
-This remains a useful arrangement when a repository already has a `CLAUDE.md`,
-when Claude Code sessions are on a release that cannot load `AGENTS.md`, or
-when the team wants the bridge to be visible in the tree. It also makes
-Claude-specific additions easy to isolate below the import. Do not describe it
-as proof that Claude Code cannot read `AGENTS.md`: current releases can do so
-under the documented conditions above.
-
-The symlink alternative, `ln -s AGENTS.md CLAUDE.md`, produces the same result
-with no file content at all. It is fine on Linux and macOS. It needs Developer
-Mode or an elevated shell on Windows, and a repository that Windows
-contributors may clone should use the import instead.
 
 #### Pointing `AGENTS.md` at `CLAUDE.md` Is Prose, Not a Mechanism
 
@@ -1064,7 +1024,7 @@ Verify the change in layers:
 Do not claim the task is complete based only on static inspection.
 ```
 
-Claude Code and Codex may expose different approval or sandbox behaviour around commands, especially when a test needs network access, containers, or writes outside the immediate project directory. Keep the conceptual distinction clear: approval determines whether the agent may take an action; the sandbox determines what the execution environment allows. A command can be approved and still fail because the sandbox blocks it, or it can be permitted by the environment while still requiring a deliberate approval decision.
+When a test needs network access, containers, or writes outside the project directory, use the [permissions and sandbox diagnostic](#permissions-and-sandboxing-are-different-controls) before retrying. Record an unavailable runtime separately from a failing assertion; neither justifies silently weakening the acceptance check.
 
 Testing is also a useful way to compare agents without relying on impressions. Give each harness the same repository state and acceptance criteria. Compare the tests each one chooses, the failures it notices, and whether its final explanation accurately describes what ran. “It felt more capable” is weak evidence; a reproducible verification record is stronger.
 
@@ -1270,42 +1230,20 @@ Execution capability is separate again. A model may be able to propose a correct
 
 ### A Dated Snapshot of the Current Codex Models
 
-The official [Codex model guidance](https://learn.chatgpt.com/docs/models) now
-recommends GPT-6.1 Sol for complex coding and GPT-6 Luna for focused work,
-with availability depending on the account and client. The [GPT-6 Astra model
-documentation](https://developers.openai.com/api/docs/models/gpt-6-astra)
-describes Astra as OpenAI's most capable model for complex reasoning, coding,
-computer use, research, and document creation. The following is a snapshot
-checked on 5 November 2026 against official documentation; it is not a promise
-that every model is available to every account, interface, or authentication
-method. GPT-6.1 Sol's launch includes eligible paid plans; Enterprise and Edu
-administrators must enable it, and Free and Go are not included at launch.
+As of 7 November 2026, the official [Codex model guidance](https://learn.chatgpt.com/docs/models) recommends choosing by task: Luna for focused work, GPT-6.1 Sol for repeated complex work, Terra for everyday writing and visual work, and Astra for the most demanding workflows. This is a documentation snapshot, not an account-access test or an independent performance comparison. The model picker, authentication method, workspace policy, and installed client determine what you can actually select.
 
-| Model | Practical orientation | Good starting use |
+These are useful starting roles for the documented identifiers:
+
+| Model | Documented orientation | Starting use in this guide |
 | --- | --- | --- |
-| `gpt-6-astra` (Astra) | Highest-capability model for complex work across code, apps, and research | Hardest end-to-end tasks that need sustained reasoning and judgement |
-| `gpt-6.1-sol` (6.1 Sol) | Recommended for complex coding and agentic workflows; OpenAI describes near-Astra performance at lower cost | Ordinary implementation through repeated, long-running work; evaluate against Astra on hard tasks |
-| `gpt-6-luna` (6 Luna) | Efficient model for focused, high-volume tasks | Clear transformations, extraction, summaries, and bounded coding |
-| `gpt-6-sol` (6 Sol) | Earlier GPT-6 Sol; named replacement in the GPT-5.5 retirement notice | Migration where the account offers 6 Sol but not 6.1 Sol |
-| `gpt-6.1-terra` | Fast, efficient model for writing, visual understanding, and computer use | Clear explanations, visual inspection, and ordinary computer-use tasks; availability varies by surface |
-| `gpt-5.5` | Retires from ChatGPT-authenticated Codex on 14 October 2026; API availability is separate | Migrate saved settings, scripts, custom agents, and scheduled tasks before retirement |
+| `gpt-6-luna` | Efficient, focused, repeatable work | Bounded transformations and coding with clear acceptance checks |
+| `gpt-6.1-sol` | Repeated, long-running work across code, apps, and documents | Implementation and diagnosis with several interacting constraints |
+| `gpt-6.1-terra` | Writing, visual understanding, and computer use | Explanations, visual inspection, and supported app tasks |
+| `gpt-6-astra` | Most demanding workflows | Hard end-to-end work requiring sustained judgement |
 
-GPT-5.4 and GPT-5.4 Mini retired from Codex with ChatGPT sign-in on 31 August
-2026. That specific retirement does not affect the OpenAI API or Codex
-authenticated with an API key. GPT-5.3 Codex Spark retired on 14 September
-2026 from the desktop app, CLI, and IDE extension; it is no longer a preview
-option. GPT-5.2 and GPT-5.3 Codex are also deprecated with ChatGPT sign-in.
-Model names, availability, retirement dates, and migration advice belong in a
-maintained reference section, not in permanent repository instructions.
+Choose effort separately. The guide suggests High for Luna and Light (`low` in configuration) for Astra; for GPT-6.1 Sol, start with the client's default. A task-specific choice such as Sol at `high` below is an illustrative routing decision, not a universal vendor default. Luna supports Max but not Ultra; Ultra uses subagents and changes the workflow as well as the computation budget.
 
-The practical selection rule is simpler than the catalogue. Use GPT-6 Luna for
-bounded work and GPT-6.1 Sol for implementation, debugging, and complex agent
-work when available. Keep Astra for the most demanding tasks. Choose effort
-separately: the product guide suggests High for Luna and Light (`low`) for
-Astra; start with the client's default for 6.1 Sol. Re-evaluate on familiar
-tasks rather than carrying an old generation's effort setting across unchanged.
-Luna supports Max but not Ultra; Ultra uses subagents, so it is also a workflow
-choice rather than just more reasoning time.
+The same source records that GPT-5.5 retired from ChatGPT-authenticated Codex on 14 October 2026; API-key sessions are separate. Its replacement advice names GPT-6.1 Sol or GPT-6 Luna when available to the account and client. GPT-5.4/Mini and GPT-5.3 Codex Spark also have dated retirement notices there. Use that maintained catalogue for older identifiers and migration dates rather than preserving a second retirement table in repository instructions. This review does not establish prices, quotas, plan entitlements, or measured performance.
 
 ### Choose by Task Shape
 
@@ -1360,41 +1298,33 @@ The prompt helps the agent spend effort on uncertainty rather than on ceremony. 
 
 ### Worked Example: Escalating a Repository Task
 
-Consider the request: “update the primer build so the PDF uses the
-repository's pinned container, regenerate the committed outputs, and run the
-relevant checks.” A fast, lower-effort setting is a reasonable first choice
-when the `Justfile` already names the runtime and the expected files are clear.
-The task contract should still name the source, generated outputs, and build
-command. The evidence for a successful first pass is a small source diff,
-regenerated HTML and PDF, and checks that inspect the outputs rather than only
-their timestamps.
+Consider a synthetic request to repair a primer's PDF build path so it uses the repository's pinned container, regenerate the required HTML/PDF, and verify the result. Assume a disposable issue branch with a known starting revision, an available pinned image, an authorised container runtime, and one writer owning the target primer and its outputs. The initial scope is the target source, its thin `Justfile`, and its required outputs; shared build recipes are outside scope. These assumptions and the cases below are illustrative and unexecuted as of 7 November 2026. No model run, benchmark, successful repair, or measured saving is reported.
 
-Now suppose the first run finds two competing recipes, one figure generator
-that runs on the host, and a failed PDF check whose error does not identify the
-source of the problem. This is a visible escalation signal: the implementation
-crosses several files, the repository invariant is unclear, and the first
-verification path has contradicted the plan. Move to a stronger model or
-higher reasoning effort, retain the same task contract, and ask it to compare
-the recipes and trace the failure before editing. Record the decision:
+Start with `gpt-6-luna` at `high`: the expected change is a bounded recipe correction with a documented build and observable outputs. In a supporting Codex CLI, the launch configuration could be expressed as follows; check the selected client and active settings before using it:
 
-| Stage | Configuration | Evidence | Decision |
-| --- | --- | --- | --- |
-| First pass | Faster setting | Found the source recipe but missed a host-side figure path | Escalate |
-| Second pass | Stronger setting with deliberate reasoning | Identified the bypass, repaired the recipe, and passed the focused build | Keep this configuration for the task |
+```bash
+codex --model gpt-6-luna -c 'model_reasoning_effort="high"'
+```
 
-The model setting changed because the repository evidence showed unresolved
-cross-file reasoning. The scope, safety boundary, and acceptance checks did
-not change. If the command had been blocked by a missing container runtime,
-changing the model would have been the wrong response; the execution
-environment would need fixing instead.
+Give that session the exact task contract: inspect the relevant recipe and inputs, propose the smallest correction, build with `just all` from the target directory, and report changed paths and checks. Do not authorise changes to shared infrastructure merely because the investigation discovers a dependency there. The [model guide](https://learn.chatgpt.com/docs/models) supports the identifier and Luna starting effort; the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) documents `model_reasoning_effort`. Neither source establishes that this hypothetical task will succeed.
 
-### Fast, Strong, and Specialised Are Not Permanent Categories
+Escalate to `gpt-6.1-sol` at `high` if the first bounded investigation identifies two competing build paths and cannot trace which one supplies the committed PDF, or finds a host-side figure dependency that contradicts the container-only invariant. That is a cross-file reasoning problem with concrete evidence. Preserve the starting revision, diff, exact failure, scope, and acceptance cases when switching through `/model` or a fresh session. Sol is chosen here to resolve the dependency ambiguity; this does not infer a speed or cost advantage. If repairing the dependency requires a shared-file edit, stop at a diagnosis and request that specific scope extension.
 
-Product documentation may describe models using categories such as fast, general-purpose, reasoning-focused, coding-focused, or preview. Treat those categories as useful orientation, not permanent technical properties. A model can be renamed, retired, reclassified, made available in a different interface, or exposed with different controls. The same label may also behave differently across a chat product, command-line tool, application programming interface (API), or hosted execution environment.
+Use the same acceptance cases for both configurations. The entries describe required evidence, not observed results:
 
-For that reason, this primer keeps exact model names, prices, quotas, rate limits, context sizes, and plan entitlements in a dated snapshot rather than in its core workflow advice. Keep the durable guidance task-oriented, and recheck the official model and usage documentation before relying on any volatile detail.
+| Acceptance case | Required evidence before accepting the task |
+| --- | --- |
+| Intended build path | Recipe and dependency trace names the pinned image; build log shows the target's documented command using it |
+| Published outputs | HTML and PDF regenerated together; metadata and extracted PDF text contain the intended content; representative table/code pages inspected |
+| Scope preserved | Final status and diff name only authorised paths; no host dependency installation, unrelated output, or shared recipe change |
+| Validation | Exact focused lint/link/render commands and exit results; render-log errors inspected; `git diff --check` clean |
+| Runtime blocked or missing | Exact command and runtime error recorded; build/output checks marked unverified, with no escalation merely to bypass the environment |
 
-Do not infer that a model available in one Codex surface is available in every other surface. Availability can depend on account, organisation, region, product, authentication method, rollout stage, or API access. Use the dated model snapshot and its official links when checking these points for your account; the interoperability review does not refresh model entitlements.
+For example, evidence of a host-side figure generator would justify the Sol investigation, while `podman` being unavailable would justify an environment report. Neither is a passing result. A future run record should include the client/version, selected model and effort, revision, actual diff, commands, results, and visual observations. Stop when the acceptance cases are satisfied or the authorised scope prevents progress; the more elaborate comparison method in [What to Measure](#what-to-measure) is needed before making a performance claim.
+
+### Model Categories and Availability Change
+
+The snapshot is a lookup aid rather than permanent repository policy. A model can be renamed, retired, or exposed with different controls across chat, CLI, API, and hosted surfaces. A familiar category such as "fast" or "reasoning-focused" does not establish capability or access in your session. Recheck the linked catalogue and account/client settings before automation; record the model and effort actually selected in a run rather than inferring them from a product label.
 
 ### Cost and Latency Are Part of Engineering Quality
 
@@ -1406,11 +1336,9 @@ When comparing Claude Code and Codex, keep the comparison fair. Use equivalent t
 
 ### A Compact Selection Rule
 
-Start fast when the task is bounded and mechanically verifiable. Move to a stronger model or higher reasoning effort when the task is ambiguous, cross-cutting, or expensive to get wrong. Improve the context and acceptance criteria before escalating when the failure is about repository discovery or execution. Add an independent review when the risk remains high after the implementation looks correct.
+Use the [worked routing example](#worked-example-escalating-a-repository-task) as the decision pattern: start with a configuration matched to a bounded task, escalate for demonstrated reasoning difficulty, and diagnose context or execution failures at their own layer. Keep the task contract and acceptance checks stable when changing models. Add independent review when the consequence of a missed error warrants it.
 
-That rule keeps model selection subordinate to engineering discipline. The model is one component of the loop; the harness, instruction files, permissions, tests, and review process determine whether a plausible answer becomes a safe change.
-
-Exact model names, effort controls, prices, quotas, usage telemetry, and entitlements remain dated product facts. Recheck their linked official sources before automation or a cost comparison; this review did not test accounts or billing. Repository boundaries and acceptance checks remain the stable basis for selection.
+Exact identifiers, effort controls, prices, quotas, and entitlements remain dated product facts; the [model snapshot](#a-dated-snapshot-of-the-current-codex-models) is their lookup home. The [measurement chapter](#what-to-measure) explains how to evaluate complete workflows rather than infer a winner from one result.
 
 ## Feature Translation
 
@@ -1441,36 +1369,160 @@ For example, a Claude Code hook that runs a formatter after an edit has a differ
 
 ### Worked Example: Translating a Claude Code Hook and Skill
 
-Suppose a Claude Code project contains a `PostToolUse` hook that runs a
-Markdown linter after edits, and a `/primer-audit` skill that tells Claude how
-to inspect the resulting HTML and PDF. They are related, but they do different
-jobs. The hook is deterministic feedback: it should run after the relevant
-edit without asking the model to remember it. The skill is procedural
-knowledge: it tells the agent how to interpret failures and what evidence to
-record.
+Assume a small hypothetical repository with tracked `notes/demo.md` and its HTML/PDF outputs, a no-fix `just lint-md <path>` recipe using a pinned Markdown linter, Python 3, and a supported Claude Code/Codex CLI. The procedure audits that source and inspects existing outputs without rebuilding them; the hook supplies immediate feedback after supported edits. All paths and snippets in this example belong to the hypothetical fixture, not to an installed migration in this repository. They are illustrative and unexecuted as of 7 November 2026; documentation checks establish syntax and intended contracts, not runtime discovery, trigger coverage, or parity.
 
-Translate the behaviour in four steps:
+**Original Claude Code setup:**
 
-1. Move the linter command to a repository-owned `just lint-md` recipe or CI
-   check. That gives both harnesses the same executable check and makes the
-   failure visible even when no agent is present.
-2. Keep the portable audit procedure in `.agents/skills/primer-audit/SKILL.md`
-   and expose a Claude Code wrapper under `.claude/skills/primer-audit/` only
-   if Claude needs different invocation or tool names.
-3. In Codex, run the same recipe first and then invoke the skill or give the
-   agent the same audit contract: inspect source, map snippets to tests, render
-   representative pages, and report unresolved evidence separately.
-4. Test the failure boundary by introducing a harmless Markdown error in a
-   disposable branch. The linter should fail without relying on the model to
-   notice the error; the audit procedure should explain the failure and identify
-   the file and command that produced it.
+The original `.claude/skills/doc-audit/SKILL.md` combines the audit instructions with a Claude-specific invocation restriction:
 
-The original trigger, authority, and side effects are now explicit. The
-repository check owns deterministic enforcement, the shared skill owns
-reasoning about evidence, and the harness-specific wrapper owns only
-invocation. If Codex has no hook with the same event semantics, do not pretend
-that a prompt saying “always run the linter” is equivalent enforcement. Keep
-the command in `just` or CI and use the prompt as a reminder.
+```markdown
+---
+name: doc-audit
+description: Audit notes/demo.md and report lint evidence without editing.
+disable-model-invocation: true
+---
+
+Read notes/demo.md and the repository's document policy.
+Run just lint-md notes/demo.md from the repository root.
+Inspect existing notes/demo.html and notes/demo.pdf for source/output mismatch.
+Report the command, result, source problems, and missing or stale outputs.
+Do not repair files, render outputs, commit, or publish during the audit.
+```
+
+A user invokes `/doc-audit`; the frontmatter prevents Claude from choosing it automatically. Separately, `.claude/settings.json` attaches a command to successful `Edit`/`Write` calls:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "^(Edit|Write)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/lint-docs.py\" --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The deterministic runner in this example remains the same across the migration. This hook lints the fixed source after any matched edit, rather than trusting a harness-specific payload path. It misses shell writes and edits by another process, and it cannot undo an edit. A hook failure is feedback about already changed state. Anthropic's [hook reference](https://code.claude.com/docs/en/hooks) documents the event and command environment; its [skill reference](https://code.claude.com/docs/en/skills) documents explicit invocation and `disable-model-invocation`.
+
+**Neutral procedure and invocation adapters:**
+
+Move the shared procedure into `.agents/skills/doc-audit/SKILL.md`, using only shared frontmatter fields:
+
+```markdown
+---
+name: doc-audit
+description: Audit notes/demo.md and report lint evidence without editing.
+---
+
+1. Establish the repository root and read its document policy and notes/demo.md.
+2. Run python3 scripts/lint-docs.py from the repository root.
+3. Inspect existing notes/demo.html and notes/demo.pdf against the source.
+   Check headings, code/table layout, and whether snippets have test evidence.
+4. Report the exact command, exit result, diagnostics, and inspected artefacts.
+5. Distinguish lint failures from an unavailable runner or container runtime.
+6. Mark missing/stale outputs and absent execution evidence as unverified.
+   Do not repair, render, commit, publish, or widen permissions during this audit.
+```
+
+Keep `.claude/skills/doc-audit/SKILL.md` as a thin Claude adapter rather than copying the procedure:
+
+```markdown
+---
+name: doc-audit
+description: Explicitly audit the demo document using the shared procedure.
+disable-model-invocation: true
+---
+
+Open .agents/skills/doc-audit/SKILL.md relative to the repository root.
+Follow its procedure with the current task's authority and report any conflict.
+```
+
+This is an instruction to open a procedure, not an instruction-file `@` include or proof that the model opened it. Verify that read separately. Codex discovers the canonical `.agents/skills/` entry; invoke it explicitly with `$doc-audit`. To retain explicit-only selection in a supporting Codex client, add the Codex-specific `.agents/skills/doc-audit/agents/openai.yaml` adapter:
+
+```yaml
+policy:
+  allow_implicit_invocation: false
+```
+
+Without that adapter, removing the Claude-specific field would change the trigger: Codex can select a matching description implicitly. The [Codex skill documentation](https://learn.chatgpt.com/docs/build-skills/) describes this policy and explicit `$` invocation. Neither invocation switch grants tool permission or prevents someone running the underlying command directly. No tool pre-authorisation is added to either skill; ordinary session controls still apply. Manual fallback is to open the canonical file and follow it under the same task authority.
+
+**Deterministic runner and Codex event adapter:**
+
+Use this complete `scripts/lint-docs.py` in the hypothetical fixture. Its input is deliberately fixed; arbitrary hook payloads cannot choose a shell command or a file outside the intended source. The existing no-fix lint recipe must itself be reviewed and pinned:
+
+```python
+from pathlib import Path
+import subprocess
+import sys
+
+root = Path(__file__).resolve().parents[1]
+command = ["just", "lint-md", "notes/demo.md"]
+try:
+    result = subprocess.run(command, cwd=root, capture_output=True, text=True)
+    failed = result.returncode != 0
+    diagnostics = result.stdout + result.stderr
+except OSError as error:
+    failed = True
+    diagnostics = f"Lint runner unavailable: {error}"
+
+if failed:
+    print(diagnostics, file=sys.stderr)
+    raise SystemExit(2 if "--hook" in sys.argv else 1)
+raise SystemExit(0)
+```
+
+Direct invocation returns 0 for a passing recipe and 1 for failure/unavailability; the diagnostics distinguish the cause. In `--hook` mode it maps failure to exit 2 for the documented post-tool feedback contract. It does not parse hook input or write source, and successful hook execution emits no output. A container pull, timeout, or missing tool is not a lint pass. The runner needs review like any repository code: a fixed command still runs with the hook process's actual credentials and environment.
+
+For Codex, the repository `.codex/config.toml` event adapter can invoke the same runner from a nested cwd:
+
+```toml
+[[hooks.PostToolUse]]
+matcher = "^apply_patch$"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'python3 "$(git rev-parse --show-toplevel)/scripts/lint-docs.py" --hook'
+timeout = 30
+```
+
+This retains post-edit feedback for a different tool path: Claude matches `Edit`/`Write`, while Codex matches its canonical `apply_patch` hook tool name. Neither matcher covers shell writes or external editors. Codex's [hooks documentation](https://learn.chatgpt.com/docs/hooks/) specifies tool coverage, cwd, feedback, and review/trust requirements. Trust the project layer and review the exact hook definition through the supported client controls; a changed hook requires renewed trust. An untrusted or administratively disabled hook is not a successful migration.
+
+The post-tool hook can influence subsequent agent processing, but it cannot prevent the edit that triggered it. To gate integration, configure a required CI check to run `python3 scripts/lint-docs.py` against the checked-out revision. That adds a separate trigger and enforcement point: a non-zero check can prevent merging when branch policy requires it, including changes made outside either harness. Merely defining a `just` recipe does not create a gate, and a local Git hook may be bypassed. Session approvals and shell sandboxing do not automatically contain hook processes or external tools; use the [scope comparison](#permissions-and-sandboxing-are-different-controls) when reviewing effective authority.
+
+The migration deliberately preserves some semantics and changes others:
+
+| Responsibility | Retained or changed semantics | Authority |
+| --- | --- | --- |
+| Procedural audit | Same source, runner, evidence, and no-edit boundary; different native invocation controls | Model-guided procedure, subject to session permissions |
+| Post-edit feedback | Claude `Edit`/`Write` becomes Codex `apply_patch`; tool payloads are not assumed interchangeable | Deterministic check after the edit; no rollback or pre-edit prevention |
+| Integration check | Added CI trigger, independent of which editor wrote the file | Merge gate only if configured as required |
+
+**Behavioural verification plan:**
+
+Use a disposable fixture, record both client versions and settings, and reset the fixture deliberately between probes. All results below are expected acceptance conditions, not observed passes. Keep command logs and source diffs separate from agent narration:
+
+| Probe | Expected acceptance condition and evidence |
+| --- | --- |
+| Discover and explicitly invoke | Catalogue evidence plus `/doc-audit` and `$doc-audit` each reach the canonical procedure; record the actual file read and report |
+| Unprompted matching task | Neither skill auto-activates with the explicit-only adapters; record settings and activation evidence; one probe cannot prove universal non-activation |
+| Clean fixed source | Direct runner exits 0; matched edit hook completes; source remains unchanged by lint |
+| Existing output audit | Both invocations inspect HTML/PDF when available, report missing/stale outputs, and distinguish snippet inspection from execution |
+| Invalid Markdown, e.g. skipped heading level | Direct runner exits 1; hook mode exits 2 with file diagnostics; the invalid edit still exists |
+| Real edit event | Claude `Edit`/`Write` and Codex `apply_patch` each trigger their reviewed adapter; record event/tool identity and diagnostics |
+| Shell or external-editor write | These matchers do not trigger; the separately required CI check catches the invalid source |
+| Nested cwd | Hook reaches the same root runner and fixed source; command evidence confirms paths |
+| Missing runtime or untrusted Codex hook | Record runner error or skipped/untrusted event; mark hook behaviour unverified, without bypassing controls |
+| Authority boundary | Procedure makes no repair/commit/external write; record status/diff and actual tool use, not merely a promised restriction |
+
+A passing direct lint command would establish the runner's behaviour for that input, not native discovery or event delivery. Conversely, a visible skill in a catalogue would establish neither lint execution nor compliance with its no-edit boundary. This separation is the point of the migration: procedural content can be shared while selection, event coverage, authority, and enforcement remain independently reviewable.
 
 The table below is a starting map. It is intentionally about responsibilities rather than exact command names or file paths.
 
@@ -1482,7 +1534,7 @@ The table below is a starting map. It is intentionally about responsibilities ra
 | Subagents | Subagents | Direct in concept, non-portable in format | Claude uses `.claude/agents/*.md`; Codex uses `~/.codex/agents/*.toml` or `.codex/agents/*.toml`. Official selective import can provide a starting configuration; review authority and discovery. |
 | Hooks | Hooks | Direct in concept, non-portable in format | Claude uses `.claude/settings.json`; Codex uses `hooks.json` or a `[hooks]` block in `config.toml`. Event names, payloads, and trust models differ. |
 | MCP servers | MCP servers | Direct at the protocol level, non-equivalent at the configuration level | Claude uses `.mcp.json`; Codex uses `[mcp_servers.<name>]` tables in `config.toml`. Separate configuration files remain; supported imports need authentication and transport review. |
-| Permissions (`allow`/`deny`/`ask` rules) | `approval_policy` in `config.toml` | Partial | Claude Code matches patterns against tool calls; Codex decides how often to ask, not which commands match. |
+| Permissions (`allow`/`deny`/`ask` rules) | `approval_policy` in `config.toml` | Partial | Claude uses tool/command patterns; Codex separates approval categories, command rules, and execution sandboxing. |
 | Sandboxing | `sandbox_mode` plus `[sandbox_workspace_write]` | Non-equivalent scope | Both have OS-enforced command isolation on supported platforms. Neither a shell policy nor a network flag establishes protection for every external tool. |
 | Enterprise policy | `requirements.toml` and `managed_config.toml` | Different policy models | Codex can centrally constrain sandbox and approval settings; Claude Code has managed settings that can require its Bash sandbox and control instructions and permissions. |
 | Tool integrations | MCP, built-in tools, connected apps, or a repository-side adapter | Partial | The existence of a connector does not imply that the current session can use it or write through it. |
@@ -1546,19 +1598,7 @@ frontmatter fields, invocation surface, tool names, and approval behaviour can
 still differ. Treat the skill body as portable procedure and the surrounding
 directory and adapter as integration work.
 
-The shared design is progressive disclosure, but the frontmatter requirements
-are not identical. Codex requires a `name` and a `description`; Claude Code can
-derive a name from the directory and supports additional Claude-specific
-fields. Use explicit `name` and `description` fields for a cross-harness skill,
-and assume that only the shared subset will port cleanly. The initial
-name-and-description metadata is loaded before the full procedure:
-Codex's documentation puts a concrete budget on that preamble: the loaded
-name-and-description set should stay under about 2% of the context window, or
-roughly 8,000 characters. The body of `SKILL.md`, along with any bundled
-scripts, references, and assets, loads only when the skill is actually
-invoked. That is what makes it viable to have fifty skills installed: the
-standing cost is fifty short descriptions, and the full cost is paid one skill
-at a time.
+The shared design is progressive disclosure, but the frontmatter requirements are not identical. Codex requires a `name` and a `description`; Claude Code can derive a name from the directory and supports additional Claude-specific fields. Use explicit `name` and `description` fields for a cross-harness skill, and assume that only the shared subset will port cleanly. The initial name-and-description metadata is loaded before the full procedure: Codex's documentation puts a concrete budget on that preamble: the loaded name-and-description set should stay under about 2% of the context window, or 8,000 characters when the context window is unknown. The body of `SKILL.md`, along with any bundled scripts, references, and assets, loads only when the skill is actually invoked. That is what makes it viable to have fifty skills installed: the standing cost is fifty short descriptions, and the full cost is paid one skill at a time.
 
 The directories differ, and the Codex side is the more interesting of the two:
 
@@ -1667,15 +1707,7 @@ array groups handlers; do not assume serial execution. Compare that with Claude
 Code's hook configuration in `.claude/settings.json`, which is JSON with its
 own matcher conventions. Use selective import where supported, then check matchers, event payloads, execution context, and blocking behaviour against the destination hook documentation.
 
-Codex adds a trust gate that Claude Code does not have, and it is worth
-understanding before you write a hook that a colleague will inherit. A
-non-managed hook does not run until a user has explicitly reviewed and trusted
-it, and the trust record is keyed to a hash of the hook itself. The `/hooks`
-command in the CLI is where that review happens. Editing the hook changes the
-hash and invalidates the trust, so a modified hook is re-reviewed rather than
-silently inheriting the old approval. This is a genuine safety property: a
-repository you clone cannot run arbitrary commands on your machine through its
-committed hook configuration just because you opened Codex in it.
+Codex uses an explicit hook-definition trust gate. A non-managed hook does not run until a user has reviewed and trusted it, and the trust record is keyed to a hash of the hook itself. This is a specific Codex mechanism, not evidence that Claude Code lacks other project-trust or administrative controls. The `/hooks` command in the CLI is where that review happens. Editing the hook invalidates its trust, so the modified definition is skipped until reviewed again. Managed hooks have a different authority, described next.
 
 Managed hooks, pushed through enterprise configuration, bypass that review by
 design — an organisation's administrators are the trust decision in that case.
@@ -1782,8 +1814,7 @@ Codex also exposes operational fields that matter for a server that is slow or
 optional: `startup_timeout_sec` (default 10) and `tool_timeout_sec` (default
 60), plus `enabled`, `required`, and `enabled_tools` / `disabled_tools` for
 trimming a chatty server's tool list down to the handful you actually want in
-context. That last pair is worth using. A server that advertises forty tools
-consumes context in every session whether you call it or not.
+context. That last pair is worth using. The context cost of an advertised list depends on the client's discovery and loading mode, enabled/disabled tool configuration, and whether tools are deferred or loaded into context. In clients that load the list eagerly, tool advertisement can add to startup and context cost even when you never call those tools. Trim optional tools where the client supports it; see the [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp/).
 
 Selective import can populate supported MCP entries; it does not make the source JSON a Codex configuration file. Review environment handling, transport, credentials, and timeouts in the destination, then test a read-only call. If you generate both files from a common source, review the generated diff. If you maintain both by hand, compare them together so a change to one does not quietly leave the other stale.
 
@@ -2320,72 +2351,34 @@ This cookbook assumes that Claude Code remains the primary harness. Codex become
 
 ### Move the Canonical Text to `AGENTS.md` and Import It
 
-If a repository already has a carefully maintained `CLAUDE.md`, the simplest
-portable migration is to move its shared text to `AGENTS.md` and verify each
-harness before removing any tool-specific adapter:
+Use the [bridge pattern](#the-bridge-pattern-and-which-direction-to-point-it) to decide whether the repository needs a Claude import, direct discovery, or Codex fallback. The migration action depends on existing ownership: if `CLAUDE.md` contains shared policy and no `AGENTS.md` exists, move that shared text rather than copying a second manual:
 
-```shell
+```bash
 git mv CLAUDE.md AGENTS.md
 ```
 
-If the Claude Code version or repository policy requires a Claude-specific
-adapter, the compatibility arrangement is:
+First extract any Claude-specific instructions so they can remain in an adapter. Add `@AGENTS.md` to `CLAUDE.md` only when the chosen discovery arrangement needs it; do not rename over an existing contract or retain an empty adapter for symmetry. Keep the move and substantive policy changes separately reviewable. Git rename detection is heuristic, so separation helps review without guaranteeing a particular history display.
 
-```markdown
-@AGENTS.md
-```
-
-That is the entire contents of the adapter. Codex discovers `AGENTS.md`
-through its own root-to-cwd walk, while Claude Code resolves the import and
-receives the same text. Append Claude-specific lines below the import only
-when they express real Claude-only behaviour. If current Claude Code can
-discover `AGENTS.md` directly and no Claude-only adapter is needed, remove the
-root `CLAUDE.md` instead; do not keep an empty compatibility file merely for
-symmetry.
-
-Keeping the two commits separate is worth the extra step. The rename shows up
-in `git log --follow` and in review as a move rather than a rewrite, so the
-history of the instruction file survives. Bundling the rename with content
-edits produces a diff that looks like a new file and hides whatever else
-changed inside it.
-
-Do not copy a large `CLAUDE.md` into `AGENTS.md` instead of importing it. Duplication looks convenient during the first migration and becomes a maintenance defect when a command, directory name, test rule, or safety constraint changes in one file but not the other. A duplicated instruction can also be more dangerous than a missing instruction: the agent receives two plausible rules and has to guess which one wins.
-
-Verify the result using the client-evidence and behavioural smoke-test procedure in [What the Bridge Does Not Do](#what-the-bridge-does-not-do). A deep cwd alone does not skip a recognised project root. If the canonical rule is missing, check the reported root, empty or overriding files, the instruction byte limit, trust-dependent configuration, and whether the session started before the change. For a task below cwd, also check whether the relevant nested file was part of startup discovery or must be read explicitly.
-
-If the canonical text must stay in `CLAUDE.md`, use the [fallback arrangement](#the-bridge-pattern-and-which-direction-to-point-it) with its precedence and trust limits. Do not add a competing prose `AGENTS.md` and expect the fallback to include both files.
+Before rollout, use the client evidence and behavioural smoke test in [What the Bridge Does Not Do](#what-the-bridge-does-not-do). Its root, override, byte-limit, trust, and session checks are the diagnostic route when a rule is missing. If the canonical text must stay in `CLAUDE.md`, use the documented fallback without a competing non-empty `AGENTS.md`/override at that directory; a prose pointer is not an include.
 
 ### Choose a Shared-Instruction Strategy
 
-Choose among the arrangements explained in [Shared Guidance Without a Second Manual](#shared-guidance-without-a-second-manual) according to who owns the shared contract. The examples below show where that choice changes the migration diff.
+The designs in [Shared Guidance Without a Second Manual](#shared-guidance-without-a-second-manual) differ in where policy is maintained, not in whether each harness needs verification. Choose the smallest design that fits the current repository: an import for a single shared file, linked neutral documentation for a large contract, and separate adapters only for real interface differences.
 
-In the import pattern, `AGENTS.md` is canonical and `CLAUDE.md` is an
-`@AGENTS.md` compatibility import. Repository rules, build commands, style
-guidance, and safety constraints all live in one file that both harnesses read
-in full. This is useful when a Claude Code version or local configuration does
-not discover `AGENTS.md` directly; it is not required when direct discovery is
-verified.
-
-In the shared-neutral pattern, stable repository rules move into a neutral file such as `docs/agent-instructions.md`. Each harness-specific file becomes a short adapter that names the shared file and adds only the behaviour specific to that harness. The neutral file should contain facts that remain true regardless of who is acting: which directories are source, how to run tests, what must not be modified, and how generated artefacts are handled.
-
-In the split pattern, the shared file still owns repository policy, but `CLAUDE.md` and `AGENTS.md` contain separate instructions for different interfaces. Examples include a Claude Code hook convention, a Codex approval workflow, or a command wrapper available in only one environment. Split only the interface detail. Do not split the underlying safety rule or definition of done.
-
-A practical repository layout looks like this:
+For a neutral-contract arrangement, the migration diff might produce this layout:
 
 ```text
 repository/
-  CLAUDE.md                    # primary Claude Code adapter or instructions
-  AGENTS.md                    # Codex adapter
+  AGENTS.md                    # canonical entry point and contract route
+  CLAUDE.md                    # optional import and Claude-specific additions
   docs/
-    agent-instructions.md      # optional neutral shared guidance
-  .claude/                     # Claude-specific skills, hooks, and settings
-  .codex/                      # Codex-specific settings, if used
-  Justfile                     # shared build entry point
+    agent-instructions.md      # optional detailed shared contract
+  .claude/                     # native adapters only where required
+  .codex/                      # native configuration only where required
+  Justfile                     # shared build and check commands
 ```
 
-The layout is illustrative, not a requirement. Do not create empty `.claude/` or `.codex/` directories merely to make the tree look symmetrical. Add a directory when it contains configuration or reusable behaviour that the corresponding harness actually needs.
-
-For this primer’s repository, the shared context is in `docs/project-contract.md`: the primer layout, containerised rendering requirement, `STYLE_GUIDE.md`, issue workflow, Silo routing, and the instruction to preserve unrelated work. `AGENTS.md` is the canonical root entry point and points at that contract. There is no competing root `CLAUDE.md`; retain Claude-specific files only when they express behaviour that is genuinely Claude-specific. If a rule later proves useful to every harness but is buried in tool-specific prose, extract it into the contract.
+Do not add empty directories to match this sketch. In this primer's repository, `AGENTS.md` already routes to `docs/project-contract.md`; there is no competing root `CLAUDE.md`. The practical decision is therefore whether a particular native adapter is needed, not whether to recreate the example tree. If shared policy is found inside a tool-specific adapter, move that policy to its explanatory home and leave only the invocation difference in the adapter.
 
 ### Roll Out in a Branch, One Capability at a Time
 
@@ -2407,30 +2400,15 @@ show the final diff and test result. Stop before committing.
 
 Review the diff as if a human had submitted it. Check that the agent respected scope, used the repository’s commands, and reported failures honestly. Only after that should you try a task that edits source code, runs a longer build, or uses network access.
 
-A staged rollout can be summarised as a sequence:
-
-- Discover: inspect instructions, status, structure, and available checks.
-- Propose: identify files, risks, and a verification plan.
-- Change: make the smallest coherent edit.
-- Verify: run focused checks before broad checks.
-- Review: inspect the diff, generated files, and command output.
-- Expand: permit a larger task only when the earlier stage behaved predictably.
+Use the [practical cross-harness loop](#a-practical-cross-harness-loop) for each stage. The rollout decision is whether the evidence justifies adding the next capability: inspection before editing, local work before service access, and read-only integration before external writes. Preserve the previous working configuration until the next stage is verified.
 
 Treat each stage as evidence, not ceremony. If Codex edits files before the inspection request is complete, ignores a scope boundary, or claims a check passed without showing a result, stop and fix the workflow before increasing the task size.
 
 ### Port Integrations by Behaviour, Not by Filename
 
-Claude Code skills, hooks, Model Context Protocol (MCP) servers, subagents, and permission settings may have analogues in Codex, but an analogous concept is not necessarily a drop-in replacement. Port the behaviour you need and test the smallest useful version of it.
+Use [Selective Import Is a Starting Point](#selective-import-is-a-starting-point) for supported native conversion and [Feature Translation](#feature-translation) for the semantic review. Migrate one behaviour at a time; the [complete hook/skill example](#worked-example-translating-a-claude-code-hook-and-skill) shows how to separate procedure, invocation, event feedback, and enforcement.
 
-For a skill, first write down the input, output, files it may touch, commands it may run, and failure behaviour. Then decide whether Codex has a supported mechanism for that workflow. If it does, port the narrow workflow and preserve the original Claude Code version until the new one has passed the same acceptance checks. If it does not, keep the Claude-specific skill and expose the underlying command or document as a normal repository workflow.
-
-For a hook, distinguish enforcement from convenience. A hook that prevents commits containing generated intermediates is an enforcement mechanism; a hook that prints a reminder is convenience. Preserve enforcement in a tool-neutral place such as a git hook, CI check, or build recipe when possible. A harness-specific reminder can remain harness-specific.
-
-For MCP, inventory the data and actions the server provides before changing configuration. A read-only documentation server and a deployment server have very different risk profiles. Port the read-only case first, confirm authentication and network behaviour, and do not grant write capabilities merely because the old harness had them.
-
-For subagents or parallel workers, begin with independent read-only tasks. Parallelise searches, test inspection, or candidate design notes before parallelising edits. If two workers can modify the same file, their work needs explicit ownership and a merge strategy; otherwise parallelism creates conflicts that cost more time than it saves.
-
-Keep a migration note for each port. It should say what behaviour was required, where it now lives, what remains Claude-specific, and which test demonstrates that the behaviour works. That record prevents a future maintainer from assuming feature parity based on similar names.
+Record a migration decision for each integration: required behaviour, source and destination configuration, retained/changed triggers, effective authority, exact acceptance probe, result, and rollback action. Start MCP with a read-only connection and subagents with independent read-only tasks. Preserve the original capability until the destination's checks pass; if a required behaviour has no verified destination mechanism, keep the original workflow or move that responsibility to a repository check. Similar names or a successful import do not close the decision.
 
 ### Preserve a Clean Rollback Path
 
@@ -2458,27 +2436,15 @@ Use least privilege for integrations. Give an agent read-only access to issue tr
 
 Treat pasted logs and generated files as possible secret carriers. A failed command can expose a token in its output, and a generated report can embed environment details. Review artefacts before sharing them with another harness or committing them.
 
-### Control Cost With Task Boundaries
+### Control Cost and Generated Changes With Task Boundaries
 
-Cost is not only the provider’s per-token charge. It includes repeated exploration, long-running commands, review time, failed builds, duplicated work between agents, and the opportunity cost of an engineer supervising an unbounded loop. A fast model that needs three correction cycles may be more expensive than a slower model that completes a bounded task correctly.
+Use [Cost and Latency Are Part of Engineering Quality](#cost-and-latency-are-part-of-engineering-quality) to choose a configuration and [What to Measure](#what-to-measure) to record the complete workflow cost. For operations, add a stopping budget: the maximum useful investigation or repair cycles, the evidence needed to continue, and the acceptance condition that ends the task. Do not turn an accepted bounded change into an open-ended improvement loop.
 
-Give each task a stopping rule. Ask for an investigation report before authorising a broad edit. Set a maximum useful iteration count for debugging. Split a large migration into independently reviewable changes. Stop when the acceptance criteria are met rather than asking an agent to “keep improving” without a definition of done.
-
-Choose model and reasoning settings by task risk and ambiguity. Use a quicker setting for a mechanical rename with strong tests; reserve deeper reasoning for a poorly understood failure, a cross-cutting design decision, or a review where missed edge cases matter. Exact model names, availability, limits, pricing, and plan entitlements belong in a separately verified table, not in timeless repository instructions.
-
-### Make Generated Changes Observable
-
-Generated HTML, PDF, lockfiles, snapshots, database migrations, and vendored assets can make a small source edit look large. Before starting, identify which outputs are expected and how to regenerate them. Afterwards, compare both source and generated changes.
-
-In a primer repository, the source Markdown and thin `Justfile` are inputs, while HTML and PDF are committed outputs. A safe task says which of those files may change and which build recipe produces them. The agent should not silently replace an output with a host-generated artefact when the repository requires containerised rendering.
-
-Use `git diff --stat`, the normal diff, and the repository’s verification commands. A non-trivial output file is not proof of a correct render; a successful command is not proof that the output contains the intended content.
+Make generated changes part of that contract. Identify expected HTML/PDF, lockfiles, snapshots, or migrations and the documented regeneration command before editing. Afterwards, review the source and output changes together using the [testing and review workflow](#testing-treat-verification-as-part-of-the-task). In this repository, a container build and output inspection belong to a published primer change; an output file's existence or timestamp alone cannot establish correctness.
 
 ### Establish an Operating Rhythm
 
-The safest two-harness workflow has a predictable rhythm: inspect, plan, implement, test, review, and record. The record can be lightweight, but it should capture enough information to explain why a particular agent, model, or permission setting was used.
-
-For recurring work, keep a small task ledger with the date, repository revision, harness, model setting, task class, result, review burden, and notable failure. This turns anecdotes into evidence and makes regressions visible when a harness, model, instruction file, or dependency changes.
+Apply the [cross-harness loop](#a-practical-cross-harness-loop) consistently and keep the factual checkpoint described in [Sessions, History, Compaction, and Hand-off](#sessions-history-compaction-and-hand-off). For recurring work, the [evaluation record](#a-practical-evaluation-record) adds review burden and failure evidence so a model or configuration change can be assessed against earlier tasks.
 
 Before a release or a destructive operation, use a human checkpoint even if the agent has passed every automated check. The checkpoint is where you confirm the target environment, migration order, data impact, and rollback procedure. Automated verification can establish that a command works; it cannot establish that today is the right day to run it against production.
 
@@ -2609,25 +2575,17 @@ interpretation is an archive, not an evaluation.
 
 ## Conclusion and Quick Reference
 
-Codex does not need to replace Claude Code to be useful. The practical opportunity is to add a second harness without creating a second, conflicting repository culture. Keep one instruction file authoritative, bridge to it with a real import rather than a prose pointer, and make harness-specific configuration earn its place through a real workflow.
-
-The migration becomes manageable when you treat it as an operational change rather than a file rename. Start with inspection, give the agent bounded authority, verify generated and source changes, and preserve a rollback path. When you compare the tools, compare complete setups on representative tasks. The model, harness, prompt, instruction files, permissions, and review loop all contribute to the result.
-
-The end state is not “Claude Code versus Codex.” It is a routing decision based on the task. One harness may be more convenient for a familiar workflow, another may be better for a particular model or reasoning setting, and a human checkpoint remains necessary wherever the consequences exceed the review surface. The repository should make those choices explicit enough that another engineer can reproduce them.
+The practical result is a repository with one contract, explicit native adapters where they are needed, and evidence for each completed change. Use the lookup routes below when starting a task; the preceding chapters explain why those decisions matter and what each mechanism can establish.
 
 ### Quick-Reference: Adding Codex to an Existing Repository
 
 #### Minimal Migration
 
-- Make `AGENTS.md` the canonical instruction source; `git mv CLAUDE.md AGENTS.md` if the text is already there.
-- Replace `CLAUDE.md` with the single line `@AGENTS.md`, plus any Claude-specific extras below it.
-- Pair each client's available instruction evidence with the read-only behavioural smoke test; a named rule alone does not prove provenance.
-- Ask Codex to inspect instructions and status without editing.
-- Run one low-risk, bounded task in a branch or separate worktree.
-- Review the diff and verification output.
-- Add shared-neutral guidance only when a rule genuinely belongs to both harnesses.
-- Use selective import where supported, then verify skills, hooks, MCP, and agents one behaviour at a time.
-- Record what worked, what remained harness-specific, and how to roll back.
+Follow the [migration cookbook](#migration-cookbook) for the sequence and [instruction systems](#instruction-systems) for discovery/bridge semantics. At the decision boundary, confirm three things:
+
+- The canonical policy has one maintained home, with each client's loading evidence checked.
+- Each imported integration has an acceptance probe and a rollback action; see the [hook/skill matrix](#worked-example-translating-a-claude-code-hook-and-skill).
+- The first bounded task has an authorised owner, required outputs, and reviewed verification evidence before capability is expanded.
 
 #### Task-Start Prompt
 
@@ -2667,16 +2625,11 @@ committing unless I explicitly ask you to commit.
 
 #### Choosing a Harness or Model Setting
 
-- Use the setup with the lowest review burden for ambiguous or cross-cutting work.
-- Use a faster setting for bounded mechanical work with strong automated checks.
-- Prefer the stricter approval path for credentials, deployment, destructive commands, and external writes.
-- Keep the model identifier and reasoning setting in the task record.
-- Do not infer a general winner from one task or from a different repository.
-- If the task is unsafe or underspecified, clarify or narrow it before choosing a model.
+Use the [dated model snapshot](#a-dated-snapshot-of-the-current-codex-models) for identifiers and starting effort, and the [routing example](#worked-example-escalating-a-repository-task) for escalation and acceptance cases. If execution or instruction discovery failed, diagnose that layer before increasing model capability. Record the selected setup and review burden using [What to Measure](#what-to-measure); no single example establishes a general winner.
 
 #### Verification Snapshot and Remaining Volatility
 
-The 7 November 2026 interoperability review checked live official documentation for the topics below. These are unversioned pages accessed on that date, not release-pinned specifications or runtime tests. Earlier model, skill, hook, and third-party-tool details retain their earlier snapshot framing; the review did not revalidate every field, entitlement, community report, or historical adoption count.
+The 7 November 2026 interoperability review checked live official documentation for the topics below. These are unversioned pages accessed on that date, not release-pinned specifications or runtime tests. The model catalogue and the hook/skill example received bounded documentation rechecks on that date. Other skill/hook details, remote/data claims, and third-party-tool descriptions retain their earlier verification boundaries; this was not a revalidation of every field, entitlement, community report, or historical adoption count.
 
 The verification scope and its limits are explicit:
 
@@ -2686,9 +2639,11 @@ The verification scope and its limits are explicit:
 | Selective configuration import | [OpenAI import](https://learn.chatgpt.com/docs/import) | Supported categories and desktop update option; no import, permission-equivalence, or authentication test |
 | Command isolation and management | [Claude sandbox](https://code.claude.com/docs/en/sandboxing); [Codex approvals/security](https://learn.chatgpt.com/docs/agent-approvals-security); [managed configuration](https://learn.chatgpt.com/docs/enterprise/managed-configuration) | Platform and tool scope, managed controls, separate external-tool authority; no sandbox or organisation-policy probe |
 | Remote execution and data | [Claude Remote Control](https://code.claude.com/docs/en/remote-control); [Claude data usage](https://code.claude.com/docs/en/data-usage); [Codex remote connections](https://learn.chatgpt.com/docs/remote-connections); [environments](https://learn.chatgpt.com/docs/environments/modes); [authentication](https://learn.chatgpt.com/docs/auth) | Local/SSH/hosted distinction, transcript and credential boundaries; no account access, remote session, or retention/deletion test |
+| Models and routing | [Codex models](https://learn.chatgpt.com/docs/models); [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) | Identifiers, task roles, effort guidance, and configuration key; no account, billing, benchmark, or model run |
+| Hook/skill example | [Claude hooks](https://code.claude.com/docs/en/hooks); [Claude skills](https://code.claude.com/docs/en/skills); [Codex hooks](https://learn.chatgpt.com/docs/hooks/); [Codex skills](https://learn.chatgpt.com/docs/build-skills/) | Invocation controls, post-edit tool coverage, feedback, and trust; snippets and behavioural matrix unexecuted |
 | Configuration diagnostics | [Codex CLI options](https://learn.chatgpt.com/docs/cli/reference) | Unknown fields can be rejected using supported `--strict-config`; other schemas and clients may warn, reject, or ignore fields |
 
-Treat the unchanged 5 November 2026 model snapshot as a dated reference, not an entitlement guarantee. Recheck current identifiers, effort controls, pricing, quotas, usage telemetry, and account-specific availability before an evaluation or automation. API data policies, account-held chats, and local history are separate; no universal retention period is asserted here.
+Treat the 7 November 2026 model documentation snapshot as a dated reference, not an entitlement guarantee. Recheck current identifiers, effort controls, pricing, quotas, usage telemetry, and account-specific availability before an evaluation or automation. API data policies, account-held chats, and local history are separate; no universal retention period is asserted here.
 
 All configuration and command examples remain illustrative and unexecuted. A renamed or unsupported field may be rejected, warned about, or ignored depending on the schema and client; broad silent-failure claims are not justified. Check startup diagnostics and effective configuration, then use a harmless behaviour test. No executable manifest was added, and neither migrations nor worktree cleanup commands were run for this review.
 
@@ -2736,7 +2691,8 @@ The following official pages anchor the 7 November 2026 interoperability review;
 - [Codex enterprise managed configuration](https://learn.chatgpt.com/docs/enterprise/managed-configuration)
 - [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code/overview)
 - [Claude Code memory and `CLAUDE.md`](https://code.claude.com/docs/en/memory)
-- [Claude Code skills](https://code.claude.com/docs/en/skills)
+- [Claude Code skills](https://code.claude.com/docs/en/skills) — invocation, frontmatter, and procedural packaging for the migration example.
+- [Claude Code hooks reference](https://code.claude.com/docs/en/hooks) — event matching, command environment, and post-tool feedback for the migration example.
 - [Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
 - [Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing)
 - [Claude Code MCP configuration](https://code.claude.com/docs/en/mcp)
