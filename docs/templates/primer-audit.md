@@ -7,6 +7,8 @@
 - Reviewed revision: <commit, not only a branch>
 - Brief reviewed: <path or issue comment>
 - Review boundary: <whole-document, sampled, executed, or not checked for each method>
+- Teaching-case contract: <path, or documented reason it is not applicable>
+- Core-concept depth matrix: <path and revision reviewed>
 
 ## Whole-document review
 
@@ -27,11 +29,29 @@ Use status values such as `verified`, `reported by an earlier reviewer`,
 `unresolved`, or `not checked`. Record whether evidence is whole-document or
 sampled; an inventory or green build is not a correctness claim.
 
+For a process, system, or applied-method primer, complete this additional
+trace. A curated fixture, schema validation, or successful smoke test is not
+evidence of an end-to-end teaching case.
+
+| Case stage | Source or section | Evidence and result | Status | Gap or limitation |
+|---|---|---|---|---|
+| Input or assumptions | | | | |
+| Construction or extraction decision | | | | |
+| Intermediate representation | | | | |
+| Stored or computed result | | | | |
+| Reader-facing query or operation | | | | |
+| Interpretation | | | | |
+| Failure mode or scope limit | | | | |
+
 ## Brief and example traceability
 
 | Brief promise or core concept | Section(s) and explanation | Example, case, or limitation | Evidence status and gap |
 |---|---|---|---|---|
 | | | | |
+
+For each core concept, check mechanism or reasoning, significance, conditions or
+limits, and the teaching device used. Do not treat word count or subsection
+count as evidence of depth.
 
 For published code, map the reader-facing snippet to its executable example or
 state that it is illustrative only. Check fixture schema, dependencies,

@@ -46,6 +46,13 @@ Copy [the brief template](templates/primer-brief.md) into an issue or ignored
   catalogue of terms?
 - What depth is appropriate, and which examples, languages, figures, tables,
   equations, and real-world cases will carry the explanation?
+- For a process, system, or applied method, what central teaching case traces
+  source inputs through construction to useful outputs, interpretation, and
+  limitations? Which stages are executable, illustrative, or measured? Complete
+  the [teaching-case contract](templates/primer-case-contract.md).
+- Which core concepts need a mechanism or reasoning explanation, why they
+  matter, conditions or limits, and a worked case, comparison, counterexample,
+  proof, or failure case? Record this in the brief's depth matrix.
 - Which claims require primary or current sources, and which calculations or
   executable examples need independent checking?
 - Which decisions remain unresolved, and what evidence would settle them?
@@ -94,6 +101,13 @@ and practical use. Combine short sections when they do not establish a real
 change of subject; retain a heading when it gives the reader a useful landmark
 or separates a materially different argument.
 
+For a process, system, or applied method, keep at least one coherent case moving
+through the draft. Show its input or assumptions, the decisions that transform
+them, the resulting representation, a useful operation or query, and what the
+result does and does not establish. Do not let a pre-curated fixture stand in
+for construction unless the brief explicitly makes that a deliberate teaching
+choice.
+
 Examples should do explanatory work. For each substantial example, state the
 input or assumptions, show the method, interpret the result, and note the
 failure mode or limitation. Prefer a small hand-worked example before a larger
@@ -108,6 +122,12 @@ source, not just a sample. The whole-document pass checks the brief, coverage,
 technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.
+
+For a process, system, or applied-method primer, the audit must complete the
+teaching-case trace from input through construction, representation, useful
+operation, interpretation, and limits. If that trace cannot be completed, the
+content gate has a substantive finding regardless of build or smoke-test
+results.
 
 Sampling is complementary, not a substitute for reading. Choose representative
 passages and output pages: an opening motivation, a formal or difficult
