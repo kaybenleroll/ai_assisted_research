@@ -28,6 +28,9 @@ permissions, network access, sandboxing, and approval policy.
 
 - Render in containers; do not install build libraries on the host.
 - Never commit or push directly to `main`.
+- For substantial work, use small, atomic commits with one coherent purpose;
+  keep implementation, repository integration, and generated outputs in the
+  smallest reviewable units that preserve their required dependencies.
 - Commit source documents and their required published outputs together; do not commit intermediate files.
 - Use UK English in repository-authored prose. Follow [STYLE_GUIDE.md](../STYLE_GUIDE.md).
 - Use [CONTRIBUTING.md](../CONTRIBUTING.md) for build and render commands. The Mermaid filter lives in `_shared/filters/`.
