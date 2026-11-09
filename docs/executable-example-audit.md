@@ -42,6 +42,12 @@ backup and restore scripts are operational utilities rather than safe tests.
 
 ## Primer Inventory
 
+The knowledge-graph primer was added after the original snapshot. Its manifest
+selects Python and R examples with the primer-owned `python-duckdb` and existing
+`r-graph` profiles. The DuckDB example uses a temporary file without a service.
+Neo4j requires a future specialised smoke test with its own service harness and
+is not covered by the offline example runner. See [the runtime contract](executable-examples.md#knowledge-graph-duckdb-runtime).
+
 The inventory covers every primer directory. “None” means that the audit found
 no candidate that should be migrated under the current execution contract; it
 does not mean that the primer contains no code or commands.

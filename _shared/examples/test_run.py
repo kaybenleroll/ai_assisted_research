@@ -21,10 +21,28 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual({path.name for path in primers}, {
             "primer_digital_signal_processing",
             "primer_fluid_mechanics",
+            "primer_knowledge_graph",
             "primer_ml_optimisation",
             "primer_numerical_analysis",
             "primer_spectral_graph_theory",
         })
+
+    def test_knowledge_graph_duckdb_profile_and_manifest(self):
+        self.assertEqual(runner.PROFILES["python-duckdb"][1:3], (
+            "PYTHON_DUCKDB_RUNTIME_IMAGE", "localhost/knowledge-graph-python:1.4.3"
+        ))
+        primer = runner.REPO_ROOT / "primer_knowledge_graph"
+        entries = runner.load_manifest(primer)
+        entry = next(item for item in entries if item["id"] == "knowledge-graph-python")
+        self.assertEqual((entry["language"], entry["profile"]), ("python", "python-duckdb"))
+        with tempfile.TemporaryDirectory() as directory, patch.dict(
+            "os.environ", {"PYTHON_DUCKDB_RUNTIME_IMAGE": "example/duckdb:test"}
+        ):
+            command = runner.container_command("docker", primer, entry, Path(directory))
+        self.assertIn("example/duckdb:test", command)
+        self.assertIn("--network=none", command)
+        self.assertEqual(command[command.index("--entrypoint") + 1], "python")
+        self.assertTrue(command[-1].endswith("/examples/python/knowledge_graph.py"))
 
     def test_fixture_loads_only_listed_examples(self):
         entries = runner.load_manifest(FIXTURE)

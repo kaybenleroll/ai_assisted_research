@@ -149,6 +149,14 @@ build-python-runtime:
 build-python-torch: build-python-runtime
   {{OCI}} build --build-arg BASE_IMAGE={{PYTHON_RUNTIME_IMAGE}} -t {{PYTHON_TORCH_IMAGE}} -f _shared/runtime/python/Containerfile.torch _shared/runtime/python/
 
+# Build the DuckDB runtime used by knowledge-graph examples
+build-python-duckdb-runtime:
+  {{OCI}} build -t {{PYTHON_DUCKDB_RUNTIME_IMAGE}} -f primer_knowledge_graph/runtime/Containerfile primer_knowledge_graph/runtime/
+
+# Run the offline probe for the DuckDB runtime
+probe-python-duckdb-runtime: build-python-duckdb-runtime
+  {{OCI}} run --rm --network=none {{PYTHON_DUCKDB_RUNTIME_IMAGE}}
+
 # Build both Python example runtimes
 build-python-runtimes: build-python-runtime build-python-torch
 
@@ -401,12 +409,21 @@ retrieval-rag-pdf:
 retrieval-rag-all:
   cd primer_retrieval_rag && just all
 
+knowledge-graph-html:
+  cd primer_knowledge_graph && just html
+
+knowledge-graph-pdf:
+  cd primer_knowledge_graph && just pdf
+
+knowledge-graph-all:
+  cd primer_knowledge_graph && just all
+
 # Common daily build across active document projects
-html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html spectral-graph-theory-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html spectral-graph-theory-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html knowledge-graph-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: pi-agent-all building-ai-all political-all numerical-all fluid-mechanics-all spectral-graph-theory-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all
+html-full: pi-agent-all building-ai-all political-all numerical-all fluid-mechanics-all spectral-graph-theory-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all knowledge-graph-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
