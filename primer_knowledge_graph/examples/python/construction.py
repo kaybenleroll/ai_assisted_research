@@ -43,11 +43,11 @@ def resolve(name, directory_id, directory):
     """Use a shared identifier as evidence; abstain on an ambiguous name."""
     candidates = [row for row in directory if row["name"] == name]
     if directory_id is None:
-        return {"decision": "abstain", "candidates": [row["id"] for row in candidates],
-                "reason": "no distinguishing identifier"}
+        return {"decision": "abstain", "candidate": None, "candidates": [row["id"] for row in candidates],
+                "reason": "the meeting gives no distinguishing identifier"}
     matches = [row for row in candidates if row["directory_id"] == directory_id]
     if len(matches) == 1:
-        return {"decision": "accept", "candidate": matches[0]["id"], "reason": "matching directory identifier"}
+        return {"decision": "accept", "candidate": matches[0]["id"], "reason": "same issuing directory identifier in the source record"}
     return {"decision": "reject", "candidate": None, "reason": "incompatible directory identifier"}
 
 
@@ -56,6 +56,8 @@ def construct():
     extracted = []
     refusals = []
     for record in records["records"]:
+        if not record.get("extract_claims", True):
+            continue
         candidates, refusal = extract(record)
         extracted.extend(candidates)
         if refusal:
@@ -73,7 +75,7 @@ def construct():
     assert rejected["decision"] == "reject" and rejected["reason"]
     assert abstained["decision"] == "abstain" and set(abstained["candidates"]) == {"person:alex-kim-1", "person:alex-kim-2"}
     assert len(refusals) == 1 and refusals[0]["source"] == "synthetic-refusal"
-    return extracted, refusals, (accepted, rejected, abstained)
+    return extracted, refusals, {"m-morgan": accepted, "m-alex": abstained}, rejected
 
 
 def canonical_claims(candidates, fixture_claims):
@@ -94,7 +96,7 @@ def canonical_claims(candidates, fixture_claims):
         claim.update(id=claim_id, mention=mention)
         if claim != expected[claim_id]:
             raise ValueError(f"constructed claim {claim_id} differs from fixture")
-        built[claim_id] = claim
+        built[claim_id] = {**claim, "evidence": candidate["evidence"]}
     if set(built) != {"c1", "c4", "c5"}:
         raise ValueError("missing constructed claims")
     return built

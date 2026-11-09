@@ -11,7 +11,7 @@ from datetime import date
 import json
 import os
 from pathlib import Path
-from construction import canonical_claims, construct
+from construction import SOURCE_RECORDS, canonical_claims, construct
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixture.json"
 CLASSIFICATION = """CASE WHEN day < valid_from THEN 'outside'
@@ -110,10 +110,23 @@ def expect_invalid(data, change, message):
 def main():
     data = json.loads(FIXTURE.read_text(encoding="utf-8"))
     validate(data)
-    candidates, refusals, decisions = construct()
+    records = json.loads(SOURCE_RECORDS.read_text(encoding="utf-8"))
+    source_texts = {record["source"]: record for record in records["records"]}
+    for source in data["sources"]:
+        assert source_texts[source["id"]]["locator"] == source["locator"]
+    for mention in data["mentions"]:
+        assert mention["text"] in source_texts[mention["source"]]["text"]
+    candidates, refusals, decisions, test_rejection = construct()
+    for row in data["resolution_decisions"]:
+        generated = decisions[row["mention"]]
+        assert all(row[key] == generated[key] for key in ("decision", "candidate", "reason"))
+        generated_candidates = generated.get("candidates", [generated.get("candidate")])
+        assert set(row["candidates"]) == set(generated_candidates)
+        assert next(m for m in data["mentions"] if m["id"] == row["mention"])["entity"] == row["candidate"]
     constructed = canonical_claims(candidates, data["claims"])
     # These rows are constructed from retained text; the other ledger rows are curated.
     data["claims"] = [constructed.get(claim["id"], claim) for claim in data["claims"]]
+    curated_ids = sorted(c["id"] for c in data["claims"] if c["id"] not in constructed)
     validate(data)
     expect_invalid(data, lambda d: d["claims"][0].update(object="missing"), "unknown entity")
     expect_invalid(data, lambda d: d["claims"][0].update(valid_to="1843-01-01"), "interval")
@@ -147,6 +160,10 @@ def main():
     db.execute("""CREATE TABLE claims (id VARCHAR, subject VARCHAR, predicate VARCHAR,
         object VARCHAR, source VARCHAR, mention VARCHAR, valid_from DATE,
         valid_to DATE, end_kind VARCHAR, supported_through DATE, polarity BOOLEAN)""")
+    db.execute("CREATE TABLE extraction_evidence (claim_id VARCHAR, locator VARCHAR, span_start INTEGER, span_end INTEGER, span_text VARCHAR, method VARCHAR)")
+    db.executemany("INSERT INTO extraction_evidence VALUES (?, ?, ?, ?, ?, ?)",
+        [(claim_id, e["locator"], e["start"], e["end"], e["text"], e["method"])
+         for claim_id, claim in constructed.items() for e in [claim["evidence"]]])
     db.execute("CREATE TABLE sources (id VARCHAR, title VARCHAR, published DATE, locator VARCHAR)")
     db.execute("CREATE TABLE mentions (id VARCHAR, source VARCHAR, text VARCHAR, entity VARCHAR)")
     db.executemany("INSERT INTO claims VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -183,12 +200,18 @@ def main():
         if any(row[2] == "invalid" for row in rows):
             raise ValueError("invalid temporal classification")
         return rows
-    provenance = db.execute("""SELECT c.id, s.title, s.locator, m.text FROM claims c
+    provenance = db.execute("""SELECT c.id, s.title, s.locator, m.text, e.span_start, e.span_end, e.span_text, e.method FROM claims c
         JOIN sources s ON c.source = s.id LEFT JOIN mentions m ON c.mention = m.id
+        LEFT JOIN extraction_evidence e ON c.id = e.claim_id
         WHERE c.subject = ? AND c.predicate = ? AND c.object = ? ORDER BY c.id""",
         ["policy:travel-v1", "applies_to", "project:atlas"]).fetchall()
-    assert provenance == [("c1", "Authorised policy register", "R1:P1-P2", "Travel Policy v1"),
-                          ("c5", "Atlas meeting minutes", "M1:paragraph-3", "version 1")]
+    assert [row[0] for row in provenance] == ["c1", "c5"]
+    for claim_id, _, locator, _, start, end, span, method in provenance:
+        claim = constructed[claim_id]
+        assert claim["evidence"] == {"locator": locator, "start": start, "end": end,
+                                     "text": span, "method": method}
+        assert source_texts[claim["source"]]["text"][start:end] == span
+
 
     def answer_rows(rows):
         polarities = {row[1] for row in rows if row[2] == "applicable"}
@@ -244,7 +267,10 @@ def main():
         SELECT {CLASSIFICATION} FROM assertion""", ["2099-01-01", unbounded[0]["valid_from"],
         unbounded[0]["valid_to"], unbounded[0]["end_kind"], unbounded[0]["supported_through"]]).fetchone()[0]
     assert check == "applicable"
-    print("Constructed claims:", sorted(constructed), "refusals:", refusals, "resolution:", decisions)
+    print("Constructed claims:", sorted(constructed), "curated claims:", curated_ids)
+    print("Extraction refusals:", refusals)
+    print("Fixture resolution decisions (generated and checked):", decisions)
+    print("Test-only rejection (not a fixture decision):", test_rejection)
     print("Undated direct topology:", direct)
     print("Undated two-hop topology:", two_hop)
     print("Provenance:", provenance)
