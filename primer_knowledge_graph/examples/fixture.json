@@ -1,0 +1,46 @@
+{
+  "sources": [
+    {"id": "s-register", "title": "Authorised policy register", "published": "2024-01-01", "locator": "R1:P1-P2"},
+    {"id": "s-directory", "title": "Northbridge directory", "published": "2024-01-01", "locator": "D1:A1"},
+    {"id": "s-minutes", "title": "Atlas meeting minutes", "published": "2024-03-15", "locator": "M1:paragraph-3"}
+  ],
+  "entities": [
+    {"id": "org:northbridge", "label": "Northbridge", "type": "organisation"},
+    {"id": "project:atlas", "label": "Atlas", "type": "project"},
+    {"id": "project:orion", "label": "Orion", "type": "project"},
+    {"id": "policy:travel-v1", "label": "Northbridge Travel Policy v1", "type": "policy_version"},
+    {"id": "policy:travel-v2", "label": "Northbridge Travel Policy v2", "type": "policy_version"},
+    {"id": "person:morgan-lee", "label": "Morgan Lee", "type": "person"},
+    {"id": "person:alex-kim-1", "label": "Alex Kim", "type": "person"},
+    {"id": "person:alex-kim-2", "label": "Alex Kim", "type": "person"}
+  ],
+  "mentions": [
+    {"id": "m-policy-v1", "source": "s-register", "text": "Travel Policy v1", "entity": "policy:travel-v1"},
+    {"id": "m-morgan", "source": "s-register", "text": "Morgan Lee", "entity": "person:morgan-lee"},
+    {"id": "m-atlas", "source": "s-directory", "text": "Atlas", "entity": "project:atlas"},
+    {"id": "m-policy-v2-meeting", "source": "s-minutes", "text": "version 2", "entity": "policy:travel-v2"},
+    {"id": "m-policy-v1-meeting", "source": "s-minutes", "text": "version 1", "entity": "policy:travel-v1"},
+    {"id": "m-policy-v2-register", "source": "s-register", "text": "Travel Policy v2", "entity": "policy:travel-v2"},
+    {"id": "m-alex", "source": "s-minutes", "text": "Alex Kim", "entity": null}
+  ],
+  "resolution_decisions": [
+    {"id": "r1", "mention": "m-morgan", "decision": "accept", "candidate": "person:morgan-lee", "candidates": ["person:morgan-lee"], "reason": "same issuing directory identifier in the source record"},
+    {"id": "r2", "mention": "m-alex", "decision": "abstain", "candidate": null, "candidates": ["person:alex-kim-1", "person:alex-kim-2"], "reason": "the meeting gives no distinguishing identifier"}
+  ],
+  "claims": [
+    {"id": "c1", "subject": "policy:travel-v1", "predicate": "applies_to", "object": "project:atlas", "source": "s-register", "mention": "m-policy-v1", "valid_from": "2024-01-01", "valid_to": "2024-04-01", "end_kind": "bounded", "supported_through": null, "polarity": true},
+    {"id": "c2", "subject": "policy:travel-v1", "predicate": "owned_by", "object": "person:morgan-lee", "source": "s-register", "mention": "m-morgan", "valid_from": "2024-01-01", "valid_to": null, "end_kind": "unknown", "supported_through": "2024-01-01", "polarity": true},
+    {"id": "c3", "subject": "project:atlas", "predicate": "belongs_to", "object": "org:northbridge", "source": "s-directory", "mention": "m-atlas", "valid_from": "2024-01-01", "valid_to": null, "end_kind": "unknown", "supported_through": "2024-01-01", "polarity": true},
+    {"id": "c4", "subject": "policy:travel-v2", "predicate": "applies_to", "object": "project:atlas", "source": "s-minutes", "mention": "m-policy-v2-meeting", "valid_from": "2024-03-15", "valid_to": null, "end_kind": "unknown", "supported_through": "2024-03-15", "polarity": true},
+    {"id": "c5", "subject": "policy:travel-v1", "predicate": "applies_to", "object": "project:atlas", "source": "s-minutes", "mention": "m-policy-v1-meeting", "valid_from": "2024-03-15", "valid_to": null, "end_kind": "unknown", "supported_through": "2024-03-15", "polarity": false},
+    {"id": "c6", "subject": "policy:travel-v2", "predicate": "applies_to", "object": "project:atlas", "source": "s-register", "mention": "m-policy-v2-register", "valid_from": "2024-04-01", "valid_to": null, "end_kind": "unknown", "supported_through": "2024-04-01", "polarity": true},
+    {"id": "c7", "subject": "project:orion", "predicate": "belongs_to", "object": "org:northbridge", "source": "s-directory", "mention": null, "valid_from": "2024-01-01", "valid_to": null, "end_kind": "unknown", "supported_through": "2024-01-01", "polarity": true}
+  ],
+  "relations": [
+    {"source": "policy:travel-v1", "target": "project:atlas", "type": "applies_to", "weight": 1},
+    {"source": "policy:travel-v1", "target": "person:morgan-lee", "type": "owned_by", "weight": 1},
+    {"source": "project:atlas", "target": "org:northbridge", "type": "belongs_to", "weight": 1},
+    {"source": "policy:travel-v2", "target": "project:atlas", "type": "applies_to", "weight": 1},
+    {"source": "project:orion", "target": "org:northbridge", "type": "belongs_to", "weight": 1}
+  ]
+}
