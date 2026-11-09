@@ -825,24 +825,80 @@ unresolved.</td>
 </tr>
 </tbody>
 </table>
-<p>The JSON stores the two Alex entities but does not contain their
-directory rows or the full register and minutes. It records only version
-1 ownership, not ownership of version 2. The start date on a meeting
-claim is an encoded valid-time interpretation, not a general rule that a
-publication date automatically fixes validity.</p>
+<p>The fixture stores the two Alex entities but not their directory
+identifiers or the full register and minutes. The separate
+<code>examples/source_records.json</code> retains short synthetic
+excerpts and three directory rows for the executable construction slice.
+It records only version 1 ownership, not ownership of version 2. The
+start date on a meeting claim is an encoded valid-time interpretation,
+not a general rule that a publication date automatically fixes
+validity.</p>
 <h2 data-number="2.1" id="bounded-source-claim-construction"><span class="header-section-number">2.1</span> Bounded Source Claim
 Construction</h2>
-<p>The construction decision is easiest to see in a small, deterministic
-slice. Suppose the retained minutes contain the sentence “From 15 March,
-version 2 applies to Atlas; version 1 does not.” Keep the source version
-and the exact sentence span, then produce two candidate mentions and two
-qualified claims: a positive <code>applies_to</code> claim for
-<code>policy:travel-v2</code>, and a negative claim for
-<code>policy:travel-v1</code>. The meeting’s explicit “from 15 March”
-supplies <code>valid_from</code>; it does not, by itself, supply an end
-date or prove continuation after the observed statement. A rule records
-the negation and a resolver leaves “Alex Kim” unresolved when both
-directory candidates remain indistinguishable.</p>
+<p>The executable <code>examples/python/construction.py</code> reads the
+versioned synthetic excerpts in
+<code>examples/source_records.json</code>. Its three sentence patterns
+produce candidates with subject, predicate, object, source, dates, end
+kind and polarity, plus an evidence locator, character offsets, exact
+matched text and method <code>northbridge-patterns-v1</code>. Offsets
+are checked against the retained text. The following table follows the
+actual source sentences into candidates; the dates are calendar
+dates.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Retained text and locator</th>
+<th>Candidate and interpretation</th>
+<th>Ledger mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>R1:P1-P2</code>: “Travel Policy v1 applies to Atlas from
+2024-01-01 until 2024-04-01.”</td>
+<td>Version 1 <code>applies_to</code> Atlas, positive;
+<code>bounded</code>, starting 1 January and ending exclusively on 1
+April.</td>
+<td>Constructed <code>c1</code>, with mention
+<code>m-policy-v1</code>.</td>
+</tr>
+<tr>
+<td><code>M1:paragraph-3</code>: “On 2024-03-15, version 2 applies to
+Atlas.”</td>
+<td>Version 2 <code>applies_to</code> Atlas, positive;
+<code>unknown</code> end, supported through 15 March.</td>
+<td>Constructed <code>c4</code>, with
+<code>m-policy-v2-meeting</code>.</td>
+</tr>
+<tr>
+<td><code>M1:paragraph-3</code>: “On 2024-03-15, version 1 does not
+apply to Atlas.”</td>
+<td>Version 1 <code>applies_to</code> Atlas, negative;
+<code>unknown</code> end, supported through 15 March.</td>
+<td>Constructed <code>c5</code>, with
+<code>m-policy-v1-meeting</code>.</td>
+</tr>
+<tr>
+<td><code>S1:1</code>: “Travel Policy v1 applies to Atlas from
+2024-01-01 without a stated end.”</td>
+<td>A separate synthetic positive candidate with <code>unbounded</code>
+end under the example’s explicit wording convention.</td>
+<td>Used in a separate classifier test; not inserted as a ledger
+claim.</td>
+</tr>
+</tbody>
+</table>
+<p>For the meeting sentences, the rule encodes the stated date as
+<code>valid_from</code> and <code>supported_through</code>; it does not
+infer continuation beyond that date. The method is deliberately
+restricted to these sentence forms and policy versions. Its selected
+claim IDs and mention IDs are assigned by a fixed source-and-subject
+mapping, rather than discovered by a general entity recogniser.</p>
 <pre class="text"><code>retained source + span
         │ bounded rules: dates, negation, identifiers
         ▼
@@ -850,14 +906,19 @@ candidate mentions and claims ──► accept, reject, or abstain
         │                           (retain reason and evidence)
         ▼
 source-specific assertion ledger ──► DuckDB / RDF / property-graph mapping</code></pre>
-<p>This is a worked construction boundary, not a claim that the
-repository contains a general extractor. The runnable Python example
-applies the bounded rules to retained synthetic source records, compares
-the constructed <code>c1</code>, <code>c4</code>, and <code>c5</code>
-claims with the canonical ledger, and then loads the ledger; the
-remaining claims are deliberately curated. Full-document optical
-character recognition, open-domain language understanding, learned
-matching, and a general update engine remain outside this milestone.</p>
+<p>The executable removes candidate evidence metadata before comparing
+every canonical field of constructed <code>c1</code>, <code>c4</code>,
+and <code>c5</code> with the fixture, then loads the fixture ledger. The
+evidence spans remain in the construction output, not in the DuckDB
+claims table. The other ledger claims are curated: <code>c2</code>
+records ownership, <code>c3</code> and <code>c7</code> project
+affiliation, and <code>c6</code> the register’s version 2 applicability.
+They are not extracted by this slice, and their complete source passages
+are not retained. The constructed-versus-curated distinction describes
+how these example rows were supplied, not a judgement that either is
+independently verified. Full-document optical character recognition,
+open-domain language understanding, learned matching, and a general
+update engine remain outside this milestone.</p>
 <h1 data-number="3" id="preserve-mentions-entities-and-identifiers-as-different-things"><span class="header-section-number">3</span> Preserve Mentions, Entities, and
 Identifiers as Different Things</h1>
 <p>A mention is an occurrence in a source; an entity is a thing the
@@ -884,13 +945,14 @@ though it were identical to either version would blur the temporal
 question the fixture is designed to answer.</p>
 <p>Each source has a logical locator: <code>R1:P1-P2</code>,
 <code>D1:A1</code>, or <code>M1:paragraph-3</code>. These identify
-synthetic source regions, not byte offsets or retained source documents;
-the register locator covers both rows rather than singling out one
-claim. A production evidence chain should point to a stable source
-version and a reproducible row key, page and paragraph, or character
-offsets against a content-addressed text extraction. Offsets without a
-reproducible text version are fragile; row numbers are fragile if rows
-can be sorted.</p>
+synthetic source regions, not byte offsets or complete source documents;
+the construction input retains excerpts and checks character offsets
+within them; the register locator covers both rows rather than singling
+out one claim. A production evidence chain should point to a stable
+source version and a reproducible row key, page and paragraph, or
+character offsets against a content-addressed text extraction. Offsets
+without a reproducible text version are fragile; row numbers are fragile
+if rows can be sorted.</p>
 <p>Identifiers should be stable and namespaced. The fixture’s IDs
 (<code>org:northbridge</code>, <code>project:atlas</code>,
 <code>policy:travel-v1</code>, and <code>person:morgan-lee</code>) are
@@ -1014,14 +1076,26 @@ measurement from match decisions. Names, type compatibility,
 co-occurring identifiers, dates, and source-specific rules can help rank
 or reject candidates, but no string similarity threshold supplies
 evidence that is absent from the source.</p>
-<p>Resolution decision <code>r1</code> accepts <code>m-morgan</code> as
-<code>person:morgan-lee</code>, giving a matching issuing-directory
-identifier as its reason. The identifier itself and the underlying
-directory record are not present as fields in the fixture, so this is a
-recorded synthetic decision, not an independently demonstrated match. In
-contrast, <code>r2</code> abstains on Alex with two candidates. A type
-mismatch could justify rejecting a candidate; insufficient evidence
-calls for abstention.</p>
+<p>The executable identity walkthrough uses the separate retained
+excerpts and directory rows. The register says “Owner Morgan Lee has
+directory ID NB-104.” Name matching proposes
+<code>person:morgan-lee</code>, whose directory row also has
+<code>NB-104</code>; <code>resolve</code> accepts that candidate. The
+fixture records the corresponding outcome as <code>r1</code> for
+<code>m-morgan</code>, although the identifier itself is outside the
+fixture. A separate test supplies <code>NB-999</code> for Morgan and
+gets a rejection for an incompatible identifier; that test is not an
+additional fixture decision.</p>
+<p>The minutes say “Alex Kim attended.” Name matching finds
+<code>person:alex-kim-1</code> (<code>NB-201</code>) and
+<code>person:alex-kim-2</code> (<code>NB-202</code>), but the sentence
+supplies neither identifier. The executable abstains with both
+candidates; curated decision <code>r2</code> likewise leaves
+<code>m-alex.entity</code> and its selected candidate null. These
+deliberately simple exact-match rules demonstrate acceptance, rejection
+and abstention on synthetic inputs; they do not measure
+identity-resolution accuracy or prove that an actual person
+attended.</p>
 <p>The fixture records each decision ID, mention, candidate set,
 outcome, selected candidate where applicable, and reason. It contains
 one acceptance and one abstention, but no rejection. An operational
@@ -1180,6 +1254,68 @@ IDs and projection for analysis; the projection is not the canonical
 evidence store. The retained source records used by the construction
 slice are a separate synthetic input and include a deliberately refused
 date phrase.</p>
+<p>The executable assertions also give a compact account of dated
+answers and evidence. The first four rows ask whether version 1 applies
+to Atlas across both register and minutes; the last two classify both
+edges of the register-backed version 1 → Atlas → Northbridge path.
+Locators are joined from the source table, and mention text is available
+for <code>c1</code> and <code>c5</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Date and question</th>
+<th>Evidence and temporal classification</th>
+<th>Executable result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 March 2024, applicability</td>
+<td><code>c1</code> positive, applicable (<code>R1:P1-P2</code>);
+<code>c5</code> outside (<code>M1:paragraph-3</code>).</td>
+<td><code>supported</code></td>
+</tr>
+<tr>
+<td>15 March 2024, applicability</td>
+<td><code>c1</code> positive and <code>c5</code> negative, both
+applicable, with their respective register and minutes locators.</td>
+<td><code>abstain: conflicting evidence</code></td>
+</tr>
+<tr>
+<td>16 March 2024, applicability</td>
+<td><code>c1</code> applicable; <code>c5</code> indeterminate beyond its
+support horizon.</td>
+<td><code>abstain: indeterminate temporal scope</code></td>
+</tr>
+<tr>
+<td>1 April 2024, applicability</td>
+<td><code>c1</code> outside at its exclusive end; <code>c5</code>
+indeterminate.</td>
+<td><code>abstain: indeterminate temporal scope</code></td>
+</tr>
+<tr>
+<td>1 January 2024, two-hop path</td>
+<td><code>c1</code> applicable (<code>R1:P1-P2</code>); <code>c3</code>
+applicable (<code>D1:A1</code>).</td>
+<td><code>applicable</code></td>
+</tr>
+<tr>
+<td>1 March 2024, two-hop path</td>
+<td><code>c1</code> applicable; <code>c3</code> indeterminate beyond 1
+January.</td>
+<td><code>indeterminate</code></td>
+</tr>
+</tbody>
+</table>
+<p>These are fixture regression results under the executable’s
+conservative answer policy, not a legal determination or evidence of
+production accuracy. The path status is a classification of both
+premises, not an inferred organisational claim.</p>
 <h2 data-number="8.1" id="from-fixture-to-tables"><span class="header-section-number">8.1</span> From Fixture to Tables</h2>
 <p>In the target ledger, each JSON claim is a source-specific assertion
 with an ID, subject, predicate, object, source, optional mention, valid
@@ -1229,11 +1365,12 @@ foreign keys, non-null fields and interval checks; cross-row conditions
 and domain rules would still need additional validation. Consult <a href="https://duckdb.org/docs/stable/sql/constraints.html">DuckDB
 constraints</a> for the pinned version’s behaviour.</p>
 <p>The source table includes the fixture’s logical locator, but the
-fixture has no retained source version, digest, ingestion time or
-complete source document. A production system should add these and use
-assertion-to-evidence links where one assertion depends on several
-passages. Evidence links can share a source and are not necessarily
-independent corroboration.</p>
+fixture has no source version, digest, ingestion time or complete source
+document. The separate construction input has a synthetic version and
+excerpts, which are not loaded into that table. A production system
+should add these and use assertion-to-evidence links where one assertion
+depends on several passages. Evidence links can share a source and are
+not necessarily independent corroboration.</p>
 <p>The distinction between a proposition and an assertion matters when
 several records say the same thing. This fixture uses
 <code>claims</code> as source-specific rows: the source and interval are
@@ -1959,6 +2096,19 @@ spans, accepted/rejected/abstained identity decisions and a refused
 unsupported date phrase. Passing those checks says that these particular
 rules held for this input; it does not establish that the source text
 actually supports any claim.</p>
+<p>The refusal and validation trace makes the boundary observable. The
+retained sentence at <code>S2:1</code>, “Travel Policy v1 applies to
+Atlas from sometime next spring.”, matches none of the supported date
+and sentence patterns. The executable returns no candidate for that
+record and a refusal with its source, method and reason
+<code>no supported date and sentence pattern</code>; it does not invent
+a date. For selected candidates, canonical comparison fails on a
+missing, duplicate or differing constructed claim. The ledger validator
+then checks its own structural rules, including the fixture’s references
+and temporal combinations; mutation tests confirm that specific invalid
+copies are rejected. This is a sequence of executable checks, not a
+human review of source truth. The refusal is separate from the seven
+curated-and-constructed ledger rows.</p>
 <p>The projection check compares positive triples, not dates,
 provenance, credibility or the numerical meaning of weights. As the R
 analysis illustrates, passing it does not make the projection a
@@ -1982,9 +2132,10 @@ A reviewer could locate the retained register version, inspect its Atlas
 entry, confirm the version and interval, and record the review and its
 limitations. Checking that <code>c1.source</code> refers to
 <code>s-register</code> is validation; comparing <code>c1</code> with
-the actual register is verification. This synthetic fixture supplies
-metadata and claims rather than the complete underlying source
-documents, so it cannot demonstrate that external verification step. It
+the actual register is verification. The synthetic excerpts permit
+comparison with the retained sample text, but neither they nor the
+fixture supply complete underlying documents or independent external
+evidence, so they cannot demonstrate that external verification step. It
 can demonstrate the structure of a review workflow and the need to
 abstain when the available evidence conflicts.</p>
 <p>For RDF data, <a href="https://www.w3.org/TR/shacl/">SHACL</a>
@@ -2003,9 +2154,9 @@ useful gold item contains the question, entity and predicate scope,
 requested valid date, source boundary, expected answer or abstention,
 supporting and opposing evidence identifiers, and an explanation of the
 adjudication. Record who reviewed it, the evidence version and the
-policy version. The fixture’s three date cases are good regression
-examples, but their expected outputs were chosen from the same synthetic
-input and policy; passing them does not estimate accuracy on unfamiliar
+policy version. The fixture’s date cases are useful regression examples,
+but their expected outputs were chosen from the same synthetic input and
+policy; passing them does not estimate accuracy on unfamiliar
 documents.</p>
 <p>For the conservative target policy, a small regression table is:</p>
 <table>
@@ -2058,8 +2209,9 @@ indeterminate premise makes the path indeterminate. A provenance case
 should check source, locator and mention, and that a missing mention
 such as <code>c7</code> does not eliminate the claim. The fixture
 records <code>m-alex</code> as unresolved and <code>r2</code> as
-abstaining between two candidates; the validator and assertions check
-this representation, but no entity-resolution algorithm is executed.</p>
+abstaining between two candidates; the validator checks this
+representation, while the separate bounded resolver executes the
+synthetic identity cases described above.</p>
 <p>Separate stages in the scorecard. For extraction, compare proposed
 source assertions with independently reviewed assertions and count
 correct, missing and spurious records. For entity resolution, evaluate
