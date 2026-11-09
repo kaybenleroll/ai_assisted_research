@@ -50,7 +50,7 @@ The executable `examples/python/construction.py` reads the versioned synthetic e
 | `R1:P1-P2`: “Travel Policy v1 applies to Atlas from 2024-01-01 until 2024-04-01.” | Version 1 `applies_to` Atlas, positive; `bounded`, starting 1 January and ending exclusively on 1 April. | Constructed `c1`, with mention `m-policy-v1`. |
 | `M1:paragraph-3`: “On 2024-03-15, version 2 applies to Atlas.” | Version 2 `applies_to` Atlas, positive; `unknown` end, supported through 15 March. | Constructed `c4`, with `m-policy-v2-meeting`. |
 | `M1:paragraph-3`: “On 2024-03-15, version 1 does not apply to Atlas.” | Version 1 `applies_to` Atlas, negative; `unknown` end, supported through 15 March. | Constructed `c5`, with `m-policy-v1-meeting`. |
-| `S1:1`: “Travel Policy v1 applies to Atlas from 2024-01-01 without a stated end.” | A separate synthetic positive candidate with `unbounded` end under the example's explicit wording convention. | Used in a separate classifier test; not inserted as a ledger claim. |
+| `S1:1`: “Travel Policy v1 applies to Atlas from 2024-01-01 and continues until further notice.” | A separate synthetic positive candidate with `unbounded` end because the source explicitly asserts continuation. | Used in a separate classifier test; not inserted as a ledger claim. |
 
 For the meeting sentences, the rule encodes the stated date as `valid_from` and `supported_through`; it does not infer continuation beyond that date. The method is deliberately restricted to these sentence forms and policy versions. Its selected claim IDs and mention IDs are assigned by a fixed source-and-subject mapping, rather than discovered by a general entity recogniser.
 

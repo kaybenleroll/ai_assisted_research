@@ -10,7 +10,7 @@ DATE = r"\d{4}-\d{2}-\d{2}"
 PATTERNS = (
     re.compile(rf"Travel Policy v(?P<version>[12]) applies to Atlas from (?P<start>{DATE}) until (?P<end>{DATE})\."),
     re.compile(rf"On (?P<start>{DATE}), version (?P<version>[12]) (?P<verb>applies|does not apply) to Atlas\."),
-    re.compile(rf"Travel Policy v(?P<version>[12]) applies to Atlas from (?P<start>{DATE}) without a stated end\."),
+    re.compile(rf"Travel Policy v(?P<version>[12]) applies to Atlas from (?P<start>{DATE}) and continues until further notice\."),
 )
 
 
