@@ -11,6 +11,10 @@
 - Approximate depth: <qualitative target; do not turn this into a quota>
 - Worked examples: <small examples and what each demonstrates>
 - Real-world cases: <applications and selection rationale>
+- Teaching-case contract: <path to the completed case contract, or the reason
+  an alternative teaching device is appropriate>
+- Core-concept depth matrix: <path to the matrix mapping concepts to mechanism,
+  significance, limits, and teaching devices>
 - Figures, tables, and equations: <planned items and purpose>
 - Languages and executable examples: <language/runtime and test intention>
 - Evidence plan: <claims, primary sources, calculations, and freshness checks>
@@ -21,3 +25,4 @@
 - Whole-document checks: <coverage, claims, structure, examples, sources, outputs>
 - Representative samples: <passages/pages and why they represent risk>
 - Planned independent reviewers: <bounded questions, not generic approval>
+- Content gate: <how the central case and concept-depth matrix will be checked>

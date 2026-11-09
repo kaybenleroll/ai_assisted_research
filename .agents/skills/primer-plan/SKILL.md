@@ -29,6 +29,21 @@ count is an outcome of that coverage and depth: use a range only as a rough
 planning estimate after the structure is established, never as an upper bound
 that forces omissions or shallow treatment.
 
+For a primer that teaches a process, system, or applied method, complete the
+teaching-case contract in `docs/templates/primer-case-contract.md` before
+drafting. Identify the source inputs or assumptions, transformations and
+decisions, intermediate representation, useful questions or outputs, expected
+interpretation, and failure modes or limits. State which stages are executable,
+illustrative, or measured. A fixture that begins as curated final claims is not,
+by itself, an end-to-end case. If no coherent case is appropriate, record the
+reason and identify the alternative teaching device that will carry the
+explanation.
+
+Map each core concept in the brief to its mechanism or reasoning, significance,
+conditions or limits, and an appropriate teaching device such as a worked case,
+comparison, counterexample, proof, or failure case. Do not use a heading count
+or word quota as a proxy for this mapping.
+
 If delegation is useful, split bounded, disjoint questions by ownership. Give
 each worker a concrete question, scope, stop condition, and requested evidence;
 choose capability and reasoning depth for the question rather than freezing a
