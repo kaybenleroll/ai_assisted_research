@@ -167,6 +167,12 @@ primer through #136, heading case, #141, and #138; avoid two open PRs on the
 same primer. A cross-primer sweep has one tracking issue with a per-primer
 checklist.
 
+For substantial work, prefer small atomic commits with one coherent purpose.
+Separate planning or policy changes, shared infrastructure, document content,
+and registration where that keeps review and rollback clear. Keep a primer's
+source and required HTML/PDF outputs in the same commit; do not split a
+published document from the outputs needed to render it.
+
 The PR workflow reports separate `checks` and `pr-body` statuses. `checks` builds the lint image, runs `just lint-changed` against the base branch, and runs `just check` with Docker. `pr-body` checks the opening reference or no-issue reason. The workflow does not render documents or check online links. Repository owners must require both statuses on `main` in Settings, Rules; the workflow cannot set that protection itself.
 
 Use `<type>/<issue#>-<slug>` branches and never commit directly to `main`. `.github/labels.json` is the source of truth for one priority, one type, at least one area, and one effort label. Squash merge by default; explain a merge commit when preserving individual commits or a stacked chain matters. Check changed paths and generated outputs before opening the PR. Published pages link to Pages-excluded project instructions through GitHub blob URLs, because `_config.yml` excludes `CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`, and `docs/` from Pages.
