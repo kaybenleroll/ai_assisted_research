@@ -1,7 +1,6 @@
 ---
 name: primer-plan
 description: Plan a new or substantially revised technical primer. Use when defining its audience, scope, dependency-led outline, examples, evidence plan, or unresolved decisions before drafting.
-compatibility: Requires repository access and the documented primer workflow.
 ---
 
 # Plan a primer
@@ -22,6 +21,13 @@ Complete the brief template in the issue or an ignored `.scratch/` note. Define
 the reader, prerequisites, motivating problem, exclusions, dependency-led route,
 qualitative depth, examples, cases, figures, languages, evidence plan, and open
 decisions. Explain why the proposed structure solves the reader's problem.
+
+Treat coverage and explanatory quality as the primary planning criteria. Build a
+coverage matrix for the topics a competent reader must understand and be able to
+apply, then use the dependency-led route to determine the necessary depth. Word
+count is an outcome of that coverage and depth: use a range only as a rough
+planning estimate after the structure is established, never as an upper bound
+that forces omissions or shallow treatment.
 
 If delegation is useful, split bounded, disjoint questions by ownership. Give
 each worker a concrete question, scope, stop condition, and requested evidence;
