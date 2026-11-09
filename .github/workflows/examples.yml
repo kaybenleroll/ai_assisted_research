@@ -11,8 +11,11 @@ on:
       - "_shared/examples/**"
       - "_shared/runtime/**"
       - "primer_*/examples/**"
+      - "primer_knowledge_graph/runtime/**"
       - "docs/executable-examples.md"
       - "docs/executable-example-migration.md"
+      - "docs/executable-example-audit.md"
+      - "CONTRIBUTING.md"
   workflow_dispatch:
 
 permissions:
@@ -34,8 +37,10 @@ jobs:
           fetch-depth: 1
       - uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4
       - name: Build selected runtime profiles
-        run: just build-python-runtime build-r-runtime build-r-graph-runtime build-julia-runtime
+        run: just build-python-runtime build-python-duckdb-runtime build-r-runtime build-r-graph-runtime build-julia-runtime
       - name: Probe selected runtime profiles offline
-        run: just probe-python-runtime probe-r-runtime probe-r-graph-runtime probe-julia-runtime
+        run: just probe-python-runtime probe-python-duckdb-runtime probe-r-runtime probe-r-graph-runtime probe-julia-runtime
+      - name: Test example runner
+        run: python3 -I -m unittest discover -s _shared/examples -p test_run.py
       - name: Run opted-in primer examples
         run: just examples-all

@@ -93,7 +93,7 @@ timeout_seconds = 30
 `id` is unique within the primer and is the selector accepted by `just
 examples`. `language` is one of `python`, `r`, or `julia`. Each entry uses
 exactly one of `script` or `markdown` plus `fence`; these are paths contained
-by the primer directory. `profile` must be `python-base`, `python-torch`, `r`,
+by the primer directory. `profile` must be `python-base`, `python-torch`, `python-duckdb`, `r`,
 `r-graph`, or `julia`, and must match the language. `timeout_seconds` is an optional
 integer from 1 to 600. Unknown keys, duplicate IDs, unsupported
 language/profile pairs, invalid timeouts, and paths that escape the primer
@@ -161,6 +161,22 @@ the new base digest or package pins, rebuild both images from a clean local
 cache, rerun the probes, and measure image size and cold-build time before CI
 adoption. The repository-check `PYTHON_IMAGE` remains independent and must
 not be used as an executable-example runtime.
+
+### Knowledge-Graph DuckDB Runtime
+
+The knowledge-graph primer owns the narrowly scoped image in `primer_knowledge_graph/runtime/`. Its Containerfile pins Python 3.12.15 using `python:3.12.15-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258`; `requirements.lock` pins DuckDB 1.4.3. The example creates and reopens a file-backed DuckDB database under the runner's temporary output directory; the image does not provide a Neo4j server.
+
+The runner profile is `python-duckdb`, with image `localhost/knowledge-graph-python:1.4.3` and override `PYTHON_DUCKDB_RUNTIME_IMAGE`. Build and probe the image from the repository root:
+
+```sh
+just build-python-duckdb-runtime
+just probe-python-duckdb-runtime
+just examples knowledge_graph knowledge-graph-python
+```
+
+Run `just examples-all` after building all required images to execute every opted-in example. The runner disables networking and supplies temporary writable output; the DuckDB file is discarded with that temporary directory after the run. The image build needs network access or a populated cache; the probe and example run offline. A Neo4j service check remains a future specialised smoke test and is not covered by this profile.
+
+For updates, the primer maintainer reviews the base digest, Python and DuckDB pins, wheel availability, and example behaviour together, updates the primer-owned runtime and any image tag and CI references as one change, and rebuilds from a clean cache. Run the offline version probe, runner unit tests, and the knowledge-graph example; record architecture, cold-build time, and image size before CI adoption. The initial image has been built and its offline probe and Python example have passed in this checkout; clean-cache timing, image size, and multi-architecture support still require the normal release review.
 
 ### R Runtime
 
@@ -251,7 +267,7 @@ credentials and disables networking. Its container invocation must:
 - leave the Git working tree unchanged.
 
 Build the needed language image before running examples: `just
-build-python-runtimes`, `just build-r-runtime`, or `just build-julia-runtime`
+build-python-runtimes`, `just build-python-duckdb-runtime`, `just build-r-runtime`, or `just build-julia-runtime`
 from the repository root. The runner does not build images implicitly. Use
 `just --list` in a primer directory or at the repository root to inspect the
 available recipes.
@@ -292,7 +308,7 @@ runtime contracts have proved stable.
 
 The corresponding GitHub Actions job is path-scoped and opt-in. It builds only
 the runtime profiles used by the migrated entries, probes them with networking
-disabled, and runs the three selected manifests. It is deliberately separate
+disabled, and runs discovered manifests. It is deliberately separate
 from the general repository checks so image-build time and example failures do
 not obscure rendering, lint, or workbook failures.
 
