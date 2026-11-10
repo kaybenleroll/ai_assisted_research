@@ -1,7 +1,7 @@
 # Final primer audit: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397. Live issue read on 10 November 2026.
-- Audit revision: `kg-398-final-audit-r2`
+- Audit revision: `kg-398-final-audit-r3`
 - Source revision: `358bd6c`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.audit.md`
 - Starting branch: `docs/398-knowledge-graph-main-checkout`
@@ -11,12 +11,12 @@
 - Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r2`, file SHA-256 `1b74b33784ea3fe6a151573a73931b914efac7a19a8cba38a05b234d0871f7ce`; its recorded source revision is `358bd6c`.
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`, file SHA-256 `6c8ec82a1358bc61ddb9efa79166a12e89f458f93396f794b752a9e525b7dcb9` at reviewed HEAD.
 - Core-concept depth matrix: the 14 rows of the tracked brief above, inventoried against the complete 741-line source.
-- Review boundary: complete source, brief, case, both executable scripts, construction helper, manifest, both JSON inputs, and committed HTML/PDF inventoried; selected claims, calculations, source pages, and rendered pages reconciled. Earlier executable and rendered evidence was retained with its original revision; no examples or render were rerun in this pass. This is not verification of every claim or an external-data evaluation.
+- Review boundary: complete source, brief, case, both executable scripts, construction helper, manifest, both JSON inputs, and committed HTML/PDF inventoried; selected claims, calculations, source pages, and rendered pages reconciled. Examples were freshly executed and outputs were rebuilt and visually sampled at the revisions recorded below. This is not verification of every claim or an external-data evaluation.
 - Readiness decision: not-ready
 
-  The **content gate passes with explicit scope reductions** for the promised primary and alternative routes. Release readiness remains not-ready because fresh example, render, source-verification, accessibility, and clean-release checks were not performed in this pass.
+  The **content gate passes with explicit scope reductions** for the promised primary and alternative routes. Release readiness remains not-ready because full citation-by-citation source verification, automated accessibility review, and a clean release handoff remain outside this pass.
 
-The integrated HEAD contains the refreshed outputs; the source text last changed in `358bd6c`.
+The integrated HEAD contains the refreshed outputs at `99f1dda`; the source text last changed in `358bd6c`.
 
 ## Whole-document review
 
@@ -29,7 +29,7 @@ The integrated HEAD contains the refreshed outputs; the source text last changed
 | Dependency order and fragmentation | Whole outline and adjacent-section reading; structural advisory check | Source headings at lines 3–734; `python3 -I scripts/check/check.py structure` | verified | Each H2 with H3 children has framing prose. The optional standards branch interrupts the page sequence but opening and branch introductions give an explicit bypass back to R. No short-section cluster breaks the main argument. | Advisory checker produced no knowledge-graph finding; other repository findings are outside this review. |
 | Worked examples and limitations | Source-to-script trace and fresh execution | Source lines 120–169, 219–344, 578–629, 639–712; two manifest IDs | verified | Source-derived `c1`, `c4`, `c5` retain spans; curated rows are labelled; negative omission, repair and changed-source rebuild produce three distinct asserted answers. | No claim of general extraction, durable releases or production access enforcement. |
 | Figures, tables, equations and accessibility | Whole source inventory plus rendered samples | Source lines 27–33, 44–50, 132–153, 223–246, 539–546, 615–621, 659–685, 697–708; PDF pages 1, 14, 40, 44, 49 | verified | Tables have lead-ins; the two pipeline/correction diagrams are text blocks with nearby prose; no image assets or equations were found. Sampled pages are legible and inside margins. | Page 49's literal backticks and dense text diagram are a presentation limitation, not a semantic failure. No automated accessibility audit was run. |
-| Published outputs | Fresh read-only render QA and local PDF inspection | `.scratch/render-qa/primer_knowledge_graph/report.md` at HEAD; HTML 178111 bytes; PDF 205657 bytes, 52 pages | verified | Tracked outputs exist; HTML title/headings/IDs/local assets pass the QA script; PDF metadata and text extract; five selected pages inspected. | `just all` was not rerun because the user forbade modifying generated outputs. |
+| Published outputs | Fresh render QA, rebuild, freshness check and local PDF inspection | `.scratch/render-qa/primer_knowledge_graph/report.md` at `99f1dda`; HTML 185714 bytes; PDF 212636 bytes, 56 pages | verified | Tracked outputs exist; HTML title/headings/IDs/local assets pass the QA script; PDF metadata and text extract; opening, table, code and two diagram pages inspected. | Literal backticks remain in the correction-loop text diagram; no clipping observed. |
 | Residual uncertainty | Explicitly inventoried exclusions | Source lines 52, 155–169, 580–582, 651, 675–689, 712, 732 | verified | No complete source documents, independent labels, live Neo4j, production identity policy or synced R export are claimed. | Keep these limits explicit; prospective integration belongs to a separate scoped issue. |
 
 The independently opened primary pages were [RDF 1.1 Concepts](https://www.w3.org/TR/rdf11-concepts/), [SPARQL 1.1 Query Language](https://www.w3.org/TR/sparql11-query/), [SHACL](https://www.w3.org/TR/shacl/), [PROV-O](https://www.w3.org/TR/prov-o/), [DuckDB Python API](https://duckdb.org/docs/current/clients/python/dbapi), [Neo4j MATCH](https://neo4j.com/docs/cypher-manual/current/clauses/match/), [Neo4j constraints](https://neo4j.com/docs/cypher-manual/current/schema/constraints/create-constraints/), [igraph data-frame conversion](https://r.igraph.org/reference/graph_from_data_frame.html), and [tidygraph activation](https://tidygraph.data-imaginist.com/reference/activate.html). This was a targeted confirmation of cited mechanisms, not a full publication-source pass. The DuckDB documentation checked is a moving `current` page; the executable itself ran in the pinned 1.4.3 image.
@@ -58,8 +58,9 @@ The Python manifest declares a 30-second timeout and `python-duckdb`; the R mani
 The route-keyed trace below is newly reviewed at `358bd6c`. Execution status is
 separate from teaching status: the Python and R results below rely on the
 previously retained executable evidence, while this audit re-checks that the
-source explains the transitions and their limits. No examples were executed in
-this audit run.
+source explains the transitions and their limits. The declared Python and R
+examples were executed in pinned runtimes during this audit cycle; the output
+rebuild followed at `99f1dda`.
 
 | route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
 |---|---|---|---|---|---|---|---|---|---|
@@ -108,8 +109,8 @@ Locators below are exact `primer_knowledge_graph/primer_knowledge_graph.md` line
 
 ### Verified
 
-- Retained evidence from the previous audit records `just examples knowledge_graph` passing `knowledge-graph-python` and `knowledge-graph-r` in offline pinned containers at its original revision. This pass did not execute examples; the source and manifest mapping were re-read and the limitation is recorded above.
-- Retained render-QA evidence records the previous HTML/PDF structural checks and human inspection of pages 1, 14, 40, 44 and 49 at its original revision. This pass did not render or visually inspect outputs.
+- Newly executed evidence records `just examples` passing `knowledge-graph-python` and `knowledge-graph-r` in offline pinned containers during this audit cycle.
+- Newly generated render-QA evidence records the rebuilt HTML/PDF structural checks and human inspection of pages 1, 15, 41, 44 and 53 at `99f1dda`.
 - `python3 -I scripts/check/check.py structure` exited 0 and reported 46 advisory findings across 26 Markdown files, none in the knowledge-graph source. Whole-outline reading supplied the separate editorial judgement.
 - The banned-hedge scan and untagged-opening-fence scan of the primer source returned no matches. File hashes and Git last-touch revisions were checked against the integrated HEAD; source/HTML/PDF are tracked.
 
@@ -130,14 +131,14 @@ Locators below are exact `primer_knowledge_graph/primer_knowledge_graph.md` line
 
 - A full primary-source audit of every link, each quotation and exact versioned claim; independent external evidence for the synthetic Northbridge records; a held-out accuracy study; RDF/SPARQL/SHACL/PROV-O parser execution; Cypher/Neo4j execution; production access controls; and a clean container rebuild were not performed. The reference-only snippets remain illustrative.
 - Full-document visual inspection, automated accessibility testing, and an all-repository link check were not performed. Render QA and human sampling establish only the pages and properties named above.
-- `python3 -I scripts/check/check.py fresh` passed in the disposable integration clone for all 31 source/output pairs. The earlier linked-worktree failure is superseded and is not current evidence.
+- `python3 -I scripts/check/check.py fresh` passed in the main checkout for all 31 source/output pairs at `99f1dda`.
 
 ## Execution, reconciliation and stopping boundary
 
-- Commands actually run and results: read-only source/brief/case comparison; `python3 -I scripts/check/primer_evidence.py primer_knowledge_graph/primer_knowledge_graph.brief.md primer_knowledge_graph/primer_knowledge_graph.audit.md` (pass after the route-keyed brief and audit update); `python3 -I scripts/check/check.py fresh` (pass for 31 source/output pairs); Git last-touch and SHA-256 checks (pass). No examples, build, render, or external-source refresh was run in this pass.
+- Commands actually run and results: `just examples` (both manifest entries pass); `just knowledge-graph-all` (HTML/PDF rebuild pass); `just render-qa primer_knowledge_graph` (pass, with human visual inspection recorded in the ignored report); `just check` (pass after README regeneration); scoped Markdown and offline-link lint (pass); `python3 -I scripts/check/primer_evidence.py primer_knowledge_graph/primer_knowledge_graph.brief.md primer_knowledge_graph/primer_knowledge_graph.audit.md` (pass); `python3 -I scripts/check/check.py fresh` (pass for 31 source/output pairs); Git last-touch and SHA-256 checks (pass). No full external-source refresh or automated accessibility audit was run.
 - False positives: the automated page-26 figure/equation candidate is a fallback prose page; source text diagrams are on pages 14 and 49. Repository-wide structure advisories do not implicate this primer.
 - Missed issues found later by another reviewer: none known at this revision; that is an absence of reported evidence, not a claim of exhaustive defect discovery.
 - Reviewer effort and friction: one whole-source pass plus targeted source/code and five-page visual sampling; linked-worktree freshness and revision metadata required separate diagnosis. No quality score was assigned.
-- Stopping boundary: content-gate and handoff review at integrated HEAD. The primer source, tracked brief, and audit were updated; examples and generated outputs were not changed.
+- Stopping boundary: content-gate and release-evidence review at integrated HEAD. The primer source, tracked brief, audit, Justfile, README registration, and generated outputs were updated; no push, merge, or release handoff was performed.
 - Content-gate decision: **passes with explicit scope reductions** for the primary and alternative routes. Q2 continuation and Q1–Q5 evaluation remain illustrative, not executable or independently adjudicated; the R route remains a lossy, unsynchronised alternative.
-- Release/evidence readiness decision: **not-ready**. Fresh examples, render QA, full source verification, accessibility review, and a clean release check were not run in this pass.
+- Release/evidence readiness decision: **not-ready for final release**. Fresh examples, render QA, freshness, repository checks and scoped lint are now current; full citation-by-citation source verification, automated accessibility review, and final handoff/release coordination remain outstanding.

@@ -15,7 +15,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 | Document | Category | Last reviewed |
 |----------|----------|---------------|
-| [Building Knowledge Graphs: From Sources to Verifiable Queries](primer_knowledge_graph/primer_knowledge_graph.html) · [PDF](primer_knowledge_graph/primer_knowledge_graph.pdf) | Quantitative Foundations | 2026-11-09 |
+| [Building Knowledge Graphs: From Sources to Verifiable Queries](primer_knowledge_graph/primer_knowledge_graph.html) · [PDF](primer_knowledge_graph/primer_knowledge_graph.pdf) | Quantitative Foundations | 2026-11-10 |
 | [Codex for Claude Code Users](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html) · [PDF](primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.pdf) | AI Agents and Coding Tools | 2026-11-07 |
 | [Spectral Graph Theory: Connectivity, Diffusion, and Computation](primer_spectral_graph_theory/primer_spectral_graph_theory.html) · [PDF](primer_spectral_graph_theory/primer_spectral_graph_theory.pdf) | Quantitative Foundations | 2026-11-04 |
 | [Fluid Mechanics](primer_fluid_mechanics/primer_fluid_mechanics.html) · [PDF](primer_fluid_mechanics/primer_fluid_mechanics.pdf) | Quantitative Foundations | 2026-10-24 |
@@ -62,7 +62,7 @@ These are the five most recently reviewed primary documents across the catalogue
 | [Fluid Mechanics](primer_fluid_mechanics/primer_fluid_mechanics.html) · [PDF](primer_fluid_mechanics/primer_fluid_mechanics.pdf) | 2026-10-24 | Continuum models, conservation laws, viscous and compressible flow, introductory CFD, and verified computational examples |
 | [Spectral Graph Theory: Connectivity, Diffusion, and Computation](primer_spectral_graph_theory/primer_spectral_graph_theory.html) · [PDF](primer_spectral_graph_theory/primer_spectral_graph_theory.pdf) | 2026-11-04 | Spectral graph theory, connectivity, diffusion, and computation |
 | [Information Theory](primer_information_theory/primer_information_theory.html) · [PDF](primer_information_theory/primer_information_theory.pdf) | 2026-10-14 | Surprise, entropy, compression, mutual information, noisy channels, capacity, error correction, and rate–distortion |
-| [Building Knowledge Graphs: From Sources to Verifiable Queries](primer_knowledge_graph/primer_knowledge_graph.html) · [PDF](primer_knowledge_graph/primer_knowledge_graph.pdf) | 2026-11-09 | Knowledge-graph construction from source records through modelling, evidence-backed queries, validation, and repeatable releases |
+| [Building Knowledge Graphs: From Sources to Verifiable Queries](primer_knowledge_graph/primer_knowledge_graph.html) · [PDF](primer_knowledge_graph/primer_knowledge_graph.pdf) | 2026-11-10 | Knowledge-graph construction from source records through modelling, evidence-backed queries, validation, and repeatable releases |
 | [Optimisation for Machine Learning](primer_ml_optimisation/primer_ml_optimisation.html) · [PDF](primer_ml_optimisation/primer_ml_optimisation.pdf) | 2026-10-18 | Objective formulation, gradients, convexity, numerical methods, neural-network training, and optimisation diagnostics |
 
 ## Society and Institutions
