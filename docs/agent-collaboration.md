@@ -32,6 +32,8 @@ branches are no longer needed.
 - Decisions and evidence: <decision and source path or URL>
 - Changes: <paths and purpose>
 - Validation: <exact command, directory, result>
+- Content gate: <status; evidence and revision; blockers; next action and owner>
+- Release readiness: <status; evidence and revision; blockers; next action and owner>
 - Remaining work and blockers: <specific next action or none>
 ```
 
@@ -48,6 +50,22 @@ example/action, interpretation, and limitation locators. Audit statuses are
 rationale, and a gap or unchecked row on a primary or alternative route remains
 blocking until resolved. Mechanical shape checks do not replace human review
 of whether the prose teaches.
+
+Make the two primer decisions independently, including evidence, blockers, and
+a next action and owner for each, even if a field is explicitly none. The
+content gate reports the human audit of teaching and its unresolved findings.
+Release readiness also depends on current outputs, freshness, metadata, required
+checks and review evidence. For example, content may pass while release is
+blocked by stale PDF output; name the rebuild and its owner. Do not describe a
+content pass as release approval. An unavailable or stale check is not a pass.
+
+For substantial or non-obvious primer work, include a concise verified commit
+map in the handoff or PR. Check the relevant Git history and diffs against the
+handoff revision; group applicable commits by planning, content, examples,
+outputs, audit and metadata, with short hashes and purposes. Identify revisions
+that supersede earlier commits and note categories with no separate commit when
+useful. The map is evidence of change history, not of content quality. It sets
+no fixed commit count and does not require preserving every commit at merge.
 
 ## Harness Smoke Test
 
