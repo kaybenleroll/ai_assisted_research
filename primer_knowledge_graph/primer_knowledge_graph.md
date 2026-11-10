@@ -10,7 +10,7 @@ Follow the dependency from the questions and source boundary to mentions and ide
 
 [Represent Claims in RDF and Property Graphs](#represent-claims-in-rdf-and-property-graphs) is an optional representation and storage branch after the Python route. Read its RDF subsections for triples, SPARQL, SHACL, and PROV-O; read the property-graph subsection for the corresponding Cypher design; or consult the storage comparison and proposed Neo4j smoke test when choosing or testing a serving layer. These designs are illustrative and the Neo4j test is prospective. Start with the section introduction before either branch; resume the main route at [Analyse a Projection in R](#analyse-a-projection-in-r).
 
-*The standards, DuckDB, Neo4j and repository-runtime claims are linked to primary sources. The source-to-claim example is deliberately bounded, and research and privacy claims are linked or flagged with their evidential limits. The graph-query, shape-validation and provenance snippets are illustrative and unexecuted.*
+*The standards, DuckDB, Neo4j and repository-runtime claims are linked to primary sources. The source-to-claim example is deliberately bounded, and research and privacy claims are linked or flagged with their evidential limits. The Python/DuckDB and R companion examples are executed by the repository manifests; the RDF, SPARQL, SHACL, PROV-O and Cypher snippets are illustrative and unexecuted.*
 
 ## Define the Boundary Before Building the Graph
 
