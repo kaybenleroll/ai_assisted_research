@@ -304,7 +304,7 @@ A dated query for version 2 illustrates a separate issue: `c4` is positive from 
 
 A representation is useful when it preserves the distinctions needed to answer a question, not merely when it draws a convincing network. Follow the Northbridge register's version 1 applicability statement through each representation: the policy version applies to Atlas from 1 January 2024 up to, but excluding, 1 April; the assertion comes from register `R1`, locator `R1:P1-P2`. The meeting minutes make a competing statement about version 2 on 15 March. A representation that retains only two policy-to-project arrows cannot reconstruct the dates, the source of either statement, or why the statements conflict. Nor should it turn the unresolved meeting mention of Alex Kim into an identified person.
 
-This optional branch starts with the same evidence requirements as the DuckDB route and asks how another representation could preserve them. RDF readers can follow triples through querying, validation, and provenance; property-graph readers can proceed to [Property Graphs and Cypher](#property-graphs-and-cypher). The comparison and storage subsections apply to either choice, while the Neo4j smoke test is a prospective product-specific branch. Resume the main route at [Analyse a Projection in R](#analyse-a-projection-in-r).
+This reference-only branch starts with the same evidence requirements as the DuckDB route and asks how another representation could preserve them. RDF readers can follow triples through querying, validation, and provenance; property-graph readers can proceed to [Property Graphs and Cypher](#property-graphs-and-cypher). The comparison and storage subsections apply to either choice, while the Neo4j smoke test is a prospective product-specific branch. These examples are not a second executable construction route; choose that scope deliberately before committing to an RDF or property-graph serving layer. Resume the main route at [Analyse a Projection in R](#analyse-a-projection-in-r).
 
 The examples in this section are illustrative designs inspired by the fixture. Their identifiers and vocabulary are local to the examples; they are not a claim that a particular RDF export, property-graph adapter, or Neo4j service has been implemented. In particular, distinguish a *claim*, which describes a qualified proposition, from an *assertion*, which records a source or process presenting that proposition. A source can support several claims, and several assertions can refer to the same claim while retaining separate locators and histories.
 
@@ -647,6 +647,15 @@ Construct a held-out set from source records or document families not used to tu
 ## Release, Update, and Govern
 
 A release is a reproducible combination of input versions, transformations, schema and answer policy, not merely a database file. For the fixture, the inputs include `primer_knowledge_graph/examples/fixture.json`, `primer_knowledge_graph/examples/python/knowledge_graph.py`, the manifest and the primer-specific runtime definition. Record their revisions or digests, the runtime and dependency versions, validation results, evaluation results and the exact build command. The current example uses a fresh temporary DuckDB file and tests that it can be reopened; it does not itself create a release manifest, preserve input snapshots or publish a database. Those are production extensions, not features to infer from the example.
+
+The following small release diff is illustrative rather than executed. Suppose release 3 contains `c1` from the original register, bounded from 1 January through 1 April, and a later source correction says that the policy ended on 1 March. Release 4 should add the corrected source version and a replacement assertion, mark the earlier assertion as superseded under the release policy, and recompute any projection or answer that depended on it.
+
+| Release | Evidence state for version 1 | Query on 15 March | What remains reconstructible |
+|---|---|---|---|
+| 3 | `c1` is applicable; minutes `c5` is also applicable and negative. | `abstain: conflicting evidence` | The original register, minutes, claims, and answer policy used by release 3. |
+| 4 | Replacement assertion says version 1 ended on 1 March; `c5` remains indeterminate after its support horizon. | `abstain: indeterminate temporal scope` | Release 3 and its original answer, plus the correction and the new answer. |
+
+The important operation is not overwriting the `valid_to` value in place. It is recording the new source and assertion version, identifying the release that adopted it, and tracing affected answers, indexes, projections, and cached results. If a downstream path relied on `c1`, the release process must either recompute it or mark it stale. A checksum or current database snapshot cannot reconstruct release 3 by itself; the required source versions and transformation policy must remain available.
 
 ### Diagnose and Apply a Release
 
