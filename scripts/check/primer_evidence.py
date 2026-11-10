@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROUTE_TIERS = {"primary", "alternative", "reference-only"}
 STATUSES = {"verified", "gap", "scope-reduced", "not-checked"}
+EXECUTION_STATUSES = {"executed", "parsed-only", "illustrative", "proposed", "not-checked"}
 READINESS = {"ready", "not-ready"}
 ID_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
 REVISION_RE = re.compile(r"^[0-9a-f]{7,64}$|^[A-Za-z0-9._/-]+@[0-9a-f]{7,64}$")
@@ -134,6 +135,22 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
         errors.append("brief: required section 'Core-concept depth matrix' is missing")
     if "Adversarial depth gate" not in _headings(audit):
         errors.append("audit: required section 'Adversarial depth gate' is missing")
+    if "Route transition evidence" not in _headings(audit):
+        errors.append("audit: required section 'Route transition evidence' is missing")
+    transition_section = re.search(
+        r"^## Route transition evidence\s*$([\s\S]*?)(?=^##\s|\Z)", audit, re.M
+    )
+    transition_required = ("route_id", "concept_id(s)", "transition (from to)",
+                           "linked input and reader operation", "intermediate reasoning or decision",
+                           "result", "interpretation", "material limitation", "execution status",
+                           "gap and reader consequence")
+    transition_headers, transition_rows = _require_table(
+        _tables(transition_section.group(1) if transition_section else ""),
+        transition_required, "audit transition", errors,
+    )
+    if transition_section:
+        for row in transition_rows:
+            row.line += audit[:transition_section.start(1)].count("\n")
     if "Readiness decision" not in audit_meta:
         errors.append("audit: missing metadata 'Readiness decision'")
     brief_revision = brief_meta.get("Source revision", "")
@@ -220,6 +237,41 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
     for key in expected:
         if key not in audited:
             errors.append(f"audit: missing coverage for '{key[0]}/{key[1]}'")
+
+    if transition_headers:
+        tcols = {field: _pick(transition_headers, field) for field in transition_required}
+        statuses = {(row.values.get(a("Route ID")), row.values.get(a("Concept ID"))):
+                    row.values.get(a("Status")) for row in audit_rows if not row.malformed}
+        covered_routes: set[str] = set()
+        for row in transition_rows:
+            if row.malformed:
+                errors.append(f"audit transition:{row.line}: malformed row has the wrong number of columns")
+                continue
+            def t(field): return row.values[tcols[field]]
+            route = t("route_id")
+            concepts = [concept.strip().strip("`") for concept in t("concept_id(s)").split(",")]
+            if not ID_RE.fullmatch(route):
+                errors.append(f"audit transition:{row.line}: invalid route_id '{route}'")
+            covered_routes.add(route)
+            for concept in concepts:
+                if not ID_RE.fullmatch(concept):
+                    errors.append(f"audit transition:{row.line}: invalid concept_id '{concept}'")
+                elif (route, concept) not in expected:
+                    errors.append(f"audit transition:{row.line}: no matching brief route/concept ID '{route}/{concept}'")
+            execution = t("execution status")
+            if execution not in EXECUTION_STATUSES:
+                errors.append(f"audit transition:{row.line}: invalid execution status '{execution}'")
+            verified = any(statuses.get((route, concept)) == "verified" for concept in concepts)
+            if verified and execution in {"proposed", "not-checked"}:
+                errors.append(f"audit transition:{row.line}: {execution} cannot support a verified concept")
+            for field in transition_required[2:8] + ("gap and reader consequence",):
+                value = t(field)
+                if _is_placeholder(value) or (verified and MISSING_RE.fullmatch(value)):
+                    errors.append(f"audit transition:{row.line}: missing or placeholder '{field}'")
+        for route, tier in expected.items():
+            if tier in {"primary", "alternative"} and route[0] not in covered_routes:
+                errors.append(f"audit transition: missing coverage for route '{route[0]}'")
+                covered_routes.add(route[0])
 
     readiness = audit_meta.get("Readiness decision", "")
     if _is_placeholder(readiness) or readiness not in READINESS:

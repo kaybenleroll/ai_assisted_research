@@ -53,6 +53,12 @@ AUDIT = """# Primer audit: Test
 | Route tier | Route ID | Concept ID | Explanation locator | Example/action locator | Interpretation locator | Limitation locator | Evidence revision | Reviewer | Status | Finding | Scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | primary | route-one | concept-one | primer.md:10 | primer.md:20 | primer.md:30 | primer.md:40 | abcdef1234567 | reviewer | verified | checked | retained |
+
+## Route transition evidence
+
+| route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
+|---|---|---|---|---|---|---|---|---|---|
+| route-one | concept-one | input to result | input and operation | reasoning | result | interpretation | limitation | illustrative | none |
 """
 
 
@@ -68,6 +74,36 @@ class PrimerEvidenceTests(unittest.TestCase):
 
     def test_valid_revision_bound_matrix(self):
         self.assertEqual(MODULE.validate(*self.files()), [])
+
+    def test_transition_table_is_required_in_its_section(self):
+        audit = AUDIT.split("## Route transition evidence")[0]
+        errors = MODULE.validate(*self.files(audit=audit))
+        self.assertTrue(any("required section 'Route transition evidence'" in e for e in errors))
+        self.assertTrue(any("audit transition: required matrix table" in e for e in errors))
+
+    def test_invalid_execution_status_and_missing_evidence(self):
+        audit = AUDIT.replace("| illustrative |", "| guessed |").replace("| reasoning |", "| |")
+        errors = MODULE.validate(*self.files(audit=audit))
+        self.assertTrue(any("invalid execution status" in e for e in errors))
+        self.assertTrue(any("missing or placeholder 'intermediate reasoning or decision'" in e for e in errors))
+        audit = AUDIT.replace("| reasoning |", "| MISSING — not reviewed |")
+        self.assertTrue(any("missing or placeholder" in e for e in MODULE.validate(*self.files(audit=audit))))
+
+    def test_unresolved_transition_and_route_coverage(self):
+        audit = AUDIT.replace("| verified |", "| not-checked |", 1).replace(
+            "- Readiness decision: ready", "- Readiness decision: not-ready").replace(
+            "| illustrative |", "| not-checked |").replace("| reasoning |", "| MISSING — not reviewed |")
+        self.assertEqual(MODULE.validate(*self.files(audit=audit)), [])
+        errors = MODULE.validate(*self.files(audit=AUDIT.replace("| illustrative |", "| proposed |")))
+        self.assertTrue(any("cannot support a verified concept" in e for e in errors))
+        errors = MODULE.validate(*self.files(audit=AUDIT.replace("| route-one | concept-one | input to result", "| unknown | concept-one | input to result")))
+        self.assertTrue(any("missing coverage for route" in e for e in errors))
+        self.assertTrue(any("no matching brief route/concept ID" in e for e in errors))
+
+    def test_transition_multiple_concepts_are_checked(self):
+        brief = BRIEF + "| primary | route-one | concept-two | do it | explain it | matters | example | result | meaning | boundary | downstream | source |\n"
+        audit = AUDIT.replace("\n\n## Route transition evidence", "\n| primary | route-one | concept-two | primer.md:10 | primer.md:20 | primer.md:30 | primer.md:40 | abcdef1234567 | reviewer | verified | checked | retained |\n\n## Route transition evidence").replace("| route-one | concept-one | input to result", "| route-one | concept-one, concept-two | input to result")
+        self.assertEqual(MODULE.validate(*self.files(audit=audit, brief=brief)), [])
 
     def test_duplicate_and_missing_coverage_are_rejected(self):
         duplicate = BRIEF.replace(

@@ -16,3 +16,9 @@
 | Route tier | Route ID | Concept ID | Explanation locator | Example/action locator | Interpretation locator | Limitation locator | Evidence revision | Reviewer | Status | Finding | Scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | primary | route-one | concept-one | primer.md:3 | primer.md:5 | primer.md:8 | primer.md:8 | abcdef1234567 | reviewer | verified | Claims checked | retain |
+
+## Route transition evidence
+
+| route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
+|---|---|---|---|---|---|---|---|---|---|
+| route-one | concept-one | input to result | input and operation | reasoning | result | interpretation | limitation | illustrative | none |
