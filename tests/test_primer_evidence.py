@@ -72,6 +72,37 @@ class PrimerEvidenceTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         return b, a
 
+    def test_populated_unmodified_template_passes_and_statuses_block(self):
+        template = (SCRIPT.parents[2] / "docs/templates/primer-audit.md").read_text(encoding="utf-8")
+        metadata = {
+            "Audit revision": "audit-1", "Source revision": "abcdef1234567",
+            "Starting branch": "infra/407-test", "Reviewer(s)": "reviewer",
+            "Date": "2026-11-10", "Reviewed revision": "abcdef1234567",
+            "Brief reviewed": "docs/brief.md at brief-1", "Review boundary": "whole document",
+            "Core-concept depth matrix": "below", "Readiness decision": "ready",
+        }
+        lines = template.splitlines()
+        for i, line in enumerate(lines):
+            for field, value in metadata.items():
+                if line.startswith(f"- {field}:"):
+                    lines[i] = f"- {field}: {value}"
+        audit = "\n".join(lines)
+        depth_row = ("| route-one | primary | concept-one | primer.md:10 | primer.md:20 | "
+                     "primer.md:30 | primer.md:40 | abcdef1234567 | reviewer | verified | checked | retained |")
+        transition_row = ("| route-one | concept-one | input to result | input and operation | reasoning | "
+                          "result | interpretation | limitation | illustrative | none |")
+        audit = audit.replace("| | | | | | | | | | | | |", depth_row, 1)
+        audit = audit.replace("| | | | | | | | | | |", transition_row, 1)
+        self.assertEqual(MODULE.validate(*self.files(audit=audit)), [])
+        for tier in ("primary", "alternative"):
+            for status in ("gap", "not-checked"):
+                with self.subTest(tier=tier, status=status):
+                    changed_brief = BRIEF.replace("| primary |", f"| {tier} |")
+                    changed_audit = audit.replace("| route-one | primary |", f"| route-one | {tier} |").replace(
+                        "| verified | checked | retained |", f"| {status} | checked | retained |")
+                    errors = MODULE.validate(*self.files(audit=changed_audit, brief=changed_brief))
+                    self.assertTrue(any(f"blocking {status}" in error for error in errors), errors)
+
     def test_valid_revision_bound_matrix(self):
         self.assertEqual(MODULE.validate(*self.files()), [])
 

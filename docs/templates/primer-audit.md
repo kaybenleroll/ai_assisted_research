@@ -103,9 +103,12 @@ heading, list, citation, fixture, or passing smoke test. Unresolved substantive
 gaps block PR readiness for primary or alternative routes or require an explicit
 scope reduction.
 
-| route_id | route tier | concept_id | exact explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status (`verified`\|`gap`\|`scope-reduced`\|`not-checked`) | finding | scope decision |
+| route_id | route tier | concept_id | explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | | | | | | | | | | | | |
+
+Allowed `status` values: `verified`, `gap`, `scope-reduced`, and
+`not-checked`.
 
 A `scope-reduced` status must include the rationale in the scope decision. For
 each `gap`, state the concrete consequence for the reader and the dependent
@@ -158,6 +161,30 @@ chosen; do not infer full-document coverage from these rows.
 Choose samples by risk. Record the page, object, and defect separately for
 visual checks; inspect figure meaning and accessibility in addition to file
 existence.
+
+## Revision-triggered second audit
+
+After any primer, brief, example, or published output changes following an
+audit, complete a second audit before readiness carries forward. Compare the
+previous and current revisions, identify the changed artefacts and affected
+route/concept evidence rows, and re-review changed passages, dependent
+transitions, claims, examples, and outputs. Include adjacent material affected
+by the changes. A revision metadata update or mechanical check alone does not
+establish a fresh judgement.
+
+| Previous and current revisions | Changed artefacts and exact passages | Affected route/concept rows, transitions, claims, examples and outputs | Review scope, reviewer, method and result | Remaining gaps and readiness consequence |
+|---|---|---|---|---|
+| | | | | |
+
+Record retained evidence separately from newly reviewed or executed evidence;
+include the original revision and reason for retaining it, or the new revision,
+method and result. Identify checks not repeated and outstanding work. Include
+this distinction in any handoff. If no earlier audit exists, state that this is
+the initial audit.
+
+| Evidence and affected rows | Retained or newly reviewed/executed | Revision, method, result and reason for retention | Limits or outstanding checks |
+|---|---|---|---|
+| | | | |
 
 ## Reconcile earlier evidence
 
