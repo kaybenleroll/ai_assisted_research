@@ -36,7 +36,7 @@ permissions, network access, sandboxing, and approval policy.
 - Use [CONTRIBUTING.md](../CONTRIBUTING.md) for build and render commands. The Mermaid filter lives in `_shared/filters/`.
 - Start a new Pandoc primer with `just new-primer <short> "<Full Title>"`; finish the printed registration steps in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
-## Tracked Brief and Audit Contract
+### Tracked Brief and Audit Contract
 
 Each new or substantially revised primer has a tracked, revision-bound brief
 and audit artefact. Record the tracked paths, source revision, brief revision,
