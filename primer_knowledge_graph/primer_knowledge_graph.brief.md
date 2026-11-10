@@ -1,8 +1,8 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r1`
-- Source revision: `3e09e00`
+- Brief revision: `kg-398-brief-r2`
+- Source revision: `24f83b1`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners who understand tables, JSON, basic
   Python or SQL, and reproducible data work, but do not yet understand graph
@@ -83,16 +83,37 @@
   documentation and the executable example; reconcile every source-sensitive
   claim with its citation, version and access date.
 - Open decisions:
-  - Whether the R script should read a generated positive projection or retain
-    its self-contained interchange fixture. Evidence needed: reproducible
-    container behaviour and whether a projection export can preserve the
-    intended teaching boundary without duplicating the Python case.
+  - Retain the R script's self-contained positive projection for this milestone.
+    It is explicitly an alternative topology teaching route, not a synchronised
+    view of a changed Python source. A generated projection would be a separate
+    content change because it would alter the interchange boundary.
   - Which exact Neo4j/Cypher version to name in the reference branch. Evidence
     needed: current official documentation; do not add an integration until a
     separate issue authorises a service test.
-  - Whether the correction demonstration should model a new source version or
-    only rebuild from a changed retained excerpt. The brief requires the latter
-    at minimum and should explain the former as the production extension.
+  - Keep the correction demonstration as a changed retained excerpt rebuilt in
+    a fresh temporary database. A durable source version is described as a
+    production extension, not promised by this milestone.
+
+## Route-keyed worked-case trace
+
+The following trace binds the continuous case to the existing stable route and
+concept IDs. It is a planning and post-draft comparison spine, not a claim that
+every stage is executable. `Illustrative` means the reader can follow the
+reasoning in the prose but the example does not independently run that whole
+question; `executable` is reserved for the bounded Python or R operations
+asserted by the examples.
+
+| route_id | route tier | stage | concept_id(s) | Input and decision | Output handed to the next stage | Evidence mode and scope decision |
+|---|---|---|---|---|---|---|
+| route-python-duckdb | primary | Boundary and questions | kg-boundary | Declare Northbridge sources, authority, dates, and Q1–Q5 contracts | Bounded questions and refusal rules | illustrative; Q2 owner continuation remains an explicitly illustrative answer |
+| route-python-duckdb | primary | Mentions and qualified claims | kg-mentions, kg-claims | Preserve source spans, distinguish mentions from entities, and retain source, interval and polarity | Candidate claims and evidence-bearing rows | executable for declared patterns; curated rows remain illustrative |
+| route-python-duckdb | primary | Temporal and conservative construction | kg-temporal, kg-extraction | Classify bounded, unbounded and unknown horizons; refuse unsupported dates and abstain on Alex identity | Validated source-derived `c1`, `c4`, `c5` plus refusal decisions | executable for the declared fixture patterns; not a general extractor |
+| route-python-duckdb | primary | DuckDB representation and queries | kg-duckdb, kg-queries | Store, reopen, and query direct, two-hop, provenance and dated evidence | Evidence rows and supported, refuted, or abstention results | executable for the bounded fixture; no production schema claim |
+| route-python-duckdb | primary | Diagnosis, correction and re-evaluation | kg-correction, kg-evaluation | Compare omitted-negative, repaired, and changed-source constructions; explain the Q1–Q5 score as synthetic | Changed answer plus an explicit evaluation limitation | correction path executable; Q1–Q5 score illustrative and not independently adjudicated |
+| route-python-duckdb | primary | Privacy and release boundary | kg-privacy | Apply audience-specific disclosure and state source, coverage and governance limits | A bounded answer or abstention with a release limitation | illustrative governance; no enforced access-control implementation |
+| route-r-projection | alternative | Positive projection | kg-r-projection | Read the declared positive interchange fixture and analyse paths/components | Topology results without claim qualifiers | executable alternative; deliberately not synchronised with changed Python input |
+| route-r-projection | alternative | Interpret topology and return to evidence | kg-r-projection | Explain unit path cost, components, and discarded dates, polarity, provenance and claim IDs | A topology interpretation and a return path to DuckDB evidence | illustrative interpretation around an executable projection; cannot answer evidence questions |
+| route-graph-storage | reference-only | RDF, property graphs and storage choice | kg-rdf, kg-property, kg-storage | Compare qualified mappings and workload boundaries | A future storage decision and prospective test | reference-only; no continuous teaching spine or executed service migration promised |
 
 ## Review plan
 

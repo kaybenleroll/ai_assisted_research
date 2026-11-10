@@ -10,6 +10,14 @@ Follow the dependency from the questions and source boundary to mentions and ide
 
 [Represent Claims in RDF and Property Graphs](#represent-claims-in-rdf-and-property-graphs) is an optional representation and storage branch after the Python route. Read its RDF subsections for triples, SPARQL, SHACL, and PROV-O; read the property-graph subsection for the corresponding Cypher design; or consult the storage comparison and proposed Neo4j smoke test when choosing or testing a serving layer. These designs are illustrative and the Neo4j test is prospective. Start with the section introduction before either branch; resume the main route at [Analyse a Projection in R](#analyse-a-projection-in-r).
 
+The headings place the optional representation branch before the R section so
+the two non-Python representations can be compared together. That presentation
+order is not an additional dependency. For the primary teaching route, read
+the Python/DuckDB sections through diagnosis and correction, then read the R
+projection and the validation/evaluation sections. Treat the RDF, property
+graph, and storage sections as a side branch that you can enter after the
+Python ledger and leave before returning to the R route.
+
 *Verified against primary sources for Construct and Query with Python and DuckDB; Represent Claims in RDF and Property Graphs; Analyse a Projection in R; and Validate, Evaluate, and Diagnose; unverified claims are flagged inline.*
 
 ## Define the Boundary Before Building the Graph
@@ -33,6 +41,39 @@ Treat each question as a contract for a query and its result. The following cont
 | Q5. Which directory person was the attendee named Alex Kim? | Return the unresolved `m-alex` mention, `r2` abstention, both `person:alex-kim-1` and `person:alex-kim-2` candidates, and `M1:paragraph-3`; assign no person ID to attendance. | Executable bounded resolution decision; audience-specific disclosure is illustrative. |
 
 These contracts close the opening questions at their actual evidence limits. In particular, the recorded owner is an answer to a source question, while ownership on a later date is a different temporal question. A graph that always returns one Alex person has encoded an assumption, not demonstrated better coverage.
+
+### Work the source/date distinction for Q2
+
+Q2 is deliberately different from Q1. The first question asks what the
+register records about applicability on a date inside `c1`'s bounded interval.
+The second asks what the register names as the owner and then tests whether
+that ownership can be carried forward to a later date. A reader should not
+answer both questions by selecting the same row and copying its date treatment.
+
+Work the reasoning in four steps:
+
+1. Select `c2` by the question's source scope (`s-register`), relation
+   (`owned_by`), and object (`policy:travel-v1`). This gives Morgan Lee and
+   the locator `R1:P1-P2`.
+2. Read the temporal fields rather than treating the row as timeless. In the
+   fixture, `c2` starts on 1 January and has an `unknown` end with support only
+   through 1 January. The source supports the recorded owner on that date, not
+   an unqualified assertion about every later date.
+3. Apply the question date, 1 March, to the temporal contract. Because it is
+   after `supported_through`, the result is `indeterminate`, not `supported`
+   and not `refuted`.
+4. Return both pieces of information: “the register names Morgan Lee on 1
+   January” and “continued ownership on 1 March is indeterminate from the
+   supplied evidence”. Include `c2` and its locator so a reviewer can inspect
+   the same decision.
+
+This is a useful manual query even though the bounded executable does not
+assert the complete owner presentation as an end-to-end operation. The
+distinction is the teaching point: an answer can be valid for a source record
+and still be insufficient for a later-date question. If a system returned
+Morgan Lee as the 1 March owner without the qualification, inspect temporal
+selection and answer policy rather than merging another person or changing the
+graph storage.
 
 ### Completeness and Negative Answers
 
@@ -646,6 +687,22 @@ The projection check compares positive triples, not dates, provenance, credibili
 
 The same distinction helps diagnose a failed answer. If the minutes' negative assertion `c5` is absent, inspect retrieval and extraction before changing the graph schema. If `c5` is present but the answer ignores it, inspect the evidence-selection or conflict policy. If the answer cites `c1` for a date after its bounded end, inspect temporal filtering. If Morgan is linked correctly but Alex is merged without an identifier, inspect identity resolution and its abstention rule. Each failure points to a different repair and should be recorded with the source span, intermediate claim or candidate decision, selected evidence, and policy version that produced the answer.
 
+Use the observed answer to choose the next inspection. The following decision
+table makes the diagnostic route concrete:
+
+| Observed answer on 15 March | Inspect first | Evidence to retain | Targeted repair and retest |
+|---|---|---|---|
+| `supported`, with only `c1` selected | Candidate extraction and negative-pattern handling | Retained `M1:paragraph-3` span, candidate list, extraction method and policy revision | Restore the negative `c5` candidate, rebuild, and rerun the conflict query |
+| `abstain: conflicting evidence`, but no `c5` locator | Evidence joins and source/claim linkage | Claim IDs, source IDs, locators and the query result before aggregation | Repair the evidence link or retrieval boundary, then rerun the same question |
+| `supported` for a date after `c1` ends | Temporal predicate and end-kind validation | `valid_from`, exclusive `valid_to`, requested date and temporal classification | Correct the date filter or interval data, then test the boundary dates again |
+| Morgan returned as the 1 March owner without qualification | Unknown-horizon handling and answer policy | `c2` support horizon, requested date and selected answer rule | Preserve the recorded 1 January owner but return indeterminate continuation |
+
+The table separates a missing assertion from a present assertion that is
+misinterpreted. Changing the schema cannot recover a candidate that extraction
+discarded, and adding another edge cannot justify a date that the evidence does
+not support. A retest should use the same question, source boundary and policy
+version so that the change in answer can be attributed to the repair.
+
 **Inference** derives a conclusion from premises under an explicit rule. For example, a system could define a rule that turns an `applies_to`/`belongs_to` path into a carefully named organisational association. The current Python example only returns the path; it does not implement that rule or materialise a new claim. Before adding it, specify its meaning, acceptable predicates, scope, source restrictions and temporal overlap. If two half-open input intervals overlap, the derived relationship can hold at most during their intersection; if they do not overlap, the path is not evidence of a simultaneous relationship. Record both premise IDs, the rule version and the derivation run, so a corrected premise or rule can invalidate the result. A derived association is not the same as an explicit statement in the register.
 
 **Verification** checks whether an assertion is supported by the appropriate evidence and is adequate for the question. A reviewer could locate the retained register version, inspect its Atlas entry, confirm the version and interval, and record the review and its limitations. Checking that `c1.source` refers to `s-register` is validation; comparing `c1` with the actual register is verification. The synthetic excerpts permit comparison with the retained sample text, but neither they nor the fixture supply complete underlying documents or independent external evidence, so they cannot demonstrate that external verification step. It can demonstrate the structure of a review workflow and the need to abstain when the available evidence conflicts.
@@ -655,6 +712,39 @@ For RDF data, [SHACL](https://www.w3.org/TR/shacl/) specifies validation of a da
 ### Gold Sets and Useful Measures
 
 Build an evaluation set from questions and independently adjudicated evidence, not merely from rows copied from the graph being tested. A useful gold item contains the question, entity and predicate scope, requested valid date, source boundary, expected answer or abstention, supporting and opposing evidence identifiers, and an explanation of the adjudication. Record who reviewed it, the evidence version and the policy version. The fixture’s date cases are useful regression examples, but their expected outputs were chosen from the same synthetic input and policy; passing them does not estimate accuracy on unfamiliar documents.
+
+### Work one adjudication before scoring
+
+Consider Q4, agreement on version 1 for Atlas on 15 March. An independent
+adjudicator would first freeze the question, source boundary, and conservative
+answer policy without seeing a system result. They would then inspect the
+retained evidence and write a gold item such as:
+
+| Gold-item field | Q4 adjudication |
+|---|---|
+| Question and scope | Does the register and the minutes agree that version 1 applies to Atlas on 15 March? Use both named sources and the requested date. |
+| Supporting/opposing evidence | Positive `c1` from `s-register`, `R1:P1-P2`; negative `c5` from `s-minutes`, `M1:paragraph-3`. |
+| Temporal decision | Both assertions are applicable on 15 March under the declared half-open and unknown-horizon rules. |
+| Gold answer | `abstain: conflicting evidence`; retain both claim IDs and locators. |
+| Adjudication record | Reviewer, evidence revision, policy revision, reasoning, and any unresolved disagreement. |
+
+Only after that record is frozen should the system answer the same question.
+Compare the complete unit: answer label, selected evidence, and required
+abstention. A system that returns `abstain: conflicting evidence` but cites
+only `c1` has an evidence-retrieval or citation failure even though its label
+looks correct. A system that returns `supported` has a policy or aggregation
+failure because it ignored the opposing applicable assertion. A system that
+returns `abstain: no evidence` has a retrieval or temporal-filter failure
+because evidence was available. This is the adjudication operation the scores
+are meant to evaluate.
+
+The current Q1–Q5 table cannot claim this independent procedure was performed:
+its answers and adjudications were constructed from the same fixture and policy
+for teaching. It is therefore a worked scoring walkthrough and regression
+expectation, not a gold-set accuracy result. To turn it into an evaluation,
+freeze labels from retained source evidence before running the system, include
+cases from a held-out source family, and retain disagreements rather than
+silently converting them into a consensus label.
 
 For the conservative target policy, a small regression table is:
 
