@@ -36,6 +36,23 @@ why it matters, and a material condition, consequence, or limitation. Use the
 outline to find catalogue-like clusters and compressed transitions, but do not
 turn subsection count, paragraph count, or word count into acceptance criteria.
 
+Run an adversarial depth gate against every row of the brief's core-concept
+matrix and every primary or alternative route. Record the exact passage that
+teaches the mechanism, the reader action or worked evidence that demonstrates
+it, the interpretation that connects the result to the concept, and the limit or
+failure case. Mark the row as a substantive gap when any of those are absent or
+when the passage merely defines, names, enumerates, or links to the concept.
+Passing code, a populated fixture, a heading, or a short summary is not teaching
+evidence. If a promised route cannot meet the gate, recommend narrowing or
+demoting the route rather than adding a token paragraph.
+
+After the row-by-row pass, review the document as a reader: could the intended
+reader explain the organising model, reproduce the central operation, interpret
+its result, and recognise when it fails? A negative answer is a readiness
+finding even when all mechanical and executable checks pass. Do not declare a
+primer ready while an unresolved substantive depth gap remains in a primary or
+alternative route.
+
 Then perform risk-selected technical verification and sampling: opening
 orientation, difficult formal passage, worked example, practical case, and
 representative rendered pages.

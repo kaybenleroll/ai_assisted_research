@@ -60,6 +60,12 @@ Copy [the brief template](templates/primer-brief.md) into an issue or ignored
 The brief is a planning instrument, not a promise to preserve every proposed
 section. During review, record deliberate omissions and changes in scope.
 
+Do not approve a broad brief because it names all relevant technologies. Before
+drafting, classify each route as primary, alternative, or reference-only and
+show the teaching spine for every primary or alternative route. If the route
+cannot carry a motivating problem, organising model, worked application,
+interpretation, and limit, narrow it or demote it before prose is written.
+
 ## 2. Research and design the route
 
 Research in dependency order. Establish the smallest set of concepts needed to
@@ -140,6 +146,13 @@ Do not convert the audit into a quality score, a fixed word count, or a heading
 quota. Record findings, severity, evidence, disposition, and reviewer effort.
 False positives and missed issues discovered during a pilot belong in the
 audit notes so the procedure can improve without weakening the review standard.
+
+The audit has a qualitative readiness gate: every primary and alternative route
+and every core-concept matrix row must have evidence of mechanism, reader action,
+interpretation, and a material limit or failure case. Missing evidence is a
+content finding, not a suggestion to add a token paragraph. The remedy is to
+narrow or demote the route, or to develop it properly; a passing build or smoke
+test cannot override the gate.
 
 ## 6. Render and verify
 
