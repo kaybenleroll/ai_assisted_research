@@ -53,6 +53,19 @@ For each core concept, check mechanism or reasoning, significance, conditions or
 limits, and the teaching device used. Do not treat word count or subsection
 count as evidence of depth.
 
+## Adversarial depth gate
+
+For every primary or alternative route and every core-concept row in the brief,
+record whether a reader can learn the mechanism, perform or inspect the stated
+operation, interpret the result, and recognise a material limit. A row is not
+verified by a definition, heading, list, citation, fixture, or passing smoke
+test. Unresolved substantive gaps block PR readiness or require an explicit
+scope reduction.
+
+| Route/concept | Mechanism passage | Reader action or worked evidence | Interpretation passage | Limit/failure passage | Status and finding | Scope decision |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+
 For published code, map the reader-facing snippet to its executable example or
 state that it is illustrative only. Check fixture schema, dependencies,
 ordering conventions, and expected results; a smoke test that exercises a
@@ -101,3 +114,5 @@ existence.
 - Missed issues: <issues found later or by another reviewer>
 - Procedure changes proposed: <specific change or “none”>
 - Remaining work: <issue-linked next actions>
+- Readiness decision: <ready only if all primary and alternative routes pass the
+  adversarial depth gate; otherwise name the blocking gaps and scope decision>
