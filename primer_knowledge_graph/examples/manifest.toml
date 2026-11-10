@@ -1,0 +1,15 @@
+schema_version = 1
+
+[[examples]]
+id = "knowledge-graph-python"
+language = "python"
+profile = "python-duckdb"
+script = "examples/python/knowledge_graph.py"
+timeout_seconds = 30
+
+[[examples]]
+id = "knowledge-graph-r"
+language = "r"
+profile = "r-graph"
+script = "examples/r/knowledge_graph.R"
+timeout_seconds = 120

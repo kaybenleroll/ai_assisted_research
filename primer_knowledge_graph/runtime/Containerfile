@@ -1,0 +1,6 @@
+FROM docker.io/library/python:3.12.15-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258
+COPY requirements.lock /tmp/requirements.lock
+RUN python -m pip install --no-cache-dir -r /tmp/requirements.lock && rm /tmp/requirements.lock
+ENV PYTHONDONTWRITEBYTECODE=1
+COPY probe.py /usr/local/bin/knowledge-graph-probe.py
+ENTRYPOINT ["python", "/usr/local/bin/knowledge-graph-probe.py"]

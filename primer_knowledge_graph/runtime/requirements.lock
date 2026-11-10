@@ -1,0 +1,2 @@
+# Primer-specific direct dependency; DuckDB has no Python package dependencies.
+duckdb==1.4.3

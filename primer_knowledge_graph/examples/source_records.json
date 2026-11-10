@@ -1,0 +1,48 @@
+{
+  "version": "northbridge-synthetic-1",
+  "records": [
+    {
+      "source": "s-register",
+      "locator": "R1:P1-P2",
+      "text": "Travel Policy v1 applies to Atlas from 2024-01-01 until 2024-04-01. Owner Morgan Lee has directory ID NB-104. Travel Policy v2 applies to Atlas on 2024-04-01."
+    },
+    {
+      "source": "s-minutes",
+      "locator": "M1:paragraph-3",
+      "text": "On 2024-03-15, version 2 applies to Atlas. On 2024-03-15, version 1 does not apply to Atlas. Alex Kim attended."
+    },
+    {
+      "source": "s-directory",
+      "locator": "D1:A1",
+      "text": "Atlas and Orion belong to Northbridge.",
+      "extract_claims": false
+    },
+    {
+      "source": "synthetic-continuation",
+      "locator": "S1:1",
+      "text": "Travel Policy v1 applies to Atlas from 2024-01-01 and continues until further notice."
+    },
+    {
+      "source": "synthetic-refusal",
+      "locator": "S2:1",
+      "text": "Travel Policy v1 applies to Atlas from sometime next spring."
+    }
+  ],
+  "directory": [
+    {
+      "id": "person:morgan-lee",
+      "name": "Morgan Lee",
+      "directory_id": "NB-104"
+    },
+    {
+      "id": "person:alex-kim-1",
+      "name": "Alex Kim",
+      "directory_id": "NB-201"
+    },
+    {
+      "id": "person:alex-kim-2",
+      "name": "Alex Kim",
+      "directory_id": "NB-202"
+    }
+  ]
+}
