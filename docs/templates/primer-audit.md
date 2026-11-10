@@ -67,7 +67,7 @@ scope reduction.
 
 | route_id | route tier | concept_id | exact explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status (`verified`\|`gap`\|`scope-reduced`\|`not-checked`) | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| | | | | | | | | | | |
+| | | | | | | | | | | | |
 
 A `scope-reduced` status must include the rationale in the scope decision. A
 `gap` or `not-checked` row blocks readiness when its route tier is `primary` or
