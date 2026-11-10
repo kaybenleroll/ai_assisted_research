@@ -14,8 +14,9 @@ decisions visible and explain exceptions.
 
 ## Lifecycle at a glance
 
-1. **Brief:** define the reader, problem, boundaries, depth, examples, evidence
-   plan, and unresolved decisions.
+1. **Brief:** create a tracked, revision-bound brief defining the reader,
+   problem, boundaries, route tiers, concept rows, evidence plan, and unresolved
+   decisions.
 2. **Research:** establish the dependency-led route, authoritative sources,
    terminology, calculations, examples, and known uncertainty.
 3. **Scaffold and register:** create the primer through the repository recipe,
@@ -35,8 +36,16 @@ evidence that the current content is correct.
 
 ## 1. Write the brief
 
-Copy [the brief template](templates/primer-brief.md) into an issue or ignored
-`.scratch/` handoff note. The brief should answer:
+Create the tracked brief artefact from [the brief template](templates/primer-brief.md).
+An issue comment or ignored `.scratch/` handoff note may help during drafting,
+but is not the durable brief. Record its source revision and stable brief
+revision. Assign stable `route_id` values to routes and
+stable `concept_id` values to core concepts; use the same IDs in the audit.
+Classify each route as `primary`, `alternative`, or `reference-only`. Every
+brief row must cover the schema fields in the template: reader action,
+mechanism or reasoning, significance, teaching device, worked evidence,
+interpretation, limitations, downstream use, and source plan. The brief should
+answer:
 
 - Who is the reader, what do they already know, and what should they be able
   to do or explain afterwards?
@@ -52,7 +61,8 @@ Copy [the brief template](templates/primer-brief.md) into an issue or ignored
   the [teaching-case contract](templates/primer-case-contract.md).
 - Which core concepts need a mechanism or reasoning explanation, why they
   matter, conditions or limits, and a worked case, comparison, counterexample,
-  proof, or failure case? Record this in the brief's depth matrix.
+  proof, or failure case? Record stable `route_id` and `concept_id` values in
+  the brief schema.
 - Which claims require primary or current sources, and which calculations or
   executable examples need independent checking?
 - Which decisions remain unresolved, and what evidence would settle them?
@@ -64,7 +74,8 @@ Do not approve a broad brief because it names all relevant technologies. Before
 drafting, classify each route as primary, alternative, or reference-only and
 show the teaching spine for every primary or alternative route. If the route
 cannot carry a motivating problem, organising model, worked application,
-interpretation, and limit, narrow it or demote it before prose is written.
+interpretation, and limit, narrow it or demote it before prose is written. The
+schema defines no quotas.
 
 ## 2. Research and design the route
 
@@ -123,8 +134,9 @@ programs.
 
 ## 5. Run the post-draft audit
 
-Use [the audit template](templates/primer-audit.md) and review the complete
-source, not just a sample. The whole-document pass checks the brief, coverage,
+Create the tracked audit artefact from [the audit template](templates/primer-audit.md),
+bind it to the exact source and brief revisions, and review the complete source,
+not just a sample. The whole-document pass checks the brief, coverage,
 technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.
@@ -148,11 +160,17 @@ False positives and missed issues discovered during a pilot belong in the
 audit notes so the procedure can improve without weakening the review standard.
 
 The audit has a qualitative readiness gate: every primary and alternative route
-and every core-concept matrix row must have evidence of mechanism, reader action,
-interpretation, and a material limit or failure case. Missing evidence is a
-content finding, not a suggestion to add a token paragraph. The remedy is to
-narrow or demote the route, or to develop it properly; a passing build or smoke
-test cannot override the gate.
+and every core-concept matrix row must have exact locators for the explanation,
+example or reader action, interpretation, and material limit or failure case.
+Record the evidence revision, reviewer, status, finding, and scope decision in
+each audit row. Use only `verified`, `gap`, `scope-reduced`, or `not-checked`;
+`scope-reduced` requires a rationale. A `gap` or `not-checked` row on a primary
+or alternative route blocks readiness. Missing evidence is a content finding,
+not a suggestion to add a token paragraph. The remedy is to narrow or demote
+the route, or to develop it properly; a passing build or smoke test cannot
+override the gate. Mechanical validation may check row shape and completeness,
+but human review must decide whether the prose genuinely teaches. Do not add
+quotas.
 
 ## 6. Render and verify
 

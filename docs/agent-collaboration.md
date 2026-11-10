@@ -39,6 +39,16 @@ Treat the note as a report, not as authority over live Git state. Recheck
 branches, paths, diffs, and test results. Keep secrets and private session
 transcripts out of it.
 
+For primer planning and review, the brief and audit are tracked artefacts, not
+only handoff notes. Preserve their stable `route_id` and `concept_id` values
+across harnesses and revisions. A handoff should name the artefact paths and
+reviewed revision, and should not replace the audit's exact explanation,
+example/action, interpretation, and limitation locators. Audit statuses are
+`verified`, `gap`, `scope-reduced`, or `not-checked`; a scope reduction needs a
+rationale, and a gap or unchecked row on a primary or alternative route remains
+blocking until resolved. Mechanical shape checks do not replace human review
+of whether the prose teaches.
+
 ## Harness Smoke Test
 
 Before adding or changing a native adapter, use a disposable checkout and

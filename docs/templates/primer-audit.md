@@ -1,11 +1,14 @@
 # Primer audit: <title>
 
 - Issue and milestone: <primary issue; related issues>
+- Audit revision: <stable revision identifier>
+- Source revision: <exact commit or source artefact revision>
+- Tracked path: <repository path to this audit>
 - Starting branch: <branch>
 - Reviewer(s): <names or harnesses>
 - Date: <YYYY-MM-DD>
 - Reviewed revision: <commit, not only a branch>
-- Brief reviewed: <path or issue comment>
+- Brief reviewed: <tracked path and brief revision>
 - Review boundary: <whole-document, sampled, executed, or not checked for each method>
 - Teaching-case contract: <path, or documented reason it is not applicable>
 - Core-concept depth matrix: <path and revision reviewed>
@@ -25,9 +28,9 @@
 | HTML, PDF, metadata, and committed outputs | | | | | |
 | Residual uncertainty and follow-up questions | | | | | |
 
-Use status values such as `verified`, `reported by an earlier reviewer`,
-`unresolved`, or `not checked`. Record whether evidence is whole-document or
-sampled; an inventory or green build is not a correctness claim.
+Use only `verified`, `gap`, `scope-reduced`, or `not-checked`. Record whether
+evidence is whole-document or sampled; an inventory or green build is not a
+correctness claim. Preserve the brief's stable `route_id` and `concept_id`.
 
 For a process, system, or applied-method primer, complete this additional
 trace. A curated fixture, schema validation, or successful smoke test is not
@@ -55,16 +58,24 @@ count as evidence of depth.
 
 ## Adversarial depth gate
 
-For every primary or alternative route and every core-concept row in the brief,
-record whether a reader can learn the mechanism, perform or inspect the stated
-operation, interpret the result, and recognise a material limit. A row is not
-verified by a definition, heading, list, citation, fixture, or passing smoke
-test. Unresolved substantive gaps block PR readiness or require an explicit
+For every route and core-concept row in the brief, record whether a reader can
+learn the mechanism, perform or inspect the stated operation, interpret the
+result, and recognise a material limit. A row is not verified by a definition,
+heading, list, citation, fixture, or passing smoke test. Unresolved substantive
+gaps block PR readiness for primary or alternative routes or require an explicit
 scope reduction.
 
-| Route/concept | Mechanism passage | Reader action or worked evidence | Interpretation passage | Limit/failure passage | Status and finding | Scope decision |
-|---|---|---|---|---|---|---|
-| | | | | | | |
+| route_id | route tier | concept_id | exact explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status (`verified`\|`gap`\|`scope-reduced`\|`not-checked`) | finding | scope decision |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | | | |
+
+A `scope-reduced` status must include the rationale in the scope decision. A
+`gap` or `not-checked` row blocks readiness when its route tier is `primary` or
+`alternative`; a `reference-only` row does not block the teaching gate.
+Mechanical checks may validate these columns, IDs, tiers, statuses, and
+non-empty required cells. Human review must decide whether the cited prose
+genuinely teaches the mechanism, action, interpretation, and limitation. Do not
+add quotas.
 
 For published code, map the reader-facing snippet to its executable example or
 state that it is illustrative only. Check fixture schema, dependencies,
