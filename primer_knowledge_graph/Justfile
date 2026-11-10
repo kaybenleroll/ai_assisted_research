@@ -2,7 +2,7 @@ SOURCE_MD   := "primer_knowledge_graph.md"
 PROJECT_DIR := "primer_knowledge_graph"
 TITLE       := "Building Knowledge Graphs: From Sources to Verifiable Queries"
 AUTHOR      := "Mick Cooney"
-DATE        := "9 November 2026"
+DATE        := "10 November 2026"
 HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
 

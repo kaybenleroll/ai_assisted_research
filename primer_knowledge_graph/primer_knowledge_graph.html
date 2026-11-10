@@ -627,7 +627,7 @@ code span.wa { color: #da4453; } /* Warning */
   <nav class="navbar">
     <span class="navbar-brand">Building Knowledge Graphs: From Sources
 to Verifiable Queries</span>
-    <span class="navbar-meta">9 November 2026</span>
+    <span class="navbar-meta">10 November 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
   </nav>
@@ -645,7 +645,9 @@ the Graph</a>
 <ul>
 <li><a href="#source-roles-and-competency-questions" id="toc-source-roles-and-competency-questions"><span class="toc-section-number">2.1</span> Source Roles and Competency
 Questions</a></li>
-<li><a href="#completeness-and-negative-answers" id="toc-completeness-and-negative-answers"><span class="toc-section-number">2.2</span> Completeness and Negative
+<li><a href="#work-the-sourcedate-distinction-for-q2" id="toc-work-the-sourcedate-distinction-for-q2"><span class="toc-section-number">2.2</span> Work the source/date distinction
+for Q2</a></li>
+<li><a href="#completeness-and-negative-answers" id="toc-completeness-and-negative-answers"><span class="toc-section-number">2.3</span> Completeness and Negative
 Answers</a></li>
 </ul></li>
 <li><a href="#preserve-mentions-entities-and-identifiers-as-different-things" id="toc-preserve-mentions-entities-and-identifiers-as-different-things"><span class="toc-section-number">3</span> Preserve Mentions, Entities, and
@@ -728,6 +730,8 @@ Diagnose</a>
 Verification</a></li>
 <li><a href="#gold-sets-and-useful-measures" id="toc-gold-sets-and-useful-measures"><span class="toc-section-number">11.2</span> Gold Sets and Useful
 Measures</a></li>
+<li><a href="#work-one-adjudication-before-scoring" id="toc-work-one-adjudication-before-scoring"><span class="toc-section-number">11.3</span> Work one adjudication before
+scoring</a></li>
 </ul></li>
 <li><a href="#release-update-and-govern" id="toc-release-update-and-govern"><span class="toc-section-number">12</span> Release, Update, and Govern</a>
 <ul>
@@ -781,6 +785,14 @@ These designs are illustrative and the Neo4j test is prospective. Start
 with the section introduction before either branch; resume the main
 route at <a href="#analyse-a-projection-in-r">Analyse a Projection in
 R</a>.</p>
+<p>The headings place the optional representation branch before the R
+section so the two non-Python representations can be compared together.
+That presentation order is not an additional dependency. For the primary
+teaching route, read the Python/DuckDB sections through diagnosis and
+correction, then read the R projection and the validation/evaluation
+sections. Treat the RDF, property graph, and storage sections as a side
+branch that you can enter after the Python ledger and leave before
+returning to the R route.</p>
 <p><em>Verified against primary sources for Construct and Query with
 Python and DuckDB; Represent Claims in RDF and Property Graphs; Analyse
 a Projection in R; and Validate, Evaluate, and Diagnose; unverified
@@ -892,7 +904,42 @@ limits. In particular, the recorded owner is an answer to a source
 question, while ownership on a later date is a different temporal
 question. A graph that always returns one Alex person has encoded an
 assumption, not demonstrated better coverage.</p>
-<h2 data-number="2.2" id="completeness-and-negative-answers"><span class="header-section-number">2.2</span> Completeness and Negative
+<h2 data-number="2.2" id="work-the-sourcedate-distinction-for-q2"><span class="header-section-number">2.2</span> Work the source/date
+distinction for Q2</h2>
+<p>Q2 is deliberately different from Q1. The first question asks what
+the register records about applicability on a date inside
+<code>c1</code>’s bounded interval. The second asks what the register
+names as the owner and then tests whether that ownership can be carried
+forward to a later date. A reader should not answer both questions by
+selecting the same row and copying its date treatment.</p>
+<p>Work the reasoning in four steps:</p>
+<ol type="1">
+<li>Select <code>c2</code> by the question’s source scope
+(<code>s-register</code>), relation (<code>owned_by</code>), and object
+(<code>policy:travel-v1</code>). This gives Morgan Lee and the locator
+<code>R1:P1-P2</code>.</li>
+<li>Read the temporal fields rather than treating the row as timeless.
+In the fixture, <code>c2</code> starts on 1 January and has an
+<code>unknown</code> end with support only through 1 January. The source
+supports the recorded owner on that date, not an unqualified assertion
+about every later date.</li>
+<li>Apply the question date, 1 March, to the temporal contract. Because
+it is after <code>supported_through</code>, the result is
+<code>indeterminate</code>, not <code>supported</code> and not
+<code>refuted</code>.</li>
+<li>Return both pieces of information: “the register names Morgan Lee on
+1 January” and “continued ownership on 1 March is indeterminate from the
+supplied evidence”. Include <code>c2</code> and its locator so a
+reviewer can inspect the same decision.</li>
+</ol>
+<p>This is a useful manual query even though the bounded executable does
+not assert the complete owner presentation as an end-to-end operation.
+The distinction is the teaching point: an answer can be valid for a
+source record and still be insufficient for a later-date question. If a
+system returned Morgan Lee as the 1 March owner without the
+qualification, inspect temporal selection and answer policy rather than
+merging another person or changing the graph storage.</p>
+<h2 data-number="2.3" id="completeness-and-negative-answers"><span class="header-section-number">2.3</span> Completeness and Negative
 Answers</h2>
 <p>The boundary also governs negative answers. The absence of a matching
 claim means only that no claim was found in this fixture after applying
@@ -2514,6 +2561,65 @@ resolution and its abstention rule. Each failure points to a different
 repair and should be recorded with the source span, intermediate claim
 or candidate decision, selected evidence, and policy version that
 produced the answer.</p>
+<p>Use the observed answer to choose the next inspection. The following
+decision table makes the diagnostic route concrete:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Observed answer on 15 March</th>
+<th>Inspect first</th>
+<th>Evidence to retain</th>
+<th>Targeted repair and retest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supported</code>, with only <code>c1</code> selected</td>
+<td>Candidate extraction and negative-pattern handling</td>
+<td>Retained <code>M1:paragraph-3</code> span, candidate list,
+extraction method and policy revision</td>
+<td>Restore the negative <code>c5</code> candidate, rebuild, and rerun
+the conflict query</td>
+</tr>
+<tr>
+<td><code>abstain: conflicting evidence</code>, but no <code>c5</code>
+locator</td>
+<td>Evidence joins and source/claim linkage</td>
+<td>Claim IDs, source IDs, locators and the query result before
+aggregation</td>
+<td>Repair the evidence link or retrieval boundary, then rerun the same
+question</td>
+</tr>
+<tr>
+<td><code>supported</code> for a date after <code>c1</code> ends</td>
+<td>Temporal predicate and end-kind validation</td>
+<td><code>valid_from</code>, exclusive <code>valid_to</code>, requested
+date and temporal classification</td>
+<td>Correct the date filter or interval data, then test the boundary
+dates again</td>
+</tr>
+<tr>
+<td>Morgan returned as the 1 March owner without qualification</td>
+<td>Unknown-horizon handling and answer policy</td>
+<td><code>c2</code> support horizon, requested date and selected answer
+rule</td>
+<td>Preserve the recorded 1 January owner but return indeterminate
+continuation</td>
+</tr>
+</tbody>
+</table>
+<p>The table separates a missing assertion from a present assertion that
+is misinterpreted. Changing the schema cannot recover a candidate that
+extraction discarded, and adding another edge cannot justify a date that
+the evidence does not support. A retest should use the same question,
+source boundary and policy version so that the change in answer can be
+attributed to the repair.</p>
 <p><strong>Inference</strong> derives a conclusion from premises under
 an explicit rule. For example, a system could define a rule that turns
 an <code>applies_to</code>/<code>belongs_to</code> path into a carefully
@@ -2559,6 +2665,72 @@ policy version. The fixture’s date cases are useful regression examples,
 but their expected outputs were chosen from the same synthetic input and
 policy; passing them does not estimate accuracy on unfamiliar
 documents.</p>
+<h2 data-number="11.3" id="work-one-adjudication-before-scoring"><span class="header-section-number">11.3</span> Work one adjudication before
+scoring</h2>
+<p>Consider Q4, agreement on version 1 for Atlas on 15 March. An
+independent adjudicator would first freeze the question, source
+boundary, and conservative answer policy without seeing a system result.
+They would then inspect the retained evidence and write a gold item such
+as:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Gold-item field</th>
+<th>Q4 adjudication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Question and scope</td>
+<td>Does the register and the minutes agree that version 1 applies to
+Atlas on 15 March? Use both named sources and the requested date.</td>
+</tr>
+<tr>
+<td>Supporting/opposing evidence</td>
+<td>Positive <code>c1</code> from <code>s-register</code>,
+<code>R1:P1-P2</code>; negative <code>c5</code> from
+<code>s-minutes</code>, <code>M1:paragraph-3</code>.</td>
+</tr>
+<tr>
+<td>Temporal decision</td>
+<td>Both assertions are applicable on 15 March under the declared
+half-open and unknown-horizon rules.</td>
+</tr>
+<tr>
+<td>Gold answer</td>
+<td><code>abstain: conflicting evidence</code>; retain both claim IDs
+and locators.</td>
+</tr>
+<tr>
+<td>Adjudication record</td>
+<td>Reviewer, evidence revision, policy revision, reasoning, and any
+unresolved disagreement.</td>
+</tr>
+</tbody>
+</table>
+<p>Only after that record is frozen should the system answer the same
+question. Compare the complete unit: answer label, selected evidence,
+and required abstention. A system that returns
+<code>abstain: conflicting evidence</code> but cites only
+<code>c1</code> has an evidence-retrieval or citation failure even
+though its label looks correct. A system that returns
+<code>supported</code> has a policy or aggregation failure because it
+ignored the opposing applicable assertion. A system that returns
+<code>abstain: no evidence</code> has a retrieval or temporal-filter
+failure because evidence was available. This is the adjudication
+operation the scores are meant to evaluate.</p>
+<p>The current Q1–Q5 table cannot claim this independent procedure was
+performed: its answers and adjudications were constructed from the same
+fixture and policy for teaching. It is therefore a worked scoring
+walkthrough and regression expectation, not a gold-set accuracy result.
+To turn it into an evaluation, freeze labels from retained source
+evidence before running the system, include cases from a held-out source
+family, and retain disagreements rather than silently converting them
+into a consensus label.</p>
 <p>For the conservative target policy, a small regression table is:</p>
 <table>
 <colgroup>
