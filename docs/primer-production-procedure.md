@@ -23,6 +23,7 @@ decisions visible and explain exceptions.
    settle the outline, register the document, and record the build route.
 4. **Draft:** write from the dependency structure, integrating examples,
    figures, equations, limitations, and practical use cases.
+   Complete the post-draft teaching-depth checkpoint before audit handoff.
 5. **Independent review:** review the whole document for coverage and claims;
    sample representative passages and outputs for depth, structure, and layout.
 6. **Render and verify:** build the committed HTML/PDF outputs in containers and
@@ -131,6 +132,29 @@ failure mode or limitation. Prefer a small hand-worked example before a larger
 real-world case. Keep code examples aligned with the repository's executable
 example policy: illustrative snippets are not silently presented as tested
 programs.
+
+### Post-draft teaching-depth checkpoint
+
+Before handing the draft to audit, compare every drafted `primary` and
+`alternative` route with its brief and route-keyed worked-case trace. Follow the
+reader-facing transitions from input to operation, intermediate reasoning,
+result, interpretation, and limit. For a route without a continuous case,
+compare the draft with its justified alternative teaching device and the
+understanding promised in the brief. Record the source revision, draft
+locators, findings, and decisions by `route_id` in the tracked brief.
+
+An unsupported transition blocks audit handoff until the prose is expanded or
+the route is explicitly narrowed or demoted. Record each scope reduction, its
+reason, and its effect on the reader promise; update the brief and reader-facing
+scope to match, preserving stable IDs. This qualitative checkpoint precedes and
+does not replace the independent whole-document audit.
+
+Calibration based on #398: a case's executable examples and checks pass, but
+the draft jumps from input and operation to a result without explaining the
+intermediate reasoning or how the reader should interpret it. The checkpoint
+fails for that route: passing examples do not supply those transitions. Expand
+the explanation or explicitly narrow or demote the route and record the effect
+on the reader promise before audit handoff.
 
 ## 5. Run the post-draft audit
 
