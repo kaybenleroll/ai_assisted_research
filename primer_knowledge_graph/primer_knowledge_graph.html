@@ -970,11 +970,15 @@ candidate mentions and claims ──► accept, reject, or abstain
         │                           (retain reason and evidence)
         ▼
 source-specific assertion ledger ──► DuckDB / RDF / property-graph mapping</code></pre>
-<p>The executable removes candidate evidence metadata before comparing
-every canonical field of constructed <code>c1</code>, <code>c4</code>,
-and <code>c5</code> with the fixture, then loads the fixture ledger. The
-evidence spans remain in the construction output, not in the DuckDB
-claims table. The other ledger claims are curated: <code>c2</code>
+<p>The executable builds source-derived <code>c1</code>,
+<code>c4</code>, and <code>c5</code> from the retained excerpts, keeps
+their evidence spans in an <code>extraction_evidence</code> table, and
+merges them with the curated remainder of the ledger before loading
+DuckDB. It also compares the current constructed rows with the fixture
+as a diagnostic, rather than requiring the fixture to be edited before a
+changed source can be built. A small mutation test changes the
+register’s end date and verifies that the rebuilt <code>c1</code>
+changes with it. The other ledger claims are curated: <code>c2</code>
 records ownership, <code>c3</code> and <code>c7</code> project
 affiliation, and <code>c6</code> the register’s version 2 applicability.
 They are not extracted by this slice, and their complete source passages
@@ -1356,11 +1360,12 @@ definitive answer.</p>
 its inputs are
 <code>primer_knowledge_graph/examples/source_records.json</code> and the
 canonical <code>primer_knowledge_graph/examples/fixture.json</code>.
-Both use synthetic records. The script applies the bounded construction
-slice, compares constructed claims with the ledger, validates references
-and intervals, writes claims and provenance to a file-backed DuckDB
-database, closes it, reopens it read-only, and runs bounded queries with
-assertions. It is not a general source extractor. Its manifest entry is
+Both use synthetic records. The script constructs source-derived claims,
+merges them with explicitly curated rows, reports any diagnostic drift
+from the fixture, validates references and intervals, writes claims and
+provenance to a file-backed DuckDB database, closes it, reopens it
+read-only, and runs bounded queries with assertions. It is not a general
+source extractor. Its manifest entry is
 <code>knowledge-graph-python</code> in
 <code>primer_knowledge_graph/examples/manifest.toml</code>. From the
 repository root, build the primer’s runtime if necessary and run:</p>
@@ -2356,13 +2361,13 @@ Atlas from sometime next spring.”, matches none of the supported date
 and sentence patterns. The executable returns no candidate for that
 record and a refusal with its source, method and reason
 <code>no supported date and sentence pattern</code>; it does not invent
-a date. For selected candidates, canonical comparison fails on a
-missing, duplicate or differing constructed claim. The ledger validator
-then checks its own structural rules, including the fixture’s references
-and temporal combinations; mutation tests confirm that specific invalid
-copies are rejected. This is a sequence of executable checks, not a
-human review of source truth. The refusal is separate from the seven
-curated-and-constructed ledger rows.</p>
+a date. The diagnostic fixture comparison reports a changed constructed
+claim without preventing a source-derived build, while the ledger
+validator checks its own structural rules, including the fixture’s
+references and temporal combinations; mutation tests confirm that
+specific invalid copies are rejected. This is a sequence of executable
+checks, not a human review of source truth. The refusal is separate from
+the seven curated-and-constructed ledger rows.</p>
 <p>The projection check compares positive triples, not dates,
 provenance, credibility or the numerical meaning of weights. As the R
 analysis illustrates, passing it does not make the projection a
@@ -2582,13 +2587,12 @@ example uses a fresh temporary DuckDB file and tests that it can be
 reopened; it does not itself create a release manifest, preserve input
 snapshots or publish a database. Those are production extensions, not
 features to infer from the example.</p>
-<p>The following small release diff is illustrative rather than
-executed. Suppose release 3 contains <code>c1</code> from the original
-register, bounded from 1 January through 1 April, and a later source
-correction says that the policy ended on 1 March. Release 4 should add
-the corrected source version and a replacement assertion, mark the
-earlier assertion as superseded under the release policy, and recompute
-any projection or answer that depended on it.</p>
+<p>The following small release sequence is illustrative rather than
+executed. It shows two different repairs: first, recovering a negative
+assertion that an extractor missed; second, admitting a later correction
+to the register. Each release should retain its inputs and policy so
+that the changed answer can be explained rather than merely
+replaced.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -2607,22 +2611,41 @@ any projection or answer that depended on it.</p>
 <tbody>
 <tr>
 <td>3</td>
-<td><code>c1</code> is applicable; minutes <code>c5</code> is also
-applicable and negative.</td>
-<td><code>abstain: conflicting evidence</code></td>
-<td>The original register, minutes, claims, and answer policy used by
-release 3.</td>
+<td>The extractor missed negative <code>c5</code>; only positive
+<code>c1</code> is loaded.</td>
+<td><code>supported</code> — an evaluation failure if the gold evidence
+includes the minutes.</td>
+<td>The original inputs, the incomplete extraction, and the incorrect
+answer.</td>
 </tr>
 <tr>
 <td>4</td>
-<td>Replacement assertion says version 1 ended on 1 March;
-<code>c5</code> remains indeterminate after its support horizon.</td>
-<td><code>abstain: indeterminate temporal scope</code></td>
-<td>Release 3 and its original answer, plus the correction and the new
+<td>Extraction preserves applicable negative <code>c5</code>;
+<code>c1</code> still covers 15 March.</td>
+<td><code>abstain: conflicting evidence</code></td>
+<td>Release 3 and its original answer, plus the changed method and
+corrected answer.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>A corrected register version replaces <code>c1</code> with an end on
+1 March; <code>c5</code> remains applicable and negative.</td>
+<td><code>refuted</code></td>
+<td>Releases 3 and 4, the corrected source, and the new current
 answer.</td>
 </tr>
 </tbody>
 </table>
+<p>The failure-to-release path is explicit. An evaluation item for 15
+March returns <code>supported</code>, while its gold record includes the
+retained minutes sentence and expects conflict. Retrieval has succeeded
+because the sentence is available; extraction is the first failing stage
+because the negative assertion is absent. After the extraction rule is
+corrected, release 4 reruns the item and returns conflict. A later
+register correction then changes the applicable positive evidence, so
+release 5 reruns the same item and returns <code>refuted</code>. The
+answer changes for two different reasons, and the stored intermediate
+evidence makes those reasons distinguishable.</p>
 <p>The important operation is not overwriting the <code>valid_to</code>
 value in place. It is recording the new source and assertion version,
 identifying the release that adopted it, and tracing affected answers,
