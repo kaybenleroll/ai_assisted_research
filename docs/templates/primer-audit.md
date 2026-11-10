@@ -77,6 +77,22 @@ non-empty required cells. Human review must decide whether the cited prose
 genuinely teaches the mechanism, action, interpretation, and limitation. Do not
 add quotas.
 
+For calibration, a catalogue entry that names a technique, lists features, and
+cites a source remains a `gap` even if the row passes validation. A suitable
+worked calculation, explained comparison or counterexample, or traceable case
+shows the reasoning and reader action, supports an interpretation, and makes a
+material limit clear. Cite the actual passages: for example,
+`primer_example/primer_example.md`, section “Choosing a model”, paragraph
+beginning “For this sample”, or a source line and named example, at the recorded
+revision. Use distinct locators when the evidence is in different places.
+
+The primary route teaches the main path; an alternative route promises another
+taught path and must meet the same gate. Reference-only material is for lookup
+and its gaps do not block that gate. For `scope-reduced`, identify the removed
+or demoted promise, rationale, and corresponding changes to the brief and
+reader-facing scope. An unaddressed omission is a `gap`, not a scope decision;
+use `not-checked` when the evidence has not been reviewed.
+
 For published code, map the reader-facing snippet to its executable example or
 state that it is illustrative only. Check fixture schema, dependencies,
 ordering conventions, and expected results; a smoke test that exercises a

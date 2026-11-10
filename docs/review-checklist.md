@@ -42,6 +42,28 @@ replace visual inspection of representative rendered pages.
 - Apply V1: address the reader as “you”; use “we” in derivations. Apply R4 by keeping evidence strength and likelihood in separate uncertainty sentences. Apply M7 by giving each table a lead-in sentence.
 - Check that examples are interpreted after they appear: state what each demonstrates, its assumptions or decisions, and its limits. For a long primer, record whether a running example or a set of local examples best serves the subject.
 
+Calibrate the depth gate against the reader's promised task. Reject a shallow
+catalogue entry even when every schema cell is populated: naming a method,
+listing its features, and linking a citation do not explain how or why it
+works. For each primary or alternative route, inspect the actual passages for
+mechanism or reasoning, a reader action, worked evidence, interpretation, and a
+material limitation. A worked calculation with inputs and intermediate steps,
+an explained comparison or counterexample, or a traceable case can supply the
+evidence when it supports that task; a bare output or unexamined fixture cannot.
+Mark missing or inadequate teaching as `gap`, or `not-checked` if it was not
+reviewed. A primary route is the main teaching path; an alternative is another
+path the brief promises to teach and is held to the same gate. A reference-only
+route is signposted for lookup and its gaps do not block that gate.
+
+Give each evidence cell a locator that identifies the passage at the recorded
+revision, such as `primer_example/primer_example.md`, section “Choosing a
+model”, paragraph beginning “For this sample”, or a source line and named
+example. Locate explanation, action or example, interpretation, and limitation
+separately where they occur in different places; a document title or section
+name alone is not precise enough. If scope is reduced, record what promise was
+removed or demoted, why, and where the brief and reader-facing scope now say
+so. Do not label an unresolved omission `scope-reduced` merely to pass the gate.
+
 From the repository root, set `md` to the Markdown source under review. Until #159 supplies the automated hedge check, this command must return no matches:
 
 ```bash
