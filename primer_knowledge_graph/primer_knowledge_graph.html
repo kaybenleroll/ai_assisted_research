@@ -1381,6 +1381,18 @@ standalone run. DuckDB documents <a href="https://duckdb.org/docs/stable/clients
 and read-only connections</a>; persistence here means the script can
 reopen and query its file, not that it publishes an enduring
 release.</p>
+<p>To test a changed retained source without editing the fixture,
+provide a copy of the source input through
+<code>SOURCE_RECORDS_PATH</code> and a fresh <code>EXAMPLE_OUT</code>
+directory. The script builds the source-derived rows, loads and queries
+them, reports which fixture rows drifted, and skips only the frozen
+current-fixture answer assertions when drift is deliberate. Structural
+validation and the source-evidence joins still run. For example,
+changing the register’s end date to 1 March produces a rebuilt
+<code>c1</code> with that exclusive end and returns <code>refuted</code>
+for the 15 March question because the applicable minutes assertion is
+negative. This is a bounded source-edit demonstration, not a general
+ingestion or migration tool.</p>
 <p>The fixture contains eight entities, three source records, seven
 mentions and seven claim records. It also contains five
 <code>relations</code> for a separate analytical projection. The Python
