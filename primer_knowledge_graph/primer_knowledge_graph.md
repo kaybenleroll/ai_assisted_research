@@ -144,9 +144,17 @@ answer.
 
 Provenance makes an answer auditable: which source version supported which assertion, what activity extracted or reviewed it, and which release and selection rule produced the answer. The W3C PROV Ontology (PROV-O) vocabulary models entities, activities, and agents and can inform an implementation. Even without adopting PROV-O, preserve stable source identifiers, version or digest, source and ingestion dates where known, reproducible locator, extraction or review method, and the responsible process or agent. A source publisher, the person quoted, and the extractor are different roles and should not be collapsed.
 
+For the Northbridge register, one useful provenance chain is `s-register` as the source entity, an extraction activity that records the parser version and retained span, a review activity that accepts or changes the candidate claim, and a named process or agent responsible for that activity. A later release can then say that `c1` was derived from the register's `R1:P1-P2` span by one extraction run and included after one review rule, without implying that the extractor authored the policy. If the register is corrected, retain a new source version and connect the changed claim to the new activity; do not rewrite the old claim and lose the explanation of what an earlier release contained.
+
+This distinction answers different audit questions. “Which document did the answer come from?” needs the source and locator. “How did this claim enter the graph?” needs the extraction or review activity and method version. “Who may approve its publication?” needs an accountable agent and release record. A checksum proves which bytes were processed, but it does not prove that the source was authoritative or that the extraction rule interpreted it correctly.
+
 ### Valid Time and Observation Time
 
 Time commonly has at least two axes. Valid time describes when the asserted relationship holds in the domain; transaction or observation time describes when the system recorded that assertion. The fixture's `valid_from` and `valid_to` encode valid time, while its `sources[].published` gives source publication dates. It has no ingestion timestamp or transaction history, so it cannot answer “what had the system recorded by 20 March?” without an external release record. A corrected register imported on 1 May should not rewrite the evidence available in an earlier release. Preserve both the old and new source versions and state whether a historical query asks what was known then or what current evidence says about then.
+
+Consider `c1`, which is valid from 1 January until 1 April. A query asking whether version 1 applied on 31 March can use its valid interval; a query asking what the graph knew on 20 March also needs a release or ingestion timestamp showing that `c1` had already been admitted. A source published on 10 March might be observed by the system on 12 March, reviewed on 14 March, and published in graph release 3 on 16 March. Those dates answer different questions. If a corrected source arrives on 1 May, a current query about 31 March may use the correction, while a reconstruction of release 3 must use only the evidence admitted by that release.
+
+When a schema stores only `valid_from` and `valid_to`, it can answer a domain-time question but cannot reconstruct the graph's historical knowledge. That is not a reason to invent an observation date from the source publication date. Add the missing release history or state that the historical query is unsupported.
 
 ### Conflict and Authority
 
@@ -529,6 +537,35 @@ Exercise only the fixed query patterns needed for these cases, using parameteris
 
 The companion `examples/r/knowledge_graph.R` hard-codes the fixture's eight entity identifiers and five positive-projection relations. It uses `igraph` to create a directed graph, and `tidygraph` to calculate node summaries. It does not read the JSON or query DuckDB, so changes to the fixture require the companion data to be kept in sync. This projection intentionally drops end kind, support horizon, polarity, provenance and claim identity; it is therefore undated and cannot implement the indeterminate answer policy. The [igraph R documentation](https://igraph.org/r/doc/) describes the graph operations.
 
+Run the companion from the repository root with `just examples knowledge_graph knowledge-graph-r`. The command executes the pinned R runtime and checks the path, component count, vertex count, and edge count. For an interactive exploration, open the script after the check and inspect the printed `node_summary`; the checked command is the reproducible baseline, while interactive filtering and plotting are exploratory operations.
+
+The essential construction is short because the graph has already been reduced to an edge list, not because the modelling problem has disappeared. `vertices` preserves the two isolated Alex entities, and `relations` preserves edge types and unit weights for this particular structural analysis. `graph_from_data_frame()` joins those tables by the `name` column and creates a directed graph; it does not infer that two equal labels denote the same person.
+
+**R:**
+
+```r
+graph <- graph_from_data_frame(
+  relations,
+  directed = TRUE,
+  vertices = entities |> rename(name = id)
+)
+
+path <- shortest_paths(
+  graph,
+  from = "policy:travel-v1",
+  to = "org:northbridge",
+  weights = E(graph)$weight,
+  mode = "out",
+  output = "vpath"
+)$vpath[[1]]
+
+weak_components <- components(graph, mode = "weak")
+```
+
+The companion converts the path vertices to labels and reports `Northbridge Travel Policy v1 -> Atlas -> Northbridge`, with unit cost 2. It reports three weak components: the main group and the two isolated Alex vertices. The `tidygraph` transformation then adds total degree and component membership to each node, which is useful for inspection but does not change the evidence represented by the graph.
+
+This is a projection analysis, not a second claim store. The path is a sequence of edges in the selected positive topology; it does not establish that the policy was valid on the requested date, that the register outranks the minutes for every purpose, or that the path is causal. The example therefore demonstrates both the value of graph operations and the reason to return to the DuckDB claims and assertions when an answer needs dates, polarity, provenance, or source-specific evidence.
+
 ### Build the Positive Projection
 
 The edge list has one row per directed relation. Its five rows appear in the edge-list table; each has weight 1. The vertex table also supplies all eight identifiers, including the two Alex entities that have no edges. Passing that table to `graph_from_data_frame()` preserves those isolated vertices rather than constructing vertices solely from edge endpoints.
@@ -564,6 +601,8 @@ These operations answer different questions. **Validation** asks whether records
 The refusal and validation trace makes the boundary observable. The retained sentence at `S2:1`, “Travel Policy v1 applies to Atlas from sometime next spring.”, matches none of the supported date and sentence patterns. The executable returns no candidate for that record and a refusal with its source, method and reason `no supported date and sentence pattern`; it does not invent a date. For selected candidates, canonical comparison fails on a missing, duplicate or differing constructed claim. The ledger validator then checks its own structural rules, including the fixture’s references and temporal combinations; mutation tests confirm that specific invalid copies are rejected. This is a sequence of executable checks, not a human review of source truth. The refusal is separate from the seven curated-and-constructed ledger rows.
 
 The projection check compares positive triples, not dates, provenance, credibility or the numerical meaning of weights. As the R analysis illustrates, passing it does not make the projection a source-resolved, dated view.
+
+The same distinction helps diagnose a failed answer. If the minutes' negative assertion `c5` is absent, inspect retrieval and extraction before changing the graph schema. If `c5` is present but the answer ignores it, inspect the evidence-selection or conflict policy. If the answer cites `c1` for a date after its bounded end, inspect temporal filtering. If Morgan is linked correctly but Alex is merged without an identifier, inspect identity resolution and its abstention rule. Each failure points to a different repair and should be recorded with the source span, intermediate claim or candidate decision, selected evidence, and policy version that produced the answer.
 
 **Inference** derives a conclusion from premises under an explicit rule. For example, a system could define a rule that turns an `applies_to`/`belongs_to` path into a carefully named organisational association. The current Python example only returns the path; it does not implement that rule or materialise a new claim. Before adding it, specify its meaning, acceptable predicates, scope, source restrictions and temporal overlap. If two half-open input intervals overlap, the derived relationship can hold at most during their intersection; if they do not overlap, the path is not evidence of a simultaneous relationship. Record both premise IDs, the rule version and the derivation run, so a corrected premise or rule can invalidate the result. A derived association is not the same as an explicit statement in the register.
 

@@ -1222,6 +1222,24 @@ source identifiers, version or digest, source and ingestion dates where
 known, reproducible locator, extraction or review method, and the
 responsible process or agent. A source publisher, the person quoted, and
 the extractor are different roles and should not be collapsed.</p>
+<p>For the Northbridge register, one useful provenance chain is
+<code>s-register</code> as the source entity, an extraction activity
+that records the parser version and retained span, a review activity
+that accepts or changes the candidate claim, and a named process or
+agent responsible for that activity. A later release can then say that
+<code>c1</code> was derived from the register’s <code>R1:P1-P2</code>
+span by one extraction run and included after one review rule, without
+implying that the extractor authored the policy. If the register is
+corrected, retain a new source version and connect the changed claim to
+the new activity; do not rewrite the old claim and lose the explanation
+of what an earlier release contained.</p>
+<p>This distinction answers different audit questions. “Which document
+did the answer come from?” needs the source and locator. “How did this
+claim enter the graph?” needs the extraction or review activity and
+method version. “Who may approve its publication?” needs an accountable
+agent and release record. A checksum proves which bytes were processed,
+but it does not prove that the source was authoritative or that the
+extraction rule interpreted it correctly.</p>
 <h2 data-number="6.2" id="valid-time-and-observation-time"><span class="header-section-number">6.2</span> Valid Time and Observation
 Time</h2>
 <p>Time commonly has at least two axes. Valid time describes when the
@@ -1235,6 +1253,22 @@ external release record. A corrected register imported on 1 May should
 not rewrite the evidence available in an earlier release. Preserve both
 the old and new source versions and state whether a historical query
 asks what was known then or what current evidence says about then.</p>
+<p>Consider <code>c1</code>, which is valid from 1 January until 1
+April. A query asking whether version 1 applied on 31 March can use its
+valid interval; a query asking what the graph knew on 20 March also
+needs a release or ingestion timestamp showing that <code>c1</code> had
+already been admitted. A source published on 10 March might be observed
+by the system on 12 March, reviewed on 14 March, and published in graph
+release 3 on 16 March. Those dates answer different questions. If a
+corrected source arrives on 1 May, a current query about 31 March may
+use the correction, while a reconstruction of release 3 must use only
+the evidence admitted by that release.</p>
+<p>When a schema stores only <code>valid_from</code> and
+<code>valid_to</code>, it can answer a domain-time question but cannot
+reconstruct the graph’s historical knowledge. That is not a reason to
+invent an observation date from the source publication date. Add the
+missing release history or state that the historical query is
+unsupported.</p>
 <h2 data-number="6.3" id="conflict-and-authority"><span class="header-section-number">6.3</span> Conflict and Authority</h2>
 <p>For the date 15 March, the register’s <code>c1</code> covers Atlas
 under version 1; the minutes’ <code>c4</code> asserts version 2 and
@@ -2168,6 +2202,54 @@ support horizon, polarity, provenance and claim identity; it is
 therefore undated and cannot implement the indeterminate answer policy.
 The <a href="https://igraph.org/r/doc/">igraph R documentation</a>
 describes the graph operations.</p>
+<p>Run the companion from the repository root with
+<code>just examples knowledge_graph knowledge-graph-r</code>. The
+command executes the pinned R runtime and checks the path, component
+count, vertex count, and edge count. For an interactive exploration,
+open the script after the check and inspect the printed
+<code>node_summary</code>; the checked command is the reproducible
+baseline, while interactive filtering and plotting are exploratory
+operations.</p>
+<p>The essential construction is short because the graph has already
+been reduced to an edge list, not because the modelling problem has
+disappeared. <code>vertices</code> preserves the two isolated Alex
+entities, and <code>relations</code> preserves edge types and unit
+weights for this particular structural analysis.
+<code>graph_from_data_frame()</code> joins those tables by the
+<code>name</code> column and creates a directed graph; it does not infer
+that two equal labels denote the same person.</p>
+<p><strong>R:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  relations,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> entities <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">name =</span> id)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">shortest_paths</span>(</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  graph,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="st">&quot;policy:travel-v1&quot;</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="st">&quot;org:northbridge&quot;</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">E</span>(graph)<span class="sc">$</span>weight,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;out&quot;</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;vpath&quot;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>)<span class="sc">$</span>vpath[[<span class="dv">1</span>]]</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>weak_components <span class="ot">&lt;-</span> <span class="fu">components</span>(graph, <span class="at">mode =</span> <span class="st">&quot;weak&quot;</span>)</span></code></pre></div>
+<p>The companion converts the path vertices to labels and reports
+<code>Northbridge Travel Policy v1 -&gt; Atlas -&gt; Northbridge</code>,
+with unit cost 2. It reports three weak components: the main group and
+the two isolated Alex vertices. The <code>tidygraph</code>
+transformation then adds total degree and component membership to each
+node, which is useful for inspection but does not change the evidence
+represented by the graph.</p>
+<p>This is a projection analysis, not a second claim store. The path is
+a sequence of edges in the selected positive topology; it does not
+establish that the policy was valid on the requested date, that the
+register outranks the minutes for every purpose, or that the path is
+causal. The example therefore demonstrates both the value of graph
+operations and the reason to return to the DuckDB claims and assertions
+when an answer needs dates, polarity, provenance, or source-specific
+evidence.</p>
 <h2 data-number="10.1" id="build-the-positive-projection"><span class="header-section-number">10.1</span> Build the Positive
 Projection</h2>
 <p>The edge list has one row per directed relation. Its five rows appear
@@ -2283,6 +2365,17 @@ curated-and-constructed ledger rows.</p>
 provenance, credibility or the numerical meaning of weights. As the R
 analysis illustrates, passing it does not make the projection a
 source-resolved, dated view.</p>
+<p>The same distinction helps diagnose a failed answer. If the minutes’
+negative assertion <code>c5</code> is absent, inspect retrieval and
+extraction before changing the graph schema. If <code>c5</code> is
+present but the answer ignores it, inspect the evidence-selection or
+conflict policy. If the answer cites <code>c1</code> for a date after
+its bounded end, inspect temporal filtering. If Morgan is linked
+correctly but Alex is merged without an identifier, inspect identity
+resolution and its abstention rule. Each failure points to a different
+repair and should be recorded with the source span, intermediate claim
+or candidate decision, selected evidence, and policy version that
+produced the answer.</p>
 <p><strong>Inference</strong> derives a conclusion from premises under
 an explicit rule. For example, a system could define a rule that turns
 an <code>applies_to</code>/<code>belongs_to</code> path into a carefully
