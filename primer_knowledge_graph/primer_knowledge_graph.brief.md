@@ -2,7 +2,7 @@
 
 - Issue and milestone: #398; related #397
 - Brief revision: `kg-398-brief-r2`
-- Source revision: `358bd6c`
+- Source revision: `539137c`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners who understand tables, JSON, basic
   Python or SQL, and reproducible data work, but do not yet understand graph
