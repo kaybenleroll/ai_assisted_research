@@ -28,6 +28,18 @@ class PrimerEvidenceFixtureTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                 self.assertIn("primer evidence check passed", result.stdout)
 
+    def test_revision_replay_demonstrates_rebinding_is_not_review(self):
+        case = FIXTURES / "revision-replay"
+        self.assertNotEqual((case / "primer-before.md").read_text(),
+                            (case / "primer-after.md").read_text())
+        result = self.run_fixture("revision-replay")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        expected = (case / "expected-review.md").read_text()
+        self.assertIn("not a fresh judgement", expected)
+        self.assertIn("Readiness must not carry forward", expected)
+        self.assertIn("route-one", expected)
+        self.assertIn("newly reviewed", expected)
+
     def test_invalid_pairs_fail_for_the_expected_reason(self):
         cases = {
             "empty": "required matrix table is missing",

@@ -87,6 +87,22 @@ recognised. Link the finding to the affected depth-gate row and mark that row
 success. A primary or alternative route with such an unresolved finding is
 not ready until its teaching is developed or its scope is explicitly reduced.
 
+After an audit, any change to the primer, tracked brief, examples, or published
+outputs triggers a second audit before readiness carries forward. Compare the
+previously audited revisions with the current artefacts; identify every
+changed artefact and the affected route/concept evidence rows. Re-review the
+changed passages, dependent reader-path transitions, claims, examples, and
+outputs within the affected scope, including any consequences for adjacent
+material. Record the revisions compared, exact locations, scope, reviewer,
+judgement and result in the tracked audit. Mark unresolved review or gaps as
+blocking where the route requires it. Rebinding revision metadata or rerunning
+a structural check alone is insufficient evidence of a fresh judgement.
+
+Distinguish evidence retained from the earlier audit, with its original revision
+and reason it remains applicable, from evidence newly reviewed or executed,
+with its current revision, method and result. Carry that distinction into any
+handoff and identify checks not repeated or still outstanding.
+
 After the row-by-row pass, review the document as a reader: could the intended
 reader explain the organising model, reproduce the central operation, interpret
 its result, and recognise when it fails? A negative answer is a readiness
