@@ -86,6 +86,29 @@ passes. Record unsupported claims, missed gaps, false positives and exact
 response evidence. A correct fixture judgement does not establish a complete
 primer audit.
 
+### Required calibration cases
+
+The forward-test set must also include these two cases. They are separate from
+the structural evidence checker because both require human judgement about
+whether the evidence teaches and whether a later review actually re-evaluated
+changed material.
+
+1. **Executed but shallow:** use `tests/fixtures/primer_evidence/executed-shallow/`.
+   The operation is marked `executed` and the command/result may be present,
+   but the reader-facing passage omits intermediate reasoning or interpretation.
+   The structural checker may pass; the audit must still record a teaching-depth
+   gap and block the affected primary route.
+2. **Source changed, audit rebound:** use
+   `tests/fixtures/primer_evidence/revision-replay/`. Compare the original
+   source and audit with the changed source and a metadata-only rebound. A
+   rebound that changes revision labels without recording affected passages,
+   transitions, claims and a fresh judgement must fail the process test. A
+   second audit that records those items may pass.
+
+Record the response and judgement for each case separately. Do not count a
+passing executable command, a changed revision string, or a structurally valid
+table as proof of teaching depth or re-audit completeness.
+
 ### Handoff
 
 ```text
