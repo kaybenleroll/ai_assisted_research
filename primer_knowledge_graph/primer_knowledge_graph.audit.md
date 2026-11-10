@@ -4,7 +4,7 @@
 - Audit revision: `kg-398-final-audit-r2`
 - Source revision: `358bd6c`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.audit.md`
-- Starting branch: `docs/398-knowledge-graph-revision`
+- Starting branch: `docs/398-knowledge-graph-main-checkout`
 - Reviewer(s): Codex, independent final content pass.
 - Date: 10 November 2026.
 - Reviewed revision: `358bd6c`
