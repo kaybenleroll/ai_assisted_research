@@ -17,10 +17,17 @@ Read `docs/primer-production-procedure.md`, `docs/templates/primer-brief.md`,
 Read the repository state before proposing edits: issue, branch, dirty paths,
 existing source or companion documents, and build recipe.
 
-Complete the brief template in the issue or an ignored `.scratch/` note. Define
-the reader, prerequisites, motivating problem, exclusions, dependency-led route,
-qualitative depth, examples, cases, figures, languages, evidence plan, and open
-decisions. Explain why the proposed structure solves the reader's problem.
+Create a tracked, revision-bound brief; an issue comment or ignored
+`.scratch/` note is supporting material, not the release brief. Record the
+brief revision and stable `route_id` and `concept_id` values; each concept row
+must reference its `route_id`. Each route row
+must use exactly one tier: `primary`, `alternative`, or `reference-only`.
+Each concept row must cover reader action, mechanism/reasoning, significance,
+teaching device, worked evidence, interpretation, limitations, downstream use,
+and source plan. Define the reader, prerequisites, motivating problem,
+exclusions, dependency-led route, qualitative depth, examples, cases, figures,
+languages, evidence plan, and open decisions. Explain why the proposed
+structure solves the reader's problem.
 
 Treat coverage and explanatory quality as the primary planning criteria. Build a
 coverage matrix for the topics a competent reader must understand and be able to
@@ -47,16 +54,19 @@ by itself, an end-to-end case. If no coherent case is appropriate, record the
 reason and identify the alternative teaching device that will carry the
 explanation.
 
-Map each core concept in the brief to its mechanism or reasoning, significance,
-conditions or limits, and an appropriate teaching device such as a worked case,
-comparison, counterexample, proof, or failure case. Do not use a heading count
-or word quota as a proxy for this mapping.
+Map each core concept in the brief to the schema fields above and to an
+appropriate teaching device such as a worked case, comparison, counterexample,
+proof, or failure case. Include downstream use and the source plan even when
+the concept is concise. Do not use a heading count, word quota, or example
+quota as a proxy for this mapping.
 
 Before drafting, review the matrix adversarially: ask what a reader would do to
 demonstrate understanding of each concept, what evidence in the primer would
 let them do it, and where the explanation could still be mistaken for a label or
 catalogue entry. Record unresolved rows as blocking planning gaps. A green build
 plan, fixture, or example manifest does not discharge a missing explanation.
+The later audit must retain the same identifiers and bind its evidence to the
+reviewed source revision; do not silently rename, merge, or omit rows.
 
 If delegation is useful, split bounded, disjoint questions by ownership. Give
 each worker a concrete question, scope, stop condition, and requested evidence;
