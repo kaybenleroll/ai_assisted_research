@@ -25,15 +25,23 @@ that the audit covers every brief row, uses only `verified`, `gap`,
 `scope-reduced` row.
 
 Treat `gap` or `not-checked` on a primary or alternative route as a blocker.
-Do not call a handoff ready while such a row remains unresolved. A
+Do not pass the content gate while such a row remains unresolved. A
 reference-only route may remain outside the teaching spine when the brief says
 so explicitly. Mechanical validation may establish shape and completeness, but
 the handoff must report the human judgement that the evidence genuinely
 teaches; render QA cannot supply that judgement or approve content depth.
 
-Distinguish executed checks from parsed examples, sampled visual checks,
-reported historical evidence, and unavailable checks. State the next action
-and its owner. Preserve secrets, private transcripts, and hidden reasoning.
+Report separate content-gate and release-readiness decisions, each with its
+status, evidence and revision, blockers, next action, and owner. A content pass
+does not establish release readiness: assess output freshness, metadata,
+required checks, review and render evidence separately. Mark missing or stale
+evidence as unverified or blocking, as appropriate. Distinguish executed checks
+from parsed examples, sampled visual checks, reported historical evidence, and
+unavailable checks. Keep secrets, private transcripts, and hidden reasoning out.
+
+For substantial or non-obvious primer work, include the verified commit map
+described in the portable template in the handoff or PR. It explains change
+history, not content quality; it sets no commit-count or merge-method quota.
 
 For a PR, identify one primary issue on the first line, list related issues on
 separate lines, state the milestone's completed and remaining work, and include
