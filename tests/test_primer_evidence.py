@@ -14,7 +14,8 @@ SPEC.loader.exec_module(MODULE)
 BRIEF = """# Primer brief: Test
 
 - Issue and milestone: #400 validator
-- Reviewed revision: abcdef1234567
+- Brief revision: brief-1
+- Source revision: abcdef1234567
 - Reader: engineers
 - Prerequisites: Python
 - Problem and motivation: test
@@ -37,6 +38,8 @@ BRIEF = """# Primer brief: Test
 AUDIT = """# Primer audit: Test
 
 - Starting branch: issue/400-test
+- Audit revision: audit-1
+- Source revision: abcdef1234567
 - Reviewer(s): reviewer
 - Date: 2026-11-10
 - Reviewed revision: abcdef1234567
@@ -98,6 +101,24 @@ class PrimerEvidenceTests(unittest.TestCase):
         errors = MODULE.validate(*self.files(audit=audit))
         self.assertTrue(any("no matching brief" in e for e in errors))
         self.assertTrue(any("revision does not match" in e for e in errors))
+
+    def test_unresolved_rows_may_record_missing_evidence(self):
+        audit = AUDIT.replace("primer.md:10", "MISSING — not reviewed").replace(
+            "primer.md:20", "MISSING — not reviewed").replace(
+            "primer.md:30", "MISSING — not reviewed").replace(
+            "primer.md:40", "MISSING — not reviewed").replace(
+            "- Readiness decision: ready", "- Readiness decision: not-ready").replace(
+                "| verified |", "| not-checked |", 1)
+        self.assertEqual(MODULE.validate(*self.files(audit=audit)), [])
+
+    def test_empty_and_malformed_matrices_are_rejected(self):
+        empty_brief = BRIEF[:BRIEF.rfind("| primary |")]
+        errors = MODULE.validate(*self.files(brief=empty_brief))
+        self.assertTrue(any("at least one row" in e for e in errors))
+
+        malformed = BRIEF + "| primary | route-two | concept-two | incomplete |\n"
+        errors = MODULE.validate(*self.files(brief=malformed))
+        self.assertTrue(any("malformed matrix row" in e for e in errors))
 
 
 if __name__ == "__main__":

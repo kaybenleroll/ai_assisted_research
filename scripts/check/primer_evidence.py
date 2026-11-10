@@ -19,24 +19,26 @@ READINESS = {"ready", "not-ready"}
 ID_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
 REVISION_RE = re.compile(r"^[0-9a-f]{7,64}$|^[A-Za-z0-9._/-]+@[0-9a-f]{7,64}$")
 LOCATOR_RE = re.compile(r"^(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+:[1-9][0-9]*$")
+MISSING_RE = re.compile(r"^MISSING(?:\s+[—-].+|\s*:.+)?$", re.I)
 PLACEHOLDER_RE = re.compile(r"<[^>]+>|\b(?:TODO|TBD|FIXME)\b|^\.\.\.$", re.I)
 
 BRIEF_FIELDS = (
-    "Issue and milestone", "Reader", "Prerequisites", "Problem and motivation",
+    "Issue and milestone", "Brief revision", "Source revision", "Reader", "Prerequisites", "Problem and motivation",
     "Intended outcome", "Scope", "Exclusions", "Proposed dependency-led route",
-    "Reviewed revision", "Teaching-case contract", "Core-concept depth matrix",
+    "Teaching-case contract", "Core-concept depth matrix",
     "Route classification and teaching spines",
 )
 AUDIT_FIELDS = (
-    "Starting branch", "Reviewer(s)", "Date", "Reviewed revision",
+    "Starting branch", "Audit revision", "Source revision", "Reviewer(s)", "Date", "Reviewed revision",
     "Brief reviewed", "Review boundary", "Core-concept depth matrix",
 )
 
 
 class Row:
-    def __init__(self, values: dict[str, str], line: int):
+    def __init__(self, values: dict[str, str], line: int, malformed: bool = False):
         self.values = values
         self.line = line
+        self.malformed = malformed
 
 
 def _clean(value: str) -> str:
@@ -78,8 +80,7 @@ def _tables(text: str) -> list[tuple[int, list[str], list[Row]]]:
         index += 2
         while index < len(lines) and "|" in lines[index] and lines[index].strip():
             values = [_clean(x) for x in lines[index].strip().strip("|").split("|")]
-            if len(values) == len(headers):
-                rows.append(Row(dict(zip(headers, values)), index + 1))
+            rows.append(Row(dict(zip(headers, values)), index + 1, len(values) != len(headers)))
             index += 1
         result.append((index - len(rows) - 2, headers, rows))
     return result
@@ -135,16 +136,16 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
         errors.append("audit: required section 'Adversarial depth gate' is missing")
     if "Readiness decision" not in audit_meta:
         errors.append("audit: missing metadata 'Readiness decision'")
-    if brief_meta.get("Reviewed revision") and "Reviewed revision" not in audit_meta:
-        errors.append("audit: missing metadata 'Reviewed revision'")
-    brief_revision = brief_meta.get("Reviewed revision", "")
+    brief_revision = brief_meta.get("Source revision", "")
     audit_revision = audit_meta.get("Reviewed revision", "")
     if brief_revision and not REVISION_RE.fullmatch(brief_revision):
         errors.append("brief: Reviewed revision is not a commit-like revision")
     if audit_revision and not REVISION_RE.fullmatch(audit_revision):
         errors.append("audit: Reviewed revision is not a commit-like revision")
     if brief_revision and audit_revision and brief_revision != audit_revision:
-        errors.append("brief and audit: Reviewed revision does not match")
+        errors.append("brief and audit: Source/Reviewed revision does not match")
+    if brief_revision and audit_meta.get("Source revision") and brief_revision != audit_meta["Source revision"]:
+        errors.append("brief and audit: Source revision does not match")
 
     brief_required = ("Route tier", "Route ID", "Concept ID", "Reader action", "Mechanism or reasoning",
                       "Significance", "Teaching device", "Worked evidence", "Interpretation", "Limitations",
@@ -154,6 +155,10 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
                       "Interpretation locator", "Limitation locator", "Evidence revision", "Reviewer", "Status",
                       "Finding", "Scope decision")
     _, audit_rows = _require_table(_tables(audit), audit_required, "audit", errors)
+    if not brief_rows:
+        errors.append("brief: core-concept depth matrix must contain at least one row")
+    if not audit_rows:
+        errors.append("audit: adversarial depth gate must contain at least one row")
     if not brief_rows or not audit_rows:
         return errors
 
@@ -167,6 +172,9 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
     _check_ids(audit_rows, a("Route ID"), a("Concept ID"), errors, "audit")
     expected: dict[tuple[str, str], str] = {}
     for row in brief_rows:
+        if row.malformed:
+            errors.append(f"brief:{row.line}: malformed matrix row has the wrong number of columns")
+            continue
         tier = row.values[b("Route tier")]
         if tier not in ROUTE_TIERS:
             errors.append(f"brief:{row.line}: invalid route tier '{tier}'")
@@ -177,6 +185,9 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
 
     audited: set[tuple[str, str]] = set()
     for row in audit_rows:
+        if row.malformed:
+            errors.append(f"audit:{row.line}: malformed matrix row has the wrong number of columns")
+            continue
         key = (row.values[a("Route ID")], row.values[a("Concept ID")])
         if key not in expected:
             errors.append(f"audit:{row.line}: row has no matching brief route/concept ID")
@@ -190,7 +201,12 @@ def validate(brief_path: Path, audit_path: Path) -> list[str]:
         if row.values[a("Route tier")] not in ROUTE_TIERS:
             errors.append(f"audit:{row.line}: invalid route tier '{row.values[a('Route tier')]}'")
         for field in ("Explanation locator", "Example/action locator", "Interpretation locator", "Limitation locator"):
-            if not LOCATOR_RE.fullmatch(row.values[a(field)]):
+            locator = row.values[a(field)]
+            if status == "verified":
+                valid_locator = bool(LOCATOR_RE.fullmatch(locator))
+            else:
+                valid_locator = bool(LOCATOR_RE.fullmatch(locator) or MISSING_RE.fullmatch(locator))
+            if not valid_locator:
                 errors.append(f"audit:{row.line}: invalid exact locator in '{field}'")
         if not REVISION_RE.fullmatch(row.values[a("Evidence revision")]):
             errors.append(f"audit:{row.line}: invalid evidence revision")
