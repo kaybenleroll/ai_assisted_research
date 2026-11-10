@@ -20,7 +20,8 @@ class PrimerEvidenceFixtureTests(unittest.TestCase):
         )
 
     def test_valid_pairs_pass(self):
-        # The shallow example is structurally valid; depth remains a human judgement.
+        # Both audit pairs pass the shape check; expected-review.md records human
+        # judgements separately. This test does not assess prose quality.
         for name in ("valid", "reference-not-checked", "shallow"):
             with self.subTest(fixture=name):
                 result = self.run_fixture(name)
