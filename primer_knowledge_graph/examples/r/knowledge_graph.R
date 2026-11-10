@@ -1,32 +1,19 @@
-# Self-contained R companion for the knowledge-graph primer.
+# R analytical companion for the knowledge-graph primer.
 #
-# Interchange contract for integration with the Python fixture:
-# use the same entity identifiers and the positive-claim projection from
-# examples/fixture.json. Claims carrying negative polarity remain in the
-# evidence store but are not edges in this analytical projection.
+# Input boundary: run from the primer directory and read the entities and
+# precomputed relations in examples/fixture.json. The relations are a
+# deduplicated positive-claim projection, not the evidence store: negative
+# claims are excluded, and polarity, dates, provenance and claim identity are
+# unavailable to the graph. It is not an as-of-date view and cannot resolve
+# conflicting claims or establish whether an edge is currently valid.
 
 library(dplyr)
 library(igraph)
 library(tidygraph)
 
-entities <- tibble::tibble(
-  id = c("org:northbridge", "project:atlas", "project:orion",
-         "policy:travel-v1", "policy:travel-v2", "person:morgan-lee",
-         "person:alex-kim-1", "person:alex-kim-2"),
-  label = c("Northbridge", "Atlas", "Orion", "Northbridge Travel Policy v1",
-            "Northbridge Travel Policy v2", "Morgan Lee", "Alex Kim", "Alex Kim"),
-  type = c("organisation", "project", "project", "policy_version",
-           "policy_version", "person", "person", "person")
-)
-
-relations <- tibble::tibble(
-  source = c("policy:travel-v1", "policy:travel-v1", "project:atlas",
-             "policy:travel-v2", "project:orion"),
-  target = c("project:atlas", "person:morgan-lee", "org:northbridge",
-             "project:atlas", "org:northbridge"),
-  type = c("applies_to", "owned_by", "belongs_to", "applies_to", "belongs_to"),
-  weight = c(1, 1, 1, 1, 1)
-)
+fixture <- jsonlite::fromJSON("examples/fixture.json")
+entities <- fixture$entities |> select(id, label, type)
+relations <- fixture$relations |> select(source, target, type, weight)
 
 graph <- graph_from_data_frame(
   relations,
