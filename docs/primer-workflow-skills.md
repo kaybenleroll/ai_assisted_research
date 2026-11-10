@@ -10,8 +10,8 @@ and handoff template remain the authoritative sources.
 
 | Need | Inputs | Output | Stopping boundary |
 |---|---|---|---|
-| [`primer-plan`](../.agents/skills/primer-plan/SKILL.md): define a new or substantial revision | Issue, existing material, repository state and brief template | Brief, outline, examples and evidence plan | Stop at the agreed scope; draft only if authorised. |
-| [`primer-audit`](../.agents/skills/primer-audit/SKILL.md): review content after drafting or revision | Brief, complete source, outputs and review guidance | Findings, evidence and unresolved risks | Report findings within scope; a failed check does not authorise repair. |
+| [`primer-plan`](../.agents/skills/primer-plan/SKILL.md): define a new or substantial revision | Issue, existing material, repository state and tracked brief template | Tracked brief with stable route/concept IDs, outline, examples and evidence plan | Stop at the agreed scope; draft only if authorised. |
+| [`primer-audit`](../.agents/skills/primer-audit/SKILL.md): review content after drafting or revision | Tracked brief, complete source, outputs and review guidance | Tracked audit with stable IDs, exact locators, findings and scope decisions | Report findings within scope; a failed check does not authorise repair. |
 | [`primer-render-qa`](../.agents/skills/primer-render-qa/SKILL.md): check published outputs and build evidence | Committed outputs, build recipe, runtime and permitted scope | Check results, provenance and visual observations | Stop when a required check cannot run safely; do not overwrite outputs outside authorised scope. |
 | [`primer-handoff`](../.agents/skills/primer-handoff/SKILL.md): transfer work at any bounded stage | Live repository state, decisions and available evidence | Handoff with remaining work and next owner | Stop at the handoff; release requires authorisation and required evidence. |
 
@@ -21,7 +21,13 @@ project contract and applicable repository guidance. Resolve repository
 documents and recipes from the owning repository root; resolve references
 bundled with a skill from that skill's directory.
 
-Plan before drafting a new primer or substantial revision. Audit and render QA
+Plan before drafting a new primer or substantial revision. Brief and audit
+artefacts are tracked and use stable `route_id` and `concept_id` values; the
+brief and audit templates define the required row fields and statuses. Audit
+mechanics may validate shape and completeness, but human review judges whether
+the prose genuinely teaches. A `gap` or `not-checked` audit row blocks a
+primary or alternative route, while `scope-reduced` requires a rationale.
+Do not add quotas. Audit and render QA
 are complementary: content review does not establish output quality, and a
 successful render does not establish content correctness. Choose the skills
 the task needs; there is no requirement to use all four or meet a quota. This

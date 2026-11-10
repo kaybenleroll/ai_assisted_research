@@ -36,11 +36,33 @@ replace visual inspection of representative rendered pages.
 - For a process, system, or applied-method primer, trace one central case from source input or assumptions through construction, intermediate representation, useful query or operation, interpretation, and failure or scope limit. A curated fixture, schema validation, or successful smoke test is not evidence of an end-to-end teaching case. Record executable, illustrative, and measured stages separately.
 - For core concepts, use a worked example, proof, case, comparison, counterexample, or failure case when it helps the reader apply or test the idea. Pair it with explanation, and prefer prose to a dump of bullets.
 - Trace each core concept from its introduction through its explanation and, where useful, an example or comparison. Check that the text explains the relevant reasoning or mechanism, significance, and conditions or limits rather than merely naming or defining the concept. Identify and repair unsupported jumps; do not add filler or a token example to meet a count.
-- Apply the adversarial depth gate to every primary or alternative route and every core-concept row: record the mechanism, reader action or worked evidence, interpretation, and material limit or failure case. A definition, list, heading, fixture, passing smoke test, or citation is not sufficient evidence. An unresolved substantive gap blocks readiness or requires an explicit scope reduction.
+- Apply the adversarial depth gate to every route and core-concept row in the tracked audit. Preserve the brief's stable `route_id` and `concept_id`, and record exact locators for the explanation, example or reader action, interpretation, and material limit or failure case, plus the evidence revision, reviewer, finding, and scope decision. Use only `verified`, `gap`, `scope-reduced`, or `not-checked`; `scope-reduced` requires a rationale. A definition, list, heading, fixture, passing smoke test, or citation is not sufficient evidence. A `gap` or `not-checked` row blocks readiness when its route tier is `primary` or `alternative`; a `reference-only` row does not. Mechanical checks validate shape and completeness only; human review judges whether the prose genuinely teaches. Do not add quotas.
 - Apply V2: banned hedges are errors. Treat filler as an editing suggestion under V4; review density above two filler terms in a paragraph or above 1.0 per 1,000 words, then fix the cause rather than swapping words.
 - Check terminology consistency by searching for the main alternative term. Expand acronyms at first meaningful use; use the first-use helper below and review its candidates by hand.
 - Apply V1: address the reader as “you”; use “we” in derivations. Apply R4 by keeping evidence strength and likelihood in separate uncertainty sentences. Apply M7 by giving each table a lead-in sentence.
 - Check that examples are interpreted after they appear: state what each demonstrates, its assumptions or decisions, and its limits. For a long primer, record whether a running example or a set of local examples best serves the subject.
+
+Calibrate the depth gate against the reader's promised task. Reject a shallow
+catalogue entry even when every schema cell is populated: naming a method,
+listing its features, and linking a citation do not explain how or why it
+works. For each primary or alternative route, inspect the actual passages for
+mechanism or reasoning, a reader action, worked evidence, interpretation, and a
+material limitation. A worked calculation with inputs and intermediate steps,
+an explained comparison or counterexample, or a traceable case can supply the
+evidence when it supports that task; a bare output or unexamined fixture cannot.
+Mark missing or inadequate teaching as `gap`, or `not-checked` if it was not
+reviewed. A primary route is the main teaching path; an alternative is another
+path the brief promises to teach and is held to the same gate. A reference-only
+route is signposted for lookup and its gaps do not block that gate.
+
+Give each evidence cell a locator that identifies the passage at the recorded
+revision, such as `primer_example/primer_example.md`, section “Choosing a
+model”, paragraph beginning “For this sample”, or a source line and named
+example. Locate explanation, action or example, interpretation, and limitation
+separately where they occur in different places; a document title or section
+name alone is not precise enough. If scope is reduced, record what promise was
+removed or demoted, why, and where the brief and reader-facing scope now say
+so. Do not label an unresolved omission `scope-reduced` merely to pass the gate.
 
 From the repository root, set `md` to the Markdown source under review. Until #159 supplies the automated hedge check, this command must return no matches:
 
@@ -100,7 +122,7 @@ Profile:
 - Passes and commands run, with results:
 - Facts and sources checked:
 - Prose or structure changes and examples:
-- Structure and depth review: identify sections consolidated or retained as short for a stated purpose, and record the adversarial depth-gate results for every primary/alternative route and core-concept row; record “none needed” only when the complete matrix was checked:
+- Structure and depth review: identify sections consolidated or retained as short for a stated purpose, and record the tracked brief/audit IDs and adversarial depth-gate results for every route and core-concept row; record “none needed” only when the complete matrix was checked:
 - Visual QA pages (type, page number, pass/fail), or reason not applicable:
 - Exceptions and justification:
 ```

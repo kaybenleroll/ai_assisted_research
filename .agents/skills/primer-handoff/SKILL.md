@@ -17,7 +17,19 @@ Read `docs/agent-collaboration.md`, `docs/primer-production-procedure.md`, and
 the project contract. Recheck live Git state immediately before writing the
 handoff. Use the portable template and include objective/issue, branch and
 revision, dirty paths, scope and exclusions, decisions and evidence, changed
-paths, exact validation results, remaining work, and blockers.
+paths, exact validation results, remaining work, and blockers. Consume the
+tracked brief and tracked audit, preserving their stable `route_id` and
+`concept_id` values and recording the evidence revision and reviewer. Confirm
+that the audit covers every brief row, uses only `verified`, `gap`,
+`scope-reduced`, or `not-checked`, and gives a rationale for every
+`scope-reduced` row.
+
+Treat `gap` or `not-checked` on a primary or alternative route as a blocker.
+Do not call a handoff ready while such a row remains unresolved. A
+reference-only route may remain outside the teaching spine when the brief says
+so explicitly. Mechanical validation may establish shape and completeness, but
+the handoff must report the human judgement that the evidence genuinely
+teaches; render QA cannot supply that judgement or approve content depth.
 
 Distinguish executed checks from parsed examples, sampled visual checks,
 reported historical evidence, and unavailable checks. State the next action

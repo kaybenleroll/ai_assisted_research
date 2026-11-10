@@ -36,6 +36,30 @@ permissions, network access, sandboxing, and approval policy.
 - Use [CONTRIBUTING.md](../CONTRIBUTING.md) for build and render commands. The Mermaid filter lives in `_shared/filters/`.
 - Start a new Pandoc primer with `just new-primer <short> "<Full Title>"`; finish the printed registration steps in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
+### Tracked Brief and Audit Contract
+
+Each new or substantially revised primer has a tracked, revision-bound brief
+and audit artefact. Record the tracked paths, source revision, brief revision,
+and audit revision; an issue comment or ignored `.scratch/` copy is not the
+durable record. The brief assigns every route a stable `route_id` and exactly
+one tier: `primary`, `alternative`, or `reference-only`. Every concept row has
+a stable `concept_id` and references its route. Keep IDs stable across
+revisions; do not use row position as an identifier.
+
+Brief rows must cover reader action, mechanism or reasoning, significance,
+teaching device, worked evidence, interpretation, limitations, downstream use,
+and source plan. The audit maps the same IDs and records exact locators for the
+explanation, example or action, interpretation, and limitation, followed by
+the evidence revision, reviewer, status, finding, and scope decision. Status is
+one of `verified`, `gap`, `scope-reduced`, or `not-checked`; a `scope-reduced`
+row requires a rationale.
+
+Mechanical checks validate shape and completeness only: IDs, tiers, statuses,
+required columns, row coverage, locators, and revision metadata. Human review
+judges whether the prose genuinely teaches. A `gap` or `not-checked` row on a
+`primary` or `alternative` route blocks readiness; a `reference-only` row does
+not. The schema sets no word, heading, example, figure, or row quotas.
+
 <a id="primer-build-and-render-notes"></a>
 
 ## Document Classes
