@@ -51,8 +51,8 @@ def resolve(name, directory_id, directory):
     return {"decision": "reject", "candidate": None, "reason": "incompatible directory identifier"}
 
 
-def construct():
-    records = json.loads(SOURCE_RECORDS.read_text(encoding="utf-8"))
+def construct(source_records_path=SOURCE_RECORDS):
+    records = json.loads(Path(source_records_path).read_text(encoding="utf-8"))
     extracted = []
     refusals = []
     for record in records["records"]:
