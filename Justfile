@@ -77,7 +77,7 @@ check-primer-evidence brief audit:
   python3 -I scripts/check/primer_evidence.py "{{brief}}" "{{audit}}"
 
 check-primer-evidence-tests:
-  python3 -I -m unittest discover -s tests -p 'test_primer_evidence.py'
+  python3 -I -m unittest discover -s tests -p 'test_primer_evidence*.py'
 
 check-render-qa:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_render_qa.py'
