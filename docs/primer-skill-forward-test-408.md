@@ -127,3 +127,26 @@ Do not include secrets, private transcripts or hidden reasoning.
 
 Report each invocation separately. A single favourable response is evidence
 only for the recorded inputs and runtime, not a general reliability claim.
+
+## Preliminary subagent behavioural probes (not native activation)
+
+Three read-only subagent behavioural probes were run against the skills at
+branch HEAD `2acd65aeda7f829cfb542d7501c0e07d67139dfb`, using the knowledge-
+graph input at branch HEAD `535f0fb4119eda5c447f52e21c77928eaa49ee0e`:
+
+- **Plan probe:** blocked drafting because there were no route-keyed traces,
+  the R handoff was unresolved, and expansion and scope decisions were
+  missing.
+- **Audit probe:** identified the primary gaps as curated temporal inputs,
+  Q1–Q3 operation-to-result links, evaluation adjudication, and interpretation
+  of `tidygraph` on the alternative route.
+- **Handoff probe:** separated recorded content, render, evidence and freshness
+  status. It found the synthetic shallow fixture's missing calculation and
+  result to be a blocking gap.
+
+These were subagent behavioural probes, not native Codex skill activation.
+No provider calls or builds ran, and no files were edited during the probes.
+The scope was limited to these three probe responses, the stated branch-HEAD
+inputs and the synthetic fixture where applicable; this is not a native
+forward-test result or evidence of general skill reliability. Native forward-
+test results remain outstanding.
