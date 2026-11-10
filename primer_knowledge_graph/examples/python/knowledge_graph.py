@@ -11,7 +11,7 @@ from datetime import date
 import json
 import os
 from pathlib import Path
-from construction import SOURCE_RECORDS, canonical_claims, construct
+from construction import SOURCE_RECORDS, build_claims, compare_with_fixture, construct, extract
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixture.json"
 CLASSIFICATION = """CASE WHEN day < valid_from THEN 'outside'
@@ -123,7 +123,8 @@ def main():
         generated_candidates = generated.get("candidates", [generated.get("candidate")])
         assert set(row["candidates"]) == set(generated_candidates)
         assert next(m for m in data["mentions"] if m["id"] == row["mention"])["entity"] == row["candidate"]
-    constructed = canonical_claims(candidates, data["claims"])
+    constructed = build_claims(candidates)
+    fixture_differences = compare_with_fixture(constructed, data["claims"])
     # These rows are constructed from retained text; the other ledger rows are curated.
     data["claims"] = [constructed.get(claim["id"], claim) for claim in data["claims"]]
     curated_ids = sorted(c["id"] for c in data["claims"] if c["id"] not in constructed)
@@ -258,6 +259,17 @@ def main():
     assert path_status("2024-04-01") == "outside"
     unbounded = [c for c in candidates if c["source"] == "synthetic-continuation"]
     assert len(unbounded) == 1 and unbounded[0]["end_kind"] == "unbounded"
+    changed_records = deepcopy(records)
+    changed_records["records"][0]["text"] = changed_records["records"][0]["text"].replace(
+        "2024-04-01", "2024-03-01")
+    changed_candidates = []
+    for record in changed_records["records"]:
+        if record.get("extract_claims", True):
+            candidates_for_record, refusal = extract(record)
+            assert refusal is None or record["source"] == "synthetic-refusal"
+            changed_candidates.extend(candidates_for_record)
+    changed_claims = build_claims(changed_candidates)
+    assert changed_claims["c1"]["valid_to"] == "2024-03-01"
     synthetic = deepcopy(data)
     synthetic["claims"][0].update({k: unbounded[0][k] for k in ("valid_from", "valid_to", "end_kind", "supported_through")})
     validate(synthetic)
@@ -268,6 +280,8 @@ def main():
         unbounded[0]["valid_to"], unbounded[0]["end_kind"], unbounded[0]["supported_through"]]).fetchone()[0]
     assert check == "applicable"
     print("Constructed claims:", sorted(constructed), "curated claims:", curated_ids)
+    print("Fixture comparison (diagnostic):", "matched" if not fixture_differences else fixture_differences)
+    print("Source edit rebuild: c1 valid_to ->", changed_claims["c1"]["valid_to"])
     print("Extraction refusals:", refusals)
     print("Fixture resolution decisions (generated and checked):", decisions)
     print("Test-only rejection (not a fixture decision):", test_rejection)

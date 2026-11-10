@@ -78,25 +78,35 @@ def construct():
     return extracted, refusals, {"m-morgan": accepted, "m-alex": abstained}, rejected
 
 
-def canonical_claims(candidates, fixture_claims):
-    """Match three extracted claims to ledger IDs and compare every canonical field."""
-    selection = {("s-register", "policy:travel-v1"): ("c1", "m-policy-v1"),
-                 ("s-minutes", "policy:travel-v2"): ("c4", "m-policy-v2-meeting"),
-                 ("s-minutes", "policy:travel-v1"): ("c5", "m-policy-v1-meeting")}
-    expected = {claim["id"]: claim for claim in fixture_claims}
+SELECTION = {("s-register", "policy:travel-v1"): ("c1", "m-policy-v1"),
+             ("s-minutes", "policy:travel-v2"): ("c4", "m-policy-v2-meeting"),
+             ("s-minutes", "policy:travel-v1"): ("c5", "m-policy-v1-meeting")}
+
+
+def build_claims(candidates):
+    """Build source-derived claim rows without requiring a fixture match."""
     built = {}
     for candidate in candidates:
         key = (candidate["source"], candidate["subject"])
-        if key not in selection:
+        if key not in SELECTION:
             continue
-        claim_id, mention = selection[key]
+        claim_id, mention = SELECTION[key]
         if claim_id in built:
             raise ValueError(f"duplicate extracted claim {claim_id}")
         claim = {key: value for key, value in candidate.items() if key != "evidence"}
         claim.update(id=claim_id, mention=mention)
-        if claim != expected[claim_id]:
-            raise ValueError(f"constructed claim {claim_id} differs from fixture")
         built[claim_id] = {**claim, "evidence": candidate["evidence"]}
     if set(built) != {"c1", "c4", "c5"}:
         raise ValueError("missing constructed claims")
     return built
+
+
+def compare_with_fixture(constructed, fixture_claims):
+    """Report drift without preventing a source-derived build."""
+    expected = {claim["id"]: claim for claim in fixture_claims}
+    differences = []
+    for claim_id, claim in constructed.items():
+        canonical = {key: value for key, value in claim.items() if key != "evidence"}
+        if canonical != expected[claim_id]:
+            differences.append(claim_id)
+    return differences
