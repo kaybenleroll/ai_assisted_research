@@ -2,7 +2,7 @@
 
 - Issue and milestone: #398; related #397
 - Brief revision: `kg-398-brief-r1`
-- Source revision: `7208ce27e819cc285fb947fdc8a749c3b3dc4c8b`
+- Source revision: `27ee1f3db0e02d22ea33515922589b6b8f830fa4`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners who understand tables, JSON, basic
   Python or SQL, and reproducible data work, but do not yet understand graph
@@ -54,7 +54,7 @@
   update, and access requirements affect storage choice.
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`
 - Core-concept depth matrix: the matrix below; retain all IDs in the later audit.
-- Route classification and teaching spines:
+- Route classification and teaching spines: The route classifications and teaching spines are specified below.
   - `route-python-duckdb` — `primary`: Northbridge questions motivate the
     organising model of evidence-backed claims; the executable Python/DuckDB
     case constructs, queries, diagnoses, corrects, rebuilds, re-evaluates, and
@@ -120,7 +120,7 @@
 
 ## Core-concept depth matrix
 
-| route_id | route tier | concept_id | concept | reader action | mechanism or reasoning | significance | teaching device | worked evidence | interpretation | limitations | downstream use | source plan |
+| route_id | route tier | concept_id | concept | reader action | mechanism or reasoning | significance | teaching device | worked evidence | interpretation | limitations | downstream use | Evidence/source plan |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | route-python-duckdb | primary | kg-boundary | Boundary and competency questions | Define what a graph may answer and what it must refuse | Scope, source authority, population and completeness govern query meaning | Prevents bounded absence becoming a universal negative | Northbridge question table and boundary decision | Three questions with source and date constraints | State what each answer does and does not establish | Synthetic sources are incomplete | Drives schema and query tests | Cite source-boundary and completeness guidance |
 | route-python-duckdb | primary | kg-mentions | Mentions, entities and identifiers | Preserve a mention before linking it to an entity | A string occurrence, real-world entity and stable identifier are different objects | Prevents premature identity collapse | Two Alex Kim records and mention ledger | Unresolved meeting mention | Abstain when candidates remain indistinguishable | IDs are local to the case | Enables review and later reconciliation | Cite identifier and entity-modelling sources |
