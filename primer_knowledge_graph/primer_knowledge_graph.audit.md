@@ -8,7 +8,7 @@
 - Reviewer(s): Codex, independent final content pass.
 - Date: 10 November 2026.
 - Reviewed revision: `358bd6c`
-- Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r2`, file SHA-256 `a3d77f059017fac710b46f876b5a06deacaada7998562d75b40c4222bb10b262`; its recorded source revision is `358bd6c`.
+- Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r2`, file SHA-256 `1b74b33784ea3fe6a151573a73931b914efac7a19a8cba38a05b234d0871f7ce`; its recorded source revision is `358bd6c`.
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`, file SHA-256 `6c8ec82a1358bc61ddb9efa79166a12e89f458f93396f794b752a9e525b7dcb9` at reviewed HEAD.
 - Core-concept depth matrix: the 14 rows of the tracked brief above, inventoried against the complete 741-line source.
 - Review boundary: complete source, brief, case, both executable scripts, construction helper, manifest, both JSON inputs, and committed HTML/PDF inventoried; selected claims, calculations, source pages, and rendered pages reconciled. Earlier executable and rendered evidence was retained with its original revision; no examples or render were rerun in this pass. This is not verification of every claim or an external-data evaluation.
