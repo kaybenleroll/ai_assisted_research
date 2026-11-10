@@ -70,7 +70,14 @@ readme-check:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
 
 # Check committed metadata, renderer variants, Mermaid, freshness, and README generation
-check: check-agent-contract check-render-qa check-meta check-variants check-mermaid check-fresh check-readme
+check: check-agent-contract check-render-qa check-primer-evidence-tests check-meta check-variants check-mermaid check-fresh check-readme
+
+# Validate a tracked brief and its revision-bound audit.  This is structural only.
+check-primer-evidence brief audit:
+  python3 -I scripts/check/primer_evidence.py "{{brief}}" "{{audit}}"
+
+check-primer-evidence-tests:
+  python3 -I -m unittest discover -s tests -p 'test_primer_evidence.py'
 
 check-render-qa:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_render_qa.py'
