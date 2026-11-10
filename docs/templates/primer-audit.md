@@ -28,15 +28,17 @@
 | HTML, PDF, metadata, and committed outputs | | | | | |
 | Residual uncertainty and follow-up questions | | | | | |
 
-Use only `verified`, `gap`, `scope-reduced`, or `not-checked`. Record whether
-evidence is whole-document or sampled; an inventory or green build is not a
-correctness claim. Preserve the brief's stable `route_id` and `concept_id`.
+For review status, use only `verified`, `gap`, `scope-reduced`, or
+`not-checked`. Record whether evidence is whole-document or sampled; an
+inventory or green build is not a correctness claim. Preserve the brief's
+stable `route_id` and `concept_id`. Transition execution status is a separate
+field defined below.
 
 For a process, system, or applied-method primer, complete this additional
 trace. A curated fixture, schema validation, or successful smoke test is not
 evidence of an end-to-end teaching case.
 
-| Case stage | Source or section | Evidence and result | Status | Gap or limitation |
+| Case stage | Source or section | Evidence and result | Execution status | Gap or limitation |
 |---|---|---|---|---|
 | Input or assumptions | | | | |
 | Construction or extraction decision | | | | |
@@ -49,12 +51,48 @@ evidence of an end-to-end teaching case.
 ## Brief and example traceability
 
 | Brief promise or core concept | Section(s) and explanation | Example, case, or limitation | Evidence status and gap |
-|---|---|---|---|---|
+|---|---|---|---|
 | | | | |
 
 For each core concept, check mechanism or reasoning, significance, conditions or
 limits, and the teaching device used. Do not treat word count or subsection
 count as evidence of depth.
+
+## Route transition evidence
+
+For each `primary` and `alternative` route, trace at least one complete reader
+path from a stated input or assumption through the promised reader operation
+to its result, interpretation, and material limit. Use one row per meaningful
+transition, in reader order; repeat stable `route_id` and relevant `concept_id`
+values from the brief rather than assigning new IDs or using row numbers. Link
+each result to the next row's input. Give exact locators at the reviewed source
+revision for the input and operation, intermediate reasoning or choice, result,
+interpretation, and limitation. Record the actual content of the link, not just
+a list of locations. For a conceptual route, the operation may be a derivation,
+worked calculation, proof, or explained comparison rather than running code.
+
+| route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
+|---|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | | |
+
+Use exactly one execution status per transition and case stage:
+`executed` means the stated operation was performed on its stated input and
+the result checked; `parsed-only` means syntax or static form was checked but
+the operation was not run; `illustrative` means the walkthrough was presented
+without an independent run; `proposed` means promised but not yet present in
+the source; `not-checked` means the reviewer did not assess it. For `executed`
+or `parsed-only`, identify the command or method, input, observed result, and
+evidence revision under execution evidence below. A passing test of different
+code does not make a transition `executed`. Passing code or a populated fixture
+does not establish that the reader is taught the reasoning, interpretation, or
+limit.
+
+For any missing or weak transition, name what the intended reader cannot infer,
+perform, or interpret and which next step depends on it. Carry substantive
+gaps into the corresponding depth-gate finding; a `proposed` or `not-checked`
+transition cannot support a `verified` depth-gate row. `Reference-only` routes
+may receive findings but do not require this full trace and do not block the
+teaching gate. Do not use word, heading, or transition counts as quotas.
 
 ## Adversarial depth gate
 
@@ -69,8 +107,10 @@ scope reduction.
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | | | | | | | | | | | | |
 
-A `scope-reduced` status must include the rationale in the scope decision. A
-`gap` or `not-checked` row blocks readiness when its route tier is `primary` or
+A `scope-reduced` status must include the rationale in the scope decision. For
+each `gap`, state the concrete consequence for the reader and the dependent
+step, not just that more depth is needed. A `gap` or `not-checked` row blocks
+readiness when its route tier is `primary` or
 `alternative`; a `reference-only` row does not block the teaching gate.
 Mechanical checks may validate these columns, IDs, tiers, statuses, and
 non-empty required cells. Human review must decide whether the cited prose
@@ -108,7 +148,7 @@ Sampling supplements the whole-document pass. Record why each sample was
 chosen; do not infer full-document coverage from these rows.
 
 | Sample/page/object | Risk represented | Evidence and result | Status | Follow-up |
-|---|---|---|---|
+|---|---|---|---|---|
 | Opening motivation | | | | |
 | Formal or difficult passage | | | | |
 | Worked example | | | | |
@@ -127,6 +167,8 @@ existence.
 
 ## Execution and render evidence
 
+- Transition checks: <route_id, concept_id, transition, command or method,
+  stated input, observed result, evidence revision, and execution status>
 - Commands actually run: <commands and results>
 - Examples executed: <IDs and runtime, or “none; illustrative only”>
 - Examples parsed but not executed: <IDs and reason>

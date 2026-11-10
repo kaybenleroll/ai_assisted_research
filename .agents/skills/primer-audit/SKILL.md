@@ -29,9 +29,34 @@ contract and trace at least one case end to end: source input or declared
 assumption, construction or extraction decision, intermediate representation,
 stored or computed result, reader-facing query or operation, interpretation, and
 failure or scope limit. A curated fixture or passing runtime check does not
-establish this trace. Record where the case is executable, illustrative, or
-measured; mark an untraceable case as a substantive gap unless the brief
+establish this trace. Record the execution status of each stage; mark an
+untraceable case as a substantive gap unless the brief
 explicitly justifies another teaching device.
+
+For every `primary` and `alternative` route, follow at least one complete
+reader path from its stated input or assumption through the promised operation
+to an interpreted result and material limit. Record each meaningful transition
+in the template's transition evidence table, reusing the brief's `route_id` and
+relevant `concept_id` values. Link the result of one step to the input of the
+next with exact source locators. For each transition locate the input and reader
+operation, intermediate reasoning or decision, result, interpretation, and
+material limitation; inspect the actual passages rather than inferring a link
+from headings or adjacent examples. State precisely what a missing or shallow
+link prevents the reader from doing or understanding, including the dependent
+step affected. A conceptual route can use a proof, worked calculation, or
+explained comparison instead of code, provided the reader can follow the
+promised operation end to end.
+
+Give each transition one execution status: `executed` (the stated operation was
+run on the stated input and its result checked), `parsed-only` (syntax or static
+form checked without running the operation), `illustrative` (presented as a
+walkthrough without an independent run), `proposed` (promised but not yet in
+the source), or `not-checked` (the reviewer did not assess it). Record commands,
+inputs, outputs, and revisions for executed or parsed-only claims. These are
+evidence-provenance statuses, separate from the depth-gate statuses. Even
+correctly executed code does not show that the prose teaches its decisions,
+result, interpretation, or limits. Keep `reference-only` handling non-blocking;
+record useful findings without requiring its full transition trace.
 
 For each core concept, check that the prose explains its mechanism or reasoning,
 why it matters, and a material condition, consequence, or limitation. Use the
@@ -53,6 +78,14 @@ not teaching evidence. Mechanical checks may validate shape, completeness,
 identifiers, revisions, and allowed values only; the human reviewer must judge
 whether the prose genuinely teaches. If a promised route cannot meet the gate,
 recommend narrowing or demoting it rather than adding a token paragraph.
+
+For each missing or unsupported transition, name the exact reader consequence:
+which operation cannot be reproduced, decision cannot be justified, result
+cannot be interpreted, or condition under which the result fails cannot be
+recognised. Link the finding to the affected depth-gate row and mark that row
+`gap` or `not-checked` as appropriate; do not infer teaching from executable
+success. A primary or alternative route with such an unresolved finding is
+not ready until its teaching is developed or its scope is explicitly reduced.
 
 After the row-by-row pass, review the document as a reader: could the intended
 reader explain the organising model, reproduce the central operation, interpret
