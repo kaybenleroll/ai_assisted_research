@@ -92,7 +92,7 @@ The fixture is `primer_knowledge_graph/examples/fixture.json`. It is synthetic d
 
 The fixture stores the two Alex entities but not their directory identifiers or the full register and minutes. The separate `examples/source_records.json` retains short synthetic excerpts and three directory rows for the executable construction slice. It records only version 1 ownership, not ownership of version 2. The start date on a meeting claim is an encoded valid-time interpretation, not a general rule that a publication date automatically fixes validity.
 
-## Preserve Mentions, Entities, and Identifiers as Different Things
+## Represent Evidence, Entities, and Qualified Claims
 
 The boundary tells us which source occurrences matter; it does not tell us which occurrences refer to the same thing. Before converting those occurrences into claims, keep their source evidence separate from the identities the graph may assign.
 
@@ -112,7 +112,7 @@ Identifiers should be stable and namespaced. The fixture's IDs (`org:northbridge
 
 The World Wide Web Consortium (W3C) RDF 1.1 Concepts recommendation makes a related distinction between Internationalised Resource Identifiers (IRIs), literals, and blank nodes: identifiers and values play different roles in a graph. Northbridge's JSON schema is not RDF, but the conceptual lesson applies across storage choices. A date such as `2024-03-15` is a value; `project:atlas` is a reference; “Atlas” is a label; and the occurrence `m-atlas` is evidence that a particular source used that label. Retaining these distinctions allows labels and interpretations to change without losing what the source actually contained.
 
-## Model Qualified Claims and Source Assertions
+### Model Qualified Claims and Source Assertions
 
 A bare triple such as `policy:travel-v1 applies_to project:atlas` omits information needed to answer the Northbridge questions. The fixture's claim `c1` adds source `s-register`, mention `m-policy-v1`, the validity interval from 1 January to 1 April 2024, and positive polarity. These fields make the statement inspectable and temporally queryable. The corresponding positive relation in `relations` is only an analytical projection; it omits source, mention, interval, and polarity and must not become the evidence record used to explain an answer.
 
@@ -256,6 +256,35 @@ For Q5, assume two audiences and one purpose: an ordinary policy-query user need
 Privacy also affects provenance design. A public answer may need to show a source class, version, and redacted locator rather than expose an entire restricted document. The system should preserve enough controlled evidence for authorised audit while preventing broader access through graph traversal. Test both what an authorised reviewer can trace and what an ordinary query user can infer. Access restrictions and redaction must not silently erase the fact that evidence was withheld; report the limitation at a level that does not itself disclose protected information.
 
 The practical design test is whether each identity link and exposed attribute is necessary for a stated question, supported by evidence, and available to the intended audience. For the ambiguous Northbridge attendee, abstaining protects both correctness and the people represented. It also leaves a clear route for adding a distinguishing identifier later, should an authorised source provide one.
+
+Apply the same decision pattern to every answer that crosses an audience
+boundary:
+
+1. State the question and the minimum fact needed to answer it. For an
+   ordinary user asking whether attendance can be attributed, the minimum is
+   that the minutes mention an unresolved Alex Kim; neither candidate's
+   directory identifier is needed.
+2. Separate evidence needed to justify the answer from attributes that would
+   merely make a person easier to identify. An authorised reviewer may need
+   `m-alex`, `r2`, both candidates and the exact source span to investigate the
+   abstention, while a general user does not.
+3. Check whether the evidence is available to that audience. If the minutes
+   are restricted, report that the supporting evidence is unavailable to the
+   requester; do not disclose a candidate indirectly through a graph path or
+   a count that reveals the hidden choice.
+4. Return the least identifying answer that remains useful, and record the
+   access decision and policy revision for later review. A later authorised
+   source can resolve the mention without rewriting the original occurrence
+   or exposing the earlier restricted evidence to everyone.
+
+This pattern also exposes failure cases. Returning both candidate IDs to a
+general user fails minimisation even if the identity decision correctly
+abstains. Returning only “unknown” to an authorised reviewer fails auditability
+because it hides the evidence and decision that could be challenged. Treating
+an access denial as “no matching person” fails correctness because it converts
+restricted evidence into a false negative. Privacy therefore changes the
+answer contract and the evidence path, not just the columns selected from a
+database.
 
 ## Construct and Query with Python and DuckDB
 
@@ -737,6 +766,25 @@ failure because it ignored the opposing applicable assertion. A system that
 returns `abstain: no evidence` has a retrieval or temporal-filter failure
 because evidence was available. This is the adjudication operation the scores
 are meant to evaluate.
+
+The unit becomes clearer when one adjudicated item is compared with a system
+answer rather than only with a final score. Suppose an independent reviewer
+has frozen Q4 as `abstain: conflicting evidence`, with both `c1` and `c5` and
+their register and minutes locators. These outcomes are different evaluation
+results:
+
+| System answer | Judgement | Failure diagnosed |
+|---|---|---|
+| `abstain: conflicting evidence`, citing `c1` and `c5` | Match | The label, selected evidence and required abstention agree with the gold item. |
+| `abstain: conflicting evidence`, citing only `c1` | Mismatch | The answer label is plausible, but retrieval or evidence selection omitted the opposing assertion. |
+| `supported`, citing only `c1` | Mismatch | The answer policy ignored an applicable negative assertion; this is not repaired by a correct-looking citation. |
+| `abstain: no evidence` | Mismatch | Retrieval or temporal filtering failed because the adjudicated evidence was available. |
+
+The comparison shows why evaluation must score the complete answer unit. A
+label-only score would count the first three rows too generously and would not
+tell an author whether to inspect extraction, evidence joins, or answer policy.
+The current Q1–Q5 table below remains a synthetic teaching walkthrough; it is
+not this independent adjudication exercise.
 
 The current Q1–Q5 table cannot claim this independent procedure was performed:
 its answers and adjudications were constructed from the same fixture and policy
