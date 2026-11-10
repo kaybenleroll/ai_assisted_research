@@ -35,6 +35,8 @@
 - Content gate: <how the central case and concept-depth matrix will be checked>
 - Depth gate: <how each route and core-concept row can be rejected for labels,
   catalogues, or unsupported jumps before drafting or publication>
+- Post-draft checkpoint: <compare each drafted primary and alternative route
+  with this brief and its trace before audit handoff; record results below>
 - Case acceptance: <check each applicable primary or alternative route's input
   through interpretation and failure/boundary; check stage handoffs, modes,
   evidence, and correction/re-evaluation where relevant>
@@ -82,6 +84,25 @@ it before drafting. Record the reason and effect on the reader outcome. Keep
 retired IDs in this record and do not reuse them.
 
 | route_id | concept_id | unresolved gap | decision and reason | effect on reader outcome |
+|---|---|---|---|---|
+| | | | | |
+
+## Post-draft teaching-depth checkpoint
+
+Before audit handoff, compare every drafted primary and alternative route with
+its brief and worked-case trace, or its justified alternative teaching device.
+Follow the reader-facing transitions from input through operation, intermediate
+reasoning, result, interpretation, and limit. Record source locators and gaps
+for each route. Passing examples or fixtures do not establish that the prose
+explains the transitions. An unsupported transition blocks audit handoff until
+expanded or the route is explicitly narrowed or demoted. Record the rationale
+and effect on the reader promise for every scope reduction, and update the
+brief and reader-facing scope. Preserve stable IDs.
+
+- Draft source revision: <exact commit or source artefact revision>
+- Brief revision reviewed: <stable revision identifier>
+
+| route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
 |---|---|---|---|---|
 | | | | | |
 

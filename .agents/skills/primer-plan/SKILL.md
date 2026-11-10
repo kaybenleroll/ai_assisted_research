@@ -86,6 +86,18 @@ outcome. Record unresolved rows as blocking planning gaps. A green build plan,
 fixture, or example manifest does not discharge a missing explanation.
 The later audit must retain the same identifiers and bind its evidence to the
 reviewed source revision; do not silently rename, merge, or omit rows.
+After drafting and before handing the source to audit, compare each drafted
+primary and alternative route with its brief and worked-case trace, keyed by
+`route_id`. Follow the reader-facing transitions from input through operation,
+intermediate reasoning, result, interpretation, and limit; use the planned
+alternative teaching device where a continuous case does not apply. Record draft
+locators, gaps, and decisions in the brief's post-draft checkpoint. A passing
+example or fixture does not establish that the prose explains those transitions.
+An unsupported transition blocks audit handoff until the explanation is expanded
+or the route is explicitly narrowed or demoted. Record any scope reduction,
+its rationale, and its effect on the reader promise; revise the brief and reader
+facing scope accordingly, retaining stable IDs. This is a qualitative check,
+not a substitute for the independent audit.
 Before handoff, check the brief against the trace and scope acceptance fields
 in `docs/templates/primer-brief.md`, including the decision record for any
 retired IDs. Once the audit exists, run
