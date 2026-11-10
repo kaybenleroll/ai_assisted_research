@@ -1,7 +1,6 @@
 ---
 name: primer-handoff
 description: Prepare an evidence-backed handoff or release note for primer work. Use when another harness, agent, or session will continue, review, or release the work.
-compatibility: Requires Git state and the repository handoff template.
 ---
 
 # Handoff or release
