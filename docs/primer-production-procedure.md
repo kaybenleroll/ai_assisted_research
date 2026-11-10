@@ -46,12 +46,25 @@ Copy [the brief template](templates/primer-brief.md) into an issue or ignored
   catalogue of terms?
 - What depth is appropriate, and which examples, languages, figures, tables,
   equations, and real-world cases will carry the explanation?
+- For a process, system, or applied method, what central teaching case traces
+  source inputs through construction to useful outputs, interpretation, and
+  limitations? Which stages are executable, illustrative, or measured? Complete
+  the [teaching-case contract](templates/primer-case-contract.md).
+- Which core concepts need a mechanism or reasoning explanation, why they
+  matter, conditions or limits, and a worked case, comparison, counterexample,
+  proof, or failure case? Record this in the brief's depth matrix.
 - Which claims require primary or current sources, and which calculations or
   executable examples need independent checking?
 - Which decisions remain unresolved, and what evidence would settle them?
 
 The brief is a planning instrument, not a promise to preserve every proposed
 section. During review, record deliberate omissions and changes in scope.
+
+Do not approve a broad brief because it names all relevant technologies. Before
+drafting, classify each route as primary, alternative, or reference-only and
+show the teaching spine for every primary or alternative route. If the route
+cannot carry a motivating problem, organising model, worked application,
+interpretation, and limit, narrow it or demote it before prose is written.
 
 ## 2. Research and design the route
 
@@ -94,6 +107,13 @@ and practical use. Combine short sections when they do not establish a real
 change of subject; retain a heading when it gives the reader a useful landmark
 or separates a materially different argument.
 
+For a process, system, or applied method, keep at least one coherent case moving
+through the draft. Show its input or assumptions, the decisions that transform
+them, the resulting representation, a useful operation or query, and what the
+result does and does not establish. Do not let a pre-curated fixture stand in
+for construction unless the brief explicitly makes that a deliberate teaching
+choice.
+
 Examples should do explanatory work. For each substantial example, state the
 input or assumptions, show the method, interpret the result, and note the
 failure mode or limitation. Prefer a small hand-worked example before a larger
@@ -109,6 +129,12 @@ technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.
 
+For a process, system, or applied-method primer, the audit must complete the
+teaching-case trace from input through construction, representation, useful
+operation, interpretation, and limits. If that trace cannot be completed, the
+content gate has a substantive finding regardless of build or smoke-test
+results.
+
 Sampling is complementary, not a substitute for reading. Choose representative
 passages and output pages: an opening motivation, a formal or difficult
 derivation, a worked example, a practical application, and pages containing
@@ -120,6 +146,13 @@ Do not convert the audit into a quality score, a fixed word count, or a heading
 quota. Record findings, severity, evidence, disposition, and reviewer effort.
 False positives and missed issues discovered during a pilot belong in the
 audit notes so the procedure can improve without weakening the review standard.
+
+The audit has a qualitative readiness gate: every primary and alternative route
+and every core-concept matrix row must have evidence of mechanism, reader action,
+interpretation, and a material limit or failure case. Missing evidence is a
+content finding, not a suggestion to add a token paragraph. The remedy is to
+narrow or demote the route, or to develop it properly; a passing build or smoke
+test cannot override the gate.
 
 ## 6. Render and verify
 
