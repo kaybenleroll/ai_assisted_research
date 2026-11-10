@@ -11,6 +11,7 @@ from datetime import date
 import json
 import os
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from construction import SOURCE_RECORDS, build_claims, compare_with_fixture, construct, extract
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixture.json"
@@ -158,24 +159,26 @@ def main():
     output_dir = Path(os.environ.get("EXAMPLE_OUT", Path.cwd()))
     output_dir.mkdir(parents=True, exist_ok=True)
     db_path = output_dir / "knowledge_graph.duckdb"
-    db = duckdb.connect(str(db_path))
-    db.execute("""CREATE TABLE claims (id VARCHAR, subject VARCHAR, predicate VARCHAR,
-        object VARCHAR, source VARCHAR, mention VARCHAR, valid_from DATE,
-        valid_to DATE, end_kind VARCHAR, supported_through DATE, polarity BOOLEAN)""")
-    db.execute("CREATE TABLE extraction_evidence (claim_id VARCHAR, locator VARCHAR, span_start INTEGER, span_end INTEGER, span_text VARCHAR, method VARCHAR)")
-    db.executemany("INSERT INTO extraction_evidence VALUES (?, ?, ?, ?, ?, ?)",
-        [(claim_id, e["locator"], e["start"], e["end"], e["text"], e["method"])
-         for claim_id, claim in constructed.items() for e in [claim["evidence"]]])
-    db.execute("CREATE TABLE sources (id VARCHAR, title VARCHAR, published DATE, locator VARCHAR)")
-    db.execute("CREATE TABLE mentions (id VARCHAR, source VARCHAR, text VARCHAR, entity VARCHAR)")
-    db.executemany("INSERT INTO claims VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [tuple(c[k] for k in ("id", "subject", "predicate", "object", "source", "mention", "valid_from", "valid_to", "end_kind", "supported_through", "polarity")) for c in data["claims"]])
-    db.executemany("INSERT INTO sources VALUES (?, ?, ?, ?)", [(s["id"], s["title"], s["published"], s["locator"]) for s in data["sources"]])
-    db.executemany("INSERT INTO mentions VALUES (?, ?, ?, ?)", [(m["id"], m["source"], m["text"], m["entity"]) for m in data["mentions"]])
+    def populate_database(path, graph, extracted_claims):
+        db = duckdb.connect(str(path))
+        db.execute("""CREATE TABLE claims (id VARCHAR, subject VARCHAR, predicate VARCHAR,
+            object VARCHAR, source VARCHAR, mention VARCHAR, valid_from DATE,
+            valid_to DATE, end_kind VARCHAR, supported_through DATE, polarity BOOLEAN)""")
+        db.execute("CREATE TABLE extraction_evidence (claim_id VARCHAR, locator VARCHAR, span_start INTEGER, span_end INTEGER, span_text VARCHAR, method VARCHAR)")
+        db.executemany("INSERT INTO extraction_evidence VALUES (?, ?, ?, ?, ?, ?)",
+            [(claim_id, e["locator"], e["start"], e["end"], e["text"], e["method"])
+             for claim_id, claim in extracted_claims.items() for e in [claim["evidence"]]])
+        db.execute("CREATE TABLE sources (id VARCHAR, title VARCHAR, published DATE, locator VARCHAR)")
+        db.execute("CREATE TABLE mentions (id VARCHAR, source VARCHAR, text VARCHAR, entity VARCHAR)")
+        db.executemany("INSERT INTO claims VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [tuple(c[k] for k in ("id", "subject", "predicate", "object", "source", "mention", "valid_from", "valid_to", "end_kind", "supported_through", "polarity")) for c in graph["claims"]])
+        db.executemany("INSERT INTO sources VALUES (?, ?, ?, ?)", [(s["id"], s["title"], s["published"], s["locator"]) for s in graph["sources"]])
+        db.executemany("INSERT INTO mentions VALUES (?, ?, ?, ?)", [(m["id"], m["source"], m["text"], m["entity"]) for m in graph["mentions"]])
+        db.close()
 
+    populate_database(db_path, data, constructed)
     # Reopen the file before querying so the example verifies durable storage,
     # not only an in-memory relational projection.
-    db.close()
     db = duckdb.connect(str(db_path), read_only=True)
     persisted = db.execute("SELECT id, valid_from, valid_to, end_kind, supported_through FROM claims ORDER BY id").fetchall()
     assert persisted == [(c["id"], iso_date(c["valid_from"]),
@@ -192,8 +195,9 @@ def main():
         ORDER BY a.id, b.id""", ["policy:travel-v1", "applies_to", "belongs_to"]).fetchall()
     assert two_hop == [("c1", "c3", "org:northbridge")]
 
-    def evidence_on(day, subject="policy:travel-v1", predicate="applies_to", obj="project:atlas", source=None):
-        rows = db.execute(f"""WITH requested AS (SELECT CAST(? AS DATE) AS day)
+    def evidence_on(day, subject="policy:travel-v1", predicate="applies_to", obj="project:atlas", source=None, connection=None):
+        connection = db if connection is None else connection
+        rows = connection.execute(f"""WITH requested AS (SELECT CAST(? AS DATE) AS day)
             SELECT c.id, c.polarity, {CLASSIFICATION} AS temporal_status,
               c.valid_from, c.valid_to, c.end_kind, c.supported_through, c.source, s.locator, c.mention
             FROM claims c JOIN sources s ON c.source = s.id CROSS JOIN requested
@@ -275,6 +279,21 @@ def main():
             changed_candidates.extend(candidates_for_record)
     changed_claims = build_claims(changed_candidates)
     assert changed_claims["c1"]["valid_to"] == "2024-03-01"
+    # Synthetic correction only: rebuild in a separate file, preserving the fixture.
+    corrected = deepcopy(data)
+    corrected["claims"] = [changed_claims.get(claim["id"], claim) for claim in data["claims"]]
+    validate(corrected)
+    correction_day = "2024-03-01"
+    before = answer_rows(evidence_on(correction_day))
+    with TemporaryDirectory(prefix="knowledge-graph-correction-") as temporary_dir:
+        corrected_path = Path(temporary_dir) / "corrected.duckdb"
+        populate_database(corrected_path, corrected, changed_claims)
+        corrected_db = duckdb.connect(str(corrected_path), read_only=True)
+        try:
+            after = answer_rows(evidence_on(correction_day, connection=corrected_db))
+        finally:
+            corrected_db.close()
+    assert (before, after) == ("supported", "abstain: no evidence")
     synthetic = deepcopy(data)
     synthetic["claims"][0].update({k: unbounded[0][k] for k in ("valid_from", "valid_to", "end_kind", "supported_through")})
     validate(synthetic)
@@ -286,7 +305,8 @@ def main():
     assert check == "applicable"
     print("Constructed claims:", sorted(constructed), "curated claims:", curated_ids)
     print("Fixture comparison (diagnostic):", "matched" if not fixture_differences else fixture_differences)
-    print("Source edit rebuild: c1 valid_to ->", changed_claims["c1"]["valid_to"])
+    print("Synthetic source correction: c1 valid_to ->", changed_claims["c1"]["valid_to"])
+    print(f"Rebuilt {correction_day} answer: {before} -> {after}")
     print("Extraction refusals:", refusals)
     print("Fixture resolution decisions (generated and checked):", decisions)
     print("Test-only rejection (not a fixture decision):", test_rejection)
