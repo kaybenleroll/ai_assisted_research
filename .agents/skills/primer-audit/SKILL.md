@@ -59,9 +59,29 @@ result, interpretation, or limits. Keep `reference-only` handling non-blocking;
 record useful findings without requiring its full transition trace.
 
 For each core concept, check that the prose explains its mechanism or reasoning,
-why it matters, and a material condition, consequence, or limitation. Use the
-outline to find catalogue-like clusters and compressed transitions, but do not
-turn subsection count, paragraph count, or word count into acceptance criteria.
+why it matters, and a material condition, consequence, or limitation. This
+local check is necessary but not sufficient: a document can populate every
+concept row while still reading as a compressed catalogue. Use the outline and
+continuous reading to find catalogue-like clusters, abrupt section endings,
+repeated heading-definition-list patterns, and reasoning that is asserted
+rather than worked through.
+
+Add a reader-scale depth pass for every major section and every section that
+hosts a primary or alternative route. Record the section's teaching job, the
+main reasoning spine or worked thread, the exact passage where the reader can
+apply or interpret it, and the material limit or failure case. Then make an
+explicit disposition: `expand`, `consolidate`, or `retain`. `retain` requires
+an editorial reason when the section is intentionally brief (for example,
+orientation, a transition, or a deliberately bounded reference branch).
+Expand a section when the reader cannot explain the mechanism, reproduce the
+promised operation, interpret its result, or recognise its failure without
+silently importing missing reasoning from another section. Consolidate
+adjacent sections when their reasoning is continuous and separate headings
+make the route feel fragmented. Do not use a fixed word, paragraph, heading,
+or subsection count as a pass/fail rule; use length and density only as
+signals that trigger this judgement. A section-level depth failure affecting a
+primary or alternative route is blocking even when every individual concept
+row is locally complete.
 
 Run an adversarial depth gate against every `route_id` and `concept_id` in the
 brief. Preserve each route tier as exactly `primary`, `alternative`, or
@@ -109,6 +129,15 @@ its result, and recognise when it fails? A negative answer is a readiness
 finding even when all mechanical and executable checks pass. Do not declare a
 primer ready while an unresolved substantive depth gap remains in a primary or
 alternative route.
+
+Repeat that reader review at section boundaries. Ask whether each major
+section advances the route or merely names adjacent topics, and whether its
+opening, development, example or decision, interpretation, and limitation form
+a coherent teaching unit. Record section-level findings separately from the
+concept depth matrix so that a locally `verified` concept cannot hide a thin
+or fragmented surrounding treatment. Re-check affected section dispositions
+after any substantive revision, including a consolidation that changes
+locators or route transitions.
 
 Then perform risk-selected technical verification and sampling: opening
 orientation, difficult formal passage, worked example, practical case, and
