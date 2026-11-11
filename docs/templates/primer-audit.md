@@ -58,6 +58,32 @@ For each core concept, check mechanism or reasoning, significance, conditions or
 limits, and the teaching device used. Do not treat word count or subsection
 count as evidence of depth.
 
+## Reader-scale section depth
+
+Review every major section and every section that carries a primary or
+alternative route. Read sections in sequence as well as individually. Record
+what each section teaches, how its reasoning develops, where the reader can
+apply or interpret it, and a material limitation or failure case. Assign an
+explicit disposition of `expand`, `consolidate`, or `retain`. Use exact source
+locators and the reviewed revision. A `retain` decision for an intentionally
+brief section needs an editorial reason, such as orientation, transition, or a
+deliberately bounded reference branch.
+
+| Section and route/concept IDs | Teaching job | Reasoning spine or worked thread | Application or interpretation locator | Material limitation or failure-case locator | Disposition and rationale |
+|---|---|---|---|---|---|
+| | | | | | |
+
+Expand when readers cannot explain the mechanism, reproduce the promised
+operation, interpret its result, or recognise a material failure without
+silently supplying missing reasoning. Consolidate adjacent sections when their
+reasoning is continuous and separate headings fragment the route. Retain when
+the teaching is coherent for its purpose; explain why an intentionally brief
+section is sufficient. Section-level failure affecting a primary or
+alternative route blocks the content gate even when individual concept rows
+are locally complete. There are no word-count quotas: length and density are
+signals for review, not pass/fail criteria. Preserve the brief's stable
+`route_id` and `concept_id` values.
+
 ## Route transition evidence
 
 For each `primary` and `alternative` route, trace at least one complete reader
@@ -219,6 +245,8 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 
 - Transition checks: <route_id, concept_id, transition, command or method,
   stated input, observed result, evidence revision, and execution status>
+- Reader-scale section review: <section locators, reviewed revision, and
+  expand/consolidate/retain dispositions>
 - Commands actually run: <commands and results>
 - Examples executed: <IDs and runtime, or “none; illustrative only”>
 - Examples parsed but not executed: <IDs and reason>
