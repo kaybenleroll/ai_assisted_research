@@ -2,7 +2,7 @@
 
 - Issue and milestone: #398; related #397
 - Brief revision: `kg-398-brief-r4`
-- Source revision: `0a269b48ffd1b2802ee64e3e9a88c414bee1db71` (Git blob for the reviewed Markdown)
+- Source revision: `a02e3d9`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
