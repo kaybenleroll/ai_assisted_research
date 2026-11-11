@@ -1,8 +1,11 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r4`
-- Source revision: `a02e3d9`
+- Brief revision: `kg-398-brief-r5`
+- Source revision: `9a1a7e7`
+- Revision state: Uncommitted editorial patch over the source revision above.
+  Rebind the integrated source revision and re-audit changed passages and
+  outputs before carrying forward readiness.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
@@ -35,10 +38,12 @@
   with time, polarity, provenance and uncertainty; work one source sentence
   through construction to a query result; extract conservatively and abstain
   on identity; use direct, path, temporal and provenance questions; diagnose a
-  failed extraction, work the revised ledger and re-evaluate the answer by
-  hand, then apply disclosure and release checks. Transfer the reasoning to
-  research literature and software dependencies. Use the alternative R
-  projection and storage reference for topology and representation questions.
+  failed extraction and work the revised ledger by hand; define authorised
+  disclosure and release products; evaluate those permitted outputs; then
+  check the final release regression. Transfer the reasoning to research
+  literature and software dependencies, comparing their modelling decisions.
+  Use the alternative R projection and storage reference for topology and
+  representation questions.
 - Approximate depth: Substantial, explanatory treatment. The document should
   grow where the dependency, worked case, or limitation requires it; word count
   is an outcome rather than a cap.
@@ -62,8 +67,8 @@
   - `route-python-duckdb` — `primary`: Northbridge questions motivate the
     organising model of evidence-backed claims. Work the standalone case by
     hand from source excerpts through ledger construction, query, diagnosis,
-    correction, and re-evaluation. Python/DuckDB is optional companion
-    verification.
+    correction, authorised disclosure, evaluation, and release regression.
+    Python/DuckDB is optional companion verification.
   - `route-r-projection` — `alternative`: the same bounded positive projection
     is used to demonstrate `igraph` paths/components and `tidygraph` node
     transformations; the result is interpreted as topology analysis, with the
@@ -72,13 +77,24 @@
     databases are compared as representation and serving options, with one
     worked mapping and a workload-based choice guide, not a product survey or
     executed Neo4j route.
-- Teaching devices: The retained-excerpt, mention-decision, span-to-assertion,
-  and ledger tables deliberately replace the source-to-ledger pipeline figure.
-  The three-pass experiment, revised derivations, and release regression
-  table deliberately replace the correction-loop diagram. The tables expose
-  the inputs, decisions, and outputs for replay by hand. The storage reference
-  uses mapping tables, and the evaluation lab shows the arithmetic with its
-  item boundaries.
+- Teaching devices: Two native Pandoc text-flow diagrams show the
+  source → mention/entity → qualified claim → evidenced answer chain and the
+  baseline → diagnosis → revised ledger → release regression cycle. Labelled
+  stages and operations remain selectable text in HTML/PDF; their meaning
+  does not depend on colour or arrow glyphs alone. Line blocks keep this
+  source-only revision free of code fences and build changes.
+  Retained-excerpt, mention-decision, span-to-assertion, and ledger tables
+  supply the detailed hand replay beneath the opening flow. Three worked
+  failures develop symptom, diagnosis, test, and change; a compact table
+  retains the other diagnostic cases. The three-pass experiment distinguishes
+  extraction repair from source correction. Evaluation follows the disclosure
+  contract, with Pass A's inputs, arithmetic, and interpretation grouped in a
+  worked note. One final release regression table gathers changed values,
+  classifications, paths, and citations. H4 landmarks divide each long
+  transfer case at source/model, query, correction, and audit transitions;
+  a cross-case comparison covers entity grain, qualifiers, admissible joins,
+  completeness, and correction dependencies. The optional storage reference
+  uses mapping tables and an acceptance handoff to the worked answer records.
 - Languages and executable examples: Python 3.12 with pinned DuckDB remains
   companion verification for the primary route; R with pinned `igraph`,
   `tidygraph`, `dplyr`, and `tibble` remains companion verification for the
@@ -117,8 +133,9 @@ covers the bounded operations stated below.
 | route-python-duckdb | primary | Mentions and qualified claims | kg-mentions, kg-claims | Preserve source spans, distinguish mentions from entities, and retain source, interval and polarity | Candidate claims and evidence-bearing rows | Hand-worked from excerpts. The optional companion verifies construction for declared patterns |
 | route-python-duckdb | primary | Temporal and conservative construction | kg-temporal, kg-extraction | Classify bounded, unbounded and unknown horizons, refuse unsupported dates, and abstain on Alex identity | Source-derived `c1`, `c4`, `c5` plus refusal decisions | Hand-worked classifications and refusals. Companion extraction covers fixture patterns |
 | route-python-duckdb | primary | Ledger and evidence queries | kg-duckdb, kg-queries | Bind identifiers, select rows, join path hops, and classify dates in the printed ledger | Evidence rows and supported, refuted, or abstention results | Hand-worked queries. The storage reference describes the optional DuckDB mapping and reopen check |
-| route-python-duckdb | primary | Diagnosis, correction and re-evaluation | kg-correction, kg-evaluation | Compare omitted-negative, repaired, and changed-source runs, replay R2 derivations, and score the synthetic items | Revised evidence links, source comparison, policy result, and evaluation limits | Hand-worked lab and regression table. The optional companion verifies a bounded rebuild |
+| route-python-duckdb | primary | Diagnosis and correction | kg-correction | Diagnose the first evidence loss, compare omitted-negative, repaired, and changed-source runs, and replay R2 derivations | Revised evidence links, source comparison, and policy result | Hand-worked failures and three-pass lab. The optional companion verifies a bounded rebuild |
 | route-python-duckdb | primary | Privacy and release boundary | kg-privacy | Compare ordinary citations, answers, and counts across paired releases | Approved evidence and the same ordinary outputs in both states | Hand-worked disclosure test and governance assumptions |
+| route-python-duckdb | primary | Evaluate permitted outputs and release regression | kg-evaluation, kg-correction, kg-privacy | Score the synthetic items against the audience contract, then compare original and revised answers, paths, and citations | Interpreted measures and release acceptance expectations | Worked arithmetic, answer items, and final regression table; no deployment accuracy claim |
 | route-r-projection | alternative | Positive projection | kg-r-projection | Read the declared positive interchange fixture and analyse paths/components | Topology results without claim qualifiers | executable alternative; deliberately not synchronised with changed Python input |
 | route-r-projection | alternative | Interpret topology and return to evidence | kg-r-projection | Explain unit path cost, components, and discarded dates, polarity, provenance and claim IDs | A topology interpretation and a return path to the evidence ledger | Hand-worked interpretation with optional R verification. Evidence questions require the ledger |
 | route-graph-storage | reference-only | RDF, property graphs and storage choice | kg-rdf, kg-property, kg-storage | Compare qualified mappings and workload boundaries | A future storage decision and prospective test | reference-only; no continuous teaching spine or executed service migration promised |
@@ -158,10 +175,10 @@ covers the bounded operations stated below.
 | route-python-duckdb | primary | kg-extraction | Conservative extraction and abstention | Extract only declared patterns and record refusals | Narrow patterns, offsets and methods make construction inspectable | Makes failure diagnosable instead of silently broad | Source sentence table and refusal cases | Rejected unsupported sentence and accepted candidates | Identify extraction uncertainty | Not a general NLP extractor | Supports tests and human review | Verify implementation claims against code |
 | route-python-duckdb | primary | kg-duckdb | Tabular ledger and optional DuckDB representation | Follow a ledger row to its source and mention evidence by hand. Optionally build, reopen, and query the temporary database | Assertion keys connect the ledger to source and optional mention records. The companion uses parameters for query values | Makes persistence and evidence links inspectable | Worked ledger and optional companion notes | Source lookup for `c5` and `c7`. Reopened queries in the companion | Distinguish persistence from the full ledger contract | Companion validation is bounded to the fixture | Supports local verification and storage comparison | Verify pinned DuckDB 1.4.3 behaviour |
 | route-python-duckdb | primary | kg-queries | Direct, two-hop and provenance queries | Answer a competency question from the printed ledger | Bind IDs and predicates, match the shared Atlas ID, and retain the scope and evidence for each row | Makes path and answer dependencies inspectable | Hand-worked lookups, Q4 classifications, and bounded path | Owner, version, provenance, and dated two-hop results | Explain which rows support the answer and which are excluded | Query scope follows fixture boundary | Feeds R projection and storage comparison | Check the results against the ledger and excerpts |
-| route-python-duckdb | primary | kg-correction | Diagnosis, correction and re-evaluation | Locate a bad answer and replay the corrected ledger by hand | Source-version links and temporal classifications determine which answers and citations need updating | Makes changed conclusions and unchanged values with revised evidence auditable | Three-pass lab, R2 derivation table, and release regression table | Omitted denial, restored denial, revised interval, and R2 carry-forwards | Explain the source comparison and applicability outcome separately | Optional companion verifies a bounded rebuild. Durable release publication needs further work | Establishes release regression behaviour | Check R1/R2 replay and the companion's stated limits |
-| route-python-duckdb | primary | kg-evaluation | Gold sets and useful measures | Adjudicate an answer against supporting/opposing evidence | Precision/recall depend on item definitions and adjudication, not arithmetic alone | Northbridge evidence-backed gold items | Q1–Q5 remapped to actual claims | Label and measure one answer set | Interpret false positives and abstentions | Small gold set is illustrative | Guides monitoring and review | Source evaluation definitions and case labels |
+| route-python-duckdb | primary | kg-correction | Diagnosis, correction and re-evaluation | Locate a bad answer and replay the corrected ledger by hand | Source-version links and temporal classifications determine which answers and citations need updating | Makes changed conclusions and unchanged values with revised evidence auditable | Worked failures, correction flow, three-pass lab, R2 derivations, and final release regression | Omitted denial, restored denial, revised interval, and R2 carry-forwards | Explain the source comparison and applicability outcome separately | Optional companion verifies a bounded rebuild. Durable release publication needs further work | Establishes release regression behaviour | Check R1/R2 replay and the companion's stated limits |
+| route-python-duckdb | primary | kg-evaluation | Gold sets and useful measures | Adjudicate an answer against supporting/opposing evidence | Precision/recall depend on item definitions and adjudication, not arithmetic alone | Northbridge evidence-backed gold items | Q1–Q5 mapped to actual claims and audience contracts | Score Pass A with explicit inputs, arithmetic, and interpretation | Interpret false positives and abstentions | Small gold set is illustrative | Guides monitoring and review | Source evaluation definitions and case labels |
 | route-python-duckdb | primary | kg-privacy | Proportionate identity and access | Resolve the approved sentence locator and compare outputs across paired releases | Select the audience view before evaluating citations, paths, and counts | Prevents citation and candidate-count disclosure | Paired Alex Kim release test | Same Q4 answer and citation, Q5 response, and visible count in both ordinary views | Explain why the ordinary result stays fixed while the authorised view differs | The worked test models disclosure behaviour in a synthetic fixture | Informs governance and release regression checks | Check the paired outputs against the view rules |
 | route-r-projection | alternative | kg-r-projection | Positive topology projection | Analyse selected relations in R | Projection drops polarity, dates, provenance and claim identity | Demonstrates graph analysis without pretending it preserves evidence | `igraph` path/components plus `tidygraph` node table | Same five positive relations and expected path | Interpret topology only | Lossy projection cannot answer evidence questions | Useful for exploratory structural analysis | Verify pinned R APIs and output |
-| route-graph-storage | reference-only | kg-rdf | RDF and qualified claims | Map a claim ledger to triples and provenance | URI identity and reification/qualified patterns preserve semantics differently | Offers interoperability vocabulary | One Northbridge claim in Turtle/SPARQL | Illustrative mapping and query | State what the mapping retains | Snippets are unexecuted | Supports standards-aware exchange | Verify W3C RDF/SPARQL/PROV-O claims |
-| route-graph-storage | reference-only | kg-property | Property graphs and Cypher | Compare a qualified claim mapping with a property graph | Node/relationship properties and query patterns make different trade-offs | Clarifies representation versus truth | Cypher-shaped mapping beside RDF | Illustrative direct/path query | Interpret convenience and loss | Product/version semantics vary | Informs serving choice | Verify named Cypher manual |
-| route-graph-storage | reference-only | kg-storage | Graph-database storage choice | Choose DuckDB, a graph database, or another store for a workload | Workload, updates, traversal, provenance and operations determine the boundary | Avoids “graph database” as automatic solution | Decision table and prospective smoke test | Same questions mapped to storage needs | Explain why no universal winner follows | No benchmark or Neo4j run in scope | Provides a future integration brief | Verify only current official claims |
+| route-graph-storage | reference-only | kg-rdf | RDF and qualified claims | Map a claim ledger to triples and provenance | URI identity and reification/qualified patterns preserve semantics differently | Offers interoperability vocabulary | Northbridge assertion-resource mapping and explained SPARQL patterns | Hand-worked representation and query reasoning | State what the mapping retains | Mapping is illustrative; no code snippets | Supports standards-aware exchange | Verify W3C RDF/SPARQL/PROV-O claims |
+| route-graph-storage | reference-only | kg-property | Property graphs and Cypher | Compare a qualified claim mapping with a property graph | Node/relationship properties and query patterns make different trade-offs | Clarifies representation versus truth | Qualified relationship mapping beside RDF | Explained pattern matching | Interpret convenience and loss | Product/version semantics vary | Informs serving choice | Verify named Cypher manual |
+| route-graph-storage | reference-only | kg-storage | Graph-database storage choice | Choose DuckDB, a graph database, or another store for a workload | Workload, updates, traversal, provenance and operations determine the boundary | Avoids “graph database” as automatic solution | Workload comparison and prospective exchange test | Same questions mapped to storage needs | Explain why no universal winner follows | No benchmark or Neo4j run in scope | Provides a future integration brief | Verify only current official claims |

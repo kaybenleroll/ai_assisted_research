@@ -6,6 +6,18 @@ On 15 March 2024, two Northbridge records give different accounts of the travel 
 
 A knowledge graph can preserve enough information to answer each of those questions. Its relationships have named meanings and connect identified things. Its evidence records say who or what made an assertion, where to check it, and under what conditions it applies. A query then selects and interprets those records for a particular purpose. Keeping these steps visible lets a reader challenge an answer and see exactly what a correction would change.
 
+The flow below shows what must survive between a source and an answer. Read it from top to bottom: the arrows describe operations on evidence, while each labelled stage states what the operation produces.
+
+| **Source:** the register and minutes make different statements about version 1.
+| ↓ Retain the wording and its location in each source snapshot.
+| **Mention → entity:** link each occurrence of "version 1" to Travel Policy v1.
+| ↓ Preserve the relation, polarity, date, and source together.
+| **Qualified claims:** an affirmation from the register and a denial from the minutes.
+| ↓ Select both for Atlas on 15 March and compare their time support.
+| **Answer with evidence:** report disagreement and cite both source passages.
+
+The two source statements reach the answer as separate records. Resolving their mentions to the same policy version enables comparison; it gives neither statement authority over the other. Dropping the denial or its date at an earlier stage changes what the final answer can establish.
+
 Northbridge is fictional. You can reproduce the main case from the excerpts, tables, and worked decisions in this primer. Familiarity with tables and identifiers is enough. The [primary route](#route-python-duckdb) starts with the questions Northbridge needs to answer, follows the evidence into the model, and works the policy queries and a correction by hand. The two transfer cases repeat the reasoning for research literature and software dependencies. The [alternative route](#route-r-projection) uses a projection of Northbridge to study graph structure. [Storage and implementation notes](#route-graph-storage) give optional mappings and describe the companion implementations.
 
 *Verified against primary sources for the standards and interfaces in Storage and Implementation Reference and the R projection. The case studies and their worked results are synthetic.*
@@ -89,7 +101,7 @@ The eight local entities in the Northbridge case are listed below. Directory ide
 
 An identifier often needs three pieces of context to serve as evidence of identity. You need the value, the authority that assigned it, and any interval during which the assignment is valid. Two systems might use NB-104 in separate namespaces. A departed person's account could be reassigned under a different local policy. If those cases are possible, record the assignment history before treating the value as decisive. Here the register and directory refer to the same issuer and compatible dates, so the matching assignment of NB-104 supports linking the Morgan Lee mention to `person:morgan-lee`.
 
-The shortened "version 1" and "version 2" in M1 can be linked because the excerpt is from the discussion of the Atlas travel policy. An isolated sentence with that wording would give less evidence. Keep the paragraph context used for the decision, since a later reviewer might find that another policy appeared between the sentence introducing the topic and the abbreviated reference. "Atlas" likewise denotes the project in this context. The model's type checks would rule out matching an Atlas-named person or application to a project role, but there could still be two projects with the same display name.
+For M1, the case supplies the topic metadata "Atlas travel policy discussion". That supplied context, together with the version numbers, supports linking the shortened "version 1" and "version 2" to the travel-policy versions. The three quoted sentences alone do not establish the policy family. Retain the topic metadata with M1 as part of the link decision; a real import would need to retain the heading, agenda item, or other located context that supplies it. An isolated sentence with the same wording would leave the family unresolved. "Atlas" likewise denotes the project in this supplied context. The model's type checks would rule out matching an Atlas-named person or application to a project role, but there could still be two projects with the same display name.
 
 The following intermediate records show selected occurrences and the link decisions. Their locators and quoted phrases can be checked in the source table. Repeated phrases such as "Atlas" can be distinguished by their sentence positions.
 
@@ -198,6 +210,8 @@ Different uncertainties call for different responses. The two Alex candidates ex
 
 Northbridge's cross-source policy gives priority to a demonstrated conflict between applicable rows. Without that conflict, any temporally indeterminate selected row leads to abstention for temporal scope. With neither of those conditions, an applicable positive yields "supported", an applicable negative yields "refuted", and the absence of applicable rows yields abstention for lack of evidence. The policy is deliberately cautious. It can withhold a result even if the indeterminate evidence has the same polarity as the applicable evidence. An organisation might choose a different rule, such as restricting a register question to the designated source or determining whether only an indeterminate opposing polarity should block a conclusion. Changing this rule changes the answer and needs its own documented version and evaluation.
 
+Work the consequence with version 2 on 1 April. Select its Atlas applicability assertions from both sources: `c4` from the minutes and `c6` from the register. `c4` is indeterminate because its support stops at 15 March; `c6` is applicable on its stated 1 April day. Both are positive, so there is no applicable disagreement, yet the conservative policy abstains because a selected row is indeterminate. Under an alternative rule that blocks support only for an indeterminate opposing polarity, `c6` would instead yield "supported", citing `R1:P1-P2`, sentence 3. That rule would still report the minutes as indeterminate, and could not claim that both sources agree on 1 April. A register-only question also yields version 2, but reaches it by selecting a different evidence boundary. Keep those two policy choices distinct when comparing answers.
+
 ## Answer Questions From the Graph
 
 The [query procedure]{#kg-queries} binds the entities and relation types, selects sources and the release, classifies valid time when the question requires it, and explains the result using evidence references. All of this can be done with the seven ledger rows. A **binding** gives a value to a role in a pattern. The unbound roles are the values you want to find. Multiple patterns can share one binding, for example when the object of the first relationship must be the subject of the next.
@@ -259,32 +273,23 @@ For a dated version, classify both hops at the same date. On 1 January `c1` and 
 
 The path still leaves the policy and organisation connected through a particular project. Extending applicability to Orion would require a separate relation or rule, such as an explicit organisation-wide policy statement and evidence that Orion was in its scope. The available evidence contains neither. A user can follow the path backwards for exploration if the question allows inverse traversal, but the evidence then still has its original directions. An undirected drawing might connect version 1 and Orion via Northbridge. That connection supplies no legitimate inference of policy applicability to Orion. This difference between navigational reachability and the meaning of a typed, evidence-backed path also governs the alternative projection.
 
-## Diagnose, Correct, and Evaluate the Answer
+Carry these query results into the correction lab as the baseline. Preserve an answer record naming the question, date, source versions, graph release, audience view, selected rows, temporal classifications, source comparison, policy branch, result, and displayed evidence locators. The record makes a changed answer comparable with its predecessor. A release name alone does not identify which audience view produced it.
 
-Use the original Northbridge excerpts and ledger as the reference for this lab. The question, source boundary, tested date, and answer policy stay fixed during the three controlled passes. Track what each pass changes and what evidence reaches the answer. This lets you distinguish a defect in reading the source from a correction to the source itself.
+The dated path is also a dependant of `c1`, even though it does not decide Q4. Record that dependency before changing the assertion: a correction can affect paths, counts, explanations, caches, and projections differently. The next lab changes one input or stage at a time and uses the classifications already worked here to locate the consequence.
 
-### Establish the Reproduction Boundary
+## Diagnose and Correct the Answer {#diagnose-correct-and-evaluate-the-answer}
 
-Start each run by writing an answer record. It names the question, the queried date, the selected source versions, the release identity, the ledger rows evaluated, their temporal classifications, the source comparison, the policy branch and its outcome, and every evidence locator shown to the reader. A result without this record may be plausible yet cannot be diagnosed. A release identifier alone is insufficient when a release can select different views for different audiences.
+The [Q4 comparison](#compare-the-same-proposition-across-sources) supplies the lab's baseline: on 15 March, applicable `c1` and `c5` give opposing evidence, and the policy abstains. Keep its question, source boundary, date, and policy fixed through three controlled passes. An extraction repair restores a statement from the same source; a source correction changes the evidence to be represented. The following flow shows where those two interventions differ and how either reaches a release check.
 
-For the central run, the fixed question is Q4. Ask whether the register and minutes agree about version 1 applying to Atlas on 15 March and what the applicability policy concludes. Select `s-register` and `s-minutes`, then retrieve assertions with subject version 1, predicate `applies_to`, object Atlas, and either selected source. The expected retrieved evidence is `c1` and `c5`. Under the original register wording, `c1` is applicable on 15 March because its interval begins on 1 January and ends immediately before 1 April. `c5` is applicable because the minutes assert it for 15 March. Their polarities oppose one another. The proper Q4 answer says that the records disagree and withholds a single applicability conclusion. It cites `R1:P1-P2` and `M1:paragraph-3` in the internal replay.
+| **Baseline:** retain the Q4 inputs, selected rows, classifications, and citations.
+| ↓ Diagnose the first stage where the observed record diverges.
+| **Diagnosis:** was the minutes denial lost, or did the register wording change?
+| ↓ Repair extraction from M1, or admit the corrected register as R2.
+| **Revised ledger:** retain the earlier derivations and identify the new evidence.
+| ↓ Apply the audience contract, then evaluate the permitted answers.
+| **Release regression:** compare changed dates, results, paths, and citations.
 
-The same case also gives a downstream path check. Ask for the organisation associated with version 1 through the register and directory on a specified date. The path has two labelled hops, version 1 to Atlas through `c1`, then Atlas to Northbridge through `c3`. On 1 January both source-specific assertions are applicable. The evidence-backed result is version 1 → Atlas → Northbridge, supported by `c1` and `c3` with both locators. On 1 March, `c1` remains applicable. `c3` is indeterminate because its directory support is limited to 1 January. The dated path is indeterminate. A system must not manufacture persistence for the affiliation hop from a single-day snapshot.
-
-This path is downstream of `c1` even though it does not decide Q4. A correction can alter a dated path, count, explanation, cache, and projection while leaving an undated positive edge unchanged. Record dependants before correcting an evidence row.
-
-The time model is intentionally strict. A bounded end is exclusive. Therefore `c1` with the original end of 1 April is applicable on 29 February and 15 March, then outside on 1 April. A source statement asserted for one named day has support through that day only. `c5` is applicable on 15 March. It is indeterminate on 16 March. This distinction controls the answer. On 16 March under the original records, `c1` is applicable and `c5` is indeterminate. The system withholds a conclusion for indeterminate temporal scope.
-
-The following record gives hand-reproducible baseline evidence. It is a test oracle for the original source revision, not a claim about any production system.
-
-| Item | Fixed input | Expected intermediate result | Expected answer or test observation |
-|---|---|---|---|
-| Q1 on 29 February | Register, Atlas, `applies_to`, 29 February | `c1` applicable and `c6` has not started | Version 1 is the register result, cited to `R1:P1-P2` |
-| Q1 on 1 March | Register, Atlas, `applies_to`, 1 March | `c1` applicable and `c6` has not started | Version 1 is the register result, cited to `R1:P1-P2` |
-| Q4 on 15 March | Register and minutes, version 1, Atlas | `c1` positive applicable and `c5` negative applicable | Disagreement, withhold applicability conclusion, cite both locators |
-| Q4 on 16 March | Register and minutes, version 1, Atlas | `c1` applicable and `c5` indeterminate | Register alone has an applicable assertion. Abstain on temporal scope |
-| Register and directory path on 1 January | Version 1 to Northbridge through Atlas | `c1` applicable and `c3` applicable | Return the two-hop path with `c1`, `c3`, `R1:P1-P2`, and `D1:A1` |
-| Register and directory path on 1 March | Same path and sources | `c1` applicable and `c3` indeterminate | Do not return a supported dated path |
+The branch at diagnosis matters. Restoring a lost denial should recreate the original disagreement. Admitting a corrected interval can legitimately remove it. The final regression check must establish which happened, including cases where the answer text stays the same but its evidence changes.
 
 ### Trace a Failure Through Stages
 
@@ -294,21 +299,32 @@ Validation can reject duplicate IDs, unknown entities, bad polarity values, miss
 
 Use the smallest discriminator that separates causes. A 15 March `supported` result may arise because extraction dropped `c5`, selection filtered negatives, classification put the minutes outside, policy ignored conflict, or presentation lost a citation. Inspect the span, candidates, assertions, selection, classifications, policy trace, then rendered result.
 
-The table maps symptoms to staged discriminators. Each discriminator is a hand check that can later become an automated regression test. It is not a replacement for source review.
+Work three representative failures in that order before using the compact reference below. Each starts from an observable symptom and chooses a test that can distinguish the cause. Applying the same repair to every plausible cause could make one answer look correct while leaving the next question broken.
 
-| Observed symptom | Plausible stage | Staged discriminator | Diagnosis if the discriminator fails | Correction and repeatable test |
-|---|---|---|---|---|
-| Q4 on 15 March says `supported` and shows only `c1` | Candidate extraction | Inspect the retained `M1:paragraph-3` span and candidate log for the words "version 1 does not apply" | Positive-only omission of the negative candidate | Admit a negative candidate with subject version 1, object Atlas, date 15 March, and source span. Re-run Q4 and require `c1` plus `c5` before policy evaluation |
-| Q4 selects `c1` but a verified `c5` exists in the ledger | Selection | Print all rows matched before polarity filtering | The selection predicate excluded negative assertions or excluded `s-minutes` | Select both polarities and both sources for a comparison question. Test that Q4 retrieves exactly `c1` and `c5` on the original release |
-| Q4 retrieves both rows yet says `supported` | Inference policy | Inspect the policy trace with polarities and temporal classifications | Conflict handling was skipped or ordered after positive support | Apply the conflict branch before the positive branch. Test that two applicable opposite polarities produce disagreement and an abstention |
-| Q4 says `c5` is outside on 15 March | Temporal interpretation | Compare its asserted date and support horizon with the queried date | The one-day minutes evidence was shifted, truncated, or treated as a publication date | Restore the asserted day of 15 March. Test `c5` applicable on 15 March and indeterminate on 16 March |
-| Q4 says disagreement but cites only `R1:P1-P2` | Evidence presentation | Compare answer citations with selected applicable rows | Citation assembly discarded the negative premise | Emit a locator for each decisive row. Test that the original Q4 output names both `R1:P1-P2` and `M1:paragraph-3` |
-| Q1 returns version 1 on 1 April | Temporal classification | Check the interval convention stored with `c1` | The exclusive 1 April end was treated as inclusive | Classify the end date as outside. Test `c1` applicable on 31 March and outside on 1 April |
-| The version 1 to Northbridge path is called supported on 1 March | Path evaluation | Classify each hop independently before joining | `c3` was assumed to persist beyond 1 January | Mark the path indeterminate when a required hop is indeterminate and none is outside. Test `c1` applicable and `c3` indeterminate on 1 March |
-| A path to Orion is returned from version 1 | Join or rule application | Inspect the shared identifier at every hop and the asserted rule | A label join or an unstated organisational propagation rule replaced the Atlas join | Join `c1` only to `c3` through Atlas. Test that `c7` does not establish version 1 applicability to Orion |
-| Q5 identifies one Alex Kim for a general user | Resolution or disclosure | Inspect `r2`, candidate evidence, and the audience view before rendering | A name match was treated as an identity decision or restricted data crossed the view boundary | Retain `m-alex` with two candidates and no person link. Test the fixed general response in releases with and without restricted candidates |
-| A general-user count changes from zero to two after an identity review | Aggregate disclosure | Compare authorised and ordinary projections, path existence, counts, search results, and cache keys | The projection or cache leaks candidate multiplicity | Filter before traversal and partition cache keys by audience. Test identical ordinary outputs across the paired releases |
-| A corrected register yields an old cached Q1 answer | Release propagation | Compare answer release, source revision, assertion derivation, and cache dependency record | The old derivation was not invalidated or was served under the new release name | Invalidate or recompute all `c1` dependants. Test that a request pinned to the revised release cannot receive the original answer |
+**A denial disappears before admission.** The symptom is a Q4 answer of `supported` on 15 March showing only `c1`. Inspect the retained `M1:paragraph-3` span, then its candidate log. The source contains "version 1 does not apply", but the log has no candidate for that sentence. This locates the first loss at candidate extraction. If `c5` were already admitted, the same symptom would instead require a selection test.
+
+The change is to admit the negative candidate with version 1 as subject, Atlas as object, 15 March as its supported day, and the minutes sentence as evidence. Re-run the unchanged Q4 selection and require exactly `c1` and `c5` before evaluating policy. Both are applicable on that day, so the repaired answer reports disagreement and abstains. This checks restoration of the omitted evidence; it does not settle which policy version should govern.
+
+**A retained denial is classified on the wrong day.** Suppose both rows reach the query, but `c5` is marked outside on 15 March. Compare the sentence's asserted day with the stored start and support horizon. A shifted date, a truncated horizon, or substitution of publication time for the asserted day would explain this symptom. If both stored dates are 15 March, test the classifier's treatment of the inclusive horizon before changing the row.
+
+Restore the source-supported date if transcription was wrong, or repair the classifier if the row was already correct. The discriminating boundary test requires `c5` to be applicable on 15 March and indeterminate on 16 March. Extending the denial indefinitely would make the central date pass while creating a false conflict on the next day. A regression must check the neighbour as well as the reported failure.
+
+**The comparison survives, but its evidence is lost in presentation.** Suppose the trace contains applicable `c1` and `c5` and reaches the conflict branch, while the displayed answer says "The records disagree" and cites only the register. Compare the decisive assertion IDs with the emitted evidence links. The inference is intact; citation assembly has discarded the negative premise. Re-extracting the minutes cannot repair that later loss.
+
+Emit an authorised locator for each decisive row. The internal replay needs `R1:P1-P2` and `M1:paragraph-3`; the ordinary view will use the approved sentence-level excerpts established in the disclosure section. Check the links as well as their labels, so each resolves to evidence that supports its assertion. The answer is incomplete if a reader can inspect only one side of the claimed disagreement.
+
+The remaining cases use the same symptom → discriminator → change progression. The table is a reference for choosing the next hand check, with the expected result stated alongside the repair.
+
+| Failure and stage | Discriminating check | Change and regression result |
+|---|---|---|
+| Q4 omits an admitted `c5`: selection | Inspect matches before polarity and source filters. | Admit both sources and polarities; original Q4 retrieves exactly `c1` and `c5`. |
+| Q4 retrieves both applicable rows but says `supported`: policy | Inspect branch order with both polarities. | Handle conflict first; opposing applicable rows give disagreement and abstention. |
+| Q1 returns version 1 on 1 April: time boundary | Check `c1` against its exclusive end. | Treat the end as outside; 31 March is applicable and 1 April is outside. |
+| The 1 March path is called supported: path evaluation | Classify each hop independently. | Keep `c1` applicable and `c3` indeterminate; the path is indeterminate. |
+| Version 1 is said to apply to Orion: join or rule | Inspect shared IDs and the asserted propagation rule. | Join `c1` to `c3` through Atlas; `c7` supplies no Orion applicability. |
+| Q5 identifies an Alex Kim for an ordinary user: resolution or disclosure | Check `r2`, its evidence, and the audience view. | Keep `m-alex` unresolved with two candidates; require the fixed ordinary response in both restricted-record states. |
+| An ordinary count changes from zero to two: aggregate disclosure | Compare paths, counts, search, exports, and cache views. | Filter before traversal and separate caches by audience; paired ordinary outputs must match. |
+| A revised release serves an old cached Q1 answer: propagation | Compare release, source, derivation, and cache dependencies. | Recompute or invalidate `c1` dependants; the revised release cannot serve the original derivation. |
 
 ### Run the Three Controlled Passes
 
@@ -330,53 +346,13 @@ The three register derivations for `G-C` are as follows.
 
 On 15 March, revised `c1` is outside and the register has no applicable version 1 assertion. The sources have no applicable disagreement and there is no evidence of agreement. The minutes denial `c5` alone yields `refuted` under the policy. Cite `R2:P1-P2` for the revised interval and `M1:paragraph-3` for the denial. The result concerns the evidence in the revised release.
 
-The next table supplies the before, intermediate, and after results for Q4. "Selected" records the rows found before time classification. The policy uses those classifications, including indeterminate rows, while the source comparison uses applicable rows. An outside row can explain why a formerly decisive assertion no longer applies.
-
-| Run and date | Selected evidence and classification | Source comparison | Applicability policy result |
-|---|---|---|---|
-| Before change, 15 March | R1 `c1` applicable positive and M1 `c5` applicable negative | Disagreement | Abstain on conflicting evidence |
-| A, incomplete extraction, 15 March | R1 `c1` applicable positive. The filter omits `c5` | Incomplete comparison because required minutes evidence is missing | `supported` from the incomplete ledger |
-| B, repaired extraction, 15 March | R1 `c1` applicable positive and M1 `c5` applicable negative | Disagreement | Abstain on conflicting evidence |
-| C, revised register, 15 March | R2 `c1` outside and M1 `c5` applicable negative | No applicable disagreement and no evidence of agreement | `refuted` from the minutes alone |
-| C, revised register, 16 March | R2 `c1` outside and M1 `c5` indeterminate | Neither source has an applicable assertion | Abstain on temporal scope |
-
-Run boundary tests in addition to the central date. In A and B, Q1 on 29 February and 1 March returns version 1 from `c1`, with `c6` outside before its start. In C, Q1 on 29 February still returns version 1 from `c1@G-C` at `R2:P1-P2`, sentence 1. On 1 March it returns no applicable register version in R2, citing that sentence for the exclusive end and sentence 3 for the start of `c6@G-C`. On 1 April Q1 returns version 2 from `c6@G-C` at `R2:P1-P2`, sentence 3. Q2 still names Morgan Lee on 1 January and reports indeterminate continuation on 1 March, now citing `c2@G-C` at `R2:P1-P2`, sentence 2, with `r1` and D1 as the identity evidence. For Q4 on 16 March, cite the same R2 interval and M1 denial as on the 15th. The denial is temporally indeterminate after its 15 March horizon, so the policy must abstain.
+The unchanged owner and version 2 wording also needs a new evidence chain. Their values can stay the same while their accepted locators move from R1 to R2. The final release regression gathers these carry-forwards with the changed answers and boundary dates; compare both values and derivations there.
 
 The version 1 to Atlas to Northbridge path illustrates a correction's downstream effect. Under the original source, the undated positive projection contains the version 1 to Atlas edge. Under C it still contains that edge if the projection discards valid-time qualifiers. A dated projection for 29 February may retain it. A dated projection for 1 March and 15 March must exclude it because revised `c1` is outside. The 1 January path is still supported because both hops cover that day. The 1 March path becomes outside because the revised first hop is outside, even though the second hop is indeterminate. Retain both classifications in the trace.
 
 Do not repair C by changing a date in place. Preserve the original source version where permitted and record the new source version, locator, admission, reviewer or authorised process, reason, rebuilt values, and affected releases. `c1` supports comparison but does not license overwriting prior evidence.
 
-### Pre-Register Retrieval and Answer Evaluation
-
-[Evaluation]{#kg-evaluation} needs item boundaries before results are inspected. Otherwise an evaluator can improve a score by deciding after the fact that the missing negative assertion did not belong, that an abstention was incomplete, or that an absent citation does not matter. The fixture is small enough to adjudicate by hand. That makes it useful for testing mechanics and disclosure behaviour. It cannot estimate accuracy on unseen sources.
-
-Pre-register two separate item types. An evidence-retrieval item specifies the question, source revision, scope, date, assertion pattern, required assertion IDs, required locators, and any required classification. A complete-answer item specifies the question, source revision, scope, date, conservative policy, required answer category, required explanation, required evidence or authorised disclosure, and whether a justified abstention fulfils the task. Score a system against the item type it was asked to solve. A system can retrieve all evidence yet phrase the wrong conclusion. It can also emit the right answer label while hiding a decisive assertion.
-
-For original Q4, the evidence-retrieval item is one unit with two required source-specific assertions, `c1` and `c5`. They count separately only inside that fixed unit. The expected locators are `R1:P1-P2` and `M1:paragraph-3`. The answer item has two determinations. First, whether the records agree. Second, whether version 1 applies under the stated policy. The adjudicated answer is "they disagree" for the first determination and a justified withholding for the second. A reply of "conflicting evidence" with only `c1` is not complete because it has no evidence for conflict.
-
-Pass A retrieves one relevant assertion, `c1`, and returns no irrelevant assertion in this deliberately bounded task. Retrieval precision is 1 divided by 1, which is 1. Retrieval recall is 1 divided by 2, which is 0.5. Its complete answer fails because the evidence omission changes the policy output. Pass B retrieves two relevant assertions and no irrelevant assertion. Precision is 2 divided by 2, which is 1. Recall is 2 divided by 2, which is 1. Its complete answer passes because it names the disagreement, withholds the policy conclusion, and cites both required locators.
-
-Score Pass C against its own R2 and M1 reference. On 15 March, the retrieval item requires `c1@G-C` at `R2:P1-P2` and `c5` at `M1:paragraph-3`, with their classifications. The applicable-evidence sub-item requires one assertion, `c5`, so precision and recall are both 1 divided by 1. The complete-answer item requires two determinations. For the comparison, there is no applicable disagreement and no evidence of agreement because revised `c1` is outside. For applicability, the minutes alone yield `refuted`. On 16 March, the complete-answer item requires the same two citations, a comparison that reports neither source has an applicable assertion, and an abstention on temporal scope because `c5` is indeterminate and `c1@G-C` is outside.
-
-The following pre-registered answer set uses the original source revisions. It has five named items and fixed completeness rules and supplies the inputs for the lab arithmetic.
-
-| Item | Required determinations and evidence | Adjudicated result | Complete under the policy? |
-|---|---|---|---|
-| Q1 | Register version for Atlas on 1 March, `c1`, `R1:P1-P2` | Version 1 on the original source | Yes |
-| Q2 | Recorded owner on 1 January, continuation to 1 March, `c2`, `R1:P1-P2` | Morgan Lee on 1 January, continuation indeterminate on 1 March | No if completeness demands an unqualified later owner, yes if justified limitation fulfils the item |
-| Q3 | Both minutes assertions on 15 March, `c4`, `c5`, `M1:paragraph-3` | Version 2 affirmed and version 1 denied | Yes |
-| Q4 | Agreement and applicability on 15 March, `c1`, `c5`, both locators | Disagreement, withhold applicability conclusion | No under a no-abstention coverage rule, yes under policy agreement |
-| Q5 | Identity answer for the authorised reviewer or bounded ordinary-user answer | `m-alex` remains unresolved for review, ordinary view returns fixed unavailable status | No under an identity-completion rule, yes under authorised policy agreement |
-
-Under a no-abstention coverage rule, only Q1 and Q3 receive complete answers. Coverage is 2 divided by 5, which is 0.4. Under policy agreement, all five items receive their adjudicated outcomes, including the justified limitation in Q2, the withholding in Q4, and the audience-specific bounded response in Q5. Policy agreement is 5 divided by 5, which is 1. Reporting only the latter would imply a broader success than the exercise supports. Report both measures with their definitions, numerators, denominators, source revision, and item boundaries.
-
-Give adjudicators the source version, question, date, scope, policy, required evidence, and rationale prompt before showing system output. Resolve differing interpretations against retained text and record the decision. Useful pitfalls include no in-scope evidence, malformed rows, unknown ends, required negatives, exclusive boundaries, and repeated upstream sources. Include Q1 at 29 February and 1 March, Q4 at 15 and 16 March, C, and the downstream path. Keep related source families out of both development and evaluation.
-
-When a denominator is zero, report it and leave the ratio undefined. Deduplicate repeated `c1` returns before counting. Retire or version an item when its source revision changes.
-
-The lab demonstrates expected behaviour under specified inputs. It makes no empirical accuracy, recall, safety, or privacy claim. A deployment evaluation needs a larger, independently assembled reference set, source-family splits, adjudicator training, error analysis, confidence intervals where sampling warrants them, and a documented treatment of abstentions and access-controlled outputs.
-
-## Govern Identity, Disclosure, and Releases
+## Govern Disclosure and Approve a Release {#govern-identity-disclosure-and-releases}
 
 The identity and release controls begin with Q5 because a correct internal result can still be an unauthorised external disclosure. `m-alex` is a mention in `M1:paragraph-3`, not a person. The directory has two Alex Kim candidates. The minutes do not supply a directory identifier or another authorised discriminator. Resolution decision `r2` therefore records both candidates and abstains from linking the attendance mention to either person. The absence of a person edge is a decision about evidence sufficiency. It is not evidence that neither candidate attended.
 
@@ -424,6 +400,62 @@ Every release needs an evidence manifest. Record admitted source versions and lo
 
 Before publishing `G-C`, compute an impact set from the register revision and its three derivations. For `c1` it includes Q1 and Q4 answers, dated version 1 to Atlas to Northbridge paths, dated projections and their search indexes, evaluation items tied to the original source, and downstream inferences whose premises include `c1`. For `c2` and `c6` it includes ownership and version 2 answers whose conclusions can remain the same while their evidence changes. Include explanations, citations, exports, and caches for each affected product.
 
+Build these products only after the audience views are defined. Their evaluation must judge what that audience is permitted to receive, and the final release check must compare the resulting values and evidence with the previous release.
+
+Distinguish three events in the release record. A domain end of validity says the proposition ceased to hold at the end of its stated interval. A correction says an earlier evidence representation or interpretation was wrong or superseded, as with the hypothetical change from 1 April to 1 March. A retraction withdraws reliance on a source or assertion, perhaps because it was unauthorised, fraudulent, or no longer retainable. An expiry can occur without a correction. A correction can preserve the source history. A retraction may make a prior answer non-reproducible from retained content while preserving a permitted withdrawal notice.
+
+Correction handling starts with provenance, not a manual answer edit. Locate every assertion derived from the source revision. Build the candidate replacement from the corrected source. Verify its span and temporal semantics. Create or update the derivation record. Recompute affected answer products and evaluate the regression table. Invalidate materialisations, indexes, caches, exports, and reports that carry affected content. Publish the new release and its manifest together. Keep an approved route for users to report a result using the release identity, question, and evidence IDs.
+
+Retraction handling first stops new use, then applies deletion, restricted-retention, or tombstone rules across evidence stores, views, replicas, indexes, caches, exports, and extracts. Re-run disclosure tests where removal changes counts or releases. A tombstone can explain non-reproducibility without publishing removed content.
+
+Provenance can create risk. Locators, reviewer identities, and release differences can disclose protected facts. Apply audience policy to manifests, derivations, notices, and audit trails. Do not expose stable local identifiers merely because they are not names.
+
+Release approval needs named responsibility. Source admission owners decide whether a source version may enter a release. Domain owners define relationship meaning and any authority rule. Identity reviewers decide resolution policy within their remit. Access owners approve audience projections and disclosure tests. Release owners verify the manifest, regression results, invalidation records, and publication scope. No single automated check can substitute for these decisions. Automation can show that required fields exist and expected cases produce expected outputs.
+
+### Evaluate the Permitted Outputs {#pre-register-retrieval-and-answer-evaluation}
+
+[Evaluation]{#kg-evaluation} needs item boundaries before results are inspected. Otherwise an evaluator can improve a score by deciding after the fact that the missing negative assertion did not belong, that an abstention was incomplete, or that an absent citation does not matter. The disclosure contract above now defines what each audience may receive. Fix the evaluation items before inspecting system outputs; the worked passes let us examine those predeclared rules here. The fixture is small enough to adjudicate by hand. That makes it useful for testing mechanics and disclosure behaviour. It cannot estimate accuracy on unseen sources.
+
+Pre-register two separate item types. An evidence-retrieval item specifies the question, source revision, scope, date, assertion pattern, required assertion IDs, required locators, and any required classification. A complete-answer item specifies the question, source revision, scope, date, conservative policy, required answer category, required explanation, required evidence or authorised disclosure, and whether a justified abstention fulfils the task. Score a system against the item type it was asked to solve. A system can retrieve all evidence yet phrase the wrong conclusion. It can also emit the right answer label while hiding a decisive assertion.
+
+For original Q4, the evidence-retrieval item is one unit with two required source-specific assertions, `c1` and `c5`. They count separately only inside that fixed unit. The expected locators are `R1:P1-P2` and `M1:paragraph-3`. The answer item has two determinations. First, whether the records agree. Second, whether version 1 applies under the stated policy. The adjudicated answer is "they disagree" for the first determination and a justified withholding for the second. A reply of "conflicting evidence" with only `c1` is not complete because it has no evidence for conflict.
+
+Work Pass A as a fixed retrieval item before judging the complete answer.
+
+> **Note:** Pass A on original Q4.
+>
+> **Inputs:** the reference requires `c1` and `c5`. The run returns only `c1`, so there is one relevant return, one total return, and two required assertions.
+>
+> **Calculation:** precision = relevant returns / all returns = 1/1 = 1. Recall = relevant returns / required assertions = 1/2 = 0.5.
+>
+> **Interpretation:** every returned assertion is relevant, but half the required evidence is missing. The complete answer fails because that omission changes the policy output from abstention to `supported`.
+
+Pass B retrieves both required assertions and no irrelevant assertion. Precision and recall are each 2/2 = 1. Its complete answer also passes: it names the disagreement, withholds the policy conclusion, and cites both required locators. Retrieval success and answer success remain separate judgements even when this run satisfies both.
+
+Score Pass C against its own R2 and M1 reference. On 15 March, the retrieval item requires `c1@G-C` at `R2:P1-P2` and `c5` at `M1:paragraph-3`, with their classifications. The applicable-evidence sub-item requires one assertion, `c5`, so precision and recall are both 1 divided by 1. The complete-answer item requires two determinations. For the comparison, there is no applicable disagreement and no evidence of agreement because revised `c1` is outside. For applicability, the minutes alone yield `refuted`. On 16 March, the complete-answer item requires the same two citations, a comparison that reports neither source has an applicable assertion, and an abstention on temporal scope because `c5` is indeterminate and `c1@G-C` is outside.
+
+The following pre-registered answer set uses the original source revisions. It has five named items and fixed completeness rules and supplies the inputs for the lab arithmetic.
+
+| Item | Required determinations and evidence | Adjudicated result | Complete under the policy? |
+|---|---|---|---|
+| Q1 | Register version for Atlas on 1 March, `c1`, `R1:P1-P2` | Version 1 on the original source | Yes |
+| Q2 | Recorded owner on 1 January, continuation to 1 March, `c2`, `R1:P1-P2` | Morgan Lee on 1 January, continuation indeterminate on 1 March | No if completeness demands an unqualified later owner, yes if justified limitation fulfils the item |
+| Q3 | Both minutes assertions on 15 March, `c4`, `c5`, `M1:paragraph-3` | Version 2 affirmed and version 1 denied | Yes |
+| Q4 | Agreement and applicability on 15 March, `c1`, `c5`, both locators | Disagreement, withhold applicability conclusion | No under a no-abstention coverage rule, yes under policy agreement |
+| Q5 | Identity answer for the authorised reviewer or bounded ordinary-user answer | `m-alex` remains unresolved for review, ordinary view returns fixed unavailable status | No under an identity-completion rule, yes under authorised policy agreement |
+
+Under a no-abstention coverage rule, only Q1 and Q3 receive complete answers. Coverage is 2 divided by 5, which is 0.4. Under policy agreement, all five items receive their adjudicated outcomes, including the justified limitation in Q2, the withholding in Q4, and the audience-specific bounded response in Q5. Policy agreement is 5 divided by 5, which is 1. Reporting only the latter would imply a broader success than the exercise supports. Report both measures with their definitions, numerators, denominators, source revision, and item boundaries.
+
+Give adjudicators the source version, question, date, scope, policy, required evidence, and rationale prompt before showing system output. Resolve differing interpretations against retained text and record the decision. Useful pitfalls include no in-scope evidence, malformed rows, unknown ends, required negatives, exclusive boundaries, and repeated upstream sources. Include Q1 at 29 February and 1 March, Q4 at 15 and 16 March, C, and the downstream path. Keep related source families out of both development and evaluation.
+
+When a denominator is zero, report it and leave the ratio undefined. Deduplicate repeated `c1` returns before counting. Retire or version an item when its source revision changes.
+
+The lab demonstrates expected behaviour under specified inputs. It makes no empirical accuracy, recall, safety, or privacy claim. A deployment evaluation needs a larger, independently assembled reference set, source-family splits, adjudicator training, error analysis, confidence intervals where sampling warrants them, and a documented treatment of abstentions and access-controlled outputs.
+
+### Check the Release Regression
+
+Evaluation defines which outputs count as successful. Release regression now checks whether the revised evidence reaches every affected product. Compare `G-B`, with repaired extraction from R1, against `G-C`, with the corrected R2 register, under the same question and audience contracts.
+
 The following regression table compares answer values and provenance across the releases. It includes the boundary dates, the owner and version 2 carry-forwards, the post-minutes date, and the downstream path.
 
 | Regression case | `G-B` expectation | `G-C` expectation | Required release check |
@@ -438,19 +470,11 @@ The following regression table compares answer values and provenance across the 
 | Version 1 → Atlas → Northbridge path on 1 March | Indeterminate because `c3` is indeterminate while `c1@G-B` is applicable | Outside because `c1@G-C` is outside. `c3` is indeterminate. | Do not reuse the old path status or a topology-only projection |
 | Undated positive projection edge version 1 → Atlas | Present | Present | Label the projection as undated and do not use it to answer dated questions |
 
-Q1 and Q4 show why a release difference needs both source and answer evidence. On 1 March, a cursory release comparison might report that version 1 still has a positive `applies_to` edge. The qualified row changed its end date, which changes the register answer. On 15 March, the old release correctly preserves a cross-source conflict. The revised release has no applicable positive register premise and therefore reaches `refuted` from the remaining minutes evidence under this policy. That is not an authority ruling. A different authority policy would be a separately versioned change with its own test set.
+A release can preserve a value while changing its evidence, or preserve an abstention while changing its reason. Q2 and the 1 April Q1 result test the first distinction; Q4 on 16 March tests the second. The undated projection is a control: its unchanged edge is expected and cannot substitute for the dated checks. This is why acceptance compares the intermediate classifications and citations alongside the displayed result.
 
-Distinguish three events in the release record. A domain end of validity says the proposition ceased to hold at the end of its stated interval. A correction says an earlier evidence representation or interpretation was wrong or superseded, as with the hypothetical change from 1 April to 1 March. A retraction withdraws reliance on a source or assertion, perhaps because it was unauthorised, fraudulent, or no longer retainable. An expiry can occur without a correction. A correction can preserve the source history. A retraction may make a prior answer non-reproducible from retained content while preserving a permitted withdrawal notice.
+Complete the release check with the paired disclosure test: compare the approved Q4 citations, fixed ordinary Q5 answer, and visible counts with restricted records present and absent. Check the authorised Q5 review separately, and confirm that an ordinary request cannot obtain the reviewer's cached answer. Every revised answer must identify its release and resolve to the evidence permitted for that audience.
 
-Correction handling starts with provenance, not a manual answer edit. Locate every assertion derived from the source revision. Build the candidate replacement from the corrected source. Verify its span and temporal semantics. Create or update the derivation record. Recompute affected answer products and evaluate the regression table. Invalidate materialisations, indexes, caches, exports, and reports that carry affected content. Publish the new release and its manifest together. Keep an approved route for users to report a result using the release identity, question, and evidence IDs.
-
-Retraction handling first stops new use, then applies deletion, restricted-retention, or tombstone rules across evidence stores, views, replicas, indexes, caches, exports, and extracts. Re-run disclosure tests where removal changes counts or releases. A tombstone can explain non-reproducibility without publishing removed content.
-
-Provenance can create risk. Locators, reviewer identities, and release differences can disclose protected facts. Apply audience policy to manifests, derivations, notices, and audit trails. Do not expose stable local identifiers merely because they are not names.
-
-Release approval needs named responsibility. Source admission owners decide whether a source version may enter a release. Domain owners define relationship meaning and any authority rule. Identity reviewers decide resolution policy within their remit. Access owners approve audience projections and disclosure tests. Release owners verify the manifest, regression results, invalidation records, and publication scope. No single automated check can substitute for these decisions. Automation can show that required fields exist and expected cases produce expected outputs.
-
-The lab's release procedure has a final hand check. Inspect `G-C` Q1 on 29 February, 1 March, and 1 April, Q2's owner and continuation, Q4 on 15 and 16 March, the 1 January and 1 March downstream paths, and the undated projection label. Check the approved Q4 citations, the ordinary Q5 answers and counts across the paired releases, and the authorised Q5 review view. Confirm that the minutes remain indeterminate beyond 15 March and that every revised answer gives its release identity and current evidence links. Confirm that an ordinary request cannot obtain the authorised reviewer's cached answer. These are test expectations for the supplied fixture. They do not prove that a broader graph, a real access-control system, or a future source feed is safe or accurate.
+The table and paired tests supply acceptance expectations for this synthetic fixture. A broader graph, live access-control system, or future source feed needs its own coverage, disclosure, and accuracy evidence. With the Northbridge cycle complete, the transfer cases show which modelling decisions carry across domains and which must be defined anew.
 
 ## Transfer the Method to Literature and Dependencies
 
@@ -459,6 +483,8 @@ The same evidence-led method can answer questions about research and software, p
 ### Literature Evidence for a Research Question
 
 A reviewer asks which studies in a specified review's citation neighbourhood report a reduction in seven-day hospital readmission among adults aged 65 or over after telephone follow-up, compared with usual care. The word "report" sets a modest task. It asks what an identified study result says under the stated conditions. It does not ask whether the intervention should be adopted, whether the result is causal, or whether all relevant studies in the world have been found. Define reduction for this exercise as a negative point estimate of the risk difference, calculated as the telephone group's readmission percentage minus the usual-care group's percentage. An interval around that estimate remains part of the answer because the sign of a point estimate alone does not describe its precision.
+
+#### Define the Sources and Model
 
 The source boundary is a fictional review and three fictional research works. Each work has a stable identity, and each version is a separately identified source. A work is the intellectual publication across its versions. A version is the particular text from which a claim was extracted. A study is the investigation described by that text, and a cohort is the group of participants whose data are analysed. Two reports can describe the same study, and two distinct studies can draw on the same cohort. Neither relationship is safe to infer solely from similar titles or matching numbers.
 
@@ -494,6 +520,8 @@ The next table records the relations extracted from the excerpts. A result asser
 
 Each `cites` edge means that the review lists a work. It does not mean that the review endorses a conclusion or that the cited work supplies a qualifying result. The `reports` edges connect a particular source version to a study, and the result assertions preserve the conditions under which the estimates were reported. The relation from a work to its version is implicit in the catalogue above and is used explicitly in the join below. A real system would also record extraction and review status, including rejected or uncertain matches. This exercise treats the shown extractions as accepted and makes no assertion about unlisted material.
 
+#### Work the Query
+
 To reproduce the query, start with `R` and bind a cited work as `w`. Join `w` to its listed version `v`, then join `v` to a reported study `s`. Join `s` to a result `r` and cohort `c` attested by the selected version `v` in the snapshot. This version binding prevents an earlier result about the same study from entering the revised answer. Keep a row when `r` specifies age 65 or over, intervention `T`, comparator `U`, outcome `O7`, and a risk difference below zero. The join uses work identity to select versions, study identity to select results, and cohort identity to describe overlap. It does not use a citation edge as a substitute for a result assertion.
 
 The intermediate bindings below show every candidate before the outcome and sign filters are applied. The evidence column gives the path and result record needed to inspect each candidate.
@@ -507,6 +535,8 @@ The intermediate bindings below show every candidate before the outcome and sign
 All three candidates satisfy the age, intervention, and comparator conditions. `SB` fails both the requested seven-day window and the negative-point-estimate condition. Its thirty-day interval includes zero, so its positive estimate alone is insufficient to characterise the uncertainty of that separate result. `SA` and `SC` pass the stated filter. Grouping by study produces two named studies, while grouping by cohort produces one contributing cohort, `X`. Those are different counts answering different questions. A count of citation paths would also be two, but it would not establish two independent participant groups.
 
 The evidenced answer at this revision is that `SA` and `SC` each report a seven-day risk difference of −4 percentage points, with a 95% interval from −7 to −1, in the specified comparison. `A@1` results table 2 and `C@1` results table 1 support the respective figures. `C@1` methods paragraph 1 identifies `SC` as a secondary analysis of the same cohort as `SA`. The answer should therefore name both reported studies and disclose that their evidence overlaps. It should not add their participant counts or present the two records as independent replications. The excerpts contain no sample sizes, allocation procedure, missing-data analysis, or assessment of bias, so they cannot establish how reliable or generalisable either estimate is.
+
+#### Correct the Selected Source Version
 
 Now suppose an authorised correction produces `C@2`. The replacement at methods paragraph 1 and results table 1 states "Study C is a secondary analysis of cohort X enrolled in Study A. It compares telephone follow-up with usual care in adults aged 65 or over. The readmission risk difference at thirty days was −4 percentage points, with a 95% interval from −7 to −1. The seven-day label in version 1 was an error." The correction changes the measurement window of `L12` from seven to thirty days. It does not change `SC`, cohort `X`, the intervention, comparator, estimate, or interval. `C@1` remains an identifiable historical source, and `C@2` is the accepted version for the revised evidence snapshot.
 
@@ -531,6 +561,8 @@ This distinction also protects the interpretation of the correction. `C@2` chang
 
 The correction requires more than changing a displayed label. Re-evaluate saved answers, exports, study and cohort counts, and any materialised result or search index dependent on `L12@1`. Check that `S1` still reproduces the historical answer with `C@1`, and that `S2` cannot combine `C@2` with the old seven-day assertion. Check the thirty-day query as well as the original seven-day query because the correction moves a result into a different eligible set. A citation-only query should continue to return all three works. This separates a change in evidence applicability from a change in the review's bibliography.
 
+#### Audit the Evidence and Interpretation
+
 A reviewer can audit the joins in the opposite direction as well. Start with the answer row for `SA`, locate `L10`, and verify its numerical value, interval, age condition, comparator, and seven-day window in `A@1` results table 2. Then verify the study identity in the methods paragraph and the entry for work `A` in `R@1`. Each step answers a different question. The result passage supports the estimate, the methods passage attaches it to the study and population, and the bibliography establishes why the work belongs to the selected neighbourhood. If the bibliography entry were absent, the estimate could still be present in the report but would fall outside this particular query. If the result passage were absent, the citation path alone could not supply the estimate.
 
 The choice of unit also affects a synthesis beyond this lookup. A study can publish multiple analyses with different windows or populations, and a cohort can appear in multiple studies. Grouping everything by work would overcount publications when versions are revised. Grouping everything by study can still double-count participants when analyses overlap, as `SA` and `SC` show. Grouping by cohort prevents a claim of independent cohorts in this small example, but it does not automatically produce a valid pooled effect. A synthesis would need to determine whether analyses use the same participants, outcome definitions, and follow-up, and then choose a method appropriate to the dependence. The source excerpts do not provide enough information for that calculation.
@@ -542,6 +574,8 @@ The result remains bounded by the stated review neighbourhood and the supplied e
 ### Installed Dependencies and Advisory Applicability
 
 A maintainer asks which production deployments in a stated inventory snapshot include a package release covered by a particular advisory. The answer needs three distinct facts. A deployment identifies the build in use, a resolved inventory identifies the exact package instances selected for that build, and an advisory defines which releases it covers. A declared version constraint describes a set of permitted releases. It does not establish which member of that set was selected or deployed. A path from a production build through its resolved dependency edges supplies that selection, subject to the completeness and timing of the inventory.
+
+#### Define the Inventory and Model
 
 Everything in this example is fictional, including the package names, registry, releases, inventory format, and advisory. Use the following explicitly synthetic version rule throughout. Versions have three non-negative integer components ordered numerically from left to right. A constraint written `>=a <b` includes versions at or above `a` and strictly below `b`. There are no prereleases, platform variants, aliases, or other version rules in this exercise. An exact release is identified by the tuple of registry, package name, and all three version components. The labels and arithmetic do not describe any real package ecosystem.
 
@@ -574,6 +608,8 @@ The extracted facts below carry the context required for a scoped traversal. `ru
 
 The dependency from Parser to Codec is transitive from the build's perspective. The build selects Parser directly, and Parser selects Codec. The path is valid only when all its edges belong to the same build and requested runtime scope. A graph keyed only by the Parser release would merge `D4` and `D6`. Traversing that merged node could falsely attach Codec 1.8.0 to build 42 and Codec 1.9.0 to build 41. Selected-instance identifiers or equivalent edge qualifiers prevent that cross-build join.
 
+#### Traverse and Test Advisory Applicability
+
 To answer the question, bind a deployment `d` from `DEP@1` whose environment is production. Follow its `uses build` edge to `b`, then traverse direct and transitive `selects` edges within `b` and runtime scope. Bind each reached instance as `i` and its exact release as `p`. Join `p` to advisory `V` only if the registry and package name match and the numeric version falls within the advisory range. The path may have more than one dependency edge in a larger inventory. Here the complete supplied paths have at most two. Keep the full path and the inventory and advisory versions with each result.
 
 The next table displays the candidate paths before the production and advisory filters are combined. The version comparisons use the synthetic rule stated above.
@@ -586,6 +622,8 @@ The next table displays the candidate paths before the production and advisory f
 The initial answer is `P` and build `B41`, with the path supported by `DEP@1` row 1, `I41@1` rows 1–2, and `ADV@1` affected section. The development path is useful as a control for the version boundary, but it is outside the production question in any event. The Parser instance itself does not match `D7` because the package name is Parser rather than Codec. Matching version numbers without checking registry and package identity would also create false results. The manifest shows that the selected Parser release satisfies its declared constraint, but the manifest alone cannot establish the transitive Codec release.
 
 This answer is an inventory-and-advisory finding for a specified snapshot. It establishes that an affected release appears on a recorded runtime dependency path in a production build. It does not establish that a vulnerable function is invoked, that a particular configuration satisfies additional conditions, or that an exploit occurred. The synthetic advisory has no additional applicability conditions, and the inventory is assumed complete within its declared runtime scope. Real advisories and inventories may have narrower conditions, missing edges, platform distinctions, and collection delays. Those facts would need separate evidence and explicit predicates before a stronger conclusion.
+
+#### Correct the Inventory and Replay
 
 Now correct the production inventory. Version `I41@2` retains row 1 and replaces row 2 with the complete statement, "That selected Parser instance selects `F/Codec/1.9.0` at runtime. The 1.8.0 selection recorded in inventory version 1 was an error." This revises the evidence about the same build and deployment. The selected Codec instance in the corrected inventory is `C41b`, bound to build `B41` and release `F/Codec/1.9.0`. The revised snapshot has an assertion record for each hop, including the direct selection whose wording was carried forward.
 
@@ -605,6 +643,8 @@ This ledger gives the correction a precise effect. The production deployment sti
 
 The change invalidates the old finding's dependency on `D4` as accepted evidence. Recompute affected paths, production counts, saved answers, exports, and caches that used `I41@1`. Confirm that the historical `D-S1` run still yields the old path and identifies its superseded inventory, while the accepted `D-S2` run does not join the old Codec edge to the corrected snapshot. Recheck `B42` as a control because its inventory did not change. Also recheck the boundary comparison for `1.9.0`, the registry and package equality tests, and the production filter. An unscoped traversal that still returns Codec 1.8.0 for `B41` reveals a stale edge or an improperly constrained join.
 
+#### Audit Scope, Boundaries, and Missing Evidence
+
 The order of the traversal matters for both accuracy and explanation. Starting with production deployments limits the relevant builds before package paths are expanded. Keeping the build binding at every hop prevents an edge from a different resolution being borrowed merely because the parent release has the same name and version. After reaching a candidate, the advisory join evaluates the exact release tuple. A path can be valid and still fail the advisory test, as the `B42` path demonstrates. Conversely, a release can satisfy the advisory range without being reachable from any deployment in the snapshot. Such a release describes potential applicability, not an installed finding.
 
 Scope is equally important. The inventory calls both edges runtime dependencies, and the question selects that scope. If an inventory also contained a test-only edge, the same package release could appear in the build's development context without meeting this query. A different question about build tooling could deliberately select that scope. The reader should preserve the distinction in the answer and in the evidence path. A generic edge with the scope erased would make it impossible to explain why the release was included or excluded, even if the final count happened to be correct.
@@ -622,6 +662,18 @@ A reviewer can test the result by starting from the evidence cited in the answer
 A practical audit should also inspect negative results rather than counting only returned rows. Under `D-S2`, trace `P` to `B41`, then `P41`, then `C41b`, and check why the final advisory comparison fails. This establishes that the empty result follows from a present, out-of-range candidate. An empty result caused by a missing inventory would have a different meaning. If `I41@2` were unavailable, the system could not establish the selected transitive release from `MAN@1` and `DEP@1` alone. The appropriate status would be unresolved for that build, with the missing evidence recorded, rather than an assertion that the build has no affected component.
 
 A later advisory correction would require a separate evidence version and rerun even if neither inventory changed. For example, if an explicitly revised advisory expanded the covered range, each reached Codec release would be tested against that new range using the same synthetic comparison rule. The result would depend on the actual replacement text, which this example does not supply. Likewise, a genuine redeployment would require a new deployment record and a resolved inventory for the new build. It should not be represented as a correction to the old build's historical contents. Recording which input changed distinguishes an amended observation from a change in the world.
+
+### Compare the Modelling Decisions
+
+The two cases share a workflow, but their admissible joins depend on different units and qualifications. Use this comparison when transferring the method to a new corpus.
+
+| Modelling decision | Literature evidence | Dependency evidence |
+|---|---|---|
+| Entity grain | Keep work, source version, study, and cohort distinct; two studies can share participants. | Keep package release and selected instance distinct; one release can have different children in different builds. |
+| Qualifications | Preserve population, intervention, comparator, outcome window, estimate, and interval together. | Preserve build, environment, runtime scope, exact release tuple, and advisory range. |
+| Admissible joins | Select a work's version, then use study and result assertions attested by that version. | Keep the build and runtime binding at every dependency hop, then test the reached release against the advisory. |
+| Completeness | The supplied review neighbourhood is complete only for this exercise; it cannot establish all relevant research or independent cohorts. | The stipulated runtime inventories and affected range permit the bounded empty result; an unavailable inventory would leave it unresolved. |
+| Correction dependencies | `C@2` changes the eligible window; rebuild version-specific links, result sets, study/cohort counts, and their citations. | `I41@2` changes a resolved child; rebuild both inventory hops, affected paths, deployment findings, and their citations. |
 
 A reproducible answer also states the rule used to resolve each boundary. In the literature example, the seven-day label is an exact match and a negative point estimate satisfies the stated reduction criterion. In the dependency example, the upper version bound is exclusive and the environment must be production. These choices belong to the question and its evaluation record. Changing one may produce a different valid answer, so a reader comparing runs needs the rule as well as the selected sources. The evidence path explains which records contributed to a result, while the failed candidates explain why other records did not. Together they make an apparently simple count open to inspection and correction. They also give the next reviewer a concrete starting point for checking the result.
 
@@ -740,6 +792,8 @@ Use an exchange test before drawing performance conclusions. Export the original
 The [local tabular representation]{#kg-duckdb} in the Python and DuckDB companion shows how these relations can be persisted and queried after reopening a database. Assertions, sources, mentions, and source-derived extraction evidence occupy separate tables. The assertion's source key supports the required evidence join and the mention key supports an optional one. For the example's source-derived rows, the extraction evidence records exact spans and the method. A query parameter supplies the requested date as a value. Closing the connection and reopening read-only exercises persistence of the records used by the queries. The example uses temporary databases and its validation checks operate in the construction program. The persisted schema alone does not enforce the full ledger contract. [DuckDB Python database interface](https://duckdb.org/docs/stable/clients/python/dbapi.html).
 
 The companion constructs `c1`, `c4`, and `c5` from synthetic excerpts and combines them with curated rows. Its bounded correction run omits the negative candidate, restores it, and rebuilds after the hypothetical changed register end. The complete Q2 answer, the audience views, and the transfer cases are hand-worked in this primer. The R companion reads a precomputed positive projection. It does not receive the changed source and its rebuilt assertions, so using R for a dated analysis after a correction would require constructing the new, explicitly scoped projection first. The examples demonstrate those bounded operations. Durable release publication, live access enforcement, and service migration require designs and tests beyond the companions.
+
+To implement the worked route, use its answer records as acceptance criteria. First compare selected assertion IDs, source revisions, and time classifications; then compare policy results and authorised evidence. Reopening a database tests persistence, while repeating those comparisons tests whether the representation retained the distinctions the question needs. When a topology projection is exported, record its selection rules and discarded qualifiers with it. These checks let an implementation be assessed against the standalone reasoning even when its tables or query language differ.
 
 ## Further Reading
 

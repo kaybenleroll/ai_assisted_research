@@ -614,33 +614,53 @@ Evidence</a></li>
 Across Sources</a></li>
 <li><a href="#follow-a-bounded-path" id="toc-follow-a-bounded-path"><span class="toc-section-number">5.4</span> Follow a Bounded Path</a></li>
 </ul></li>
-<li><a href="#diagnose-correct-and-evaluate-the-answer" id="toc-diagnose-correct-and-evaluate-the-answer"><span class="toc-section-number">6</span> Diagnose, Correct, and Evaluate the
-Answer</a>
+<li><a href="#diagnose-correct-and-evaluate-the-answer" id="toc-diagnose-correct-and-evaluate-the-answer"><span class="toc-section-number">6</span> Diagnose and Correct the Answer</a>
 <ul>
-<li><a href="#establish-the-reproduction-boundary" id="toc-establish-the-reproduction-boundary"><span class="toc-section-number">6.1</span> Establish the Reproduction
-Boundary</a></li>
-<li><a href="#trace-a-failure-through-stages" id="toc-trace-a-failure-through-stages"><span class="toc-section-number">6.2</span> Trace a Failure Through
+<li><a href="#trace-a-failure-through-stages" id="toc-trace-a-failure-through-stages"><span class="toc-section-number">6.1</span> Trace a Failure Through
 Stages</a></li>
-<li><a href="#run-the-three-controlled-passes" id="toc-run-the-three-controlled-passes"><span class="toc-section-number">6.3</span> Run the Three Controlled
+<li><a href="#run-the-three-controlled-passes" id="toc-run-the-three-controlled-passes"><span class="toc-section-number">6.2</span> Run the Three Controlled
 Passes</a></li>
-<li><a href="#pre-register-retrieval-and-answer-evaluation" id="toc-pre-register-retrieval-and-answer-evaluation"><span class="toc-section-number">6.4</span> Pre-Register Retrieval and Answer
-Evaluation</a></li>
 </ul></li>
-<li><a href="#govern-identity-disclosure-and-releases" id="toc-govern-identity-disclosure-and-releases"><span class="toc-section-number">7</span> Govern Identity, Disclosure, and
-Releases</a>
+<li><a href="#govern-identity-disclosure-and-releases" id="toc-govern-identity-disclosure-and-releases"><span class="toc-section-number">7</span> Govern Disclosure and Approve a
+Release</a>
 <ul>
 <li><a href="#separate-authorised-review-from-ordinary-use" id="toc-separate-authorised-review-from-ordinary-use"><span class="toc-section-number">7.1</span> Separate Authorised Review From
 Ordinary Use</a></li>
 <li><a href="#version-releases-as-evidence-products" id="toc-version-releases-as-evidence-products"><span class="toc-section-number">7.2</span> Version Releases as Evidence
 Products</a></li>
+<li><a href="#pre-register-retrieval-and-answer-evaluation" id="toc-pre-register-retrieval-and-answer-evaluation"><span class="toc-section-number">7.3</span> Evaluate the Permitted
+Outputs</a></li>
+<li><a href="#check-the-release-regression" id="toc-check-the-release-regression"><span class="toc-section-number">7.4</span> Check the Release
+Regression</a></li>
 </ul></li>
 <li><a href="#transfer-the-method-to-literature-and-dependencies" id="toc-transfer-the-method-to-literature-and-dependencies"><span class="toc-section-number">8</span> Transfer the Method to Literature
 and Dependencies</a>
 <ul>
 <li><a href="#literature-evidence-for-a-research-question" id="toc-literature-evidence-for-a-research-question"><span class="toc-section-number">8.1</span> Literature Evidence for a Research
-Question</a></li>
+Question</a>
+<ul>
+<li><a href="#define-the-sources-and-model" id="toc-define-the-sources-and-model"><span class="toc-section-number">8.1.1</span> Define the Sources and
+Model</a></li>
+<li><a href="#work-the-query" id="toc-work-the-query"><span class="toc-section-number">8.1.2</span> Work the Query</a></li>
+<li><a href="#correct-the-selected-source-version" id="toc-correct-the-selected-source-version"><span class="toc-section-number">8.1.3</span> Correct the Selected Source
+Version</a></li>
+<li><a href="#audit-the-evidence-and-interpretation" id="toc-audit-the-evidence-and-interpretation"><span class="toc-section-number">8.1.4</span> Audit the Evidence and
+Interpretation</a></li>
+</ul></li>
 <li><a href="#installed-dependencies-and-advisory-applicability" id="toc-installed-dependencies-and-advisory-applicability"><span class="toc-section-number">8.2</span> Installed Dependencies and
-Advisory Applicability</a></li>
+Advisory Applicability</a>
+<ul>
+<li><a href="#define-the-inventory-and-model" id="toc-define-the-inventory-and-model"><span class="toc-section-number">8.2.1</span> Define the Inventory and
+Model</a></li>
+<li><a href="#traverse-and-test-advisory-applicability" id="toc-traverse-and-test-advisory-applicability"><span class="toc-section-number">8.2.2</span> Traverse and Test Advisory
+Applicability</a></li>
+<li><a href="#correct-the-inventory-and-replay" id="toc-correct-the-inventory-and-replay"><span class="toc-section-number">8.2.3</span> Correct the Inventory and
+Replay</a></li>
+<li><a href="#audit-scope-boundaries-and-missing-evidence" id="toc-audit-scope-boundaries-and-missing-evidence"><span class="toc-section-number">8.2.4</span> Audit Scope, Boundaries, and
+Missing Evidence</a></li>
+</ul></li>
+<li><a href="#compare-the-modelling-decisions" id="toc-compare-the-modelling-decisions"><span class="toc-section-number">8.3</span> Compare the Modelling
+Decisions</a></li>
 </ul></li>
 <li><a href="#route-r-projection" id="toc-route-r-projection"><span class="toc-section-number">9</span> Analyse a Positive Projection</a>
 <ul>
@@ -692,6 +712,27 @@ assertion, where to check it, and under what conditions it applies. A
 query then selects and interprets those records for a particular
 purpose. Keeping these steps visible lets a reader challenge an answer
 and see exactly what a correction would change.</p>
+<p>The flow below shows what must survive between a source and an
+answer. Read it from top to bottom: the arrows describe operations on
+evidence, while each labelled stage states what the operation
+produces.</p>
+<div class="line-block"><strong>Source:</strong> the register and
+minutes make different statements about version 1.<br />
+↓ Retain the wording and its location in each source snapshot.<br />
+<strong>Mention → entity:</strong> link each occurrence of “version 1”
+to Travel Policy v1.<br />
+↓ Preserve the relation, polarity, date, and source together.<br />
+<strong>Qualified claims:</strong> an affirmation from the register and
+a denial from the minutes.<br />
+↓ Select both for Atlas on 15 March and compare their time
+support.<br />
+<strong>Answer with evidence:</strong> report disagreement and cite both
+source passages.</div>
+<p>The two source statements reach the answer as separate records.
+Resolving their mentions to the same policy version enables comparison;
+it gives neither statement authority over the other. Dropping the denial
+or its date at an earlier stage changes what the final answer can
+establish.</p>
 <p>Northbridge is fictional. You can reproduce the main case from the
 excerpts, tables, and worked decisions in this primer. Familiarity with
 tables and identifiers is enough. The <a href="#route-python-duckdb">primary route</a> starts with the questions
@@ -1040,15 +1081,18 @@ possible, record the assignment history before treating the value as
 decisive. Here the register and directory refer to the same issuer and
 compatible dates, so the matching assignment of NB-104 supports linking
 the Morgan Lee mention to <code>person:morgan-lee</code>.</p>
-<p>The shortened “version 1” and “version 2” in M1 can be linked because
-the excerpt is from the discussion of the Atlas travel policy. An
-isolated sentence with that wording would give less evidence. Keep the
-paragraph context used for the decision, since a later reviewer might
-find that another policy appeared between the sentence introducing the
-topic and the abbreviated reference. “Atlas” likewise denotes the
-project in this context. The model’s type checks would rule out matching
-an Atlas-named person or application to a project role, but there could
-still be two projects with the same display name.</p>
+<p>For M1, the case supplies the topic metadata “Atlas travel policy
+discussion”. That supplied context, together with the version numbers,
+supports linking the shortened “version 1” and “version 2” to the
+travel-policy versions. The three quoted sentences alone do not
+establish the policy family. Retain the topic metadata with M1 as part
+of the link decision; a real import would need to retain the heading,
+agenda item, or other located context that supplies it. An isolated
+sentence with the same wording would leave the family unresolved.
+“Atlas” likewise denotes the project in this supplied context. The
+model’s type checks would rule out matching an Atlas-named person or
+application to a project role, but there could still be two projects
+with the same display name.</p>
 <p>The following intermediate records show selected occurrences and the
 link decisions. Their locators and quoted phrases can be checked in the
 source table. Repeated phrases such as “Atlas” can be distinguished by
@@ -1552,6 +1596,20 @@ choose a different rule, such as restricting a register question to the
 designated source or determining whether only an indeterminate opposing
 polarity should block a conclusion. Changing this rule changes the
 answer and needs its own documented version and evaluation.</p>
+<p>Work the consequence with version 2 on 1 April. Select its Atlas
+applicability assertions from both sources: <code>c4</code> from the
+minutes and <code>c6</code> from the register. <code>c4</code> is
+indeterminate because its support stops at 15 March; <code>c6</code> is
+applicable on its stated 1 April day. Both are positive, so there is no
+applicable disagreement, yet the conservative policy abstains because a
+selected row is indeterminate. Under an alternative rule that blocks
+support only for an indeterminate opposing polarity, <code>c6</code>
+would instead yield “supported”, citing <code>R1:P1-P2</code>, sentence
+3. That rule would still report the minutes as indeterminate, and could
+not claim that both sources agree on 1 April. A register-only question
+also yields version 2, but reaches it by selecting a different evidence
+boundary. Keep those two policy choices distinct when comparing
+answers.</p>
 <h1 data-number="5" id="answer-questions-from-the-graph"><span class="header-section-number">5</span> Answer Questions From the
 Graph</h1>
 <p>The <span id="kg-queries">query procedure</span> binds the entities
@@ -1822,127 +1880,48 @@ connect version 1 and Orion via Northbridge. That connection supplies no
 legitimate inference of policy applicability to Orion. This difference
 between navigational reachability and the meaning of a typed,
 evidence-backed path also governs the alternative projection.</p>
-<h1 data-number="6" id="diagnose-correct-and-evaluate-the-answer"><span class="header-section-number">6</span> Diagnose, Correct, and Evaluate
-the Answer</h1>
-<p>Use the original Northbridge excerpts and ledger as the reference for
-this lab. The question, source boundary, tested date, and answer policy
-stay fixed during the three controlled passes. Track what each pass
-changes and what evidence reaches the answer. This lets you distinguish
-a defect in reading the source from a correction to the source
-itself.</p>
-<h2 data-number="6.1" id="establish-the-reproduction-boundary"><span class="header-section-number">6.1</span> Establish the Reproduction
-Boundary</h2>
-<p>Start each run by writing an answer record. It names the question,
-the queried date, the selected source versions, the release identity,
-the ledger rows evaluated, their temporal classifications, the source
-comparison, the policy branch and its outcome, and every evidence
-locator shown to the reader. A result without this record may be
-plausible yet cannot be diagnosed. A release identifier alone is
-insufficient when a release can select different views for different
-audiences.</p>
-<p>For the central run, the fixed question is Q4. Ask whether the
-register and minutes agree about version 1 applying to Atlas on 15 March
-and what the applicability policy concludes. Select
-<code>s-register</code> and <code>s-minutes</code>, then retrieve
-assertions with subject version 1, predicate <code>applies_to</code>,
-object Atlas, and either selected source. The expected retrieved
-evidence is <code>c1</code> and <code>c5</code>. Under the original
-register wording, <code>c1</code> is applicable on 15 March because its
-interval begins on 1 January and ends immediately before 1 April.
-<code>c5</code> is applicable because the minutes assert it for 15
-March. Their polarities oppose one another. The proper Q4 answer says
-that the records disagree and withholds a single applicability
-conclusion. It cites <code>R1:P1-P2</code> and
-<code>M1:paragraph-3</code> in the internal replay.</p>
-<p>The same case also gives a downstream path check. Ask for the
-organisation associated with version 1 through the register and
-directory on a specified date. The path has two labelled hops, version 1
-to Atlas through <code>c1</code>, then Atlas to Northbridge through
-<code>c3</code>. On 1 January both source-specific assertions are
-applicable. The evidence-backed result is version 1 → Atlas →
-Northbridge, supported by <code>c1</code> and <code>c3</code> with both
-locators. On 1 March, <code>c1</code> remains applicable.
-<code>c3</code> is indeterminate because its directory support is
-limited to 1 January. The dated path is indeterminate. A system must not
-manufacture persistence for the affiliation hop from a single-day
-snapshot.</p>
-<p>This path is downstream of <code>c1</code> even though it does not
-decide Q4. A correction can alter a dated path, count, explanation,
-cache, and projection while leaving an undated positive edge unchanged.
-Record dependants before correcting an evidence row.</p>
-<p>The time model is intentionally strict. A bounded end is exclusive.
-Therefore <code>c1</code> with the original end of 1 April is applicable
-on 29 February and 15 March, then outside on 1 April. A source statement
-asserted for one named day has support through that day only.
-<code>c5</code> is applicable on 15 March. It is indeterminate on 16
-March. This distinction controls the answer. On 16 March under the
-original records, <code>c1</code> is applicable and <code>c5</code> is
-indeterminate. The system withholds a conclusion for indeterminate
-temporal scope.</p>
-<p>The following record gives hand-reproducible baseline evidence. It is
-a test oracle for the original source revision, not a claim about any
-production system.</p>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th>Item</th>
-<th>Fixed input</th>
-<th>Expected intermediate result</th>
-<th>Expected answer or test observation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Q1 on 29 February</td>
-<td>Register, Atlas, <code>applies_to</code>, 29 February</td>
-<td><code>c1</code> applicable and <code>c6</code> has not started</td>
-<td>Version 1 is the register result, cited to
-<code>R1:P1-P2</code></td>
-</tr>
-<tr>
-<td>Q1 on 1 March</td>
-<td>Register, Atlas, <code>applies_to</code>, 1 March</td>
-<td><code>c1</code> applicable and <code>c6</code> has not started</td>
-<td>Version 1 is the register result, cited to
-<code>R1:P1-P2</code></td>
-</tr>
-<tr>
-<td>Q4 on 15 March</td>
-<td>Register and minutes, version 1, Atlas</td>
-<td><code>c1</code> positive applicable and <code>c5</code> negative
-applicable</td>
-<td>Disagreement, withhold applicability conclusion, cite both
-locators</td>
-</tr>
-<tr>
-<td>Q4 on 16 March</td>
-<td>Register and minutes, version 1, Atlas</td>
-<td><code>c1</code> applicable and <code>c5</code> indeterminate</td>
-<td>Register alone has an applicable assertion. Abstain on temporal
-scope</td>
-</tr>
-<tr>
-<td>Register and directory path on 1 January</td>
-<td>Version 1 to Northbridge through Atlas</td>
-<td><code>c1</code> applicable and <code>c3</code> applicable</td>
-<td>Return the two-hop path with <code>c1</code>, <code>c3</code>,
-<code>R1:P1-P2</code>, and <code>D1:A1</code></td>
-</tr>
-<tr>
-<td>Register and directory path on 1 March</td>
-<td>Same path and sources</td>
-<td><code>c1</code> applicable and <code>c3</code> indeterminate</td>
-<td>Do not return a supported dated path</td>
-</tr>
-</tbody>
-</table>
-<h2 data-number="6.2" id="trace-a-failure-through-stages"><span class="header-section-number">6.2</span> Trace a Failure Through
+<p>Carry these query results into the correction lab as the baseline.
+Preserve an answer record naming the question, date, source versions,
+graph release, audience view, selected rows, temporal classifications,
+source comparison, policy branch, result, and displayed evidence
+locators. The record makes a changed answer comparable with its
+predecessor. A release name alone does not identify which audience view
+produced it.</p>
+<p>The dated path is also a dependant of <code>c1</code>, even though it
+does not decide Q4. Record that dependency before changing the
+assertion: a correction can affect paths, counts, explanations, caches,
+and projections differently. The next lab changes one input or stage at
+a time and uses the classifications already worked here to locate the
+consequence.</p>
+<h1 data-number="6" id="diagnose-correct-and-evaluate-the-answer"><span class="header-section-number">6</span> Diagnose and Correct the
+Answer</h1>
+<p>The <a href="#compare-the-same-proposition-across-sources">Q4
+comparison</a> supplies the lab’s baseline: on 15 March, applicable
+<code>c1</code> and <code>c5</code> give opposing evidence, and the
+policy abstains. Keep its question, source boundary, date, and policy
+fixed through three controlled passes. An extraction repair restores a
+statement from the same source; a source correction changes the evidence
+to be represented. The following flow shows where those two
+interventions differ and how either reaches a release check.</p>
+<div class="line-block"><strong>Baseline:</strong> retain the Q4 inputs,
+selected rows, classifications, and citations.<br />
+↓ Diagnose the first stage where the observed record diverges.<br />
+<strong>Diagnosis:</strong> was the minutes denial lost, or did the
+register wording change?<br />
+↓ Repair extraction from M1, or admit the corrected register as
+R2.<br />
+<strong>Revised ledger:</strong> retain the earlier derivations and
+identify the new evidence.<br />
+↓ Apply the audience contract, then evaluate the permitted
+answers.<br />
+<strong>Release regression:</strong> compare changed dates, results,
+paths, and citations.</div>
+<p>The branch at diagnosis matters. Restoring a lost denial should
+recreate the original disagreement. Admitting a corrected interval can
+legitimately remove it. The final regression check must establish which
+happened, including cases where the answer text stays the same but its
+evidence changes.</p>
+<h2 data-number="6.1" id="trace-a-failure-through-stages"><span class="header-section-number">6.1</span> Trace a Failure Through
 Stages</h2>
 <p>Diagnose in order of information loss. Acquisition obtains a specific
 source revision. Candidate extraction identifies a possible statement
@@ -1965,142 +1944,124 @@ answer display. Verification must return to the span.</p>
 minutes outside, policy ignored conflict, or presentation lost a
 citation. Inspect the span, candidates, assertions, selection,
 classifications, policy trace, then rendered result.</p>
-<p>The table maps symptoms to staged discriminators. Each discriminator
-is a hand check that can later become an automated regression test. It
-is not a replacement for source review.</p>
+<p>Work three representative failures in that order before using the
+compact reference below. Each starts from an observable symptom and
+chooses a test that can distinguish the cause. Applying the same repair
+to every plausible cause could make one answer look correct while
+leaving the next question broken.</p>
+<p><strong>A denial disappears before admission.</strong> The symptom is
+a Q4 answer of <code>supported</code> on 15 March showing only
+<code>c1</code>. Inspect the retained <code>M1:paragraph-3</code> span,
+then its candidate log. The source contains “version 1 does not apply”,
+but the log has no candidate for that sentence. This locates the first
+loss at candidate extraction. If <code>c5</code> were already admitted,
+the same symptom would instead require a selection test.</p>
+<p>The change is to admit the negative candidate with version 1 as
+subject, Atlas as object, 15 March as its supported day, and the minutes
+sentence as evidence. Re-run the unchanged Q4 selection and require
+exactly <code>c1</code> and <code>c5</code> before evaluating policy.
+Both are applicable on that day, so the repaired answer reports
+disagreement and abstains. This checks restoration of the omitted
+evidence; it does not settle which policy version should govern.</p>
+<p><strong>A retained denial is classified on the wrong day.</strong>
+Suppose both rows reach the query, but <code>c5</code> is marked outside
+on 15 March. Compare the sentence’s asserted day with the stored start
+and support horizon. A shifted date, a truncated horizon, or
+substitution of publication time for the asserted day would explain this
+symptom. If both stored dates are 15 March, test the classifier’s
+treatment of the inclusive horizon before changing the row.</p>
+<p>Restore the source-supported date if transcription was wrong, or
+repair the classifier if the row was already correct. The discriminating
+boundary test requires <code>c5</code> to be applicable on 15 March and
+indeterminate on 16 March. Extending the denial indefinitely would make
+the central date pass while creating a false conflict on the next day. A
+regression must check the neighbour as well as the reported failure.</p>
+<p><strong>The comparison survives, but its evidence is lost in
+presentation.</strong> Suppose the trace contains applicable
+<code>c1</code> and <code>c5</code> and reaches the conflict branch,
+while the displayed answer says “The records disagree” and cites only
+the register. Compare the decisive assertion IDs with the emitted
+evidence links. The inference is intact; citation assembly has discarded
+the negative premise. Re-extracting the minutes cannot repair that later
+loss.</p>
+<p>Emit an authorised locator for each decisive row. The internal replay
+needs <code>R1:P1-P2</code> and <code>M1:paragraph-3</code>; the
+ordinary view will use the approved sentence-level excerpts established
+in the disclosure section. Check the links as well as their labels, so
+each resolves to evidence that supports its assertion. The answer is
+incomplete if a reader can inspect only one side of the claimed
+disagreement.</p>
+<p>The remaining cases use the same symptom → discriminator → change
+progression. The table is a reference for choosing the next hand check,
+with the expected result stated alongside the repair.</p>
 <table>
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
 </colgroup>
 <thead>
 <tr>
-<th>Observed symptom</th>
-<th>Plausible stage</th>
-<th>Staged discriminator</th>
-<th>Diagnosis if the discriminator fails</th>
-<th>Correction and repeatable test</th>
+<th>Failure and stage</th>
+<th>Discriminating check</th>
+<th>Change and regression result</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Q4 on 15 March says <code>supported</code> and shows only
-<code>c1</code></td>
-<td>Candidate extraction</td>
-<td>Inspect the retained <code>M1:paragraph-3</code> span and candidate
-log for the words “version 1 does not apply”</td>
-<td>Positive-only omission of the negative candidate</td>
-<td>Admit a negative candidate with subject version 1, object Atlas,
-date 15 March, and source span. Re-run Q4 and require <code>c1</code>
-plus <code>c5</code> before policy evaluation</td>
+<td>Q4 omits an admitted <code>c5</code>: selection</td>
+<td>Inspect matches before polarity and source filters.</td>
+<td>Admit both sources and polarities; original Q4 retrieves exactly
+<code>c1</code> and <code>c5</code>.</td>
 </tr>
 <tr>
-<td>Q4 selects <code>c1</code> but a verified <code>c5</code> exists in
-the ledger</td>
-<td>Selection</td>
-<td>Print all rows matched before polarity filtering</td>
-<td>The selection predicate excluded negative assertions or excluded
-<code>s-minutes</code></td>
-<td>Select both polarities and both sources for a comparison question.
-Test that Q4 retrieves exactly <code>c1</code> and <code>c5</code> on
-the original release</td>
+<td>Q4 retrieves both applicable rows but says <code>supported</code>:
+policy</td>
+<td>Inspect branch order with both polarities.</td>
+<td>Handle conflict first; opposing applicable rows give disagreement
+and abstention.</td>
 </tr>
 <tr>
-<td>Q4 retrieves both rows yet says <code>supported</code></td>
-<td>Inference policy</td>
-<td>Inspect the policy trace with polarities and temporal
-classifications</td>
-<td>Conflict handling was skipped or ordered after positive support</td>
-<td>Apply the conflict branch before the positive branch. Test that two
-applicable opposite polarities produce disagreement and an
-abstention</td>
+<td>Q1 returns version 1 on 1 April: time boundary</td>
+<td>Check <code>c1</code> against its exclusive end.</td>
+<td>Treat the end as outside; 31 March is applicable and 1 April is
+outside.</td>
 </tr>
 <tr>
-<td>Q4 says <code>c5</code> is outside on 15 March</td>
-<td>Temporal interpretation</td>
-<td>Compare its asserted date and support horizon with the queried
-date</td>
-<td>The one-day minutes evidence was shifted, truncated, or treated as a
-publication date</td>
-<td>Restore the asserted day of 15 March. Test <code>c5</code>
-applicable on 15 March and indeterminate on 16 March</td>
+<td>The 1 March path is called supported: path evaluation</td>
+<td>Classify each hop independently.</td>
+<td>Keep <code>c1</code> applicable and <code>c3</code> indeterminate;
+the path is indeterminate.</td>
 </tr>
 <tr>
-<td>Q4 says disagreement but cites only <code>R1:P1-P2</code></td>
-<td>Evidence presentation</td>
-<td>Compare answer citations with selected applicable rows</td>
-<td>Citation assembly discarded the negative premise</td>
-<td>Emit a locator for each decisive row. Test that the original Q4
-output names both <code>R1:P1-P2</code> and
-<code>M1:paragraph-3</code></td>
+<td>Version 1 is said to apply to Orion: join or rule</td>
+<td>Inspect shared IDs and the asserted propagation rule.</td>
+<td>Join <code>c1</code> to <code>c3</code> through Atlas;
+<code>c7</code> supplies no Orion applicability.</td>
 </tr>
 <tr>
-<td>Q1 returns version 1 on 1 April</td>
-<td>Temporal classification</td>
-<td>Check the interval convention stored with <code>c1</code></td>
-<td>The exclusive 1 April end was treated as inclusive</td>
-<td>Classify the end date as outside. Test <code>c1</code> applicable on
-31 March and outside on 1 April</td>
+<td>Q5 identifies an Alex Kim for an ordinary user: resolution or
+disclosure</td>
+<td>Check <code>r2</code>, its evidence, and the audience view.</td>
+<td>Keep <code>m-alex</code> unresolved with two candidates; require the
+fixed ordinary response in both restricted-record states.</td>
 </tr>
 <tr>
-<td>The version 1 to Northbridge path is called supported on 1
-March</td>
-<td>Path evaluation</td>
-<td>Classify each hop independently before joining</td>
-<td><code>c3</code> was assumed to persist beyond 1 January</td>
-<td>Mark the path indeterminate when a required hop is indeterminate and
-none is outside. Test <code>c1</code> applicable and <code>c3</code>
-indeterminate on 1 March</td>
+<td>An ordinary count changes from zero to two: aggregate
+disclosure</td>
+<td>Compare paths, counts, search, exports, and cache views.</td>
+<td>Filter before traversal and separate caches by audience; paired
+ordinary outputs must match.</td>
 </tr>
 <tr>
-<td>A path to Orion is returned from version 1</td>
-<td>Join or rule application</td>
-<td>Inspect the shared identifier at every hop and the asserted
-rule</td>
-<td>A label join or an unstated organisational propagation rule replaced
-the Atlas join</td>
-<td>Join <code>c1</code> only to <code>c3</code> through Atlas. Test
-that <code>c7</code> does not establish version 1 applicability to
-Orion</td>
-</tr>
-<tr>
-<td>Q5 identifies one Alex Kim for a general user</td>
-<td>Resolution or disclosure</td>
-<td>Inspect <code>r2</code>, candidate evidence, and the audience view
-before rendering</td>
-<td>A name match was treated as an identity decision or restricted data
-crossed the view boundary</td>
-<td>Retain <code>m-alex</code> with two candidates and no person link.
-Test the fixed general response in releases with and without restricted
-candidates</td>
-</tr>
-<tr>
-<td>A general-user count changes from zero to two after an identity
-review</td>
-<td>Aggregate disclosure</td>
-<td>Compare authorised and ordinary projections, path existence, counts,
-search results, and cache keys</td>
-<td>The projection or cache leaks candidate multiplicity</td>
-<td>Filter before traversal and partition cache keys by audience. Test
-identical ordinary outputs across the paired releases</td>
-</tr>
-<tr>
-<td>A corrected register yields an old cached Q1 answer</td>
-<td>Release propagation</td>
-<td>Compare answer release, source revision, assertion derivation, and
-cache dependency record</td>
-<td>The old derivation was not invalidated or was served under the new
-release name</td>
-<td>Invalidate or recompute all <code>c1</code> dependants. Test that a
-request pinned to the revised release cannot receive the original
-answer</td>
+<td>A revised release serves an old cached Q1 answer: propagation</td>
+<td>Compare release, source, derivation, and cache dependencies.</td>
+<td>Recompute or invalidate <code>c1</code> dependants; the revised
+release cannot serve the original derivation.</td>
 </tr>
 </tbody>
 </table>
-<h2 data-number="6.3" id="run-the-three-controlled-passes"><span class="header-section-number">6.3</span> Run the Three Controlled
+<h2 data-number="6.2" id="run-the-three-controlled-passes"><span class="header-section-number">6.2</span> Run the Three Controlled
 Passes</h2>
 <p>The <span id="kg-correction">correction experiment</span> keeps Q4,
 its source boundary, the queried date, and the conservative policy
@@ -2184,78 +2145,11 @@ disagreement and there is no evidence of agreement. The minutes denial
 <code>R2:P1-P2</code> for the revised interval and
 <code>M1:paragraph-3</code> for the denial. The result concerns the
 evidence in the revised release.</p>
-<p>The next table supplies the before, intermediate, and after results
-for Q4. “Selected” records the rows found before time classification.
-The policy uses those classifications, including indeterminate rows,
-while the source comparison uses applicable rows. An outside row can
-explain why a formerly decisive assertion no longer applies.</p>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th>Run and date</th>
-<th>Selected evidence and classification</th>
-<th>Source comparison</th>
-<th>Applicability policy result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Before change, 15 March</td>
-<td>R1 <code>c1</code> applicable positive and M1 <code>c5</code>
-applicable negative</td>
-<td>Disagreement</td>
-<td>Abstain on conflicting evidence</td>
-</tr>
-<tr>
-<td>A, incomplete extraction, 15 March</td>
-<td>R1 <code>c1</code> applicable positive. The filter omits
-<code>c5</code></td>
-<td>Incomplete comparison because required minutes evidence is
-missing</td>
-<td><code>supported</code> from the incomplete ledger</td>
-</tr>
-<tr>
-<td>B, repaired extraction, 15 March</td>
-<td>R1 <code>c1</code> applicable positive and M1 <code>c5</code>
-applicable negative</td>
-<td>Disagreement</td>
-<td>Abstain on conflicting evidence</td>
-</tr>
-<tr>
-<td>C, revised register, 15 March</td>
-<td>R2 <code>c1</code> outside and M1 <code>c5</code> applicable
-negative</td>
-<td>No applicable disagreement and no evidence of agreement</td>
-<td><code>refuted</code> from the minutes alone</td>
-</tr>
-<tr>
-<td>C, revised register, 16 March</td>
-<td>R2 <code>c1</code> outside and M1 <code>c5</code> indeterminate</td>
-<td>Neither source has an applicable assertion</td>
-<td>Abstain on temporal scope</td>
-</tr>
-</tbody>
-</table>
-<p>Run boundary tests in addition to the central date. In A and B, Q1 on
-29 February and 1 March returns version 1 from <code>c1</code>, with
-<code>c6</code> outside before its start. In C, Q1 on 29 February still
-returns version 1 from <code>c1@G-C</code> at <code>R2:P1-P2</code>,
-sentence 1. On 1 March it returns no applicable register version in R2,
-citing that sentence for the exclusive end and sentence 3 for the start
-of <code>c6@G-C</code>. On 1 April Q1 returns version 2 from
-<code>c6@G-C</code> at <code>R2:P1-P2</code>, sentence 3. Q2 still names
-Morgan Lee on 1 January and reports indeterminate continuation on 1
-March, now citing <code>c2@G-C</code> at <code>R2:P1-P2</code>, sentence
-2, with <code>r1</code> and D1 as the identity evidence. For Q4 on 16
-March, cite the same R2 interval and M1 denial as on the 15th. The
-denial is temporally indeterminate after its 15 March horizon, so the
-policy must abstain.</p>
+<p>The unchanged owner and version 2 wording also needs a new evidence
+chain. Their values can stay the same while their accepted locators move
+from R1 to R2. The final release regression gathers these carry-forwards
+with the changed answers and boundary dates; compare both values and
+derivations there.</p>
 <p>The version 1 to Atlas to Northbridge path illustrates a correction’s
 downstream effect. Under the original source, the undated positive
 projection contains the version 1 to Atlas edge. Under C it still
@@ -2271,145 +2165,8 @@ source version where permitted and record the new source version,
 locator, admission, reviewer or authorised process, reason, rebuilt
 values, and affected releases. <code>c1</code> supports comparison but
 does not license overwriting prior evidence.</p>
-<h2 data-number="6.4" id="pre-register-retrieval-and-answer-evaluation"><span class="header-section-number">6.4</span> Pre-Register Retrieval and
-Answer Evaluation</h2>
-<p><span id="kg-evaluation">Evaluation</span> needs item boundaries
-before results are inspected. Otherwise an evaluator can improve a score
-by deciding after the fact that the missing negative assertion did not
-belong, that an abstention was incomplete, or that an absent citation
-does not matter. The fixture is small enough to adjudicate by hand. That
-makes it useful for testing mechanics and disclosure behaviour. It
-cannot estimate accuracy on unseen sources.</p>
-<p>Pre-register two separate item types. An evidence-retrieval item
-specifies the question, source revision, scope, date, assertion pattern,
-required assertion IDs, required locators, and any required
-classification. A complete-answer item specifies the question, source
-revision, scope, date, conservative policy, required answer category,
-required explanation, required evidence or authorised disclosure, and
-whether a justified abstention fulfils the task. Score a system against
-the item type it was asked to solve. A system can retrieve all evidence
-yet phrase the wrong conclusion. It can also emit the right answer label
-while hiding a decisive assertion.</p>
-<p>For original Q4, the evidence-retrieval item is one unit with two
-required source-specific assertions, <code>c1</code> and
-<code>c5</code>. They count separately only inside that fixed unit. The
-expected locators are <code>R1:P1-P2</code> and
-<code>M1:paragraph-3</code>. The answer item has two determinations.
-First, whether the records agree. Second, whether version 1 applies
-under the stated policy. The adjudicated answer is “they disagree” for
-the first determination and a justified withholding for the second. A
-reply of “conflicting evidence” with only <code>c1</code> is not
-complete because it has no evidence for conflict.</p>
-<p>Pass A retrieves one relevant assertion, <code>c1</code>, and returns
-no irrelevant assertion in this deliberately bounded task. Retrieval
-precision is 1 divided by 1, which is 1. Retrieval recall is 1 divided
-by 2, which is 0.5. Its complete answer fails because the evidence
-omission changes the policy output. Pass B retrieves two relevant
-assertions and no irrelevant assertion. Precision is 2 divided by 2,
-which is 1. Recall is 2 divided by 2, which is 1. Its complete answer
-passes because it names the disagreement, withholds the policy
-conclusion, and cites both required locators.</p>
-<p>Score Pass C against its own R2 and M1 reference. On 15 March, the
-retrieval item requires <code>c1@G-C</code> at <code>R2:P1-P2</code> and
-<code>c5</code> at <code>M1:paragraph-3</code>, with their
-classifications. The applicable-evidence sub-item requires one
-assertion, <code>c5</code>, so precision and recall are both 1 divided
-by 1. The complete-answer item requires two determinations. For the
-comparison, there is no applicable disagreement and no evidence of
-agreement because revised <code>c1</code> is outside. For applicability,
-the minutes alone yield <code>refuted</code>. On 16 March, the
-complete-answer item requires the same two citations, a comparison that
-reports neither source has an applicable assertion, and an abstention on
-temporal scope because <code>c5</code> is indeterminate and
-<code>c1@G-C</code> is outside.</p>
-<p>The following pre-registered answer set uses the original source
-revisions. It has five named items and fixed completeness rules and
-supplies the inputs for the lab arithmetic.</p>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th>Item</th>
-<th>Required determinations and evidence</th>
-<th>Adjudicated result</th>
-<th>Complete under the policy?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Q1</td>
-<td>Register version for Atlas on 1 March, <code>c1</code>,
-<code>R1:P1-P2</code></td>
-<td>Version 1 on the original source</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Q2</td>
-<td>Recorded owner on 1 January, continuation to 1 March,
-<code>c2</code>, <code>R1:P1-P2</code></td>
-<td>Morgan Lee on 1 January, continuation indeterminate on 1 March</td>
-<td>No if completeness demands an unqualified later owner, yes if
-justified limitation fulfils the item</td>
-</tr>
-<tr>
-<td>Q3</td>
-<td>Both minutes assertions on 15 March, <code>c4</code>,
-<code>c5</code>, <code>M1:paragraph-3</code></td>
-<td>Version 2 affirmed and version 1 denied</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Q4</td>
-<td>Agreement and applicability on 15 March, <code>c1</code>,
-<code>c5</code>, both locators</td>
-<td>Disagreement, withhold applicability conclusion</td>
-<td>No under a no-abstention coverage rule, yes under policy
-agreement</td>
-</tr>
-<tr>
-<td>Q5</td>
-<td>Identity answer for the authorised reviewer or bounded ordinary-user
-answer</td>
-<td><code>m-alex</code> remains unresolved for review, ordinary view
-returns fixed unavailable status</td>
-<td>No under an identity-completion rule, yes under authorised policy
-agreement</td>
-</tr>
-</tbody>
-</table>
-<p>Under a no-abstention coverage rule, only Q1 and Q3 receive complete
-answers. Coverage is 2 divided by 5, which is 0.4. Under policy
-agreement, all five items receive their adjudicated outcomes, including
-the justified limitation in Q2, the withholding in Q4, and the
-audience-specific bounded response in Q5. Policy agreement is 5 divided
-by 5, which is 1. Reporting only the latter would imply a broader
-success than the exercise supports. Report both measures with their
-definitions, numerators, denominators, source revision, and item
-boundaries.</p>
-<p>Give adjudicators the source version, question, date, scope, policy,
-required evidence, and rationale prompt before showing system output.
-Resolve differing interpretations against retained text and record the
-decision. Useful pitfalls include no in-scope evidence, malformed rows,
-unknown ends, required negatives, exclusive boundaries, and repeated
-upstream sources. Include Q1 at 29 February and 1 March, Q4 at 15 and 16
-March, C, and the downstream path. Keep related source families out of
-both development and evaluation.</p>
-<p>When a denominator is zero, report it and leave the ratio undefined.
-Deduplicate repeated <code>c1</code> returns before counting. Retire or
-version an item when its source revision changes.</p>
-<p>The lab demonstrates expected behaviour under specified inputs. It
-makes no empirical accuracy, recall, safety, or privacy claim. A
-deployment evaluation needs a larger, independently assembled reference
-set, source-family splits, adjudicator training, error analysis,
-confidence intervals where sampling warrants them, and a documented
-treatment of abstentions and access-controlled outputs.</p>
-<h1 data-number="7" id="govern-identity-disclosure-and-releases"><span class="header-section-number">7</span> Govern Identity, Disclosure, and
-Releases</h1>
+<h1 data-number="7" id="govern-identity-disclosure-and-releases"><span class="header-section-number">7</span> Govern Disclosure and Approve a
+Release</h1>
 <p>The identity and release controls begin with Q5 because a correct
 internal result can still be an unauthorised external disclosure.
 <code>m-alex</code> is a mention in <code>M1:paragraph-3</code>, not a
@@ -2600,6 +2357,205 @@ to the original source, and downstream inferences whose premises include
 ownership and version 2 answers whose conclusions can remain the same
 while their evidence changes. Include explanations, citations, exports,
 and caches for each affected product.</p>
+<p>Build these products only after the audience views are defined. Their
+evaluation must judge what that audience is permitted to receive, and
+the final release check must compare the resulting values and evidence
+with the previous release.</p>
+<p>Distinguish three events in the release record. A domain end of
+validity says the proposition ceased to hold at the end of its stated
+interval. A correction says an earlier evidence representation or
+interpretation was wrong or superseded, as with the hypothetical change
+from 1 April to 1 March. A retraction withdraws reliance on a source or
+assertion, perhaps because it was unauthorised, fraudulent, or no longer
+retainable. An expiry can occur without a correction. A correction can
+preserve the source history. A retraction may make a prior answer
+non-reproducible from retained content while preserving a permitted
+withdrawal notice.</p>
+<p>Correction handling starts with provenance, not a manual answer edit.
+Locate every assertion derived from the source revision. Build the
+candidate replacement from the corrected source. Verify its span and
+temporal semantics. Create or update the derivation record. Recompute
+affected answer products and evaluate the regression table. Invalidate
+materialisations, indexes, caches, exports, and reports that carry
+affected content. Publish the new release and its manifest together.
+Keep an approved route for users to report a result using the release
+identity, question, and evidence IDs.</p>
+<p>Retraction handling first stops new use, then applies deletion,
+restricted-retention, or tombstone rules across evidence stores, views,
+replicas, indexes, caches, exports, and extracts. Re-run disclosure
+tests where removal changes counts or releases. A tombstone can explain
+non-reproducibility without publishing removed content.</p>
+<p>Provenance can create risk. Locators, reviewer identities, and
+release differences can disclose protected facts. Apply audience policy
+to manifests, derivations, notices, and audit trails. Do not expose
+stable local identifiers merely because they are not names.</p>
+<p>Release approval needs named responsibility. Source admission owners
+decide whether a source version may enter a release. Domain owners
+define relationship meaning and any authority rule. Identity reviewers
+decide resolution policy within their remit. Access owners approve
+audience projections and disclosure tests. Release owners verify the
+manifest, regression results, invalidation records, and publication
+scope. No single automated check can substitute for these decisions.
+Automation can show that required fields exist and expected cases
+produce expected outputs.</p>
+<h2 data-number="7.3" id="pre-register-retrieval-and-answer-evaluation"><span class="header-section-number">7.3</span> Evaluate the Permitted
+Outputs</h2>
+<p><span id="kg-evaluation">Evaluation</span> needs item boundaries
+before results are inspected. Otherwise an evaluator can improve a score
+by deciding after the fact that the missing negative assertion did not
+belong, that an abstention was incomplete, or that an absent citation
+does not matter. The disclosure contract above now defines what each
+audience may receive. Fix the evaluation items before inspecting system
+outputs; the worked passes let us examine those predeclared rules here.
+The fixture is small enough to adjudicate by hand. That makes it useful
+for testing mechanics and disclosure behaviour. It cannot estimate
+accuracy on unseen sources.</p>
+<p>Pre-register two separate item types. An evidence-retrieval item
+specifies the question, source revision, scope, date, assertion pattern,
+required assertion IDs, required locators, and any required
+classification. A complete-answer item specifies the question, source
+revision, scope, date, conservative policy, required answer category,
+required explanation, required evidence or authorised disclosure, and
+whether a justified abstention fulfils the task. Score a system against
+the item type it was asked to solve. A system can retrieve all evidence
+yet phrase the wrong conclusion. It can also emit the right answer label
+while hiding a decisive assertion.</p>
+<p>For original Q4, the evidence-retrieval item is one unit with two
+required source-specific assertions, <code>c1</code> and
+<code>c5</code>. They count separately only inside that fixed unit. The
+expected locators are <code>R1:P1-P2</code> and
+<code>M1:paragraph-3</code>. The answer item has two determinations.
+First, whether the records agree. Second, whether version 1 applies
+under the stated policy. The adjudicated answer is “they disagree” for
+the first determination and a justified withholding for the second. A
+reply of “conflicting evidence” with only <code>c1</code> is not
+complete because it has no evidence for conflict.</p>
+<p>Work Pass A as a fixed retrieval item before judging the complete
+answer.</p>
+<blockquote>
+<p><strong>Note:</strong> Pass A on original Q4.</p>
+<p><strong>Inputs:</strong> the reference requires <code>c1</code> and
+<code>c5</code>. The run returns only <code>c1</code>, so there is one
+relevant return, one total return, and two required assertions.</p>
+<p><strong>Calculation:</strong> precision = relevant returns / all
+returns = 1/1 = 1. Recall = relevant returns / required assertions = 1/2
+= 0.5.</p>
+<p><strong>Interpretation:</strong> every returned assertion is
+relevant, but half the required evidence is missing. The complete answer
+fails because that omission changes the policy output from abstention to
+<code>supported</code>.</p>
+</blockquote>
+<p>Pass B retrieves both required assertions and no irrelevant
+assertion. Precision and recall are each 2/2 = 1. Its complete answer
+also passes: it names the disagreement, withholds the policy conclusion,
+and cites both required locators. Retrieval success and answer success
+remain separate judgements even when this run satisfies both.</p>
+<p>Score Pass C against its own R2 and M1 reference. On 15 March, the
+retrieval item requires <code>c1@G-C</code> at <code>R2:P1-P2</code> and
+<code>c5</code> at <code>M1:paragraph-3</code>, with their
+classifications. The applicable-evidence sub-item requires one
+assertion, <code>c5</code>, so precision and recall are both 1 divided
+by 1. The complete-answer item requires two determinations. For the
+comparison, there is no applicable disagreement and no evidence of
+agreement because revised <code>c1</code> is outside. For applicability,
+the minutes alone yield <code>refuted</code>. On 16 March, the
+complete-answer item requires the same two citations, a comparison that
+reports neither source has an applicable assertion, and an abstention on
+temporal scope because <code>c5</code> is indeterminate and
+<code>c1@G-C</code> is outside.</p>
+<p>The following pre-registered answer set uses the original source
+revisions. It has five named items and fixed completeness rules and
+supplies the inputs for the lab arithmetic.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Item</th>
+<th>Required determinations and evidence</th>
+<th>Adjudicated result</th>
+<th>Complete under the policy?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>Register version for Atlas on 1 March, <code>c1</code>,
+<code>R1:P1-P2</code></td>
+<td>Version 1 on the original source</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>Recorded owner on 1 January, continuation to 1 March,
+<code>c2</code>, <code>R1:P1-P2</code></td>
+<td>Morgan Lee on 1 January, continuation indeterminate on 1 March</td>
+<td>No if completeness demands an unqualified later owner, yes if
+justified limitation fulfils the item</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>Both minutes assertions on 15 March, <code>c4</code>,
+<code>c5</code>, <code>M1:paragraph-3</code></td>
+<td>Version 2 affirmed and version 1 denied</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>Agreement and applicability on 15 March, <code>c1</code>,
+<code>c5</code>, both locators</td>
+<td>Disagreement, withhold applicability conclusion</td>
+<td>No under a no-abstention coverage rule, yes under policy
+agreement</td>
+</tr>
+<tr>
+<td>Q5</td>
+<td>Identity answer for the authorised reviewer or bounded ordinary-user
+answer</td>
+<td><code>m-alex</code> remains unresolved for review, ordinary view
+returns fixed unavailable status</td>
+<td>No under an identity-completion rule, yes under authorised policy
+agreement</td>
+</tr>
+</tbody>
+</table>
+<p>Under a no-abstention coverage rule, only Q1 and Q3 receive complete
+answers. Coverage is 2 divided by 5, which is 0.4. Under policy
+agreement, all five items receive their adjudicated outcomes, including
+the justified limitation in Q2, the withholding in Q4, and the
+audience-specific bounded response in Q5. Policy agreement is 5 divided
+by 5, which is 1. Reporting only the latter would imply a broader
+success than the exercise supports. Report both measures with their
+definitions, numerators, denominators, source revision, and item
+boundaries.</p>
+<p>Give adjudicators the source version, question, date, scope, policy,
+required evidence, and rationale prompt before showing system output.
+Resolve differing interpretations against retained text and record the
+decision. Useful pitfalls include no in-scope evidence, malformed rows,
+unknown ends, required negatives, exclusive boundaries, and repeated
+upstream sources. Include Q1 at 29 February and 1 March, Q4 at 15 and 16
+March, C, and the downstream path. Keep related source families out of
+both development and evaluation.</p>
+<p>When a denominator is zero, report it and leave the ratio undefined.
+Deduplicate repeated <code>c1</code> returns before counting. Retire or
+version an item when its source revision changes.</p>
+<p>The lab demonstrates expected behaviour under specified inputs. It
+makes no empirical accuracy, recall, safety, or privacy claim. A
+deployment evaluation needs a larger, independently assembled reference
+set, source-family splits, adjudicator training, error analysis,
+confidence intervals where sampling warrants them, and a documented
+treatment of abstentions and access-controlled outputs.</p>
+<h2 data-number="7.4" id="check-the-release-regression"><span class="header-section-number">7.4</span> Check the Release
+Regression</h2>
+<p>Evaluation defines which outputs count as successful. Release
+regression now checks whether the revised evidence reaches every
+affected product. Compare <code>G-B</code>, with repaired extraction
+from R1, against <code>G-C</code>, with the corrected R2 register, under
+the same question and audience contracts.</p>
 <p>The following regression table compares answer values and provenance
 across the releases. It includes the boundary dates, the owner and
 version 2 carry-forwards, the post-minutes date, and the downstream
@@ -2693,65 +2649,25 @@ questions</td>
 </tr>
 </tbody>
 </table>
-<p>Q1 and Q4 show why a release difference needs both source and answer
-evidence. On 1 March, a cursory release comparison might report that
-version 1 still has a positive <code>applies_to</code> edge. The
-qualified row changed its end date, which changes the register answer.
-On 15 March, the old release correctly preserves a cross-source
-conflict. The revised release has no applicable positive register
-premise and therefore reaches <code>refuted</code> from the remaining
-minutes evidence under this policy. That is not an authority ruling. A
-different authority policy would be a separately versioned change with
-its own test set.</p>
-<p>Distinguish three events in the release record. A domain end of
-validity says the proposition ceased to hold at the end of its stated
-interval. A correction says an earlier evidence representation or
-interpretation was wrong or superseded, as with the hypothetical change
-from 1 April to 1 March. A retraction withdraws reliance on a source or
-assertion, perhaps because it was unauthorised, fraudulent, or no longer
-retainable. An expiry can occur without a correction. A correction can
-preserve the source history. A retraction may make a prior answer
-non-reproducible from retained content while preserving a permitted
-withdrawal notice.</p>
-<p>Correction handling starts with provenance, not a manual answer edit.
-Locate every assertion derived from the source revision. Build the
-candidate replacement from the corrected source. Verify its span and
-temporal semantics. Create or update the derivation record. Recompute
-affected answer products and evaluate the regression table. Invalidate
-materialisations, indexes, caches, exports, and reports that carry
-affected content. Publish the new release and its manifest together.
-Keep an approved route for users to report a result using the release
-identity, question, and evidence IDs.</p>
-<p>Retraction handling first stops new use, then applies deletion,
-restricted-retention, or tombstone rules across evidence stores, views,
-replicas, indexes, caches, exports, and extracts. Re-run disclosure
-tests where removal changes counts or releases. A tombstone can explain
-non-reproducibility without publishing removed content.</p>
-<p>Provenance can create risk. Locators, reviewer identities, and
-release differences can disclose protected facts. Apply audience policy
-to manifests, derivations, notices, and audit trails. Do not expose
-stable local identifiers merely because they are not names.</p>
-<p>Release approval needs named responsibility. Source admission owners
-decide whether a source version may enter a release. Domain owners
-define relationship meaning and any authority rule. Identity reviewers
-decide resolution policy within their remit. Access owners approve
-audience projections and disclosure tests. Release owners verify the
-manifest, regression results, invalidation records, and publication
-scope. No single automated check can substitute for these decisions.
-Automation can show that required fields exist and expected cases
-produce expected outputs.</p>
-<p>The lab’s release procedure has a final hand check. Inspect
-<code>G-C</code> Q1 on 29 February, 1 March, and 1 April, Q2’s owner and
-continuation, Q4 on 15 and 16 March, the 1 January and 1 March
-downstream paths, and the undated projection label. Check the approved
-Q4 citations, the ordinary Q5 answers and counts across the paired
-releases, and the authorised Q5 review view. Confirm that the minutes
-remain indeterminate beyond 15 March and that every revised answer gives
-its release identity and current evidence links. Confirm that an
-ordinary request cannot obtain the authorised reviewer’s cached answer.
-These are test expectations for the supplied fixture. They do not prove
-that a broader graph, a real access-control system, or a future source
-feed is safe or accurate.</p>
+<p>A release can preserve a value while changing its evidence, or
+preserve an abstention while changing its reason. Q2 and the 1 April Q1
+result test the first distinction; Q4 on 16 March tests the second. The
+undated projection is a control: its unchanged edge is expected and
+cannot substitute for the dated checks. This is why acceptance compares
+the intermediate classifications and citations alongside the displayed
+result.</p>
+<p>Complete the release check with the paired disclosure test: compare
+the approved Q4 citations, fixed ordinary Q5 answer, and visible counts
+with restricted records present and absent. Check the authorised Q5
+review separately, and confirm that an ordinary request cannot obtain
+the reviewer’s cached answer. Every revised answer must identify its
+release and resolve to the evidence permitted for that audience.</p>
+<p>The table and paired tests supply acceptance expectations for this
+synthetic fixture. A broader graph, live access-control system, or
+future source feed needs its own coverage, disclosure, and accuracy
+evidence. With the Northbridge cycle complete, the transfer cases show
+which modelling decisions carry across domains and which must be defined
+anew.</p>
 <h1 data-number="8" id="transfer-the-method-to-literature-and-dependencies"><span class="header-section-number">8</span> Transfer the Method to Literature
 and Dependencies</h1>
 <p>The same evidence-led method can answer questions about research and
@@ -2777,6 +2693,8 @@ difference, calculated as the telephone group’s readmission percentage
 minus the usual-care group’s percentage. An interval around that
 estimate remains part of the answer because the sign of a point estimate
 alone does not describe its precision.</p>
+<h3 data-number="8.1.1" id="define-the-sources-and-model"><span class="header-section-number">8.1.1</span> Define the Sources and
+Model</h3>
 <p>The source boundary is a fictional review and three fictional
 research works. Each work has a stable identity, and each version is a
 separately identified source. A work is the intellectual publication
@@ -2961,6 +2879,7 @@ catalogue above and is used explicitly in the join below. A real system
 would also record extraction and review status, including rejected or
 uncertain matches. This exercise treats the shown extractions as
 accepted and makes no assertion about unlisted material.</p>
+<h3 data-number="8.1.2" id="work-the-query"><span class="header-section-number">8.1.2</span> Work the Query</h3>
 <p>To reproduce the query, start with <code>R</code> and bind a cited
 work as <code>w</code>. Join <code>w</code> to its listed version
 <code>v</code>, then join <code>v</code> to a reported study
@@ -3048,6 +2967,8 @@ participant counts or present the two records as independent
 replications. The excerpts contain no sample sizes, allocation
 procedure, missing-data analysis, or assessment of bias, so they cannot
 establish how reliable or generalisable either estimate is.</p>
+<h3 data-number="8.1.3" id="correct-the-selected-source-version"><span class="header-section-number">8.1.3</span> Correct the Selected Source
+Version</h3>
 <p>Now suppose an authorised correction produces <code>C@2</code>. The
 replacement at methods paragraph 1 and results table 1 states “Study C
 is a secondary analysis of cohort X enrolled in Study A. It compares
@@ -3169,6 +3090,8 @@ query as well as the original seven-day query because the correction
 moves a result into a different eligible set. A citation-only query
 should continue to return all three works. This separates a change in
 evidence applicability from a change in the review’s bibliography.</p>
+<h3 data-number="8.1.4" id="audit-the-evidence-and-interpretation"><span class="header-section-number">8.1.4</span> Audit the Evidence and
+Interpretation</h3>
 <p>A reviewer can audit the joins in the opposite direction as well.
 Start with the answer row for <code>SA</code>, locate <code>L10</code>,
 and verify its numerical value, interval, age condition, comparator, and
@@ -3227,6 +3150,8 @@ releases. It does not establish which member of that set was selected or
 deployed. A path from a production build through its resolved dependency
 edges supplies that selection, subject to the completeness and timing of
 the inventory.</p>
+<h3 data-number="8.2.1" id="define-the-inventory-and-model"><span class="header-section-number">8.2.1</span> Define the Inventory and
+Model</h3>
 <p>Everything in this example is fictional, including the package names,
 registry, releases, inventory format, and advisory. Use the following
 explicitly synthetic version rule throughout. Versions have three
@@ -3393,6 +3318,8 @@ release would merge <code>D4</code> and <code>D6</code>. Traversing that
 merged node could falsely attach Codec 1.8.0 to build 42 and Codec 1.9.0
 to build 41. Selected-instance identifiers or equivalent edge qualifiers
 prevent that cross-build join.</p>
+<h3 data-number="8.2.2" id="traverse-and-test-advisory-applicability"><span class="header-section-number">8.2.2</span> Traverse and Test Advisory
+Applicability</h3>
 <p>To answer the question, bind a deployment <code>d</code> from
 <code>DEP@1</code> whose environment is production. Follow its
 <code>uses build</code> edge to <code>b</code>, then traverse direct and
@@ -3460,6 +3387,8 @@ advisories and inventories may have narrower conditions, missing edges,
 platform distinctions, and collection delays. Those facts would need
 separate evidence and explicit predicates before a stronger
 conclusion.</p>
+<h3 data-number="8.2.3" id="correct-the-inventory-and-replay"><span class="header-section-number">8.2.3</span> Correct the Inventory and
+Replay</h3>
 <p>Now correct the production inventory. Version <code>I41@2</code>
 retains row 1 and replaces row 2 with the complete statement, “That
 selected Parser instance selects <code>F/Codec/1.9.0</code> at runtime.
@@ -3561,6 +3490,8 @@ its inventory did not change. Also recheck the boundary comparison for
 production filter. An unscoped traversal that still returns Codec 1.8.0
 for <code>B41</code> reveals a stale edge or an improperly constrained
 join.</p>
+<h3 data-number="8.2.4" id="audit-scope-boundaries-and-missing-evidence"><span class="header-section-number">8.2.4</span> Audit Scope, Boundaries, and
+Missing Evidence</h3>
 <p>The order of the traversal matters for both accuracy and explanation.
 Starting with production deployments limits the relevant builds before
 package paths are expanded. Keeping the build binding at every hop
@@ -3657,6 +3588,65 @@ resolved inventory for the new build. It should not be represented as a
 correction to the old build’s historical contents. Recording which input
 changed distinguishes an amended observation from a change in the
 world.</p>
+<h2 data-number="8.3" id="compare-the-modelling-decisions"><span class="header-section-number">8.3</span> Compare the Modelling
+Decisions</h2>
+<p>The two cases share a workflow, but their admissible joins depend on
+different units and qualifications. Use this comparison when
+transferring the method to a new corpus.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Modelling decision</th>
+<th>Literature evidence</th>
+<th>Dependency evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entity grain</td>
+<td>Keep work, source version, study, and cohort distinct; two studies
+can share participants.</td>
+<td>Keep package release and selected instance distinct; one release can
+have different children in different builds.</td>
+</tr>
+<tr>
+<td>Qualifications</td>
+<td>Preserve population, intervention, comparator, outcome window,
+estimate, and interval together.</td>
+<td>Preserve build, environment, runtime scope, exact release tuple, and
+advisory range.</td>
+</tr>
+<tr>
+<td>Admissible joins</td>
+<td>Select a work’s version, then use study and result assertions
+attested by that version.</td>
+<td>Keep the build and runtime binding at every dependency hop, then
+test the reached release against the advisory.</td>
+</tr>
+<tr>
+<td>Completeness</td>
+<td>The supplied review neighbourhood is complete only for this
+exercise; it cannot establish all relevant research or independent
+cohorts.</td>
+<td>The stipulated runtime inventories and affected range permit the
+bounded empty result; an unavailable inventory would leave it
+unresolved.</td>
+</tr>
+<tr>
+<td>Correction dependencies</td>
+<td><code>C@2</code> changes the eligible window; rebuild
+version-specific links, result sets, study/cohort counts, and their
+citations.</td>
+<td><code>I41@2</code> changes a resolved child; rebuild both inventory
+hops, affected paths, deployment findings, and their citations.</td>
+</tr>
+</tbody>
+</table>
 <p>A reproducible answer also states the rule used to resolve each
 boundary. In the literature example, the seven-day label is an exact
 match and a negative point estimate satisfies the stated reduction
@@ -4187,6 +4177,15 @@ require constructing the new, explicitly scoped projection first. The
 examples demonstrate those bounded operations. Durable release
 publication, live access enforcement, and service migration require
 designs and tests beyond the companions.</p>
+<p>To implement the worked route, use its answer records as acceptance
+criteria. First compare selected assertion IDs, source revisions, and
+time classifications; then compare policy results and authorised
+evidence. Reopening a database tests persistence, while repeating those
+comparisons tests whether the representation retained the distinctions
+the question needs. When a topology projection is exported, record its
+selection rules and discarded qualifiers with it. These checks let an
+implementation be assessed against the standalone reasoning even when
+its tables or query language differ.</p>
 <h1 data-number="12" id="further-reading"><span class="header-section-number">12</span> Further Reading</h1>
 <ul>
 <li>The <a href="https://www.w3.org/TR/swbp-n-aryRelations/">W3C note on
