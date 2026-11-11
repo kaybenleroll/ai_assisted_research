@@ -166,6 +166,57 @@ def project_paths(root: Path, project: str) -> tuple[Path, Path, Path]:
     return source, brief, audit
 
 
+def checklist_findings(text: str) -> list[str]:
+    """Validate the two decisions in the single current checklist section."""
+    sections: list[list[str]] = []
+    current: list[str] | None = None
+    fence: tuple[str, int] | None = None
+    for line in text.splitlines():
+        marker = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
+        if marker:
+            token = marker.group(1)
+            if fence is None:
+                fence = (token[0], len(token))
+            elif token[0] == fence[0] and len(token) >= fence[1] and not line[marker.end():].strip():
+                fence = None
+            continue
+        if fence is not None:
+            continue
+        heading = re.match(r"^ {0,3}(#{1,6})[ \t]+(.*?)[ \t]*#*[ \t]*$", line)
+        if heading:
+            current = None
+            if heading.group(1) == "##" and heading.group(2) == "Release readiness checklist":
+                current = []
+                sections.append(current)
+            continue
+        if current is not None:
+            current.append(line)
+
+    if len(sections) != 1:
+        return [f"audit: expected exactly one current 'Release readiness checklist' section; found {len(sections)}"]
+
+    errors = []
+    decisions = {}
+    for name, allowed in (("Content gate", "pass|fail"), ("Release readiness", "ready|not-ready")):
+        # Count malformed fields too, so a valid entry cannot hide a duplicate.
+        candidates = [line for line in sections[0]
+                      if re.match(rf"^\s*(?:(?:[-+*]|\d+[.)])\s+)?{re.escape(name)}\b", line, re.I)]
+        if len(candidates) != 1:
+            errors.append(f"audit: checklist must contain exactly one {name} entry; found {len(candidates)}")
+            continue
+        match = re.fullmatch(
+            rf"- {re.escape(name)}:\s+\*\*({allowed})\*\*(?:[,. ;:]\s*\S.*|\s+\S.*)?\s*",
+            candidates[0],
+        )
+        if not match:
+            errors.append(f"audit: malformed {name} entry in checklist")
+        else:
+            decisions[name] = match.group(1)
+    if decisions.get("Content gate") == "fail" and decisions.get("Release readiness") == "ready":
+        errors.append("audit: Release readiness cannot be ready when Content gate is fail")
+    return errors
+
+
 def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
     errors = []
     if not brief.is_file():
@@ -178,12 +229,7 @@ def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
     revision_errors, _, digest = revision_findings(root, source_path(root, source), brief, audit)
     errors.extend(revision_errors)
     audit_text = audit.read_text(encoding="utf-8")
-    if "## Release readiness checklist" not in audit_text:
-        errors.append("audit: required section 'Release readiness checklist' is missing")
-    if not re.search(r"^- Content gate:\s+\*\*(?:pass|fail)\*\*\s*$", audit_text, re.M):
-        errors.append("audit: checklist must record Content gate as pass or fail")
-    if not re.search(r"^- Release readiness:\s+\*\*(?:ready|not-ready)\*\*\s*$", audit_text, re.M):
-        errors.append("audit: checklist must record Release readiness as ready or not-ready")
+    errors.extend(checklist_findings(audit_text))
     print(f"source: {source.relative_to(root)}")
     print(f"source sha256: {digest}")
     return errors

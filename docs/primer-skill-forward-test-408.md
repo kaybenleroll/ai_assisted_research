@@ -109,6 +109,29 @@ Record the response and judgement for each case separately. Do not count a
 passing executable command, a changed revision string, or a structurally valid
 table as proof of teaching depth or re-audit completeness.
 
+### Domain-neutral coverage matrix
+
+Use a small, deliberately varied set of cases so the forward-test covers
+different forms of teaching evidence. Select or adapt cases appropriate to the
+skill under test; this matrix is a coverage guide, not a quota or a claim that
+all cases are equivalent. Keep task-execution evidence distinct from evidence
+that the native skill activated.
+
+| Case form | Example task | What task-execution evidence should establish | Typical limitation to inspect |
+|---|---|---|---|
+| Mathematical or derivational | Derive a result from stated assumptions, then apply it to a small worked instance. | The response connects assumptions, intermediate reasoning, result, interpretation, and a condition where the result may fail. | A correct final expression without justified steps or interpretation is insufficient. |
+| Applied or procedural | Trace a decision or operation from stated input through an outcome. | The response identifies the operation, relevant choice points, explained or observed outcome, and reader-facing interpretation. | A plausible outcome does not establish that the reader can reproduce the operation. |
+| Concise/reference-only | Locate and explain the scope of a short lookup entry, definition, or comparison table. | The response answers the bounded lookup request accurately and identifies the entry's scope or cross-reference when relevant. | Do not require a full teaching spine from material explicitly designated reference-only; do not misclassify a promised teaching route as reference-only. |
+
+For every invocation, record two separate findings. **Native activation evidence**
+records the harness mechanism and observed evidence that the named skill was
+loaded or invoked; catalogue discovery or manually opening a skill file is not
+native activation. **Task-execution evidence** records the response, case
+criteria, human judgement, misses, and limitations. A strong task response
+does not prove native activation, and native activation does not prove the task
+was performed well. If either dimension is unavailable, mark it unknown or
+inconclusive rather than inferring a pass from the other.
+
 ### Handoff
 
 ```text
@@ -133,7 +156,8 @@ retain a durable reviewed record in an authorised location after the tests.
 Do not include secrets, private transcripts or hidden reasoning.
 
 - Date/time and operator:
-- Case and skill; native activation mechanism and observed evidence:
+- Case and skill; native activation mechanism and observed evidence (or
+  unknown/inconclusive):
 - Harness/version, model identifier, effort and relevant settings:
 - Checkout path, branch, full HEAD, dirty state and applicable permissions:
 - Source/fixture paths and hashes; brief, audit, evidence and skill revisions
@@ -141,7 +165,8 @@ Do not include secrets, private transcripts or hidden reasoning.
 - Exact command and complete prompt:
 - Run outcome: completed / incomplete / unavailable; reason if applicable:
 - Response or log location and relevant excerpts/locators:
-- Human findings against the criteria, including false positives and misses:
+- Task-execution evidence: response or log location, human findings against
+  case criteria, including false positives and misses:
 - Scope, unverified claims and limitations:
 - No-write controls, exact before/after inventory and Git commands, comparison
   results and any observed attempted writes:
