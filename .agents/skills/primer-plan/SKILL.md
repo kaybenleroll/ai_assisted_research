@@ -17,6 +17,21 @@ Read `docs/primer-production-procedure.md`, `docs/templates/primer-brief.md`,
 Read the repository state before proposing edits: issue, branch, dirty paths,
 existing source or companion documents, and build recipe.
 
+When planning a forward test of revised guidance, calibrate against the current
+revised primer and its tracked brief and audit at identified revisions. Before
+testing, re-scope historical findings against those artefacts: distinguish gaps
+that remain, findings already addressed, explicit scope reductions, and items
+not checked. Retain stable route and concept IDs when relating the findings to
+the current reader promise; do not treat an old finding as a current gap without
+checking it.
+
+Plan synthetic fixtures and realistic current-primer evidence separately.
+Fixtures can exercise known cases and failure modes, but cannot by themselves
+establish that the guidance works on the current primer. Record each test's
+input, revision, intended observation, result, and limits. Primary and
+alternative teaching gaps remain content blockers; plan the content gate and
+release-readiness decision as separate judgements.
+
 Create a tracked, revision-bound brief; an issue comment or ignored
 `.scratch/` note is supporting material, not the release brief. Record the
 brief revision and stable `route_id` and `concept_id` values; each concept row

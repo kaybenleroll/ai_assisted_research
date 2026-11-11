@@ -17,6 +17,21 @@ Read `docs/primer-production-procedure.md`,
 `STYLE_GUIDE.md`. Record the reviewed source revision and brief revision, not
 only a branch name; the audit itself is a tracked artefact.
 
+For a forward test of revised guidance, use the current revised primer and its
+tracked brief and audit as the calibration baseline, recording their revisions.
+Before testing, re-scope historical findings against the current artefacts:
+identify what remains a gap, what has been addressed, what was explicitly
+scope-reduced, and what has not been checked. Preserve the stable route and
+concept IDs and assess findings against the current reader promise; do not
+carry a historical gap forward without current evidence.
+
+Report synthetic fixture results separately from realistic current-primer
+evidence, with inputs, revisions, observations, and limits. A fixture can test a
+known case or failure mode but cannot alone establish behaviour on the current
+primer. Neither type of test replaces the human content judgement. Keep the
+content gate (`pass` or `fail`) separate from release readiness (`ready` or
+`not-ready`); unresolved primary or alternative gaps block the content gate.
+
 After the human review, run `just primer-audit <primer-directory>` for a
 tracked primer. This performs the structural evidence check, Git-backed
 locator and revision check, opted-in examples, build, render QA, freshness,
