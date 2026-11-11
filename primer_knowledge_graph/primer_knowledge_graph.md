@@ -488,14 +488,12 @@ A reviewer asks which studies in a specified review's citation neighbourhood rep
 
 The source boundary is a fictional review and three fictional research works. Each work has a stable identity, and each version is a separately identified source. A work is the intellectual publication across its versions. A version is the particular text from which a claim was extracted. A study is the investigation described by that text, and a cohort is the group of participants whose data are analysed. Two reports can describe the same study, and two distinct studies can draw on the same cohort. Neither relationship is safe to infer solely from similar titles or matching numbers.
 
-The following source catalogue defines the complete initial evidence set. The quotation in each row is an excerpt of that synthetic source, and the locator identifies the passage available for checking.
+The following source catalogue defines the complete initial evidence set. Each quotation is an excerpt of the synthetic source, and its locator identifies the passage available for checking.
 
-| Source version | Work and locator | Complete relevant excerpt |
-|---|---|---|
-| `R@1` | Review `R`, bibliography entries 8–10 | "Entry 8: report A. Entry 9: report B. Entry 10: report C." |
-| `A@1` | Report `A`, methods paragraph 1 and results table 2 | "Study A enrolled cohort X, adults aged 65 or over. Telephone follow-up was compared with usual care. Seven-day readmission risk difference was −4 percentage points, with a 95% interval from −7 to −1." |
-| `B@1` | Report `B`, methods paragraph 1 and results table 3 | "Study B enrolled cohort Y, adults aged 65 or over. Telephone follow-up was compared with usual care. Thirty-day readmission risk difference was +1 percentage point, with a 95% interval from −2 to +4." |
-| `C@1` | Report `C`, methods paragraph 1 and results table 1 | "Study C is a secondary analysis of the same cohort X enrolled in Study A. It compares telephone follow-up with usual care in adults aged 65 or over. Seven-day readmission risk difference was −4 percentage points, with a 95% interval from −7 to −1." |
+- **Source version `R@1`** — Review `R`; locator: bibliography entries 8–10. Excerpt: "Entry 8: report A. Entry 9: report B. Entry 10: report C."
+- **Source version `A@1`** — Report `A`; locator: methods paragraph 1 and results table 2. Excerpt: "Study A enrolled cohort X, adults aged 65 or over. Telephone follow-up was compared with usual care. Seven-day readmission risk difference was −4 percentage points, with a 95% interval from −7 to −1."
+- **Source version `B@1`** — Report `B`; locator: methods paragraph 1 and results table 3. Excerpt: "Study B enrolled cohort Y, adults aged 65 or over. Telephone follow-up was compared with usual care. Thirty-day readmission risk difference was +1 percentage point, with a 95% interval from −2 to +4."
+- **Source version `C@1`** — Report `C`; locator: methods paragraph 1 and results table 1. Excerpt: "Study C is a secondary analysis of the same cohort X enrolled in Study A. It compares telephone follow-up with usual care in adults aged 65 or over. Seven-day readmission risk difference was −4 percentage points, with a 95% interval from −7 to −1."
 
 These excerpts are the entire evidence universe for this exercise at the initial revision. The review supplies three bibliography links. It does not itself establish any outcome, the age of a population, or independence between results. The reports supply those details. Report C explicitly identifies a shared cohort and a secondary analysis, so its separate study and work identities do not justify treating its participants as an independent replication of Study A. The repeated numbers reinforce the need to inspect the relationship, but the explicit source statement is what establishes it here.
 
