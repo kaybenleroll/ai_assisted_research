@@ -2,23 +2,75 @@
 
 ## Introduction
 
-On 15 March 2024, two Northbridge records give different accounts of the travel policy for project Atlas. The policy register has version 1 in force for a period that includes that day. The Atlas minutes explicitly deny that version 1 applies on that day and affirm that version 2 does. If you draw an arrow from each version to Atlas, the diagram can suggest that both apply. If you keep only the minutes, you lose the record that makes this a disagreement. And if you look on 16 March, you have another problem. The register still covers the day, while the minutes only establish what the meeting said about the 15th.
+On 15 March 2024, two Northbridge records give different accounts of the travel policy for project Atlas. The policy register says that version 1 applies during a period containing that day. The Atlas meeting minutes say that version 1 does not apply on that day and that version 2 does. A reader needs to know what each record says, whether the statements concern the same policy and project, and what conclusion the available evidence permits. An arrow labelled “applies to” cannot carry all of that meaning by itself.
 
-A knowledge graph can preserve enough information to answer each of those questions. Its relationships have named meanings and connect identified things. Its evidence records say who or what made an assertion, where to check it, and under what conditions it applies. A query then selects and interprets those records for a particular purpose. Keeping these steps visible lets a reader challenge an answer and see exactly what a correction would change.
+This is the organising problem of the primer: how do you turn source material into connected records that support useful, inspectable answers? We will build a small knowledge graph, use it to answer questions, and follow the consequences when evidence is omitted or corrected. Northbridge is fictional, and its sources and results are synthetic teaching examples. The passages and intermediate records are printed here so that you can follow the reasoning without running a programme.
 
-The flow below shows what must survive between a source and an answer. Read it from top to bottom: the arrows describe operations on evidence, while each labelled stage states what the operation produces.
+### What a Knowledge Graph Adds
 
-| **Source:** the register and minutes make different statements about version 1.
-| ↓ Retain the wording and its location in each source snapshot.
-| **Mention → entity:** link each occurrence of "version 1" to Travel Policy v1.
-| ↓ Preserve the relation, polarity, date, and source together.
-| **Qualified claims:** an affirmation from the register and a denial from the minutes.
-| ↓ Select both for Atlas on 15 March and compare their time support.
-| **Answer with evidence:** report disagreement and cite both source passages.
+A graph represents things as **nodes** and connections between them as **edges**. In the model used here, a node can represent a project, a policy version, a person, or a record about one of those things. An edge has a direction and a named relationship: “version 1 applies to Atlas” differs from “Atlas belongs to Northbridge”. A **path** follows several edges through shared nodes. Following a policy version to a project and then to its organisation can answer a different question from looking up the policy version alone.
 
-The two source statements reach the answer as separate records. Resolving their mentions to the same policy version enables comparison; it gives neither statement authority over the other. Dropping the denial or its date at an earlier stage changes what the final answer can establish.
+A knowledge graph gives those connections a defined meaning and uses identifiers to keep their participants distinguishable. In this primer, it also preserves the evidence and qualifications needed to interpret its assertions. The term is used more broadly elsewhere; the evidence requirements here express the task we want our graph to perform. Storing a relationship does not establish that it is true, complete, or appropriate for every question.
 
-Northbridge is fictional. You can reproduce the main case from the excerpts, tables, and worked decisions in this primer. Familiarity with tables and identifiers is enough. The [primary route](#route-python-duckdb) starts with the questions Northbridge needs to answer, follows the evidence into the model, and works the policy queries and a correction by hand. The two transfer cases repeat the reasoning for research literature and software dependencies. The [alternative route](#route-r-projection) uses a projection of Northbridge to study graph structure. [Storage and implementation notes](#route-graph-storage) give optional mappings and describe the companion implementations.
+Compare three ways of keeping the Northbridge information. A **document** preserves wording and context: you can read exactly how the minutes describe the meeting. A **table** can make repeated fields explicit, such as policy version, project, date, and source. A **graph model** makes identified participants and named relationships reusable across questions. You might start from Atlas to find policy statements, from a person to inspect ownership, or from a source revision to find the assertions derived from it. Each operation depends on the meanings assigned to the connections.
+
+These are compatible choices. Tables can store the entire graph and its evidence, and joins can follow its paths. Documents can remain the underlying sources. A graph database is one storage option, rather than a prerequisite for graph modelling. If the task is simply to find one entry in a reliable register, a table lookup or document index may be sufficient. The additional modelling becomes useful when questions repeatedly combine relationships or require review of their origins and qualifications.
+
+An **unqualified graph** might draw the register’s version 1 connection to Atlas and the minutes’ version 2 connection to Atlas, then leave out dates, denials, and source roles. The picture would show related things while obscuring the actual disagreement. Even two paths to the same node would say little about whether the evidence was independent or whether their dates overlapped. The aim is therefore to preserve the distinctions the questions require, rather than to maximise the number of connections.
+
+### The Vocabulary of Sources, Identity, and Statements
+
+A **source** is material admitted as evidence for a defined purpose, such as a particular revision of the policy register or the Atlas minutes. We retain a **snapshot**, an identified version of that material, because a later revision may say something different. A **locator** identifies the relevant part of the snapshot, such as a sentence, paragraph, or register entry. A title alone cannot tell a reviewer which wording produced an answer.
+
+A **mention** is a particular occurrence of a name or phrase in a source. An **entity** is the thing that occurrence may refer to. The phrase “version 1” in the minutes is a mention; Travel Policy v1 is the entity to which we may link it. A second occurrence in the register is a separate mention of the same version. Keeping the occurrences separate preserves the fact that two sources made statements about one thing.
+
+An **identifier** names an entity within an agreed naming system. A **label** is the text displayed to a reader. Two people can share a label, and one person can appear under several labels. An identifier helps keep accepted identity decisions consistent; assigning it does not prove that two mentions refer to the same person. Northbridge’s directory contains two people called Alex Kim, while the minutes give only that name. We can preserve the attendance mention without choosing either person. Additional identifying evidence would be needed to justify a link.
+
+A relationship can be expressed as a **proposition** with a subject, a predicate naming the relationship, and an object: “Travel Policy v1 — applies to — Atlas”. A **claim**, in this primer’s vocabulary, adds the qualifications needed to interpret that proposition, such as a period or a condition. An **assertion** is a source-specific presentation of a claim, with its evidence, admission history, and **polarity**: whether the source affirms or denies the relationship. Other systems use these words differently, so keep this local convention in mind when comparing representations.
+
+The distinction lets the register’s affirmation and the minutes’ denial remain separate assertions about the same proposition. It also lets two sources express the same claim without collapsing their evidence into one record. A copied statement can have two source occurrences while still depending on one original account. Counting occurrences alone would give a misleading impression of independent support.
+
+A **qualifier** limits or specifies the meaning of a statement. Time, project scope, and conditions such as a restriction to domestic travel can all matter. “On 15 March” establishes something different from “from 15 March until further notice”. Removing either phrase can change which question an assertion answers. A missing end date gives us no automatic justification for treating a statement as permanent; later sections establish the explicit time convention used in this case.
+
+**Evidence** is the material and reasoning used to support a particular assertion or decision. The register passage supports an applicability statement, while a directory entry may support identifying the named owner. These are different evidential roles. **Provenance** records origin and history: which snapshot and passage were used, how they were transformed, and which review or resolution decisions produced the admitted record. Qualifiers explain the statement’s scope; provenance explains where the record came from. Neither substitutes for checking whether its evidence supports its meaning.
+
+A **query** is a specified operation over the represented information. It might ask which version the register records for Atlas on a given day, which assertions came from the minutes, or whether the two sources disagree. An **answer** interprets the selected records under the question’s scope and the chosen decision rules. Those **answer policies** determine, for example, what to do when applicable sources disagree. Preserving a denial is a construction decision; deciding that disagreement requires withholding an applicability conclusion is an answer-policy decision; displaying the conclusion and its citations is a presentation decision. Each can fail separately.
+
+**Abstention** means withholding a conclusion that the available, permitted evidence does not justify, while explaining the relevant limit when disclosure permits it. An authorised reviewer can abstain from identifying Alex Kim because two candidates remain indistinguishable. A policy answer can abstain because applicable assertions conflict. Neither response means that nobody attended or that no policy applies. The missing conclusion and the reason for withholding it are part of the answer.
+
+### Follow the Evidence From Source to Answer
+
+The organising model is a sequence of decisions. First retain the source wording and context. Identify its mentions, then decide which entities they refer to. Represent the statements with their meanings, polarities, qualifications, and evidence. Finally, select records for a question, interpret them under a stated policy, and present an answer with the evidence a reader is permitted to inspect.
+
+The flow below follows the version 1 disagreement. Each stage hands something checkable to the next.
+
+| Stage | What survives |
+|---|---|
+| **Sources** | The register affirms version 1 applicability over a period; the minutes deny it on 15 March. |
+| **Mentions and entities** | The policy-version and Atlas mentions are retained, with the basis for each identity link. |
+| **Qualified assertions** | The register affirmation and minutes denial remain separate, with polarity, time, source, and locator. |
+| **Selected evidence** | The question selects the same version, project, and requested day under stated comparison rules. |
+| **Interpreted answer** | The answer reports disagreement and withholds an applicability conclusion under the cross-source policy, citing both passages. |
+
+The **evidence ledger** is the collection of these reviewable assertion records and their links to sources and decisions. The graph is represented by those connected records. The answer is a product of querying and interpreting them; it is not another name for the graph itself.
+
+For 15 March, both version 1 assertions concern the same project and support the requested day, and their polarities oppose each other. That establishes the disagreement in the selected records. It does not settle which version a traveller should follow. The register’s designated role and the minutes’ account of the meeting remain visible for an accountable owner to investigate.
+
+Changing the question can change the answer without changing the ledger. A register-only question returns what the register records. A question about the minutes returns their applicability statements. A cross-source question compares the evidence. On 16 March, the minutes no longer provide definite day-level support under the case’s time convention; their later duration is unknown. The conservative policy still withholds an applicability conclusion, now for temporal uncertainty rather than a demonstrated same-day conflict. This is why the reasoning needs to survive alongside the final wording.
+
+### What “Verifiable” Means and How to Read the Primer
+
+Here, **verifiable** means that a permitted reviewer can inspect and challenge the chain from an answer back to its sources and decisions. The answer record identifies the question and its date and scope, the source revisions and graph release, the selected assertions, the relevant exclusions or uncertainties, the policy used, and the supporting locators. A graph release is an identified version of the graph together with the evidence and rules used to produce its answer products.
+
+A citation is necessary when the answer relies on a source passage, but a citation alone cannot establish the chain. It must resolve to the right revision and support the assertion attributed to it. If the answer reports a disagreement, the reviewer needs evidence for both sides. If a source or rule changes, the recorded dependencies let us work out which answers need re-evaluation. Where retention or access rules prevent full replay, that limitation must be stated through an authorised view.
+
+Verifiability does not guarantee that a source is correct, that the collection covers every relevant case, or that the answer is an operational authorisation. A fully traceable answer can correctly identify conflicting evidence and leave the substantive decision unresolved. Likewise, finding no assertion about another project is a finding about the selected evidence, rather than proof that no policy applies to that project. The primer teaches how to expose these boundaries so that a reader can decide what further evidence or review is needed.
+
+You need general technical literacy and familiarity with tables and identifiers. No programming, graph theory, or specialist database experience is required for the main explanation. The [primary route](#route-python-duckdb) follows Northbridge from its questions and source excerpts through identity decisions, ledger construction, time and conflict, queries, diagnosis, correction, authorised disclosure, evaluation, and release checks. Read those sections in order on a first pass: each stage supplies distinctions used by the next. The research-literature and software-dependency cases then show how the same reasoning changes with different entities, evidence, and questions.
+
+For structural analysis, the [alternative projection route](#route-r-projection) explains paths and connected components in a simplified view of Northbridge. That view deliberately drops dates, polarity, and provenance, so its connectivity results cannot replace evidence-based applicability answers. The [storage and implementation reference](#route-graph-storage) compares representations and serving choices. Optional companion implementations use Python with DuckDB and R; familiarity with those languages is useful only if you choose to inspect or run them.
+
+The scope is a bounded method for constructing, querying, reviewing, and correcting knowledge graphs whose answers remain connected to evidence. General-purpose language extraction, comprehensive ontology engineering, production deployment, vendor benchmarking, and a complete graph-database integration are outside that scope. The Northbridge exercise supplies neither legal advice nor evidence of production accuracy. Its value is that you can inspect every important transition, including the points at which an honest answer must stop.
 
 *Verified against primary sources for the standards and interfaces in Storage and Implementation Reference and the R projection. The case studies and their worked results are synthetic.*
 
