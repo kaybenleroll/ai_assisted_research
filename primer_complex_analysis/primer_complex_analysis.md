@@ -903,26 +903,9 @@ This example separates two decisions that are often collapsed. The sign of the o
 
 ### A Numerical Contour Check
 
-One can verify the Cauchy-formula example numerically without confusing the check with its proof. Parametrise $C:|z-1|=r$ by $z(\theta)=1+re^{i\theta}$, take $r=0.4$, and apply the periodic trapezoidal rule:
+One can verify the Cauchy-formula example numerically without confusing the check with its proof. Parametrise $C:|z-1|=r$ by $z(\theta)=1+re^{i\theta}$, take $r=0.4$, and apply the periodic trapezoidal rule. The manifest-backed script [`contour_quadrature.py`](examples/contour_quadrature.py) runs this calculation; select the stable example ID `contour-quadrature-convergence` with `just examples complex_analysis contour-quadrature-convergence` from the repository root. It asserts that doubling the resolution from 8 to 16 points reduces the absolute error, then checks that the 16-, 32-, and 64-point estimates are within $10^{-12}$ of the residue result.
 
-```python
-import cmath
-import math
-
-radius = 0.4
-for n in (8, 16, 32, 64):
-    total = 0j
-    for k in range(n):
-        theta = 2 * math.pi * k / n
-        z = 1 + radius * cmath.exp(1j * theta)
-        dz_dtheta = 1j * radius * cmath.exp(1j * theta)
-        total += cmath.exp(z) / (z - 1) * dz_dtheta
-    estimate = total * (2 * math.pi / n)
-    exact = 2j * math.pi * math.e
-    print(n, estimate, abs(estimate - exact))
-```
-
-The denominator never vanishes on this circle, and increasing $n$ should drive the error down towards floating-point limits. A stable sequence of approximations is evidence that the parametrisation and orientation were coded correctly. It is not a proof of the residue theorem: a grid could miss a narrow feature, a pole could sit almost on the path, or cancellation could make a wrong contour appear plausible.
+The assumptions are explicit: the circle is traversed counterclockwise, its radius is positive, and its only enclosed singularity is the simple pole at $z=1$; no singularity lies on the path. The denominator therefore never vanishes on the circle, and increasing $n$ should drive the error down towards floating-point limits. A stable sequence of approximations is evidence that the parametrisation and orientation were coded correctly. It is not a proof of the residue theorem: a grid could miss a narrow feature, a pole could sit almost on the path, or cancellation could make a wrong contour appear plausible.
 
 The numerical experiment is especially clean here because the parametrised integrand simplifies algebraically: $dz/d\theta=i(z-1)$, so $[e^z/(z-1)](dz/d\theta)=ie^z$. This cancellation shows the sampled function is smooth and periodic in $\theta$, which helps the trapezoidal rule. It also gives an independent way to debug the code if an estimate has the wrong sign: $dz/d\theta$ should contain $+i$ for counterclockwise travel. A clockwise parametrisation would contain $-i$ and return $-2\pi i e$. Numerical contour integration is most trustworthy when you inspect the parametrised integrand and the minimum distance from the path to each singularity, not just the final printed number.
 

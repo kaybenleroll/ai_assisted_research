@@ -1,0 +1,8 @@
+schema_version = 1
+
+[[examples]]
+id = "contour-quadrature-convergence"
+language = "python"
+script = "examples/contour_quadrature.py"
+profile = "python-base"
+timeout_seconds = 30

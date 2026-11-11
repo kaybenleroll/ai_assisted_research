@@ -159,6 +159,8 @@ def elo_update(rating_a: float, rating_b: float,
     return new_rating_a, new_rating_b
 ```
 
+The offline [Python example](examples/elo_and_score.py) checks this update and the score-token calculation in [Automate](#automate). Run `just examples evaluation_loop elo-and-score-python` from the repository root. With a common $K$ and complementary scores, rating changes are equal and opposite; a draw leaves ratings unchanged when they start equal. The script uses an absolute tolerance of $10^{-10}$ for floating-point checks.
+
 The **Bradley–Terry** model instead fits a latent strength $\beta_A$ or $\beta_B$ to each item. It models the probability that A beats B as:
 
 $$
@@ -228,6 +230,8 @@ def g_eval_score(logprobs: dict[str, float]) -> float:
     expected_score = sum(int(token) * p for token, p in p_scores.items())
     return expected_score
 ```
+
+The offline example linked in [Aggregate](#aggregate) checks the score for fixed token weights; it makes no judge or model call and does not establish agreement with human ratings.
 
 The code assumes that `logprobs` contains all five intended score tokens from the same scoring position. It renormalises only those tokens; a production implementation must check tokenisation, missing mass, and the model interface. An LLM judge can then score the hypothetical responses without a human on every pass. Its score inherits the rubric's omissions and may add the judge's own biases. Check it against held-out human ratings for this task; the agreement statistics in §2 tell you how to interpret a measured comparison, not an assumed ceiling.
 

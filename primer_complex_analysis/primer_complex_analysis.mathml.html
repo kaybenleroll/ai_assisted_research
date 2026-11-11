@@ -31,6 +31,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -172,6 +183,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -183,7 +195,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -584,7 +595,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -623,13 +634,15 @@ code span.wa { color: #da4453; } /* Warning */
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Complex Analysis: A Technical
 Primer</span>
     <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -638,7 +651,7 @@ Primer</span>
       <div class="sidebar-tools">
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#orientation-prerequisites-and-complex-plane-geometry" id="toc-orientation-prerequisites-and-complex-plane-geometry"><span class="toc-section-number">1</span> Orientation, Prerequisites, and
 Complex-Plane Geometry</a>
 <ul>
@@ -792,14 +805,16 @@ Topics</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#notation" id="toc-notation"><span class="toc-section-number">10</span> Notation</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
+<h1 id="document-title" class="document-title">Complex Analysis: A
+Technical Primer</h1>
 <p>Complex analysis looks like a narrow extension of calculus until its
 central fact becomes visible: requiring a derivative to be independent
 of direction forces an extraordinary amount of structure. Holomorphic
@@ -808,7 +823,7 @@ geometric maps turn difficult boundary problems into simpler ones. This
 primer develops that chain with enough theory to use it, enough geometry
 to see it, and enough computation to test your understanding without
 confusing a numerical picture for a proof.</p>
-<h1 data-number="1" id="orientation-prerequisites-and-complex-plane-geometry"><span class="header-section-number">1</span> Orientation, Prerequisites, and
+<h1 data-number="1" role="heading" aria-level="3" id="orientation-prerequisites-and-complex-plane-geometry"><span class="header-section-number">1</span> Orientation, Prerequisites, and
 Complex-Plane Geometry</h1>
 <p>This opening section establishes the language used throughout the
 primer. It reviews the real-analysis ideas that control limits,
@@ -816,7 +831,7 @@ convergence, and interchange of operations, then treats the complex
 plane as both an algebraic system and a geometric domain. The aim is not
 to repeat a full real-analysis course, but to make explicit which
 background results the later holomorphic and contour arguments use.</p>
-<h2 data-number="1.1" id="why-a-second-plane-changes-calculus"><span class="header-section-number">1.1</span> Why a Second Plane Changes
+<h2 data-number="1.1" role="heading" aria-level="4" id="why-a-second-plane-changes-calculus"><span class="header-section-number">1.1</span> Why a Second Plane Changes
 Calculus</h2>
 <p>A real differentiable function can behave almost arbitrarily away
 from the point where you differentiate it. A complex differentiable
@@ -930,7 +945,7 @@ distinction between pointwise and uniform convergence explains why our
 later proofs always choose
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>&lt;</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">r&lt;R</annotation></semantics></math>
 rather than work right up against the largest circle.</p>
-<h2 data-number="1.2" id="limits-compactness-and-the-spare-room-in-a-proof"><span class="header-section-number">1.2</span> Limits, Compactness, and the
+<h2 data-number="1.2" role="heading" aria-level="4" id="limits-compactness-and-the-spare-room-in-a-proof"><span class="header-section-number">1.2</span> Limits, Compactness, and the
 Spare Room in a Proof</h2>
 <p>The distinction between a limit at each point and a limit uniform
 over a whole set will recur throughout the subject. Consider
@@ -1076,7 +1091,7 @@ equals the function nearby. The implication is not a matter of notation;
 the requirement that the same derivative exist from every complex
 direction gives a contour identity that ordinary real smoothness does
 not provide.</p>
-<h2 data-number="1.3" id="arithmetic-is-geometry"><span class="header-section-number">1.3</span> Arithmetic Is Geometry</h2>
+<h2 data-number="1.3" role="heading" aria-level="4" id="arithmetic-is-geometry"><span class="header-section-number">1.3</span> Arithmetic Is Geometry</h2>
 <p>Write
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>x</mi><mo>+</mo><mi>i</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">z=x+iy</annotation></semantics></math>,
 where
@@ -1272,7 +1287,7 @@ grid to another conformal grid</figcaption>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>↦</mo><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">z\mapsto z^2</annotation></semantics></math>
 preserves the crossing angle of the two grid families while doubling
 arguments and changing scale.</em></p>
-<h2 data-number="1.4" id="practice"><span class="header-section-number">1.4</span> Practice</h2>
+<h2 data-number="1.4" role="heading" aria-level="4" id="practice"><span class="header-section-number">1.4</span> Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <p>Try these before moving on. Full outline solutions are in Appendix B;
 use Appendix A only when you need a nudge.</p>
@@ -1309,7 +1324,7 @@ for convergence. (<a href="#solution-2">Solution 2</a>)</li>
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 1–2</a>.</p>
-<h1 data-number="2" id="complex-functions-and-analyticity"><span class="header-section-number">2</span> Complex Functions and
+<h1 data-number="2" role="heading" aria-level="3" id="complex-functions-and-analyticity"><span class="header-section-number">2</span> Complex Functions and
 Analyticity</h1>
 <p>Complex analysis begins by asking what it means for a derivative to
 be independent of direction. The Cauchy–Riemann equations give a
@@ -1317,7 +1332,7 @@ practical test, while elementary examples show why that test needs the
 right hypotheses. Exponentials, logarithms, and analytic continuation
 then expose how a local derivative interacts with global choices such as
 branches.</p>
-<h2 data-number="2.1" id="the-derivative-must-ignore-direction"><span class="header-section-number">2.1</span> The Derivative Must Ignore
+<h2 data-number="2.1" role="heading" aria-level="4" id="the-derivative-must-ignore-direction"><span class="header-section-number">2.1</span> The Derivative Must Ignore
 Direction</h2>
 <p>For
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>:</mo><mi>D</mi><mo>→</mo><mi mathvariant="double-struck">ℂ</mi></mrow><annotation encoding="application/x-tex">f:D\to\mathbb C</annotation></semantics></math>,
@@ -1484,7 +1499,7 @@ had failed
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>u</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Delta u=0</annotation></semantics></math>,
 the equations would have been incompatible; harmonicity is the
 integrability condition for this construction.</p>
-<h2 data-number="2.2" id="exponential-logarithm-and-what-a-branch-chooses"><span class="header-section-number">2.2</span> Exponential, Logarithm, and
+<h2 data-number="2.2" role="heading" aria-level="4" id="exponential-logarithm-and-what-a-branch-chooses"><span class="header-section-number">2.2</span> Exponential, Logarithm, and
 What a Branch Chooses</h2>
 <p>The complex exponential is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mi>x</mi><mo>+</mo><mi>i</mi><mi>y</mi></mrow></msup><mo>=</mo><msup><mi>e</mi><mi>x</mi></msup><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">cos</mi><mo>⁡</mo></mrow><mi>y</mi><mo>+</mo><mi>i</mi><mrow><mi mathvariant="normal">sin</mi><mo>⁡</mo></mrow><mi>y</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">e^{x+iy}=e^x(\cos y+i\sin y)</annotation></semantics></math>.
@@ -1592,7 +1607,7 @@ domain without vanishing everywhere, as the identity theorem will make
 precise. Compare that with a real-valued function of two variables,
 whose zero set is often a curve. This is another way to feel how
 restrictive a single complex derivative is.</p>
-<h2 data-number="2.3" id="branches-under-continuation"><span class="header-section-number">2.3</span> Branches Under
+<h2 data-number="2.3" role="heading" aria-level="4" id="branches-under-continuation"><span class="header-section-number">2.3</span> Branches Under
 Continuation</h2>
 <p>The logarithm is best understood as a local inverse with a global
 obstruction. The exponential maps a horizontal strip of height
@@ -1808,7 +1823,7 @@ chosen domain. If you integrate a function containing
 around a keyhole contour, keep the two boundary values separate. They
 are related by a known phase factor, not equal terms that cancel
 automatically.</p>
-<h2 data-number="2.4" id="harmonic-functions-and-their-conjugates"><span class="header-section-number">2.4</span> Harmonic Functions and Their
+<h2 data-number="2.4" role="heading" aria-level="4" id="harmonic-functions-and-their-conjugates"><span class="header-section-number">2.4</span> Harmonic Functions and Their
 Conjugates</h2>
 <p>Suppose
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>=</mo><mi>u</mi><mo>+</mo><mi>i</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">f=u+iv</annotation></semantics></math>
@@ -1876,7 +1891,8 @@ altogether. When applying this to physics, one must also check what
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
 represent and what assumptions make a potential description valid.</p>
-<h2 data-number="2.5" id="practice-1"><span class="header-section-number">2.5</span> Practice</h2>
+<h2 data-number="2.5" role="heading" aria-level="4" id="practice-1"><span class="header-section-number">2.5</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="3" type="1">
 <li>Test the claim that
@@ -1901,14 +1917,14 @@ on the punctured plane. (<a href="#solution-5">Solution 5</a>)</li>
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 3–5</a>.</p>
-<h1 data-number="3" id="contours-and-cauchy-theory"><span class="header-section-number">3</span> Contours and Cauchy Theory</h1>
+<h1 data-number="3" role="heading" aria-level="3" id="contours-and-cauchy-theory"><span class="header-section-number">3</span> Contours and Cauchy Theory</h1>
 <p>Contour integration makes the geometry of a domain matter:
 orientation records direction, winding records how a path surrounds
 points, and holes can obstruct primitives. Cauchy’s theorem and formula
 turn these path integrals into strong statements about values inside a
 contour. The section builds from parametrisation to those interior
 consequences.</p>
-<h2 data-number="3.1" id="integrating-along-a-directed-curve"><span class="header-section-number">3.1</span> Integrating Along a Directed
+<h2 data-number="3.1" role="heading" aria-level="4" id="integrating-along-a-directed-curve"><span class="header-section-number">3.1</span> Integrating Along a Directed
 Curve</h2>
 <p>A <em>contour</em>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>:</mo><mo stretchy="false" form="prefix">[</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false" form="postfix">]</mo><mo>→</mo><mi>D</mi></mrow><annotation encoding="application/x-tex">\gamma:[a,b]\to D</annotation></semantics></math>
@@ -2043,7 +2059,7 @@ about points inside it and index
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
 about points outside it. The arrows matter: reversing the path changes
 every index’s sign.</em></p>
-<h2 data-number="3.2" id="winding-is-a-directed-count"><span class="header-section-number">3.2</span> Winding Is a Directed
+<h2 data-number="3.2" role="heading" aria-level="4" id="winding-is-a-directed-count"><span class="header-section-number">3.2</span> Winding Is a Directed
 Count</h2>
 <p>The winding number has two descriptions that should agree in any
 calculation. One is the integral of
@@ -2234,7 +2250,7 @@ contour with positive clearance, prove the identity there, and then take
 a limit separately if the boundary is needed. The limiting step can
 introduce principal values or boundary terms; it is not part of the
 original theorem.</p>
-<h2 data-number="3.3" id="primitives-paths-and-holes"><span class="header-section-number">3.3</span> Primitives, Paths, and
+<h2 data-number="3.3" role="heading" aria-level="4" id="primitives-paths-and-holes"><span class="header-section-number">3.3</span> Primitives, Paths, and
 Holes</h2>
 <p>If
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>F</mi><mo>′</mo></msup><mo>=</mo><mi>f</mi></mrow><annotation encoding="application/x-tex">F&#39;=f</annotation></semantics></math>
@@ -2302,7 +2318,7 @@ these statements distinct helps avoid circular reasoning: a primitive
 implies vanishing periods on any domain, while Cauchy–Goursat supplies
 vanishing periods from holomorphy when the loops can be filled inside
 the domain.</p>
-<h2 data-number="3.4" id="cauchygoursat-and-the-subdivision-idea"><span class="header-section-number">3.4</span> Cauchy–Goursat and the
+<h2 data-number="3.4" role="heading" aria-level="4" id="cauchygoursat-and-the-subdivision-idea"><span class="header-section-number">3.4</span> Cauchy–Goursat and the
 Subdivision Idea</h2>
 <p>Here is a precise foundational version. If
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
@@ -2390,7 +2406,7 @@ around poles. It does not say that either individual integral is zero;
 gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">2\pi i</annotation></semantics></math>
 on every positively oriented circle around zero.</p>
-<h2 data-number="3.5" id="cauchys-formula-boundary-values-control-the-interior"><span class="header-section-number">3.5</span> Cauchy’s Formula: Boundary
+<h2 data-number="3.5" role="heading" aria-level="4" id="cauchys-formula-boundary-values-control-the-interior"><span class="header-section-number">3.5</span> Cauchy’s Formula: Boundary
 Values Control the Interior</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
@@ -2527,7 +2543,7 @@ reciprocal has a finite maximum. Liouville then contradicts
 nonconstancy, proving the fundamental theorem of algebra. Section 4
 draws a different consequence from the same formula: the function equals
 its Taylor series, not merely a finite Taylor approximation.</p>
-<h2 data-number="3.6" id="how-cauchys-formula-forces-rigidity"><span class="header-section-number">3.6</span> How Cauchy’s Formula Forces
+<h2 data-number="3.6" role="heading" aria-level="4" id="how-cauchys-formula-forces-rigidity"><span class="header-section-number">3.6</span> How Cauchy’s Formula Forces
 Rigidity</h2>
 <p>Cauchy’s formula is a reproducing rule. If you know
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
@@ -2754,7 +2770,8 @@ The example is useful because
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
 is perfectly holomorphic near the <em>contour</em>, so checking only the
 boundary would miss the problem.</p>
-<h2 data-number="3.7" id="practice-2"><span class="header-section-number">3.7</span> Practice</h2>
+<h2 data-number="3.7" role="heading" aria-level="4" id="practice-2"><span class="header-section-number">3.7</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="6" type="1">
 <li>A student claims that
@@ -2772,14 +2789,14 @@ two. (<a href="#solution-7">Solution 7</a>)</li>
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 6–7</a>.</p>
-<h1 data-number="4" id="series-and-singularities"><span class="header-section-number">4</span> Series and Singularities</h1>
+<h1 data-number="4" role="heading" aria-level="3" id="series-and-singularities"><span class="header-section-number">4</span> Series and Singularities</h1>
 <p>Cauchy’s formula supplies the expansions that make local behaviour
 calculable. Taylor series describe regular points, while Laurent series
 distinguish removable singularities, poles, and essential singularities
 on punctured neighbourhoods. The examples emphasise convergence regions
 as well as coefficients, since both determine what an expansion can
 establish.</p>
-<h2 data-number="4.1" id="taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="header-section-number">4.1</span> Taylor Series Come From a
+<h2 data-number="4.1" role="heading" aria-level="4" id="taylor-series-come-from-a-contour-not-a-smoothness-guess"><span class="header-section-number">4.1</span> Taylor Series Come From a
 Contour, Not a Smoothness Guess</h2>
 <p>Suppose
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
@@ -2924,7 +2941,7 @@ circuit around zero changes the value by
 so continuing all the way back does not return to the original branch.
 This is why continuation along different paths can matter, while the
 Taylor series in one disk is unambiguous.</p>
-<h2 data-number="4.2" id="laurent-series-separate-the-two-sides-of-a-hole"><span class="header-section-number">4.2</span> Laurent Series Separate the Two
+<h2 data-number="4.2" role="heading" aria-level="4" id="laurent-series-separate-the-two-sides-of-a-hole"><span class="header-section-number">4.2</span> Laurent Series Separate the Two
 Sides of a Hole</h2>
 <p>If
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
@@ -2987,7 +3004,7 @@ singularity circles</figcaption>
 <p><em>Figure: A Laurent expansion belongs to an annulus. Crossing a
 singularity changes the available expansion, even when the underlying
 rational formula looks unchanged.</em></p>
-<h2 data-number="4.3" id="three-laurent-annuli-in-one-calculation"><span class="header-section-number">4.3</span> Three Laurent Annuli in One
+<h2 data-number="4.3" role="heading" aria-level="4" id="three-laurent-annuli-in-one-calculation"><span class="header-section-number">4.3</span> Three Laurent Annuli in One
 Calculation</h2>
 <p>Take
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mrow><mi>z</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>+</mo><mfrac><mn>1</mn><mrow><mi>z</mi><mo>−</mo><mn>2</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -3142,7 +3159,7 @@ convergence is bounded by the nearest singularity on each side, though
 continuation may still define the function beyond one side through a
 different expansion. In this rational example the poles sit exactly on
 the boundary circles, making the two radii transparent.</p>
-<h2 data-number="4.4" id="convergence-and-singularity-traps"><span class="header-section-number">4.4</span> Convergence and Singularity
+<h2 data-number="4.4" role="heading" aria-level="4" id="convergence-and-singularity-traps"><span class="header-section-number">4.4</span> Convergence and Singularity
 Traps</h2>
 <p>Convergence regions are easier to understand if you derive each
 geometric expansion from its inequality. For a Taylor series, the
@@ -3335,7 +3352,7 @@ Recenter at
 and a different Taylor series describes it there. A failure of one
 centred series on its boundary is not a failure of the function to exist
 at that point.</p>
-<h2 data-number="4.5" id="the-principal-part-tells-you-what-failed"><span class="header-section-number">4.5</span> The Principal Part Tells You
+<h2 data-number="4.5" role="heading" aria-level="4" id="the-principal-part-tells-you-what-failed"><span class="header-section-number">4.5</span> The Principal Part Tells You
 What Failed</h2>
 <p>An <em>isolated singularity</em> at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
@@ -3446,7 +3463,8 @@ hypotheses supplies the classification. Conversely, if a symbolic
 expression seems complicated but you can prove it bounded on a punctured
 disk, the removable-singularity theorem settles the issue without a full
 series expansion.</p>
-<h2 data-number="4.6" id="practice-3"><span class="header-section-number">4.6</span> Practice</h2>
+<h2 data-number="4.6" role="heading" aria-level="4" id="practice-3"><span class="header-section-number">4.6</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="8" type="1">
 <li>Find the Laurent series of
@@ -3477,13 +3495,13 @@ to evaluate
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 8–10</a>.</p>
-<h1 data-number="5" id="residues-and-contour-methods"><span class="header-section-number">5</span> Residues and Contour Methods</h1>
+<h1 data-number="5" role="heading" aria-level="3" id="residues-and-contour-methods"><span class="header-section-number">5</span> Residues and Contour Methods</h1>
 <p>Residues extract the one Laurent coefficient that survives
 integration around a small loop. The residue theorem carries that local
 information to larger contours, where a good choice of path can evaluate
 real integrals and transforms. The worked examples make contour
 selection, orientation, and estimates on added arcs explicit.</p>
-<h2 data-number="5.1" id="one-laurent-coefficient-survives-a-loop"><span class="header-section-number">5.1</span> One Laurent Coefficient
+<h2 data-number="5.1" role="heading" aria-level="4" id="one-laurent-coefficient-survives-a-loop"><span class="header-section-number">5.1</span> One Laurent Coefficient
 Survives a Loop</h2>
 <p>If
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
@@ -3652,7 +3670,7 @@ If the contour instead enclosed only one pole, the answer would be
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">\pi i</annotation></semantics></math>.
 The formula therefore encodes contour location as well as local
 algebra.</p>
-<h2 data-number="5.2" id="choosing-and-checking-a-residue-calculation"><span class="header-section-number">5.2</span> Choosing and Checking a Residue
+<h2 data-number="5.2" role="heading" aria-level="4" id="choosing-and-checking-a-residue-calculation"><span class="header-section-number">5.2</span> Choosing and Checking a Residue
 Calculation</h2>
 <p>Residue calculations are fastest when you choose the method that
 exposes the coefficient with the least algebra. For a simple pole of
@@ -3956,7 +3974,7 @@ and the differential
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">H(z)\,dz</annotation></semantics></math>.
 Naming the convention prevents a common sign confusion about “the
 residue at infinity.”</p>
-<h2 data-number="5.3" id="a-real-integral-from-a-semicircle"><span class="header-section-number">5.3</span> A Real Integral from a
+<h2 data-number="5.3" role="heading" aria-level="4" id="a-real-integral-from-a-semicircle"><span class="header-section-number">5.3</span> A Real Integral from a
 Semicircle</h2>
 <p>Consider
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">a&gt;0</annotation></semantics></math>
@@ -4023,7 +4041,7 @@ before passing from finite segments to an improper integral; here
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>a</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1/(x^2+a^2)</annotation></semantics></math>
 is integrable because it decays like
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>x</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">x^{-2}</annotation></semantics></math>.</p>
-<h2 data-number="5.4" id="a-fourier-integral-and-the-sign-of-the-half-plane"><span class="header-section-number">5.4</span> A Fourier Integral and the Sign
+<h2 data-number="5.4" role="heading" aria-level="4" id="a-fourier-integral-and-the-sign-of-the-half-plane"><span class="header-section-number">5.4</span> A Fourier Integral and the Sign
 of the Half-Plane</h2>
 <p>Now add an oscillatory factor and let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t&gt;0</annotation></semantics></math>:
@@ -4162,7 +4180,7 @@ term. That contribution is often summarised as a “half residue,” yet the
 sign and the precise limiting prescription must be stated. The basic
 residue theorem deliberately excludes poles on the path to keep its
 statement unambiguous.</p>
-<h2 data-number="5.5" id="a-keyhole-contour-with-two-banks"><span class="header-section-number">5.5</span> A Keyhole Contour with Two
+<h2 data-number="5.5" role="heading" aria-level="4" id="a-keyhole-contour-with-two-banks"><span class="header-section-number">5.5</span> A Keyhole Contour with Two
 Banks</h2>
 <p>A branch is not decoration added after the algebra. It determines the
 function being integrated, the contour on which that function is
@@ -4324,7 +4342,7 @@ or
 is not a harmless simplification; it changes the residue theorem’s
 answer. State the branch before evaluating special points, and carry its
 argument interval through every substitution.</p>
-<h2 data-number="5.6" id="an-arc-estimate-with-a-double-pole"><span class="header-section-number">5.6</span> An Arc Estimate with a Double
+<h2 data-number="5.6" role="heading" aria-level="4" id="an-arc-estimate-with-a-double-pole"><span class="header-section-number">5.6</span> An Arc Estimate with a Double
 Pole</h2>
 <p>When a contour is closed to turn a real integral into a residue sum,
 the residue theorem handles only the closed contour. It does not say
@@ -4401,7 +4419,7 @@ not prove decay. One would need the sharper oscillatory estimate
 (Jordan’s lemma) or another contour. Failure of a bound is not evidence
 that the arc fails to vanish; it means only that this particular
 estimate has not settled the question.</p>
-<h2 data-number="5.7" id="a-numerical-contour-check"><span class="header-section-number">5.7</span> A Numerical Contour Check</h2>
+<h2 data-number="5.7" role="heading" aria-level="4" id="a-numerical-contour-check"><span class="header-section-number">5.7</span> A Numerical Contour Check</h2>
 <p>One can verify the Cauchy-formula example numerically without
 confusing the check with its proof. Parametrise
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>:</mo><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">C:|z-1|=r</annotation></semantics></math>
@@ -4409,22 +4427,21 @@ by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>+</mo><mi>r</mi><msup><mi>e</mi><mrow><mi>i</mi><mi>θ</mi></mrow></msup></mrow><annotation encoding="application/x-tex">z(\theta)=1+re^{i\theta}</annotation></semantics></math>,
 take
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">r=0.4</annotation></semantics></math>,
-and apply the periodic trapezoidal rule:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cmath</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>radius <span class="op">=</span> <span class="fl">0.4</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> (<span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>, <span class="dv">64</span>):</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="ot">0j</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        theta <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> math.pi <span class="op">*</span> k <span class="op">/</span> n</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> radius <span class="op">*</span> cmath.exp(<span class="ot">1j</span> <span class="op">*</span> theta)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        dz_dtheta <span class="op">=</span> <span class="ot">1j</span> <span class="op">*</span> radius <span class="op">*</span> cmath.exp(<span class="ot">1j</span> <span class="op">*</span> theta)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> cmath.exp(z) <span class="op">/</span> (z <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> dz_dtheta</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    estimate <span class="op">=</span> total <span class="op">*</span> (<span class="dv">2</span> <span class="op">*</span> math.pi <span class="op">/</span> n)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    exact <span class="op">=</span> <span class="ot">2j</span> <span class="op">*</span> math.pi <span class="op">*</span> math.e</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(n, estimate, <span class="bu">abs</span>(estimate <span class="op">-</span> exact))</span></code></pre></div>
-<p>The denominator never vanishes on this circle, and increasing
+and apply the periodic trapezoidal rule. The manifest-backed script <a href="examples/contour_quadrature.py"><code>contour_quadrature.py</code></a>
+runs this calculation; select the stable example ID
+<code>contour-quadrature-convergence</code> with
+<code>just examples complex_analysis contour-quadrature-convergence</code>
+from the repository root. It asserts that doubling the resolution from 8
+to 16 points reduces the absolute error, then checks that the 16-, 32-,
+and 64-point estimates are within
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>12</mn></mrow></msup><annotation encoding="application/x-tex">10^{-12}</annotation></semantics></math>
+of the residue result.</p>
+<p>The assumptions are explicit: the circle is traversed
+counterclockwise, its radius is positive, and its only enclosed
+singularity is the simple pole at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">z=1</annotation></semantics></math>;
+no singularity lies on the path. The denominator therefore never
+vanishes on the circle, and increasing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
 should drive the error down towards floating-point limits. A stable
 sequence of approximations is evidence that the parametrisation and
@@ -4451,7 +4468,8 @@ and return
 Numerical contour integration is most trustworthy when you inspect the
 parametrised integrand and the minimum distance from the path to each
 singularity, not just the final printed number.</p>
-<h2 data-number="5.8" id="practice-4"><span class="header-section-number">5.8</span> Practice</h2>
+<h2 data-number="5.8" role="heading" aria-level="4" id="practice-4"><span class="header-section-number">5.8</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="11" type="1">
 <li>Classify the finite singularities of
@@ -4465,14 +4483,14 @@ vanishes. (<a href="#solution-11">Solution 11</a>)</li>
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solution
 11</a>.</p>
-<h1 data-number="6" id="global-theorems-and-geometric-structure"><span class="header-section-number">6</span> Global Theorems and Geometric
+<h1 data-number="6" role="heading" aria-level="3" id="global-theorems-and-geometric-structure"><span class="header-section-number">6</span> Global Theorems and Geometric
 Structure</h1>
 <p>The local theory now yields statements about whole regions.
 Factorisation and the argument principle turn zeros into winding counts;
 maximum-modulus results constrain possible values; and conformal maps
 transfer geometry while preserving angles and harmonicity. Together
 these theorems explain how local rigidity governs global shape.</p>
-<h2 data-number="6.1" id="local-factorisation-turns-zeros-into-integers"><span class="header-section-number">6.1</span> Local Factorisation Turns Zeros
+<h2 data-number="6.1" role="heading" aria-level="4" id="local-factorisation-turns-zeros-into-integers"><span class="header-section-number">6.1</span> Local Factorisation Turns Zeros
 Into Integers</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
@@ -4565,7 +4583,7 @@ Similarly, infinitely many zeros may accumulate at the boundary of a
 disk without forcing a holomorphic function to vanish identically
 inside. When you use a zero-counting theorem, check where all the
 accumulation and boundary points lie.</p>
-<h2 data-number="6.2" id="argument-principle-and-rouchés-theorem"><span class="header-section-number">6.2</span> Argument Principle and Rouché’s
+<h2 data-number="6.2" role="heading" aria-level="4" id="argument-principle-and-rouchés-theorem"><span class="header-section-number">6.2</span> Argument Principle and Rouché’s
 Theorem</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
@@ -4737,7 +4755,7 @@ term dominates on a circle, try a different radius or a noncircular
 contour rather than forcing an invalid comparison. The homotopy proof
 tells you exactly what a valid comparison needs: a continuous path of
 boundary images that never crosses zero.</p>
-<h2 data-number="6.3" id="zero-counts-and-strict-boundary-margins"><span class="header-section-number">6.3</span> Zero Counts and Strict Boundary
+<h2 data-number="6.3" role="heading" aria-level="4" id="zero-counts-and-strict-boundary-margins"><span class="header-section-number">6.3</span> Zero Counts and Strict Boundary
 Margins</h2>
 <p>The argument principle is especially useful when a function has a
 known meromorphic form but its zeros are difficult to solve for.
@@ -5008,7 +5026,7 @@ theorem supplies a separate global check that no root was missed outside
 the annulus. If a numerical root appears close to either circle, refine
 it and evaluate boundary margins carefully, because the proof depends on
 strict inequalities.</p>
-<h2 data-number="6.4" id="maximum-modulus-and-what-it-forbids"><span class="header-section-number">6.4</span> Maximum Modulus and What It
+<h2 data-number="6.4" role="heading" aria-level="4" id="maximum-modulus-and-what-it-forbids"><span class="header-section-number">6.4</span> Maximum Modulus and What It
 Forbids</h2>
 <p>A nonconstant holomorphic function on a connected domain cannot
 attain a local maximum of its modulus at an interior point. One proof
@@ -5114,7 +5132,7 @@ imaginary parts of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
 satisfy related maximum principles for harmonic functions; that is why
 conformal methods can turn boundary data into interior fields.</p>
-<h2 data-number="6.5" id="boundary-bounds-and-the-order-of-a-zero"><span class="header-section-number">6.5</span> Boundary Bounds and the Order
+<h2 data-number="6.5" role="heading" aria-level="4" id="boundary-bounds-and-the-order-of-a-zero"><span class="header-section-number">6.5</span> Boundary Bounds and the Order
 of a Zero</h2>
 <p>The maximum modulus principle can produce quantitative bounds when
 the boundary values are simpler than the interior formula. Let
@@ -5255,7 +5273,7 @@ separate argument controlling large arcs. This is the same missing
 estimate that appears in contour integration. In both settings, a
 familiar finite-boundary theorem says nothing about an unexamined limit
 at infinity.</p>
-<h2 data-number="6.6" id="conformal-maps-and-their-limits"><span class="header-section-number">6.6</span> Conformal Maps and Their
+<h2 data-number="6.6" role="heading" aria-level="4" id="conformal-maps-and-their-limits"><span class="header-section-number">6.6</span> Conformal Maps and Their
 Limits</h2>
 <p>At a point
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
@@ -5429,7 +5447,8 @@ structure into geometry. Applications and computation can use this
 chain, but they also have to respect its hypotheses: the domain, its
 holes, the contour orientation, the location of singularities, and the
 branch of any multivalued function.</p>
-<h2 data-number="6.7" id="practice-5"><span class="header-section-number">6.7</span> Practice</h2>
+<h2 data-number="6.7" role="heading" aria-level="4" id="practice-5"><span class="header-section-number">6.7</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="12" type="1">
 <li>Use Rouché’s theorem to count the zeros of
@@ -5474,7 +5493,7 @@ is not globally one-to-one. (<a href="#solution-16">Solution
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 12–16</a>.</p>
-<h1 data-number="7" id="harmonic-functions-and-applications"><span class="header-section-number">7</span> Harmonic Functions and
+<h1 data-number="7" role="heading" aria-level="3" id="harmonic-functions-and-applications"><span class="header-section-number">7</span> Harmonic Functions and
 Applications</h1>
 <p>Harmonic functions connect the abstract theory to potentials,
 boundary data, and transforms. A holomorphic function packages a
@@ -5497,7 +5516,7 @@ says that two solutions with the same boundary data must agree. It does
 not by itself construct a solution; the conformal-map examples below
 separate this uniqueness statement from the existence and representation
 questions.</p>
-<h2 data-number="7.1" id="a-boundary-value-problem-made-simple-by-a-conformal-map"><span class="header-section-number">7.1</span> A Boundary-Value Problem Made
+<h2 data-number="7.1" role="heading" aria-level="4" id="a-boundary-value-problem-made-simple-by-a-conformal-map"><span class="header-section-number">7.1</span> A Boundary-Value Problem Made
 Simple by a Conformal Map</h2>
 <p>Electrostatics gives a concrete reason to care that harmonic
 functions are the real and imaginary parts of holomorphic functions. In
@@ -5813,7 +5832,7 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Re</mi><mo>⁡</mo></mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">\operatorname{Re}F</annotation></semantics></math>
 form orthogonal families away from the singularity. The circular
 boundary is a streamline for the ideal cylinder-flow model.</em></p>
-<h2 data-number="7.2" id="a-jump-in-boundary-data"><span class="header-section-number">7.2</span> A Jump in Boundary Data</h2>
+<h2 data-number="7.2" role="heading" aria-level="4" id="a-jump-in-boundary-data"><span class="header-section-number">7.2</span> A Jump in Boundary Data</h2>
 <p>Suppose a harmonic potential
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">U(x,y)</annotation></semantics></math>
 is prescribed on the real axis by
@@ -5949,7 +5968,7 @@ the Poisson kernel concentrates near
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\theta=0</annotation></semantics></math>.
 This is the approximate-identity mechanism behind boundary recovery at
 continuity points.</em></p>
-<h2 data-number="7.3" id="a-transform-integral-reduced-to-one-residue"><span class="header-section-number">7.3</span> A Transform Integral Reduced to
+<h2 data-number="7.3" role="heading" aria-level="4" id="a-transform-integral-reduced-to-one-residue"><span class="header-section-number">7.3</span> A Transform Integral Reduced to
 One Residue</h2>
 <p>Residues can turn a real transform integral into a finite algebraic
 calculation. For
@@ -6047,7 +6066,7 @@ beats the arc length and the exponential is non-growing in the chosen
 half-plane. In other problems, a slower-decaying rational function or an
 exponential that grows along part of the arc requires a different
 contour or a more refined estimate, such as Jordan’s lemma.</p>
-<h2 data-number="7.4" id="a-bounded-saddle-point-example"><span class="header-section-number">7.4</span> A Bounded Saddle-Point
+<h2 data-number="7.4" role="heading" aria-level="4" id="a-bounded-saddle-point-example"><span class="header-section-number">7.4</span> A Bounded Saddle-Point
 Example</h2>
 <p>The same contour ideas explain a basic asymptotic estimate. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt;0</annotation></semantics></math>
@@ -6144,7 +6163,8 @@ concentrates
 near the minimum. The picture motivates the local scaling argument, but
 the asymptotic error still depends on smoothness and tail
 hypotheses.</em></p>
-<h2 data-number="7.5" id="practice-6"><span class="header-section-number">7.5</span> Practice</h2>
+<h2 data-number="7.5" role="heading" aria-level="4" id="practice-6"><span class="header-section-number">7.5</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="17" type="1">
 <li>State the maximum principle for a harmonic function on a bounded
@@ -6171,7 +6191,7 @@ condition needed before moving a contour. (<a href="#solution-20">Solution 20</a
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 17–20</a>.</p>
-<h1 data-number="8" id="computational-complex-analysis"><span class="header-section-number">8</span> Computational Complex
+<h1 data-number="8" role="heading" aria-level="3" id="computational-complex-analysis"><span class="header-section-number">8</span> Computational Complex
 Analysis</h1>
 <p>Numerical experiments can make branches, mapped grids, residues, and
 contour integrals easier to inspect. They are diagnostic companions to
@@ -6179,7 +6199,7 @@ the proofs: finite samples cannot establish holomorphy, rule out unseen
 singularities, or certify a zero count. The examples proceed from
 visualising functions and maps to symbolic and numerical contour checks,
 then collect practical guidance on error and reliability.</p>
-<h2 data-number="8.1" id="visualising-functions-and-maps"><span class="header-section-number">8.1</span> Visualising Functions and
+<h2 data-number="8.1" role="heading" aria-level="4" id="visualising-functions-and-maps"><span class="header-section-number">8.1</span> Visualising Functions and
 Maps</h2>
 <p>Numerical work is most useful here as a way to inspect geometry, test
 a derivation, and find mistakes in signs or branches. It does not
@@ -6189,47 +6209,47 @@ arrays below represent a rectangular grid in the complex plane; the hue
 records argument and brightness records modulus.</p>
 <div class="code-group">
 <p><strong>Python:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="dv">801</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="dv">801</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> X <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> Y</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Show principal values even on the cut; the holomorphic branch excludes it.</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>valid <span class="op">=</span> np.<span class="bu">abs</span>(Z) <span class="op">&gt;</span> <span class="dv">0</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.full(Z.shape, np.nan <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> np.nan, dtype<span class="op">=</span><span class="bu">complex</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>F[valid] <span class="op">=</span> np.log(Z[valid])</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>phase <span class="op">=</span> np.imag(F)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>brightness <span class="op">=</span> np.tanh(np.<span class="bu">abs</span>(F) <span class="op">/</span> <span class="fl">3.0</span>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.imshow(</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    phase, extent<span class="op">=</span>[x.<span class="bu">min</span>(), x.<span class="bu">max</span>(), y.<span class="bu">min</span>(), y.<span class="bu">max</span>()], origin<span class="op">=</span><span class="st">&quot;lower&quot;</span>,</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    cmap<span class="op">=</span><span class="st">&quot;twilight&quot;</span>, vmin<span class="op">=-</span>np.pi, vmax<span class="op">=</span>np.pi,</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.contour(X, Y, brightness, levels<span class="op">=</span>np.linspace(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dv">9</span>),</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            colors<span class="op">=</span><span class="st">&quot;white&quot;</span>, linewidths<span class="op">=</span><span class="fl">0.35</span>)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">&quot;black&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">&quot;equal&quot;</span>)</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Re z&quot;</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Im z&quot;</span>)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Domain coloring of the principal logarithm&quot;</span>)</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="dv">801</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="dv">801</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> X <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> Y</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Show principal values even on the cut; the holomorphic branch excludes it.</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>valid <span class="op">=</span> np.<span class="bu">abs</span>(Z) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.full(Z.shape, np.nan <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> np.nan, dtype<span class="op">=</span><span class="bu">complex</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>F[valid] <span class="op">=</span> np.log(Z[valid])</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>phase <span class="op">=</span> np.imag(F)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>brightness <span class="op">=</span> np.tanh(np.<span class="bu">abs</span>(F) <span class="op">/</span> <span class="fl">3.0</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>plt.imshow(</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    phase, extent<span class="op">=</span>[x.<span class="bu">min</span>(), x.<span class="bu">max</span>(), y.<span class="bu">min</span>(), y.<span class="bu">max</span>()], origin<span class="op">=</span><span class="st">&quot;lower&quot;</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    cmap<span class="op">=</span><span class="st">&quot;twilight&quot;</span>, vmin<span class="op">=-</span>np.pi, vmax<span class="op">=</span>np.pi,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>plt.contour(X, Y, brightness, levels<span class="op">=</span>np.linspace(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dv">9</span>),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            colors<span class="op">=</span><span class="st">&quot;white&quot;</span>, linewidths<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">&quot;black&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">&quot;equal&quot;</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Re z&quot;</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Im z&quot;</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Domain coloring of the principal logarithm&quot;</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>R:</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> y, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_complex_</span>, <span class="at">nrow =</span> <span class="fu">length</span>(x), <span class="at">ncol =</span> <span class="fu">length</span>(y))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>valid <span class="ot">&lt;-</span> <span class="fu">Mod</span>(z) <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>f[valid] <span class="ot">&lt;-</span> <span class="fu">log</span>(z[valid])</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>phase <span class="ot">&lt;-</span> <span class="fu">Im</span>(f)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>hue <span class="ot">&lt;-</span> (phase <span class="sc">+</span> pi) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> pi)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>palette <span class="ot">&lt;-</span> <span class="fu">hcl</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="at">length.out =</span> <span class="dv">257</span>)[<span class="sc">-</span><span class="dv">257</span>], <span class="at">c =</span> <span class="dv">80</span>, <span class="at">l =</span> <span class="dv">55</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(x, y, <span class="fu">matrix</span>(hue, <span class="at">nrow =</span> <span class="fu">length</span>(x)), <span class="at">col =</span> palette, <span class="at">zlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;Re z&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Im z&quot;</span>, <span class="at">asp =</span> <span class="dv">1</span>,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">&quot;Phase of the principal logarithm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">501</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> y, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_complex_</span>, <span class="at">nrow =</span> <span class="fu">length</span>(x), <span class="at">ncol =</span> <span class="fu">length</span>(y))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>valid <span class="ot">&lt;-</span> <span class="fu">Mod</span>(z) <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>f[valid] <span class="ot">&lt;-</span> <span class="fu">log</span>(z[valid])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>phase <span class="ot">&lt;-</span> <span class="fu">Im</span>(f)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>hue <span class="ot">&lt;-</span> (phase <span class="sc">+</span> pi) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> pi)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>palette <span class="ot">&lt;-</span> <span class="fu">hcl</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="at">length.out =</span> <span class="dv">257</span>)[<span class="sc">-</span><span class="dv">257</span>], <span class="at">c =</span> <span class="dv">80</span>, <span class="at">l =</span> <span class="dv">55</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(x, y, <span class="fu">matrix</span>(hue, <span class="at">nrow =</span> <span class="fu">length</span>(x)), <span class="at">col =</span> palette, <span class="at">zlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;Re z&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Im z&quot;</span>, <span class="at">asp =</span> <span class="dv">1</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">&quot;Phase of the principal logarithm&quot;</span>)</span></code></pre></div>
 </div>
 <p>The picture should show a discontinuity across the negative real
 axis, the chosen branch cut. The origin is excluded because the
@@ -6264,35 +6284,35 @@ plots their images under
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>↦</mo><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">z\mapsto z^2</annotation></semantics></math>.
 The image should be a half-disk with straightened boundary rays. This is
 a plotting aid, not the solution of a new boundary-value problem.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> np.pi <span class="op">/</span> <span class="dv">2</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>power <span class="op">=</span> np.pi <span class="op">/</span> alpha</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>radii <span class="op">=</span> np.linspace(<span class="fl">0.15</span>, <span class="fl">1.0</span>, <span class="dv">9</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>angles <span class="op">=</span> np.linspace(<span class="fl">0.0</span>, alpha, <span class="dv">9</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="dv">300</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>))</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> radii:</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> r <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> t <span class="op">*</span> alpha)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> z<span class="op">**</span>power</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(z.real, z.imag, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(w.real, w.imag, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> theta <span class="kw">in</span> angles:</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> t <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> theta)  <span class="co"># radial segments</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> z<span class="op">**</span>power</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(z.real, z.imag, color<span class="op">=</span><span class="st">&quot;darkorange&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(w.real, w.imag, color<span class="op">=</span><span class="st">&quot;darkorange&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, title <span class="kw">in</span> <span class="bu">zip</span>(axes, [<span class="st">&quot;Right-angle wedge&quot;</span>, <span class="st">&quot;Image under z -&gt; z^2&quot;</span>]):</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">&quot;equal&quot;</span>)</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&quot;real part&quot;</span>)</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">&quot;imaginary part&quot;</span>)</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> np.pi <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>power <span class="op">=</span> np.pi <span class="op">/</span> alpha</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>radii <span class="op">=</span> np.linspace(<span class="fl">0.15</span>, <span class="fl">1.0</span>, <span class="dv">9</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>angles <span class="op">=</span> np.linspace(<span class="fl">0.0</span>, alpha, <span class="dv">9</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="dv">300</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> radii:</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> r <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> t <span class="op">*</span> alpha)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> z<span class="op">**</span>power</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(z.real, z.imag, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(w.real, w.imag, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> theta <span class="kw">in</span> angles:</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> t <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> theta)  <span class="co"># radial segments</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> z<span class="op">**</span>power</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(z.real, z.imag, color<span class="op">=</span><span class="st">&quot;darkorange&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(w.real, w.imag, color<span class="op">=</span><span class="st">&quot;darkorange&quot;</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, title <span class="kw">in</span> <span class="bu">zip</span>(axes, [<span class="st">&quot;Right-angle wedge&quot;</span>, <span class="st">&quot;Image under z -&gt; z^2&quot;</span>]):</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">&quot;equal&quot;</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&quot;real part&quot;</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">&quot;imaginary part&quot;</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p>The radial lines remain radial while their angles double; the
 circular arcs remain circular but their radii become
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>r</mi><mn>2</mn></msup><annotation encoding="application/x-tex">r^2</annotation></semantics></math>.
@@ -6307,20 +6327,20 @@ As in the Python plot, the hue seam reflects the principal argument
 convention, not a defect in the plotting library. The grid includes
 zero, where <code>log(0)</code> is not finite, so that point is excluded
 before evaluation.</p>
-<h2 data-number="8.2" id="symbolic-residues-and-contour-quadrature"><span class="header-section-number">8.2</span> Symbolic Residues and Contour
+<h2 data-number="8.2" role="heading" aria-level="4" id="symbolic-residues-and-contour-quadrature"><span class="header-section-number">8.2</span> Symbolic Residues and Contour
 Quadrature</h2>
 <p>The following examples share a contour-integral workflow: symbolic
 algebra checks a local residue, and numerical quadrature checks a
 parametrised contour integral. The analytic choice of contour and its
 hypotheses remain part of the mathematical argument.</p>
 <p>For a symbolic residue, SymPy can verify the local algebra:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy <span class="im">as</span> sp</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> sp.symbols(<span class="st">&quot;z&quot;</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> sp.symbols(<span class="st">&quot;a&quot;</span>, positive<span class="op">=</span><span class="va">True</span>, real<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> sp.exp(sp.I <span class="op">*</span> a <span class="op">*</span> z) <span class="op">/</span> (z<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>residue_at_i <span class="op">=</span> sp.residue(f, z, sp.I)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sp.simplify(residue_at_i))  <span class="co"># -I*exp(-a)/2</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy <span class="im">as</span> sp</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> sp.symbols(<span class="st">&quot;z&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> sp.symbols(<span class="st">&quot;a&quot;</span>, positive<span class="op">=</span><span class="va">True</span>, real<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> sp.exp(sp.I <span class="op">*</span> a <span class="op">*</span> z) <span class="op">/</span> (z<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>residue_at_i <span class="op">=</span> sp.residue(f, z, sp.I)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sp.simplify(residue_at_i))  <span class="co"># -I*exp(-a)/2</span></span></code></pre></div>
 <p>This computes the residue at the requested point; it does not choose
 a contour, check whether other poles are enclosed, or justify a
 vanishing arc. Those are mathematical decisions outside the symbolic
@@ -6337,28 +6357,28 @@ for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1/(z-i)</annotation></semantics></math>:</p>
 <div class="code-group">
 <p><strong>Python:</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mpmath <span class="im">as</span> mp</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>mp.mp.dps <span class="op">=</span> <span class="dv">40</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>radius <span class="op">=</span> mp.mpf(<span class="st">&quot;2&quot;</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> integrand_on_circle(t):</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> radius <span class="op">*</span> mp.e<span class="op">**</span>(<span class="ot">1j</span> <span class="op">*</span> t)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    dz_dt <span class="op">=</span> <span class="ot">1j</span> <span class="op">*</span> radius <span class="op">*</span> mp.e<span class="op">**</span>(<span class="ot">1j</span> <span class="op">*</span> t)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dz_dt <span class="op">/</span> (z <span class="op">-</span> <span class="ot">1j</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> mp.quad(integrand_on_circle, [<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> mp.pi])</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(value)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mpmath <span class="im">as</span> mp</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mp.mp.dps <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>radius <span class="op">=</span> mp.mpf(<span class="st">&quot;2&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> integrand_on_circle(t):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> radius <span class="op">*</span> mp.e<span class="op">**</span>(<span class="ot">1j</span> <span class="op">*</span> t)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    dz_dt <span class="op">=</span> <span class="ot">1j</span> <span class="op">*</span> radius <span class="op">*</span> mp.e<span class="op">**</span>(<span class="ot">1j</span> <span class="op">*</span> t)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dz_dt <span class="op">/</span> (z <span class="op">-</span> <span class="ot">1j</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> mp.quad(integrand_on_circle, [<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> mp.pi])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(value)</span></code></pre></div>
 <p><strong>R:</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200000</span><span class="dt">L</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>radius <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="fu">seq_len</span>(n) <span class="sc">-</span> <span class="fl">0.5</span>) <span class="sc">/</span> n</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> radius <span class="sc">*</span> <span class="fu">exp</span>(<span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> t)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dz_dt <span class="ot">&lt;-</span> <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> radius <span class="sc">*</span> <span class="fu">exp</span>(<span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> t)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> n</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>value <span class="ot">&lt;-</span> <span class="fu">sum</span>(dz_dt <span class="sc">/</span> (z <span class="sc">-</span> <span class="dv">1</span><span class="dt">i</span>)) <span class="sc">*</span> dt</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(value)  <span class="co"># approximately 0+6.283185i</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200000</span><span class="dt">L</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>radius <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="fu">seq_len</span>(n) <span class="sc">-</span> <span class="fl">0.5</span>) <span class="sc">/</span> n</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> radius <span class="sc">*</span> <span class="fu">exp</span>(<span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> t)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>dz_dt <span class="ot">&lt;-</span> <span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> radius <span class="sc">*</span> <span class="fu">exp</span>(<span class="dv">1</span><span class="dt">i</span> <span class="sc">*</span> t)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> n</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>value <span class="ot">&lt;-</span> <span class="fu">sum</span>(dz_dt <span class="sc">/</span> (z <span class="sc">-</span> <span class="dv">1</span><span class="dt">i</span>)) <span class="sc">*</span> dt</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(value)  <span class="co"># approximately 0+6.283185i</span></span></code></pre></div>
 </div>
 <p>This block is self-contained once <code>mpmath</code> is installed.
 It evaluates one exact example with one simple pole and no near-boundary
@@ -6439,7 +6459,7 @@ holomorphic in the region swept out. If the computed answer changes
 substantially under a harmless contour deformation, the discrepancy is
 evidence about numerical error or a singularity that was not accounted
 for. It is not evidence that residues depend on the contour’s shape.</p>
-<h2 data-number="8.3" id="numerical-margins-and-reliability"><span class="header-section-number">8.3</span> Numerical Margins and
+<h2 data-number="8.3" role="heading" aria-level="4" id="numerical-margins-and-reliability"><span class="header-section-number">8.3</span> Numerical Margins and
 Reliability</h2>
 <p>For the argument principle, sample the image curve
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f(z(t))</annotation></semantics></math>
@@ -6481,7 +6501,7 @@ extremal distortion reliably. A vanishing derivative, as with
 at zero, is qualitatively different: local angle preservation fails
 there. Plot refinement can reveal a missed feature, but it cannot turn
 samples into a theorem.</p>
-<h2 data-number="8.4" id="computational-source-notes"><span class="header-section-number">8.4</span> Computational Source Notes</h2>
+<h2 data-number="8.4" role="heading" aria-level="4" id="computational-source-notes"><span class="header-section-number">8.4</span> Computational Source Notes</h2>
 <ul>
 <li>The wedge mapping and complex-potential framing follow the applied
 boundary-value and hydrodynamics treatments in <a href="https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/mit18_04s18_topic6/">MIT
@@ -6496,7 +6516,8 @@ quadrature</a>.</li>
 <li>Real-valued numerical integration in R: <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html">R
 <code>integrate</code></a>. Asymptotic methods: <a href="https://dlmf.nist.gov/2">NIST DLMF, Chapter 2</a>.</li>
 </ul>
-<h2 data-number="8.5" id="practice-7"><span class="header-section-number">8.5</span> Practice</h2>
+<h2 data-number="8.5" role="heading" aria-level="4" id="practice-7"><span class="header-section-number">8.5</span>
+Practice</h2>
 <!-- markdownlint-disable MD051 -->
 <ol start="21" type="1">
 <li>Parameterise
@@ -6522,7 +6543,7 @@ identify the variable and centre supplied to the software. (<a href="#solution-2
 <!-- markdownlint-enable MD051 -->
 <p>See <a href="#appendix-b-outline-solutions">Appendix B, Solutions
 21–23</a>.</p>
-<h1 data-number="9" id="appendices-hints-outline-solutions-and-further-reading"><span class="header-section-number">9</span> Appendices: Hints, Outline
+<h1 data-number="9" role="heading" aria-level="3" id="appendices-hints-outline-solutions-and-further-reading"><span class="header-section-number">9</span> Appendices: Hints, Outline
 Solutions, and Further Reading</h1>
 <p>The appendices keep the practice blocks close to their topics without
 putting complete answers directly beneath them. Unless stated otherwise,
@@ -6530,7 +6551,8 @@ contours are positively oriented, zeros are counted with multiplicity,
 and a “domain” is open and connected. Give hypotheses and explain
 contour choices. Computations and plots are useful diagnostics, never
 proofs.</p>
-<h2 data-number="9.1" id="appendix-a-hints"><span class="header-section-number">9.1</span> Appendix A: Hints</h2>
+<h2 data-number="9.1" role="heading" aria-level="4" id="appendix-a-hints"><span class="header-section-number">9.1</span>
+Appendix A: Hints</h2>
 <p>Use the following only after attempting the corresponding local
 practice problem.</p>
 <ul>
@@ -6588,9 +6610,9 @@ singularity explicit. In the logarithm plot, show real and imaginary
 parts rather than the phase of the logarithm itself. A symbolic residue
 command must receive the intended variable and centre.</li>
 </ul>
-<h2 data-number="9.2" id="appendix-b-outline-solutions"><span class="header-section-number">9.2</span> Appendix B: Outline
+<h2 data-number="9.2" role="heading" aria-level="4" id="appendix-b-outline-solutions"><span class="header-section-number">9.2</span> Appendix B: Outline
 Solutions</h2>
-<h3 class="unnumbered" id="solution-1">Solution 1</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-1">Solution 1</h3>
 <p>On
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mi>n</mi></msup><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x^n\to0</annotation></semantics></math>
@@ -6611,7 +6633,7 @@ for
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(1)=1</annotation></semantics></math>,
 which makes the continuity contradiction explicit.</p>
-<h3 class="unnumbered" id="solution-2">Solution 2</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-2">Solution 2</h3>
 <p>Parameterising
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 gives
@@ -6622,7 +6644,7 @@ gives
 is sufficient. This is the precise estimate behind interchanging a
 uniformly convergent limit with a fixed finite-length contour
 integral.</p>
-<h3 class="unnumbered" id="solution-3">Solution 3</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-3">Solution 3</h3>
 <p>At every point, the difference quotient of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>z</mi><mo accent="true">¯</mo></mover><annotation encoding="application/x-tex">\overline z</annotation></semantics></math>
 is
@@ -6656,7 +6678,7 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">f(z)/z</annotation></semantics></math>
 does not approach a finite limit. Continuously differentiable components
 satisfying CR on a neighbourhood do imply holomorphy.</p>
-<h3 class="unnumbered" id="solution-4">Solution 4</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-4">Solution 4</h3>
 <p>Continuous first partial derivatives plus CR imply complex
 differentiability throughout the region. Continuity controls the
 first-order real differentiability remainder in the complex difference
@@ -6666,7 +6688,7 @@ partials at the origin but an unbounded difference quotient along
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">y=x^2</annotation></semantics></math>.
 Thus the hypothesis is a neighbourhood hypothesis, not merely a pair of
 equalities checked at the target point.</p>
-<h3 class="unnumbered" id="solution-5">Solution 5</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-5">Solution 5</h3>
 <p>CR gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>y</mi></msub><mo>=</mo><mn>2</mn><mi>x</mi></mrow><annotation encoding="application/x-tex">v_y=2x</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>x</mi></msub><mo>=</mo><mn>2</mn><mi>y</mi></mrow><annotation encoding="application/x-tex">v_x=2y</annotation></semantics></math>,
@@ -6684,7 +6706,7 @@ so there is no globally single-valued conjugate on the punctured plane.
 The obstruction is topological, not a failure of local harmonicity. On
 any simply connected slit region avoiding zero, one branch of the
 argument supplies a valid conjugate.</p>
-<h3 class="unnumbered" id="solution-6">Solution 6</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-6">Solution 6</h3>
 <p>A primitive would make every closed-curve integral zero, but the unit
 circle gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∮</mo><mi>d</mi><mi>z</mi><mi>/</mi><mi>z</mi><mo>=</mo><mn>2</mn><mi>π</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">\oint dz/z=2\pi i</annotation></semantics></math>.
@@ -6693,7 +6715,7 @@ condition for a primitive. More generally, all closed-curve integrals
 must vanish. The punctured plane fails the topological condition because
 the unit circle cannot be contracted without crossing the missing
 origin.</p>
-<h3 class="unnumbered" id="solution-7">Solution 7</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-7">Solution 7</h3>
 <p>Cauchy’s derivative formula gives
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∮</mo><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>2</mn></mrow></msub><mfrac><msup><mi>e</mi><mi>z</mi></msup><mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>3</mn></msup></mrow></mfrac><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi><mo>=</mo><mfrac><mrow><mn>2</mn><mi>π</mi><mi>i</mi></mrow><mrow><mn>2</mn><mi>!</mi></mrow></mfrac><msup><mi>e</mi><mn>1</mn></msup><mo>=</mo><mi>π</mi><mi>i</mi><mi>e</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
 \oint_{|z|=2}\frac{e^z}{(z-1)^3}\,dz=\frac{2\pi i}{2!}e^1=\pi i e,
@@ -6701,7 +6723,7 @@ origin.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><mi>z</mi></msup><annotation encoding="application/x-tex">e^z</annotation></semantics></math>
 is holomorphic on and inside the circle and the denominator is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mrow><mn>2</mn><mo>+</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">(z-1)^{2+1}</annotation></semantics></math>.</p>
-<h3 class="unnumbered" id="solution-8">Solution 8</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-8">Solution 8</h3>
 <p>For
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|z|&lt;1</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><mi>z</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>−</mi><msubsup><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><msup><mi>z</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">z/(z-1)=-z/(1-z)=-\sum_{n=1}^{\infty}z^n</annotation></semantics></math>.
@@ -6715,7 +6737,7 @@ A Laurent expansion belongs to an annulus of analyticity, so the same
 centre can support different expansions on different annuli. Neither
 expansion may be extended across the pole merely because its algebraic
 formula looks the same.</p>
-<h3 class="unnumbered" id="solution-9">Solution 9</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-9">Solution 9</h3>
 <p>Expand
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>0</mn></mrow><mi>∞</mi></msubsup><msup><mi>z</mi><mrow><mi>−</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>+</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mi>/</mi><mi>n</mi><mi>!</mi></mrow><annotation encoding="application/x-tex">g(z)=\sum_{n=0}^{\infty}z^{-(n+2)}/n!</annotation></semantics></math>.
 No
@@ -6725,7 +6747,7 @@ occur, hence the singularity is essential. The residue is only one
 Laurent coefficient; it does not determine the rest of the principal
 part. In particular, “residue zero” does not mean “removable” or
 “regular.”</p>
-<h3 class="unnumbered" id="solution-10">Solution 10</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-10">Solution 10</h3>
 <p>Partial fractions give
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>z</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>z</mi><mo>+</mo><mn>2</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(z^2+1)/(z(z-1))=1-1/z+2/(z-1)</annotation></semantics></math>.
 The enclosed residues at zero and one are
@@ -6746,7 +6768,7 @@ in the full expression is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>,
 giving the same answer. The coefficient method applies because the
 contour lies in that annulus.</p>
-<h3 class="unnumbered" id="solution-11">Solution 11</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-11">Solution 11</h3>
 <p>The simple poles of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mi>z</mi></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>z</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">e^z/(z^2+1)</annotation></semantics></math>
 are
@@ -6774,7 +6796,7 @@ and the arc length is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\pi R</annotation></semantics></math>;
 the arc integral is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>R</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">O(R^{-1})\to0</annotation></semantics></math>.</p>
-<h3 class="unnumbered" id="solution-12">Solution 12</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-12">Solution 12</h3>
 <p>On
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|z|=1</annotation></semantics></math>,
 compare
@@ -6796,7 +6818,7 @@ and
 Thus there are five zeros inside radius two and four in the annulus. The
 inequalities are strict on the complete boundary circles, so no
 boundary-zero ambiguity remains.</p>
-<h3 class="unnumbered" id="solution-13">Solution 13</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-13">Solution 13</h3>
 <p>The argument principle gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mi>P</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>π</mi><mi>i</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>∮</mo><msup><mi>f</mi><mo>′</mo></msup><mi>/</mi><mi>f</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">N-P=(2\pi i)^{-1}\oint f&#39;/f\,dz</annotation></semantics></math>.
 For
@@ -6810,7 +6832,7 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>,
 respectively. There are no poles, so these winding counts are exactly
 the zero counts.</p>
-<h3 class="unnumbered" id="solution-14">Solution 14</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-14">Solution 14</h3>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>+</mo><mi>i</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">w=(z-i)/(z+i)</annotation></semantics></math>
 works. It sends
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>↦</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">i\mapsto0</annotation></semantics></math>,
@@ -6827,7 +6849,7 @@ In the upper half-plane
 so the image lies inside the circle. The strict inequality follows by
 comparing squared distances:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo>+</mo><mi>i</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mo>−</mo><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo>−</mo><mi>i</mi><msup><mo stretchy="false" form="prefix">|</mo><mn>2</mn></msup><mo>=</mo><mn>4</mn><mrow><mi mathvariant="normal">Im</mi><mo>⁡</mo></mrow><mi>z</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">|z+i|^2-|z-i|^2=4\operatorname{Im}z&gt;0</annotation></semantics></math>.</p>
-<h3 class="unnumbered" id="solution-15">Solution 15</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-15">Solution 15</h3>
 <p>Since
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msup><mi>e</mi><mrow><mi>π</mi><mi>z</mi></mrow></msup><mo stretchy="false" form="prefix">|</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>π</mi><mrow><mi mathvariant="normal">Re</mi><mo>⁡</mo></mrow><mi>z</mi></mrow></msup></mrow><annotation encoding="application/x-tex">|e^{\pi z}|=e^{\pi\operatorname{Re}z}</annotation></semantics></math>,
 the image is
@@ -6841,7 +6863,7 @@ map to the unit circle and the circle of radius
 each covered repeatedly as the imaginary part varies. The image is an
 annulus, not a disk, because the strip’s two vertical boundary lines
 become two distinct modulus boundaries.</p>
-<h3 class="unnumbered" id="solution-16">Solution 16</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-16">Solution 16</h3>
 <p>The real Jacobian at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mn>0</mn></msub><annotation encoding="application/x-tex">z_0</annotation></semantics></math>
 is rotation and uniform scaling by
@@ -6856,7 +6878,7 @@ has period
 Nonzero derivative gives local, not global, one-to-one behaviour; global
 injectivity requires additional information about the domain and the
 map.</p>
-<h3 class="unnumbered" id="solution-17">Solution 17</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-17">Solution 17</h3>
 <p>The maximum principle says a nonconstant harmonic function cannot
 attain an interior maximum or minimum. A continuous harmonic function on
 a bounded domain therefore takes its extrema on the boundary. This gives
@@ -6866,7 +6888,7 @@ existence or give a formula; those require separate construction or an
 existence theorem. This distinction is important: a uniqueness argument
 rules out two different solutions, but it does not produce even one
 solution.</p>
-<h3 class="unnumbered" id="solution-18">Solution 18</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-18">Solution 18</h3>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>F</mi><mo>′</mo></msup><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>U</mi><mo>−</mo><mi>a</mi><mi>/</mi><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">F&#39;(z)=U-a/z^2</annotation></semantics></math>,
 so the stagnation points are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>±</mi><msqrt><mrow><mi>a</mi><mi>/</mi><mi>U</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">z=\pm\sqrt{a/U}</annotation></semantics></math>.
@@ -6882,7 +6904,7 @@ uniform flow past a circular cylinder in ideal potential flow. The
 assumptions omit viscosity, turbulence, compressibility, and time
 dependence; the doublet singularity lies inside the excluded cylinder,
 so the formula is used only outside the physical boundary.</p>
-<h3 class="unnumbered" id="solution-19">Solution 19</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-19">Solution 19</h3>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 map the disk conformally to the physical domain. Composition
@@ -6899,7 +6921,7 @@ require extra work. In practice, the disk solution must still be
 evaluated and composed with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ϕ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">\phi^{-1}</annotation></semantics></math>,
 so the theorem and the computational solution are separate steps.</p>
-<h3 class="unnumbered" id="solution-20">Solution 20</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-20">Solution 20</h3>
 <p>Squaring the integral and using polar coordinates gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>λ</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mi>π</mi><mi>/</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">I(\lambda)^2=\pi/\lambda</annotation></semantics></math>,
 and positivity selects
@@ -6912,7 +6934,7 @@ justification. For a complex Gaussian, the chosen branch of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>λ</mi></msqrt><annotation encoding="application/x-tex">\sqrt{\lambda}</annotation></semantics></math>
 and the direction in which the contour can be rotated are additional
 data.</p>
-<h3 class="unnumbered" id="solution-21">Solution 21</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-21">Solution 21</h3>
 <p>With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>k</mi></msub><mo>=</mo><mn>2</mn><mi>π</mi><mi>k</mi><mi>/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">t_k=2\pi k/N</annotation></semantics></math>,
 use
@@ -6939,7 +6961,7 @@ Both errors decay geometrically; for the smaller circle the finite sum
 is not exactly zero. The nearest singularity in the complexified
 parameter controls trapezoidal convergence. Refining the mesh never
 changes which pole is enclosed.</p>
-<h3 class="unnumbered" id="solution-22">Solution 22</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-22">Solution 22</h3>
 <p>The principal logarithm has real part
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">|</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">\log|z|</annotation></semantics></math>
 and imaginary part
@@ -6952,7 +6974,7 @@ argument around zero, so a finer grid can only sample it more sharply.
 For example, the slit plane
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">ℂ</mi><mo>\</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mi>∞</mi><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb C\setminus(-\infty,0]</annotation></semantics></math>
 supports the standard principal branch.</p>
-<h3 class="unnumbered" id="solution-23">Solution 23</h3>
+<h3 class="unnumbered" role="heading" aria-level="5" id="solution-23">Solution 23</h3>
 <p>The expansion is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">sin</mi><mo>⁡</mo></mrow><mi>z</mi><mi>/</mi><msup><mi>z</mi><mn>3</mn></msup><mo>=</mo><msup><mi>z</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup><mo>−</mo><mn>1</mn><mi>/</mi><mn>6</mn><mo>+</mo><msup><mi>z</mi><mn>2</mn></msup><mi>/</mi><mn>120</mn><mo>−</mo><mi>⋯</mi></mrow><annotation encoding="application/x-tex">\sin z/z^3=z^{-2}-1/6+z^2/120-\cdots</annotation></semantics></math>.
 The singularity is a pole of order two and its residue, the coefficient
@@ -6964,7 +6986,7 @@ Correct output can still answer the wrong question if the point or
 variable was supplied incorrectly. The hand expansion is the audit
 trail: it makes the zero residue and pole order visible rather than
 treating the software result as a proof.</p>
-<h2 data-number="9.3" id="further-reading-and-references"><span class="header-section-number">9.3</span> Further Reading and
+<h2 data-number="9.3" role="heading" aria-level="4" id="further-reading-and-references"><span class="header-section-number">9.3</span> Further Reading and
 References</h2>
 <p>The proof sequence, examples, and theorem formulations were checked
 against <a href="https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/resources/lecture-notes/">MIT
@@ -6974,7 +6996,7 @@ OpenCourseWare 18.112, <em>Functions of a Complex Variable</em>, lecture
 notes</a> (especially Lectures 9–16 and 20), and the <a href="https://www.math.ucdavis.edu/~hunter/m185a/m185a.html">UC Davis
 Math 185A complex-analysis course outline</a> for theorem scope and
 ordering. This draft uses its own exposition and worked examples.</p>
-<h3 data-number="9.3.1" id="foundational-texts-and-course-notes"><span class="header-section-number">9.3.1</span> Foundational Texts and Course
+<h3 data-number="9.3.1" role="heading" aria-level="5" id="foundational-texts-and-course-notes"><span class="header-section-number">9.3.1</span> Foundational Texts and Course
 Notes</h3>
 <ul>
 <li><strong>Accessible undergraduate text — Saff and Snider,
@@ -7027,7 +7049,7 @@ proof-intensive treatment, including conformal mapping and the Riemann
 mapping theorem. <a href="https://link.springer.com/book/10.1007/978-1-4612-6313-5">Springer
 record</a>.</li>
 </ul>
-<h3 data-number="9.3.2" id="applications-and-special-topics"><span class="header-section-number">9.3.2</span> Applications and Special
+<h3 data-number="9.3.2" role="heading" aria-level="5" id="applications-and-special-topics"><span class="header-section-number">9.3.2</span> Applications and Special
 Topics</h3>
 <ul>
 <li><strong>Potential flow — MIT OCW 18.04, Topic 6, “Two-Dimensional
@@ -7055,7 +7077,7 @@ the Riemann mapping theorem provide a rigorous route beyond the
 canonical examples; existence alone does not give a convenient
 computational map.</li>
 </ul>
-<h3 data-number="9.3.3" id="history-and-context"><span class="header-section-number">9.3.3</span> History and Context</h3>
+<h3 data-number="9.3.3" role="heading" aria-level="5" id="history-and-context"><span class="header-section-number">9.3.3</span> History and Context</h3>
 <ul>
 <li><strong>History of analysis — Jeremy Gray, <em>The Real and the
 Complex: A History of Analysis in the 19th Century</em>.</strong> Places
@@ -7067,7 +7089,7 @@ Analysis</em> (above).</strong> Particularly effective for seeing how
 geometric interpretations illuminate the subject, though it is a
 mathematical exposition rather than a documentary history.</li>
 </ul>
-<h3 data-number="9.3.4" id="software-documentation"><span class="header-section-number">9.3.4</span> Software Documentation</h3>
+<h3 data-number="9.3.4" role="heading" aria-level="5" id="software-documentation"><span class="header-section-number">9.3.4</span> Software Documentation</h3>
 <ul>
 <li><strong>Arrays and branch conventions — NumPy, logarithms and
 complex routines.</strong> Documents principal-value behaviour and
@@ -7100,7 +7122,7 @@ stats::integrate expects a real-valued function, so split complex
 integrals into real and imaginary components. <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/complex.html">Complex
 numbers</a> · <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/integrate.html">Integration</a>.</li>
 </ul>
-<h3 data-number="9.3.5" id="choosing-a-next-step"><span class="header-section-number">9.3.5</span> Choosing a Next Step</h3>
+<h3 data-number="9.3.5" role="heading" aria-level="5" id="choosing-a-next-step"><span class="header-section-number">9.3.5</span> Choosing a Next Step</h3>
 <p>For a first pass through the subject, pair the primer with MIT 18.04
 or Saff and Snider: both keep applications visible while supplying
 additional worked examples. If a proof feels compressed, Romik’s notes
@@ -7134,7 +7156,7 @@ theorem, first check orientation, poles on or near the contour, branch
 cuts, and whether the numerical path actually matches the intended
 contour. A plot is most useful as a way to discover a bad assumption or
 a missed feature, then return to the analytic argument.</p>
-<h1 data-number="10" id="notation"><span class="header-section-number">10</span> Notation</h1>
+<h1 data-number="10" role="heading" aria-level="3" id="notation"><span class="header-section-number">10</span> Notation</h1>
 <p>The table gathers the symbols that carry the main arguments. Local
 variables introduced in a theorem or calculation are defined again where
 they first matter.</p>
@@ -7229,7 +7251,7 @@ and the transpose convention is not needed in this document.</p>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -7259,18 +7281,27 @@ and the transpose convention is not needed in this document.</p>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -7278,19 +7309,18 @@ and the transpose convention is not needed in this document.</p>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
