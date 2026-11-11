@@ -42,11 +42,12 @@
   grow where the dependency, worked case, or limitation requires it; word count
   is an outcome rather than a cap.
 - Worked examples: Northbridge competency questions; a small graph and its
-  qualified evidence table; source sentence to mention, entity decision, claim,
-  query, result and limitation; two Alex Kim identity abstention; direct,
-  path, provenance, temporal and conflict questions; a deliberately broken
-  extraction followed by correction and re-evaluation; R shortest-path and
-  component analysis; and storage-neutral comparisons of RDF and property
+  qualified evidence table; comparative policy, research-literature, and
+  software-dependency graphs; source sentence to mention, entity decision,
+  claim, query, result and limitation; two Alex Kim identity abstention;
+  direct, path, provenance, temporal and conflict questions; a deliberately
+  broken extraction followed by correction and re-evaluation; R shortest-path
+  and component analysis; and storage-neutral comparisons of RDF and property
   graphs. Executable implementations remain companion evidence rather than the
   reader's primary route.
 - Real-world cases: Northbridge is a synthetic organisational-policy case used

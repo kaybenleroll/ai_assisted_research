@@ -143,6 +143,95 @@ and evidence boundary, build claims conservatively, use those claims to answer
 bounded queries, and state what the answer cannot establish. Every example is
 small enough to inspect by hand before it is connected to an implementation.
 
+### Three graph-shaped problems
+
+The same modelling discipline appears in different domains, but the useful
+nodes, relationships, and evidence fields change. The following examples are
+deliberately small. They are not alternative case studies to be implemented in
+full; they show how to decide whether a graph-shaped question is actually the
+right problem and what a responsible answer would contain.
+
+#### Organisational policy
+
+The Northbridge case is a policy graph. Its useful nodes are policy versions,
+projects, organisations, people, source records, and mentions. Its important
+relationships are `applies_to`, `belongs_to`, and `owned_by`. A source sentence
+becomes a candidate claim; an identity or temporal decision qualifies the claim;
+the query returns the claim and its evidence rather than a bare path.
+
+| Reader question | Useful graph operation | Answer that the model can justify | Boundary |
+|---|---|---|---|
+| Which policy version is recorded for Atlas on 1 March? | Select `applies_to` claims by source and date | Version 1, with claim `c1` and register locator | This reports the designated register, not every organisational belief. |
+| What connects version 1 to Northbridge? | Follow `applies_to → belongs_to` | A two-hop path through Atlas, with one claim ID per hop | A path does not create a new organisation-level policy claim. |
+| Which Alex Kim attended? | Inspect the mention and candidate set | Abstention with two candidates and the meeting locator | The source does not supply a distinguishing identifier. |
+
+The graph is built from source records in dependency order: define the question,
+retain the mention, decide which entities are candidates, create the qualified
+claim, then expose only the relationships that survive the stated decision. A
+query that starts with the final answer and works backwards will tend to hide
+the very uncertainty the graph is meant to preserve. This is why the main case
+returns `c1`, `c3`, or `c5` rather than only “Northbridge”, “supported”, or
+“Alex Kim”.
+
+#### Research literature
+
+A literature graph might contain papers, authors, institutions, datasets,
+methods, and results. Its relationships could include `authored_by`,
+`cites`, `uses_method`, `evaluates_on`, and `reports_result`. The tempting query
+“Which papers support method X?” is not answered safely by traversing citations
+alone. A citation records a relationship between documents; it does not by
+itself say that the cited result was reproduced, that the authors endorse every
+claim in it, or that two papers used comparable data.
+
+| Construction decision | Why it matters |
+|---|---|
+| Preserve the paper version and section or figure locator | A revised preprint may change the result while retaining its title. |
+| Distinguish an author mention from a resolved researcher identity | Two people with the same name must not receive one combined publication history. |
+| Record the direction and type of citation | A paper can cite a method, criticise a result, or use a dataset without endorsing its conclusion. |
+| Attach dataset version, evaluation measure, and population where stated | “Improves accuracy” is not interpretable without the task, baseline, data, and metric. |
+
+A bounded query might ask: “Which papers published between 2022 and 2024
+report an improvement over baseline B on dataset D, and where is that result
+reported?” The answer path is not merely `paper → cites → paper`. It combines
+the paper's reported result, the dataset and version, the baseline, the metric,
+and the evidence locator. If one paper says that another result failed to
+replicate, retain both assertions. A graph can expose the disagreement and
+find the relevant evidence; it cannot decide which experiment is sound without
+an evaluation rule and the underlying data.
+
+#### Software dependencies and vulnerabilities
+
+A software graph might contain packages, releases, applications, licences,
+advisories, vulnerable ranges, fixed releases, and deployed environments. Its
+relationships include `depends_on`, `contains`, `affected_by`, and `fixed_in`.
+Here the most important qualifier is often release and environment scope. A
+package-level edge such as “application A depends on library L” is insufficient
+to answer whether a deployed application is vulnerable: the installed release,
+dependency resolution, platform, configuration, and advisory range all matter.
+
+| Question | Build and query path | Failure if the graph is simplified |
+|---|---|---|
+| Is the deployed application affected by advisory V? | Deployment → installed release → package → advisory range | A package-name edge may report a vulnerability for a release that is not installed. |
+| Which upgrade paths remove V? | Affected release → fixed release, constrained by dependency compatibility | A fixed release may be unusable if another dependency forbids it. |
+| Which services need review after an upgrade? | Changed package release → dependency graph → deployed environments | A source repository graph may omit the versions actually deployed. |
+
+The graph is built by joining authoritative or declared sources: lockfiles and
+deployment inventories supply installed versions; package metadata supplies
+dependency edges; advisories supply affected and fixed ranges; a release record
+binds the result to the time at which the inventory was observed. A query can
+then return the affected service, the installed release, the advisory locator,
+and the reason the release falls inside the affected range. It should not return
+“safe” merely because no path was found: the inventory may be incomplete, an
+advisory may not cover the platform, or a transitive dependency may have been
+omitted.
+
+These examples share a pattern but not a universal schema. In each domain, the
+reader starts with a question, identifies the source boundary, preserves the
+qualifiers needed to interpret each relationship, and returns an evidence path
+with a material limit. That is the reusable idea. The choice of RDF, tables,
+property graph, search index, or service comes later and should be justified by
+the questions and update work rather than by the presence of the word “graph”.
+
 ## Define the Boundary Before Building the Graph
 
 A knowledge graph is an answer-producing model over a declared evidence set. Its boundary therefore includes more than the files that happened to be ingested. It includes the questions the model is intended to answer, the source classes it accepts, the period and population those sources cover, and the decisions it is authorised to make when records disagree. If any of these are implicit, users can mistake a bounded extract for a complete account.
