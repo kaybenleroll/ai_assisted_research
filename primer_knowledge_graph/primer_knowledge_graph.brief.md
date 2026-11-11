@@ -2,7 +2,7 @@
 
 - Issue and milestone: #398; related #397
 - Brief revision: `kg-398-brief-r5`
-- Source revision: `85d0535`
+- Source revision: `0152148`
 - Revision state: Editorial source and outputs committed at the source revision
   above. Audit and release readiness are recorded separately.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
