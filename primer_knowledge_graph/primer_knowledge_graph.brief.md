@@ -1,10 +1,10 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r5`
-- Source revision: `0152148`
-- Revision state: Editorial source and outputs committed at the source revision
-  above. Audit and release readiness are recorded separately.
+- Brief revision: `kg-398-brief-r6`
+- Source revision: `65956ad`
+- Revision state: The introduction and end-to-end walkthrough are committed
+  at the source revision above. Published outputs need regeneration and review.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
@@ -31,8 +31,10 @@
 - Exclusions: General-purpose NLP, ontology engineering in depth, legal advice,
   vendor benchmarking, production deployment, a complete Neo4j integration,
   and claims that a synthetic fixture represents a real organisation.
-- Proposed dependency-led route: Explain what a knowledge graph is and when it
-  helps; establish the Northbridge boundary and competency questions; preserve
+- Proposed dependency-led route: Orient the reader with concepts, terminology,
+  verifiability and reading routes; follow one complete illustrative Northbridge
+  question from evidence to release; then establish the detailed boundary and
+  competency questions; preserve
   source mentions and distinguish them from entities; model qualified claims
   with time, polarity, provenance and uncertainty; work one source sentence
   through construction to a query result; extract conservatively and abstain
@@ -64,7 +66,8 @@
 - Core-concept depth matrix: the matrix below; retain all IDs in the later audit.
 - Route classification and teaching spines: The route classifications and teaching spines are specified below.
   - `route-python-duckdb` — `primary`: Northbridge questions motivate the
-    organising model of evidence-backed claims. Work the standalone case by
+    organising model of evidence-backed claims. The opening walkthrough makes
+    Q4's complete source-to-release spine prominent. Work the standalone case by
     hand from source excerpts through ledger construction, query, diagnosis,
     correction, authorised disclosure, evaluation, and release regression.
     Python/DuckDB is optional companion verification.
@@ -76,12 +79,13 @@
     databases are compared as representation and serving options, with one
     worked mapping and a workload-based choice guide, not a product survey or
     executed Neo4j route.
-- Teaching devices: Two native Pandoc text-flow diagrams show the
-  source → mention/entity → qualified claim → evidenced answer chain and the
-  baseline → diagnosis → revised ledger → release regression cycle. Labelled
-  stages and operations remain selectable text in HTML/PDF; their meaning
-  does not depend on colour or arrow glyphs alone. Line blocks keep this
-  source-only revision free of code fences and build changes.
+- Teaching devices: The opening terminology and Q4 walkthrough orient the
+  standalone reader before the detailed sections. The walkthrough and its
+  intermediate records are illustrative prose, not independently executed.
+  A stage table shows the source → mention/entity → qualified claim →
+  evidenced answer chain; a text flow shows the baseline → diagnosis →
+  revised ledger → release regression cycle. Labels convey the stages without
+  depending on colour. Current HTML/PDF presentation needs review.
   Retained-excerpt, mention-decision, span-to-assertion, and ledger tables
   supply the detailed hand replay beneath the opening flow. Three worked
   failures develop symptom, diagnosis, test, and change; a compact table
