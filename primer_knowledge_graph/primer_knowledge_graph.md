@@ -74,6 +74,72 @@ The scope is a bounded method for constructing, querying, reviewing, and correct
 
 *Verified against primary sources for the standards and interfaces in Storage and Implementation Reference and the R projection. The case studies and their worked results are synthetic.*
 
+## A Complete Northbridge Question
+
+The rest of the primer develops the parts of one method. Before entering those detailed sections, follow one question from source wording to a released answer. Northbridge is fictional, and the records below are a small, deliberately constructed evidence set. The question is: **Do the register and the meeting minutes agree about whether Travel Policy v1 applies to project Atlas on 15 March 2024, and what does the stated answer policy conclude?** The first part compares what the sources say. The second applies a decision rule to those statements. Neither asks us to decide which policy an employee should follow; that operational decision belongs to an accountable owner.
+
+This walkthrough has three kinds of decision. **Construction** records source wording, identifies its participants, and builds reviewable assertions. **Policy** sets which evidence is considered and how selected assertions are interpreted. **Presentation** decides what an audience may see and how the answer is explained. They interact, but a source sentence does not choose an answer policy, and a well-phrased answer cannot repair evidence lost during construction.
+
+### Question and Source Boundary
+
+The permitted comparison uses two identified source snapshots. The policy register, R1, says: “Travel Policy v1 applies to Atlas from 1 January until 1 April.” For this case, “until 1 April” is an exclusive end. The Atlas minutes, M1, say: “On 15 March, version 1 does not apply to Atlas.” Their supplied topic is the Atlas travel policy discussion. The directory, D1, supplies identity and affiliation context; it does not settle the disputed applicability statement.
+
+The intermediate artefact is a **question contract** naming the date, the proposition, the two sources, and the two determinations the answer must make: what each source asserts, and what the answer policy concludes when those assertions are compared. Its limit is just as important. These excerpts do not cover every amendment, exception, travel expense, or source Northbridge might possess. A result scoped to this evidence must not be presented as a general operational authorisation.
+
+### Mentions and Entities
+
+Construction begins with occurrences in the sources. The register’s “Travel Policy v1” and the minutes’ “version 1” are different mentions. The model links them to the same entity, `policy:travel-v1`; it links the Atlas mentions to `project:atlas`. The minutes’ topic and version number support the shortened policy reference. This matters because the comparison requires the same policy version and project, rather than two labels that happen to look alike.
+
+The intermediate artefact is a set of mention-to-entity decisions with their source context and reasons. The link says that the mentions refer to the same thing; it does not say either source is right. Without the supplied topic, the short phrase “version 1” alone would not establish which policy family was intended. The detailed identity section later shows how to retain the unresolved Alex Kim mention rather than forcing a person link.
+
+### Claims and Assertions
+
+The shared proposition is that version 1 applies to Atlas. The register affirms it; the minutes deny it. The model retains these as two separate source-specific assertions: `c1` for the register and `c5` for the minutes. Each has the same subject, relationship, and object, but its own polarity, time support, and evidence. Their common participants make comparison possible; they do not make one assertion a correction of the other. The minutes also affirm version 2 on 15 March, but that is a separate assertion. It is not itself a contradiction of version 1 without an additional rule that only one version can apply.
+
+The intermediate artefact is therefore a pair of qualified assertions, each traceable to the source from which it was constructed. This is more informative than a single edge labelled “applies to”. The edge might be useful as a projection, but the answer needs to know who made the assertion, what period it covers, whether it is positive or negative, and where the wording can be checked.
+
+### Time and Polarity
+
+For `c1`, R1 supports the period from 1 January up to, but not including, 1 April, so 15 March falls inside it. For `c5`, M1 supports its denial on 15 March; it does not say how long that denial continues. Both assertions are therefore **applicable as evidence** on 15 March, although one asserts applicability and the other denies it.
+
+The intermediate artefact is a classification for each assertion at the requested date, alongside its unchanged polarity. The distinction matters on 16 March: the register assertion remains applicable, while the minutes assertion is indeterminate beyond its supported day. Indeterminate does not mean that the denial became false or definitely continued. Temporal scope is part of the assertion’s meaning, not a filter applied after the graph has been built.
+
+### Evidence Ledger
+
+The constructed ledger brings these decisions together without collapsing them into one arrow. Its Q4-relevant rows are `c1`: version 1 applies to Atlas, positive, R1, 1 January to the exclusive end of 1 April; and `c5`: version 1 applies to Atlas, negative, M1, supported on 15 March with an unknown end. Each row carries assertion identifiers, participants, polarity, source references, and time support.
+
+The ledger is an intermediate artefact a reviewer can inspect. It contains what this construction admitted from the selected sources; its existence is not proof that extraction was complete or that the source corpus covers the wider world. A source snapshot can contain a sentence that the extraction omitted, and a complete extraction can still be limited by the sources that were admitted. Later, the correction experiment deliberately separates those failures.
+
+### Query and Interpretation
+
+Bind the subject to version 1, the relationship to applicability, and the object to Atlas; select the register and minutes in the original release. The query retrieves `c1` and `c5`, then classifies each for 15 March. Its intermediate artefact is a **selection trace**: two rows, two source references, two applicable time classifications, and opposite polarities.
+
+The comparison policy calls this disagreement because both sources address the same proposition and day with opposing polarity. The separate conservative applicability policy withholds a conclusion when applicable evidence conflicts. It does not pick the register merely because that is the designated administrative record: this question deliberately includes both sources. A register-only question would have a different boundary and could report what the register records without resolving the cross-source conflict.
+
+The answer for the original evidence is therefore: **“The register and minutes disagree about Travel Policy v1 for Atlas on 15 March. The register affirms applicability and the minutes deny it. Applicability is unresolved under the cross-source policy.”** The answer should identify the register’s first sentence at `R1:P1-P2:sentence-1` and the minutes’ second sentence at `M1:paragraph-3:sentence-2`. This is a presentation of the comparison and the policy decision, supported by two checkable passages. It is not a finding about the true governing policy or about an individual expense.
+
+### Failure and Construction Repair
+
+Now suppose the candidate extraction keeps positive statements but drops the minutes denial before it is admitted. The source snapshot still contains the sentence, but the ledger used in pass A has `c1` and no `c5`. The same query retrieves only the positive row and the same policy produces “supported”. The intermediate artefact is the comparison between the retained source, candidate decisions, and ledger: it locates the first loss at extraction. A confident-looking answer is wrong for the declared evidence boundary even though its one citation is relevant.
+
+In pass B, repair the extraction by admitting `c5` from the same M1 sentence, preserving its negation and 15 March support. Keep the sources, question, date, and answer policy fixed. The revised ledger now supplies both `c1` and `c5`; the query returns disagreement and the policy abstains. The new construction and answer trace show exactly what changed. This repair restores omitted evidence; it does not resolve the sources’ disagreement or authorise a different rule.
+
+A **source correction** is a different event. In a separate hypothetical pass C, register revision R2 changes the end of the version 1 interval to 1 March, still exclusive. Rebuild the register-derived assertion against R2 while retaining the earlier derivation where permitted. On 15 March, `c1` in the revised release is outside and `c5` remains applicable. There is no applicable disagreement and no evidence of agreement; under the same policy the minutes’ denial alone yields “refuted”. This conclusion is relative to R2 and the stated policy; it does not establish what a source owner would decide operationally.
+
+### Disclosure and Governance
+
+Before presenting an answer, select the evidence the audience is authorised to receive. The minutes also contain a separate attendance statement about Alex Kim, whose name matches two directory people. That identity question is unresolved and its attendance evidence is restricted in this exercise. For an ordinary reader, the Q4 evidence view can expose the approved policy sentence without exposing the adjacent attendance sentence. The intermediate artefact is an audience-specific evidence view and its approved citation: the Q4 answer still cites both policy statements, while a request for the attendance identity receives the fixed response “Attendance identity is unavailable in this view.” This response must not reveal whether restricted attendance records exist.
+
+Test two otherwise equivalent release candidates, one with the restricted attendance records admitted and one without. The ordinary Q4 answer, approved citation lookup, fixed attendance response, and visible attendance-candidate count must be the same in both. An authorised reviewer may see the unresolved mention and two candidates when those records are admitted. This paired disclosure comparison checks the specified views; it does not prove that every combination of searches, counts, exports, or caches is safe. Source, domain, identity, access, and release owners have distinct decisions to approve.
+
+### Evaluation and Release
+
+Define the expected evidence and answer before inspecting a run. For original Q4, the retrieval item requires both `c1` and `c5`; the answer item requires the disagreement, the justified withholding, and the permitted evidence references. In pass A, the single returned assertion is relevant, so precision is 1 out of 1, but recall is 1 out of 2 because the denial is missing. The complete answer fails. In pass B, both required assertions and no irrelevant assertion are returned, so precision and recall are each 2 out of 2; the answer also passes the stated item. These numbers check a tiny synthetic fixture, not accuracy on unseen sources or the safety of an operational service.
+
+Give the repaired original and hypothetical corrected graphs separate identities, `G-B` and `G-C`, and record which source versions, construction decisions, answer policy, and audience view each uses. Compare affected outputs before release. For Q4 on 15 March, `G-B` reports disagreement and abstains; `G-C` reports no applicable disagreement and, from the minutes’ denial, “refuted”. On 16 March both releases abstain for temporal scope, but their underlying classifications differ. A dated path from version 1 through Atlas to Northbridge can also change when the register interval changes; an undated positive drawing may look identical.
+
+The intermediate artefact is a release manifest and regression record that compares evidence, classifications, conclusions, and affected derived views, not just displayed labels. This single question shows why a usable graph is more than a picture of connections. An answer depends on the evidence retained during construction, the scope and interpretation selected by policy, and the information an audience may receive. Each stage leaves a reviewable product and a limit. The following sections develop the identity decisions, temporal rules, query mechanics, correction experiment, disclosure test, evaluation, and release checks in detail, and use other questions to show where this one example does not suffice.
+
 ## Design the Graph Around Questions {#route-python-duckdb}
 
 Start with the Atlas project and the first version of the travel policy. An arrow labelled "applies to" can connect them. A second arrow from Atlas to Northbridge can record that the project belongs to the organisation. The two arrows make it easy to ask which organisation is connected to that policy version through a project. To answer whether the policy governs a particular trip, you would need to know which version, which project, which period, and potentially what sort of trip. The difference between those questions determines how much of the source the model must preserve.
