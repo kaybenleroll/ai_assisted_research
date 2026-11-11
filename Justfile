@@ -70,14 +70,14 @@ readme-check:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
 
 # Check committed metadata, renderer variants, Mermaid, freshness, and README generation
-check: check-agent-contract check-render-qa check-primer-evidence-tests check-meta check-variants check-mermaid check-fresh check-readme
+check: check-agent-contract check-render-qa check-primer-evidence-tests check-primer-audit-tests check-primer-evidence-changed check-meta check-variants check-mermaid check-fresh check-readme
 
 # Validate a tracked brief and its revision-bound audit.  This is structural only.
 check-primer-evidence brief audit:
   python3 -I scripts/check/primer_evidence.py "{{brief}}" "{{audit}}"
 
-# Run the repeatable evidence, build, example, render, freshness, and scoped-link checks for one primer.
-primer-audit project:
+# Run the repeatable checks for one primer; optionally override its complete build recipe.
+primer-audit project $build_recipe="":
   #!/usr/bin/env bash
   set -euo pipefail
   root="{{justfile_directory()}}"
@@ -93,7 +93,20 @@ primer-audit project:
   if [[ -f "$root/{{project}}/examples/manifest.toml" ]]; then
     python3 -I _shared/examples/run.py --repo-root "$root" "{{project}}"
   fi
-  just --justfile "$root/{{project}}/Justfile" all
+  if [[ -z "$build_recipe" ]]; then
+    recipes="$(just --justfile "$root/{{project}}/Justfile" --summary)"
+    for candidate in full all-retained all; do
+      if [[ " $recipes " == *" $candidate "* ]]; then
+        build_recipe="$candidate"
+        break
+      fi
+    done
+  fi
+  if [[ -z "$build_recipe" ]]; then
+    printf 'No complete build recipe found for %s\n' '{{project}}' >&2
+    exit 1
+  fi
+  just --justfile "$root/{{project}}/Justfile" "$build_recipe"
   python3 -I scripts/render_qa.py "{{project}}"
   python3 -I scripts/check/check.py fresh
   bash scripts/lint.sh --md "$source_rel" "$audit_rel"
@@ -101,6 +114,37 @@ primer-audit project:
 
 check-primer-evidence-tests:
   python3 -I -m unittest discover -s tests -p 'test_primer_evidence*.py'
+
+check-primer-audit-tests:
+  python3 -I -m unittest discover -s tests -p 'test_primer_audit.py'
+
+# Validate changed projects that have opted into tracked brief and audit evidence.
+# BASE_REF matches lint-changed; include committed, staged, and local changes.
+check-primer-evidence-changed:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  root="{{justfile_directory()}}"
+  base="${BASE_REF:-origin/main}"
+  paths="$(mktemp)"
+  trap 'rm -f "$paths"' EXIT
+  git -C "$root" diff --name-only -z --diff-filter=ACDMRT "$base...HEAD" -- 'primer_*/*' > "$paths"
+  git -C "$root" diff --name-only -z --diff-filter=ACDMRT HEAD -- 'primer_*/*' >> "$paths"
+  git -C "$root" ls-files --others --exclude-standard -z -- 'primer_*/*' >> "$paths"
+  declare -A projects=()
+  while IFS= read -r -d '' path; do
+    project="${path%%/*}"
+    [[ "$project" == primer_* ]] && projects["$project"]=1
+  done < "$paths"
+  for project in "${!projects[@]}"; do
+    brief="$project/$project.brief.md"
+    audit="$project/$project.audit.md"
+    if [[ -e "$root/$brief" || -e "$root/$audit" ]] || \
+       git -C "$root" cat-file -e "$base:$brief" 2>/dev/null || \
+       git -C "$root" cat-file -e "$base:$audit" 2>/dev/null; then
+      python3 -I "$root/scripts/check/primer_evidence.py" "$root/$brief" "$root/$audit"
+      python3 -I "$root/scripts/check/primer_audit.py" --repo-root "$root" --project "$project"
+    fi
+  done
 
 check-render-qa:
   {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_render_qa.py'
