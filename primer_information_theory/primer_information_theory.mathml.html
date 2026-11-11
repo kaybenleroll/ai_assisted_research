@@ -32,6 +32,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -173,6 +184,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -184,7 +196,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -585,7 +596,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -624,13 +635,15 @@ code span.wa { color: #da4453; } /* Warning */
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Information Theory: Surprise,
 Compression, and Communication</span>
     <span class="navbar-meta">14 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -639,7 +652,7 @@ Compression, and Communication</span>
       <div class="sidebar-tools">
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#orientation-and-notation" id="toc-orientation-and-notation"><span class="toc-section-number">1</span> Orientation and Notation</a>
 <ul>
 <li><a href="#purpose-scope-and-background" id="toc-purpose-scope-and-background"><span class="toc-section-number">1.1</span> Purpose, Scope, and
@@ -851,20 +864,22 @@ for a System Claim</a></li>
 </ul></li>
 <li><a href="#glossary" id="toc-glossary"><span class="toc-section-number">11</span> Glossary</a></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">12</span> Further Reading</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
-<h1 data-number="1" id="orientation-and-notation"><span class="header-section-number">1</span> Orientation and Notation</h1>
+<h1 id="document-title" class="document-title">Information Theory:
+Surprise, Compression, and Communication</h1>
+<h1 data-number="1" role="heading" aria-level="3" id="orientation-and-notation"><span class="header-section-number">1</span> Orientation and Notation</h1>
 <p>The sections that follow build from probability models to information
 quantities and then to coding consequences. This orientation fixes the
 scope, reading route, and notation used throughout, so later formulas
 can be read against the stated model and unit.</p>
-<h2 data-number="1.1" id="purpose-scope-and-background"><span class="header-section-number">1.1</span> Purpose, Scope, and
+<h2 data-number="1.1" role="heading" aria-level="4" id="purpose-scope-and-background"><span class="header-section-number">1.1</span> Purpose, Scope, and
 Background</h2>
 <p>Information theory gives precise ways to talk about uncertainty,
 dependence, representation, and communication. Its central move is to
@@ -899,7 +914,8 @@ Each is a direct calculation intended to expose conventions and
 assumptions, not a production compressor. Run the code blocks in order
 within each section; later R estimation examples reuse the
 <code>mi_bits()</code> function defined in that section.</p>
-<h2 data-number="1.2" id="reading-route"><span class="header-section-number">1.2</span> Reading Route</h2>
+<h2 data-number="1.2" role="heading" aria-level="4" id="reading-route"><span class="header-section-number">1.2</span>
+Reading Route</h2>
 <p>Start with probability if conditional laws and expectations are
 unfamiliar. Entropy and divergence describe one distribution or compare
 two. Mutual information then treats dependence, source coding turns a
@@ -914,7 +930,7 @@ adds structured redundancy to withstand noise. Both are asymptotic
 theories under stated models; the worked examples and exercises show how
 to calculate finite quantities without confusing them with theorem
 guarantees.</p>
-<h2 data-number="1.3" id="notation"><span class="header-section-number">1.3</span> Notation</h2>
+<h2 data-number="1.3" role="heading" aria-level="4" id="notation"><span class="header-section-number">1.3</span> Notation</h2>
 <p>Unless a section explicitly says otherwise, logarithms are base 2 and
 information is measured in bits. The convention
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mn>0</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">0\log_2 0=0</annotation></semantics></math>
@@ -1027,7 +1043,7 @@ for their mass functions or densities. A conditional law is only defined
 up to events of probability zero; finite-alphabet formulas can assign
 arbitrary conditional distributions on zero-probability conditioning
 events without changing any expectation.</p>
-<h2 data-number="1.4" id="units-supports-and-claims"><span class="header-section-number">1.4</span> Units, Supports, and
+<h2 data-number="1.4" role="heading" aria-level="4" id="units-supports-and-claims"><span class="header-section-number">1.4</span> Units, Supports, and
 Claims</h2>
 <p>Changing all logarithms from base 2 to natural logarithms changes
 bits to nats by multiplication by
@@ -1057,13 +1073,13 @@ probability model. In an empirical study, that model may be known,
 estimated, or implicitly replaced by empirical frequencies. State which
 case applies. A measured code length under a model is not automatically
 the entropy of the data-generating process.</p>
-<h1 data-number="2" id="probability-foundations"><span class="header-section-number">2</span> Probability Foundations</h1>
+<h1 data-number="2" role="heading" aria-level="3" id="probability-foundations"><span class="header-section-number">2</span> Probability Foundations</h1>
 <p>Information quantities are expectations or comparisons under
 probability laws, so their interpretation depends on specifying the
 random variables and their joint distribution. This section establishes
 the sample-space, marginal, conditional, and expectation rules used in
 the later definitions.</p>
-<h2 data-number="2.1" id="sample-spaces-and-random-variables"><span class="header-section-number">2.1</span> Sample Spaces and Random
+<h2 data-number="2.1" role="heading" aria-level="4" id="sample-spaces-and-random-variables"><span class="header-section-number">2.1</span> Sample Spaces and Random
 Variables</h2>
 <p>A probability model consists of a sample space
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Ω</mi><annotation encoding="application/x-tex">\Omega</annotation></semantics></math>,
@@ -1104,7 +1120,7 @@ has probability
 The labels H and T could be replaced by 0 and 1 without changing any
 information quantity, provided the probabilities travel with the
 labels.</p>
-<h3 data-number="2.1.1" id="joint-and-marginal-distributions"><span class="header-section-number">2.1.1</span> Joint and Marginal
+<h3 data-number="2.1.1" role="heading" aria-level="5" id="joint-and-marginal-distributions"><span class="header-section-number">2.1.1</span> Joint and Marginal
 Distributions</h3>
 <p>For two discrete variables
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -1204,7 +1220,7 @@ given
 the ordered pair is known. The sum is a function of the pair, and
 reporting it loses different amounts of detail for different realised
 sums.</p>
-<h2 data-number="2.2" id="conditional-distributions-and-bayes-rule"><span class="header-section-number">2.2</span> Conditional Distributions and
+<h2 data-number="2.2" role="heading" aria-level="4" id="conditional-distributions-and-bayes-rule"><span class="header-section-number">2.2</span> Conditional Distributions and
 Bayes’ Rule</h2>
 <p>For
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>Y</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_Y(y)&gt;0</annotation></semantics></math>,
@@ -1254,7 +1270,7 @@ Bayes’ rule gives
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mi>Y</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.9</mn><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>0.5</mn><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">p(X=1\mid Y=1)=0.9(0.5)/0.5=0.9</annotation></semantics></math>.
 A posterior needs the observation model and the source distribution; the
 likelihood alone is not the posterior.</p>
-<h3 data-number="2.2.1" id="independence-and-factorisation"><span class="header-section-number">2.2.1</span> Independence and
+<h3 data-number="2.2.1" role="heading" aria-level="5" id="independence-and-factorisation"><span class="header-section-number">2.2.1</span> Independence and
 Factorisation</h3>
 <p>Variables
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -1290,7 +1306,7 @@ is independent, yet the triple is constrained by
 When a theorem assumes independence, check whether it requires mutual
 independence of the whole sequence rather than pairwise
 independence.</p>
-<h2 data-number="2.3" id="expectation-and-conditional-expectation"><span class="header-section-number">2.3</span> Expectation and Conditional
+<h2 data-number="2.3" role="heading" aria-level="4" id="expectation-and-conditional-expectation"><span class="header-section-number">2.3</span> Expectation and Conditional
 Expectation</h2>
 <p>For a discrete variable with finite support, the expectation of a
 function
@@ -1348,7 +1364,7 @@ The observation has narrowed the compatible pairs without necessarily
 identifying either die. Conditional expectation captures the average of
 what remains possible; it is not a reconstruction of the hidden
 roll.</p>
-<h3 data-number="2.3.1" id="conditional-independence-and-markov-chains"><span class="header-section-number">2.3.1</span> Conditional Independence and
+<h3 data-number="2.3.1" role="heading" aria-level="5" id="conditional-independence-and-markov-chains"><span class="header-section-number">2.3.1</span> Conditional Independence and
 Markov Chains</h3>
 <p>The variables
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -1442,7 +1458,7 @@ is the same parity structure used later to show why conditioning can
 increase mutual information. The two examples are useful checks when
 deciding whether a graphical arrow represents a valid factorisation:
 work from the joint law, not the apparent order of variables.</p>
-<h2 data-number="2.4" id="continuous-variables-probability-is-mass-density-is-not"><span class="header-section-number">2.4</span> Continuous Variables:
+<h2 data-number="2.4" role="heading" aria-level="4" id="continuous-variables-probability-is-mass-density-is-not"><span class="header-section-number">2.4</span> Continuous Variables:
 Probability Is Mass, Density Is Not</h2>
 <p>A continuous random variable is described by a probability density
 function (pdf)
@@ -1513,7 +1529,7 @@ discrete-continuous laws require sums and integrals over their
 respective components. A fully general treatment uses probability
 measures and Radon–Nikodym derivatives; no claim here assumes that every
 distribution has a density.</p>
-<h2 data-number="2.5" id="base-r-and-python-inspect-a-joint-law"><span class="header-section-number">2.5</span> Base R and Python: Inspect a
+<h2 data-number="2.5" role="heading" aria-level="4" id="base-r-and-python-inspect-a-joint-law"><span class="header-section-number">2.5</span> Base R and Python: Inspect a
 Joint Law</h2>
 <p>The same joint table can be represented as a matrix whose rows index
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -1551,7 +1567,14 @@ sum to one, then computes marginals with <code>rowSums()</code> and
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(row_marginals, column_marginals)</span></code></pre></div>
 </div>
 <p>Both marginals are <code>c(0.5, 0.5)</code>, matching the fair-bit
-distributions in the table.</p>
+distributions in the table. The offline <a href="examples/binary_joint_law.py">Python example</a> also checks the
+mutual information, approximately 0.278072 bits, using the positive
+entries of this table and an absolute tolerance of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>12</mn></mrow></msup><annotation encoding="application/x-tex">10^{-12}</annotation></semantics></math>.
+Run it with
+<code>just examples information_theory binary-joint-law-python</code>
+from the repository root. This is a calculation for the stipulated law,
+not an estimate from data.</p>
 <p>The probability rules above are enough to begin calculating
 information, but a calculation is meaningful only after the random
 experiment has been specified. A joint table from repeated independent
@@ -1622,12 +1645,12 @@ P(D=1\mid T=1)=\frac{0.9(0.01)}
 are false positives because the condition is rare. Information measures
 later average log evidence across all possible test outcomes. They do
 not replace this posterior calculation for an individual result.</p>
-<h1 data-number="3" id="entropy-and-divergences"><span class="header-section-number">3</span> Entropy and Divergences</h1>
+<h1 data-number="3" role="heading" aria-level="3" id="entropy-and-divergences"><span class="header-section-number">3</span> Entropy and Divergences</h1>
 <p>Entropy averages the surprisal of outcomes under one distribution,
 while divergence compares distributions and mutual information measures
 dependence. This section develops these quantities from log probability,
 with their assumptions and support conditions made explicit.</p>
-<h2 data-number="3.1" id="surprise-as-log-probability"><span class="header-section-number">3.1</span> Surprise as Log
+<h2 data-number="3.1" role="heading" aria-level="4" id="surprise-as-log-probability"><span class="header-section-number">3.1</span> Surprise as Log
 Probability</h2>
 <p>For an outcome
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
@@ -1665,7 +1688,8 @@ entropy averages the two values with probabilities
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.4</mn><annotation encoding="application/x-tex">0.4</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.6</mn><annotation encoding="application/x-tex">0.6</annotation></semantics></math>.</p>
-<h2 data-number="3.2" id="shannon-entropy"><span class="header-section-number">3.2</span> Shannon Entropy</h2>
+<h2 data-number="3.2" role="heading" aria-level="4" id="shannon-entropy"><span class="header-section-number">3.2</span>
+Shannon Entropy</h2>
 <p>For a discrete variable
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
 with pmf
@@ -1746,7 +1770,7 @@ chain rule makes the saving explicit:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mrow><mn>2</mn><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>X</mi><mrow><mn>2</mn><mi>k</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mrow><mn>2</mn><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mrow><mn>2</mn><mi>k</mi></mrow></msub><mo>∣</mo><msub><mi>X</mi><mrow><mn>2</mn><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>+</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H(X_{2k-1},X_{2k})=H(X_{2k-1})+H(X_{2k}\mid X_{2k-1})=1+0</annotation></semantics></math>.
 This is why a memoryless theorem must not be applied to a source with
 predictable temporal structure by substituting its marginal entropy.</p>
-<h3 data-number="3.2.1" id="joint-entropy-and-chain-rule"><span class="header-section-number">3.2.1</span> Joint Entropy and Chain
+<h3 data-number="3.2.1" role="heading" aria-level="5" id="joint-entropy-and-chain-rule"><span class="header-section-number">3.2.1</span> Joint Entropy and Chain
 Rule</h3>
 <p>The joint entropy of two finite-alphabet variables is the entropy of
 their pair:</p>
@@ -1794,7 +1818,7 @@ identity beyond the finite case.</p>
 If the variables are mutually independent, each conditional term equals
 its marginal entropy, so joint entropy is the sum. Independence is
 essential to that simplification.</p>
-<h3 data-number="3.2.2" id="conditioning-reduces-entropy"><span class="header-section-number">3.2.2</span> Conditioning Reduces
+<h3 data-number="3.2.2" role="heading" aria-level="5" id="conditioning-reduces-entropy"><span class="header-section-number">3.2.2</span> Conditioning Reduces
 Entropy</h3>
 <p><strong>Theorem 3.3 (Conditioning inequality).</strong> For
 finite-alphabet
@@ -1823,7 +1847,8 @@ over all
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
 cannot exceed
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(X)</annotation></semantics></math>.</p>
-<h2 data-number="3.3" id="kl-divergence"><span class="header-section-number">3.3</span> KL Divergence</h2>
+<h2 data-number="3.3" role="heading" aria-level="4" id="kl-divergence"><span class="header-section-number">3.3</span> KL
+Divergence</h2>
 <p>For distributions
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
 and
@@ -1969,7 +1994,7 @@ on
 data remains
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>P</mi><mo stretchy="false" form="postfix">∥</mo><mi>Q</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(P\|Q)</annotation></semantics></math>,
 not JSD.</p>
-<h3 data-number="3.3.1" id="cross-entropy-and-log-loss"><span class="header-section-number">3.3.1</span> Cross-Entropy and Log
+<h3 data-number="3.3.1" role="heading" aria-level="5" id="cross-entropy-and-log-loss"><span class="header-section-number">3.3.1</span> Cross-Entropy and Log
 Loss</h3>
 <p>If outcomes follow
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
@@ -2034,7 +2059,7 @@ bits; if the third occurs, it is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mo stretchy="false" form="prefix">(</mo><mn>0.1</mn><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mn>3.322</mn></mrow><annotation encoding="application/x-tex">-\log_2(0.1)\approx3.322</annotation></semantics></math>
 bits. Cross-entropy averages these losses over possible alerts rather
 than describing every realised alert.</p>
-<h2 data-number="3.4" id="entropy-of-a-bernoulli-variable"><span class="header-section-number">3.4</span> Entropy of a Bernoulli
+<h2 data-number="3.4" role="heading" aria-level="4" id="entropy-of-a-bernoulli-variable"><span class="header-section-number">3.4</span> Entropy of a Bernoulli
 Variable</h2>
 <p>For a bit that equals 1 with probability
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
@@ -2075,7 +2100,7 @@ H(B)=-\frac{7}{12}\log_2\frac{7}{12}-\frac{5}{12}\log_2\frac{5}{12}\approx0.9799
 <p>This is uncertainty about the coarse label, not about the exact sum
 or ordered pair. Name the random variable before interpreting its
 entropy.</p>
-<h3 data-number="3.4.1" id="continuous-entropy-and-relative-entropy"><span class="header-section-number">3.4.1</span> Continuous Entropy and
+<h3 data-number="3.4.1" role="heading" aria-level="5" id="continuous-entropy-and-relative-entropy"><span class="header-section-number">3.4.1</span> Continuous Entropy and
 Relative Entropy</h3>
 <p>For a continuous variable with density
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>X</mi></msub><annotation encoding="application/x-tex">f_X</annotation></semantics></math>
@@ -2159,7 +2184,7 @@ cancellation is legitimate. The KL definition remains valid when
 individual differential entropy terms are infinite but mutual
 information is finite. See <a href="#continuous-variables-and-mutual-information">Continuous Variables
 and Mutual Information</a>.</p>
-<h2 data-number="3.5" id="base-r-and-python-calculations"><span class="header-section-number">3.5</span> Base R and Python
+<h2 data-number="3.5" role="heading" aria-level="4" id="base-r-and-python-calculations"><span class="header-section-number">3.5</span> Base R and Python
 Calculations</h2>
 <p>For a finite probability vector, define
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0\log 0</annotation></semantics></math>
@@ -2254,7 +2279,7 @@ bit, reproducing the support and direction example above.</p>
 probability vectors, compute with stable log-probabilities and avoid
 underflow; do not interpret a tiny negative floating-point result as
 evidence that KL divergence is mathematically negative.</p>
-<h1 data-number="4" id="information-between-variables"><span class="header-section-number">4</span> Information Between
+<h1 data-number="4" role="heading" aria-level="3" id="information-between-variables"><span class="header-section-number">4</span> Information Between
 Variables</h1>
 <p>Entropy and divergence lead to mutual information by comparing a
 joint law with the law that would result if its marginals were
@@ -2280,7 +2305,7 @@ bits, while the Huffman code below assigns three bits. A single codeword
 can be shorter than its surprisal even though the average code length
 remains above entropy. The Kraft constraint acts on the whole code tree,
 so code lengths must be judged together.</p>
-<h2 data-number="4.1" id="conditional-entropy-as-remaining-uncertainty"><span class="header-section-number">4.1</span> Conditional Entropy as
+<h2 data-number="4.1" role="heading" aria-level="4" id="conditional-entropy-as-remaining-uncertainty"><span class="header-section-number">4.1</span> Conditional Entropy as
 Remaining Uncertainty</h2>
 <p>Conditional entropy
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>∣</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(X\mid Y)</annotation></semantics></math>
@@ -2355,7 +2380,8 @@ observing
 removes about
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.531</mn><annotation encoding="application/x-tex">0.531</annotation></semantics></math>
 bits of uncertainty on average.</p>
-<h2 data-number="4.2" id="mutual-information"><span class="header-section-number">4.2</span> Mutual Information</h2>
+<h2 data-number="4.2" role="heading" aria-level="4" id="mutual-information"><span class="header-section-number">4.2</span>
+Mutual Information</h2>
 <p>Mutual information quantifies statistical dependence between two
 variables. For finite alphabets, equivalent expressions are</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>;</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>∣</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>,</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>P</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub><mo stretchy="true" form="infix">∥</mo><msub><mi>P</mi><mi>X</mi></msub><msub><mi>P</mi><mi>Y</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><munder><mo>∑</mo><mrow><mi>x</mi><mo>,</mo><mi>y</mi><mo>:</mo><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn></mrow></munder><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mfrac><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><msub><mi>p</mi><mi>X</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><msub><mi>p</mi><mi>Y</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
@@ -2448,7 +2474,7 @@ A variable can carry information about a target in the probabilistic
 sense but be inaccessible to a particular algorithm, too costly to use,
 or ethically inappropriate to use. Those are separate modelling and
 decision questions.</p>
-<h3 data-number="4.2.1" id="conditional-mutual-information-and-chain-rules"><span class="header-section-number">4.2.1</span> Conditional Mutual
+<h3 data-number="4.2.1" role="heading" aria-level="5" id="conditional-mutual-information-and-chain-rules"><span class="header-section-number">4.2.1</span> Conditional Mutual
 Information and Chain Rules</h3>
 <p>Conditional mutual information is the average dependence between
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -2533,7 +2559,7 @@ once the shared bit is given, there is no uncertainty left to reduce.
 These two examples show why conditional mutual information must be
 calculated from the conditional law rather than inferred from a generic
 slogan about conditioning.</p>
-<h2 data-number="4.3" id="independence-synergy-and-interaction"><span class="header-section-number">4.3</span> Independence, Synergy, and
+<h2 data-number="4.3" role="heading" aria-level="4" id="independence-synergy-and-interaction"><span class="header-section-number">4.3</span> Independence, Synergy, and
 Interaction</h2>
 <p>Pairwise mutual information can miss higher-order structure. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>,</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X,Y</annotation></semantics></math>
@@ -2552,7 +2578,7 @@ chosen framework and should not be introduced as if they were uniquely
 determined by Shannon entropy. For this primer, use the parity example
 to expose the limitation and route specialised decompositions to further
 reading.</p>
-<h2 data-number="4.4" id="data-processing-inequality"><span class="header-section-number">4.4</span> Data-Processing Inequality</h2>
+<h2 data-number="4.4" role="heading" aria-level="4" id="data-processing-inequality"><span class="header-section-number">4.4</span> Data-Processing Inequality</h2>
 <p><strong>Theorem 4.1 (Data-processing inequality).</strong> Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>,</mo><mi>Y</mi><mo>,</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">X,Y,Z</annotation></semantics></math>
 be finite-alphabet random variables forming the Markov chain
@@ -2694,7 +2720,7 @@ This is a statement about average statistical dependence under a
 specified joint law. It does not establish a formal privacy guarantee by
 itself: adversary knowledge, rare individuals, utility, and the chosen
 threat model still matter.</p>
-<h2 data-number="4.5" id="continuous-variables-and-mutual-information"><span class="header-section-number">4.5</span> Continuous Variables and Mutual
+<h2 data-number="4.5" role="heading" aria-level="4" id="continuous-variables-and-mutual-information"><span class="header-section-number">4.5</span> Continuous Variables and Mutual
 Information</h2>
 <p>For arbitrary random variables on suitable measurable spaces, define
 mutual information by relative entropy:</p>
@@ -2761,7 +2787,7 @@ in the ideal noise-free continuous model the MI is generally infinite.
 Adding measurement noise changes that value. State both the
 distributional family and measurement resolution before using
 correlation as an information proxy.</p>
-<h2 data-number="4.6" id="base-r-and-python-calculation-from-a-joint-table"><span class="header-section-number">4.6</span> Base R and Python Calculation
+<h2 data-number="4.6" role="heading" aria-level="4" id="base-r-and-python-calculation-from-a-joint-table"><span class="header-section-number">4.6</span> Base R and Python Calculation
 From a Joint Table</h2>
 <p>For a small finite joint distribution, mutual information can be
 computed from the ratio of joint mass to the product of marginals. This
@@ -2813,13 +2839,14 @@ explicit; <code>table()</code> can construct empirical counts, but naive
 plug-in mutual information is biased upward in many finite-sample
 settings. See <a href="#estimating-information-from-data">Estimating
 Information from Data</a>.</p>
-<h1 data-number="5" id="lossless-source-coding"><span class="header-section-number">5</span> Lossless Source Coding</h1>
+<h1 data-number="5" role="heading" aria-level="3" id="lossless-source-coding"><span class="header-section-number">5</span>
+Lossless Source Coding</h1>
 <p>Lossless source coding turns probabilities into binary
 representations and evaluates their cost by expected code length. The
 section relates prefix-code constraints to entropy bounds, then develops
 practical constructions and the conditions behind block-coding
 results.</p>
-<h2 data-number="5.1" id="from-probabilities-to-code-lengths"><span class="header-section-number">5.1</span> From Probabilities to Code
+<h2 data-number="5.1" role="heading" aria-level="4" id="from-probabilities-to-code-lengths"><span class="header-section-number">5.1</span> From Probabilities to Code
 Lengths</h2>
 <p>A binary code maps source symbols to finite strings over
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{0,1\}</annotation></semantics></math>.
@@ -2846,7 +2873,8 @@ necessary: some uniquely decodable codes are not prefix codes. The
 simplest entropy bounds are stated for prefix codes; do not silently
 claim that every argument about a prefix tree applies to arbitrary codes
 without a corresponding theorem.</p>
-<h3 data-number="5.1.1" id="kraft-inequality"><span class="header-section-number">5.1.1</span> Kraft Inequality</h3>
+<h3 data-number="5.1.1" role="heading" aria-level="5" id="kraft-inequality"><span class="header-section-number">5.1.1</span>
+Kraft Inequality</h3>
 <p>For any binary prefix code with lengths
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>ℓ</mi><mi>m</mi></msub></mrow><annotation encoding="application/x-tex">\ell_1,\ldots,\ell_m</annotation></semantics></math>,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msup><mn>2</mn><mrow><mi>−</mi><msub><mi>ℓ</mi><mi>i</mi></msub></mrow></msup><mo>≤</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -2912,7 +2940,7 @@ Thus a complete stream has a unique parse even though the next symbol
 cannot always be identified when its last bit arrives. The prefix
 assignment with the same lengths is easier to parse as bits arrive,
 which is why the code tree remains the useful construction here.</p>
-<h3 data-number="5.1.2" id="the-entropy-lower-bound"><span class="header-section-number">5.1.2</span> The Entropy Lower Bound</h3>
+<h3 data-number="5.1.2" role="heading" aria-level="5" id="the-entropy-lower-bound"><span class="header-section-number">5.1.2</span> The Entropy Lower Bound</h3>
 <p><strong>Theorem 5.2 (Expected length lower bound).</strong> For a
 discrete source
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -2976,7 +3004,7 @@ arrive. For eight independent draws, the <em>expected</em> length is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo stretchy="false" form="prefix">(</mo><mn>1.75</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>14</mn></mrow><annotation encoding="application/x-tex">8(1.75)=14</annotation></semantics></math>
 bits before framing or model costs. A realised eight-symbol stream can
 have a different length.</p>
-<h2 data-number="5.2" id="shannon-code-and-the-one-bit-redundancy-bound"><span class="header-section-number">5.2</span> Shannon Code and the One-Bit
+<h2 data-number="5.2" role="heading" aria-level="4" id="shannon-code-and-the-one-bit-redundancy-bound"><span class="header-section-number">5.2</span> Shannon Code and the One-Bit
 Redundancy Bound</h2>
 <p>For each positive-probability symbol, choose length
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℓ</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">⌈</mo><mi>−</mi><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">⌉</mo></mrow><annotation encoding="application/x-tex">\ell(x)=\lceil-\log_2p(x)\rceil</annotation></semantics></math>.
@@ -3001,7 +3029,7 @@ and its bound hold for the construction given here. A code word length
 is an integer, while surprisal is generally fractional; the ceiling is
 the rounding loss. This construction need not be optimal among
 one-symbol prefix codes.</p>
-<h2 data-number="5.3" id="huffman-coding-and-a-complete-example"><span class="header-section-number">5.3</span> Huffman Coding and a Complete
+<h2 data-number="5.3" role="heading" aria-level="4" id="huffman-coding-and-a-complete-example"><span class="header-section-number">5.3</span> Huffman Coding and a Complete
 Example</h2>
 <p>Huffman coding produces a minimum-expected-length binary prefix code
 for a known finite source when symbols are encoded individually and
@@ -3111,7 +3139,7 @@ choosing the two least probable symbols at each step is optimal. This
 argument assumes symbol-wise coding, binary branches, and known
 probabilities; it says nothing about finite-block global optimality or
 model cost.</p>
-<h3 data-number="5.3.1" id="base-r-and-python-for-expected-length"><span class="header-section-number">5.3.1</span> Base R and Python for
+<h3 data-number="5.3.1" role="heading" aria-level="5" id="base-r-and-python-for-expected-length"><span class="header-section-number">5.3.1</span> Base R and Python for
 Expected Length</h3>
 <p>For a known codebook, expected length is a weighted sum. Named
 vectors keep probabilities and codewords aligned by symbol. The checks
@@ -3166,7 +3194,7 @@ canonical-code serialisation deserve deliberate design. The example
 checks the supplied non-empty codewords and expected-length arithmetic;
 a one-symbol alphabet can instead use an empty codeword when framing
 supplies the symbol count.</p>
-<h2 data-number="5.4" id="block-coding-and-the-noiseless-source-coding-theorem"><span class="header-section-number">5.4</span> Block Coding and the Noiseless
+<h2 data-number="5.4" role="heading" aria-level="4" id="block-coding-and-the-noiseless-source-coding-theorem"><span class="header-section-number">5.4</span> Block Coding and the Noiseless
 Source-Coding Theorem</h2>
 <p>Single-symbol codes pay an integer-length penalty on each symbol. A
 block code groups
@@ -3289,7 +3317,7 @@ corresponding asymptotic equipartition property. Do not call a dependent
 source memoryless or substitute
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(X_1)</annotation></semantics></math>
 for its entropy rate.</p>
-<h3 data-number="5.4.1" id="what-lossless-means-in-practice"><span class="header-section-number">5.4.1</span> What “Lossless” Means in
+<h3 data-number="5.4.1" role="heading" aria-level="5" id="what-lossless-means-in-practice"><span class="header-section-number">5.4.1</span> What “Lossless” Means in
 Practice</h3>
 <p>Lossless coding requires exact recovery of the encoded source
 sequence under the declared code and decoding rule. A compression
@@ -3323,7 +3351,7 @@ unrecoverable. Such preprocessing must be accounted for outside the
 lossless coding theorem. Similarly, a checksum can detect a damaged
 compressed stream but does not generally repair it; protection against
 channel errors belongs to the channel-code model.</p>
-<h2 data-number="5.5" id="arithmetic-coding-probability-intervals"><span class="header-section-number">5.5</span> Arithmetic Coding: Probability
+<h2 data-number="5.5" role="heading" aria-level="4" id="arithmetic-coding-probability-intervals"><span class="header-section-number">5.5</span> Arithmetic Coding: Probability
 Intervals</h2>
 <p>Arithmetic coding illustrates how variable-length bitstrings can
 approximate fractional surprisal across a sequence. Given a known finite
@@ -3381,7 +3409,7 @@ implementation must manage finite registers, renormalisation, underflow,
 termination, and a probability model known to both sides. The next
 chapter contrasts this source representation with channel coding, where
 redundancy is intentionally added to enable recovery from noise.</p>
-<h1 data-number="6" id="noisy-channels-and-capacity"><span class="header-section-number">6</span> Noisy Channels and Capacity</h1>
+<h1 data-number="6" role="heading" aria-level="3" id="noisy-channels-and-capacity"><span class="header-section-number">6</span> Noisy Channels and Capacity</h1>
 <p>Compression and communication are related but answer different
 questions. Source coding asks how concisely a source can be represented.
 Channel coding asks how reliably a message can be recovered after a
@@ -3398,7 +3426,7 @@ channel, and closes with the real additive white Gaussian noise (AWGN)
 model. The theorem statements concern mathematical existence; they do
 not supply a practical encoder, decoder, latency target, or finite-block
 error guarantee.</p>
-<h2 data-number="6.1" id="a-channel-as-a-conditional-distribution"><span class="header-section-number">6.1</span> A Channel as a Conditional
+<h2 data-number="6.1" role="heading" aria-level="4" id="a-channel-as-a-conditional-distribution"><span class="header-section-number">6.1</span> A Channel as a Conditional
 Distribution</h2>
 <p>A channel is a conditional probability distribution from an input
 alphabet
@@ -3449,7 +3477,7 @@ the input remains after observing the output. This connects directly to
 <a href="#mutual-information">Mutual Information</a>: mutual information
 is a property of a joint distribution, not of a channel diagram
 alone.</p>
-<h2 data-number="6.2" id="binary-symmetric-channel-one-input-law-one-capacity"><span class="header-section-number">6.2</span> Binary Symmetric Channel: One
+<h2 data-number="6.2" role="heading" aria-level="4" id="binary-symmetric-channel-one-input-law-one-capacity"><span class="header-section-number">6.2</span> Binary Symmetric Channel: One
 Input Law, One Capacity</h2>
 <p>A BSC has input and output alphabets
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{0,1\}</annotation></semantics></math>.
@@ -3608,7 +3636,7 @@ against
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
 is not a curve of capacity unless each point has itself been maximised
 over every other permitted channel choice.</p>
-<h3 data-number="6.2.1" id="binary-erasure-channel"><span class="header-section-number">6.2.1</span> Binary Erasure Channel</h3>
+<h3 data-number="6.2.1" role="heading" aria-level="5" id="binary-erasure-channel"><span class="header-section-number">6.2.1</span> Binary Erasure Channel</h3>
 <p>A BEC with erasure probability
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
 has output alphabet
@@ -3702,7 +3730,7 @@ arbitrary substitutions, as discussed in <a href="#error-correction-as-geometry"
 Those are worst-case guarantees for a code with minimum distance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>,
 not average-error predictions for a random channel.</p>
-<h2 data-number="6.3" id="asymmetric-channels-and-input-optimisation"><span class="header-section-number">6.3</span> Asymmetric Channels and Input
+<h2 data-number="6.3" role="heading" aria-level="4" id="asymmetric-channels-and-input-optimisation"><span class="header-section-number">6.3</span> Asymmetric Channels and Input
 Optimisation</h2>
 <p>Uniform input is optimal for a symmetric channel such as the BSC, but
 not in general. For a binary asymmetric channel, let
@@ -3763,7 +3791,7 @@ capacity value is unique even though multiple input laws achieve it. A
 learned or estimated input law is not automatically the maximiser: it
 describes observed traffic, whereas capacity asks what the channel could
 support under the allowed input choices.</p>
-<h2 data-number="6.4" id="capacity-and-the-channel-coding-theorem"><span class="header-section-number">6.4</span> Capacity and the Channel Coding
+<h2 data-number="6.4" role="heading" aria-level="4" id="capacity-and-the-channel-coding-theorem"><span class="header-section-number">6.4</span> Capacity and the Channel Coding
 Theorem</h2>
 <p>For a finite DMC
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>,
@@ -3908,7 +3936,7 @@ bits per use with a non-zero finite-block error. Neither number is its
 achieved mutual information under a source bit distribution; they answer
 different questions. This is a useful small illustration, not a
 capacity-approaching construction.</p>
-<h3 data-number="6.4.1" id="error-correction-as-geometry"><span class="header-section-number">6.4.1</span> Error Correction as
+<h3 data-number="6.4.1" role="heading" aria-level="5" id="error-correction-as-geometry"><span class="header-section-number">6.4.1</span> Error Correction as
 Geometry</h3>
 <p>A binary block code can be viewed as a set of
 length-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
@@ -3957,7 +3985,7 @@ flag many altered packets and support retransmission, yet a detected
 error is not a decoded message. Report whether a claimed reliability
 figure is raw symbol error, codeword error, undetected error, or
 application-level loss after retransmissions.</p>
-<h2 data-number="6.5" id="the-real-awgn-channel"><span class="header-section-number">6.5</span> The Real AWGN Channel</h2>
+<h2 data-number="6.5" role="heading" aria-level="4" id="the-real-awgn-channel"><span class="header-section-number">6.5</span> The Real AWGN Channel</h2>
 <p>For a real-valued signal, an often-used ideal model is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mi>X</mi><mo>+</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">Y=X+Z</annotation></semantics></math>,
 where
@@ -4035,7 +4063,7 @@ retransmissions can reduce application throughput. A reported
 signal-to-noise ratio also needs a reference point: receiver input
 power, post-filter noise variance, and per-symbol energy are not
 interchangeable without a system model.</p>
-<h1 data-number="7" id="lossy-compression-and-rate-distortion"><span class="header-section-number">7</span> Lossy Compression and
+<h1 data-number="7" role="heading" aria-level="3" id="lossy-compression-and-rate-distortion"><span class="header-section-number">7</span> Lossy Compression and
 Rate-Distortion</h1>
 <p>Lossless coding tries to reproduce every source symbol exactly. Many
 tasks instead permit controlled error: an image can lose detail, a
@@ -4048,7 +4076,7 @@ the source distribution and distortion measure, not only on the source
 alphabet. The central function is an asymptotic bound for long blocks of
 a memoryless source; it is not an objective quality score that
 automatically matches human judgement.</p>
-<h2 data-number="7.1" id="distortion-and-the-ratedistortion-function"><span class="header-section-number">7.1</span> Distortion and the
+<h2 data-number="7.1" role="heading" aria-level="4" id="distortion-and-the-ratedistortion-function"><span class="header-section-number">7.1</span> Distortion and the
 Rate–Distortion Function</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -4134,7 +4162,7 @@ bits per sample, the ideal asymptotic description rate is 70 bits per
 second before framing and model overhead. If a design instead specifies
 a limit on the worst individual sample error, expected-distortion theory
 does not directly answer it.</p>
-<h2 data-number="7.2" id="binary-hamming-distortion"><span class="header-section-number">7.2</span> Binary Hamming Distortion</h2>
+<h2 data-number="7.2" role="heading" aria-level="4" id="binary-hamming-distortion"><span class="header-section-number">7.2</span> Binary Hamming Distortion</h2>
 <p>For a binary source with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∼</mo><mrow><mi mathvariant="normal">Bernoulli</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X\sim\operatorname{Bernoulli}(p)</annotation></semantics></math>,
 use Hamming distortion
@@ -4237,7 +4265,7 @@ bits per source symbol, much smaller than the fair-source value. The
 rate–distortion curve reflects the actual source law; a statement of
 “binary rate–distortion” without both the distribution and distortion
 measure is incomplete.</p>
-<h2 data-number="7.3" id="gaussian-squared-error-distortion"><span class="header-section-number">7.3</span> Gaussian Squared-Error
+<h2 data-number="7.3" role="heading" aria-level="4" id="gaussian-squared-error-distortion"><span class="header-section-number">7.3</span> Gaussian Squared-Error
 Distortion</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
@@ -4330,7 +4358,7 @@ or encode domain-specific consequences; then the rate–distortion curve
 changes. Distortion is a modelling decision, and reporting
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">R(D)</annotation></semantics></math>
 without identifying it conceals the main value judgement.</p>
-<h2 data-number="7.4" id="choosing-a-distortion-measure"><span class="header-section-number">7.4</span> Choosing a Distortion
+<h2 data-number="7.4" role="heading" aria-level="4" id="choosing-a-distortion-measure"><span class="header-section-number">7.4</span> Choosing a Distortion
 Measure</h2>
 <p>For categorical records, zero-one loss may be understandable, but
 confusing two categories may have very different costs. For a medical
@@ -4419,7 +4447,7 @@ treating one as a substitute for the other.</p>
 </tr>
 </tbody>
 </table>
-<h1 data-number="8" id="estimating-information-from-data"><span class="header-section-number">8</span> Estimating Information From
+<h1 data-number="8" role="heading" aria-level="3" id="estimating-information-from-data"><span class="header-section-number">8</span> Estimating Information From
 Data</h1>
 <p>The definitions above concern a probability model. In applied work,
 the model is usually unknown and the analyst has a finite sample.
@@ -4433,7 +4461,7 @@ information?” It is “Which population quantity, under which sampling
 model, is this estimate intended to approximate, and how uncertain is
 it?” This section develops a basic workflow for discrete data and
 indicates where more specialised estimators are needed.</p>
-<h2 data-number="8.1" id="plug-in-estimates-and-their-bias"><span class="header-section-number">8.1</span> Plug-In Estimates and Their
+<h2 data-number="8.1" role="heading" aria-level="4" id="plug-in-estimates-and-their-bias"><span class="header-section-number">8.1</span> Plug-In Estimates and Their
 Bias</h2>
 <p>Suppose
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>X</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">X_1,\ldots,X_n</annotation></semantics></math>
@@ -4511,7 +4539,7 @@ by design under the model. A sampling zero is an unobserved event that
 may still have positive population probability. Adding a pseudocount
 treats the latter as possible, but the pseudocount is a modelling choice
 rather than evidence.</p>
-<h2 data-number="8.2" id="joint-tables-sparse-cells-and-mutual-information"><span class="header-section-number">8.2</span> Joint Tables, Sparse Cells, and
+<h2 data-number="8.2" role="heading" aria-level="4" id="joint-tables-sparse-cells-and-mutual-information"><span class="header-section-number">8.2</span> Joint Tables, Sparse Cells, and
 Mutual Information</h2>
 <p>For paired observations
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>,</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(X_i,Y_i)</annotation></semantics></math>,
@@ -4689,7 +4717,7 @@ for another changes the inferential target. If the data contain repeated
 measurements from one person, resampling individual rows also gives
 misleadingly narrow uncertainty because the rows are not independent
 units.</p>
-<h2 data-number="8.3" id="permutation-tests-for-dependence"><span class="header-section-number">8.3</span> Permutation Tests for
+<h2 data-number="8.3" role="heading" aria-level="4" id="permutation-tests-for-dependence"><span class="header-section-number">8.3</span> Permutation Tests for
 Dependence</h2>
 <p>A permutation test can estimate the null distribution of empirical
 mutual information under independence while preserving the observed
@@ -4722,7 +4750,7 @@ respects the dependence. For time series, naive shuffling destroys
 serial structure; use a null procedure designed for that process. The
 mechanics of shuffling are simple, but exchangeability is a substantive
 assumption.</p>
-<h3 data-number="8.3.1" id="bootstrap-uncertainty-and-resampling-units"><span class="header-section-number">8.3.1</span> Bootstrap Uncertainty and
+<h3 data-number="8.3.1" role="heading" aria-level="5" id="bootstrap-uncertainty-and-resampling-units"><span class="header-section-number">8.3.1</span> Bootstrap Uncertainty and
 Resampling Units</h3>
 <p>The non-parametric bootstrap resamples observed units with
 replacement and recomputes the estimator. If the data are independent
@@ -4815,7 +4843,7 @@ adjustment based on these replicates would still inherit that support
 limitation. With a larger sample, checking occupied cells and repeating
 the analysis under plausible smoothing choices can expose sensitivity
 that a single percentile interval conceals.</p>
-<h2 data-number="8.4" id="continuous-variables-and-estimator-choice"><span class="header-section-number">8.4</span> Continuous Variables and
+<h2 data-number="8.4" role="heading" aria-level="4" id="continuous-variables-and-estimator-choice"><span class="header-section-number">8.4</span> Continuous Variables and
 Estimator Choice</h2>
 <p>For continuous variables, discretising into bins changes the
 estimand. Mutual information between binned
@@ -4893,7 +4921,7 @@ fixed creates sparse cells; increasing sample size under a drifting
 distribution violates the fixed-target assumption. Decide what random
 variables and population are being studied before selecting the
 estimator.</p>
-<h3 data-number="8.4.1" id="reporting-an-estimate-so-it-can-be-reused"><span class="header-section-number">8.4.1</span> Reporting an Estimate so It
+<h3 data-number="8.4.1" role="heading" aria-level="5" id="reporting-an-estimate-so-it-can-be-reused"><span class="header-section-number">8.4.1</span> Reporting an Estimate so It
 Can Be Reused</h3>
 <p>A useful report makes the calculation reproducible at the level of
 assumptions even if the raw data cannot be shared. State the target
@@ -4941,7 +4969,7 @@ the observations are actually clustered or the population is shifting.
 Sensitivity analysis over defensible sampling and modelling assumptions
 is often more informative than a more elaborate interval under one
 fragile assumption.</p>
-<h3 data-number="8.4.2" id="a-practical-estimation-workflow"><span class="header-section-number">8.4.2</span> A Practical Estimation
+<h3 data-number="8.4.2" role="heading" aria-level="5" id="a-practical-estimation-workflow"><span class="header-section-number">8.4.2</span> A Practical Estimation
 Workflow</h3>
 <p>For a defensible estimate, write down the estimand in plain language
 first: for example, “mutual information in bits between a binary alarm
@@ -4967,7 +4995,7 @@ intended use is compression, evaluate held-out code length under the
 stated model. A statistic becomes useful when its population meaning and
 decision role are clear; a precise decimal alone does not establish
 either.</p>
-<h1 data-number="9" id="connections-to-statistics-and-machine-learning"><span class="header-section-number">9</span> Connections to Statistics and
+<h1 data-number="9" role="heading" aria-level="3" id="connections-to-statistics-and-machine-learning"><span class="header-section-number">9</span> Connections to Statistics and
 Machine Learning</h1>
 <p>Information theory supplies quantities that recur in statistical
 modelling: likelihood, log loss, divergence, dependence, and
@@ -4975,7 +5003,7 @@ compression. They can clarify what a learning objective rewards, but
 they do not remove choices about targets, populations, costs, or
 validation. This section connects earlier <a href="#cross-entropy-and-log-loss">Cross-Entropy and Log Loss</a>, <a href="#mutual-information">Mutual Information</a>, and <a href="#data-processing-inequality">Data Processing Inequality</a> to
 prediction and representation learning.</p>
-<h2 data-number="9.1" id="log-loss-cross-entropy-and-kl-direction"><span class="header-section-number">9.1</span> Log Loss, Cross-Entropy, and KL
+<h2 data-number="9.1" role="heading" aria-level="4" id="log-loss-cross-entropy-and-kl-direction"><span class="header-section-number">9.1</span> Log Loss, Cross-Entropy, and KL
 Direction</h2>
 <p>For a categorical outcome
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
@@ -5047,7 +5075,7 @@ Reversing KL would weight outcomes as if 1% rain were the truth; that is
 a different evaluation population. The average log-loss comparison still
 says nothing about the costs of failing to warn on one particular
 day.</p>
-<h3 data-number="9.1.1" id="calibration-is-not-the-same-as-discrimination"><span class="header-section-number">9.1.1</span> Calibration Is Not the Same
+<h3 data-number="9.1.1" role="heading" aria-level="5" id="calibration-is-not-the-same-as-discrimination"><span class="header-section-number">9.1.1</span> Calibration Is Not the Same
 as Discrimination</h3>
 <p>A predictor is calibrated when, among cases assigned probability
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
@@ -5122,7 +5150,7 @@ Decision evaluation would need an uncertainty analysis for the untreated
 risk and the intervention effect, as well as a population to which both
 estimates apply. The chosen cost units and perfect prevention assumption
 are part of this example, not measured facts.</p>
-<h2 data-number="9.2" id="evidence-features-and-predictive-information"><span class="header-section-number">9.2</span> Evidence, Features, and
+<h2 data-number="9.2" role="heading" aria-level="4" id="evidence-features-and-predictive-information"><span class="header-section-number">9.2</span> Evidence, Features, and
 Predictive Information</h2>
 <p>For a target
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
@@ -5176,7 +5204,7 @@ finite or restricted predictor to use, improve optimisation, reduce
 noise, or satisfy a resource constraint. The inequality concerns
 information in the random variables, not the computational accessibility
 of a useful decision rule.</p>
-<h2 data-number="9.3" id="the-information-bottleneck"><span class="header-section-number">9.3</span> The Information Bottleneck</h2>
+<h2 data-number="9.3" role="heading" aria-level="4" id="the-information-bottleneck"><span class="header-section-number">9.3</span> The Information Bottleneck</h2>
 <p>The information bottleneck method frames representation learning as a
 trade-off. Given input
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>,
@@ -5276,7 +5304,7 @@ compresses away a feature correlated with a protected group may still
 encode that group through other features; low
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>;</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">I(X;Z)</annotation></semantics></math>
 is not itself a privacy guarantee.</p>
-<h3 data-number="9.3.1" id="evidence-is-not-causation"><span class="header-section-number">9.3.1</span> Evidence Is Not
+<h3 data-number="9.3.1" role="heading" aria-level="5" id="evidence-is-not-causation"><span class="header-section-number">9.3.1</span> Evidence Is Not
 Causation</h3>
 <p>Mutual information is symmetric association. It does not orient an
 arrow, distinguish confounding from direct influence, or identify what
@@ -5328,7 +5356,7 @@ on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>;
 both can generate dependence. An intervention claim requires additional
 assumptions or data.</p>
-<h3 data-number="9.3.2" id="privacy-information-measures-and-guarantees"><span class="header-section-number">9.3.2</span> Privacy: Information Measures
+<h3 data-number="9.3.2" role="heading" aria-level="5" id="privacy-information-measures-and-guarantees"><span class="header-section-number">9.3.2</span> Privacy: Information Measures
 and Guarantees</h3>
 <p>If sensitive data are represented by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
@@ -5368,7 +5396,7 @@ some average inference quantities under explicit assumptions. It does
 show why an application with individual-level promises needs a threat
 model and a guarantee that addresses the relevant worst cases or tail
 events.</p>
-<h2 data-number="9.4" id="a-practical-quantity-selection-guide"><span class="header-section-number">9.4</span> A Practical Quantity-Selection
+<h2 data-number="9.4" role="heading" aria-level="4" id="a-practical-quantity-selection-guide"><span class="header-section-number">9.4</span> A Practical Quantity-Selection
 Guide</h2>
 <p>A dataset can support several legitimate questions, each with a
 different information quantity. Before calculating, identify the random
@@ -5495,10 +5523,10 @@ source symbol is a finite-file average, identify its included overhead
 before comparing it with an entropy rate or
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">R(D)</annotation></semantics></math>;
 for lossy coding, report realised distortion and its units as well.</p>
-<h1 data-number="10" id="exercises"><span class="header-section-number">10</span> Exercises</h1>
+<h1 data-number="10" role="heading" aria-level="3" id="exercises"><span class="header-section-number">10</span> Exercises</h1>
 <p>Unless stated otherwise, logarithms are base 2. Work from the stated
 model and check the units. Outline solutions follow each prompt.</p>
-<h2 data-number="10.1" id="exercise-1-probability-and-labelling"><span class="header-section-number">10.1</span> Exercise 1: Probability and
+<h2 data-number="10.1" role="heading" aria-level="4" id="exercise-1-probability-and-labelling"><span class="header-section-number">10.1</span> Exercise 1: Probability and
 Labelling</h2>
 <p>A three-outcome variable has probabilities
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">1/2,1/3,1/6</annotation></semantics></math>.
@@ -5510,7 +5538,7 @@ The expectation is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>1</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>6</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">0(1/2)+1(1/3)+2(1/6)=2/3</annotation></semantics></math>.
 Relabelling the outcomes changes this expectation, unlike entropy, which
 depends only on the probability multiset.</p>
-<h2 data-number="10.2" id="exercise-2-kl-direction-and-support"><span class="header-section-number">10.2</span> Exercise 2: KL Direction and
+<h2 data-number="10.2" role="heading" aria-level="4" id="exercise-2-kl-direction-and-support"><span class="header-section-number">10.2</span> Exercise 2: KL Direction and
 Support</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P=(1,0)</annotation></semantics></math>
@@ -5526,7 +5554,7 @@ because
 assigns positive mass where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
 assigns zero. This also demonstrates asymmetry and the support rule.</p>
-<h2 data-number="10.3" id="exercise-3-pairwise-independence-and-parity"><span class="header-section-number">10.3</span> Exercise 3: Pairwise
+<h2 data-number="10.3" role="heading" aria-level="4" id="exercise-3-pairwise-independence-and-parity"><span class="header-section-number">10.3</span> Exercise 3: Pairwise
 Independence and Parity</h2>
 <p>In the parity construction with independent fair
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>,</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X,Y</annotation></semantics></math>
@@ -5537,7 +5565,7 @@ show that each pair is independent but
 <p><strong>Outline Solution.</strong> For any fixed value of one bit,
 XOR with the other fair independent bit is fair, giving pairwise
 independence. Once both inputs are given, the output is fixed.</p>
-<h2 data-number="10.4" id="exercise-4-equality-in-data-processing"><span class="header-section-number">10.4</span> Exercise 4: Equality in Data
+<h2 data-number="10.4" role="heading" aria-level="4" id="exercise-4-equality-in-data-processing"><span class="header-section-number">10.4</span> Exercise 4: Equality in Data
 Processing</h2>
 <p>A system has
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Y</mi><mo>→</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">X\to Y\to Z</annotation></semantics></math>
@@ -5554,7 +5582,7 @@ relevant to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>,
 equivalently
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>;</mo><mi>Y</mi><mo>∣</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">I(X;Y\mid Z)=0</annotation></semantics></math>.</p>
-<h2 data-number="10.5" id="exercise-5-kraft-and-a-code-assignment"><span class="header-section-number">10.5</span> Exercise 5: Kraft and a Code
+<h2 data-number="10.5" role="heading" aria-level="4" id="exercise-5-kraft-and-a-code-assignment"><span class="header-section-number">10.5</span> Exercise 5: Kraft and a Code
 Assignment</h2>
 <p>A binary prefix code has lengths 1, 2, and 2. Is such a code
 possible? Give one assignment.</p>
@@ -5562,7 +5590,7 @@ possible? Give one assignment.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>2</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1/2+1/4+1/4=1</annotation></semantics></math>,
 so it is possible. Codewords <code>0</code>, <code>10</code>, and
 <code>11</code> work.</p>
-<h2 data-number="10.6" id="exercise-6-fractional-entropy-and-integer-lengths"><span class="header-section-number">10.6</span> Exercise 6: Fractional Entropy
+<h2 data-number="10.6" role="heading" aria-level="4" id="exercise-6-fractional-entropy-and-integer-lengths"><span class="header-section-number">10.6</span> Exercise 6: Fractional Entropy
 and Integer Lengths</h2>
 <p>Explain why a 1.846-bit entropy does not imply that a one-symbol
 binary code can give every symbol a codeword of length 1.846 bits.</p>
@@ -5572,7 +5600,7 @@ and arithmetic coding can amortise fractional information over long
 sequences.</p>
 <p>State the assumptions alongside each calculation; a numerical answer
 alone does not identify the model.</p>
-<h2 data-number="10.7" id="exercise-7-input-bias-on-a-bsc"><span class="header-section-number">10.7</span> Exercise 7: Input Bias on a
+<h2 data-number="10.7" role="heading" aria-level="4" id="exercise-7-input-bias-on-a-bsc"><span class="header-section-number">10.7</span> Exercise 7: Input Bias on a
 BSC</h2>
 <p>A BSC has crossover probability
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><mn>0.15</mn></mrow><annotation encoding="application/x-tex">\varepsilon=0.15</annotation></semantics></math>.
@@ -5603,7 +5631,7 @@ the channel flips deterministically;
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>;</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">I(X;Y)=H(X)</annotation></semantics></math>
 for any input law and capacity is one bit per use. A deterministic flip
 is invertible, not destructive noise.</p>
-<h2 data-number="10.8" id="exercise-8-erasures-and-substitutions"><span class="header-section-number">10.8</span> Exercise 8: Erasures and
+<h2 data-number="10.8" role="heading" aria-level="4" id="exercise-8-erasures-and-substitutions"><span class="header-section-number">10.8</span> Exercise 8: Erasures and
 Substitutions</h2>
 <p>A BEC has erasure probability
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.12</mn><annotation encoding="application/x-tex">0.12</annotation></semantics></math>.
@@ -5626,7 +5654,7 @@ asymptotic optimal rates under their respective models. They do not
 imply equal finite-block error, decoder complexity, or performance for a
 particular code. The numerical equality of the error parameter has no
 common operational meaning.</p>
-<h2 data-number="10.9" id="exercise-9-a-z-channel-optimisation"><span class="header-section-number">10.9</span> Exercise 9: A Z-Channel
+<h2 data-number="10.9" role="heading" aria-level="4" id="exercise-9-a-z-channel-optimisation"><span class="header-section-number">10.9</span> Exercise 9: A Z-Channel
 Optimisation</h2>
 <p>Input 0 is always received as 0. Input 1 is received as 0 with
 probability
@@ -5656,7 +5684,7 @@ the stationary condition is
 Verify the candidate is in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math>
 and compare boundaries if solving numerically.</p>
-<h2 data-number="10.10" id="exercise-10-coding-rate-and-error-probability"><span class="header-section-number">10.10</span> Exercise 10: Coding Rate and
+<h2 data-number="10.10" role="heading" aria-level="4" id="exercise-10-coding-rate-and-error-probability"><span class="header-section-number">10.10</span> Exercise 10: Coding Rate and
 Error Probability</h2>
 <p>For threefold repetition on a BSC with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">\varepsilon=0.05</annotation></semantics></math>,
@@ -5678,7 +5706,7 @@ bits per use. The code’s rate is below capacity and has a small but
 non-zero error for this one block length. The theorem concerns sequences
 of codes as block length tends to infinity, not this particular
 code.</p>
-<h2 data-number="10.11" id="exercise-11-choose-a-distortion-measure"><span class="header-section-number">10.11</span> Exercise 11: Choose a
+<h2 data-number="10.11" role="heading" aria-level="4" id="exercise-11-choose-a-distortion-measure"><span class="header-section-number">10.11</span> Exercise 11: Choose a
 Distortion Measure</h2>
 <p>A logger stores a binary warning flag with prevalence
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.08</mn></mrow><annotation encoding="application/x-tex">P(X=1)=0.08</annotation></semantics></math>.
@@ -5697,7 +5725,7 @@ choose 1. The switch occurs when prevalence exceeds
 Distortion encodes the stipulated application costs, and the optimum can
 change when that criterion changes. This zero-rate decision alone does
 not determine the positive-rate curve.</p>
-<h2 data-number="10.12" id="exercise-12-gaussian-ratedistortion"><span class="header-section-number">10.12</span> Exercise 12: Gaussian
+<h2 data-number="10.12" role="heading" aria-level="4" id="exercise-12-gaussian-ratedistortion"><span class="header-section-number">10.12</span> Exercise 12: Gaussian
 Rate–Distortion</h2>
 <p>An iid Gaussian source has variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">\sigma^2=9</annotation></semantics></math>
@@ -5718,7 +5746,7 @@ outputting the mean zero requires no bits and meets the expected
 distortion target. The theorem is asymptotic for iid Gaussian samples
 under squared error; finite block coding, overhead, and a particular
 sample realisation affect actual file length and distortion.</p>
-<h2 data-number="10.13" id="exercise-13-entropy-bias-and-a-sparse-table"><span class="header-section-number">10.13</span> Exercise 13: Entropy Bias and
+<h2 data-number="10.13" role="heading" aria-level="4" id="exercise-13-entropy-bias-and-a-sparse-table"><span class="header-section-number">10.13</span> Exercise 13: Entropy Bias and
 a Sparse Table</h2>
 <p>You observe 25 pairs of categorical variables, each with 10 possible
 categories, but only 13 joint cells are occupied. The plug-in mutual
@@ -5738,7 +5766,7 @@ distribution under a null of no association while retaining marginals;
 bootstrap estimates sampling variability around the observed joint
 distribution. Neither procedure repairs absent support
 automatically.</p>
-<h2 data-number="10.14" id="exercise-14-kl-direction-and-prediction"><span class="header-section-number">10.14</span> Exercise 14: KL Direction and
+<h2 data-number="10.14" role="heading" aria-level="4" id="exercise-14-kl-direction-and-prediction"><span class="header-section-number">10.14</span> Exercise 14: KL Direction and
 Prediction</h2>
 <p>The true outcome distribution is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.8</mn><mo>,</mo><mn>0.2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p=(0.8,0.2)</annotation></semantics></math>
@@ -5759,7 +5787,7 @@ true probability but
 expected log loss and the KL divergence are infinite. A finite sample
 might fail to expose this failure, which is why unsmoothed zero
 predictions are dangerous.</p>
-<h2 data-number="10.15" id="exercise-15-information-bottleneck-and-causation"><span class="header-section-number">10.15</span> Exercise 15: Information
+<h2 data-number="10.15" role="heading" aria-level="4" id="exercise-15-information-bottleneck-and-causation"><span class="header-section-number">10.15</span> Exercise 15: Information
 Bottleneck and Causation</h2>
 <p>A representation
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Z=f(X)</annotation></semantics></math>
@@ -5783,7 +5811,7 @@ be biased or overfit. Use an identified causal design for causal claims,
 estimate performance and MI on held-out data with uncertainty, and audit
 subgroup and secondary-task behaviour. State the estimator and target
 population.</p>
-<h2 data-number="10.16" id="exercise-16-select-a-quantity-for-a-system-claim"><span class="header-section-number">10.16</span> Exercise 16: Select a
+<h2 data-number="10.16" role="heading" aria-level="4" id="exercise-16-select-a-quantity-for-a-system-claim"><span class="header-section-number">10.16</span> Exercise 16: Select a
 Quantity for a System Claim</h2>
 <p>A team reports: “Our sensor system has capacity 2 bits/s and
 therefore loses no more than 1% of measurements.” The model is a BSC
@@ -5802,7 +5830,7 @@ reconstruction loss, specify the source law, distortion measure, target
 average or maximum error, source coding method, channel code, block
 length, and end-to-end evaluation. Keep source symbols per second,
 channel uses per second, bits per use, and bits per second distinct.</p>
-<h1 data-number="11" id="glossary"><span class="header-section-number">11</span> Glossary</h1>
+<h1 data-number="11" role="heading" aria-level="3" id="glossary"><span class="header-section-number">11</span> Glossary</h1>
 <p>These short definitions point to the first full treatment. In each
 application, the units and distributional assumptions belong with the
 reported value.</p>
@@ -6030,7 +6058,8 @@ Channel Coding Theorem</a></td>
 </tr>
 </tbody>
 </table>
-<h1 data-number="12" id="further-reading"><span class="header-section-number">12</span> Further Reading</h1>
+<h1 data-number="12" role="heading" aria-level="3" id="further-reading"><span class="header-section-number">12</span>
+Further Reading</h1>
 <p>The following sources support the main definitions and theorems. The
 annotations indicate where to continue after the primer; they do not
 replace the stated hypotheses of a result.</p>
@@ -6078,7 +6107,7 @@ channel models.</li>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -6108,18 +6137,27 @@ channel models.</li>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -6127,19 +6165,18 @@ channel models.</li>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 

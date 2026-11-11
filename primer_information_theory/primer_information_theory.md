@@ -211,7 +211,7 @@ print(row_marginals, column_marginals)
 
 :::
 
-Both marginals are `c(0.5, 0.5)`, matching the fair-bit distributions in the table.
+Both marginals are `c(0.5, 0.5)`, matching the fair-bit distributions in the table. The offline [Python example](examples/binary_joint_law.py) also checks the mutual information, approximately 0.278072 bits, using the positive entries of this table and an absolute tolerance of $10^{-12}$. Run it with `just examples information_theory binary-joint-law-python` from the repository root. This is a calculation for the stipulated law, not an estimate from data.
 
 The probability rules above are enough to begin calculating information, but a calculation is meaningful only after the random experiment has been specified. A joint table from repeated independent trials describes a different experiment from a single trajectory of a time series. If observations share a latent cause, treating their rows as independent can give apparently precise frequencies while understating uncertainty about the population law. Information identities still hold for the population distribution; what changes is whether the table in hand estimates it reliably.
 
