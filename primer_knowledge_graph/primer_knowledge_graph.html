@@ -979,10 +979,10 @@ graph-database integration are outside that scope. The Northbridge
 exercise supplies neither legal advice nor evidence of production
 accuracy. Its value is that you can inspect every important transition,
 including the points at which an honest answer must stop.</p>
-<p><em>The standards and interface claims in Storage and Implementation
-Reference and the R projection require primary-source verification
-before release. The case studies and their worked results are
-synthetic.</em></p>
+<p><em>Verified against primary sources for Storage and Implementation
+Reference and Analyse a Positive Projection. The case studies and their
+worked results are synthetic; companion execution and accessibility are
+reported separately.</em></p>
 <h1 data-number="2" id="a-complete-northbridge-question"><span class="header-section-number">2</span> A Complete Northbridge
 Question</h1>
 <p>The rest of the primer develops the parts of one method. Before
@@ -2349,19 +2349,20 @@ fixed through three controlled passes. An extraction repair restores a
 statement from the same source; a source correction changes the evidence
 to be represented. The following flow shows where those two
 interventions differ and how either reaches a release check.</p>
-<div class="line-block"><strong>Baseline:</strong> retain the Q4 inputs,
-selected rows, classifications, and citations.<br />
-↓ Diagnose the first stage where the observed record diverges.<br />
-<strong>Diagnosis:</strong> was the minutes denial lost, or did the
-register wording change?<br />
-↓ Repair extraction from M1, or admit the corrected register as
-R2.<br />
-<strong>Revised ledger:</strong> retain the earlier derivations and
-identify the new evidence.<br />
-↓ Apply the audience contract, then evaluate the permitted
-answers.<br />
-<strong>Release regression:</strong> compare changed dates, results,
-paths, and citations.</div>
+<ol type="1">
+<li><strong>Baseline:</strong> retain the Q4 inputs, selected rows,
+classifications, and citations.</li>
+<li>Diagnose the first stage where the observed record diverges: was the
+minutes denial lost, or did the register wording change?</li>
+<li>If the denial was lost, repair extraction from M1. If the register
+wording changed, admit the corrected register as R2.</li>
+<li><strong>Revised ledger:</strong> retain the earlier derivations and
+identify the new evidence.</li>
+<li>Apply the audience contract, then evaluate the permitted
+answers.</li>
+<li><strong>Release regression:</strong> compare changed dates, results,
+paths, and citations.</li>
+</ol>
 <p>The branch at diagnosis matters. Restoring a lost denial should
 recreate the original disagreement. Admitting a corrected interval can
 legitimately remove it. The final regression check must establish which
@@ -3318,57 +3319,22 @@ study identity to select results, and cohort identity to describe
 overlap. It does not use a citation edge as a substitute for a result
 assertion.</p>
 <p>The intermediate bindings below show every candidate before the
-outcome and sign filters are applied. The evidence column gives the path
-and result record needed to inspect each candidate.</p>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th><code>w</code></th>
-<th><code>v</code></th>
-<th><code>s</code></th>
-<th><code>c</code></th>
-<th><code>r</code> and qualification</th>
-<th>Evidence path</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>A</code></td>
-<td><code>A@1</code></td>
-<td><code>SA</code></td>
-<td><code>X</code></td>
-<td><code>L10</code>, <code>O7</code>, −4, interval −7 to −1</td>
-<td><code>L1</code>, <code>L4</code>, <code>L7</code>,
-<code>L10</code></td>
-</tr>
-<tr>
-<td><code>B</code></td>
-<td><code>B@1</code></td>
-<td><code>SB</code></td>
-<td><code>Y</code></td>
-<td><code>L11</code>, <code>O30</code>, +1, interval −2 to +4</td>
-<td><code>L2</code>, <code>L5</code>, <code>L8</code>,
-<code>L11</code></td>
-</tr>
-<tr>
-<td><code>C</code></td>
-<td><code>C@1</code></td>
-<td><code>SC</code></td>
-<td><code>X</code></td>
-<td><code>L12</code>, <code>O7</code>, −4, interval −7 to −1</td>
-<td><code>L3</code>, <code>L6</code>, <code>L9</code>,
-<code>L12</code></td>
-</tr>
-</tbody>
-</table>
+outcome and sign filters are applied. Each evidence path includes the
+result record needed to inspect the candidate.</p>
+<ul>
+<li><strong><code>SA</code>:</strong> work <code>A</code>, version
+<code>A@1</code>, cohort <code>X</code>; result <code>L10</code> is
+<code>O7</code>, −4, interval −7 to −1. Evidence path: <code>L1</code>,
+<code>L4</code>, <code>L7</code>, <code>L10</code>.</li>
+<li><strong><code>SB</code>:</strong> work <code>B</code>, version
+<code>B@1</code>, cohort <code>Y</code>; result <code>L11</code> is
+<code>O30</code>, +1, interval −2 to +4. Evidence path: <code>L2</code>,
+<code>L5</code>, <code>L8</code>, <code>L11</code>.</li>
+<li><strong><code>SC</code>:</strong> work <code>C</code>, version
+<code>C@1</code>, cohort <code>X</code>; result <code>L12</code> is
+<code>O7</code>, −4, interval −7 to −1. Evidence path: <code>L3</code>,
+<code>L6</code>, <code>L9</code>, <code>L12</code>.</li>
+</ul>
 <p>All three candidates satisfy the age, intervention, and comparator
 conditions. <code>SB</code> fails both the requested seven-day window
 and the negative-point-estimate condition. Its thirty-day interval
@@ -4305,8 +4271,10 @@ table supplies the endpoint IDs and the separate vertex table preserves
 the isolates. The analysis follows outgoing edges for the path and
 ignores direction for weak components. A <code>tidygraph</code> view
 selects the node table when adding degree and component membership so
-the resulting fields describe vertices. The paper calculation here
-supplies the expected results and their interpretation. <a href="https://r.igraph.org/reference/graph_from_data_frame.html">igraph
+the resulting fields describe vertices. The R companion baseline uses
+igraph 2.3.0 and tidygraph 1.3.1, as of November 2026. The paper
+calculation here supplies the expected results and their interpretation.
+<a href="https://r.igraph.org/reference/graph_from_data_frame.html">igraph
 graph construction</a> and <a href="https://tidygraph.data-imaginist.com/reference/activate.html">tidygraph
 table selection</a>.</p>
 <h1 data-number="11" id="practise-the-reasoning"><span class="header-section-number">11</span> Practise the Reasoning</h1>
@@ -4459,11 +4427,12 @@ predicate, and object. In RDF 1.1 a subject is an Internationalised
 Resource Identifier (IRI) or blank node, the predicate is an IRI, and
 the object can also be a literal value. An IRI gives a globally scoped
 name. A blank node can represent a resource without assigning such a
-name. A literal can carry a datatype or language tag. An assertion that
-needs to be cited across releases benefits from a stable, governed IRI.
-Repeating the same triple in one graph leaves the set unchanged, so
-duplicates cannot carry separate evidence. <a href="https://www.w3.org/TR/rdf11-concepts/">RDF 1.1 Concepts and
-Abstract Syntax</a>.</p>
+name. Each literal has a datatype IRI; a language-tagged string also has
+a language tag. An assertion that needs to be cited across releases
+benefits from a stable, governed IRI. Repeating the same triple in one
+graph leaves the set unchanged, so duplicates cannot carry separate
+evidence. <a href="https://www.w3.org/TR/rdf11-concepts/">RDF 1.1
+Concepts and Abstract Syntax</a>.</p>
 <p>Map each source-specific assertion to an identified resource. For the
 two applicability rows, use a local vocabulary with links to the
 version, project, and source, and properties for polarity, start, end
@@ -4509,9 +4478,10 @@ relation under the vocabulary of the added triple. The assertion
 resource can describe the source’s affirmation without committing the
 graph to unqualified applicability. Named graphs can organise source
 versions or views, while the meaning of graph names and the evidence
-linking individual claims to spans still need a documented convention.
-<a href="https://www.w3.org/TR/swbp-n-aryRelations/">W3C note on n-ary
-relations</a>.</p>
+linking individual claims to spans still need a documented convention;
+see <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF
+datasets</a>. <a href="https://www.w3.org/TR/swbp-n-aryRelations/">W3C
+note on n-ary relations</a>.</p>
 <p>SPARQL 1.1 matches triple patterns with shared variables. A pattern
 binding the assertion, version 1, and Atlas can yield both resources,
 then follow their source and locator links. Treat the end and horizon as
@@ -4548,8 +4518,9 @@ be clearer to give it a node and link it to those records. Test the
 representation by asking whether the change to <code>c1</code> can be
 traced independently of <code>c5</code>. A node label or a relationship
 type alone provides little assurance that an import preserved those
-records. <a href="https://neo4j.com/docs/cypher-manual/current/clauses/match/">Cypher
-pattern matching</a>.</p>
+records. The reference comparison uses the <a href="https://neo4j.com/docs/cypher-manual/5/clauses/match/">Neo4j 5
+MATCH manual</a>, checked as of November 2026; no Neo4j service
+integration is executed.</p>
 <p><span id="kg-storage">Storage choice</span> depends on the work the
 system must support. Tables can hold all of the evidence and handle
 direct patterns and fixed-depth paths through joins. An RDF
@@ -4587,7 +4558,8 @@ query parameter supplies the requested date as a value. Closing the
 connection and reopening read-only exercises persistence of the records
 used by the queries. The example uses temporary databases and its
 validation checks operate in the construction program. The persisted
-schema alone does not enforce the full ledger contract. <a href="https://duckdb.org/docs/stable/clients/python/dbapi.html">DuckDB
+schema alone does not enforce the full ledger contract. The companion
+baseline is Python 3.12.15 with DuckDB 1.4.3, as of November 2026. <a href="https://duckdb.org/docs/1.4/clients/python/dbapi">DuckDB 1.4
 Python database interface</a>.</p>
 <p>The companion constructs <code>c1</code>, <code>c4</code>, and
 <code>c5</code> from synthetic excerpts and combines them with curated

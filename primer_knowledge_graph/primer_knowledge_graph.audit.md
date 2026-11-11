@@ -1,61 +1,91 @@
 # Primer audit: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Audit revision: `kg-398-depth-audit-r10`
-- Source revision: `56d76da`
+- Audit revision: `kg-398-depth-audit-r11`
+- Source revision: `1ee9f80`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.audit.md`
 - Starting branch: `docs/398-knowledge-graph-finish`
 - Reviewer(s): Codex
 - Date: 2026-11-11
-- Reviewed revision: `56d76da`
-- Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r7`, working-tree update
-- Review boundary: whole-document source and route review at `56d76da`; pinned
-  examples and render rerun; representative visual pages inspected; primary-source
-  verification and semantic accessibility remain outstanding
+- Reviewed revision: `1ee9f80`
+- Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r8`, working-tree update
+- Review boundary: whole-document source and routes at `1ee9f80`; scoped
+  primary-source review and changed-passage review; regenerated outputs and
+  representative visual pages inspected; semantic accessibility remains
+  untested
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`
-- Core-concept depth matrix: brief r7, all 14 IDs reviewed below
+- Core-concept depth matrix: brief r8, all 14 IDs reviewed below
 - Readiness decision: not-ready
 
 ## Current whole-document review
 
-Codex reviewed source `56d76da` against brief r7 and the teaching-case
-contract. Compared with `0152148`, the introduction changed at lines 3–75
-and the walkthrough was added at 77–141. Remaining source content is
-unchanged but its locators shifted by 118 lines. The new prose and its
-intermediate records are illustrative, not executed. The source commits required
-output regeneration.
+Codex reviewed source `1ee9f80` against brief r8 and the teaching-case
+contract. The earlier whole-document and route review at `56d76da` is retained
+for unchanged reasoning, with locators rebound below. Compared with that revision,
+the changed passages at 75, 400–409, 641–648, 846, 880, 889, 897 and 905
+were reread along with their dependent route, correction, literature and storage
+context. The diagnostic sequence retains both correction branches, and the
+labelled records preserve the three candidates and evidence paths. The revised
+reference wording remains bounded to the checked interfaces. The teaching
+judgements remain valid; the worked routes remain illustrative.
 
 The inventory covers the graph and questions (143–195), ledger (197–297),
-time (299–331), queries (333–396), repair (398–471), disclosure, evaluation
-and release (473–595), transfer cases (597–796), topology (798–849), practice
-(851–875), storage reference (877–912) and reading (914–920). The walkthrough
+time (299–331), queries (333–396), repair (398–470), disclosure, evaluation
+and release (472–594), transfer cases (596–793), topology (795–846), practice
+(848–872), storage reference (874–909) and reading (911–917). The walkthrough
 agrees with the detailed Q4 classifications and repair at 366–382 and
-447–469; its retrieval arithmetic agrees with 533–571. These are selected
+446–468; its retrieval arithmetic agrees with 532–570. These are selected
 hand checks, not independent verification of all claims or sources. The
 literature and dependency cases are synthetic; the reference branch does not
 promise a service.
 
-The pinned `just all` route passed both companion examples and regenerated the
-HTML/PDF. `just render-qa primer_knowledge_graph` passed its mechanical checks.
-Human inspection of the current PDF opening (page 3), walkthrough pages (9,
-12, and 14), a representative table (page 7), and a later diagnostic page
-(page 28) found no clipping, broken table layout, or problematic section break.
-The render-QA report's stale candidate images from earlier revisions were not
-used as current evidence; the current pages were rasterised separately from
-the regenerated PDF.
+The pinned `just all` route regenerated the HTML/PDF after this source change;
+both companion examples passed. `just render-qa primer_knowledge_graph` passed
+its mechanical checks. Current PDF pages 3, 9, 12 and 57 were rasterised and
+visually inspected: the expanded opening, walkthrough, ordered diagnostic
+sequence, and labelled literature records are legible with no clipping or
+broken page flow. This is visual evidence only, not semantic accessibility
+validation.
 
 **Content gate: pass** for the stated illustrative primary and alternative
-routes. **Release readiness: not-ready.** Source line 75 now correctly flags
-standards and interface verification as outstanding. Verify each claim before
-release. The current build and visual sample pass; review citations and
-versions and complete semantic accessibility review. The PDF remains untagged.
-Historical checks below are not current execution, output or accessibility
-evidence.
+routes. **Scoped source gate: pass** for the checks recorded below. **Release
+readiness: not-ready** for a full accessibility claim because of the shared
+template and PDF blockers below. Source SHA-256 at `1ee9f80`:
+`51ccafddb162978237ddcdbd1261cb99e41c17a65f861e36dca8a1e9ec6cae08`.
 
-The current source revision differs from `65956ad` only in that verification
-note. The current route and concept evidence rows below retain their original
-`65956ad` evidence revision because their cited teaching passages are unchanged;
-the note change does not alter those judgements.
+## Scoped source verification
+
+On 11 November 2026 the source reviewer checked the standards and interface
+claims, version baselines, and each distinct cited external source, against
+primary sources. The review found no material unsupported claim in that scope.
+It did not run the companions, execute a graph service or migration, verify all
+synthetic calculations, attest installed transitive dependencies, or establish
+accessibility. These links identify the checked sources and their use:
+
+- RDF graph, terms, literals and datasets, source 880–889: [RDF 1.1 Concepts](https://www.w3.org/TR/rdf11-concepts/#section-rdf-graph), [literals](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal), [datasets](https://www.w3.org/TR/rdf11-concepts/#section-dataset), and the [n-ary relations note](https://www.w3.org/TR/swbp-n-aryRelations/).
+- Pattern matching, constraints and provenance, 891–893: [SPARQL 1.1](https://www.w3.org/TR/sparql11-query/), [SHACL](https://www.w3.org/TR/shacl/) and [PROV-O](https://www.w3.org/TR/prov-o/). These support the illustrative mapping, not execution of that mapping.
+- Property graph and fixed joins, 897–905: [Neo4j graph concepts](https://neo4j.com/docs/getting-started/appendix/graphdb-concepts/), [Neo4j 5 MATCH](https://neo4j.com/docs/cypher-manual/5/clauses/match/), [DuckDB 1.4 joins](https://duckdb.org/docs/1.4/sql/query_syntax/from#joins) and [DuckDB 1.4 Python DB API](https://duckdb.org/docs/1.4/clients/python/dbapi). No Neo4j service route was executed.
+- R projection, 801–846: [igraph 2.3.0 constructor](https://raw.githubusercontent.com/igraph/rigraph/v2.3.0/man/graph_from_data_frame.Rd), [paths](https://raw.githubusercontent.com/igraph/rigraph/v2.3.0/man/distances.Rd), [components](https://raw.githubusercontent.com/igraph/rigraph/v2.3.0/man/components.Rd), and [tidygraph 1.3.1 activation](https://raw.githubusercontent.com/thomasp85/tidygraph/v1.3.1/man/activate.Rd). Synthetic topology was also checked by hand against the fixture.
+- Declared baselines: [Python 3.12.15](https://www.python.org/downloads/release/python-31215/), [DuckDB 1.4.3](https://pypi.org/pypi/duckdb/1.4.3/json), [R 4.5.3 release notes](https://stat.ethz.ch/R-manual/R-patched/doc/html/NEWS.html), and package metadata for [igraph 2.3.0](https://raw.githubusercontent.com/igraph/rigraph/v2.3.0/DESCRIPTION), [tidygraph 1.3.1](https://raw.githubusercontent.com/thomasp85/tidygraph/v1.3.1/DESCRIPTION) and [dplyr 1.2.1](https://raw.githubusercontent.com/tidyverse/dplyr/v1.2.1/DESCRIPTION). Transitive versions were not independently attested.
+- Other cited sources, 235 and 913–917: [record-linkage blocking](https://www150.statcan.gc.ca/n1/pub/12-001-x/2021002/article/00002-eng.htm), [PROV-DM](https://www.w3.org/TR/prov-dm/), [SPARQL optional patterns](https://www.w3.org/TR/sparql11-query/#optional), and [NIST SP 800-188](https://csrc.nist.gov/pubs/sp/800/188/final). The fictional identity and disclosure examples are not validated by these references.
+
+## Accessibility and output status
+
+The local source fixes are the ordered diagnostic list at 402–407, which
+retains both branches, and the labelled literature candidate records at
+644–646, which retain the evidence paths. Their current HTML and PDF
+presentation was regenerated and visually checked as described above.
+
+The earlier accessibility review found shared build/template limitations:
+the PDF is untagged; HTML contents buttons have duplicate accessible names;
+there is no skip-to-main link; and the displayed document title is absent from
+heading navigation. Keyboard and screen-reader testing, the browser accessibility
+tree, and PDF tag and reading-order semantics remain untested. Earlier static
+fragment checks do not establish accessibility for this revision. These shared
+issues block a full accessibility release claim; the content pass does not
+waive them. They are tracked separately because they affect the common primer
+template and PDF build rather than this primer's source alone. Follow-up is
+tracked in issue #421.
 
 ## Current reader-scale section dispositions
 
@@ -67,17 +97,17 @@ the note change does not alter those judgements.
 | Evidence Ledger, 197–297 | Identity decisions and source-to-row construction, 220–235, 259–287 | Extraction may miss evidence, 235, 273–275 | retain |
 | Time and Conflict, 299–331 | Classify evidence before policy, 303–313, 321–331 | Unknown duration is not permanence, 307–313 | retain |
 | Answer Questions, 333–396 | Bind Q4 and follow a typed path, 368–390 | No applicability inference to Orion, 392 | retain |
-| Diagnose and Correct, 398–471 | Trace failures and compare controlled passes, 414–432, 447–469 | Synthetic correction, 449–455 | retain |
-| Govern Disclosure and Release, 473–595 | Audience views, evaluation and regression, 477–507, 533–593 | Synthetic checks do not prove deployment safety, 503–509, 571 | retain |
-| Transfer to Literature and Dependencies, 597–796 | Versioned evidence and build-specific joins, 601–796 | Path is neither clinical proof nor exploitation, 794–796 | retain |
-| Positive Projection, 798–849 | Select edges and calculate paths and components, 804–841 | Dropped qualifiers prevent Q4 answer, 843–847 | retain |
-| Practice, 851–875 | Exercises and worked answers, 853–875 | Reuses assumptions, 853 | retain; bounded practice |
-| Storage Reference, 877–912 | Map assertions and compare serving choices, 883–904 | Exchange and migration need tests, 904–910 | retain; reference branch |
-| Further Reading, 914–920 | Signpost further sources | Does not establish citation verification | retain; intentionally brief |
+| Diagnose and Correct, 398–470 | Trace failures and compare controlled passes, 413–431, 446–468 | Synthetic correction, 448–454 | retain |
+| Govern Disclosure and Release, 472–594 | Audience views, evaluation and regression, 476–506, 532–592 | Synthetic checks do not prove deployment safety, 502–508, 570 | retain |
+| Transfer to Literature and Dependencies, 596–793 | Versioned evidence and build-specific joins, 600–793 | Path is neither clinical proof nor exploitation, 791–793 | retain |
+| Positive Projection, 795–846 | Select edges and calculate paths and components, 801–838 | Dropped qualifiers prevent Q4 answer, 840–844 | retain |
+| Practice, 848–872 | Exercises and worked answers, 850–872 | Reuses assumptions, 850 | retain; bounded practice |
+| Storage Reference, 874–909 | Map assertions and compare serving choices, 880–901 | Exchange and migration need tests, 901–907 | retain; reference branch |
+| Further Reading, 911–917 | Signpost further sources | Does not establish citation verification | retain; intentionally brief |
 
 ## Current teaching-case trace
 
-All stages are illustrative prose at `65956ad`; no operations were executed
+All stages are illustrative prose at `1ee9f80`; no operations were executed
 in this audit. Historical companion runs cover only their declared fixtures.
 
 | Stage | Input, decision and result | Limit |
@@ -86,64 +116,62 @@ in this audit. Historical companion runs cover only their declared fixtures.
 | Construction | Link mentions and preserve opposing `c1`, `c5`, 89–103 | Topic context is assumed |
 | Representation | Ledger rows and classifications, 103–111, 281–287 | Admitted evidence can be incomplete |
 | Query and interpretation | Bind proposition, classify, compare and abstain, 113–119, 368–382 | Result depends on evidence and policy |
-| Failure and correction | Omit and restore denial; revise R1 to R2, 121–127, 447–469 | Not an operational decision |
-| Disclosure and release | Audience views, scores and release regression, 129–141, 477–595 | Not a production safety or accuracy test |
+| Failure and correction | Omit and restore denial; revise R1 to R2, 121–127, 446–468 | Not an operational decision |
+| Disclosure and release | Audience views, scores and release regression, 129–141, 476–594 | Not a production safety or accuracy test |
 
 ## Route transition evidence
 
 All locators refer to `primer_knowledge_graph/primer_knowledge_graph.md` at
-`65956ad`. Execution status describes the hand-worked source explanation.
+`1ee9f80`. Execution status describes the hand-worked source explanation.
 
 | route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence |
 |---|---|---|---|---|---|---|---|---|---|
 | route-python-duckdb | kg-boundary, kg-mentions | sources to identities | 85–93, 169–175, 220–233 | Topic and IDs link mentions; Alex unresolved | Shared participants | Compare without forced identity | Context and completeness, 93, 177 | illustrative | No blocking gap. |
 | route-python-duckdb | kg-claims, kg-extraction | identities to ledger | 95–111, 259–287 | Preserve polarity, time and source | Separate `c1` and `c5` | Opposing assertions stay comparable | Extraction may omit evidence, 111 | illustrative | No blocking gap. |
 | route-python-duckdb | kg-temporal, kg-queries, kg-duckdb | ledger to answers | 103–119, 368–390 | Bind and classify rows and path hops | Conflict and abstention | Conflict differs from reachability | Unknown duration; no Orion inference, 105, 392 | illustrative | No blocking gap. |
-| route-python-duckdb | kg-correction | answer to correction | 121–127, 447–469 | Restore denial then revise source | B abstains; C refutes | Repair differs from source revision | No operational authority, 127 | illustrative | No blocking gap. |
-| route-python-duckdb | kg-privacy, kg-evaluation | correction to release | 129–141, 477–595 | Filter views, score items and compare provenance | Paired outputs and regression | Internal correctness does not ensure disclosure safety | Synthetic views and scores, 133, 571 | illustrative | No blocking gap. |
-| route-r-projection | kg-r-projection | ledger to edge view | 800–818 | Select positives, deduplicate and keep isolates | Five edges, eight vertices | Edge count differs from assertion count | Qualifiers dropped, 804 | illustrative | No blocking gap. |
-| route-r-projection | kg-r-projection | edge view to topology to evidence | 820–847 | Trace neighbours and components, restore date scope | Two-hop path and three components | Selected topology only | Cannot settle Q4, 845–847 | illustrative | No blocking gap. |
+| route-python-duckdb | kg-correction | answer to correction | 121–127, 446–468 | Restore denial then revise source | B abstains; C refutes | Repair differs from source revision | No operational authority, 127 | illustrative | No blocking gap. |
+| route-python-duckdb | kg-privacy, kg-evaluation | correction to release | 129–141, 476–594 | Filter views, score items and compare provenance | Paired outputs and regression | Internal correctness does not ensure disclosure safety | Synthetic views and scores, 133, 570 | illustrative | No blocking gap. |
+| route-r-projection | kg-r-projection | ledger to edge view | 797–815 | Select positives, deduplicate and keep isolates | Five edges, eight vertices | Edge count differs from assertion count | Qualifiers dropped, 801 | illustrative | No blocking gap. |
+| route-r-projection | kg-r-projection | edge view to topology to evidence | 817–844 | Trace neighbours and components, restore date scope | Two-hop path and three components | Selected topology only | Cannot settle Q4, 842–844 | illustrative | No blocking gap. |
 
 ## Adversarial depth gate
 
-Each row records a current teaching judgement at `65956ad`. Verified means
+Each row records a current teaching judgement at `1ee9f80`. Verified means
 the prose teaches the stated scope, not that it was executed or source-verified.
 
 | route_id | route tier | concept_id | explanation locator | example/action locator | interpretation locator | limitation locator | evidence revision | reviewer | status | finding | scope decision |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| route-python-duckdb | primary | kg-boundary | `primer_knowledge_graph/primer_knowledge_graph.md:163` | `primer_knowledge_graph/primer_knowledge_graph.md:183` | `primer_knowledge_graph/primer_knowledge_graph.md:191` | `primer_knowledge_graph/primer_knowledge_graph.md:193` | 56d76da | Codex | verified | Questions bound admissible evidence. | Retain. |
-| route-python-duckdb | primary | kg-mentions | `primer_knowledge_graph/primer_knowledge_graph.md:203` | `primer_knowledge_graph/primer_knowledge_graph.md:222` | `primer_knowledge_graph/primer_knowledge_graph.md:235` | `primer_knowledge_graph/primer_knowledge_graph.md:237` | 56d76da | Codex | verified | Context supports links and Alex requires abstention. | Retain. |
-| route-python-duckdb | primary | kg-claims | `primer_knowledge_graph/primer_knowledge_graph.md:241` | `primer_knowledge_graph/primer_knowledge_graph.md:245` | `primer_knowledge_graph/primer_knowledge_graph.md:287` | `primer_knowledge_graph/primer_knowledge_graph.md:243` | 56d76da | Codex | verified | Source-specific assertions preserve qualifications. | Retain. |
-| route-python-duckdb | primary | kg-temporal | `primer_knowledge_graph/primer_knowledge_graph.md:305` | `primer_knowledge_graph/primer_knowledge_graph.md:311` | `primer_knowledge_graph/primer_knowledge_graph.md:331` | `primer_knowledge_graph/primer_knowledge_graph.md:307` | 56d76da | Codex | verified | Classification and policy are distinguished. | Retain. |
-| route-python-duckdb | primary | kg-extraction | `primer_knowledge_graph/primer_knowledge_graph.md:259` | `primer_knowledge_graph/primer_knowledge_graph.md:263` | `primer_knowledge_graph/primer_knowledge_graph.md:267` | `primer_knowledge_graph/primer_knowledge_graph.md:271` | 56d76da | Codex | verified | Source spans produce candidates and refusals. | Retain. |
-| route-python-duckdb | primary | kg-duckdb | `primer_knowledge_graph/primer_knowledge_graph.md:908` | `primer_knowledge_graph/primer_knowledge_graph.md:289` | `primer_knowledge_graph/primer_knowledge_graph.md:295` | `primer_knowledge_graph/primer_knowledge_graph.md:910` | 56d76da | Codex | verified | Hand ledger and optional persistence are distinguished. | Retain. |
-| route-python-duckdb | primary | kg-queries | `primer_knowledge_graph/primer_knowledge_graph.md:335` | `primer_knowledge_graph/primer_knowledge_graph.md:368` | `primer_knowledge_graph/primer_knowledge_graph.md:382` | `primer_knowledge_graph/primer_knowledge_graph.md:392` | 56d76da | Codex | verified | Bindings and classifications support interpreted answers. | Retain. |
-| route-python-duckdb | primary | kg-correction | `primer_knowledge_graph/primer_knowledge_graph.md:400` | `primer_knowledge_graph/primer_knowledge_graph.md:422` | `primer_knowledge_graph/primer_knowledge_graph.md:447` | `primer_knowledge_graph/primer_knowledge_graph.md:471` | 56d76da | Codex | verified | Failures and passes distinguish repair from revision. | Retain. |
-| route-python-duckdb | primary | kg-evaluation | `primer_knowledge_graph/primer_knowledge_graph.md:535` | `primer_knowledge_graph/primer_knowledge_graph.md:543` | `primer_knowledge_graph/primer_knowledge_graph.md:551` | `primer_knowledge_graph/primer_knowledge_graph.md:571` | 56d76da | Codex | verified | Fixed items distinguish retrieval and answer quality. | Retain. |
-| route-python-duckdb | primary | kg-privacy | `primer_knowledge_graph/primer_knowledge_graph.md:477` | `primer_knowledge_graph/primer_knowledge_graph.md:489` | `primer_knowledge_graph/primer_knowledge_graph.md:503` | `primer_knowledge_graph/primer_knowledge_graph.md:509` | 56d76da | Codex | verified | Audience views and paired outputs show leakage risks. | Retain. |
-| route-r-projection | alternative | kg-r-projection | `primer_knowledge_graph/primer_knowledge_graph.md:800` | `primer_knowledge_graph/primer_knowledge_graph.md:804` | `primer_knowledge_graph/primer_knowledge_graph.md:822` | `primer_knowledge_graph/primer_knowledge_graph.md:847` | 56d76da | Codex | verified | Worked topology loses evidence qualifiers. | Retain. |
-| route-graph-storage | reference-only | kg-rdf | `primer_knowledge_graph/primer_knowledge_graph.md:883` | `primer_knowledge_graph/primer_knowledge_graph.md:885` | `primer_knowledge_graph/primer_knowledge_graph.md:892` | `primer_knowledge_graph/primer_knowledge_graph.md:894` | 56d76da | Codex | verified | Qualified resources distinguish descriptions from assertions. | Retain. |
-| route-graph-storage | reference-only | kg-property | `primer_knowledge_graph/primer_knowledge_graph.md:900` | `primer_knowledge_graph/primer_knowledge_graph.md:900` | `primer_knowledge_graph/primer_knowledge_graph.md:900` | `primer_knowledge_graph/primer_knowledge_graph.md:904` | 56d76da | Codex | verified | Representation must preserve evidence. | Retain. |
-| route-graph-storage | reference-only | kg-storage | `primer_knowledge_graph/primer_knowledge_graph.md:902` | `primer_knowledge_graph/primer_knowledge_graph.md:904` | `primer_knowledge_graph/primer_knowledge_graph.md:902` | `primer_knowledge_graph/primer_knowledge_graph.md:904` | 56d76da | Codex | verified | Workload and exchange tests guide choice. | Retain. |
+| route-python-duckdb | primary | kg-boundary | `primer_knowledge_graph/primer_knowledge_graph.md:163` | `primer_knowledge_graph/primer_knowledge_graph.md:183` | `primer_knowledge_graph/primer_knowledge_graph.md:191` | `primer_knowledge_graph/primer_knowledge_graph.md:193` | 1ee9f80 | Codex | verified | Questions bound admissible evidence. | Retain. |
+| route-python-duckdb | primary | kg-mentions | `primer_knowledge_graph/primer_knowledge_graph.md:203` | `primer_knowledge_graph/primer_knowledge_graph.md:222` | `primer_knowledge_graph/primer_knowledge_graph.md:235` | `primer_knowledge_graph/primer_knowledge_graph.md:237` | 1ee9f80 | Codex | verified | Context supports links and Alex requires abstention. | Retain. |
+| route-python-duckdb | primary | kg-claims | `primer_knowledge_graph/primer_knowledge_graph.md:241` | `primer_knowledge_graph/primer_knowledge_graph.md:245` | `primer_knowledge_graph/primer_knowledge_graph.md:287` | `primer_knowledge_graph/primer_knowledge_graph.md:243` | 1ee9f80 | Codex | verified | Source-specific assertions preserve qualifications. | Retain. |
+| route-python-duckdb | primary | kg-temporal | `primer_knowledge_graph/primer_knowledge_graph.md:305` | `primer_knowledge_graph/primer_knowledge_graph.md:311` | `primer_knowledge_graph/primer_knowledge_graph.md:331` | `primer_knowledge_graph/primer_knowledge_graph.md:307` | 1ee9f80 | Codex | verified | Classification and policy are distinguished. | Retain. |
+| route-python-duckdb | primary | kg-extraction | `primer_knowledge_graph/primer_knowledge_graph.md:259` | `primer_knowledge_graph/primer_knowledge_graph.md:263` | `primer_knowledge_graph/primer_knowledge_graph.md:267` | `primer_knowledge_graph/primer_knowledge_graph.md:271` | 1ee9f80 | Codex | verified | Source spans produce candidates and refusals. | Retain. |
+| route-python-duckdb | primary | kg-duckdb | `primer_knowledge_graph/primer_knowledge_graph.md:905` | `primer_knowledge_graph/primer_knowledge_graph.md:289` | `primer_knowledge_graph/primer_knowledge_graph.md:295` | `primer_knowledge_graph/primer_knowledge_graph.md:907` | 1ee9f80 | Codex | verified | Hand ledger and optional persistence are distinguished. | Retain. |
+| route-python-duckdb | primary | kg-queries | `primer_knowledge_graph/primer_knowledge_graph.md:335` | `primer_knowledge_graph/primer_knowledge_graph.md:368` | `primer_knowledge_graph/primer_knowledge_graph.md:382` | `primer_knowledge_graph/primer_knowledge_graph.md:392` | 1ee9f80 | Codex | verified | Bindings and classifications support interpreted answers. | Retain. |
+| route-python-duckdb | primary | kg-correction | `primer_knowledge_graph/primer_knowledge_graph.md:400` | `primer_knowledge_graph/primer_knowledge_graph.md:421` | `primer_knowledge_graph/primer_knowledge_graph.md:446` | `primer_knowledge_graph/primer_knowledge_graph.md:470` | 1ee9f80 | Codex | verified | Failures and passes distinguish repair from revision. | Retain. |
+| route-python-duckdb | primary | kg-evaluation | `primer_knowledge_graph/primer_knowledge_graph.md:534` | `primer_knowledge_graph/primer_knowledge_graph.md:542` | `primer_knowledge_graph/primer_knowledge_graph.md:550` | `primer_knowledge_graph/primer_knowledge_graph.md:570` | 1ee9f80 | Codex | verified | Fixed items distinguish retrieval and answer quality. | Retain. |
+| route-python-duckdb | primary | kg-privacy | `primer_knowledge_graph/primer_knowledge_graph.md:476` | `primer_knowledge_graph/primer_knowledge_graph.md:488` | `primer_knowledge_graph/primer_knowledge_graph.md:502` | `primer_knowledge_graph/primer_knowledge_graph.md:508` | 1ee9f80 | Codex | verified | Audience views and paired outputs show leakage risks. | Retain. |
+| route-r-projection | alternative | kg-r-projection | `primer_knowledge_graph/primer_knowledge_graph.md:797` | `primer_knowledge_graph/primer_knowledge_graph.md:801` | `primer_knowledge_graph/primer_knowledge_graph.md:819` | `primer_knowledge_graph/primer_knowledge_graph.md:844` | 1ee9f80 | Codex | verified | Worked topology loses evidence qualifiers. | Retain. |
+| route-graph-storage | reference-only | kg-rdf | `primer_knowledge_graph/primer_knowledge_graph.md:880` | `primer_knowledge_graph/primer_knowledge_graph.md:882` | `primer_knowledge_graph/primer_knowledge_graph.md:889` | `primer_knowledge_graph/primer_knowledge_graph.md:891` | 1ee9f80 | Codex | verified | Qualified resources distinguish descriptions from assertions. | Retain. |
+| route-graph-storage | reference-only | kg-property | `primer_knowledge_graph/primer_knowledge_graph.md:897` | `primer_knowledge_graph/primer_knowledge_graph.md:897` | `primer_knowledge_graph/primer_knowledge_graph.md:897` | `primer_knowledge_graph/primer_knowledge_graph.md:901` | 1ee9f80 | Codex | verified | Representation must preserve evidence. | Retain. |
+| route-graph-storage | reference-only | kg-storage | `primer_knowledge_graph/primer_knowledge_graph.md:899` | `primer_knowledge_graph/primer_knowledge_graph.md:901` | `primer_knowledge_graph/primer_knowledge_graph.md:899` | `primer_knowledge_graph/primer_knowledge_graph.md:901` | 1ee9f80 | Codex | verified | Workload and exchange tests guide choice. | Retain. |
 
 ## Release readiness checklist
 
 - Content gate: **pass**, for the reviewed illustrative teaching routes.
-- Release readiness: **not-ready**; verify the source-sensitive claims,
-  review citations and versions, and complete semantic accessibility review.
-  The current build and visual sample pass; the PDF remains untagged.
-- Mechanical checks: `python3 -I scripts/check/primer_evidence.py
+- Source gate: **pass** for the scoped checks and primary sources above.
+- Release readiness: **not-ready** for a full accessibility claim. Source
+  verification, local content fixes, regenerated outputs, examples, and visual
+  samples pass. Shared template/PDF tagging work and keyboard, screen-reader,
+  and tag-inspector testing remain outstanding.
+- Evidence checks: `python3 -I scripts/check/primer_evidence.py
   primer_knowledge_graph/primer_knowledge_graph.brief.md
-  primer_knowledge_graph/primer_knowledge_graph.audit.md` passed.
+  primer_knowledge_graph/primer_knowledge_graph.audit.md` passed, and
   `python3 -I scripts/check/primer_audit.py --repo-root . --project
-  primer_knowledge_graph` passed after adding this required heading. Source
-  SHA-256: `49f0be9ed45bdb83cdde0cb407586e068a94225fc5a421bc37551d0d9b60a23b`.
-  `just all` passed Python/DuckDB and R companion examples and regenerated the
-  outputs. `just render-qa primer_knowledge_graph` passed; current PDF pages 3,
-  7, 9, 12, 14 and 28 were visually inspected. `git diff --check --
-  primer_knowledge_graph/primer_knowledge_graph.brief.md
-  primer_knowledge_graph/primer_knowledge_graph.audit.md` passed. These checks
-  do not establish citation accuracy or semantic accessibility.
+  primer_knowledge_graph` passed. `just all` passed both companion examples and
+  regenerated HTML/PDF; `just render-qa primer_knowledge_graph` passed. Current
+  PDF pages 3, 9, 12 and 57 were visually inspected. These checks establish
+  neither semantic accessibility nor a tagged PDF. `git diff --check` passed.
 
 ## Historical review at 0152148
 

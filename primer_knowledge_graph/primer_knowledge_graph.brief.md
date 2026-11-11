@@ -1,11 +1,12 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r7`
-- Source revision: `56d76da`
-- Revision state: The introduction, end-to-end walkthrough, and corrected
-  verification note are committed at the source revision above. Published
-  outputs need review after regeneration.
+- Brief revision: `kg-398-brief-r8`
+- Source revision: `1ee9f80`
+- Revision state: The introduction, end-to-end walkthrough, source
+  verification clarifications, and local accessibility improvements are
+  committed at the source revision above. Published outputs need regeneration
+  and review.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
@@ -84,7 +85,7 @@
   standalone reader before the detailed sections. The walkthrough and its
   intermediate records are illustrative prose, not independently executed.
   A stage table shows the source → mention/entity → qualified claim →
-  evidenced answer chain; a text flow shows the baseline → diagnosis →
+  evidenced answer chain; an ordered list shows the baseline → diagnosis →
   revised ledger → release regression cycle. Labels convey the stages without
   depending on colour. Current HTML/PDF presentation needs review.
   Retained-excerpt, mention-decision, span-to-assertion, and ledger tables
@@ -96,31 +97,33 @@
   worked note. One final release regression table gathers changed values,
   classifications, paths, and citations. H4 landmarks divide each long
   transfer case at source/model, query, correction, and audit transitions;
-  a cross-case comparison covers entity grain, qualifiers, admissible joins,
+  labelled candidate records keep the literature bindings and evidence paths
+  readable. A cross-case comparison covers entity grain, qualifiers, admissible joins,
   completeness, and correction dependencies. The optional storage reference
   uses mapping tables and an acceptance handoff to the worked answer records.
-- Languages and executable examples: Python 3.12 with pinned DuckDB remains
-  companion verification for the primary route; R with pinned `igraph`,
-  `tidygraph`, `dplyr`, and `tibble` remains companion verification for the
-  alternative projection. Optional Python verification builds, closes,
+- Languages and executable examples: Python 3.12.15 with pinned DuckDB 1.4.3
+  remains companion verification for the primary route; R 4.5.3 with directly
+  checked `igraph` 2.3.0, `tidygraph` 1.3.1, and `dplyr` 1.2.1 remains
+  companion verification for the alternative projection. Transitive
+  dependencies, including `tibble`, are resolved from the dated package
+  snapshot. Optional Python verification builds, closes,
   reopens, and queries a temporary database and exercises the bounded
   correction, rebuild, and re-evaluation. The published explanation supplies
   the worked reasoning and states each interchange boundary and the semantics
   discarded.
-- Evidence plan: Verify current DuckDB 1.4.3 behaviour against official
-  documentation; verify RDF 1.1, SPARQL 1.1, SHACL and PROV-O statements against
-  W3C specifications; verify the narrow Cypher claims against the named
-  official manual; verify the R APIs and reported output against pinned package
-  documentation and the executable example; reconcile every source-sensitive
-  claim with its citation, version and access date.
+- Evidence plan: The scoped source review verified the DuckDB 1.4.3 interface,
+  RDF 1.1, SPARQL 1.1, SHACL, PROV-O, Neo4j 5 MATCH, and the pinned R API
+  claims against authoritative documentation on 11 November 2026. Retain the
+  exact sources and access boundary in the audit; do not generalise this to a
+  service integration or a latest-version claim.
 - Open decisions:
   - Retain the R script's self-contained positive projection for this milestone.
     It is explicitly an alternative topology teaching route, not a synchronised
     view of a changed Python source. A generated projection would be a separate
     content change because it would alter the interchange boundary.
-  - Which exact Neo4j/Cypher version to name in the reference branch. Evidence
-    needed: current official documentation; do not add an integration until a
-    separate issue authorises a service test.
+  - No Neo4j service integration is in scope. The reference comparison uses the
+    Neo4j 5 MATCH manual, checked on 11 November 2026; a service test would be
+    a separate issue.
   - The primary lab works source-version replay by hand. The optional Python
     companion rebuilds a changed retained excerpt in a fresh temporary
     database. Durable release publication is a production extension.
