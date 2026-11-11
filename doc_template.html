@@ -35,6 +35,18 @@
       line-height: 1.7;
     }
 
+    .skip-link {
+      position: fixed;
+      top: .5rem; left: 1rem;
+      z-index: 200;
+      padding: .5rem 1rem;
+      background: var(--surface);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; }
+    :focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+    #main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
+
     /* ── Top navbar ────────────────────────────────────────────────── */
     .navbar {
       position: fixed;
@@ -199,6 +211,8 @@
       width: 100%;
     }
 
+    #TOC [hidden] { display: none; }
+
     /* TOC collapsible controls */
     .toc-toggle {
       background: none;
@@ -210,7 +224,6 @@
       font-size: 1em;
       line-height: 1;
       vertical-align: middle;
-      outline: none;
       transition: color .15s;
     }
 
@@ -561,7 +574,7 @@ $highlighting-css$
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -601,12 +614,14 @@ $math$
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">$title$</span>
 $if(date)$    <span class="navbar-meta">$date$</span>$endif$
 $if(author)$    <span class="navbar-meta">$author$</span>$endif$
 $if(word_count)$    <span class="navbar-meta">$word_count$ words</span>$endif$
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -617,14 +632,15 @@ $if(mathvariants)$
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
 $endif$
       </div>
-$if(toc)$      <div id="TOC" aria-label="Table of contents">$table-of-contents$</div>
+$if(toc)$      <nav id="TOC" aria-label="Table of contents">$table-of-contents$</nav>
 $endif$
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
+<h1 id="document-title" class="document-title">$title$</h1>
 $body$
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author.$if(date)$ The document date is that of its last substantive review.$endif$</footer>
       </div>
@@ -633,7 +649,7 @@ $body$
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -663,18 +679,27 @@ $body$
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -682,19 +707,18 @@ $body$
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 

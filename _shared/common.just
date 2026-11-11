@@ -32,7 +32,7 @@ examples *ids:
 SOURCE_MD_STEM := file_stem(SOURCE_MD)
 
 # Pandoc flag sets
-HTML_FLAGS_BASE := "--standalone --embed-resources --toc --toc-depth=3 --syntax-highlighting=breezedark --metadata lang=en-GB"
+HTML_FLAGS_BASE := "--standalone --embed-resources --toc --toc-depth=3 --syntax-highlighting=breezedark --metadata lang=en-GB --lua-filter=/repo/_shared/filters/html-heading-semantics.lua"
 PDF_FLAGS_BASE  := "--pdf-engine=xelatex --toc --toc-depth=3 -V geometry:margin=1.2in -V fontsize=11pt -V linestretch=1.25 -V colorlinks=true -V linkcolor=NavyBlue -V urlcolor=NavyBlue -V toc-title='Table of Contents' --metadata lang=en-GB"
 
 default:

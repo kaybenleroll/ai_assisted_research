@@ -36,18 +36,47 @@ class HTMLAudit(HTMLParser):
         self.images: list[str] = []
         self.title = ""
         self.headings: list[str] = []
+        self.heading_details: list[dict[str, str | None]] = []
+        self.controls: list[dict[str, str | None]] = []
+        self.links: list[dict[str, str | None]] = []
+        self.landmarks: list[dict[str, str | None]] = []
+        self.list_ids: set[str] = set()
         self._in_title = False
 
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
         if "id" in values:
             self.ids.append(values["id"])
+        if tag in {"ol", "ul"} and values.get("id"):
+            self.list_ids.add(values["id"])
         if tag == "img":
             self.images.append(values.get("src", ""))
         if tag == "title":
             self._in_title = True
-        if tag in {"h1", "h2", "h3"}:
+        if tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
             self.headings.append(tag)
+            self.heading_details.append({
+                "tag": tag,
+                "id": values.get("id"),
+                "role": values.get("role"),
+                "aria-level": values.get("aria-level"),
+            })
+        if tag in {"main", "nav"} or values.get("role") in {"main", "navigation"}:
+            self.landmarks.append({
+                "tag": tag,
+                "id": values.get("id"),
+                "role": values.get("role"),
+                "aria-label": values.get("aria-label"),
+                "aria-labelledby": values.get("aria-labelledby"),
+            })
+        if tag == "button" and values.get("class") and "toc-toggle" in values["class"].split():
+            self.controls.append({
+                "aria-label": values.get("aria-label"),
+                "aria-controls": values.get("aria-controls"),
+                "aria-expanded": values.get("aria-expanded"),
+            })
+        if tag == "a":
+            self.links.append({"href": values.get("href"), "class": values.get("class")})
 
     def handle_endtag(self, tag):
         if tag == "title":
@@ -243,12 +272,59 @@ def audit_html(html: Path, source: Path) -> tuple[HTMLAudit, list[str]]:
             f"HTML QA failed for {html.relative_to(ROOT)}: duplicate IDs={duplicate_ids}, "
             f"missing images={missing_images}, missing source assets={missing_source_assets}"
         )
+    semantic_errors = semantic_html_errors(parser_html)
+    if semantic_errors:
+        raise RuntimeError(
+            f"HTML accessibility QA failed for {html.relative_to(ROOT)}: "
+            + "; ".join(semantic_errors)
+        )
     if source_refs and len(parser_html.images) < len(source_refs):
         raise RuntimeError(
             f"HTML image parity failed for {html.relative_to(ROOT)}: "
             f"source references={len(source_refs)}, output images={len(parser_html.images)}"
         )
     return parser_html, source_refs
+
+
+def semantic_html_errors(parser_html: HTMLAudit) -> list[str]:
+    """Check deterministic semantics emitted by the shared HTML template.
+
+    This deliberately checks source markup rather than attempting to stand in
+    for a browser accessibility tree or assistive-technology review.
+    """
+    errors: list[str] = []
+    title_headings = [heading for heading in parser_html.heading_details if heading["id"] == "document-title"]
+    if len(title_headings) != 1:
+        errors.append("expected one document-title heading")
+    elif title_headings[0]["tag"] != "h1":
+        errors.append("document-title must be an h1")
+    main = [landmark for landmark in parser_html.landmarks if landmark["tag"] == "main"]
+    if len(main) != 1 or main[0]["id"] != "main-content":
+        errors.append("expected one main landmark with id main-content")
+    elif main[0]["aria-labelledby"] != "document-title":
+        errors.append("main must be labelled by document-title")
+    toc = [landmark for landmark in parser_html.landmarks if landmark["id"] == "TOC"]
+    if len(toc) != 1 or toc[0]["tag"] != "nav" or toc[0]["aria-label"] != "Table of contents":
+        errors.append("expected a labelled contents navigation landmark")
+    skip_links = [link for link in parser_html.links if link["href"] == "#main-content"]
+    if len(skip_links) != 1:
+        errors.append("expected one skip link to main-content")
+    section_headings = [heading for heading in parser_html.heading_details if heading["id"] != "document-title"]
+    if any(heading["role"] != "heading" or not heading["aria-level"] for heading in section_headings):
+        errors.append("section headings need explicit heading roles and aria-level values")
+    labels = [control["aria-label"] for control in parser_html.controls]
+    controls = [control["aria-controls"] for control in parser_html.controls]
+    if len(labels) != len(set(labels)):
+        errors.append("TOC toggle names must be unique")
+    if len(controls) != len(set(controls)):
+        errors.append("TOC toggle targets must be unique")
+    if any(not label or not label.startswith("Toggle subsections of ") for label in labels):
+        errors.append("TOC toggles need section-specific accessible names")
+    if any(not target or target not in parser_html.list_ids for target in controls):
+        errors.append("TOC toggles must reference existing controlled lists")
+    if any(control["aria-expanded"] not in {"false", "true"} for control in parser_html.controls):
+        errors.append("TOC toggles need aria-expanded state")
+    return errors
 
 
 def raster_pages(pdf: Path, output: Path, pages: dict[str, int]) -> None:
@@ -355,6 +431,20 @@ def main() -> int:
             filename = f"{label}-{page:0{len(str(page_count))}d}.png"
             lines.append(f"| `{pdf.relative_to(ROOT)}` | {label} | {page} | {reasons[label]} | `{prefix}{filename}` | pending |")
     lines += [
+        "",
+        "All HTML outputs passed the deterministic publication semantics checks: document title and main landmark, labelled contents navigation, skip link, section heading levels, unique TOC toggle names, and `aria-controls` targets.",
+        "",
+        "## Human accessibility checks",
+        "",
+        "Complete and record these checks in the pull request or handoff using this report and the representative rendered output:",
+        "",
+        "- Keyboard: Tab reaches the skip link first; Enter moves focus to main; Tab reaches each contents link and toggle; Enter and Space open and close a toggle; fragment links still navigate to the original heading IDs.",
+        "- No JavaScript: disable JavaScript and confirm every contents link remains visible, focusable, and navigates to its target.",
+        "- Browser accessibility tree: inspect the rendered page in Chromium DevTools and confirm one named `main` landmark, one document-title level-1 heading, section heading levels, a labelled contents navigation landmark, and section-specific toggle names and controlled lists.",
+        "- Screen reader: use a representative screen reader (for example NVDA, VoiceOver, or Orca) to traverse landmarks, headings, the skip link, contents controls, and a fragment destination; record the tool and version.",
+        "- PDF: inspect the opening, table, code, and figure/equation raster candidates listed above, then use a PDF accessibility checker or tag tree viewer to record whether tags and reading order are present. The pinned XeLaTeX route currently reports `Tagged: no`; this repository therefore treats HTML as the accessibility-complete publication format and records PDF tagging as an unresolved limitation.",
+        "",
+        "Record the tool names, versions, page or fragment identifiers, result, and any defect beside the relevant check. Rasterisation and extractable text do not establish PDF tags or accessibility-tree correctness.",
         "",
         "Automated checks cover committed output presence, HTML structure, local assets, source-image assets, image-count parity, PDF metadata/text, and raster generation. They do not establish semantic correctness, factual accuracy, caption meaning, accessibility quality, or human visual acceptability.",
         "",

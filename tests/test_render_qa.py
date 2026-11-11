@@ -69,6 +69,41 @@ class RenderQATests(unittest.TestCase):
         self.assertEqual(audit.ids, ["one"])
         self.assertEqual(len(audit.images), 1)
 
+    def test_semantic_html_audit_accepts_shared_template_contract(self):
+        audit = MODULE.HTMLAudit()
+        audit.feed("""<html><head><title>Primer</title></head><body>
+        <a class='skip-link' href='#main-content'>Skip to main content</a>
+        <nav id='TOC' aria-label='Table of contents'><button class='toc-toggle'
+          aria-label='Toggle subsections of 1 Introduction' aria-controls='toc-subsections-1'
+          aria-expanded='false'></button><ul id='toc-subsections-1'></ul></nav>
+        <main id='main-content' aria-labelledby='document-title' tabindex='-1'>
+          <h1 id='document-title'>Primer</h1>
+          <h1 id='introduction' role='heading' aria-level='2'>Introduction</h1>
+        </main></body></html>""")
+        self.assertEqual(MODULE.semantic_html_errors(audit), [])
+
+    def test_semantic_html_audit_rejects_duplicate_toggle_names_and_targets(self):
+        audit = MODULE.HTMLAudit()
+        audit.feed("""<a href='#main-content'>skip</a><nav id='TOC' aria-label='Table of contents'>
+        <button class='toc-toggle' aria-label='Toggle subsections of Introduction'
+          aria-controls='same' aria-expanded='false'></button>
+        <button class='toc-toggle' aria-label='Toggle subsections of Introduction'
+          aria-controls='same' aria-expanded='false'></button><ul id='same'></ul></nav>
+        <main id='main-content' aria-labelledby='document-title'><h1 id='document-title'>X</h1>
+        <h1 id='a' role='heading' aria-level='2'></h1></main>""")
+        errors = MODULE.semantic_html_errors(audit)
+        self.assertIn("TOC toggle names must be unique", errors)
+        self.assertIn("TOC toggle targets must be unique", errors)
+
+    def test_semantic_html_audit_rejects_missing_controlled_list(self):
+        audit = MODULE.HTMLAudit()
+        audit.feed("""<a href='#main-content'>skip</a><nav id='TOC' aria-label='Table of contents'>
+        <button class='toc-toggle' aria-label='Toggle subsections of Introduction'
+          aria-controls='missing' aria-expanded='false'></button></nav>
+        <main id='main-content' aria-labelledby='document-title'><h1 id='document-title'>X</h1>
+        <h1 id='a' role='heading' aria-level='2'></h1></main>""")
+        self.assertIn("TOC toggles must reference existing controlled lists", MODULE.semantic_html_errors(audit))
+
     def test_source_for_output_strips_variant_suffixes(self):
         project = MODULE.ROOT / "primer_spectral_graph_theory"
         self.assertEqual(
