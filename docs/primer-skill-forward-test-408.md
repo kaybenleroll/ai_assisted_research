@@ -109,6 +109,34 @@ Record the response and judgement for each case separately. Do not count a
 passing executable command, a changed revision string, or a structurally valid
 table as proof of teaching depth or re-audit completeness.
 
+### Revised primer calibration and stale baseline
+
+Include the revised primer at `primer_knowledge_graph/primer_knowledge_graph.md`, its tracked brief, audit, and case contract as a realistic calibration case. Pin and hash the actual inputs at the tested revision; the audit's own source and brief revisions are claims to compare with those inputs. This case exercises the general workflow, not a requirement that other primers use the same domain, examples, or route IDs. Reviewers independently inspect the evidence behind the response rather than assuming the recorded audit judgement is correct.
+
+Run a fresh `primer-audit` session using the audit prompt below. Record the exact selected passages and IDs before reviewing the answer, but do not disclose expected judgements to the session. The selection must include a changed passage, its dependent reasoning or worked transition, and a scope-reduced or reference-only route if present.
+
+```text
+<native invocation: primer-audit>
+Work read-only. Do not edit files, invoke subagents, run builds, or access the
+network. Inspect the revised primer, its tracked brief, audit and case contract
+under primer_knowledge_graph/. Assess the recorded content judgement against
+the source, including changed passages and dependent reasoning. Identify the
+revisions, exact locators, route and concept IDs, scope decisions, gaps and
+limitations. Distinguish current evidence from historical claims and report
+what you did not verify. Do not repair files.
+```
+
+For a separate stale-baseline probe, select an earlier recorded baseline and a later source revision with a demonstrable change, recording both revisions and a diff locator. In another fresh session, ask the skill to determine whether the old findings still apply and to propose a bounded re-scope. The response must identify affected claims, transitions and dependent examples, retain genuinely unaffected findings only with a reason, and require fresh review or mark the result unknown where evidence is insufficient. It must not treat old gaps as present without checking, silently discard them, or treat updated revision labels as a re-audit. If a suitable revision pair cannot be established, mark this case inconclusive and record why.
+
+```text
+<native invocation: primer-audit>
+Work read-only. Do not edit files, invoke subagents, run builds, or access the
+network. Compare <earlier revision and evidence paths> with <later revision and
+source paths>. Re-scope the earlier findings against the later material, naming
+changed and affected passages, retained findings, checks still needed, and
+uncertainties. Give exact revision and passage locators. Do not repair files.
+```
+
 ### Domain-neutral coverage matrix
 
 Use a small, deliberately varied set of cases so the forward-test covers
@@ -149,15 +177,31 @@ Human review checks whether the handoff reports the missing intermediate
 reasoning and result as a blocking primary-route gap, separates fixture claims
 from observed evidence, and avoids inventing checks or authorising release.
 
+Run a second, independent handoff session on the revised primer and its tracked brief, audit, and case contract. Ask for content and release decisions separately, the provenance of each check, unresolved blockers, next action and owner. The reviewer checks that the response assesses the recorded content pass within its scope while preserving the separate release blocker and outstanding accessibility evidence. It must not convert historical checks into checks performed by the session, infer a release pass from a content pass, or authorise release. If the input state no longer supports this combination, select and pin a revision that does, or record the case as unavailable; do not manufacture the state.
+
+```text
+<native invocation: primer-handoff>
+Work read-only. Do not edit files, invoke subagents, run builds, or access the
+network. Prepare a handoff for the revised primer under primer_knowledge_graph/.
+Inspect its source, tracked brief, audit and case contract. Separate the content
+and release decisions, identify evidence revisions and checks actually performed
+or reported, and state blockers, limitations, next action and owner. Assess
+recorded claims rather than assuming them. Do not repair files or release.
+```
+
 ## Results record template
 
 Copy this section outside the test checkout for each independent invocation;
-retain a durable reviewed record in an authorised location after the tests.
+retain a durable reviewed record in an authorised location after the tests. The
+[batch results](primer-skill-forward-test-408-results.md) record outstanding
+cases and their evidence independently; update it after each reviewed run.
 Do not include secrets, private transcripts or hidden reasoning.
 
 - Date/time and operator:
-- Case and skill; native activation mechanism and observed evidence (or
-  unknown/inconclusive):
+- Case ID, skill, operator and independent reviewer:
+- Native activation: mechanism, observed evidence and locator, plus status
+  observed / not observed / unknown; explain any limitation. Catalogue
+  discovery and manual-file fallback are separate observations.
 - Harness/version, model identifier, effort and relevant settings:
 - Checkout path, branch, full HEAD, dirty state and applicable permissions:
 - Source/fixture paths and hashes; brief, audit, evidence and skill revisions
@@ -165,13 +209,16 @@ Do not include secrets, private transcripts or hidden reasoning.
 - Exact command and complete prompt:
 - Run outcome: completed / incomplete / unavailable; reason if applicable:
 - Response or log location and relevant excerpts/locators:
-- Task-execution evidence: response or log location, human findings against
-  case criteria, including false positives and misses:
+- Task-execution evidence: response or log location, exact supporting
+  locators, case criteria, human findings, false positives and misses; status
+  supported / failed / inconclusive with rationale:
 - Scope, unverified claims and limitations:
 - No-write controls, exact before/after inventory and Git commands, comparison
   results and any observed attempted writes:
-- Conclusion for this invocation: supported / failed / inconclusive, with
-  rationale; follow-up and owner:
+- Overall conclusion: supported only when native activation is observed,
+  task execution is supported and no-write verification passes; otherwise
+  failed for an observed failure or inconclusive for missing evidence. Record
+  rationale, follow-up and owner:
 
 Report each invocation separately. A single favourable response is evidence
 only for the recorded inputs and runtime, not a general reliability claim.
