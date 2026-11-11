@@ -76,6 +76,29 @@ check: check-agent-contract check-render-qa check-primer-evidence-tests check-me
 check-primer-evidence brief audit:
   python3 -I scripts/check/primer_evidence.py "{{brief}}" "{{audit}}"
 
+# Run the repeatable evidence, build, example, render, freshness, and scoped-link checks for one primer.
+primer-audit project:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  root="{{justfile_directory()}}"
+  brief_rel="{{project}}/{{project}}.brief.md"
+  audit_rel="{{project}}/{{project}}.audit.md"
+  brief="$root/$brief_rel"
+  audit="$root/$audit_rel"
+  source_name="$(sed -n 's/^SOURCE_MD[[:space:]]*:=[[:space:]]*"\([^"]*\)"/\1/p' "$root/{{project}}/Justfile")"
+  source_rel="{{project}}/$source_name"
+  source="$root/$source_rel"
+  python3 -I scripts/check/primer_evidence.py "$brief" "$audit"
+  python3 -I scripts/check/primer_audit.py --repo-root "$root" --project "{{project}}"
+  if [[ -f "$root/{{project}}/examples/manifest.toml" ]]; then
+    python3 -I _shared/examples/run.py --repo-root "$root" "{{project}}"
+  fi
+  just --justfile "$root/{{project}}/Justfile" all
+  python3 -I scripts/render_qa.py "{{project}}"
+  python3 -I scripts/check/check.py fresh
+  bash scripts/lint.sh --md "$source_rel" "$audit_rel"
+  bash scripts/lint.sh --links "${source_rel%.md}.html"
+
 check-primer-evidence-tests:
   python3 -I -m unittest discover -s tests -p 'test_primer_evidence*.py'
 

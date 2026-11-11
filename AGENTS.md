@@ -39,3 +39,13 @@ mandate. For the catastrophe workbook, follow its README and Justfile.
 The contract remains the detailed source of truth. If these short rules and
 the contract appear to disagree, stop and resolve the discrepancy before
 editing.
+
+## Subagent-first orchestration
+
+- The default cap is three concurrent agents and six live agent threads. This
+  cap is a safety default; the live tool limit takes precedence.
+- Completed agents remain counted until explicitly closed; close them
+  immediately. Reuse an existing agent with `send_input` when its context is
+  useful, and batch larger work into rounds.
+- Do not increase the documented numeric cap to work around a thread-limit
+  error; the tool may enforce the ceiling.

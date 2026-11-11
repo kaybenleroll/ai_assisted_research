@@ -21,6 +21,10 @@ project contract and applicable repository guidance. Resolve repository
 documents and recipes from the owning repository root; resolve references
 bundled with a skill from that skill's directory.
 
+For a tracked primer, `just primer-audit <primer-directory>` is the repeatable
+execution route. It supplements, rather than replaces, the human depth and
+release-readiness judgements recorded in the audit.
+
 Plan before drafting a new primer or substantial revision. Brief and audit
 artefacts are tracked and use stable `route_id` and `concept_id` values; the
 brief and audit templates define the required row fields and statuses. Audit

@@ -46,27 +46,63 @@ it is popular, technically interesting, or easy to list.
 
 For a primer that teaches a process, system, or applied method, complete the
 teaching-case contract in `docs/templates/primer-case-contract.md` before
-drafting. Identify the source inputs or assumptions, transformations and
-decisions, intermediate representation, useful questions or outputs, expected
-interpretation, and failure modes or limits. State which stages are executable,
-illustrative, or measured. A fixture that begins as curated final claims is not,
-by itself, an end-to-end case. If no coherent case is appropriate, record the
+drafting. In the brief, key a continuous worked-case trace to each applicable
+primary or alternative `route_id`. Follow the same case from input or
+assumptions through transformation, intermediate representation, reader-facing
+operation, interpretation, and failure or boundary; include correction and
+re-evaluation when the failure can be addressed. Show what each stage hands to
+the next, the planned evidence, and whether that stage is `executable`,
+`illustrative`, or `reference-only`. Record measured evidence separately when
+relevant; a measurement is not a stage mode. A fixture that begins as curated
+final claims is not, by itself, an end-to-end case. A required stage marked
+`reference-only` does not establish a worked teaching spine: expand that stage
+or narrow or demote the route. If no coherent case is appropriate, record the
 reason and identify the alternative teaching device that will carry the
 explanation.
+
+Balance optional branches against the main route before adding them. Name the
+reader need each branch serves, the worked evidence it adds, and the material
+it displaces or shortens; retain the primary route's complete teaching spine.
+If the trade-off cannot be justified, narrow, demote, or remove the branch.
+For every unresolved concept, record an explicit decision to expand it, narrow
+or demote its route, or remove it, with the reason and effect on reader outcomes.
+Preserve retired `route_id` and `concept_id` values in the decision record;
+never reuse them for a different subject.
 
 Map each core concept in the brief to the schema fields above and to an
 appropriate teaching device such as a worked case, comparison, counterexample,
 proof, or failure case. Include downstream use and the source plan even when
-the concept is concise. Do not use a heading count, word quota, or example
+the concept is concise. Do not impose word or heading quotas, or use an example
 quota as a proxy for this mapping.
 
 Before drafting, review the matrix adversarially: ask what a reader would do to
 demonstrate understanding of each concept, what evidence in the primer would
 let them do it, and where the explanation could still be mistaken for a label or
-catalogue entry. Record unresolved rows as blocking planning gaps. A green build
-plan, fixture, or example manifest does not discharge a missing explanation.
+catalogue entry. Check that every applicable taught route has a trace whose
+stage outputs feed the next stage, whose modes and evidence are explicit, and
+whose interpretation and failure or boundary are supported. Check the optional
+branch trade-offs and resolve each concept decision against the intended reader
+outcome. Record unresolved rows as blocking planning gaps. A green build plan,
+fixture, or example manifest does not discharge a missing explanation.
 The later audit must retain the same identifiers and bind its evidence to the
 reviewed source revision; do not silently rename, merge, or omit rows.
+After drafting and before handing the source to audit, compare each drafted
+primary and alternative route with its brief and worked-case trace, keyed by
+`route_id`. Follow the reader-facing transitions from input through operation,
+intermediate reasoning, result, interpretation, and limit; use the planned
+alternative teaching device where a continuous case does not apply. Record draft
+locators, gaps, and decisions in the brief's post-draft checkpoint. A passing
+example or fixture does not establish that the prose explains those transitions.
+An unsupported transition blocks audit handoff until the explanation is expanded
+or the route is explicitly narrowed or demoted. Record any scope reduction,
+its rationale, and its effect on the reader promise; revise the brief and reader
+facing scope accordingly, retaining stable IDs. This is a qualitative check,
+not a substitute for the independent audit.
+Before handoff, check the brief against the trace and scope acceptance fields
+in `docs/templates/primer-brief.md`, including the decision record for any
+retired IDs. Once the audit exists, run
+`just check-primer-evidence <brief> <audit>` for matrix structure and matching
+IDs; this mechanical check does not judge the case's explanatory quality.
 
 If delegation is useful, split bounded, disjoint questions by ownership. Give
 each worker a concrete question, scope, stop condition, and requested evidence;
