@@ -38,6 +38,20 @@ evidence as unverified or blocking, as appropriate. Distinguish executed checks
 from parsed examples, sampled visual checks, reported historical evidence, and
 unavailable checks. Keep secrets, private transcripts, and hidden reasoning out.
 
+For example, a handoff might report the following fictional case. Evidence and
+blockers are separate: an unavailable check is not a successful check.
+
+| Decision | Status | Evidence and revision | Blockers | Next action | Owner |
+|---|---|---|---|---|---|
+| Content gate | Pass | Human content review at revision `abc1234` | None identified | Preserve the reviewed revision | Content owner |
+| Release readiness | Blocked | Output metadata inspected at revision `abc1234` | Required render QA unavailable | Run render QA and review the outputs | Release owner |
+
+In this example, the metadata inspection is an actual check at the stated
+revision. A prior render is historical evidence, not a current check; the
+required render QA is unavailable, not passed. Assign the action to the person
+or role responsible for resolving the blocker, and retain both decisions in
+the handoff even when content has passed.
+
 For substantial or non-obvious primer work, include the verified commit map
 described in the portable template in the handoff or PR. It explains change
 history, not content quality; it sets no commit-count or merge-method quota.
