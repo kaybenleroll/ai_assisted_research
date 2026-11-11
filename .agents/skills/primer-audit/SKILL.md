@@ -17,6 +17,12 @@ Read `docs/primer-production-procedure.md`,
 `STYLE_GUIDE.md`. Record the reviewed source revision and brief revision, not
 only a branch name; the audit itself is a tracked artefact.
 
+After the human review, run `just primer-audit <primer-directory>` for a
+tracked primer. This performs the structural evidence check, Git-backed
+locator and revision check, opted-in examples, build, render QA, freshness,
+and scoped link checks. Record its result in the audit. It does not replace
+human judgement of depth, citations, accessibility meaning, or visual quality.
+
 Read the complete source and perform a whole-document inventory against the
 tracked, revision-bound brief. Check coverage, technical claims and
 calculations, sources and freshness, prerequisites and explanatory depth,

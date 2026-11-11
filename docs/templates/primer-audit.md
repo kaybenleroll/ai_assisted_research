@@ -192,6 +192,29 @@ the initial audit.
 |---|---|---|---|
 | | | | |
 
+## Release readiness checklist
+
+Record the content gate and release-readiness decision separately. Use
+`pass`/`fail` for the content gate and `ready`/`not-ready` for release
+readiness. Mechanical checks supply evidence; human review remains responsible
+for semantic depth, citation support, accessibility meaning, and visual quality.
+
+| Gate | Decision | Required evidence or limitation |
+|---|---|---|
+| Brief and audit binding | | Source, brief, audit, and reviewed revisions agree. |
+| Route/concept gate | | Stable IDs, exact locators, and no blocking primary/alternative rows. |
+| Locator validity | | Git-backed source and line validation result. |
+| Examples | | Manifest IDs, runtime, command, result, and execution status. |
+| Rendered outputs | | HTML/PDF existence, metadata, freshness, and render-QA result. |
+| Accessibility | | Heading order, table/code structure, alt text, and visual inspection status. |
+| Sources | | Citation verification and freshness status. |
+| Links | | Offline result and any online-check limitation. |
+| Revision review | | Changed artefacts and affected evidence rows reviewed. |
+| Handoff | | Remaining gaps, reviewer, branch, commands, and release decision. |
+
+- Content gate: <pass or fail>
+- Release readiness: <ready or not-ready>
+
 ## Execution and render evidence
 
 - Transition checks: <route_id, concept_id, transition, command or method,

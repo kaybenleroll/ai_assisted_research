@@ -10,7 +10,7 @@
 - Reviewed revision: `539137c`
 - Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r2`, file SHA-256 `3cd671ef8028aefacc213059befcc793f5034ca1d347c026a3d0882137126cea`; its recorded source revision is `539137c`.
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`, file SHA-256 `6c8ec82a1358bc61ddb9efa79166a12e89f458f93396f794b752a9e525b7dcb9` at reviewed HEAD.
-- Core-concept depth matrix: the 14 rows of the tracked brief above, inventoried against the complete 872-line source.
+- Core-concept depth matrix: the 14 rows of the tracked brief above, inventoried against the complete 879-line source.
 - Review boundary: complete source, brief, case, both executable scripts, construction helper, manifest, both JSON inputs, and committed HTML/PDF inventoried; selected claims, calculations, source pages, and rendered pages reconciled. Examples were freshly executed and outputs were rebuilt and visually sampled at the revisions recorded below. This is not verification of every claim or an external-data evaluation.
 - Readiness decision: not-ready
 
@@ -45,7 +45,7 @@ unstated step from elsewhere.
 |---|---|---|---|---|
 | Introduction | Orient the audience, primary route, optional branch and scope. | Source lines 5–19 | It cannot teach the operations itself. | retain: orientation is its deliberate role. |
 | Define the Boundary Before Building the Graph | Turn questions and source roles into bounded answer contracts, including the Q2 date distinction. | Source lines 27–76 | Q2's complete owner presentation is illustrative, not an asserted query. | retain: the section has a worked reasoning spine. |
-| Preserve Mentions, Entities, and Identifiers; Model Qualified Claims and Source Assertions | Move from source occurrences and identifiers to qualified, source-specific claims. | Source lines 97–133 | Separate H2 boundaries make one continuous modelling decision feel like two short topics. | consolidate: preserve `kg-mentions` and `kg-claims` as H3-level concepts under one teaching section. |
+| Represent Evidence, Entities, and Qualified Claims | Move from source occurrences and identifiers to qualified, source-specific claims. | Source lines 97–133 | The section now provides one H2 teaching frame, with mentions, identifiers, qualified claims, assertions, temporal scope and polarity as connected H3 concepts. | retain: the consolidation is already present in the reviewed source; re-check it if either concept is later split. |
 | Extract Conservatively and Resolve Identity with Abstention | Show candidate construction, identity decisions and abstention before loading the ledger. | Source lines 139–210 | The extractor is deliberately narrow and partly curated. | retain: the construction table and bounded flow provide the worked thread. |
 | Provenance, Time, Contradiction, and Uncertainty | Explain the controls that determine traceability, temporal scope and interpretation. | Source lines 220–246 | The fixture has no historical release record. | retain: the four controls are explicitly connected and applied to `c1`. |
 | Privacy and Proportionate Identity | Turn unresolved identity into audience-specific disclosure decisions. | Source lines 250–286 | The decision pattern covers ordinary user, authorised reviewer and restricted evidence, including minimisation and false-negative failures. | retain: expanded and still bounded to the Q5 case. |
@@ -159,9 +159,27 @@ Locators below are exact `primer_knowledge_graph/primer_knowledge_graph.md` line
 - Full-document visual inspection, automated accessibility testing, and an all-repository link check were not performed. Render QA and human sampling establish only the pages and properties named above.
 - `python3 -I scripts/check/check.py fresh` passed in the main checkout for all 31 source/output pairs at `99f1dda`.
 
+## Release readiness checklist
+
+| Gate | Decision | Required evidence or limitation |
+|---|---|---|
+| Brief and audit binding | pass | Source, brief, audit, and reviewed revisions agree at `539137c`. |
+| Route/concept gate | pass | Stable IDs, exact locators, and no blocking primary/alternative rows. |
+| Locator validity | pass | `just primer-audit primer_knowledge_graph` resolved the reviewed commit and all structured source locators. |
+| Examples | pass | Both manifest examples pass in their pinned runtimes. |
+| Rendered outputs | pass | HTML/PDF, freshness, and render QA pass; visual inspection remains sampled. |
+| Accessibility | not-checked | Automated accessibility review and full visual inspection remain outstanding. |
+| Sources | not-checked | Full citation-by-citation verification remains outstanding. |
+| Links | pass | Scoped offline link check passes; no full online refresh was run. |
+| Revision review | pass | The current source revision and affected audit metadata were reviewed. |
+| Handoff | pending | Final release handoff has not been prepared. |
+
+- Content gate: **pass**
+- Release readiness: **not-ready**
+
 ## Execution, reconciliation and stopping boundary
 
-- Commands actually run and results: `just examples` (both manifest entries pass); `just knowledge-graph-all` (HTML/PDF rebuild pass); `just render-qa primer_knowledge_graph` (pass, with human visual inspection recorded in the ignored report); `just check` (pass after README regeneration); scoped Markdown and offline-link lint (pass); `python3 -I scripts/check/primer_evidence.py primer_knowledge_graph/primer_knowledge_graph.brief.md primer_knowledge_graph/primer_knowledge_graph.audit.md` (pass); `python3 -I scripts/check/check.py fresh` (pass for 31 source/output pairs); Git last-touch and SHA-256 checks (pass). No full external-source refresh or automated accessibility audit was run.
+- Commands actually run and results: `just primer-audit primer_knowledge_graph` (structural evidence, Git-backed locator/revision validation, both manifest examples, HTML/PDF rebuild, render QA, freshness, scoped Markdown lint, and offline link check pass); `python3 -I -m unittest discover -s tests -p 'test_*.py'` (45 tests pass); `python3 -I scripts/check/primer_audit.py --repo-root . --project primer_knowledge_graph --impact-from 539137c` (no changed source ranges or affected locators); `git diff --check` (pass). No full external-source refresh, automated accessibility audit, or full-document visual inspection was run.
 - False positives: the automated page-26 figure/equation candidate is a fallback prose page; source text diagrams are on pages 14 and 49. Repository-wide structure advisories do not implicate this primer.
 - Missed issues found later by another reviewer: none known at this revision; that is an absence of reported evidence, not a claim of exhaustive defect discovery.
 - Reviewer effort and friction: one whole-source pass plus targeted source/code and five-page visual sampling; linked-worktree freshness and revision metadata required separate diagnosis. No quality score was assigned.
