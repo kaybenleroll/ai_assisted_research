@@ -13,11 +13,12 @@
   complete answer. The reader needs a practical method for turning bounded
   source material into qualified claims, preserving evidence and uncertainty,
   querying the result, and knowing when to abstain, correct, or re-evaluate it.
-- Intended outcome: The reader can design a bounded knowledge-graph case,
-  construct and query an evidence-preserving representation in Python and
-  DuckDB, interpret positive, negative, conflicting, and indeterminate results,
-  diagnose a failed answer, make a documented correction, and choose whether
-  an R projection or graph database is appropriate.
+- Intended outcome: The reader can explain what a knowledge graph adds beyond
+  an ordinary table or graph drawing; design a bounded case; work from source
+  mention to qualified claim to interpreted query result; recognise positive,
+  negative, conflicting, and indeterminate evidence; diagnose a failed answer;
+  make a documented correction; and choose whether a tabular, RDF, property-
+  graph, or other serving representation is appropriate.
 - Scope: Source boundaries and competency questions; mentions, entities and
   identifiers; qualified claims; temporal scope, polarity, provenance and
   uncertainty; conservative extraction and identity resolution; privacy;
@@ -28,25 +29,26 @@
 - Exclusions: General-purpose NLP, ontology engineering in depth, legal advice,
   vendor benchmarking, production deployment, a complete Neo4j integration,
   and claims that a synthetic fixture represents a real organisation.
-- Proposed dependency-led route: Establish the Northbridge boundary and
-  competency questions; preserve source text and distinguish mentions from
-  entities; model claims with time, polarity, provenance and uncertainty;
-  extract conservatively and abstain on identity; build the source-derived
-  ledger in DuckDB; answer direct and two-hop questions with evidence and
-  abstention; diagnose a failed extraction, rebuild after a source correction,
-  and re-evaluate the answer; validate and evaluate; analyse a deliberately
-  lossy R projection; then take an optional reference branch through RDF and
-  property graphs before comparing graph-shaped storage choices and closing
-  with governance and release.
+- Proposed dependency-led route: Explain what a knowledge graph is and when it
+  helps; establish the Northbridge boundary and competency questions; preserve
+  source mentions and distinguish them from entities; model qualified claims
+  with time, polarity, provenance and uncertainty; work one source sentence
+  through construction to a query result; extract conservatively and abstain
+  on identity; use direct, path, temporal and provenance questions; diagnose a
+  failed extraction, rebuild after a source correction, and re-evaluate the
+  answer; then compare RDF, property-graph, tabular, and R projection choices
+  before closing with governance and release.
 - Approximate depth: Substantial, explanatory treatment. The document should
   grow where the dependency, worked case, or limitation requires it; word count
   is an outcome rather than a cap.
-- Worked examples: Northbridge competency questions; source sentence to
-  candidate claim; two Alex Kim identity abstention; DuckDB direct, two-hop,
-  provenance and temporal queries; conflict and indeterminate answers; a
-  deliberately broken extraction followed by correction and re-evaluation;
-  R shortest-path/component analysis; an RDF qualified-claim mapping; a
-  property-graph/Cypher comparison table.
+- Worked examples: Northbridge competency questions; a small graph and its
+  qualified evidence table; source sentence to mention, entity decision, claim,
+  query, result and limitation; two Alex Kim identity abstention; direct,
+  path, provenance, temporal and conflict questions; a deliberately broken
+  extraction followed by correction and re-evaluation; R shortest-path and
+  component analysis; and storage-neutral comparisons of RDF and property
+  graphs. Executable implementations remain companion evidence rather than the
+  reader's primary route.
 - Real-world cases: Northbridge is a synthetic organisational-policy case used
   because it exposes source authority, temporal conflict, identity ambiguity,
   privacy, and correction without implying access to real personal data. Brief
@@ -56,9 +58,9 @@
 - Core-concept depth matrix: the matrix below; retain all IDs in the later audit.
 - Route classification and teaching spines: The route classifications and teaching spines are specified below.
   - `route-python-duckdb` — `primary`: Northbridge questions motivate the
-    organising model of evidence-backed claims; the executable Python/DuckDB
-    case constructs, queries, diagnoses, corrects, rebuilds, re-evaluates, and
-    states where the method abstains.
+    organising model of evidence-backed claims; the standalone case constructs,
+    queries, diagnoses, corrects, rebuilds, re-evaluates, and states where the
+    method abstains. Python/DuckDB remains companion verification evidence.
   - `route-r-projection` — `alternative`: the same bounded positive projection
     is used to demonstrate `igraph` paths/components and `tidygraph` node
     transformations; the result is interpreted as topology analysis, with the
@@ -68,14 +70,18 @@
     worked mapping and a workload-based choice guide, not a product survey or
     executed Neo4j route.
 - Figures, tables, and equations: Preserve the useful source-to-ledger pipeline,
-  add a correction-loop diagram, retain the source/claim and storage comparison
-  tables, add a before/after answer table, and use equations only where they
-  clarify evaluation measures or temporal classification.
+  make the standalone graph and source-to-answer walkthrough central, add a
+  correction-loop diagram, retain the source/claim and storage comparison
+  tables, add before/after answer tables, and use equations only where they
+  clarify evaluation measures or temporal classification. Do not make code or
+  repository file targets necessary to understand a worked example.
 - Languages and executable examples: Python 3.12 with pinned DuckDB remains
-  the primary executable route; R with pinned `igraph`, `tidygraph`, `dplyr`,
-  and `tibble` remains an alternative projection. Python must execute the
-  correction/rebuild/re-evaluation path. The R example may remain a separate
-  projection but must state its interchange boundary and discarded semantics.
+  companion verification for the primary route; R with pinned `igraph`,
+  `tidygraph`, `dplyr`, and `tibble` remains companion verification for the
+  alternative projection. Python must execute the correction/rebuild/
+  re-evaluation path. The published explanation must remain readable without
+  opening or running either implementation, and must state each interchange
+  boundary and discarded semantic.
 - Evidence plan: Verify current DuckDB 1.4.3 behaviour against official
   documentation; verify RDF 1.1, SPARQL 1.1, SHACL and PROV-O statements against
   W3C specifications; verify the narrow Cypher claims against the named

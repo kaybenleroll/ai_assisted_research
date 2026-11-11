@@ -4,21 +4,144 @@
 
 A knowledge graph connects identified things and the relationships claimed between them. Its value is not that drawing an edge makes a statement true. Its value is that a reader can follow a chain from a question through explicit modelling decisions to the source records on which an answer depends. This primer develops that chain: from source material and uncertain names to qualified claims, evidence-backed queries, validation, and repeatable releases.
 
-The reader is a software or data practitioner comfortable with tables, JSON, and basic Python or SQL. No prior graph-database or ontology experience is assumed. The main route follows Northbridge, a synthetic organisational-policy case, through the canonical Python and DuckDB construction pipeline. This is a construction guide, not a complete reference for database products, formal logic, or legal interpretation. Policy authority in the example is an explicit modelling assumption, not legal advice.
+The reader is a software or data practitioner comfortable with tables and basic
+data modelling. No prior graph-database or ontology experience is assumed. The
+main route follows Northbridge, a synthetic organisational-policy case, from
+source evidence to a bounded set of claims and then to questions whose answers
+can be inspected. This is a guide to the reasoning behind a knowledge graph,
+not a complete reference for database products, formal logic, or legal
+interpretation. Policy authority in the example is an explicit modelling
+assumption, not legal advice.
 
-Follow the dependency from the questions and source boundary to mentions and identity, then to qualified claims, extraction, provenance, and privacy. These choices determine what the Python and DuckDB queries can return and when they must abstain. After those queries, continue at [Analyse a Projection in R](#analyse-a-projection-in-r), then use validation and release governance to assess and maintain the result. The R projection is a separate analysis of selected relations, not an evidence-preserving replacement for the claims.
+Read the primer as a standalone explanation. The central case is worked with
+tables, small graph diagrams, and prose before any implementation detail is
+introduced. The Python, SQL, R, RDF, and property-graph material later in the
+primer is companion evidence for particular representations; you should be
+able to understand the model, reproduce the reasoning by hand, and judge the
+answer limits without opening a repository file.
 
-[Represent Claims in RDF and Property Graphs](#represent-claims-in-rdf-and-property-graphs) is an optional representation and storage branch after the Python route. Read its RDF subsections for triples, SPARQL, SHACL, and PROV-O; read the property-graph subsection for the corresponding Cypher design; or consult the storage comparison and proposed Neo4j smoke test when choosing or testing a serving layer. These designs are illustrative and the Neo4j test is prospective. Start with the section introduction before either branch; resume the main route at [Analyse a Projection in R](#analyse-a-projection-in-r).
-
-The headings place the optional representation branch before the R section so
-the two non-Python representations can be compared together. That presentation
-order is not an additional dependency. For the primary teaching route, read
-the Python/DuckDB sections through diagnosis and correction, then read the R
-projection and the validation/evaluation sections. Treat the RDF, property
-graph, and storage sections as a side branch that you can enter after the
-Python ledger and leave before returning to the R route.
+The route is deliberately divided into two questions. First, how do we build a
+graph without turning a source statement into an unsupported fact? Second, how
+do we use the resulting graph without confusing a path, a stored assertion,
+and a conclusion? A final section covers validation, evaluation, correction,
+release, privacy, and responsibility. RDF, property graphs, and R are useful
+comparison branches, not prerequisites for the main case.
 
 *Verified against primary sources for Construct and Query with Python and DuckDB; Represent Claims in RDF and Property Graphs; Analyse a Projection in R; and Validate, Evaluate, and Diagnose; unverified claims are flagged inline.*
+
+## What a Knowledge Graph Is—and When It Helps
+
+A knowledge graph is a model of entities and relationships in which the
+relationships can be inspected, traversed, and qualified. That definition is
+intentionally modest. A graph does not become knowledge merely because its
+data is drawn as circles and arrows, and it does not become trustworthy merely
+because a graph database stores it. The useful question is: what can a reader
+ask, which evidence supports the answer, and which modelling decisions stand
+between the source and the result?
+
+Consider three ways to record the same small fact:
+
+| Representation | What it makes easy to see | What remains unresolved |
+|---|---|---|
+| Sentence: “The register says version 1 applies to Atlas.” | The wording and its source context | Whether “applies” has a date, what version of the register was read, and how to compare a conflicting sentence |
+| Row: `(policy:travel-v1, applies_to, project:atlas)` | The endpoints and predicate | Who asserted it, when it applies, whether it is positive or negative, and what the reader should do when another source disagrees |
+| Qualified graph claim | Endpoints, predicate, source, locator, interval, polarity, and decision status can be queried together | The graph still depends on the quality and coverage of its source boundary and modelling rules |
+
+The third representation is the focus here. It is not always the best storage
+choice. A small, stable report may be better kept as a document; a fixed set of
+joins may be clearer in ordinary relational tables; a graph becomes attractive
+when the important questions follow relationships, combine evidence from
+different sources, or need to retain uncertainty about those relationships.
+
+### The smallest useful graph
+
+Start with a graph that answers one real question rather than with a list of
+technologies. Suppose a directory records that Atlas belongs to Northbridge
+and a policy register records that Travel Policy v1 applies to Atlas. The
+unqualified picture is:
+
+```text
+Travel Policy v1 ──applies_to──► Atlas ──belongs_to──► Northbridge
+```
+
+This path answers a structural question: is the policy connected to the
+organisation through the project? It does not answer whether the policy was
+valid on a particular date, whether both edges came from the same source, or
+whether the path is an authorised inference. For those questions, each edge
+needs an evidence-bearing record. A useful hand-worked version is:
+
+| Claim | Subject | Predicate | Object | Source | Scope | Polarity |
+|---|---|---|---|---|---|---|
+| `c1` | `policy:travel-v1` | `applies_to` | `project:atlas` | policy register, `R1:P1-P2` | 1 January–1 April 2024, end exclusive | positive |
+| `c3` | `project:atlas` | `belongs_to` | `org:northbridge` | directory, `D1:A1` | source record's stated scope | positive |
+
+The path can now be returned together with the two claim IDs and their
+locators. That is the first important difference between a graph used for
+evidence-backed work and a graph used only as a visualisation: the answer can
+be challenged one relationship at a time.
+
+### Why the graph is more than a set of edges
+
+The graph's entities and relationships are only the visible centre of a larger
+model. A source contains *mentions*: occurrences such as “Alex Kim” or
+“version 2”. An entity is the thing the model may identify from that mention.
+A claim says that a qualified relationship is being considered; an assertion
+says that a particular source or process presents it. These are not synonyms.
+Keeping them separate lets the graph represent both “the minutes deny that
+version 1 applies” and “the register says that it does” without overwriting
+one source with the other.
+
+Qualification carries the context needed to interpret the relationship. Common
+qualifiers include:
+
+- source and locator, so a reviewer can return to the evidence;
+- valid time and observation or publication time, which answer different
+  temporal questions;
+- polarity, so a denial is not silently discarded;
+- confidence or review state, when those are defined and calibrated;
+- audience, access, or jurisdiction, when a relationship is not universal;
+- extraction and identity decisions, so a correction can be traced to its
+  intermediate reasoning.
+
+Not every graph needs every field. The discipline is to begin with the
+questions and retain the fields that those questions require. Adding a generic
+“confidence” number does not solve an identity ambiguity if the source never
+provides a distinguishing identifier. Adding a graph database does not solve a
+missing date. The model should make those limits visible rather than decorate
+them with infrastructure.
+
+### When a graph helps—and when it does not
+
+A graph is useful when relationships are central to the reader's task. Typical
+questions include:
+
+1. Which things are connected through a particular relation, and what are the
+   intermediate steps?
+2. Which sources support each step of a path?
+3. Do competing sources make incompatible claims about the same relationship?
+4. What was supported at a stated date, and what is merely unknown afterwards?
+5. Which related records must be reconsidered when a source or identity
+   decision changes?
+
+These are not automatically graph-database questions. A relational design can
+answer them with tables and joins, especially when the depth and predicates are
+known in advance. The graph vocabulary is valuable because it makes the
+relationship structure and path semantics explicit. Choose a serving engine
+only after the questions, evidence fields, update pattern, and access boundary
+are clear.
+
+The Northbridge case keeps this distinction visible. It uses a tabular ledger
+for the canonical evidence-preserving route because the teaching problem is to
+show the records and decisions clearly. A later comparison explains how the
+same qualified claims could be mapped to RDF or a property graph. The reader
+does not need to believe that one representation is universally superior; the
+reader needs to understand what information each representation retains or
+loses for a particular question.
+
+The rest of the primer therefore follows a simple promise: define the question
+and evidence boundary, build claims conservatively, use those claims to answer
+bounded queries, and state what the answer cannot establish. Every example is
+small enough to inspect by hand before it is connected to an implementation.
 
 ## Define the Boundary Before Building the Graph
 
@@ -82,7 +205,11 @@ The boundary also governs negative answers. The absence of a matching claim mean
 This distinction prevents two common category errors. First, “the graph says” should not conceal which source and selection rule produced the result. Second, a missing path is not evidence that a relationship does not exist. State the fixture boundary alongside conclusions, and return “not represented in the supplied sources” when that is all the query establishes.
 
 
-The fixture is `primer_knowledge_graph/examples/fixture.json`. It is synthetic data, not a set of retained source documents. The table summarises its source records and selected assertions; the locators are the exact source-level labels in the JSON.
+The teaching fixture is synthetic data, not a set of retained source documents.
+The table summarises its source records and selected assertions; the locators
+are exact source-level labels within those synthetic records. A production
+graph would need stable source versions and access to the retained evidence,
+not merely the labels shown here.
 
 | Source | Locator | Selected fixture content |
 |---|---|---|
@@ -90,13 +217,18 @@ The fixture is `primer_knowledge_graph/examples/fixture.json`. It is synthetic d
 | Northbridge directory `s-directory` | `D1:A1` | `c3` and `c7`: Atlas and Orion belong to Northbridge. The shared source locator does not identify a separate Orion row. |
 | Atlas meeting minutes `s-minutes` | `M1:paragraph-3` | From 15 March, `c4` asserts version 2 applies and `c5` denies that version 1 applies; `m-alex` is unresolved. |
 
-The fixture stores the two Alex entities but not their directory identifiers or the full register and minutes. The separate `examples/source_records.json` retains short synthetic excerpts and three directory rows for the executable construction slice. It records only version 1 ownership, not ownership of version 2. The start date on a meeting claim is an encoded valid-time interpretation, not a general rule that a publication date automatically fixes validity.
+The teaching data stores the two Alex entities but not their directory
+identifiers or complete register and minutes. The construction companion
+retains short synthetic excerpts and three directory rows for its executable
+slice. It records only version 1 ownership, not ownership of version 2. The
+start date on a meeting claim is an encoded valid-time interpretation, not a
+general rule that a publication date automatically fixes validity.
 
 ## Represent Evidence, Entities, and Qualified Claims
 
 The boundary tells us which source occurrences matter; it does not tell us which occurrences refer to the same thing. Before converting those occurrences into claims, keep their source evidence separate from the identities the graph may assign.
 
-### Mentions and Entity References
+### From source mentions to qualified claims
 
 A mention is an occurrence in a source; an entity is a thing the model refers to; an identifier names that entity within a defined namespace. A label is a human-readable description and need not be unique. These objects have different lifecycles and should not be collapsed into one row just because a simple graph drawing has one node per thing.
 
@@ -106,43 +238,43 @@ The same separation applies to policy names. `policy:travel-v1` and `policy:trav
 
 Each source has a logical locator: `R1:P1-P2`, `D1:A1`, or `M1:paragraph-3`. These identify synthetic source regions, not byte offsets or complete source documents; the construction input retains excerpts and checks character offsets within them; the register locator covers both rows rather than singling out one claim. A production evidence chain should point to a stable source version and a reproducible row key, page and paragraph, or character offsets against a content-addressed text extraction. Offsets without a reproducible text version are fragile; row numbers are fragile if rows can be sorted.
 
-### Stable, Namespaced Identifiers
+**Stable, namespaced identifiers.**
 
 Identifiers should be stable and namespaced. The fixture's IDs (`org:northbridge`, `project:atlas`, `policy:travel-v1`, and `person:morgan-lee`) are readable synthetic identifiers; the prefix suggests a kind but does not by itself guarantee global uniqueness or establish who issued it. Real source identifiers should retain their issuing authority, since `1234` in one system may identify something different from `1234` in another. A label change should not silently create a new entity, and a reused label should not silently merge two entities. If two records are linked, preserve the mapping and the basis for it so that a later correction can split the records without rewriting the source history.
 
 The World Wide Web Consortium (W3C) RDF 1.1 Concepts recommendation makes a related distinction between Internationalised Resource Identifiers (IRIs), literals, and blank nodes: identifiers and values play different roles in a graph. Northbridge's JSON schema is not RDF, but the conceptual lesson applies across storage choices. A date such as `2024-03-15` is a value; `project:atlas` is a reference; “Atlas” is a label; and the occurrence `m-atlas` is evidence that a particular source used that label. Retaining these distinctions allows labels and interpretations to change without losing what the source actually contained.
 
-### Model Qualified Claims and Source Assertions
+**Model qualified claims and source assertions.**
 
 A bare triple such as `policy:travel-v1 applies_to project:atlas` omits information needed to answer the Northbridge questions. The fixture's claim `c1` adds source `s-register`, mention `m-policy-v1`, the validity interval from 1 January to 1 April 2024, and positive polarity. These fields make the statement inspectable and temporally queryable. The corresponding positive relation in `relations` is only an analytical projection; it omits source, mention, interval, and polarity and must not become the evidence record used to explain an answer.
 
-### Qualified Assertions
+**Qualified assertions.**
 
 The subject–predicate–object form remains useful for the core relation, but many claims are not adequately represented by an unqualified edge. A policy's applicability can be conditional on jurisdiction, staff class, or activity; ownership can have a role and appointment period; an employment relation can be asserted by one source and disputed by another. One representation is to make each qualified assertion a first-class record, as `claims` does, with references to its participants and evidence. Another is an n-ary relation node or a named graph with attached metadata. The design choice should preserve the fields needed by competency questions and validation. W3C's guidance on n-ary relations describes this general modelling problem; it does not prescribe one universal encoding.
 
 Distinguish a proposition from an assertion of that proposition. In this primer, a claim is the qualified proposition under consideration; an assertion is a source or process presenting it. Claim `c4` says that `policy:travel-v2` applies to Atlas from 15 March according to the minutes. Claim `c6` says that the same version applies from 1 April according to the register. Claim `c5` records the minutes' negative assertion that version 1 applies on 15 March. Keeping source-specific assertions means the minutes and register remain separately queryable. It also avoids the misleading operation of overwriting one value with the other.
 
-### Temporal Scope
+**Temporal scope.**
 
 The temporal contract must distinguish three end kinds; nullness alone is not enough. A `bounded` claim has `valid_to > valid_from` and means the half-open interval `[valid_from, valid_to)`. An `unbounded` claim has no `valid_to` and explicitly says that the source asserts continuation; it remains revisable and is not a promise of eternal truth. An `unknown` claim has no `valid_to` but has a `supported_through` date: the source supports the inclusive period `[valid_from, supported_through]`, and applicability afterwards is indeterminate. `supported_through` is the last domain-valid date supported by the assertion, not its publication, ingestion, review, or transaction time. It must not be inferred from a single observation or from a source publication date.
 
 Thus `c1` is bounded, covers 1 January through 31 March, and `c6` begins on 1 April. Existing claims with an unspecified end should be treated as `unknown` unless the source explicitly supplies continuation; do not silently promote them to `unbounded`. The fixture and runnable script require explicit `end_kind`, explicit nulls where applicable, and the corresponding `supported_through` rule. The predicate itself also needs a definition: `owned_by` means the register's recorded owner in this example, not necessarily the legal owner, budget holder, or operational decision-maker.
 
-### Polarity and Conflicting Evidence
+**Polarity and conflicting evidence.**
 
 Polarity is not the same as truth status. `c5` is a negative-polarity assertion from the minutes; its presence records that the minutes deny applicability of version 1 from 15 March. It does not erase positive `c1`, and the fact that `c1`'s validity interval ends on 1 April does not make `c5` true. The positive-claim `relations` projection intentionally excludes `c5`, so analyses over that projection cannot answer questions about the disagreement. Query design must choose whether it needs the positive topology, the full assertion ledger, or both. A projection is a derived view with documented loss, not a replacement for source-backed claims.
 
-## Extract Conservatively and Resolve Identity with Abstention
+## Build Conservatively and Resolve Identity with Abstention
 
 The claim model specifies what a usable record must retain. Construction must now decide whether a source supplies enough evidence to populate that record and link its participants; missing evidence can require abstention at either step.
 
-### Candidate Extraction
+### From candidate evidence to an abstaining identity decision
 
 Extraction turns source material into candidate mentions and assertions. It is an interpretation step, even when a rule-based parser is used: sentence boundaries, negation scope, coreference, version references, and date expressions can all be misread. Preserve the input source and version, the extracted text or span, the proposed participants and predicate, and the extraction method. Separate this candidate record from a later accepted assertion so that changed rules can be compared against the same evidence.
 
 The Northbridge examples expose why this matters. The register says version 1 applies to Atlas from 1 January until 1 April; the minutes, dated 15 March, say version 2 already applies and explicitly deny that version 1 applies. A system that extracts only affirmative noun–verb patterns may retain `c4` and lose `c5`. A system that treats the meeting date as the start date of the policy's validity may confuse when a statement was made with when the stated relationship holds. The fixture encodes the meeting assertions as valid from 15 March, but a richer representation would separately store the minutes' publication or event date and the time referred to by each statement. Extraction must retain enough context to assess those interpretations rather than hide them in a single edge.
 
-### Identity Resolution
+**Identity resolution.**
 
 Entity resolution is a separate decision: given a mention or source record and candidate entities, decide whether the evidence supports identity. Candidate generation and candidate matching have distinct failure modes. A blocking rule may fail to propose a true match; a matcher may incorrectly accept a proposed pair. Statistics Canada's study of blocking errors discusses why missed candidates need separate measurement from match decisions. Names, type compatibility, co-occurring identifiers, dates, and source-specific rules can help rank or reject candidates, but no string similarity threshold supplies evidence that is absent from the source.
 
@@ -152,7 +284,7 @@ The minutes say “Alex Kim attended.” Name matching finds `person:alex-kim-1`
 
 The fixture records each decision ID, mention, candidate set, outcome, selected candidate where applicable, and reason. It contains one acceptance and one abstention, but no rejection. An operational decision record should also identify the method and version, review status and decision time. The Python validator checks the decision references and selected-candidate rules, and asserts the Alex abstention; it does not run a matcher or write the decisions into DuckDB.
 
-### Abstention and Review
+**Abstention and review.**
 
 Abstention is useful because the costs of errors are asymmetric. A missed link may leave a query incomplete; a false identity merge can attribute meeting attendance or policy ownership to the wrong person and contaminate every downstream path. Preserve uncertain candidate links outside the accepted graph, and make review possible. Pairwise decisions also need global consistency checks: accepting A–B and B–C does not prove A–C if the evidence is inconsistent or entities are not governed by a strict equivalence relation. Record enough provenance to reverse or revisit a merge.
 
@@ -162,8 +294,8 @@ Do not interpret a model's score as a probability of real-world truth unless it 
 
 Now that mentions, identities and abstention rules are explicit, construction can
 populate the qualified claim model without silently turning text into truth. The
-executable `examples/python/construction.py` reads the versioned synthetic
-excerpts in `examples/source_records.json`. Its three sentence patterns produce
+companion construction implementation reads versioned synthetic excerpts. Its
+three sentence patterns produce
 candidates with subject, predicate, object, source, dates, end kind and polarity,
 plus an evidence locator, character offsets, exact matched text and method
 `northbridge-patterns-v1`. Offsets are checked against the retained text. The
@@ -209,7 +341,55 @@ that either is independently verified. Full-document optical character
 recognition, open-domain language understanding, learned matching, and a
 general update engine remain outside this milestone.
 
-## Provenance, Time, Contradiction, and Uncertainty
+### Work one claim from source to answer
+
+The whole construction can be understood without a parser or graph service.
+Take the sentence “On 2024-03-15, version 1 does not apply to Atlas.” The
+sentence is not yet a graph edge. It is a source occurrence with a location,
+wording, and an interpretation that still needs to be recorded.
+
+| Stage | Stored or decided result | Why it matters |
+|---|---|---|
+| Source occurrence | `m-policy-v1-meeting`, in the Atlas minutes at `M1:paragraph-3` | A later reviewer can find the exact sentence and distinguish it from another mention of version 1. |
+| Mention interpretation | “version 1” refers to `policy:travel-v1`; “Atlas” refers to `project:atlas` in this meeting context | The model records an identity decision instead of pretending that labels are globally unique. |
+| Qualified claim | `c5`: `policy:travel-v1 applies_to project:atlas`, negative polarity, valid from 15 March, end kind `unknown`, supported through 15 March | The relationship can be queried without discarding its date or the fact that the source denies it. |
+| Source assertion | The minutes present `c5`; the register separately presents positive `c1` for 1 January–1 April | Competing evidence remains visible rather than being overwritten by a preferred value. |
+| Reader question | “What does the evidence say about version 1 on 15 March?” | The question fixes the date and prevents a timeless answer from being smuggled in. |
+| Result | `c1` is applicable and positive; `c5` is applicable and negative; answer policy returns `abstain: conflicting evidence` | The result states what the selected evidence supports and why it does not choose a winner. |
+
+Now add the other path edge: the directory says Atlas belongs to Northbridge.
+The reader can ask whether there is a path from version 1 to Northbridge using
+the sequence `applies_to → belongs_to`. The answer is a two-hop path whose
+first hop is `c1` and whose second hop is `c3`. It is not a new claim that
+version 1 applies to Northbridge. The path is a useful answer to a structural
+question, but its interpretation remains bounded by the meaning of each
+predicate and by the dates and sources on each hop.
+
+This distinction becomes important when the question changes. “Is there a
+path?” and “Was the policy applicable to the organisation on 15 March?” are
+not equivalent. The first may be answered by following the selected positive
+topology. The second must classify each hop at the requested date, retain
+negative and indeterminate evidence, and state whether the policy allows that
+path to support an organisation-level conclusion. A graph can make the first
+answer easy while leaving the second unresolved; that is a modelling result,
+not a failure of graph traversal.
+
+Finally, consider the minutes' mention of “Alex Kim”. The source occurrence
+survives, but two directory entities have that label and the sentence provides
+no distinguishing identifier. The graph therefore stores an unresolved
+mention, both candidates, and an abstention. It does not create an edge from
+the meeting to either person. A query can report that the meeting contains an
+unresolved Alex Kim mention; it cannot responsibly answer which directory
+person attended. The absence of an edge here is not a negative attendance
+claim. It is the result of an explicit identity decision.
+
+These three outcomes—an evidence-backed direct assertion, a qualified path,
+and an unresolved mention—are the basic reader operations for the rest of the
+primer. In each case the graph is useful because the intermediate decision is
+available for inspection. In each case the graph is limited because the answer
+depends on source scope, predicate meaning, temporal policy, and completeness.
+
+## Preserve Provenance, Time, Conflict, and Uncertainty
 
 These concerns determine whether a graph answer can be traced, dated, compared
 with competing evidence, and qualified when the evidence is incomplete. Treat
@@ -217,7 +397,7 @@ them as connected controls: provenance identifies the assertion, time limits
 its scope, conflict preserves disagreement, and uncertainty constrains the
 answer.
 
-### Provenance Roles and Release History
+### Keep the evidence chain interpretable
 
 Provenance makes an answer auditable: which source version supported which assertion, what activity extracted or reviewed it, and which release and selection rule produced the answer. The W3C PROV Ontology (PROV-O) vocabulary models entities, activities, and agents and can inform an implementation. Even without adopting PROV-O, preserve stable source identifiers, version or digest, source and ingestion dates where known, reproducible locator, extraction or review method, and the responsible process or agent. A source publisher, the person quoted, and the extractor are different roles and should not be collapsed.
 
@@ -225,7 +405,7 @@ For the Northbridge register, one useful provenance chain is `s-register` as the
 
 This distinction answers different audit questions. “Which document did the answer come from?” needs the source and locator. “How did this claim enter the graph?” needs the extraction or review activity and method version. “Who may approve its publication?” needs an accountable agent and release record. A checksum proves which bytes were processed, but it does not prove that the source was authoritative or that the extraction rule interpreted it correctly.
 
-### Valid Time and Observation Time
+**Valid time and observation time.**
 
 Time commonly has at least two axes. Valid time describes when the asserted relationship holds in the domain; transaction or observation time describes when the system recorded that assertion. The fixture's `valid_from` and `valid_to` encode valid time, while its `sources[].published` gives source publication dates. It has no ingestion timestamp or transaction history, so it cannot answer “what had the system recorded by 20 March?” without an external release record. A corrected register imported on 1 May should not rewrite the evidence available in an earlier release. Preserve both the old and new source versions and state whether a historical query asks what was known then or what current evidence says about then.
 
@@ -233,13 +413,13 @@ Consider `c1`, which is valid from 1 January until 1 April. A query asking wheth
 
 When a schema stores only `valid_from` and `valid_to`, it can answer a domain-time question but cannot reconstruct the graph's historical knowledge. That is not a reason to invent an observation date from the source publication date. Add the missing release history or state that the historical query is unsupported.
 
-### Conflict and Authority
+**Conflict and authority.**
 
 For the date 15 March, the register's `c1` covers Atlas under version 1; the minutes' `c4` asserts version 2 and `c5` denies version 1 for the same project and date. Those are incompatible assertions under the fixture's intended interpretation. `c6` begins version 2 on 1 April and is consistent with the end of `c1`; it is not itself a contradiction. Before labelling two records contradictory, compare subject, predicate, object or competing value, temporal scope, jurisdiction, and relevant conditions. A conflict requires overlapping scope and mutually exclusive claims, not merely two different records.
 
 Authority is purpose-specific. To answer “what did the register record?”, use the register. To answer “what did the minutes say?”, report the minutes. To answer “which version should a user treat as governing?”, the fixture alone cannot settle legal or operational force; its teaching rule can prefer the register only for the narrower question about recorded policy applicability. Keep the losing assertion visible and state the preference rule. Otherwise a source ranking can look like a truth mechanism and conceal a material disagreement.
 
-### Uncertainty and Path Interpretation
+**Uncertainty and path interpretation.**
 
 Uncertainty has multiple causes and should not be compressed into one confidence number. The Alex identity is underdetermined because the source lacks a distinguishing identifier. The applicability disagreement is not an extraction uncertainty in the fixture: two explicit, incompatible records are present. Source completeness is unknown because only three synthetic source records are included. An unknown end on `c2` means duration is supported only through its retained horizon; it is not an eternal interval. Each condition changes what a query can conclude and should be represented or reported separately.
 
@@ -286,16 +466,32 @@ restricted evidence into a false negative. Privacy therefore changes the
 answer contract and the evidence path, not just the columns selected from a
 database.
 
-## Construct and Query with Python and DuckDB
+## Use the Graph: From Claims to Interpreted Queries
 
-The preceding decisions become observable when claims are built, checked, and queried. The executable route below retains source-specific records so that a date classification and an answer policy can be inspected separately: an applicable assertion is evidence for an answer, while a competing or temporally indeterminate assertion can prevent a definitive answer.
+The preceding decisions become useful when a reader can ask a question and
+follow the answer back through the claims that support it. Start with the
+reader-facing operation, not with a database product. A direct question returns
+the relevant assertions; a path question returns every hop and its evidence; a
+dated question classifies each assertion before combining the results; and a
+conflict or uncertainty policy determines whether the final answer should be
+supported, refuted, or withheld. The same reasoning can be implemented with
+tables, RDF, a property graph, or a service API.
 
-The canonical runnable example is `primer_knowledge_graph/examples/python/knowledge_graph.py`; its inputs are `primer_knowledge_graph/examples/source_records.json` and the canonical `primer_knowledge_graph/examples/fixture.json`. Both use synthetic records. The script constructs source-derived claims, merges them with explicitly curated rows, reports any diagnostic drift from the fixture, validates references and intervals, writes claims and provenance to a file-backed DuckDB database, closes it, reopens it read-only, and runs bounded queries with assertions. It is not a general source extractor. Its manifest entry is `knowledge-graph-python` in `primer_knowledge_graph/examples/manifest.toml`. From the repository root, build the primer's runtime if necessary and run:
+The small example below uses a tabular ledger as an implementation companion.
+It is intentionally not the source of the explanation: the tables and result
+interpretations above and below are the standalone teaching route. The code
+and schema show one reproducible implementation of the decisions, while the
+reader should not need to inspect repository files to understand what the
+queries mean.
 
-```sh
-just build-python-duckdb-runtime
-just examples knowledge_graph knowledge-graph-python
-```
+The canonical runnable companion constructs source-derived claims, merges them
+with explicitly curated rows, reports diagnostic drift from the teaching
+fixture, validates references and intervals, writes claims and provenance to a
+file-backed DuckDB database, closes it, reopens it read-only, and runs bounded
+queries with assertions. It is not a general source extractor. The repository
+keeps the exact container command and example manifest separately so that this
+standalone explanation does not make its reader learn a file layout before
+understanding the model.
 
 The runner provides a fresh temporary output directory, disables network access and discards the database afterwards. The script uses `EXAMPLE_OUT` when set and otherwise writes to its working directory. It creates tables with plain `CREATE TABLE`, so running it again against the same output database fails rather than silently replacing the previous build. Use a fresh directory for each standalone run. DuckDB documents [file-backed and read-only connections](https://duckdb.org/docs/stable/clients/python/dbapi.html); persistence here means the script can reopen and query its file, not that it publishes an enduring release.
 
@@ -316,22 +512,18 @@ The executable assertions also give a compact account of dated answers and evide
 
 These are fixture regression results under the executable’s conservative answer policy, not a legal determination or evidence of production accuracy. The path status is a classification of both premises, not an inferred organisational claim.
 
-### From Fixture to Tables
+### Companion implementation: a tabular evidence ledger
 
 In the target ledger, each JSON claim is a source-specific assertion with an ID, subject, predicate, object, source, optional mention, valid interval, temporal end kind, optional support horizon, and polarity. The field contract is: `bounded` requires `valid_to` and no `supported_through`; `unbounded` requires both to be null and explicit source wording of continuation; `unknown` requires a null `valid_to` and `supported_through >= valid_from`. Dates use calendar-date strings. The horizon is the last supported domain-valid date, inclusive; it is not publication or ingestion time. The checked-in fixture uses this contract. In either form, `c1` says that `policy:travel-v1` applies to `project:atlas` from 1 January to 1 April 2024, according to `s-register`; `c5` records a negative assertion about the same subject, predicate and object from `s-minutes`, starting on 15 March. The two rows preserve disagreement. `c4` and `c6` both assert that version 2 applies to Atlas, but they have different sources and start dates. Neither should be collapsed into a single source-free edge if the question concerns evidence.
 
-The executable's current data-definition language (DDL) is intentionally minimal; domain rules remain in the Python validator:
-
-```sql
-CREATE TABLE claims (id VARCHAR, subject VARCHAR, predicate VARCHAR,
-    object VARCHAR, source VARCHAR, mention VARCHAR, valid_from DATE,
-    valid_to DATE, end_kind VARCHAR, supported_through DATE,
-    polarity BOOLEAN);
-CREATE TABLE sources (id VARCHAR, title VARCHAR, published DATE, locator VARCHAR);
-CREATE TABLE mentions (id VARCHAR, source VARCHAR, text VARCHAR, entity VARCHAR);
-CREATE TABLE extraction_evidence (claim_id VARCHAR, locator VARCHAR,
-    span_start INTEGER, span_end INTEGER, span_text VARCHAR, method VARCHAR);
-```
+The companion ledger has four conceptual tables. `claims` holds the subject,
+predicate, object, source, optional mention, valid interval, end kind, support
+horizon, and polarity. `sources` holds source titles, publication dates, and
+logical locators. `mentions` preserves the source occurrence and any resolved
+entity. `extraction_evidence` links a constructed claim to its locator,
+character span, exact text, and extraction method. The schema is deliberately
+small; the important lesson is the fields and their relationships, not the
+syntax of a particular data-definition language.
 
 The executable loads both qualifier fields and validates the three combinations before insertion. A production-aligned schema would also make `end_kind` non-null, add keys and foreign keys, and enforce the cross-field combinations in the database as well as in application code.
 
@@ -343,28 +535,20 @@ The source table includes the fixture’s logical locator, but the fixture has n
 
 The distinction between a proposition and an assertion matters when several records say the same thing. This fixture uses `claims` as source-specific rows: the source and interval are part of each row. A larger model may instead give a canonical proposition its own ID and record each source assertion separately, including its extraction method and review state. Either design can work if it preserves which source made which assertion, under which scope, and does not mistake a merged proposition for a verified fact. The W3C [PROV data model](https://www.w3.org/TR/prov-dm/) provides a general vocabulary for entities, activities and agents when interoperable provenance is needed; the fixture does not implement PROV.
 
-### Direct and Two-Hop Questions
+### Direct questions, paths, and evidence
 
-A direct query returns all recorded assertions for a subject and predicate. In the executable, the parameters are `policy:travel-v1` and `applies_to`:
+A direct query returns all recorded assertions for a subject and predicate. For
+`policy:travel-v1` and `applies_to`, the result contains `c1` with positive
+polarity and `c5` with negative polarity. The operation deliberately has no
+date or source filter. It establishes that the ledger contains two differently
+signed assertions; it does not decide which applies on a particular day.
 
-```sql
-SELECT id, object, polarity
-FROM claims
-WHERE subject = ? AND predicate = ?
-ORDER BY id;
-```
+Filtering to positive rows first would hide the negative evidence. Filtering to
+the register answers a different, explicitly source-scoped question, not an
+unrestricted question about all evidence.
 
-The result is `c1, project:atlas, true` and `c5, project:atlas, false`. The query deliberately has no date or source filter. It establishes that the database contains two differently signed assertions; it does not decide which applies on a particular day. Filtering to positive rows first would hide the negative evidence. Filtering by `source = 's-register'` answers a different, explicitly source-scoped question, not an unrestricted question about all evidence.
-
-A two-hop query follows a known relationship sequence. The executable joins the object of a positive `applies_to` claim to the subject of a positive `belongs_to` claim:
-
-```sql
-SELECT a.id, b.id, b.object
-FROM claims a JOIN claims b ON a.object = b.subject
-WHERE a.subject = ? AND a.predicate = ? AND b.predicate = ?
-  AND a.polarity AND b.polarity
-ORDER BY a.id, b.id;
-```
+A two-hop query follows a known relationship sequence. It joins the object of a
+positive `applies_to` claim to the subject of a positive `belongs_to` claim.
 
 With parameters `policy:travel-v1`, `applies_to` and `belongs_to`, the result is `(c1, c3, org:northbridge)`: the policy is linked through Atlas to Northbridge. Both claim IDs are returned, so the evidence for each step can be inspected. The join establishes a path under the query's conditions; it does not create a new assertion that the policy applies to the whole organisation. The executable's two-hop query has no time filter and therefore does not establish that both links hold on any requested date. For a dated path, apply the same valid-time predicate to **each** row, and retain the individual intervals and sources. If several assertions support either step, the join can yield several paths; deciding whether to deduplicate answers is separate from retaining their evidence.
 
@@ -372,24 +556,14 @@ Bounded predicates and hop counts also constrain cost and interpretation. An unr
 
 ### Valid Time, Conflict and Evidence
 
-The target query policy classifies each *validated* matching assertion before aggregating an answer. A bounded end is exclusive; an explicit unbounded end remains applicable after its start; an unknown end is applicable only through its inclusive support horizon and is indeterminate afterwards. The classification is:
-
-```sql
-SELECT id, polarity, end_kind, supported_through,
-  CASE
-    WHEN CAST(? AS DATE) < valid_from THEN 'outside'
-    WHEN end_kind = 'bounded' AND CAST(? AS DATE) < valid_to THEN 'applicable'
-    WHEN end_kind = 'bounded' THEN 'outside'
-    WHEN end_kind = 'unbounded' THEN 'applicable'
-    WHEN end_kind = 'unknown'
-      AND CAST(? AS DATE) <= supported_through THEN 'applicable'
-    WHEN end_kind = 'unknown' THEN 'indeterminate'
-    ELSE 'invalid'
-  END AS temporal_status
-FROM claims
-WHERE subject = ? AND predicate = ? AND object = ?
-ORDER BY id;
-```
+The target query policy classifies each *validated* matching assertion before
+aggregating an answer. A bounded end is exclusive; an explicit unbounded end
+remains applicable after its start; an unknown end is applicable only through
+its inclusive support horizon and is indeterminate afterwards. In prose, the
+classification is: before `valid_from`, outside; inside a bounded interval,
+applicable; after a bounded interval, outside; after an explicit unbounded
+start, applicable; inside an unknown assertion's support horizon, applicable;
+and after that horizon, indeterminate. Any unrecognised end kind is invalid.
 
 The source-specific answer policy is deliberately conservative: conflicting applicable polarities produce `abstain: conflicting evidence`; any indeterminate row produces `abstain: indeterminate temporal scope`; one applicable polarity produces `supported` or `refuted`; and no applicable or indeterminate evidence produces `abstain: no evidence`. This is a teaching policy, not the only valid aggregation rule. Do not turn an unknown negative into a definite refutation, or discard it to obtain a definite support. The executable applies this policy after retaining each row's temporal classification. The `ELSE 'invalid'` branch catches an unrecognised end kind that reaches this expression; it does not validate arbitrary malformed rows. Python rejects the fixture's tested date-field combinations before insertion, and the query raises if a returned row is classified `invalid`. Missing or null fields outside that validated input contract need separate schema checks; a SQL `NULL` comparison can bypass the apparent branch outcome.
 
@@ -397,22 +571,16 @@ Under this contract, 31 December 2023 has no evidence; 15 March has applicable `
 
 Here `refuted` means that the selected applicable rows contain negative evidence and no positive evidence under this policy. It is not a judgment that the negative source is authoritative or that every other relevant record has been found. No evidence is different from explicit negative evidence. Nor does a conflict force a particular authority decision: the policy does not rank the register above the minutes.
 
-A provenance query makes that disagreement inspectable:
-
-```sql
-SELECT c.id, s.title, s.locator, m.text
-FROM claims c
-JOIN sources s ON c.source = s.id
-LEFT JOIN mentions m ON c.mention = m.id
-WHERE c.subject = ? AND c.predicate = ? AND c.object = ?
-ORDER BY c.id;
-```
+A provenance query joins each matching claim to its source title and locator,
+then left-joins its mention text when one exists. It returns both `c1` and
+`c5` with their different source labels and locators, rather than returning
+only the selected answer.
 
 The executable returns `c1` with `Authorised policy register`, `R1:P1-P2` and `Travel Policy v1`, and `c5` with `Atlas meeting minutes`, `M1:paragraph-3` and `version 1`. The left join matters because a claim such as `c7` has no mention. These source-level locators are logical labels, not the underlying documents or verified quotations. A real system needs source versions, reproducible locations, access conditions and retrieval context.
 
 A dated query for version 2 illustrates a separate issue: `c4` is positive from 15 March and `c6` is positive from 1 April. The presence of two positive rows after 1 April does not prove independent corroboration or settle the register-versus-minutes interpretation. If an application adopts an authority hierarchy, make that policy a versioned input to answer generation, retain excluded evidence, and explain why it applies to this predicate, scope and date. A later correction must be able to change the answer without erasing the historical disagreement.
 
-## Represent Claims in RDF and Property Graphs
+## Optional Representations: RDF, Property Graphs, and Projections
 
 A representation is useful when it preserves the distinctions needed to answer a question, not merely when it draws a convincing network. Follow the Northbridge register's version 1 applicability statement through each representation: the policy version applies to Atlas from 1 January 2024 up to, but excluding, 1 April; the assertion comes from register `R1`, locator `R1:P1-P2`. The meeting minutes make a competing statement about version 2 on 15 March. A representation that retains only two policy-to-project arrows cannot reconstruct the dates, the source of either statement, or why the statements conflict. Nor should it turn the unresolved meeting mention of Alex Kim into an identified person.
 
@@ -645,7 +813,7 @@ The smoke test has bounded acceptance cases:
 
 Exercise only the fixed query patterns needed for these cases, using parameterised inputs and a timeout. Capture exit status and assertion failures, and clean up the test's own resources even on failure. This verifies mapping and basic operation on the fixture; it does not establish availability, security, disaster recovery, production throughput, or a performance advantage. Neither this design nor the illustrative Cypher above is evidence that Neo4j has been run.
 
-## Analyse a Projection in R
+### Analyse a Projection in R
 
 The companion `examples/r/knowledge_graph.R` reads the eight entities and five precomputed positive-projection relations from `examples/fixture.json` using `jsonlite`. It uses `igraph` to create a directed graph and `tidygraph` to calculate node summaries. This removes the earlier hard-coded copy of those rows, but does not make R consume the Python source-derived rebuild: a changed `SOURCE_RECORDS_PATH` can change `c1` in DuckDB while the R script still reads the unchanged fixture. The projection must be regenerated or compared with the rebuilt claims before treating the analyses as synchronised. It intentionally drops end kind, support horizon, polarity, provenance and claim identity; it is therefore undated and cannot implement the indeterminate answer policy. See the official [igraph data-frame conversion reference](https://r.igraph.org/reference/graph_from_data_frame.html) and [tidygraph activation reference](https://tidygraph.data-imaginist.com/reference/activate.html) for the operations used here.
 
@@ -678,7 +846,7 @@ The companion converts the path vertices to labels and reports `Northbridge Trav
 
 This is a projection analysis, not a second claim store. The path is a sequence of edges in the selected positive topology; it does not establish that the policy was valid on the requested date, that the register outranks the minutes for every purpose, or that the path is causal. The example therefore demonstrates both the value of graph operations and the reason to return to the DuckDB claims and assertions when an answer needs dates, polarity, provenance, or source-specific evidence.
 
-### Build the Positive Projection
+**Build the positive projection.**
 
 The edge list has one row per directed relation. Its five rows appear in the edge-list table; each has weight 1. The vertex table also supplies all eight identifiers, including the two Alex entities that have no edges. Passing that table to `graph_from_data_frame()` preserves those isolated vertices rather than constructing vertices solely from edge endpoints.
 
@@ -690,7 +858,7 @@ The edge list has one row per directed relation. Its five rows appear in the edg
 | `policy:travel-v2` | `applies_to` | `project:atlas` |
 | `project:orion` | `belongs_to` | `org:northbridge` |
 
-### Interpret Paths and Components
+**Interpret paths and components.**
 
 Starting at `policy:travel-v1`, the outgoing `applies_to` edge reaches Atlas; its outgoing `belongs_to` edge reaches Northbridge. The two edge weights add to 2. The `owned_by` edge leads to Morgan Lee and does not continue to Northbridge in this projection. Reversing the question is different: `mode = "out"` cannot traverse these edges backwards. For weak components, however, ignore direction while grouping vertices connected by any sequence of edges. The first six entities form one component, and each isolated Alex entity forms a component of one, giving three in total. The node summary's total degree counts incident edges regardless of direction; it is a structural count, not a measure of a person's importance or the quality of the evidence.
 
@@ -738,7 +906,7 @@ version so that the change in answer can be attributed to the repair.
 
 For RDF data, [SHACL](https://www.w3.org/TR/shacl/) specifies validation of a data graph against shapes and produces a validation report. It does not make a conforming graph factually correct. Likewise, the DuckDB schema above and the Python checks are not a SHACL implementation. If a system validates inferred data, record whether validation ran on asserted data only or on an expanded graph, and keep the underlying asserted data distinguishable from derived results.
 
-### Gold Sets and Useful Measures
+**Gold sets and useful measures.**
 
 Build an evaluation set from questions and independently adjudicated evidence, not merely from rows copied from the graph being tested. A useful gold item contains the question, entity and predicate scope, requested valid date, source boundary, expected answer or abstention, supporting and opposing evidence identifiers, and an explanation of the adjudication. Record who reviewed it, the evidence version and the policy version. The fixture’s date cases are useful regression examples, but their expected outputs were chosen from the same synthetic input and policy; passing them does not estimate accuracy on unfamiliar documents.
 
@@ -826,7 +994,7 @@ The date rows above and the separate 31 December, 15 March, 16 March and 1 April
 
 Construct a held-out set from source records or document families not used to tune extraction and matching rules. Splitting individual rows from the same document across development and test can leak the same wording, entities and corrections into both. Review difficult cases independently, resolve disagreements using written criteria, and retain unresolved or disputed labels rather than forcing a false consensus. Include negative examples and missing-evidence cases, but label absence as negative only when the gold-set scope justifies that conclusion. Re-run the same gold set after changing the schema, extraction pipeline, linking rules, answer policy or sources; investigate regressions before replacing expected answers.
 
-## Release, Update, and Govern
+## Maintain, Evaluate, Release, and Govern
 
 A release is a reproducible combination of input versions, transformations, schema and answer policy, not merely a database file. For the fixture, the inputs include `examples/source_records.json`, `examples/fixture.json`, `examples/python/construction.py`, `examples/python/knowledge_graph.py`, the manifest and the primer-specific runtime definition. Record their revisions or digests, the runtime and dependency versions, validation results, evaluation results and the exact build command. The current example uses fresh temporary DuckDB files and tests that they can be reopened; it does not create a release manifest, preserve input snapshots after the run or publish a database. Those are production extensions, not features to infer from the example.
 
@@ -849,13 +1017,13 @@ The diagnosis is explicit: the minutes' negative sentence is retained and its ex
 
 For a real release, the important operation is to record the new source and assertion version, identify the release that adopted it, and trace affected answers, indexes, projections and cached results. The example keeps separate databases only during one run; it does not implement durable release identities, recorded times, an approval step or dependency invalidation. If a downstream path relied on `c1`, a release process would need to recompute it or mark it stale. A checksum or current database snapshot alone cannot reconstruct an earlier answer; the permitted source versions and transformation policy must remain available.
 
-### Diagnose and Apply a Release
+### Diagnose, correct, and apply a release
 
 Use a failure to locate the stage that needs attention. A missing source passage may call for retrieval or source-coverage work; a retrieved passage with a missing claim points towards extraction; a correct claim attached to the wrong person points towards identity resolution. If the evidence is present but an answer ignores a conflicting assertion or an uncertain interval, inspect selection and answer policy before changing the extractor. Conversely, a valid-looking citation that does not support the answer is an evidence-linking failure even when the answer happens to match the gold label. Preserve the question, selected evidence, intermediate decisions and policy version so that these possibilities can be distinguished rather than treating every wrong answer as a graph-storage problem.
 
 For an operational graph, ingest a new source version into a staging area; validate identifiers, references and intervals; compare the candidate with the previous release; run the evaluation set; and review material changes before publication. The diff should show added, changed and withdrawn assertions, affected entities and derived paths, changes in source coverage and the effect on representative questions. Build into a new versioned location rather than overwriting the only copy. Publish the version and its provenance together, and retain a tested route back to the prior release subject to retention and access rules. A reproducible build requires access to permitted input versions as well as code; a digest can identify missing material but cannot reconstruct it.
 
-### Corrections, Retractions, and Dependencies
+**Corrections, retractions, and dependencies.**
 
 A correction, an end of validity and a retraction are different events. Ending `c1` at 1 April describes the asserted policy interval; it does not say that the register was wrong when it made the assertion. A later correction might revise that interval and require a new source version. A retraction says that an assertion or source should no longer be relied upon under a stated policy. Preserve a record of the change, its effective and recorded times, reason, actor and replacement when applicable. Whether the old content itself can be retained depends on legal, privacy and retention obligations; a tombstone or restricted audit record may be needed where the original must be removed. Do not silently delete an assertion and leave derived results or cached answers looking unchanged.
 

@@ -640,104 +640,93 @@ to Verifiable Queries</span>
       </div>
       <div id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#define-the-boundary-before-building-the-graph" id="toc-define-the-boundary-before-building-the-graph"><span class="toc-section-number">2</span> Define the Boundary Before Building
+<li><a href="#what-a-knowledge-graph-isand-when-it-helps" id="toc-what-a-knowledge-graph-isand-when-it-helps"><span class="toc-section-number">2</span> What a Knowledge Graph Is—and When
+It Helps</a>
+<ul>
+<li><a href="#the-smallest-useful-graph" id="toc-the-smallest-useful-graph"><span class="toc-section-number">2.1</span> The smallest useful graph</a></li>
+<li><a href="#why-the-graph-is-more-than-a-set-of-edges" id="toc-why-the-graph-is-more-than-a-set-of-edges"><span class="toc-section-number">2.2</span> Why the graph is more than a set
+of edges</a></li>
+<li><a href="#when-a-graph-helpsand-when-it-does-not" id="toc-when-a-graph-helpsand-when-it-does-not"><span class="toc-section-number">2.3</span> When a graph helps—and when it
+does not</a></li>
+</ul></li>
+<li><a href="#define-the-boundary-before-building-the-graph" id="toc-define-the-boundary-before-building-the-graph"><span class="toc-section-number">3</span> Define the Boundary Before Building
 the Graph</a>
 <ul>
-<li><a href="#source-roles-and-competency-questions" id="toc-source-roles-and-competency-questions"><span class="toc-section-number">2.1</span> Source Roles and Competency
+<li><a href="#source-roles-and-competency-questions" id="toc-source-roles-and-competency-questions"><span class="toc-section-number">3.1</span> Source Roles and Competency
 Questions</a></li>
-<li><a href="#work-the-sourcedate-distinction-for-q2" id="toc-work-the-sourcedate-distinction-for-q2"><span class="toc-section-number">2.2</span> Work the source/date distinction
+<li><a href="#work-the-sourcedate-distinction-for-q2" id="toc-work-the-sourcedate-distinction-for-q2"><span class="toc-section-number">3.2</span> Work the source/date distinction
 for Q2</a></li>
-<li><a href="#completeness-and-negative-answers" id="toc-completeness-and-negative-answers"><span class="toc-section-number">2.3</span> Completeness and Negative
+<li><a href="#completeness-and-negative-answers" id="toc-completeness-and-negative-answers"><span class="toc-section-number">3.3</span> Completeness and Negative
 Answers</a></li>
 </ul></li>
-<li><a href="#represent-evidence-entities-and-qualified-claims" id="toc-represent-evidence-entities-and-qualified-claims"><span class="toc-section-number">3</span> Represent Evidence, Entities, and
+<li><a href="#represent-evidence-entities-and-qualified-claims" id="toc-represent-evidence-entities-and-qualified-claims"><span class="toc-section-number">4</span> Represent Evidence, Entities, and
 Qualified Claims</a>
 <ul>
-<li><a href="#mentions-and-entity-references" id="toc-mentions-and-entity-references"><span class="toc-section-number">3.1</span> Mentions and Entity
-References</a></li>
-<li><a href="#stable-namespaced-identifiers" id="toc-stable-namespaced-identifiers"><span class="toc-section-number">3.2</span> Stable, Namespaced
-Identifiers</a></li>
-<li><a href="#model-qualified-claims-and-source-assertions" id="toc-model-qualified-claims-and-source-assertions"><span class="toc-section-number">3.3</span> Model Qualified Claims and Source
-Assertions</a></li>
-<li><a href="#qualified-assertions" id="toc-qualified-assertions"><span class="toc-section-number">3.4</span> Qualified Assertions</a></li>
-<li><a href="#temporal-scope" id="toc-temporal-scope"><span class="toc-section-number">3.5</span> Temporal Scope</a></li>
-<li><a href="#polarity-and-conflicting-evidence" id="toc-polarity-and-conflicting-evidence"><span class="toc-section-number">3.6</span> Polarity and Conflicting
-Evidence</a></li>
+<li><a href="#from-source-mentions-to-qualified-claims" id="toc-from-source-mentions-to-qualified-claims"><span class="toc-section-number">4.1</span> From source mentions to qualified
+claims</a></li>
 </ul></li>
-<li><a href="#extract-conservatively-and-resolve-identity-with-abstention" id="toc-extract-conservatively-and-resolve-identity-with-abstention"><span class="toc-section-number">4</span> Extract Conservatively and Resolve
+<li><a href="#build-conservatively-and-resolve-identity-with-abstention" id="toc-build-conservatively-and-resolve-identity-with-abstention"><span class="toc-section-number">5</span> Build Conservatively and Resolve
 Identity with Abstention</a>
 <ul>
-<li><a href="#candidate-extraction" id="toc-candidate-extraction"><span class="toc-section-number">4.1</span> Candidate Extraction</a></li>
-<li><a href="#identity-resolution" id="toc-identity-resolution"><span class="toc-section-number">4.2</span> Identity Resolution</a></li>
-<li><a href="#abstention-and-review" id="toc-abstention-and-review"><span class="toc-section-number">4.3</span> Abstention and Review</a></li>
-<li><a href="#bounded-source-claim-construction" id="toc-bounded-source-claim-construction"><span class="toc-section-number">4.4</span> Bounded Source Claim
+<li><a href="#from-candidate-evidence-to-an-abstaining-identity-decision" id="toc-from-candidate-evidence-to-an-abstaining-identity-decision"><span class="toc-section-number">5.1</span> From candidate evidence to an
+abstaining identity decision</a></li>
+<li><a href="#bounded-source-claim-construction" id="toc-bounded-source-claim-construction"><span class="toc-section-number">5.2</span> Bounded Source Claim
 Construction</a></li>
+<li><a href="#work-one-claim-from-source-to-answer" id="toc-work-one-claim-from-source-to-answer"><span class="toc-section-number">5.3</span> Work one claim from source to
+answer</a></li>
 </ul></li>
-<li><a href="#provenance-time-contradiction-and-uncertainty" id="toc-provenance-time-contradiction-and-uncertainty"><span class="toc-section-number">5</span> Provenance, Time, Contradiction, and
-Uncertainty</a>
+<li><a href="#preserve-provenance-time-conflict-and-uncertainty" id="toc-preserve-provenance-time-conflict-and-uncertainty"><span class="toc-section-number">6</span> Preserve Provenance, Time, Conflict,
+and Uncertainty</a>
 <ul>
-<li><a href="#provenance-roles-and-release-history" id="toc-provenance-roles-and-release-history"><span class="toc-section-number">5.1</span> Provenance Roles and Release
-History</a></li>
-<li><a href="#valid-time-and-observation-time" id="toc-valid-time-and-observation-time"><span class="toc-section-number">5.2</span> Valid Time and Observation
-Time</a></li>
-<li><a href="#conflict-and-authority" id="toc-conflict-and-authority"><span class="toc-section-number">5.3</span> Conflict and Authority</a></li>
-<li><a href="#uncertainty-and-path-interpretation" id="toc-uncertainty-and-path-interpretation"><span class="toc-section-number">5.4</span> Uncertainty and Path
-Interpretation</a></li>
+<li><a href="#keep-the-evidence-chain-interpretable" id="toc-keep-the-evidence-chain-interpretable"><span class="toc-section-number">6.1</span> Keep the evidence chain
+interpretable</a></li>
 </ul></li>
-<li><a href="#privacy-and-proportionate-identity" id="toc-privacy-and-proportionate-identity"><span class="toc-section-number">6</span> Privacy and Proportionate
+<li><a href="#privacy-and-proportionate-identity" id="toc-privacy-and-proportionate-identity"><span class="toc-section-number">7</span> Privacy and Proportionate
 Identity</a></li>
-<li><a href="#construct-and-query-with-python-and-duckdb" id="toc-construct-and-query-with-python-and-duckdb"><span class="toc-section-number">7</span> Construct and Query with Python and
-DuckDB</a>
+<li><a href="#use-the-graph-from-claims-to-interpreted-queries" id="toc-use-the-graph-from-claims-to-interpreted-queries"><span class="toc-section-number">8</span> Use the Graph: From Claims to
+Interpreted Queries</a>
 <ul>
-<li><a href="#from-fixture-to-tables" id="toc-from-fixture-to-tables"><span class="toc-section-number">7.1</span> From Fixture to Tables</a></li>
-<li><a href="#direct-and-two-hop-questions" id="toc-direct-and-two-hop-questions"><span class="toc-section-number">7.2</span> Direct and Two-Hop
-Questions</a></li>
-<li><a href="#valid-time-conflict-and-evidence" id="toc-valid-time-conflict-and-evidence"><span class="toc-section-number">7.3</span> Valid Time, Conflict and
+<li><a href="#companion-implementation-a-tabular-evidence-ledger" id="toc-companion-implementation-a-tabular-evidence-ledger"><span class="toc-section-number">8.1</span> Companion implementation: a
+tabular evidence ledger</a></li>
+<li><a href="#direct-questions-paths-and-evidence" id="toc-direct-questions-paths-and-evidence"><span class="toc-section-number">8.2</span> Direct questions, paths, and
+evidence</a></li>
+<li><a href="#valid-time-conflict-and-evidence" id="toc-valid-time-conflict-and-evidence"><span class="toc-section-number">8.3</span> Valid Time, Conflict and
 Evidence</a></li>
 </ul></li>
-<li><a href="#represent-claims-in-rdf-and-property-graphs" id="toc-represent-claims-in-rdf-and-property-graphs"><span class="toc-section-number">8</span> Represent Claims in RDF and Property
-Graphs</a>
+<li><a href="#optional-representations-rdf-property-graphs-and-projections" id="toc-optional-representations-rdf-property-graphs-and-projections"><span class="toc-section-number">9</span> Optional Representations: RDF,
+Property Graphs, and Projections</a>
 <ul>
-<li><a href="#rdf-triples-and-qualified-claims" id="toc-rdf-triples-and-qualified-claims"><span class="toc-section-number">8.1</span> RDF: Triples and Qualified
+<li><a href="#rdf-triples-and-qualified-claims" id="toc-rdf-triples-and-qualified-claims"><span class="toc-section-number">9.1</span> RDF: Triples and Qualified
 Claims</a></li>
-<li><a href="#sparql-evidence-queries" id="toc-sparql-evidence-queries"><span class="toc-section-number">8.2</span> SPARQL Evidence Queries</a></li>
-<li><a href="#validate-graph-structure-with-shapes-constraint-language-shacl" id="toc-validate-graph-structure-with-shapes-constraint-language-shacl"><span class="toc-section-number">8.3</span> Validate Graph Structure with
+<li><a href="#sparql-evidence-queries" id="toc-sparql-evidence-queries"><span class="toc-section-number">9.2</span> SPARQL Evidence Queries</a></li>
+<li><a href="#validate-graph-structure-with-shapes-constraint-language-shacl" id="toc-validate-graph-structure-with-shapes-constraint-language-shacl"><span class="toc-section-number">9.3</span> Validate Graph Structure with
 Shapes Constraint Language (SHACL)</a></li>
-<li><a href="#describe-production-history-with-the-prov-ontology-prov-o" id="toc-describe-production-history-with-the-prov-ontology-prov-o"><span class="toc-section-number">8.4</span> Describe Production History with
+<li><a href="#describe-production-history-with-the-prov-ontology-prov-o" id="toc-describe-production-history-with-the-prov-ontology-prov-o"><span class="toc-section-number">9.4</span> Describe Production History with
 the PROV Ontology (PROV-O)</a></li>
-<li><a href="#property-graphs-and-cypher" id="toc-property-graphs-and-cypher"><span class="toc-section-number">8.5</span> Property Graphs and
+<li><a href="#property-graphs-and-cypher" id="toc-property-graphs-and-cypher"><span class="toc-section-number">9.5</span> Property Graphs and
 Cypher</a></li>
-<li><a href="#what-is-lost-when-a-graph-is-simplified" id="toc-what-is-lost-when-a-graph-is-simplified"><span class="toc-section-number">8.6</span> What Is Lost When a Graph Is
+<li><a href="#what-is-lost-when-a-graph-is-simplified" id="toc-what-is-lost-when-a-graph-is-simplified"><span class="toc-section-number">9.6</span> What Is Lost When a Graph Is
 Simplified?</a></li>
-<li><a href="#storage-and-workload-determine-the-boundary" id="toc-storage-and-workload-determine-the-boundary"><span class="toc-section-number">8.7</span> Storage and Workload Determine the
+<li><a href="#storage-and-workload-determine-the-boundary" id="toc-storage-and-workload-determine-the-boundary"><span class="toc-section-number">9.7</span> Storage and Workload Determine the
 Boundary</a></li>
-<li><a href="#a-bounded-future-neo4j-smoke-test" id="toc-a-bounded-future-neo4j-smoke-test"><span class="toc-section-number">8.8</span> A Bounded Future Neo4j Smoke
+<li><a href="#a-bounded-future-neo4j-smoke-test" id="toc-a-bounded-future-neo4j-smoke-test"><span class="toc-section-number">9.8</span> A Bounded Future Neo4j Smoke
 Test</a></li>
-</ul></li>
-<li><a href="#analyse-a-projection-in-r" id="toc-analyse-a-projection-in-r"><span class="toc-section-number">9</span> Analyse a Projection in R</a>
-<ul>
-<li><a href="#build-the-positive-projection" id="toc-build-the-positive-projection"><span class="toc-section-number">9.1</span> Build the Positive
-Projection</a></li>
-<li><a href="#interpret-paths-and-components" id="toc-interpret-paths-and-components"><span class="toc-section-number">9.2</span> Interpret Paths and
-Components</a></li>
+<li><a href="#analyse-a-projection-in-r" id="toc-analyse-a-projection-in-r"><span class="toc-section-number">9.9</span> Analyse a Projection in R</a></li>
 </ul></li>
 <li><a href="#validate-evaluate-and-diagnose" id="toc-validate-evaluate-and-diagnose"><span class="toc-section-number">10</span> Validate, Evaluate, and
 Diagnose</a>
 <ul>
 <li><a href="#validation-inference-and-verification" id="toc-validation-inference-and-verification"><span class="toc-section-number">10.1</span> Validation, Inference and
 Verification</a></li>
-<li><a href="#gold-sets-and-useful-measures" id="toc-gold-sets-and-useful-measures"><span class="toc-section-number">10.2</span> Gold Sets and Useful
-Measures</a></li>
-<li><a href="#work-one-adjudication-before-scoring" id="toc-work-one-adjudication-before-scoring"><span class="toc-section-number">10.3</span> Work one adjudication before
+<li><a href="#work-one-adjudication-before-scoring" id="toc-work-one-adjudication-before-scoring"><span class="toc-section-number">10.2</span> Work one adjudication before
 scoring</a></li>
 </ul></li>
-<li><a href="#release-update-and-govern" id="toc-release-update-and-govern"><span class="toc-section-number">11</span> Release, Update, and Govern</a>
+<li><a href="#maintain-evaluate-release-and-govern" id="toc-maintain-evaluate-release-and-govern"><span class="toc-section-number">11</span> Maintain, Evaluate, Release, and
+Govern</a>
 <ul>
-<li><a href="#diagnose-and-apply-a-release" id="toc-diagnose-and-apply-a-release"><span class="toc-section-number">11.1</span> Diagnose and Apply a
-Release</a></li>
-<li><a href="#corrections-retractions-and-dependencies" id="toc-corrections-retractions-and-dependencies"><span class="toc-section-number">11.2</span> Corrections, Retractions, and
-Dependencies</a></li>
-<li><a href="#responsibility-access-and-boundaries" id="toc-responsibility-access-and-boundaries"><span class="toc-section-number">11.3</span> Responsibility, Access, and
+<li><a href="#diagnose-correct-and-apply-a-release" id="toc-diagnose-correct-and-apply-a-release"><span class="toc-section-number">11.1</span> Diagnose, correct, and apply a
+release</a></li>
+<li><a href="#responsibility-access-and-boundaries" id="toc-responsibility-access-and-boundaries"><span class="toc-section-number">11.2</span> Responsibility, Access, and
 Boundaries</a></li>
 </ul></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">12</span> Further Reading</a></li>
@@ -757,45 +746,210 @@ question through explicit modelling decisions to the source records on
 which an answer depends. This primer develops that chain: from source
 material and uncertain names to qualified claims, evidence-backed
 queries, validation, and repeatable releases.</p>
-<p>The reader is a software or data practitioner comfortable with
-tables, JSON, and basic Python or SQL. No prior graph-database or
-ontology experience is assumed. The main route follows Northbridge, a
-synthetic organisational-policy case, through the canonical Python and
-DuckDB construction pipeline. This is a construction guide, not a
-complete reference for database products, formal logic, or legal
-interpretation. Policy authority in the example is an explicit modelling
-assumption, not legal advice.</p>
-<p>Follow the dependency from the questions and source boundary to
-mentions and identity, then to qualified claims, extraction, provenance,
-and privacy. These choices determine what the Python and DuckDB queries
-can return and when they must abstain. After those queries, continue at
-<a href="#analyse-a-projection-in-r">Analyse a Projection in R</a>, then
-use validation and release governance to assess and maintain the result.
-The R projection is a separate analysis of selected relations, not an
-evidence-preserving replacement for the claims.</p>
-<p><a href="#represent-claims-in-rdf-and-property-graphs">Represent
-Claims in RDF and Property Graphs</a> is an optional representation and
-storage branch after the Python route. Read its RDF subsections for
-triples, SPARQL, SHACL, and PROV-O; read the property-graph subsection
-for the corresponding Cypher design; or consult the storage comparison
-and proposed Neo4j smoke test when choosing or testing a serving layer.
-These designs are illustrative and the Neo4j test is prospective. Start
-with the section introduction before either branch; resume the main
-route at <a href="#analyse-a-projection-in-r">Analyse a Projection in
-R</a>.</p>
-<p>The headings place the optional representation branch before the R
-section so the two non-Python representations can be compared together.
-That presentation order is not an additional dependency. For the primary
-teaching route, read the Python/DuckDB sections through diagnosis and
-correction, then read the R projection and the validation/evaluation
-sections. Treat the RDF, property graph, and storage sections as a side
-branch that you can enter after the Python ledger and leave before
-returning to the R route.</p>
+<p>The reader is a software or data practitioner comfortable with tables
+and basic data modelling. No prior graph-database or ontology experience
+is assumed. The main route follows Northbridge, a synthetic
+organisational-policy case, from source evidence to a bounded set of
+claims and then to questions whose answers can be inspected. This is a
+guide to the reasoning behind a knowledge graph, not a complete
+reference for database products, formal logic, or legal interpretation.
+Policy authority in the example is an explicit modelling assumption, not
+legal advice.</p>
+<p>Read the primer as a standalone explanation. The central case is
+worked with tables, small graph diagrams, and prose before any
+implementation detail is introduced. The Python, SQL, R, RDF, and
+property-graph material later in the primer is companion evidence for
+particular representations; you should be able to understand the model,
+reproduce the reasoning by hand, and judge the answer limits without
+opening a repository file.</p>
+<p>The route is deliberately divided into two questions. First, how do
+we build a graph without turning a source statement into an unsupported
+fact? Second, how do we use the resulting graph without confusing a
+path, a stored assertion, and a conclusion? A final section covers
+validation, evaluation, correction, release, privacy, and
+responsibility. RDF, property graphs, and R are useful comparison
+branches, not prerequisites for the main case.</p>
 <p><em>Verified against primary sources for Construct and Query with
 Python and DuckDB; Represent Claims in RDF and Property Graphs; Analyse
 a Projection in R; and Validate, Evaluate, and Diagnose; unverified
 claims are flagged inline.</em></p>
-<h1 data-number="2" id="define-the-boundary-before-building-the-graph"><span class="header-section-number">2</span> Define the Boundary Before
+<h1 data-number="2" id="what-a-knowledge-graph-isand-when-it-helps"><span class="header-section-number">2</span> What a Knowledge Graph Is—and
+When It Helps</h1>
+<p>A knowledge graph is a model of entities and relationships in which
+the relationships can be inspected, traversed, and qualified. That
+definition is intentionally modest. A graph does not become knowledge
+merely because its data is drawn as circles and arrows, and it does not
+become trustworthy merely because a graph database stores it. The useful
+question is: what can a reader ask, which evidence supports the answer,
+and which modelling decisions stand between the source and the
+result?</p>
+<p>Consider three ways to record the same small fact:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Representation</th>
+<th>What it makes easy to see</th>
+<th>What remains unresolved</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sentence: “The register says version 1 applies to Atlas.”</td>
+<td>The wording and its source context</td>
+<td>Whether “applies” has a date, what version of the register was read,
+and how to compare a conflicting sentence</td>
+</tr>
+<tr>
+<td>Row: <code>(policy:travel-v1, applies_to, project:atlas)</code></td>
+<td>The endpoints and predicate</td>
+<td>Who asserted it, when it applies, whether it is positive or
+negative, and what the reader should do when another source
+disagrees</td>
+</tr>
+<tr>
+<td>Qualified graph claim</td>
+<td>Endpoints, predicate, source, locator, interval, polarity, and
+decision status can be queried together</td>
+<td>The graph still depends on the quality and coverage of its source
+boundary and modelling rules</td>
+</tr>
+</tbody>
+</table>
+<p>The third representation is the focus here. It is not always the best
+storage choice. A small, stable report may be better kept as a document;
+a fixed set of joins may be clearer in ordinary relational tables; a
+graph becomes attractive when the important questions follow
+relationships, combine evidence from different sources, or need to
+retain uncertainty about those relationships.</p>
+<h2 data-number="2.1" id="the-smallest-useful-graph"><span class="header-section-number">2.1</span> The smallest useful graph</h2>
+<p>Start with a graph that answers one real question rather than with a
+list of technologies. Suppose a directory records that Atlas belongs to
+Northbridge and a policy register records that Travel Policy v1 applies
+to Atlas. The unqualified picture is:</p>
+<pre class="text"><code>Travel Policy v1 ──applies_to──► Atlas ──belongs_to──► Northbridge</code></pre>
+<p>This path answers a structural question: is the policy connected to
+the organisation through the project? It does not answer whether the
+policy was valid on a particular date, whether both edges came from the
+same source, or whether the path is an authorised inference. For those
+questions, each edge needs an evidence-bearing record. A useful
+hand-worked version is:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Subject</th>
+<th>Predicate</th>
+<th>Object</th>
+<th>Source</th>
+<th>Scope</th>
+<th>Polarity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c1</code></td>
+<td><code>policy:travel-v1</code></td>
+<td><code>applies_to</code></td>
+<td><code>project:atlas</code></td>
+<td>policy register, <code>R1:P1-P2</code></td>
+<td>1 January–1 April 2024, end exclusive</td>
+<td>positive</td>
+</tr>
+<tr>
+<td><code>c3</code></td>
+<td><code>project:atlas</code></td>
+<td><code>belongs_to</code></td>
+<td><code>org:northbridge</code></td>
+<td>directory, <code>D1:A1</code></td>
+<td>source record’s stated scope</td>
+<td>positive</td>
+</tr>
+</tbody>
+</table>
+<p>The path can now be returned together with the two claim IDs and
+their locators. That is the first important difference between a graph
+used for evidence-backed work and a graph used only as a visualisation:
+the answer can be challenged one relationship at a time.</p>
+<h2 data-number="2.2" id="why-the-graph-is-more-than-a-set-of-edges"><span class="header-section-number">2.2</span> Why the graph is more than a
+set of edges</h2>
+<p>The graph’s entities and relationships are only the visible centre of
+a larger model. A source contains <em>mentions</em>: occurrences such as
+“Alex Kim” or “version 2”. An entity is the thing the model may identify
+from that mention. A claim says that a qualified relationship is being
+considered; an assertion says that a particular source or process
+presents it. These are not synonyms. Keeping them separate lets the
+graph represent both “the minutes deny that version 1 applies” and “the
+register says that it does” without overwriting one source with the
+other.</p>
+<p>Qualification carries the context needed to interpret the
+relationship. Common qualifiers include:</p>
+<ul>
+<li>source and locator, so a reviewer can return to the evidence;</li>
+<li>valid time and observation or publication time, which answer
+different temporal questions;</li>
+<li>polarity, so a denial is not silently discarded;</li>
+<li>confidence or review state, when those are defined and
+calibrated;</li>
+<li>audience, access, or jurisdiction, when a relationship is not
+universal;</li>
+<li>extraction and identity decisions, so a correction can be traced to
+its intermediate reasoning.</li>
+</ul>
+<p>Not every graph needs every field. The discipline is to begin with
+the questions and retain the fields that those questions require. Adding
+a generic “confidence” number does not solve an identity ambiguity if
+the source never provides a distinguishing identifier. Adding a graph
+database does not solve a missing date. The model should make those
+limits visible rather than decorate them with infrastructure.</p>
+<h2 data-number="2.3" id="when-a-graph-helpsand-when-it-does-not"><span class="header-section-number">2.3</span> When a graph helps—and when it
+does not</h2>
+<p>A graph is useful when relationships are central to the reader’s
+task. Typical questions include:</p>
+<ol type="1">
+<li>Which things are connected through a particular relation, and what
+are the intermediate steps?</li>
+<li>Which sources support each step of a path?</li>
+<li>Do competing sources make incompatible claims about the same
+relationship?</li>
+<li>What was supported at a stated date, and what is merely unknown
+afterwards?</li>
+<li>Which related records must be reconsidered when a source or identity
+decision changes?</li>
+</ol>
+<p>These are not automatically graph-database questions. A relational
+design can answer them with tables and joins, especially when the depth
+and predicates are known in advance. The graph vocabulary is valuable
+because it makes the relationship structure and path semantics explicit.
+Choose a serving engine only after the questions, evidence fields,
+update pattern, and access boundary are clear.</p>
+<p>The Northbridge case keeps this distinction visible. It uses a
+tabular ledger for the canonical evidence-preserving route because the
+teaching problem is to show the records and decisions clearly. A later
+comparison explains how the same qualified claims could be mapped to RDF
+or a property graph. The reader does not need to believe that one
+representation is universally superior; the reader needs to understand
+what information each representation retains or loses for a particular
+question.</p>
+<p>The rest of the primer therefore follows a simple promise: define the
+question and evidence boundary, build claims conservatively, use those
+claims to answer bounded queries, and state what the answer cannot
+establish. Every example is small enough to inspect by hand before it is
+connected to an implementation.</p>
+<h1 data-number="3" id="define-the-boundary-before-building-the-graph"><span class="header-section-number">3</span> Define the Boundary Before
 Building the Graph</h1>
 <p>A knowledge graph is an answer-producing model over a declared
 evidence set. Its boundary therefore includes more than the files that
@@ -804,7 +958,7 @@ to answer, the source classes it accepts, the period and population
 those sources cover, and the decisions it is authorised to make when
 records disagree. If any of these are implicit, users can mistake a
 bounded extract for a complete account.</p>
-<h2 data-number="2.1" id="source-roles-and-competency-questions"><span class="header-section-number">2.1</span> Source Roles and Competency
+<h2 data-number="3.1" id="source-roles-and-competency-questions"><span class="header-section-number">3.1</span> Source Roles and Competency
 Questions</h2>
 <p>Northbridge makes the boundary concrete. The fixture contains an
 authorised policy register, a Northbridge directory, and Atlas meeting
@@ -902,7 +1056,7 @@ limits. In particular, the recorded owner is an answer to a source
 question, while ownership on a later date is a different temporal
 question. A graph that always returns one Alex person has encoded an
 assumption, not demonstrated better coverage.</p>
-<h2 data-number="2.2" id="work-the-sourcedate-distinction-for-q2"><span class="header-section-number">2.2</span> Work the source/date
+<h2 data-number="3.2" id="work-the-sourcedate-distinction-for-q2"><span class="header-section-number">3.2</span> Work the source/date
 distinction for Q2</h2>
 <p>Q2 is deliberately different from Q1. The first question asks what
 the register records about applicability on a date inside
@@ -937,7 +1091,7 @@ source record and still be insufficient for a later-date question. If a
 system returned Morgan Lee as the 1 March owner without the
 qualification, inspect temporal selection and answer policy rather than
 merging another person or changing the graph storage.</p>
-<h2 data-number="2.3" id="completeness-and-negative-answers"><span class="header-section-number">2.3</span> Completeness and Negative
+<h2 data-number="3.3" id="completeness-and-negative-answers"><span class="header-section-number">3.3</span> Completeness and Negative
 Answers</h2>
 <p>The boundary also governs negative answers. The absence of a matching
 claim means only that no claim was found in this fixture after applying
@@ -955,11 +1109,12 @@ the result. Second, a missing path is not evidence that a relationship
 does not exist. State the fixture boundary alongside conclusions, and
 return “not represented in the supplied sources” when that is all the
 query establishes.</p>
-<p>The fixture is
-<code>primer_knowledge_graph/examples/fixture.json</code>. It is
-synthetic data, not a set of retained source documents. The table
-summarises its source records and selected assertions; the locators are
-the exact source-level labels in the JSON.</p>
+<p>The teaching fixture is synthetic data, not a set of retained source
+documents. The table summarises its source records and selected
+assertions; the locators are exact source-level labels within those
+synthetic records. A production graph would need stable source versions
+and access to the retained evidence, not merely the labels shown
+here.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -997,22 +1152,21 @@ unresolved.</td>
 </tr>
 </tbody>
 </table>
-<p>The fixture stores the two Alex entities but not their directory
-identifiers or the full register and minutes. The separate
-<code>examples/source_records.json</code> retains short synthetic
-excerpts and three directory rows for the executable construction slice.
-It records only version 1 ownership, not ownership of version 2. The
-start date on a meeting claim is an encoded valid-time interpretation,
-not a general rule that a publication date automatically fixes
-validity.</p>
-<h1 data-number="3" id="represent-evidence-entities-and-qualified-claims"><span class="header-section-number">3</span> Represent Evidence, Entities, and
+<p>The teaching data stores the two Alex entities but not their
+directory identifiers or complete register and minutes. The construction
+companion retains short synthetic excerpts and three directory rows for
+its executable slice. It records only version 1 ownership, not ownership
+of version 2. The start date on a meeting claim is an encoded valid-time
+interpretation, not a general rule that a publication date automatically
+fixes validity.</p>
+<h1 data-number="4" id="represent-evidence-entities-and-qualified-claims"><span class="header-section-number">4</span> Represent Evidence, Entities, and
 Qualified Claims</h1>
 <p>The boundary tells us which source occurrences matter; it does not
 tell us which occurrences refer to the same thing. Before converting
 those occurrences into claims, keep their source evidence separate from
 the identities the graph may assign.</p>
-<h2 data-number="3.1" id="mentions-and-entity-references"><span class="header-section-number">3.1</span> Mentions and Entity
-References</h2>
+<h2 data-number="4.1" id="from-source-mentions-to-qualified-claims"><span class="header-section-number">4.1</span> From source mentions to
+qualified claims</h2>
 <p>A mention is an occurrence in a source; an entity is a thing the
 model refers to; an identifier names that entity within a defined
 namespace. A label is a human-readable description and need not be
@@ -1045,8 +1199,7 @@ source version and a reproducible row key, page and paragraph, or
 character offsets against a content-addressed text extraction. Offsets
 without a reproducible text version are fragile; row numbers are fragile
 if rows can be sorted.</p>
-<h2 data-number="3.2" id="stable-namespaced-identifiers"><span class="header-section-number">3.2</span> Stable, Namespaced
-Identifiers</h2>
+<p><strong>Stable, namespaced identifiers.</strong></p>
 <p>Identifiers should be stable and namespaced. The fixture’s IDs
 (<code>org:northbridge</code>, <code>project:atlas</code>,
 <code>policy:travel-v1</code>, and <code>person:morgan-lee</code>) are
@@ -1069,8 +1222,7 @@ reference; “Atlas” is a label; and the occurrence <code>m-atlas</code>
 is evidence that a particular source used that label. Retaining these
 distinctions allows labels and interpretations to change without losing
 what the source actually contained.</p>
-<h2 data-number="3.3" id="model-qualified-claims-and-source-assertions"><span class="header-section-number">3.3</span> Model Qualified Claims and
-Source Assertions</h2>
+<p><strong>Model qualified claims and source assertions.</strong></p>
 <p>A bare triple such as
 <code>policy:travel-v1 applies_to project:atlas</code> omits information
 needed to answer the Northbridge questions. The fixture’s claim
@@ -1081,7 +1233,7 @@ inspectable and temporally queryable. The corresponding positive
 relation in <code>relations</code> is only an analytical projection; it
 omits source, mention, interval, and polarity and must not become the
 evidence record used to explain an answer.</p>
-<h2 data-number="3.4" id="qualified-assertions"><span class="header-section-number">3.4</span> Qualified Assertions</h2>
+<p><strong>Qualified assertions.</strong></p>
 <p>The subject–predicate–object form remains useful for the core
 relation, but many claims are not adequately represented by an
 unqualified edge. A policy’s applicability can be conditional on
@@ -1104,7 +1256,7 @@ version applies from 1 April according to the register. Claim
 applies on 15 March. Keeping source-specific assertions means the
 minutes and register remain separately queryable. It also avoids the
 misleading operation of overwriting one value with the other.</p>
-<h2 data-number="3.5" id="temporal-scope"><span class="header-section-number">3.5</span> Temporal Scope</h2>
+<p><strong>Temporal scope.</strong></p>
 <p>The temporal contract must distinguish three end kinds; nullness
 alone is not enough. A <code>bounded</code> claim has
 <code>valid_to &gt; valid_from</code> and means the half-open interval
@@ -1129,8 +1281,7 @@ corresponding <code>supported_through</code> rule. The predicate itself
 also needs a definition: <code>owned_by</code> means the register’s
 recorded owner in this example, not necessarily the legal owner, budget
 holder, or operational decision-maker.</p>
-<h2 data-number="3.6" id="polarity-and-conflicting-evidence"><span class="header-section-number">3.6</span> Polarity and Conflicting
-Evidence</h2>
+<p><strong>Polarity and conflicting evidence.</strong></p>
 <p>Polarity is not the same as truth status. <code>c5</code> is a
 negative-polarity assertion from the minutes; its presence records that
 the minutes deny applicability of version 1 from 15 March. It does not
@@ -1142,13 +1293,14 @@ questions about the disagreement. Query design must choose whether it
 needs the positive topology, the full assertion ledger, or both. A
 projection is a derived view with documented loss, not a replacement for
 source-backed claims.</p>
-<h1 data-number="4" id="extract-conservatively-and-resolve-identity-with-abstention"><span class="header-section-number">4</span> Extract Conservatively and
-Resolve Identity with Abstention</h1>
+<h1 data-number="5" id="build-conservatively-and-resolve-identity-with-abstention"><span class="header-section-number">5</span> Build Conservatively and Resolve
+Identity with Abstention</h1>
 <p>The claim model specifies what a usable record must retain.
 Construction must now decide whether a source supplies enough evidence
 to populate that record and link its participants; missing evidence can
 require abstention at either step.</p>
-<h2 data-number="4.1" id="candidate-extraction"><span class="header-section-number">4.1</span> Candidate Extraction</h2>
+<h2 data-number="5.1" id="from-candidate-evidence-to-an-abstaining-identity-decision"><span class="header-section-number">5.1</span> From candidate evidence to an
+abstaining identity decision</h2>
 <p>Extraction turns source material into candidate mentions and
 assertions. It is an interpretation step, even when a rule-based parser
 is used: sentence boundaries, negation scope, coreference, version
@@ -1169,7 +1321,7 @@ March, but a richer representation would separately store the minutes’
 publication or event date and the time referred to by each statement.
 Extraction must retain enough context to assess those interpretations
 rather than hide them in a single edge.</p>
-<h2 data-number="4.2" id="identity-resolution"><span class="header-section-number">4.2</span> Identity Resolution</h2>
+<p><strong>Identity resolution.</strong></p>
 <p>Entity resolution is a separate decision: given a mention or source
 record and candidate entities, decide whether the evidence supports
 identity. Candidate generation and candidate matching have distinct
@@ -1208,7 +1360,7 @@ status and decision time. The Python validator checks the decision
 references and selected-candidate rules, and asserts the Alex
 abstention; it does not run a matcher or write the decisions into
 DuckDB.</p>
-<h2 data-number="4.3" id="abstention-and-review"><span class="header-section-number">4.3</span> Abstention and Review</h2>
+<p><strong>Abstention and review.</strong></p>
 <p>Abstention is useful because the costs of errors are asymmetric. A
 missed link may leave a query incomplete; a false identity merge can
 attribute meeting attendance or policy ownership to the wrong person and
@@ -1227,19 +1379,18 @@ separately from accepted-match precision and review/abstention rates,
 using an explicitly described labelled sample. The synthetic fixture is
 a behavioural example; it cannot establish those rates for Northbridge
 or any wider population.</p>
-<h2 data-number="4.4" id="bounded-source-claim-construction"><span class="header-section-number">4.4</span> Bounded Source Claim
+<h2 data-number="5.2" id="bounded-source-claim-construction"><span class="header-section-number">5.2</span> Bounded Source Claim
 Construction</h2>
 <p>Now that mentions, identities and abstention rules are explicit,
 construction can populate the qualified claim model without silently
-turning text into truth. The executable
-<code>examples/python/construction.py</code> reads the versioned
-synthetic excerpts in <code>examples/source_records.json</code>. Its
-three sentence patterns produce candidates with subject, predicate,
-object, source, dates, end kind and polarity, plus an evidence locator,
-character offsets, exact matched text and method
-<code>northbridge-patterns-v1</code>. Offsets are checked against the
-retained text. The following table follows the actual source sentences
-into candidates; the dates are calendar dates.</p>
+turning text into truth. The companion construction implementation reads
+versioned synthetic excerpts. Its three sentence patterns produce
+candidates with subject, predicate, object, source, dates, end kind and
+polarity, plus an evidence locator, character offsets, exact matched
+text and method <code>northbridge-patterns-v1</code>. Offsets are
+checked against the retained text. The following table follows the
+actual source sentences into candidates; the dates are calendar
+dates.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -1320,15 +1471,114 @@ example rows were supplied, not a judgement that either is independently
 verified. Full-document optical character recognition, open-domain
 language understanding, learned matching, and a general update engine
 remain outside this milestone.</p>
-<h1 data-number="5" id="provenance-time-contradiction-and-uncertainty"><span class="header-section-number">5</span> Provenance, Time, Contradiction,
-and Uncertainty</h1>
+<h2 data-number="5.3" id="work-one-claim-from-source-to-answer"><span class="header-section-number">5.3</span> Work one claim from source to
+answer</h2>
+<p>The whole construction can be understood without a parser or graph
+service. Take the sentence “On 2024-03-15, version 1 does not apply to
+Atlas.” The sentence is not yet a graph edge. It is a source occurrence
+with a location, wording, and an interpretation that still needs to be
+recorded.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Stored or decided result</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source occurrence</td>
+<td><code>m-policy-v1-meeting</code>, in the Atlas minutes at
+<code>M1:paragraph-3</code></td>
+<td>A later reviewer can find the exact sentence and distinguish it from
+another mention of version 1.</td>
+</tr>
+<tr>
+<td>Mention interpretation</td>
+<td>“version 1” refers to <code>policy:travel-v1</code>; “Atlas” refers
+to <code>project:atlas</code> in this meeting context</td>
+<td>The model records an identity decision instead of pretending that
+labels are globally unique.</td>
+</tr>
+<tr>
+<td>Qualified claim</td>
+<td><code>c5</code>:
+<code>policy:travel-v1 applies_to project:atlas</code>, negative
+polarity, valid from 15 March, end kind <code>unknown</code>, supported
+through 15 March</td>
+<td>The relationship can be queried without discarding its date or the
+fact that the source denies it.</td>
+</tr>
+<tr>
+<td>Source assertion</td>
+<td>The minutes present <code>c5</code>; the register separately
+presents positive <code>c1</code> for 1 January–1 April</td>
+<td>Competing evidence remains visible rather than being overwritten by
+a preferred value.</td>
+</tr>
+<tr>
+<td>Reader question</td>
+<td>“What does the evidence say about version 1 on 15 March?”</td>
+<td>The question fixes the date and prevents a timeless answer from
+being smuggled in.</td>
+</tr>
+<tr>
+<td>Result</td>
+<td><code>c1</code> is applicable and positive; <code>c5</code> is
+applicable and negative; answer policy returns
+<code>abstain: conflicting evidence</code></td>
+<td>The result states what the selected evidence supports and why it
+does not choose a winner.</td>
+</tr>
+</tbody>
+</table>
+<p>Now add the other path edge: the directory says Atlas belongs to
+Northbridge. The reader can ask whether there is a path from version 1
+to Northbridge using the sequence <code>applies_to → belongs_to</code>.
+The answer is a two-hop path whose first hop is <code>c1</code> and
+whose second hop is <code>c3</code>. It is not a new claim that version
+1 applies to Northbridge. The path is a useful answer to a structural
+question, but its interpretation remains bounded by the meaning of each
+predicate and by the dates and sources on each hop.</p>
+<p>This distinction becomes important when the question changes. “Is
+there a path?” and “Was the policy applicable to the organisation on 15
+March?” are not equivalent. The first may be answered by following the
+selected positive topology. The second must classify each hop at the
+requested date, retain negative and indeterminate evidence, and state
+whether the policy allows that path to support an organisation-level
+conclusion. A graph can make the first answer easy while leaving the
+second unresolved; that is a modelling result, not a failure of graph
+traversal.</p>
+<p>Finally, consider the minutes’ mention of “Alex Kim”. The source
+occurrence survives, but two directory entities have that label and the
+sentence provides no distinguishing identifier. The graph therefore
+stores an unresolved mention, both candidates, and an abstention. It
+does not create an edge from the meeting to either person. A query can
+report that the meeting contains an unresolved Alex Kim mention; it
+cannot responsibly answer which directory person attended. The absence
+of an edge here is not a negative attendance claim. It is the result of
+an explicit identity decision.</p>
+<p>These three outcomes—an evidence-backed direct assertion, a qualified
+path, and an unresolved mention—are the basic reader operations for the
+rest of the primer. In each case the graph is useful because the
+intermediate decision is available for inspection. In each case the
+graph is limited because the answer depends on source scope, predicate
+meaning, temporal policy, and completeness.</p>
+<h1 data-number="6" id="preserve-provenance-time-conflict-and-uncertainty"><span class="header-section-number">6</span> Preserve Provenance, Time,
+Conflict, and Uncertainty</h1>
 <p>These concerns determine whether a graph answer can be traced, dated,
 compared with competing evidence, and qualified when the evidence is
 incomplete. Treat them as connected controls: provenance identifies the
 assertion, time limits its scope, conflict preserves disagreement, and
 uncertainty constrains the answer.</p>
-<h2 data-number="5.1" id="provenance-roles-and-release-history"><span class="header-section-number">5.1</span> Provenance Roles and Release
-History</h2>
+<h2 data-number="6.1" id="keep-the-evidence-chain-interpretable"><span class="header-section-number">6.1</span> Keep the evidence chain
+interpretable</h2>
 <p>Provenance makes an answer auditable: which source version supported
 which assertion, what activity extracted or reviewed it, and which
 release and selection rule produced the answer. The W3C PROV Ontology
@@ -1356,8 +1606,7 @@ method version. “Who may approve its publication?” needs an accountable
 agent and release record. A checksum proves which bytes were processed,
 but it does not prove that the source was authoritative or that the
 extraction rule interpreted it correctly.</p>
-<h2 data-number="5.2" id="valid-time-and-observation-time"><span class="header-section-number">5.2</span> Valid Time and Observation
-Time</h2>
+<p><strong>Valid time and observation time.</strong></p>
 <p>Time commonly has at least two axes. Valid time describes when the
 asserted relationship holds in the domain; transaction or observation
 time describes when the system recorded that assertion. The fixture’s
@@ -1385,7 +1634,7 @@ reconstruct the graph’s historical knowledge. That is not a reason to
 invent an observation date from the source publication date. Add the
 missing release history or state that the historical query is
 unsupported.</p>
-<h2 data-number="5.3" id="conflict-and-authority"><span class="header-section-number">5.3</span> Conflict and Authority</h2>
+<p><strong>Conflict and authority.</strong></p>
 <p>For the date 15 March, the register’s <code>c1</code> covers Atlas
 under version 1; the minutes’ <code>c4</code> asserts version 2 and
 <code>c5</code> denies version 1 for the same project and date. Those
@@ -1404,8 +1653,7 @@ its teaching rule can prefer the register only for the narrower question
 about recorded policy applicability. Keep the losing assertion visible
 and state the preference rule. Otherwise a source ranking can look like
 a truth mechanism and conceal a material disagreement.</p>
-<h2 data-number="5.4" id="uncertainty-and-path-interpretation"><span class="header-section-number">5.4</span> Uncertainty and Path
-Interpretation</h2>
+<p><strong>Uncertainty and path interpretation.</strong></p>
 <p>Uncertainty has multiple causes and should not be compressed into one
 confidence number. The Alex identity is underdetermined because the
 source lacks a distinguishing identifier. The applicability disagreement
@@ -1423,7 +1671,7 @@ project to an organisation proves only that the selected projection
 contains those edges. It does not establish causality, authority, or
 completeness. Return evidence for each hop and keep interpretation
 distinct from topology.</p>
-<h1 data-number="6" id="privacy-and-proportionate-identity"><span class="header-section-number">6</span> Privacy and Proportionate
+<h1 data-number="7" id="privacy-and-proportionate-identity"><span class="header-section-number">7</span> Privacy and Proportionate
 Identity</h1>
 <p>Entity resolution can turn dispersed records into a more identifying
 profile than any single source. A name, project affiliation, and meeting
@@ -1504,30 +1752,31 @@ be challenged. Treating an access denial as “no matching person” fails
 correctness because it converts restricted evidence into a false
 negative. Privacy therefore changes the answer contract and the evidence
 path, not just the columns selected from a database.</p>
-<h1 data-number="7" id="construct-and-query-with-python-and-duckdb"><span class="header-section-number">7</span> Construct and Query with Python
-and DuckDB</h1>
-<p>The preceding decisions become observable when claims are built,
-checked, and queried. The executable route below retains source-specific
-records so that a date classification and an answer policy can be
-inspected separately: an applicable assertion is evidence for an answer,
-while a competing or temporally indeterminate assertion can prevent a
-definitive answer.</p>
-<p>The canonical runnable example is
-<code>primer_knowledge_graph/examples/python/knowledge_graph.py</code>;
-its inputs are
-<code>primer_knowledge_graph/examples/source_records.json</code> and the
-canonical <code>primer_knowledge_graph/examples/fixture.json</code>.
-Both use synthetic records. The script constructs source-derived claims,
-merges them with explicitly curated rows, reports any diagnostic drift
-from the fixture, validates references and intervals, writes claims and
-provenance to a file-backed DuckDB database, closes it, reopens it
+<h1 data-number="8" id="use-the-graph-from-claims-to-interpreted-queries"><span class="header-section-number">8</span> Use the Graph: From Claims to
+Interpreted Queries</h1>
+<p>The preceding decisions become useful when a reader can ask a
+question and follow the answer back through the claims that support it.
+Start with the reader-facing operation, not with a database product. A
+direct question returns the relevant assertions; a path question returns
+every hop and its evidence; a dated question classifies each assertion
+before combining the results; and a conflict or uncertainty policy
+determines whether the final answer should be supported, refuted, or
+withheld. The same reasoning can be implemented with tables, RDF, a
+property graph, or a service API.</p>
+<p>The small example below uses a tabular ledger as an implementation
+companion. It is intentionally not the source of the explanation: the
+tables and result interpretations above and below are the standalone
+teaching route. The code and schema show one reproducible implementation
+of the decisions, while the reader should not need to inspect repository
+files to understand what the queries mean.</p>
+<p>The canonical runnable companion constructs source-derived claims,
+merges them with explicitly curated rows, reports diagnostic drift from
+the teaching fixture, validates references and intervals, writes claims
+and provenance to a file-backed DuckDB database, closes it, reopens it
 read-only, and runs bounded queries with assertions. It is not a general
-source extractor. Its manifest entry is
-<code>knowledge-graph-python</code> in
-<code>primer_knowledge_graph/examples/manifest.toml</code>. From the
-repository root, build the primer’s runtime if necessary and run:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> build-python-duckdb-runtime</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> examples knowledge_graph knowledge-graph-python</span></code></pre></div>
+source extractor. The repository keeps the exact container command and
+example manifest separately so that this standalone explanation does not
+make its reader learn a file layout before understanding the model.</p>
 <p>The runner provides a fresh temporary output directory, disables
 network access and discards the database afterwards. The script uses
 <code>EXAMPLE_OUT</code> when set and otherwise writes to its working
@@ -1633,7 +1882,8 @@ January.</td>
 conservative answer policy, not a legal determination or evidence of
 production accuracy. The path status is a classification of both
 premises, not an inferred organisational claim.</p>
-<h2 data-number="7.1" id="from-fixture-to-tables"><span class="header-section-number">7.1</span> From Fixture to Tables</h2>
+<h2 data-number="8.1" id="companion-implementation-a-tabular-evidence-ledger"><span class="header-section-number">8.1</span> Companion implementation: a
+tabular evidence ledger</h2>
 <p>In the target ledger, each JSON claim is a source-specific assertion
 with an ID, subject, predicate, object, source, optional mention, valid
 interval, temporal end kind, optional support horizon, and polarity. The
@@ -1653,16 +1903,16 @@ The two rows preserve disagreement. <code>c4</code> and <code>c6</code>
 both assert that version 2 applies to Atlas, but they have different
 sources and start dates. Neither should be collapsed into a single
 source-free edge if the question concerns evidence.</p>
-<p>The executable’s current data-definition language (DDL) is
-intentionally minimal; domain rules remain in the Python validator:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> claims (<span class="kw">id</span> <span class="dt">VARCHAR</span>, subject <span class="dt">VARCHAR</span>, predicate <span class="dt">VARCHAR</span>,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">object</span> <span class="dt">VARCHAR</span>, <span class="kw">source</span> <span class="dt">VARCHAR</span>, mention <span class="dt">VARCHAR</span>, valid_from <span class="dt">DATE</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    valid_to <span class="dt">DATE</span>, end_kind <span class="dt">VARCHAR</span>, supported_through <span class="dt">DATE</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    polarity <span class="dt">BOOLEAN</span>);</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> sources (<span class="kw">id</span> <span class="dt">VARCHAR</span>, title <span class="dt">VARCHAR</span>, published <span class="dt">DATE</span>, <span class="kw">locator</span> <span class="dt">VARCHAR</span>);</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> mentions (<span class="kw">id</span> <span class="dt">VARCHAR</span>, <span class="kw">source</span> <span class="dt">VARCHAR</span>, text <span class="dt">VARCHAR</span>, entity <span class="dt">VARCHAR</span>);</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> extraction_evidence (claim_id <span class="dt">VARCHAR</span>, <span class="kw">locator</span> <span class="dt">VARCHAR</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    span_start <span class="dt">INTEGER</span>, span_end <span class="dt">INTEGER</span>, span_text <span class="dt">VARCHAR</span>, <span class="kw">method</span> <span class="dt">VARCHAR</span>);</span></code></pre></div>
+<p>The companion ledger has four conceptual tables. <code>claims</code>
+holds the subject, predicate, object, source, optional mention, valid
+interval, end kind, support horizon, and polarity. <code>sources</code>
+holds source titles, publication dates, and logical locators.
+<code>mentions</code> preserves the source occurrence and any resolved
+entity. <code>extraction_evidence</code> links a constructed claim to
+its locator, character span, exact text, and extraction method. The
+schema is deliberately small; the important lesson is the fields and
+their relationships, not the syntax of a particular data-definition
+language.</p>
 <p>The executable loads both qualifier fields and validates the three
 combinations before insertion. A production-aligned schema would also
 make <code>end_kind</code> non-null, add keys and foreign keys, and
@@ -1705,31 +1955,21 @@ and does not mistake a merged proposition for a verified fact. The W3C
 general vocabulary for entities, activities and agents when
 interoperable provenance is needed; the fixture does not implement
 PROV.</p>
-<h2 data-number="7.2" id="direct-and-two-hop-questions"><span class="header-section-number">7.2</span> Direct and Two-Hop
-Questions</h2>
+<h2 data-number="8.2" id="direct-questions-paths-and-evidence"><span class="header-section-number">8.2</span> Direct questions, paths, and
+evidence</h2>
 <p>A direct query returns all recorded assertions for a subject and
-predicate. In the executable, the parameters are
-<code>policy:travel-v1</code> and <code>applies_to</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">id</span>, <span class="dt">object</span>, polarity</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> claims</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> subject <span class="op">=</span> ? <span class="kw">AND</span> predicate <span class="op">=</span> ?</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="kw">id</span>;</span></code></pre></div>
-<p>The result is <code>c1, project:atlas, true</code> and
-<code>c5, project:atlas, false</code>. The query deliberately has no
-date or source filter. It establishes that the database contains two
-differently signed assertions; it does not decide which applies on a
-particular day. Filtering to positive rows first would hide the negative
-evidence. Filtering by <code>source = &#39;s-register&#39;</code> answers a
-different, explicitly source-scoped question, not an unrestricted
-question about all evidence.</p>
-<p>A two-hop query follows a known relationship sequence. The executable
-joins the object of a positive <code>applies_to</code> claim to the
-subject of a positive <code>belongs_to</code> claim:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> a.<span class="kw">id</span>, b.<span class="kw">id</span>, b.<span class="dt">object</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> claims a <span class="kw">JOIN</span> claims b <span class="kw">ON</span> a.<span class="dt">object</span> <span class="op">=</span> b.subject</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> a.subject <span class="op">=</span> ? <span class="kw">AND</span> a.predicate <span class="op">=</span> ? <span class="kw">AND</span> b.predicate <span class="op">=</span> ?</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> a.polarity <span class="kw">AND</span> b.polarity</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> a.<span class="kw">id</span>, b.<span class="kw">id</span>;</span></code></pre></div>
+predicate. For <code>policy:travel-v1</code> and
+<code>applies_to</code>, the result contains <code>c1</code> with
+positive polarity and <code>c5</code> with negative polarity. The
+operation deliberately has no date or source filter. It establishes that
+the ledger contains two differently signed assertions; it does not
+decide which applies on a particular day.</p>
+<p>Filtering to positive rows first would hide the negative evidence.
+Filtering to the register answers a different, explicitly source-scoped
+question, not an unrestricted question about all evidence.</p>
+<p>A two-hop query follows a known relationship sequence. It joins the
+object of a positive <code>applies_to</code> claim to the subject of a
+positive <code>belongs_to</code> claim.</p>
 <p>With parameters <code>policy:travel-v1</code>,
 <code>applies_to</code> and <code>belongs_to</code>, the result is
 <code>(c1, c3, org:northbridge)</code>: the policy is linked through
@@ -1750,27 +1990,18 @@ many paths created by duplicated evidence. State which predicate
 sequences answer the question and why their direction matters. A path
 through <code>owned_by</code> has a different meaning from one through
 <code>belongs_to</code>, even if both lead to a familiar name.</p>
-<h2 data-number="7.3" id="valid-time-conflict-and-evidence"><span class="header-section-number">7.3</span> Valid Time, Conflict and
+<h2 data-number="8.3" id="valid-time-conflict-and-evidence"><span class="header-section-number">8.3</span> Valid Time, Conflict and
 Evidence</h2>
 <p>The target query policy classifies each <em>validated</em> matching
 assertion before aggregating an answer. A bounded end is exclusive; an
 explicit unbounded end remains applicable after its start; an unknown
 end is applicable only through its inclusive support horizon and is
-indeterminate afterwards. The classification is:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">id</span>, polarity, end_kind, supported_through,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">CAST</span>(? <span class="kw">AS</span> <span class="dt">DATE</span>) <span class="op">&lt;</span> valid_from <span class="cf">THEN</span> <span class="st">&#39;outside&#39;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> end_kind <span class="op">=</span> <span class="st">&#39;bounded&#39;</span> <span class="kw">AND</span> <span class="fu">CAST</span>(? <span class="kw">AS</span> <span class="dt">DATE</span>) <span class="op">&lt;</span> valid_to <span class="cf">THEN</span> <span class="st">&#39;applicable&#39;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> end_kind <span class="op">=</span> <span class="st">&#39;bounded&#39;</span> <span class="cf">THEN</span> <span class="st">&#39;outside&#39;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> end_kind <span class="op">=</span> <span class="st">&#39;unbounded&#39;</span> <span class="cf">THEN</span> <span class="st">&#39;applicable&#39;</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> end_kind <span class="op">=</span> <span class="st">&#39;unknown&#39;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="kw">AND</span> <span class="fu">CAST</span>(? <span class="kw">AS</span> <span class="dt">DATE</span>) <span class="op">&lt;=</span> supported_through <span class="cf">THEN</span> <span class="st">&#39;applicable&#39;</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> end_kind <span class="op">=</span> <span class="st">&#39;unknown&#39;</span> <span class="cf">THEN</span> <span class="st">&#39;indeterminate&#39;</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;invalid&#39;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> temporal_status</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> claims</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> subject <span class="op">=</span> ? <span class="kw">AND</span> predicate <span class="op">=</span> ? <span class="kw">AND</span> <span class="dt">object</span> <span class="op">=</span> ?</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="kw">id</span>;</span></code></pre></div>
+indeterminate afterwards. In prose, the classification is: before
+<code>valid_from</code>, outside; inside a bounded interval, applicable;
+after a bounded interval, outside; after an explicit unbounded start,
+applicable; inside an unknown assertion’s support horizon, applicable;
+and after that horizon, indeterminate. Any unrecognised end kind is
+invalid.</p>
 <p>The source-specific answer policy is deliberately conservative:
 conflicting applicable polarities produce
 <code>abstain: conflicting evidence</code>; any indeterminate row
@@ -1806,13 +2037,10 @@ every other relevant record has been found. No evidence is different
 from explicit negative evidence. Nor does a conflict force a particular
 authority decision: the policy does not rank the register above the
 minutes.</p>
-<p>A provenance query makes that disagreement inspectable:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.<span class="kw">id</span>, s.title, s.<span class="kw">locator</span>, m.text</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> claims c</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> sources s <span class="kw">ON</span> c.<span class="kw">source</span> <span class="op">=</span> s.<span class="kw">id</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> mentions m <span class="kw">ON</span> c.mention <span class="op">=</span> m.<span class="kw">id</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> c.subject <span class="op">=</span> ? <span class="kw">AND</span> c.predicate <span class="op">=</span> ? <span class="kw">AND</span> c.<span class="dt">object</span> <span class="op">=</span> ?</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.<span class="kw">id</span>;</span></code></pre></div>
+<p>A provenance query joins each matching claim to its source title and
+locator, then left-joins its mention text when one exists. It returns
+both <code>c1</code> and <code>c5</code> with their different source
+labels and locators, rather than returning only the selected answer.</p>
 <p>The executable returns <code>c1</code> with
 <code>Authorised policy register</code>, <code>R1:P1-P2</code> and
 <code>Travel Policy v1</code>, and <code>c5</code> with
@@ -1831,8 +2059,8 @@ authority hierarchy, make that policy a versioned input to answer
 generation, retain excluded evidence, and explain why it applies to this
 predicate, scope and date. A later correction must be able to change the
 answer without erasing the historical disagreement.</p>
-<h1 data-number="8" id="represent-claims-in-rdf-and-property-graphs"><span class="header-section-number">8</span> Represent Claims in RDF and
-Property Graphs</h1>
+<h1 data-number="9" id="optional-representations-rdf-property-graphs-and-projections"><span class="header-section-number">9</span> Optional Representations: RDF,
+Property Graphs, and Projections</h1>
 <p>A representation is useful when it preserves the distinctions needed
 to answer a question, not merely when it draws a convincing network.
 Follow the Northbridge register’s version 1 applicability statement
@@ -1862,7 +2090,7 @@ from an <em>assertion</em>, which records a source or process presenting
 that proposition. A source can support several claims, and several
 assertions can refer to the same claim while retaining separate locators
 and histories.</p>
-<h2 data-number="8.1" id="rdf-triples-and-qualified-claims"><span class="header-section-number">8.1</span> RDF: Triples and Qualified
+<h2 data-number="9.1" id="rdf-triples-and-qualified-claims"><span class="header-section-number">9.1</span> RDF: Triples and Qualified
 Claims</h2>
 <p>The Resource Description Framework (RDF) represents a graph as a set
 of triples: subject, predicate, and object. A triple says that the
@@ -1966,7 +2194,7 @@ exact RDF version, syntax, semantics, and store support before depending
 on them. Even then, annotation syntax does not decide whether two
 observations are independent, which source takes precedence, or whether
 a date has been interpreted correctly.</p>
-<h2 data-number="8.2" id="sparql-evidence-queries"><span class="header-section-number">8.2</span> SPARQL Evidence Queries</h2>
+<h2 data-number="9.2" id="sparql-evidence-queries"><span class="header-section-number">9.2</span> SPARQL Evidence Queries</h2>
 <p>The SPARQL Protocol and RDF Query Language (SPARQL) matches graph
 patterns and returns bindings for variables. Each triple pattern below
 must match; the shared variables join the claim to its assertion and
@@ -2035,7 +2263,7 @@ treating absence as meaningful. <a href="https://www.w3.org/TR/sparql11-query/">
 graph patterns, optional matches, filters, datasets, and result forms;
 an implementation may add features whose behaviour should be documented
 separately.</p>
-<h2 data-number="8.3" id="validate-graph-structure-with-shapes-constraint-language-shacl"><span class="header-section-number">8.3</span> Validate Graph Structure with
+<h2 data-number="9.3" id="validate-graph-structure-with-shapes-constraint-language-shacl"><span class="header-section-number">9.3</span> Validate Graph Structure with
 Shapes Constraint Language (SHACL)</h2>
 <p>The Shapes Constraint Language (SHACL) expresses conditions over an
 RDF <em>data graph</em> in a separate <em>shapes graph</em>. A validator
@@ -2096,7 +2324,7 @@ conform, and a correct but incomplete extraction can fail. Preserve the
 validation report and the shapes version with the release, and
 investigate failures rather than silently dropping records. See the <a href="https://www.w3.org/TR/shacl/">SHACL Recommendation</a> for
 targets, constraint components, and validation reports.</p>
-<h2 data-number="8.4" id="describe-production-history-with-the-prov-ontology-prov-o"><span class="header-section-number">8.4</span> Describe Production History
+<h2 data-number="9.4" id="describe-production-history-with-the-prov-ontology-prov-o"><span class="header-section-number">9.4</span> Describe Production History
 with the PROV Ontology (PROV-O)</h2>
 <p>Provenance records how a representation was produced and by whom. The
 <a href="https://www.w3.org/TR/prov-o/">PROV Ontology</a> (PROV-O)
@@ -2132,7 +2360,7 @@ valid time: an assertion generated on 20 March can describe
 applicability on 1 March. If a register correction is ingested later,
 keep the earlier source and release identifiable so that both a current
 answer and a historical answer can be reconstructed.</p>
-<h2 data-number="8.5" id="property-graphs-and-cypher"><span class="header-section-number">8.5</span> Property Graphs and Cypher</h2>
+<h2 data-number="9.5" id="property-graphs-and-cypher"><span class="header-section-number">9.5</span> Property Graphs and Cypher</h2>
 <p>A property graph presents nodes connected by typed, directed
 relationships. Nodes may have labels and properties; relationships may
 also have properties. In Neo4j, a relationship has one type and a
@@ -2209,7 +2437,7 @@ guarantees, import options, security, and query planning. Select a
 documented version for any reproducible example. Graph-shaped syntax
 makes traversals legible, but it does not guarantee that a query is fast
 or that a path is semantically meaningful.</p>
-<h2 data-number="8.6" id="what-is-lost-when-a-graph-is-simplified"><span class="header-section-number">8.6</span> What Is Lost When a Graph Is
+<h2 data-number="9.6" id="what-is-lost-when-a-graph-is-simplified"><span class="header-section-number">9.6</span> What Is Lost When a Graph Is
 Simplified?</h2>
 <p>The following comparison assumes that the starting records contain
 the identified claims, assertions, and source information described
@@ -2286,7 +2514,7 @@ and edge counts. If a target cannot represent a field directly, retain a
 documented sidecar or declare the export lossy; never silently
 reconstruct an unknown end as unbounded or otherwise missing information
 as fact.</p>
-<h2 data-number="8.7" id="storage-and-workload-determine-the-boundary"><span class="header-section-number">8.7</span> Storage and Workload Determine
+<h2 data-number="9.7" id="storage-and-workload-determine-the-boundary"><span class="header-section-number">9.7</span> Storage and Workload Determine
 the Boundary</h2>
 <p>The comparison above identifies information a mapping must preserve;
 it does not choose an engine. That choice also depends on which
@@ -2340,7 +2568,7 @@ integration, not production scalability. Include backup, access control,
 deployment, and skills in the decision, because a modest query-time
 improvement can be outweighed by the cost of maintaining another
 service.</p>
-<h2 data-number="8.8" id="a-bounded-future-neo4j-smoke-test"><span class="header-section-number">8.8</span> A Bounded Future Neo4j Smoke
+<h2 data-number="9.8" id="a-bounded-future-neo4j-smoke-test"><span class="header-section-number">9.8</span> A Bounded Future Neo4j Smoke
 Test</h2>
 <p>A later integration can test the mapping without making Neo4j a
 prerequisite for the canonical offline route. Use an isolated,
@@ -2392,7 +2620,7 @@ verifies mapping and basic operation on the fixture; it does not
 establish availability, security, disaster recovery, production
 throughput, or a performance advantage. Neither this design nor the
 illustrative Cypher above is evidence that Neo4j has been run.</p>
-<h1 data-number="9" id="analyse-a-projection-in-r"><span class="header-section-number">9</span> Analyse a Projection in R</h1>
+<h2 data-number="9.9" id="analyse-a-projection-in-r"><span class="header-section-number">9.9</span> Analyse a Projection in R</h2>
 <p>The companion <code>examples/r/knowledge_graph.R</code> reads the
 eight entities and five precomputed positive-projection relations from
 <code>examples/fixture.json</code> using <code>jsonlite</code>. It uses
@@ -2427,22 +2655,22 @@ the vertex table’s <code>name</code> column and creates a directed
 graph; it does not infer that two equal labels denote the same
 person.</p>
 <p><strong>R:</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  relations,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> entities <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">name =</span> id)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">shortest_paths</span>(</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  graph,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="st">&quot;policy:travel-v1&quot;</span>,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="st">&quot;org:northbridge&quot;</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">E</span>(graph)<span class="sc">$</span>weight,</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;out&quot;</span>,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;vpath&quot;</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>)<span class="sc">$</span>vpath[[<span class="dv">1</span>]]</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>weak_components <span class="ot">&lt;-</span> <span class="fu">components</span>(graph, <span class="at">mode =</span> <span class="st">&quot;weak&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  relations,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> entities <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">name =</span> id)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">shortest_paths</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  graph,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="st">&quot;policy:travel-v1&quot;</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="st">&quot;org:northbridge&quot;</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">E</span>(graph)<span class="sc">$</span>weight,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;out&quot;</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;vpath&quot;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>)<span class="sc">$</span>vpath[[<span class="dv">1</span>]]</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>weak_components <span class="ot">&lt;-</span> <span class="fu">components</span>(graph, <span class="at">mode =</span> <span class="st">&quot;weak&quot;</span>)</span></code></pre></div>
 <p>The companion converts the path vertices to labels and reports
 <code>Northbridge Travel Policy v1 -&gt; Atlas -&gt; Northbridge</code>,
 with unit cost 2. It reports three weak components: the main group and
@@ -2458,8 +2686,7 @@ causal. The example therefore demonstrates both the value of graph
 operations and the reason to return to the DuckDB claims and assertions
 when an answer needs dates, polarity, provenance, or source-specific
 evidence.</p>
-<h2 data-number="9.1" id="build-the-positive-projection"><span class="header-section-number">9.1</span> Build the Positive
-Projection</h2>
+<p><strong>Build the positive projection.</strong></p>
 <p>The edge list has one row per directed relation. Its five rows appear
 in the edge-list table; each has weight 1. The vertex table also
 supplies all eight identifiers, including the two Alex entities that
@@ -2502,8 +2729,7 @@ rather than constructing vertices solely from edge endpoints.</p>
 </tr>
 </tbody>
 </table>
-<h2 data-number="9.2" id="interpret-paths-and-components"><span class="header-section-number">9.2</span> Interpret Paths and
-Components</h2>
+<p><strong>Interpret paths and components.</strong></p>
 <p>Starting at <code>policy:travel-v1</code>, the outgoing
 <code>applies_to</code> edge reaches Atlas; its outgoing
 <code>belongs_to</code> edge reaches Northbridge. The two edge weights
@@ -2680,8 +2906,7 @@ a SHACL implementation. If a system validates inferred data, record
 whether validation ran on asserted data only or on an expanded graph,
 and keep the underlying asserted data distinguishable from derived
 results.</p>
-<h2 data-number="10.2" id="gold-sets-and-useful-measures"><span class="header-section-number">10.2</span> Gold Sets and Useful
-Measures</h2>
+<p><strong>Gold sets and useful measures.</strong></p>
 <p>Build an evaluation set from questions and independently adjudicated
 evidence, not merely from rows copied from the graph being tested. A
 useful gold item contains the question, entity and predicate scope,
@@ -2692,7 +2917,7 @@ policy version. The fixture’s date cases are useful regression examples,
 but their expected outputs were chosen from the same synthetic input and
 policy; passing them does not estimate accuracy on unfamiliar
 documents.</p>
-<h2 data-number="10.3" id="work-one-adjudication-before-scoring"><span class="header-section-number">10.3</span> Work one adjudication before
+<h2 data-number="10.2" id="work-one-adjudication-before-scoring"><span class="header-section-number">10.2</span> Work one adjudication before
 scoring</h2>
 <p>Consider Q4, agreement on version 1 for Atlas on 15 March. An
 independent adjudicator would first freeze the question, source
@@ -2996,7 +3221,8 @@ as negative only when the gold-set scope justifies that conclusion.
 Re-run the same gold set after changing the schema, extraction pipeline,
 linking rules, answer policy or sources; investigate regressions before
 replacing expected answers.</p>
-<h1 data-number="11" id="release-update-and-govern"><span class="header-section-number">11</span> Release, Update, and Govern</h1>
+<h1 data-number="11" id="maintain-evaluate-release-and-govern"><span class="header-section-number">11</span> Maintain, Evaluate, Release, and
+Govern</h1>
 <p>A release is a reproducible combination of input versions,
 transformations, schema and answer policy, not merely a database file.
 For the fixture, the inputs include
@@ -3088,8 +3314,8 @@ or dependency invalidation. If a downstream path relied on
 stale. A checksum or current database snapshot alone cannot reconstruct
 an earlier answer; the permitted source versions and transformation
 policy must remain available.</p>
-<h2 data-number="11.1" id="diagnose-and-apply-a-release"><span class="header-section-number">11.1</span> Diagnose and Apply a
-Release</h2>
+<h2 data-number="11.1" id="diagnose-correct-and-apply-a-release"><span class="header-section-number">11.1</span> Diagnose, correct, and apply a
+release</h2>
 <p>Use a failure to locate the stage that needs attention. A missing
 source passage may call for retrieval or source-coverage work; a
 retrieved passage with a missing claim points towards extraction; a
@@ -3114,8 +3340,7 @@ route back to the prior release subject to retention and access rules. A
 reproducible build requires access to permitted input versions as well
 as code; a digest can identify missing material but cannot reconstruct
 it.</p>
-<h2 data-number="11.2" id="corrections-retractions-and-dependencies"><span class="header-section-number">11.2</span> Corrections, Retractions, and
-Dependencies</h2>
+<p><strong>Corrections, retractions, and dependencies.</strong></p>
 <p>A correction, an end of validity and a retraction are different
 events. Ending <code>c1</code> at 1 April describes the asserted policy
 interval; it does not say that the register was wrong when it made the
@@ -3138,7 +3363,7 @@ production feature; the Python fixture does not maintain it. For mutable
 sources, keep the old source version and locator where permitted so that
 a reviewer can explain what a previous release knew, even if the
 preferred answer has since changed.</p>
-<h2 data-number="11.3" id="responsibility-access-and-boundaries"><span class="header-section-number">11.3</span> Responsibility, Access, and
+<h2 data-number="11.2" id="responsibility-access-and-boundaries"><span class="header-section-number">11.2</span> Responsibility, Access, and
 Boundaries</h2>
 <p>Assign named responsibility for source admission, identity
 resolution, schema and predicate definitions, conflict policy, release
