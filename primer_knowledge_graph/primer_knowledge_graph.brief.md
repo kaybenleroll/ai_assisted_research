@@ -1,8 +1,8 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r2`
-- Source revision: `539137c`
+- Brief revision: `kg-398-brief-r3`
+- Source revision: `a02df70`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners who understand tables, JSON, basic
   Python or SQL, and reproducible data work, but do not yet understand graph
