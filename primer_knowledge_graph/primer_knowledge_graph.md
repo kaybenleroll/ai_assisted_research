@@ -72,7 +72,7 @@ For structural analysis, the [alternative projection route](#route-r-projection)
 
 The scope is a bounded method for constructing, querying, reviewing, and correcting knowledge graphs whose answers remain connected to evidence. General-purpose language extraction, comprehensive ontology engineering, production deployment, vendor benchmarking, and a complete graph-database integration are outside that scope. The Northbridge exercise supplies neither legal advice nor evidence of production accuracy. Its value is that you can inspect every important transition, including the points at which an honest answer must stop.
 
-*Verified against primary sources for the standards and interfaces in Storage and Implementation Reference and the R projection. The case studies and their worked results are synthetic.*
+*The standards and interface claims in Storage and Implementation Reference and the R projection require primary-source verification before release. The case studies and their worked results are synthetic.*
 
 ## A Complete Northbridge Question
 
