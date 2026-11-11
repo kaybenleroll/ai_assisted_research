@@ -2,10 +2,9 @@
 
 - Issue and milestone: #398; related #397
 - Brief revision: `kg-398-brief-r5`
-- Source revision: `9a1a7e7`
-- Revision state: Uncommitted editorial patch over the source revision above.
-  Rebind the integrated source revision and re-audit changed passages and
-  outputs before carrying forward readiness.
+- Source revision: `85d0535`
+- Revision state: Editorial source and outputs committed at the source revision
+  above. Audit and release readiness are recorded separately.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
