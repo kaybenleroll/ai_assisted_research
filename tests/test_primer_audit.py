@@ -13,6 +13,40 @@ SPEC.loader.exec_module(MODULE)
 
 
 class PrimerAuditTests(unittest.TestCase):
+    def test_current_checklist_accepts_independent_decisions_and_explanations(self):
+        for content, release in (("pass", "ready"), ("pass", "not-ready"), ("fail", "not-ready")):
+            with self.subTest(content=content, release=release):
+                text = ("## Release readiness checklist\n"
+                        f"- Content gate: **{content}**, for the reviewed scope.\n"
+                        f"- Release readiness: **{release}** for this release.\n"
+                        "  Further detail.\n"
+                        "## Historical release readiness checklist\n"
+                        "- Content gate: **fail**\n- Release readiness: **ready**\n")
+                self.assertEqual(MODULE.checklist_findings(text), [])
+
+    def test_current_checklist_rejects_missing_duplicate_and_malformed_content(self):
+        valid = ("## Release readiness checklist\n"
+                 "- Content gate: **pass**\n- Release readiness: **ready**\n")
+        cases = {
+            "missing section": "## Historical release readiness checklist\n" + valid.split("\n", 1)[1],
+            "heading prefix": valid.replace("checklist\n", "checklist history\n"),
+            "fenced section": "```md\n" + valid + "```\n",
+            "duplicate section": valid + valid,
+            "historical fields": ("## Release readiness checklist\n"
+                                  "## Historical release readiness checklist\n" + valid.split("\n", 1)[1]),
+            "subsection fields": ("## Release readiness checklist\n### Historical\n" + valid.split("\n", 1)[1]),
+            "duplicate field": valid + "- Content gate: **fail**\n",
+            "malformed duplicate": valid + "Content gate: pass\n",
+            "invalid value": valid.replace("**pass**", "**pending**"),
+            "unbolded value": valid.replace("**ready**", "ready"),
+            "joined value": valid.replace("**pass**", "**pass**fail"),
+            "contradiction": valid.replace("**pass**", "**fail**"),
+            "fenced fields": "## Release readiness checklist\n```\n" + valid.split("\n", 1)[1] + "```\n",
+        }
+        for name, text in cases.items():
+            with self.subTest(name=name):
+                self.assertTrue(MODULE.checklist_findings(text))
+
     def test_locator_lines_are_checked_against_real_files(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
