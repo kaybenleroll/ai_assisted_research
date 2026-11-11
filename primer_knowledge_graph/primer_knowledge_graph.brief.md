@@ -1,10 +1,11 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r6`
-- Source revision: `65956ad`
-- Revision state: The introduction and end-to-end walkthrough are committed
-  at the source revision above. Published outputs need regeneration and review.
+- Brief revision: `kg-398-brief-r7`
+- Source revision: `56d76da`
+- Revision state: The introduction, end-to-end walkthrough, and corrected
+  verification note are committed at the source revision above. Published
+  outputs need review after regeneration.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
