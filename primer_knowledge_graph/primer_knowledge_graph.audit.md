@@ -1,7 +1,7 @@
 # Primer audit: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397; shared accessibility follow-up #421
-- Audit revision: `kg-398-depth-audit-r13`
+- Audit revision: `kg-398-depth-audit-r14`
 - Source revision: `22aec31`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.audit.md`
 - Starting branch: `docs/398-revise-knowledge-graph-primer`
@@ -9,7 +9,7 @@
 - Date: 2026-11-12
 - Reviewed revision: `22aec31`
 - Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r11`, committed at `dee0ecb`
-- Review boundary: targeted second audit of source 828–834 and brief r11; retain complete source, route, concept, calculation, standards and companion evidence from audit r12 at `3f3d384`; no new render, visual QA, or assistive-technology testing
+- Review boundary: retain the targeted r13 audit of source 828–834 and brief r11 and the complete r12 content evidence at `3f3d384`; update release evidence from publication commit `240d09e` and its render report, without new assistive-technology testing
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`, reconciled at `2d47558`, unchanged since then
 - Core-concept depth matrix: brief r11, all 14 stable IDs and all three route tiers retained below
 - Readiness decision: not-ready
@@ -33,7 +33,7 @@ qualifiers, source comparison, interpretation, correction, disclosure, scoring,
 and release dependencies. The schema bridge works an inference and a
 validation counterexample with different premises and consequences, rather
 than merely defining terms. The source-located teaching judgement remains
-separate from the companion runs and the stale published outputs.
+separate from the companion runs and published-output checks.
 
 The whole-document findings record both the extent and limits of verification.
 
@@ -46,8 +46,8 @@ The whole-document findings record both the extent and limits of verification.
 | Structure, dependency order, and section fragmentation | All major sections and section boundaries | 3–21, 27–91, 93–147, 348–422, 546–745, 798–836 | verified | Opening and Northbridge consolidation remove the glossary-first detour. Four walkthrough stages are meaningful decisions; detailed sections deepen them. Transfer cases culminate in a comparison; the short bridge is a worked transition. | Retain all current sections for reasons below. |
 | Worked examples and interpretations | Hand trace of Northbridge, both transfers, R derivation and practice; companion inspection and runs | 119–247, 289–344, 398–418, 441–544, 558–743, 751–822 | verified | Q2 snapshot ownership is distinct from later continuity. Q4 comparison differs from applicability. The R companion consumes a precomputed view, not the ledger filtering described in prose. | Retain explicit illustrative/executed boundaries. |
 | Applications, limitations, and failure modes | Whole source, especially dependent repairs | 143–145, 219–223, 363–420, 456, 520, 544, 635, 687, 717–725, 792–794 | verified | Omissions, scope, unknown dates, false joins, count leakage and changed citations have concrete consequences and discriminating checks. | Retain; production guarantees are excluded, not missing promised implementation. |
-| Figures, tables, equations, and accessibility | Source/table inventory and SVG XML/content inspection only | 45–61; SVG title/description and labels; tables 227–235, 445–450, 528–538 | not-checked | Alt text and prose explain polarity, dates and the policy arrow without colour dependence; XML parses. New figure's rendered legibility, semantic exposure and PDF layout are untested. No formal derivation or code-page render is claimed. | Source teaching is adequate; output/accessibility acceptance remains open. |
-| HTML, PDF, metadata, and committed outputs | Git last-touch and byte hashes; read-only PDF metadata | Published HTML/PDF last changed at `c7b5a91`, representing source `1ee9f80`; details below | gap | Outputs predate consolidation, SVG and bridge. They cannot present or validate the current source. | Release blocker; regeneration explicitly outside this assignment. |
+| Figures, tables, equations, and accessibility | Source inspection and publication render report | 45–61; SVG title/description and labels; tables 227–235, 445–450, 528–538; PDF pages 7 and 53 | not-checked | SVG alt text and figure/table visual samples pass; interactive and assistive-technology semantics remain untested. No formal derivation or code-page render is claimed. | Source teaching is adequate; human accessibility acceptance remains open. |
+| HTML, PDF, metadata, and committed outputs | Publication render report and Git baseline | HTML/PDF committed at `240d09e`, representing source `22aec31`; details below | verified | Build, freshness, publication semantics and representative visual checks passed; PDF is untagged. | Human accessibility checks remain a separate release blocker. |
 | Residual uncertainty and follow-up questions | Review limits and first-use terminology | 828 expands `RDFS`; 830 links RDF Schema; output/source evidence below | verified | First use now names RDF Schema. No unreviewed primary/alternative teaching transition remains. | Retain output and accessibility limitations below. |
 
 The case contract's r9 label is historical metadata, not evidence of an
@@ -55,7 +55,7 @@ unagreed route change. Its acceptance is standalone reasoning; execution is
 optional. Brief r10 records the post-draft checkpoint after `e60c339` and
 `3f3d384`. Its statements that the audit is stale describe the state before
 this update and are superseded by this audit's current binding. Its output
-warning remains true. No brief or contract edit was made.
+warning is superseded by publication commit `240d09e`. No brief or contract edit was made.
 
 For the central case, every reader-facing stage has the following provenance.
 
@@ -187,8 +187,8 @@ map to companions or remain illustrative as follows.
 
 ## Representative sampling
 
-These risk-selected checks supplement the complete source reading; no rendered
-page sample is claimed for the current source.
+These risk-selected checks supplement the complete source reading. Rendered
+page samples are recorded separately in the publication report.
 
 | Sample/page/object | Risk represented | Evidence and result | Status | Follow-up |
 |---|---|---|---|---|
@@ -197,7 +197,7 @@ page sample is claimed for the current source.
 | Q4 dates/correction 318–342, 398–418, 528–540 | Same answer hiding changed premises | Checked 15/16 March, R2 exclusive end, owner/c6 carry-forwards and c1/c3 path. Source comparison and applicability remain distinct. | verified | Companion coverage is narrower than full printed regression. |
 | Literature/dependency cases 590–635, 676–725 | False independence or cross-build joins | Two studies/one cohort becomes one qualifying study after C@2; affected production path disappears on corrected 1.9.0 boundary for stated synthetic inputs. | verified | No clinical or real package/advisory validation claimed. |
 | Projection 751–794 | Fixture success masking information loss | Checked triples, isolates, neighbour expansion, three weak components, eight strong singletons, in/out sums five and Atlas degree three. | verified | Current R pass does not make dated evidence available. |
-| SVG at 47 and evidence tables | Accessibility and visual quality | SVG XML parses; title/desc and all labels agree with c1/c5 and source alt/prose. No current HTML/PDF rendition exists. | not-checked | Render, inspect figure/table/code or applicable replacement samples and accessibility semantics after regeneration. |
+| SVG at 47 and evidence tables | Accessibility and visual quality | SVG XML parses; title/desc and labels agree with c1/c5 and source alt/prose. Render report records figure page 7 and table page 53 as visually passed. | not-checked | Complete human accessibility semantics checks. |
 
 ## Revision-triggered second audit
 
@@ -208,11 +208,11 @@ offset to r11. The r12-to-r13 row records the targeted second audit.
 |---|---|---|---|---|
 | Audit r11 at `c7b5a91`, source `1ee9f80` → source `e60c339`/`3f3d384` | Opening old 3–75 → current 3–19; Northbridge old 77–141 → current 21–91; inline anchors retain former vocabulary/stage access | Primary boundary, mentions, claims, time, queries, correction, privacy/evaluation; all early transitions | Codex reread complete source, compared diff and retraced inputs through release. Definitions now occur at their use; no lost case decision found. | Old render pages and heading locations cannot validate current layout. |
 | `1ee9f80` → `3f3d384` | Primary anchor 143→93, ledger 197→147, time 299→249, query 333→283, correction 398→348, governance 472→422, transfer 596→546, R 795→745 | Every primary/alternative concept/transition locator; adjacent detailed evidence and transfer threads | Codex reread each passage and dependent boundary. New current tables use exact locators for mechanism/action/interpretation/limit. | Locator validity is mechanical support, not the depth judgement. |
-| `e60c339` → `3f3d384` | New source 47–49 and `figures/northbridge-evidence-graph.svg` | Primary kg-claims/kg-queries and figure/accessibility evidence | Codex inspected text, XML labels, title/description and correspondence to ledger and policy. | Rendered figure, PDF flow and accessibility meaning not checked; release blocker. |
+| `e60c339` → `3f3d384` | New source 47–49 and `figures/northbridge-evidence-graph.svg` | Primary kg-claims/kg-queries and figure/accessibility evidence | Codex inspected text, XML labels, title/description and correspondence to ledger and policy. | At that review, rendered figure, PDF flow and accessibility meaning were not checked; current render evidence is below. |
 | `e60c339` → `3f3d384` | New schema bridge 824–834; storage anchor old 874→current 836 | kg-claims/kg-rdf; relation types, directly asserted graph versus qualified record, validation and inference | Codex traced c3 premises and c1 counterexample; verified new RDFS/SHACL claims against W3C on 12 November. | No formal engine run promised; first-use expansion subsequently resolved at `22aec31`. |
-| Brief r8 → r9/r10 at `bddf2cf`/`f014f1b`; contract reconciliation at `2d47558` | Brief source binding, route-keyed trace, scope, post-draft checkpoint; contract Trace and Teaching decisions | All three route tiers/14 IDs, optional execution versus standalone route | Codex compared live committed artefacts, not checkpoint conclusions alone. Contract's r9 baseline agrees with r10 scope. | r10's historical stale-audit statement is superseded here; published-output warning still applies. |
-| Audit r12 at `c56a182`, source `3f3d384` → `22aec31`; brief r10 at `f014f1b` → r11 at `dee0ecb` | Source 828 expands RDF Schema (RDFS) at first use; brief updates the source binding and checkpoint wording. No other source line changed. | Schema bridge 826–834; `route-python-duckdb`/`kg-claims` and `route-graph-storage`/`kg-rdf`; inference and validation examples, retained outputs | Codex compared both Git diffs and reread 826–834: 828 names the acronym, 830 retains its explicit assertion and inferred classes, and 832 retains the validation contrast and limits. The change is editorial-only and does not alter route transitions, concept evidence, tiers, or locators. | Acronym finding resolved. Examples and standards checks were not rerun; HTML/PDF remain stale, with regeneration and visual/accessibility checks outstanding. |
-| Outputs at `c7b5a91` → unchanged at `f014f1b`; companions unchanged | Published HTML/PDF still represent `1ee9f80`; examples have no diff since `c7b5a91` | Current output/accessibility evidence stale; companion evidence independently renewable | Git history/byte comparison and PDF metadata checked; both companion examples rerun successfully. | No current render, output freshness pass, visual acceptance or assistive-technology acceptance. |
+| Brief r8 → r9/r10 at `bddf2cf`/`f014f1b`; contract reconciliation at `2d47558` | Brief source binding, route-keyed trace, scope, post-draft checkpoint; contract Trace and Teaching decisions | All three route tiers/14 IDs, optional execution versus standalone route | Codex compared live committed artefacts, not checkpoint conclusions alone. Contract's r9 baseline agrees with r10 scope. | r10's historical stale-audit and published-output warnings are superseded by later evidence. |
+| Audit r12 at `c56a182`, source `3f3d384` → `22aec31`; brief r10 at `f014f1b` → r11 at `dee0ecb` | Source 828 expands RDF Schema (RDFS) at first use; brief updates the source binding and checkpoint wording. No other source line changed. | Schema bridge 826–834; `route-python-duckdb`/`kg-claims` and `route-graph-storage`/`kg-rdf`; inference and validation examples, retained outputs | Codex compared both Git diffs and reread 826–834: 828 names the acronym, 830 retains its explicit assertion and inferred classes, and 832 retains the validation contrast and limits. The change is editorial-only and does not alter route transitions, concept evidence, tiers, or locators. | Acronym finding resolved. At r13, examples and standards checks had not been rerun and output checks remained outstanding. |
+| Outputs at `c7b5a91` → `240d09e` | HTML/PDF regenerated for source `22aec31` | Current publication and accessibility evidence | Publication build and render report record successful checks and visual inspection. | Human accessibility checks remain outstanding; PDF is untagged. |
 
 Retained evidence is not relabelled as a current run.
 
@@ -233,12 +233,12 @@ Earlier findings are dispositioned against the current promise and artefacts.
 |---|---|---|---|
 | Audit and brief binding mismatch | r11 source `1ee9f80`/brief r8 versus r10 source `3f3d384`; r10 checkpoint reported two schema mismatches | resolved | Current metadata and all 14 evidence rows bind `22aec31`; structural/Git-backed checks below. |
 | Opening overhead and fragmented early case | `1ee9f80` opening 3–75 and walkthrough 77–141 | resolved | Fresh reader-scale review of 3–91 and detailed dependent route; compact orientation and continuous case retain substantive distinctions. |
-| New graph and schema bridge verification | Brief r10 checkpoint at `f014f1b` | resolved for source meaning; output acceptance stale | Source 47–49 and 826–834 read; XML parsed and new W3C claims checked; neither rendered output includes them. |
+| New graph and schema bridge verification | Brief r10 checkpoint at `f014f1b` | resolved for source meaning and rendered presentation | Source 47–49 and 826–834 read; XML parsed and new W3C claims checked; current output and figure inspection recorded below. |
 | Q2 source/date explanation or empirical score ambiguity | Earlier audits through r11 | confirmed as taught and illustrative | Current 302–304 and 509 distinguish snapshot identity from continuity; 494–520 explicitly define synthetic arithmetic and limits. No old teaching gap carried forward. |
 | Optional persistence, standalone scope and unsynchronised R | Contract `2d47558`; brief r9/r10 | confirmed scope reductions | Source 867–871 and alternative return-to-evidence at 792–794 agree with contract. Not missing promised production implementation. |
 | Ordered diagnostic semantics and literature records | r11 source 402–407 and 644–646 | confirmed in source, output evidence historical | Current 352–357 is an ordered branch sequence; 594–596 preserves three labelled candidate/evidence paths. Prior visual acceptance is not a current render check. |
-| Shared accessibility defects | Historical review at `6cf3203`, retained in r11/`c7b5a91`, follow-up #421 | confirmed as unresolved release evidence | Baseline PDF remains untagged. Prior duplicate contents-control names, missing skip link and title heading need review against regenerated outputs/shared tooling; this audit does not certify live template state. |
-| Builds, output freshness and local visual passes | r11 and older audits | stale for `22aec31` | HTML/PDF have no change after `c7b5a91`; no current SVG/bridge or consolidated presentation. |
+| Shared accessibility defects | Historical review at `6cf3203`, retained in r11/`c7b5a91`, follow-up #421 | human accessibility evidence remains unresolved | Current deterministic HTML checks pass for control names, skip link and title heading; browser and assistive-technology checks remain outstanding. PDF remains untagged. |
+| Builds, output freshness and local visual passes | r11 and older audits | superseded for `22aec31` | Publication report records current build, freshness and visual samples for outputs committed at `240d09e`. |
 
 ### Retained primary-source review at 1ee9f80
 
@@ -302,43 +302,46 @@ validation report is claimed.
 
 ## Release readiness checklist
 
-The decisions apply to source `22aec31`, brief r11 and this audit r13.
+The decisions apply to source `22aec31`, brief r11, outputs `240d09e` and this audit r14.
 
 | Gate | Decision | Required evidence or limitation |
 |---|---|---|
 | Brief and audit binding | pass | Source/Reviewed `22aec31`, brief r11 at `dee0ecb`; contract `2d47558` r9 baseline reconciled explicitly. |
 | Route/concept gate | pass | All 14 IDs and three tiers retained; every primary/alternative transition and section reviewed; no blocking depth row. |
 | Locator validity | pass | Structural evidence checker and Git-backed locator/revision checker below; human review supplied teaching judgement. |
-| Examples | pass within bounds | Both manifest IDs rerun successfully in existing pinned containers, network disabled. Prose operations remain illustrative; full release/disclosure not executed. |
-| Rendered outputs | blocked | HTML/PDF baseline `c7b5a91` for source `1ee9f80` is stale; no regeneration permitted. No current render-QA/freshness pass. |
-| Accessibility | blocked | SVG source descriptions inspected, rendered semantics untested. Baseline PDF is untagged. Historical shared issues and keyboard/browser/screen-reader/PDF semantic checks remain open under #421. |
+| Examples | pass within bounds | Publication report records `just examples` passing both `knowledge-graph-python` and `knowledge-graph-r` offline. Prose operations remain illustrative; full release/disclosure not executed. |
+| Rendered outputs | pass | `just all`, render QA, metadata, freshness, variants, Mermaid, structure and README checks passed; visual pages 1, 53 and 7 passed; code page not applicable. |
+| Accessibility | blocked | HTML deterministic semantics and SVG alt text pass; PDF reports `Tagged: no`. Keyboard, no-JS, browser accessibility tree, screen reader and PDF tag-tree/reading-order checks remain outstanding under #421. |
 | Sources | scoped pass | New RDFS/SHACL claims verified on 12 November; unchanged source checks retain original 11 November provenance. No full renewed citation or dependency attestation. |
-| Links | limited | Current source/figure/companion paths inspected and new W3C links opened; no full current offline/online link check or regenerated fragment check. Old output results cannot clear this gate. |
+| Links | scoped pass | Publication report records offline `just lint-links primer_knowledge_graph/primer_knowledge_graph.html` passing; no full online link check claimed. |
 | Revision review | pass | Consolidation, SVG, bridge, brief and contract reviewed with dependent and adjacent routes; all current locators replaced from reading. |
-| Handoff | bounded audit complete | Only audit update owned; source owner must regenerate and obtain current visual/accessibility/link acceptance before release. No push/merge authorised here. |
+| Handoff | bounded audit complete | Human accessibility checks remain before release; this update owns only the audit. No push/merge authorised here. |
 
 - Content gate: **pass**, for the agreed illustrative primary and alternative teaching routes; no new scope reduction used to excuse a gap.
-- Release readiness: **not-ready**, because current outputs, their visual/accessibility review and final output/link checks remain outstanding.
+- Release readiness: **not-ready**, pending the outstanding human accessibility checks.
 
 ### Published-output baseline and exact limitation
 
-Git history and byte comparison show both tracked outputs unchanged since
-`c7b5a91`, which published source `1ee9f80`. Current SHA-256 values:
+The publication report `.scratch/render-qa/primer_knowledge_graph/report.md`
+was generated at `088a2ba` with modified output files before their final commit;
+the HTML and PDF committed at `240d09e` are the checked output bytes. Current
+SHA-256 values:
 
-- HTML: `36ce0ed8446b2b10b675f9deea1ab271e4ad278075cb5e98e8a880b8d3694473`.
-- PDF: `969a33dc236cd1f24e785c95806be719ac8f13fd4aaadd4a1f296dc260b32fe8`.
+- HTML: `c7fbfb34296d3948fc474de737a8d51eeed7b0a99de92563a357579efb560f22`.
+- PDF: `f1b29e83293cfa3172d73e343dcecf920400848da1c1627a42423f4c5eadf105`.
 
-Read-only host `pdfinfo primer_knowledge_graph/primer_knowledge_graph.pdf`
-reports the correct title/author, 82 pages, 274,560 bytes, PDF 1.7, creation
-11 November 2026 at 10:18:22 UTC, and `Tagged: no`. This inspects existing
-metadata; it is neither a pinned-container render nor a current-source output
-check. Historical r11 visual samples 3/9/12/57 were not reopened. No current
-opening, table, code or applicable replacement, figure/equation page has been
-rasterised or visually accepted here. The new central SVG, consolidated
-opening and schema bridge therefore have no current published presentation
-or accessibility result. The previous template findings are recorded above
-with their original provenance; no claim is made that current shared-template
-code has been tested or that #421 has been resolved.
+The report records 80 PDF pages and `Tagged: no`; text extraction found no
+replacement characters. Visual inspection passed opening page 1, table page 53
+and figure page 7. Code page 40 is prose and the source has no code blocks, so
+the code-page check is not applicable. Deterministic HTML semantics and the
+embedded SVG's alt text passed. These checks do not establish interactive or
+assistive-technology accessibility, or resolve #421.
+
+The publication report records `just all` and both examples passing, alongside
+`just check-meta`, `just check-fresh` (after commit), `just check-variants`,
+`just check-mermaid`, `just check-structure` and `just readme-check`. Scoped
+Markdown, spelling and prose lint and the offline HTML link check passed;
+structure and prose advisories are documented in the report.
 
 ## Execution and render evidence
 
@@ -359,8 +362,8 @@ code has been tested or that #421 has been resolved.
   read-only repository mount and disposable temporary output directories.
   Neither runtime was rebuilt; declared versions/transitive dependencies were
   not independently re-attested in this run. Scripts and fixtures are unchanged
-  since `c7b5a91`; the run is retained evidence from source `3f3d384` and
-  was not repeated for the editorial change.
+  since `c7b5a91`; that run is retained evidence from source `3f3d384` and
+  was not repeated during r13. The publication report records a later pass.
 - **Observed companion results:** Python's assertions pass for the source
   patterns, refusal/abstention, evidence spans, validation, persisted/reopened
   rows, direct/path/provenance/temporal queries and bounded negative repair and
@@ -373,22 +376,24 @@ code has been tested or that #421 has been resolved.
   Python standard-library `xml.etree.ElementTree`; its `role="img"`,
   `aria-labelledby="title desc"`, title, description and labels were inspected.
   This is source/static evidence, not visual or assistive-technology testing.
-- **Revision and baseline checks:** Git history/diffs for source, brief,
+- **Historical revision and baseline checks:** At r12, Git history/diffs for source, brief,
   contract, figures, outputs and examples; byte comparisons against
   `git show 3f3d384:<path>` and `sha256sum` of source/HTML/PDF. Source,
   contract, figure and outputs match that commit; brief r10 is the later
-  `f014f1b` checkpoint. Output history shows last-touch `c7b5a91`.
+  `f014f1b` checkpoint. Output history then showed last-touch `c7b5a91`;
+  publication commit `240d09e` supersedes that output baseline.
 - **Mechanical commands:** final structural/Git-backed/diff results are
   recorded immediately below after checking this audit update.
-- **Render route deliberately not run:** `just primer-audit primer_knowledge_graph`
+- **Render route in this audit update:** `just primer-audit primer_knowledge_graph`
   invokes examples, a complete build, render QA, freshness and lint/link checks.
   Its build would regenerate forbidden outputs, so the user's audit-only
   instruction takes precedence over the skill's aggregate recipe. In r12, its
   non-mutating structural/revision components and separate companions were run;
-  this targeted audit repeats only the structural/revision components.
-- **Visual and accessibility checks:** no current raster inspection, browser
-  accessibility tree, keyboard/no-JavaScript, screen-reader, PDF tag-tree or
-  reading-order check. No full render QA or current output-freshness acceptance.
+  this update repeats only the structural/revision components and records the
+  independent publication report.
+- **Visual and accessibility checks:** publication report records the visual
+  passes above. Browser accessibility tree, keyboard/no-JavaScript, screen-reader,
+  PDF tag-tree and reading-order checks remain outstanding.
 - **Reviewer effort and stopping rule:** elapsed time was not instrumented; one complete source reading plus
   route/concept/section and targeted verification passes. No suitable bounded
   subagent interface was available in this session. Stop at current audit
@@ -417,9 +422,8 @@ shape, Git binding and whitespace, not content truth or release readiness.
   assertion scope of the R runtime test.
 - Procedure changes proposed: none. Keep complete source reading, section
   dispositions, transition provenance and the two gate decisions separate.
-- Remaining work: #398 source owner can regenerate outputs and obtain current
-  output/fragment/link and visual evidence. Accessibility owner must resolve or explicitly disposition #421
-  and perform the documented semantic tests. No such repair is authorised by
-  a passing content gate.
+- Remaining work: the accessibility owner must perform the documented human
+  semantic tests and resolve or explicitly disposition #421. No such repair is
+  authorised by a passing content gate.
 - Final disposition: content passes; release is not-ready. This audit update
   completes the assigned evidence milestone without changing those boundaries.
