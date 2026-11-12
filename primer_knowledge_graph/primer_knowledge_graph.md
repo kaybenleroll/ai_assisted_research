@@ -4,11 +4,35 @@
 
 On 15 March 2024, two Northbridge records give different accounts of the travel policy for project Atlas. The policy register says that version 1 applies during a period containing that day. The Atlas meeting minutes say that version 1 does not apply on that day and that version 2 does. Do the records agree, and what conclusion does their evidence permit? Answering requires us to identify the same policy and project across sources, preserve dates and denials, and explain how the conclusion follows.
 
-A graph represents things as **nodes** and connections between them as **edges**. Here an edge has a direction and a named relationship: "version 1 applies to Atlas" differs from "Atlas belongs to Northbridge". A **path** follows edges through shared nodes, such as a policy version through its project to an organisation. A [knowledge graph]{#what-a-knowledge-graph-adds} gives those connections defined meanings and identifiers for their participants. In this primer, it also preserves the evidence and qualifications needed to interpret statements. The term is used more broadly elsewhere; these evidence requirements express the task our graph must perform.
+### Graph Foundations and Terminology {#what-an-edge-lets-you-ask}
+
+A graph represents things as **nodes** and connections between them as **edges**. Consider a library in which a book and its author are nodes connected by a "written by" edge. The edge has a type and a direction: the book is written by the author, not the other way round. A reader can follow the edge backwards to find an author's books, but that traversal does not reverse the meaning of the statement. A separate "wrote" relation can express the inverse if its definition guarantees the equivalence.
+
+A **path** follows a sequence of edges through shared nodes. If the book is also connected to a subject, a path from author through book to subject can answer which subjects that author has written about. The shared book must be the same identified node at both steps; two books with the same title need not be the same book. The relationship types matter too: a path through an "edited by" edge answers a different question from one through "written by". A path shows the connections represented in the model, not every conclusion one might imagine from them.
+
+In Northbridge, a node can represent an identified thing or a record about one. The `owned_by` edge has the policy version as its subject and the person named as owner as its object. A path version 1 → Atlas → Northbridge shares the Atlas identifier as the object of the first edge and the subject of the second. A query can bind that identifier once and use it in both steps. A second edge named `belongs_to` answers a different question from `sponsored_by`, even if both end at Northbridge. Choose the relationship types for a question before deciding which connections count.
+
+### Graphs, Databases, and Evidence Ledgers
+
+A [knowledge graph]{#what-a-knowledge-graph-adds} gives connections defined meanings and identifiers for their participants. In this primer, it also preserves the evidence and qualifications needed to interpret statements. The term is used more broadly elsewhere; these evidence requirements express the task our graph must perform.
 
 Compare a document, a table, and a graph model. The document preserves wording and context; the table makes repeated fields such as version, project, date, and source explicit; the graph model makes identified participants and named relationships reusable across questions. You can start from Atlas to find policy statements, from a person to inspect ownership, or from a source revision to find the statements derived from it. Tables can store the entire graph and its evidence, and joins can follow its paths. A graph database is one storage option. For one reliable register lookup, a table or document index may suffice; the extra modelling becomes useful when questions combine relationships or require review of their origins and qualifications.
 
 The [essential vocabulary]{#the-vocabulary-of-sources-identity-and-statements} follows that task. A **source** supplies material admitted as evidence for a defined purpose. An **entity** is a thing we identify, such as Travel Policy v1 or Atlas. An **assertion** records a source's statement about such things, preserving whether it affirms or denies a relationship and what qualifies it. The walkthrough below develops these distinctions as it turns the two passages into an answer, then repairs an answer that lost the denial. Northbridge is fictional; all its sources and results are synthetic teaching examples. The passages and intermediate records are printed here so that you can follow the reasoning without running software.
+
+Consider two systems that both display the same two arrows. One drew them from two unchecked name matches. The other linked an identified version to a project using a dated register entry and the project to an organisation using an identified directory record. If a user wants to dispute the first edge, the systems give very different opportunities for review. The knowledge graph in this primer comprises a graph model and a way to trace its claims, including the qualifications that the two-arrow drawing omits. Some systems use the term more broadly for a graph with a shared vocabulary. In either usage, the drawing alone gives little information about what the relation means or what supports it.
+
+Graphs are a way to organise and ask questions about data. A two-column list of source and destination IDs with a third column for relationship type can represent directed edges. A path can be followed by matching columns across copies of that list. A service might organise the same records by each node's outgoing neighbours. Both arrangements can represent the same graph. The distinguishing design work here is choosing stable participants and relationships that readers can combine, and making those relationships precise enough to interpret together. The storage engine is a later decision.
+
+A graph database is a storage and query system designed around graph structures; the graph model does not require one. An **evidence ledger** is the collection of assertion records and their links to sources, qualifications, and decisions. It can be represented in tables or graph-oriented storage. The ledger and the graph describe connected evidence; the database is one possible way to store and retrieve it. A storage choice alone cannot establish that an identity link or a source interpretation is sound.
+
+### When Graph Modelling Helps
+
+For a single register lookup, a table indexed by project and date may already give the reader everything they need. Consider the work created by separating a policy family, a policy version, a project, an organisation, and a source record. You have to name them consistently and check each relationship. The investment starts to pay when the next questions reuse the distinctions. A project-centred query can combine applicability with ownership. A document-centred query can retrieve all the assertions introduced by one register revision. A comparison can group statements from two sources by the same version and project. Each uses a different starting point and shares the same evidence model.
+
+A graph may also fit poorly when the identifiers have no dependable interpretation. Linking hundreds of pages through a surname gives many paths while making the answers harder to justify. Increasing the number of edges then raises the cost of review. Ask what users will do with a path and how they can check it. A small corpus with a reliable index and clear source locators may meet a discovery need before any entity integration is warranted. At Northbridge, the source roles, the distinct policy versions, and the reviewable same-name case make the extra modelling decisions visible.
+
+### How to Read This Primer
 
 Here, [**verifiable**]{#what-verifiable-means-and-how-to-read-the-primer} means that a permitted reviewer can inspect and challenge the chain from an answer to its sources and decisions. A citation must resolve to the right revision and support the statement attributed to it; reporting disagreement requires evidence for both sides. Traceability does not guarantee source truth, complete coverage, or operational authority. An absent assertion is not automatically a denial. Recorded dependencies show what needs re-evaluation after a source or rule changes; where retention or access rules prevent full replay, an authorised view must state that limit.
 
@@ -93,20 +117,6 @@ The release manifest and regression record compare evidence, classifications, co
 ## Design the Graph Around Questions {#route-python-duckdb}
 
 Start with the Atlas project and the first version of the travel policy. An arrow labelled "applies to" can connect them. A second arrow from Atlas to Northbridge can record that the project belongs to the organisation. The two arrows make it easy to ask which organisation is connected to that policy version through a project. To answer whether the policy governs a particular trip, you would need to know which version, which project, which period, and potentially what sort of trip. The difference between those questions determines how much of the source the model must preserve.
-
-### What an Edge Lets You Ask
-
-A graph has **nodes** and **edges**. In the graph model used here, a node represents an identified thing or a record about one. An edge has a direction and a type. The relationship type defines how to read its endpoints. For `owned_by`, the subject is the policy version and the object is the person named as its owner. Looking up what Morgan Lee owns may involve following the edge in reverse, while the statement expressed by the edge still reads from version to person. An inverse relationship such as "owns" can be defined from the same assertion if the vocabulary guarantees that equivalence. Reversing an arrow and reading the original label would change its meaning.
-
-A **path** is a sequence of edges that you can follow through shared nodes. With version 1 → Atlas → Northbridge, the Atlas identifier is the object of the first edge and the subject of the second. A graph query can bind that shared identifier once and use it in both steps. A relation named `belongs_to` at the second step answers a different question from `sponsored_by`. Even if both edges ended at Northbridge, the resulting paths would establish different things. Define the sequence of relationship types for a question before deciding which connections count.
-
-Consider two systems that both display the same two arrows. One drew them from two unchecked name matches. The other linked an identified version to a project using a dated register entry and the project to an organisation using an identified directory record. If a user wants to dispute the first edge, the systems give very different opportunities for review. The knowledge graph in this primer comprises a graph model and a way to trace its claims, including the qualifications that the two-arrow drawing omits. Some systems use the term more broadly for a graph with a shared vocabulary. In either usage, the drawing alone gives little information about what the relation means or what supports it.
-
-Graphs are a way to organise and ask questions about data. A two-column list of source and destination IDs with a third column for relationship type can represent directed edges. A path can be followed by matching columns across copies of that list. A service might organise the same records by each node's outgoing neighbours. Both arrangements can represent the same graph. The distinguishing design work here is choosing stable participants and relationships that readers can combine, and making those relationships precise enough to interpret together. The storage engine is a later decision.
-
-For a single register lookup, a table indexed by project and date may already give the reader everything they need. Consider the work created by separating a policy family, a policy version, a project, an organisation, and a source record. You have to name them consistently and check each relationship. The investment starts to pay when the next questions reuse the distinctions. A project-centred query can combine applicability with ownership. A document-centred query can retrieve all the assertions introduced by one register revision. A comparison can group statements from two sources by the same version and project. Each uses a different starting point and shares the same evidence model.
-
-A graph may also fit poorly when the identifiers have no dependable interpretation. Linking hundreds of pages through a surname gives many paths while making the answers harder to justify. Increasing the number of edges then raises the cost of review. Ask what users will do with a path and how they can check it. A small corpus with a reliable index and clear source locators may meet a discovery need before any entity integration is warranted. At Northbridge, the source roles, the distinct policy versions, and the reviewable same-name case make the extra modelling decisions visible.
 
 ### Define the Northbridge Evidence Boundary
 
@@ -246,7 +256,7 @@ Record the source publisher, the speaker or author where relevant, the extractio
 
 For a hand-worked answer you can cite a locator and the sentence directly. At larger scale, keep an explicit evidence reference in the result even if users normally see a short summary. An answer that returns `c5` plus the locator lets a reviewer find the original paragraph. If the source link was lost, the answer should surface an evidence-integrity problem. A guessed citation from the subject label could attach the register to the minutes denial, leaving the user with a convincing citation that cannot support the statement. This is a failure of the evidence chain even if the displayed conclusion happens to match what the sources say.
 
-## Interpret Time, Conflict, and Uncertainty
+## Interpret Evidence and Answer Questions From the Graph {#interpret-time-conflict-and-uncertainty}
 
 The ledger contains both an affirmation and a denial of version 1 applicability. To say whether they conflict for a question, first ask whether the two assertions concern the same proposition and scope, then whether their supported time overlaps on the requested day. The time decision belongs to each row. After classification, an answer policy decides what the selected rows collectively establish.
 
@@ -280,11 +290,11 @@ Northbridge's cross-source policy gives priority to a demonstrated conflict betw
 
 Work the consequence with version 2 on 1 April. Select its Atlas applicability assertions from both sources: `c4` from the minutes and `c6` from the register. `c4` is indeterminate because its support stops at 15 March; `c6` is applicable on its stated 1 April day. Both are positive, so there is no applicable disagreement, yet the conservative policy abstains because a selected row is indeterminate. Under an alternative rule that blocks support only for an indeterminate opposing polarity, `c6` would instead yield "supported", citing `R1:P1-P2`, sentence 3. That rule would still report the minutes as indeterminate, and could not claim that both sources agree on 1 April. A register-only question also yields version 2, but reaches it by selecting a different evidence boundary. Keep those two policy choices distinct when comparing answers.
 
-## Answer Questions From the Graph
+### Look Up a Version and an Owner
+
+<a id="answer-questions-from-the-graph"></a>
 
 The [query procedure]{#kg-queries} binds the entities and relation types, selects sources and the release, classifies valid time when the question requires it, and explains the result using evidence references. All of this can be done with the seven ledger rows. A **binding** gives a value to a role in a pattern. The unbound roles are the values you want to find. Multiple patterns can share one binding, for example when the object of the first relationship must be the subject of the next.
-
-### Look Up a Version and an Owner
 
 Start Q1 by binding the object to `project:atlas` and the relation to `applies_to`. Leave the subject open. The first selection returns `c1`, `c4`, `c5`, and `c6`. For this question the source boundary admits R1, leaving `c1` and `c6`. It matters that you selected the register because the full set includes a denial as well as a second source's version 2 assertion. The selected rows are then classified individually.
 
@@ -543,15 +553,15 @@ Complete the release check with the paired disclosure test: compare the approved
 
 The table and paired tests supply acceptance expectations for this synthetic fixture. A broader graph, live access-control system, or future source feed needs its own coverage, disclosure, and accuracy evidence. With the Northbridge cycle complete, the transfer cases show which modelling decisions carry across domains and which must be defined anew.
 
-## Transfer the Method to Literature and Dependencies
+<a id="transfer-the-method-to-literature-and-dependencies"></a>
+
+## Literature Evidence for a Research Question
 
 The same evidence-led method can answer questions about research and software, provided each graph relation keeps its domain meaning. In both cases, a path finds candidate evidence, and explicit conditions decide whether that evidence applies to the question. The cases below are entirely synthetic. Their sources, identifiers, numbers, version rules, and corrections are supplied here so that you can reproduce the results without consulting an external catalogue, registry, or advisory. Neither case establishes a clinical recommendation or a security finding about a real system.
 
-### Literature Evidence for a Research Question
-
 A reviewer asks which studies in a specified review's citation neighbourhood report a reduction in seven-day hospital readmission among adults aged 65 or over after telephone follow-up, compared with usual care. The word "report" sets a modest task. It asks what an identified study result says under the stated conditions. It does not ask whether the intervention should be adopted, whether the result is causal, or whether all relevant studies in the world have been found. Define reduction for this exercise as a negative point estimate of the risk difference, calculated as the telephone group's readmission percentage minus the usual-care group's percentage. An interval around that estimate remains part of the answer because the sign of a point estimate alone does not describe its precision.
 
-#### Define the Sources and Model
+### Define the Sources and Model
 
 The source boundary is a fictional review and three fictional research works. Each work has a stable identity, and each version is a separately identified source. A work is the intellectual publication across its versions. A version is the particular text from which a claim was extracted. A study is the investigation described by that text, and a cohort is the group of participants whose data are analysed. Two reports can describe the same study, and two distinct studies can draw on the same cohort. Neither relationship is safe to infer solely from similar titles or matching numbers.
 
@@ -585,7 +595,7 @@ The next table records the relations extracted from the excerpts. A result asser
 
 Each `cites` edge means that the review lists a work. It does not mean that the review endorses a conclusion or that the cited work supplies a qualifying result. The `reports` edges connect a particular source version to a study, and the result assertions preserve the conditions under which the estimates were reported. The relation from a work to its version is implicit in the catalogue above and is used explicitly in the join below. A real system would also record extraction and review status, including rejected or uncertain matches. This exercise treats the shown extractions as accepted and makes no assertion about unlisted material.
 
-#### Work the Query
+### Work the Query
 
 To reproduce the query, start with `R` and bind a cited work as `w`. Join `w` to its listed version `v`, then join `v` to a reported study `s`. Join `s` to a result `r` and cohort `c` attested by the selected version `v` in the snapshot. This version binding prevents an earlier result about the same study from entering the revised answer. Keep a row when `r` specifies age 65 or over, intervention `T`, comparator `U`, outcome `O7`, and a risk difference below zero. The join uses work identity to select versions, study identity to select results, and cohort identity to describe overlap. It does not use a citation edge as a substitute for a result assertion.
 
@@ -599,7 +609,7 @@ All three candidates satisfy the age, intervention, and comparator conditions. `
 
 The evidenced answer at this revision is that `SA` and `SC` each report a seven-day risk difference of −4 percentage points, with a 95% interval from −7 to −1, in the specified comparison. `A@1` results table 2 and `C@1` results table 1 support the respective figures. `C@1` methods paragraph 1 identifies `SC` as a secondary analysis of the same cohort as `SA`. The answer should therefore name both reported studies and disclose that their evidence overlaps. It should not add their participant counts or present the two records as independent replications. The excerpts contain no sample sizes, allocation procedure, missing-data analysis, or assessment of bias, so they cannot establish how reliable or generalisable either estimate is.
 
-#### Correct the Selected Source Version
+### Correct the Selected Source Version
 
 Now suppose an authorised correction produces `C@2`. The replacement at methods paragraph 1 and results table 1 states "Study C is a secondary analysis of cohort X enrolled in Study A. It compares telephone follow-up with usual care in adults aged 65 or over. The readmission risk difference at thirty days was −4 percentage points, with a 95% interval from −7 to −1. The seven-day label in version 1 was an error." The correction changes the measurement window of `L12` from seven to thirty days. It does not change `SC`, cohort `X`, the intervention, comparator, estimate, or interval. `C@1` remains an identifiable historical source, and `C@2` is the accepted version for the revised evidence snapshot.
 
@@ -624,7 +634,7 @@ This distinction also protects the interpretation of the correction. `C@2` chang
 
 The correction requires more than changing a displayed label. Re-evaluate saved answers, exports, study and cohort counts, and any materialised result or search index dependent on `L12@1`. Check that `S1` still reproduces the historical answer with `C@1`, and that `S2` cannot combine `C@2` with the old seven-day assertion. Check the thirty-day query as well as the original seven-day query because the correction moves a result into a different eligible set. A citation-only query should continue to return all three works. This separates a change in evidence applicability from a change in the review's bibliography.
 
-#### Audit the Evidence and Interpretation
+### Audit the Evidence and Interpretation
 
 A reviewer can audit the joins in the opposite direction as well. Start with the answer row for `SA`, locate `L10`, and verify its numerical value, interval, age condition, comparator, and seven-day window in `A@1` results table 2. Then verify the study identity in the methods paragraph and the entry for work `A` in `R@1`. Each step answers a different question. The result passage supports the estimate, the methods passage attaches it to the study and population, and the bibliography establishes why the work belongs to the selected neighbourhood. If the bibliography entry were absent, the estimate could still be present in the report but would fall outside this particular query. If the result passage were absent, the citation path alone could not supply the estimate.
 
@@ -634,11 +644,11 @@ A result can also fail a filter for a reason that is unknown rather than explici
 
 The result remains bounded by the stated review neighbourhood and the supplied excerpts. An empty result would mean that this procedure found no qualifying result among the selected versions, not that no such study exists. A broader review would need a defined search strategy, screening decisions, independent identity resolution, and a way to represent conflicting or uncertain extractions. In particular, overlapping cohorts can be partial, and this simple shared-cohort label would need participant-level or source-supported overlap information before a reviewer could combine estimates. The graph makes the assumptions and dependencies inspectable, but it cannot supply evidence absent from the sources.
 
-### Installed Dependencies and Advisory Applicability
+## Installed Dependencies and Advisory Applicability
 
 A maintainer asks which production deployments in a stated inventory snapshot include a package release covered by a particular advisory. The answer needs three distinct facts. A deployment identifies the build in use, a resolved inventory identifies the exact package instances selected for that build, and an advisory defines which releases it covers. A declared version constraint describes a set of permitted releases. It does not establish which member of that set was selected or deployed. A path from a production build through its resolved dependency edges supplies that selection, subject to the completeness and timing of the inventory.
 
-#### Define the Inventory and Model
+### Define the Inventory and Model
 
 Everything in this example is fictional, including the package names, registry, releases, inventory format, and advisory. Use the following explicitly synthetic version rule throughout. Versions have three non-negative integer components ordered numerically from left to right. A constraint written `>=a <b` includes versions at or above `a` and strictly below `b`. There are no prereleases, platform variants, aliases, or other version rules in this exercise. An exact release is identified by the tuple of registry, package name, and all three version components. The labels and arithmetic do not describe any real package ecosystem.
 
@@ -671,7 +681,7 @@ The extracted facts below carry the context required for a scoped traversal. `ru
 
 The dependency from Parser to Codec is transitive from the build's perspective. The build selects Parser directly, and Parser selects Codec. The path is valid only when all its edges belong to the same build and requested runtime scope. A graph keyed only by the Parser release would merge `D4` and `D6`. Traversing that merged node could falsely attach Codec 1.8.0 to build 42 and Codec 1.9.0 to build 41. Selected-instance identifiers or equivalent edge qualifiers prevent that cross-build join.
 
-#### Traverse and Test Advisory Applicability
+### Traverse and Test Advisory Applicability
 
 To answer the question, bind a deployment `d` from `DEP@1` whose environment is production. Follow its `uses build` edge to `b`, then traverse direct and transitive `selects` edges within `b` and runtime scope. Bind each reached instance as `i` and its exact release as `p`. Join `p` to advisory `V` only if the registry and package name match and the numeric version falls within the advisory range. The path may have more than one dependency edge in a larger inventory. Here the complete supplied paths have at most two. Keep the full path and the inventory and advisory versions with each result.
 
@@ -686,7 +696,7 @@ The initial answer is `P` and build `B41`, with the path supported by `DEP@1` ro
 
 This answer is an inventory-and-advisory finding for a specified snapshot. It establishes that an affected release appears on a recorded runtime dependency path in a production build. It does not establish that a vulnerable function is invoked, that a particular configuration satisfies additional conditions, or that an exploit occurred. The synthetic advisory has no additional applicability conditions, and the inventory is assumed complete within its declared runtime scope. Real advisories and inventories may have narrower conditions, missing edges, platform distinctions, and collection delays. Those facts would need separate evidence and explicit predicates before a stronger conclusion.
 
-#### Correct the Inventory and Replay
+### Correct the Inventory and Replay
 
 Now correct the production inventory. Version `I41@2` retains row 1 and replaces row 2 with the complete statement, "That selected Parser instance selects `F/Codec/1.9.0` at runtime. The 1.8.0 selection recorded in inventory version 1 was an error." This revises the evidence about the same build and deployment. The selected Codec instance in the corrected inventory is `C41b`, bound to build `B41` and release `F/Codec/1.9.0`. The revised snapshot has an assertion record for each hop, including the direct selection whose wording was carried forward.
 
@@ -706,7 +716,7 @@ This ledger gives the correction a precise effect. The production deployment sti
 
 The change invalidates the old finding's dependency on `D4` as accepted evidence. Recompute affected paths, production counts, saved answers, exports, and caches that used `I41@1`. Confirm that the historical `D-S1` run still yields the old path and identifies its superseded inventory, while the accepted `D-S2` run does not join the old Codec edge to the corrected snapshot. Recheck `B42` as a control because its inventory did not change. Also recheck the boundary comparison for `1.9.0`, the registry and package equality tests, and the production filter. An unscoped traversal that still returns Codec 1.8.0 for `B41` reveals a stale edge or an improperly constrained join.
 
-#### Audit Scope, Boundaries, and Missing Evidence
+### Audit Scope, Boundaries, and Missing Evidence
 
 The order of the traversal matters for both accuracy and explanation. Starting with production deployments limits the relevant builds before package paths are expanded. Keeping the build binding at every hop prevents an edge from a different resolution being borrowed merely because the parent release has the same name and version. After reaching a candidate, the advisory join evaluates the exact release tuple. A path can be valid and still fail the advisory test, as the `B42` path demonstrates. Conversely, a release can satisfy the advisory range without being reachable from any deployment in the snapshot. Such a release describes potential applicability, not an installed finding.
 
@@ -857,6 +867,10 @@ The PROV Ontology (PROV-O) describes production history using entities, activiti
 ### Property Graphs and Serving Choices
 
 A [property graph]{#kg-property} can store both `c1` and `c5` as parallel directed relationships carrying their assertion IDs, source references, locators, polarities, and time fields. Cypher pattern matching can find relationships joining version 1 to Atlas. Retain both matches before classifying time or aggregating the evidence. Where an assertion itself must connect to multiple supporting sources, reviews, and correction decisions, it can be clearer to give it a node and link it to those records. Test the representation by asking whether the change to `c1` can be traced independently of `c5`. A node label or a relationship type alone provides little assurance that an import preserved those records. The reference comparison uses the [Neo4j 5 MATCH manual](https://neo4j.com/docs/cypher-manual/5/clauses/match/), checked as of November 2026; no Neo4j service integration is executed.
+
+For the original release, picture one policy-version node and one Atlas project node joined by two separately identified `applies_to` relationships. The `c1` relationship records an affirmation from R1 at `R1:P1-P2`, beginning on 1 January with an exclusive end of 1 April. The `c5` relationship records a denial from M1 at `M1:paragraph-3`, beginning on 15 March, with an unknown end and an evidence horizon of 15 March. These are records of what the respective sources assert; drawing both relationships does not itself assert that version 1 applies. Their properties preserve the separate evidence and temporal qualifications only if the mapping carries those values and their meanings across.
+
+A representative question asks for every `applies_to` relationship from version 1 to Atlas in the original release, returning each assertion ID, polarity, source locator, and time fields. It finds both `c1` and `c5`. Classifying the returned records for 15 March makes both applicable, exposing the opposing assertions and the need to withhold an applicability conclusion under the stated policy. On 16 March, `c1` remains applicable but `c5` is indeterminate, so the policy still abstains on temporal scope. A query that returns only neighbouring nodes, or collapses the two relationships into one unqualified edge, loses the distinction between affirmation and denial and cannot support either interpretation. Even a complete property mapping does not establish that the sources are true or preserve access rules unless those rules are represented and enforced separately.
 
 [Storage choice]{#kg-storage} depends on the work the system must support. Tables can hold all of the evidence and handle direct patterns and fixed-depth paths through joins. An RDF representation may be valuable when interoperable identifiers, shared vocabularies, RDF interchange, or SPARQL queries drive the choice. A property-graph engine can be worth testing for a service that repeatedly explores variable-depth neighbourhoods. In-memory projection is sufficient for the eight-node analysis. Each approach can represent an appropriate view. Compare the entire cost of serving and correcting the specified workload, including graph degree, traversal depth, updates, access constraints, rebuilds, and concurrent requests. A small structural example provides no ranking of engine performance.
 
