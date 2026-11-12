@@ -1,7 +1,7 @@
 # Primer audit: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397; accessibility follow-up #421
-- Audit revision: `kg-398-depth-audit-r16`
+- Audit revision: `kg-398-depth-audit-r17`
 - Source revision: `5924434`
 - Reviewed revision: `5924434`
 - Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r13`
@@ -17,7 +17,7 @@
 ## Current content review
 
 Compared source `9ceb2d2` to `5924434`, brief r12 to r13 and audit r15 to
-r16. Reviewed the structural changes, adjacent reasoning, primary and
+r17. Reviewed the structural changes, adjacent reasoning, primary and
 alternative paths, the 14 concept passages, and the new property-graph
 example against the current source. Locators below refer to Markdown at
 `5924434`, not rendered pages. Source SHA-256 is
@@ -108,21 +108,26 @@ explanation, action, interpretation and limitation within the stated route.
 | Earlier full review and standards | Audit r15 and its predecessors record complete reading at `3f3d384`, targeted review at `9ceb2d2`, and scoped W3C checks on 12 November; other source/API checks date to 11 November at `1ee9f80`. | Retained as historical evidence for unchanged claims; not every citation or dependency was independently rechecked. |
 | Python and R | `just examples` rerun against source `5924434`; both pinned companion manifests pass. | Execution remains bounded to the companions; the primary prose, projection derivation, disclosure and release are illustrative. |
 | Rendering and visual checks | `just all` and `just render-qa primer_knowledge_graph` rerun from source `5924434`; representative pages 1, 54, 9 and 41 inspected. | HTML/PDF freshness and sampled visual quality pass; PDF remains untagged. |
-| Accessibility | Prior review and #421 identify outstanding human checks. | Keyboard, no-JavaScript, browser accessibility tree, screen-reader and PDF tag/reading-order checks remain outstanding. |
+| Accessibility | Shared HTML heading filter and render-QA regression fixed the skipped heading levels; browser review rerun against the regenerated output. | Keyboard, no-JavaScript, browser accessibility-tree, landmark, fragment and image checks pass in sampled scope. A screen-reader traversal remains unverified because Orca cannot connect to an AT-SPI bus in this environment; PDF tagging remains unavailable and is documented as a print-companion limitation. |
 
 The earlier scoped standards review checked [RDF 1.1](https://www.w3.org/TR/rdf11-concepts/), [SPARQL 1.1](https://www.w3.org/TR/sparql11-query/), [PROV-O](https://www.w3.org/TR/prov-o/), [Neo4j 5 MATCH](https://neo4j.com/docs/cypher-manual/5/clauses/match/) and the declared companion APIs at `1ee9f80` on 11 November. The subsequent bridge review checked [RDF Schema domain](https://www.w3.org/TR/rdf-schema/#ch_domain), [range](https://www.w3.org/TR/rdf-schema/#ch_range) and [SHACL cardinality](https://www.w3.org/TR/shacl/#MinCountConstraintComponent) on 12 November. These are retained source checks, not renewed checks or executed reasoner and validator results.
 
-The current companion run used `just examples`, with the Python/DuckDB and R manifests both passing in pinned containers. Its Python assertions cover bounded construction, persistence and queries; R checks a precomputed fixture's path and weak components. The hand-worked release and disclosure case, ledger-to-projection transformation and service migration were not executed by those passes. The current publication report records representative opening, figure, table and prose-page visual checks, and a PDF reported as `Tagged: no`; those samples do not establish full accessibility.
+The current companion run used `just examples`, with the Python/DuckDB and R manifests both passing in pinned containers. Its Python assertions cover bounded construction, persistence and queries; R checks a precomputed fixture's path and weak components. The hand-worked release and disclosure case, ledger-to-projection transformation and service migration were not executed by those passes. The shared HTML heading filter and render-QA semantic check were corrected after a browser accessibility review; the regenerated HTML now exposes one level-1 document title, 13 level-2 sections and 45 level-3 subsections, while preserving the 59 heading tags, IDs, numbering and 58 contents targets. Sampled keyboard, no-JavaScript, landmark, image and fragment checks pass. The representative opening, figure, table and prose-page visual checks pass, and the PDF reports `Tagged: no`; the PDF remains a documented print-oriented limitation under `docs/publication-accessibility.md`.
 
 The earlier audit contains further commands, hashes, samples and standards
 links in Git history. They remain associated with their original revisions.
-No source, output, case contract, figure or example was changed by this audit.
+The source, case contract, figure and examples were unchanged by the
+accessibility follow-up; the shared HTML filter, render-QA checks and
+regenerated publication outputs changed as recorded above.
 
 ## Release readiness checklist
 
 - Content gate: **pass** for the agreed teaching scope.
-- Release readiness: **not-ready**. Human accessibility checks remain open;
-  current output build and sampled visual QA pass, but do not clear #421.
+- Release readiness: **not-ready** pending a representative screen-reader
+  traversal. The HTML hierarchy defect found during #421 is fixed and sampled
+  browser checks pass; the available environment cannot provide an AT-SPI bus.
+  The PDF is intentionally not accessibility-complete and remains covered by
+  the documented HTML-only accessibility decision.
 - The structural evidence checker tests IDs, revisions and required fields; it
   cannot establish pedagogy, rendered quality or accessibility.
 
@@ -136,3 +141,7 @@ No source, output, case contract, figure or example was changed by this audit.
 `just all`, `just examples`, and `just render-qa primer_knowledge_graph`
 passed. The mechanical checks do not validate every free-text line reference
 or the semantics of a cited passage; locators are revision-specific.
+
+- `env PANDOC=/tmp/421-pandoc python3 -I -m unittest discover -s tests -p
+  'test_render_qa.py'`: 14 tests passed, including the shared heading-filter
+  integration check and skipped-level semantic-audit regression.
