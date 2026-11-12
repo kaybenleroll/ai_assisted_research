@@ -10,13 +10,12 @@
   structural consolidation at `9ceb2d2`. Exact
   current source locators and remaining verification boundaries are recorded
   below. Route tiers and all route and concept IDs are retained.
-- Output baseline: The latest tracked published-output and
-  accessibility-review baseline remains `c7b5a91`, for source `1ee9f80`.
-  HTML/PDF outputs are stale pending regeneration at source revision
-  `9ceb2d2`. The tracked audit is being rebound to this brief revision;
-  neither its old locators nor its content, execution, and output checks
-  establish verification of this revision. Re-audit and output regeneration
-  remain separate from this checkpoint.
+- Output baseline: HTML/PDF outputs were regenerated from source `9ceb2d2`.
+  Automated publication and representative visual checks pass; keyboard,
+  no-JavaScript, browser accessibility-tree, screen-reader and PDF tag-tree
+  checks remain outstanding under #421. The bound audit is
+  `kg-398-depth-audit-r15`; content and release-readiness decisions remain
+  separate.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
