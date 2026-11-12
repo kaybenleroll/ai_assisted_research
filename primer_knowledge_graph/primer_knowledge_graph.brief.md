@@ -1,17 +1,18 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r10`
-- Source revision: `3f3d384`
+- Brief revision: `kg-398-brief-r11`
+- Source revision: `22aec31`
 - Revision state: Post-draft teaching-depth checkpoint on 12 November 2026,
   after the opening/Northbridge consolidation at `e60c339` and the
-  schema/semantics bridge and central evidence graph at `3f3d384`. Exact
+  schema/semantics bridge and central evidence graph at `3f3d384`, with the
+  source wording correction at `22aec31`. Exact
   current source locators and remaining verification boundaries are recorded
   below. Route tiers and all route and concept IDs are retained.
 - Output baseline: The latest tracked published-output and
   accessibility-review baseline remains `c7b5a91`, for source `1ee9f80`.
   HTML/PDF outputs are stale pending regeneration at source revision
-  `3f3d384`. The tracked audit still reviews `1ee9f80` against brief r8;
+  `22aec31`. The tracked audit still reviews `1ee9f80` against brief r8;
   neither its old locators nor its content, execution, and output checks
   establish verification of this revision. Re-audit and output regeneration
   remain separate from this checkpoint.
@@ -140,7 +141,8 @@
     policy, disclosure, evaluation, and correction records through the new
     headings.
   - The bounded schema/semantics bridge and labelled central evidence graph
-    are implemented at `3f3d384`. The bridge distinguishes validation from
+    are implemented at `3f3d384`; the RDF Schema acronym is expanded at
+    `22aec31`. The bridge distinguishes validation from
     inference using Northbridge assertions; ontology engineering remains
     excluded. The visual has descriptive alt text and a prose explanation;
     rendered presentation and semantic accessibility still need review.
@@ -234,21 +236,21 @@ gaps block current readiness, as detailed below.
 
 ## Post-draft teaching-depth checkpoint
 
-Compared source `3f3d384` with brief r9's route-keyed trace and the case
+Compared source `22aec31` with brief r10's route-keyed trace and the case
 contract reconciled at `2d47558`, on 12 November 2026. The locators below
 identify inputs, operations, intermediate reasoning, results, interpretations,
 and limits in the current source. This qualitative checkpoint supports the
 next independent audit; it does not replace that audit or certify release
 readiness. Recheck these locators after any further source or heading move.
 
-- Draft source revision: `3f3d384`
-- Brief revision reviewed: `kg-398-brief-r10`, checkpoint against the r9 plan
+- Draft source revision: `22aec31`
+- Brief revision reviewed: `kg-398-brief-r11`, checkpoint against the r10 plan
 - Evidence modes: All reader-facing primary stages are `illustrative`.
   The R derivation and interpretation are also `illustrative`; only the
   companion's graph construction and topology operations are `executable`.
   The existing audit records earlier companion passes at `1ee9f80`; neither
   companion was run for this checkpoint. Prose, a manifest entry, or code
-  inspection does not establish execution at `3f3d384`.
+  inspection does not establish execution at `22aec31`.
 
 The route findings retain all existing tiers and concept IDs.
 
@@ -292,12 +294,11 @@ command was:
 just check-primer-evidence primer_knowledge_graph/primer_knowledge_graph.brief.md primer_knowledge_graph/primer_knowledge_graph.audit.md
 ```
 
-It returned exit 1 with exactly two findings: "brief and audit:
-Source/Reviewed revision does not match" and "brief and audit: Source revision
-does not match". No other schema finding was reported. The brief now binds
-`3f3d384`, while the unchanged audit's Source/Reviewed revision remains
-`1ee9f80`; that mismatch blocks a current paired evidence pass. Re-audit and
-regenerate outputs at the new source revision before a release decision.
+It returned exit 1 because the unchanged audit's Source/Reviewed revision
+remains `1ee9f80`, while this brief binds `22aec31`. The prior two-row source
+mismatch is therefore still present; no additional schema finding was
+reported. Re-audit and regenerate outputs at the new source revision before a
+release decision.
 
 ## Core-concept depth matrix
 
