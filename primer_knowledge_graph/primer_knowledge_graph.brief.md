@@ -1,12 +1,14 @@
 # Primer brief: Building Knowledge Graphs: From Sources to Verifiable Queries
 
 - Issue and milestone: #398; related #397
-- Brief revision: `kg-398-brief-r8`
+- Brief revision: `kg-398-brief-r9`
 - Source revision: `1ee9f80`
-- Revision state: The introduction, end-to-end walkthrough, source
-  verification clarifications, and local accessibility improvements are
-  committed at the source revision above. Published outputs need regeneration
-  and review.
+- Revision state: Planning revision after the 12 November 2026 comparative
+  review. The source remains at `1ee9f80`; the latest tracked published-output
+  and accessibility-review baseline is `c7b5a91`. This revision defines
+  selective consolidation, one focused schema/semantics expansion, and one
+  central graph visual before drafting. Output regeneration and audit rebinding
+  will follow the substantive source revision.
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.brief.md`
 - Reader: Software or data practitioners new to graph modelling, evidence
   qualification, or graph-database trade-offs.
@@ -25,40 +27,45 @@
 - Scope: Source boundaries and competency questions; mentions, entities and
   identifiers; qualified claims; temporal scope, polarity, provenance and
   uncertainty; conservative extraction and identity resolution; privacy;
-  hand-worked construction, queries, diagnosis, and correction;
-  validation and evaluation; an R `igraph`/`tidygraph` projection; RDF,
-  SPARQL, SHACL and PROV-O; property graphs, Cypher, and graph-database
-  storage trade-offs; release and governance. Python/DuckDB provides optional
-  companion verification of bounded construction, queries, and correction.
-- Exclusions: General-purpose NLP, ontology engineering in depth, legal advice,
-  vendor benchmarking, production deployment, a complete Neo4j integration,
-  and claims that a synthetic fixture represents a real organisation.
-- Proposed dependency-led route: Orient the reader with concepts, terminology,
-  verifiability and reading routes; follow one complete illustrative Northbridge
-  question from evidence to release; then establish the detailed boundary and
-  competency questions; preserve
-  source mentions and distinguish them from entities; model qualified claims
-  with time, polarity, provenance and uncertainty; work one source sentence
-  through construction to a query result; extract conservatively and abstain
-  on identity; use direct, path, temporal and provenance questions; diagnose a
-  failed extraction and work the revised ledger by hand; define authorised
-  disclosure and release products; evaluate those permitted outputs; then
-  check the final release regression. Transfer the reasoning to research
-  literature and software dependencies, comparing their modelling decisions.
-  Use the alternative R projection and storage reference for topology and
-  representation questions.
+  hand-worked construction, queries, diagnosis, and correction; validation
+  and evaluation; the distinction between vocabulary, instance assertions,
+  schema, ontology semantics, validation, and inference; an R
+  `igraph`/`tidygraph` projection; RDF, SPARQL, SHACL and PROV-O; property
+  graphs, Cypher, and graph-database storage trade-offs; release and
+  governance. Python/DuckDB provides optional companion verification of
+  bounded construction, queries, and correction.
+- Exclusions: General-purpose NLP, production entity-resolution calibration or
+  reconciliation, ontology engineering in depth, legal advice, vendor
+  benchmarking, production deployment or access enforcement, a complete Neo4j
+  integration, ranked semantic retrieval or GraphRAG, and claims that a
+  synthetic fixture represents a real organisation.
+- Proposed dependency-led route: Open with the problem, reader promise,
+  essential vocabulary, and one compact preview of the Northbridge question;
+  consolidate the early orientation so the reader reaches the worked problem
+  before absorbing the full glossary. Develop the Northbridge case as one
+  continuous source-to-answer-and-repair narrative, with source boundary,
+  mentions and identity, qualified claims, temporal policy, queries,
+  correction, disclosure, evaluation, and release regression as linked stages.
+  Follow that case with the detailed evidence ledger and query mechanics, then
+  transfer the reasoning to literature and dependency graphs. Add a focused
+  bridge from local relations to vocabulary, schema, ontology semantics,
+  validation, and inference using the existing Northbridge claims. Use the
+  alternative R projection to show deliberate information loss, and keep RDF,
+  property-graph, and storage material as bounded reference guidance. End
+  with practice, limitations, and further reading.
 - Approximate depth: Substantial, explanatory treatment. The document should
   grow where the dependency, worked case, or limitation requires it; word count
   is an outcome rather than a cap.
-- Worked examples: Northbridge competency questions; a small graph and its
-  qualified evidence table; comparative policy, research-literature, and
-  software-dependency graphs; source sentence to mention, entity decision,
-  claim, query, result and limitation; two Alex Kim identity abstention;
-  direct, path, provenance, temporal and conflict questions; a deliberately
-  broken extraction followed by correction and re-evaluation; R shortest-path
-  and component analysis; and storage-neutral comparisons of RDF and property
-  graphs. Executable implementations remain companion evidence rather than the
-  reader's primary route.
+- Worked examples: Northbridge competency questions; a small labelled graph
+  linked to its qualified evidence table; source sentence to mention, entity
+  decision, claim, query, result and limitation; two Alex Kim identity
+  abstention; direct, path, provenance, temporal and conflict questions; a
+  deliberately broken extraction followed by correction and re-evaluation; a
+  small schema/validation/inference contrast; research-literature and
+  software-dependency transfer graphs; R shortest-path and component analysis;
+  and storage-neutral comparisons of RDF and property graphs. Executable
+  implementations remain companion evidence rather than the reader's primary
+  route.
 - Real-world cases: Northbridge is a synthetic organisational-policy case used
   because it exposes source authority, temporal conflict, identity ambiguity,
   privacy, and correction without implying access to real personal data. Brief
@@ -81,13 +88,16 @@
     databases are compared as representation and serving options, with one
     worked mapping and a workload-based choice guide, not a product survey or
     executed Neo4j route.
-- Teaching devices: The opening terminology and Q4 walkthrough orient the
-  standalone reader before the detailed sections. The walkthrough and its
-  intermediate records are illustrative prose, not independently executed.
-  A stage table shows the source → mention/entity → qualified claim →
-  evidenced answer chain; an ordered list shows the baseline → diagnosis →
-  revised ledger → release regression cycle. Labels convey the stages without
-  depending on colour. Current HTML/PDF presentation needs review.
+- Teaching devices: One opening orientation block introduces only the terms
+  needed for the first Northbridge question. A compact labelled graph and its
+  evidence table establish the relationship between topology, qualifiers,
+  provenance, and an answer. The consolidated walkthrough follows the source
+  → mention/entity → qualified claim → query → interpretation → correction →
+  release chain; an ordered list shows the baseline → diagnosis → revised
+  ledger → release regression cycle. A focused relation/schema/validation/
+  inference comparison uses the same claims rather than introducing a second
+  miniature system. Labels and alt text convey the stages without depending on
+  colour. Current HTML/PDF presentation needs review after drafting.
   Retained-excerpt, mention-decision, span-to-assertion, and ledger tables
   supply the detailed hand replay beneath the opening flow. Three worked
   failures develop symptom, diagnosis, test, and change; a compact table
@@ -117,6 +127,15 @@
   exact sources and access boundary in the audit; do not generalise this to a
   service integration or a latest-version claim.
 - Open decisions:
+  - Consolidate the opening and Northbridge headings without deleting the
+    existing intermediate records. The implementation must preserve the
+    source, identity, temporal, policy, disclosure, evaluation, and correction
+    decisions while reducing restart points.
+  - Add the schema/semantics bridge as a bounded expansion before the storage
+    reference. It must distinguish validation from inference with one worked
+    Northbridge contrast; ontology engineering remains excluded.
+  - Add one labelled central graph visual with descriptive alt text and a prose
+    explanation. It must reinforce, not replace, the evidence tables.
   - Retain the R script's self-contained positive projection for this milestone.
     It is explicitly an alternative topology teaching route, not a synchronised
     view of a changed Python source. A generated projection would be a separate
@@ -124,28 +143,35 @@
   - No Neo4j service integration is in scope. The reference comparison uses the
     Neo4j 5 MATCH manual, checked on 11 November 2026; a service test would be
     a separate issue.
+  - Reconcile `primer_knowledge_graph.case.md` with this brief before drafting:
+    the reader-facing primary route is illustrative and standalone, while the
+    optional Python companion verifies bounded operations. The case contract
+    must not require a reader to rebuild DuckDB or imply that companion
+    execution is the primary teaching route.
   - The primary lab works source-version replay by hand. The optional Python
     companion rebuilds a changed retained excerpt in a fresh temporary
     database. Durable release publication is a production extension.
 
 ## Route-keyed worked-case trace
 
-The trace binds the case to its stable route and concept IDs. Every primary
-stage is hand-worked in the primer. Companion verification is optional and
-covers the bounded operations stated below.
+The trace binds the case to its stable route and concept IDs. Reader-facing
+primary stages are illustrative hand-worked prose; optional companion checks
+are listed separately as evidence. The alternative route has one executable
+projection stage and one illustrative interpretation stage. Reference-only
+material does not carry a continuous teaching spine.
 
 | route_id | route tier | stage | concept_id(s) | Input and decision | Output handed to the next stage | Evidence mode and scope decision |
 |---|---|---|---|---|---|---|
-| route-python-duckdb | primary | Boundary and questions | kg-boundary | Declare Northbridge sources, authority, dates, and Q1–Q5 contracts | Bounded questions and refusal rules | Hand-worked, including the two-part Q2 and Q4 contracts |
-| route-python-duckdb | primary | Mentions and qualified claims | kg-mentions, kg-claims | Preserve source spans, distinguish mentions from entities, and retain source, interval and polarity | Candidate claims and evidence-bearing rows | Hand-worked from excerpts. The optional companion verifies construction for declared patterns |
-| route-python-duckdb | primary | Temporal and conservative construction | kg-temporal, kg-extraction | Classify bounded, unbounded and unknown horizons, refuse unsupported dates, and abstain on Alex identity | Source-derived `c1`, `c4`, `c5` plus refusal decisions | Hand-worked classifications and refusals. Companion extraction covers fixture patterns |
-| route-python-duckdb | primary | Ledger and evidence queries | kg-duckdb, kg-queries | Bind identifiers, select rows, join path hops, and classify dates in the printed ledger | Evidence rows and supported, refuted, or abstention results | Hand-worked queries. The storage reference describes the optional DuckDB mapping and reopen check |
-| route-python-duckdb | primary | Diagnosis and correction | kg-correction | Diagnose the first evidence loss, compare omitted-negative, repaired, and changed-source runs, and replay R2 derivations | Revised evidence links, source comparison, and policy result | Hand-worked failures and three-pass lab. The optional companion verifies a bounded rebuild |
-| route-python-duckdb | primary | Privacy and release boundary | kg-privacy | Compare ordinary citations, answers, and counts across paired releases | Approved evidence and the same ordinary outputs in both states | Hand-worked disclosure test and governance assumptions |
-| route-python-duckdb | primary | Evaluate permitted outputs and release regression | kg-evaluation, kg-correction, kg-privacy | Score the synthetic items against the audience contract, then compare original and revised answers, paths, and citations | Interpreted measures and release acceptance expectations | Worked arithmetic, answer items, and final regression table; no deployment accuracy claim |
-| route-r-projection | alternative | Positive projection | kg-r-projection | Read the declared positive interchange fixture and analyse paths/components | Topology results without claim qualifiers | executable alternative; deliberately not synchronised with changed Python input |
-| route-r-projection | alternative | Interpret topology and return to evidence | kg-r-projection | Explain unit path cost, components, and discarded dates, polarity, provenance and claim IDs | A topology interpretation and a return path to the evidence ledger | Hand-worked interpretation with optional R verification. Evidence questions require the ledger |
-| route-graph-storage | reference-only | RDF, property graphs and storage choice | kg-rdf, kg-property, kg-storage | Compare qualified mappings and workload boundaries | A future storage decision and prospective test | reference-only; no continuous teaching spine or executed service migration promised |
+| route-python-duckdb | primary | Boundary and questions | kg-boundary | Declare Northbridge sources, authority, dates, and Q1–Q5 contracts | Bounded questions and refusal rules | `illustrative`; verify contracts against retained excerpts |
+| route-python-duckdb | primary | Mentions and qualified claims | kg-mentions, kg-claims | Preserve source spans, distinguish mentions from entities, and retain source, interval and polarity | Candidate claims and evidence-bearing rows | `illustrative`; optional companion check `construction.py` covers declared patterns |
+| route-python-duckdb | primary | Temporal and conservative construction | kg-temporal, kg-extraction | Classify bounded, unbounded and unknown horizons, refuse unsupported dates, and abstain on Alex identity | Source-derived `c1`, `c4`, `c5` plus refusal decisions | `illustrative`; optional companion extraction check covers fixture patterns |
+| route-python-duckdb | primary | Ledger and evidence queries | kg-duckdb, kg-queries | Bind identifiers, select rows, join path hops, and classify dates in the printed ledger | Evidence rows and supported, refuted, or abstention results | `illustrative`; optional DuckDB reopen/query check is companion evidence |
+| route-python-duckdb | primary | Diagnosis and correction | kg-correction | Diagnose the first evidence loss, compare omitted-negative, repaired, and changed-source runs, and replay R2 derivations | Revised evidence links, source comparison, and policy result | `illustrative`; optional companion verifies a bounded rebuild |
+| route-python-duckdb | primary | Privacy and release boundary | kg-privacy | Compare ordinary citations, answers, and counts across paired releases | Approved evidence and the same ordinary outputs in both states | `illustrative`; synthetic disclosure test, not deployment evidence |
+| route-python-duckdb | primary | Evaluate permitted outputs and release regression | kg-evaluation, kg-correction, kg-privacy | Score the synthetic items against the audience contract, then compare original and revised answers, paths, and citations | Interpreted measures and release acceptance expectations | `illustrative`; worked arithmetic and regression table, no deployment accuracy claim |
+| route-r-projection | alternative | Positive projection construction | kg-r-projection | Read the declared positive interchange fixture and construct the projected vertices and relations | Five positive relations and eight vertices for path/component analysis | `executable`; run the pinned R example and inspect expected path/components |
+| route-r-projection | alternative | Interpret topology and return to evidence | kg-r-projection | Explain unit path cost, components, and discarded dates, polarity, provenance and claim IDs | A topology interpretation and a return path to the evidence ledger | `illustrative`; interpretation is checked against the fixture and ledger |
+| route-graph-storage | reference-only | RDF, property graphs and storage choice | kg-rdf, kg-property, kg-storage | Compare qualified mappings and workload boundaries | A future storage decision and prospective test | `reference-only`; no continuous teaching spine or executed service migration |
 
 ## Review plan
 
@@ -170,6 +196,50 @@ covers the bounded operations stated below.
   A definition, list, citation, heading, or code output alone is not teaching
   evidence. Any primary or alternative row without those locators blocks
   readiness; reference-only rows need an explicit scope rationale.
+- Release-readiness gate: Keep this separate from the content gate. Rebuild
+  HTML/PDF after source changes; rebind the audit to the new source, brief, and
+  output revisions; run current render QA and the documented keyboard,
+  browser-accessibility-tree, screen-reader, and PDF tag-tree checks; record
+  HTML accessibility as the target and the pinned PDF's `Tagged: no` status as
+  an explicit limitation. Do not call a content pass release-ready.
+- Case reconciliation: Update and review the case contract before drafting so
+  the standalone illustrative route and optional executable companion have one
+  consistent reader promise. The contract must identify the exact companion
+  commands and the boundary of what they verify.
+
+## Optional branches and unresolved concepts
+
+| route_id | optional branch | reader need | worked evidence added | material displaced or shortened | scope decision and reason |
+|---|---|---|---|---|---|
+| route-python-duckdb | Optional Python/DuckDB companion | Reproduce bounded construction, persistence, and correction checks | Temporary database build, reopen, parameterised queries, and bounded rebuild | No reader-facing prose; companion remains outside the main narrative | Retain as optional executable evidence; reconcile the case contract so it does not become a hidden prerequisite |
+| route-r-projection | R topology projection | See how a lossy positive view supports path and component analysis | Pinned `igraph`/`tidygraph` projection and expected results | No synchronised projection of later corrected Python data | Retain as an alternative route because its information-loss boundary is a teaching result |
+| route-graph-storage | RDF/property-graph reference | Compare representation and serving choices | One Northbridge mapping and workload comparison | No full service implementation or vendor survey | Retain as reference-only; it cannot carry a continuous teaching spine |
+| route-graph-storage | Schema/validation/inference bridge | Transfer local relation reasoning into standards-aware semantics | One worked contrast using an existing Northbridge relation | Shorten the storage catalogue and remove repeated format definitions | Expand selectively; keep ontology engineering out of scope |
+
+No unresolved concept is currently blocking the planned revision. The schema,
+validation, and inference bridge is an intentional expansion of the existing
+`kg-rdf`/`kg-claims` boundary, not a new route or a replacement concept ID.
+
+## Post-draft teaching-depth checkpoint
+
+Before audit handoff, compare the revised source with this brief and the case
+contract at a new source revision. For each primary or alternative route,
+record exact locators for the input, intermediate reasoning, reader operation,
+result, interpretation, and material limit. Record whether the reader-facing
+stage is illustrative or whether companion execution was actually run. A
+missing transition blocks handoff until the prose is expanded or the route is
+narrowed or demoted. Recheck the opening, consolidated Northbridge route,
+schema/semantics bridge, graph visual, and the R projection after any heading
+move.
+
+- Draft source revision: <to be filled after the content milestone>
+- Brief revision reviewed: `kg-398-brief-r9`
+
+| route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
+|---|---|---|---|---|
+| route-python-duckdb | Northbridge source-to-answer-and-repair trace | Pending revised source | Pending checkpoint | Standalone illustrative route; optional companion remains non-blocking |
+| route-r-projection | Executable projection plus illustrative interpretation | Pending revised source | Pending checkpoint | Loss of qualifiers remains explicit and intentional |
+| route-graph-storage | Reference mapping and workload comparison | Pending revised source | Pending checkpoint | No service migration or product implementation promised |
 
 ## Core-concept depth matrix
 
