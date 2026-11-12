@@ -821,7 +821,11 @@ Use the original Northbridge evidence unless an exercise specifies a correction.
 7. A merged Parser node can carry both Codec edges. Build 41 can incorrectly reach the 1.9.0 instance from build 42 and build 42 can incorrectly reach the 1.8.0 instance from build 41. If the query is expanded to development, the second error creates a false advisory match. The first can also conceal the production finding if the system takes just one reachable release. Bind build and runtime scope at each hop. In the corrected example, the present inventory positively identifies Codec 1.9.0, outside V's range. An unavailable inventory gives no evidence of the selected transitive version. The manifest's allowed Parser range supplies no substitute for that evidence.
 8. The gold items are `c1` and `c5`. The two correct returns out of three give precision 2/3, and both gold items were returned, giving recall 2/2. `c4` concerns version 2 and is outside the fixed proposition even though the minutes assert it on the same date. The positive topology can show version 1 → Atlas and version 2 → Atlas. It discards the negative evidence and its temporal scope, so these edges cannot support the complete answer about agreement. For an answer score, require the correct judgement, the justified abstention on applicability, and the evidence for both opposing assertions.
 
-## From Local Relations to Schema and Semantics
+## Storage and Implementation Reference {#route-graph-storage}
+
+The ledger can be represented in several ways. The distinction to carry across a mapping is between a relationship that the graph asserts directly, an identified record of someone else's qualified assertion, and an analytical edge derived from selected evidence. Use `c1` and `c5` as a test. A reader of the new representation should still be able to tell that they concern the same proposition, differ in polarity and time, and originate from different sources.
+
+### Schema, Validation, and Inference {#from-local-relations-to-schema-and-semantics}
 
 Northbridge's relation definitions provide a local **vocabulary**: names such as `belongs_to`, the participant types, and their intended readings. The classes project and organisation are vocabulary terms too. An **instance assertion** uses those terms to say something about particular entities: `c3` records the directory's statement that Atlas belongs to Northbridge. A vocabulary supplies terms with which to make statements; it is not itself evidence that this particular affiliation holds. The source-specific assertion also retains its provenance and time support.
 
@@ -832,10 +836,6 @@ Consider a small contrast using `c3`. For this illustration, suppose a separate 
 **Validation** asks a different question: does a chosen data graph meet stated conditions? Suppose a SHACL-style shape targets each applicability assertion and requires exactly one source reference. If a copy of `c1` has no source reference, validating it against that shape produces a non-conformance result identifying the affected record and constraint. It does not infer a source, prove that the register is wrong, or decide Q4. Conversely, an inferred project classification is a consequence of the assumed relation and schema; it is not a validation failure or independent source evidence. Validation results depend on the selected shapes and graph, including whether inferred statements are included. A conforming record can still misrepresent its passage, so inspect the source as well. [Shapes Constraint Language](https://www.w3.org/TR/shacl/).
 
 These distinctions prepare the storage mappings that follow. They do not require a full ontology design: the choice of vocabulary, assumptions, constraints, and inference regime should be explicit for the question being answered.
-
-## Storage and Implementation Reference {#route-graph-storage}
-
-The ledger can be represented in several ways. The distinction to carry across a mapping is between a relationship that the graph asserts directly, an identified record of someone else's qualified assertion, and an analytical edge derived from selected evidence. Use `c1` and `c5` as a test. A reader of the new representation should still be able to tell that they concern the same proposition, differ in polarity and time, and originate from different sources.
 
 ### RDF, Evidence Resources, and Constraints
 

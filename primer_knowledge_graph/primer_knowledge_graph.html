@@ -698,19 +698,19 @@ Evidence</a></li>
 <li><a href="#questions" id="toc-questions"><span class="toc-section-number">11.1</span> Questions</a></li>
 <li><a href="#worked-answers" id="toc-worked-answers"><span class="toc-section-number">11.2</span> Worked Answers</a></li>
 </ul></li>
-<li><a href="#from-local-relations-to-schema-and-semantics" id="toc-from-local-relations-to-schema-and-semantics"><span class="toc-section-number">12</span> From Local Relations to Schema and
-Semantics</a></li>
-<li><a href="#route-graph-storage" id="toc-route-graph-storage"><span class="toc-section-number">13</span> Storage and Implementation
+<li><a href="#route-graph-storage" id="toc-route-graph-storage"><span class="toc-section-number">12</span> Storage and Implementation
 Reference</a>
 <ul>
-<li><a href="#rdf-evidence-resources-and-constraints" id="toc-rdf-evidence-resources-and-constraints"><span class="toc-section-number">13.1</span> RDF, Evidence Resources, and
+<li><a href="#from-local-relations-to-schema-and-semantics" id="toc-from-local-relations-to-schema-and-semantics"><span class="toc-section-number">12.1</span> Schema, Validation, and
+Inference</a></li>
+<li><a href="#rdf-evidence-resources-and-constraints" id="toc-rdf-evidence-resources-and-constraints"><span class="toc-section-number">12.2</span> RDF, Evidence Resources, and
 Constraints</a></li>
-<li><a href="#property-graphs-and-serving-choices" id="toc-property-graphs-and-serving-choices"><span class="toc-section-number">13.2</span> Property Graphs and Serving
+<li><a href="#property-graphs-and-serving-choices" id="toc-property-graphs-and-serving-choices"><span class="toc-section-number">12.3</span> Property Graphs and Serving
 Choices</a></li>
-<li><a href="#companion-implementation-notes" id="toc-companion-implementation-notes"><span class="toc-section-number">13.3</span> Companion Implementation
+<li><a href="#companion-implementation-notes" id="toc-companion-implementation-notes"><span class="toc-section-number">12.4</span> Companion Implementation
 Notes</a></li>
 </ul></li>
-<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14</span> Further Reading</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">13</span> Further Reading</a></li>
 </ul></nav>
 
     </aside>
@@ -4312,8 +4312,18 @@ agreement. For an answer score, require the correct judgement, the
 justified abstention on applicability, and the evidence for both
 opposing assertions.</li>
 </ol>
-<h1 data-number="12" role="heading" aria-level="3" id="from-local-relations-to-schema-and-semantics"><span class="header-section-number">12</span> From Local Relations to Schema
-and Semantics</h1>
+<h1 data-number="12" role="heading" aria-level="3" id="route-graph-storage"><span class="header-section-number">12</span>
+Storage and Implementation Reference</h1>
+<p>The ledger can be represented in several ways. The distinction to
+carry across a mapping is between a relationship that the graph asserts
+directly, an identified record of someone else’s qualified assertion,
+and an analytical edge derived from selected evidence. Use
+<code>c1</code> and <code>c5</code> as a test. A reader of the new
+representation should still be able to tell that they concern the same
+proposition, differ in polarity and time, and originate from different
+sources.</p>
+<h2 data-number="12.1" role="heading" aria-level="4" id="from-local-relations-to-schema-and-semantics"><span class="header-section-number">12.1</span> Schema, Validation, and
+Inference</h2>
 <p>Northbridge’s relation definitions provide a local
 <strong>vocabulary</strong>: names such as <code>belongs_to</code>, the
 participant types, and their intended readings. The classes project and
@@ -4366,17 +4376,7 @@ misrepresent its passage, so inspect the source as well. <a href="https://www.w3
 not require a full ontology design: the choice of vocabulary,
 assumptions, constraints, and inference regime should be explicit for
 the question being answered.</p>
-<h1 data-number="13" role="heading" aria-level="3" id="route-graph-storage"><span class="header-section-number">13</span>
-Storage and Implementation Reference</h1>
-<p>The ledger can be represented in several ways. The distinction to
-carry across a mapping is between a relationship that the graph asserts
-directly, an identified record of someone else’s qualified assertion,
-and an analytical edge derived from selected evidence. Use
-<code>c1</code> and <code>c5</code> as a test. A reader of the new
-representation should still be able to tell that they concern the same
-proposition, differ in polarity and time, and originate from different
-sources.</p>
-<h2 data-number="13.1" role="heading" aria-level="4" id="rdf-evidence-resources-and-constraints"><span class="header-section-number">13.1</span> RDF, Evidence Resources, and
+<h2 data-number="12.2" role="heading" aria-level="4" id="rdf-evidence-resources-and-constraints"><span class="header-section-number">12.2</span> RDF, Evidence Resources, and
 Constraints</h2>
 <p>The <span id="kg-rdf">Resource Description Framework</span> (RDF)
 models a graph as a set of triples. Each triple has a subject,
@@ -4462,7 +4462,7 @@ review can be recorded as a further activity. Use separate vocabulary
 for 15 March as the asserted day and for the minutes’ evidential role.
 Generation of the assertion in an extraction activity establishes
 neither its valid time nor its authority. <a href="https://www.w3.org/TR/prov-o/">PROV-O</a>.</p>
-<h2 data-number="13.2" role="heading" aria-level="4" id="property-graphs-and-serving-choices"><span class="header-section-number">13.2</span> Property Graphs and Serving
+<h2 data-number="12.3" role="heading" aria-level="4" id="property-graphs-and-serving-choices"><span class="header-section-number">12.3</span> Property Graphs and Serving
 Choices</h2>
 <p>A <span id="kg-property">property graph</span> can store both
 <code>c1</code> and <code>c5</code> as parallel directed relationships
@@ -4502,7 +4502,7 @@ and edge counts could pass while every source locator and horizon was
 lost. Where an export intentionally loses information, document the
 view’s question and carry an evidence mapping if users must return to
 the original.</p>
-<h2 data-number="13.3" role="heading" aria-level="4" id="companion-implementation-notes"><span class="header-section-number">13.3</span> Companion Implementation
+<h2 data-number="12.4" role="heading" aria-level="4" id="companion-implementation-notes"><span class="header-section-number">12.4</span> Companion Implementation
 Notes</h2>
 <p>The <span id="kg-duckdb">local tabular representation</span> in the
 Python and DuckDB companion shows how these relations can be persisted
@@ -4539,7 +4539,7 @@ the question needs. When a topology projection is exported, record its
 selection rules and discarded qualifiers with it. These checks let an
 implementation be assessed against the standalone reasoning even when
 its tables or query language differ.</p>
-<h1 data-number="14" role="heading" aria-level="3" id="further-reading"><span class="header-section-number">14</span>
+<h1 data-number="13" role="heading" aria-level="3" id="further-reading"><span class="header-section-number">13</span>
 Further Reading</h1>
 <ul>
 <li>The <a href="https://www.w3.org/TR/swbp-n-aryRelations/">W3C note on
