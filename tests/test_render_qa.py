@@ -1,5 +1,8 @@
 import importlib.util
+import os
 from pathlib import Path
+import shutil
+import subprocess
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 import unittest
@@ -13,6 +16,31 @@ SPEC.loader.exec_module(MODULE)
 
 
 class RenderQATests(unittest.TestCase):
+    def test_heading_filter_preserves_shifted_tags_ids_and_numbering(self):
+        pandoc = os.environ.get("PANDOC", "pandoc")
+        if not shutil.which(pandoc):
+            self.skipTest("Pandoc is required for the heading filter integration test")
+        root = SCRIPT.parent.parent
+        command = [pandoc, "--from=markdown", "--to=html", "--number-sections",
+                   "--shift-heading-level-by=-1"]
+        source = "## Section {#section}\n\n### Subsection {#subsection}\n"
+
+        def render(extra):
+            return subprocess.run(command + extra, input=source, text=True,
+                                  capture_output=True, check=True).stdout
+
+        original = render([])
+        filtered = render([f"--lua-filter={root / '_shared/filters/html-heading-semantics.lua'}"])
+        for fragment in ('<h1 data-number="1"', 'id="section"', '>1</span>',
+                         '<h2 data-number="1.1"', 'id="subsection"', '>1.1</span>'):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, original)
+                self.assertIn(fragment, filtered)
+        audit = MODULE.HTMLAudit()
+        audit.feed(filtered)
+        self.assertEqual([(h["tag"], h["id"], h["aria-level"]) for h in audit.heading_details],
+                         [("h1", "section", "2"), ("h2", "subsection", "3")])
+
     def test_page_candidates_skip_front_matter_and_find_content(self):
         pages = [
             "cover",
@@ -94,6 +122,25 @@ class RenderQATests(unittest.TestCase):
         errors = MODULE.semantic_html_errors(audit)
         self.assertIn("TOC toggle names must be unique", errors)
         self.assertIn("TOC toggle targets must be unique", errors)
+
+    def test_semantic_html_audit_checks_section_heading_levels(self):
+        def errors(levels):
+            audit = MODULE.HTMLAudit()
+            headings = "".join(
+                f"<h1 id='section-{i}' role='heading' aria-level='{level}'>Section</h1>"
+                for i, level in enumerate(levels)
+            )
+            audit.feed("""<a href='#main-content'>skip</a>
+                <nav id='TOC' aria-label='Table of contents'></nav>
+                <main id='main-content' aria-labelledby='document-title'>
+                <h1 id='document-title'>Title</h1>""" + headings + "</main>")
+            return MODULE.semantic_html_errors(audit)
+
+        message = "section heading aria-levels must start at 2 and not skip levels"
+        self.assertEqual(errors([2, 3, 2]), [])
+        for levels in ([3, 4], [2, 4], [1], ["invalid"]):
+            with self.subTest(levels=levels):
+                self.assertIn(message, errors(levels))
 
     def test_semantic_html_audit_rejects_missing_controlled_list(self):
         audit = MODULE.HTMLAudit()

@@ -312,6 +312,17 @@ def semantic_html_errors(parser_html: HTMLAudit) -> list[str]:
     section_headings = [heading for heading in parser_html.heading_details if heading["id"] != "document-title"]
     if any(heading["role"] != "heading" or not heading["aria-level"] for heading in section_headings):
         errors.append("section headings need explicit heading roles and aria-level values")
+    else:
+        previous_level = 1  # The template's document title is level 1.
+        for heading in section_headings:
+            try:
+                level = int(heading["aria-level"])
+            except ValueError:
+                level = 0
+            if level < 2 or level > previous_level + 1:
+                errors.append("section heading aria-levels must start at 2 and not skip levels")
+                break
+            previous_level = level
     labels = [control["aria-label"] for control in parser_html.controls]
     controls = [control["aria-controls"] for control in parser_html.controls]
     if len(labels) != len(set(labels)):
