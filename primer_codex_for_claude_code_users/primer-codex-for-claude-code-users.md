@@ -2,7 +2,7 @@
 
 This is a long-form, operational guide for Claude Code users who want Codex as a second coding-agent harness while keeping their existing repository workflow intact.
 
-*Product snapshot · 7 November 2026. Bounded documentation checks cover instruction discovery, selective import, sandbox scope, model routing, and the hook/skill migration example. Earlier checks retain their stated dates; examples remain unexecuted.*
+*Revision snapshot · 15 November 2026. This edition develops configuration ownership and coordinated delivery, with bounded primary-source checks of configuration, agent model resolution, review controls, thread lifecycle, and isolation. The model catalogue and earlier interoperability checks retain their stated dates; the worked scenarios remain illustrative and unexecuted.*
 
 ## Introduction
 
@@ -10,7 +10,7 @@ If you already use Claude Code, the first few minutes with Codex can be oddly co
 
 Then the similarities stop being useful. The instruction file may have a different name. A command that Claude Code would run immediately may produce an approval request in Codex, or be unavailable in the current execution environment. A model name may describe a different thing from the product or interface you were comparing. A prompt that worked well in one harness may leave the other with too little context about scope, verification, or when it is allowed to edit.
 
-This primer fills that gap. It is a translator's guide for experienced Claude Code users who want Codex as a second coding-agent harness without turning an existing repository into a compatibility project. The goal is not to declare a winner. The useful question is: given this repository, this task, and these constraints, how do you make either harness behave predictably?
+This primer fills that gap. It is a translator's guide for experienced Claude Code users who want Codex as a second coding-agent harness while keeping one understandable repository workflow. Its organising question is how to turn a request into a bounded, reviewed change: establish the shared contract, verify the active configuration, allocate responsibility, inspect the returned evidence, and preserve enough state for either harness to continue. The goal is predictable work whose result you can accept or reject.
 
 ### What This Primer Covers
 
@@ -40,7 +40,11 @@ You should be comfortable working in a terminal, reading a git diff, running a p
 
 You do not need to know Codex's configuration syntax in advance. You do need to bring the habits that make any coding agent safe to use: give it a bounded task, keep the working tree understandable, inspect its proposed changes, and run the checks that establish whether the result is correct.
 
-*Verified against primary sources for Instruction Systems (discovery), Models and Reasoning Effort (model snapshot and routing controls), and Feature Translation (selective import, sandbox scope, and the hook/skill example); Workflow Differences retains its earlier remote/data verification boundary, and other unverified details are flagged inline.*
+The build-repair case runs through the main route of this guide. It is synthetic and illustrative: an existing Claude-maintained repository has a documented pinned-container build path for a primer, required HTML and PDF outputs, and a known starting revision. The task is to repair that path, regenerate the outputs, and verify the scope and rendered results. No example below claims that this work was executed or that a model's performance was measured.
+
+Begin with [Two Harnesses, One Repository](#two-harnesses-one-repository) and [First-Session Setup](#first-session-setup) to identify the shared contract and discover what the active harness can actually do. The [configuration discussion](#codex-configuration-is-a-supplement-not-the-project-contract) traces the developer's intended routing from its durable owner to a session; [Parallel Work](#parallel-work-divide-by-contract-not-by-file-count) then divides the repair and passes evidence to the coordinator. The conclusion returns to the candidate and its acceptance decision. If your immediate concern is an existing hook or skill, the [worked translation](#worked-example-translating-a-claude-code-hook-and-skill) is an alternative route; the model catalogue and feature comparisons are reference material to consult as needed.
+
+*Verification is bounded by topic and date. The [verification snapshot](#verification-snapshot-and-remaining-volatility) separates the 15 November configuration and delegation checks from the retained 7 November model and interoperability snapshot and earlier remote/data checks. Documentation checks do not establish runtime behaviour in your account or client.*
 
 All prompts, shell commands, configuration blocks, and worked scenarios are illustrative and unexecuted unless explicitly identified otherwise. This primer has no executable-example manifest. The verification snapshot distinguishes documentation checks from runtime tests; a configuration example is not a tested deployment.
 
@@ -166,7 +170,7 @@ When concurrency is worthwhile, create one branch and worktree per agent. Give
 each worker an explicit ownership boundary, such as "investigate and test the
 API, but do not edit" or "change only `src/payments/` and its tests". Keep
 generated files, lockfiles, migrations, and shared interfaces under one owner
-unless you have already agreed how to integrate them. A worktree isolates files
+unless you have already agreed how to integrate them. A worktree separates working files
 and branch state; it does not resolve design disagreement or make shared
 services safe to mutate.
 
@@ -247,7 +251,7 @@ git worktree remove ../repo-codex
 git worktree prune
 ```
 
-Worktrees prevent accidental file overwrites; they do not make two agents
+Worktrees provide separate checkouts, not an enforced read-only or path-restricted sandbox. They reduce accidental file overwrites; they do not make two agents
 independent if they both change the same contract or mutate the same external
 database. Keep one owner for shared state and one human or coordinating agent
 responsible for integration.
@@ -886,29 +890,6 @@ wider advice matches everything in this chapter — universal instructions in
 `AGENTS.md`, `CLAUDE.md` as an `@AGENTS.md` import plus Claude-specific extras,
 and `~/.codex/config.toml` left deliberately tool-specific.
 
-### Codex Configuration Is a Supplement, Not the Project Contract
-
-Codex may have user-level and repository-level configuration for model choice,
-approval behaviour, sandboxing, or instruction-file fallback. Those settings
-are more volatile than repository prose and may differ by client. Keep them
-small, documented, and safe to ignore when a user runs another interface.
-
-At the time of drafting, this repository sets
-`project_doc_fallback_filenames = ["CLAUDE.md"]`, whose semantics are covered
-earlier in this chapter. The intent is narrow: if the normal Codex-facing file
-is absent, the existing Claude Code instruction file remains discoverable. It
-does not turn `CLAUDE.md` into a universal Codex configuration format, and it
-does not add `CLAUDE.md` as a second project instruction source when
-`AGENTS.md` is present. The current configuration reference also says that
-project-local `.codex/` layers are skipped for untrusted projects, so trust
-status is part of the setup rather than an implementation detail.
-
-Do not put model preferences, approval choices, or secrets into shared project
-instructions unless every contributor should inherit them. A developer who
-needs a more permissive sandbox for a local experiment should be able to make
-that choice locally without changing the repository’s review policy for
-everyone else.
-
 ### A Practical Instruction Audit
 
 When adding Codex to an existing Claude Code repository, audit the instruction
@@ -929,6 +910,142 @@ The audit is complete when both agents can answer the same repository questions
 and still retain their own harness-specific workflows. You do not need
 identical prompts or identical feature sets. You do need one understandable
 source of truth for what the repository considers a correct change.
+
+## Configuration Ownership and Effective Settings
+
+A repository can share its definition of a correct change while each contributor keeps personal model and execution preferences. Follow a setting from its durable owner to the active session before diagnosing a mismatch: agreement between two files is useful evidence, but it can miss a stale upstream source or a session override.
+
+### Codex Configuration Is a Supplement, Not the Project Contract
+
+The repository contract describes what a correct change requires across harnesses. Codex configuration controls aspects of a particular installation or session, such as model selection and sandbox behaviour; it does not replace that contract. Keep shared instructions in their canonical home and keep personal preferences outside them unless the whole project has deliberately adopted a setting. A configuration file is also not an authorisation boundary: the active environment and any managed requirements determine what a session can actually do.
+
+In the bridge described above, `project_doc_fallback_filenames = ["CLAUDE.md"]` is a narrow discovery fallback, not a second instruction source added alongside an existing `AGENTS.md`. Codex skips project configuration layers for untrusted projects, so a file's presence does not establish that the session loaded it. Check trust and the relevant client's diagnostics when an expected setting or fallback appears absent. The [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) and [configuration basics](https://learn.chatgpt.com/docs/config-file/config-basic) describe the supported fields and loading rules; consult them for the client in use rather than assuming one complete precedence order covers every control.
+
+A personal preference can have a longer ownership chain than Codex itself knows about. In the build-repair case, the developer wants a strong reasoning coordinator at medium effort, a general-purpose worker at medium effort, a strong model for `/review`, and a local limit of three agents. This is a reasoned operating choice, not a benchmark or a provider default. A durable personal source records the intent; optional user-maintained tooling produces an installed reference; the tooling selectively updates the live Codex configuration; and a session then resolves its settings. A dotfile manager or synchronisation script is optional user tooling, not a Codex feature. Someone without one can maintain the applicable configuration directly.
+
+The distinction matters when a source becomes stale. Suppose the managed source still says the coordinator should use a general-purpose model, while the installed reference and live configuration both contain the intended strong model. A comparison of installed reference with live configuration reports agreement, yet the next synchronisation from the stale source could restore the wrong coordinator. The table shows the illustrative state for the owned preferences; it is not command output or a record of a run.
+
+| Owned preference | Managed source before correction | Installed reference and live file before correction | Intended state after correction |
+| --- | --- | --- | --- |
+| Coordinator | General model, medium | Strong reasoning model, medium | Strong reasoning model, medium throughout |
+| Worker | General model, medium | General model, medium | General model, medium throughout |
+| `/review` | Strong model | Strong model | Strong model throughout |
+| Agent limit | 3 | 3 | 3 throughout |
+
+Compare the managed source with the installed reference *and* the installed reference with the live file before applying the user's synchronisation tool. Inspect the tool's ownership and proposed diff, correct the stale coordinator keys in the durable source, and preview the resulting changes before applying them. Recheck both comparisons afterwards. Update only the settings the tool owns: a desktop client may also maintain live configuration, so copying a complete reference over that file can discard unrelated settings. If a comparison reveals other discrepancies, establish their owner and intended value before changing them. This procedure establishes agreement among inspected files; it does not establish which model handled a request.
+
+Keep the portable policy in capability terms, and record identifiers as dated, replaceable selections. For example, as an illustrative selection on 15 November 2026, the coordinator might use `gpt-6.1-sol` at `medium`, the worker `gpt-6.1-terra` at `medium`, and `/review` `gpt-6.1-sol`, with the agent limit set to three. Availability and appropriate identifiers depend on the account, client, and date. These choices are examples rather than measured results, and the limit is a local policy rather than a provider ceiling. Consult the [model guidance](https://learn.chatgpt.com/docs/models) and the active controls before choosing actual values.
+
+The illustrative preferences can be represented in a user configuration as follows. This block names the relevant controls; it is not a complete configuration file to copy over an existing installation. Keep other settings and any managed constraints intact.
+
+```toml
+model = "gpt-6.1-sol"
+model_reasoning_effort = "medium"
+review_model = "gpt-6.1-sol"
+
+[agents]
+default_subagent_model = "gpt-6.1-terra"
+default_subagent_reasoning_effort = "medium"
+max_concurrent_threads_per_session = 3
+```
+
+The agent limit in this example caps open spawned threads, excluding the primary, in the documented local Codex configuration. It is not a count only of agents currently working. The [subagent chapter](#subagents-delegation-is-not-parallelism-by-itself) explains model resolution and lifecycle; inspect the active tool interface before assuming that its limits or closure operations are identical.
+
+Agreement among personal files still does not settle the configuration selected for a particular project. Codex combines local configuration layers: in the bounded comparison below, a trusted project setting takes precedence over a selected profile file, which takes precedence over the user configuration; explicit CLI flags or `--config` take precedence over those file layers. This is a subset of the documented order, not a complete precedence chain. Other layers and the closest applicable project configuration also matter; see [configuration precedence](https://learn.chatgpt.com/docs/config-file/config-basic#configuration-precedence). Project-scoped configuration is skipped when the project is untrusted.
+
+Extend the illustrative build-repair case after correcting the stale source. The personal source, installed reference, and live user configuration all specify `gpt-6.1-sol` at `medium`, but the trusted project's `.codex/config.toml` specifies `gpt-6.1-terra` at `medium`. Assume no selected profile or higher CLI override changes those settings, and no managed requirement prevents them. The following comparison describes configured intent under those assumptions, not an observed model run.
+
+| Layer or evidence | Illustrative value | Consequence |
+| --- | --- | --- |
+| Matching personal files and user configuration | `gpt-6.1-sol`, `medium` | The personal source and installed values agree. |
+| Trusted project configuration | `gpt-6.1-terra`, `medium` | The project value takes precedence over the user value. |
+| Higher CLI override | None in this example | The resulting configured selection is `gpt-6.1-terra`, `medium`. |
+| Actual session or agent execution | Not observed | File comparison alone does not establish the runtime selection or a model call. |
+
+A selected profile can change the comparison between user and project settings, and a CLI flag or `--config` can change the result above. A session selection may also affect the active session according to its interface; inspect the intended session's start options, selected profile, trust state, and available configuration or session diagnostics instead of assuming the files prove what ran. If the project setting expresses deliberate shared policy, retain it and record that the project selection differs from the personal preference. If the preference should apply here, identify the owner of the conflicting setting and agree or make the appropriate narrow change there; do not delete the project file or change trust merely to obtain the preferred model.
+
+Managed requirements are constraints on allowable settings, not simply another default to rank in this comparison. They can reject or limit a requested value, and managed deployments have their own policy details. Check the applicable [managed configuration guidance](https://learn.chatgpt.com/docs/enterprise/managed-configuration) and the client's diagnostics before treating any proposed selection as available or permitted. Even a successfully parsed configuration is separate evidence from the actual coordinator, worker, or review model used at runtime.
+
+A default model is not necessarily the effective model of every part of a workflow. A session may have its own selection or override; a delegated agent may use an agent-specific configuration or spawn-time choice. The [subagent reference](https://learn.chatgpt.com/docs/agent-configuration/subagents/) documents how those choices resolve, including their effort settings. The `review_model` setting applies to `/review`, not automatically to a custom reviewer subagent; configure that agent's model and effort separately and inspect the active session or agent controls where they expose the selection. The case records the intended and file-configured values after correction, but leaves the actual coordinator, worker, and reviewer runtime selections **unknown** until observed through an appropriate client or run record. Parsing a configuration or finding a matching diff is evidence about the file, not a model execution.
+
+## Models and Reasoning Effort
+
+Choosing a model is part of designing a working arrangement. The main session may have to interpret an ambiguous request, divide the work, reconcile contradictory findings, and decide whether the evidence supports completion. A delegate may instead have a narrow question and an easily checked answer. Those responsibilities justify different starting choices even when both sessions work on the same repository. Model, reasoning effort, available context, tools, permissions, and acceptance checks all affect the result; changing a model cannot repair a missing runtime or an unclear contract.
+
+### What the Controls Mean
+
+The model generates decisions, tool calls, and text. Reasoning effort is a product-specific control over the computation allocated to a response or action. More effort gives difficult reasoning more room but guarantees neither a correct answer nor a useful task boundary. Context matters too: a session needs the applicable instructions, relevant source and evidence, but a mass of unrelated logs can obscure them. Direct the session to the sources it needs and preserve decisions in reviewable files rather than relying on an unshared conversation.
+
+Controls vary by model and surface. The [Codex model guide](https://learn.chatgpt.com/docs/models) describes Low, Medium, High, Extra High, Max and Ultra in its CLI guidance; Ultra can involve automatic delegation. The [Astra API documentation](https://developers.openai.com/api/docs/models/gpt-6-astra) lists API values `low`, `medium`, `high`, `xhigh` and `max`. Do not infer that labels, availability, or effects are identical across interfaces. Check the active client and selected model before treating a setting as available.
+
+### A Dated Snapshot of the Current Codex Models
+
+As of 7 November 2026, the official [Codex model guidance](https://learn.chatgpt.com/docs/models) describes Luna for focused work, GPT-6.1 Sol for repeated complex work, Terra for everyday writing and visual work, and Astra for the most demanding workflows. This is a documentation snapshot, not an account-access test or independent performance comparison. The picker, authentication method, workspace policy and client determine what is selectable.
+
+| Model | Documented orientation | Illustrative use here |
+| --- | --- | --- |
+| `gpt-6-luna` | Efficient, focused, repeatable work | A bounded mechanical delegate with clear checks |
+| `gpt-6.1-sol` | Repeated, long-running work across code, apps and documents | Coordination or implementation with interacting constraints |
+| `gpt-6.1-terra` | Writing, visual understanding and computer use | Bounded authoring or supported visual work |
+| `gpt-6-astra` | Most demanding workflows | Exceptional end-to-end work explicitly escalated to it |
+
+Choose effort separately. The guide suggests High for Luna and Light (`low` in configuration) for Astra; for GPT-6.1 Sol, start with the client's default. Luna supports Max but not Ultra. The catalogue also records dated retirements, including GPT-5.5 for ChatGPT-authenticated Codex on 14 October 2026; API-key sessions are separate. Consult the maintained catalogue for current identifiers and retirement dates. This snapshot establishes no price, quota, entitlement, or measured performance.
+
+### Choose by Responsibility and Task Shape
+
+For substantial work, a useful starting policy is a strong general reasoning model at medium effort for the main session. Its job is to frame the task, identify dependencies, allocate ownership, resolve conflicts, integrate changes and judge the evidence. Use a capable general-purpose model at medium effort for a bounded implementation, investigation or documentation task. For clear, repeatable mechanical work with good checks, use an efficient model at the highest effort that remains economical. Reserve strong reasoning at high effort for demonstrated difficult ambiguity, architecture, debugging or substantive review; use a frontier model for explicitly escalated exceptional work. Resolve these classes to models actually available in the session, rather than making an identifier permanent policy.
+
+This is a recommendation about responsibility, not a benchmark. An inexpensive capable configuration can be an excellent choice for a small self-contained task, including one performed without delegates. Conversely, making it the automatic coordinator for every substantial task can leave integration and judgement under-resourced. A small change can be difficult when its invariants are poorly documented; a larger change can be mechanical when the contract and checks are strong. Match the assignment to uncertainty and consequences, and adjust when the evidence calls for it.
+
+Exploration needs enough capability to distinguish relevant code from its neighbours and return paths and evidence. Planning needs more reasoning when plausible designs compete or a wrong choice would be costly. Implementation needs it when behaviour spans files or tests omit important invariants. Review requires the ability to challenge omissions and interpret failures, not merely repeat the implementation. A fresh context can help expose assumptions; selecting a different model alone does not make a review independent or guarantee different errors.
+
+### A Model-Selection Workflow
+
+First define the outcome, permitted scope and acceptance cases. Select the coordinator for its integration responsibility, then partition only genuinely separable work and choose delegates for their contracts. Inspect their evidence and integrate it against the original acceptance cases. If a delegate repeatedly misses a cross-file invariant despite adequate context, narrow the work or increase capability. If it never found the relevant file, correct discovery or context first. If a correct command cannot run because a runtime, permission or network is missing, report that environment constraint instead of treating a stronger model as the remedy. Keep the revision and acceptance cases stable when comparing another configuration.
+
+A review can use a fresh session with a clear brief and access to the diff, relevant contract and tests. Codex's `review_model` configures the model used by `/review`; it does not select the model for an explicitly spawned custom reviewer. Select that reviewer through its applicable agent configuration or spawn settings and verify what ran. A different model and fresh context are useful ways to vary the review, but neither proves independence; reviewers can share source material, assumptions and blind spots. See the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) and [subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents/).
+
+### Worked Example: Escalating a Repository Task
+
+Consider an illustrative, unexecuted repair of a primer's build path. The task starts at a known repository revision on a disposable issue branch, with an available pinned image and authorised container runtime. The shared contract requires a container build and committed HTML and PDF. The permitted changes are the target source, thin `Justfile` and required outputs; shared build recipes remain outside scope. The objective is to trace the build, make the smallest authorised correction, regenerate both outputs and demonstrate their quality. No run, successful repair, runtime or saving is claimed.
+
+Configure a strong-reasoning coordinator at medium effort. It reads the shared contract, owns the plan and final decision, and delegates a bounded recipe and dependency investigation to a capable general worker at medium. A separate worker can inspect the expected output and validation procedure without editing the same files. Once the coordinator has resolved the build path, one designated writer owns the target files and outputs. A reviewer with a fresh context examines the resulting diff and evidence; the coordinator resolves findings and performs final integration. These roles are chosen for their responsibilities, not because parallel execution is always faster. If the task is too tightly coupled to divide safely, the coordinator can perform it directly.
+
+Suppose the investigator returns the following *illustrative trace*, with file and line references in a real hand-off. The labels are pseudocode, not runnable `just` syntax or a claim about an existing repository recipe:
+
+```text
+Before: target build -> host PDF renderer -> PDF
+Documented route: target build -> shared pinned-container build -> HTML + PDF
+Proposed change: point the target build at the shared pinned-container build
+```
+
+The coordinator compares the target invocation with the shared recipe and documented output contract. If the trace establishes that the target bypasses the shared container and that the shared route already produces both required outputs, the minimal scoped decision is to redirect the target invocation, retain the shared recipe unchanged, and regenerate HTML and PDF together. The trace supports that proposed correction; it does not prove the correction works. Acceptance still requires the actual diff, container build log, output inspection and checks in the table below. If the shared route does not produce both outputs, the premise fails and the coordinator must investigate rather than apply the proposed change.
+
+Suppose instead that the investigation traces two competing build paths and cannot establish which produces the committed PDF, or finds a host-side figure dependency apparently contradicting the container-only rule. That concrete ambiguity justifies a strong-reasoning investigation at high effort. Preserve the revision, scope, exact findings and acceptance cases. If the fix requires a shared-recipe change, stop with the diagnosis and seek that specific scope extension. If `podman` is unavailable, record the command and error and mark build and output checks unverified; changing models does not supply the runtime.
+
+| Acceptance case | Evidence required before accepting the task |
+| --- | --- |
+| Intended build path | Recipe and dependency trace names the pinned image; the target's documented build command and log show its use |
+| Published outputs | HTML and PDF regenerated together; metadata and extracted PDF text contain intended content; representative table and code pages visually inspected |
+| Scope preserved | Final status and diff name only authorised paths; no host dependency installation, unrelated output or shared recipe change |
+| Validation | Exact focused lint, link and render commands with exit results; render-log errors inspected; `git diff --check` clean |
+| Runtime blocked or missing | Exact command and runtime error recorded; build and output checks marked unverified |
+
+Stop when these cases are satisfied, or when an unresolved environment or scope boundary prevents completion. Record the actual client, model and effort, revision, diff, commands, results and visual observations. The example provides a decision rule, not evidence that one model or delegation pattern is superior.
+
+### Model Categories and Availability Change
+
+The snapshot is a lookup aid, not permanent repository policy. Models and controls can change across CLI, chat, API and hosted surfaces. Recheck the catalogue and effective settings before automation, and record what was selected in a run. A label such as “fast” does not establish either capability or access in your session.
+
+### Cost and Latency Are Part of Engineering Quality
+
+Consider the whole workflow: model use, waiting, integration, failed checks, correction and human review. A cheap first pass that requires repeated repair can cost more overall; maximum effort on every routine search can waste resources. Delegation also has coordination and review costs, so use it when the work can be divided into contracts with useful independent evidence. These are reasons for the policy above, not measured claims about any particular model.
+
+When comparing workflows, use the same repository revision, task contract, permissions and acceptance checks, and record actual usage, elapsed time and review burden where available. Separate environment failures from model failures. The [measurement chapter](#what-to-measure) describes a comparison; a single hypothetical case cannot establish a winner.
+
+### A Compact Selection Rule
+
+Choose the main session for coordination and judgement, then route bounded work by responsibility and demonstrated difficulty. Preserve the task contract while adjusting capability, and diagnose context and execution failures at their own layer. Use the [dated snapshot](#a-dated-snapshot-of-the-current-codex-models) as a lookup and the [worked example](#worked-example-escalating-a-repository-task) for acceptance and stopping decisions.
 
 ## Workflow Differences
 
@@ -1183,11 +1300,15 @@ environments, `.env` files, or local build caches follow the worktree.
 
 ### Parallel Work: Divide by Contract, Not by File Count
 
-Parallel agents are useful when the work has separable outcomes. “One agent per file” is a poor partition if all files implement one coupled behaviour. Better divisions are “research the existing API,” “add focused regression coverage,” “implement the backend adapter,” and “review the resulting diff,” provided each role has a clear output and a defined boundary.
+Parallel work pays for its coordination when the outcomes are separable and can be integrated against a shared acceptance criterion. One agent per file is a weak partition if the files implement one coupled behaviour. In the build-repair case, the coordinator can ask one worker to trace the existing build recipe and its dependencies while another inspects the required output checks without editing. Once those findings are reconciled, one designated writer owns the implementation and generated outputs, using a separate worktree if concurrent writers need distinct checkouts. The coordinator retains the task boundary, resolves conflicting evidence, integrates the change, and decides whether the complete result meets the repository's checks. If the next step depends on each new observation, or the repair is small enough to finish directly, keep that work together.
 
-Give each parallel worker the same repository rules and a narrow task contract. Tell workers whether they may edit files, whether they should commit, and how they should report conflicts. Keep a single owner for integration. The owner should inspect every branch or worktree, resolve interface differences, run the full relevant verification, and decide which changes belong in the final patch.
+Before assigning the work, inspect the capabilities actually exposed in the active session: the ability to spawn, observe, resume, or close agents, and any enforced concurrency or thread limits. The case's limit of three is a chosen local operating policy, not a universal Codex limit. Tool interfaces and their counting rules can differ, so a completed agent may or may not release the relevant capacity immediately. If a spawn fails, inspect the reported limit and lifecycle before changing the plan; do not infer that a configuration file guarantees the tool is available.
 
-Parallelism increases throughput only when coordination costs stay below the time saved. It is a poor fit for exploratory debugging where each new observation changes the next step, or for a small task whose review cost exceeds its implementation cost. It also increases the chance of duplicated edits, inconsistent terminology, and tests that pass in isolation but fail together.
+Each worker needs the same applicable repository contract plus a bounded responsibility: the starting revision, owned paths or read-only scope, expected result, checks, and stop condition. Give concurrent writers disjoint ownership and avoid assigning the same generated outputs to both. A reviewer needs a stable candidate and a concrete question, such as whether the recipe still uses the pinned container and whether the generated outputs correspond to the source. Fresh context can expose a shared assumption, but an independent model or an approving summary is not proof that the change works.
+
+A Git worktree gives concurrent writers separate working files and makes it easier to inspect and integrate their diffs. It does not enforce a read-only role or prevent an agent from accessing another path or external service. If restricted authority matters, use the active harness's enforced sandbox and tool permissions, and check the access of external integrations separately; a prompt and a separate checkout do not supply those controls. See the [worktree documentation](https://learn.chatgpt.com/docs/environments/git-worktrees/) and [security guidance](https://learn.chatgpt.com/docs/agent-approvals-security) for the relevant mechanisms and their limits.
+
+Workers hand back artefacts another person can inspect: changed paths and diff, the dependency trace, exact commands and outcomes, and unresolved failures or unrun checks. The coordinator combines those records with the working tree and repository revision, then runs the checks that depend on the integrated result. In the case, a recipe trace and a candidate patch can support an implementation decision, but neither alone proves the HTML and PDF were regenerated and inspected. The [handoff and evaluation guidance](#what-to-measure) explains how to carry the evidence forward without treating a private conversation as the project record.
 
 ### A Practical Cross-Harness Loop
 
@@ -1202,143 +1323,6 @@ For most repository work, the following loop transfers cleanly from Claude Code 
 7. Record a checkpoint before handing the work to another session or harness.
 
 The difference is not that one harness follows this loop and the other does not. The difference is how much of the loop each harness performs implicitly and how much you need to make explicit. If Codex is producing broad or surprising patches, tighten the task contract and require an inspection pass. If it is spending too much time describing obvious steps, shorten the plan and move to a focused test. Adjust the interaction pattern before concluding that the underlying model cannot handle the task.
-
-## Models and Reasoning Effort
-
-Claude Code users often ask, “Which Codex model should I use?” That question is incomplete. The useful choice is a combination of model capability, reasoning effort, context available to the task, execution environment, latency, and cost. Exact model names and entitlements change; the task characteristics are more stable.
-
-Think of model selection as choosing an engine for a job, and reasoning effort as deciding how long the engine should spend checking the route. A stronger model at a lower effort may be faster and more useful than a weaker model at maximum effort. A high-effort run can still produce a wrong answer if the repository context or acceptance criteria are wrong. Model controls improve the search; they do not replace a good task boundary and tests.
-
-### What the Controls Mean
-
-The model is the underlying system generating decisions, tool calls, and text. Models differ in coding ability, instruction following, context handling, speed, availability, and cost. Those differences are not perfectly captured by a single intelligence ranking. A model that is excellent at a self-contained algorithm may be less useful for a large repository if it is slow to navigate or weak at maintaining constraints across many files.
-
-Reasoning effort is a control over how much internal computation or deliberation the system allocates before producing an answer or taking the next action. The labels and exact behaviour depend on the product surface. Conceptually, lower effort favours speed and throughput; higher effort gives difficult tasks more room for decomposition, checking, and alternative consideration. It does not guarantee correctness, and increasing it can make a poor prompt more expensive without making it more precise.
-
-Reasoning controls are surface- and model-specific. The current Codex CLI guide
-describes Low, Medium, High, Extra High, Max, and Ultra; its documentation
-defines Ultra as a mode that can use automatic task delegation. The Astra API
-page lists `low`, `medium`, `high`, `xhigh`, and `max` for
-`reasoning.effort`. Do not assume that CLI “Extra High” is a universal alias
-for API `xhigh`, or describe Ultra as merely another point on one effort
-slider. In every surface, higher effort can improve difficult work but takes
-longer and uses more tokens.
-
-Context is the third control people often overlook. The model can only reason over the instructions, conversation, files, tool results, and other material available in the current context. More context is not automatically better: irrelevant logs and giant generated files can bury the contract and the code that matters. Curate context by pointing to the relevant paths, asking for targeted inspection, and preserving durable decisions in the repository when appropriate.
-
-Execution capability is separate again. A model may be able to propose a correct command while the harness lacks permission, network access, credentials, or a suitable runtime to execute it. Keep model quality, reasoning effort, context quality, and execution permissions as separate variables when diagnosing a failure.
-
-### A Dated Snapshot of the Current Codex Models
-
-As of 7 November 2026, the official [Codex model guidance](https://learn.chatgpt.com/docs/models) recommends choosing by task: Luna for focused work, GPT-6.1 Sol for repeated complex work, Terra for everyday writing and visual work, and Astra for the most demanding workflows. This is a documentation snapshot, not an account-access test or an independent performance comparison. The model picker, authentication method, workspace policy, and installed client determine what you can actually select.
-
-These are useful starting roles for the documented identifiers:
-
-| Model | Documented orientation | Starting use in this guide |
-| --- | --- | --- |
-| `gpt-6-luna` | Efficient, focused, repeatable work | Bounded transformations and coding with clear acceptance checks |
-| `gpt-6.1-sol` | Repeated, long-running work across code, apps, and documents | Implementation and diagnosis with several interacting constraints |
-| `gpt-6.1-terra` | Writing, visual understanding, and computer use | Explanations, visual inspection, and supported app tasks |
-| `gpt-6-astra` | Most demanding workflows | Hard end-to-end work requiring sustained judgement |
-
-Choose effort separately. The guide suggests High for Luna and Light (`low` in configuration) for Astra; for GPT-6.1 Sol, start with the client's default. A task-specific choice such as Sol at `high` below is an illustrative routing decision, not a universal vendor default. Luna supports Max but not Ultra; Ultra uses subagents and changes the workflow as well as the computation budget.
-
-The same source records that GPT-5.5 retired from ChatGPT-authenticated Codex on 14 October 2026; API-key sessions are separate. Its replacement advice names GPT-6.1 Sol or GPT-6 Luna when available to the account and client. GPT-5.4/Mini and GPT-5.3 Codex Spark also have dated retirement notices there. Use that maintained catalogue for older identifiers and migration dates rather than preserving a second retirement table in repository instructions. This review does not establish prices, quotas, plan entitlements, or measured performance.
-
-### Choose by Task Shape
-
-Use the least expensive configuration that can reliably satisfy the acceptance criteria, then increase capability when evidence says the task needs it. The goal is not to use the strongest available model for every prompt. The goal is to match the configuration to the uncertainty and cost of being wrong.
-
-| Task shape | Starting configuration | Increase effort or capability when… |
-| --- | --- | --- |
-| Mechanical edit with clear tests | Fast or lower-effort option | The change crosses an abstraction boundary or tests are weak |
-| Familiar bug with a reproducible failure | General coding option at moderate effort | The cause is non-local, intermittent, or concurrent |
-| Unfamiliar repository exploration | Stronger context handling at moderate effort | The architecture is ambiguous or the first map conflicts with the code |
-| Multi-file refactor or API migration | Stronger model with deliberate planning | Compatibility constraints, generated code, or many callers are involved |
-| Security-sensitive, data-sensitive, or high-impact change | Stronger model at higher effort plus independent review | The threat model is unclear or verification cannot cover the risk |
-| Review of an existing patch | A configuration different from the implementer's when possible | The reviewer repeats the same assumptions or lacks enough context |
-
-This table is a starting heuristic, not a benchmark. A “simple” change in a mature repository can be harder than a large but well-specified migration. The cost of failure matters as much as the amount of code: a small permission change deserves more scrutiny than a large comment update.
-
-### Exploration and Planning Usually Need Less Than Implementation of Ambiguity
-
-High reasoning effort is most useful when the agent must resolve competing explanations, preserve many constraints, or make a design choice with expensive consequences. It is less useful when the task is already fully specified and the remaining work is mechanical.
-
-For exploration, begin with enough capability to build a trustworthy map. Ask for evidence and paths. If the agent cannot distinguish the relevant subsystem from neighbouring code, increase capability or narrow the search before asking for a larger answer. Spending maximum effort on an unbounded repository tour often produces a long but shallow inventory.
-
-For planning, effort should track the number of plausible designs and the cost of choosing the wrong one. A small bug with one obvious fix does not need a design essay. A compatibility migration, concurrency change, or schema transition does. Ask the agent to state assumptions and alternatives so that you can see whether extra reasoning is addressing real uncertainty.
-
-For implementation, increase effort when the patch must preserve invariants across files, reason about edge cases, or modify code whose behaviour is not fully captured by tests. Keep the task bounded. A powerful model with a broad mandate can still turn a focused fix into an unnecessary redesign.
-
-For testing and review, capability matters because the agent must interpret failures and look for omissions rather than merely produce code. Independent review is often more valuable than repeatedly increasing the implementer's effort. A second pass with a fresh context can challenge assumptions that a longer first pass has merely reinforced.
-
-### A Model-Selection Workflow
-
-Instead of memorising a product matrix, use a short escalation loop:
-
-1. Classify the task as mechanical, diagnostic, design-heavy, or high-impact.
-2. Choose a fast or general configuration that can inspect the relevant code.
-3. Set a clear acceptance test and ask for a bounded first pass.
-4. Inspect the result and the evidence, not just the prose.
-5. Increase reasoning effort or switch models only when the failure reveals a capability problem.
-6. Re-run the same acceptance checks after changing the configuration.
-
-This gives you a meaningful signal. If the first run failed because it never found the right file, a stronger model may not help until you improve the prompt or instruction layer. If it found the right code but repeatedly misses a cross-file invariant, more reasoning or a stronger model may be justified. If it produced the right patch but could not run tests, the problem is execution configuration rather than model choice.
-
-You can make the escalation explicit in a prompt:
-
-```text
-Start with a focused investigation and do not edit yet. If the cause is
-clear, propose the smallest fix. If there are multiple plausible causes,
-compare them using the existing tests and call sites. Do not switch to a
-broader redesign without explaining why the local fix would be unsafe.
-```
-
-The prompt helps the agent spend effort on uncertainty rather than on ceremony. You can then raise the effort setting for the same task if the investigation remains inconclusive, without changing the task contract.
-
-### Worked Example: Escalating a Repository Task
-
-Consider a synthetic request to repair a primer's PDF build path so it uses the repository's pinned container, regenerate the required HTML/PDF, and verify the result. Assume a disposable issue branch with a known starting revision, an available pinned image, an authorised container runtime, and one writer owning the target primer and its outputs. The initial scope is the target source, its thin `Justfile`, and its required outputs; shared build recipes are outside scope. These assumptions and the cases below are illustrative and unexecuted as of 7 November 2026. No model run, benchmark, successful repair, or measured saving is reported.
-
-Start with `gpt-6-luna` at `high`: the expected change is a bounded recipe correction with a documented build and observable outputs. In a supporting Codex CLI, the launch configuration could be expressed as follows; check the selected client and active settings before using it:
-
-```bash
-codex --model gpt-6-luna -c 'model_reasoning_effort="high"'
-```
-
-Give that session the exact task contract: inspect the relevant recipe and inputs, propose the smallest correction, build with `just all` from the target directory, and report changed paths and checks. Do not authorise changes to shared infrastructure merely because the investigation discovers a dependency there. The [model guide](https://learn.chatgpt.com/docs/models) supports the identifier and Luna starting effort; the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) documents `model_reasoning_effort`. Neither source establishes that this hypothetical task will succeed.
-
-Escalate to `gpt-6.1-sol` at `high` if the first bounded investigation identifies two competing build paths and cannot trace which one supplies the committed PDF, or finds a host-side figure dependency that contradicts the container-only invariant. That is a cross-file reasoning problem with concrete evidence. Preserve the starting revision, diff, exact failure, scope, and acceptance cases when switching through `/model` or a fresh session. Sol is chosen here to resolve the dependency ambiguity; this does not infer a speed or cost advantage. If repairing the dependency requires a shared-file edit, stop at a diagnosis and request that specific scope extension.
-
-Use the same acceptance cases for both configurations. The entries describe required evidence, not observed results:
-
-| Acceptance case | Required evidence before accepting the task |
-| --- | --- |
-| Intended build path | Recipe and dependency trace names the pinned image; build log shows the target's documented command using it |
-| Published outputs | HTML and PDF regenerated together; metadata and extracted PDF text contain the intended content; representative table/code pages inspected |
-| Scope preserved | Final status and diff name only authorised paths; no host dependency installation, unrelated output, or shared recipe change |
-| Validation | Exact focused lint/link/render commands and exit results; render-log errors inspected; `git diff --check` clean |
-| Runtime blocked or missing | Exact command and runtime error recorded; build/output checks marked unverified, with no escalation merely to bypass the environment |
-
-For example, evidence of a host-side figure generator would justify the Sol investigation, while `podman` being unavailable would justify an environment report. Neither is a passing result. A future run record should include the client/version, selected model and effort, revision, actual diff, commands, results, and visual observations. Stop when the acceptance cases are satisfied or the authorised scope prevents progress; the more elaborate comparison method in [What to Measure](#what-to-measure) is needed before making a performance claim.
-
-### Model Categories and Availability Change
-
-The snapshot is a lookup aid rather than permanent repository policy. A model can be renamed, retired, or exposed with different controls across chat, CLI, API, and hosted surfaces. A familiar category such as "fast" or "reasoning-focused" does not establish capability or access in your session. Recheck the linked catalogue and account/client settings before automation; record the model and effort actually selected in a run rather than inferring them from a product label.
-
-### Cost and Latency Are Part of Engineering Quality
-
-The cheapest run is not always the cheapest workflow. A low-cost configuration that creates three rounds of repair, review, and failed testing can cost more time and compute than one deliberate first pass. Conversely, using maximum effort for every search and formatting change wastes budget and slows feedback.
-
-Estimate the cost of being wrong. For a reversible documentation edit, optimise for fast iteration. For a production migration, optimise for evidence and review. For an exploratory question, use a bounded investigation before committing to a long autonomous run. Track elapsed time, number of repair cycles, verification quality, and the final diff, not just the nominal model price.
-
-When comparing Claude Code and Codex, keep the comparison fair. Use equivalent task descriptions, the same repository state, comparable permissions, and the same acceptance checks. Record whether a run needed human correction and whether the reported test results were accurate. Exact prices and quotas should be captured separately because they are volatile and can differ by product surface. Confirm which cost and usage metrics are exposed by the reader's chosen Codex interface before adding a comparison example.
-
-### A Compact Selection Rule
-
-Use the [worked routing example](#worked-example-escalating-a-repository-task) as the decision pattern: start with a configuration matched to a bounded task, escalate for demonstrated reasoning difficulty, and diagnose context or execution failures at their own layer. Keep the task contract and acceptance checks stable when changing models. Add independent review when the consequence of a missed error warrants it.
-
-Exact identifiers, effort controls, prices, quotas, and entitlements remain dated product facts; the [model snapshot](#a-dated-snapshot-of-the-current-codex-models) is their lookup home. The [measurement chapter](#what-to-measure) explains how to evaluate complete workflows rather than infer a winner from one result.
 
 ## Feature Translation
 
@@ -1851,91 +1835,50 @@ Confirm the current Codex surface's MCP support, supported transports, configura
 
 ### Subagents: Delegation Is Not Parallelism by Itself
 
-Claude Code users may use subagents to give a bounded task to a separate context: inspect tests, review a design, search for callers, or implement a small independent change. This is an area where the answer has changed: early 2025 Codex had nothing comparable, and current Codex has subagents as a generally available feature with its own configuration format, scoping rules, and concurrency controls. Simon Willison, reviewing the feature when it shipped, described the concept as "very similar to the Claude Code implementation". That is a fair assessment of the concept. It is not true of the files.
+A subagent gives a bounded task its own working context and returns a result to a coordinating session. Claude Code users will recognise the idea, but should check the active Codex interface, tools and configuration rather than assume the two harnesses load the same definitions or expose the same controls. Codex has built-in agent roles as well as custom definitions; a TOML file is a way to define a custom role, not a prerequisite for every subagent. The [Codex subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents/) describes the current formats and lifecycle.
+
+In the [primer build example](#worked-example-escalating-a-repository-task), the coordinator can ask one worker to trace the pinned build path and another to identify required output checks. Each returns paths, evidence and uncertainty; the coordinator reconciles the results before assigning one writer to the target files and outputs. A reviewer then examines the diff and evidence in a fresh context. The coordinator retains responsibility for integration, resolving contradictions and deciding whether the acceptance cases pass. If the build path and output work cannot be separated without overlapping edits, keep that work with one owner instead of creating parallel writers.
 
 #### How Codex Subagents Are Defined
 
-A Codex subagent is a TOML file. Personal definitions live in `~/.codex/agents/`
-and project definitions in `.codex/agents/`. Three fields are required — `name`,
-`description`, and `developer_instructions` — while optional fields describe
-the model, reasoning effort, and other agent metadata. The parent session's
-permissions, provider, and MCP servers remain the authority for the delegated
-work; a custom agent definition is not an independent security boundary.
+Codex documents built-in roles including `default`, `worker` and `explorer`. Custom TOML definitions can be stored in `~/.codex/agents/` or `.codex/agents/` and supply fields such as `name`, `description` and `developer_instructions`, with optional model and effort settings. A custom definition using a built-in name overrides that role, so check names before importing or creating one. Claude Code's agent definitions use Markdown with YAML frontmatter; conversion of a file does not establish equivalent tool restrictions, permissions or behaviour. Review the translated definition and test it from the intended session.
 
-The key safety lesson for a Claude Code user is the opposite of an assumed
-per-agent sandbox: writing "do not edit files" into a delegated prompt is not
-an operating-system guarantee. If a delegated task needs read-only or
-path-isolated execution, use a read-only parent session, a separate worktree,
-or a separate process with the required sandbox. Restrict MCP access at the
-parent/session or organisation layer and verify the effective configuration
-before the task starts.
+Subagent tools and roles depend on the active interface and session. Before concluding that delegation is unavailable, inspect the tools actually exposed, including any deferred tool discovery mechanism the interface provides. Conversely, the existence of a definition on disk does not prove it is reachable from the current parent. Ask for or instruct delegation where appropriate, then verify which role and settings actually ran. A historical report, [`openai/codex#15250`](https://github.com/openai/codex/issues/15250), described custom agents not reliably reachable in some tool-backed sessions; its disposition was not checked for this review and it does not establish a current general defect.
 
-Codex ships three built-in subagents — `default`, `worker`, and `explorer` — and
-a custom definition with one of those names overrides the built-in. That is
-convenient and also a trap: naming your own agent `explorer` silently replaces
-a built-in that other instructions or skills may reference.
-
-Subagents can be invoked by your request or by the main agent acting on an
-instruction it read, whether that instruction came from `AGENTS.md`, a skill,
-or your prompt. Do not rely on description-only selection: applicable project
-or skill instructions may cause delegation, but the exact trigger depends on
-the interface and workflow. Make the delegation boundary explicit when it
-matters, and verify which agent actually ran.
-
-Concurrency and defaults are set globally in an `[agents]` block:
+The following illustrative configuration supplies defaults and limits open spawned threads; check the client documentation and effective configuration before using it:
 
 ```toml
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 4
-default_subagent_model = "gpt-6-luna"
-default_subagent_reasoning_effort = "high"
+max_concurrent_threads_per_session = 3
+default_subagent_model = "gpt-6.1-terra"
+default_subagent_reasoning_effort = "medium"
 ```
 
-`max_concurrent_threads_per_session` is the control that stops an enthusiastic
-main agent from fanning out further than you can review. Set it deliberately.
-This example assigns bounded tasks to Luna; use an available Sol or Astra
-model for a delegate whose task needs more capability. Check the [subagent
-configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents/)
-and [model availability](https://learn.chatgpt.com/docs/models) before copying it.
+The value three is a chosen operating limit for this example, not a universal product limit. The documented control counts concurrently **open spawned threads**, excluding the primary thread; open is not synonymous with running. A completed thread may still occupy a slot until closed where the interface exposes closure. Close completed threads when supported, reuse suitable threads where available, and batch further work. Follow the active interface's lifecycle and any stricter local policy. The [official configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents/) distinguishes this setting from API concurrency and explains the default when it is unset.
 
-#### Review Imported Definitions and Session Reachability
+For a concrete lifecycle failure, suppose this illustrative session has three open spawned threads: one investigator is working, while two completed workers still appear as Done without being closed. A fourth spawn is refused under an open-thread cap of three. Counting only the one working investigator would misdiagnose the refusal. Inspect the thread list and reported limit, preserve the completed workers' findings in the task record, and close those completed threads if the active interface supports explicit closure. Releasing their slots allows a later assignment within the same cap; it does not require a higher configured ceiling. This is an illustrative state transition, not a report of a tested client.
 
-Claude Code subagents are Markdown files with YAML frontmatter in
-`.claude/agents/`, carrying fields such as `description`, `tools`, and `model`,
-with the body serving as the agent's instructions. Codex subagents are TOML,
-with the instructions in a `developer_instructions` string. Selective import can translate supported definitions, but format conversion does not establish equivalent tool restrictions, permission inheritance, or model availability. Review the resulting definition and test reachability from the intended parent session before assigning work.
+If the interface exposes reuse but no closure, check whether reassigning a suitable existing thread is supported and whether that operation avoids allocating another thread. If neither capacity release nor safe reuse is available, stop spawning and finish the remaining bounded work in an existing session or carry it to a new task with its evidence. Merely waiting or grouping future work into batches does not prove that already open threads have released capacity. Diagnose the lifecycle the actual tool reports before treating a refusal as unavailable delegation, a model problem, or a reason to increase limits.
 
-A historical reachability report is worth checking when diagnosing an installed client. GitHub issue
-`openai/codex#15250` reports that custom subagents placed in `.codex/agents`
-are not reliably reachable from tool-backed sessions, despite the documentation
-implying that they should be. Its current disposition was not rechecked in this review, so it does not establish a present defect across releases. Verify that your agent is reachable in the intended session type rather than relying on either the old report or the documented scope alone.
+Default settings do not force every delegate to use the same model. The documented precedence is custom agent file settings first, explicit spawn overrides next, then `[agents]` defaults, then the parent. A model selected explicitly or by default without an effort uses that model's default effort; a custom file setting only the model preserves the previously resolved effort. Specify and verify both when the distinction matters. These are configuration rules, not a guarantee that a model is available to a particular account. `review_model` applies to `/review`, while a custom reviewer is selected through its own applicable configuration and spawn settings; see the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
 
-“Subagent” therefore still does not guarantee the same context isolation, tool access, or result handoff across the two harnesses, even though the concept now exists on both sides.
+#### Give Delegates a Contract and Integrate the Result
 
-Translate a subagent task into an explicit contract:
+A useful task names its question, ownership, constraints, evidence, stop condition and return format. For the build investigation, the coordinator might use:
 
 ```text
-Role: repository investigator
-Scope: inspect only src/auth/ and its tests
-Question: where is token expiry validated, and which tests cover it?
-Restrictions: do not edit files, do not run commands that write files
-Output: a short report with file paths, line numbers, and missing-test hypotheses
+Role: build-path investigator; capable general model, medium effort.
+Scope: inspect the target primer's Justfile and relevant shared recipes.
+Question: trace the documented build to the pinned image and HTML/PDF outputs.
+Do not edit files. Return paths and line references, exact commands to verify,
+uncertainties, and any dependency that would require a shared-file change.
+Stop after the report; the coordinator owns the decision and integration.
 ```
 
-The contract makes the delegation useful even if it runs as a normal second session. It also prevents a common failure mode: asking several workers to modify overlapping files and then trying to merge their incompatible assumptions.
+The prompt makes expected behaviour and hand-off explicit. It does not enforce a security boundary. Likewise, separate Git worktrees help prevent concurrent writers colliding in a checkout; a worktree alone is not an operating-system sandbox and does not prevent access to other paths. Codex documents that custom agents inherit the parent session's permissions, provider and MCP servers. If a task requires enforced read-only or path-restricted access, use an appropriately restricted session or process and verify its effective permissions. Definitions and instructions cannot substitute for those controls. See [subagent permissions](https://learn.chatgpt.com/docs/agent-configuration/subagents/) and [Permissions and Sandboxing](#permissions-and-sandboxing-are-different-controls).
 
-Parallelise only independent work. Good candidates are separate read-only investigations, test discovery, or analysis of disjoint modules. Keep architectural decisions, shared-file edits, migrations, and final integration under one coordinating context unless you have a deliberate merge strategy.
-
-For every delegated task, define:
-
-- the files or subsystem it may inspect;
-- whether it may edit anything;
-- the evidence it must return;
-- how stale or contradictory findings should be reported; and
-- who owns the final decision.
-
-The exact Codex support for delegated agents, parallel workers, context sharing, model selection per worker, and result synthesis depends on the interface and current release. Do not promise a particular subagent command or assume that a delegated worker has broader authority than the parent session. Current Codex subagents inherit the parent session's permissions, provider, and MCP servers; a custom-agent definition supplies instructions and identity, not an independent OS-enforced sandbox. Use a separate session or worktree when you need stronger isolation, and verify the effective permissions before delegating a write task.
+Parallelise independent investigations or disjoint edits with clear ownership, not a collection of overlapping mandates. Tell each delegate how to report contradictory or stale evidence. Review its actual output, compare it with the starting revision and contract, and run the required integration checks. A fresh reviewer or a different model can help challenge assumptions, but neither guarantees independence or correctness. Durable hand-off evidence is the diff, commands, results and written decisions, not an inaccessible private conversation.
 
 ### Permissions and Sandboxing Are Different Controls
 
@@ -2448,20 +2391,7 @@ Apply the [cross-harness loop](#a-practical-cross-harness-loop) consistently and
 
 Before a release or a destructive operation, use a human checkpoint even if the agent has passed every automated check. The checkpoint is where you confirm the target environment, migration order, data impact, and rollback procedure. Automated verification can establish that a command works; it cannot establish that today is the right day to run it against production.
 
-#### Safety and Operational Checklist
-
-- Start from a known branch, worktree, or commit.
-- Read the instruction bridge and confirm the source of truth.
-- State the allowed files, forbidden files, and expected generated outputs.
-- Separate approval decisions from sandbox or environment limits.
-- Remove unnecessary secrets, mounts, credentials, and network access.
-- Start with read-only inspection and a low-risk change.
-- Give long-running tasks a stopping rule and a verification command.
-- Review the complete diff, including generated artefacts and deletions.
-- Do not commit or deploy without an explicit human checkpoint.
-- Record the harness, model setting, repository revision, result, and failures.
-- Keep configuration and source changes in separate, recoverable commits.
-- Verify volatile product claims before publication or team rollout.
+Use the [preflight and postflight checklists](#preflight-checklist) as the shared operational record. Add the task's explicit commit, deployment, and external-service authority, then record actual model selections and any unrun checks in its handoff. Repeated checklists with different completion rules are harder to maintain than one task contract and one evidence record.
 
 ## What to Measure
 
@@ -2577,6 +2507,23 @@ interpretation is an archive, not an evaluation.
 
 The practical result is a repository with one contract, explicit native adapters where they are needed, and evidence for each completed change. Use the lookup routes below when starting a task; the preceding chapters explain why those decisions matter and what each mechanism can establish.
 
+### The Build-Repair Case: Evidence and Handoff
+
+Return to the build-repair case. The worker returns a candidate for the coordinator to review. The following ledger supplies invented example findings to show how the decision works; no build, inspection, or model run is claimed.
+
+| Returned item | Illustrative evidence | Coordinator's interpretation |
+| --- | --- | --- |
+| Scoped diff | The target primer's `Justfile` changes the build path; the reported changed paths also include its required HTML and PDF. | Inspect the diff against the task boundary and confirm the generated outputs belong to the source. |
+| Dependency trace | The target recipe reaches the shared PDF recipe, which uses the project's pinned container image. | The trace supports the intended build path; compare it with the actual recipes. |
+| Build report | The worker reports that the prescribed build completed and generated HTML and PDF. | This is a claimed build result, supported only if its command and output are included; it does not establish readable pages. |
+| Output inspection | No rendered-page inspection is reported. | Required visual evidence is missing, so the candidate is not ready for acceptance. |
+
+The coordinator asks a reviewer to examine the candidate and rejects the completion claim until the rendered outputs are checked. The requested follow-up is to inspect the HTML and representative PDF pages, including pages containing tables, and return the commands, inspected locations, and findings. Consider two possible returns. If the required renderer is unavailable, the worker records the failed or unrun command and its blocker; the coordinator keeps the candidate **not ready** and hands that missing check to the next session. A plausible build report or review approval cannot fill the gap.
+
+In the other illustrative return, inspection finds a clipped table in the PDF. The worker corrects the relevant source or build setting within the agreed scope, regenerates both required outputs, and reinspects the affected table and representative pages. The revised handoff records the original finding, the correction, the regeneration and inspection commands, and their outcomes. If the coordinator verifies those records, the integrated diff, and the other required checks, the result is a reviewable candidate; committing still depends on the authority granted for the task. The second inspection matters because the first successful build did not establish that the document rendered correctly, and the correction itself produced new artefacts that also needed checking.
+
+Either handoff identifies the starting revision and branch, owned and changed paths, the recipe decision, exact commands and results, output inspection, and remaining limitations. It also distinguishes configured routing from model selections observed at runtime: the earlier file comparisons alone do not establish which model performed this work. The next harness can inspect the diff and rerun or complete the checks without access to the first session's conversation. This is the same evidence discipline used in [What to Measure](#what-to-measure); a comparative evaluation needs actual run records, not this scenario.
+
 ### Quick-Reference: Adding Codex to an Existing Repository
 
 #### Minimal Migration
@@ -2625,9 +2572,11 @@ committing unless I explicitly ask you to commit.
 
 #### Choosing a Harness or Model Setting
 
-Use the [dated model snapshot](#a-dated-snapshot-of-the-current-codex-models) for identifiers and starting effort, and the [routing example](#worked-example-escalating-a-repository-task) for escalation and acceptance cases. If execution or instruction discovery failed, diagnose that layer before increasing model capability. Record the selected setup and review burden using [What to Measure](#what-to-measure); no single example establishes a general winner.
+Choose the coordinator for integration and judgement, then assign bounded workers and a reviewer according to their responsibilities. Use the [dated model snapshot](#a-dated-snapshot-of-the-current-codex-models) for lookup and the [routing example](#worked-example-escalating-a-repository-task) for allocation, escalation, acceptance, and stopping decisions. If execution or instruction discovery failed, diagnose that layer before increasing model capability. Record the selected setup and review burden using [What to Measure](#what-to-measure); no single example establishes a general winner.
 
 #### Verification Snapshot and Remaining Volatility
+
+The 15 November 2026 revision rechecked the official [configuration basics](https://learn.chatgpt.com/docs/config-file/config-basic), [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference), [subagent reference](https://learn.chatgpt.com/docs/agent-configuration/subagents/), [Codex security guidance](https://learn.chatgpt.com/docs/agent-approvals-security), [worktree guide](https://learn.chatgpt.com/docs/environments/git-worktrees/), and Claude's [subagent](https://code.claude.com/docs/en/sub-agents) and [sandbox](https://code.claude.com/docs/en/sandboxing) documentation. The checked claims concern project trust, configuration ownership versus effective session selection, agent model and effort resolution, the scope of `review_model`, open-thread accounting, built-in versus custom agents, and checkout separation versus enforced authority. The source-to-installed-reference workflow is an explicitly illustrative user-maintained arrangement, not a Codex configuration feature. No configuration was deployed, model selection observed, permission boundary probed, or model comparison executed for the teaching case.
 
 The 7 November 2026 interoperability review checked live official documentation for the topics below. These are unversioned pages accessed on that date, not release-pinned specifications or runtime tests. The model catalogue and the hook/skill example received bounded documentation rechecks on that date. Other skill/hook details, remote/data claims, and third-party-tool descriptions retain their earlier verification boundaries; this was not a revalidation of every field, entitlement, community report, or historical adoption count.
 
@@ -2651,7 +2600,7 @@ The durable method is to keep a canonical repository contract, review imported a
 
 ## References
 
-The following official pages anchor the 7 November 2026 interoperability review; the verification table above records the checked claims and limits. Other references support earlier snapshots and practical background.
+The configuration, subagent, security, and worktree pages also anchor the bounded 15 November 2026 revision; the remaining official pages anchor the 7 November 2026 interoperability review; the verification table above records the checked claims and limits. Other references support earlier snapshots and practical background.
 
 - [OpenAI selective import](https://learn.chatgpt.com/docs/import) — supported migration categories, desktop updates, and post-import review.
 - [Claude Code Remote Control](https://code.claude.com/docs/en/remote-control) — local execution, remote connection, and server-held transcript.
