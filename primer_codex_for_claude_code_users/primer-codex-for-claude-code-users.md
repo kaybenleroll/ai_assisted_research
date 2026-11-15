@@ -815,8 +815,8 @@ cannot reliably follow references, but it creates a maintenance obligation.
 Keep the duplicated section short and make drift detectable in review.
 
 For this project, the second design is now the repository pattern. The shared
-contract lives in `docs/project-contract.md`, and `AGENTS.md` is the canonical
-root entry point. The contract also routes to `docs/agent-collaboration.md` for
+contract lives in `maintenance/docs/project-contract.md`, and `AGENTS.md` is the canonical
+root entry point. The contract also routes to `maintenance/docs/agent-collaboration.md` for
 handoffs and smoke tests. Claude-specific settings may remain under `.claude/`,
 but they are not a second repository policy manual. This keeps repository
 policy neutral without pretending that native skills, hooks, permissions, or
@@ -993,11 +993,11 @@ Choose effort separately. The guide suggests High for Luna and Light (`low` in c
 
 ### Choose by Responsibility and Task Shape
 
-For substantial work, a useful starting policy is a strong general reasoning model at medium effort for the main session. Its job is to frame the task, identify dependencies, allocate ownership, resolve conflicts, integrate changes and judge the evidence. Use a capable general-purpose model at medium effort for a bounded implementation, investigation or documentation task. For clear, repeatable mechanical work with good checks, use an efficient model at the highest effort that remains economical. Reserve strong reasoning at high effort for demonstrated difficult ambiguity, architecture, debugging or substantive review; use a frontier model for explicitly escalated exceptional work. Resolve these classes to models actually available in the session, rather than making an identifier permanent policy.
+<span id="choose-by-task-shape"></span>For substantial work, a useful starting policy is a strong general reasoning model at medium effort for the main session. Its job is to frame the task, identify dependencies, allocate ownership, resolve conflicts, integrate changes and judge the evidence. Use a capable general-purpose model at medium effort for a bounded implementation, investigation or documentation task. For clear, repeatable mechanical work with good checks, use an efficient model at the highest effort that remains economical. Reserve strong reasoning at high effort for demonstrated difficult ambiguity, architecture, debugging or substantive review; use a frontier model for explicitly escalated exceptional work. Resolve these classes to models actually available in the session, rather than making an identifier permanent policy.
 
 This is a recommendation about responsibility, not a benchmark. An inexpensive capable configuration can be an excellent choice for a small self-contained task, including one performed without delegates. Conversely, making it the automatic coordinator for every substantial task can leave integration and judgement under-resourced. A small change can be difficult when its invariants are poorly documented; a larger change can be mechanical when the contract and checks are strong. Match the assignment to uncertainty and consequences, and adjust when the evidence calls for it.
 
-Exploration needs enough capability to distinguish relevant code from its neighbours and return paths and evidence. Planning needs more reasoning when plausible designs compete or a wrong choice would be costly. Implementation needs it when behaviour spans files or tests omit important invariants. Review requires the ability to challenge omissions and interpret failures, not merely repeat the implementation. A fresh context can help expose assumptions; selecting a different model alone does not make a review independent or guarantee different errors.
+<span id="exploration-and-planning-usually-need-less-than-implementation-of-ambiguity"></span>Exploration needs enough capability to distinguish relevant code from its neighbours and return paths and evidence. Planning needs more reasoning when plausible designs compete or a wrong choice would be costly. Implementation needs it when behaviour spans files or tests omit important invariants. Review requires the ability to challenge omissions and interpret failures, not merely repeat the implementation. A fresh context can help expose assumptions; selecting a different model alone does not make a review independent or guarantee different errors.
 
 ### A Model-Selection Workflow
 
@@ -1841,7 +1841,7 @@ In the [primer build example](#worked-example-escalating-a-repository-task), the
 
 #### How Codex Subagents Are Defined
 
-Codex documents built-in roles including `default`, `worker` and `explorer`. Custom TOML definitions can be stored in `~/.codex/agents/` or `.codex/agents/` and supply fields such as `name`, `description` and `developer_instructions`, with optional model and effort settings. A custom definition using a built-in name overrides that role, so check names before importing or creating one. Claude Code's agent definitions use Markdown with YAML frontmatter; conversion of a file does not establish equivalent tool restrictions, permissions or behaviour. Review the translated definition and test it from the intended session.
+<span id="review-imported-definitions-and-session-reachability"></span>Codex documents built-in roles including `default`, `worker` and `explorer`. Custom TOML definitions can be stored in `~/.codex/agents/` or `.codex/agents/` and supply fields such as `name`, `description` and `developer_instructions`, with optional model and effort settings. A custom definition using a built-in name overrides that role, so check names before importing or creating one. Claude Code's agent definitions use Markdown with YAML frontmatter; conversion of a file does not establish equivalent tool restrictions, permissions or behaviour. Review the translated definition and test it from the intended session.
 
 Subagent tools and roles depend on the active interface and session. Before concluding that delegation is unavailable, inspect the tools actually exposed, including any deferred tool discovery mechanism the interface provides. Conversely, the existence of a definition on disk does not prove it is reachable from the current parent. Ask for or instruct delegation where appropriate, then verify which role and settings actually ran. A historical report, [`openai/codex#15250`](https://github.com/openai/codex/issues/15250), described custom agents not reliably reachable in some tool-backed sessions; its disposition was not checked for this review and it does not establish a current general defect.
 
@@ -2321,7 +2321,7 @@ repository/
   Justfile                     # shared build and check commands
 ```
 
-Do not add empty directories to match this sketch. In this primer's repository, `AGENTS.md` already routes to `docs/project-contract.md`; there is no competing root `CLAUDE.md`. The practical decision is therefore whether a particular native adapter is needed, not whether to recreate the example tree. If shared policy is found inside a tool-specific adapter, move that policy to its explanatory home and leave only the invocation difference in the adapter.
+Do not add empty directories to match this sketch. In this primer's repository, `AGENTS.md` already routes to `maintenance/docs/project-contract.md`; there is no competing root `CLAUDE.md`. The practical decision is therefore whether a particular native adapter is needed, not whether to recreate the example tree. If shared policy is found inside a tool-specific adapter, move that policy to its explanatory home and leave only the invocation difference in the adapter.
 
 ### Roll Out in a Branch, One Capability at a Time
 
@@ -2391,7 +2391,7 @@ Apply the [cross-harness loop](#a-practical-cross-harness-loop) consistently and
 
 Before a release or a destructive operation, use a human checkpoint even if the agent has passed every automated check. The checkpoint is where you confirm the target environment, migration order, data impact, and rollback procedure. Automated verification can establish that a command works; it cannot establish that today is the right day to run it against production.
 
-Use the [preflight and postflight checklists](#preflight-checklist) as the shared operational record. Add the task's explicit commit, deployment, and external-service authority, then record actual model selections and any unrun checks in its handoff. Repeated checklists with different completion rules are harder to maintain than one task contract and one evidence record.
+<span id="safety-and-operational-checklist"></span>Use the [preflight and postflight checklists](#preflight-checklist) as the shared operational record. Add the task's explicit commit, deployment, and external-service authority, then record actual model selections and any unrun checks in its handoff. Repeated checklists with different completion rules are harder to maintain than one task contract and one evidence record.
 
 ## What to Measure
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en-GB"><head>
 <script>/*!
  * clipboard.js v2.0.11
  * https://clipboardjs.com/
@@ -2138,6 +2138,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -2279,6 +2290,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -2290,7 +2302,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -2331,6 +2342,15 @@ max-width: none;
 .content-inner > :where(table, .broad-table, .compact-table) {
 align-self: flex-start;
 }
+.doc-disclosure {
+width: 100%;
+max-width: 100ch;
+margin-top: 2rem;
+padding-top: .75rem;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: .8rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
 font-weight: 700;
@@ -2340,10 +2360,12 @@ margin-bottom: .6em;
 color: var(--text);
 scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
-h1 { font-size: 2rem; margin-top: 0; }
+h1 { font-size: 2rem; }
 h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: .35em; }
 h3 { font-size: 1.15rem; }
 h4 { font-size: 1rem; }
+.content-inner > :where(h1, h2, h3, h4, h5, h6) { margin-top: 1.5rem; }
+.content-inner > h1:first-child { margin-top: 0; }
 p { margin-bottom: 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -2614,10 +2636,11 @@ max-width: none;
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
+      .doc-disclosure { display: block; }
       .code-tabs .code-tab-panel { display: block !important; }
       .code-tabs .code-tab-label {
         display: block;
@@ -2630,6 +2653,27 @@ max-width: none;
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored inline below (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
+    // The MathML variants ignore this block.
+    window.MathJax = {
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
+      } }
+    };
+  </script>
 
   <script>
     (function () {
@@ -2643,34 +2687,36 @@ max-width: none;
 </head>
 <body class="quarto-light">
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Catastrophe ELT Primer Executable Index</span>
 
 
 
-  </nav>
+  </header>
 
   <div class="layout">
 
     <aside class="sidebar">
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
-        <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#render-scripts" id="toc-render-scripts"><span class="header-section-number">1</span> Render Scripts</a></li>
 <li><a href="#just-targets" id="toc-just-targets"><span class="header-section-number">2</span> Just Targets</a></li>
 <li><a href="#primer-section-map-where-to-look" id="toc-primer-section-map-where-to-look"><span class="header-section-number">3</span> Primer Section Map (Where to Look)</a></li>
 <li><a href="#deterministic-controls" id="toc-deterministic-controls"><span class="header-section-number">4</span> Deterministic Controls</a></li>
 <li><a href="#expected-render-sequence" id="toc-expected-render-sequence"><span class="header-section-number">5</span> Expected Render Sequence</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
+<h1 id="document-title" class="document-title">Catastrophe ELT Primer Executable Index</h1>
 <section id="render-scripts" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="render-scripts"><span class="header-section-number">1</span> Render Scripts</h2>
 <table class="caption-top table">
@@ -2823,13 +2869,14 @@ max-width: none;
 <li>Final check: <code>just render-full-container</code></li>
 </ol>
 </section>
+        <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author.</footer>
       </div>
     </main>
 
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -2859,18 +2906,27 @@ max-width: none;
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -2878,19 +2934,18 @@ max-width: none;
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
@@ -2910,44 +2965,6 @@ max-width: none;
       initTOCWithRetries();
     }
 
-    // Math renderer toggle: switch between generated mathjax/mathml files.
-    (function initMathModeToggle() {
-      var btn = document.getElementById('math-mode-toggle');
-      if (!btn) {
-        return;
-      }
-
-      var path = window.location.pathname || '';
-      var targetPath = '';
-      var label = '';
-      var defaultMathRenderer = 'mathjax';
-
-      if (path.endsWith('.mathml.html')) {
-        targetPath = path.slice(0, -('.mathml.html'.length)) + '.mathjax.html';
-        label = 'Switch to MathJax';
-      } else if (path.endsWith('.mathjax.html')) {
-        targetPath = path.slice(0, -('.mathjax.html'.length)) + '.mathml.html';
-        label = 'Switch to MathML';
-      } else if (path.endsWith('.html')) {
-        if (defaultMathRenderer === 'mathml') {
-          targetPath = path.slice(0, -('.html'.length)) + '.mathjax.html';
-          label = 'Switch to MathJax';
-        } else {
-          targetPath = path.slice(0, -('.html'.length)) + '.mathml.html';
-          label = 'Switch to MathML';
-        }
-      }
-
-      if (!targetPath) {
-        btn.style.display = 'none';
-        return;
-      }
-
-      btn.textContent = label;
-      btn.addEventListener('click', function () {
-        window.location.href = targetPath + (window.location.search || '') + (window.location.hash || '');
-      });
-    })();
 
       // Sidebar resizer logic (existing)
       var root = document.documentElement;

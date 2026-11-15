@@ -32,6 +32,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -173,6 +184,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -184,7 +196,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -585,7 +596,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -605,18 +616,21 @@ code span.wa { color: #da4453; } /* Warning */
   <script>
     // MathJax's boldsymbol extension is a separate file that an embedded
     // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
-    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // extension is therefore vendored inline below (exact
     // bytes of the matching mathjax@<version> release file) and run inside
     // startup.ready, before MathJax typesets. When Pandoc embeds a different
     // MathJax version, download input/tex/extensions/boldsymbol.js from
-    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
     // and re-render the maths primers. A version mismatch is not checked in
     // CI; MathJax's runtime checkVersion warns in the browser console on drift.
     // The MathML variants ignore this block.
     window.MathJax = {
       tex: { packages: { '[+]': ['boldsymbol'] } },
       startup: { ready() {
-(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();        MathJax.startup.defaultReady();
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
       } }
     };
   </script>
@@ -624,13 +638,15 @@ code span.wa { color: #da4453; } /* Warning */
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Spectral Graph Theory: Connectivity,
 Diffusion, and Computation</span>
     <span class="navbar-meta">4 November 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -638,7 +654,7 @@ Diffusion, and Computation</span>
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
 <li><a href="#notation" id="toc-notation"><span class="toc-section-number">2</span> Notation</a>
 <ul>
@@ -819,15 +835,18 @@ Relations</a></li>
 Graphs</a></li>
 </ul></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">12</span> Further Reading</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
-<h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
+<h1 id="document-title" class="document-title">Spectral Graph Theory:
+Connectivity, Diffusion, and Computation</h1>
+<h1 data-number="1" role="heading" aria-level="2" id="introduction"><span class="header-section-number">1</span>
+Introduction</h1>
 <p>A graph represents objects and relationships. A vertex might
 represent a junction, a document, an airport, or a person; an edge
 records a relationship whose meaning must be specified before any matrix
@@ -966,7 +985,7 @@ against the repository’s pinned Python and R runtimes. Claims about
 package interfaces are dated where they may change; the synthetic case
 study is verified against its checked-in fixture rather than external
 route data.</em></p>
-<h1 data-number="2" id="notation"><span class="header-section-number">2</span> Notation</h1>
+<h1 data-number="2" role="heading" aria-level="2" id="notation"><span class="header-section-number">2</span> Notation</h1>
 <p>The table provides a reference for the main symbols; each derivation
 defines its variables locally.</p>
 <table>
@@ -1102,7 +1121,7 @@ This notation refers to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
 unless another operator is named. Eigenvectors have arbitrary scale and
 sign.</p>
-<h2 data-number="2.1" id="minimal-linear-algebra-background"><span class="header-section-number">2.1</span> Minimal Linear-Algebra
+<h2 data-number="2.1" role="heading" aria-level="3" id="minimal-linear-algebra-background"><span class="header-section-number">2.1</span> Minimal Linear-Algebra
 Background</h2>
 <p>For vectors
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>,</mo><mi mathvariant="bold-italic">𝒚</mi><mo>∈</mo><msup><mi mathvariant="double-struck">ℝ</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{x},\mathbf{y}\in\mathbb{R}^n</annotation></semantics></math>,
@@ -1133,14 +1152,14 @@ distinction is essential because constants on components are in the
 nullspace. It is often safer to ground one vertex per component and
 solve a nonsingular reduced system than to silently invert a singular
 matrix.</p>
-<h1 data-number="3" id="from-data-to-graph-operators"><span class="header-section-number">3</span> From Data to Graph Operators</h1>
+<h1 data-number="3" role="heading" aria-level="2" id="from-data-to-graph-operators"><span class="header-section-number">3</span> From Data to Graph Operators</h1>
 <p>Spectral analysis starts with a graph-construction decision, even
 when that decision is hidden inside a convenience function. A data set
 may contain observations, coordinates, events, or pairwise similarities;
 none of these is automatically an edge list. The construction determines
 which observations can borrow information and which partitions are
 considered plausible.</p>
-<h2 data-number="3.1" id="graph-construction-and-the-vertex-universe"><span class="header-section-number">3.1</span> Graph Construction and the
+<h2 data-number="3.1" role="heading" aria-level="3" id="graph-construction-and-the-vertex-universe"><span class="header-section-number">3.1</span> Graph Construction and the
 Vertex Universe</h2>
 <p>For feature vectors, common constructions include a radius graph, a
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-nearest-neighbour
@@ -1334,7 +1353,7 @@ loopless, undirected graph with non-negative edge weights. Directed
 spectra, signed graphs, hypergraphs, graphons, and infinite graphs are
 outside the main route.</p>
 </blockquote>
-<h2 data-number="3.2" id="from-relationships-to-operators"><span class="header-section-number">3.2</span> From Relationships to
+<h2 data-number="3.2" role="heading" aria-level="3" id="from-relationships-to-operators"><span class="header-section-number">3.2</span> From Relationships to
 Operators</h2>
 <p>For distinct vertices define
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">A_{ij}=w_{ij}</annotation></semantics></math>
@@ -1445,7 +1464,7 @@ algebra behind sparse Laplacian multiplication, finite-element stiffness
 matrices, electrical-network solves, and many message-passing updates.
 The same local operation can support several algorithms, but the
 objective and normalisation still determine what the result means.</p>
-<h2 data-number="3.3" id="components-and-the-kernel"><span class="header-section-number">3.3</span> Components and the Kernel</h2>
+<h2 data-number="3.3" role="heading" aria-level="3" id="components-and-the-kernel"><span class="header-section-number">3.3</span> Components and the Kernel</h2>
 <p><strong>Theorem (Laplacian kernel and components).</strong> If
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>
 has connected components
@@ -1500,7 +1519,7 @@ The normalised Laplacian does not inherit the same simple statement
 because the degree matrix changes at the same time. This distinction
 prevents a correct unnormalised argument from being applied accidentally
 to a different operator.</p>
-<h2 data-number="3.4" id="the-four-vertex-laboratory"><span class="header-section-number">3.4</span> The Four-Vertex Laboratory</h2>
+<h2 data-number="3.4" role="heading" aria-level="3" id="the-four-vertex-laboratory"><span class="header-section-number">3.4</span> The Four-Vertex Laboratory</h2>
 <p>Take unit-weight edges
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{1,2\}</annotation></semantics></math>
 and
@@ -1537,14 +1556,14 @@ constant on each component. The spectrum is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,0,1,3)</annotation></semantics></math>:
 two zeros for the path component and isolate, and two positive modes
 within the path.</p>
-<h1 data-number="4" id="connectivity-variational-principles-and-cuts"><span class="header-section-number">4</span> Connectivity, Variational
+<h1 data-number="4" role="heading" aria-level="2" id="connectivity-variational-principles-and-cuts"><span class="header-section-number">4</span> Connectivity, Variational
 Principles, and Cuts</h1>
 <p>A low eigenvalue expresses an optimisation statement: some non-zero
 signal has little edge energy compared with its magnitude. Orthogonality
 constraints decide which signals are eligible. We first prove the
 variational principle, then use it both to interpret connectivity and to
 distinguish valid upper bounds from lower bounds.</p>
-<h2 data-number="4.1" id="rayleigh-quotients-and-algebraic-connectivity"><span class="header-section-number">4.1</span> Rayleigh Quotients and
+<h2 data-number="4.1" role="heading" aria-level="3" id="rayleigh-quotients-and-algebraic-connectivity"><span class="header-section-number">4.1</span> Rayleigh Quotients and
 Algebraic Connectivity</h2>
 <p>For a real symmetric matrix
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>
@@ -1632,7 +1651,7 @@ order without rewriting the dimensions changes the theorem. Spielman’s
 <a href="https://www.cs.yale.edu/homes/spielman/561/lect04-15.pdf">lecture
 on bounding eigenvalues</a> provides a further treatment of this
 variational viewpoint.</p>
-<h2 data-number="4.2" id="connectivity-poincaré-inequalities-and-weight-scale"><span class="header-section-number">4.2</span> Connectivity, Poincaré
+<h2 data-number="4.2" role="heading" aria-level="3" id="connectivity-poincaré-inequalities-and-weight-scale"><span class="header-section-number">4.2</span> Connectivity, Poincaré
 Inequalities, and Weight Scale</h2>
 <p>The energy identity shows that
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
@@ -1755,7 +1774,7 @@ Algebraic connectivity therefore carries the scale of the weights.
 Comparing its magnitude across graphs requires comparable units, size,
 and degree structure. Degree normalisation will remove a uniform weight
 scale, while retaining other modelling choices.</p>
-<h2 data-number="4.3" id="cuts-volume-and-degree-normalisation"><span class="header-section-number">4.3</span> Cuts, Volume, and Degree
+<h2 data-number="4.3" role="heading" aria-level="3" id="cuts-volume-and-degree-normalisation"><span class="header-section-number">4.3</span> Cuts, Volume, and Degree
 Normalisation</h2>
 <p>A cut partitions
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math>
@@ -1769,7 +1788,7 @@ measures how much weight crosses the partition. A useful separation
 criterion also specifies what counts as a substantial side: vertex
 cardinality and degree volume answer different questions. We derive
 their distinct relaxations before introducing an algorithm.</p>
-<h3 data-number="4.3.1" id="which-cut-objective-is-being-relaxed"><span class="header-section-number">4.3.1</span> Which Cut Objective Is Being
+<h3 data-number="4.3.1" role="heading" aria-level="4" id="which-cut-objective-is-being-relaxed"><span class="header-section-number">4.3.1</span> Which Cut Objective Is Being
 Relaxed?</h3>
 <p>Degree volume counts all incident edge weight. If
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo stretchy="false" form="prefix">(</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">w(E(S))</annotation></semantics></math>
@@ -1872,7 +1891,7 @@ of <a href="https://doi.org/10.1109/34.868688">Shi and Malik</a> is a
 primary reference for the associated spectral relaxation. Here the
 algebra is developed explicitly, and conductance remains a separately
 defined objective.</p>
-<h3 data-number="4.3.2" id="centred-indicators-give-exact-discrete-quotients"><span class="header-section-number">4.3.2</span> Centred Indicators Give Exact
+<h3 data-number="4.3.2" role="heading" aria-level="4" id="centred-indicators-give-exact-discrete-quotients"><span class="header-section-number">4.3.2</span> Centred Indicators Give Exact
 Discrete Quotients</h3>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mo stretchy="false" form="prefix">|</mo><mi>S</mi><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">s=|S|</annotation></semantics></math>
@@ -1918,7 +1937,7 @@ together. An ordinary mean-zero constraint combined with a
 degree-weighted norm would solve a different optimisation problem. This
 distinction is easily hidden on regular graphs and material on a
 star.</p>
-<h3 data-number="4.3.3" id="the-symmetric-normalised-eigenproblem"><span class="header-section-number">4.3.3</span> The Symmetric Normalised
+<h3 data-number="4.3.3" role="heading" aria-level="4" id="the-symmetric-normalised-eigenproblem"><span class="header-section-number">4.3.3</span> The Symmetric Normalised
 Eigenproblem</h3>
 <p>Assume all degrees are positive. Set
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒛</mi><mo>=</mo><msup><mi>D</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mi mathvariant="bold-italic">𝒇</mi></mrow><annotation encoding="application/x-tex">\mathbf{z}=D^{1/2}\mathbf{f}</annotation></semantics></math>.
@@ -2016,7 +2035,7 @@ arbitrary; a reproducible implementation should process the block as one
 threshold or document its tie-break. Near a repeated eigenvalue, the
 ordering itself can rotate under a small perturbation, so partition
 stability is more meaningful than the exact coordinates.</p>
-<h2 data-number="4.4" id="spectral-sweeps-and-cheegers-inequality"><span class="header-section-number">4.4</span> Spectral Sweeps and Cheeger’s
+<h2 data-number="4.4" role="heading" aria-level="3" id="spectral-sweeps-and-cheegers-inequality"><span class="header-section-number">4.4</span> Spectral Sweeps and Cheeger’s
 Inequality</h2>
 <p>The normalised eigenvector is continuous, while a cut is discrete.
 Let
@@ -2108,7 +2127,7 @@ particular conductance convention used here. Changing to an unnormalised
 ratio cut changes both the relaxed problem and the constants. These
 hypotheses should travel with the theorem whenever it is used in an
 application.</p>
-<h1 data-number="5" id="random-walks-diffusion-and-graph-signals"><span class="header-section-number">5</span> Random Walks, Diffusion, and
+<h1 data-number="5" role="heading" aria-level="2" id="random-walks-diffusion-and-graph-signals"><span class="header-section-number">5</span> Random Walks, Diffusion, and
 Graph Signals</h1>
 <p>A graph can describe a traveller moving between places, a quantity
 spreading between locations, or measurements whose neighbouring values
@@ -2125,7 +2144,7 @@ alternation rather than slow spatial variation. These operators are
 related by similarity or a change of scale only under the relevant
 degree and symmetry assumptions. Treating “the spectrum” as a single
 object without naming the operator hides these distinctions.</p>
-<h2 data-number="5.1" id="random-walks-bipartite-alternation-and-laziness"><span class="header-section-number">5.1</span> Random Walks, Bipartite
+<h2 data-number="5.1" role="heading" aria-level="3" id="random-walks-bipartite-alternation-and-laziness"><span class="header-section-number">5.1</span> Random Walks, Bipartite
 Alternation, and Laziness</h2>
 <p>For positive degrees,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><msup><mi>D</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>A</mi></mrow><annotation encoding="application/x-tex">P=D^{-1}A</annotation></semantics></math>
@@ -2240,7 +2259,7 @@ chain aperiodic and the lazy distribution converges to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math>.
 Laziness removes periodicity, but it also changes the time scale:
 comparisons with the original walk must specify which clock is used.</p>
-<h2 data-number="5.2" id="heat-diffusion-and-the-walk-bridge"><span class="header-section-number">5.2</span> Heat Diffusion and the Walk
+<h2 data-number="5.2" role="heading" aria-level="3" id="heat-diffusion-and-the-walk-bridge"><span class="header-section-number">5.2</span> Heat Diffusion and the Walk
 Bridge</h2>
 <p>Heat diffusion turns the edge-difference operator into a
 continuous-time evolution. For an initial column signal
@@ -2333,7 +2352,7 @@ combinatorial heat,
 a sufficient condition for a non-negative averaging update is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>h</mi><mo>≤</mo><mfrac><mn>1</mn><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mi>i</mi></msub><msub><mi>d</mi><mi>i</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">0&lt;h\leq\frac{1}{\max_i d_i}</annotation></semantics></math>;
 a larger step can overshoot or become unstable.</p>
-<h2 data-number="5.3" id="adjacency-spectra-expansion-and-mixing"><span class="header-section-number">5.3</span> Adjacency Spectra, Expansion,
+<h2 data-number="5.3" role="heading" aria-level="3" id="adjacency-spectra-expansion-and-mixing"><span class="header-section-number">5.3</span> Adjacency Spectra, Expansion,
 and Mixing</h2>
 <p>The adjacency matrix has its own useful questions, especially when
 the number of walks or the concentration of connectivity matters more
@@ -2632,7 +2651,7 @@ code’s decoding algorithm. Those require an additional model. The
 comparison supplies a useful diagnostic question: has a graph achieved
 connectivity by retaining many edges, or does its sparse structure
 itself prevent poorly attached large regions?</p>
-<h2 data-number="5.4" id="graph-signals-embeddings-and-clustering"><span class="header-section-number">5.4</span> Graph Signals, Embeddings, and
+<h2 data-number="5.4" role="heading" aria-level="3" id="graph-signals-embeddings-and-clustering"><span class="header-section-number">5.4</span> Graph Signals, Embeddings, and
 Clustering</h2>
 <p>A graph signal is any value attached to each vertex: a sensor
 reading, document score, or measured phenotype. The Laplacian energy
@@ -2653,7 +2672,7 @@ of the model. A stable eigensolver cannot rescue a graph in which a
 distance was treated as a similarity, duplicate records were aggregated
 unintentionally, or a degree-heavy hub dominates the intended notion of
 neighbourhood.</p>
-<h3 data-number="5.4.1" id="an-end-to-end-normalised-spectral-clustering-pipeline"><span class="header-section-number">5.4.1</span> An End-to-End Normalised
+<h3 data-number="5.4.1" role="heading" aria-level="4" id="an-end-to-end-normalised-spectral-clustering-pipeline"><span class="header-section-number">5.4.1</span> An End-to-End Normalised
 Spectral-Clustering Pipeline</h3>
 <p>Suppose
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
@@ -2729,7 +2748,7 @@ one degree-aware bottleneck and the conductance guarantee matters.
 on several rows is more natural when the output is a multiway embedding,
 but its labels are not automatically the minimum normalised-cut
 partition.</p>
-<h3 data-number="5.4.2" id="three-operators-three-geometries"><span class="header-section-number">5.4.2</span> Three Operators, Three
+<h3 data-number="5.4.2" role="heading" aria-level="4" id="three-operators-three-geometries"><span class="header-section-number">5.4.2</span> Three Operators, Three
 Geometries</h3>
 <p>The phrase “spectral clustering” hides three related choices. With
 the combinatorial Laplacian
@@ -2775,7 +2794,7 @@ to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="script">ℒ</mi><annotation encoding="application/x-tex">\mathcal{L}</annotation></semantics></math>,
 that is evidence that degree scale is material to the data, not by
 itself evidence of numerical failure.</p>
-<h3 data-number="5.4.3" id="a-small-worked-clustering-example"><span class="header-section-number">5.4.3</span> A Small Worked Clustering
+<h3 data-number="5.4.3" role="heading" aria-level="4" id="a-small-worked-clustering-example"><span class="header-section-number">5.4.3</span> A Small Worked Clustering
 Example</h3>
 <p>Consider four vertices in the order
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,2,3,4)</annotation></semantics></math>.
@@ -2828,7 +2847,7 @@ embedding asks a different degree-relative question. If the graph is
 made disconnected, the zero eigenspace records components exactly and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-means
 should not disguise that fact as a novel community result.</p>
-<h3 data-number="5.4.4" id="failure-modes-to-check-before-interpreting-labels"><span class="header-section-number">5.4.4</span> Failure Modes to Check Before
+<h3 data-number="5.4.4" role="heading" aria-level="4" id="failure-modes-to-check-before-interpreting-labels"><span class="header-section-number">5.4.4</span> Failure Modes to Check Before
 Interpreting Labels</h3>
 <p>Sorting or thresholding the rows of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
@@ -2847,7 +2866,7 @@ individual coordinates unstable up to rotation. Compare subspaces,
 pairwise embedding distances, graph-level objectives, and label
 stability under graph perturbations rather than matching raw eigenvector
 signs or columns.</p>
-<h3 data-number="5.4.5" id="a-probabilistic-community-example"><span class="header-section-number">5.4.5</span> A Probabilistic Community
+<h3 data-number="5.4.5" role="heading" aria-level="4" id="a-probabilistic-community-example"><span class="header-section-number">5.4.5</span> A Probabilistic Community
 Example</h3>
 <p>The weak bridge establishes a deterministic bottleneck. A stochastic
 block model adds a different question: can an algorithm recover labels
@@ -2992,7 +3011,7 @@ neither establishes statistical consistency by itself. Consistency
 concerns a stated sequence of data-generating models and graph
 constructions as sample size grows. See <a href="https://arxiv.org/abs/0711.0189">von Luxburg’s tutorial</a> and <a href="https://arxiv.org/abs/0804.0678">von Luxburg, Belkin, and Bousquet
 on consistency</a> for the distinction.</p>
-<h2 data-number="5.5" id="graph-fourier-analysis-and-spectral-filtering"><span class="header-section-number">5.5</span> Graph Fourier Analysis and
+<h2 data-number="5.5" role="heading" aria-level="3" id="graph-fourier-analysis-and-spectral-filtering"><span class="header-section-number">5.5</span> Graph Fourier Analysis and
 Spectral Filtering</h2>
 <p>The same eigenbasis that supplies embedding coordinates also supplies
 a filtering basis. Here the object of interest is not the position of a
@@ -3080,7 +3099,7 @@ at every distance in exact arithmetic, with distant influence controlled
 by time and graph geometry. Thus “local graph filtering” can mean a
 finite-hop approximation or a rapidly decaying diffusion process. State
 which one is implemented when locality matters.</p>
-<h3 data-number="5.5.1" id="a-worked-smoothing-example"><span class="header-section-number">5.5.1</span> A Worked Smoothing
+<h3 data-number="5.5.1" role="heading" aria-level="4" id="a-worked-smoothing-example"><span class="header-section-number">5.5.1</span> A Worked Smoothing
 Example</h3>
 <p>Consider a path of three vertices with unit weights and observed
 values
@@ -3142,7 +3161,7 @@ smoothing.</figcaption>
 <p>The figure is generated by <code>generate_figures.py</code> from the
 displayed filter responses. It illustrates the response of an operator,
 not the distribution of eigenvalues in a particular data set.</p>
-<h1 data-number="6" id="electrical-networks-resistance-and-spanning-trees"><span class="header-section-number">6</span> Electrical Networks, Resistance,
+<h1 data-number="6" role="heading" aria-level="2" id="electrical-networks-resistance-and-spanning-trees"><span class="header-section-number">6</span> Electrical Networks, Resistance,
 and Spanning Trees</h1>
 <p>Interpret every edge
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{i,j\}</annotation></semantics></math>
@@ -3283,7 +3302,7 @@ because an alternative route reduces the response to a unit injection.
 <a href="https://math.dartmouth.edu/~doyle/docs/walks/walks.pdf">Doyle
 and Snell</a> provide the standard electrical-network background for
 this interpretation.</p>
-<h2 data-number="6.1" id="spanning-trees-and-resistance"><span class="header-section-number">6.1</span> Spanning Trees and
+<h2 data-number="6.1" role="heading" aria-level="3" id="spanning-trees-and-resistance"><span class="header-section-number">6.1</span> Spanning Trees and
 Resistance</h2>
 <p>A spanning tree is a connected, acyclic subgraph containing every
 vertex. If edge weights are conductances, assign a tree
@@ -3323,7 +3342,8 @@ unnecessary, while a bridge has
 and is present with probability one. The edge-marginal result is part of
 the effective-resistance framework developed by <a href="https://doi.org/10.1137/08074489X">Spielman and Srivastava</a>;
 edge events are not independent.</p>
-<h3 data-number="6.1.1" id="triangle-check"><span class="header-section-number">6.1.1</span> Triangle Check</h3>
+<h3 data-number="6.1.1" role="heading" aria-level="4" id="triangle-check"><span class="header-section-number">6.1.1</span>
+Triangle Check</h3>
 <p>The unweighted triangle has three spanning trees, one for each choice
 of the omitted edge. Its Laplacian is</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -3400,7 +3420,7 @@ so the same physical evolution occurs on a clock accelerated by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>.
 Confusing these clocks is a common source of incorrect comparisons
 between simulations and formulas.</p>
-<h2 data-number="6.2" id="what-the-analogy-does-and-does-not-preserve"><span class="header-section-number">6.2</span> What the Analogy Does and Does
+<h2 data-number="6.2" role="heading" aria-level="3" id="what-the-analogy-does-and-does-not-preserve"><span class="header-section-number">6.2</span> What the Analogy Does and Does
 Not Preserve</h2>
 <p>The walk, diffusion, and network descriptions agree because they are
 built from the same symmetric conductance matrix. The stationary measure
@@ -3478,11 +3498,11 @@ hitting-time calculation before trusting a large eigensolve. The most
 common failure is not a difficult theorem; it is applying a correct
 theorem to a matrix whose rows, weights, or normalisation represent a
 different object.</p>
-<h1 data-number="7" id="worked-graph-laboratories"><span class="header-section-number">7</span> Worked Graph Laboratories</h1>
+<h1 data-number="7" role="heading" aria-level="2" id="worked-graph-laboratories"><span class="header-section-number">7</span> Worked Graph Laboratories</h1>
 <p>The following calculations are deliberately explicit. They can be
 used as unit tests for a graph library and as figures in the primer. All
 graphs below are unweighted unless an edge weight is displayed.</p>
-<h2 data-number="7.1" id="the-path-boundary-conditions-matter"><span class="header-section-number">7.1</span> The Path: Boundary Conditions
+<h2 data-number="7.1" role="heading" aria-level="3" id="the-path-boundary-conditions-matter"><span class="header-section-number">7.1</span> The Path: Boundary Conditions
 Matter</h2>
 <p>The earlier path calculations checked the operator and bounded one
 eigenvalue. This revisit adds the whole graph family’s spectrum,
@@ -3529,7 +3549,7 @@ this is
 The combinatorial and normalised second eigenvalues are close enough to
 invite confusion, but they have different units and different
 eigenvectors.</p>
-<h2 data-number="7.2" id="the-cycle-fourier-modes-and-no-boundary-endpoints"><span class="header-section-number">7.2</span> The Cycle: Fourier Modes and No
+<h2 data-number="7.2" role="heading" aria-level="3" id="the-cycle-fourier-modes-and-no-boundary-endpoints"><span class="header-section-number">7.2</span> The Cycle: Fourier Modes and No
 Boundary Endpoints</h2>
 <p>For the cycle
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>C</mi><mi>n</mi></msub><annotation encoding="application/x-tex">C_n</annotation></semantics></math>,
@@ -3564,7 +3584,7 @@ optimal. The cycle’s low modes vary smoothly around the ring, while the
 path’s endpoint boundary changes the eigenfunctions. A plot should show
 the first non-constant mode on the vertex order around the cycle, not an
 arbitrary force-directed layout.</p>
-<h2 data-number="7.3" id="the-star-degree-bias-is-not-a-numerical-detail"><span class="header-section-number">7.3</span> The Star: Degree Bias Is Not a
+<h2 data-number="7.3" role="heading" aria-level="3" id="the-star-degree-bias-is-not-a-numerical-detail"><span class="header-section-number">7.3</span> The Star: Degree Bias Is Not a
 Numerical Detail</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>n</mi></msub><annotation encoding="application/x-tex">S_n</annotation></semantics></math>
@@ -3617,7 +3637,7 @@ The star has no low-conductance volume bottleneck despite its poor
 ordinary vertex-to-vertex geometry. This is why a small algebraic
 connectivity should not be described as a universal measure of
 vertex-removal resilience.</p>
-<h2 data-number="7.4" id="the-clique-expansion-without-a-preferred-direction"><span class="header-section-number">7.4</span> The Clique: Expansion Without a
+<h2 data-number="7.4" role="heading" aria-level="3" id="the-clique-expansion-without-a-preferred-direction"><span class="header-section-number">7.4</span> The Clique: Expansion Without a
 Preferred Direction</h2>
 <p>For the complete graph
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>n</mi></msub><annotation encoding="application/x-tex">K_n</annotation></semantics></math>,
@@ -3652,7 +3672,7 @@ objective can be degenerate even when the graph is maximally connected.
 A clustering routine fed only the clique’s non-zero eigenspace must
 obtain its labels from an extra criterion or from numerical
 accident.</p>
-<h2 data-number="7.5" id="two-triangles-joined-by-a-weak-bridge"><span class="header-section-number">7.5</span> Two Triangles Joined by a Weak
+<h2 data-number="7.5" role="heading" aria-level="3" id="two-triangles-joined-by-a-weak-bridge"><span class="header-section-number">7.5</span> Two Triangles Joined by a Weak
 Bridge</h2>
 <p>We now turn the opening’s weak-bridge mechanism into an explicit cut
 and variational bound, then derive the exact eigenvalue and record its
@@ -3733,7 +3753,7 @@ epsilon.</figcaption>
 <code>generate_figures.py</code>. The logarithmic horizontal axis makes
 the continuous approach to disconnection visible across several orders
 of magnitude.</p>
-<h3 data-number="7.5.1" id="an-exact-weak-bridge-eigenvalue"><span class="header-section-number">7.5.1</span> An Exact Weak-Bridge
+<h3 data-number="7.5.1" role="heading" aria-level="4" id="an-exact-weak-bridge-eigenvalue"><span class="header-section-number">7.5.1</span> An Exact Weak-Bridge
 Eigenvalue</h3>
 <p>The preceding weak-bridge calculation supplied an upper bound. Here
 we calculate the eigenvalue itself and identify the adjustment that
@@ -3800,7 +3820,7 @@ exact normalised eigenvector must account for the changed endpoint
 degrees. The important invariant is not that the two eigenvalues are
 numerically equal; it is that both become small linearly with the weak
 coupling while the graph remains mathematically connected.</p>
-<h3 data-number="7.5.2" id="a-perturbation-ledger-for-the-weak-bridge"><span class="header-section-number">7.5.2</span> A Perturbation Ledger for the
+<h3 data-number="7.5.2" role="heading" aria-level="4" id="a-perturbation-ledger-for-the-weak-bridge"><span class="header-section-number">7.5.2</span> A Perturbation Ledger for the
 Weak Bridge</h3>
 <p>The trial bound and exact eigenvalue above describe one bridge weight
 at a time. This ledger adds a parameter experiment: it records which
@@ -3839,7 +3859,7 @@ absolute conductance scale; a report that lists only
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>
 would miss degree-relative behaviour. Preserve both when the application
 could plausibly depend on either.</p>
-<h2 data-number="7.6" id="worked-cut-ledger-for-the-four-vertex-path"><span class="header-section-number">7.6</span> Worked Cut Ledger for the
+<h2 data-number="7.6" role="heading" aria-level="3" id="worked-cut-ledger-for-the-four-vertex-path"><span class="header-section-number">7.6</span> Worked Cut Ledger for the
 Four-Vertex Path</h2>
 <p>The earlier sweep introduced thresholding; this revisit audits the
 discrete objectives for its candidate cuts. The path
@@ -3908,7 +3928,7 @@ two and three, and its total incident weight is five. The boundary is
 counted once; internal edges contribute twice to volume. Writing those
 two counting rules beside a numerical result prevents many
 normalised-cut discrepancies.</p>
-<h2 data-number="7.7" id="a-fully-worked-three-vertex-filter"><span class="header-section-number">7.7</span> A Fully Worked Three-Vertex
+<h2 data-number="7.7" role="heading" aria-level="3" id="a-fully-worked-three-vertex-filter"><span class="header-section-number">7.7</span> A Fully Worked Three-Vertex
 Filter</h2>
 <p>The heat and Tikhonov examples evaluated particular smoothing
 operators. This revisit exposes the signal’s modal coefficients so that
@@ -3990,7 +4010,7 @@ whereas Tikhonov at unit strength multiplies by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math>.
 A figure that compares them should label the parameter values rather
 than calling both settings “one step”.</p>
-<h2 data-number="7.8" id="what-the-derivations-do-not-prove"><span class="header-section-number">7.8</span> What the Derivations Do Not
+<h2 data-number="7.8" role="heading" aria-level="3" id="what-the-derivations-do-not-prove"><span class="header-section-number">7.8</span> What the Derivations Do Not
 Prove</h2>
 <p>The inequalities connect graph quantities, but they do not remove the
 need for model validation. A small
@@ -4142,7 +4162,7 @@ chosen isolate convention.</li>
 beside the analysis rather than in an informal notebook because they
 encode the operator contract on which every later interpretation
 depends.</p>
-<h2 data-number="7.9" id="one-graph-through-five-spectral-lenses"><span class="header-section-number">7.9</span> One Graph Through Five Spectral
+<h2 data-number="7.9" role="heading" aria-level="3" id="one-graph-through-five-spectral-lenses"><span class="header-section-number">7.9</span> One Graph Through Five Spectral
 Lenses</h2>
 <p>This revisit translates between operators while holding the original
 four-vertex laboratory fixed: a three-vertex path and one isolate. Its
@@ -4176,14 +4196,14 @@ respect. Then calculate one invariant for each interpretation: component
 count, energy, stationary mass, conserved sum, or residual. If the
 implementation cannot explain these small answers, a large graph result
 is not ready for interpretation.</p>
-<h1 data-number="8" id="what-problems-spectral-methods-solve"><span class="header-section-number">8</span> What Problems Spectral Methods
+<h1 data-number="8" role="heading" aria-level="2" id="what-problems-spectral-methods-solve"><span class="header-section-number">8</span> What Problems Spectral Methods
 Solve</h1>
 <p>Spectral graph theory is useful when the important structure is
 relational and global rather than attached to individual rows of a data
 table. The following use cases are deliberately stated as problem
 formulations, because the same algorithm can be appropriate in one
 setting and misleading in another.</p>
-<h2 data-number="8.1" id="community-detection-and-network-segmentation"><span class="header-section-number">8.1</span> Community Detection and Network
+<h2 data-number="8.1" role="heading" aria-level="3" id="community-detection-and-network-segmentation"><span class="header-section-number">8.1</span> Community Detection and Network
 Segmentation</h2>
 <p>Suppose a network contains dense groups connected by relatively few
 edges. A community-detection task asks for a partition whose
@@ -4281,7 +4301,7 @@ or the stability of the rounded partition. A sign flip is harmless; a
 rotation within a repeated eigenspace is not a numerical error. This is
 why a clique belongs in the laboratory: its repeated eigenvalue makes
 non-uniqueness visible before it appears in a large data set.</p>
-<h2 data-number="8.2" id="semi-supervised-learning-and-signal-completion"><span class="header-section-number">8.2</span> Semi-Supervised Learning and
+<h2 data-number="8.2" role="heading" aria-level="3" id="semi-supervised-learning-and-signal-completion"><span class="header-section-number">8.2</span> Semi-Supervised Learning and
 Signal Completion</h2>
 <p>Graph-based learning uses a small set of labelled vertices to infer
 labels or values on unlabelled vertices. The smoothness prior says that
@@ -4410,7 +4430,7 @@ also fail when a component has very few labels or when the graph
 contains a bridge that crosses a class boundary. The graph regulariser
 supplies a prior, not a probability model, unless a probabilistic
 observation model is added.</p>
-<h2 data-number="8.3" id="ranking-diffusion-and-information-flow"><span class="header-section-number">8.3</span> Ranking, Diffusion, and
+<h2 data-number="8.3" role="heading" aria-level="3" id="ranking-diffusion-and-information-flow"><span class="header-section-number">8.3</span> Ranking, Diffusion, and
 Information Flow</h2>
 <p>Random-walk and diffusion operators solve ranking problems by
 repeatedly redistributing mass through a graph. A restart or damping
@@ -4470,7 +4490,7 @@ the speed and direction of spread that motivated diffusion. A useful
 worked result reports a short trajectory or a heat-kernel distance at
 several times, then explains which time scale corresponds to the
 application.</p>
-<h2 data-number="8.4" id="images-meshes-and-spatially-irregular-data"><span class="header-section-number">8.4</span> Images, Meshes, and Spatially
+<h2 data-number="8.4" role="heading" aria-level="3" id="images-meshes-and-spatially-irregular-data"><span class="header-section-number">8.4</span> Images, Meshes, and Spatially
 Irregular Data</h2>
 <p>An image grid is a graph in which pixels are connected to nearby
 pixels, often with weights based on intensity similarity. A mesh graph
@@ -4486,7 +4506,7 @@ weights are set solely by geometric distance, a sharp intensity boundary
 can be smoothed away. In either case, a spectral result should be
 interpreted as a property of the constructed graph, not as a property of
 the raw image independent of that construction.</p>
-<h2 data-number="8.5" id="resilience-redundancy-and-infrastructure"><span class="header-section-number">8.5</span> Resilience, Redundancy, and
+<h2 data-number="8.5" role="heading" aria-level="3" id="resilience-redundancy-and-infrastructure"><span class="header-section-number">8.5</span> Resilience, Redundancy, and
 Infrastructure</h2>
 <p>Effective resistance measures how much a network responds to a unit
 injection between two vertices. It is useful for assessing redundancy: a
@@ -4539,7 +4559,7 @@ structural feature under that transformation, and then test whether the
 feature improves a downstream reliability or demand model. The spectral
 calculation can suggest where to look; it cannot supply the missing
 operational semantics.</p>
-<h2 data-number="8.6" id="scientific-networks-and-multi-scale-structure"><span class="header-section-number">8.6</span> Scientific Networks and
+<h2 data-number="8.6" role="heading" aria-level="3" id="scientific-networks-and-multi-scale-structure"><span class="header-section-number">8.6</span> Scientific Networks and
 Multi-Scale Structure</h2>
 <p>In biological or neuroscience networks, vertices may be genes, brain
 regions, or species and edges may encode similarity, interaction, or
@@ -4574,7 +4594,8 @@ investigation. If it changes as expected, the mode can be used as a
 reduced coordinate, but the reduction error should be checked against
 the original field or solution rather than inferred from eigenvalue
 ordering alone.</p>
-<h2 data-number="8.7" id="a-decision-checklist"><span class="header-section-number">8.7</span> A Decision Checklist</h2>
+<h2 data-number="8.7" role="heading" aria-level="3" id="a-decision-checklist"><span class="header-section-number">8.7</span>
+A Decision Checklist</h2>
 <p>Before choosing a spectral method, answer five questions:</p>
 <ol type="1">
 <li>What does an edge weight mean, and should larger values strengthen
@@ -4619,7 +4640,7 @@ failure probability, combine spectral diagnostics with a stochastic
 reliability model. Spectral analysis is a family of relaxations and
 coordinates, not a universal replacement for graph algorithms or domain
 models.</p>
-<h1 data-number="9" id="numerical-practice-and-reproducible-computation"><span class="header-section-number">9</span> Numerical Practice and
+<h1 data-number="9" role="heading" aria-level="2" id="numerical-practice-and-reproducible-computation"><span class="header-section-number">9</span> Numerical Practice and
 Reproducible Computation</h1>
 <p>Build the operator, choose the numerical target, validate the result,
 and only then interpret or stress the output. Construction,
@@ -4627,7 +4648,7 @@ normalisation, and component policy establish the problem before solver
 choice. The later guidance covers approximation and linear systems;
 failure diagnosis and twelve practice exercises then test the full
 operator contract.</p>
-<h2 data-number="9.1" id="build-the-operator-before-choosing-the-algorithm"><span class="header-section-number">9.1</span> Build the Operator Before
+<h2 data-number="9.1" role="heading" aria-level="3" id="build-the-operator-before-choosing-the-algorithm"><span class="header-section-number">9.1</span> Build the Operator Before
 Choosing the Algorithm</h2>
 <p>An eigensolver cannot repair a graph-construction error. Fix a vertex
 order and preserve it through the edge table, adjacency matrix,
@@ -4675,7 +4696,7 @@ non-zeros and their indices, with storage proportional to
 for a simple graph. The practical crossover depends on the matrix
 format, hardware, and algorithm, but the conceptual rule is stable:
 sparse structure matters only if the computation preserves it.</p>
-<h2 data-number="9.2" id="normalised-and-unnormalised-operators-must-not-be-interchanged"><span class="header-section-number">9.2</span> Normalised and Unnormalised
+<h2 data-number="9.2" role="heading" aria-level="3" id="normalised-and-unnormalised-operators-must-not-be-interchanged"><span class="header-section-number">9.2</span> Normalised and Unnormalised
 Operators Must Not Be Interchanged</h2>
 <p>The combinatorial Laplacian preserves the physical scale of the
 weights. Multiplying every conductance by
@@ -4771,7 +4792,7 @@ than assuming that two libraries count null vectors in the same way. The
 <code>sparse = FALSE</code> argument is also deliberate: base R’s
 <code>eigen()</code> expects a dense matrix, and converting a large
 graph this way defeats sparse storage.</p>
-<h2 data-number="9.3" id="disconnected-graphs-and-isolated-vertices-need-a-policy"><span class="header-section-number">9.3</span> Disconnected Graphs and
+<h2 data-number="9.3" role="heading" aria-level="3" id="disconnected-graphs-and-isolated-vertices-need-a-policy"><span class="header-section-number">9.3</span> Disconnected Graphs and
 Isolated Vertices Need a Policy</h2>
 <p>For the combinatorial Laplacian, the multiplicity of zero is the
 number of connected components, including singleton isolated vertices. A
@@ -4809,7 +4830,7 @@ solver, and either ground one vertex in each relevant component or work
 in the orthogonal complement of the nullspace. Silently adding a small
 diagonal ridge makes a nonsingular system, but it also changes the
 physical problem.</p>
-<h2 data-number="9.4" id="dense-and-sparse-eigensolvers-answer-different-computational-questions"><span class="header-section-number">9.4</span> Dense and Sparse Eigensolvers
+<h2 data-number="9.4" role="heading" aria-level="3" id="dense-and-sparse-eigensolvers-answer-different-computational-questions"><span class="header-section-number">9.4</span> Dense and Sparse Eigensolvers
 Answer Different Computational Questions</h2>
 <p>For a small or moderately sized symmetric matrix, a dense symmetric
 eigensolver is the simplest reference method. It computes the full
@@ -4912,7 +4933,7 @@ principal angles, or the residual of the whole invariant subspace.
 Eigenvector signs are arbitrary even for a simple eigenvalue; orienting
 a vector by making its largest-magnitude entry positive is a display
 convention, not a mathematical correction.</p>
-<h2 data-number="9.5" id="convergence-and-validation-are-part-of-the-result"><span class="header-section-number">9.5</span> Convergence and Validation Are
+<h2 data-number="9.5" role="heading" aria-level="3" id="convergence-and-validation-are-part-of-the-result"><span class="header-section-number">9.5</span> Convergence and Validation Are
 Part of the Result</h2>
 <p>An eigensolver’s “converged” flag is evidence about its internal
 stopping rule, not a proof that the intended graph and operator were
@@ -5034,7 +5055,7 @@ the vertex order and the input data checksum with the result.
 Deterministic seeds help with randomised sparsification and layouts, but
 a seed does not make an ill-conditioned eigenspace unique. It only makes
 one algorithmic path repeatable.</p>
-<h2 data-number="9.6" id="spectral-sparsification-preserves-more-than-a-few-eigenvalues"><span class="header-section-number">9.6</span> Spectral Sparsification
+<h2 data-number="9.6" role="heading" aria-level="3" id="spectral-sparsification-preserves-more-than-a-few-eigenvalues"><span class="header-section-number">9.6</span> Spectral Sparsification
 Preserves More Than a Few Eigenvalues</h2>
 <p>Sparsification is useful when the input graph is too large or dense
 for the desired repeated computations. A spectral sparsifier is a
@@ -5097,7 +5118,7 @@ held-out test vectors, selected cuts, and effective resistances relevant
 to the application. Preserve the original graph for audit and compare
 results on both graphs; a sparsifier is an approximation layer, not a
 replacement for provenance.</p>
-<h2 data-number="9.7" id="laplacian-linear-systems-and-preconditioning"><span class="header-section-number">9.7</span> Laplacian Linear Systems and
+<h2 data-number="9.7" role="heading" aria-level="3" id="laplacian-linear-systems-and-preconditioning"><span class="header-section-number">9.7</span> Laplacian Linear Systems and
 Preconditioning</h2>
 <p>Many applications need
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mi mathvariant="bold-italic">𝒃</mi></mrow><annotation encoding="application/x-tex">L\mathbf{v}=\mathbf{b}</annotation></semantics></math>
@@ -5143,7 +5164,7 @@ is usually wasteful and can magnify numerical noise.</p>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">max</span>(<span class="fu">abs</span>(L <span class="sc">%*%</span> potential <span class="sc">-</span> b)) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>resistance <span class="ot">&lt;-</span> potential[<span class="dv">1</span>] <span class="sc">-</span> potential[<span class="dv">3</span>]</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">abs</span>(resistance <span class="sc">-</span> <span class="dv">2</span>) <span class="sc">&lt;</span> <span class="fl">1e-12</span>)</span></code></pre></div>
-<h2 data-number="9.8" id="schur-complements-expose-the-boundary-problem"><span class="header-section-number">9.8</span> Schur Complements Expose the
+<h2 data-number="9.8" role="heading" aria-level="3" id="schur-complements-expose-the-boundary-problem"><span class="header-section-number">9.8</span> Schur Complements Expose the
 Boundary Problem</h2>
 <p>Grounding is one way to remove the Laplacian nullspace. A related
 operation is to eliminate interior vertices while retaining an exact
@@ -5261,7 +5282,8 @@ by
 changes the units and the conservation law. Normalisation is appropriate
 when the model is explicitly degree-relative; it is not a generic
 numerical stabiliser.</p>
-<h2 data-number="9.9" id="common-failure-modes"><span class="header-section-number">9.9</span> Common Failure Modes</h2>
+<h2 data-number="9.9" role="heading" aria-level="3" id="common-failure-modes"><span class="header-section-number">9.9</span>
+Common Failure Modes</h2>
 <p>The most expensive mistakes occur before the eigensolver. Duplicate
 route rows may be aggregated when they should be binary, or treated as
 parallel edges when they are repeated observations. A distance may be
@@ -5329,7 +5351,7 @@ If the reduced graph reproduces the phenomenon, inspect the modelling
 assumptions. If it does not, inspect vertex order, weights, and solver
 targeting. This debugging order is usually faster than tuning an
 iterative routine against a matrix whose meaning is uncertain.</p>
-<h2 data-number="9.10" id="practice-and-self-checks"><span class="header-section-number">9.10</span> Practice and Self-Checks</h2>
+<h2 data-number="9.10" role="heading" aria-level="3" id="practice-and-self-checks"><span class="header-section-number">9.10</span> Practice and Self-Checks</h2>
 <p>The exercises are designed to force the operator convention into the
 open. For every numerical answer, state the vertex order, edge-weight
 meaning, and whether the graph is connected.</p>
@@ -5434,7 +5456,7 @@ triangle has three spanning trees; and an isolate policy changes the
 normalised zero count. A wrong answer to any of these checks usually
 indicates an operator, ordering, or convention error rather than an
 eigensolver problem.</p>
-<h1 data-number="10" id="computational-workflows-and-case-studies"><span class="header-section-number">10</span> Computational Workflows and Case
+<h1 data-number="10" role="heading" aria-level="2" id="computational-workflows-and-case-studies"><span class="header-section-number">10</span> Computational Workflows and Case
 Studies</h1>
 <p>The preceding sections establish numerical policies and validation
 checks; this section connects them to saved analysis records,
@@ -5445,7 +5467,7 @@ under controlled inputs; the karate-club network and topographic grid
 then test empirical description and prediction. Keep graph construction,
 operator order, numerical results, and visual inspection as explicit
 objects throughout.</p>
-<h2 data-number="10.1" id="an-end-to-end-spectral-analysis-recipe"><span class="header-section-number">10.1</span> An End-to-End Spectral
+<h2 data-number="10.1" role="heading" aria-level="3" id="an-end-to-end-spectral-analysis-recipe"><span class="header-section-number">10.1</span> An End-to-End Spectral
 Analysis Recipe</h2>
 <p>This operational recipe applies to the finite, loopless, undirected
 graph with non-negative weights used throughout the main route. When
@@ -5506,7 +5528,7 @@ eigensolver as the analysis. The eigensolver is one numerical step
 inside a model, validation, and interpretation pipeline. A smaller,
 correctly specified graph is more useful than a larger graph whose edge
 semantics and nullspace policy are implicit.</p>
-<h3 data-number="10.1.1" id="a-reproducible-analysis-record"><span class="header-section-number">10.1.1</span> A Reproducible Analysis
+<h3 data-number="10.1.1" role="heading" aria-level="4" id="a-reproducible-analysis-record"><span class="header-section-number">10.1.1</span> A Reproducible Analysis
 Record</h3>
 <p>The recipe becomes auditable when each stage has a saved object. An
 analysis notebook should make the data-to-claim path visible in its
@@ -5611,7 +5633,7 @@ illustrative topographic workflow adds held-out prediction and
 construction sensitivity. The registered synthetic route case shows how
 aggregation changes a result while remaining offline. Their execution
 status differs, but each records the data-to-claim contract.</p>
-<h2 data-number="10.2" id="an-idiomatic-r-workflow-with-igraph-tidygraph-and-ggraph"><span class="header-section-number">10.2</span> An Idiomatic R Workflow with
+<h2 data-number="10.2" role="heading" aria-level="3" id="an-idiomatic-r-workflow-with-igraph-tidygraph-and-ggraph"><span class="header-section-number">10.2</span> An Idiomatic R Workflow with
 <code>igraph</code>, <code>tidygraph</code>, and
 <code>ggraph</code></h2>
 <p><code>igraph</code> is a natural construction and matrix layer,
@@ -5627,11 +5649,11 @@ distance.</p>
 example image. The <a href="examples/manifest.toml">example manifest</a>
 selects that runtime profile and records example sources and timeouts;
 the graph-package lock at
-<code>_shared/runtime/r-graph/packages.lock</code> records direct
-graph-package versions. The base R runtime Containerfile at
-<code>_shared/runtime/r/Containerfile</code> pins the R image and dated
-P3M snapshot used to resolve transitive dependencies. Both paths are
-relative to the repository root. The manifest’s
+<code>maintenance/build/runtime/r-graph/packages.lock</code> records
+direct graph-package versions. The base R runtime Containerfile at
+<code>maintenance/build/runtime/r/Containerfile</code> pins the R image
+and dated P3M snapshot used to resolve transitive dependencies. Both
+paths are relative to the repository root. The manifest’s
 <code>igraph-tidygraph-smoke</code> example runs the construction,
 Laplacian invariants, tidy node mutation, stress layout, and PNG output
 offline. The profile is separate from the minimal shared R image because
@@ -5846,7 +5868,7 @@ reference graph and sparse iterative methods for large graphs with a
 small spectral target. Use a grounded solve for a Laplacian system, not
 an unexplained ridge. At every branch, preserve the operator contract
 and validate the downstream quantity that motivated the calculation.</p>
-<h2 data-number="10.3" id="a-python-operator-and-validation-reference"><span class="header-section-number">10.3</span> A Python Operator and
+<h2 data-number="10.3" role="heading" aria-level="3" id="a-python-operator-and-validation-reference"><span class="header-section-number">10.3</span> A Python Operator and
 Validation Reference</h2>
 <p>This distinct five-vertex example checks operator construction in
 Python without a graph-package abstraction: it uses a weighted
@@ -5893,7 +5915,7 @@ the isolated-vertex convention. The tolerance <code>1e-10</code> is only
 suitable for this small, unit-scale illustration. In production, derive
 it from the matrix norm and solver accuracy, and use a component-aware
 policy.</p>
-<h2 data-number="10.4" id="synthetic-route-case-binary-and-count-aggregation"><span class="header-section-number">10.4</span> Synthetic Route Case: Binary
+<h2 data-number="10.4" role="heading" aria-level="3" id="synthetic-route-case-binary-and-count-aggregation"><span class="header-section-number">10.4</span> Synthetic Route Case: Binary
 and Count Aggregation</h2>
 <p>The repository example uses a small deterministic fixture with the
 historical shape of an OpenFlights route table. Its airport codes,
@@ -5936,7 +5958,7 @@ endpoints and duplicates, and state the conversion from directional
 records to a simple undirected graph. A binary edge means “at least one
 retained route record”, not passenger capacity, flight frequency,
 geographic distance, or electrical conductance.</p>
-<h3 data-number="10.4.1" id="the-graph-contract-and-the-sensitivity-question"><span class="header-section-number">10.4.1</span> The Graph Contract and the
+<h3 data-number="10.4.1" role="heading" aria-level="4" id="the-graph-contract-and-the-sensitivity-question"><span class="header-section-number">10.4.1</span> The Graph Contract and the
 Sensitivity Question</h3>
 <p>The useful question is not “what is the airport spectrum?” but “which
 structural separations appear under a specified route-record
@@ -5967,7 +5989,7 @@ difference as intrinsically important.</p>
 component, and treat sensitivity to direction, deduplication, and
 weighting as part of the result. No network fetch belongs in the offline
 example runner.</p>
-<h3 data-number="10.4.2" id="a-reproducible-analysis-design"><span class="header-section-number">10.4.2</span> A Reproducible Analysis
+<h3 data-number="10.4.2" role="heading" aria-level="4" id="a-reproducible-analysis-design"><span class="header-section-number">10.4.2</span> A Reproducible Analysis
 Design</h3>
 <p>For this fixture, the reproducible workflow is:</p>
 <ol type="1">
@@ -6123,7 +6145,7 @@ the full component inventory even if a largest-component analysis is
 used for a plot. Removing smaller components can make an embedding
 easier to display while changing the stationary distribution and hiding
 disconnected systems.</p>
-<h2 data-number="10.5" id="public-data-community-case-zacharys-karate-club"><span class="header-section-number">10.5</span> Public-Data Community Case:
+<h2 data-number="10.5" role="heading" aria-level="3" id="public-data-community-case-zacharys-karate-club"><span class="header-section-number">10.5</span> Public-Data Community Case:
 Zachary’s Karate Club</h2>
 <p>The question is whether a low-energy partition of observed
 friendships resembles the club affiliations recorded after a social
@@ -6384,7 +6406,7 @@ this benchmark is small and extensively studied, and the binary
 transcription discards interaction detail. A claim of predictive
 performance would require a time-respecting design with labels and
 choices withheld during model development.</p>
-<h2 data-number="10.6" id="public-data-signal-case-interpolating-the-volcano-grid"><span class="header-section-number">10.6</span> Public-Data Signal Case:
+<h2 data-number="10.6" role="heading" aria-level="3" id="public-data-signal-case-interpolating-the-volcano-grid"><span class="header-section-number">10.6</span> Public-Data Signal Case:
 Interpolating the <code>volcano</code> Grid</h2>
 <p>The second case asks whether a local graph can recover hidden
 topographic values better than a constant or nearest-observation
@@ -6629,7 +6651,7 @@ against hidden recorded values. The preceding synthetic route fixture
 supplies a controlled aggregation experiment. Keeping these evidence
 types explicit lets the mathematical laboratories support applications
 without substituting exact toy answers for empirical validation.</p>
-<h1 data-number="11" id="beyond-the-baseline-model"><span class="header-section-number">11</span> Beyond the Baseline Model</h1>
+<h1 data-number="11" role="heading" aria-level="2" id="beyond-the-baseline-model"><span class="header-section-number">11</span> Beyond the Baseline Model</h1>
 <p>The undirected non-negative model is the right starting point because
 symmetry gives real eigenvalues, an orthogonal eigenbasis, reversible
 walks, and a positive Laplacian energy. Many applications do not satisfy
@@ -6640,7 +6662,8 @@ recognise when the baseline model is inadequate and to identify the
 properties a specialised method must preserve. Further Reading then
 groups the sources for these extensions alongside the foundations,
 applications, and numerical methods.</p>
-<h2 data-number="11.1" id="directed-graphs"><span class="header-section-number">11.1</span> Directed Graphs</h2>
+<h2 data-number="11.1" role="heading" aria-level="3" id="directed-graphs"><span class="header-section-number">11.1</span>
+Directed Graphs</h2>
 <p>In a directed graph,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">A_{ij}</annotation></semantics></math>
 and
@@ -6693,7 +6716,7 @@ same spectrum. See <a href="https://doi.org/10.1007/s00026-005-0237-z">Chung’s
 Laplacian treatment</a> for one directed normalisation, and <a href="https://doi.org/10.1515/9780691213101">Trefethen and Embree’s
 discussion of non-normal spectra</a> for why eigenvalues alone can be a
 poor stability diagnostic.</p>
-<h2 data-number="11.2" id="signed-and-indefinite-weights"><span class="header-section-number">11.2</span> Signed and Indefinite
+<h2 data-number="11.2" role="heading" aria-level="3" id="signed-and-indefinite-weights"><span class="header-section-number">11.2</span> Signed and Indefinite
 Weights</h2>
 <p>Negative weights can encode antagonism or disagreement. Substituting
 them into
@@ -6706,7 +6729,7 @@ The interpretation of a zero mode then concerns balance or switching
 structure rather than ordinary connectivity. Do not apply the
 non-negative Cheeger or random-walk results to a signed matrix without
 translating the theorem.</p>
-<h2 data-number="11.3" id="hypergraphs-and-higher-order-relations"><span class="header-section-number">11.3</span> Hypergraphs and Higher-Order
+<h2 data-number="11.3" role="heading" aria-level="3" id="hypergraphs-and-higher-order-relations"><span class="header-section-number">11.3</span> Hypergraphs and Higher-Order
 Relations</h2>
 <p>An edge joins two vertices; a hyperedge can join an arbitrary set.
 Projecting a hypergraph to a pairwise graph is convenient but can
@@ -6717,7 +6740,7 @@ meeting links ten people, for example, a clique expansion says that all
 45 pairs interacted, while an incidence model can keep the single event
 as one object. The chosen projection should be reported before a
 spectral result is interpreted as evidence about pairwise influence.</p>
-<h2 data-number="11.4" id="dynamic-and-multilayer-graphs"><span class="header-section-number">11.4</span> Dynamic and Multilayer
+<h2 data-number="11.4" role="heading" aria-level="3" id="dynamic-and-multilayer-graphs"><span class="header-section-number">11.4</span> Dynamic and Multilayer
 Graphs</h2>
 <p>If edges change over time, the spectrum of an aggregated graph
 describes the aggregation rule, not necessarily any actual time point.
@@ -6729,7 +6752,8 @@ introduces another scale parameter; changing it can move the analysis
 from layer-specific communities to a consensus partition. Report the
 temporal window, aggregation order, and interlayer coupling rather than
 presenting the aggregate spectrum as timeless structure.</p>
-<h1 data-number="12" id="further-reading"><span class="header-section-number">12</span> Further Reading</h1>
+<h1 data-number="12" role="heading" aria-level="2" id="further-reading"><span class="header-section-number">12</span>
+Further Reading</h1>
 <p>Use these annotated sources according to the next task: establish the
 theory, follow a clustering or signal application, investigate a
 numerical method, or extend the graph model. Dataset provenance and
@@ -6829,7 +6853,7 @@ sections.</li>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -6859,18 +6883,27 @@ sections.</li>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -6878,19 +6911,18 @@ sections.</li>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 

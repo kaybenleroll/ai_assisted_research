@@ -6,4 +6,4 @@ DATE        := "15 November 2026"
 HTML_EXTRA  := "--number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--number-sections --shift-heading-level-by=-1"
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'

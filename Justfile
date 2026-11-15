@@ -1,7 +1,7 @@
 set shell := ["bash", "-c"]
 
-import '_shared/images.just'
-import '_shared/examples.just'
+import 'maintenance/build/images.just'
+import 'maintenance/build/examples.just'
 
 OCI := env_var_or_default("OCI", `command -v podman >/dev/null 2>&1 && echo podman || echo docker`)
 PYTHON_OCI_FLAGS := if OCI == "podman" { "--userns=keep-id" } else { "--user=" + `id -u` + ":" + `id -g` }
@@ -13,7 +13,7 @@ examples primer *IDS:
 
 # Run every primer that has an executable-example manifest.
 examples-all:
-  python3 -I _shared/examples/run.py --repo-root "{{justfile_directory()}}" --all
+  python3 -I maintenance/build/examples/run.py --repo-root "{{justfile_directory()}}" --all
 
 default:
   @just --list
@@ -47,34 +47,34 @@ new-primer $short $title:
   trap 'rm -f "$project_dir/Justfile" "$project_dir/$project_dir.md"; rmdir "$project_dir"' ERR
   sed -e "s|@@PROJECT_DIR@@|$project_value|g" -e "s|@@JUST_TITLE@@|$just_title|g" \
     -e "s|@@DATE@@|$review_date|g" \
-    _shared/templates/primer/Justfile.tmpl > "$project_dir/Justfile"
+    maintenance/build/templates/primer/Justfile.tmpl > "$project_dir/Justfile"
   sed "s|@@TITLE@@|$source_title|g" \
-    _shared/templates/primer/primer.md.tmpl > "$project_dir/$project_dir.md"
+    maintenance/build/templates/primer/primer.md.tmpl > "$project_dir/$project_dir.md"
   trap - ERR
   printf 'Created %s. Next:\n' "$project_dir"
   printf '%s\n' \
     '  - Set AUTHOR; update DATE after the substantive review.' \
     '  - Draft and verify the primer against STYLE_GUIDE.md.' \
     '  - Add top-level Justfile targets.' \
-    '  - Register source and outputs in scripts/update_readme_recent.py; run just readme.' \
+    '  - Register source and outputs in maintenance/scripts/update_readme_recent.py; run just readme.' \
     '  - Add and synchronise an area label in .github/labels.json if this is a new class.' \
-    '  - Add the directory to the docs/project-contract.md document-class list.' \
+    '  - Add the directory to the maintenance/docs/project-contract.md document-class list.' \
     '  - Render in containers and commit the source, Justfile, HTML and PDF together.'
 
 # Generate the README document tables from Justfile review dates
 readme:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python scripts/update_readme_recent.py
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python maintenance/scripts/update_readme_recent.py
 
 # Check README generation without changing files
 readme-check:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/update_readme_recent.py --check
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/update_readme_recent.py --check
 
 # Check committed metadata, renderer variants, Mermaid, freshness, and README generation
 check: check-agent-contract check-render-qa check-primer-evidence-tests check-primer-audit-tests check-primer-evidence-changed check-meta check-variants check-mermaid check-fresh check-readme
 
 # Validate a tracked brief and its revision-bound audit.  This is structural only.
 check-primer-evidence brief audit:
-  python3 -I scripts/check/primer_evidence.py "{{brief}}" "{{audit}}"
+  python3 -I maintenance/scripts/check/primer_evidence.py "{{brief}}" "{{audit}}"
 
 # Run the repeatable checks for one primer; optionally override its complete build recipe.
 primer-audit project $build_recipe="":
@@ -88,10 +88,10 @@ primer-audit project $build_recipe="":
   source_name="$(sed -n 's/^SOURCE_MD[[:space:]]*:=[[:space:]]*"\([^"]*\)"/\1/p' "$root/{{project}}/Justfile")"
   source_rel="{{project}}/$source_name"
   source="$root/$source_rel"
-  python3 -I scripts/check/primer_evidence.py "$brief" "$audit"
-  python3 -I scripts/check/primer_audit.py --repo-root "$root" --project "{{project}}"
+  python3 -I maintenance/scripts/check/primer_evidence.py "$brief" "$audit"
+  python3 -I maintenance/scripts/check/primer_audit.py --repo-root "$root" --project "{{project}}"
   if [[ -f "$root/{{project}}/examples/manifest.toml" ]]; then
-    python3 -I _shared/examples/run.py --repo-root "$root" "{{project}}"
+    python3 -I maintenance/build/examples/run.py --repo-root "$root" "{{project}}"
   fi
   if [[ -z "$build_recipe" ]]; then
     recipes="$(just --justfile "$root/{{project}}/Justfile" --summary)"
@@ -107,16 +107,16 @@ primer-audit project $build_recipe="":
     exit 1
   fi
   just --justfile "$root/{{project}}/Justfile" "$build_recipe"
-  python3 -I scripts/render_qa.py "{{project}}"
-  python3 -I scripts/check/check.py fresh
-  bash scripts/lint.sh --md "$source_rel" "$audit_rel"
-  bash scripts/lint.sh --links "${source_rel%.md}.html"
+  python3 -I maintenance/scripts/render_qa.py "{{project}}"
+  python3 -I maintenance/scripts/check/check.py fresh
+  bash maintenance/scripts/lint.sh --md "$source_rel" "$audit_rel"
+  bash maintenance/scripts/lint.sh --links "${source_rel%.md}.html"
 
 check-primer-evidence-tests:
-  python3 -I -m unittest discover -s tests -p 'test_primer_evidence*.py'
+  python3 -I -m unittest discover -s maintenance/tests -p 'test_primer_evidence*.py'
 
 check-primer-audit-tests:
-  python3 -I -m unittest discover -s tests -p 'test_primer_audit.py'
+  python3 -I -m unittest discover -s maintenance/tests -p 'test_primer_audit.py'
 
 # Validate changed projects that have opted into tracked brief and audit evidence.
 # BASE_REF matches lint-changed; include committed, staged, and local changes.
@@ -141,87 +141,87 @@ check-primer-evidence-changed:
     if [[ -e "$root/$brief" || -e "$root/$audit" ]] || \
        git -C "$root" cat-file -e "$base:$brief" 2>/dev/null || \
        git -C "$root" cat-file -e "$base:$audit" 2>/dev/null; then
-      python3 -I "$root/scripts/check/primer_evidence.py" "$root/$brief" "$root/$audit"
-      python3 -I "$root/scripts/check/primer_audit.py" --repo-root "$root" --project "$project"
+      python3 -I "$root/maintenance/scripts/check/primer_evidence.py" "$root/$brief" "$root/$audit"
+      python3 -I "$root/maintenance/scripts/check/primer_audit.py" --repo-root "$root" --project "$project"
     fi
   done
 
 check-render-qa:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_render_qa.py'
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s maintenance/tests -p 'test_render_qa.py'
 
 check-agent-contract:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check_agent_contract.py
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s tests -p 'test_agent_contract.py'
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/check_agent_contract.py
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I -m unittest discover -s maintenance/tests -p 'test_agent_contract.py'
 
 check-meta:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py meta
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/check/check.py meta
 
 check-variants:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py variants
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/check/check.py variants
 
 # Report H2 sections whose first H3 appears before any prose; editorial, advisory check.
 check-structure:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py structure
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/check/check.py structure
 
 check-mermaid:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py mermaid
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/check/check.py mermaid
 
 check-fresh:
-  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I scripts/check/check.py fresh
+  {{OCI}} run --rm {{PYTHON_OCI_FLAGS}} -v "{{justfile_directory()}}:/repo{{MOUNT_SUFFIX}}" -w /repo {{PYTHON_IMAGE}} python3 -I maintenance/scripts/check/check.py fresh
 
 check-readme: readme-check
 
 # Build the pinned spelling checker image
 build-lint-image:
-  {{OCI}} build --build-arg PYTHON_IMAGE={{PYTHON_IMAGE}} -t {{LINT_IMAGE}} -f _shared/Dockerfile.lint _shared/
+  {{OCI}} build --build-arg PYTHON_IMAGE={{PYTHON_IMAGE}} -t {{LINT_IMAGE}} -f maintenance/build/Dockerfile.lint maintenance/build/
 
 # Check Markdown sources and offline links in committed HTML and README
 lint:
-  bash scripts/lint.sh
+  bash maintenance/scripts/lint.sh
 
 # Check relative links and fragments in tracked built HTML and README
 lint-links *FILES:
-  bash scripts/lint.sh --links {{FILES}}
+  bash maintenance/scripts/lint.sh --links {{FILES}}
 
 # Report external links in Markdown sources without gating
 lint-links-online *FILES:
-  bash scripts/lint.sh --links-online {{FILES}}
+  bash maintenance/scripts/lint.sh --links-online {{FILES}}
 
 # Check Markdown structure and accessibility without the spelling checker
 lint-md *FILES:
-  bash scripts/lint.sh --md {{FILES}}
+  bash maintenance/scripts/lint.sh --md {{FILES}}
 
 # Check House prose rules, or only the named Markdown files
 lint-prose *FILES:
-  bash scripts/lint.sh --prose {{FILES}}
+  bash maintenance/scripts/lint.sh --prose {{FILES}}
 
 # Assert each House rule's passing and failing fixture
 lint-prose-test:
-  bash scripts/lint.sh --prose-test
+  bash maintenance/scripts/lint.sh --prose-test
 
 # Check changed Markdown and the full offline link baseline
 lint-changed:
-  bash scripts/lint.sh --changed
+  bash maintenance/scripts/lint.sh --changed
 
 # Check all in-scope files, or only the named Markdown files
 lint-spell *FILES:
-  bash scripts/lint.sh --spell {{FILES}}
+  bash maintenance/scripts/lint.sh --spell {{FILES}}
 
 # Collect HTML/PDF checks and raster candidates for human visual inspection
 render-qa project:
-  python3 -I scripts/render_qa.py "{{project}}"
+  python3 -I maintenance/scripts/render_qa.py "{{project}}"
 
 # Build the shared pandoc image used by all primer projects
 build-image:
-  {{OCI}} build -t {{IMAGE}} -f _shared/Dockerfile _shared/
+  {{OCI}} build -t {{IMAGE}} -f maintenance/build/Dockerfile maintenance/build/
 
 # Build the shared scientific Python runtime used by executable examples
 build-python-runtime:
-  {{OCI}} build -t {{PYTHON_RUNTIME_IMAGE}} -f _shared/runtime/python/Containerfile _shared/runtime/python/
+  {{OCI}} build -t {{PYTHON_RUNTIME_IMAGE}} -f maintenance/build/runtime/python/Containerfile maintenance/build/runtime/python/
 
 # Build the opt-in CPU PyTorch profile on top of the shared Python runtime
 build-python-torch: build-python-runtime
-  {{OCI}} build --build-arg BASE_IMAGE={{PYTHON_RUNTIME_IMAGE}} -t {{PYTHON_TORCH_IMAGE}} -f _shared/runtime/python/Containerfile.torch _shared/runtime/python/
+  {{OCI}} build --build-arg BASE_IMAGE={{PYTHON_RUNTIME_IMAGE}} -t {{PYTHON_TORCH_IMAGE}} -f maintenance/build/runtime/python/Containerfile.torch maintenance/build/runtime/python/
 
 # Build the DuckDB runtime used by knowledge-graph examples
 build-python-duckdb-runtime:
@@ -244,7 +244,7 @@ probe-python-torch: build-python-torch
 
 # Build the R runtime used by executable examples
 build-r-runtime:
-  {{OCI}} build -t {{R_RUNTIME_IMAGE}} -f _shared/runtime/r/Containerfile _shared/runtime/r/
+  {{OCI}} build -t {{R_RUNTIME_IMAGE}} -f maintenance/build/runtime/r/Containerfile maintenance/build/runtime/r/
 
 # Run the offline probe for the R example runtime
 probe-r-runtime: build-r-runtime
@@ -252,7 +252,7 @@ probe-r-runtime: build-r-runtime
 
 # Build the opt-in graph-analysis R profile used by spectral graph examples
 build-r-graph-runtime: build-r-runtime
-  {{OCI}} build --build-arg BASE_IMAGE={{R_RUNTIME_IMAGE}} -t {{R_GRAPH_RUNTIME_IMAGE}} -f _shared/runtime/r-graph/Containerfile _shared/runtime/r-graph/
+  {{OCI}} build --build-arg BASE_IMAGE={{R_RUNTIME_IMAGE}} -t {{R_GRAPH_RUNTIME_IMAGE}} -f maintenance/build/runtime/r-graph/Containerfile maintenance/build/runtime/r-graph/
 
 # Run the offline probe for the graph-analysis R profile
 probe-r-graph-runtime: build-r-graph-runtime
@@ -260,7 +260,7 @@ probe-r-graph-runtime: build-r-graph-runtime
 
 # Build the Julia runtime used by executable examples
 build-julia-runtime:
-  {{OCI}} build -t {{JULIA_RUNTIME_IMAGE}} -f _shared/runtime/julia/Containerfile _shared/runtime/julia/
+  {{OCI}} build -t {{JULIA_RUNTIME_IMAGE}} -f maintenance/build/runtime/julia/Containerfile maintenance/build/runtime/julia/
 
 # Run the offline probe for the Julia example runtime
 probe-julia-runtime: build-julia-runtime

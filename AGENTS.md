@@ -1,7 +1,7 @@
 # Repository Instructions
 
 This is the canonical repository instruction file for Codex, Claude Code, Pi,
-and other harnesses that discover `AGENTS.md`. Read the [project contract](docs/project-contract.md)
+and other harnesses that discover `AGENTS.md`. Read the [project contract](maintenance/docs/project-contract.md)
 before repository work, then read the
 task-specific documents it names. The contract contains the detailed
 invariants, task routes, collaboration rules, and definition of done.
@@ -29,9 +29,9 @@ invariants, task routes, collaboration rules, and definition of done.
 
 Read [Contributing](CONTRIBUTING.md) for repository process, builds, rendering,
 and new documents; [STYLE_GUIDE.md](STYLE_GUIDE.md) for authored prose;
-[maths notation](docs/math-notation.md) for mathematical notation;
-[the review checklist](docs/review-checklist.md) for content and visual QA;
-and [agent collaboration notes](docs/agent-collaboration.md) for cross-harness
+[maths notation](maintenance/docs/math-notation.md) for mathematical notation;
+[the review checklist](maintenance/docs/review-checklist.md) for content and visual QA;
+and [agent collaboration notes](maintenance/docs/agent-collaboration.md) for cross-harness
 handoffs and smoke tests. For Silo RPG work, read
 `gaming_silo_rpg/gaming_silo_index.md` first and follow its restricted-reading
 mandate. For the catastrophe workbook, follow its README and Justfile.

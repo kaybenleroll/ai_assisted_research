@@ -91,7 +91,7 @@ These are the five most recently reviewed primary documents across the catalogue
 
 ## Build
 
-Shared build infrastructure lives in `_shared/`. Each primer has a thin `Justfile` that sets variables and imports `../_shared/common.just`.
+Shared build infrastructure lives in `maintenance/build/`. Each primer has a thin `Justfile` that sets variables and imports `../maintenance/build/common.just`.
 
 ```bash
 # Render a specific primer

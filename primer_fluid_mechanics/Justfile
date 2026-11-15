@@ -10,7 +10,7 @@ PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont
 
 # The shared build emits MathML and MathJax variants when mathvariants=true.
 # Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
-# MERMAID_FILTER points to _shared/filters/mermaid-to-image.lua.
+# MERMAID_FILTER points to maintenance/build/filters/mermaid-to-image.lua.
 
 # Generate reproducible figures in the pinned R runtime.
 plots:
@@ -22,4 +22,4 @@ plots:
 
 full: plots html-variants html pdf
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'
