@@ -51,4 +51,4 @@ just render-full
 
 ## Known Output Issue
 
-As of October 2026, each committed HTML output contains a math-renderer toggle (`math-mode-toggle`) that links to `.mathml.html` and `.mathjax.html` variants that are not committed for this workbook. The shared template fix in #145 applies to Pandoc documents; the workbook outputs retain the toggle until they can be re-rendered.
+The committed main workbook and quickstart HTML outputs retain a math-renderer toggle (`math-mode-toggle`) that links to `.mathml.html` and `.mathjax.html` variants that are not committed for this workbook. The executable index was re-rendered through the relocated shared template in #437 and no longer contains that control. The other outputs retain it until they can be re-rendered.

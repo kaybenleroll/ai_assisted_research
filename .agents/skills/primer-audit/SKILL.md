@@ -8,12 +8,12 @@ description: Audit a primer after drafting or substantive revision. Use for whol
 Resolve repository documents and recipes from the owning repository root;
 resolve references bundled with this skill from the skill directory.
 
-Use `docs/primer-workflow-skills.md` for routing and the shared decision
+Use `maintenance/docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. Report findings and evidence within scope; a failed check does not
 authorise repair.
 
-Read `docs/primer-production-procedure.md`,
-`docs/templates/primer-audit.md`, `docs/review-checklist.md`, and
+Read `maintenance/docs/primer-production-procedure.md`,
+`maintenance/docs/templates/primer-audit.md`, `maintenance/docs/review-checklist.md`, and
 `STYLE_GUIDE.md`. Record the reviewed source revision and brief revision, not
 only a branch name; the audit itself is a tracked artefact.
 

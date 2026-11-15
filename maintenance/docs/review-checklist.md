@@ -1,0 +1,143 @@
+# Review Checklist
+
+Use this checklist for primer reviews. Select a profile, complete its passes, and record findings in the pull request.
+
+## Pass 0: Choose a Profile
+
+| Profile | Required passes |
+|---|---|
+| Mechanical sweep | Pass 2 for the scoped edits; Pass 3 when rendered output changes. Pass 1 only when claims or sources change. |
+| Content edit | Passes 1 and 2; Pass 3 when rendered output changes. |
+| New document | Passes 1–3. |
+
+## Pass 1: Facts and Sources
+
+Apply the R and C rules in the Style Guide, especially R1–R6 for sources and C1–C5 for contested subjects. Preserve exact proper names, standards, identifiers, and quotations under L2, and attribute interpretations rather than presenting them as neutral fact.
+
+- Open every AI-supplied reference. Confirm its title and author; resolve each DOI and check that it identifies the same work.
+- Check quotations against the source. Preserve exact wording and context.
+- Date volatile claims with “as of” wording. Attribute contested claims and separate evidence from interpretation.
+- Record sources checked, corrections made, and any remaining uncertainty in the PR.
+
+For a new document or substantive content revision, read the complete source
+once for coverage and coherence. Then use representative sampling for local
+depth and render risks: sample the opening orientation, a difficult formal
+passage, a worked example, a practical case, and pages containing code, tables,
+figures, or equations. Record the scope and method of both passes. Sampling is
+not a substitute for whole-document review, and whole-document review does not
+replace visual inspection of representative rendered pages.
+
+## Pass 2: Prose and Structure
+
+- Check that one coherent opening orientation block delivers the stated promise, explains scope and exclusions, states prerequisites, and gives the reader a route through the document. Do not accept separate top-level headings for each orientation item unless a documented navigation need justifies them.
+- For every H2 with child headings, verify the framing paragraph required by S6; review short subsections for a distinct purpose and consolidate those that split continuous reasoning. Record any navigation-only exception. Run `just check-structure` and review its advisory output; it catches missing prose before the first H3 but cannot judge whether the prose is substantive.
+- Read the outline and adjacent sections as a continuous route. Flag clusters of short sections or repeated heading–paragraph/list patterns, including top-level sections, and decide whether each heading marks a distinct concept, task, comparison, or useful navigation point. Keep this judgement editorial: do not use a fixed heading, word, or paragraph count as a pass/fail rule.
+- Check that the main route is dependency-led: introduce the organising model before enumerating components, keep optional or reference-heavy branches clearly marked, and provide a comparison, synthesis, or decision framework after a broad survey where readers need one.
+- For a process, system, or applied-method primer, trace one central case from source input or assumptions through construction, intermediate representation, useful query or operation, interpretation, and failure or scope limit. A curated fixture, schema validation, or successful smoke test is not evidence of an end-to-end teaching case. Record executable, illustrative, and measured stages separately.
+- For core concepts, use a worked example, proof, case, comparison, counterexample, or failure case when it helps the reader apply or test the idea. Pair it with explanation, and prefer prose to a dump of bullets.
+- Trace each core concept from its introduction through its explanation and, where useful, an example or comparison. Check that the text explains the relevant reasoning or mechanism, significance, and conditions or limits rather than merely naming or defining the concept. Identify and repair unsupported jumps; do not add filler or a token example to meet a count.
+- Apply the adversarial depth gate to every route and core-concept row in the tracked audit. Preserve the brief's stable `route_id` and `concept_id`, and record exact locators for the explanation, example or reader action, interpretation, and material limit or failure case, plus the evidence revision, reviewer, finding, and scope decision. Use only `verified`, `gap`, `scope-reduced`, or `not-checked`; `scope-reduced` requires a rationale. A definition, list, heading, fixture, passing smoke test, or citation is not sufficient evidence. A `gap` or `not-checked` row blocks readiness when its route tier is `primary` or `alternative`; a `reference-only` row does not. Mechanical checks validate shape and completeness only; human review judges whether the prose genuinely teaches. Do not add quotas.
+- Apply V2: banned hedges are errors. Treat filler as an editing suggestion under V4; review density above two filler terms in a paragraph or above 1.0 per 1,000 words, then fix the cause rather than swapping words.
+- Check terminology consistency by searching for the main alternative term. Expand acronyms at first meaningful use; use the first-use helper below and review its candidates by hand.
+- Apply V1: address the reader as “you”; use “we” in derivations. Apply R4 by keeping evidence strength and likelihood in separate uncertainty sentences. Apply M7 by giving each table a lead-in sentence.
+- Check that examples are interpreted after they appear: state what each demonstrates, its assumptions or decisions, and its limits. For a long primer, record whether a running example or a set of local examples best serves the subject.
+
+Calibrate the depth gate against the reader's promised task. Reject a shallow
+catalogue entry even when every schema cell is populated: naming a method,
+listing its features, and linking a citation do not explain how or why it
+works. For each primary or alternative route, inspect the actual passages for
+mechanism or reasoning, a reader action, worked evidence, interpretation, and a
+material limitation. A worked calculation with inputs and intermediate steps,
+an explained comparison or counterexample, or a traceable case can supply the
+evidence when it supports that task; a bare output or unexamined fixture cannot.
+Mark missing or inadequate teaching as `gap`, or `not-checked` if it was not
+reviewed. A primary route is the main teaching path; an alternative is another
+path the brief promises to teach and is held to the same gate. A reference-only
+route is signposted for lookup and its gaps do not block that gate.
+
+Give each evidence cell a locator that identifies the passage at the recorded
+revision, such as `primer_example/primer_example.md`, section “Choosing a
+model”, paragraph beginning “For this sample”, or a source line and named
+example. Locate explanation, action or example, interpretation, and limitation
+separately where they occur in different places; a document title or section
+name alone is not precise enough. If scope is reduced, record what promise was
+removed or demoted, why, and where the brief and reader-facing scope now say
+so. Do not label an unresolved omission `scope-reduced` merely to pass the gate.
+
+From the repository root, set `md` to the Markdown source under review. Until #159 supplies the automated hedge check, this command must return no matches:
+
+```bash
+grep -niE 'it should be noted|it is worth (mentioning|noting)|one might argue|needless to say|it is important to note' "$md"
+```
+
+Run the first-use acronym helper on the Markdown source; inspect false positives and record unresolved first-use expansions:
+
+```bash
+awk '/^[ \t]*(```|~~~)/{fence=!fence; next} !fence && !/^#/{print NR ":" $0}' "$md" | sed -E 's/`[^`]*`//g; s/\]\([^)]*\)/]/g; s#https?://[^ )>]+##g' | awk -F: '{ln=$1; $1=""; line=$0; while (match(line,/[A-Z][A-Z0-9]{2,}/)) {t=substr(line,RSTART,RLENGTH); ctx=substr(line,(RSTART>40?RSTART-40:1),RLENGTH+80); if(!(t in seen)){seen[t]=1; print ln ": " t " | " ctx} line=substr(line,RSTART+RLENGTH)} }' | grep -vE ': (HTTP|HTTPS|GPU|CPU|API|APIs|URL|JSON|README|CLI|PDF|HTML|SQL|CSS|YAML|TOML|UK|USA|LLM|LLMs|AI)\b'
+```
+
+Every opening code fence needs a language tag; empty output is required:
+
+```bash
+awk '/^[ \t]*```/{if(!fence){if($0 ~ /^[ \t]*```[ \t]*$/) print FILENAME ":" NR; fence=1} else fence=0}' "$md"
+```
+
+## Pass 3: Render QA and Visual QA
+
+Follow [CONTRIBUTING.md — Render QA](../../CONTRIBUTING.md#render-qa) for builds and render checks; this checklist does not repeat those steps.
+
+**Visual QA** means rasterising and inspecting four PDF page types: the first page, a page with a table, a page with code, and a page with a figure or equation. Record each page number and pass or fail in the PR. This runnable example uses the pinned Pandoc base image and installs Poppler only inside the disposable container. The sample page numbers target `primer_evaluation_loop`; change them for the document under review. Run from the repository root; output stays under `.scratch`:
+
+The reusable route is `just render-qa <primer-directory>`. It checks the
+committed HTML, extracts PDF metadata and text in the configured Pandoc
+container, and writes candidate page PNGs plus a report under
+`.scratch/render-qa/<primer-directory>/`. The page choices are heuristics for
+finding likely tables, code, and figures or equations; open each PNG and
+replace `pending` in the report with the human result. The command does not
+claim that rasterisation alone is visual QA.
+
+```bash
+podman run --rm --entrypoint sh -v "$PWD":/work:Z -w /work docker.io/pandoc/latex@sha256:bd7641edf35bb8fad1316bacdac15fcc15f4d8d4f89051da2edcace15a6366d8 -c 'apk add --no-cache poppler-utils >/dev/null && mkdir -p .scratch/review-pages && for page in 1 17 13 3; do pdftoppm -f "$page" -l "$page" -png -r 120 primer_evaluation_loop/primer_evaluation_loop.pdf ".scratch/review-pages/page-$page"; done'
+```
+
+For another document, replace the PDF path and page numbers 17, 13, and 3 with pages containing a table, code, and a figure or equation. Open all four PNGs and record the result.
+
+## PR Description Template
+
+The first line identifies the primary issue. Put each additional issue reference
+on its own line, using `Refs #N` for a related or partially addressed issue.
+Use a closing keyword only when this milestone completes that issue; record
+remaining work in the issue.
+
+```markdown
+Closes #N
+
+Refs #N
+
+Milestone:
+- Outcome and acceptance criteria:
+- Issue coverage: completed work and remaining work for each linked issue:
+
+Profile:
+- Passes and commands run, with results:
+- Facts and sources checked:
+- Prose or structure changes and examples:
+- Structure and depth review: identify sections consolidated or retained as short for a stated purpose, and record the tracked brief/audit IDs and adversarial depth-gate results for every route and core-concept row; record “none needed” only when the complete matrix was checked:
+- Visual QA pages (type, page number, pass/fail), or reason not applicable:
+- Exceptions and justification:
+```
+
+## Eight-Check Mapping
+
+Use this table to report the eight content checks consistently.
+
+| Check | Checklist item | Evidence in PR |
+|---|---|---|
+| 1 | Hedge grep in Pass 2 | Matches fixed or justified; record result. |
+| 2 | First-use acronyms in Pass 2 | Helper candidates reviewed; list remaining issues. |
+| 3 | Tagged fences in Pass 2 | Untagged-opening scan is empty or exceptions are listed. |
+| 4 | Examples in Pass 2 | Name 3–5 core concepts and their example types. |
+| 5 | Uncertainty in Passes 1–2 | List claims checked and changes made. |
+| 6 | Subject-specific exposition in Pass 2 | Record one fix or “none needed” with sections checked. |
+| 7 | Terminology in Pass 2 | State the chosen term and alternative searched. |
+| 8 | Sources in Pass 1 | Name sources checked or added. |

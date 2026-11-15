@@ -14,7 +14,7 @@ REF_CAMPAIGN_DATE := "11 October 2026"
 HTML_EXTRA  := ""
 PDF_EXTRA   := ""
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'
 
 # Multi-doc orchestration (shared html/pdf/all act on gaming_silo_index only)
 silo-html: silo-index-html silo-player-html silo-gm-html silo-bible-html silo-campaign-html silo-ref-index-html silo-ref-player-html silo-ref-gm-html silo-ref-campaign-html

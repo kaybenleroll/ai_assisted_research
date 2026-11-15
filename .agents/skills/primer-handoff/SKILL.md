@@ -8,11 +8,11 @@ description: Prepare an evidence-backed handoff or release note for primer work.
 Resolve repository documents and recipes from the owning repository root;
 resolve references bundled with this skill from the skill directory.
 
-Use `docs/primer-workflow-skills.md` for routing and the shared decision
+Use `maintenance/docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. A handoff can occur at any bounded stage; it does not itself
 authorise repair or release.
 
-Read `docs/agent-collaboration.md`, `docs/primer-production-procedure.md`, and
+Read `maintenance/docs/agent-collaboration.md`, `maintenance/docs/primer-production-procedure.md`, and
 the project contract. Recheck live Git state immediately before writing the
 handoff. Use the portable template and include objective/issue, branch and
 revision, dirty paths, scope and exclusions, decisions and evidence, changed

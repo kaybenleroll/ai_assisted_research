@@ -8,4 +8,4 @@ PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont
 
 # Maths variants are enabled because the source contains substantial mathematics.
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'

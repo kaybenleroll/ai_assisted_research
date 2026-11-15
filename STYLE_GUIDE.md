@@ -4,7 +4,7 @@ This guide captures the house style for this collection. Use it when generating 
 
 ## 0 Scope and Precedence
 
-Rule IDs are stable: L covers Language, V Voice, S Structure, E Exposition and Examples, M Markup Mechanics, R Evidence and Sources, and C Contested Subjects. Keep existing IDs when moving or revising rules; do not reuse retired IDs. N is reserved for the maths guide, `docs/math-notation.md`, in issue #146; that file is planned, not yet a link target. Build, date-maintenance, and naming processes belong in CONTRIBUTING.md (issue #143), rather than here.
+Rule IDs are stable: L covers Language, V Voice, S Structure, E Exposition and Examples, M Markup Mechanics, R Evidence and Sources, and C Contested Subjects. Keep existing IDs when moving or revising rules; do not reuse retired IDs. N is reserved for the maths guide, `maintenance/docs/math-notation.md`, in issue #146; that file is planned, not yet a link target. Build, date-maintenance, and naming processes belong in CONTRIBUTING.md (issue #143), rather than here.
 
 The table defines which rule groups apply to each document class; a subset names the applicable rule IDs.
 
@@ -50,7 +50,7 @@ A local preference does not silently override the guide. Declare a necessary dep
 
 **S1.** Use descriptive Title Case headings consistently within each document. The 20 minor words are `a`, `an`, `the`, `and`, `but`, `or`, `nor`, `for`, `so`, `yet`, `as`, `at`, `by`, `in`, `of`, `on`, `per`, `to`, `via`, and `vs`; lowercase them except at the start or end of a heading or immediately after a colon or dash. Capitalise all other words, including `Off` and `Up` (for example "Setting Up a Server"). Capitalise each part of a hyphenated compound unless it is a minor word; leave code spans, identifiers, and proper nouns as written. [check: review]
 
-**S2.** Use one H1 as the canonical title, equal to the Justfile `TITLE`, with no refresh stamps in either. Sections start at `##`; do not skip heading levels or select levels for visual appearance. Normally stop at H4; use H5 only for exercise solutions or where a documented heading demotion requires it. For numbered Pandoc builds with a leading H1 and `##` sections, pass `--shift-heading-level-by=-1` with `--number-sections`, as specified in the [project contract](docs/project-contract.md#primer-build-and-render-notes). [check: review]
+**S2.** Use one H1 as the canonical title, equal to the Justfile `TITLE`, with no refresh stamps in either. Sections start at `##`; do not skip heading levels or select levels for visual appearance. Normally stop at H4; use H5 only for exercise solutions or where a documented heading demotion requires it. For numbered Pandoc builds with a leading H1 and `##` sections, pass `--shift-heading-level-by=-1` with `--number-sections`, as specified in the [project contract](maintenance/docs/project-contract.md#primer-build-and-render-notes). [check: review]
 
 **S3.** Open with one coherent orientation block: state what the document covers and which problem or gap it addresses, what it is not, the assumed background, and how to read it. Do not create a separate top-level heading for each item in this triad; use one opening section or integrated introductory prose, with short child headings only when they materially improve navigation. Include an annotated Further Reading section; maths primers also require a Notation section, with details assigned to issue #146. Exercises are optional; a glossary is optional and particularly useful above about 15 specialist terms. Learning objectives are not mandatory. New primers follow these requirements from their first draft; existing primers adopt them through their content-audit row in issue #138, and a maths primer's temporary Notation exemption ends when its row is finished. [check: review]
 
@@ -66,7 +66,7 @@ A local preference does not silently override the guide. Declare a necessary dep
 
 For the repository's distinction between executable and illustrative code, and
 the container and manifest contract for runnable examples, see
-[docs/executable-examples.md](docs/executable-examples.md).
+[maintenance/docs/executable-examples.md](maintenance/docs/executable-examples.md).
 
 **E1.** Keep real technical depth: precise terminology, hypotheses, exceptions, proofs, competing interpretations, and failure modes. For each core concept, provide enough explanation for the intended reader to understand its purpose, mechanism or reasoning, and a material condition, consequence, or limitation when relevant. A definition or assertion alone is not an explanation; use the depth the subject and the stated scope require. Assume general technical literacy rather than domain expertise; explain what a condition number is, why it matters, and what goes wrong when it is ignored. Adapt the method to the subject: mathematical reasoning needs hypotheses, and humanities explanations distinguish evidence, attribution, and interpretation. [check: review]
 
@@ -115,7 +115,7 @@ Source: [primer_numerical_analysis/primer_numerical_analysis.md](primer_numerica
 
 **M7.** Put a lead-in sentence before every table. Omit captions by default; use a Pandoc `Table:` caption only when referring to the table elsewhere. The four Silo reference sheets (`gaming_silo_rpg/gaming_silo_player_guide.md`, `gaming_silo_rpg/gaming_silo_gm_secrets.md`, `gaming_silo_rpg/gaming_silo_comprehensive_bible.md`, and `gaming_silo_rpg/gaming_silo_starter_campaign.md`) may place a table directly under its heading as a D16 layout exception, but the caption and accessibility rules still apply. [check: review]
 
-**M8.** Use `> **Note:**` and `> **Warning:**` blockquotes for callouts, sparingly; reserve warnings for material risk or an action the reader must not take. The only allowed fenced-div classes are `.broad-table`, `.compact-table`, and `.code-group`, defined in [doc_template.html](doc_template.html). Use the existing template without adding CSS or filters for callouts. [check: review]
+**M8.** Use `> **Note:**` and `> **Warning:**` blockquotes for callouts, sparingly; reserve warnings for material risk or an action the reader must not take. The only allowed fenced-div classes are `.broad-table`, `.compact-table`, and `.code-group`, defined in [maintenance/build/doc_template.html](maintenance/build/doc_template.html). Use the existing template without adding CSS or filters for callouts. [check: review]
 
 **M9.** For multi-language examples, put consecutive fenced code blocks one after another; the HTML template turns them into tabs, and print and PDF show them in sequence. Label each block with a bold paragraph on its own line that ends in a colon, such as `**Python:**`, `**R:**`, or `**Python (SciPy):**`. The trailing colon also satisfies markdownlint MD036, which otherwise treats a bold-only line as a pseudo-heading. Never add Pandoc attributes to bold text: `**Python**{.code-label}` renders the literal text `{.code-label}` and breaks the tabs. A `::: {.code-group}` fenced div may bound a group. [check: review]
 

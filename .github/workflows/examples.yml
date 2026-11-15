@@ -6,15 +6,15 @@ on:
     paths:
       - ".github/workflows/examples.yml"
       - "Justfile"
-      - "_shared/common.just"
-      - "_shared/examples.just"
-      - "_shared/examples/**"
-      - "_shared/runtime/**"
+      - "maintenance/build/common.just"
+      - "maintenance/build/examples.just"
+      - "maintenance/build/examples/**"
+      - "maintenance/build/runtime/**"
       - "primer_*/examples/**"
       - "primer_knowledge_graph/runtime/**"
-      - "docs/executable-examples.md"
-      - "docs/executable-example-migration.md"
-      - "docs/executable-example-audit.md"
+      - "maintenance/docs/executable-examples.md"
+      - "maintenance/docs/executable-example-migration.md"
+      - "maintenance/docs/executable-example-audit.md"
       - "CONTRIBUTING.md"
   workflow_dispatch:
 
@@ -41,6 +41,6 @@ jobs:
       - name: Probe selected runtime profiles offline
         run: just probe-python-runtime probe-python-duckdb-runtime probe-r-runtime probe-r-graph-runtime probe-julia-runtime
       - name: Test example runner
-        run: python3 -I -m unittest discover -s _shared/examples -p test_run.py
+        run: python3 -I -m unittest discover -s maintenance/build/examples -p test_run.py
       - name: Run opted-in primer examples
         run: just examples-all

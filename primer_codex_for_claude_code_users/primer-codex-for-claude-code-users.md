@@ -811,8 +811,8 @@ cannot reliably follow references, but it creates a maintenance obligation.
 Keep the duplicated section short and make drift detectable in review.
 
 For this project, the second design is now the repository pattern. The shared
-contract lives in `docs/project-contract.md`, and `AGENTS.md` is the canonical
-root entry point. The contract also routes to `docs/agent-collaboration.md` for
+contract lives in `maintenance/docs/project-contract.md`, and `AGENTS.md` is the canonical
+root entry point. The contract also routes to `maintenance/docs/agent-collaboration.md` for
 handoffs and smoke tests. Claude-specific settings may remain under `.claude/`,
 but they are not a second repository policy manual. This keeps repository
 policy neutral without pretending that native skills, hooks, permissions, or
@@ -2378,7 +2378,7 @@ repository/
   Justfile                     # shared build and check commands
 ```
 
-Do not add empty directories to match this sketch. In this primer's repository, `AGENTS.md` already routes to `docs/project-contract.md`; there is no competing root `CLAUDE.md`. The practical decision is therefore whether a particular native adapter is needed, not whether to recreate the example tree. If shared policy is found inside a tool-specific adapter, move that policy to its explanatory home and leave only the invocation difference in the adapter.
+Do not add empty directories to match this sketch. In this primer's repository, `AGENTS.md` already routes to `maintenance/docs/project-contract.md`; there is no competing root `CLAUDE.md`. The practical decision is therefore whether a particular native adapter is needed, not whether to recreate the example tree. If shared policy is found inside a tool-specific adapter, move that policy to its explanatory home and leave only the invocation difference in the adapter.
 
 ### Roll Out in a Branch, One Capability at a Time
 
