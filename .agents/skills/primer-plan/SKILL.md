@@ -8,12 +8,12 @@ description: Plan a new or substantially revised technical primer. Use when defi
 Resolve repository documents and recipes from the owning repository root;
 resolve references bundled with this skill from the skill directory.
 
-Use `docs/primer-workflow-skills.md` for routing and the shared decision
+Use `maintenance/docs/primer-workflow-skills.md` for routing and the shared decision
 checklist. Planning precedes drafting; stop at the agreed plan unless drafting
 is authorised.
 
-Read `docs/primer-production-procedure.md`, `docs/templates/primer-brief.md`,
-`STYLE_GUIDE.md`, and the relevant task routes in `docs/project-contract.md`.
+Read `maintenance/docs/primer-production-procedure.md`, `maintenance/docs/templates/primer-brief.md`,
+`STYLE_GUIDE.md`, and the relevant task routes in `maintenance/docs/project-contract.md`.
 Read the repository state before proposing edits: issue, branch, dirty paths,
 existing source or companion documents, and build recipe.
 
@@ -60,7 +60,7 @@ demoted to reference material, or removed. Do not retain a route merely because
 it is popular, technically interesting, or easy to list.
 
 For a primer that teaches a process, system, or applied method, complete the
-teaching-case contract in `docs/templates/primer-case-contract.md` before
+teaching-case contract in `maintenance/docs/templates/primer-case-contract.md` before
 drafting. In the brief, key a continuous worked-case trace to each applicable
 primary or alternative `route_id`. Follow the same case from input or
 assumptions through transformation, intermediate representation, reader-facing
@@ -114,7 +114,7 @@ its rationale, and its effect on the reader promise; revise the brief and reader
 facing scope accordingly, retaining stable IDs. This is a qualitative check,
 not a substitute for the independent audit.
 Before handoff, check the brief against the trace and scope acceptance fields
-in `docs/templates/primer-brief.md`, including the decision record for any
+in `maintenance/docs/templates/primer-brief.md`, including the decision record for any
 retired IDs. Once the audit exists, run
 `just check-primer-evidence <brief> <audit>` for matrix structure and matching
 IDs; this mechanical check does not judge the case's explanatory quality.

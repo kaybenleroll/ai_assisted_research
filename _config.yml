@@ -2,4 +2,4 @@ exclude:
   - CLAUDE.md
   - AGENTS.md
   - CONTRIBUTING.md
-  - docs/
+  - maintenance/

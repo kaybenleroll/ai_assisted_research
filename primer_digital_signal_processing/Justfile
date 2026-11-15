@@ -22,4 +22,4 @@ plots-check:
 
 full: plots plots-check all
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'

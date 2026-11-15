@@ -6,7 +6,7 @@ DATE        := "12 October 2026"
 HTML_EXTRA  := "--mathjax --lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--lua-filter=" + MERMAID_FILTER + " -V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'
 
 REFERENCE_MD   := "primer_agent_quick_reference.md"
 

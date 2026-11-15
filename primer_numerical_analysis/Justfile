@@ -19,4 +19,4 @@ plots:
 # Generate figures then render both HTML and PDF
 full: plots html-variants html pdf
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'

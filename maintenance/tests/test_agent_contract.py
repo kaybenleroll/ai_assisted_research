@@ -1,0 +1,161 @@
+import tempfile
+import unittest
+import importlib.util
+import subprocess
+import sys
+from pathlib import Path
+
+VALIDATOR = Path(__file__).resolve().parents[1] / "scripts/check_agent_contract.py"
+SPEC = importlib.util.spec_from_file_location("check_agent_contract", VALIDATOR)
+MODULE = importlib.util.module_from_spec(SPEC)
+assert SPEC.loader is not None
+SPEC.loader.exec_module(MODULE)
+REQUIRED_H2 = MODULE.REQUIRED_H2
+SKILLS = MODULE.SKILLS
+check = MODULE.check
+
+
+CONTRACT = "# Project Contract\n\n" + "\n\n".join(f"## {heading}\nText." for heading in REQUIRED_H2)
+ADAPTER = "# Adapter\n\nRead the [project contract](maintenance/docs/project-contract.md).\n"
+ROUTER = "\n".join(
+    f"[`{skill}`](../../.agents/skills/{skill}/SKILL.md)" for skill in SKILLS
+)
+
+
+class AgentContractTests(unittest.TestCase):
+    def make_root(self):
+        temp = tempfile.TemporaryDirectory()
+        root = Path(temp.name)
+        (root / "maintenance/docs").mkdir(parents=True)
+        (root / "gaming_silo_rpg").mkdir()
+        (root / "workbook_catmodel_elt_documents").mkdir()
+        (root / "maintenance/docs/project-contract.md").write_text(CONTRACT, encoding="utf-8")
+        for path in ("CONTRIBUTING.md", "STYLE_GUIDE.md"):
+            (root / path).write_text("x", encoding="utf-8")
+        for path in ("math-notation.md", "review-checklist.md", "agent-collaboration.md"):
+            (root / "maintenance/docs" / path).write_text("x", encoding="utf-8")
+        (root / "workbook_catmodel_elt_documents/README.md").write_text("x", encoding="utf-8")
+        (root / "gaming_silo_rpg/gaming_silo_index.md").write_text("x", encoding="utf-8")
+        (root / "AGENTS.md").write_text(ADAPTER, encoding="utf-8")
+        (root / "maintenance/docs/primer-workflow-skills.md").write_text(ROUTER, encoding="utf-8")
+        (root / ".claude/skills").mkdir(parents=True)
+        for skill in SKILLS:
+            skill_dir = root / ".agents/skills" / skill
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text("x", encoding="utf-8")
+            (root / ".claude/skills" / skill).symlink_to(
+                f"../../.agents/skills/{skill}", target_is_directory=True
+            )
+        return temp, root
+
+    def test_default_root_finds_real_contract_from_another_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = subprocess.run(
+                [sys.executable, str(VALIDATOR)], cwd=directory,
+                text=True, capture_output=True, check=False,
+            )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("agent contract: OK", result.stdout)
+
+    def test_valid_contract(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(check(root), [])
+
+    def test_missing_adapter_link_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "AGENTS.md").write_text("# Adapter\n", encoding="utf-8")
+        self.assertTrue(any("AGENTS.md" in error for error in check(root)))
+
+    def test_missing_agents_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "AGENTS.md").unlink()
+        self.assertTrue(any("missing AGENTS.md" in error for error in check(root)))
+
+    def test_root_claude_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "CLAUDE.md").write_text("# Obsolete\n", encoding="utf-8")
+        self.assertTrue(any("root CLAUDE.md" in error for error in check(root)))
+
+    def test_missing_skill_link_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        router = root / "maintenance/docs/primer-workflow-skills.md"
+        router.write_text(ROUTER.replace(ROUTER.splitlines()[0], "`primer-plan`"), encoding="utf-8")
+        self.assertTrue(any("skill primer-plan must link" in error for error in check(root)))
+
+    def test_wrong_and_duplicate_skill_links_are_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        router = root / "maintenance/docs/primer-workflow-skills.md"
+        wrong = "[`primer-plan`](../../.agents/skills/primer-audit/SKILL.md)"
+        router.write_text(ROUTER + "\n" + wrong, encoding="utf-8")
+        self.assertTrue(any("skill primer-plan must link" in error for error in check(root)))
+        router.write_text(ROUTER.replace(ROUTER.splitlines()[0], wrong), encoding="utf-8")
+        self.assertTrue(any("skill primer-plan must link" in error for error in check(root)))
+
+    def test_missing_skill_target_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / ".agents/skills/primer-audit/SKILL.md").unlink()
+        self.assertTrue(any("skill link target is missing" in error for error in check(root)))
+
+    def test_claude_adapters_reject_missing_copied_absolute_and_wrong_links(self):
+        for skill in SKILLS:
+            for defect in ("missing", "copied", "absolute", "wrong", "equivalent"):
+                with self.subTest(skill=skill, defect=defect):
+                    temp, root = self.make_root()
+                    try:
+                        adapter = root / ".claude/skills" / skill
+                        adapter.unlink()
+                        if defect == "copied":
+                            adapter.mkdir()
+                            (adapter / "SKILL.md").write_text("x", encoding="utf-8")
+                        elif defect == "absolute":
+                            adapter.symlink_to(root / ".agents/skills" / skill)
+                        elif defect == "wrong":
+                            adapter.symlink_to("../../.agents/skills/primer-other")
+                        elif defect == "equivalent":
+                            adapter.symlink_to(f"../../.agents/skills/./{skill}")
+                        self.assertTrue(any(f"Claude skill adapter {skill}" in e for e in check(root)))
+                    finally:
+                        temp.cleanup()
+
+    def test_claude_adapter_rejects_dangling_target(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        skill_dir = root / ".agents/skills/primer-plan"
+        (skill_dir / "SKILL.md").unlink()
+        skill_dir.rmdir()
+        self.assertTrue(any("Claude skill adapter primer-plan is dangling" in e for e in check(root)))
+
+    def test_claude_skills_directory_must_be_real(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        skills_dir = root / ".claude/skills"
+        skills_dir.rename(root / ".claude/other")
+        skills_dir.symlink_to("other", target_is_directory=True)
+        self.assertIn(".claude/skills must be a real directory", check(root))
+
+    def test_missing_skill_router_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "maintenance/docs/primer-workflow-skills.md").unlink()
+        self.assertIn("missing maintenance/docs/primer-workflow-skills.md", check(root))
+
+    def test_reordered_heading_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        text = (root / "maintenance/docs/project-contract.md").read_text(encoding="utf-8")
+        text = text.replace("## Purpose and Scope", "## FIRST", 1)
+        text = text.replace("## Task Routing", "## Purpose and Scope", 1)
+        text = text.replace("## FIRST", "## Task Routing", 1)
+        (root / "maintenance/docs/project-contract.md").write_text(text, encoding="utf-8")
+        self.assertTrue(any("H2 sequence" in error for error in check(root)))
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -6,7 +6,7 @@ format:
     toc-depth: 2
     toc-location: left
     number-sections: true
-    template: ../doc_template.html
+    template: ../maintenance/build/doc_template.html
     embed-resources: true
 ---
 

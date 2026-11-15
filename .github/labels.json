@@ -99,7 +99,7 @@
     "name": "area: build",
     "category": "area",
     "color": "1d76db",
-    "description": "_shared, Justfiles, pandoc container, filters, CI, Pages"
+    "description": "maintenance/build, Justfiles, pandoc container, filters, CI, Pages"
   },
   {
     "name": "effort: XS",

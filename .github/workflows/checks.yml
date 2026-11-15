@@ -38,4 +38,4 @@ jobs:
       - name: Check issue reference
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
-        run: python3 -I scripts/check_pr_body.py
+        run: python3 -I maintenance/scripts/check_pr_body.py

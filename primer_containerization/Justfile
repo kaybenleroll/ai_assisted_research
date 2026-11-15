@@ -6,4 +6,4 @@ DATE        := "12 October 2026"
 HTML_EXTRA  := "--lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 PDF_EXTRA   := "--lua-filter=" + MERMAID_FILTER + " --number-sections --shift-heading-level-by=-1"
 
-import '../_shared/common.just'
+import '../maintenance/build/common.just'
