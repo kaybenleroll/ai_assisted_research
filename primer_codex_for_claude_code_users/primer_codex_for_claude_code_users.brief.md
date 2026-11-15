@@ -1,8 +1,8 @@
 # Primer brief: Codex for Claude Code users
 
 - Issue and milestone: #435; coordinated workflows and configuration ownership revision.
-- Brief revision: codex-operating-model-v1
-- Source revision: 73e224d2bfe7824039edc9c55519520f5ae6ef0e
+- Brief revision: codex-operating-model-v2
+- Source revision: c8a4b57096bd8faf0659c37df412565be728fa8a
 - Tracked path: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.brief.md
 - Reader: Experienced Claude Code users adopting Codex alongside an established repository workflow.
 - Prerequisites: Git, shell, existing project instructions, tests and build commands; no prior Codex configuration knowledge.
@@ -15,7 +15,7 @@
 - Worked examples: Synthetic pinned-container build repair, stale managed-source incident, role routing, bounded delegation and acceptance ledger; retain existing hook/skill migration.
 - Real-world cases: Repository primer maintenance motivates the synthetic case without representing it as a measured model run.
 - Teaching-case contract: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.case.md
-- Core-concept depth matrix: This brief, codex-operating-model-v1, table below.
+- Core-concept depth matrix: This brief, codex-operating-model-v2, table below.
 - Route classification and teaching spines: Matrix tiers and trace below. Shared contract diagnoses layers; configuration traces source to session; coordinated delivery turns a bounded request into reviewed outputs; migration teaches one hook/skill alternative; evidence handoff turns results into continuation and evaluation; reference material is lookup only.
 - Figures, tables, and equations: Keep useful existing comparisons; add concise ownership and routing tables. No decorative figures or new mathematical content.
 - Languages and executable examples: TOML, shell, Markdown and text; all published scenarios illustrative unless explicitly stated. Static syntax checks are separate from operational execution.
@@ -61,8 +61,8 @@ These are compact route traces: each named prose case must expose its input, dec
 
 ## Post-draft teaching-depth checkpoint
 
-- Draft source revision: Uncommitted working source over 73e224d2bfe7824039edc9c55519520f5ae6ef0e; SHA256 93e2fb1e57d6e57fbef8f11ce296d2a32976f700fcc4390fb96e82d4ffdebdff.
-- Brief revision reviewed: codex-operating-model-v1
+- Draft source revision: Committed source c8a4b57096bd8faf0659c37df412565be728fa8a; SHA256 93e2fb1e57d6e57fbef8f11ce296d2a32976f700fcc4390fb96e82d4ffdebdff.
+- Brief revision reviewed: codex-operating-model-v2
 
 | route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
 |---|---|---|---|---|
@@ -72,7 +72,7 @@ These are compact route traces: each named prose case must expose its input, dec
 | migration | Behaviour-first hook/skill alternative | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:1354; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:1534; Existing detailed hook/skill transformation and matrix retained; other feature comparisons are bounded reference, not a promise of parity. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
 | evidence-handoff | Rejected output evidence, correction and evaluation | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:2510; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:2453; Returned ledger rejects missing visual QA, branches on unavailable inspection versus clipped-table correction and reinspection, then factual handoff; no measurement inferred. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
 
-Integrator checkpoint completed before independent audit. The source SHA identifies the draft; Git-backed revision binding remains pending user-authorised commit. The baseline metadata must not be represented as a commit containing the new source.
+Integrator checkpoint completed before independent audit. The source SHA was subsequently compared byte for byte with content commit c8a4b57096bd8faf0659c37df412565be728fa8a. Independent committed-state review rechecked the changed passages, dependent transitions and exact source locators; all stable IDs and the illustrative scope are retained. Revision v2 binds this evidence to the real source commit; required interactive accessibility evidence remains unavailable and is recorded in the audit. The user has authorised commits, push and a draft PR; merge is outside the authorised scope.
 
 ## Core-concept depth matrix
 
