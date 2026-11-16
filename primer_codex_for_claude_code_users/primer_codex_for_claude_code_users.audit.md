@@ -1,19 +1,19 @@
 # Primer audit: Codex for Claude Code Users
 
 - Issue and milestone: #435; coordinated workflows and configuration ownership revision
-- Audit revision: codex-operating-model-audit-v3
+- Audit revision: codex-operating-model-audit-v4
 - Source revision: 48562529f6413d07f3189e75d436984f51ee547c
 - Reviewed revision: 48562529f6413d07f3189e75d436984f51ee547c
 - Draft SHA256: 5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619
 - Tracked path: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.audit.md
 - Starting branch: docs/435-codex-operating-model
 - Reviewer(s): Codex independent content reviewer, gpt-6.1-sol at high effort; publication verification recorded separately
-- Date: 2026-11-15
-- Brief reviewed: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.brief.md, codex-operating-model-v3
+- Date: 2026-11-16
+- Brief reviewed: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.brief.md, codex-operating-model-v4
 - Review boundary: whole-source reading and coverage inventory; independent risk-selected primary-source checks of changed configuration and delegation semantics; illustrative case and alternative traced without execution; publication evidence separated below
 - Teaching-case contract: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.case.md
-- Core-concept depth matrix: brief codex-operating-model-v3; all 12 stable concept IDs and their unchanged tiers
-- Readiness decision: not-ready
+- Core-concept depth matrix: brief codex-operating-model-v4; all 12 stable concept IDs and their unchanged tiers
+- Readiness decision: ready
 
 The current metadata and matrix identify source commit `48562529f6413d07f3189e75d436984f51ee547c`.
 The original content review at `c8a4b57096bd8faf0659c37df412565be728fa8a` and baseline
@@ -21,16 +21,18 @@ The original content review at `c8a4b57096bd8faf0659c37df412565be728fa8a` and ba
 Revision v3 adds a fresh independent whole-source review and a differential
 review after integrating relocated main `8190dd96003c11d6ed91a419c0aa50f3ff54591d`.
 Only three repository-path lines and four legacy-anchor spans changed from
-the previously reviewed source. The current review, publication evidence and
-remaining accessibility gate are recorded in the post-maintenance section.
+the previously reviewed source. The post-maintenance section retains the historical v3 review and gate.
+The current decision is recorded in Release Acceptance and Policy Applicability.
 
 **Content gate: pass** for the brief's illustrative primary and alternative
-routes. The configuration and lifecycle gaps found in the first integrated
-draft were repaired and re-reviewed. **Release readiness: not-ready** while
-required keyboard, no-JavaScript, browser-tree and screen-reader checks remain unavailable.
-Committed publication evidence is reconciled below. Neither
-documentation verification nor a publication build counts
-as execution of a teaching scenario or evidence of comparative model quality.
+routes. **Release readiness: ready** under the owner-approved policy in #439,
+adopted at `58f2194e9dd534dc86e03770e3a043d51b5e1cce`; current-head CI
+must pass before release. Revision v4 changes the verification-scope and release evidence only;
+source, examples, case and published outputs retain the reviewed v3 bytes.
+The owner accepted the served preview and authorised the policy update and
+merge. The final release section records the applicability decision and
+explicitly unperformed advisory checks. Earlier not-ready decisions below
+remain historical; no unperformed check has become a pass.
 
 Source locators use `primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md`.
 Plain line ranges in the explanatory tables refer to that committed source.
@@ -194,19 +196,19 @@ checks are retained only within their original topic/date boundary.
 
 | Gate | Decision | Required evidence or limitation |
 | --- | --- | --- |
-| Brief and audit binding | pass | Brief v3 and audit v3 bind current source 48562529f6413d07f3189e75d436984f51ee547c; independent full-source and differential review completed. |
+| Brief and audit binding | pass | Brief v4 and audit v4 bind current source 48562529f6413d07f3189e75d436984f51ee547c; independent full-source and differential review completed. |
 | Route/concept gate | pass | Five taught routes and 11 primary/alternative concepts pass; reference row retains bounded lookup scope. |
 | Locator validity | pass | All 48 unique source locators checked against the committed source, with no blank or out-of-range lines; Git-backed validator result recorded below. |
 | Examples | pass | All teaching snippets/cases are illustrative; no executable manifest or run claimed. |
-| Rendered outputs | pass | Final container build, metadata/text checks, deterministic HTML semantics and nine visual samples pass. The committed source/HTML/PDF match reviewed artefacts; final committed-state freshness is recorded by the coordinator. |
-| Accessibility | not-ready | Static HTML hierarchy/landmarks/TOC targets and sampled visual checks pass; keyboard, no-JavaScript, browser tree and screen-reader checks unavailable: supported browser bootstrap returns no browser and inventory is empty. Orca 50.3 and AT-SPI2 2.60.4 availability does not establish target traversal. PDF is untagged and remains the documented print companion. |
+| Rendered outputs | pass | Final container build, metadata/text checks, deterministic HTML semantics and current samples on pages 1, 31, 33, 47 and 67 pass. The committed source/HTML/PDF match reviewed artefacts; final committed-state freshness is recorded by the coordinator. |
+| Accessibility | pass | Required automated structure, metadata and sampled visual checks pass. Interactive keyboard, no-JavaScript, browser-tree and screen-reader checks remain not performed; they are advisory for this content/outline and legacy-fragment revision under #439. No conformance or equivalent fragment focus/scroll behaviour is claimed. PDF remains untagged. |
 | Sources | pass | Changed configuration/delegation semantics checked against primary pages; retained topic/date limits explicit. |
 | Links | pass | Scoped offline generated-HTML links pass with zero findings; exhaustive online checks not claimed. |
 | Revision review | pass | First-draft findings and repairs genuinely reread with dependent transitions. |
-| Handoff | not-ready | Draft PR #436 is updated on relocated main; required interactive accessibility checks still block readiness and merge. |
+| Handoff | pass | Owner accepted the served preview and authorised the revised policy and merge. Content/source/output evidence is retained; current-head CI and policy integration are verified by the coordinator before merging. |
 
 - Content gate: **pass**
-- Release readiness: **not-ready**
+- Release readiness: **ready**
 
 ## Historical Execution and Render Evidence
 
@@ -327,7 +329,7 @@ connection, then record actual keyboard, no-JavaScript, tree and Orca results
 with tool versions. Until then, content passes and release is **not-ready**;
 main can open the authorised draft PR with this limitation visible.
 
-## Post-Maintenance Integration Review
+## Historical Post-Maintenance Integration Review
 
 - Source and reviewed revision: `48562529f6413d07f3189e75d436984f51ee547c`; SHA256 `5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619`.
 - Brief: `codex-operating-model-v3`; audit: `codex-operating-model-audit-v3`.
@@ -393,10 +395,65 @@ content/layout evidence, not byte-for-byte PDF build reproducibility. The
 brief/audit wording corrections after the pipeline change no source, example
 or output; lightweight validators and scoped Markdown were rerun separately.
 
+## Release Acceptance and Policy Applicability
+
+- Review date: 16 November 2026.
+- Reviewed source remains `48562529f6413d07f3189e75d436984f51ee547c` with SHA256 `5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619`.
+- Compared evidence: v3 at `c338d771f09e9dbe892c2bfedd5305c36031e2d4`; v4 changes only the tracked brief/audit and integrates the separately reviewed #439 policy.
+- Current policy: `maintenance/docs/publication-accessibility.md`, issue #439 and merged PR #440, adopted at `58f2194e9dd534dc86e03770e3a043d51b5e1cce` and integrated into this branch at `4bd0110`.
+- Owner acceptance: the owner inspected the served preview, accepted it, approved the narrower policy, and instructed the coordinator to merge the remaining PRs.
+
+The source, case, examples and required HTML/PDF are byte-identical to the
+reviewed content commit. The content gate, 12 stable concept rows, tiers,
+route transitions and 48 locator line numbers therefore retain their prior
+independent review evidence. This is a fresh release-scope review, not a new
+claim of whole-source or illustrative-scenario execution.
+
+Independent applicability review compared #436 with relocated main 8190dd9.
+The shared template, heading filter, navigation/control implementation and
+HTML/PDF rendering flags are unchanged; only the primer date differs in its
+Justfile. The source does change the heading outline and contents entries.
+Four old heading fragment IDs now belong to empty spans at the beginnings of
+corresponding paragraphs (996, 1000, 1844 and 2394). Their IDs survive and the
+replacement material is relevant, but those four locations no longer appear
+as headings or contents entries. All draft IDs and published-main heading IDs
+remain present. This establishes target existence and relevant content, not
+equivalent browser focus, scrolling or screen-reader behaviour.
+
+Under the explicitly scoped #439 policy, this is ordinary content, outline
+and legacy-fragment maintenance using existing rendering components.
+Interactive checks are advisory for this scope. No known broken interaction
+or fragment link was identified by the structural, source, output or owner
+preview reviews. Keyboard, no-JavaScript, browser accessibility-tree and
+representative screen-reader traversal remain **not performed**, with their
+behaviour unverified. The unavailable browser connection and earlier tool
+availability findings retain their original dates and limits. Advisory status
+does not retroactively turn them into passes. The PDF remains an untagged
+print companion; no PDF/UA, tagged reading-order or comprehensive HTML
+accessibility claim is made.
+
+Final verification on 16 November 2026 after policy integration at `4bd0110`:
+`just primer-audit primer_codex_for_claude_code_users`, `just lint-changed`,
+`just check` and `git diff --check` all exited 0. The audit recipe reran
+structural and Git-backed evidence checks, the pinned-container HTML/PDF
+build, render QA, freshness and scoped Markdown/link checks. The repository
+checks covered 31 source/output pairs; offline links across 59 files had zero
+enforced or advisory failures. Existing review-only prose advisories remain.
+Logs are retained in `.scratch/435/final-*.log` in the integration checkout.
+Visual evidence and unchanged-source content reviews retain their stated
+scope. The rebuilt PDF differed only in its creation timestamp and file size
+according to `pdfinfo`; extracted text and raster SHA256 values for pages 1,
+31, 33, 47 and 67 were identical to the reviewed committed PDF. That committed
+PDF was restored after comparison, leaving source, HTML, PDF and case
+byte-identical to `48562529`. The PDF remains untagged. The owner accepted the preview, and the current policy makes the
+remaining unperformed interactive checks non-blocking for this scope.
+Content gate: **pass**. Release readiness: **ready**, with policy integration
+and current-head CI confirmed before the authorised merge.
+
 ## Pilot learning
 
 - False positives: initial concern that the running case only listed acceptance requirements was resolved by inspecting the integrated pseudocode trace and scoped correction; no executable fixture is required by the declared illustrative promise.
 - Missed issues: none recorded after the resolved configuration, lifecycle and sequencing findings; publication defects can still trigger another review.
 - Procedure changes proposed: none; do not alter validators or policy to make uncommitted source appear bound.
-- Remaining work: #435 required interactive accessibility evidence when a supported browser connection is available; main owns the authorised evidence commit, push and draft PR. No merge or claim of release readiness.
-- Final decision: not-ready for release; the illustrative content gate passes with no unresolved primary or alternative teaching gap.
+- Remaining work: coordinator confirms current-head CI and completes the authorised merge, then synchronises main. Policy #439 is adopted and integrated. Advisory interactive checks remain explicitly not performed.
+- Final decision: ready for the authorised release after policy integration and current-head CI; the illustrative content gate passes with no unresolved primary or alternative teaching gap.

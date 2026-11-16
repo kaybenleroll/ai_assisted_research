@@ -1,7 +1,7 @@
 # Primer brief: Codex for Claude Code users
 
 - Issue and milestone: #435; coordinated workflows and configuration ownership revision.
-- Brief revision: codex-operating-model-v3
+- Brief revision: codex-operating-model-v4
 - Source revision: 48562529f6413d07f3189e75d436984f51ee547c
 - Tracked path: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.brief.md
 - Reader: Experienced Claude Code users adopting Codex alongside an established repository workflow.
@@ -15,7 +15,7 @@
 - Worked examples: Synthetic pinned-container build repair, stale managed-source incident, role routing, bounded delegation and acceptance ledger; retain existing hook/skill migration.
 - Real-world cases: Repository primer maintenance motivates the synthetic case without representing it as a measured model run.
 - Teaching-case contract: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.case.md
-- Core-concept depth matrix: This brief, codex-operating-model-v3, table below.
+- Core-concept depth matrix: This brief, codex-operating-model-v4, table below.
 - Route classification and teaching spines: Matrix tiers and trace below. Shared contract diagnoses layers; configuration traces source to session; coordinated delivery turns a bounded request into reviewed outputs; migration teaches one hook/skill alternative; evidence handoff turns results into continuation and evaluation; reference material is lookup only.
 - Figures, tables, and equations: Keep useful existing comparisons; add concise ownership and routing tables. No decorative figures or new mathematical content.
 - Languages and executable examples: TOML, shell, Markdown and text; all published scenarios illustrative unless explicitly stated. Static syntax checks are separate from operational execution.
@@ -62,7 +62,7 @@ These are compact route traces: each named prose case must expose its input, dec
 ## Post-draft teaching-depth checkpoint
 
 - Draft source revision: Committed source 48562529f6413d07f3189e75d436984f51ee547c; SHA256 5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619.
-- Brief revision reviewed: codex-operating-model-v3
+- Brief revision reviewed: codex-operating-model-v4
 
 | route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
 |---|---|---|---|---|
@@ -91,6 +91,31 @@ Integrator checkpoint completed before independent audit. The source SHA was sub
 | evidence-handoff | primary | workflow-evaluation | Workflow evaluation | Compare accepted workflows rather than model labels | Control starting state and score correctness and review burden | Avoid treating example results as measured advantage | Existing evaluation record | Model, effort, revision, outcome and repair cycles | Separate observed run results from recommendations | No empirical ranking or token saving claimed | Revisit routing policy | Existing evaluation chapter and official availability docs |
 | reference | reference-only | catalogue-and-surfaces | Catalogue and surfaces | Look up dated model and integration details | Maintain a bounded snapshot with authoritative links | Keep volatile facts outside durable rules | Dated catalogue and feature comparisons | Explicit dates and checked/unexecuted scopes | Verify current client/account before copying | Not a universal compatibility catalogue | Targeted research | Official model, config and feature references |
 
-## Post-Maintenance Revision Checkpoint
+## Historical Post-Maintenance Revision Checkpoint
 
-Revision v3 binds the brief to 48562529f6413d07f3189e75d436984f51ee547c after main 8190dd96003c11d6ed91a419c0aa50f3ff54591d. Relative to c8a4b57096bd8faf0659c37df412565be728fa8a, only three repository-specific path lines and four empty legacy-anchor spans changed; no teaching prose, route or concept ID, tier, example or case contract changed. Independent whole-source review retained the content pass, then a differential review checked the discovery and migration paths, role routing, agent-definition translation and operational record at lines 818–819, 996, 1000, 1844, 2324 and 2394. The four spans retain published section fragments while pointing to their replacement material. The source line count and all 48 audit locators remain valid. All taught scenarios remain illustrative; refreshed documentation and publication checks do not execute them. Release remains not-ready pending the checks in `maintenance/docs/publication-accessibility.md`.
+Revision v3 binds the brief to 48562529f6413d07f3189e75d436984f51ee547c after main 8190dd96003c11d6ed91a419c0aa50f3ff54591d. Relative to c8a4b57096bd8faf0659c37df412565be728fa8a, only three repository-specific path lines and four empty legacy-anchor spans changed; no teaching prose, route or concept ID, tier, example or case contract changed. Independent whole-source review retained the content pass, then a differential review checked the discovery and migration paths, role routing, agent-definition translation and operational record at lines 818–819, 996, 1000, 1844, 2324 and 2394. The four spans retain published section fragments while pointing to their replacement material. The source line count and all 48 audit locators remain valid. All taught scenarios remain illustrative; refreshed documentation and publication checks do not execute them. At the v3 checkpoint, release remained not-ready under the then-current interactive-check policy. The current release decision is recorded below.
+
+## Release Acceptance and Verification Scope
+
+Revision v4 retains source commit 48562529f6413d07f3189e75d436984f51ee547c
+and source SHA256 5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619.
+The source, case, examples and published HTML/PDF are unchanged from v3;
+all route/concept IDs and tiers remain stable. The owner accepted the served
+preview and authorised the policy change in #439 and release of #436.
+Policy PR #440 merged at 58f2194e9dd534dc86e03770e3a043d51b5e1cce
+and is integrated into this branch.
+
+The current publication policy makes interactive checks advisory for ordinary
+content, outline and legacy-fragment maintenance using existing rendering
+components. This revision changes the outline and contents entries; four old
+heading IDs now identify spans at the beginnings of corresponding paragraphs.
+Their presence and destination relevance were checked. The template, heading
+filter, navigation controls and rendering flags match relocated main 8190dd9.
+This is a scoped applicability decision, not a claim that destination semantics
+or browser behaviour are unchanged. Keyboard, no-JavaScript, accessibility-tree
+and representative screen-reader checks remain not performed. Content review,
+automated checks, output/visual evidence and owner acceptance support release;
+the audit records the current policy revision and final checks. Historical
+not-ready decisions remain historical. Content gate: pass. Release readiness:
+ready under the adopted policy; current-head CI must pass before the release
+coordinator merges.
