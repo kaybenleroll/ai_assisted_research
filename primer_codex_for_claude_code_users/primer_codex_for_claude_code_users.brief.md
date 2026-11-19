@@ -2,7 +2,7 @@
 
 - Issue and milestone: #441; whole-document current-documentation refresh, Codex before Pi #442.
 - Brief revision: codex-current-docs-v5
-- Source revision: 48562529f6413d07f3189e75d436984f51ee547c
+- Source revision: 7df2e25cd4e7265e27aea2e315ea46945a543d13
 - Tracked path: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.brief.md
 - Reader: Experienced Claude Code users adopting Codex alongside an established repository workflow.
 - Prerequisites: Git, shell, existing project instructions, tests and build commands; no prior Codex configuration knowledge.
@@ -61,7 +61,20 @@ These are compact route traces: each named prose case must expose its input, dec
 
 ## Post-draft teaching-depth checkpoint
 
-The preceding revision's teaching checkpoint is retained in Git at source commit 48562529f6413d07f3189e75d436984f51ee547c. This refresh retains all twelve concept IDs and their route tiers. A new checkpoint will bind the revised source after the documentation corrections, follow all five taught routes, and explicitly review dependent migration examples; the historical content and release decisions do not certify this draft.
+- Draft source revision: 7df2e25cd4e7265e27aea2e315ea46945a543d13
+- Brief revision reviewed: codex-current-docs-v5
+
+The integrator checked the draft against all retained route traces before final differential audit. The independent baseline review identified two transition gaps and two consistency cautions; each is repaired in the recorded source and submitted for fresh judgement. All twelve concept IDs and tiers are retained.
+
+| route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
+|---|---|---|---|---|
+| shared-contract | Layer diagnosis and instruction bridge | Source sections Two Harnesses and Instruction Systems; native discovery comparison and first-session smoke prompt retained; task table now marks Codex override scope. | Retain full teaching spine; current doc corrections do not imply runtime discovery. | None. |
+| configuration | Stale-source correction and effective-model ledger | Source section Configuration Ownership and Effective Settings, paragraph beginning A selected profile; project policy retained and developer authorises task launch override before dispatch, runtime still unknown. | Expand missing outgoing decision; owned-key correction and observed-versus-configured distinction retained. | None. |
+| coordinated-delivery | Role routing, dependency trace and acceptance | Source Models, Parallel Work, Subagents and Apply the Execution Boundary; dispatch follows explicit override; scope now includes generated HTML/PDF. | Retain sole writer, refusal/recovery and acceptance tests; repair contradictory scope prompt. | None. |
+| migration | Hook/skill behaviour translation | Source Worked Example: Translating a Claude Code Hook and Skill, neutral procedure, native adapters, deterministic runner and expected probes unchanged; hooks reference corrects pre/post/approval authority. | Retain complete illustrated alternative; no feature activation result inferred. | None. |
+| evidence-handoff | Rejected completion, repair and evaluation | Source The Build-Repair Case, Sessions and What to Measure; missing QA still rejects completion, clipped-table correction requires regeneration/reinspection, and controlled comparison remains hypothetical. | Retain complete transition and bounded interpretation. | None. |
+
+The earlier release's checkpoint and accessibility records remain historical in Git at 48562529f6413d07f3189e75d436984f51ee547c; they do not certify this revision. No illustrative case was executed. Current publication checks and independent content judgement are recorded in the refreshed audit separately.
 
 ## Core-concept depth matrix
 
