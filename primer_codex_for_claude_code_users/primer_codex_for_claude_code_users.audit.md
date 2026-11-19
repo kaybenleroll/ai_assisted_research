@@ -188,7 +188,7 @@ The shared rendering/navigation components are unchanged, so interactive checks 
 | Route/concept gate | pass | All 12 stable concepts and five taught routes substantively reviewed; D1–D4 resolved without demotion. |
 | Locator validity | pass | Exact source passages at reviewed commit; structural and Git-backed primer audit checks pass. |
 | Examples | illustrative only | No fresh parse/runtime test claimed; no executable manifest promised. |
-| Rendered outputs | pass current scoped evidence | Pinned all/render-qa and page samples reported above; final complete suite pending. |
+| Rendered outputs | pass current scoped evidence | Pinned all/render-qa and page samples reported above; final complete suite passed as recorded in Coordinator Final Verification. |
 | Accessibility | pass applicable scoped evidence | Deterministic structure and reported visual sample pass; interactive checks unperformed/advisory; PDF untagged. |
 | Sources | pass scoped documentation review | Topic/source/result map plus actual edited-claim reconciliation; runtime/account/historical limits explicit. |
 | Links | pass scoped offline | Current source Markdown and HTML/README link logs zero findings. |
@@ -204,7 +204,7 @@ The shared rendering/navigation components are unchanged, so interactive checks 
 - Teaching transitions and all snippets remain illustrative. Examples executed: none. Examples freshly parsed: none. Historical eight-TOML syntax result is not fresh evidence.
 - Researcher inspected CLI 0.169.0 version/help and primary docs/manual. Main built this publication and inspected pages listed above; that does not execute the teaching case.
 - No model/account, native hook/skill/import, permission boundary, remote connection, retention/deletion or comparative workflow test was performed. No empirical ranking/savings claim.
-- Stop boundary: current content judgement and audit handed back to main; final complete checks and release readiness remain outstanding. No tests, policy or validator changed to bypass evidence requirements.
+- Stop boundary: current content judgement and audit handed back to main; final complete checks and release readiness were completed in Coordinator Final Verification. No tests, policy or validator changed to bypass evidence requirements.
 
 ## Pilot learning
 
@@ -215,3 +215,5 @@ Two cross-section inconsistencies escaped earlier content passes despite substan
 The coordinator bound the tracked brief/checkpoint to 7df2e25 and ran `python3 -I maintenance/scripts/check/primer_evidence.py <brief> <audit>` and `python3 -I maintenance/scripts/check/primer_audit.py --repo-root . --project primer_codex_for_claude_code_users`: both passed. `just primer-audit primer_codex_for_claude_code_users`, `just lint-changed`, `just check`, and `git diff --check` passed. The complete primer pipeline repeated the pinned build/render QA, freshness, source/audit Markdown and offline HTML links. The final rebuild preserved source and HTML bytes and produced identical extracted PDF text; the same reviewed source/template and sampled layout apply. A full binary diff was not used as verification. `just check` included README consistency and source/output freshness; `just lint-changed` included 59 HTML/README offline link targets with zero link findings. The sole source prose advisory, agents currently working, describes agent activity and is retained.
 
 Reviewed brief changes replace historical-current readiness prose with the fresh five-route checkpoint, preserve all twelve concepts/tiers and change no reader-facing scope. Audit-only binding and verification updates do not add execution claims. Prior pending-check statements in the review narrative describe the state at independent review; this final verification resolves those named publication and binding checks. No interactive or account test was added.
+
+Pre-merge editorial review, 19 November 2026: source unchanged from 7df2e25; independent reviewer confirmed no substantive blocker or execution overclaim. Reconciled stale pending-check wording with the completed coordinator verification; no concept, route, tier, source claim or output changed.
