@@ -1,6 +1,6 @@
 # Primer teaching-case contract: Two harnesses, one accepted repository change
 
-- Issue and milestone: #435, operational-model revision.
+- Issue and milestone: #441, freshness revision of the operational-model case.
 - Reader capability: Configure two harnesses, dispatch bounded tasks, judge returned evidence and preserve continuation state.
 - Case purpose: Connect instruction discovery, durable configuration, role-based delegation and evidence-led acceptance in one build-repair task.
 - Case boundary: Synthetic repository with pinned container build, existing Claude workflow, optional personal dotfile manager, known starting revision and available tools; no live account/model benchmark or production action.
@@ -24,4 +24,4 @@
 - Measured stages: None; no performance or savings claim.
 - Required alternatives: Existing hook/skill migration supplies a behaviour-first alternative; other integrations are bounded reference.
 - Expected abstentions or failures: Do not escalate models for missing runtime; do not claim a worktree enforces read-only access; do not claim review completion without required output evidence.
-- Evidence and freshness plan: Recheck changed public controls against official sources on 15 November 2026, independent semantic review, pinned-container publication checks and sampled visual QA.
+- Evidence and freshness plan: Recheck changed public controls against official sources on 19 November 2026, independent semantic review, pinned-container publication checks and sampled visual QA.
