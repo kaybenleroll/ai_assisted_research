@@ -180,14 +180,14 @@ The shared template/navigation/rendering components are unchanged ordinary conte
 
 | Gate | Decision | Evidence/limit |
 |---|---|---|
-| Brief/audit binding | pass final check | Audit binds c193c88; main rebinds brief/case and validates actual committed locators. |
+| Brief/audit binding | pass final check | Audit, brief and case bind c193c88; committed locator validation passed. |
 | Route/concept gate | pass | Nine stable concept rows, eight primary routes and reference scope substantively reviewed; no unresolved primary gap. |
-| Locator validity | pass final check | Human-selected exact current passages nonblank; structural/Git-backed checks follow binding. |
+| Locator validity | pass final check | Human-selected exact current passages nonblank; structural/Git-backed checks passed. |
 | Examples | pass stated scope | Exact RPC fake tests/AST separate; all reader-facing scenarios illustrative; no full executable manifest promise. |
-| Rendered outputs | pass reported scoped build | Required output build/render pass reported; listed final visual samples pass; final complete suite pending. |
+| Rendered outputs | pass reported scoped build | Required output build/render pass reported; listed final visual samples pass; final complete suite passed as recorded in Coordinator final verification. |
 | Accessibility | pass applicable scoped evidence | Deterministic semantics and listed final visual samples pass; interactive unperformed/advisory; PDF untagged. |
 | Sources | pass scoped documentation evidence | Research map reconciled with current edits; live/third-party/historical limits explicit. |
-| Links/lint/freshness | pass final suite | Main reports lint-changed pass in permitted container context; final pipeline/check and exact results follow audit integration. |
+| Links/lint/freshness | pass final suite | Main reports lint-changed pass in permitted container context; final pipeline/check passed; exact results are recorded in Coordinator final verification. |
 | Revision review | pass | Baseline full reading, substantive committed diff and final three repairs genuinely reread. |
 | Handoff | ready for review | Main owns final mechanical/visual evidence and release decision. |
 
@@ -198,7 +198,7 @@ The shared template/navigation/rendering components are unchanged ordinary conte
 
 - Content reviewer: complete baseline source/brief/case/evidence reading, changed diff/current passage and dependent-transition review, Git/status/SHA256 and exact nonblank locator inspection. No teaching operation independently executed.
 - Main/researcher: current primary-documentation checks, read-only registry identity checks, exact RPC prototype comparison/AST and four fake test methods covering 12 scenarios. No live Pi/provider/model test.
-- Publication coordinator: pinned all/render QA reported pass; final listed visual samples and lint-changed pass reported; pipeline/freshness/binding/check suite remains pending and separately recorded. Older toy QA and old source checks retain their original date.
+- Publication coordinator: pinned all/render QA reported pass; final listed visual samples and lint-changed pass reported; pipeline/freshness/binding/check suite passed as recorded in Coordinator final verification. Older toy QA and old source checks retain their original date.
 - Deliberately unperformed: Pi install/login/provider/billing/endpoint, extension/MCP/browser activation, package security audit, OS-boundary probes, complete Rocker build/run and interactive accessibility.
 - Stop: tracked audit draft and content judgement returned to main. A new source, example or output change triggers affected-scope review; metadata rebinding alone is insufficient.
 
@@ -223,3 +223,5 @@ Logs and raster files are in ignored `.scratch/refresh-2026-11-19/` and `.scratc
 Content gate **pass** and release readiness **ready for PR review**, without a live-provider, package-security, complete Rocker execution or interactive-accessibility claim. The independent content review remains distinct from the coordinator’s checks. Source changes require affected-route review again. Preserve source history when merging because Git-backed evidence pins depend on it.
 
 The pipeline rebuild changed PDF binary bytes; pinned Poppler extraction compared byte-for-byte identical to the visually reviewed final PDF text (`cmp pi-final-pdf.txt pi-pipeline-pdf.txt`: pass). Source and HTML were unchanged. This is text-equivalence evidence, not a claim of binary or pixel identity. Final brief/audit schema, Git-backed binding/locator validation and `git diff --check` passed again after the audit results were recorded.
+
+Pre-merge editorial review, 19 November 2026: source unchanged from c193c88; independent reviewer confirmed no substantive blocker or execution overclaim. Reconciled stale pending-check wording with completed coordinator verification; no concept, route, tier, source claim or output changed.
