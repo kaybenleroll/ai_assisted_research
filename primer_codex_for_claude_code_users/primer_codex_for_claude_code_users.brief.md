@@ -1,26 +1,26 @@
 # Primer brief: Codex for Claude Code users
 
-- Issue and milestone: #435; coordinated workflows and configuration ownership revision.
-- Brief revision: codex-operating-model-v4
+- Issue and milestone: #441; whole-document current-documentation refresh, Codex before Pi #442.
+- Brief revision: codex-current-docs-v5
 - Source revision: 48562529f6413d07f3189e75d436984f51ee547c
 - Tracked path: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.brief.md
 - Reader: Experienced Claude Code users adopting Codex alongside an established repository workflow.
 - Prerequisites: Git, shell, existing project instructions, tests and build commands; no prior Codex configuration knowledge.
 - Problem and motivation: Similar agent interfaces conceal different instruction, configuration, delegation and authority semantics; cheap-first task routing alone does not explain coordination responsibilities.
 - Intended outcome: Configure, delegate, verify and hand off a bounded repository change while preserving shared policy and durable personal settings.
-- Scope: Complete existing primer, with substantive revisions to model routing, configuration ownership, delegation, isolation and running-case continuity.
+- Scope: Complete existing primer; recheck volatile product claims against current primary documentation and correct model catalogue, instruction exclusions, generation defaults, hooks, skills, prompt invocation and MCP guidance while retaining the operating-model teaching route.
 - Exclusions: Empirical model ranking, account entitlements, exhaustive configuration manual, real production migration, and claims of executing illustrative examples.
 - Proposed dependency-led route: Identify behavioural layers; establish shared instructions; verify configuration ownership; coordinate one bounded change; translate optional integrations; accept evidence and hand off.
 - Approximate depth: Preserve long-form technical explanations and substantial migration examples; replace duplication with a connected worked case. Length follows teaching needs.
 - Worked examples: Synthetic pinned-container build repair, stale managed-source incident, role routing, bounded delegation and acceptance ledger; retain existing hook/skill migration.
 - Real-world cases: Repository primer maintenance motivates the synthetic case without representing it as a measured model run.
 - Teaching-case contract: primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.case.md
-- Core-concept depth matrix: This brief, codex-operating-model-v4, table below.
+- Core-concept depth matrix: This brief, codex-current-docs-v5, table below.
 - Route classification and teaching spines: Matrix tiers and trace below. Shared contract diagnoses layers; configuration traces source to session; coordinated delivery turns a bounded request into reviewed outputs; migration teaches one hook/skill alternative; evidence handoff turns results into continuation and evaluation; reference material is lookup only.
 - Figures, tables, and equations: Keep useful existing comparisons; add concise ownership and routing tables. No decorative figures or new mathematical content.
 - Languages and executable examples: TOML, shell, Markdown and text; all published scenarios illustrative unless explicitly stated. Static syntax checks are separate from operational execution.
 - Evidence plan: Current primary documentation for changed controls and semantics, source-linked claim notes, full-document editorial review, pinned-container builds, lint/link checks, extracted PDF checks and sampled visual inspection.
-- Open decisions: No blocking scope decisions. Source/model catalogues remain dated; unsupported controls will be omitted or qualified. Commits, push and conditional merge are authorised by the continuation; release gates still apply.
+- Open decisions: Full audit precedes drafting; verify or qualify every volatile topic. Deliver separate issue branches and reviewable PRs, with Codex first. Preserve unrelated mise.toml, recovery archives and the unrelated ADR. Model and billing availability remain account-specific; examples remain illustrative.
 
 ## Review plan
 
@@ -61,18 +61,7 @@ These are compact route traces: each named prose case must expose its input, dec
 
 ## Post-draft teaching-depth checkpoint
 
-- Draft source revision: Committed source 48562529f6413d07f3189e75d436984f51ee547c; SHA256 5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619.
-- Brief revision reviewed: codex-operating-model-v4
-
-| route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
-|---|---|---|---|---|
-| shared-contract | Layer diagnostic and instruction bridge | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:289; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:893; Layer diagnosis precedes the bridge; native discovery is checked before any bounded write. No runtime discovery guarantee. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
-| configuration | Durable-owner drift and effective-selection case | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:914; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:969; Source-installed-live comparison exposes stale upstream intent, then key-level correction; runtime remains unknown. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
-| coordinated-delivery | Role routing, concrete build trace and acceptance | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:994; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:1836; Trace exposes bypassed container route, conditional scoped correction, sole writer, acceptance evidence and lifecycle/authority boundaries. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
-| migration | Behaviour-first hook/skill alternative | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:1354; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:1534; Existing detailed hook/skill transformation and matrix retained; other feature comparisons are bounded reference, not a promise of parity. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
-| evidence-handoff | Rejected output evidence, correction and evaluation | primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:2510; primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.md:2453; Returned ledger rejects missing visual QA, branches on unavailable inspection versus clipped-table correction and reinspection, then factual handoff; no measurement inferred. | Retain; each stage supplies the next decision or artefact and explains its limit. | None; alternative/reference boundaries remain as planned. |
-
-Integrator checkpoint completed before independent audit. The source SHA was subsequently compared byte for byte with content commit c8a4b57096bd8faf0659c37df412565be728fa8a. Independent committed-state review rechecked the changed passages, dependent transitions and exact source locators; all stable IDs and the illustrative scope are retained. Revision v2 binds this evidence to the real source commit; required interactive accessibility evidence remains unavailable and is recorded in the audit. That was the original draft checkpoint. The continuation authorises integration and conditional merge after release gates pass; the required interactive accessibility evidence remains unavailable, so the PR stays draft.
+The preceding revision's teaching checkpoint is retained in Git at source commit 48562529f6413d07f3189e75d436984f51ee547c. This refresh retains all twelve concept IDs and their route tiers. A new checkpoint will bind the revised source after the documentation corrections, follow all five taught routes, and explicitly review dependent migration examples; the historical content and release decisions do not certify this draft.
 
 ## Core-concept depth matrix
 
@@ -91,31 +80,8 @@ Integrator checkpoint completed before independent audit. The source SHA was sub
 | evidence-handoff | primary | workflow-evaluation | Workflow evaluation | Compare accepted workflows rather than model labels | Control starting state and score correctness and review burden | Avoid treating example results as measured advantage | Existing evaluation record | Model, effort, revision, outcome and repair cycles | Separate observed run results from recommendations | No empirical ranking or token saving claimed | Revisit routing policy | Existing evaluation chapter and official availability docs |
 | reference | reference-only | catalogue-and-surfaces | Catalogue and surfaces | Look up dated model and integration details | Maintain a bounded snapshot with authoritative links | Keep volatile facts outside durable rules | Dated catalogue and feature comparisons | Explicit dates and checked/unexecuted scopes | Verify current client/account before copying | Not a universal compatibility catalogue | Targeted research | Official model, config and feature references |
 
-## Historical Post-Maintenance Revision Checkpoint
+## Refresh Decisions
 
-Revision v3 binds the brief to 48562529f6413d07f3189e75d436984f51ee547c after main 8190dd96003c11d6ed91a419c0aa50f3ff54591d. Relative to c8a4b57096bd8faf0659c37df412565be728fa8a, only three repository-specific path lines and four empty legacy-anchor spans changed; no teaching prose, route or concept ID, tier, example or case contract changed. Independent whole-source review retained the content pass, then a differential review checked the discovery and migration paths, role routing, agent-definition translation and operational record at lines 818–819, 996, 1000, 1844, 2324 and 2394. The four spans retain published section fragments while pointing to their replacement material. The source line count and all 48 audit locators remain valid. All taught scenarios remain illustrative; refreshed documentation and publication checks do not execute them. At the v3 checkpoint, release remained not-ready under the then-current interactive-check policy. The current release decision is recorded below.
+The 19 November 2026 source audit identifies concrete documentation defects rather than a need to replace the teaching structure. Refresh the model snapshot to include GPT-6.2; correct hook event authority, Ruler defaults and ownership, managed instruction exclusions, custom-prompt invocation, skill catalogue limits, and the removed MCP server command. Recheck remaining interface, configuration, session, remote/data and integration claims before changing their verification dates. Remove unsupported popularity rankings while retaining the generator ownership explanation and practical alternatives. Preserve every existing publication heading/fragment target, including historical compatibility spans, and the build-repair and hook/skill cases.
 
-## Release Acceptance and Verification Scope
-
-Revision v4 retains source commit 48562529f6413d07f3189e75d436984f51ee547c
-and source SHA256 5d7780a7e79b3770f2f85103f8c636375706de2bf814b5e74d142bfc3f870619.
-The source, case, examples and published HTML/PDF are unchanged from v3;
-all route/concept IDs and tiers remain stable. The owner accepted the served
-preview and authorised the policy change in #439 and release of #436.
-Policy PR #440 merged at 58f2194e9dd534dc86e03770e3a043d51b5e1cce
-and is integrated into this branch.
-
-The current publication policy makes interactive checks advisory for ordinary
-content, outline and legacy-fragment maintenance using existing rendering
-components. This revision changes the outline and contents entries; four old
-heading IDs now identify spans at the beginnings of corresponding paragraphs.
-Their presence and destination relevance were checked. The template, heading
-filter, navigation controls and rendering flags match relocated main 8190dd9.
-This is a scoped applicability decision, not a claim that destination semantics
-or browser behaviour are unchanged. Keyboard, no-JavaScript, accessibility-tree
-and representative screen-reader checks remain not performed. Content review,
-automated checks, output/visual evidence and owner acceptance support release;
-the audit records the current policy revision and final checks. Historical
-not-ready decisions remain historical. Content gate: pass. Release readiness:
-ready under the adopted policy; current-head CI must pass before the release
-coordinator merges.
+No runtime account, model, hook, permission or migration result is inferred from documentation. Publication builds and sampled visual inspection validate this publication separately. Interactive checks are advisory for these ordinary content corrections using unchanged rendering components; unperformed checks remain unperformed, and the PDF remains an untagged print companion.
