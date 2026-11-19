@@ -1,6 +1,6 @@
 # Primer teaching-case contract: Pi and Rocker daily-temperature project
 
-- Issue and milestone: #442 Pi current-documentation refresh; promote to the tracked case artefact only with the approved brief and source revision.
+- Issue and milestone: #442 Pi current-documentation refresh, brief pi-current-docs-v1, source c193c88ce7f16a2145c4be27dd53f7feb6668422.
 - Reader capability: distinguish a supervised host agent from an isolated analysis runtime, state expected results independently, and decide what evidence supports accepting a proposed result.
 - Case purpose: link Pi's context, research, code generation and session handoff to a concrete data-quality check without treating agent output as independent validation.
 - Case boundary: synthetic five-row CSV for 1–2 January 2026, station groups A and B, R/Python implementations imagined under an R 4.6.1 Rocker image. Missing-only group is excluded. The primer does not supply complete cleaners, tests, `compare_outputs.py`, requirements or lockfiles, and this refresh did not execute the project. It is an illustrative case with hand-checked expected values, not a deliverable the reader can run by copying snippets alone.

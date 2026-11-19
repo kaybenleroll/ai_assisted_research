@@ -2,7 +2,7 @@
 
 - Issue and milestone: #442, current-documentation refresh, after Codex #441.
 - Brief revision: pi-current-docs-v1
-- Source revision: f18f0ddd6c670601a26a4f1d717be97d12cab616
+- Source revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.brief.md
 - Reader: experienced Claude Code user evaluating, configuring and supervising Pi for a bounded repository task.
 - Prerequisites: terminal, Git, repository instructions and basic Claude Code concepts; TypeScript reading helpful for extension route.
@@ -45,7 +45,7 @@
 | research | input through interpretation and boundary | Need current package documentation for Rocker case | Direct source for known URL, reviewed search skill or enabled Radius for discovery, then inspect primary source | Dated source handoff with uncertainty | illustrative | pi-skills source, Radius docs and explicit data paths; no live search run |
 | sessions | input through interpretation and boundary | Research session and resulting URLs | Name, branch, compact or hand off; inspect summary and sharing destination | Reviewed handoff note, not an assumed full context | illustrative | Session and compaction docs; no transcript uploaded |
 | containment | input through interpretation and boundary | Agent/task runs with host access and analysis code needs isolation | Distinguish trust, callable tools and OS controls; compare host Pi with constrained analysis container | Reviewable boundary and access decision | illustrative | Current security/containerisation/settings docs; no security guarantee |
-| rocker | input through interpretation and boundary | Fictional CSV, expected rows and analysis contract | Agent edits code; digest-pinned image and tests would compare R/Python outputs; inspect independent check and configuration diff | Conditional acceptance or rejection and correction | illustrative | `pi-case.md`; fixture arithmetic by inspection, image index identity confirmed, runtime not run in this refresh |
+| rocker | input through interpretation and boundary | Fictional CSV, expected rows and analysis contract | Agent edits code; digest-pinned image and tests would compare R/Python outputs; inspect independent check and configuration diff | Conditional acceptance or rejection and correction | illustrative | the tracked case contract; fixture arithmetic by inspection, image index identity confirmed, runtime not run in this refresh |
 
 ## Optional Branches and Unresolved Concepts
 
@@ -64,7 +64,21 @@
 
 ## Post-draft teaching-depth checkpoint
 
-Not yet performed. Record exact draft source revision, brief revision, locators, findings, scope decisions and reviewer after writing; no pre-draft audit result certifies a later draft.
+- Draft source revision: c193c88ce7f16a2145c4be27dd53f7feb6668422
+- Brief revision reviewed: pi-current-docs-v1
+
+The coordinator followed all eight primary routes against their planned traces after drafting and before final audit. Source locators below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md`. All planned concept IDs/tiers are retained. The RPC block exactly matches the tested scratch prototype; synthetic protocol tests do not execute Pi. The complete Rocker workflow remains illustrative, with missing implementation assets made explicit in the reader-facing source.
+
+| route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise |
+|---|---|---|---|---|
+| first-run | Disposable supervised task | Lines 127–159 restrict tools, inspect discovery, authorise one edit, inspect actual Git diff and diagnose the failing layer. | Retain coherent first-loop example. | None. |
+| models | Provider/readiness decision and local endpoint | Lines 165–233 explain credential precedence, account metering uncertainty, endpoint selection and layered tool-call checks. | Retain documented connection choices; no account result promised. | None. |
+| automation | Single-prompt event lifecycle | Lines 263–380 distinguish acceptance/handled/settlement and final failure; RPC code retains early events and imposes deadline; SDK completion caveat explicit. | Expand actual lifecycle example and limits; prototype identity checked with synthetic failures. | No live-provider promise; no arbitrary concurrent-run correlation. |
+| customisation | Minimal layer plus word-count tool | Lines 382–537 compare instructions versus code, show tool mechanism and error result, and explain in-process gates versus selective MCP. | Correct error/schema facts while retaining concrete code and authority explanation. | None. |
+| research | Source lookup, search and handoff | Lines 539–636 use pinned source URL, reviewed-skill workflow and browser/RPC/service choice; macOS paths and package review limits explicit. | Retain worked selection and source-handoff spine. | No package security review or live search claimed. |
+| sessions | Branch, compact, share or hand off | Lines 642–688 explain on-disk versus active context, branch effects, summaries and sensitive sharing destinations. | Retain decisions and factual note for continuation. | None. |
+| containment | Host process versus analysis runtime | Lines 690–746 distinguish trust, tools and OS isolation; lines 920–972 instantiate mounts/network/output policy and protected-host review. | Retain mechanism and concrete boundary failure. | None. |
+| rocker | Fixture through conditional acceptance | Lines 774–973 declare missing files, compute expected values, prewrite contract/comparator, assign Pi tasks, pin environment, restrict mounts and reject unsupported acceptance. | Expand arithmetic and protected comparator review, retain all recipes. | Case remains illustrative; no complete supplied application or fresh runtime pass. |
 
 ## Core-concept depth matrix
 
