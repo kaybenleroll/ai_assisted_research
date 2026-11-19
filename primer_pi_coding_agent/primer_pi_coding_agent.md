@@ -813,7 +813,8 @@ pi-temperature-starter/
 ```markdown
 # Project rules
 - Run all analysis inside the container with `just qa`. Never run R or pip on the host.
-- Do not edit `data/raw/`, `data/expected/`, `Justfile`, or `Containerfile`.
+- Do not edit `data/raw/`, `data/expected/`, `scripts/compare_outputs.py`,
+  `Justfile`, or `Containerfile`.
 - Read the contract in `README.md`. Stop and ask if it is ambiguous.
 ```
 
@@ -919,7 +920,7 @@ podman run --rm -v "$PWD:/w:Z" -w /w \
 
 ### Run It With Rootless Podman
 
-A small `Justfile` exposes the workflow without hiding the container boundary. These recipes were built and run against a toy implementation with Podman 5.7.0 on Ubuntu, and the toy project passed `just qa`:
+A small `Justfile` exposes the workflow without hiding the container boundary. The 16 October 2026 edition reported a toy implementation passing `just qa` with Podman 5.7.0 on Ubuntu. That is historical evidence; this refresh did not rerun that project, and the missing implementation files and lockfiles must be supplied before you can run these recipes:
 
 ```just
 set shell := ["bash", "-ceu"]
@@ -1078,4 +1079,4 @@ Pi's distinctive feature is its programmable loop and selective tool exposure. B
 
 Pi suits you if you want a loop you can program: a provider-neutral harness, an embeddable runtime, a research workflow you assemble yourself. It suits you less if you want bundled per-tool approvals, subagents, and web search on day one. MCP is now supplied, but its servers still need configuration and review. Pi runs with your permissions, so put a container or VM around anything untrusted or unattended, and review extensions, packages, and MCP servers as code you are about to execute.
 
-A sensible first week: install Pi and check `pi --version`; run the read-only orientation from "A controlled first session" on a repository you know; add one skill; then repeat the Rocker example with your own fixture. Read the author's design essay before deciding what else to add.
+A sensible first week: install Pi and check `pi --version`; run the read-only orientation from "A controlled first session" on a repository you know; add one skill; then supply the missing Rocker project files and apply its checks to your own fixture. Read the author's design essay before deciding what else to add.

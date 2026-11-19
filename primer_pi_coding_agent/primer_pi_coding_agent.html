@@ -2486,8 +2486,9 @@ tie differently.</li>
 it automatically at startup:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Project rules</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Run all analysis inside the container with <span class="in">`just qa`</span>. Never run R or pip on the host.</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Do not edit <span class="in">`data/raw/`</span>, <span class="in">`data/expected/`</span>, <span class="in">`Justfile`</span>, or <span class="in">`Containerfile`</span>.</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Read the contract in <span class="in">`README.md`</span>. Stop and ask if it is ambiguous.</span></code></pre></div>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Do not edit <span class="in">`data/raw/`</span>, <span class="in">`data/expected/`</span>, <span class="in">`scripts/compare_outputs.py`</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="in">`Justfile`</span>, or <span class="in">`Containerfile`</span>.</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Read the contract in <span class="in">`README.md`</span>. Stop and ask if it is ambiguous.</span></code></pre></div>
 <p>Start with a deliberately small fixture. One group has two valid
 readings, so the mean, minimum, and maximum differ; the last row forms a
 group of only missing data:</p>
@@ -2618,9 +2619,11 @@ build context includes everything not ignored.</li>
 <h2 data-number="11.4" role="heading" aria-level="3" id="run-it-with-rootless-podman"><span class="header-section-number">11.4</span> Run It With Rootless
 Podman</h2>
 <p>A small <code>Justfile</code> exposes the workflow without hiding the
-container boundary. These recipes were built and run against a toy
-implementation with Podman 5.7.0 on Ubuntu, and the toy project passed
-<code>just qa</code>:</p>
+container boundary. The 16 October 2026 edition reported a toy
+implementation passing <code>just qa</code> with Podman 5.7.0 on Ubuntu.
+That is historical evidence; this refresh did not rerun that project,
+and the missing implementation files and lockfiles must be supplied
+before you can run these recipes:</p>
 <pre class="just"><code>set shell := [&quot;bash&quot;, &quot;-ceu&quot;]
 
 IMAGE   := &quot;localhost/pi-temperature:dev&quot;
@@ -2937,8 +2940,9 @@ are about to execute.</p>
 <p>A sensible first week: install Pi and check
 <code>pi --version</code>; run the read-only orientation from “A
 controlled first session” on a repository you know; add one skill; then
-repeat the Rocker example with your own fixture. Read the author’s
-design essay before deciding what else to add.</p>
+supply the missing Rocker project files and apply its checks to your own
+fixture. Read the author’s design essay before deciding what else to
+add.</p>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>
