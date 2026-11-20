@@ -1,5 +1,9 @@
 # Agent Architecture Quick Reference & Decision Frameworks
 
+<!-- Preserve fragments for the former redundant title and its TOC entry. -->
+<span id="agent-architecture-quick-reference-decision-frameworks"></span>
+<span id="toc-agent-architecture-quick-reference-decision-frameworks"></span>
+
 ## Scope and Relationship to the Comprehensive Primer
 
 This is a companion reference for someone implementing or reviewing the
@@ -285,9 +289,16 @@ Use this matrix to choose a starting framework or runtime based on the capabilit
 | Typed Python tools and fast implementation | Pydantic AI | Strong schemas and a small abstraction surface |
 | Explicit state, pause/resume, and durable execution | LangGraph | Checkpointing, interrupts, persistence, and workflow control |
 | Role-based multi-agent collaboration | CrewAI | Convenient delegation model; accept coordination overhead |
-| One-provider features and fastest access to its software development kit (SDK) | Provider-native SDK | OpenAI Agents SDK, Claude Agent SDK, or Google Agent Development Kit (ADK); lower portability |
+| Provider-native tools and controls | Provider SDK | OpenAI Agents SDK, Claude Agent SDK, or Google Agent Development Kit (ADK); check model integrations, tool/state semantics and tracing before switching providers |
 | Interoperable tool connections | Model Context Protocol (MCP) | Standard tool/resource boundary; still apply local authorisation |
 | Independent agent-to-agent delegation | Agent-to-Agent (A2A) | Useful when agents have separate endpoints and lifecycles |
+
+A provider SDK can support other model providers through integrations; that
+does not guarantee equivalent tools, state, or observability. An adapter with
+explicit application state can ease replacement but leaves more orchestration
+to your application. Check the [OpenAI Agents SDK model guide](https://openai.github.io/openai-agents-python/models/)
+and [Google ADK model guidance](https://adk.dev/agents/models/) for the route
+you intend to use.
 
 Choose the smallest layer that provides the failure semantics you need. Do not
 add multi-agent orchestration when ordinary functions or a durable workflow

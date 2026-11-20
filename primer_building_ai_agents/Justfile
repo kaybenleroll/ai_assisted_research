@@ -17,7 +17,7 @@ quick-html:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{REFERENCE_MD}} -o primer_agent_quick_reference.html \
-    {{HTML_FLAGS_BASE}} --lua-filter="{{MERMAID_FILTER}}" \
+    {{HTML_FLAGS_BASE}} --shift-heading-level-by=-1 --lua-filter="{{MERMAID_FILTER}}" \
     --template="{{TEMPLATE}}" \
     --metadata title="Agent Architecture Quick Reference & Decision Frameworks" \
     --metadata author="{{AUTHOR}}" \
