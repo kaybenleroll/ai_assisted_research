@@ -2241,7 +2241,7 @@ Run tests in an order that localises failures:
 Use relative error with an absolute floor:
 
 $$
-e_{mathrm{rel}}
+e_{\mathrm{rel}}
 =\frac{|a-b|}{\max(1,|a|,|b|)}.
 $$
 
