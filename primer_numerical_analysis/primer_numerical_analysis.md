@@ -1382,10 +1382,10 @@ $$
 f'(x) \approx \frac{f(x+h)-f(x-h)}{2h}
 $$
 
-This allows a larger optimal $h$ (around $\varepsilon_{mach}^{1/3} \approx 10^{-5}$ for double precision) and is generally preferred for smooth functions. When derivative accuracy is critical, automatic differentiation — which computes exact derivatives of the code rather than approximating them — is often a better choice than any finite difference scheme.
+This allows a larger optimal $h$ (around $\varepsilon_{mach}^{1/3} \approx 10^{-5}$ for double precision) and is generally preferred for smooth functions. Automatic differentiation can avoid this finite-difference approximation by applying derivative rules to the operations in the program. It still needs supported, differentiable operations and numerically stable derivative calculations; it does not remove floating-point error or ill-conditioning.
 
 
-The optimal step size for central differences is not arbitrary. Truncation error from the Taylor expansion scales as $O(h^2)$. Cancellation error arises because $f(x+h)$ and $f(x-h)$ agree in their leading $\sim|\log_{10} h|$ digits, so the subtraction loses that many digits to catastrophic cancellation, leaving an absolute error of roughly $\varepsilon_\text{mach}|f(x)|$ in the numerator — which, after dividing by $2h$, gives a cancellation error of $O(\varepsilon_\text{mach}/h)$ in the derivative estimate. The total error is minimised when $h^2 \approx \varepsilon_\text{mach}/h$, giving optimal $h \approx \varepsilon_\text{mach}^{1/3} \approx 6 \times 10^{-6}$ for double precision. You cannot make $h$ arbitrarily small — doing so makes cancellation dominate and the error actually grows. This is exactly why automatic differentiation (covered later) is preferable: it achieves machine-precision derivatives with no step-size tuning whatsoever.
+The optimal step size for central differences is not arbitrary. For a sufficiently smooth, well-scaled function, truncation error scales as $O(h^2)$, while function-evaluation round-off contributes a derivative error of order $O(\varepsilon_\text{mach}/h)$ through the subtraction and division. Balancing the terms gives $h \sim \varepsilon_\text{mach}^{1/3} \approx 6 \times 10^{-6}$ in double precision and an error of order $\varepsilon_\text{mach}^{2/3}$. The constants depend on the function's magnitude and third derivative; noisy evaluations need a different error model. This is a scaling argument, not a universal step or accuracy floor. [SciPy's numerical-differentiation implementation](https://github.com/scipy/scipy/blob/main/scipy/optimize/_numdiff.py) likewise distinguishes square-root steps for first-order two-point differences from cube-root steps for second-order three-point differences. AD avoids this particular step-size balance, but its own numerical and domain limits still need checking.
 
 ![Step size vs error for central differences: truncation vs cancellation error](figures/finite_diff_stepsize.png)
 
@@ -1525,17 +1525,28 @@ Getting derivatives out of code is one of those problems that looks solved until
 
 The naive approach is finite differences: evaluate your function at $x$ and $x+h$, subtract, divide by $h$. The primer's differentiation section already shows why this is unpleasant. You have to choose $h$, and $h$ too large means truncation error, $h$ too small means catastrophic cancellation. For a scalar function you can usually muddle through, but for a function of $n$ inputs you need $n$ function evaluations per gradient — and you are still fighting the step-size tradeoff the whole time.
 
-The other apparent alternative is symbolic differentiation: feed the expression to a computer algebra system and get an analytic formula for the derivative. That works for textbook examples. For real code — branchy, loopy, calling external routines — it either does not apply or produces symbolic expressions that grow exponentially with the depth of the computation. This is called expression swell, and it is why symbolic differentiation is not a general engineering tool.
+Another alternative is symbolic differentiation: feed an expression to a computer algebra system and obtain an analytic derivative. This is useful when an explicit formula is available, and symbolic simplification can improve its numerical evaluation. Extending it to an arbitrary program with branches, loops, or external routines is a different problem. Naively expanding expressions can also duplicate subexpressions and cause expression swell. AD instead propagates local derivative information through a supported computation without requiring one expanded symbolic formula.
 
 ### What AD Is Not
 
 Automatic differentiation (AD) is neither of these things. The distinction matters before getting into the mechanics.
 
-It is not finite differences. AD computes derivatives that are exact to machine precision — not approximate. There is no step size to tune, no truncation error, no cancellation problem. You do not get a derivative-like number that happens to be close to the true derivative; you get the derivative, computed to the same floating-point accuracy as the function evaluation itself.
+It is not finite differences. AD applies derivative rules and the chain rule rather than estimating a limit from nearby function values. For a composition of differentiable primitives with correct derivative rules, those rules give the derivative in exact arithmetic. A floating-point implementation still rounds its intermediate values and derivatives. AD avoids finite-difference truncation and step-size selection; it does not guarantee a particular relative accuracy, prevent overflow or cancellation in the derivative calculation, or make an undefined derivative exist.
 
-It is not symbolic differentiation either. AD does not manipulate mathematical expressions. It works at the level of the program: the actual sequence of floating-point operations your code executes. Expression swell cannot happen because AD never constructs a symbolic expression at all.
+It is not the same as expanding a symbolic derivative either. AD follows the computation and its primitive derivative rules, using tangents or adjoints as described below. Branching and discrete choices still matter: differentiating the selected smooth branch does not account for a jump when the branch changes, and unsupported operations need an appropriate derivative rule or another method.
 
-What AD does is apply the chain rule mechanically and automatically to the sequence of primitive operations that make up your function — additions, multiplications, transcendentals, whatever the function actually does — and accumulate exact derivative information alongside the function evaluation. The result is exact derivatives at the cost of a constant multiple of the original computation, with no tuning required.
+The numerical distinction is visible in a small example. For $x>0$, let $f(x)=\sqrt{x+1}-\sqrt{x}$. Differentiating the displayed expression gives
+
+$$
+f'(x)=\frac{1}{2\sqrt{x+1}}-\frac{1}{2\sqrt{x}}
+=-\frac{1}{2\sqrt{x}\sqrt{x+1}(\sqrt{x+1}+\sqrt{x})}.
+$$
+
+The first form subtracts nearly equal quantities when $x$ is large, even if AD produced those quantities. The second is algebraically equivalent and avoids that final subtraction. A stable formulation of the function and its derivative remains a numerical-analysis decision. Both formulas are mathematical identities here; no runtime accuracy measurement is implied.
+
+A finite function value also does not prove that a reverse pass is valid. [JAX's documented guarded-log example](https://docs.jax.dev/en/latest/faq.html#gradients-contain-nan-where-using-where) uses `jnp.where(x > 0, jnp.log(x), 0)`: its value at zero is finite, but its reverse gradient is NaN because an undefined intermediate enters the adjoint calculation. Moving the guard inside the logarithm keeps that primitive's input valid and avoids this NaN. That rewrite does not create a classical derivative at zero: the piecewise function is discontinuous there. Check the mathematical domain and differentiability as well as whether the returned gradient is finite.
+
+AD's work depends on what derivative you request. One forward tangent pass computes a Jacobian-vector product; one reverse pass computes a vector-Jacobian product after the forward evaluation. A scalar-output gradient can therefore be obtained with work proportional to the original computation under the usual primitive-cost model, but a full Jacobian generally needs multiple passes. Tape storage, recomputation, and the derivative rules for expensive primitives also affect the cost. The following examples develop those distinctions rather than promising every derivative for one fixed overhead.
 
 ### Forward Mode: Dual Numbers
 
@@ -1617,7 +1628,7 @@ If you have worked with neural networks, reverse-mode AD should look familiar: i
 
 In neural network training, the computation graph is the network itself: layers, activations, loss function. The forward pass computes predictions and records operations. The backward pass accumulates gradients layer by layer. The "delta" terms that propagate backwards in classical backpropagation derivations are exactly the adjoints accumulated on the Wengert tape.
 
-The contribution of the AD framing is that it makes clear backpropagation is not special to neural networks. It is the right algorithm for differentiating any scalar function of many inputs, regardless of the structure of the computation. For more on the ML-specific context, see the deep learning primer.
+The contribution of the AD framing is that it makes clear backpropagation is not special to neural networks. Reverse mode is useful for scalar functions of many inputs when their operations have suitable derivative rules. Discrete decisions, non-differentiable points, unsupported routines, and memory costs still constrain its use. For more on the ML-specific context, see the deep learning primer.
 
 ### Code
 
@@ -1634,7 +1645,7 @@ def f(x):
 
 # Reverse-mode gradient (scalar output)
 df = jax.grad(f)
-print(df(jnp.array(jnp.pi / 4)))  # exact to machine precision
+print(df(jnp.array(jnp.pi / 4)))  # AD result in the configured floating-point dtype
 
 # Full Jacobian of a vector function
 def F(x):
@@ -1654,7 +1665,7 @@ using ForwardDiff, Zygote
 
 f(x) = sin(x^2)
 
-# Forward mode — exact derivative
+# Forward mode — chain-rule derivative evaluated in floating point
 println(ForwardDiff.derivative(f, π/4))
 
 # Reverse mode via Zygote
@@ -1666,9 +1677,11 @@ x0 = [1.0, 2.0]
 println(ForwardDiff.jacobian(F, x0))
 ```
 
-**R (what you would have used before AD, and why it is worse):**
+**R (finite-difference comparison):**
 
-R does not have a mature AD library. The standard tool is `numDeriv::grad`, which uses finite differences — exactly what the primer's differentiation section warned you about.
+R users can use AD, but the interface determines which computation is differentiated. [TMB](https://kaskr.github.io/adcomp/Introduction.html) differentiates compiled C++ model templates and exposes objective values, gradients, and Hessians to R. The R [`torch` package's autograd example](https://github.com/mlverse/torch#simple-autograd-example) instead builds a differentiable tensor computation and backpropagates through its recorded operations. Neither interface means that any existing R function, including arbitrary external calls, can be passed unchanged to an AD engine.
+
+For an ordinary callable R function, `numDeriv::grad` remains a useful numerical comparison when rewriting it for an AD interface is unnecessary or impractical. The example below deliberately uses finite differences and compares their result with the analytic derivative; it does not represent the absence of AD in R.
 
 ```r
 library(numDeriv)
@@ -1685,7 +1698,7 @@ cat(sprintf("numDeriv result : %.15f\n", fd_deriv))
 cat(sprintf("Absolute error  : %.3e\n", abs(fd_deriv - true_deriv)))
 ```
 
-`numDeriv::grad`'s default method is Richardson extrapolation rather than a plain central difference, so typical output shows error around $10^{-10}$ to $10^{-12}$ on smooth functions like this one — much tighter than the $O(\sqrt{\varepsilon_\text{mach}})$ floor you'd get from a single central difference. For a single smooth scalar function this is often tolerable. For a gradient of a loss over thousands of parameters, accumulated finite-difference errors become a real problem, and the $n$ function evaluations per gradient become expensive. This is the concrete cost of not having AD: you pay in both accuracy and computation.
+[`numDeriv::grad`](https://cran.r-project.org/web/packages/numDeriv/refman/numDeriv.html#grad)'s default method is Richardson extrapolation, which combines differences at several step sizes. Inspect the printed error rather than assuming a fixed number of correct digits. For a plain central difference on a smooth, well-scaled function, the earlier $O(h^2)+O(\varepsilon_\text{mach}/h)$ model gives $h\sim\varepsilon_\text{mach}^{1/3}$ and error of order $\varepsilon_\text{mach}^{2/3}$; the square-root balance belongs to a first-order forward difference. Richardson extrapolation can reduce truncation error further, but evaluation noise, smoothness, scaling, and round-off still limit it. A full finite-difference gradient needs evaluations for multiple perturbations of every input coordinate, so its cost grows with the number of parameters. Choose between that cost and an AD-compatible implementation for the actual objective, and use small analytic or finite-difference cross-checks to test either route.
 
 ---
 
@@ -2923,7 +2936,7 @@ Each topic in this primer is a doorway into a much larger field.
 
 **Uncertainty quantification** addresses how to propagate uncertainty from inputs to outputs, covering Monte Carlo methods, polynomial chaos expansions, and sensitivity analysis. It is increasingly central to any serious computational modelling workflow.
 
-**Automatic differentiation** has transformed numerical optimisation and machine learning by making exact derivative computation practical for a broad class of differentiable programs. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood. Griewank and Walther's *Evaluating Derivatives* is the rigorous reference.
+**Automatic differentiation** makes chain-rule derivatives practical for a broad class of differentiable programs without a finite-difference step-size approximation. Its derivative calculations still have floating-point, domain, and implementation limits. Understanding forward and reverse mode AD gives you a much clearer picture of what tools like PyTorch and JAX are actually doing under the hood. Griewank and Walther's *Evaluating Derivatives* is the rigorous reference.
 
 **High-performance computing** covers everything that happens when problems are too large for a single core: memory hierarchy effects, cache-friendly data layouts, parallelisation strategies, and GPU-aware algorithms.
 
