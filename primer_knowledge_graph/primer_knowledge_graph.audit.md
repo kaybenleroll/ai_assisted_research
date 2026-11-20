@@ -1,18 +1,18 @@
 # Primer audit: Building Knowledge Graphs: From Sources to Verifiable Queries
 
-- Issue and milestone: #398; related #397; accessibility follow-up #421
-- Audit revision: `kg-398-depth-audit-r17`
+- Issue and milestone: #398; related #397; accessibility follow-ups #421 and #456
+- Audit revision: `kg-398-depth-audit-r18`
 - Source revision: `5924434`
 - Reviewed revision: `5924434`
 - Brief reviewed: `primer_knowledge_graph/primer_knowledge_graph.brief.md`, `kg-398-brief-r13`
 - Tracked path: `primer_knowledge_graph/primer_knowledge_graph.audit.md`
 - Starting branch: `docs/398-revise-knowledge-graph-primer`
 - Reviewer(s): Codex, applying `primer-audit`
-- Review boundary: source structure and depth at `5924434`, with historical execution and release evidence retained separately
+- Review boundary: source structure and depth at `5924434` retained from r17; current release evidence scoped to publication accessibility
 - Core-concept depth matrix: brief r13, all 14 stable IDs and three route tiers
-- Date: 2026-11-12
+- Date: 2026-11-20
 - Teaching-case contract: `primer_knowledge_graph/primer_knowledge_graph.case.md`, historical reconciliation `2d47558`
-- Readiness decision: not-ready
+- Readiness decision: ready
 
 ## Current content review
 
@@ -108,11 +108,11 @@ explanation, action, interpretation and limitation within the stated route.
 | Earlier full review and standards | Audit r15 and its predecessors record complete reading at `3f3d384`, targeted review at `9ceb2d2`, and scoped W3C checks on 12 November; other source/API checks date to 11 November at `1ee9f80`. | Retained as historical evidence for unchanged claims; not every citation or dependency was independently rechecked. |
 | Python and R | `just examples` rerun against source `5924434`; both pinned companion manifests pass. | Execution remains bounded to the companions; the primary prose, projection derivation, disclosure and release are illustrative. |
 | Rendering and visual checks | `just all` and `just render-qa primer_knowledge_graph` rerun from source `5924434`; representative pages 1, 54, 9 and 41 inspected. | HTML/PDF freshness and sampled visual quality pass; PDF remains untagged. |
-| Accessibility | Shared HTML heading filter and render-QA regression fixed the skipped heading levels; browser review rerun against the regenerated output. | Keyboard, no-JavaScript, browser accessibility-tree, landmark, fragment and image checks pass in sampled scope. A screen-reader traversal remains unverified because Orca cannot connect to an AT-SPI bus in this environment; PDF tagging remains unavailable and is documented as a print-companion limitation. |
+| Accessibility | #421 corrected the shared HTML heading filter and added the render-QA regression check. Audit r18 adds the scoped interactive verification below. | The PDF remains an untagged print companion under the publication accessibility policy. |
 
 The earlier scoped standards review checked [RDF 1.1](https://www.w3.org/TR/rdf11-concepts/), [SPARQL 1.1](https://www.w3.org/TR/sparql11-query/), [PROV-O](https://www.w3.org/TR/prov-o/), [Neo4j 5 MATCH](https://neo4j.com/docs/cypher-manual/5/clauses/match/) and the declared companion APIs at `1ee9f80` on 11 November. The subsequent bridge review checked [RDF Schema domain](https://www.w3.org/TR/rdf-schema/#ch_domain), [range](https://www.w3.org/TR/rdf-schema/#ch_range) and [SHACL cardinality](https://www.w3.org/TR/shacl/#MinCountConstraintComponent) on 12 November. These are retained source checks, not renewed checks or executed reasoner and validator results.
 
-The current companion run used `just examples`, with the Python/DuckDB and R manifests both passing in pinned containers. Its Python assertions cover bounded construction, persistence and queries; R checks a precomputed fixture's path and weak components. The hand-worked release and disclosure case, ledger-to-projection transformation and service migration were not executed by those passes. The shared HTML heading filter and render-QA semantic check were corrected after a browser accessibility review; the regenerated HTML now exposes one level-1 document title, 13 level-2 sections and 45 level-3 subsections, while preserving the 59 heading tags, IDs, numbering and 58 contents targets. Sampled keyboard, no-JavaScript, landmark, image and fragment checks pass. The representative opening, figure, table and prose-page visual checks pass, and the PDF reports `Tagged: no`; the PDF remains a documented print-oriented limitation under `docs/publication-accessibility.md`.
+The r17 companion run used `just examples`, with the Python/DuckDB and R manifests both passing in pinned containers. Its Python assertions cover bounded construction, persistence and queries; R checks a precomputed fixture's path and weak components. The hand-worked release and disclosure case, ledger-to-projection transformation and service migration were not executed by those passes. The shared HTML heading filter and render-QA semantic check were corrected after a browser accessibility review; the regenerated HTML now exposes one level-1 document title, 13 level-2 sections and 45 level-3 subsections, while preserving the 59 heading tags, IDs, numbering and 58 contents targets. Sampled keyboard, no-JavaScript, landmark, image and fragment checks pass. The representative opening, figure, table and prose-page visual checks pass, and the PDF reports `Tagged: no`; the PDF remains a documented print-oriented limitation under the current publication accessibility policy.
 
 The earlier audit contains further commands, hashes, samples and standards
 links in Git history. They remain associated with their original revisions.
@@ -120,18 +120,65 @@ The source, case contract, figure and examples were unchanged by the
 accessibility follow-up; the shared HTML filter, render-QA checks and
 regenerated publication outputs changed as recorded above.
 
+## Accessibility reconciliation, 20 November 2026
+
+The [publication accessibility policy](../maintenance/docs/publication-accessibility.md)
+requires interactive verification for the #421 heading and ARIA rendering
+change. The published HTML matches `debfbc3` byte for byte, with SHA-256
+`a95275f8eee047356e9003e386c1cd972de064c444404141d0da6cd1621c56b6`.
+The source, brief, examples and published outputs are unchanged in r18.
+The content review and execution evidence above retain their 12 November scope.
+
+- Chromium 149.0.7827.55 exposed a named main landmark, a named contents
+  navigation landmark, one level-1 heading, 13 level-2 headings, 45 level-3
+  headings and the named evidence image. Keyboard activation of the skip
+  link focused main. Space and Enter opened and closed the Introduction
+  toggle. Enter on the nested contents link reached
+  `#what-an-edge-lets-you-ask` with and without JavaScript.
+- Firefox ESR 153.7.0 with Orca 48.1 and AT-SPI 2.56.2 used an isolated
+  virtual display, D-Bus session and audio sink. Orca announced the skip
+  link, banner, complementary content, named contents navigation and named
+  main landmark. From the opening view, the level-1 shortcut announced the
+  title, followed by Introduction at level 2 and Graph Foundations and
+  Terminology at level 3 using heading navigation.
+- Orca announced the contents toggle for A Complete Northbridge Question
+  as collapsed and then expanded. Enter on the corresponding link moved to
+  the level-2 destination at `#a-complete-northbridge-question`.
+  Heading navigation reached its level-3 subsections. Image navigation
+  announced the evidence graph's two conflicting assertions and the
+  policy's withheld conclusion. Speech was sampled from Orca's utterance
+  log with eSpeak NG through a virtual audio sink.
+- After following the contents fragment and scrolling deep into the
+  document, Orca's level-1 shortcut omitted the off-screen title, which
+  also labels the main landmark. The same key sequence against the
+  pre-fix HTML at `debfbc3^` reproduced that omission and exposed the
+  incorrectly shifted destination and subsection at levels 3 and 4.
+  The corrected page announced those headings at levels 2 and 3. The
+  off-screen Orca behaviour predates #421 and is a limitation of this
+  tested Firefox and Orca combination.
+- `just render-qa primer_knowledge_graph` passed against the committed
+  outputs. Visual sampling covered the contents opening (page 1), evidence
+  figure (page 9), prose and access comparison (page 41), and the literature
+  evidence table (page 54). The PDF contains no fenced code sample and
+  `pdfinfo` reports `Tagged: no`.
+
 ## Release readiness checklist
 
 - Content gate: **pass** for the agreed teaching scope.
-- Release readiness: **not-ready** pending a representative screen-reader
-  traversal. The HTML hierarchy defect found during #421 is fixed and sampled
-  browser checks pass; the available environment cannot provide an AT-SPI bus.
-  The PDF is intentionally not accessibility-complete and remains covered by
-  the documented HTML-only accessibility decision.
+- Release readiness: **ready** for the sampled publication scope. The
+  representative screen-reader and browser checks cover the #421
+  rendering change. The pre-existing off-screen title limitation is
+  recorded above. The PDF remains an untagged print companion, and the
+  sampled checks establish the reported behaviour only.
 - The structural evidence checker tests IDs, revisions and required fields; it
   cannot establish pedagogy, rendered quality or accessibility.
 
 ## Mechanical checks
+
+Audit r18 passed the structural evidence and Git-backed locator checks,
+scoped Markdown and offline HTML link lint, publication freshness and
+`git diff --check`. The following r17 evidence retains its original
+commands and scope.
 
 - `python3 -I scripts/check/primer_evidence.py primer_knowledge_graph/primer_knowledge_graph.brief.md primer_knowledge_graph/primer_knowledge_graph.audit.md`: passed.
 - `python3 -I scripts/check/primer_audit.py --repo-root . --project primer_knowledge_graph`: passed; verifies source revision and explicit concept locators, not their teaching quality.
