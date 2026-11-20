@@ -32,6 +32,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -173,6 +184,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -184,7 +196,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -585,7 +596,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -605,18 +616,21 @@ code span.wa { color: #da4453; } /* Warning */
   <script>
     // MathJax's boldsymbol extension is a separate file that an embedded
     // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
-    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // extension is therefore vendored inline below (exact
     // bytes of the matching mathjax@<version> release file) and run inside
     // startup.ready, before MathJax typesets. When Pandoc embeds a different
     // MathJax version, download input/tex/extensions/boldsymbol.js from
-    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
     // and re-render the maths primers. A version mismatch is not checked in
     // CI; MathJax's runtime checkVersion warns in the browser console on drift.
     // The MathML variants ignore this block.
     window.MathJax = {
       tex: { packages: { '[+]': ['boldsymbol'] } },
       startup: { ready() {
-(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();        MathJax.startup.defaultReady();
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
       } }
     };
   </script>
@@ -624,13 +638,15 @@ code span.wa { color: #da4453; } /* Warning */
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Claude Code Alternatives: A Comprehensive
 Survey of AI Coding Agents in 2026</span>
     <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -638,7 +654,7 @@ Survey of AI Coding Agents in 2026</span>
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
 <li><a href="#capability-led-selection-and-adoption" id="toc-capability-led-selection-and-adoption"><span class="toc-section-number">2</span> Capability-Led Selection and
 Adoption</a>
@@ -833,15 +849,18 @@ Practitioner Reports</a></li>
 Documentation</a></li>
 <li><a href="#secondary-background" id="toc-secondary-background"><span class="toc-section-number">14.4</span> Secondary Background</a></li>
 </ul></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
-<h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
+<h1 id="document-title" class="document-title">Claude Code Alternatives:
+A Comprehensive Survey of AI Coding Agents in 2026</h1>
+<h1 data-number="1" role="heading" aria-level="2" id="introduction"><span class="header-section-number">1</span>
+Introduction</h1>
 <p>Claude Code has established itself as one of the most capable agentic
 coding tools available: it runs in the terminal and supported integrated
 development environments (IDEs), takes high-level natural-language
@@ -910,14 +929,14 @@ comparative survey and evaluation guide, not a product endorsement,
 security approval, benchmark result, or substitute for testing an agent
 against your own repository and data-handling requirements.</p>
 <hr />
-<h1 data-number="2" id="capability-led-selection-and-adoption"><span class="header-section-number">2</span> Capability-Led Selection and
+<h1 data-number="2" role="heading" aria-level="2" id="capability-led-selection-and-adoption"><span class="header-section-number">2</span> Capability-Led Selection and
 Adoption</h1>
 <p>The shortest useful answer is to choose the operating boundary first,
 then choose a model inside it. Do not start by translating Claude model
 names into another vendor’s names: the harness, provider, context
 policy, tools, permissions, and recovery loop are part of the system you
 are evaluating.</p>
-<h2 data-number="2.1" id="choose-a-capability-lane"><span class="header-section-number">2.1</span> Choose a Capability Lane</h2>
+<h2 data-number="2.1" role="heading" aria-level="3" id="choose-a-capability-lane"><span class="header-section-number">2.1</span> Choose a Capability Lane</h2>
 <p>Use the first row that matches the constraint that matters most. The
 named tools are starting points, not claims of universal superiority;
 the dated profiles and matrix below explain the evidence and the
@@ -997,7 +1016,7 @@ shortlist</a> supplies dated examples. The concrete setup later turns
 those roles into OpenCode/OpenRouter, direct-provider, local, Aider,
 Cline, and Pi configurations. A model choice never grants additional
 shell, file, network, credential, or merge authority.</p>
-<h2 data-number="2.2" id="a-staged-adoption-path"><span class="header-section-number">2.2</span> A Staged Adoption Path</h2>
+<h2 data-number="2.2" role="heading" aria-level="3" id="a-staged-adoption-path"><span class="header-section-number">2.2</span> A Staged Adoption Path</h2>
 <p>Treat migration as an evaluation programme. Keep the existing Claude
 workflow as the baseline and promote alternatives only when the complete
 harness/provider/model configuration passes the same acceptance
@@ -1042,7 +1061,7 @@ required regional, contractual, or data boundary; OpenRouter is a
 convenient routing layer, not a privacy guarantee. The provider-specific
 retention distinctions later in this document are part of the decision,
 not footnotes.</p>
-<h2 data-number="2.3" id="command-contract-for-every-example"><span class="header-section-number">2.3</span> Command Contract for Every
+<h2 data-number="2.3" role="heading" aria-level="3" id="command-contract-for-every-example"><span class="header-section-number">2.3</span> Command Contract for Every
 Example</h2>
 <p>The installation, authentication, configuration, and launch commands
 throughout this document are illustrative recipes. Before retaining or
@@ -1104,7 +1123,7 @@ product-specific checks; if a section cannot satisfy one of these four
 fields, treat the command as unverified rather than silently copying
 it.</p>
 <hr />
-<h1 data-number="3" id="the-ai-coding-agent-taxonomy"><span class="header-section-number">3</span> The AI Coding Agent Taxonomy</h1>
+<h1 data-number="3" role="heading" aria-level="2" id="the-ai-coding-agent-taxonomy"><span class="header-section-number">3</span> The AI Coding Agent Taxonomy</h1>
 <p>Before comparing tools, it helps to understand the four distinct
 categories that have emerged. This taxonomy comes from Artificial
 Analysis’s coding agent classification (verified):</p>
@@ -1138,7 +1157,7 @@ the IDE and cloud categories contain tools capable enough to be worth
 understanding as alternatives — especially if your workflow includes
 time in an editor.</p>
 <hr />
-<h1 data-number="4" id="model-alternatives-for-coding-agents"><span class="header-section-number">4</span> Model Alternatives for Coding
+<h1 data-number="4" role="heading" aria-level="2" id="model-alternatives-for-coding-agents"><span class="header-section-number">4</span> Model Alternatives for Coding
 Agents</h1>
 <p>Choosing an agent and choosing its model are separate decisions. You
 can preserve a familiar editing workflow while changing the inference
@@ -1148,7 +1167,7 @@ October 2026</strong> snapshot; the tool profiles that follow describe
 the surrounding products. The objective is to identify candidates for
 your workload, not to translate every Claude name into another vendor’s
 tier.</p>
-<h2 data-number="4.1" id="model-provider-and-agent-harness"><span class="header-section-number">4.1</span> Model, Provider, and Agent
+<h2 data-number="4.1" role="heading" aria-level="3" id="model-provider-and-agent-harness"><span class="header-section-number">4.1</span> Model, Provider, and Agent
 Harness</h2>
 <p>The <strong>model</strong> is the learned set of numerical weights; a
 <strong>checkpoint</strong> is a particular saved version of those
@@ -1177,7 +1196,7 @@ may have misunderstood the code, the harness may have retained stale
 context, or the edit adapter may have rejected an otherwise useful
 change. Record the attempted edit and tool response: a final answer
 saying “fixed” does not identify which layer failed.</p>
-<h2 data-number="4.2" id="what-matters-for-agentic-coding"><span class="header-section-number">4.2</span> What Matters for Agentic
+<h2 data-number="4.2" role="heading" aria-level="3" id="what-matters-for-agentic-coding"><span class="header-section-number">4.2</span> What Matters for Agentic
 Coding</h2>
 <p>Start with <strong>edit correctness</strong>: does the change satisfy
 the task, preserve unrelated behaviour, and respect repository
@@ -1218,7 +1237,7 @@ failures; and <strong>independent review</strong> for checking a
 proposed change against evidence. These roles specify work and
 authority. They are not universal Haiku, Sonnet, Opus, or Fable
 equivalents.</p>
-<h2 data-number="4.3" id="candidate-families-against-the-claude-baseline"><span class="header-section-number">4.3</span> Candidate Families Against the
+<h2 data-number="4.3" role="heading" aria-level="3" id="candidate-families-against-the-claude-baseline"><span class="header-section-number">4.3</span> Candidate Families Against the
 Claude Baseline</h2>
 <p>Use this <strong>7 October 2026</strong> shortlist to decide what to
 test against your existing Claude configuration. Rows select
@@ -1339,13 +1358,14 @@ total cost or unrestricted licensing. Compare accepted changes, elapsed
 time, and correction effort with the same Claude baseline before
 claiming parity or savings. This table supplies no measured ranking,
 guaranteed workstation fit, or proven Fable substitute.</p>
-<h2 data-number="4.4" id="closed-weight-models"><span class="header-section-number">4.4</span> Closed-Weight Models</h2>
+<h2 data-number="4.4" role="heading" aria-level="3" id="closed-weight-models"><span class="header-section-number">4.4</span>
+Closed-Weight Models</h2>
 <p>Closed-weight models are available through services without
 downloadable weights for independent deployment. Their model
 documentation establishes advertised capabilities; your subscription or
 endpoint determines actual access. Keep a known Claude configuration as
 a baseline when testing alternatives.</p>
-<h3 data-number="4.4.1" id="anthropic-claude-baseline"><span class="header-section-number">4.4.1</span> Anthropic / Claude
+<h3 data-number="4.4.1" role="heading" aria-level="4" id="anthropic-claude-baseline"><span class="header-section-number">4.4.1</span> Anthropic / Claude
 Baseline</h3>
 <p>This October refresh uses Anthropic’s current Sonnet 5.5 and Opus 5.5
 releases as the relevant Claude baseline; check the <a href="https://platform.claude.com/docs/en/models/overview">Anthropic
@@ -1358,17 +1378,23 @@ actually use on the same repository tasks. Reproducing a result from
 Claude Code may require preserving context selection and edit tooling as
 well as changing the model. No evidence presented here establishes a
 proven Fable equivalent.</p>
-<h3 data-number="4.4.2" id="openai-gpt-and-codex-models"><span class="header-section-number">4.4.2</span> OpenAI / GPT and Codex
+<h3 data-number="4.4.2" role="heading" aria-level="4" id="openai-gpt-and-codex-models"><span class="header-section-number">4.4.2</span> OpenAI / GPT and Codex
 Models</h3>
-<p>OpenAI’s hosted catalogue includes GPT-6 Astra and GPT-5.6 Sol,
-Terra, and Luna. OpenAI positions Astra for its hardest reasoning and
-coding work, Sol for complex professional work, Terra for balancing
-capability and cost, and Luna for cost-sensitive workloads. These are
-useful shortlist distinctions; they do not establish equivalence to
-Anthropic tiers. Check each model’s supported modalities, context,
-function calling, and reasoning settings in the <a href="https://developers.openai.com/api/docs/models">OpenAI model
+<p>The 7 October shortlist above used GPT-6 Astra and GPT-5.6 Sol,
+Terra, and Luna as examples. That is a historical comparison, not a
+current inventory. Check each model’s supported modalities, context,
+function calling, and reasoning settings in the <a href="https://developers.openai.com/api/docs/models">OpenAI API model
 catalogue</a>. Treat OpenAI’s comparative coding scores as vendor
 evaluations.</p>
+<p>A separate, limited check on 20 November 2026 found that <a href="https://learn.chatgpt.com/docs/models">OpenAI’s Work and Codex
+model guidance</a> lists GPT-6.2 Astra and GPT-6.2 Sol on supported
+plans and clients, alongside GPT-6.1 Terra and GPT-6 Luna. This product
+guidance does not revalidate the October API prices or the rest of the
+table. An API catalogue entry does not establish access through a
+subscription, a particular client, or your account; inspect the active
+picker and applicable plan before choosing a candidate. The list does
+not establish equivalence to a Claude tier or performance on your
+tasks.</p>
 <p><strong>Codex is also a product and access path</strong>, not a
 synonym for one immutable model. Codex-branded model releases and the
 models available inside Codex can change independently of API
@@ -1382,7 +1408,8 @@ executing them unaided.</p>
 open-weight family, covered below. They are not downloadable versions of
 GPT-5.6 or GPT-6, and an open-source Codex client does not make the
 hosted GPT weights open.</p>
-<h3 data-number="4.4.3" id="google-gemini"><span class="header-section-number">4.4.3</span> Google / Gemini</h3>
+<h3 data-number="4.4.3" role="heading" aria-level="4" id="google-gemini"><span class="header-section-number">4.4.3</span>
+Google / Gemini</h3>
 <p>Google’s catalogue spans Pro, Flash, and Flash-Lite models. In this
 snapshot, Gemini 3.1 Pro remains a preview option, while Gemini 3.8
 Flash is listed as stable and aimed at long software-engineering and
@@ -1397,7 +1424,8 @@ establish constraint retention or recovery quality. Test those directly.
 Gemini CLI and Antigravity access, tools, and quotas belong to their
 tool profiles; neither is a property of the underlying Gemini
 checkpoint.</p>
-<h3 data-number="4.4.4" id="xai-grok"><span class="header-section-number">4.4.4</span> xAI / Grok</h3>
+<h3 data-number="4.4.4" role="heading" aria-level="4" id="xai-grok"><span class="header-section-number">4.4.4</span> xAI /
+Grok</h3>
 <p>Grok belongs in the model shortlist independently of Grok Bot. xAI’s
 <a href="https://docs.x.ai/developers/models/grok-4.6">Grok 4.6
 documentation</a> describes a hosted frontier model for coding and
@@ -1412,7 +1440,7 @@ to provider tools or products. In particular, access to a Grok API model
 does not supply Grok Bot’s execution environment. Earlier downloadable
 Grok releases also do not establish that the current hosted model has
 downloadable weights.</p>
-<h3 data-number="4.4.5" id="other-vendors-and-product-specific-models"><span class="header-section-number">4.4.5</span> Other Vendors and
+<h3 data-number="4.4.5" role="heading" aria-level="4" id="other-vendors-and-product-specific-models"><span class="header-section-number">4.4.5</span> Other Vendors and
 Product-Specific Models</h3>
 <p>A managed coding product may select private models, fine-tunes, or
 several vendors behind its interface. Evaluate the resulting product if
@@ -1421,7 +1449,8 @@ name or a successful demo. Without a documented checkpoint or selectable
 endpoint, its results cannot answer whether the same behaviour will
 transfer to another harness. The existing commercial-tool profiles cover
 those product decisions.</p>
-<h2 data-number="4.5" id="open-weight-models"><span class="header-section-number">4.5</span> Open-Weight Models</h2>
+<h2 data-number="4.5" role="heading" aria-level="3" id="open-weight-models"><span class="header-section-number">4.5</span>
+Open-Weight Models</h2>
 <p><strong>Open weights</strong> means that you can obtain the model’s
 learned parameters and run them yourself under the release’s licence. It
 does not necessarily mean unrestricted use, published training data, or
@@ -1437,7 +1466,7 @@ intermediate values at reduced numerical precision, lowering memory
 demand and sometimes compute cost, with accuracy and runtime-support
 tradeoffs. A quantised checkpoint is a configuration to evaluate, not a
 guarantee of unchanged tool-use reliability.</p>
-<h3 data-number="4.5.1" id="qwen"><span class="header-section-number">4.5.1</span> Qwen</h3>
+<h3 data-number="4.5.1" role="heading" aria-level="4" id="qwen"><span class="header-section-number">4.5.1</span> Qwen</h3>
 <p>Qwen includes coding-specific and general-purpose models. Qwen3-Coder
 explicitly targets multi-turn software-engineering work with tool
 feedback. Its documented 480B-total/35B-active variant has 256K native
@@ -1454,7 +1483,8 @@ context, subject to runtime overhead. Smaller Qwen checkpoints offer
 more memory margin; verify their own tool format and coding results.
 Qwen Code is the harness discussed later, not a capability inherited by
 every Qwen model.</p>
-<h3 data-number="4.5.2" id="deepseek"><span class="header-section-number">4.5.2</span> DeepSeek</h3>
+<h3 data-number="4.5.2" role="heading" aria-level="4" id="deepseek"><span class="header-section-number">4.5.2</span>
+DeepSeek</h3>
 <p>DeepSeek V4.1 Flash is available as an open-weight release as well as
 through the hosted <code>deepseek-flash</code> endpoint. The <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">model
 card</a> describes a multimodal MoE with a 552B-parameter backbone plus
@@ -1469,7 +1499,8 @@ are vendor results with specified harnesses; they do not prove recovery
 quality in yours. Smaller DeepSeek-derived or distilled checkpoints are
 separate models, not compact deployments of the full V4.1 system, and
 need their own evaluations.</p>
-<h3 data-number="4.5.3" id="z.ai-glm"><span class="header-section-number">4.5.3</span> Z.AI / GLM</h3>
+<h3 data-number="4.5.3" role="heading" aria-level="4" id="z.ai-glm"><span class="header-section-number">4.5.3</span> Z.AI /
+GLM</h3>
 <p>Z.AI positions <a href="https://docs.z.ai/guides/llm/glm-5">GLM-5</a>
 for agentic engineering, including planning, refactoring, and debugging.
 Its documented 744B total parameters versus 40B active make the
@@ -1485,7 +1516,8 @@ verify checkpoint availability, serving support, and tool parsing before
 adoption. Smaller GLM variants may fit local experiments; neither the
 GLM name nor a coding-plan subscription establishes that a particular
 model fits your workstation.</p>
-<h3 data-number="4.5.4" id="moonshot-kimi"><span class="header-section-number">4.5.4</span> Moonshot / Kimi</h3>
+<h3 data-number="4.5.4" role="heading" aria-level="4" id="moonshot-kimi"><span class="header-section-number">4.5.4</span>
+Moonshot / Kimi</h3>
 <p>Moonshot’s <a href="https://www.kimi.ai/blog/kimi-k3">Kimi K3
 technical account</a> describes a 2.8-trillion-parameter model with
 native vision and a million-token context window; <a href="https://huggingface.co/moonshotai/Kimi-K3">released weights have
@@ -1500,7 +1532,8 @@ whether its reasoning mode meets your latency budget. The <a href="https://platf
 developer guide</a> describes the API contract; launch demos and vendor
 benchmarks do not establish independent-review accuracy. Kimi CLI
 remains a separate harness choice.</p>
-<h3 data-number="4.5.5" id="mistral-devstral"><span class="header-section-number">4.5.5</span> Mistral / Devstral</h3>
+<h3 data-number="4.5.5" role="heading" aria-level="4" id="mistral-devstral"><span class="header-section-number">4.5.5</span>
+Mistral / Devstral</h3>
 <p>Devstral is Mistral’s coding-agent family, trained for repository
 exploration and multi-file software-engineering work. Its smaller
 downloadable variants offer a more realistic workstation experiment than
@@ -1516,7 +1549,8 @@ with 256K context and open weights under a Modified MIT licence. That
 does not invalidate an existing local Devstral checkpoint, nor establish
 that Medium fits the same hardware. Evaluate the exact release, licence,
 and deployment instructions.</p>
-<h3 data-number="4.5.6" id="openai-gpt-oss"><span class="header-section-number">4.5.6</span> OpenAI / gpt-oss</h3>
+<h3 data-number="4.5.6" role="heading" aria-level="4" id="openai-gpt-oss"><span class="header-section-number">4.5.6</span>
+OpenAI / gpt-oss</h3>
 <p><a href="https://developers.openai.com/api/docs/models/gpt-oss-20b">OpenAI
 gpt-oss-20b</a> and <a href="https://developers.openai.com/api/docs/models/gpt-oss-120b">gpt-oss-120b</a>
 are text-only open-weight reasoning models under Apache 2.0. They
@@ -1535,7 +1569,7 @@ format, including reasoning and tool boundaries, through the serving
 adapter. Test malformed calls, long-context recovery, and reasoning
 latency before giving either model write authority. Screenshots require
 a separate visual-processing path.</p>
-<h3 data-number="4.5.7" id="meta-llama-and-google-gemma"><span class="header-section-number">4.5.7</span> Meta / Llama and Google /
+<h3 data-number="4.5.7" role="heading" aria-level="4" id="meta-llama-and-google-gemma"><span class="header-section-number">4.5.7</span> Meta / Llama and Google /
 Gemma</h3>
 <p>Llama offers downloadable general-purpose checkpoints with an
 established deployment ecosystem, but the family name does not imply
@@ -1554,7 +1588,7 @@ or visual input drive the experiment, but a supported function-call
 format does not establish dependable autonomous coding. Check the exact
 release’s licence, input support, and edit-test behaviour before moving
 beyond bounded support.</p>
-<h3 data-number="4.5.8" id="other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="header-section-number">4.5.8</span> Other Families: MiniMax,
+<h3 data-number="4.5.8" role="heading" aria-level="4" id="other-families-minimax-nvidia-nemotron-ibm-granite-microsoft-phi"><span class="header-section-number">4.5.8</span> Other Families: MiniMax,
 NVIDIA Nemotron, IBM Granite, Microsoft Phi</h3>
 <p><a href="https://github.com/MiniMax-AI/MiniMax-M2">MiniMax’s coding
 and agent releases</a> merit a hosted or server evaluation; their sparse
@@ -1572,7 +1606,7 @@ Phi</a> offers small general instruction/reasoning models suitable for
 constrained local experiments. For these smaller models, start with
 extraction, summaries, and tightly scoped edits. Compact size alone says
 nothing about reliable multi-file recovery.</p>
-<h2 data-number="4.6" id="deployment-fit-workstation-server-or-hosted-endpoint"><span class="header-section-number">4.6</span> Deployment Fit: Workstation,
+<h2 data-number="4.6" role="heading" aria-level="3" id="deployment-fit-workstation-server-or-hosted-endpoint"><span class="header-section-number">4.6</span> Deployment Fit: Workstation,
 Server, or Hosted Endpoint</h2>
 <p>Size the deployment for the actual checkpoint and workload. GPU video
 memory (VRAM), shared system memory, and memory spread across several
@@ -1654,7 +1688,7 @@ a benchmark or a prediction for the named models above. Measure actual
 peak allocation and latency. Hardware purchase, electricity, and
 administration costs belong in <a href="#cost-analysis">Cost
 Analysis</a>.</p>
-<h2 data-number="4.7" id="evidence-and-evaluation"><span class="header-section-number">4.7</span> Evidence and Evaluation</h2>
+<h2 data-number="4.7" role="heading" aria-level="3" id="evidence-and-evaluation"><span class="header-section-number">4.7</span> Evidence and Evaluation</h2>
 <p>Keep four evidence types separate. <strong>Vendor specifications and
 claims</strong> establish intended formats, supported settings,
 licences, and published limits; vendor benchmark results show
@@ -1750,7 +1784,7 @@ serving, also record peak memory, time to first token, generation speed,
 and failures at the intended context and concurrency. This survey does
 not supply measured workstation results; the capacity example above is
 explicitly an estimate.</p>
-<h2 data-number="4.8" id="choosing-a-replacement"><span class="header-section-number">4.8</span> Choosing a Replacement</h2>
+<h2 data-number="4.8" role="heading" aria-level="3" id="choosing-a-replacement"><span class="header-section-number">4.8</span> Choosing a Replacement</h2>
 <p>Start with your deployment boundary and the consequences of an
 incorrect autonomous action, then shortlist models for a task role. The
 table supplies experiments, not winners. Keep the Claude baseline where
@@ -1823,8 +1857,9 @@ reproducible evidence. The model survey identifies what to test; <a href="#provi
 and the tool profiles establish which harnesses can deliver the chosen
 policy.</p>
 <hr />
-<h1 data-number="5" id="cli-native-tools"><span class="header-section-number">5</span> CLI-Native Tools</h1>
-<h2 data-number="5.1" id="aider"><span class="header-section-number">5.1</span> Aider</h2>
+<h1 data-number="5" role="heading" aria-level="2" id="cli-native-tools"><span class="header-section-number">5</span>
+CLI-Native Tools</h1>
+<h2 data-number="5.1" role="heading" aria-level="3" id="aider"><span class="header-section-number">5.1</span> Aider</h2>
 <p><strong>What it is:</strong> Aider is the most mature and
 architecturally similar open-source alternative to Claude Code. It is a
 terminal-based pair-programming tool that works directly with your
@@ -1866,8 +1901,8 @@ providers via litellm, including:</p>
 <ul>
 <li>Anthropic (Claude family — <code>claude-sonnet-5</code>,
 <code>claude-opus-5</code>, <code>claude-haiku-4-5-20251001</code>)</li>
-<li>OpenAI (current GPT-5.6 and Codex model aliases exposed by the
-installed Aider/litellm release)</li>
+<li>OpenAI (model aliases exposed by the installed Aider/litellm
+release; verify availability)</li>
 <li>Google (<code>gemini-3.1-pro-preview</code> via Vertex AI or AI
 Studio)</li>
 <li>AWS Bedrock</li>
@@ -1941,7 +1976,7 @@ explicitly <code>/add</code> files) - Less capable at long multi-step
 autonomous tasks compared to Claude Code - No built-in web search or
 browser use - Development cadence has slowed relative to faster-moving
 competitors</p>
-<h2 data-number="5.2" id="opencode"><span class="header-section-number">5.2</span> OpenCode</h2>
+<h2 data-number="5.2" role="heading" aria-level="3" id="opencode"><span class="header-section-number">5.2</span> OpenCode</h2>
 <p><strong>What it is:</strong> OpenCode is an open-source coding agent
 with a rich terminal UI (TUI), a client/server architecture, and support
 for a very wide range of LLM providers.</p>
@@ -2022,7 +2057,8 @@ the old bundled plugin route is prohibited by Anthropic and is no longer
 shipped - Org/rebrand churn (<code>sst/opencode</code> →
 <code>anomalyco/opencode</code>) means older documentation and links may
 be stale</p>
-<h2 data-number="5.3" id="goose-by-block"><span class="header-section-number">5.3</span> Goose (by Block)</h2>
+<h2 data-number="5.3" role="heading" aria-level="3" id="goose-by-block"><span class="header-section-number">5.3</span> Goose
+(by Block)</h2>
 <p><strong>What it is:</strong> Goose is an open-source, on-device AI
 coding agent developed by Block (formerly Square, the company associated
 with Jack Dorsey). It is available as a CLI, a desktop application, and
@@ -2077,7 +2113,8 @@ ecosystem</p>
 desktop app orientation means some rough edges in headless terminal use
 - Younger MCP ecosystem integration story than Claude Code’s, despite
 the architecture being sound</p>
-<h2 data-number="5.4" id="gemini-cli-by-google"><span class="header-section-number">5.4</span> Gemini CLI (by Google)</h2>
+<h2 data-number="5.4" role="heading" aria-level="3" id="gemini-cli-by-google"><span class="header-section-number">5.4</span>
+Gemini CLI (by Google)</h2>
 <p><strong>What it is:</strong> Gemini CLI is Google’s open-source
 terminal AI agent, released in mid-2025. It is powered by the Gemini
 model family. Google announced a transition to Antigravity CLI: from 18
@@ -2138,7 +2175,7 @@ no longer the supported Gemini CLI path; migrate to Antigravity CLI -
 Gemini models, while capable, may not match Claude’s code quality for
 your specific use cases - Less battle-tested than Aider - Node.js
 dependency</p>
-<h2 data-number="5.5" id="plandex"><span class="header-section-number">5.5</span> Plandex</h2>
+<h2 data-number="5.5" role="heading" aria-level="3" id="plandex"><span class="header-section-number">5.5</span> Plandex</h2>
 <p><strong>What it is:</strong> Plandex is an open-source CLI agent with
 a distinctive planning-first approach. Rather than immediately executing
 changes, it plans multi-file, multi-step tasks and builds up pending
@@ -2181,7 +2218,7 @@ multi-file tasks</p>
 quick edits - Less interactive than Aider or OpenCode - Client-server
 architecture adds complexity - LLM provider support less broad than
 Aider/OpenCode - Smaller community</p>
-<h2 data-number="5.6" id="swe-agent"><span class="header-section-number">5.6</span> SWE-agent</h2>
+<h2 data-number="5.6" role="heading" aria-level="3" id="swe-agent"><span class="header-section-number">5.6</span> SWE-agent</h2>
 <p><strong>What it is:</strong> SWE-agent is a research tool from
 Princeton NLP lab, designed primarily for automated software engineering
 on GitHub issues. It achieves high scores on the SWE-bench benchmark. It
@@ -2211,7 +2248,8 @@ not interactive - Research-oriented design means rough UX edges - Slower
 than interactive tools - Not designed for the ad-hoc, exploratory coding
 sessions that Claude Code excels at - Primary development momentum has
 moved to mini-swe-agent; SWE-agent proper sees less active iteration</p>
-<h2 data-number="5.7" id="openai-codex-cli"><span class="header-section-number">5.7</span> OpenAI Codex CLI</h2>
+<h2 data-number="5.7" role="heading" aria-level="3" id="openai-codex-cli"><span class="header-section-number">5.7</span>
+OpenAI Codex CLI</h2>
 <p><strong>What it is:</strong> Codex CLI is OpenAI’s open-source
 terminal coding agent, open-sourced 16 April 2025. It is OpenAI’s direct
 answer to Claude Code and Gemini CLI: a terminal-native agent that reads
@@ -2229,15 +2267,15 @@ local model backends.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-g</span> @openai/codex</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or via the standalone Rust binary release</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">codex</span></span></code></pre></div>
-<p><strong>Model support:</strong> The current Codex subscription lineup
-is the GPT-5.6 family: Sol, Terra, and Luna. Sol is the high-capability
-choice, Terra balances capability and allowance, and Luna stretches
-usage furthest. Available models depend on plan and may change, so
-<code>/model</code> and <code>/status</code> are more reliable than a
-hard-coded model name in a long-lived guide.</p>
-<p>The GPT-6 Astra model is also available in the current OpenAI model
-catalogue; use the installed Codex <code>/model</code> listing rather
-than assuming every plan exposes every model.</p>
+<p><strong>Model support:</strong> As checked on 20 November 2026, <a href="https://learn.chatgpt.com/docs/models">OpenAI’s Work and Codex
+model guide</a> lists GPT-6.2 Astra and GPT-6.2 Sol for supported plans
+and clients, as well as GPT-6.1 Terra and GPT-6 Luna. Availability
+depends on the account, plan, client and workspace settings. Use the
+installed Codex <code>/model</code> picker and <code>/status</code>, and
+check the applicable plan, rather than assuming the published list is
+available to every user. The separate <a href="https://developers.openai.com/api/docs/models">API catalogue</a>
+describes API access; it does not establish subscription entitlement or
+identical client support.</p>
 <p><strong>Local model support:</strong> Codex CLI can run against local
 models via an <code>--oss</code> flag, with documented Ollama and LM
 Studio providers. This gives it a genuine offline/local-only mode,
@@ -2257,19 +2295,20 @@ behaviour, and approval policy for shell commands.</p>
 files, run shell commands with configurable approval levels, and iterate
 autonomously across multi-step tasks, broadly comparable in scope to
 Claude Code and Gemini CLI.</p>
-<p><strong>Strengths:</strong> - Current GPT-5.6 Sol/Terra/Luna choices
-let you trade capability against how quickly you consume the plan
-allowance - Fast, low-overhead Rust binary - Genuine local-model mode
-via <code>--oss</code> (Ollama and LM Studio) — not just a cloud-only
-tool - Bundled into existing ChatGPT subscriptions, so many users
-already have access with no incremental cost - Very large and
-fast-growing community (high-five-figure/low-six-figure star range)</p>
+<p><strong>Strengths:</strong> - The model picker lets you compare the
+choices available to your account and task; check the applicable usage
+limits - Fast, low-overhead Rust binary - Genuine local-model mode via
+<code>--oss</code> (Ollama and LM Studio) — not just a cloud-only tool -
+Bundled into existing ChatGPT subscriptions, so many users already have
+access with no incremental cost - Very large and fast-growing community
+(high-five-figure/low-six-figure star range)</p>
 <p><strong>Weaknesses:</strong> - Best experience is tied to OpenAI’s
 own models and ChatGPT plans; using it as a purely model-agnostic tool
 is a secondary use case - Newer than Aider/OpenCode as a CLI-first
 product, despite OpenAI’s scale - Model availability and usage
 allowances change quickly, making static comparisons easy to age</p>
-<h2 data-number="5.8" id="amp-sourcegraph"><span class="header-section-number">5.8</span> Amp (Sourcegraph)</h2>
+<h2 data-number="5.8" role="heading" aria-level="3" id="amp-sourcegraph"><span class="header-section-number">5.8</span> Amp
+(Sourcegraph)</h2>
 <p><strong>What it is:</strong> Amp is Sourcegraph’s hybrid
 CLI-plus-cloud coding agent. It pairs a local CLI with cloud-hosted
 “Orbs” for offloading longer-running or parallel work. Orbs are remote
@@ -2313,9 +2352,9 @@ Newer product identity means less accumulated community track record
 than Sourcegraph’s older Cody product - Cloud “Orbs” component means it
 is not a purely local/offline tool in the way Aider or Goose can be;
 self-hosted Orbs still depend on Amp’s hosted control plane</p>
-<h2 data-number="5.9" id="deprecated-and-unverified-tools"><span class="header-section-number">5.9</span> Deprecated and Unverified
+<h2 data-number="5.9" role="heading" aria-level="3" id="deprecated-and-unverified-tools"><span class="header-section-number">5.9</span> Deprecated and Unverified
 Tools</h2>
-<h3 data-number="5.9.1" id="mentat"><span class="header-section-number">5.9.1</span> Mentat</h3>
+<h3 data-number="5.9.1" role="heading" aria-level="4" id="mentat"><span class="header-section-number">5.9.1</span> Mentat</h3>
 <p><strong>What it is:</strong> Mentat was a Python-based CLI coding
 tool and an early entrant in the space, taking a conversational approach
 to code editing with explicit context management.</p>
@@ -2334,7 +2373,7 @@ archived on 15 May 2026 and is now read-only. The project has publicly
 directed users to alternatives such as Cline and ZooCode. There is no
 live “current tool” entry for Roo Code in this document — by the time of
 this refresh it is itself historical.</p>
-<h2 data-number="5.10" id="qwen-code-and-kimi-cli"><span class="header-section-number">5.10</span> Qwen Code and Kimi CLI</h2>
+<h2 data-number="5.10" role="heading" aria-level="3" id="qwen-code-and-kimi-cli"><span class="header-section-number">5.10</span> Qwen Code and Kimi CLI</h2>
 <p><strong>What they are:</strong> These are CLI coding agents from
 Chinese AI labs — Qwen Code from Alibaba’s Qwen team and Kimi CLI from
 Moonshot AI. Both are classified alongside Claude Code and Aider as CLI
@@ -2349,9 +2388,9 @@ CLI uses Kimi’s models with a very long context window.</p>
 <p><strong>Note:</strong> These tools were not covered by this round’s
 research refresh. Treat specific capability claims with appropriate
 scepticism until you test them directly.</p>
-<h1 data-number="6" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">6</span> IDE Extensions and Hybrid
+<h1 data-number="6" role="heading" aria-level="2" id="ide-extensions-and-hybrid-tools"><span class="header-section-number">6</span> IDE Extensions and Hybrid
 Tools</h1>
-<h2 data-number="6.1" id="cline-formerly-claude-dev"><span class="header-section-number">6.1</span> Cline (Formerly Claude
+<h2 data-number="6.1" role="heading" aria-level="3" id="cline-formerly-claude-dev"><span class="header-section-number">6.1</span> Cline (Formerly Claude
 Dev)</h2>
 <p><strong>What it is:</strong> Cline is an open-source autonomous
 coding agent that operates primarily as a VS Code extension. It is
@@ -2449,7 +2488,8 @@ CLI)</p>
 workflows, and platform support is not uniform - Browser use capability
 means it can have unintended side effects if not supervised - Less
 scriptable than pure CLI tools</p>
-<h2 data-number="6.2" id="continue.dev"><span class="header-section-number">6.2</span> Continue.dev</h2>
+<h2 data-number="6.2" role="heading" aria-level="3" id="continue.dev"><span class="header-section-number">6.2</span>
+Continue.dev</h2>
 <p><strong>What it is:</strong> Continue.dev is an open-source AI coding
 assistant for VS Code and JetBrains IDEs. It combines autocomplete,
 chat, and agent capabilities in a single extension, with deep
@@ -2518,8 +2558,9 @@ CLI is supplementary, not a terminal-first redesign - Agent mode quality
 depends heavily on the model’s tool-calling capabilities - Less capable
 at long agentic chains than Cline or Claude Code - JetBrains support is
 less mature than VS Code</p>
-<h1 data-number="7" id="dedicated-ai-ides"><span class="header-section-number">7</span> Dedicated AI IDEs</h1>
-<h2 data-number="7.1" id="cursor"><span class="header-section-number">7.1</span> Cursor</h2>
+<h1 data-number="7" role="heading" aria-level="2" id="dedicated-ai-ides"><span class="header-section-number">7</span>
+Dedicated AI IDEs</h1>
+<h2 data-number="7.1" role="heading" aria-level="3" id="cursor"><span class="header-section-number">7.1</span> Cursor</h2>
 <p><strong>What it is:</strong> Cursor is a VS Code fork with deep AI
 integration baked into every layer of the editor. It has become one of
 the most widely adopted commercial AI coding tools, with a large user
@@ -2596,7 +2637,7 @@ support - Proprietary — you are dependent on Anysphere remaining a going
 concern and maintaining pricing - Heavier than a terminal tool —
 requires a full VS Code instance - Usage-based credit pricing makes
 monthly cost less predictable than the old flat-request model</p>
-<h2 data-number="7.2" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">7.2</span> Windsurf (Now Devin Desktop,
+<h2 data-number="7.2" role="heading" aria-level="3" id="windsurf-now-devin-desktop-cognition-ai"><span class="header-section-number">7.2</span> Windsurf (Now Devin Desktop,
 Cognition AI)</h2>
 <p><strong>What it is:</strong> Windsurf was an AI-first IDE built by
 Codeium, positioned as a direct competitor to Cursor. Its standout
@@ -2643,7 +2684,7 @@ long-term - Less model flexibility than Cursor - Smaller community than
 Cursor; documentation is still catching up to the rebrand - Easy to
 confuse with Cognition’s separate cloud Devin product, which has
 different pricing and a different execution model</p>
-<h2 data-number="7.3" id="zed-ai"><span class="header-section-number">7.3</span> Zed AI</h2>
+<h2 data-number="7.3" role="heading" aria-level="3" id="zed-ai"><span class="header-section-number">7.3</span> Zed AI</h2>
 <p><strong>What it is:</strong> Zed is a high-performance code editor
 written in Rust, designed for speed and minimal latency. Its AI
 integration (Zed AI) brings Claude as the default model into this fast
@@ -2683,7 +2724,8 @@ on Zed’s own agent</p>
 less mature than Cursor’s or Devin Desktop’s - Windows is supported
 alongside macOS and Linux - Token-based overage billing can be less
 predictable than a flat monthly fee for heavy users</p>
-<h2 data-number="7.4" id="google-antigravity"><span class="header-section-number">7.4</span> Google Antigravity</h2>
+<h2 data-number="7.4" role="heading" aria-level="3" id="google-antigravity"><span class="header-section-number">7.4</span>
+Google Antigravity</h2>
 <p><strong>What it is:</strong> Google Antigravity is Google’s
 agent-first development platform. It includes Antigravity CLI, the
 Antigravity 2.0 desktop application, IDE integrations, an SDK, and
@@ -2721,7 +2763,8 @@ open-weight models - Under active development by Google</p>
 battle-tested - Product and pricing details remain volatile across
 surfaces - No general BYOK/OpenRouter path for extending account
 quotas</p>
-<h2 data-number="7.5" id="aws-kiro-ide-and-cli"><span class="header-section-number">7.5</span> AWS Kiro IDE and CLI</h2>
+<h2 data-number="7.5" role="heading" aria-level="3" id="aws-kiro-ide-and-cli"><span class="header-section-number">7.5</span>
+AWS Kiro IDE and CLI</h2>
 <p><strong>What it is:</strong> Kiro is AWS’s agentic development
 environment, available as a VS Code-based desktop IDE, terminal-native
 CLI, web surface, and mobile companion. These surfaces share one agent
@@ -2765,9 +2808,10 @@ model and task, so heavy-use cost is not a flat subscription - Closed
 source and tied to AWS’s product and model availability - Newer than the
 established IDEs; verify regional model access and feature
 availability</p>
-<h1 data-number="8" id="cloud-and-web-platform-agents"><span class="header-section-number">8</span> Cloud and Web Platform
+<h1 data-number="8" role="heading" aria-level="2" id="cloud-and-web-platform-agents"><span class="header-section-number">8</span> Cloud and Web Platform
 Agents</h1>
-<h2 data-number="8.1" id="grok-bot-xai"><span class="header-section-number">8.1</span> Grok Bot (xAI)</h2>
+<h2 data-number="8.1" role="heading" aria-level="3" id="grok-bot-xai"><span class="header-section-number">8.1</span> Grok
+Bot (xAI)</h2>
 <p><strong>What it is:</strong> Grok Bot is xAI’s commercial, hosted
 computer-use agent. xAI launched it in beta on <strong>11 August
 2026</strong> as a set of persistent AI teammates rather than as another
@@ -2837,7 +2881,7 @@ and sessions can be available to the user’s other Bots</li>
 <li>Beta product with rapidly changing plan eligibility, quotas, and
 administrative controls</li>
 </ul>
-<h2 data-number="8.2" id="openhands-formerly-opendevin"><span class="header-section-number">8.2</span> OpenHands (Formerly
+<h2 data-number="8.2" role="heading" aria-level="3" id="openhands-formerly-opendevin"><span class="header-section-number">8.2</span> OpenHands (Formerly
 OpenDevin)</h2>
 <p><strong>What it is:</strong> OpenHands is a highly capable
 open-source AI software engineer designed to solve complex software
@@ -2907,7 +2951,7 @@ tools - Primarily a cloud/web platform — less suitable for quick
 interactive sessions - Slower to start up than CLI tools (Docker
 container spin-up) - Not a terminal-first tool despite having a CLI
 option</p>
-<h2 data-number="8.3" id="devin-by-cognition-ai"><span class="header-section-number">8.3</span> Devin (by Cognition AI)</h2>
+<h2 data-number="8.3" role="heading" aria-level="3" id="devin-by-cognition-ai"><span class="header-section-number">8.3</span> Devin (by Cognition AI)</h2>
 <p><strong>What it is:</strong> Devin was the first high-profile “AI
 software engineer” capable of autonomously solving complex GitHub issues
 end-to-end. It is a commercial cloud product from Cognition AI.</p>
@@ -2933,9 +2977,9 @@ levels</p>
 still make heavy-use costs less predictable than a simple flat
 subscription - Fully proprietary — no control over the stack - Not a CLI
 tool</p>
-<h1 data-number="9" id="commercial-ai-coding-assistants"><span class="header-section-number">9</span> Commercial AI Coding
+<h1 data-number="9" role="heading" aria-level="2" id="commercial-ai-coding-assistants"><span class="header-section-number">9</span> Commercial AI Coding
 Assistants</h1>
-<h2 data-number="9.1" id="github-copilot-with-agent-mode"><span class="header-section-number">9.1</span> GitHub Copilot With Agent
+<h2 data-number="9.1" role="heading" aria-level="3" id="github-copilot-with-agent-mode"><span class="header-section-number">9.1</span> GitHub Copilot With Agent
 Mode</h2>
 <p><strong>What it is:</strong> GitHub Copilot is Microsoft/GitHub’s AI
 coding assistant. It now spans autocomplete, chat, an in-IDE “Agent
@@ -2988,7 +3032,7 @@ enterprise-managed custom models are different paths - Agent Mode and
 Copilot Coding Agent are two separate mental models to learn, with
 different sync/async execution semantics - Less suited for non-GitHub
 workflows</p>
-<h2 data-number="9.2" id="amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="header-section-number">9.2</span> Amazon Q Developer (Formerly
+<h2 data-number="9.2" role="heading" aria-level="3" id="amazon-q-developer-formerly-codewhisperer-ide-transition-to-kiro"><span class="header-section-number">9.2</span> Amazon Q Developer (Formerly
 CodeWhisperer) — IDE Transition to Kiro</h2>
 <p><strong>What it is:</strong> Amazon Q Developer is AWS’s AI coding
 assistant, with deep integration into the AWS ecosystem (rebranded from
@@ -3022,7 +3066,7 @@ mode is now genuinely general-purpose, not AWS-console-limited</p>
 closed - AWS-focused — less useful for non-AWS codebases - Provider
 choice limited to Claude via Bedrock/CLI; no OpenRouter or broad
 model-agnosticism</p>
-<h2 data-number="9.3" id="jetbrains-ai-assistant"><span class="header-section-number">9.3</span> JetBrains AI Assistant</h2>
+<h2 data-number="9.3" role="heading" aria-level="3" id="jetbrains-ai-assistant"><span class="header-section-number">9.3</span> JetBrains AI Assistant</h2>
 <p><strong>What it is:</strong> JetBrains AI Assistant is integrated
 into IntelliJ IDEA, PyCharm, WebStorm, GoLand, and all other JetBrains
 IDEs. It provides chat, completion, and an autonomous multi-step agent
@@ -3058,7 +3102,7 @@ agent mode or Cline on complex multi-file tasks - Pricing and
 entitlements vary between standalone AI plans, IDE bundles, and
 external-agent paths, adding cost-tracking overhead - JetBrains IDEs
 remain heavier than VS Code</p>
-<h2 data-number="9.4" id="tabnine"><span class="header-section-number">9.4</span> Tabnine</h2>
+<h2 data-number="9.4" role="heading" aria-level="3" id="tabnine"><span class="header-section-number">9.4</span> Tabnine</h2>
 <p><strong>What it is:</strong> Tabnine is an AI coding assistant with a
 long history (one of the first serious AI coding tools), historically
 focused on fast, high-quality inline completions. It has since pivoted
@@ -3087,7 +3131,7 @@ $39/$59/month) — no longer the budget completions option it once was -
 Agentic capability is newer and less proven than Cursor, Cline, or
 Claude Code - Being overtaken by Cursor/Windsurf on raw completion
 quality</p>
-<h2 data-number="9.5" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">9.5</span> Supermaven — Discontinued,
+<h2 data-number="9.5" role="heading" aria-level="3" id="supermaven-discontinued-folded-into-cursor"><span class="header-section-number">9.5</span> Supermaven — Discontinued,
 Folded Into Cursor</h2>
 <p><strong>What it is:</strong> Supermaven was a VS Code-focused
 autocomplete tool with a very large context window for completions (300k
@@ -3099,14 +3143,14 @@ absorbed the team and technology, and Cursor has integrated Supermaven’s
 completion engine into its tab-completion feature. If Supermaven was
 your tool of choice, Cursor is its direct successor; there is no
 standalone Supermaven product to evaluate separately.</p>
-<h1 data-number="10" id="cross-cutting-analysis"><span class="header-section-number">10</span> Cross-Cutting Analysis</h1>
-<h2 data-number="10.1" id="provider-flexibility-analysis"><span class="header-section-number">10.1</span> Provider Flexibility
+<h1 data-number="10" role="heading" aria-level="2" id="cross-cutting-analysis"><span class="header-section-number">10</span> Cross-Cutting Analysis</h1>
+<h2 data-number="10.1" role="heading" aria-level="3" id="provider-flexibility-analysis"><span class="header-section-number">10.1</span> Provider Flexibility
 Analysis</h2>
 <p>A critical factor for Claude Code users concerned about API costs is
 whether an alternative tool is model-agnostic — allowing you to route
 requests to cheaper models, local models, or whichever provider has the
 best current pricing.</p>
-<h3 data-number="10.1.1" id="openrouter-compatibility"><span class="header-section-number">10.1.1</span> OpenRouter
+<h3 data-number="10.1.1" role="heading" aria-level="4" id="openrouter-compatibility"><span class="header-section-number">10.1.1</span> OpenRouter
 Compatibility</h3>
 <p>OpenRouter is a unified API gateway that provides access to hundreds
 of models from dozens of providers under a single API key, with
@@ -3277,7 +3321,7 @@ coverage vary by client and plan. Cursor, Devin Desktop, Devin, and Grok
 Bot remain managed products rather than OpenRouter-style routing layers;
 Grok Bot’s cross-application computer use should not be confused with
 provider flexibility.</p>
-<h3 data-number="10.1.2" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">10.1.2</span> Local LLM Support (Ollama /
+<h3 data-number="10.1.2" role="heading" aria-level="4" id="local-llm-support-ollama-lm-studio"><span class="header-section-number">10.1.2</span> Local LLM Support (Ollama /
 LM Studio)</h3>
 <p>Running models locally eliminates API costs entirely, but not
 hardware, electricity, or operational costs. Quality and hardware fit
@@ -3462,13 +3506,13 @@ support without explicit provider documentation.</p>
 Coding Agents</a>, especially <a href="#deployment-fit-workstation-server-or-hosted-endpoint">Deployment
 Fit</a>. The tables above describe provider compatibility; model quality
 and hardware feasibility require separate evaluation.</p>
-<h2 data-number="10.2" id="feature-comparison-matrix"><span class="header-section-number">10.2</span> Feature Comparison Matrix</h2>
+<h2 data-number="10.2" role="heading" aria-level="3" id="feature-comparison-matrix"><span class="header-section-number">10.2</span> Feature Comparison Matrix</h2>
 <p>The matrix is a shortlist rather than a complete catalogue; it spans
 17 representative tools and is split below into five groups for
 legibility. Products and model surfaces change faster than this table,
 so read it with the dated product profiles and model section.</p>
 <div class="broad-table">
-<h3 data-number="10.2.1" id="group-1-claude-code-aider-opencode-cline"><span class="header-section-number">10.2.1</span> Group 1: Claude Code, Aider,
+<h3 data-number="10.2.1" role="heading" aria-level="4" id="group-1-claude-code-aider-opencode-cline"><span class="header-section-number">10.2.1</span> Group 1: Claude Code, Aider,
 OpenCode, Cline</h3>
 <table>
 <colgroup>
@@ -3588,7 +3632,7 @@ OpenCode, Cline</h3>
 </tr>
 </tbody>
 </table>
-<h3 data-number="10.2.2" id="group-2-continue.dev-goose-gemini-cli-openhands"><span class="header-section-number">10.2.2</span> Group 2: Continue.dev,
+<h3 data-number="10.2.2" role="heading" aria-level="4" id="group-2-continue.dev-goose-gemini-cli-openhands"><span class="header-section-number">10.2.2</span> Group 2: Continue.dev,
 Goose, Gemini CLI, OpenHands</h3>
 <table>
 <colgroup>
@@ -3708,7 +3752,7 @@ Goose, Gemini CLI, OpenHands</h3>
 </tr>
 </tbody>
 </table>
-<h3 data-number="10.2.3" id="group-3-cursor-windsurf-codex-cli-amp"><span class="header-section-number">10.2.3</span> Group 3: Cursor, Windsurf,
+<h3 data-number="10.2.3" role="heading" aria-level="4" id="group-3-cursor-windsurf-codex-cli-amp"><span class="header-section-number">10.2.3</span> Group 3: Cursor, Windsurf,
 Codex CLI, Amp</h3>
 <table>
 <colgroup>
@@ -3829,7 +3873,7 @@ credits</td>
 </tr>
 </tbody>
 </table>
-<h3 data-number="10.2.4" id="group-4-devin-grok-bot-copilot"><span class="header-section-number">10.2.4</span> Group 4: Devin, Grok Bot,
+<h3 data-number="10.2.4" role="heading" aria-level="4" id="group-4-devin-grok-bot-copilot"><span class="header-section-number">10.2.4</span> Group 4: Devin, Grok Bot,
 Copilot</h3>
 <table>
 <colgroup>
@@ -3934,7 +3978,7 @@ Copilot</h3>
 </tbody>
 </table>
 </div>
-<h3 data-number="10.2.5" id="group-5-kiro-antigravity"><span class="header-section-number">10.2.5</span> Group 5: Kiro,
+<h3 data-number="10.2.5" role="heading" aria-level="4" id="group-5-kiro-antigravity"><span class="header-section-number">10.2.5</span> Group 5: Kiro,
 Antigravity</h3>
 <div class="compact-table">
 <table>
@@ -4039,7 +4083,7 @@ browser tool proactively looking up documentation and solutions during a
 task. This is distinct from “Devin Search,” a separately documented
 codebase-search feature; do not conflate the two.</p>
 <hr />
-<h2 data-number="10.3" id="extensibility-deep-dive"><span class="header-section-number">10.3</span> Extensibility Deep Dive</h2>
+<h2 data-number="10.3" role="heading" aria-level="3" id="extensibility-deep-dive"><span class="header-section-number">10.3</span> Extensibility Deep Dive</h2>
 <p>One of Claude Code’s most powerful features is its extensibility
 system: Skills (reusable, discoverable workflow packages that can be
 invoked directly or selected by the agent), hooks (commands that fire on
@@ -4047,7 +4091,7 @@ events like tool calls or session start), and MCP servers (external
 tools exposed via a standard protocol). This combination allows you to
 build a highly personalised, automated coding workflow. How do the
 alternatives compare?</p>
-<h3 data-number="10.3.1" id="claude-codes-extension-architecture"><span class="header-section-number">10.3.1</span> Claude Code’s Extension
+<h3 data-number="10.3.1" role="heading" aria-level="4" id="claude-codes-extension-architecture"><span class="header-section-number">10.3.1</span> Claude Code’s Extension
 Architecture</h3>
 <p>For context, Claude Code’s three-layer system works as follows:</p>
 <ol type="1">
@@ -4069,7 +4113,7 @@ of its reasoning (read from a database, query an external API, access
 browser dev tools, etc.). Any MCP server in the ecosystem
 works.</p></li>
 </ol>
-<h3 data-number="10.3.2" id="how-alternatives-compare"><span class="header-section-number">10.3.2</span> How Alternatives
+<h3 data-number="10.3.2" role="heading" aria-level="4" id="how-alternatives-compare"><span class="header-section-number">10.3.2</span> How Alternatives
 Compare</h3>
 <p><strong>Aider:</strong> No equivalent to skills or hooks. No MCP
 support. Configuration via <code>.aider.conf.yml</code> covers model
@@ -4117,7 +4161,7 @@ rules. MCP is optional rather than foundational: the Bot can use a
 browser and hosted computer directly when a service has no MCP server.
 Its routines and Auto Review controls are product-specific and are not
 compatible with Claude Code hooks or other agents’ skill formats.</p>
-<h3 data-number="10.3.3" id="the-agents.md-open-standard"><span class="header-section-number">10.3.3</span> The AGENTS.md Open
+<h3 data-number="10.3.3" role="heading" aria-level="4" id="the-agents.md-open-standard"><span class="header-section-number">10.3.3</span> The AGENTS.md Open
 Standard</h3>
 <p>Alongside MCP, a second cross-cutting convention has emerged that
 matters for anyone comparing extensibility stories:
@@ -4143,7 +4187,7 @@ one, both, or neither. If you maintain several per-tool rule files
 <code>CLAUDE.md</code>), AGENTS.md is worth tracking as a potential
 single source of truth that many tools can read natively, reducing the
 duplication of instructions across tools.</p>
-<h3 data-number="10.3.4" id="what-this-means-for-migration"><span class="header-section-number">10.3.4</span> What This Means for
+<h3 data-number="10.3.4" role="heading" aria-level="4" id="what-this-means-for-migration"><span class="header-section-number">10.3.4</span> What This Means for
 Migration</h3>
 <p>If you have heavily invested in Claude Code’s extensibility system
 (skills, hooks, MCPs), a complete migration requires rebuilding your
@@ -4160,7 +4204,8 @@ hooks. If your per-tool instruction files (rather than MCP servers) are
 the bigger migration cost, look at consolidating onto AGENTS.md — it is
 now adopted across tens of thousands of projects, and Claude Code can
 import it into <code>CLAUDE.md</code>.</p>
-<h2 data-number="10.4" id="cost-analysis"><span class="header-section-number">10.4</span> Cost Analysis</h2>
+<h2 data-number="10.4" role="heading" aria-level="3" id="cost-analysis"><span class="header-section-number">10.4</span> Cost
+Analysis</h2>
 <p>If you are a heavy Claude Code user on a Max plan, what would the
 same usage cost on each alternative? Note first that “unlimited usage”
 is not an accurate description of the Max plan: Max 5x ($100/month) and
@@ -4169,7 +4214,7 @@ weekly limit, with further caps and model-specific effects possible.
 Anthropic’s live help page is the authority for the limits; do not
 convert them into a fixed message count because message capacity depends
 on model, context, and workload.</p>
-<h3 data-number="10.4.1" id="defining-heavy-usage"><span class="header-section-number">10.4.1</span> Defining “Heavy Usage”</h3>
+<h3 data-number="10.4.1" role="heading" aria-level="4" id="defining-heavy-usage"><span class="header-section-number">10.4.1</span> Defining “Heavy Usage”</h3>
 <p>For this analysis, heavy usage means: - ~4-8 hours of active coding
 per day - Typical session: long context (50k-200k tokens input), many
 file edits, running tests - Estimated: ~100-200 million input tokens per
@@ -4177,7 +4222,7 @@ month, 10-20 million output tokens per month</p>
 <p>These are rough estimates — actual token consumption varies
 enormously by workflow and model. The worked examples below use the
 midpoints (~150M input / ~15M output tokens per month).</p>
-<h3 data-number="10.4.2" id="api-cost-estimates-direct-provider-as-of-7-october-2026"><span class="header-section-number">10.4.2</span> API Cost Estimates (Direct
+<h3 data-number="10.4.2" role="heading" aria-level="4" id="api-cost-estimates-direct-provider-as-of-7-october-2026"><span class="header-section-number">10.4.2</span> API Cost Estimates (Direct
 Provider, as of 7 October 2026)</h3>
 <p>Pricing changes frequently; treat these as ballpark figures using
 current published rates, not guarantees.</p>
@@ -4206,15 +4251,16 @@ this refresh intentionally avoids carrying forward the superseded Sonnet
 verify current tier pricing and caps before treating that as a
 purchasing recommendation.</em></li>
 </ul>
-<p><strong>OpenAI GPT-5.6 Terra (current balanced tier):</strong></p>
+<p><strong>OpenAI GPT-5.6 Terra (7 October 2026 pricing
+example):</strong></p>
 <ul>
 <li>Input: $2/million tokens</li>
 <li>Output: $12/million tokens</li>
 <li>Heavy usage estimate: (150M x $2 + 15M x $12) / 1M approximately
 <strong>$300 + $180 = ~$480/month</strong></li>
-<li><em>GPT-5.6 Sol is the flagship at $4/$20 per million; GPT-5.6 Luna
-is the cost-sensitive tier at $0.20/$1.20. The model and price selected
-materially change the result.</em></li>
+<li><em>The October example used GPT-5.6 Sol at $4/$20 per million and
+GPT-5.6 Luna at $0.20/$1.20. The model and price selected materially
+change the result; verify current API rates before budgeting.</em></li>
 </ul>
 <p>At the same 150M input / 15M output workload, the corresponding
 estimates are approximately <strong>$900/month for Sol</strong> ($600 +
@@ -4257,7 +4303,7 @@ status, and gateway markup.</em></li>
 length, and runtime; validate the actual workload rather than relying on
 a generic VRAM threshold</li>
 </ul>
-<h3 data-number="10.4.3" id="per-tool-cost-summary"><span class="header-section-number">10.4.3</span> Per-Tool Cost Summary</h3>
+<h3 data-number="10.4.3" role="heading" aria-level="4" id="per-tool-cost-summary"><span class="header-section-number">10.4.3</span> Per-Tool Cost Summary</h3>
 <div class="broad-table">
 <table>
 <colgroup>
@@ -4634,7 +4680,7 @@ no API charge</td>
 </tbody>
 </table>
 </div>
-<h3 data-number="10.4.4" id="cost-migration-strategy"><span class="header-section-number">10.4.4</span> Cost Migration Strategy</h3>
+<h3 data-number="10.4.4" role="heading" aria-level="4" id="cost-migration-strategy"><span class="header-section-number">10.4.4</span> Cost Migration Strategy</h3>
 <p><strong>Scenario 1: Keep Claude-quality results, accept higher
 costs</strong> Use Aider or Cline with direct Anthropic API. Cost:
 roughly $450/month for the heavy-usage workload defined here at Sonnet
@@ -4642,10 +4688,10 @@ roughly $450/month for the heavy-usage workload defined here at Sonnet
 financially — you lose the Max plan subsidy, though the gap is narrower
 than it was under 2025 Sonnet pricing.</p>
 <p><strong>Scenario 2: Reduce cost with model diversity</strong> Use
-Aider or OpenCode with OpenRouter, routing to a current low-cost model
-for routine tasks and Claude/GPT-5.6 for complex ones. Cost depends on
-the selected provider, model, and routing strategy; expect a quality
-trade-off on simpler models.</p>
+Aider or OpenCode with OpenRouter. Try a low-cost model on
+representative routine tasks and compare more capable models on the
+complex tasks where it falls short. Measure task completion and total
+cost, including retries, before choosing how to route work.</p>
 <p><strong>Scenario 3: Go local for routine work, cloud for hard
 tasks</strong> Use Aider or Cline with Ollama or LM Studio and a current
 local coding model, then escalate to a cloud API for complex multi-file
@@ -4663,8 +4709,9 @@ Google’s current transition announcement conflicts with some Gemini CLI
 authentication pages, so test the live sign-in path before making it a
 dependency. API-key and Vertex use have their own quota, billing, and
 data-use terms.</p>
-<h1 data-number="11" id="recommendations"><span class="header-section-number">11</span> Recommendations</h1>
-<h2 data-number="11.1" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">11.1</span> If You Want the Closest CLI
+<h1 data-number="11" role="heading" aria-level="2" id="recommendations"><span class="header-section-number">11</span>
+Recommendations</h1>
+<h2 data-number="11.1" role="heading" aria-level="3" id="if-you-want-the-closest-cli-experience-to-claude-code"><span class="header-section-number">11.1</span> If You Want the Closest CLI
 Experience to Claude Code</h2>
 <p><strong>Primary:</strong> Aider — mature, reliable, git-native,
 OpenRouter-supported, local LLM support. Start here. The absence of MCP
@@ -4685,7 +4732,7 @@ with local-model support via <code>--oss</code> for Ollama and LM
 Studio. Amp offers a hybrid local-CLI-plus-cloud-Orbs model with
 $20/$200 subscriptions or pay-as-you-go billing; model inference and Orb
 compute are separate meters.</p>
-<h2 data-number="11.2" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">11.2</span> If You Want the Best
+<h2 data-number="11.2" role="heading" aria-level="3" id="if-you-want-the-best-ide-integrated-alternative"><span class="header-section-number">11.2</span> If You Want the Best
 IDE-Integrated Alternative</h2>
 <p><strong>Primary:</strong> Cline — model-agnostic,
 OpenRouter-supported, browser use, MCP-compatible, Plan/Act mode, and
@@ -4707,7 +4754,7 @@ agent mode — autonomous execution is called “Agent mode.” Current Cursor
 supports multiple parallel agents, but exact concurrency and branch
 limits are plan-dependent; it remains OpenRouter- and
 local-model-incompatible.</p>
-<h2 data-number="11.3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">11.3</span> If Cost Is the Primary
+<h2 data-number="11.3" role="heading" aria-level="3" id="if-cost-is-the-primary-constraint"><span class="header-section-number">11.3</span> If Cost Is the Primary
 Constraint</h2>
 <p><strong>Free option:</strong> Antigravity CLI has an official $0
 individual tier authenticated with a Google Account. It is the simplest
@@ -4726,7 +4773,7 @@ includes usage allowances, but extra work is purchased as on-demand
 credits at API pricing. That is clearer than the legacy ACU model, but
 it still means heavy users can spend beyond the subscription. Devin
 competes on autonomy and capability, not guaranteed low cost.</p>
-<h2 data-number="11.4" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">11.4</span> If You Need Persistent
+<h2 data-number="11.4" role="heading" aria-level="3" id="if-you-need-persistent-cross-application-or-asynchronous-work"><span class="header-section-number">11.4</span> If You Need Persistent
 Cross-Application or Asynchronous Work</h2>
 <p><strong>Primary:</strong> Grok Bot — if the task crosses websites,
 inboxes, documents, and business applications and can continue while you
@@ -4739,7 +4786,7 @@ better comparison for GitHub-centred autonomous software engineering,
 while OpenHands is the better comparison when you want an open-source,
 self-hostable cloud-agent stack. Claude Code remains the better fit for
 interactive terminal-native work.</p>
-<h2 data-number="11.5" id="if-mcp-server-investments-are-critical"><span class="header-section-number">11.5</span> If MCP Server Investments Are
+<h2 data-number="11.5" role="heading" aria-level="3" id="if-mcp-server-investments-are-critical"><span class="header-section-number">11.5</span> If MCP Server Investments Are
 Critical</h2>
 <p>Tools with confirmed MCP support: Claude Code (native), OpenCode,
 Cline, Gemini CLI, Antigravity, Goose (MCP is a core architectural
@@ -4751,7 +4798,7 @@ agentic execution and extensibility; Goose remains worth a closer look
 when on-device execution and MCP portability matter. Grok Bot is the
 better fit when MCP is unavailable but browser or desktop computer use
 can bridge the gap.</p>
-<h2 data-number="11.6" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">11.6</span> If You Need Extensibility
+<h2 data-number="11.6" role="heading" aria-level="3" id="if-you-need-extensibility-similar-to-claude-codes-skillshooks"><span class="header-section-number">11.6</span> If You Need Extensibility
 Similar to Claude Code’s Skills+Hooks</h2>
 <p>The honest answer: no alternative is drop-in compatible with Claude
 Code’s skills+hooks system. The closest approximations: - <strong>Skills
@@ -4766,7 +4813,8 @@ equivalents:</strong> if per-tool rule files (rather than MCP servers)
 are your bigger migration cost, AGENTS.md is now adopted across tens of
 thousands of projects and is a better consolidation target than any
 single vendor’s format</p>
-<h2 data-number="11.7" id="migration-strategy"><span class="header-section-number">11.7</span> Migration Strategy</h2>
+<h2 data-number="11.7" role="heading" aria-level="3" id="migration-strategy"><span class="header-section-number">11.7</span>
+Migration Strategy</h2>
 <p>Rather than a hard switch, a practical migration path:</p>
 <ol type="1">
 <li><strong>Set up Aider</strong> as a Claude Code complement today. Get
@@ -4792,7 +4840,7 @@ AGENTS.md</strong> if you maintain per-tool instruction/rule files
 projects and is a lower-maintenance way to keep project instructions
 portable than maintaining one file per vendor.</li>
 </ol>
-<h1 data-number="12" id="a-concrete-multi-model-alternative-setup"><span class="header-section-number">12</span> A Concrete Multi-Model
+<h1 data-number="12" role="heading" aria-level="2" id="a-concrete-multi-model-alternative-setup"><span class="header-section-number">12</span> A Concrete Multi-Model
 Alternative Setup</h1>
 <p>The survey above helps you choose a tool. It does not tell you how to
 run a real repository when no single model is best at every task. A
@@ -4807,7 +4855,7 @@ examples below reflect a <strong>18 September 2026</strong> research
 checkpoint. Model IDs, prices, quotas, authentication methods, and tool
 support can change independently. Replace every example ID with one
 confirmed in the live provider catalogue before adoption.</p>
-<h2 data-number="12.1" id="the-recommended-default-opencode-plus-explicit-model-tiers"><span class="header-section-number">12.1</span> The Recommended Default:
+<h2 data-number="12.1" role="heading" aria-level="3" id="the-recommended-default-opencode-plus-explicit-model-tiers"><span class="header-section-number">12.1</span> The Recommended Default:
 OpenCode Plus Explicit Model Tiers</h2>
 <p>For this multi-provider, MCP-heavy design, start with OpenCode. Its
 MCP support, project configuration, local-model options, and broad
@@ -4851,7 +4899,7 @@ configuration, and model documentation are the relevant setup
 references. The exact provider route is part of the experiment: pin a
 provider when a long tool-use session needs stable latency, or permit
 fallbacks when availability matters more than reproducibility.</p>
-<h2 data-number="12.2" id="provider-accounts-credits-and-data-boundaries"><span class="header-section-number">12.2</span> Provider Accounts, Credits,
+<h2 data-number="12.2" role="heading" aria-level="3" id="provider-accounts-credits-and-data-boundaries"><span class="header-section-number">12.2</span> Provider Accounts, Credits,
 and Data Boundaries</h2>
 <p>Create one separate API key for this coding harness, give it a small
 spending limit, and keep it in the shell environment or the harness
@@ -5064,7 +5112,8 @@ precedence over environment variables. Local Ollama, vLLM, and llama.cpp
 providers normally belong in Pi’s <code>models.json</code> and
 OpenCode’s custom-provider configuration; bind them to
 <code>127.0.0.1</code> and use the model’s required tool parser.</p>
-<h2 data-number="12.3" id="rough-cost-planning"><span class="header-section-number">12.3</span> Rough Cost Planning</h2>
+<h2 data-number="12.3" role="heading" aria-level="3" id="rough-cost-planning"><span class="header-section-number">12.3</span>
+Rough Cost Planning</h2>
 <p>For a simple planning estimate, assume one month contains 2 million
 input tokens and 500,000 output tokens. At the 18 September 2026
 snapshot, the model-only arithmetic is approximately:</p>
@@ -5113,7 +5162,7 @@ and provider, and raise the limit only when the task pilot justifies it.
 Local inference replaces token billing with hardware, electricity,
 setup, and maintenance costs; count failed runs and operator time rather
 than calling it free.</p>
-<h2 data-number="12.4" id="model-allocation-by-task"><span class="header-section-number">12.4</span> Model Allocation by Task</h2>
+<h2 data-number="12.4" role="heading" aria-level="3" id="model-allocation-by-task"><span class="header-section-number">12.4</span> Model Allocation by Task</h2>
 <p>Use a role-based policy that you can inspect and override. A wrapper
 script or shell alias is enough; automatic model switching that the user
 cannot see is not.</p>
@@ -5212,7 +5261,8 @@ parity.</p>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Aider is the deliberately smaller fallback.</span></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">aider</span> <span class="at">--model</span> openrouter/qwen/qwen3-coder-next <span class="dt">\</span></span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">--weak-model</span> openrouter/z-ai/glm-5.3-flash</span></code></pre></div>
-<h2 data-number="12.5" id="setup-cli-first"><span class="header-section-number">12.5</span> Setup: CLI-First</h2>
+<h2 data-number="12.5" role="heading" aria-level="3" id="setup-cli-first"><span class="header-section-number">12.5</span>
+Setup: CLI-First</h2>
 <p>Install OpenCode and connect the providers you have approved. Put
 repository-wide instructions in <code>AGENTS.md</code>; keep
 <code>opencode.json</code> focused on model and provider adapters. Begin
@@ -5237,7 +5287,7 @@ configuration, not a guarantee that the remote model supports the
 advertised capabilities. Choose Aider when the small git-native loop is
 the requirement; do not describe it as an equivalent replacement for
 Claude Code’s MCP, skills, and hooks architecture.</p>
-<h2 data-number="12.6" id="setup-agentic-editor"><span class="header-section-number">12.6</span> Setup: Agentic Editor</h2>
+<h2 data-number="12.6" role="heading" aria-level="3" id="setup-agentic-editor"><span class="header-section-number">12.6</span> Setup: Agentic Editor</h2>
 <p>Use Cline when the editor is the primary surface and you want
 Plan/Act review, browser and MCP access, and a visual diff loop.
 Configure OpenRouter with GLM 5.3 for difficult Act-mode changes, Qwen3
@@ -5253,7 +5303,7 @@ providers, and extensions are all reviewed. In either editor, keep the
 plan reviewable, require approval before writes with external
 consequences, and do not assume that importing an <code>AGENTS.md</code>
 file reproduces Claude Code’s full instruction or hook behaviour.</p>
-<h2 data-number="12.7" id="repository-configuration-and-security-boundaries"><span class="header-section-number">12.7</span> Repository Configuration and
+<h2 data-number="12.7" role="heading" aria-level="3" id="repository-configuration-and-security-boundaries"><span class="header-section-number">12.7</span> Repository Configuration and
 Security Boundaries</h2>
 <p>Treat the harness, provider, model, repository, and external tools as
 separate trust boundaries. MCP standardises tool access; it does not
@@ -5348,7 +5398,7 @@ service, while Devin is a managed cloud boundary. Use a separate branch
 or worktree with least-privilege credentials and a clean handoff
 containing the task contract, diff, relevant source, tests, and
 unresolved questions. Human approval remains the integration gate.</p>
-<h2 data-number="12.8" id="a-staged-rollout-and-evaluation-loop"><span class="header-section-number">12.8</span> A Staged Rollout and
+<h2 data-number="12.8" role="heading" aria-level="3" id="a-staged-rollout-and-evaluation-loop"><span class="header-section-number">12.8</span> A Staged Rollout and
 Evaluation Loop</h2>
 <p>Start with a pilot of roughly 20-30 representative tasks from the
 repository, including a new feature, multi-file refactor, failing-test
@@ -5371,7 +5421,7 @@ a provider, model ID, quantisation, context setting, harness version, or
 major project instruction changes. Keep representative prompts and
 expected checks in the repository’s normal evaluation workflow so the
 result is reproducible rather than anecdotal.</p>
-<h2 data-number="12.9" id="what-this-setup-does-not-solve"><span class="header-section-number">12.9</span> What This Setup Does Not
+<h2 data-number="12.9" role="heading" aria-level="3" id="what-this-setup-does-not-solve"><span class="header-section-number">12.9</span> What This Setup Does Not
 Solve</h2>
 <p>Multiple models do not remove the need for good repository
 instructions, tests, observability, or human judgement. A second model
@@ -5394,7 +5444,7 @@ if that matches how you work, and retain Aider as the minimal fallback.
 Use a different provider route for high-risk review, and refresh model
 IDs, prices, quotas, authentication paths, and provider policies
 immediately before adoption.</p>
-<h1 data-number="13" id="pi-as-an-additional-harness"><span class="header-section-number">13</span> Pi as an Additional Harness</h1>
+<h1 data-number="13" role="heading" aria-level="2" id="pi-as-an-additional-harness"><span class="header-section-number">13</span> Pi as an Additional Harness</h1>
 <p>Pi is worth adding to the comparison because it takes a different
 position from the full-featured alternatives above. It is a minimal
 terminal coding harness: the core provides the agent loop, a small set
@@ -5412,7 +5462,7 @@ authentication path, and documentation before installing. The current
 official site uses the <code>@earendil-works/pi-coding-agent</code>
 package; older examples may use the <code>@mariozechner</code>
 scope.</p>
-<h2 data-number="13.1" id="what-pi-adds-to-a-multi-harness-setup"><span class="header-section-number">13.1</span> What Pi Adds to a
+<h2 data-number="13.1" role="heading" aria-level="3" id="what-pi-adds-to-a-multi-harness-setup"><span class="header-section-number">13.1</span> What Pi Adds to a
 Multi-Harness Setup</h2>
 <p>Pi is a useful third surface when you want to hold the harness
 constant enough to compare models, but keep the harness itself easy to
@@ -5449,7 +5499,7 @@ model’s behaviour depends on the complete tuple of harness, provider,
 model ID, context policy, tool schemas, thinking settings, retries, and
 permissions. A successful Pi run does not prove that the same model will
 behave the same way in OpenCode, Cline, or Claude Code.</p>
-<h2 data-number="13.2" id="installation-and-a-first-controlled-run"><span class="header-section-number">13.2</span> Installation and a First
+<h2 data-number="13.2" role="heading" aria-level="3" id="installation-and-a-first-controlled-run"><span class="header-section-number">13.2</span> Installation and a First
 Controlled Run</h2>
 <p>The current official quick start offers an installer or a global npm
 installation. Pin the version in a reproducible environment where the
@@ -5485,7 +5535,7 @@ request and explicit checks:</p>
 repository contract, require tests, and inspect the diff yourself. Pi
 runs with the permissions of the user who starts it, so the working
 directory and shell account are part of the authorisation boundary.</p>
-<h2 data-number="13.3" id="project-context-settings-and-extensions"><span class="header-section-number">13.3</span> Project Context, Settings, and
+<h2 data-number="13.3" role="heading" aria-level="3" id="project-context-settings-and-extensions"><span class="header-section-number">13.3</span> Project Context, Settings, and
 Extensions</h2>
 <p>Pi can load <code>AGENTS.md</code> and <code>CLAUDE.md</code> context
 files, which makes it a useful consumer of portable repository
@@ -5528,7 +5578,7 @@ documentation warns that extensions execute arbitrary code and skills
 can instruct the model to perform actions, so review and pin third-party
 packages before enabling them. Do not install an unreviewed package in a
 repository containing credentials or production access.</p>
-<h2 data-number="13.4" id="what-pi-does-not-provide-by-default"><span class="header-section-number">13.4</span> What Pi Does Not Provide by
+<h2 data-number="13.4" role="heading" aria-level="3" id="what-pi-does-not-provide-by-default"><span class="header-section-number">13.4</span> What Pi Does Not Provide by
 Default</h2>
 <p>Pi’s minimal core intentionally does not provide built-in MCP, plan
 mode, subagents, permission popups, background bash, or a built-in to-do
@@ -5553,7 +5603,7 @@ If MCP is central to the workflow, OpenCode or Cline remains the more
 direct additional harness. The model choice does not repair this gap:
 GLM, DeepSeek, and Qwen can all emit tool calls, but Pi still owns the
 tool schema, approval policy, retries, and result handling.</p>
-<h2 data-number="13.5" id="sessions-and-cross-harness-handoff"><span class="header-section-number">13.5</span> Sessions and Cross-Harness
+<h2 data-number="13.5" role="heading" aria-level="3" id="sessions-and-cross-harness-handoff"><span class="header-section-number">13.5</span> Sessions and Cross-Harness
 Handoff</h2>
 <p>Pi automatically saves sessions and supports continuing the most
 recent session, browsing older sessions, opening a session by path or
@@ -5571,7 +5621,7 @@ in a dedicated worktree; a different provider receives the contract,
 diff, relevant source, and test results for review; CI and a human own
 the merge. The reverse direction works for investigation or a small
 follow-up, but do not carry hidden assumptions across the boundary.</p>
-<h2 data-number="13.6" id="how-to-evaluate-pi-fairly"><span class="header-section-number">13.6</span> How to Evaluate Pi Fairly</h2>
+<h2 data-number="13.6" role="heading" aria-level="3" id="how-to-evaluate-pi-fairly"><span class="header-section-number">13.6</span> How to Evaluate Pi Fairly</h2>
 <p>Add Pi as another row in the existing 20-30-task pilot, not as an
 anecdotal alternative. Use the same initial revision, task contract,
 context files, permission envelope, model/provider tuple, thinking
@@ -5587,7 +5637,8 @@ the last two, test compaction, session resume, malformed tool results,
 and interruption recovery. If Pi needs an extension or wrapper to supply
 a capability that OpenCode has in its core, record that configuration as
 part of Pi’s harness identity and measure its maintenance burden.</p>
-<h2 data-number="13.7" id="recommendation"><span class="header-section-number">13.7</span> Recommendation</h2>
+<h2 data-number="13.7" role="heading" aria-level="3" id="recommendation"><span class="header-section-number">13.7</span>
+Recommendation</h2>
 <p>Add Pi when you value a small terminal core, explicit model
 switching, inspectable session state, or TypeScript-level customisation.
 Keep it beside OpenCode rather than underneath it: use OpenCode for the
@@ -5599,14 +5650,14 @@ surface and Aider for the minimal git-native fallback. Use a disposable
 worktree or container for initial trials, review extensions and packages
 as code, and never let Pi’s model choice silently expand shell, file,
 network, or merge permissions.</p>
-<h1 data-number="14" id="references"><span class="header-section-number">14</span> References</h1>
+<h1 data-number="14" role="heading" aria-level="2" id="references"><span class="header-section-number">14</span> References</h1>
 <p>First-party sources checked on <strong>18 September 2026</strong> for
 the current model, provider, pricing, and policy snapshot. Pi sources
 and setup documentation were checked on <strong>18 September
 2026</strong>. Grok Bot sources were checked on <strong>9 September
 2026</strong>. Model names, prices, quotas, and product boundaries can
 change independently; the date is part of each claim.</p>
-<h2 data-number="14.1" id="model-documentation-and-licences"><span class="header-section-number">14.1</span> Model Documentation and
+<h2 data-number="14.1" role="heading" aria-level="3" id="model-documentation-and-licences"><span class="header-section-number">14.1</span> Model Documentation and
 Licences</h2>
 <ul>
 <li><a href="https://platform.claude.com/docs/en/models/overview">Anthropic
@@ -5673,7 +5724,7 @@ Nemotron</a>, <a href="https://github.com/ibm-granite/granite-code-models">IBM G
 Code</a>, and <a href="https://huggingface.co/microsoft/Phi-4-mini-instruct">Microsoft
 Phi-4 mini</a></li>
 </ul>
-<h2 data-number="14.2" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">14.2</span> Model Evaluations and
+<h2 data-number="14.2" role="heading" aria-level="3" id="model-evaluations-and-practitioner-reports"><span class="header-section-number">14.2</span> Model Evaluations and
 Practitioner Reports</h2>
 <ul>
 <li><a href="https://deepswe.datacurve.ai/">DeepSWE v1.1 common-harness
@@ -5694,7 +5745,7 @@ Claude Code, Codex, and Gemini CLI</a></li>
 <li><a href="https://arxiv.org/abs/2607.21656">Cross-model LLM code
 review study</a></li>
 </ul>
-<h2 data-number="14.3" id="tool-and-pricing-documentation"><span class="header-section-number">14.3</span> Tool and Pricing
+<h2 data-number="14.3" role="heading" aria-level="3" id="tool-and-pricing-documentation"><span class="header-section-number">14.3</span> Tool and Pricing
 Documentation</h2>
 <ul>
 <li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Anthropic
@@ -5795,7 +5846,7 @@ trust</a>, <a href="https://pi.dev/docs/latest/extensions">extensions</a>, <a hr
 works-with-openrouter</a>, <a href="https://docs.continue.dev/guides/ollama-guide">Continue Ollama
 guide</a>, and <a href="https://agents.md/">AGENTS.md</a></li>
 </ul>
-<h2 data-number="14.4" id="secondary-background"><span class="header-section-number">14.4</span> Secondary Background</h2>
+<h2 data-number="14.4" role="heading" aria-level="3" id="secondary-background"><span class="header-section-number">14.4</span> Secondary Background</h2>
 <ul>
 <li><a href="https://artificialanalysis.ai/agents/coding">Artificial
 Analysis coding-agent taxonomy</a></li>
@@ -5811,7 +5862,7 @@ Claude Code alternatives comparison</a></li>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -5841,18 +5892,27 @@ Claude Code alternatives comparison</a></li>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -5860,19 +5920,18 @@ Claude Code alternatives comparison</a></li>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
