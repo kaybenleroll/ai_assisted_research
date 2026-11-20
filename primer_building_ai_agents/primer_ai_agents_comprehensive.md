@@ -110,6 +110,9 @@ Here's where the magic happens. Instead of just asking an LLM to "solve this pro
 The example below shows the underlying idea using plain text instructions, so you can see exactly what's happening with nothing hidden behind an API. It's conceptually accurate but it is not how you'd build this today — the subsection right after the example explains what production systems actually do.
 
 #### Example 1: Simple Tool Use
+
+The model proposes a search as a structured tool call:
+
 ```text
 System prompt: "You are an agent. You can call these tools:
 - search(query): searches the web
@@ -730,9 +733,18 @@ All major providers now also ship first-party agent SDKs. [OpenAI's Agents SDK](
 documents tools, handoffs, guardrails, tracing, sessions, and sandbox agents;
 Anthropic's [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview)
 and Google's [Agent Development Kit (ADK)](https://google.github.io/adk-docs/)
-provide comparable provider-native paths. These SDKs are sensible when you
-are committed to one provider and want its newest features. They are less
-portable than a thin model adapter plus explicit application state.
+provide provider-native paths. These SDKs can be useful when you need a
+provider’s tools and controls, but choosing one does not necessarily fix the
+model provider: the [OpenAI Agents SDK model guide](https://openai.github.io/openai-agents-python/models/)
+documents non-OpenAI integrations, and [Google ADK](https://adk.dev/agents/models/)
+documents model connectors and routing. The integration must still be checked
+for the specific model, endpoint, tool calls and structured outputs you use.
+Provider-native tools, session state and tracing may have different semantics or
+destinations across routes; a successful model call does not establish parity.
+A thin model adapter with explicit application state can make those boundaries
+easier to replace, but it leaves more orchestration and verification to the
+application. Compare the work needed to preserve behaviour, recovery and
+observability for your actual workflow.
 
 The important distinction is between layers:
 
@@ -913,6 +925,8 @@ Success: Agent retrieves data and formats a readable report
 This progression is deliberate. Each stage adds one new complexity dimension so failures are easier to isolate and fix.
 
 ### Testing an Agent
+
+These illustrative tests check a basic result and recovery from an invalid request:
 
 ```python
 def test_agent_basic_task():
