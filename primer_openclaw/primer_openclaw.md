@@ -136,7 +136,7 @@ The target posture is a rootless Gateway container, host-controlled state, loopb
 
 ### Prerequisites
 
-You need rootless Podman and the OpenClaw CLI on the host. As checked on 7 October 2026, the [Node guide](https://docs.openclaw.ai/install/node) requires Node 24.16+ or 26.1+ with a write-ahead logging (WAL)-reset-safe linked SQLite library; Node 26 is recommended. Node 22, 23, and 25 are unsupported. The [compatibility guide](https://docs.openclaw.ai/install/node-compatibility) explains the SQLite safety checks: a version number alone is insufficient for a distro build linked to a different SQLite library. Upgrade the runtime before updating OpenClaw. The installer can provision a compatible runtime. `systemd --user` is optional for Quadlet-managed startup.
+You need rootless Podman and the OpenClaw CLI on the host. As checked on 20 November 2026, the [Node guide](https://docs.openclaw.ai/install/node) accepts Node 24.16+ on the 24.x line and 26.1+ on the 26.x line, with a write-ahead logging (WAL)-reset-safe linked SQLite library; it also accepts Node 27. Node 22, 23, and 25 are unsupported. The accepted minimum is not the security recommendation: upstream recommends Node 26.12.1+ by default or 24.22.1+ on the 24.x LTS line because these patched versions reject keys compromised in the October 2026 eMudhra incident. Earlier compatible versions remain accepted but produce a security warning. The [compatibility guide](https://docs.openclaw.ai/install/node-compatibility) explains the SQLite safety checks: a version number alone is insufficient for a distro build linked to a different SQLite library. Upgrade the runtime before updating OpenClaw. The installer can provision a compatible runtime. `systemd --user` is optional for Quadlet-managed startup.
 
 ### Install and Verify the Host CLI
 
@@ -403,6 +403,8 @@ This matrix compares the controls to apply at each exposure level, from local de
 ## Runbooks
 
 ### Deterministic Bring-Up
+
+From the OpenClaw repository root, run:
 
 ```bash
 ./scripts/podman/setup.sh

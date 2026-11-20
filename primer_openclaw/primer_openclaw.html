@@ -31,6 +31,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -172,6 +183,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -183,7 +195,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -584,7 +595,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -601,17 +612,40 @@ code span.wa { color: #da4453; } /* Warning */
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored inline below (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
+    // The MathML variants ignore this block.
+    window.MathJax = {
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
+      } }
+    };
+  </script>
 
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">OpenClaw: A Comprehensive, Podman-First
 Guide</span>
     <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -619,7 +653,7 @@ Guide</span>
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#why-this-primer-exists" id="toc-why-this-primer-exists"><span class="toc-section-number">1</span> Why This Primer Exists</a>
 <ul>
 <li><a href="#what-this-primer-covers" id="toc-what-this-primer-covers"><span class="toc-section-number">1.1</span> What This Primer Covers</a></li>
@@ -702,19 +736,22 @@ Containment</a></li>
 </ul></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">13</span> Further Reading</a></li>
 <li><a href="#closing-perspective" id="toc-closing-perspective"><span class="toc-section-number">14</span> Closing Perspective</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
+<h1 id="document-title" class="document-title">OpenClaw: A
+Comprehensive, Podman-First Guide</h1>
 <hr />
 <p><em>Verified against primary sources for all sections; unverified
 claims are flagged inline.</em></p>
 <hr />
-<h1 data-number="1" id="why-this-primer-exists"><span class="header-section-number">1</span> Why This Primer Exists</h1>
+<h1 data-number="1" role="heading" aria-level="2" id="why-this-primer-exists"><span class="header-section-number">1</span>
+Why This Primer Exists</h1>
 <p>OpenClaw is easy to describe badly. Calling it a chatbot hides the
 important part; calling it an autonomous agent makes it sound like a
 single model. OpenClaw is a self-hosted Gateway: one long-lived service
@@ -730,7 +767,7 @@ deployment path. It also separates OpenClaw from Hermes Agent Server, a
 neighbouring project with different server processes and state
 semantics. The comparison matters because both projects are now used as
 self-hosted assistants, but they are not interchangeable components.</p>
-<h2 data-number="1.1" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
+<h2 data-number="1.1" role="heading" aria-level="3" id="what-this-primer-covers"><span class="header-section-number">1.1</span> What This Primer Covers</h2>
 <p>You will learn:</p>
 <ol type="1">
 <li>What the OpenClaw Gateway owns and how messages move through
@@ -744,14 +781,14 @@ service.</li>
 <li>How OpenClaw compares with Hermes Agent Server and when the two can
 be combined.</li>
 </ol>
-<h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
+<h2 data-number="1.2" role="heading" aria-level="3" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
 <p>This is not a catalogue of every channel plugin, a model benchmark,
 or a security certification. Provider names, model names, CLI flags, and
 plugin behaviour change quickly; use the linked official documentation
 to verify a command before applying it to a production host. The
 examples are patterns you can adapt, not a claim that one configuration
 is safe for every environment.</p>
-<h1 data-number="2" id="what-openclaw-is-used-for"><span class="header-section-number">2</span> What OpenClaw Is Used For</h1>
+<h1 data-number="2" role="heading" aria-level="2" id="what-openclaw-is-used-for"><span class="header-section-number">2</span> What OpenClaw Is Used For</h1>
 <p>OpenClaw is a self-hosted assistant Gateway for developers and power
 users who want one agent reachable through several surfaces. The current
 project describes a single Gateway serving messaging surfaces such as
@@ -769,7 +806,7 @@ model server. It can talk to hosted providers, local model servers, or
 both. It can route different agents or sessions to different models. It
 can put tool execution in a separate sandbox. It does not itself provide
 the model weights or guarantee that a model’s output is safe.</p>
-<h2 data-number="2.1" id="what-jobs-openclaw-performs-in-practice"><span class="header-section-number">2.1</span> What Jobs OpenClaw Performs in
+<h2 data-number="2.1" role="heading" aria-level="3" id="what-jobs-openclaw-performs-in-practice"><span class="header-section-number">2.1</span> What Jobs OpenClaw Performs in
 Practice</h2>
 <p>OpenClaw handles channel ingress and egress, identity and pairing,
 session construction, media handling, model selection,
@@ -781,7 +818,8 @@ Telegram pairing failure is a channel problem. A provider authentication
 failure is a model-provider problem. A command that ran in the wrong
 filesystem is an execution-policy problem. A session that disappeared
 after a rebuild is a state-persistence problem.</p>
-<h2 data-number="2.2" id="what-openclaw-is-not"><span class="header-section-number">2.2</span> What OpenClaw Is Not</h2>
+<h2 data-number="2.2" role="heading" aria-level="3" id="what-openclaw-is-not"><span class="header-section-number">2.2</span>
+What OpenClaw Is Not</h2>
 <p>OpenClaw is not:</p>
 <ul>
 <li>a large language model or model-weight distribution;</li>
@@ -798,9 +836,9 @@ family.</li>
 files, but OpenClaw’s own tool sandbox is a separate setting. If you
 enable no sandbox, tool execution may still occur on the host or in the
 Gateway container, depending on your configuration.</p>
-<h1 data-number="3" id="how-people-actually-use-openclaw"><span class="header-section-number">3</span> How People Actually Use
+<h1 data-number="3" role="heading" aria-level="2" id="how-people-actually-use-openclaw"><span class="header-section-number">3</span> How People Actually Use
 OpenClaw</h1>
-<h2 data-number="3.1" id="pattern-a-single-user-daily-assistant"><span class="header-section-number">3.1</span> Pattern A: Single-User Daily
+<h2 data-number="3.1" role="heading" aria-level="3" id="pattern-a-single-user-daily-assistant"><span class="header-section-number">3.1</span> Pattern A: Single-User Daily
 Assistant</h2>
 <p>Start with one Gateway, one agent, one model provider, and the
 Control UI. This gives you a small system whose failures are easy to
@@ -810,7 +848,7 @@ assistance, and low-risk local automation.</p>
 channels or specialist agents. If the basic chat cannot complete a
 normal request, adding messaging integrations only multiplies the places
 where the failure can appear.</p>
-<h2 data-number="3.2" id="pattern-b-multi-channel-command-centre"><span class="header-section-number">3.2</span> Pattern B: Multi-Channel
+<h2 data-number="3.2" role="heading" aria-level="3" id="pattern-b-multi-channel-command-centre"><span class="header-section-number">3.2</span> Pattern B: Multi-Channel
 Command Centre</h2>
 <p>Once the local path is stable, connect the channels you actually use.
 One Gateway can serve multiple channel plugins, but each channel
@@ -820,7 +858,7 @@ mentions, attachments, rate limits, and outbound delivery.</p>
 mentions in group chats, and keep the Gateway’s published ports on
 loopback unless you have an explicit remote-access design such as a
 tailnet or authenticated proxy.</p>
-<h2 data-number="3.3" id="pattern-c-local-first-with-hosted-fallback"><span class="header-section-number">3.3</span> Pattern C: Local-First With
+<h2 data-number="3.3" role="heading" aria-level="3" id="pattern-c-local-first-with-hosted-fallback"><span class="header-section-number">3.3</span> Pattern C: Local-First With
 Hosted Fallback</h2>
 <p>A local model can be the default for privacy and cost while a hosted
 provider remains available for difficult requests or local-service
@@ -835,14 +873,14 @@ automatic state can persist across subsequent turns while the original
 primary is periodically reprobed; it is cleared when the primary
 recovers. Treat this as a reliability feature, not as permission to hide
 provider errors.</p>
-<h2 data-number="3.4" id="pattern-d-specialist-agents-and-nodes"><span class="header-section-number">3.4</span> Pattern D: Specialist Agents
+<h2 data-number="3.4" role="heading" aria-level="3" id="pattern-d-specialist-agents-and-nodes"><span class="header-section-number">3.4</span> Pattern D: Specialist Agents
 and Nodes</h2>
 <p>Separate agents can have distinct workspaces, models, and routing
 bindings. Nodes can expose device capabilities such as camera, screen,
 voice, or location to the Gateway. This is powerful because the
 assistant can move from text to action, but it also increases the number
 of capabilities that need pairing and review.</p>
-<h2 data-number="3.5" id="pattern-e-container-first-operations"><span class="header-section-number">3.5</span> Pattern E: Container-First
+<h2 data-number="3.5" role="heading" aria-level="3" id="pattern-e-container-first-operations"><span class="header-section-number">3.5</span> Pattern E: Container-First
 Operations</h2>
 <p>Rootless Podman is a good fit when you want a narrow host contract,
 explicit bind mounts, and user-level service management. The official
@@ -850,7 +888,7 @@ Podman path runs the Gateway in a container while the host
 <code>openclaw</code> CLI remains the management surface. It is
 different from running every tool call in a sandbox; you can choose that
 separately.</p>
-<h1 data-number="4" id="ideas-for-how-you-could-use-openclaw"><span class="header-section-number">4</span> Ideas for How You Could Use
+<h1 data-number="4" role="heading" aria-level="2" id="ideas-for-how-you-could-use-openclaw"><span class="header-section-number">4</span> Ideas for How You Could Use
 OpenClaw</h1>
 <p>For documentation work, OpenClaw can summarise a repository, draft
 release notes, and enforce a project style guide while leaving final
@@ -865,7 +903,7 @@ Gateway retains the session and policy.</p>
 <p>The safe design pattern is consistent: let the model propose work,
 let OpenClaw validate the request and route it, and let an explicit
 execution boundary decide what the tool can actually touch.</p>
-<h1 data-number="5" id="openclaw-architecture-in-one-mental-model"><span class="header-section-number">5</span> OpenClaw Architecture in One
+<h1 data-number="5" role="heading" aria-level="2" id="openclaw-architecture-in-one-mental-model"><span class="header-section-number">5</span> OpenClaw Architecture in One
 Mental Model</h1>
 <p>Think in five layers:</p>
 <ol type="1">
@@ -889,7 +927,8 @@ transport with an explicit node role and declared capabilities. A single
 Gateway should own a host’s messaging sessions; starting multiple
 competing Gateways against the same state creates confusing locks and
 duplicate channel connections.</p>
-<h2 data-number="5.1" id="the-message-path"><span class="header-section-number">5.1</span> The Message Path</h2>
+<h2 data-number="5.1" role="heading" aria-level="3" id="the-message-path"><span class="header-section-number">5.1</span> The
+Message Path</h2>
 <p>A useful trace for a request is:</p>
 <pre class="text"><code>channel or UI
   -&gt; Gateway ingress and authorization
@@ -902,7 +941,7 @@ duplicate channel connections.</p>
   -&gt; Gateway delivery to the originating surface</code></pre>
 <p>The model is only one stage in this path. When a task fails, identify
 the last successful stage before changing prompts or models.</p>
-<h2 data-number="5.2" id="state-locations-that-matter"><span class="header-section-number">5.2</span> State Locations That
+<h2 data-number="5.2" role="heading" aria-level="3" id="state-locations-that-matter"><span class="header-section-number">5.2</span> State Locations That
 Matter</h2>
 <p>The default state directory is <code>~/.openclaw</code>. It contains
 the main configuration, agent-specific state, auth routing and
@@ -915,28 +954,34 @@ system.</p>
 Back up configuration, auth material, session data, memory, and
 workspace together, and protect the archive as you would protect API
 credentials.</p>
-<h1 data-number="6" id="comprehensive-local-setup-podman-first"><span class="header-section-number">6</span> Comprehensive Local Setup
+<h1 data-number="6" role="heading" aria-level="2" id="comprehensive-local-setup-podman-first"><span class="header-section-number">6</span> Comprehensive Local Setup
 (Podman-First)</h1>
 <p>This section follows the current official rootless Podman workflow.
 The commands below assume a Linux host with Podman and an OpenClaw
 checkout. For a quick non-container install, use the official installer
 and <code>openclaw onboard</code> instead.</p>
-<h2 data-number="6.1" id="deployment-goals"><span class="header-section-number">6.1</span> Deployment Goals</h2>
+<h2 data-number="6.1" role="heading" aria-level="3" id="deployment-goals"><span class="header-section-number">6.1</span>
+Deployment Goals</h2>
 <p>The target posture is a rootless Gateway container, host-controlled
 state, loopback-only published ports, user-level restart management when
 needed, and a separate tool sandbox policy for non-main sessions.</p>
-<h2 data-number="6.2" id="prerequisites"><span class="header-section-number">6.2</span> Prerequisites</h2>
+<h2 data-number="6.2" role="heading" aria-level="3" id="prerequisites"><span class="header-section-number">6.2</span>
+Prerequisites</h2>
 <p>You need rootless Podman and the OpenClaw CLI on the host. As checked
-on 7 October 2026, the <a href="https://docs.openclaw.ai/install/node">Node guide</a> requires
-Node 24.16+ or 26.1+ with a write-ahead logging (WAL)-reset-safe linked
-SQLite library; Node 26 is recommended. Node 22, 23, and 25 are
-unsupported. The <a href="https://docs.openclaw.ai/install/node-compatibility">compatibility
+on 20 November 2026, the <a href="https://docs.openclaw.ai/install/node">Node guide</a> accepts Node
+24.16+ on the 24.x line and 26.1+ on the 26.x line, with a write-ahead
+logging (WAL)-reset-safe linked SQLite library; it also accepts Node 27.
+Node 22, 23, and 25 are unsupported. The accepted minimum is not the
+security recommendation: upstream recommends Node 26.12.1+ by default or
+24.22.1+ on the 24.x LTS line because these patched versions reject keys
+compromised in the October 2026 eMudhra incident. Earlier compatible
+versions remain accepted but produce a security warning. The <a href="https://docs.openclaw.ai/install/node-compatibility">compatibility
 guide</a> explains the SQLite safety checks: a version number alone is
 insufficient for a distro build linked to a different SQLite library.
 Upgrade the runtime before updating OpenClaw. The installer can
 provision a compatible runtime. <code>systemd --user</code> is optional
 for Quadlet-managed startup.</p>
-<h2 data-number="6.3" id="install-and-verify-the-host-cli"><span class="header-section-number">6.3</span> Install and Verify the Host
+<h2 data-number="6.3" role="heading" aria-level="3" id="install-and-verify-the-host-cli"><span class="header-section-number">6.3</span> Install and Verify the Host
 CLI</h2>
 <p>The installer is the shortest path for a normal host install:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://openclaw.ai/install.sh <span class="kw">|</span> <span class="fu">bash</span></span>
@@ -952,7 +997,7 @@ Gateway.</p>
 current install instructions. Do not assume that an old
 <code>pnpm</code> or Node version from an earlier guide remains
 supported.</p>
-<h2 data-number="6.4" id="bootstrap-the-podman-gateway"><span class="header-section-number">6.4</span> Bootstrap the Podman
+<h2 data-number="6.4" role="heading" aria-level="3" id="bootstrap-the-podman-gateway"><span class="header-section-number">6.4</span> Bootstrap the Podman
 Gateway</h2>
 <p>From the OpenClaw repository root:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/podman/setup.sh</span></span>
@@ -968,7 +1013,7 @@ container install, complete provider authentication through OpenClaw’s
 own setup so credentials are stored in the mounted OpenClaw state. Do
 not assume that a host login in <code>~/.claude</code> or
 <code>~/.codex</code> is visible inside the container.</p>
-<h2 data-number="6.5" id="manage-the-container-from-the-host-cli"><span class="header-section-number">6.5</span> Manage the Container From the
+<h2 data-number="6.5" role="heading" aria-level="3" id="manage-the-container-from-the-host-cli"><span class="header-section-number">6.5</span> Manage the Container From the
 Host CLI</h2>
 <p>Use the container-aware CLI explicitly while you learn the setup:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw gateway status <span class="at">--deep</span></span>
@@ -980,7 +1025,7 @@ Host CLI</h2>
 shortcut. Verify the target before making configuration changes; a
 healthy CLI command against the wrong Gateway is still the wrong
 result.</p>
-<h2 data-number="6.6" id="persistence-and-ports"><span class="header-section-number">6.6</span> Persistence and Ports</h2>
+<h2 data-number="6.6" role="heading" aria-level="3" id="persistence-and-ports"><span class="header-section-number">6.6</span> Persistence and Ports</h2>
 <p>The official launcher persists the configuration directory and
 workspace from the host. The normal published Gateway port is
 <code>18789</code>; the bridge port is <code>18790</code>. Keep both
@@ -991,7 +1036,7 @@ in a checked-in compose file, shell history, screenshot, or support
 ticket. If you change the host config or workspace paths, pass the same
 values to both setup and launch; otherwise the two commands can operate
 on different state.</p>
-<h2 data-number="6.7" id="optional-quadlet-mode"><span class="header-section-number">6.7</span> Optional Quadlet Mode</h2>
+<h2 data-number="6.7" role="heading" aria-level="3" id="optional-quadlet-mode"><span class="header-section-number">6.7</span> Optional Quadlet Mode</h2>
 <p>On a Linux host with <code>systemd --user</code>, run setup with
 Quadlet enabled:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/podman/setup.sh</span> <span class="at">--quadlet</span></span>
@@ -1004,7 +1049,7 @@ lingering may be required:</p>
 <p>After editing the generated unit, reload and restart it:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> daemon-reload</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> restart openclaw.service</span></code></pre></div>
-<h2 data-number="6.8" id="upgrades-and-recovery"><span class="header-section-number">6.8</span> Upgrades and Recovery</h2>
+<h2 data-number="6.8" role="heading" aria-level="3" id="upgrades-and-recovery"><span class="header-section-number">6.8</span> Upgrades and Recovery</h2>
 <p>When you rebuild or pull a newer image, restart the container or
 Quadlet service. If the updated Gateway exits while applying state
 changes, run a one-off <code>podman run</code> with the same image, user
@@ -1017,13 +1062,14 @@ linting preflight:</p>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw gateway status <span class="at">--deep</span></span></code></pre></div>
 <p>Do not “fix” an upgrade by deleting <code>~/.openclaw</code>. That
 directory is the system’s durable state, not a cache.</p>
-<h2 data-number="6.9" id="day-two-operations"><span class="header-section-number">6.9</span> Day-Two Operations</h2>
+<h2 data-number="6.9" role="heading" aria-level="3" id="day-two-operations"><span class="header-section-number">6.9</span>
+Day-Two Operations</h2>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> logs <span class="at">-f</span> openclaw</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> ps <span class="at">--filter</span> name=openclaw</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> stop openclaw</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/run-openclaw-podman.sh</span> launch</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw gateway status <span class="at">--deep</span></span></code></pre></div>
-<h1 data-number="7" id="channels-sessions-and-access-control"><span class="header-section-number">7</span> Channels, Sessions, and Access
+<h1 data-number="7" role="heading" aria-level="2" id="channels-sessions-and-access-control"><span class="header-section-number">7</span> Channels, Sessions, and Access
 Control</h1>
 <p>Channels are not just output formats. They are authenticated ingress
 paths into an agent with tools. Start with one channel and configure the
@@ -1039,7 +1085,7 @@ and agent-specific sessions can have different routing and sandbox
 behaviour. Do not infer that two messages share context because they
 reached the same Gateway; inspect the session key and routing
 policy.</p>
-<h1 data-number="8" id="models-providers-and-failover"><span class="header-section-number">8</span> Models, Providers, and
+<h1 data-number="8" role="heading" aria-level="2" id="models-providers-and-failover"><span class="header-section-number">8</span> Models, Providers, and
 Failover</h1>
 <p>A model reference has the form <code>provider/model</code>. It
 chooses a provider and model; it does not by itself decide the low-level
@@ -1053,7 +1099,7 @@ state across later turns while the original primary is reprobed.
 Explicit user model choices are intentionally strict, so a visible
 provider error can be preferable to an unexpected answer from a
 different model.</p>
-<h2 data-number="8.1" id="ollama-use-the-native-api"><span class="header-section-number">8.1</span> Ollama: Use the Native API</h2>
+<h2 data-number="8.1" role="heading" aria-level="3" id="ollama-use-the-native-api"><span class="header-section-number">8.1</span> Ollama: Use the Native API</h2>
 <p>OpenClaw’s Ollama provider uses Ollama’s native API, not the
 OpenAI-compatible <code>/v1</code> endpoint. In a Podman Gateway
 container, <code>127.0.0.1</code> means the Gateway container itself,
@@ -1093,14 +1139,14 @@ path where appropriate.</p>
 context metadata. It does not automatically solve a model that is too
 small, lacks reliable tool calling, or cannot hold the working context
 of your task.</p>
-<h2 data-number="8.2" id="generic-openai-compatible-providers"><span class="header-section-number">8.2</span> Generic OpenAI-Compatible
+<h2 data-number="8.2" role="heading" aria-level="3" id="generic-openai-compatible-providers"><span class="header-section-number">8.2</span> Generic OpenAI-Compatible
 Providers</h2>
 <p>LM Studio, vLLM, LiteLLM, and many hosted gateways expose
 OpenAI-compatible endpoints. The provider configuration is not
 interchangeable with Ollama’s native configuration: use the endpoint and
 API mode documented by the service, then verify one real tool call
 before trusting the integration.</p>
-<h2 data-number="8.3" id="choosing-a-local-model"><span class="header-section-number">8.3</span> Choosing a Local Model</h2>
+<h2 data-number="8.3" role="heading" aria-level="3" id="choosing-a-local-model"><span class="header-section-number">8.3</span> Choosing a Local Model</h2>
 <p>For an agentic workload, evaluate more than tokens per second:</p>
 <ul>
 <li>tool-call schema reliability;</li>
@@ -1114,7 +1160,8 @@ key-value-cache growth;</li>
 context length, vision support, batching, and backend version all change
 the footprint. Measure the exact model and settings on the hardware you
 intend to operate.</p>
-<h2 data-number="8.4" id="constrained-hardware"><span class="header-section-number">8.4</span> Constrained Hardware</h2>
+<h2 data-number="8.4" role="heading" aria-level="3" id="constrained-hardware"><span class="header-section-number">8.4</span>
+Constrained Hardware</h2>
 <p>Partial GPU offload can make a local model usable on a laptop that
 cannot hold the full model in VRAM. The trade-off is lower throughput
 and a more complicated memory budget. The key-value cache can still
@@ -1125,7 +1172,7 @@ split between GPU and central processing unit (CPU) random-access memory
 loop, and increase it only when the workload requires it. A nominal “64K
 context” setting is not free: it changes both latency and memory
 behaviour.</p>
-<h1 data-number="9" id="openclaw-and-hermes-agent-server"><span class="header-section-number">9</span> OpenClaw and Hermes Agent
+<h1 data-number="9" role="heading" aria-level="2" id="openclaw-and-hermes-agent-server"><span class="header-section-number">9</span> OpenClaw and Hermes Agent
 Server</h1>
 <p>OpenClaw and Hermes are frequently compared because both can power a
 self-hosted assistant. The precise comparison is OpenClaw Gateway versus
@@ -1211,17 +1258,19 @@ localhost. Both can run commands, read files, use credentials, and
 access external services. Choose the system whose session, plugin,
 memory, and execution model matches your workflow, then secure its
 actual trust boundaries.</p>
-<h2 data-number="9.1" id="when-to-use-openclaw"><span class="header-section-number">9.1</span> When to Use OpenClaw</h2>
+<h2 data-number="9.1" role="heading" aria-level="3" id="when-to-use-openclaw"><span class="header-section-number">9.1</span>
+When to Use OpenClaw</h2>
 <p>Choose OpenClaw when one Gateway serving many channels, device nodes,
 WebChat, and a typed control-plane protocol are central requirements.
 Its Podman workflow is also attractive when you want the Gateway
 container and host CLI to have distinct roles.</p>
-<h2 data-number="9.2" id="when-to-use-hermes-server"><span class="header-section-number">9.2</span> When to Use Hermes Server</h2>
+<h2 data-number="9.2" role="heading" aria-level="3" id="when-to-use-hermes-server"><span class="header-section-number">9.2</span> When to Use Hermes Server</h2>
 <p>Choose Hermes when you want the Hermes Agent runtime’s built-in
 memory, skills, toolsets, profiles, and messaging gateway, or when you
 want to attach Open WebUI or another OpenAI-compatible frontend directly
 to a tool-using Hermes backend.</p>
-<h2 data-number="9.3" id="combining-them"><span class="header-section-number">9.3</span> Combining Them</h2>
+<h2 data-number="9.3" role="heading" aria-level="3" id="combining-them"><span class="header-section-number">9.3</span>
+Combining Them</h2>
 <p>An OpenAI-compatible Hermes API can look like a model endpoint to
 another system, but that does not mean the two systems share sessions or
 tool policy. This is an experimental generic OpenAI-compatible
@@ -1231,7 +1280,7 @@ plain inference server. If OpenClaw sends a request to Hermes, decide
 explicitly which system owns tool execution, memory, authorisation, and
 the user-visible session. Avoid building two independent agents that
 both believe they own the same terminal or credentials.</p>
-<h1 data-number="10" id="tool-sandboxing-and-containment"><span class="header-section-number">10</span> Tool Sandboxing and
+<h1 data-number="10" role="heading" aria-level="2" id="tool-sandboxing-and-containment"><span class="header-section-number">10</span> Tool Sandboxing and
 Containment</h1>
 <p>OpenClaw separates Gateway placement from tool placement. The Gateway
 can run in a Podman container while tool execution uses a distinct
@@ -1267,8 +1316,10 @@ network access constrained, use deny-by-default tool policy for exposed
 channels, and test the exact operations the assistant is allowed to
 perform. A sandbox reduces blast radius; it does not turn unreviewed
 prompts into a formal security proof.</p>
-<h1 data-number="11" id="operational-reference"><span class="header-section-number">11</span> Operational Reference</h1>
-<h2 data-number="11.1" id="security-checklist"><span class="header-section-number">11.1</span> Security Checklist</h2>
+<h1 data-number="11" role="heading" aria-level="2" id="operational-reference"><span class="header-section-number">11</span>
+Operational Reference</h1>
+<h2 data-number="11.1" role="heading" aria-level="3" id="security-checklist"><span class="header-section-number">11.1</span>
+Security Checklist</h2>
 <ol type="1">
 <li>Keep Gateway and bridge ports on loopback by default.</li>
 <li>Use pairing or explicit allowlists for every messaging surface.</li>
@@ -1287,7 +1338,7 @@ or agent state.</li>
 <li>Test recovery from a provider outage and a container
 replacement.</li>
 </ol>
-<h2 data-number="11.2" id="troubleshooting-order"><span class="header-section-number">11.2</span> Troubleshooting Order</h2>
+<h2 data-number="11.2" role="heading" aria-level="3" id="troubleshooting-order"><span class="header-section-number">11.2</span> Troubleshooting Order</h2>
 <p>Start at the outside and move inward:</p>
 <ol type="1">
 <li><strong>Reachability:</strong> Is the Gateway process running, and
@@ -1308,7 +1359,8 @@ configuration, workspace, and session directories?</li>
 <p>When tool calls arrive as plain text, inspect the provider API mode
 first. When a container restart loses configuration, inspect mounts and
 paths before re-running onboarding.</p>
-<h2 data-number="11.3" id="exposure-profiles"><span class="header-section-number">11.3</span> Exposure Profiles</h2>
+<h2 data-number="11.3" role="heading" aria-level="3" id="exposure-profiles"><span class="header-section-number">11.3</span>
+Exposure Profiles</h2>
 <p>This matrix compares the controls to apply at each exposure level,
 from local development to public reachability.</p>
 <table>
@@ -1365,8 +1417,9 @@ from local development to public reachability.</p>
 </tr>
 </tbody>
 </table>
-<h1 data-number="12" id="runbooks"><span class="header-section-number">12</span> Runbooks</h1>
-<h2 data-number="12.1" id="deterministic-bring-up"><span class="header-section-number">12.1</span> Deterministic Bring-Up</h2>
+<h1 data-number="12" role="heading" aria-level="2" id="runbooks"><span class="header-section-number">12</span> Runbooks</h1>
+<h2 data-number="12.1" role="heading" aria-level="3" id="deterministic-bring-up"><span class="header-section-number">12.1</span> Deterministic Bring-Up</h2>
+<p>From the OpenClaw repository root, run:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/podman/setup.sh</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/run-openclaw-podman.sh</span> launch</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/run-openclaw-podman.sh</span> launch setup</span>
@@ -1377,7 +1430,7 @@ from local development to public reachability.</p>
 deliberately harmless tool call, and confirm the result appears in the
 expected workspace. Only then add additional channels, nodes, or
 providers.</p>
-<h2 data-number="12.2" id="backup"><span class="header-section-number">12.2</span> Backup</h2>
+<h2 data-number="12.2" role="heading" aria-level="3" id="backup"><span class="header-section-number">12.2</span> Backup</h2>
 <p>Use OpenClaw’s backup command for live state. It understands the
 authoritative SQLite databases and verifies the resulting archive:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> backup create <span class="dt">\</span></span>
@@ -1387,7 +1440,7 @@ authoritative SQLite databases and verifies the resulting archive:</p>
 auth state, private conversations, and tool results. Do not copy live
 SQLite files with a raw <code>tar</code> command while the Gateway is
 writing to them.</p>
-<h2 data-number="12.3" id="validate-after-restore"><span class="header-section-number">12.3</span> Validate After Restore</h2>
+<h2 data-number="12.3" role="heading" aria-level="3" id="validate-after-restore"><span class="header-section-number">12.3</span> Validate After Restore</h2>
 <p>Run these checks:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw doctor <span class="at">--lint</span> <span class="at">--json</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">openclaw</span> <span class="at">--container</span> openclaw gateway status <span class="at">--deep</span></span>
@@ -1395,7 +1448,8 @@ writing to them.</p>
 <p>Send a test message through the Control UI before reconnecting every
 external channel. This isolates a state or provider problem from a
 channel-authentication problem.</p>
-<h1 data-number="13" id="further-reading"><span class="header-section-number">13</span> Further Reading</h1>
+<h1 data-number="13" role="heading" aria-level="2" id="further-reading"><span class="header-section-number">13</span>
+Further Reading</h1>
 <ul>
 <li><a href="https://docs.openclaw.ai/">OpenClaw documentation</a></li>
 <li><a href="https://docs.openclaw.ai/install">OpenClaw
@@ -1420,7 +1474,8 @@ API server</a></li>
 <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/desktop">Hermes
 desktop and <code>hermes serve</code></a></li>
 </ul>
-<h1 data-number="14" id="closing-perspective"><span class="header-section-number">14</span> Closing Perspective</h1>
+<h1 data-number="14" role="heading" aria-level="2" id="closing-perspective"><span class="header-section-number">14</span>
+Closing Perspective</h1>
 <p>OpenClaw becomes dependable when you stop treating it as a chat
 window and start treating it as a small distributed system. The Gateway
 owns connectivity and state; the model proposes reasoning and actions;
@@ -1439,7 +1494,7 @@ works.</p>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -1469,18 +1524,27 @@ works.</p>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -1488,19 +1552,18 @@ works.</p>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
