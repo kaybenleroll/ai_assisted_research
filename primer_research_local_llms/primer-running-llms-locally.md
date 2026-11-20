@@ -769,18 +769,18 @@ Example `~/.continue/config.yaml`:
 models:
   - name: Local coding chat
     provider: ollama
-    model: qwen3-coder:8b
+    model: qwen2.5-coder:7b
     roles:
       - chat
 
   - name: Local autocomplete
     provider: ollama
-    model: qwen3-coder:1.5b
+    model: qwen2.5-coder:1.5b
     roles:
       - autocomplete
 ```
 
-If tag names differ in your environment, pick the nearest available coder variants from your local registry.
+The [Ollama catalogue](https://ollama.com/library/qwen2.5-coder/tags) listed these 7B and 1.5B tags on 20 November 2026; the 7B download was about 4.7 GB, before runtime and context memory. Pull the chosen model first, check available memory and evaluate whether it meets your coding or autocomplete needs. These examples have not been run for this update. A configured endpoint does not install the model; choose an available tag and check the extension's current configuration format.
 
 Who this is for:
 
@@ -996,7 +996,11 @@ If your app isolates model client config behind environment variables, you can s
 
 The common shape is useful, but compatibility is not identity. Vision requests may require base64 image data, a model-specific content schema, or a separate projector. Audio transcription and text-to-speech normally use different endpoints. Responses APIs, stateful conversations, tool choice, structured output, and remote image URLs also vary by runtime. Build a small adapter around these differences instead of scattering backend-specific assumptions through your application.
 
-Python example:
+Python example, assuming Ollama is running and `qwen2.5-coder:7b` has already been pulled. The compatible endpoint does not install the model. This example has not been run for this update:
+
+```{=latex}
+\newpage
+```
 
 ```python
 from openai import OpenAI
@@ -1009,7 +1013,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="qwen3-coder:8b",
+    model="qwen2.5-coder:7b",
     messages=[
         {"role": "system", "content": "You are a concise coding assistant."},
         {"role": "user", "content": "Explain what a KV cache does."},
@@ -1235,13 +1239,19 @@ Do that, and you get the best part of local AI: private, configurable intelligen
 
 ### Quick Command Cheatsheet
 
+These commands illustrate the tools described above; check model tags and local settings before running them.
+
+```{=latex}
+\newpage
+```
+
 ```bash
 # === Ollama ===
 # Verify current model tags in the Ollama library before pulling.
-ollama pull qwen3-coder:8b
-ollama run qwen3-coder:8b
+ollama pull qwen2.5-coder:7b
+ollama run qwen2.5-coder:7b
 ollama list
-ollama rm qwen3-coder:8b
+ollama rm qwen2.5-coder:7b
 ollama serve
 
 # === llama-server ===
