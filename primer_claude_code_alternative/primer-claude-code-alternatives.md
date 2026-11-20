@@ -144,7 +144,9 @@ A replacement should be compared with the Claude configuration you actually use 
 
 #### OpenAI / GPT and Codex Models
 
-OpenAI's hosted catalogue includes GPT-6 Astra and GPT-5.6 Sol, Terra, and Luna. OpenAI positions Astra for its hardest reasoning and coding work, Sol for complex professional work, Terra for balancing capability and cost, and Luna for cost-sensitive workloads. These are useful shortlist distinctions; they do not establish equivalence to Anthropic tiers. Check each model's supported modalities, context, function calling, and reasoning settings in the [OpenAI model catalogue](https://developers.openai.com/api/docs/models). Treat OpenAI's comparative coding scores as vendor evaluations.
+The 7 October shortlist above used GPT-6 Astra and GPT-5.6 Sol, Terra, and Luna as examples. That is a historical comparison, not a current inventory. Check each model's supported modalities, context, function calling, and reasoning settings in the [OpenAI API model catalogue](https://developers.openai.com/api/docs/models). Treat OpenAI's comparative coding scores as vendor evaluations.
+
+A separate, limited check on 20 November 2026 found that [OpenAI's Work and Codex model guidance](https://learn.chatgpt.com/docs/models) lists GPT-6.2 Astra and GPT-6.2 Sol on supported plans and clients, alongside GPT-6.1 Terra and GPT-6 Luna. This product guidance does not revalidate the October API prices or the rest of the table. An API catalogue entry does not establish access through a subscription, a particular client, or your account; inspect the active picker and applicable plan before choosing a candidate. The list does not establish equivalence to a Claude tier or performance on your tasks.
 
 **Codex is also a product and access path**, not a synonym for one immutable model. Codex-branded model releases and the models available inside Codex can change independently of API availability. A Codex subscription, hosted GPT API usage, and a self-hosted checkpoint are different arrangements; see the [current product model documentation](https://learn.chatgpt.com/docs/models) and the [Codex CLI profile](#openai-codex-cli) for the product layer. An API listing shell, apply-patch, or MCP support describes integration with those tools, not a model executing them unaided.
 
@@ -325,7 +327,7 @@ uv tool install aider-chat
 **LLM provider support:** Aider supports all major providers via litellm, including:
 
 - Anthropic (Claude family — `claude-sonnet-5`, `claude-opus-5`, `claude-haiku-4-5-20251001`)
-- OpenAI (current GPT-5.6 and Codex model aliases exposed by the installed Aider/litellm release)
+- OpenAI (model aliases exposed by the installed Aider/litellm release; verify availability)
 - Google (`gemini-3.1-pro-preview` via Vertex AI or AI Studio)
 - AWS Bedrock
 - Azure OpenAI
@@ -608,9 +610,7 @@ npm install -g @openai/codex
 codex
 ```
 
-**Model support:** The current Codex subscription lineup is the GPT-5.6 family: Sol, Terra, and Luna. Sol is the high-capability choice, Terra balances capability and allowance, and Luna stretches usage furthest. Available models depend on plan and may change, so `/model` and `/status` are more reliable than a hard-coded model name in a long-lived guide.
-
-The GPT-6 Astra model is also available in the current OpenAI model catalogue; use the installed Codex `/model` listing rather than assuming every plan exposes every model.
+**Model support:** As checked on 20 November 2026, [OpenAI’s Work and Codex model guide](https://learn.chatgpt.com/docs/models) lists GPT-6.2 Astra and GPT-6.2 Sol for supported plans and clients, as well as GPT-6.1 Terra and GPT-6 Luna. Availability depends on the account, plan, client and workspace settings. Use the installed Codex `/model` picker and `/status`, and check the applicable plan, rather than assuming the published list is available to every user. The separate [API catalogue](https://developers.openai.com/api/docs/models) describes API access; it does not establish subscription entitlement or identical client support.
 
 **Local model support:** Codex CLI can run against local models via an `--oss` flag, with documented Ollama and LM Studio providers. This gives it a genuine offline/local-only mode, something Gemini CLI lacks entirely.
 
@@ -621,7 +621,7 @@ The GPT-6 Astra model is also available in the current OpenAI model catalogue; u
 **Agentic capabilities:** Codex CLI can read and edit files, run shell commands with configurable approval levels, and iterate autonomously across multi-step tasks, broadly comparable in scope to Claude Code and Gemini CLI.
 
 **Strengths:**
-- Current GPT-5.6 Sol/Terra/Luna choices let you trade capability against how quickly you consume the plan allowance
+- The model picker lets you compare the choices available to your account and task; check the applicable usage limits
 - Fast, low-overhead Rust binary
 - Genuine local-model mode via `--oss` (Ollama and LM Studio) — not just a cloud-only tool
 - Bundled into existing ChatGPT subscriptions, so many users already have access with no incremental cost
@@ -1447,12 +1447,12 @@ Pricing note: pricing is volatile and model-specific. Verify Anthropic's current
 - Heavy usage estimate: approximately **$225/month**
 - *Cheaper and faster than the Sonnet tier in many workloads, but verify current tier pricing and caps before treating that as a purchasing recommendation.*
 
-**OpenAI GPT-5.6 Terra (current balanced tier):**
+**OpenAI GPT-5.6 Terra (7 October 2026 pricing example):**
 
 - Input: $2/million tokens
 - Output: $12/million tokens
 - Heavy usage estimate: (150M x $2 + 15M x $12) / 1M approximately **$300 + $180 = ~$480/month**
-- *GPT-5.6 Sol is the flagship at $4/$20 per million; GPT-5.6 Luna is the cost-sensitive tier at $0.20/$1.20. The model and price selected materially change the result.*
+- *The October example used GPT-5.6 Sol at $4/$20 per million and GPT-5.6 Luna at $0.20/$1.20. The model and price selected materially change the result; verify current API rates before budgeting.*
 
 At the same 150M input / 15M output workload, the corresponding estimates are approximately **$900/month for Sol** ($600 + $300), **$480/month for Terra** ($300 + $180), and **$48/month for Luna** ($30 + $18), before caching or any subscription allowance.
 
@@ -1541,7 +1541,7 @@ At the same 150M input / 15M output workload, the corresponding estimates are ap
 Use Aider or Cline with direct Anthropic API. Cost: roughly $450/month for the heavy-usage workload defined here at Sonnet 5's current standard rate. This is still the worst-case scenario financially — you lose the Max plan subsidy, though the gap is narrower than it was under 2025 Sonnet pricing.
 
 **Scenario 2: Reduce cost with model diversity**
-Use Aider or OpenCode with OpenRouter, routing to a current low-cost model for routine tasks and Claude/GPT-5.6 for complex ones. Cost depends on the selected provider, model, and routing strategy; expect a quality trade-off on simpler models.
+Use Aider or OpenCode with OpenRouter. Try a low-cost model on representative routine tasks and compare more capable models on the complex tasks where it falls short. Measure task completion and total cost, including retries, before choosing how to route work.
 
 **Scenario 3: Go local for routine work, cloud for hard tasks**
 Use Aider or Cline with Ollama or LM Studio and a current local coding model, then escalate to a cloud API for complex multi-file refactors. Cost is near zero for routine work, plus occasional API costs for hard tasks.
