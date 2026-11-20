@@ -32,6 +32,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -173,6 +184,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -184,7 +196,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -585,7 +596,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -605,18 +616,21 @@ code span.wa { color: #da4453; } /* Warning */
   <script>
     // MathJax's boldsymbol extension is a separate file that an embedded
     // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
-    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // extension is therefore vendored inline below (exact
     // bytes of the matching mathjax@<version> release file) and run inside
     // startup.ready, before MathJax typesets. When Pandoc embeds a different
     // MathJax version, download input/tex/extensions/boldsymbol.js from
-    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
     // and re-render the maths primers. A version mismatch is not checked in
     // CI; MathJax's runtime checkVersion warns in the browser console on drift.
     // The MathML variants ignore this block.
     window.MathJax = {
       tex: { packages: { '[+]': ['boldsymbol'] } },
       startup: { ready() {
-(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();        MathJax.startup.defaultReady();
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
       } }
     };
   </script>
@@ -624,13 +638,15 @@ code span.wa { color: #da4453; } /* Warning */
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Machine Learning Optimisation:
 Objectives, Algorithms, and Diagnostics</span>
     <span class="navbar-meta">18 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -639,7 +655,7 @@ Objectives, Algorithms, and Diagnostics</span>
       <div class="sidebar-tools">
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#orientation-scope-and-notation" id="toc-orientation-scope-and-notation"><span class="toc-section-number">1</span> Orientation, Scope, and Notation</a>
 <ul>
 <li><a href="#purpose-scope-and-reading-route" id="toc-purpose-scope-and-reading-route"><span class="toc-section-number">1.1</span> Purpose, Scope, and Reading
@@ -793,17 +809,19 @@ Evidence</a></li>
 Checklist</a></li>
 </ul></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">10</span> Further Reading</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
-<h1 data-number="1" id="orientation-scope-and-notation"><span class="header-section-number">1</span> Orientation, Scope, and
+<h1 id="document-title" class="document-title">Machine Learning
+Optimisation: Objectives, Algorithms, and Diagnostics</h1>
+<h1 data-number="1" role="heading" aria-level="2" id="orientation-scope-and-notation"><span class="header-section-number">1</span> Orientation, Scope, and
 Notation</h1>
-<h2 data-number="1.1" id="purpose-scope-and-reading-route"><span class="header-section-number">1.1</span> Purpose, Scope, and Reading
+<h2 data-number="1.1" role="heading" aria-level="3" id="purpose-scope-and-reading-route"><span class="header-section-number">1.1</span> Purpose, Scope, and Reading
 Route</h2>
 <p>Optimisation is the part of machine learning that turns a model,
 data, and a loss into fitted parameters. The optimiser does not decide
@@ -881,7 +899,7 @@ benchmark itself into an uncontrolled outer optimisation loop. The
 intended outcome is not memorisation of algorithm names, but a
 defensible account of what was optimised, under which assumptions, and
 why the reported result is credible.</p>
-<h2 data-number="1.2" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
+<h2 data-number="1.2" role="heading" aria-level="3" id="what-this-primer-is-not"><span class="header-section-number">1.2</span> What This Primer Is Not</h2>
 <p>This is not a proof-based optimisation textbook, a catalogue of
 solver APIs, or a claim that one optimiser is best across
 machine-learning tasks. Proof sketches are included where they expose an
@@ -943,7 +961,8 @@ progress. An excellent validation score can indicate a useful model, a
 lucky split, or leakage. The final workflow asks the reader to
 distinguish these possibilities with measurements rather than
 attributing every outcome to the optimiser’s brand name.</p>
-<h2 data-number="1.3" id="assumed-background"><span class="header-section-number">1.3</span> Assumed Background</h2>
+<h2 data-number="1.3" role="heading" aria-level="3" id="assumed-background"><span class="header-section-number">1.3</span>
+Assumed Background</h2>
 <p>You should be comfortable with vectors, matrices, matrix
 multiplication, derivatives of scalar functions, and elementary
 probability. The primer defines optimisation-specific terms such as
@@ -1048,7 +1067,7 @@ being discussed. The same convention carries into the code: arrays have
 named roles, intermediate quantities are not hidden behind a framework
 call, and numerical output is treated as evidence that can be
 checked.</p>
-<h2 data-number="1.4" id="notation"><span class="header-section-number">1.4</span> Notation</h2>
+<h2 data-number="1.4" role="heading" aria-level="3" id="notation"><span class="header-section-number">1.4</span> Notation</h2>
 <p>Vectors and matrices are bold. For Latin symbols this is written with
 <code>\mathbf</code>; for Greek symbols, whose bold forms are not
 reliably produced by <code>\mathbf</code> in every TeX renderer, this
@@ -1283,14 +1302,14 @@ merely because automatic differentiation produced it. These are notation
 and semantics checks as much as coding checks.</p>
 <p><em>Verified against primary sources for all sections; unverified
 claims are flagged inline.</em></p>
-<h1 data-number="2" id="from-a-learning-task-to-an-optimisation-problem"><span class="header-section-number">2</span> From a Learning Task to an
+<h1 data-number="2" role="heading" aria-level="2" id="from-a-learning-task-to-an-optimisation-problem"><span class="header-section-number">2</span> From a Learning Task to an
 Optimisation Problem</h1>
 <p>Optimisation begins before an algorithm is selected. You must decide
 what parameters are free, what data enter the objective, which errors
 receive which costs, what constraints apply, and what evidence will be
 held out. A poor formulation solved perfectly is still a poor
 result.</p>
-<h2 data-number="2.1" id="population-risk-and-empirical-risk"><span class="header-section-number">2.1</span> Population Risk and Empirical
+<h2 data-number="2.1" role="heading" aria-level="3" id="population-risk-and-empirical-risk"><span class="header-section-number">2.1</span> Population Risk and Empirical
 Risk</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
@@ -1380,7 +1399,7 @@ bookkeeping is correct. A robust objective test duplicates the data,
 changes the batch partition while preserving the same examples, and
 checks whether the intended mathematical objective and its full gradient
 remain unchanged.</p>
-<h2 data-number="2.2" id="parameters-hyperparameters-and-state"><span class="header-section-number">2.2</span> Parameters, Hyperparameters,
+<h2 data-number="2.2" role="heading" aria-level="3" id="parameters-hyperparameters-and-state"><span class="header-section-number">2.2</span> Parameters, Hyperparameters,
 and State</h2>
 <p>Parameters are variables changed by the inner optimiser, such as
 regression coefficients or neural-network weights. Hyperparameters
@@ -1408,7 +1427,7 @@ while still calling the same data “held out”. Reusing validation results
 to choose many configurations makes the validation set part of the
 selection procedure. A final test set or a nested resampling design is
 needed when you want an unbiased assessment of that procedure.</p>
-<h2 data-number="2.3" id="recurring-example-regularised-logistic-regression"><span class="header-section-number">2.3</span> Recurring Example: Regularised
+<h2 data-number="2.3" role="heading" aria-level="3" id="recurring-example-regularised-logistic-regression"><span class="header-section-number">2.3</span> Recurring Example: Regularised
 Logistic Regression</h2>
 <p>For binary targets
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">y_i\in\{0,1\}</annotation></semantics></math>
@@ -1794,7 +1813,7 @@ and can improve conditioning. Validation estimates predictive behaviour
 under a sampling design. A classification threshold converts
 probabilities to decisions and belongs to the decision rule, not to the
 smooth training objective.</p>
-<h2 data-number="2.4" id="objective-metric-and-constraint-are-different-roles"><span class="header-section-number">2.4</span> Objective, Metric, and
+<h2 data-number="2.4" role="heading" aria-level="3" id="objective-metric-and-constraint-are-different-roles"><span class="header-section-number">2.4</span> Objective, Metric, and
 Constraint Are Different Roles</h2>
 <p>The training objective must be computable often and, for gradient
 methods, differentiable or proximable. The acceptance metric should
@@ -1832,7 +1851,7 @@ training objective.</li>
 <p>This audit is short, but it prevents a common category error:
 spending days tuning an optimiser for an objective that changes with
 batch size, weighting convention, or data order.</p>
-<h2 data-number="2.5" id="worked-formulation-audit-weighted-logistic-regression"><span class="header-section-number">2.5</span> Worked Formulation Audit:
+<h2 data-number="2.5" role="heading" aria-level="3" id="worked-formulation-audit-weighted-logistic-regression"><span class="header-section-number">2.5</span> Worked Formulation Audit:
 Weighted Logistic Regression</h2>
 <p>Suppose positive examples receive weight
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mo>+</mo></msub><annotation encoding="application/x-tex">w_+</annotation></semantics></math>
@@ -1870,13 +1889,13 @@ recall for the positive class, but the final threshold still determines
 the operational trade-off between false positives and false negatives.
 Selecting that threshold on validation data is an outer decision, not
 part of solving the differentiable inner objective.</p>
-<h1 data-number="3" id="geometry-derivatives-and-conditioning"><span class="header-section-number">3</span> Geometry, Derivatives, and
+<h1 data-number="3" role="heading" aria-level="2" id="geometry-derivatives-and-conditioning"><span class="header-section-number">3</span> Geometry, Derivatives, and
 Conditioning</h1>
 <p>An optimiser sees local information about a surface. The gradient
 supplies a slope, the Hessian supplies local curvature, and constraints
 limit the available directions. Conditioning determines whether one
 local scale is representative of the rest.</p>
-<h2 data-number="3.1" id="directional-derivatives-gradients-jacobians-and-hessians"><span class="header-section-number">3.1</span> Directional Derivatives,
+<h2 data-number="3.1" role="heading" aria-level="3" id="directional-derivatives-gradients-jacobians-and-hessians"><span class="header-section-number">3.1</span> Directional Derivatives,
 Gradients, Jacobians, and Hessians</h2>
 <p>For a differentiable scalar function
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>:</mo><msup><mi mathvariant="double-struck">ℝ</mi><mi>d</mi></msup><mo>→</mo><mi mathvariant="double-struck">ℝ</mi></mrow><annotation encoding="application/x-tex">F:\mathbb{R}^d\to\mathbb{R}</annotation></semantics></math>,
@@ -1991,7 +2010,7 @@ does not exist. Conversely, a singular Hessian does not by itself prove
 failure: the objective may be flat along a symmetry direction while
 still increasing in every direction that changes the represented
 function.</p>
-<h2 data-number="3.2" id="smoothness-and-curvature-bounds"><span class="header-section-number">3.2</span> Smoothness and Curvature
+<h2 data-number="3.2" role="heading" aria-level="3" id="smoothness-and-curvature-bounds"><span class="header-section-number">3.2</span> Smoothness and Curvature
 Bounds</h2>
 <p>An objective has an
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>-Lipschitz
@@ -2023,7 +2042,7 @@ convex and
 Strong convexity gives a unique minimiser and turns objective or
 gradient error into distance bounds. Smoothness alone does not imply
 convexity, and convexity alone does not imply a Lipschitz gradient.</p>
-<h2 data-number="3.3" id="recurring-example-a-rotated-ill-conditioned-quadratic"><span class="header-section-number">3.3</span> Recurring Example: A Rotated
+<h2 data-number="3.3" role="heading" aria-level="3" id="recurring-example-a-rotated-ill-conditioned-quadratic"><span class="header-section-number">3.3</span> Recurring Example: A Rotated
 Ill-Conditioned Quadratic</h2>
 <p>Let the known minimiser be
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝜽</mi><mo>*</mo></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\theta}^*=(1,-1)^{\top}</annotation></semantics></math>.
@@ -2394,7 +2413,7 @@ an unregularised linear predictor, but an isotropic penalty in the
 transformed coordinates is not generally isotropic in the original
 units. State whether a rescaling is a pure reparameterisation or part of
 the model definition.</p>
-<h2 data-number="3.4" id="derivative-checks-and-numerical-limits"><span class="header-section-number">3.4</span> Derivative Checks and Numerical
+<h2 data-number="3.4" role="heading" aria-level="3" id="derivative-checks-and-numerical-limits"><span class="header-section-number">3.4</span> Derivative Checks and Numerical
 Limits</h2>
 <p>Automatic differentiation applies the chain rule to program
 operations; it is neither symbolic algebra nor finite differencing. It
@@ -2426,7 +2445,7 @@ For logistic regression, compare the analytic gradient against finite
 differences before trusting an optimiser trace. A passed check supports
 the derivative implementation at the tested points; it does not prove
 the whole training system correct.</p>
-<h2 data-number="3.5" id="automatic-differentiation-for-optimisation"><span class="header-section-number">3.5</span> Automatic Differentiation for
+<h2 data-number="3.5" role="heading" aria-level="3" id="automatic-differentiation-for-optimisation"><span class="header-section-number">3.5</span> Automatic Differentiation for
 Optimisation</h2>
 <p>Automatic differentiation (AD) is the bridge between the mathematical
 derivatives in this chapter and the derivatives supplied to an
@@ -2437,7 +2456,7 @@ mode. Here the practical question is different: which derivative object
 does an optimisation method need, how should it be computed, and what
 evidence supports the claim that it is the derivative of the intended
 objective?</p>
-<h3 data-number="3.5.1" id="the-derivative-object-the-solver-needs"><span class="header-section-number">3.5.1</span> The Derivative Object the
+<h3 data-number="3.5.1" role="heading" aria-level="4" id="the-derivative-object-the-solver-needs"><span class="header-section-number">3.5.1</span> The Derivative Object the
 Solver Needs</h3>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>:</mo><msup><mi mathvariant="double-struck">ℝ</mi><mi>d</mi></msup><mo>→</mo><msup><mi mathvariant="double-struck">ℝ</mi><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">r:\mathbb{R}^d\to\mathbb{R}^m</annotation></semantics></math>
@@ -2491,7 +2510,7 @@ of the complete implemented objective, including reductions, masks,
 regularisation, and transformations between parameters and predictions.
 A gradient of the network output before the loss reduction is not
 necessarily the gradient that the optimiser should use.</p>
-<h3 data-number="3.5.2" id="from-a-written-loss-to-an-executable-objective"><span class="header-section-number">3.5.2</span> From a Written Loss to an
+<h3 data-number="3.5.2" role="heading" aria-level="4" id="from-a-written-loss-to-an-executable-objective"><span class="header-section-number">3.5.2</span> From a Written Loss to an
 Executable Objective</h3>
 <p>Consider the regularised logistic objective already used in this
 primer:</p>
@@ -2519,7 +2538,7 @@ another parameter value. A successful derivative call therefore
 establishes a derivative of the executed program, subject to the rules
 supplied for its operations, not a proof that the program expresses the
 stated model.</p>
-<h3 data-number="3.5.3" id="memory-state-and-non-smooth-operations"><span class="header-section-number">3.5.3</span> Memory, State, and Non-Smooth
+<h3 data-number="3.5.3" role="heading" aria-level="4" id="memory-state-and-non-smooth-operations"><span class="header-section-number">3.5.3</span> Memory, State, and Non-Smooth
 Operations</h3>
 <p>Reverse mode normally retains or reconstructs intermediate values
 needed by the backward pass. Deep models, long unrolled optimisers, and
@@ -2548,7 +2567,7 @@ penalty, a proximal method may express the intended problem more
 faithfully than treating one selected subgradient as an ordinary smooth
 gradient. Check the solver’s regularity assumptions against the
 operations in the graph.</p>
-<h3 data-number="3.5.4" id="worked-derivative-products"><span class="header-section-number">3.5.4</span> Worked Derivative
+<h3 data-number="3.5.4" role="heading" aria-level="4" id="worked-derivative-products"><span class="header-section-number">3.5.4</span> Worked Derivative
 Products</h3>
 <p>The following small example uses the same four-point logistic data in
 three ecosystems. The Python and R blocks use reverse-mode AD for the
@@ -2642,7 +2661,7 @@ sensitivities, while Zygote constructs the reverse-mode gradient. Its
 dense Hessian is only a reference for this two-parameter fixture; larger
 problems should use matrix-free products and choose modes according to
 dimensions, memory, and the solver’s request.</p>
-<h3 data-number="3.5.5" id="validate-ad-independently"><span class="header-section-number">3.5.5</span> Validate AD
+<h3 data-number="3.5.5" role="heading" aria-level="4" id="validate-ad-independently"><span class="header-section-number">3.5.5</span> Validate AD
 Independently</h3>
 <p>Begin with a deterministic fixture and write down the exact scalar
 objective, reduction, parameter mask, regularisation coefficient, and
@@ -2678,7 +2697,7 @@ and <a href="https://fluxml.ai/Flux.jl/dev/reference/training/gradients/">Zygote
 higher-order derivatives</a>. Package APIs were checked against these
 official pages on 18 October 2026; exact installed versions and
 execution remain unverified in this workspace.</p>
-<h2 data-number="3.6" id="conditioning-beyond-one-number"><span class="header-section-number">3.6</span> Conditioning Beyond One
+<h2 data-number="3.6" role="heading" aria-level="3" id="conditioning-beyond-one-number"><span class="header-section-number">3.6</span> Conditioning Beyond One
 Number</h2>
 <p>The ratio
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi>/</mi><mi>μ</mi></mrow><annotation encoding="application/x-tex">L/\mu</annotation></semantics></math>
@@ -2725,13 +2744,13 @@ directional curvatures, convergence slopes on a log residual plot,
 block-level update ratios, and sensitivity to rescaling. Name the point,
 matrix approximation, and subspace used for any reported Hessian
 condition estimate.</p>
-<h1 data-number="4" id="problem-classes-and-convergence-claims"><span class="header-section-number">4</span> Problem Classes and Convergence
+<h1 data-number="4" role="heading" aria-level="2" id="problem-classes-and-convergence-claims"><span class="header-section-number">4</span> Problem Classes and Convergence
 Claims</h1>
 <p>Method names are less informative than problem classes. A guarantee
 has four parts: assumptions, a quantity that decreases, a rate or
 limiting claim, and a unit of work. Removing any part can turn a theorem
 into a misleading slogan.</p>
-<h2 data-number="4.1" id="classify-before-you-optimise"><span class="header-section-number">4.1</span> Classify Before You
+<h2 data-number="4.1" role="heading" aria-level="3" id="classify-before-you-optimise"><span class="header-section-number">4.1</span> Classify Before You
 Optimise</h2>
 <p>An unconstrained smooth problem has a differentiable objective and no
 explicit feasible set. A constrained problem restricts
@@ -2881,7 +2900,7 @@ is any valid lower bound. The conclusion is about first-order
 stationarity of at least one iterate. It does not identify which iterate
 in advance, prove that the last iterate is best, or distinguish a local
 minimum from a saddle.</p>
-<h2 data-number="4.2" id="what-common-rates-actually-say"><span class="header-section-number">4.2</span> What Common Rates Actually
+<h2 data-number="4.2" role="heading" aria-level="3" id="what-common-rates-actually-say"><span class="header-section-number">4.2</span> What Common Rates Actually
 Say</h2>
 <p>The following table gives representative deterministic results.
 Constants, norms, and admissible step sizes vary by theorem, so each row
@@ -2998,7 +3017,7 @@ Hessian-vector products, or another declared oracle. It does not count
 data loading, communication, compilation, or parallel efficiency. A
 method with a better iteration rate can lose in wall-clock time if each
 iteration is much more expensive.</p>
-<h2 data-number="4.3" id="stopping-criteria-are-claims-about-evidence"><span class="header-section-number">4.3</span> Stopping Criteria Are Claims
+<h2 data-number="4.3" role="heading" aria-level="3" id="stopping-criteria-are-claims-about-evidence"><span class="header-section-number">4.3</span> Stopping Criteria Are Claims
 About Evidence</h2>
 <p>A solver needs a stopping rule before it runs. Common criteria
 include a small gradient norm, a small projected-gradient or
@@ -3024,7 +3043,7 @@ on a fixed diagnostic batch, report variability, or use a moving average
 with a declared window. Keep the training stopping rule distinct from
 early stopping selected by validation performance; the latter is a
 model-selection and regularisation decision.</p>
-<h2 data-number="4.4" id="a-guarantee-checklist"><span class="header-section-number">4.4</span> A Guarantee Checklist</h2>
+<h2 data-number="4.4" role="heading" aria-level="3" id="a-guarantee-checklist"><span class="header-section-number">4.4</span> A Guarantee Checklist</h2>
 <p>Before repeating a convergence claim, identify the answers to these
 questions:</p>
 <ol type="1">
@@ -3065,7 +3084,7 @@ implemented quantity Q is bounded in sense S after work unit W. In this
 experiment, A was checked by X, B is plausible because Y, and C was not
 verified.” This separates theorem, evidence, and unresolved
 assumption.</p>
-<h2 data-number="4.5" id="reading-a-convergence-theorem-as-an-engineering-contract"><span class="header-section-number">4.5</span> Reading a Convergence Theorem
+<h2 data-number="4.5" role="heading" aria-level="3" id="reading-a-convergence-theorem-as-an-engineering-contract"><span class="header-section-number">4.5</span> Reading a Convergence Theorem
 as an Engineering Contract</h2>
 <p>Consider the statement that gradient descent converges linearly on an
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>-smooth,
@@ -3111,13 +3130,14 @@ set. Iterates can converge to a stationary point with poor objective
 value in a non-convex problem. A residual can reach a finite-precision
 floor while the exact-arithmetic sequence would continue. State exactly
 which event the evidence supports.</p>
-<h1 data-number="5" id="first-order-methods"><span class="header-section-number">5</span> First-Order Methods</h1>
+<h1 data-number="5" role="heading" aria-level="2" id="first-order-methods"><span class="header-section-number">5</span>
+First-Order Methods</h1>
 <p>First-order methods build steps from gradients or subgradients. Their
 low memory cost and access to mini-batch estimates make them the default
 at machine-learning scale. The price is sensitivity to scaling and
 learning-rate choices, especially when curvature varies strongly by
 direction.</p>
-<h2 data-number="5.1" id="gradient-descent-and-line-search"><span class="header-section-number">5.1</span> Gradient Descent and Line
+<h2 data-number="5.1" role="heading" aria-level="3" id="gradient-descent-and-line-search"><span class="header-section-number">5.1</span> Gradient Descent and Line
 Search</h2>
 <p>Gradient descent uses the update</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝜽</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo>−</mo><msub><mi>α</mi><mi>k</mi></msub><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -3177,7 +3197,7 @@ values can become non-finite. With a very small step, it fails quietly
 by making negligible progress. Always compare the update norm with the
 parameter scale and the gradient norm with the expected local
 curvature.</p>
-<h2 data-number="5.2" id="stochastic-and-mini-batch-gradients"><span class="header-section-number">5.2</span> Stochastic and Mini-Batch
+<h2 data-number="5.2" role="heading" aria-level="3" id="stochastic-and-mini-batch-gradients"><span class="header-section-number">5.2</span> Stochastic and Mini-Batch
 Gradients</h2>
 <p>For a data average, a mini-batch
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>B</mi><mi>k</mi></msub><annotation encoding="application/x-tex">B_k</annotation></semantics></math>
@@ -3326,7 +3346,7 @@ restart logic. They are attractive when the data set is finite and
 revisited many times, gradients are not dominated by hardware throughput
 considerations, and high training accuracy matters. They are less
 compelling in a streaming setting where examples do not recur.</p>
-<h2 data-number="5.3" id="momentum-and-accelerated-methods"><span class="header-section-number">5.3</span> Momentum and Accelerated
+<h2 data-number="5.3" role="heading" aria-level="3" id="momentum-and-accelerated-methods"><span class="header-section-number">5.3</span> Momentum and Accelerated
 Methods</h2>
 <p>Heavy-ball momentum keeps a velocity,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒗</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>β</mi><msub><mi mathvariant="bold-italic">𝒗</mi><mi>k</mi></msub><mo>+</mo><msub><mi mathvariant="bold-italic">𝒈</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi mathvariant="bold-italic">𝜽</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo>−</mo><mi>α</mi><msub><mi mathvariant="bold-italic">𝒗</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
@@ -3400,7 +3420,7 @@ preserve the velocity. In stochastic training, momentum also filters
 noise and can lag after a sudden learning-rate or data-distribution
 change. Inspect update-to-parameter ratios and not only raw gradients,
 because the velocity determines the actual step.</p>
-<h2 data-number="5.4" id="learning-rate-schedules"><span class="header-section-number">5.4</span> Learning-Rate Schedules</h2>
+<h2 data-number="5.4" role="heading" aria-level="3" id="learning-rate-schedules"><span class="header-section-number">5.4</span> Learning-Rate Schedules</h2>
 <p>A schedule makes
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\alpha_k</annotation></semantics></math>
 vary with iteration, epoch, validation feedback, or a measured
@@ -3418,7 +3438,7 @@ implemented non-stationary procedure.</p>
 warm-up” changes meaning when data size, batch size, gradient
 accumulation, or distributed worker count changes. Record optimiser
 updates as well as epochs and examples processed.</p>
-<h2 data-number="5.5" id="adaptive-diagonal-methods"><span class="header-section-number">5.5</span> Adaptive Diagonal Methods</h2>
+<h2 data-number="5.5" role="heading" aria-level="3" id="adaptive-diagonal-methods"><span class="header-section-number">5.5</span> Adaptive Diagonal Methods</h2>
 <p>Adaptive methods rescale coordinates using gradient history. AdaGrad
 accumulates squared gradients,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝒔</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi mathvariant="bold-italic">𝒈</mi><mi>k</mi></msub><mo>⊙</mo><msub><mi mathvariant="bold-italic">𝒈</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi mathvariant="bold-italic">𝜽</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo>−</mo><mi>α</mi><mfrac><msub><mi mathvariant="bold-italic">𝒈</mi><mi>k</mi></msub><mrow><msqrt><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub></msqrt><mo>+</mo><mi>δ</mi></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
@@ -3497,7 +3517,7 @@ weight decay applies shrinkage outside the adaptive gradient
 transformation; it is not generally equivalent to adding
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>λ</mi><mn>2</mn></mfrac><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝜽</mi><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\frac{\lambda}{2}\|\boldsymbol{\theta}\|^2</annotation></semantics></math>
 to an adaptively preconditioned objective.</p>
-<h2 data-number="5.6" id="coordinate-subgradient-and-proximal-methods"><span class="header-section-number">5.6</span> Coordinate, Subgradient, and
+<h2 data-number="5.6" role="heading" aria-level="3" id="coordinate-subgradient-and-proximal-methods"><span class="header-section-number">5.6</span> Coordinate, Subgradient, and
 Proximal Methods</h2>
 <p>Coordinate descent updates one coordinate or block at a time. It is
 effective when a coordinate update is cheap, features are sparse, or a
@@ -3584,7 +3604,7 @@ proximal schemes can improve worst-case objective rates, but their
 extrapolation may make objective values non-monotone. A monotone restart
 can be an engineering safeguard, though it changes the analysed
 sequence.</p>
-<h2 data-number="5.7" id="first-order-selection-summary"><span class="header-section-number">5.7</span> First-Order Selection
+<h2 data-number="5.7" role="heading" aria-level="3" id="first-order-selection-summary"><span class="header-section-number">5.7</span> First-Order Selection
 Summary</h2>
 <p>Use full gradient descent when a complete gradient is affordable and
 accurate. Use stochastic or mini-batch methods when the data sum is too
@@ -3598,7 +3618,7 @@ specialised update cheap.</p>
 gradients, unsuitable scaling, unstable steps, hidden batch-dependent
 objective changes, and stopping rules based on noisy quantities. No
 first-order method repairs a malformed objective.</p>
-<h2 data-number="5.8" id="choosing-batch-size-step-size-and-schedule-together"><span class="header-section-number">5.8</span> Choosing Batch Size, Step Size,
+<h2 data-number="5.8" role="heading" aria-level="3" id="choosing-batch-size-step-size-and-schedule-together"><span class="header-section-number">5.8</span> Choosing Batch Size, Step Size,
 and Schedule Together</h2>
 <p>Batch size and learning rate are coupled through gradient noise and
 work per update. Increasing the batch usually reduces variance, but it
@@ -3633,7 +3653,7 @@ schedule becomes a different procedure. If gradient accumulation
 changes, an “update” represents a different number of examples. Record
 updates and examples processed, and restore the schedule counter with
 optimiser state.</p>
-<h2 data-number="5.9" id="online-regret-and-offline-optimisation"><span class="header-section-number">5.9</span> Online Regret and Offline
+<h2 data-number="5.9" role="heading" aria-level="3" id="online-regret-and-offline-optimisation"><span class="header-section-number">5.9</span> Online Regret and Offline
 Optimisation</h2>
 <p>Adaptive methods are often motivated by online-learning regret
 bounds. In an online problem, losses
@@ -3660,14 +3680,14 @@ responsiveness but changing the proof obligations. The practical
 question is which history a method stores, how that history is
 initialised and restored, and which result matches that exact
 recurrence.</p>
-<h1 data-number="6" id="curvature-aware-and-structured-methods"><span class="header-section-number">6</span> Curvature-Aware and Structured
+<h1 data-number="6" role="heading" aria-level="2" id="curvature-aware-and-structured-methods"><span class="header-section-number">6</span> Curvature-Aware and Structured
 Methods</h1>
 <p>Curvature-aware methods spend more computation per iteration to
 choose a better-scaled direction. They are attractive when high-accuracy
 gradients are available, parameters are moderate in number, or reducing
 expensive objective evaluations matters more than minimising arithmetic
 per step.</p>
-<h2 data-number="6.1" id="newtons-method-and-safeguards"><span class="header-section-number">6.1</span> Newton’s Method and
+<h2 data-number="6.1" role="heading" aria-level="3" id="newtons-method-and-safeguards"><span class="header-section-number">6.1</span> Newton’s Method and
 Safeguards</h2>
 <p>Newton’s step solves</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>∇</mi><mn>2</mn></msup><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><msub><mi mathvariant="bold-italic">𝒑</mi><mi>k</mi></msub><mo>=</mo><mi>−</mi><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi mathvariant="bold-italic">𝜽</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo>+</mo><msub><mi mathvariant="bold-italic">𝒑</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -3770,7 +3790,7 @@ one, entries of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑾</mi><annotation encoding="application/x-tex">\mathbf{W}</annotation></semantics></math>
 shrink and data curvature can become weak; regularisation supplies a
 lower curvature floor.</p>
-<h2 data-number="6.2" id="gaussnewton-and-natural-gradient-ideas"><span class="header-section-number">6.2</span> Gauss–Newton and
+<h2 data-number="6.2" role="heading" aria-level="3" id="gaussnewton-and-natural-gradient-ideas"><span class="header-section-number">6.2</span> Gauss–Newton and
 Natural-Gradient Ideas</h2>
 <p>For non-linear least squares, Gauss–Newton solves</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="bold-italic">𝑱</mi><mi>r</mi><mi>⊤</mi></msubsup><msub><mi mathvariant="bold-italic">𝑱</mi><mi>r</mi></msub><mspace width="0.167em"></mspace><mi mathvariant="bold-italic">𝒑</mi><mo>=</mo><mi>−</mi><msubsup><mi mathvariant="bold-italic">𝑱</mi><mi>r</mi><mi>⊤</mi></msubsup><mi>r</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -3807,7 +3827,8 @@ Kronecker-factored, or empirical approximations define different
 algorithms and invariance properties. Damping is again required when the
 metric is singular or poorly estimated. “Second order” should therefore
 identify the matrix actually used, not imply an exact Hessian.</p>
-<h2 data-number="6.3" id="trust-region-methods"><span class="header-section-number">6.3</span> Trust-Region Methods</h2>
+<h2 data-number="6.3" role="heading" aria-level="3" id="trust-region-methods"><span class="header-section-number">6.3</span>
+Trust-Region Methods</h2>
 <p>At iterate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\boldsymbol{\theta}_k</annotation></semantics></math>,
 define a quadratic model</p>
@@ -3850,7 +3871,8 @@ least a declared fraction of this baseline. Log
 predicted reduction, actual reduction, and subproblem termination. A
 radius collapsing towards zero while the gradient remains large points
 to a poor model, inconsistent objective evaluations, or bad scaling.</p>
-<h2 data-number="6.4" id="quasi-newton-methods"><span class="header-section-number">6.4</span> Quasi-Newton Methods</h2>
+<h2 data-number="6.4" role="heading" aria-level="3" id="quasi-newton-methods"><span class="header-section-number">6.4</span>
+Quasi-Newton Methods</h2>
 <p>Let</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒔</mi><mi>k</mi></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi mathvariant="bold-italic">𝒚</mi><mi>k</mi></msub><mo>=</mo><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>∇</mi><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="bold-italic">𝜽</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \mathbf{s}_k
@@ -3903,7 +3925,7 @@ then mixes curvature change with sampling change.</p>
 positive-definite local curvature, a suitable line search, and other
 technical conditions. L-BFGS with fixed memory has different theory and
 should not inherit the full-memory claim automatically.</p>
-<h2 data-number="6.5" id="hessian-vector-products-and-preconditioning"><span class="header-section-number">6.5</span> Hessian-Vector Products and
+<h2 data-number="6.5" role="heading" aria-level="3" id="hessian-vector-products-and-preconditioning"><span class="header-section-number">6.5</span> Hessian-Vector Products and
 Preconditioning</h2>
 <p>Many large problems can compute
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>∇</mi><mn>2</mn></msup><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜽</mi><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝒗</mi></mrow><annotation encoding="application/x-tex">\nabla^2F(\boldsymbol{\theta})\mathbf{v}</annotation></semantics></math>
@@ -3999,7 +4021,7 @@ an objective evaluation requires an expensive simulation, a method that
 uses more linear algebra but fewer rejected evaluations may dominate. If
 gradients arrive from a high-throughput stochastic pipeline, a dense
 factorisation may be irrelevant regardless of its iteration rate.</p>
-<h2 data-number="6.6" id="curvature-aware-selection-summary"><span class="header-section-number">6.6</span> Curvature-Aware Selection
+<h2 data-number="6.6" role="heading" aria-level="3" id="curvature-aware-selection-summary"><span class="header-section-number">6.6</span> Curvature-Aware Selection
 Summary</h2>
 <p>Use Newton or trust-region methods for moderate, smooth problems when
 derivatives and linear solves are reliable. Use Gauss–Newton when a
@@ -4011,7 +4033,7 @@ but dense storage is impossible.</p>
 gradient differences, inaccurate linear solves, or a local model trusted
 too far. Safeguards are part of the method, not optional
 decorations.</p>
-<h2 data-number="6.7" id="a-worked-curvature-aware-decision"><span class="header-section-number">6.7</span> A Worked Curvature-Aware
+<h2 data-number="6.7" role="heading" aria-level="3" id="a-worked-curvature-aware-decision"><span class="header-section-number">6.7</span> A Worked Curvature-Aware
 Decision</h2>
 <p>Suppose regularised logistic regression has
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>2</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">d=2,000</annotation></semantics></math>
@@ -4042,7 +4064,7 @@ record time and oracle calls to several residual thresholds. Third,
 perturb the starting point and regularisation strength. A method that
 wins only from one favourable start or at one loose threshold has not
 established a general advantage.</p>
-<h2 data-number="6.8" id="model-quality-and-step-quality"><span class="header-section-number">6.8</span> Model Quality and Step
+<h2 data-number="6.8" role="heading" aria-level="3" id="model-quality-and-step-quality"><span class="header-section-number">6.8</span> Model Quality and Step
 Quality</h2>
 <p>Curvature methods fail in two separable ways. The model may be poor,
 or the model may be solved poorly. Trust-region agreement
@@ -4060,14 +4082,14 @@ and truncated-CG methods can exploit a detected negative-curvature
 direction while bounding the step. Gauss–Newton discards a class of
 negative-curvature terms by construction. These choices solve different
 local models and should produce different diagnostic records.</p>
-<h1 data-number="7" id="constraints-duality-and-regularisation"><span class="header-section-number">7</span> Constraints, Duality, and
+<h1 data-number="7" role="heading" aria-level="2" id="constraints-duality-and-regularisation"><span class="header-section-number">7</span> Constraints, Duality, and
 Regularisation</h1>
 <p>Constraints encode feasible decisions; regularisers change preference
 among feasible parameters; penalties trade violation against objective
 value. Dual variables expose the marginal value of constraints and
 support optimality certificates when the problem structure permits
 them.</p>
-<h2 data-number="7.1" id="feasible-sets-and-projections"><span class="header-section-number">7.1</span> Feasible Sets and
+<h2 data-number="7.1" role="heading" aria-level="3" id="feasible-sets-and-projections"><span class="header-section-number">7.1</span> Feasible Sets and
 Projections</h2>
 <p>Write a general constrained problem as</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><munder><mi mathvariant="normal">min</mi><mi mathvariant="bold-italic">𝜽</mi></munder><mspace width="1.0em"></mspace></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜽</mi><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">subject to</mtext><mspace width="1.0em"></mspace></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜽</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>0</mn><mo>,</mo></mtd><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>m</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mi>h</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜽</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn><mo>,</mo></mtd><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mi>r</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>p</mi><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
@@ -4122,7 +4144,7 @@ projected-gradient convergence parallels unconstrained gradient descent.
 Clipping parameters after an arbitrary optimiser update is only
 projected optimisation if the clipping is the correct projection and the
 complete update is analysed with it.</p>
-<h2 data-number="7.2" id="lagrangians-kkt-conditions-and-duality"><span class="header-section-number">7.2</span> Lagrangians, KKT Conditions,
+<h2 data-number="7.2" role="heading" aria-level="3" id="lagrangians-kkt-conditions-and-duality"><span class="header-section-number">7.2</span> Lagrangians, KKT Conditions,
 and Duality</h2>
 <p>Using the sign convention
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜽</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j(\boldsymbol{\theta})\leq0</annotation></semantics></math>,
@@ -4243,7 +4265,7 @@ point has no active force, while a boundary optimum balances the
 objective gradient against a feasible-set normal. Higher-dimensional
 projected, proximal, and primal–dual methods build on the same
 geometry.</p>
-<h2 data-number="7.3" id="penalty-barrier-and-augmented-lagrangian-methods"><span class="header-section-number">7.3</span> Penalty, Barrier, and
+<h2 data-number="7.3" role="heading" aria-level="3" id="penalty-barrier-and-augmented-lagrangian-methods"><span class="header-section-number">7.3</span> Penalty, Barrier, and
 Augmented-Lagrangian Methods</h2>
 <p>For equality constraints
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒉</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝜽</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn mathvariant="bold">𝟎</mn></mrow><annotation encoding="application/x-tex">\mathbf{h}(\boldsymbol{\theta})=\mathbf{0}</annotation></semantics></math>,
@@ -4303,7 +4325,7 @@ to an extreme value. Its diagnostics must include both inner optimality
 and outer feasibility; a small inner gradient of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="script">ℒ</mi><mi>ρ</mi></msub><annotation encoding="application/x-tex">\mathcal{L}_{\rho}</annotation></semantics></math>
 does not prove that the original constraints are satisfied.</p>
-<h2 data-number="7.4" id="regularisation-as-geometry-and-statistical-choice"><span class="header-section-number">7.4</span> Regularisation as Geometry and
+<h2 data-number="7.4" role="heading" aria-level="3" id="regularisation-as-geometry-and-statistical-choice"><span class="header-section-number">7.4</span> Regularisation as Geometry and
 Statistical Choice</h2>
 <p>An
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ℓ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\ell_2</annotation></semantics></math>
@@ -4378,7 +4400,7 @@ evidence; a constraint tolerance describes acceptable feasibility. Do
 not tune a hard safety requirement as if it were an ordinary predictive
 hyperparameter unless the application explicitly permits that
 trade-off.</p>
-<h2 data-number="7.5" id="constraints-and-regularisation-failure-modes"><span class="header-section-number">7.5</span> Constraints and Regularisation
+<h2 data-number="7.5" role="heading" aria-level="3" id="constraints-and-regularisation-failure-modes"><span class="header-section-number">7.5</span> Constraints and Regularisation
 Failure Modes</h2>
 <p>The common failures are infeasible requirements, silently scaled
 penalties, incorrect projections, and invalid dual claims. Diagnose
@@ -4386,7 +4408,7 @@ feasibility before tuning an optimiser. Report constraint residuals in
 their physical units. Compare penalty terms with the data loss under the
 exact averaging convention. If a solution sits on a boundary, use
 constrained stationarity rather than expecting a zero raw gradient.</p>
-<h2 data-number="7.6" id="worked-kkt-example-projection-onto-a-simplex"><span class="header-section-number">7.6</span> Worked KKT Example: Projection
+<h2 data-number="7.6" role="heading" aria-level="3" id="worked-kkt-example-projection-onto-a-simplex"><span class="header-section-number">7.6</span> Worked KKT Example: Projection
 Onto a Simplex</h2>
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>∈</mo><msup><mi mathvariant="double-struck">ℝ</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{a}\in\mathbb{R}^d</annotation></semantics></math>
@@ -4436,7 +4458,7 @@ generally destroys the sum constraint.</p>
 non-negativity, the sum residual, stationarity on positive components,
 and the threshold inequality on zero components. A small Euclidean
 distance to the input is not enough if the result is infeasible.</p>
-<h2 data-number="7.7" id="choosing-a-constrained-method"><span class="header-section-number">7.7</span> Choosing a Constrained
+<h2 data-number="7.7" role="heading" aria-level="3" id="choosing-a-constrained-method"><span class="header-section-number">7.7</span> Choosing a Constrained
 Method</h2>
 <p>Active-set methods estimate which inequalities bind, solve a reduced
 equality-constrained problem, and update the active set. They are
@@ -4465,14 +4487,14 @@ Are constraints convex? Is strict feasibility available? Are Jacobians
 sparse? Does the problem decompose? Can a linearised constraint model be
 solved reliably? The number of constraints alone does not answer these
 questions.</p>
-<h1 data-number="8" id="non-convex-optimisation-in-machine-learning"><span class="header-section-number">8</span> Non-Convex Optimisation in
+<h1 data-number="8" role="heading" aria-level="2" id="non-convex-optimisation-in-machine-learning"><span class="header-section-number">8</span> Non-Convex Optimisation in
 Machine Learning</h1>
 <p>Neural-network objectives are non-convex because layers compose
 nonlinear maps and because parameter symmetries create many equivalent
 representations. The practical goal is usually a parameter state with
 acceptable validation and operational behaviour, not a certificate of
 global optimality.</p>
-<h2 data-number="8.1" id="what-the-guarantees-become"><span class="header-section-number">8.1</span> What the Guarantees Become</h2>
+<h2 data-number="8.1" role="heading" aria-level="3" id="what-the-guarantees-become"><span class="header-section-number">8.1</span> What the Guarantees Become</h2>
 <p>For a smooth objective bounded below, gradient descent with a
 suitable step can guarantee that some iterate has a small gradient norm.
 Stochastic variants can obtain expected stationarity bounds under
@@ -4514,7 +4536,7 @@ point, moving a small distance in the associated eigenvector direction
 decreases the quadratic model in one of the two signs. Trust-region and
 negative-curvature methods can exploit this. A pure gradient method may
 move slowly because its first-order signal is already small.</p>
-<h2 data-number="8.2" id="saddles-plateaux-symmetries-and-cliffs"><span class="header-section-number">8.2</span> Saddles, Plateaux, Symmetries,
+<h2 data-number="8.2" role="heading" aria-level="3" id="saddles-plateaux-symmetries-and-cliffs"><span class="header-section-number">8.2</span> Saddles, Plateaux, Symmetries,
 and Cliffs</h2>
 <p>At a saddle, the gradient can be small while the Hessian has a
 negative eigenvalue. In high dimensions, there are many possible
@@ -4558,7 +4580,7 @@ changes under parameter perturbations to distinguish functional flatness
 from parameter symmetry. Evaluate a line segment between solutions only
 after aligning obvious permutations; a high-loss midpoint can otherwise
 be an artefact of mismatched units.</p>
-<h2 data-number="8.3" id="mini-batch-noise-and-training-dynamics"><span class="header-section-number">8.3</span> Mini-Batch Noise and Training
+<h2 data-number="8.3" role="heading" aria-level="3" id="mini-batch-noise-and-training-dynamics"><span class="header-section-number">8.3</span> Mini-Batch Noise and Training
 Dynamics</h2>
 <p>Stochasticity comes from sample selection, augmentation, dropout-like
 mechanisms, distributed asynchrony, and finite-precision arithmetic. The
@@ -4598,7 +4620,7 @@ asynchronous staleness, gradient accumulation, and loss scaling —
 likewise define the update that must be analysed. Automatic
 differentiation can compute the pre-transformation gradient exactly
 while the optimiser follows a materially different direction.</p>
-<h2 data-number="8.4" id="optimiser-choice-and-generalisation"><span class="header-section-number">8.4</span> Optimiser Choice and
+<h2 data-number="8.4" role="heading" aria-level="3" id="optimiser-choice-and-generalisation"><span class="header-section-number">8.4</span> Optimiser Choice and
 Generalisation</h2>
 <p>Two optimisers can reach similar training losses with different
 parameter norms, margins, or trajectories and then show different
@@ -4638,7 +4660,7 @@ Reporting the maximum validation score across many checkpoints and
 trials without accounting for that search overstates evidence. Preserve
 the full trial history and use an untouched test set or nested design
 for a final comparison.</p>
-<h2 data-number="8.5" id="hyperparameter-search-as-an-outer-loop"><span class="header-section-number">8.5</span> Hyperparameter Search as an
+<h2 data-number="8.5" role="heading" aria-level="3" id="hyperparameter-search-as-an-outer-loop"><span class="header-section-number">8.5</span> Hyperparameter Search as an
 Outer Loop</h2>
 <p>The outer objective can be discontinuous, noisy, expensive, and
 conditional on training budget. Random search is a strong baseline when
@@ -4675,7 +4697,7 @@ consistently useful or occasionally excellent. A paired design using the
 same data split and, where appropriate, matched data-order seeds can
 reduce nuisance variation, but preserve any randomness that is part of
 the method itself.</p>
-<h2 data-number="8.6" id="a-defensible-non-convex-claim"><span class="header-section-number">8.6</span> A Defensible Non-Convex
+<h2 data-number="8.6" role="heading" aria-level="3" id="a-defensible-non-convex-claim"><span class="header-section-number">8.6</span> A Defensible Non-Convex
 Claim</h2>
 <p>A defensible report can state that, across five declared seeds and a
 fixed update budget, the procedure reached finite training losses,
@@ -4687,7 +4709,7 @@ supplies.</p>
 stationary but useless solution, validation overfitting, irreproducible
 sensitivity to seeds, and unfair optimiser comparisons. The diagnostic
 workflow is designed to distinguish them.</p>
-<h1 data-number="9" id="diagnostics-and-an-end-to-end-workflow"><span class="header-section-number">9</span> Diagnostics and an End-to-End
+<h1 data-number="9" role="heading" aria-level="2" id="diagnostics-and-an-end-to-end-workflow"><span class="header-section-number">9</span> Diagnostics and an End-to-End
 Workflow</h1>
 <p>Optimisation is observable when you record the objective’s
 components, gradient and update scales, feasibility, numerical health,
@@ -4715,7 +4737,7 @@ optimiser converged. Keeping the layers separate makes an apparently
 contradictory result intelligible: a deliberately early-stopped model
 can have incomplete optimisation evidence and strong statistical
 evidence.</p>
-<h2 data-number="9.1" id="step-1-freeze-the-optimisation-contract"><span class="header-section-number">9.1</span> Step 1: Freeze the Optimisation
+<h2 data-number="9.1" role="heading" aria-level="3" id="step-1-freeze-the-optimisation-contract"><span class="header-section-number">9.1</span> Step 1: Freeze the Optimisation
 Contract</h2>
 <p>Write the objective mathematically and in executable terms. State
 whether losses are summed or averaged, which parameters are regularised,
@@ -4798,7 +4820,7 @@ event-driven records should capture rejected line-search steps,
 trust-region changes, clipping, non-finite values, checkpoint selection,
 and termination. Use a stable schema so method comparisons do not lose
 fields precisely when a method behaves differently.</p>
-<h2 data-number="9.2" id="step-2-validate-the-objective-and-derivatives"><span class="header-section-number">9.2</span> Step 2: Validate the Objective
+<h2 data-number="9.2" role="heading" aria-level="3" id="step-2-validate-the-objective-and-derivatives"><span class="header-section-number">9.2</span> Step 2: Validate the Objective
 and Derivatives</h2>
 <p>Test the loss on hand-calculated cases. Check invariants such as
 non-negativity where appropriate, permutation invariance of a data
@@ -4840,8 +4862,8 @@ after one optimiser step and compare the actual difference with the
 update reconstructed from logged state.</p></li>
 </ol>
 <p>Use relative error with an absolute floor:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi>m</mi><mi>a</mi><mi>t</mi><mi>h</mi><mi>r</mi><mi>m</mi><mrow><mi>r</mi><mi>e</mi><mi>l</mi></mrow></mrow></msub><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">|</mo></mrow><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo stretchy="false" form="prefix">|</mo><mo>,</mo><mo stretchy="false" form="prefix">|</mo><mi>b</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
-e_{mathrm{rel}}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="prefix">|</mo></mrow><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo stretchy="false" form="prefix">|</mo><mo>,</mo><mo stretchy="false" form="prefix">|</mo><mi>b</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+e_{\mathrm{rel}}
 =\frac{|a-b|}{\max(1,|a|,|b|)}.
 </annotation></semantics></math></p>
 <p>A relative error alone is unstable when both quantities are near
@@ -4854,7 +4876,7 @@ optimiser.</p>
 and masks, disable data augmentation, and put stateful normalisation in
 a declared mode. A finite-difference check against two different random
 computations measures randomness, not a derivative error.</p>
-<h2 data-number="9.3" id="step-3-run-small-problems-with-known-answers"><span class="header-section-number">9.3</span> Step 3: Run Small Problems With
+<h2 data-number="9.3" role="heading" aria-level="3" id="step-3-run-small-problems-with-known-answers"><span class="header-section-number">9.3</span> Step 3: Run Small Problems With
 Known Answers</h2>
 <p>Use the rotated quadratic to expose conditioning and step stability.
 Use a tiny regularised logistic data set for which a trusted full-batch
@@ -4898,7 +4920,7 @@ computation for fewer outer steps.</p>
 logistic-regression subsections provide the known-answer traces,
 derivative checks, optimisation diagnostics, and held-out validation
 evidence for these two rungs.</p>
-<h2 data-number="9.4" id="step-4-monitor-quantities-that-separate-failures"><span class="header-section-number">9.4</span> Step 4: Monitor Quantities That
+<h2 data-number="9.4" role="heading" aria-level="3" id="step-4-monitor-quantities-that-separate-failures"><span class="header-section-number">9.4</span> Step 4: Monitor Quantities That
 Separate Failures</h2>
 <p>Record enough information to distinguish instability, noise,
 conditioning, infeasibility, and overfitting. At a minimum, retain
@@ -5019,7 +5041,7 @@ window.</p>
 learning rate, changing the optimiser, adding clipping, changing batch
 size, and changing initialisation in one run may improve the curve while
 teaching nothing about the original failure.</p>
-<h2 data-number="9.5" id="step-5-compare-methods-fairly"><span class="header-section-number">9.5</span> Step 5: Compare Methods
+<h2 data-number="9.5" role="heading" aria-level="3" id="step-5-compare-methods-fairly"><span class="header-section-number">9.5</span> Step 5: Compare Methods
 Fairly</h2>
 <p>Define the budget before looking at results: gradient evaluations,
 examples processed, objective calls, Hessian-vector products, wall-clock
@@ -5067,7 +5089,7 @@ needed 100 trials and method B needed 10, comparing only the best final
 runs hides most of the resource and selection bias. Report search
 spaces, trial counts, failed trials, and the rule used to choose the
 winner.</p>
-<h2 data-number="9.6" id="step-6-decide-stop-and-preserve-evidence"><span class="header-section-number">9.6</span> Step 6: Decide, Stop, and
+<h2 data-number="9.6" role="heading" aria-level="3" id="step-6-decide-stop-and-preserve-evidence"><span class="header-section-number">9.6</span> Step 6: Decide, Stop, and
 Preserve Evidence</h2>
 <p>Stop for one of four explicit reasons: a convergence certificate
 reached its tolerance, validation policy selected a checkpoint, a
@@ -5117,7 +5139,7 @@ expected determinism limits. A file that reloads parameters but loses
 momentum, adaptive moments, schedule counters, gradient-scaler state, or
 sampler position is an inference checkpoint, not an exact
 training-resume checkpoint.</p>
-<h2 data-number="9.7" id="method-selection-checklist"><span class="header-section-number">9.7</span> Method-Selection Checklist</h2>
+<h2 data-number="9.7" role="heading" aria-level="3" id="method-selection-checklist"><span class="header-section-number">9.7</span> Method-Selection Checklist</h2>
 <p>Use the following order when choosing a method:</p>
 <ol type="1">
 <li>Formulate and test the objective, constraints, and data split.</li>
@@ -5157,7 +5179,8 @@ unresolved numerical, statistical, or operational concerns.</p>
 <p>This record is more valuable than naming the winning optimiser. It
 lets another reader decide whether the result transfers to a different
 data scale, tolerance, constraint, or hardware setting.</p>
-<h1 data-number="10" id="further-reading"><span class="header-section-number">10</span> Further Reading</h1>
+<h1 data-number="10" role="heading" aria-level="2" id="further-reading"><span class="header-section-number">10</span>
+Further Reading</h1>
 <p>The sources below provide full proofs, broader algorithm catalogues,
 and primary discussions of methods mentioned in the primer. The
 annotations identify their role.</p>
@@ -5235,7 +5258,7 @@ hyperparameters matter. <!-- typos: ignore-line -->
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -5265,18 +5288,27 @@ hyperparameters matter. <!-- typos: ignore-line -->
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -5284,19 +5316,18 @@ hyperparameters matter. <!-- typos: ignore-line -->
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
