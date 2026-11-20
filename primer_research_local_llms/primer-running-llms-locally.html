@@ -31,6 +31,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -172,6 +183,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -183,7 +195,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -584,7 +595,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -601,17 +612,40 @@ code span.wa { color: #da4453; } /* Warning */
     /* ── Custom code color overrides for readability ── */
     code span.fu { color: #c792ea !important; } /* function names: lighter purple */
   </style>
+  <script>
+    // MathJax's boldsymbol extension is a separate file that an embedded
+    // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
+    // extension is therefore vendored inline below (exact
+    // bytes of the matching mathjax@<version> release file) and run inside
+    // startup.ready, before MathJax typesets. When Pandoc embeds a different
+    // MathJax version, download input/tex/extensions/boldsymbol.js from
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
+    // and re-render the maths primers. A version mismatch is not checked in
+    // CI; MathJax's runtime checkVersion warns in the browser console on drift.
+    // The MathML variants ignore this block.
+    window.MathJax = {
+      tex: { packages: { '[+]': ['boldsymbol'] } },
+      startup: { ready() {
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
+      } }
+    };
+  </script>
 
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Running LLMs Locally: A Secure Practical
 Landscape</span>
     <span class="navbar-meta">12 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -619,7 +653,7 @@ Landscape</span>
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a>
 <ul>
 <li><a href="#what-this-covers" id="toc-what-this-covers"><span class="toc-section-number">1.1</span> What This Covers</a></li>
@@ -787,14 +821,16 @@ Families</a></li>
 <li><a href="#quick-command-cheatsheet" id="toc-quick-command-cheatsheet"><span class="toc-section-number">14.1</span> Quick Command Cheatsheet</a></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">14.2</span> Further Reading</a></li>
 </ul></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
+<h1 id="document-title" class="document-title">Running LLMs Locally: A
+Secure Practical Landscape</h1>
 <p>From first prompt to a maintainable private AI stack</p>
 <p><em>Verified against primary sources for all sections; unverified
 claims are flagged inline.</em></p>
@@ -809,8 +845,10 @@ on a vendor roadmap. You also need to understand what is actually
 running and who can reach it.</p>
 <p>Verify compatibility and model cards before standardising a
 deployment.</p>
-<h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
-<h2 data-number="1.1" id="what-this-covers"><span class="header-section-number">1.1</span> What This Covers</h2>
+<h1 data-number="1" role="heading" aria-level="2" id="introduction"><span class="header-section-number">1</span>
+Introduction</h1>
+<h2 data-number="1.1" role="heading" aria-level="3" id="what-this-covers"><span class="header-section-number">1.1</span>
+What This Covers</h2>
 <p>This is a practical guide to running models locally for chat, coding,
 API workloads, retrieval, media work, and agent backends. You will
 learn:</p>
@@ -825,7 +863,8 @@ differ.</li>
 <li>How to keep personal services loopback-only, and what has to change
 before you share one.</li>
 </ol>
-<h2 data-number="1.2" id="what-this-is-not"><span class="header-section-number">1.2</span> What This Is Not</h2>
+<h2 data-number="1.2" role="heading" aria-level="3" id="what-this-is-not"><span class="header-section-number">1.2</span>
+What This Is Not</h2>
 <p>This is not a training guide. It does not teach full fine-tuning
 pipelines, distributed pretraining, or benchmark archaeology. It does
 not try to be a complete reference for every inference engine.</p>
@@ -833,12 +872,13 @@ not try to be a complete reference for every inference engine.</p>
 becomes safe by calling it private or local. Model names and runtime
 support move quickly; the dated links and model cards matter more than
 any static ranking.</p>
-<h2 data-number="1.3" id="background-assumed"><span class="header-section-number">1.3</span> Background Assumed</h2>
+<h2 data-number="1.3" role="heading" aria-level="3" id="background-assumed"><span class="header-section-number">1.3</span>
+Background Assumed</h2>
 <p>You can use a terminal, install software, and read logs. If you know
 what a container is and have used Docker or Podman once, you are set. If
 you have not, you can still follow along, but expect to pause and look
 up a couple of commands.</p>
-<h2 data-number="1.4" id="how-this-is-structured"><span class="header-section-number">1.4</span> How This Is Structured</h2>
+<h2 data-number="1.4" role="heading" aria-level="3" id="how-this-is-structured"><span class="header-section-number">1.4</span> How This Is Structured</h2>
 <p>Start with one text model, one user, and a loopback-only endpoint.
 Branch to a UI, coding assistant, retrieval, multimodal work, or shared
 serving only when the task needs it. The guide expands that path:</p>
@@ -849,7 +889,7 @@ serving only when the task needs it. The guide expands that path:</p>
 <li>Deployment blueprints (copyable patterns)</li>
 <li>Model and operations decisions (how to stay sane over time)</li>
 </ol>
-<h2 data-number="1.5" id="quick-read-if-you-are-in-a-hurry"><span class="header-section-number">1.5</span> Quick Read If You Are in a
+<h2 data-number="1.5" role="heading" aria-level="3" id="quick-read-if-you-are-in-a-hurry"><span class="header-section-number">1.5</span> Quick Read If You Are in a
 Hurry</h2>
 <p>If you need one short answer:</p>
 <ol type="1">
@@ -868,7 +908,7 @@ adapter.</li>
 transport layer security (TLS), a firewall rule, and a named owner for
 the service.</li>
 </ol>
-<h2 data-number="1.6" id="privacy-is-a-data-flow-question"><span class="header-section-number">1.6</span> Privacy Is a Data-Flow
+<h2 data-number="1.6" role="heading" aria-level="3" id="privacy-is-a-data-flow-question"><span class="header-section-number">1.6</span> Privacy Is a Data-Flow
 Question</h2>
 <p>Local inference keeps prompts local only when the whole workflow is
 local. Trace every arrow, including the ones outside the model
@@ -881,7 +921,7 @@ cloud embeddings, crash reporting, agent connectors, and backups that
 fall outside that boundary. An offline model with an unrestricted shell
 tool or a public HTTP port is not a private assistant.</p>
 <hr />
-<h1 data-number="2" id="foundations-what-you-are-actually-running"><span class="header-section-number">2</span> Foundations: What You Are
+<h1 data-number="2" role="heading" aria-level="2" id="foundations-what-you-are-actually-running"><span class="header-section-number">2</span> Foundations: What You Are
 Actually Running</h1>
 <p>Most confusion in local LLM work comes from blending three layers
 together.</p>
@@ -893,7 +933,8 @@ together.</p>
 </ol>
 <p>When you keep these layers distinct, the ecosystem stops feeling
 messy.</p>
-<h2 data-number="2.1" id="model-artefact"><span class="header-section-number">2.1</span> Model Artefact</h2>
+<h2 data-number="2.1" role="heading" aria-level="3" id="model-artefact"><span class="header-section-number">2.1</span> Model
+Artefact</h2>
 <p>A model is a large set of learned weights plus metadata about
 tokenizer, architecture, and prompt formatting.</p>
 <p>For local inference, you will mostly see:</p>
@@ -911,7 +952,8 @@ is portable and quantisation-friendly.</p>
 commonly distributed as Safetensors components, while Apple-oriented
 tools often use MLX conversions. A vision-language model may also need a
 separate vision tower or <code>mmproj</code> file.</p>
-<h2 data-number="2.2" id="inference-engine"><span class="header-section-number">2.2</span> Inference Engine</h2>
+<h2 data-number="2.2" role="heading" aria-level="3" id="inference-engine"><span class="header-section-number">2.2</span>
+Inference Engine</h2>
 <p>The engine performs tokenization, forward passes, cache management,
 and sampling.</p>
 <p>At runtime, a single response loop is:</p>
@@ -924,14 +966,15 @@ and sampling.</p>
 </ol>
 <p>This is why memory bandwidth and cache behaviour matter so much. Even
 with good compute hardware, poor memory fit destroys throughput.</p>
-<h2 data-number="2.3" id="server-layer"><span class="header-section-number">2.3</span> Server Layer</h2>
+<h2 data-number="2.3" role="heading" aria-level="3" id="server-layer"><span class="header-section-number">2.3</span> Server
+Layer</h2>
 <p>The server exposes the engine over HTTP and handles request
 structure, batching, and optional auth.</p>
 <p>If you keep to OpenAI-compatible endpoints, you can usually swap
 runtimes with small config changes.</p>
 <p>That API stability is what makes local inference practical for real
 applications, not just demos.</p>
-<h2 data-number="2.4" id="quantisation-the-lever-you-will-use-most"><span class="header-section-number">2.4</span> Quantisation (the Lever You
+<h2 data-number="2.4" role="heading" aria-level="3" id="quantisation-the-lever-you-will-use-most"><span class="header-section-number">2.4</span> Quantisation (the Lever You
 Will Use Most)</h2>
 <p>Quantisation reduces weight precision to make models fit smaller
 hardware.</p>
@@ -979,7 +1022,7 @@ llama.cpp baseline for many assistants and coding workflows. They are
 not a universal optimum: image/video pipelines and accelerator servers
 often use different formats, and quantisation quality depends on the
 model and hardware.</p>
-<h2 data-number="2.5" id="context-window-and-kv-cache"><span class="header-section-number">2.5</span> Context Window and KV
+<h2 data-number="2.5" role="heading" aria-level="3" id="context-window-and-kv-cache"><span class="header-section-number">2.5</span> Context Window and KV
 Cache</h2>
 <p>Context window is how much text the model can attend to at once. KV
 cache is the memory used to store token history state.</p>
@@ -992,7 +1035,8 @@ runs that otherwise fit fine.</p>
 <li>Do not assume max advertised context is affordable on your
 hardware.</li>
 </ol>
-<h2 data-number="2.6" id="sampling-controls"><span class="header-section-number">2.6</span> Sampling Controls</h2>
+<h2 data-number="2.6" role="heading" aria-level="3" id="sampling-controls"><span class="header-section-number">2.6</span>
+Sampling Controls</h2>
 <p>The three settings that matter most:</p>
 <ol type="1">
 <li>Temperature: randomness.</li>
@@ -1001,7 +1045,7 @@ hardware.</li>
 </ol>
 <p>For coding and precise factual tasks, run cooler. For brainstorming,
 increase controlled randomness.</p>
-<h2 data-number="2.7" id="decision-models-when-you-should-not-generate-text"><span class="header-section-number">2.7</span> Decision Models: When You
+<h2 data-number="2.7" role="heading" aria-level="3" id="decision-models-when-you-should-not-generate-text"><span class="header-section-number">2.7</span> Decision Models: When You
 Should Not Generate Text</h2>
 <p>Many applications do not need an answer written for a person. They
 need a route, a score, a yes/no judgment, or the next item from a finite
@@ -1030,7 +1074,7 @@ a person, and combine several atomic scores with explicit business
 logic. That decomposition is important: a decision model is not a
 general autonomous reasoner, and its confidence does not prove that the
 question or option set was well designed.</p>
-<h3 data-number="2.7.1" id="jev-is-not-the-same-as-a-classifier-or-structured-output"><span class="header-section-number">2.7.1</span> Jev Is Not the Same as a
+<h3 data-number="2.7.1" role="heading" aria-level="4" id="jev-is-not-the-same-as-a-classifier-or-structured-output"><span class="header-section-number">2.7.1</span> Jev Is Not the Same as a
 Classifier or Structured Output</h3>
 <p>These tools overlap, but they are not interchangeable:</p>
 <table>
@@ -1089,7 +1133,7 @@ removes one failure class; it does not remove semantic error,
 distribution shift, bad labels, poor calibration, or prompt injection in
 the state. Treat the returned probability as a signal to validate on
 your own workload, not as a licence to skip evaluation.</p>
-<h3 data-number="2.7.2" id="what-can-run-locally"><span class="header-section-number">2.7.2</span> What Can Run Locally</h3>
+<h3 data-number="2.7.2" role="heading" aria-level="4" id="what-can-run-locally"><span class="header-section-number">2.7.2</span> What Can Run Locally</h3>
 <p>Jev itself is a hosted, proprietary API at the time of this review.
 The local ecosystem is young and should be treated as a set of
 experiments, not as a settled compatibility layer. Examples include:</p>
@@ -1115,7 +1159,7 @@ underneath; that can still be useful, but it changes the latency,
 memory, and output-reliability story. A model card that reports accuracy
 without calibration or abstention behaviour is not enough for
 confidence-gated automation.</p>
-<h3 data-number="2.7.3" id="a-practical-local-pattern"><span class="header-section-number">2.7.3</span> A Practical Local
+<h3 data-number="2.7.3" role="heading" aria-level="4" id="a-practical-local-pattern"><span class="header-section-number">2.7.3</span> A Practical Local
 Pattern</h3>
 <p>Keep the decision model behind ordinary application code. Do not let
 it execute tools directly. Validate the question and option set, record
@@ -1145,7 +1189,7 @@ useful systems the two are combined: a local decision model handles
 cheap routing and guardrails, while a larger language model handles only
 the cases that require generation or deeper reasoning.</p>
 <hr />
-<h1 data-number="3" id="beyond-text-choose-the-model-for-the-modality"><span class="header-section-number">3</span> Beyond Text: Choose the Model for
+<h1 data-number="3" role="heading" aria-level="2" id="beyond-text-choose-the-model-for-the-modality"><span class="header-section-number">3</span> Beyond Text: Choose the Model for
 the Modality</h1>
 <p>“Local model” no longer means only a chatbot. The important split is
 between models that <em>understand</em> an input and models that
@@ -1160,7 +1204,8 @@ audio, or video and generate text. Image and video generators usually
 use diffusion or flow-matching pipelines and are operated through tools
 such as <a href="https://github.com/huggingface/diffusers">Diffusers</a>, <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a>, or <a href="https://github.com/invoke-ai/InvokeAI">InvokeAI</a>, not a chat
 endpoint.</p>
-<h2 data-number="3.1" id="practical-model-map"><span class="header-section-number">3.1</span> Practical Model Map</h2>
+<h2 data-number="3.1" role="heading" aria-level="3" id="practical-model-map"><span class="header-section-number">3.1</span>
+Practical Model Map</h2>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1244,7 +1289,7 @@ separately from the language model that writes the final response.</td>
 </tr>
 </tbody>
 </table>
-<h2 data-number="3.2" id="what-changed-in-the-september-2026-snapshot"><span class="header-section-number">3.2</span> What Changed in the September
+<h2 data-number="3.2" role="heading" aria-level="3" id="what-changed-in-the-september-2026-snapshot"><span class="header-section-number">3.2</span> What Changed in the September
 2026 Snapshot</h2>
 <p>The September 2026 snapshot points towards smaller specialists,
 sparse larger models, configurable reasoning, native tool calling,
@@ -1254,7 +1299,7 @@ are useful examples, not a permanent shortlist. Parameter count alone is
 no longer a fit estimate: active parameters, modality encoders, context
 length, quantisation, and draft-model support all affect actual memory
 and throughput.</p>
-<h2 data-number="3.3" id="specialist-models-worth-knowing"><span class="header-section-number">3.3</span> Specialist Models Worth
+<h2 data-number="3.3" role="heading" aria-level="3" id="specialist-models-worth-knowing"><span class="header-section-number">3.3</span> Specialist Models Worth
 Knowing</h2>
 <p>For task selection, use a compact text/coding model first; use a VLM
 or OCR specialist for document structure; use ASR/TTS models for speech;
@@ -1267,7 +1312,7 @@ transcription. These are orientation points, not a catalogue: verify the
 exact artefact, runtime, hardware fit, and licence. Voice cloning
 requires speaker consent; video generation remains a workstation-scale
 workload.</p>
-<h2 data-number="3.4" id="image-generation-is-not-vision"><span class="header-section-number">3.4</span> Image Generation Is Not
+<h2 data-number="3.4" role="heading" aria-level="3" id="image-generation-is-not-vision"><span class="header-section-number">3.4</span> Image Generation Is Not
 Vision</h2>
 <p>This distinction prevents a common failed setup. A VLM such as
 Qwen3-VL can inspect a screenshot, read a receipt, or answer questions
@@ -1284,7 +1329,7 @@ image.</li>
 <p>The same separation applies to audio and video. Transcribe with ASR,
 reason over the transcript with a language model, and synthesise speech
 or video only at the output stage when required.</p>
-<h2 data-number="3.5" id="running-diffusion-language-models-locally"><span class="header-section-number">3.5</span> Running Diffusion Language
+<h2 data-number="3.5" role="heading" aria-level="3" id="running-diffusion-language-models-locally"><span class="header-section-number">3.5</span> Running Diffusion Language
 Models Locally</h2>
 <p>Diffusion language models use the same broad idea as image diffusion
 — start from a noisy or masked state and refine it — but they need a
@@ -1316,7 +1361,7 @@ know how the runtime represents diffusion steps, maximum output length,
 batching, and cancellation. A chat UI can hide those details and make a
 slow or incorrect sampler look like a model-quality problem.</li>
 </ol>
-<h3 data-number="3.5.1" id="a-practical-first-experiment"><span class="header-section-number">3.5.1</span> A Practical First
+<h3 data-number="3.5.1" role="heading" aria-level="4" id="a-practical-first-experiment"><span class="header-section-number">3.5.1</span> A Practical First
 Experiment</h3>
 <p>For a desktop or workstation, start with an 8B instruction-tuned
 checkpoint and a 4-bit GGUF. One published LLaDA Q4_K_M conversion is
@@ -1389,7 +1434,7 @@ Apple Silicon, unified memory can let the model fit without a discrete
 GPU, but the CPU and GPU share that memory. On AMD, Vulkan or ROCm
 support depends on the exact runtime and card. Validate the smallest
 supported checkpoint end to end before planning around a larger one.</p>
-<h2 data-number="3.6" id="multimodal-memory-costs"><span class="header-section-number">3.6</span> Multimodal Memory Costs</h2>
+<h2 data-number="3.6" role="heading" aria-level="3" id="multimodal-memory-costs"><span class="header-section-number">3.6</span> Multimodal Memory Costs</h2>
 <p>Images, audio, and video become tokens or latent features before the
 language model sees them. A single high-resolution image or a sampled
 video can therefore consume more context and key-value (KV) cache than
@@ -1398,10 +1443,11 @@ small number of images; increase them only after measuring memory and
 latency. A model that fits text-only may fail once its vision tower,
 projector, audio encoder, or video loader is enabled.</p>
 <hr />
-<h1 data-number="4" id="hardware-reality-in-2026"><span class="header-section-number">4</span> Hardware Reality in 2026</h1>
+<h1 data-number="4" role="heading" aria-level="2" id="hardware-reality-in-2026"><span class="header-section-number">4</span> Hardware Reality in 2026</h1>
 <p>Hardware constraints are still the biggest determinant of user
 experience.</p>
-<h2 data-number="4.1" id="cpu-only-systems"><span class="header-section-number">4.1</span> CPU-Only Systems</h2>
+<h2 data-number="4.1" role="heading" aria-level="3" id="cpu-only-systems"><span class="header-section-number">4.1</span>
+CPU-Only Systems</h2>
 <p>CPU-only inference is valid, but expectations matter.</p>
 <p>CPU-only is good for:</p>
 <ol type="1">
@@ -1417,7 +1463,8 @@ experience.</p>
 </ol>
 <p>Modern llama.cpp builds are excellent on CPU, but a slow token stream
 is still a slow token stream.</p>
-<h2 data-number="4.2" id="nvidia-gpu-systems"><span class="header-section-number">4.2</span> NVIDIA GPU Systems</h2>
+<h2 data-number="4.2" role="heading" aria-level="3" id="nvidia-gpu-systems"><span class="header-section-number">4.2</span>
+NVIDIA GPU Systems</h2>
 <p>NVIDIA remains the easiest path for predictable high-performance
 local inference because CUDA tooling is mature across runtimes.</p>
 <p>Approximate fit guidance for mainstream quantised models:</p>
@@ -1449,7 +1496,8 @@ local inference because CUDA tooling is mature across runtimes.</p>
 </table>
 <p>Exact fit depends on runtime, context, and architecture. Always leave
 memory headroom for KV cache and framework overhead.</p>
-<h2 data-number="4.3" id="amd-gpu-systems"><span class="header-section-number">4.3</span> AMD GPU Systems</h2>
+<h2 data-number="4.3" role="heading" aria-level="3" id="amd-gpu-systems"><span class="header-section-number">4.3</span> AMD
+GPU Systems</h2>
 <p>ROCm is now materially better than it was two years ago. Many local
 users run AMD successfully in 2026, and Vulkan paths are useful for some
 consumer cards and applications. Intel XPU support is also present in
@@ -1467,7 +1515,8 @@ combinations.</li>
 </ol>
 <p>Avoid wishful assumptions. Test your exact card + runtime pair
 early.</p>
-<h2 data-number="4.4" id="apple-silicon"><span class="header-section-number">4.4</span> Apple Silicon</h2>
+<h2 data-number="4.4" role="heading" aria-level="3" id="apple-silicon"><span class="header-section-number">4.4</span> Apple
+Silicon</h2>
 <p>Apple Silicon remains one of the best personal platforms for local
 inference due to unified memory and strong Metal acceleration.</p>
 <p>The key trade-off is that very large models are memory-bandwidth
@@ -1478,7 +1527,7 @@ provides the best quality-to-latency balance. MLX and
 <code>mlx-lm</code>/<code>mlx-vlm</code> now make Apple-native text and
 selected vision workloads particularly attractive; model-specific
 conversion still matters.</p>
-<h2 data-number="4.5" id="multi-gpu-and-multi-node"><span class="header-section-number">4.5</span> Multi-GPU and Multi-Node</h2>
+<h2 data-number="4.5" role="heading" aria-level="3" id="multi-gpu-and-multi-node"><span class="header-section-number">4.5</span> Multi-GPU and Multi-Node</h2>
 <p>Splitting models across multiple GPUs or nodes is possible and
 increasingly common in hobby homelabs.</p>
 <p>Do it only when you need it. Complexity rises quickly:</p>
@@ -1490,7 +1539,7 @@ increasingly common in hobby homelabs.</p>
 <p>If one larger GPU solves your problem, it is often cheaper in time
 than distributed experimentation.</p>
 <hr />
-<h1 data-number="5" id="runtime-and-tooling-landscape"><span class="header-section-number">5</span> Runtime and Tooling
+<h1 data-number="5" role="heading" aria-level="2" id="runtime-and-tooling-landscape"><span class="header-section-number">5</span> Runtime and Tooling
 Landscape</h1>
 <p>There are more choices now, but the core categories are stable.</p>
 <p>At the 10 September 2026 cutoff, the release pages still showed a
@@ -1499,7 +1548,7 @@ This document deliberately does not pin a “current” version: runtime and
 model compatibility is more important than the newest tag, and a moving
 version number ages immediately. Read the model recipe and accelerator
 requirements before upgrading.</p>
-<h2 data-number="5.1" id="llama.cpp-and-llama-server"><span class="header-section-number">5.1</span> <code>llama.cpp</code> and
+<h2 data-number="5.1" role="heading" aria-level="3" id="llama.cpp-and-llama-server"><span class="header-section-number">5.1</span> <code>llama.cpp</code> and
 <code>llama-server</code></h2>
 <p>llama.cpp is still the foundational local inference engine for GGUF
 workflows.</p>
@@ -1527,7 +1576,8 @@ changes the service from a personal endpoint into a network-reachable
 one. Do not use it until the gateway, authentication, TLS, firewall, and
 access policy described later are in place. If you enjoy tuning and
 understanding the engine, llama.cpp remains a top choice.</p>
-<h2 data-number="5.2" id="mlx-lm-and-mlx-vlm"><span class="header-section-number">5.2</span> MLX-LM and MLX-VLM</h2>
+<h2 data-number="5.2" role="heading" aria-level="3" id="mlx-lm-and-mlx-vlm"><span class="header-section-number">5.2</span>
+MLX-LM and MLX-VLM</h2>
 <p><a href="https://github.com/ml-explore/mlx">MLX</a> is Apple’s array
 framework for Apple Silicon. <code>mlx-lm</code> is a strong path for
 text models on Macs, and <code>mlx-vlm</code> adds model-specific
@@ -1538,7 +1588,7 @@ model-specific than with Transformers.</p>
 <p>For image generation, use an MLX-specific implementation only when
 the model’s repository documents it. Otherwise use a supported Diffusers
 or ComfyUI pipeline and expect higher memory pressure.</p>
-<h2 data-number="5.3" id="ollama"><span class="header-section-number">5.3</span> Ollama</h2>
+<h2 data-number="5.3" role="heading" aria-level="3" id="ollama"><span class="header-section-number">5.3</span> Ollama</h2>
 <p>Ollama is still the fastest path from zero to a working local model,
 but it is no longer text-only in practice. Current releases support
 selected vision models, image inputs, tools, reasoning controls,
@@ -1563,7 +1613,7 @@ is not the most configurable engine, and its OpenAI-compatible surface
 is only a subset: base64 image data works, while remote image URLs and
 some tool controls do not. It remains the most productive default for a
 single user who wants to try text or vision models quickly.</p>
-<h2 data-number="5.4" id="localai"><span class="header-section-number">5.4</span> LocalAI</h2>
+<h2 data-number="5.4" role="heading" aria-level="3" id="localai"><span class="header-section-number">5.4</span> LocalAI</h2>
 <p>LocalAI is a broad local AI platform exposing OpenAI-style interfaces
 across text, embedding, audio, and image workflows through multiple
 backends.</p>
@@ -1585,7 +1635,7 @@ flexible, but there is more operational surface area than Ollama.
 LocalAI is a useful compatibility layer, not proof that every underlying
 model has equal support or quality. Validate each modality
 separately.</p>
-<h2 data-number="5.5" id="transformers-and-diffusers"><span class="header-section-number">5.5</span> Transformers and Diffusers</h2>
+<h2 data-number="5.5" role="heading" aria-level="3" id="transformers-and-diffusers"><span class="header-section-number">5.5</span> Transformers and Diffusers</h2>
 <p><a href="https://github.com/huggingface/transformers">Transformers</a>
 remains the model-definition and native-inference layer for many VLM,
 OCR, ASR, and text models. Its newer <code>transformers serve</code>
@@ -1596,7 +1646,7 @@ the corresponding practical layer for image and video generation. It
 handles pipelines, schedulers, VAEs, adapters, and quantisation. Use it
 for Python integration and reproducibility; use ComfyUI when you want to
 inspect and iterate on a graph interactively.</p>
-<h2 data-number="5.6" id="vllm"><span class="header-section-number">5.6</span> <code>vLLM</code></h2>
+<h2 data-number="5.6" role="heading" aria-level="3" id="vllm"><span class="header-section-number">5.6</span> <code>vLLM</code></h2>
 <p>vLLM remains one of the leading choices for high-throughput serving
 with strong batching behaviour and efficient cache management. Its
 supported-model surface now includes text, image, video, and audio
@@ -1617,7 +1667,7 @@ path is Hugging Face-native (for example FP8, GPTQ, AWQ, MXFP4, NVFP4,
 and quantised KV cache); GGUF support is experimental and requires the
 separate <a href="https://docs.vllm.ai/en/latest/features/quantisation/gguf/">vLLM
 GGUF plugin</a>.</p>
-<h2 data-number="5.7" id="sglang"><span class="header-section-number">5.7</span> SGLang</h2>
+<h2 data-number="5.7" role="heading" aria-level="3" id="sglang"><span class="header-section-number">5.7</span> SGLang</h2>
 <p>SGLang is now a serious option for optimised LLM, multimodal, and
 diffusion serving, especially where structured generation and advanced
 decode/scheduling behaviour matter. Its support is accelerator- and
@@ -1633,7 +1683,8 @@ feature as portable.</p>
 their exact request patterns before committing. For image or video
 generation, SGLang-Diffusion is a separate path from ordinary chat
 serving.</p>
-<h2 data-number="5.8" id="lm-studio-and-jan"><span class="header-section-number">5.8</span> LM Studio and Jan</h2>
+<h2 data-number="5.8" role="heading" aria-level="3" id="lm-studio-and-jan"><span class="header-section-number">5.8</span> LM
+Studio and Jan</h2>
 <p>LM Studio and Jan remain useful graphical user interface (GUI)-first
 desktop choices.</p>
 <p>Use them when:</p>
@@ -1644,7 +1695,8 @@ desktop choices.</p>
 </ol>
 <p>These tools are excellent for exploration and personal workflows,
 less so for hardened shared server operations.</p>
-<h2 data-number="5.9" id="open-webui"><span class="header-section-number">5.9</span> Open WebUI</h2>
+<h2 data-number="5.9" role="heading" aria-level="3" id="open-webui"><span class="header-section-number">5.9</span> Open
+WebUI</h2>
 <p>Open WebUI is still the dominant self-hosted chat frontend in this
 ecosystem. It is becoming an agent frontend as well, with tool approval
 and richer state handling. Treat it as a versioned application, not an
@@ -1669,7 +1721,8 @@ Check the <a href="https://github.com/open-webui/open-webui/releases">release
 page</a> before copying the version tag, and keep it patched: an earlier
 2026 release line had a domain name system (DNS)-rebinding security
 advisory.</p>
-<h2 data-number="5.10" id="comparison-snapshot"><span class="header-section-number">5.10</span> Comparison Snapshot</h2>
+<h2 data-number="5.10" role="heading" aria-level="3" id="comparison-snapshot"><span class="header-section-number">5.10</span>
+Comparison Snapshot</h2>
 <table style="width:100%;">
 <colgroup>
 <col style="width: 16%" />
@@ -1765,12 +1818,12 @@ advisory.</p>
 </tbody>
 </table>
 <hr />
-<h1 data-number="6" id="containers-runtime-hygiene-and-why-reproducibility-wins"><span class="header-section-number">6</span> Containers, Runtime Hygiene, and
+<h1 data-number="6" role="heading" aria-level="2" id="containers-runtime-hygiene-and-why-reproducibility-wins"><span class="header-section-number">6</span> Containers, Runtime Hygiene, and
 Why Reproducibility Wins</h1>
 <p>Containerisation is a strong default for Linux server-style local
 inference. It improves reproducibility; it does not make an exposed HTTP
 service private.</p>
-<h2 data-number="6.1" id="why-containers-matter"><span class="header-section-number">6.1</span> Why Containers Matter</h2>
+<h2 data-number="6.1" role="heading" aria-level="3" id="why-containers-matter"><span class="header-section-number">6.1</span> Why Containers Matter</h2>
 <p>You isolate dependencies:</p>
 <ol type="1">
 <li>CUDA/ROCm stacks</li>
@@ -1778,12 +1831,14 @@ service private.</p>
 <li>Runtime binaries and model-serving flags</li>
 </ol>
 <p>This makes rollback possible and debugging less chaotic.</p>
-<h2 data-number="6.2" id="docker-vs-podman"><span class="header-section-number">6.2</span> Docker vs Podman</h2>
+<h2 data-number="6.2" role="heading" aria-level="3" id="docker-vs-podman"><span class="header-section-number">6.2</span>
+Docker vs Podman</h2>
 <p>Both are viable. Podman remains attractive for rootless operation and
 daemonless workflow. Docker still has broader tutorial gravity.</p>
 <p>Pick one and standardise across your own docs and scripts. The
 consistency is more important than the brand.</p>
-<h2 data-number="6.3" id="image-tags-and-drift"><span class="header-section-number">6.3</span> Image Tags and Drift</h2>
+<h2 data-number="6.3" role="heading" aria-level="3" id="image-tags-and-drift"><span class="header-section-number">6.3</span>
+Image Tags and Drift</h2>
 <p>Never treat <code>latest</code> as a long-term contract.</p>
 <p>For personal experimentation, <code>latest</code> is fine.</p>
 <p>For repeatable environments, pin tags or digests and record:</p>
@@ -1794,7 +1849,7 @@ consistency is more important than the brand.</p>
 </ol>
 <p>That single discipline prevents many “it worked last week”
 incidents.</p>
-<h2 data-number="6.4" id="binding-is-a-security-decision"><span class="header-section-number">6.4</span> Binding Is a Security
+<h2 data-number="6.4" role="heading" aria-level="3" id="binding-is-a-security-decision"><span class="header-section-number">6.4</span> Binding Is a Security
 Decision</h2>
 <p>A container port published as <code>-p 8080:8080</code>, a runtime
 bound to <code>0.0.0.0</code>, or a router port-forward all create a
@@ -1813,7 +1868,8 @@ intended networks. A placeholder API key that a client library insists
 on is not authentication. Keep real credentials out of command lines,
 images, prompts, repositories, and browser JavaScript; use a protected
 secret mechanism and rotate them.</p>
-<h2 data-number="6.5" id="gpu-access-notes"><span class="header-section-number">6.5</span> GPU Access Notes</h2>
+<h2 data-number="6.5" role="heading" aria-level="3" id="gpu-access-notes"><span class="header-section-number">6.5</span> GPU
+Access Notes</h2>
 <p>GPU passthrough is still the most common deployment failure
 point.</p>
 <p>Checklist:</p>
@@ -1825,10 +1881,10 @@ point.</p>
 <p>If you invert this order, you lose hours in application-level logs
 for a host-level problem.</p>
 <hr />
-<h1 data-number="7" id="deployment-blueprints-that-work"><span class="header-section-number">7</span> Deployment Blueprints That
+<h1 data-number="7" role="heading" aria-level="2" id="deployment-blueprints-that-work"><span class="header-section-number">7</span> Deployment Blueprints That
 Work</h1>
 <p>These are opinionated starting points that fit common goals.</p>
-<h2 data-number="7.1" id="blueprint-1-personal-chat-in-under-20-minutes"><span class="header-section-number">7.1</span> Blueprint 1: Personal Chat in
+<h2 data-number="7.1" role="heading" aria-level="3" id="blueprint-1-personal-chat-in-under-20-minutes"><span class="header-section-number">7.1</span> Blueprint 1: Personal Chat in
 Under 20 Minutes</h2>
 <p>Use Ollama + optional Open WebUI.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://ollama.com/install.sh <span class="kw">|</span> <span class="fu">sh</span></span>
@@ -1849,7 +1905,7 @@ policy.</p>
 <li>Privacy-first personal usage</li>
 <li>No strict performance constraints</li>
 </ol>
-<h2 data-number="7.2" id="blueprint-2-local-coding-assistant-in-vs-code"><span class="header-section-number">7.2</span> Blueprint 2: Local Coding
+<h2 data-number="7.2" role="heading" aria-level="3" id="blueprint-2-local-coding-assistant-in-vs-code"><span class="header-section-number">7.2</span> Blueprint 2: Local Coding
 Assistant in VS Code</h2>
 <p>Use Ollama as backend and connect via Continue or other
 OpenAI-compatible extension.</p>
@@ -1857,24 +1913,30 @@ OpenAI-compatible extension.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">models</span><span class="kw">:</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Local coding chat</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3-coder:8b</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen2.5-coder:7b</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> chat</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Local autocomplete</span></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">provider</span><span class="kw">:</span><span class="at"> ollama</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen3-coder:1.5b</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">model</span><span class="kw">:</span><span class="at"> qwen2.5-coder:1.5b</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> autocomplete</span></span></code></pre></div>
-<p>If tag names differ in your environment, pick the nearest available
-coder variants from your local registry.</p>
+<p>The <a href="https://ollama.com/library/qwen2.5-coder/tags">Ollama
+catalogue</a> listed these 7B and 1.5B tags on 20 November 2026; the 7B
+download was about 4.7 GB, before runtime and context memory. Pull the
+chosen model first, check available memory and evaluate whether it meets
+your coding or autocomplete needs. These examples have not been run for
+this update. A configured endpoint does not install the model; choose an
+available tag and check the extension’s current configuration
+format.</p>
 <p>Who this is for:</p>
 <ol type="1">
 <li>Daily coding assistance</li>
 <li>Fast edit-feedback loops</li>
 <li>Strong local privacy boundary</li>
 </ol>
-<h2 data-number="7.3" id="blueprint-3-persistent-local-api-service"><span class="header-section-number">7.3</span> Blueprint 3: Persistent Local
+<h2 data-number="7.3" role="heading" aria-level="3" id="blueprint-3-persistent-local-api-service"><span class="header-section-number">7.3</span> Blueprint 3: Persistent Local
 API Service</h2>
 <p>Use <code>llama-server</code> or Ollama in a container with
 persistent volumes and service management.</p>
@@ -1906,7 +1968,7 @@ Record the image digest, model revision, quantisation, context limit,
 and baseline latency alongside the unit. If another machine needs
 access, put an authenticated TLS gateway in front of it rather than
 changing both bindings to <code>0.0.0.0</code>.</p>
-<h2 data-number="7.4" id="blueprint-4-multi-modal-local-platform"><span class="header-section-number">7.4</span> Blueprint 4: Multi-Modal Local
+<h2 data-number="7.4" role="heading" aria-level="3" id="blueprint-4-multi-modal-local-platform"><span class="header-section-number">7.4</span> Blueprint 4: Multi-Modal Local
 Platform</h2>
 <p>Use LocalAI when you want one endpoint across text, embeddings,
 speech, and image workflows. For serious image/video generation, pair a
@@ -1929,7 +1991,7 @@ for speech, diffusion/flow pipelines for image and video generation, and
 an LLM for language reasoning. A single frontend can hide these
 services, but it cannot remove their different memory, licensing, and
 failure modes.</p>
-<h2 data-number="7.5" id="blueprint-5-high-concurrency-api-for-teams"><span class="header-section-number">7.5</span> Blueprint 5: High-Concurrency
+<h2 data-number="7.5" role="heading" aria-level="3" id="blueprint-5-high-concurrency-api-for-teams"><span class="header-section-number">7.5</span> Blueprint 5: High-Concurrency
 API for Teams</h2>
 <p>Use vLLM or SGLang behind a gateway and benchmark realistic prompt
 lengths and concurrency. Mixed long prompts and simultaneous requests
@@ -1960,9 +2022,9 @@ explicit approval for side-effecting tools, and keep credentials
 unavailable to the model process unless a narrowly scoped tool actually
 needs them.</p>
 <hr />
-<h1 data-number="8" id="model-selection-in-2026"><span class="header-section-number">8</span> Model Selection in 2026</h1>
+<h1 data-number="8" role="heading" aria-level="2" id="model-selection-in-2026"><span class="header-section-number">8</span> Model Selection in 2026</h1>
 <p>Do not choose by hype. Choose by workload.</p>
-<h2 data-number="8.1" id="the-selection-order-that-works"><span class="header-section-number">8.1</span> The Selection Order That
+<h2 data-number="8.1" role="heading" aria-level="3" id="the-selection-order-that-works"><span class="header-section-number">8.1</span> The Selection Order That
 Works</h2>
 <p>Use this sequence:</p>
 <ol type="1">
@@ -1976,7 +2038,8 @@ generation.</li>
 <li>Run short evals.</li>
 <li>Freeze the baseline.</li>
 </ol>
-<h2 data-number="8.2" id="workload-shapes"><span class="header-section-number">8.2</span> Workload Shapes</h2>
+<h2 data-number="8.2" role="heading" aria-level="3" id="workload-shapes"><span class="header-section-number">8.2</span>
+Workload Shapes</h2>
 <p>Four broad categories capture most local usage:</p>
 <ol type="1">
 <li>General assistant chat and summarization</li>
@@ -1986,7 +2049,7 @@ generation.</li>
 </ol>
 <p>Different families and sizes win in different categories. There is no
 universal best model.</p>
-<h2 data-number="8.3" id="family-level-guidance-practical"><span class="header-section-number">8.3</span> Family-Level Guidance
+<h2 data-number="8.3" role="heading" aria-level="3" id="family-level-guidance-practical"><span class="header-section-number">8.3</span> Family-Level Guidance
 (Practical)</h2>
 <p>Use a dated shortlist only to form candidates. At this review date,
 Qwen, Gemma, Granite, Mistral, gpt-oss, LFM, and established distilled
@@ -1998,7 +2061,7 @@ format, context support, and a realistic evaluation on your hardware. A
 sparse model’s active-parameter count is not its whole memory footprint,
 and a headline long context may not fit its KV cache on your
 machine.</p>
-<h2 data-number="8.4" id="size-and-quantisation-pairing"><span class="header-section-number">8.4</span> Size and Quantisation
+<h2 data-number="8.4" role="heading" aria-level="3" id="size-and-quantisation-pairing"><span class="header-section-number">8.4</span> Size and Quantisation
 Pairing</h2>
 <p>Use realistic tiers:</p>
 <table>
@@ -2036,7 +2099,7 @@ video pipeline can exceed the memory of a similarly sized text model.
 For image/video generation, use the model’s own hardware guidance; for
 example, Wan2.2 documents 24 GB VRAM for its 5B 720p text-image-to-video
 path.</p>
-<h2 data-number="8.5" id="where-to-source-models"><span class="header-section-number">8.5</span> Where to Source Models</h2>
+<h2 data-number="8.5" role="heading" aria-level="3" id="where-to-source-models"><span class="header-section-number">8.5</span> Where to Source Models</h2>
 <p>Primary sources remain:</p>
 <ol type="1">
 <li>Hugging Face Hub for broad model and quantisation availability</li>
@@ -2054,7 +2117,7 @@ pipeline version, resolution or clip length, and any safety or
 watermarking defaults. For voice cloning and image-generation
 checkpoints, record the usage restrictions separately from the code
 licence.</p>
-<h2 data-number="8.6" id="minimal-local-eval-loop"><span class="header-section-number">8.6</span> Minimal Local Eval Loop</h2>
+<h2 data-number="8.6" role="heading" aria-level="3" id="minimal-local-eval-loop"><span class="header-section-number">8.6</span> Minimal Local Eval Loop</h2>
 <p>Do not trust one impression prompt. Build a tiny repeatable eval
 set.</p>
 <p>Include 15-30 prompts that represent your real work:</p>
@@ -2074,11 +2137,11 @@ set.</p>
 </ol>
 <p>That small harness pays off immediately.</p>
 <hr />
-<h1 data-number="9" id="api-compatibility-and-application-design"><span class="header-section-number">9</span> API Compatibility and Application
+<h1 data-number="9" role="heading" aria-level="2" id="api-compatibility-and-application-design"><span class="header-section-number">9</span> API Compatibility and Application
 Design</h1>
 <p>You protect future flexibility by designing around stable
 interfaces.</p>
-<h2 data-number="9.1" id="keep-app-code-on-openai-compatible-calls"><span class="header-section-number">9.1</span> Keep App Code on
+<h2 data-number="9.1" role="heading" aria-level="3" id="keep-app-code-on-openai-compatible-calls"><span class="header-section-number">9.1</span> Keep App Code on
 OpenAI-Compatible Calls</h2>
 <p>Most local runtimes expose chat-completions-style APIs.</p>
 <p>Do not force every local model through a chat-completions
@@ -2097,7 +2160,10 @@ use different endpoints. Responses APIs, stateful conversations, tool
 choice, structured output, and remote image URLs also vary by runtime.
 Build a small adapter around these differences instead of scattering
 backend-specific assumptions through your application.</p>
-<p>Python example:</p>
+<p>Python example, assuming Ollama is running and
+<code>qwen2.5-coder:7b</code> has already been pulled. The compatible
+endpoint does not install the model. This example has not been run for
+this update:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
@@ -2108,7 +2174,7 @@ backend-specific assumptions through your application.</p>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.chat.completions.create(</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">&quot;qwen3-coder:8b&quot;</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">&quot;qwen2.5-coder:7b&quot;</span>,</span>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;role&quot;</span>: <span class="st">&quot;system&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;You are a concise coding assistant.&quot;</span>},</span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&quot;role&quot;</span>: <span class="st">&quot;user&quot;</span>, <span class="st">&quot;content&quot;</span>: <span class="st">&quot;Explain what a KV cache does.&quot;</span>},</span>
@@ -2117,7 +2183,7 @@ backend-specific assumptions through your application.</p>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].message.content)</span></code></pre></div>
-<h2 data-number="9.2" id="guardrails-for-tool-calling"><span class="header-section-number">9.2</span> Guardrails for Tool
+<h2 data-number="9.2" role="heading" aria-level="3" id="guardrails-for-tool-calling"><span class="header-section-number">9.2</span> Guardrails for Tool
 Calling</h2>
 <p>If you are building agents, the model chooses a proposed action; it
 must not hold unlimited authority to execute it. Put the policy boundary
@@ -2139,7 +2205,8 @@ raw database credentials or a general web-fetch tool by default. This
 saves enormous debugging time once workflows grow beyond toy examples,
 and it prevents a persuasive model response from becoming an unreviewed
 system action.</p>
-<h2 data-number="9.3" id="rag-layer-decisions"><span class="header-section-number">9.3</span> RAG Layer Decisions</h2>
+<h2 data-number="9.3" role="heading" aria-level="3" id="rag-layer-decisions"><span class="header-section-number">9.3</span>
+RAG Layer Decisions</h2>
 <p>For private document workflows, RAG is still the standard
 pattern:</p>
 <ol type="1">
@@ -2171,10 +2238,11 @@ such as <a href="https://github.com/PaddlePaddle/PaddleOCR/blob/main/docs/versio
 resulting text and layout. Test tables, formulas, handwriting, reading
 order, and low-quality scans as separate cases.</p>
 <hr />
-<h1 data-number="10" id="operations-keep-it-stable-over-time"><span class="header-section-number">10</span> Operations: Keep It Stable Over
+<h1 data-number="10" role="heading" aria-level="2" id="operations-keep-it-stable-over-time"><span class="header-section-number">10</span> Operations: Keep It Stable Over
 Time</h1>
 <p>Most local deployments fail from drift, not from initial setup.</p>
-<h2 data-number="10.1" id="baseline-checklist"><span class="header-section-number">10.1</span> Baseline Checklist</h2>
+<h2 data-number="10.1" role="heading" aria-level="3" id="baseline-checklist"><span class="header-section-number">10.1</span>
+Baseline Checklist</h2>
 <p>For each deployed model/runtime combo, record:</p>
 <ol type="1">
 <li>Runtime image tag or digest</li>
@@ -2185,7 +2253,8 @@ Time</h1>
 <li>Expected latency envelope</li>
 </ol>
 <p>Store this next to your deployment config.</p>
-<h2 data-number="10.2" id="update-discipline"><span class="header-section-number">10.2</span> Update Discipline</h2>
+<h2 data-number="10.2" role="heading" aria-level="3" id="update-discipline"><span class="header-section-number">10.2</span>
+Update Discipline</h2>
 <p>Use a simple release procedure:</p>
 <ol type="1">
 <li>Pull new runtime/model in staging profile.</li>
@@ -2194,7 +2263,7 @@ Time</h1>
 <li>Promote only if metrics and behaviour are acceptable.</li>
 </ol>
 <p>Local stacks feel “small”, but this discipline is still worth it.</p>
-<h2 data-number="10.3" id="observability-that-actually-helps"><span class="header-section-number">10.3</span> Observability That Actually
+<h2 data-number="10.3" role="heading" aria-level="3" id="observability-that-actually-helps"><span class="header-section-number">10.3</span> Observability That Actually
 Helps</h2>
 <p>You do not need enterprise observability to get value.</p>
 <p>Start with:</p>
@@ -2210,7 +2279,7 @@ throughput, memory use, authenticated caller or service identity, and
 model revision. Do not default to logging raw prompts, uploaded files,
 retrieved chunks, or tool output. If debugging requires them, restrict
 access and define a short retention period before collecting them.</p>
-<h2 data-number="10.4" id="security-and-privacy-reality"><span class="header-section-number">10.4</span> Security and Privacy
+<h2 data-number="10.4" role="heading" aria-level="3" id="security-and-privacy-reality"><span class="header-section-number">10.4</span> Security and Privacy
 Reality</h2>
 <p>Local inference improves privacy posture. It does not automatically
 make your stack secure. Secure API endpoints, frontend authentication,
@@ -2224,58 +2293,58 @@ addresses after every runtime or container change. <code>0.0.0.0</code>,
 warning signs that need an explicit deployment decision, not defaults to
 leave unexplained.</p>
 <hr />
-<h1 data-number="11" id="decision-guide-by-constraint"><span class="header-section-number">11</span> Decision Guide by
+<h1 data-number="11" role="heading" aria-level="2" id="decision-guide-by-constraint"><span class="header-section-number">11</span> Decision Guide by
 Constraint</h1>
 <p>Use this when you need a fast recommendation.</p>
-<h2 data-number="11.1" id="i-want-the-easiest-possible-local-setup"><span class="header-section-number">11.1</span> I Want the Easiest Possible
+<h2 data-number="11.1" role="heading" aria-level="3" id="i-want-the-easiest-possible-local-setup"><span class="header-section-number">11.1</span> I Want the Easiest Possible
 Local Setup</h2>
 <p>Use Ollama first.</p>
-<h2 data-number="11.2" id="i-want-maximum-low-level-control"><span class="header-section-number">11.2</span> I Want Maximum Low-Level
+<h2 data-number="11.2" role="heading" aria-level="3" id="i-want-maximum-low-level-control"><span class="header-section-number">11.2</span> I Want Maximum Low-Level
 Control</h2>
 <p>Use llama.cpp directly.</p>
-<h2 data-number="11.3" id="i-need-high-concurrency-for-team-apis"><span class="header-section-number">11.3</span> I Need High Concurrency for
+<h2 data-number="11.3" role="heading" aria-level="3" id="i-need-high-concurrency-for-team-apis"><span class="header-section-number">11.3</span> I Need High Concurrency for
 Team APIs</h2>
 <p>Benchmark vLLM and SGLang for your request pattern.</p>
-<h2 data-number="11.4" id="i-need-one-local-platform-for-text-embeddings-audio-image"><span class="header-section-number">11.4</span> I Need One Local Platform for
+<h2 data-number="11.4" role="heading" aria-level="3" id="i-need-one-local-platform-for-text-embeddings-audio-image"><span class="header-section-number">11.4</span> I Need One Local Platform for
 Text + Embeddings + Audio + Image</h2>
 <p>Use LocalAI for a single API surface, but validate each modality
 independently. For best generation workflows, use LocalAI or an LLM
 server alongside ComfyUI/Diffusers.</p>
-<h2 data-number="11.5" id="i-need-image-generation-or-image-editing"><span class="header-section-number">11.5</span> I Need Image Generation or
+<h2 data-number="11.5" role="heading" aria-level="3" id="i-need-image-generation-or-image-editing"><span class="header-section-number">11.5</span> I Need Image Generation or
 Image Editing</h2>
 <p>Start with FLUX.2 Klein 4B or Qwen-Image/Edit if their licenses fit
 your use. Use ComfyUI for interactive graphs or Diffusers for code. Do
 not select a VLM just because it accepts images.</p>
-<h2 data-number="11.6" id="i-need-ocr-screenshots-or-document-understanding"><span class="header-section-number">11.6</span> I Need OCR, Screenshots, or
+<h2 data-number="11.6" role="heading" aria-level="3" id="i-need-ocr-screenshots-or-document-understanding"><span class="header-section-number">11.6</span> I Need OCR, Screenshots, or
 Document Understanding</h2>
 <p>Start with a small VLM or OCR specialist such as Qwen3-VL, Gemma 4,
 PaddleOCR-VL, GLM-OCR, or olmOCR. Test layout, tables, formulas, and
 reading order—not only plain paragraphs.</p>
-<h2 data-number="11.7" id="i-need-local-transcription-or-speech-generation"><span class="header-section-number">11.7</span> I Need Local Transcription or
+<h2 data-number="11.7" role="heading" aria-level="3" id="i-need-local-transcription-or-speech-generation"><span class="header-section-number">11.7</span> I Need Local Transcription or
 Speech Generation</h2>
 <p>Use Whisper/faster-whisper for broad transcription compatibility,
 Qwen3-ASR for a newer multilingual ASR option, and Kokoro or Qwen3-TTS
 for speech synthesis. Voice cloning needs explicit speaker consent and a
 licence review.</p>
-<h2 data-number="11.8" id="i-need-local-video-generation"><span class="header-section-number">11.8</span> I Need Local Video
+<h2 data-number="11.8" role="heading" aria-level="3" id="i-need-local-video-generation"><span class="header-section-number">11.8</span> I Need Local Video
 Generation</h2>
 <p>Start with Wan2.2 TI2V-5B if you have around 24 GB VRAM and can
 accept slow generation. Larger Wan2.2 or synchronised audio-video models
 move into workstation and multi-GPU territory. Check territorial
 restrictions on Tencent models before adopting them.</p>
-<h2 data-number="11.9" id="i-want-a-polished-local-chat-ui"><span class="header-section-number">11.9</span> I Want a Polished Local Chat
+<h2 data-number="11.9" role="heading" aria-level="3" id="i-want-a-polished-local-chat-ui"><span class="header-section-number">11.9</span> I Want a Polished Local Chat
 UI</h2>
 <p>Use Open WebUI with your backend, or desktop-first tools like LM
 Studio or Jan.</p>
-<h2 data-number="11.10" id="i-want-private-assistant-workflows-through-messaging-apps"><span class="header-section-number">11.10</span> I Want Private Assistant
+<h2 data-number="11.10" role="heading" aria-level="3" id="i-want-private-assistant-workflows-through-messaging-apps"><span class="header-section-number">11.10</span> I Want Private Assistant
 Workflows Through Messaging Apps</h2>
 <p>Use a gateway layer such as OpenClaw in front of your local inference
 stack. For a deep setup and hardening walkthrough, see the <a href="../primer_openclaw/primer_openclaw.md">OpenClaw Primer</a>.</p>
 <hr />
-<h1 data-number="12" id="day-practical-starter-path"><span class="header-section-number">12</span> 5-Day Practical Starter
+<h1 data-number="12" role="heading" aria-level="2" id="day-practical-starter-path"><span class="header-section-number">12</span> 5-Day Practical Starter
 Path</h1>
 <p>If you are new and want momentum without chaos, follow this path.</p>
-<h2 data-number="12.1" id="day-1-run-a-local-model"><span class="header-section-number">12.1</span> Day 1: Run a Local Model</h2>
+<h2 data-number="12.1" role="heading" aria-level="3" id="day-1-run-a-local-model"><span class="header-section-number">12.1</span> Day 1: Run a Local Model</h2>
 <p>Install Ollama and chat with a compact current instruct model. The
 command is deliberately a placeholder because model tags move faster
 than this document.</p>
@@ -2286,26 +2355,26 @@ than this document.</p>
 card and licence. Confirm that the listener is <code>127.0.0.1</code> or
 <code>[::1]</code>, not <code>0.0.0.0</code> or <code>*:11434</code>,
 before adding anything else.</p>
-<h2 data-number="12.2" id="day-2-add-browser-ui"><span class="header-section-number">12.2</span> Day 2: Add Browser UI</h2>
+<h2 data-number="12.2" role="heading" aria-level="3" id="day-2-add-browser-ui"><span class="header-section-number">12.2</span> Day 2: Add Browser UI</h2>
 <p>Run Open WebUI and connect it to Ollama on loopback. Decide whether
 you want chat retention, document uploads, web search, or tools before
 enabling them.</p>
-<h2 data-number="12.3" id="day-3-use-the-api-directly"><span class="header-section-number">12.3</span> Day 3: Use the API
+<h2 data-number="12.3" role="heading" aria-level="3" id="day-3-use-the-api-directly"><span class="header-section-number">12.3</span> Day 3: Use the API
 Directly</h2>
 <p>Send chat-completions requests and confirm you can call your local
 model from code.</p>
-<h2 data-number="12.4" id="day-4-containerise-and-persist"><span class="header-section-number">12.4</span> Day 4: Containerise and
+<h2 data-number="12.4" role="heading" aria-level="3" id="day-4-containerise-and-persist"><span class="header-section-number">12.4</span> Day 4: Containerise and
 Persist</h2>
 <p>Move your runtime into containers with persistent volumes and service
 startup.</p>
-<h2 data-number="12.5" id="day-5-compare-two-model-families"><span class="header-section-number">12.5</span> Day 5: Compare Two Model
+<h2 data-number="12.5" role="heading" aria-level="3" id="day-5-compare-two-model-families"><span class="header-section-number">12.5</span> Day 5: Compare Two Model
 Families</h2>
 <p>Run your mini eval prompts across two families and pick one baseline
 model for your real workflow.</p>
 <p>At this point, you are no longer experimenting blindly. You have a
 repeatable local AI workflow.</p>
 <hr />
-<h1 data-number="13" id="conclusion"><span class="header-section-number">13</span> Conclusion</h1>
+<h1 data-number="13" role="heading" aria-level="2" id="conclusion"><span class="header-section-number">13</span> Conclusion</h1>
 <p>Running open models locally in 2026 is no longer a niche hobby. It is
 a practical software capability, and the useful unit is no longer always
 a language model: it may be an OCR model, an image pipeline, an ASR
@@ -2323,14 +2392,16 @@ fit, with a thin adapter for modality-specific differences.</li>
 <p>Do that, and you get the best part of local AI: private, configurable
 intelligence you can run, test, and evolve on your own terms.</p>
 <hr />
-<h1 data-number="14" id="appendix"><span class="header-section-number">14</span> Appendix</h1>
-<h2 data-number="14.1" id="quick-command-cheatsheet"><span class="header-section-number">14.1</span> Quick Command Cheatsheet</h2>
+<h1 data-number="14" role="heading" aria-level="2" id="appendix"><span class="header-section-number">14</span> Appendix</h1>
+<h2 data-number="14.1" role="heading" aria-level="3" id="quick-command-cheatsheet"><span class="header-section-number">14.1</span> Quick Command Cheatsheet</h2>
+<p>These commands illustrate the tools described above; check model tags
+and local settings before running them.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Ollama ===</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify current model tags in the Ollama library before pulling.</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen3-coder:8b</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run qwen3-coder:8b</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen2.5-coder:7b</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> run qwen2.5-coder:7b</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> list</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> rm qwen3-coder:8b</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> rm qwen2.5-coder:7b</span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve</span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># === llama-server ===</span></span>
@@ -2359,7 +2430,8 @@ intelligence you can run, test, and evolve on your own terms.</p>
 <span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="co"># === vLLM ===</span></span>
 <span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install vllm</span>
 <span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="ex">vllm</span> serve meta-llama/Llama-3.3-8B-Instruct</span></code></pre></div>
-<h2 data-number="14.2" id="further-reading"><span class="header-section-number">14.2</span> Further Reading</h2>
+<h2 data-number="14.2" role="heading" aria-level="3" id="further-reading"><span class="header-section-number">14.2</span>
+Further Reading</h2>
 <ul>
 <li><a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a></li>
 <li><a href="https://docs.ollama.com">Ollama docs</a></li>
@@ -2397,7 +2469,7 @@ Diffusers</a></li>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -2427,18 +2499,27 @@ Diffusers</a></li>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -2446,19 +2527,18 @@ Diffusers</a></li>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
