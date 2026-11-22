@@ -21,3 +21,20 @@ def score(n):
 a, c=score(1600),score(3200)
 assert abs(a-c)<1e-7 and abs(c-float(rows[0]['joint_log_score']))<1e-9
 print('Conditional means:',conditional,'integrated means:',integrated,'joint log density:',c)
+# Recurrence builds the conditional NB mass; normal integration yields a discrete mixture.
+def future_cdf(n, limit):
+    z=-limit+(np.arange(n)+.5)*2*limit/n
+    weights=np.exp(-z*z/2)/math.sqrt(2*math.pi)*2*limit/n
+    mu=np.exp(eta[0]+sigma*z); p=theta/(theta+mu)
+    mass=p**theta; cdf=[]; total=0.0
+    for k in range(81):
+        if k: mass=mass*((theta+k-1)/k)*(1-p)
+        total+=float(np.dot(weights,mass)); cdf.append(total)
+    return np.array(cdf)
+f=future_cdf(3200,9); coarse=future_cdf(1600,9); wide=future_cdf(3200,10)
+assert np.max(abs(f-coarse))<1e-7 and np.max(abs(f-wide))<1e-7
+assert abs(1-f[-1])<1e-10 and np.all(np.diff(f)>=0)
+quantiles=[int(np.searchsorted(f,p)) for p in (.025,.975)]
+assert quantiles==[int(rows[0]['predictive_lower']),int(rows[0]['predictive_upper'])]
+assert abs(f[quantiles[1]]-float(rows[0]['predictive_cdf_upper']))<1e-10
+print('Future count interval:',quantiles,'F(upper):',f[quantiles[1]],'remaining tail:',1-f[-1])

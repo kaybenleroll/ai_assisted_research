@@ -24,6 +24,13 @@ score <- function(y,eta,theta,sigma,n=1600L,limit=9) {
  ll <- vapply(z,function(t) sum(dnbinom(y,mu=exp(eta+sigma*t),size=theta,log=TRUE)),numeric(1)) + dnorm(z,log=TRUE)
  a <- max(ll); a+log(sum(exp(ll-a))*2*limit/n)
 }
+# Integrate a future count CDF over the new site's normal intercept.
+future_cdf <- function(q, eta, theta, sigma, n, limit) {
+ z <- -limit+(seq_len(n)-.5)*2*limit/n
+ weights <- dnorm(z)*2*limit/n
+ mu <- exp(eta+sigma*z)
+ vapply(q,function(k) sum(weights*pnbinom(k,size=theta,mu=mu)),numeric(1))
+}
 get_sigma <- function(m) {
  if(!any(vapply(m$smooth,function(s) identical(s$label,'s(site)'),logical(1)))) return(0)
  v <- gam.vcomp(m,rescale=TRUE); vc <- if(is.list(v)) v$vc else v; if(is.null(dim(vc))) unname(vc['s(site)']) else unname(vc['s(site)','std.dev'])
@@ -43,13 +50,20 @@ for(nm in names(models)) {
  rows[[nm]]<-data.frame(model=nm,theta=theta,sigma=sig,edf=sum(m$edf),joint_log_score=sum(hi))
  if(nm=='combined') {
    i<-g[[1]]; expected<-score(test$y[i],eta[i],theta,sig,3200L)
-   fixtures[[1]]<-data.frame(y=test$y[i],eta=eta[i],theta=theta,sigma=sig, conditional_b=0.25,
-      conditional_mean=exp(eta[i]+0.25), integrated_mean=exp(eta[i]+sig^2/2), joint_log_score=expected)
+   cdf <- future_cdf(0:80,eta[i[1]],theta,sig,3200L,9)
+ cdf_coarse <- future_cdf(0:80,eta[i[1]],theta,sig,1600L,9)
+ cdf_wide <- future_cdf(0:80,eta[i[1]],theta,sig,3200L,10)
+ stopifnot(max(abs(cdf-cdf_coarse))<1e-7,max(abs(cdf-cdf_wide))<1e-7, 1-tail(cdf,1)<1e-10,all(diff(cdf)>=0))
+ # Discrete equal-tail quantiles: min integer k for which F(k) >= p.
+ interval <- vapply(c(.025,.975),function(p) which(cdf>=p)[1]-1L,integer(1))
+ cat('Future count equal-tail 95% interval:',interval,'; F(0), F(upper-1), F(upper), tail beyond 80:',cdf[1],cdf[interval[2]],cdf[interval[2]+1],1-tail(cdf,1),'\n')
+ fixtures[[1]]<-data.frame(y=test$y[i],eta=eta[i],theta=theta,sigma=sig, conditional_b=0.25,
+      conditional_mean=exp(eta[i]+0.25), integrated_mean=exp(eta[i]+sig^2/2), joint_log_score=expected, predictive_lower=interval[1], predictive_upper=interval[2], predictive_cdf_upper=cdf[interval[2]+1])
    cat('Combined first held-out site; b=0 / b=.25 / integrated means, observations:\n')
    print(data.frame(y=test$y[i],b0=exp(eta[i]),conditional=exp(eta[i]+.25),integrated=exp(eta[i]+sig^2/2)))
    cat('First site joint log predictive density:',expected,'; first visit predictive P(Y=0):',exp(score(0,eta[i[1]],theta,sig,3200L)),'\n')
    reference <- read.csv('examples/combined-fixture.csv')
-   stopifnot(identical(as.integer(reference$y),as.integer(test$y[i])),max(abs(reference$eta-eta[i]))<1e-7,abs(reference$joint_log_score[1]-expected)<1e-7)
+   stopifnot(identical(as.integer(reference$y),as.integer(test$y[i])),max(abs(reference$eta-eta[i]))<1e-7,abs(reference$joint_log_score[1]-expected)<1e-7,identical(as.integer(reference[1,c('predictive_lower','predictive_upper')]),interval),abs(reference$predictive_cdf_upper[1]-cdf[interval[2]+1])<1e-7)
  }
 }
 results<-do.call(rbind,rows); print(results,row.names=FALSE)
