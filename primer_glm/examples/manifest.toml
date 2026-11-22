@@ -1,0 +1,109 @@
+schema_version = 1
+[[examples]]
+id = "core-r"
+language = "r"
+profile = "r"
+script = "examples/core.R"
+[[examples]]
+id = "core-python"
+language = "python"
+profile = "python-base"
+script = "examples/core.py"
+[[examples]]
+id = "core-julia"
+language = "julia"
+profile = "julia"
+script = "examples/core.jl"
+[[examples]]
+id = "nb-r"
+language = "r"
+profile = "r"
+script = "examples/nb.R"
+[[examples]]
+id = "nb-python"
+language = "python"
+profile = "python-base"
+script = "examples/nb.py"
+[[examples]]
+id = "nb-julia"
+language = "julia"
+profile = "julia"
+script = "examples/nb.jl"
+[[examples]]
+id = "gam-r"
+language = "r"
+profile = "r"
+script = "examples/gam.R"
+[[examples]]
+id = "gam-python"
+language = "python"
+profile = "python-base"
+script = "examples/gam.py"
+[[examples]]
+id = "gam-julia"
+language = "julia"
+profile = "julia"
+script = "examples/gam.jl"
+[[examples]]
+id = "extensions-r"
+language = "r"
+profile = "r"
+script = "examples/extensions.R"
+[[examples]]
+id = "bayes-r"
+language = "r"
+profile = "r"
+script = "examples/bayes.R"
+[[examples]]
+id = "ordinal-repair-r"
+language = "r"
+profile = "r"
+script = "examples/ordinal-repair.R"
+
+[[examples]]
+id = "prepare-data-r"
+language = "r"
+profile = "r"
+script = "examples/prepare_data.R"
+
+[[examples]]
+id = "real-cases-r"
+language = "r"
+profile = "r"
+script = "examples/real_cases.R"
+
+[[examples]]
+id = "core-repairs-r"
+language = "r"
+profile = "r"
+script = "examples/core-repairs.R"
+
+[[examples]]
+id = "extensions-bayes-repairs-r"
+language = "r"
+profile = "r"
+script = "examples/extensions-bayes-repairs.R"
+
+[[examples]]
+id = "real-cases-python"
+language = "python"
+profile = "python-base"
+script = "examples/real_cases.py"
+
+[[examples]]
+id = "real-cases-julia"
+language = "julia"
+profile = "julia"
+script = "examples/real_cases.jl"
+
+[[examples]]
+id = "bayes-count-python"
+language = "python"
+profile = "python-base"
+script = "examples/bayes_count.py"
+
+[[examples]]
+id = "bayes-count-julia"
+language = "julia"
+profile = "julia"
+script = "examples/bayes_count.jl"

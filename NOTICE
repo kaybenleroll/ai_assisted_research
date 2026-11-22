@@ -14,3 +14,11 @@ unofficial, non-commercial game aids set in the world of Hugh Howey's
 Silo novels (Wool, Shift and Dust). The setting, its names and its story
 remain the property of their rights-holders; only the game text and
 mechanics written for this repository are covered by the MIT licence.
+
+The GLM primer includes third-party ecological datasets in
+primer_glm/data/. Palmer penguins is distributed by its authors under
+CC0 1.0. The package-derived glmmTMB Salamanders data are attributed to
+Price and colleagues; Dryad declares the original dataset CC0 1.0 and
+the pinned glmmTMB package declares AGPL-3. The exact data sources,
+licence links, citations, hashes, provenance limits and the penguin
+authors' contact request are recorded in primer_glm/data/README.txt.
