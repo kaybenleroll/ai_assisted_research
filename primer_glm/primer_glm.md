@@ -11,7 +11,7 @@ The running setting is ecological monitoring, but no ecology background is requi
 You should be comfortable with algebra, logarithms, elementary probability, derivatives, and the idea of a matrix. We refresh each tool as it becomes necessary. Read the main route in order: the later extensions build on problems exposed by the core models and return their results to the ecological question. R is the primary language. Complete examples and matched implementations in Python and Julia are described alongside the published example files; a code fragment is a teaching illustration unless its execution is recorded in the example manifest. A formula and a successful software call do not establish that a model is appropriate.
 
 
-### Computation and data files
+### Computation and Data Files {#computation-and-data-files}
 
 R carries the main narrative. The companion scripts in `examples/` include
 matched R, Python and Julia implementations of the four core families,
@@ -29,6 +29,8 @@ for commands and execution limits. From the repository root, `just examples
 glm` runs the registered examples in the pinned containers. A registered
 example checks its particular calculation; it does not establish ecological
 adequacy or validate every formula in this document.
+
+*Verified against primary sources for cited dataset descriptions and statistical method and software reference summaries; unverified claims are flagged inline.*
 
 ## Notation
 
@@ -543,7 +545,7 @@ Suppose a held-out detection model gives ten visits probabilities near 0.2 and t
 
 Influence is a change in a result, so calculate it on the target scale. Suppose a fitted rate ratio is 1.40 using all sites and 1.05 after removing one site. The 0.35 change in that contrast is a sensitivity result, not a reason by itself to remove the site. Check recording errors, compare site characteristics, repeat the analysis with a suitable site-level model, and show both results if the observation is valid. The values here are hypothetical; no such deletion analysis has been claimed for the salamander data.
 
-### A Diagnostic, Repair, and Re-evaluation
+### A Diagnostic, Repair, and Re-Evaluation {#a-diagnostic-repair-and-re-evaluation}
 
 This seeded simulation supplies a known nonlinear Poisson mean. The initial log-linear model omits the quadratic term; the repair includes it. Both are fitted to the same 40 synthetic observations, eight at each predictor value. We inspect mean raw residuals at each value before and after the change and compare likelihoods; we do not select the repair by repeatedly searching many candidate models.
 
@@ -655,13 +657,13 @@ The proportional-odds restriction can be wrong. For example, restoration might m
 
 We pre-specify a multinomial model as the less restrictive alternative and evaluate both fitted models on the same remaining 1,000 observations. Lower is better for both scores: held-out mean log loss is 1.045 for proportional odds and 1.031 for multinomial; the multicategory Brier scores are 0.631 and 0.621. At $x=0.8$, for example, the true generating probabilities are approximately $(0.239,0.291,0.470)$; proportional odds predicts $(0.157,0.437,0.406)$ and multinomial predicts $(0.225,0.286,0.489)$. This is a comparison of probabilities for the same categories, not an estimate of one shared ordinal odds ratio from the multinomial fit. The multinomial alternative uses more parameters and gives up the proportional-odds ordering structure; its better score in this deliberately selected simulation is not a guarantee in another sample. A real analysis should state candidate models and validation design before comparing them, and report uncertainty in predictive performance rather than selecting a model by repeatedly searching the test set.
 
-## When counts vary more than the Poisson model allows {#dispersion-models}
+## When Counts Vary More Than the Poisson Model Allows {#dispersion-models}
 
 A Poisson regression makes two claims, not one: the conditional mean is linked to the predictors, and the conditional variance equals that mean. A sensible fitted mean does not guarantee the second claim. Ecological counts can vary because sites differ in unmeasured habitat, animals cluster, survey conditions change, observations share a site, or the recording process creates extra zeros. These explanations do not all imply the same repair. Here we separate a limited claim about the mean and its uncertainty from a complete probability model for counts. The distinction matters when the goal changes from estimating a rate ratio to predicting how many zeros or very large counts a future survey will produce.
 
 For this chapter let $Y_i$ be the count at observation $i$, $\mu_i=E(Y_i\mid x_i)$, and $\log\mu_i=x_i^{\top}\beta+\log e_i$, where $e_i>0$ is known exposure. The offset constrains a doubling of exposure to double the expected count, an assumption worth checking. Conditional means and variances refer to observations with the same covariates and exposure, not the raw mean and variance of a heterogeneous dataset. A raw variance exceeding its mean can arise even when every conditional Poisson assumption is correct.
 
-### Detecting a discrepancy and choosing its target
+### Detecting a Discrepancy and Choosing Its Target {#detecting-a-discrepancy-and-choosing-its-target}
 
 Fit the Poisson model, inspect residuals against predictors, fitted means, site and time, and compare observed features with simulated datasets from the fitted model. A common descriptive statistic is
 
@@ -673,7 +675,7 @@ where $p$ is the rank of the fitted mean model, including the intercept, and $n-
 
 Suppose the residual Pearson sum of squares is 180 for 90 residual degrees of freedom. Then $\widehat\phi_P=2$. Under the assumptions below, a quasi-Poisson standard error is approximately $\sqrt 2$ times its Poisson counterpart: a coefficient with standard error 0.10 has one of about 0.141. The estimated coefficient and its rate ratio do not change in this particular Poisson-versus-quasi-Poisson comparison, but the reported uncertainty does. This arithmetic assumes the same data, predictors, weights and log link, and a common scale; it does not repair dependence or a biased mean.
 
-### Quasi-likelihood: a variance relationship, not a count distribution
+### Quasi-Likelihood: A Variance Relationship, Not a Count Distribution {#quasi-likelihood-a-variance-relationship-not-a-count-distribution}
 
 A quasi-Poisson model asserts $E(Y_i\mid x_i)=\mu_i$ and $\operatorname{Var}(Y_i\mid x_i)=\phi\mu_i$, with common $\phi>0$, without specifying every count probability. For independent observations, the estimating equation for a log link is proportional to
 
@@ -687,7 +689,7 @@ A *sandwich* covariance takes a different route. Let $u_i$ be an observation's e
 
 Because quasi-Poisson alone assigns no probability to each possible count, it does not supply an ordinary log likelihood, ordinary likelihood-ratio test, ordinary AIC or a full predictive distribution. R returns `NA` for its AIC. Do not simulate future counts by quietly assuming a Poisson distribution with inflated standard errors: that reintroduces a distribution whose variance is wrong. For mean inference, inspect residuals and uncertainty under the assumptions chosen; for probabilities of zeros or extremes, specify and check a complete distribution.
 
-### Negative binomial: a complete alternative
+### Negative Binomial: A Complete Alternative {#negative-binomial-a-complete-alternative}
 
 A negative-binomial model supplies such a distribution. For the NB2 convention with shape $\kappa>0$,
 
@@ -710,7 +712,7 @@ NB1 is different. One convention has $\operatorname{Var}(Y)=\mu(1+\alpha)$, $\al
 
 `MASS::glm.nb` alternates between estimating regression coefficients for a given shape and estimating the shape from the likelihood given the current fitted means; iteration continues towards a joint fit. The likelihood includes the normalising terms involving $\kappa$, so changing shape affects more than a variance multiplier. Check convergence, profile or otherwise assess shape uncertainty, and recognise that a very large estimate can indicate a likelihood nearly flat towards the Poisson limit. A finite printed estimate does not ensure that shape is well determined. NB2 supplies a likelihood and hence likelihood-based AIC for comparable fits to the same response observations, provided the fitted likelihoods and constants are comparable. The estimated shape is a fitted parameter and belongs in the parameter count; software normally handles this. AIC compares relative expected predictive performance under its assumptions, not biological truth. NB2 is not automatically the best model when variance exceeds the Poisson mean: dependence, a misspecified mean or a detection process can remain.
 
-### Simulated comparison and a real-data boundary
+### Simulated Comparison and a Real-Data Boundary {#simulated-comparison-and-a-real-data-boundary}
 
 The following deliberately generates independent NB2 observations. It is a demonstration of a known simulation mechanism, not an ecological claim. `MASS` is a recommended R package. The fixed seed makes the generated sample reproducible within the stated R environment; print results from the actual run rather than taking the generating parameters as fitted estimates.
 
@@ -754,11 +756,11 @@ The package-derived Salamanders data provide a useful counterexample to assuming
 
 **Outline answer.** A smaller NB2 shape increases variance relative to its mean, while a larger shape approaches Poisson variation. NB maximum-likelihood coefficients can change because the likelihood weights observations differently; quasi-Poisson with one common scale leaves the Poisson mean score unchanged. A row split targets another visit from represented sites, while a site split tests prediction for held-out sites; neither split repairs an incorrect observation process.
 
-## Repeated sites and generalised linear mixed models {#multilevel-models}
+## Repeated Sites and Generalised Linear Mixed Models {#multilevel-models}
 
 Repeated surveys of the same pond are not independent replicates of ponds. They may share water chemistry, vegetation, survey access and animals. Treating every visit as an unrelated site can make a dataset appear more informative about the population of sites than it is. A generalised linear mixed model (GLMM) represents some dependence through latent site effects. It is an extension of a GLM: the conditional response distribution and link are GLM-like, but the likelihood for the observed data integrates over unobserved effects. Its extra structure answers a question about how sites vary; it also adds assumptions that a large number of visits at only a few sites cannot validate by itself.
 
-### A model for visits within sites
+### A Model for Visits Within Sites {#a-model-for-visits-within-sites}
 
 Let $Y_{ij}$ be the recorded count on visit $j$ to site $i$, and $x_{ij}$ a measured covariate. A random-intercept Poisson model is
 
@@ -780,7 +782,7 @@ $$
 
 Site-specific intercepts and slopes require replication and variation in $x$ within sites. If $x$ is constant within every site, its site-specific slope cannot be separated in the same way from a site intercept. Centre a continuous $x$ at a meaningful value: the random intercept and its correlation with the slope then refer to that value. A fixed site factor estimates an unrelated coefficient for each observed site; random effects instead posit a population distribution and allow predictions for new sites under that distribution. Neither choice removes confounding by variables that differ between sites.
 
-### Partial pooling and prediction targets
+### Partial Pooling and Prediction Targets {#partial-pooling-and-prediction-targets}
 
 For a transparent calculation, temporarily use a Gaussian measurement model: $\bar y_i\mid b_i\sim N(b_i, 4/n_i)$ and $b_i\sim N(0,1)$, with both variances fixed and known. If a site has $n_i=1$ observation with $\bar y_i=2$, its unpooled estimate is 2 and its posterior mean is $[1/(1+4)]2=0.4$. With $n_i=16$ and the same average, the posterior mean is $[1/(1+4/16)]2=1.6$. Both are pulled towards zero, but the more informative site is pulled less. These are conditional estimates under the stated Gaussian model; real GLMM pooling is nonlinear and variance parameters are estimated, so those exact weights do not apply.
 
@@ -794,7 +796,7 @@ $$
 
 The zero-effect site is therefore not the population average on the response scale. This is a consequence of the nonlinear inverse link, not a numerical quirk. For an observed site, a plug-in prediction at its estimated $b_i$ is conditional on that estimate; integrating over uncertainty in $b_i$ gives a different prediction. For a new site, one can report the population-average mean, or simulate a new $b$ and count to describe a future site's predictive distribution. The latter includes between-site and count variation; uncertainty in fitted parameters adds another layer. With random slopes, the marginal mean becomes $\exp(x^{\top}\beta+z^{\top}\Sigma z/2)$, where $z$ contains the random-effect covariates. Thus even the shape of a marginal effect may differ from its conditional counterpart.
 
-### Fitting integrates over what was not observed
+### Fitting Integrates Over What Was Not Observed {#fitting-integrates-over-what-was-not-observed}
 
 For independent sites, the observed-data likelihood is
 
@@ -808,7 +810,7 @@ The inner product uses the conditional count density; the integral averages it o
 
 The fitted variance can sit at zero, a boundary where ordinary interior normal and chi-square approximations may fail. A singular fit means one or more estimated random-effect variance directions are effectively zero; for example, an intercept–slope covariance matrix can be rank deficient. This may reflect a truly small component or insufficient information, not automatically an optimiser defect. Examine group counts and within-group covariate range, scale predictors, compare defensible simpler structures and fit diagnostics, and consider collecting more independent sites. Thousands of repeated visits do not replace independent sites for estimating between-site variation. Standard errors of variance components and predictions may be asymmetric; profile or parametric bootstrap intervals can be more informative when computationally and statistically feasible. Report boundary fits and sensitivity, not just the model that produced the preferred significance level.
 
-### A reproducible simulation and the salamander case
+### A Reproducible Simulation and the Salamander Case {#a-reproducible-simulation-and-the-salamander-case}
 
 The following deliberately small numerical fit uses adaptive one-dimensional integration rather than a production mixed-model package. Eight sites each have twelve visits, with a fixed grid of $x$ and fixed generating effects; Poisson draws are random. This controlled illustration does not make the eight generated effects a random sample from a normal population. The code maximises the integrated likelihood and compares two numerical integration tolerances. It is educational, not production code: the integration domain used to locate the mode, direct exponentiation and optimisation need stronger safeguards for difficult data.
 
@@ -851,7 +853,7 @@ cat('glmm_quadrature_loglik_difference',abs(coarse-fine),'\n')
 stopifnot(abs(coarse-fine)<1e-5)
 ```
 
-The executed fit returns $\widehat\beta_0=0.5366$, $\widehat\beta_1=0.2503$ and $\widehat\sigma_b=0.4253$. At $x=0$, the fitted zero-effect mean is 1.7101 and the model-based new-site mean is 1.8720. The optimizer reports convergence and the two integration tolerances differ in log likelihood by $4.7\times10^{-11}$ at the solution. This checks numerical sensitivity at those tolerances, not parameter uncertainty or model adequacy. The site totals are 8, 12, 19, 23, 19, 28, 33 and 42; a common-intercept Poisson fit cannot model their shared site variation. The random-intercept revision allows it, but eight sites leave substantial variance uncertainty. A defensible next check compares simulated site totals and within-site patterns with the observations, and repeats fitting from different starts; if serial patterns remain, revise the within-site model or collect additional independent sites. Do not interpret the convergence code as a diagnostic pass.
+The executed fit returns $\widehat\beta_0=0.5366$, $\widehat\beta_1=0.2503$ and $\widehat\sigma_b=0.4253$. At $x=0$, the fitted zero-effect mean is 1.7101 and the model-based new-site mean is 1.8720. The optimiser reports convergence and the two integration tolerances differ in log likelihood by $4.7\times10^{-11}$ at the solution. This checks numerical sensitivity at those tolerances, not parameter uncertainty or model adequacy. The site totals are 8, 12, 19, 23, 19, 28, 33 and 42; a common-intercept Poisson fit cannot model their shared site variation. The random-intercept revision allows it, but eight sites leave substantial variance uncertainty. A defensible next check compares simulated site totals and within-site patterns with the observations, and repeats fitting from different starts; if serial patterns remain, revise the within-site model or collect additional independent sites. Do not interpret the convergence code as a diagnostic pass.
 
 Use the fitted eight-site example to distinguish two tasks at $x=0$. For observed site 1, combine its twelve counts with the fitted normal site distribution and integrate its conditional density on a fine grid. The conditional site-effect mode is −0.615, its mean −0.635, and its central 95% interval −1.132 to −0.176. Integrating this conditional distribution gives expected count 0.934 for a further visit and a simulated central 95% future-count interval 0–3. For a new site, integrate over a fresh normal effect: its population mean is 1.872 and its simulated future-count interval is 0–6. These are different targets; both intervals include count variation, while the observed-site interval also integrates uncertainty in that site's effect. They condition on fitted fixed effects and variance: uncertainty in those parameters is absent. With just eight sites, a parametric bootstrap or a fully specified posterior would be needed to assess that additional uncertainty, and may itself be unstable.
 
@@ -865,11 +867,11 @@ For the salamanders, a defensible next model for the `GP` subset is `count ~ min
 
 **Outline answer.** At $x=0$ the new-site marginal mean is approximately 1.872, whereas the conditional mean at $b=\log 2$ is $2e^{0.5366}\approx3.420$. For an observed site, integrate its effect conditional on previous visits; for a new site, integrate over the site-effect distribution, and for a future count include count variation as well. With one visit per site, persistent site variation and independent overdispersion can be hard to distinguish without further assumptions or replication.
 
-## Flexible effects with generalised additive models {#smooth-effects}
+## Flexible Effects With Generalised Additive Models {#smooth-effects}
 
 An ecological response need not change at a constant rate along a temperature or elevation gradient. Cutting a continuous gradient into arbitrary low, medium and high categories discards ordering and can produce abrupt fitted jumps; adding many polynomial powers can produce unstable curves at the boundaries. A generalised additive model (GAM) replaces a rigid linear effect with a smooth function while retaining a response distribution, link and interpretable design. Flexibility is controlled by a penalty, and its amount must be estimated or chosen. A smooth is still conditional on the other variables, the sampling design and the response model: a curve alone does not establish a causal optimum.
 
-### Building a curve from basis functions
+### Building a Curve From Basis Functions {#building-a-curve-from-basis-functions}
 
 For a count outcome, consider
 
@@ -888,7 +890,7 @@ $$
 
 These two simple global polynomials explain the construction, not the basis chosen by `mgcv::s`. Spline bases typically combine locally supported or other smooth functions so a curve can bend in different parts of the observed range. Basis choice and dimension constrain what can be represented even before penalisation. A very small $K$ cannot express a complex curve; a large enough basis lets the penalty determine how much complexity the data support, subject to computational cost and identifiability.
 
-### Penalising roughness and choosing smoothness
+### Penalising Roughness and Choosing Smoothness {#penalising-roughness-and-choosing-smoothness}
 
 Instead of maximising the log likelihood $\ell$ alone, estimate coefficients by maximising
 
@@ -906,7 +908,7 @@ A truncated-power basis supplies another concrete example of columns used to con
 
 An intercept plus an unrestricted smooth can be non-identifiable: adding a constant to $f$ and subtracting it from the intercept gives the same predictor. Software commonly centres smooths to resolve this. Consequently the plotted smooth is generally a centred partial contribution on the link scale, not the expected count itself. Other covariates and the intercept must be included, followed by the inverse link, to obtain a response prediction. Confidence bands around a fitted smooth represent uncertainty in the estimated effect under the model and software's approximation; they are not prediction intervals for individual future counts. Pointwise bands also do not simultaneously cover an entire curve with the nominal probability.
 
-### Fit, inspect and repair a simulated smooth
+### Fit, Inspect and Repair a Simulated Smooth {#fit-inspect-and-repair-a-simulated-smooth}
 
 This example generates a curved mean on a known range. It uses independent Poisson observations and an exposure fixed at one; those assumptions make the demonstration interpretable, not realistic for every survey. Run it in an R environment with `mgcv` installed. The graph's vertical axis is the centred link-scale contribution. A rise in the plot means the fitted expected count rises while other terms stay fixed; the vertical zero is imposed by centring, not a no-effect ecological threshold.
 
@@ -953,11 +955,11 @@ A GAM can include random effects or correlated error structures, producing a gen
 
 **Outline answer.** Compare the curves, EDF, uncertainty and diagnostics rather than assuming a larger basis is better. Holding out a continuous stretch of the gradient tests interpolation across a gap or extrapolation near an edge, whereas random rows mainly test prediction within observed support. Near-duplicate predictors can make individual curves unstable despite similar combined predictions; the two-smooth example above supplies a concrete check.
 
-## Zeros, hurdles and the observation process {#zero-processes}
+## Zeros, Hurdles and the Observation Process {#zero-processes}
 
 An observed zero can mean that animals were absent, present but not detected, or present and detected on other occasions but not this one. A Poisson or negative-binomial model already assigns some probability to zero. If the fitted distribution predicts too few zeros, a separate zero component is one candidate, but the discrepancy can also come from rate heterogeneity, omitted covariates or dependence. A zero-inflated model and a hurdle model partition the same observable counts in different ways. Their parameters are useful only relative to their stated generative assumptions; counting zeros alone does not reveal the underlying biology.
 
-### Two complete probability models
+### Two Complete Probability Models {#two-complete-probability-models}
 
 Let $f(y;\mu)$ be any count probability mass function on $0,1,\ldots$, with mean $\mu$, variance $v$, and zero probability $f_0=f(0;\mu)$. Parameters can vary with covariates and exposure; we suppress subscripts for clarity. A zero-inflated model first assigns probability $\pi$ to a point-mass zero and otherwise draws from $f$:
 
@@ -992,7 +994,7 @@ $$
 
 Truncation leaves the unnormalised first and second moments unchanged because zero contributes nothing: $E(Y\mid Y>0)=\mu/(1-f_0)$ and $E(Y^2\mid Y>0)=(v+\mu^2)/(1-f_0)$. Multiply both by $q$ and subtract the squared overall mean to obtain the variance. The parameter $\mu$ belongs to the *untruncated* base distribution; the mean conditional on a positive observation is $\mu/(1-f_0)$. That positive mean exceeds $\mu$ whenever $f_0>0$. The [Stan guide to zero-inflated and hurdle models](https://mc-stan.org/docs/2_28/stan-users-guide/zero-inflated.html) writes the two likelihoods explicitly.
 
-### A numerical comparison and an identification surprise
+### A Numerical Comparison and an Identification Surprise {#a-numerical-comparison-and-an-identification-surprise}
 
 Let the base be Poisson with $\mu=2$, so $f_0=e^{-2}\approx0.1353$. With $\pi=0.25$, the zero-inflated model has zero probability $0.25+0.75e^{-2}\approx0.3515$, mean $1.5$, and variance $0.75(2)+0.25(0.75)(4)=2.25$. The conditional mean given a positive count is $2/(1-e^{-2})\approx2.313$. The point-mass-zero component is not directly observed for any particular zero.
 
@@ -1006,7 +1008,7 @@ Therefore its mean, variance and entire observed count distribution are identica
 
 For a different hurdle example, keep $\mu=2$ and set $q=0.4$. The probability of zero is 0.6 and the overall mean is $0.4(2)/(1-e^{-2})\approx0.925$. Among positive observations the mean remains about 2.313. By contrast, observing an overall mean of 0.925 does not imply that the mean positive count is 0.925. These quantities answer different questions: probability of any recorded count, expected count given a positive record, and expected count across all records.
 
-### Fitting and checking models without overclaiming
+### Fitting and Checking Models Without Overclaiming {#fitting-and-checking-models-without-overclaiming}
 
 A practical fit must evaluate log probabilities stably, constrain probabilities and dispersion, and inspect convergence. At a zero, evaluate the log of a sum of component probabilities with stable log-sum-exp arithmetic; at small $\mu$, compute $\log(1-e^{-\mu})$ using a numerically stable function such as `log(-expm1(-mu))`. Weak separation of mixture components may give flat likelihoods, extreme coefficients, boundary estimates or singular Hessians. Starting values, multiple plausible initialisations, profile intervals or simulation can expose instability. A numerical optimum is not proof of identification; neither a single zero statistic nor a successful convergence flag establishes the assumed process.
 
@@ -1070,7 +1072,7 @@ predict(zi, newdata = new, type = "zprob")
 
 In this package's hurdle formulation the zero model represents the probability of zero, whereas the notation above uses $q$ for the probability of a positive observation. Read the package documentation for its prediction types and truncated-family semantics before interpreting them. Generate replicate datasets from each fitted model and compare zero proportions *by predictor*, the positive-count distribution and its upper tail, not just the total zeros. Compare held-out log scores or other decision-relevant predictions, with site-blocking where observations share sites. If Poisson misses zeros and the hurdle fits, that is evidence about predictive discrepancies under those fitted models, not proof that one ecological process exists. If a model also misses the positive tail, consider a negative-binomial base or omitted group dependence and repeat the checks; extra flexibility must remain supported by data.
 
-### Detection is a separate question
+### Detection Is a Separate Question {#detection-is-a-separate-question}
 
 Suppose an animal is present with probability $\psi$, and conditional on presence is detected on a visit with probability $p$. With a single binary observation, $P(\text{detection})=\psi p$. The combinations $(\psi,p)=(0.8,0.5)$ and $(0.5,0.8)$ both give detection probability 0.4: a single detection/non-detection cannot separate occupancy from detection without additional assumptions or information. Counts introduce further complexities, including abundance and repeated detections. A statistical point mass at zero does not automatically estimate absence or detectability. Repeated visits with an explicit observation model, appropriate closure and independence assumptions, or external detection information can help, but require a design and analysis beyond this primer. Even repeated visits cannot rescue assumptions that are scientifically implausible.
 
@@ -1208,7 +1210,7 @@ For the main routes, return to [Nelder and Wedderburn's GLM paper](https://doi.o
 
 The exercises revisit calculations, assumptions, interpretation and model revision. Use the outline answers to check the reasoning; simulated outputs may vary when you change a seed or generating mechanism.
 
-### Foundations and core models {#core-exercises}
+### Foundations and Core Models {#core-exercises}
 These exercises use hypothetical values unless a dataset is named. Work on the stated scale first, then explain what your answer says about an observation and what it cannot establish.
 
 1. A Gaussian model has mean $12+2x+3h-xh$, where $h$ is one for restored habitat. Calculate both habitat means at $x=2$ and the restored-minus-reference contrast. Explain the intercept.
@@ -1220,7 +1222,7 @@ These exercises use hypothetical values unless a dataset is named. Work on the s
 7. A colleague fits $\log Y\sim N(m,s^2)$ and reports $e^m$ as the arithmetic mean. State the correction when the conditional log variance is $s^2$, and explain what additional assumption was used.
 8. A site survey selects a penalty using all data before splitting into training and test sets. Explain the information leak and the appropriate place for tuning. Contrast a random visit split with holding out whole sites.
 
-#### Outline solutions
+#### Outline Solutions {#outline-solutions}
 
 1. The reference mean is 16 and restored mean is 17, so the contrast is 1. The intercept 12 is the reference mean at $x=0$, whether or not that point is well represented by data.
 2. Baseline odds are $1/3$; multiplying by three gives odds 1 and probability $1/2$. The probability doubles, not triples.
@@ -1231,7 +1233,7 @@ These exercises use hypothetical values unless a dataset is named. Work on the s
 7. Under conditional lognormality the arithmetic mean is $e^{m+s^2/2}$. Without that distributional assumption, the same correction need not apply; $e^m$ is not generally the arithmetic mean.
 8. The chosen penalty has used test outcomes and the test score is no longer a clean evaluation of the full selection procedure. Tune within training data using a split appropriate to the intended prediction; hold whole sites out when the target is a new site.
 
-### Categorical and Bayesian models
+### Categorical and Bayesian Models {#categorical-and-bayesian-models}
 Work through the calculations before consulting the solutions. In each applied answer state the population, observational unit and assumptions as well as the numerical result.
 
 1. A three-category multinomial model has reference-category weight 1 and other weights 2 and 3. Calculate all category probabilities. If the first non-reference weight doubles while the others are unchanged, calculate the new probabilities and explain what happens to the other categories.
@@ -1241,7 +1243,7 @@ Work through the calculations before consulting the solutions. In each applied a
 5. A fitted zero-inflated count model matches the observed fraction of zero counts. A colleague concludes that the mixture component represents sites where the species is truly absent. Give two alternative explanations and one design or measurement that could help distinguish them.
 6. A posterior sampler has 100,000 retained draws, high acceptance and visually similar chain means, but a lag-one correlation of 0.99. Explain what remains uncertain and how you would evaluate numerical precision before reporting a tail probability.
 
-#### Outline solutions
+#### Outline Solutions {#outline-solutions-1}
 
 1. The original probabilities are $(2/6,3/6,1/6)=(1/3,1/2,1/6)$. With weights $(4,3,1)$ they are $(1/2,3/8,1/8)$. The other probabilities change because all weights share the same normalising denominator.
 2. The cumulative probabilities are $F(-2)\approx0.119$ and $F(0)=0.5$; subtracting gives approximately $(0.119,0.381,0.5)$. The lower-tail cumulative odds at each threshold are multiplied by $e^{-1}$.
