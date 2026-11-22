@@ -35,6 +35,46 @@ get_sigma <- function(m) {
  if(!any(vapply(m$smooth,function(s) identical(s$label,'s(site)'),logical(1)))) return(0)
  v <- gam.vcomp(m,rescale=TRUE); vc <- if(is.list(v)) v$vc else v; if(is.null(dim(vc))) unname(vc['s(site)']) else unname(vc['s(site)','std.dev'])
 }
+# Training-only predictive discrepancies, fixed before viewing the test responses.
+# Replicates use one independent draw per site, shared by its four visits.
+set.seed(4682027)
+site_index <- as.integer(train$site)
+bin <- cut(train$x, breaks=c(-1,-.5,0,.5,1),include.lowest=TRUE)
+summary_discrepancies <- function(y, expected) {
+  bin_residual <- as.numeric(tapply(y-expected,bin,mean))
+  totals <- as.numeric(rowsum(y,site_index))
+  c(gradient=sum(bin_residual^2), site_total_variance=var(totals), zeros=sum(y==0), upper_ge6=sum(y>=6))
+}
+check_model <- function(m,nm,nsim=1000L) {
+  sigma <- get_sigma(m); theta <- if(nm=='poisson') Inf else m$family$getTheta(TRUE)
+  eta0 <- as.numeric(predict(m,newdata=train,type='link',exclude=if(sigma>0) 's(site)' else NULL))
+  marginal_mean <- exp(eta0+sigma^2/2)
+  observed <- summary_discrepancies(train$y,marginal_mean)
+  cat(nm, 'training marginal residual means by increasing x bin:',as.numeric(tapply(train$y-marginal_mean,bin,mean)),'\n')
+  simulations <- replicate(nsim, {
+    intercepts <- rnorm(nlevels(train$site),0,sigma)
+    mu <- exp(eta0+intercepts[site_index])
+    y <- if(is.infinite(theta)) rpois(length(mu),mu) else rnbinom(length(mu),size=theta,mu=mu)
+    summary_discrepancies(y,marginal_mean)
+  })
+  bounds <- t(apply(simulations,1,quantile,probs=c(.025,.5,.975),names=FALSE))
+  stopifnot(all(is.finite(bounds)),all(bounds[,1]<=bounds[,3]),all(is.finite(observed)))
+  data.frame(model=nm,measure=names(observed),observed=unname(observed),sim_lo=bounds[,1],sim_median=bounds[,2],sim_hi=bounds[,3],row.names=NULL)
+}
+cat('Training data: plugin site-replicate checks, 1000 simulations per candidate, 2.5/50/97.5% simulation quantiles:\n')
+training_checks <- do.call(rbind,lapply(c('poisson','nb','nb_site','nb_smooth','combined'), function(nm) check_model(models[[nm]],nm)))
+print(training_checks,row.names=FALSE)
+cat('Combined variance components (approximate uncertainty; SD not variance):\n')
+print(gam.vcomp(models$combined,rescale=TRUE)$vc)
+set.seed(4682028)
+cat('Combined k.check (simulation-based k-index check, site factor omitted):\n')
+print(k.check(models$combined,n.rep=400))
+# Basis dimension sensitivity, chosen before inspecting held-out outcomes.
+k10 <- gam(y~s(x,k=10)+s(site,bs='re')+offset(log(effort)),data=train,family=nb(),method='REML')
+stopifnot(isTRUE(k10$converged))
+cat('Training basis sensitivity k=7 versus k=10, theta / site SD / total EDF:\n')
+print(rbind(k7=c(models$combined$family$getTheta(TRUE),get_sigma(models$combined),sum(models$combined$edf)),k10=c(k10$family$getTheta(TRUE),get_sigma(k10),sum(k10$edf))))
+
 rows <- list(); fixtures <- list()
 for(nm in names(models)) {
  m<-models[[nm]]; sig<-get_sigma(m); theta<-if(nm=='poisson') Inf else m$family$getTheta(TRUE)
@@ -66,6 +106,12 @@ for(nm in names(models)) {
    stopifnot(identical(as.integer(reference$y),as.integer(test$y[i])),max(abs(reference$eta-eta[i]))<1e-7,abs(reference$joint_log_score[1]-expected)<1e-7,identical(as.integer(reference[1,c('predictive_lower','predictive_upper')]),interval),abs(reference$predictive_cdf_upper[1]-cdf[interval[2]+1])<1e-7)
  }
 }
+# Prespecified sensitivity evaluation on the same held-out sites, not a second independent test.
+pred10 <- test; pred10$site <- factor(rep(levels(train$site)[1],nrow(test)),levels=levels(train$site))
+eta10 <- as.numeric(predict(k10,newdata=pred10,type='link',exclude='s(site)'))
+g10 <- split(seq_len(nrow(test)),test$site,drop=TRUE)
+score10 <- sum(vapply(g10,function(i) score(test$y[i],eta10[i],k10$family$getTheta(TRUE),get_sigma(k10),3200L),numeric(1)))
+cat('Prespecified k=10 held-out joint log score:',score10,'\n')
 results<-do.call(rbind,rows); print(results,row.names=FALSE)
 cat('Training: 54 sites, 216 observations; test: 18 new sites, 72 observations. Test scores are sums of joint site log densities.\n')
 write.csv(fixtures[[1]],file.path(Sys.getenv('EXAMPLE_OUT',tempdir()),'combined-fixture.csv'),row.names=FALSE,quote=FALSE)
