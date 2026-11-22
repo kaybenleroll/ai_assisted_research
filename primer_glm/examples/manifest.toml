@@ -107,3 +107,21 @@ id = "bayes-count-julia"
 language = "julia"
 profile = "julia"
 script = "examples/bayes_count.jl"
+
+[[examples]]
+id = "combined-r"
+language = "r"
+profile = "r"
+script = "examples/combined.R"
+
+[[examples]]
+id = "combined-python"
+language = "python"
+profile = "python-base"
+script = "examples/combined.py"
+
+[[examples]]
+id = "combined-julia"
+language = "julia"
+profile = "julia"
+script = "examples/combined.jl"
