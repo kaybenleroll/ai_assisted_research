@@ -21,6 +21,7 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual({path.name for path in primers}, {
             "primer_digital_signal_processing",
             "primer_fluid_mechanics",
+            "primer_glm",
             "primer_knowledge_graph",
             "primer_complex_analysis",
             "primer_evaluation_loop",
