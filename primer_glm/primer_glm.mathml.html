@@ -674,7 +674,13 @@ Rows</a></li>
 Mass</a></li>
 </ul></li>
 <li><a href="#glm-components" id="toc-glm-components"><span class="toc-section-number">3</span> How a Generalised Linear Model Fits
-Together</a></li>
+Together</a>
+<ul>
+<li><a href="#from-design-row-to-response-mean" id="toc-from-design-row-to-response-mean"><span class="toc-section-number">3.1</span> From Design Row to Response
+Mean</a></li>
+<li><a href="#what-the-distribution-adds" id="toc-what-the-distribution-adds"><span class="toc-section-number">3.2</span> What the Distribution
+Adds</a></li>
+</ul></li>
 <li><a href="#probabilities-and-counts" id="toc-probabilities-and-counts"><span class="toc-section-number">4</span> Probabilities, Counts, and
 Exposure</a>
 <ul>
@@ -690,7 +696,9 @@ Assumptions</a></li>
 <li><a href="#positive-measurements" id="toc-positive-measurements"><span class="toc-section-number">5</span>
 Positive Measurements and the Meaning of a Transformation</a>
 <ul>
-<li><a href="#the-gamma-density-and-its-consequences" id="toc-the-gamma-density-and-its-consequences"><span class="toc-section-number">5.1</span> The Gamma Density and Its
+<li><a href="#gamma-and-log-transformed-measurements" id="toc-gamma-and-log-transformed-measurements"><span class="toc-section-number">5.1</span> Gamma and Log-Transformed
+Measurements</a></li>
+<li><a href="#the-gamma-density-and-its-consequences" id="toc-the-gamma-density-and-its-consequences"><span class="toc-section-number">5.2</span> The Gamma Density and Its
 Consequences</a></li>
 </ul></li>
 <li><a href="#glm-fitting" id="toc-glm-fitting"><span class="toc-section-number">6</span> Likelihood, Fitting, and the Working
@@ -808,8 +816,8 @@ Predictive Checks</a></li>
 Regression</a></li>
 <li><a href="#from-a-grid-to-markov-chain-monte-carlo" id="toc-from-a-grid-to-markov-chain-monte-carlo"><span class="toc-section-number">15.4</span> From a Grid to Markov Chain Monte
 Carlo</a></li>
-<li><a href="#checking-predictions-and-sharing-information-across-sites" id="toc-checking-predictions-and-sharing-information-across-sites"><span class="toc-section-number">15.5</span> Checking Predictions and Sharing
-Information Across Sites</a></li>
+<li><a href="#checking-predictions-and-sharing-information-across-sites" id="toc-checking-predictions-and-sharing-information-across-sites"><span class="toc-section-number">15.5</span> Checking Posterior
+Predictions</a></li>
 <li><a href="#hierarchical-sharing-across-sites" id="toc-hierarchical-sharing-across-sites"><span class="toc-section-number">15.6</span> Hierarchical Sharing Across
 Sites</a></li>
 </ul></li>
@@ -882,8 +890,8 @@ The following cases use calculations and checks together.</p>
 response models, then asks why fitting works and how to assess its
 uncertainty. Count extensions follow a sequence of different
 discrepancies: variability, shared sites, nonlinear means and zeros.
-These components can coexist. The later combined case puts them together
-before the categorical and Bayesian branches; the synthesis returns to
+These components can coexist. The later <a href="#combined-count-case">combined case</a> puts them together. The <a href="#categorical-responses">categorical</a> and <a href="#bayesian-models">Bayesian</a> chapters are optional branches for
+those response types and inferential questions; the synthesis returns to
 the decisions made along the way.</p>
 <p>The cases do not all use the same observations. Penguins are a real
 positive-measurement study; Salamanders are a separate real
@@ -1314,6 +1322,8 @@ predictors, instead of treating a named regression as an indivisible
 recipe.</p>
 <p><a id="distribution-predictor-and-link"></a>
 <a id="toc-distribution-predictor-and-link"></a></p>
+<h2 data-number="3.1" role="heading" aria-level="3" id="from-design-row-to-response-mean"><span class="header-section-number">3.1</span> From Design Row to Response
+Mean</h2>
 <p>For each observation, the systematic predictor is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>i</mi></msub><mo>=</mo><msubsup><mi mathvariant="bold-italic">𝒙</mi><mi>i</mi><mi>⊤</mi></msubsup><mi mathvariant="bold-italic">𝜷</mi></mrow><annotation encoding="application/x-tex">\eta_i=\mathbf{x}_i^{\top}\boldsymbol{\beta}</annotation></semantics></math>,
 possibly with a known offset added. The response distribution describes
@@ -1323,6 +1333,28 @@ The link relates the two:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>η</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msup><mi>g</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>η</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 g(\mu_i)=\eta_i,\qquad \mu_i=g^{-1}(\eta_i).
 </annotation></semantics></math></p>
+<p>Take a design row
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒙</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{x}=(1,2)^{\top}</annotation></semantics></math>
+and coefficients
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝜷</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>0.5</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta}=(-1,0.5)^{\top}</annotation></semantics></math>.
+The linear predictor is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn><mo>+</mo><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">-1+2(0.5)=0</annotation></semantics></math>.
+With a logit inverse link, the response mean is the detection
+probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mn>0</mn></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">1/(1+e^0)=0.5</annotation></semantics></math>;
+with a log inverse link it is the expected count
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>0</mn></msup><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">e^0=1</annotation></semantics></math>.
+Now increase the covariate from 2 to 3, keeping the coefficients fixed.
+The new predictor is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn><mo>+</mo><mn>3</mn><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">-1+3(0.5)=0.5</annotation></semantics></math>:
+the logit model gives probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>0.5</mn></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mn>0.5</mn></msup><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mn>0.622</mn></mrow><annotation encoding="application/x-tex">e^{0.5}/(1+e^{0.5})\approx0.622</annotation></semantics></math>,
+while the log-linked count model gives mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>0.5</mn></msup><mo>≈</mo><mn>1.649</mn></mrow><annotation encoding="application/x-tex">e^{0.5}\approx1.649</annotation></semantics></math>.
+The coefficient is the same change on the predictor scale, but the
+inverse link determines its interpretation on the response scale. These
+are illustrative fixed coefficients, not fitted ecological effects; an
+interaction or offset would change the calculation.</p>
 <p>A Gaussian identity model has
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false" form="prefix">(</mo><mi>μ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>μ</mi></mrow><annotation encoding="application/x-tex">g(\mu)=\mu</annotation></semantics></math>
 and can assign any real mean. A Bernoulli logit model has
@@ -1373,6 +1405,32 @@ is generally not
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">E</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>g</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\operatorname{E}\{g(Y)\mid X\}</annotation></semantics></math>.
 We return to the practical consequences for positive measurements
 below.</p>
+<h2 data-number="3.2" role="heading" aria-level="3" id="what-the-distribution-adds"><span class="header-section-number">3.2</span> What the Distribution Adds</h2>
+<p>The mean alone does not specify the possible outcomes or their
+spread. Hold the conditional mean at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
+in three models. A Bernoulli response can only be zero or one, with
+variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.5</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">0.5(1-0.5)=0.25</annotation></semantics></math>.
+A Poisson response can be any non-negative integer, with variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>.
+A Gamma response is continuous and strictly positive, with variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>0.25</mn><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi(0.5)^2=0.25\phi</annotation></semantics></math>
+under the mean–dispersion parameterisation. For example,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\phi=2</annotation></semantics></math>
+gives the Gamma the same variance as this Poisson, yet their supports
+and probabilities of individual outcomes differ: the Poisson can produce
+exactly zero and the Gamma cannot. Matching a mean, or even a mean and
+variance, does not make the distributions interchangeable.</p>
+<p>The family supplies a probability model for outcomes around the mean;
+the link specifies how the mean changes with the predictor. A Poisson
+and a Gamma model can both use a log link, but a log-linked mean by
+itself does not decide whether the observation is a count or a positive
+measurement. Conversely, the same family can use different valid links,
+giving different mean curves. The family assumptions must be checked
+against the observation process and data; a compatible support alone
+does not establish the proposed variance, independence, or adequacy of
+the model.</p>
 <p>The distribution and link are separate choices, although not every
 pairing is valid for every range of predictors. The <em>canonical
 link</em> makes the linear predictor equal to the exponential family’s
@@ -1587,6 +1645,12 @@ unobserved habitat differences. A good fit to the average does not prove
 the underlying event process.</p>
 <h1 data-number="5" role="heading" aria-level="2" id="positive-measurements"><span class="header-section-number">5</span>
 Positive Measurements and the Meaning of a Transformation</h1>
+<p>A positive measurement calls for a choice about both the response
+distribution and the quantity being modelled. We first compare a Gamma
+mean model with regression on transformed measurements, then examine the
+Gamma density and its implications.</p>
+<h2 data-number="5.1" role="heading" aria-level="3" id="gamma-and-log-transformed-measurements"><span class="header-section-number">5.1</span> Gamma and Log-Transformed
+Measurements</h2>
 <p>A positive continuous outcome can have variability that grows with
 its mean. A Gamma model is one way to represent that pattern; it is not
 justified simply because all values happen to be positive. Its
@@ -1668,7 +1732,7 @@ arithmetic mean is
 This correction requires the assumed conditional lognormal model. A
 Gamma/log model links its arithmetic mean directly and makes a different
 variance claim.</p>
-<h2 data-number="5.1" role="heading" aria-level="3" id="the-gamma-density-and-its-consequences"><span class="header-section-number">5.1</span> The Gamma Density and Its
+<h2 data-number="5.2" role="heading" aria-level="3" id="the-gamma-density-and-its-consequences"><span class="header-section-number">5.2</span> The Gamma Density and Its
 Consequences</h2>
 <p>For a positive response, choose shape
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mi>/</mi><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">k=1/\phi</annotation></semantics></math>
@@ -4232,7 +4296,10 @@ variance was already inside the NB2-only range, so these summaries did
 and, in this simulation, the known shared generating intercept motivate
 considering that component; in field data its existence and distribution
 remain questions for the design and evidence. The NB2 checks also do not
-establish excess zeros or tails requiring a separate zero process.</p>
+establish excess zeros or tails requiring a separate zero process. The
+<a href="#zero-processes">zero-process chapter</a> explains why such a
+component needs a distinct observation model and evidence beyond a count
+of zeros.</p>
 <p>The simulation ranges condition on fitted parameters and do not
 include refitting or smoothing uncertainty. Their empirical tails use
 roughly 25 of the 1,000 replicates each, so endpoints have Monte Carlo
@@ -5089,8 +5156,8 @@ are teaching devices, not an HMC/NUTS implementation. A larger
 hierarchical or mixture analysis should use an independently tested
 dedicated sampler, documented model code, diagnostics and reproducible
 runtime rather than silently scaling up the toy algorithm.</p>
-<h2 data-number="15.5" role="heading" aria-level="3" id="checking-predictions-and-sharing-information-across-sites"><span class="header-section-number">15.5</span> Checking Predictions and
-Sharing Information Across Sites</h2>
+<h2 data-number="15.5" role="heading" aria-level="3" id="checking-predictions-and-sharing-information-across-sites"><span class="header-section-number">15.5</span> Checking Posterior
+Predictions</h2>
 <p>Posterior predictive checking asks whether data simulated from the
 fitted model resemble the observations in features relevant to the
 question. For each posterior draw, calculate probabilities for the
