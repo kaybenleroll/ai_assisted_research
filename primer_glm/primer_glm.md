@@ -15,7 +15,7 @@ The route moves from a question and ordinary regression to four response models,
 
 The cases do not all use the same observations. Penguins are a real positive-measurement study; Salamanders are a separate real repeated-count study. The Gamma holdout, the independent negative-binomial sample, the eight-site mixed-model illustration, the zero-process experiment and the combined monitoring survey are separately generated simulations. Their known mechanisms help diagnose a model; none establishes how the real studies were generated.
 
-Keep a short analysis ledger as you read. For the penguins, the question is a species-specific mass mean and a future individual measurement; 342 rows supply both, while a sex comparison uses 333. For the real GP salamanders, a visit-level recorded count is nested in a site; the initial Poisson fit and later NB comparison use 92 visits at 23 sites, and prediction for a new site requires holding entire sites out. The independently simulated Gamma and count cases below have their own rows and validation splits. A result from one case is not a measurement from another.
+Keep a short analysis ledger as you read. For the penguins, the question is a species-specific mass mean and a future individual measurement; 342 rows supply both, while a sex comparison uses 333. For the real GP salamanders, a visit-level recorded count is nested in a site; the initial Poisson fit and later NB comparison use 92 visits at 23 sites, and evaluating predictions for new sites requires holding entire sites out. The independently simulated Gamma and count cases below have their own rows and validation splits. A result from one case is not a measurement from another.
 
 ### Computation and Data Files {#computation-and-data-files}
 
