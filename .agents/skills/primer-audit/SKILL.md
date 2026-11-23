@@ -83,6 +83,13 @@ or changed and the reader consequence. Distinguish an unresolved substantive
 structural finding that blocks content readiness from an editorial improvement
 that does not; an unmet user-specified structural requirement blocks readiness.
 Do not infer either decision from heading counts alone.
+For repository Pandoc HTML, run the advisory candidate comparison
+`python3 -I maintenance/scripts/check/primer_outline_compare.py SOURCE.md OUTPUT.html`
+and inspect each difference or ambiguity against the source and rendered
+contents. It can expose missing headings, but heuristics, unmatched HTML
+layouts and numbering can yield false positives or misses; it does not replace
+the outline or contents review. Record the actual command, output and scope.
+
 Inspect the rendered contents as well as the source outline, including the
 opening orientation and placement of notation. Consider an isolated brief
 chapter, a chapter with a single child heading, and a long undivided case as
