@@ -214,8 +214,14 @@ or alternative route blocks readiness. Missing evidence is a content finding,
 not a suggestion to add a token paragraph. The remedy is to narrow or demote
 the route, or to develop it properly; a passing build or smoke test cannot
 override the gate. Mechanical validation may check row shape and completeness,
-but human review must decide whether the prose genuinely teaches. Do not add
-quotas.
+but human review must decide whether the prose genuinely teaches. After a
+revision, individually inspect every retained or moved explanation, example
+or action, interpretation, and limitation locator against its described
+passage in the current source. Correct wrong mappings and mark evidence not
+actually checked as `not-checked`, applying the route gate. Record this human
+semantic check separately from mechanical locator reachability and historical
+content review: a valid line or anchor does not establish meaning, and a
+checked mapping does not itself repeat the content review. Do not add quotas.
 
 ## 6. Render and verify
 

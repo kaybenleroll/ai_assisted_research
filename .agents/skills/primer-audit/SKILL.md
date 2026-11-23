@@ -163,6 +163,14 @@ judgement and result in the tracked audit. Mark unresolved review or gaps as
 blocking where the route requires it. Rebinding revision metadata or rerunning
 a structural check alone is insufficient evidence of a fresh judgement.
 
+After a revision, inspect each retained or moved explanation, example/action,
+interpretation, and limitation locator against the passage it describes in the
+current source. Correct wrong mappings; mark unverified evidence `not-checked`
+and apply the route gate. A reachable line or anchor does not establish that it
+contains the described evidence. Record this semantic locator check separately
+from mechanical reachability and from the earlier content review; checking a
+mapping does not itself repeat or renew that review.
+
 Distinguish evidence retained from the earlier audit, with its original revision
 and reason it remains applicable, from evidence newly reviewed or executed,
 with its current revision, method and result. Carry that distinction into any
