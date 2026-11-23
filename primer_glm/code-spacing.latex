@@ -1,0 +1,6 @@
+% The shared compact-code header subtracts 0.55em on each side of Shaded.
+% Restore that space and add a small separation from surrounding prose while
+% retaining the shared compact font and line spacing inside code blocks.
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{Shaded}{\vspace{0.9em}}
+\AfterEndEnvironment{Shaded}{\vspace{0.9em}}

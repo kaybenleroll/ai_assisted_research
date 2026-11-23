@@ -4,7 +4,7 @@ TITLE       := "Generalised Linear Models: How the Pieces Fit Together"
 AUTHOR      := "Mick Cooney"
 DATE        := "22 November 2026"
 HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true --number-sections --shift-heading-level-by=-1"
-PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1 --include-in-header=/repo/primer_glm/code-spacing.latex"
 
 plots:
   {{OCI}} run --rm {{OCI_FLAGS}} \
