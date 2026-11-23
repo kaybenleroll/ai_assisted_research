@@ -208,6 +208,11 @@ blocks readiness; an optional unperformed check is a stated limitation, not
 automatic failure. State the reasoned verdict, outstanding blockers and
 stopping boundary instead of leaving an unexplained pending status.
 
+If a source read is truncated, continue in bounded, contiguous batches and
+record inspected and unreviewed ranges. Do not mark the whole-document review
+complete while gaps remain; if reading cannot continue, state the cause and
+readiness consequence.
+
 Sampling is complementary, not a substitute for reading. Choose representative
 passages and output pages: an opening motivation, a formal or difficult
 derivation, a worked example, a practical application, and pages containing

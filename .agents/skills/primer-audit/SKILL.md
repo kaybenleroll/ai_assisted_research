@@ -84,7 +84,10 @@ as `not-checked` and report release readiness as `not-ready`; do not use
 `not-checked` as the release decision. State both decisions even for a scoped
 review, using separate `Structural gate: not-checked` and `Release readiness:
 not-ready` statements. Do not report a pass based on a truncated source read
-or incomplete outline inspection.
+or incomplete outline inspection. If a read is truncated, resume in bounded,
+contiguous batches and record the inspected ranges; do not stop at the
+truncation when further reading is available. If coverage still cannot be
+completed, report the unreviewed ranges and their readiness consequence.
 
 For a process, system, or applied-method primer, read the teaching-case
 contract and trace at least one case end to end: source input or declared
@@ -107,7 +110,10 @@ from headings or adjacent examples. State precisely what a missing or shallow
 link prevents the reader from doing or understanding, including the dependent
 step affected. A conceptual route can use a proof, worked calculation, or
 explained comparison instead of code, provided the reader can follow the
-promised operation end to end.
+promised operation end to end. Distinguish genuinely separate examples from a
+continuous case, but do not require every concept or different response type
+to share one dataset unless the brief promises that connection. Judge whether
+the reader can transfer between the examples, and record any material gap.
 
 Give each transition one execution status: `executed` (the stated operation was
 run on the stated input and its result checked), `parsed-only` (syntax or static

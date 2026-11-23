@@ -1,0 +1,11 @@
+Rendered contents (extract from the supplied final HTML navigation; complete list)
+
+1. Arrival rate
+2. Service rate
+3. Utilisation
+4. Backlog
+5. Stable averages
+6. Worked measurement
+7. Symbols at a glance
+8. Quick reference
+9. Publication status
