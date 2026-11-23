@@ -58,6 +58,42 @@ For each core concept, check mechanism or reasoning, significance, conditions or
 limits, and the teaching device used. Do not treat word count or subsection
 count as evidence of depth.
 
+## Outline and hierarchy review
+
+Record the actual outline at the reviewed source revision, including every
+top-level section boundary and its heading hierarchy. For each top-level
+section, explain its purpose, how its children support it, and the distinction
+or relationship between adjacent siblings. Examine boundaries and hierarchy
+throughout the document, including reference and orientation sections; an
+inventory of headings alone is not a review. Record evidence and a disposition
+for each boundary, including justified retention. Judge structure separately
+from the depth and dependency-order gates.
+
+Consider isolated orientation or notation, short sections with a single child,
+long combined cases without subsections, and balance between related branches
+of the hierarchy. For each relevant candidate, compare plausible placements or
+landmarks and explain their effect on the reader. These patterns prompt
+judgement; none is automatically a defect or subject to a quota.
+
+| Actual section and hierarchy at reviewed revision | Purpose and parent/child relationship | Adjacent sibling boundary and rationale | Finding and disposition |
+|---|---|---|---|
+| | | | |
+
+When a structural change is proposed, map the current sections to the proposed
+structure and account for substantive coverage, examples, and figures to be
+preserved. Identify and justify any deliberate scope change. Do not assume that
+short sections need consolidation or that a heading or length quota applies.
+
+| Current section(s) | Proposed location or structure | Coverage, examples, and figures preserved; any scope change |
+|---|---|---|
+| | | |
+
+An unresolved structural defect, unmet user-specified structural requirement,
+or incomplete required examination blocks release readiness. Mark unexamined material `not-checked` and release readiness
+`not-ready`; do not give a provisional pass to a truncated review. Record the
+structural gate decision below and revisit affected boundaries and hierarchy
+after revisions.
+
 ## Reader-scale section depth
 
 Review every major section and every section that carries a primary or
@@ -229,6 +265,7 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 |---|---|---|
 | Brief and audit binding | | Source, brief, audit, and reviewed revisions agree. |
 | Route/concept gate | | Stable IDs, exact locators, and no blocking primary/alternative rows. |
+| Structure | | Actual outline, every top-level boundary and hierarchy reviewed at the source revision; no unresolved structural defects or unreviewed boundaries. |
 | Locator validity | | Git-backed source and line validation result. |
 | Examples | | Manifest IDs, runtime, command, result, and execution status. |
 | Rendered outputs | | HTML/PDF existence, metadata, freshness, and render-QA result. |
@@ -239,6 +276,7 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 | Handoff | | Remaining gaps, reviewer, branch, commands, and release decision. |
 
 - Content gate: <pass or fail>
+- Structural gate: <pass, fail, or not-checked>
 - Release readiness: <ready or not-ready>
 
 ## Execution and render evidence
@@ -261,5 +299,5 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 - Missed issues: <issues found later or by another reviewer>
 - Procedure changes proposed: <specific change or “none”>
 - Remaining work: <issue-linked next actions>
-- Readiness decision: <ready only if all primary and alternative routes pass the
-  adversarial depth gate; otherwise name the blocking gaps and scope decision>
+- Readiness decision: <ready only if the structural gate and all primary and
+  alternative routes pass; otherwise name the blocking gaps and scope decision>

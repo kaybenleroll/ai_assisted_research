@@ -45,6 +45,27 @@ dependency order and section fragmentation, examples and limitations,
 figures/tables/equations/accessibility, and committed outputs. Record the
 audited source revision and reviewer.
 
+Inspect the actual source outline in sequence, using the shared outline review
+in `maintenance/docs/primer-production-procedure.md` and recording evidence in
+`maintenance/docs/templates/primer-audit.md`. Review every top-level boundary,
+the purpose of parent and child sections, and whether siblings serve distinct
+reader needs or develop one continuous task or argument. Record an explicit,
+evidence-based decision for each boundary, including why it should be retained
+or changed and the reader consequence. Distinguish an unresolved substantive
+structural finding that blocks content readiness from an editorial improvement
+that does not; an unmet user-specified structural requirement blocks readiness.
+Do not infer either decision from heading counts alone.
+Inspect the rendered contents as well as the source outline, including the
+opening orientation and placement of notation. Consider an isolated brief
+chapter, a chapter with a single child heading, and a long undivided case as
+candidates for review, not automatic defects. Compare plausible alternative
+groupings and their effects on the reader before deciding whether to retain or
+change the existing structure; do not merely justify the status quo.
+
+If any required part of this review is incomplete, record its scope and reason
+as `not-checked` and report readiness as `not-ready`; do not report a pass
+based on a truncated source read or incomplete outline inspection.
+
 For a process, system, or applied-method primer, read the teaching-case
 contract and trace at least one case end to end: source input or declared
 assumption, construction or extraction decision, intermediate representation,

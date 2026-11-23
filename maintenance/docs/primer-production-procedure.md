@@ -24,8 +24,9 @@ decisions visible and explain exceptions.
 4. **Draft:** write from the dependency structure, integrating examples,
    figures, equations, limitations, and practical use cases.
    Complete the post-draft teaching-depth checkpoint before audit handoff.
-5. **Independent review:** review the whole document for coverage and claims;
-   sample representative passages and outputs for depth, structure, and layout.
+5. **Independent review:** review the whole document for coverage, claims,
+   depth, and structure; sample representative passages and outputs for local
+   explanation and layout risks.
 6. **Render and verify:** build the committed HTML/PDF outputs in containers and
    run the repository checks and visual checks required by the guides.
 7. **Evidence and handoff:** record what was checked, what was sampled, what
@@ -164,6 +165,24 @@ not just a sample. The whole-document pass checks the brief, coverage,
 technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.
+
+Review the actual outline at the recorded source revision, including every
+top-level section boundary and the heading hierarchy within each section.
+Record the purpose of each section, how its children serve that purpose, and
+whether adjacent siblings belong together or mark a useful distinction. Judge
+the structure as its own release gate, separately from teaching depth and
+dependency order. Consider whether orientation or notation stands apart from
+its useful context, a short section with a single child needs both levels, a
+long unbroken case needs landmarks, or the hierarchy gives related material
+appropriate balance. Compare plausible placements and their effects on the
+reader; none of these patterns is automatically a defect. An unresolved
+structural defect, unmet user-specified structural requirement, or incomplete
+required examination blocks readiness; record
+unexamined material as not checked. When proposing a change, map current
+sections to the proposed structure and account for the substantive coverage,
+examples, and figures to be preserved or for any deliberate scope change. A
+decision to retain the structure is valid when the evidence supports it; do
+not restructure to meet a heading or length quota.
 
 For a process, system, or applied-method primer, the audit must complete the
 teaching-case trace from input through construction, representation, useful
