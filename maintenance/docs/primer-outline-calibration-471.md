@@ -97,3 +97,12 @@ The readiness checker now validates the shape and consistency of adopted
 structural evidence, including the rendered-contents status. Historical audits
 without either new marker remain exempt; an evidence row does not prove that
 all boundaries were reviewed or that the editorial judgement is sound.
+
+## Notation hierarchy conflict
+
+The GLM structural review found that notation rule N1 required a literal `##`
+heading, although the user requested notation within the introduction and
+several established primers use a `### Notation` subsection. The rule now
+permits either location while retaining the requirement to introduce notation
+before mathematical use. This resolves a conflict in guidance; it does not
+itself approve any specific primer outline.
