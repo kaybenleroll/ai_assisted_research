@@ -192,6 +192,22 @@ operation, interpretation, and limits. If that trace cannot be completed, the
 content gate has a substantive finding regardless of build or smoke-test
 results.
 
+Before the readiness decision, assess the document as a continuous reader
+journey: whether major sections have sufficient development for their teaching
+jobs, how their boundaries aid the promised reader, and whether the rendered
+contents and opening satisfy explicit user requirements. Explain justified
+short reference or orientation sections. A completed matrix does not substitute
+for this integrated judgement.
+
+For each unresolved item, record its concrete risk or reader consequence,
+what evidence would resolve it, who will decide it, and whether it blocks a
+content, structural or release gate or is advisory. Reconcile existing
+evidence first; select additional technical checks by risk and scope rather
+than demanding exhaustive reproduction by default. Required unchecked work
+blocks readiness; an optional unperformed check is a stated limitation, not
+automatic failure. State the reasoned verdict, outstanding blockers and
+stopping boundary instead of leaving an unexplained pending status.
+
 Sampling is complementary, not a substitute for reading. Choose representative
 passages and output pages: an opening motivation, a formal or difficult
 derivation, a worked example, a practical application, and pages containing

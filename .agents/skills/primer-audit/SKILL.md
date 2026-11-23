@@ -32,6 +32,23 @@ primer. Neither type of test replaces the human content judgement. Keep the
 content gate (`pass` or `fail`) separate from release readiness (`ready` or
 `not-ready`); unresolved primary or alternative gaps block the content gate.
 
+Before the final verdict, read the document as one reader journey and state
+whether the major sections develop their teaching jobs with enough reasoning,
+application and limits for the promised audience. Check the opening and
+rendered contents against any explicit user requirements. Explain retained
+brief sections by their purpose; do not equate a populated matrix with a sound
+whole-document judgement.
+
+For every open item, identify the specific risk or reader consequence, the
+evidence needed to decide it, who is responsible and whether it blocks content,
+structure or release, or is an advisory limitation. Reconcile that item with
+existing evidence before asking for more checks. Use risk-selected technical
+verification: do not demand exhaustive independent reproduction merely
+because a calculation or fit has not been independently rerun. An incomplete
+required review blocks readiness; an unperformed optional check is not
+automatically a defect. Give a reasoned decision, the remaining blockers and
+the stopping boundary; do not leave an unexplained `pending` verdict.
+
 After the human review, run `just primer-audit <primer-directory>` for a
 tracked primer. This performs the structural evidence check, Git-backed
 locator and revision check, opted-in examples, build, render QA, freshness,

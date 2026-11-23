@@ -257,6 +257,22 @@ the initial audit.
 |---|---|---|---|
 | | | | |
 
+## Integrated reader judgement and open decisions
+
+Explain whether the complete reader journey and each major section meet the
+promised teaching job, including the opening, rendered contents and any
+explicit user requirements. Reference the section and outline evidence above;
+a populated matrix alone is not this judgement.
+
+| Open item and concrete risk or reader consequence | Existing evidence and remaining decision | Evidence needed and decision owner | Blocking gate or advisory limitation |
+|---|---|---|---|
+| | | | |
+
+Choose further technical checks by risk. Explain why an unperformed check is
+required or optional; do not treat exhaustive independent reproduction as the
+default. Record a reasoned verdict and stopping boundary, not an unexplained
+`pending` label. Required unchecked work blocks readiness.
+
 ## Release readiness checklist
 
 Record the content gate and release-readiness decision separately. Use
