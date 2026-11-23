@@ -1,7 +1,7 @@
 # Primer audit: Generalised linear models and their extensions
 
 - Issue and milestone: #468 primer; #467 planning.
-- Audit revision: glm-content-audit-v9
+- Audit revision: glm-content-audit-v10
 - Source revision: 242763261dd88e5f39f58c0a402e5f8db45af870
 - Source SHA-256: 888fb2672118489dca510d2100a41e01f20289ebcf5c1645fdf82e325b855293
 - Tracked path: primer_glm/primer_glm.audit.md
@@ -187,6 +187,8 @@ At `2427632`, the pinned `just -f primer_glm/Justfile full`, `just render-qa pri
 ## Reconcile earlier evidence
 
 The earlier original content-depth gaps, hurdle q-notation defect, duplicate concurvity, and separated-example wording were repaired in the historical fa462de9 audit. The 167c5d65 review found a new combined diagnostic-to-repair gap and an invalid site-total correlation phrase; current independent re-review finds both repaired. The prior primary-source checks cover documented dataset licences/provenance, methods and software at their recorded scope; original Dryad bytes, some publisher landing pages and exhaustive external claims were not verified. Current combined mgcv references use documented `nb`, random-effect smooths, REML and new-level prediction semantics; the author checked implementation against the installed package, not all possible versions. See the source-verification, combined-case and independent reports in the editorial scratch evidence.
+
+A bounded follow-up on 23 November 2026 checked the eight DOI references that had produced access errors. Publisher records or publisher-indexed excerpts identified all eight. Opened publisher content supported the cited general claims for Wood's smoothing-parameter estimation, MacKenzie's imperfect detection and Rue's latent Gaussian framework. Publisher search excerpts supported the specific quasi-likelihood and beta-regression claims for Wedderburn and Ferrari; Price and McCullagh were checked for identity and topic, and Cox for identity only. Some full-text pages remained inaccessible; this is not exhaustive source or freshness verification, and no fresh Lychee run was performed. The detailed URL-by-URL record is `.scratch/outline-audit-471/glm-source-followup.md`.
 
 ## Release readiness checklist
 
