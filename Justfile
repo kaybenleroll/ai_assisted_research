@@ -117,6 +117,7 @@ check-primer-evidence-tests:
 
 check-primer-audit-tests:
   python3 -I -m unittest discover -s maintenance/tests -p 'test_primer_audit.py'
+  python3 -I -m unittest discover -s maintenance/tests -p 'test_primer_outline_compare.py'
 
 # Validate changed projects that have opted into tracked brief and audit evidence.
 # BASE_REF matches lint-changed; include committed, staged, and local changes.
