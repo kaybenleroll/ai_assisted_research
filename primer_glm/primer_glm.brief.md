@@ -1,10 +1,10 @@
 # Primer brief: Generalised linear models and their extensions
 
 - Issue and milestone: #468 primer; #467 planning.
-- Brief revision: glm-brief-v10
-- Source revision: 0245c0356ecd5fb33d94f46ae8eac3ebf133ba58
-- Source SHA-256: 7a450cfc3c9a1eabd5631eb9ed66fcffacd08cf58d2fc183c52e6bcb30211f83
-- Reviewed revision: 0245c0356ecd5fb33d94f46ae8eac3ebf133ba58
+- Brief revision: glm-brief-v11
+- Source revision: 242763261dd88e5f39f58c0a402e5f8db45af870
+- Source SHA-256: 888fb2672118489dca510d2100a41e01f20289ebcf5c1645fdf82e325b855293
+- Reviewed revision: 242763261dd88e5f39f58c0a402e5f8db45af870
 - Tracked path: primer_glm/primer_glm.brief.md
 - Reader: quantitatively literate ecological researcher or analyst who can read basic R.
 - Prerequisites: algebra, logarithms, elementary probability, derivatives, vectors and basic regression.
@@ -18,7 +18,7 @@
 - Real-world cases: Palmer penguins and package-derived Salamanders; `primer_glm/data/README.txt` records provenance and observational limits.
 - Teaching-case contract: primer_glm/primer_glm.case.md, glm-case-v5.
 - Worked-case trace: route-keyed table below and combined/Gamma case contract.
-- Core-concept depth matrix: this brief, glm-brief-v10.
+- Core-concept depth matrix: this brief, glm-brief-v11.
 - Route classification and teaching spines: primary, alternative and reference-only as listed below.
 - Figures, tables and equations: nine figures, design tables, derivations and numerical examples; historical sampled PDF and HTML visual QA passed; current outputs require integration review.
 - Languages: R primary; core, fixed-dispersion NB, fixed-penalty spline, real-data analyses and conjugate count example have bounded R/Python/Julia counterparts. Combined case is R fit with matched fixed-input Python/Julia predictions, not refit parity; specialised demonstrations are R-only.
@@ -73,9 +73,9 @@ These independent teaching cases link input to an operation, result, interpretat
 
 ## Post-draft teaching-depth checkpoint
 
-- Draft source revision: 0245c0356ecd5fb33d94f46ae8eac3ebf133ba58
-- Source SHA-256: 7a450cfc3c9a1eabd5631eb9ed66fcffacd08cf58d2fc183c52e6bcb30211f83
-- Brief revision reviewed: glm-brief-v10 (targeted trace-cell and r03 reader-path reviews only; historical whole-content review predates this revision)
+- Draft source revision: 242763261dd88e5f39f58c0a402e5f8db45af870
+- Source SHA-256: 888fb2672118489dca510d2100a41e01f20289ebcf5c1645fdf82e325b855293
+- Brief revision reviewed: glm-brief-v11 (targeted trace-cell and r03 reader-path reviews only; historical whole-content review predates this revision)
 
 Independent reviewer read the whole preceding source and repaired combined trace; no route was demoted. The earlier whole review found a combined-case diagnostic gap, now repaired and independently re-read. Execution is distinct from prose judgement.
 
