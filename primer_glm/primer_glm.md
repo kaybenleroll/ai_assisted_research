@@ -351,7 +351,7 @@ The same update is a weighted least-squares calculation. At a current iterate, d
 
 More generally, with a differentiable inverse link and conditional variance $\operatorname{Var}(Y_i)=\phi V(\mu_i)$, the working response is $z_i=\eta_i+(y_i-\mu_i)/(d\mu_i/d\eta_i)$ and weights are proportional to $(d\mu_i/d\eta_i)^2/\{\phi V(\mu_i)\}$. These formulae require a nonzero derivative and finite, valid variance at the current mean. In practice, use a stable linear solve, inspect convergence and rank, and recognise that a noncanonical link can make a Newton step differ from Fisher scoring. The original GLM formulation connects exponential-family responses and iterative weighted regression; see [Nelder and Wedderburn](https://doi.org/10.2307/2344614) and the [R `glm` documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/glm.html).
 
-<span id="why-the-irls-weights-take-their-form"></span>
+<span id="why-the-irls-weights-take-their-form" style="display:block;scroll-margin-top:calc(var(--nav-h) + 1rem)"></span>
 
 The working weights are not arbitrary importance scores. They follow from the way a change in a coefficient changes the mean and thus the likelihood. For independent observations in the unweighted exponential-family form above, take $a(\phi)=\phi$ and write $V(\mu_i)=b''(\theta_i)$. The chain rule gives $d\mu_i/d\theta_i=V(\mu_i)$ and $d\eta_i/d\beta_j=x_{ij}$. Consequently the score for coefficient $j$ is
 
@@ -436,7 +436,7 @@ c(statistic = LR, df = df, p_value = pchisq(LR, df, lower.tail = FALSE))
 
 Use the same observations and response scale, check that the models really are nested, and state the reference distribution's regularity assumptions. If model choices were made by repeatedly inspecting these data, the nominal $p$-value does not account for that selection. For these normal models a classical equal-variance nested F test is another available procedure; its finite-sample reference and statistic are not identical to the asymptotic likelihood-ratio calculation.
 
-<span id="comparing-likelihoods-on-the-same-measurement-scale"></span>
+<span id="comparing-likelihoods-on-the-same-measurement-scale" style="display:block;scroll-margin-top:calc(var(--nav-h) + 1rem)"></span>
 
 A numerical comparison needs the same underlying observations and probability measure. In the synthetic Poisson example below, the two log likelihoods include the same $\log(y!)$ constants, the saturated likelihood is common, and Poisson dispersion is fixed at one. The deviance difference therefore equals twice the fitted log-likelihood difference. AIC adds $2k$ to negative twice the log likelihood, where $k$ is the number of independently estimated parameters. The comparison trades the extra parameter against the likelihood improvement; it does not turn a selected model into the data-generating truth.
 
