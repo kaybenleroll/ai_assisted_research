@@ -166,8 +166,10 @@ technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.
 
-Review the actual outline at the recorded source revision, including every
-top-level section boundary and the heading hierarchy within each section.
+Review the actual source outline and rendered contents at the recorded source
+revision, including every top-level section boundary and the heading hierarchy
+within each section. If current rendered contents are unavailable, record that
+inspection as not checked.
 Record the purpose of each section, how its children serve that purpose, and
 whether adjacent siblings belong together or mark a useful distinction. Judge
 the structure as its own release gate, separately from teaching depth and
@@ -177,10 +179,10 @@ long unbroken case needs landmarks, or the hierarchy gives related material
 appropriate balance. Compare plausible placements and their effects on the
 reader; none of these patterns is automatically a defect. An unresolved
 structural defect, unmet user-specified structural requirement, or incomplete
-required examination blocks readiness; record
-unexamined material as not checked. When proposing a change, map current
+required examination blocks readiness; record unexamined material as not checked. When proposing a change, map current
 sections to the proposed structure and account for the substantive coverage,
-examples, and figures to be preserved or for any deliberate scope change. A
+examples, figures, and published heading targets to be preserved or for any
+deliberate scope change. A
 decision to retain the structure is valid when the evidence supports it; do
 not restructure to meet a heading or length quota.
 

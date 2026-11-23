@@ -167,8 +167,9 @@ def project_paths(root: Path, project: str) -> tuple[Path, Path, Path]:
 
 
 def checklist_findings(text: str) -> list[str]:
-    """Validate the two decisions in the single current checklist section."""
+    """Validate decisions in the single current checklist section."""
     sections: list[list[str]] = []
+    outlines: list[list[str]] = []
     current: list[str] | None = None
     fence: tuple[str, int] | None = None
     for line in text.splitlines():
@@ -176,6 +177,8 @@ def checklist_findings(text: str) -> list[str]:
         if marker:
             token = marker.group(1)
             if fence is None:
+                if current is not None:
+                    current.append("")  # A fence interrupts a Markdown table.
                 fence = (token[0], len(token))
             elif token[0] == fence[0] and len(token) >= fence[1] and not line[marker.end():].strip():
                 fence = None
@@ -185,6 +188,9 @@ def checklist_findings(text: str) -> list[str]:
         heading = re.match(r"^ {0,3}(#{1,6})[ \t]+(.*?)[ \t]*#*[ \t]*$", line)
         if heading:
             current = None
+            if heading.group(1) == "##" and heading.group(2) == "Outline and hierarchy review":
+                current = []
+                outlines.append(current)
             if heading.group(1) == "##" and heading.group(2) == "Release readiness checklist":
                 current = []
                 sections.append(current)
@@ -197,10 +203,14 @@ def checklist_findings(text: str) -> list[str]:
 
     errors = []
     decisions = {}
-    for name, allowed in (("Content gate", "pass|fail"), ("Release readiness", "ready|not-ready")):
+    for name, allowed, required in (("Content gate", "pass|fail", True),
+                                    ("Structural gate", "pass|fail|not-checked", bool(outlines)),
+                                    ("Release readiness", "ready|not-ready", True)):
         # Count malformed fields too, so a valid entry cannot hide a duplicate.
         candidates = [line for line in sections[0]
                       if re.match(rf"^\s*(?:(?:[-+*]|\d+[.)])\s+)?{re.escape(name)}\b", line, re.I)]
+        if not candidates and not required:
+            continue
         if len(candidates) != 1:
             errors.append(f"audit: checklist must contain exactly one {name} entry; found {len(candidates)}")
             continue
@@ -214,6 +224,48 @@ def checklist_findings(text: str) -> list[str]:
             decisions[name] = match.group(1)
     if decisions.get("Content gate") == "fail" and decisions.get("Release readiness") == "ready":
         errors.append("audit: Release readiness cannot be ready when Content gate is fail")
+    if decisions.get("Structural gate") in ("fail", "not-checked") and decisions.get("Release readiness") == "ready":
+        errors.append("audit: Release readiness cannot be ready when Structural gate is fail or not-checked")
+    if decisions.get("Structural gate") == "pass":
+        if len(outlines) != 1:
+            errors.append(f"audit: Structural gate pass requires exactly one Outline and hierarchy review; found {len(outlines)}")
+        else:
+            outline = outlines[0]
+            rendered = [line for line in outline if re.match(
+                r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Rendered contents\b", line, re.I)]
+            if len(rendered) != 1 or not re.fullmatch(
+                r"- Rendered contents:\s+\*\*checked\*\*(?:[,. ;:]\s*\S.*|\s+\S.*)?\s*", rendered[0]
+            ):
+                errors.append("audit: Structural gate pass requires exactly one Rendered contents: **checked** entry")
+            header = ("Actual section and hierarchy at reviewed revision", "Purpose and parent/child relationship",
+                      "Adjacent sibling boundary and rationale", "Finding and disposition")
+            def cells(line: str) -> list[str]:
+                line = line.strip()
+                if not (line.startswith("|") and line.endswith("|")):
+                    return []
+                return [cell.strip() for cell in re.split(r"(?<!\\)\|", line[1:-1])]
+            def evidence(cell: str) -> bool:
+                return bool(cell and not re.fullmatch(r"(?i)(?:[-–—]+|n/?a|tbd|todo|pending|not[- ]checked|<[^>]*>|\[[^]]*\])", cell))
+            found = False
+            incomplete = False
+            for index, line in enumerate(outline[:-2]):
+                if tuple(cells(line)) != header:
+                    continue
+                separator = cells(outline[index + 1])
+                if len(separator) != 4 or not all(re.fullmatch(r":?-{3,}:?", cell) for cell in separator):
+                    continue
+                for row in outline[index + 2:]:
+                    values = cells(row)
+                    if not values:
+                        if row.strip().startswith("|"):
+                            incomplete = True
+                        break
+                    if len(values) != 4 or not all(evidence(value) for value in values):
+                        incomplete = True
+                    else:
+                        found = True
+            if not found or incomplete:
+                errors.append("audit: Structural gate pass requires complete outline evidence table rows")
     return errors
 
 

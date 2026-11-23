@@ -60,8 +60,11 @@ count as evidence of depth.
 
 ## Outline and hierarchy review
 
-Record the actual outline at the reviewed source revision, including every
-top-level section boundary and its heading hierarchy. For each top-level
+Record the actual source outline and inspect the rendered contents at the
+reviewed source revision, including every top-level section boundary and its
+heading hierarchy. Record unavailable current rendered contents as `not-checked`.
+
+- Rendered contents: <**checked** or **not-checked**; output revision and method> For each top-level
 section, explain its purpose, how its children support it, and the distinction
 or relationship between adjacent siblings. Examine boundaries and hierarchy
 throughout the document, including reference and orientation sections; an
@@ -80,8 +83,8 @@ judgement; none is automatically a defect or subject to a quota.
 | | | | |
 
 When a structural change is proposed, map the current sections to the proposed
-structure and account for substantive coverage, examples, and figures to be
-preserved. Identify and justify any deliberate scope change. Do not assume that
+structure and account for substantive coverage, examples, figures, and
+published heading targets to be preserved. Identify and justify any deliberate scope change. Do not assume that
 short sections need consolidation or that a heading or length quota applies.
 
 | Current section(s) | Proposed location or structure | Coverage, examples, and figures preserved; any scope change |
@@ -89,8 +92,8 @@ short sections need consolidation or that a heading or length quota applies.
 | | | |
 
 An unresolved structural defect, unmet user-specified structural requirement,
-or incomplete required examination blocks release readiness. Mark unexamined material `not-checked` and release readiness
-`not-ready`; do not give a provisional pass to a truncated review. Record the
+or incomplete required examination blocks release readiness. Mark unexamined
+material `not-checked` and release readiness `not-ready`; do not give a provisional pass to a truncated review. Record the
 structural gate decision below and revisit affected boundaries and hierarchy
 after revisions.
 
