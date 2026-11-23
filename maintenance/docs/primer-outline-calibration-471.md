@@ -54,3 +54,46 @@ and the uncommitted shared procedure had SHA-256
 The worktree HEAD was `e03baa554ff96cad286efb9caf32c9d82c9d6f4d`.
 A later refinement to the wording about user requirements was not separately
 behaviour-tested. No synthetic test result is claimed.
+
+## Independent synthetic trial
+
+A separate reviewer manually applied the revised workflow to a synthetic
+request-error-rate primer without reading the fixture author's audit. The
+reviewer identified a calculation fragmented across headings, a redundant
+single-child orientation, and missing landmarks in a long worked case. A short
+reference section was retained. The reviewer proposed incorporating a short
+transition that the fixture author had retained; this disagreement requires
+editorial adjudication and is not automatically a false positive. The fixture
+had no rendered output, so the reviewer correctly recorded the structural gate
+as not checked and release as not ready. This is a controlled fixture, not
+real-primer validation or native skill activation. The temporary inputs and
+review are under `/tmp/outline-fixture-471/`; their availability is not assumed
+for a future audit.
+
+A fresh, unnamed-task Codex 0.171 session selected `primer-audit`, read its
+canonical skill file, and identified the fixture's fragmented calculation and
+missing case landmarks while retaining the short reference. It stated that
+rendered contents were unchecked but reported release readiness as unchecked,
+rather than the required `not-ready`. After the skill was clarified, a second
+fresh session selected and read the skill, found those same candidate issues,
+and reported release readiness as `not-ready`. It did not explicitly label the
+structural-gate decision despite the instruction to state both decisions. These
+are partial behaviour observations on one synthetic fixture, not proof of
+reliable activation or editorial judgement in other tasks. Raw temporary event
+logs are `/tmp/outline-natural-probe-471.jsonl` and
+`/tmp/outline-natural-retry-471.jsonl`.
+
+After the instruction was refined to require both labels, a third fresh
+unnamed-task session selected and read the audit workflow, identified the
+fragmented calculation and missing case landmarks, retained the short
+reference, and explicitly reported `Structural gate: not-checked` and
+`Release readiness: not-ready` because rendered contents were not inspected.
+This is one successful retry on the same fixture, following two partial or
+failed trials, not evidence that the workflow will always be selected or
+applied correctly. The temporary event log is
+`/tmp/outline-natural-final-471.jsonl`.
+
+The readiness checker now validates the shape and consistency of adopted
+structural evidence, including the rendered-contents status. Historical audits
+without either new marker remain exempt; an evidence row does not prove that
+all boundaries were reviewed or that the editorial judgement is sound.

@@ -63,8 +63,11 @@ groupings and their effects on the reader before deciding whether to retain or
 change the existing structure; do not merely justify the status quo.
 
 If any required part of this review is incomplete, record its scope and reason
-as `not-checked` and report readiness as `not-ready`; do not report a pass
-based on a truncated source read or incomplete outline inspection.
+as `not-checked` and report release readiness as `not-ready`; do not use
+`not-checked` as the release decision. State both decisions even for a scoped
+review, using separate `Structural gate: not-checked` and `Release readiness:
+not-ready` statements. Do not report a pass based on a truncated source read
+or incomplete outline inspection.
 
 For a process, system, or applied-method primer, read the teaching-case
 contract and trace at least one case end to end: source input or declared
