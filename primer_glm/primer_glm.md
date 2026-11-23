@@ -1,6 +1,6 @@
 # Generalised Linear Models: How the Pieces Fit Together
 
-## Orientation
+## Introduction {#orientation}
 
 An ecologist visits streams and records the number of salamanders seen. Another researcher weighs adult penguins and asks how body mass varies among species. A third wants to predict whether a survey will detect a species at all. Each has observations and predictors, but the observations do not have the same possible values. Counts are non-negative integers, detection is binary, and a measured body mass is positive and continuous. A model that ignores these distinctions may predict an impossible value or give uncertainty that does not describe the measurement process.
 
@@ -14,6 +14,8 @@ You should be comfortable with algebra, logarithms, elementary probability, deri
 The route moves from a question and ordinary regression to four response models, then asks why fitting works and how to assess its uncertainty. Count extensions follow a sequence of different discrepancies: variability, shared sites, nonlinear means and zeros. These components can coexist. The later combined case puts them together before the categorical and Bayesian branches; the synthesis returns to the decisions made along the way.
 
 The cases do not all use the same observations. Penguins are a real positive-measurement study; Salamanders are a separate real repeated-count study. The Gamma holdout, the independent negative-binomial sample, the eight-site mixed-model illustration, the zero-process experiment and the combined monitoring survey are separately generated simulations. Their known mechanisms help diagnose a model; none establishes how the real studies were generated.
+
+Keep a short analysis ledger as you read. For the penguins, the question is a species-specific mass mean and a future individual measurement; 342 rows supply both, while a sex comparison uses 333. For the real GP salamanders, a visit-level recorded count is nested in a site; the initial Poisson fit and later NB comparison use 92 visits at 23 sites, and prediction for a new site requires holding entire sites out. The independently simulated Gamma and count cases below have their own rows and validation splits. A result from one case is not a measurement from another.
 
 ### Computation and Data Files {#computation-and-data-files}
 
@@ -36,7 +38,7 @@ adequacy or validate every formula in this document.
 
 *Verified against primary sources for cited dataset descriptions and statistical method and software reference summaries; unverified claims are flagged inline.*
 
-## Notation
+### Notation {#notation}
 
 The table introduces the symbols used in the main route. Additional symbols are defined where needed; a subscript identifies an observation, not an exponent.
 
@@ -63,8 +65,6 @@ The table introduces the symbols used in the main route. Additional symbols are 
 | $K$, $\tau_k$ | Number of categories and ordered thresholds | Categorical responses |
 
 Vectors and matrices are bold; the transpose $\mathbf{x}_i^{\top}$ turns a column vector into a row. We use $\log$ for the natural logarithm. A probability law is a model for uncertainty, not a promise that nature generated the data exactly according to that law.
-
-Keep a short analysis ledger as you read. For the penguins, the question is a species-specific mass mean and a future individual measurement; 342 rows supply both, while a sex comparison uses 333. For the real GP salamanders, a visit-level recorded count is nested in a site; the initial Poisson fit and later NB comparison use 92 visits at 23 sites, and prediction for a new site requires holding entire sites out. The independently simulated Gamma and count cases below have their own rows and validation splits. A result from one case is not a measurement from another.
 
 ## From an Ecological Question to Regression {#regression-foundations}
 
@@ -116,7 +116,7 @@ On those 342 records, the observed species-by-island table has Adelie counts 44,
 
 The following complete R example examines the intended rows and checks rank. The file is the frozen curated package dataset; paths are relative to this primer's directory.
 
-```r
+```{#cb1 .r}
 penguins <- read.csv("data/penguins.csv", na.strings = "NA")
 penguins$species <- factor(penguins$species,
                            levels = c("Adelie", "Chinstrap", "Gentoo"))
@@ -131,17 +131,15 @@ g <- lm(body_mass_g ~ species, data = p)
 d <- p  # Same 342 analysis rows for later nested-model comparisons.
 coef(g)
 ```
-
 The fitted species means are approximately 3,701 g for Adelie, 3,733 g for Chinstrap, and 5,076 g for Gentoo. These describe the sampled adults under the stated model, not a controlled species experiment. Variation in sex, sampling, time, and location remains relevant. Later we compare a Gaussian and a Gamma model on exactly these same 342 rows rather than confusing a change of family with a change of sample.
 
 The same 342 penguins with observed mass and species make the distinction between a confidence interval for a mean and a prediction interval for one new observation concrete. Use the fitted model `g` above, with Adelie as the reference, and request predictions at `species = "Adelie"`. The fitted Adelie mean is 3,700.7 g. Under the model's independent Gaussian errors with common variance, the 95% confidence interval for that population mean is approximately 3,626.7–3,774.7 g; the 95% prediction interval for one further Adelie penguin is 2,788.4–4,613.0 g. Both use the same fitted coefficients, residual standard deviation and 339 residual degrees of freedom. The second interval is much wider because it includes individual variation in addition to estimation uncertainty. These are model-based intervals for a comparable future observation, not evidence that all penguins in a wider population are represented by this sample.
 
-```r
+```{#cb2 .r}
 new <- data.frame(species = factor("Adelie", levels = levels(d$species)))
 predict(g, new, interval = "confidence", level = 0.95)
 predict(g, new, interval = "prediction", level = 0.95)
 ```
-
 The precision of the mean interval should not be mistaken for a narrow distribution of individual masses. The common Gaussian variance and independent sampling assumptions need scrutiny; uneven species–island coverage, missing values and the observational design limit generalisation. A new group, location, season or protocol could have additional variation not represented by this prediction interval.
 
 The descriptive figure shows the sampled measurements before any regression fit.
@@ -152,7 +150,8 @@ The descriptive figure shows the sampled measurements before any regression fit.
 
 A GLM retains the design matrix and linear combination from ordinary regression, but it separates that combination from the mean and gives the response a distribution appropriate to its support. This division lets us ask what changes when we change the family, the link, or the predictors, instead of treating a named regression as an indivisible recipe.
 
-### Distribution, Predictor, and Link
+<a id="distribution-predictor-and-link"></a>
+<a id="toc-distribution-predictor-and-link"></a>
 
 For each observation, the systematic predictor is $\eta_i=\mathbf{x}_i^{\top}\boldsymbol{\beta}$, possibly with a known offset added. The response distribution describes the conditional variation around its mean $\mu_i$. The link relates the two:
 
@@ -161,6 +160,8 @@ g(\mu_i)=\eta_i,\qquad \mu_i=g^{-1}(\eta_i).
 $$
 
 A Gaussian identity model has $g(\mu)=\mu$ and can assign any real mean. A Bernoulli logit model has $g(\mu)=\log\{\mu/(1-\mu)\}$ for a probability between zero and one. A Poisson log model uses $g(\mu)=\log\mu$ for a positive expected count. A Gamma log model also has a positive mean, but its continuous response and variance relationship differ from those of a Poisson count.
+
+Consider the same numerical predictor $\eta=1$ for two different observations. With a Bernoulli logit model the mean is a probability $e/(1+e)\approx0.731$; with a Poisson log model it is an expected count $e\approx2.718$. The same predictor value therefore has different meanings after the link is inverted. Even when two families share a log link, as Poisson and Gamma can, a mean of $e$ describes a non-negative integer count in one case and a positive continuous measurement in the other. Their conditional variances also differ: the Poisson variance is $e$, while the Gamma variance is $\phi e^2$. Choosing a link controls the mean scale; choosing a family adds assumptions about possible observations and their variation. Neither choice establishes that the covariates or sampling design are adequate.
 
 The inverse links in the next figure show how the same predictor scale maps to different mean domains.
 
@@ -182,6 +183,29 @@ In logistic regression, a coefficient changes the log odds. If a probability is 
 
 A binomial likelihood assumes the stated trials share the modelled probability and have the dependence structure assumed in the model. Four repeat visits at one site can share weather, habitat, and unmeasured occupancy; four detections are not necessarily independent Bernoulli trials. A detection model concerns what the survey records. Inferring true occupancy requires a distinct observation process and identifying assumptions; a zero in a visit is not proof of absence.
 
+### A Binomial Likelihood You Can Calculate
+
+Suppose a simple, deliberately idealised survey has eight independent visits under the same conditions, and three visits produce a detection. If the detection probability is $p$, the binomial likelihood is proportional to $p^3(1-p)^5$; the binomial coefficient describes the number of sequences with three successes but does not depend on $p$. At $p=0.375$, this probability model has its largest likelihood. To see why, differentiate the log likelihood $3\log p+5\log(1-p)$: its score is $3/p-5/(1-p)$, which vanishes at $p=3/8$. The second derivative is negative inside the unit interval. The data do not determine the probability without uncertainty: another set of eight visits would usually have a different count.
+
+Now compare three detections in eight visits with 30 in 80. Both have the same maximum-likelihood estimate, 0.375. The second experiment has more information under the independent, equal-probability binomial model. Treating both fractions as equally precise discards their denominators. Conversely, multiplying a count of visits by ten on paper does not create information: if the visits are correlated or the 80 records contain repeated measurements of the same sites, the independent-trial likelihood can overstate the effective information. The data collection unit and dependence assumptions must travel with the denominator.
+
+The following model uses successes and failures as two columns. Each row is one hypothetical group of independent visits with a shared probability; an observation of two successes from four visits contributes a different likelihood from one success in two, even though both fractions are one half.
+
+```{#cb4 .r}
+trials <- data.frame(
+  habitat = factor(c("reference", "reference", "restored", "restored")),
+  successes = c(1, 2, 3, 4),
+  visits = c(4, 4, 4, 4)
+)
+trials$failures <- trials$visits - trials$successes
+binomial_fit <- glm(cbind(successes, failures) ~ habitat,
+                    family = binomial(link = "logit"), data = trials)
+predict(binomial_fit, type = "response")
+```
+This is a syntax and arithmetic example, not a real study or a test of independence. The implied estimates are 3/8 for the reference group and 7/8 for the restored group. The first group's odds are $3/5$; the second group's odds are $7$. Their fitted odds ratio is $35/3$, even though the probability difference is one half. With only two group probabilities and two coefficients, the fitted means reproduce the group fractions exactly. Uncertainty and assessment of the equal-probability and independence assumptions remain essential.
+
+**Checkpoint.** The grouped data above contain three detections in eight reference visits. If a second dataset had 30 detections in 80 independent comparable visits, both sample fractions would be 0.375, but the latter likelihood is more concentrated. The denominator records information only if those are distinct, conditionally independent trials.
+
 ### Poisson Counts and a Worked Offset
 
 The following distributions show how the Poisson count probabilities change as the mean increases.
@@ -200,7 +224,7 @@ The term $\log t_i$ is an *offset*: its coefficient is fixed at one, not estimat
 
 The following synthetic example simulates an explicit Poisson law, fixes a seed, and fits a log-rate model. It demonstrates syntax; its particular printed values are not evidence about any real survey.
 
-```r
+```{#cb3 .r}
 set.seed(467)
 survey <- data.frame(
   habitat = factor(rep(c("reference", "restored"), each = 40)),
@@ -213,34 +237,9 @@ count_fit <- glm(count ~ habitat + offset(log(hours)),
 summary(count_fit)
 exp(coef(count_fit))
 ```
-
 The intercept's exponent is a rate for the reference habitat in the chosen unit; the other exponent is a rate ratio. A new visit's expected count requires both its predicted rate and its duration. To forecast an actual count, include the assumed count distribution and uncertainty in fitted parameters; a confidence interval for the rate is not itself a prediction interval for the count.
 
 **Checkpoint.** Two visits of one and four hours have the same expected rate of 0.8 recorded events per hour. Their expected counts are 0.8 and 3.2. The second is four times the first because the offset assumes proportionality to recorded effort; it is not evidence that detection is constant within a visit.
-
-### A Binomial Likelihood You Can Calculate
-
-Suppose a simple, deliberately idealised survey has eight independent visits under the same conditions, and three visits produce a detection. If the detection probability is $p$, the binomial likelihood is proportional to $p^3(1-p)^5$; the binomial coefficient describes the number of sequences with three successes but does not depend on $p$. At $p=0.375$, this probability model has its largest likelihood. To see why, differentiate the log likelihood $3\log p+5\log(1-p)$: its score is $3/p-5/(1-p)$, which vanishes at $p=3/8$. The second derivative is negative inside the unit interval. The data do not determine the probability without uncertainty: another set of eight visits would usually have a different count.
-
-Now compare three detections in eight visits with 30 in 80. Both have the same maximum-likelihood estimate, 0.375. The second experiment has more information under the independent, equal-probability binomial model. Treating both fractions as equally precise discards their denominators. Conversely, multiplying a count of visits by ten on paper does not create information: if the visits are correlated or the 80 records contain repeated measurements of the same sites, the independent-trial likelihood can overstate the effective information. The data collection unit and dependence assumptions must travel with the denominator.
-
-The following model uses successes and failures as two columns. Each row is one hypothetical group of independent visits with a shared probability; an observation of two successes from four visits contributes a different likelihood from one success in two, even though both fractions are one half.
-
-```r
-trials <- data.frame(
-  habitat = factor(c("reference", "reference", "restored", "restored")),
-  successes = c(1, 2, 3, 4),
-  visits = c(4, 4, 4, 4)
-)
-trials$failures <- trials$visits - trials$successes
-binomial_fit <- glm(cbind(successes, failures) ~ habitat,
-                    family = binomial(link = "logit"), data = trials)
-predict(binomial_fit, type = "response")
-```
-
-This is a syntax and arithmetic example, not a real study or a test of independence. The implied estimates are 3/8 for the reference group and 7/8 for the restored group. The first group's odds are $3/5$; the second group's odds are $7$. Their fitted odds ratio is $35/3$, even though the probability difference is one half. With only two group probabilities and two coefficients, the fitted means reproduce the group fractions exactly. Uncertainty and assessment of the equal-probability and independence assumptions remain essential.
-
-**Checkpoint.** The grouped data above contain three detections in eight reference visits. If a second dataset had 30 detections in 80 independent comparable visits, both sample fractions would be 0.375, but the latter likelihood is more concentrated. The denominator records information only if those are distinct, conditionally independent trials.
 
 ### A Poisson Likelihood and Its Assumptions
 
@@ -258,7 +257,7 @@ Contrast this with fitting an ordinary Gaussian regression to $\log Y$. That mod
 
 Return to `p`, the same 342 penguins prepared in the regression section. Fit Gaussian identity and Gamma log with the same species predictor; the data do not change when the family changes:
 
-```r
+```{#cb5 .r}
 normal_mass <- glm(body_mass_g ~ species, family = gaussian(), data = p)
 gamma_mass <- glm(body_mass_g ~ species, family = Gamma(link = "log"), data = p)
 new_species <- data.frame(species = factor(c("Adelie", "Chinstrap", "Gentoo"),
@@ -267,7 +266,6 @@ data.frame(species = as.character(new_species$species),
       gaussian_g = predict(normal_mass, new_species, type = "response"),
       gamma_g = predict(gamma_mass, new_species, type = "response"))
 ```
-
 Both fits reproduce the three group means here because the species-only predictor supplies one mean per species. Equal fitted means do not make their assumptions, likelihoods, residuals, or prediction intervals the same. The Gaussian fit's estimated residual standard deviation is about 462 g; the Gamma dispersion estimate is about 0.0124 in the stated variance parameterisation. Neither result by itself selects a family. A check of residual behaviour, influential individuals, and predictive performance is needed. If sex is added, use the explicitly defined 333 complete records for both candidate models or explain why their samples differ. In that subset a Gaussian additive model estimates a male-minus-female difference of about 668 g conditional on species; a Gamma/log fit estimates a male log ratio of 0.159, or a mean ratio of about 1.17. The different scales answer different questions, and neither coefficient alone establishes a causal effect of sex.
 
 A Gamma response cannot include exact zeros. A recorded zero could represent a true value, censoring below a detection limit, rounding, or a separate process; the scientific distinction determines a defensible model. Adding an arbitrary constant solely to make a logarithm work changes the model and the question. A two-part model may be useful for some zero-plus-positive outcomes, but a data-processing trick does not establish a two-process mechanism.
@@ -388,7 +386,7 @@ Consider a related separated example: ten observations have $x=0$, with four suc
 
 For a concrete repair, minimise the negative Bernoulli log likelihood plus $\lambda(\beta_0^2+\beta_1^2)/2$, explicitly penalising the intercept as well as the slope in this illustration. With $\lambda=1$, the fitted intercept is about 0.156 and slope 1.544, giving probabilities 0.539 and 0.846 at $x=0$ and $x=1$. This is a finite estimate because the penalty makes large coefficients costly; its probability is not the unpenalised maximum-likelihood answer. The intercept was included in the penalty here to make the objective explicit, though many implementations choose otherwise. With $\lambda=0.25$ the corresponding probabilities are about 0.471 and 0.932; with $\lambda=4$ they are 0.568 and 0.724. The strength and choice of regularisation matter substantially in this small separated sample. Select and validate the penalty according to the intended prediction task, ideally within training data; extra data or a justified prior are other possible routes.
 
-```r
+```{#cb6 .r}
 x <- c(rep(0, 10), rep(1, 10))
 y <- c(rep(0, 6), rep(1, 4), rep(1, 10))
 X <- cbind(1, x)
@@ -401,7 +399,6 @@ objective <- function(b, lambda) {
 penalised <- optim(c(0, 0), objective, lambda = 1, method = "BFGS")
 plogis(c(penalised$par[1], sum(penalised$par)))
 ```
-
 The direct `log1p(exp(eta))` calculation is sufficient for this bounded illustration but can overflow at extreme predictors; use a numerically stable loss and a validated implementation for production. Penalisation does not repair an unrepresentative sample, unmeasured confounding or a missing observation process.
 
 ## Uncertainty, Prediction, and Model Comparison {#inference-and-validation}
@@ -426,14 +423,13 @@ Prediction can be a separate objective from coefficient inference. Choose the es
 
 Returning to the penguin data `d` and fitted Gaussian model `g`, compare models on the same 342 rows. For a concrete nested likelihood comparison, compare the intercept-only Gaussian model with the species-means model. Both maximise their Gaussian likelihood including a common residual variance, and their log-likelihood degrees of freedom include that variance parameter. The species model adds two mean parameters: twice the fitted log-likelihood difference is 378.82, compared with a chi-squared reference distribution with two degrees of freedom, giving approximately $p=5.5\times10^{-83}$ under the usual likelihood-ratio approximation. In this sample, the common-mean model is very difficult to reconcile with the observed species differences under these model assumptions. This is not a test of whether species causes body-mass differences, nor does it validate a common variance or the sampling design.
 
-```r
+```{#cb7 .r}
 g0 <- lm(body_mass_g ~ 1, data = d)
 stopifnot(nobs(g0) == nobs(g))
 LR <- 2 * as.numeric(logLik(g) - logLik(g0))
 df <- attr(logLik(g), "df") - attr(logLik(g0), "df")
 c(statistic = LR, df = df, p_value = pchisq(LR, df, lower.tail = FALSE))
 ```
-
 Use the same observations and response scale, check that the models really are nested, and state the reference distribution's regularity assumptions. If model choices were made by repeatedly inspecting these data, the nominal $p$-value does not account for that selection. For these normal models a classical equal-variance nested F test is another available procedure; its finite-sample reference and statistic are not identical to the asymptotic likelihood-ratio calculation.
 
 <span id="comparing-likelihoods-on-the-same-measurement-scale" style="display:block;scroll-margin-top:calc(var(--nav-h) + 1rem)"></span>
@@ -460,7 +456,7 @@ A 95% normal-approximation interval on the first linear predictor is $0.6\pm1.96
 
 The following reproducible calculation also draws 20,000 coefficient vectors from the *approximate normal sampling distribution* with this covariance. Its 2.5% and 97.5% probability quantiles are about 0.368 and 0.850. This is a simulation of a normal approximation, not a nonparametric or parametric bootstrap refitting the original data.
 
-```r
+```{#cb8 .r}
 beta <- c(-1, 0.8)
 V <- matrix(c(0.04, -0.015, -0.015, 0.09), 2, 2)
 new_x <- c(1, 2)
@@ -473,7 +469,6 @@ draws <- matrix(rnorm(40000), ncol = 2) %*% chol(V) +
   matrix(beta, nrow = 20000, ncol = 2, byrow = TRUE)
 quantile(plogis(draws[, 1] + 2 * draws[, 2]), c(0.025, 0.975))
 ```
-
 A genuine parametric bootstrap instead simulates a fresh response under a fitted sampling model, refits every simulated dataset, and recomputes the quantity. A nonparametric bootstrap resamples the sampled units and refits. Both expose fitting failures and may capture asymmetry missed by a normal approximation, but a parametric bootstrap inherits its generative assumptions and a nonparametric bootstrap must respect clusters and the original design. Compare the three approaches for the same target and record failed refits. With a fitted probability of 0.646, one future Bernoulli observation is either 0 or 1, with those model probabilities conditional on the fitted parameters; its conditional variance is about 0.229. The interval for the probability is not an interval asserting that a future binary observation will be between 0.368 and 0.851. For future data, account for both outcome variation and parameter uncertainty in a predictive distribution.
 
 Interactions add another reason to work with a stated contrast rather than read a coefficient in isolation. Consider four independent groups of 100 simulated visits, one at each combination of $x\in\{0,1\}$ and habitat indicator $h\in\{0,1\}$. Their observed detections are 20, 40, 55 and 85 in the order $(x,h)=(0,0),(1,0),(0,1),(1,1)$. Fit a grouped-binomial logit model with an intercept, both main effects and their interaction. The fitted probabilities in this saturated four-cell example are 0.20, 0.40, 0.55 and 0.85. This construction makes the calculations transparent; it does not establish an ecological effect or test goodness of fit because the model has one fitted probability per cell.
@@ -482,7 +477,7 @@ The estimated habitat log-odds contrast is 1.587 at $x=0$ and $1.587+0.553=2.140
 
 The two coefficients in the habitat contrast at $x=1$ come from the same fitted model and are correlated. In this fit their estimated covariance is $-0.1029$. The variance of their sum is approximately 0.1201 after including twice that covariance; adding only their separate variances gives 0.3259. Omitting covariance would materially change the uncertainty calculation. This is a link-scale contrast; obtaining an interval for a response-scale difference requires the joint coefficient covariance, for example with a delta-method gradient or joint coefficient draws, and the relevant approximation and sampling assumptions.
 
-```r
+```{#cb9 .r}
 cells <- expand.grid(x = c(0, 1), habitat = c(0, 1))
 cells$success <- c(20, 40, 55, 85)
 cells$failure <- 100 - cells$success
@@ -496,7 +491,6 @@ c(link_x1 = b["habitat"] + b["x:habitat"],
   variance_x1 = V["habitat", "habitat"] + V["x:habitat", "x:habitat"] +
     2 * V["habitat", "x:habitat"])
 ```
-
 ## Diagnosing, Validating, and Revising Models {#model-diagnostics}
 
 A model check becomes useful when it changes a decision: identify the target, inspect a discrepancy, revise a specified component, and evaluate the same target again. The Gamma example below uses independent simulated measurements; the real salamander visit example requires site-aware validation.
@@ -527,7 +521,7 @@ Influence is a change in a result, so calculate it on the target scale. Suppose 
 
 This seeded simulation supplies a known nonlinear Poisson mean. The initial log-linear model omits the quadratic term; the repair includes it. Both are fitted to the same 40 synthetic observations, eight at each predictor value. We inspect mean raw residuals at each value before and after the change and compare likelihoods; we do not select the repair by repeatedly searching many candidate models.
 
-```r
+```{#cb10 .r}
 set.seed(467)
 x <- rep(0:4, each = 8)
 y <- rpois(length(x), exp(0.25 + 0.15 * x + 0.2 * x^2))
@@ -541,7 +535,6 @@ c(linear_logLik = as.numeric(logLik(linear)),
   linear_deviance = deviance(linear), curved_deviance = deviance(curved),
   linear_AIC = AIC(linear), curved_AIC = AIC(curved))
 ```
-
 The linear fit's mean raw residuals at $x=0,1,2,3,4$ are approximately 1.102, 0.000, -0.875, -2.660, and 2.432. Their systematic pattern is a reason to inspect the mean function. After adding the prespecified quadratic, they are 0.278, -0.485, -0.214, 0.771, and -0.350; the remaining fluctuations are not all zero. The log likelihoods are -99.835 and -90.830, and residual deviances are 64.708 and 46.698. The likelihood-ratio statistic is $2(-90.830+99.835)=18.010$, also the deviance difference because the saturated reference and observed data are identical. The quadratic model uses one additional coefficient; its AIC is 187.660 versus 203.670 for the linear model, using 2 and 3 free regression coefficients respectively. Under regular large-sample and independent-Poisson assumptions a one-degree-of-freedom likelihood-ratio reference is a possible approximation, but this constructed example is primarily a diagnostic demonstration.
 
 The source mechanism was defined as quadratic, so a model that includes it can recover the correct mean form in expectation; the realised sample still contains Poisson noise. Improved in-sample deviance does not establish out-of-sample performance or the correctness of a real ecological mechanism. Re-evaluate with independently simulated or held-out units, inspect dispersion and influential points, and use site-blocked validation if the observational design includes repeated sites. The example has no site structure and cannot test that concern.
@@ -549,6 +542,8 @@ The source mechanism was defined as quadratic, so a model that includes it can r
 ### Validation and Selection
 
 A model intended for future observations at known sites poses a different validation task from prediction at new sites. A random row split can put visits from the same site in both sets. It may be suitable for a precisely defined within-site target, but it does not test transport to an unseen site. A grouped split holds complete sites out; temporal blocking may be needed for future years, and spatial blocking may be needed for new regions. Estimate preprocessing, imputation, transformations, and tuning on training data only, then apply them to validation data without looking at its responses.
+
+For the real GP salamander case, define the target as recorded counts at new sites under a comparable survey protocol. Reserve whole sites as a final test set before fitting; keep all visits from each reserved site together. Within the remaining sites, use grouped folds to choose among prespecified model structures or tuning settings. In each fold, estimate any imputation or transformation from the fold's training sites, fit the candidate there, and apply those choices to the validation sites. Compare predictions at the site level using a declared score and inspect count, zero and site-total discrepancies; for a shared-site model, the joint predictive distribution must retain the shared effect. Select the procedure using these folds, refit it on all non-test sites, then evaluate once on the held-out sites. Record the split and uncertainty: with only 23 sites, results may be sensitive to which sites are held out. This is a proposed workflow for the real case, not a claim that these calculations were performed or that a single split establishes transport to other regions.
 
 
 
@@ -578,7 +573,7 @@ At $x=0.8$, the revised model's estimated mean is 6.225 in the simulation's meas
 
 A 500-replicate parametric bootstrap resimulates the training responses under that fitted Gamma model, refits both mean and dispersion and, for each successful refit, simulates one future observation at $x=0.8$. The approximate percentile interval for the estimated mean is 5.657–6.826; the simulated future-observation interval is 1.974–12.547. No refits failed in this particular run. These intervals use the same fitted model and target covariate, but answer different questions: the future value adds outcome variation. The bootstrap assumes the fitted Gamma model is the generator, and 500 replicates make tail endpoints noisy; report failed refits, check Monte Carlo stability and do not treat this conditional illustration as a validated coverage guarantee.
 
-```r
+```{#cb11 .r}
 set.seed(222468)
 n <- 400
 x <- runif(n, -1, 1)
@@ -593,7 +588,6 @@ bounds <- cbind(qgamma(0.025, shape, scale = mu / shape),
                 qgamma(0.975, shape, scale = mu / shape))
 mean(test$y >= bounds[, 1] & test$y <= bounds[, 2])
 ```
-
 The displayed code takes the revised training fit through the held-out interval check. The other reported diagnostics require the companion script: first compute predictions for both models on the identical test rows, then aggregate residuals within the two gradient ranges and score the held-out responses. The bootstrap instead repeatedly regenerates training responses, refits, and predicts at the stated $x=0.8$; it is a distinct operation from calculating the plug-in bounds.
 
 The complete [`examples/core-repairs.R`](examples/core-repairs.R) adds the baseline comparison, both scores, the group residual calculation and the fixed-seed bootstrap. It records the complete result, including failed refits; the displayed fragment shows the held-out interval calculation and does not by itself reproduce the bootstrap endpoints.
@@ -612,7 +606,7 @@ The [glmmTMB Salamanders documentation](https://github.com/glmmTMB/glmmTMB/blob/
 
 Select the prespecified `GP` group: 92 observations, four per site, with 12 reference and 11 mined sites. A Poisson model of recorded count on mining status and scaled `DOP`, ignoring site dependence for this initial illustration, gives a mined coefficient about -3.881. At `DOP = 0` its fitted means are about 2.206 observations per visit at reference sites and 0.0455 at mined sites. These are fitted observed counts under the model and observed sampling conditions, not estimates of true abundance or proof of a causal mining effect. The severe imbalance in observed counts and repeated visits make both uncertainty and model adequacy important.
 
-```r
+```{#cb12 .r}
 salamanders <- read.csv("data/salamanders-package.csv")
 gp <- subset(salamanders, spp == "GP")
 gp$mined <- factor(gp$mined, levels = c("no", "yes"))
@@ -625,7 +619,6 @@ new_sites <- data.frame(mined = factor(c("no", "yes"),
 predict(fit_gp, newdata = new_sites, type = "response")
 sum(residuals(fit_gp, type = "pearson")^2) / df.residual(fit_gp)
 ```
-
 The Pearson residual sum of squares divided by residual degrees of freedom is approximately 2.147 in this fit. It is a warning to investigate, not a proof of a particular mechanism or a complete diagnostic test. Extra variation, site dependence, an incorrect mean function, unmodelled detection, and other mismatches can all matter. [Dispersion models](#dispersion-models) and [multilevel models](#multilevel-models) return to distinct possible responses. No survey-effort offset has been invented for these data.
 
 For our real GP data, the sample variance of recorded counts is about 4.98 in reference sites while its sample mean is about 2.21; mined sites have much smaller recorded values. This simple grouping is not a model-based test of conditional overdispersion because the observations have different covariates and repeated sites. It does explain why comparing observed and model-predicted variation is a sensible next step.
@@ -685,7 +678,7 @@ NB1 is different. One convention has $\operatorname{Var}(Y)=\mu(1+\alpha)$, $\al
 
 The following deliberately generates independent NB2 observations. It is a demonstration of a known simulation mechanism, not an ecological claim. `MASS` is a recommended R package. The fixed seed makes the generated sample reproducible within the stated R environment; print results from the actual run rather than taking the generating parameters as fitted estimates.
 
-```r
+```{#cb13 .r}
 set.seed(46705)
 n <- 400
 x <- runif(n, -1, 1)
@@ -708,7 +701,6 @@ zero_nb <- replicate(B, sum(rnbinom(n, mu = fitted(nb), size = nb$theta) == 0))
 rbind(observed = sum(y == 0), Poisson = quantile(zero_p, c(.025, .5, .975)),
       NB2 = quantile(zero_nb, c(.025, .5, .975)))
 ```
-
 In the pinned R 4.5.3 runtime this seed gives Poisson and NB2 slope estimates 0.6694 and 0.6228 (rate ratios about 1.953 and 1.864). Their model-based slope standard errors are 0.0655 and 0.0955; quasi-Poisson has the Poisson slope and standard error 0.0949 with estimated scale 2.0944. NB2 estimates $\kappa=1.6373$, compared with the generating value 2; this is an estimate, not a known parameter, and its uncertainty should be examined. Poisson AIC is 1567.61, NB2 AIC 1440.76, and quasi AIC is unavailable. There are 136 observed zeros, compared with conditional simulated central 95% ranges 70–100 for Poisson and 112–147 for NB2. Thus Poisson badly misses this particular feature; NB2 is consistent with it in this check. This does not establish that its full distribution is correct.
 
 For a numerical contrast with a sandwich, artificially group adjacent observations in pairs, calculate Poisson score contributions $u_i=x_i(y_i-\widehat\mu_i)$ and sum them within each pair, then use the sensitivity $A=X^{\top}\operatorname{diag}(\widehat\mu)X$. The resulting uncorrected cluster-sandwich slope standard error is 0.0990, versus 0.0949 from the common quasi scale. These pairs were independently generated and are an arithmetic illustration, not evidence of real clustering. With real shared sites, cluster by site and assess the number of independent sites; finite-cluster corrections and the choice of asymptotic reference distribution matter. The numerical difference is sample-specific: sandwich is not guaranteed to be larger. Both approaches require a correctly specified mean for the intended coefficient interpretation.
@@ -787,7 +779,7 @@ The fitted variance can sit at zero, a boundary where ordinary interior normal a
 
 The following deliberately small numerical fit uses adaptive one-dimensional integration rather than a production mixed-model package. Eight sites each have twelve visits, with a fixed grid of $x$ and fixed generating effects; Poisson draws are random. This controlled illustration does not make the eight generated effects a random sample from a normal population. The code maximises the integrated likelihood and compares two numerical integration tolerances. It is educational, not production code: the integration domain used to locate the mode, direct exponentiation and optimisation need stronger safeguards for difficult data.
 
-```r
+```{#cb14 .r}
 set.seed(467)
 x <- rep(seq(-1.5,1.5,length.out=12),8); group <- rep(1:8,each=12)
 b <- rep(c(-.7,-.5,-.3,-.1,.1,.3,.5,.7),each=12)
@@ -825,7 +817,6 @@ fine <- sum(vapply(1:8,function(k)ll_group(fit$par,k,1e-9),numeric(1)))
 cat('glmm_quadrature_loglik_difference',abs(coarse-fine),'\n')
 stopifnot(abs(coarse-fine)<1e-5)
 ```
-
 The code's integrated likelihood fits the population coefficients and site variance; it does not yet calculate a prediction for a particular site. The separate held-out calculation linked below evaluates a conditional density for site 1 using that site's twelve observations and the fitted population distribution. Its grid is a numerical way to average over plausible effects, while the held-out-site score integrates one shared effect over each group of visits.
 
 The executed fit returns $\widehat\beta_0=0.5366$, $\widehat\beta_1=0.2503$ and $\widehat\sigma_b=0.4253$. At $x=0$, the fitted zero-effect mean is 1.7101 and the model-based new-site mean is 1.8720. The optimiser reports convergence and the two integration tolerances differ in log likelihood by $4.7\times10^{-11}$ at the solution. This checks numerical sensitivity at those tolerances, not parameter uncertainty or model adequacy. The site totals are 8, 12, 19, 23, 19, 28, 33 and 42; a common-intercept Poisson fit cannot model their shared site variation. The random-intercept revision allows it, but eight sites leave substantial variance uncertainty. A defensible next check compares simulated site totals and within-site patterns with the observations, and repeats fitting from different starts; if serial patterns remain, revise the within-site model or collect additional independent sites. Do not interpret the convergence code as a diagnostic pass.
@@ -889,7 +880,7 @@ An intercept plus an unrestricted smooth can be non-identifiable: adding a const
 
 This example generates a curved mean on a known range. It uses independent Poisson observations and an exposure fixed at one; those assumptions make the demonstration interpretable, not realistic for every survey. Run it in an R environment with `mgcv` installed. The graph's vertical axis is the centred link-scale contribution. A rise in the plot means the fitted expected count rises while other terms stay fixed; the vertical zero is imposed by centring, not a no-effect ecological threshold.
 
-```r
+```{#cb15 .r}
 set.seed(46710)
 n <- 300
 x <- runif(n, -2, 2)
@@ -913,7 +904,6 @@ plot(new$x, new$mean, type = "l", ylim = range(new$lower, new$upper),
      xlab = "Gradient", ylab = "Expected count, z = 0")
 lines(new$x, new$lower, lty = 2); lines(new$x, new$upper, lty = 2)
 ```
-
 In the executed sample the smooth EDF is 3.531 and its basis-check k-index is 1.00. At $x\approx-0.0202$ and $z=0$, the fitted mean is 1.631 with approximate pointwise interval 1.330–1.999. In four ascending $x$ bins the linear fit's mean Pearson residuals are -0.365, 0.166, 0.524, -0.321: the middle is systematically underpredicted and the edges overpredicted. The smooth fit gives -0.038, -0.003, 0.066, -0.045. This is a visible improvement for this generated example, not proof of adequate uncertainty or out-of-sample prediction.
 
 With `k=3`, EDF is 1.978 of the available 2; increasing to `k=10` permits EDF 3.531. The respective k-indices are 0.997 and 0.998, so this particular check does not flag the restricted basis despite its near-saturation. Compare the fitted curves and held-out predictions rather than interpreting one diagnostic as a verdict.
@@ -995,7 +985,7 @@ A practical fit must evaluate log probabilities stably, constrain probabilities 
 
 The following bounded intercept-only fit makes the observable calculation explicit. It uses optimised probabilities on transformed scales; it is an educational likelihood, not a production fitting routine. In particular, the simple probability arithmetic can be unstable for extreme parameters.
 
-```r
+```{#cb16 .r}
 # Intercept-only mixture and hurdle likelihoods.
 set.seed(468); raw <- rpois(300,2); z <- ifelse(runif(300)<.3,0,raw)
 zip_obj <- function(par) {pi<-plogis(par[1]); mu<-exp(par[2]);
@@ -1016,7 +1006,6 @@ hurdle_mean <- (1-plogis(hur$par[1]))*exp(hur$par[2])/
 cat('zi_mean',zip_mean,'hurdle_mean',hurdle_mean,'observed_mean',mean(z),'\n')
 stopifnot(zip_mean>0,hurdle_mean>0)
 ```
-
 For the executed sample, 113 of 300 counts are zero (0.3767), the observed mean is 1.4167, and 11 counts are at least 5. The zero-inflated fit gives $\widehat\pi=0.2731$ and $\widehat\mu=1.9491$, giving fitted zero probability 0.3766 and overall mean 1.4167. The hurdle fit estimates zero probability 0.3767 and base mean 1.9491, giving overall mean 1.4166; this is the same observable fit to numerical tolerance. The fitted zero-inflated model predicts about 10.51 counts at least 5, compared with 11 observed. This single tail comparison does not establish a good fit; simulate the full count distribution and compare several features with uncertainty. An ordinary Poisson model with fitted mean 1.4167 predicts zero probability $e^{-1.4167}\approx0.2425$, well below the observed 0.3767. The mixture or hurdle revision repairs that discrepancy in-sample, but does not establish the generating mechanism. Both optimisers reported convergence; parameter uncertainty and sensitivity to starting values remain to be assessed.
 
 Refit the same 300 simulated counts after randomly holding out 100. Generate 3,000 test-sized datasets from each training fit. The held-out observations contain 41 zeros, five counts of at least five, and mean 1.53. The ordinary Poisson model predicts central 95% ranges of 17–35 zeros, 0–4 upper-tail counts and means 1.14–1.60. The zero-inflated fit predicts 27–45 zeros, 0–6 upper-tail counts and means 1.10–1.63. The hurdle fit gives 27–45, 0–6 and 1.11–1.63 respectively. Their mean held-out log probabilities are −1.832, −1.687 and −1.687. Thus the two-component revisions address the particular zero and upper-tail discrepancies in this split, without uniquely establishing the mechanism. Their near-identical observable predictions follow from the intercept-only equivalence derived above, not independent confirmation of structural zeros. The ranges condition on fitted parameters, and the single split and chosen summaries leave many possible failures untested. They do not account for site dependence or imperfect detection.
@@ -1029,7 +1018,7 @@ The figure below returns to the equivalence derived above with another set of co
 
 The following R code generates a known zero-inflated process and specifies comparable models using `glmmTMB`. It is illustrative until that package and the code are verified in the chosen runtime. The fits use the same rows and covariates, so their likelihood-based AIC values are comparable as statistical criteria if convergence and likelihood evaluation are sound. The simulation is not evidence that a real species has a structural-zero state.
 
-```r
+```{#cb17 .r}
 set.seed(46707)
 n <- 600
 x <- runif(n, -1, 1)
@@ -1050,7 +1039,6 @@ predict(zi, newdata = new, type = "response")
 predict(zi, newdata = new, type = "conditional")
 predict(zi, newdata = new, type = "zprob")
 ```
-
 In this package's hurdle formulation the zero model represents the probability of zero, whereas the notation above uses $q$ for the probability of a positive observation. Read the package documentation for its prediction types and truncated-family semantics before interpreting them. Generate replicate datasets from each fitted model and compare zero proportions *by predictor*, the positive-count distribution and its upper tail, not just the total zeros. Compare held-out log scores or other decision-relevant predictions, with site-blocking where observations share sites. If Poisson misses zeros and the hurdle fits, that is evidence about predictive discrepancies under those fitted models, not proof that one ecological process exists. If a model also misses the positive tail, consider a negative-binomial base or omitted group dependence and repeat the checks; extra flexibility must remain supported by data.
 
 ### Detection Is a Separate Question {#detection-is-a-separate-question}
@@ -1064,6 +1052,11 @@ For the salamanders, recorded zero counts and repeat visits make an observation-
 **Outline answer.** The zero probability is $0.3+0.7e^{-1}\approx0.5575$, the overall mean is $0.7$, and the mean conditional on a positive count is $1/(1-e^{-1})\approx1.582$. A hurdle model with zero probability 0.5575 and a zero-truncated Poisson(1) positive part has the same observable distribution. Repeated visits can add information about shared presence and detection, provided closure, the observation model and conditional dependence assumptions are justified.
 
 ## Combining Mean Shape, Site Dependence, and Count Variation {#combined-count-case}
+
+This case brings the preceding modelling decisions together, from specifying a
+shared-site count model to checking its predictions for sites not used in fitting.
+
+### Model Components and Prediction Targets
 
 The preceding chapters changed one component at a time. A survey can need several changes at once. Suppose site $i$ has visit $j$, recorded positive effort $e_{ij}$ and gradient $x_{ij}$. A combined model might specify
 
@@ -1085,6 +1078,8 @@ The covariance comes from the same random multiplier $e^{b_i}$ appearing in both
 
 For an observed site, its prior visits inform its latent effect. For a new site, integrate over a fresh effect rather than treating the fitted effect of an unseen factor as known. If $\eta$ excludes the random intercept, the zero-effect count mean is $e^\eta$, whereas the new-site marginal mean is $e^{\eta+\sigma_b^2/2}$. To score a whole held-out site's visits, integrate the product of their conditional NB2 masses over one shared $b_i$; multiplying independently marginalised visit probabilities would discard the dependence the model was built to represent. A future-count interval adds outcome and new-site variation; fitted coefficients, dispersion and smoothing parameters bring further uncertainty.
 
+### Simulated Survey and Candidate Models
+
 The next synthetic monitoring programme makes these choices on one common dataset. It is a new case, not the independent NB2 sample or the eight fixed-effect sites above. With seed 4682026, generate 72 independent sites with four visits each. Each visit has a gradient $x$ uniformly distributed on $[-1,1]$ and known positive effort uniformly distributed on $[0.6,1.6]$. The generating site intercept has normal standard deviation 0.55; conditional counts have NB2 shape 2 and mean
 
 $$
@@ -1094,6 +1089,8 @@ $$
 Thus the conditional variance is $\mu_{ij}+\mu_{ij}^2/2$. This mechanism is known because we generated it, not because a field survey has confirmed it. Sites 1–54 provide 216 training visits; all four visits from each of sites 55–72 are held out. This split targets a new site, rather than an additional visit at a known one. The same response, covariates and held-out groups are used throughout.
 
 Before inspecting held-out scores, specify five fits: a log-linear Poisson baseline; log-linear NB2; NB2 with a log-linear mean and site intercept; NB2 with a smooth gradient; and NB2 with both smooth and site intercept. The R fit uses `mgcv::gam`, `mgcv::nb()`, a seven-dimensional smooth basis, a site random-effect smooth, an effort offset and REML selection. Its NB2 shape and smoothing/site variance parameters are estimated, not fixed at their generating values. The [mgcv negative-binomial reference](https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/negbin.html) gives the family convention; the [random-effects reference](https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/random.effects.html) explains this penalised representation and its approximations. Non-Gaussian fitting uses an approximate marginal criterion: convergence does not establish identifiability or accurate variance-component uncertainty.
+
+### Training Diagnostics
 
 Before looking at the held-out outcomes, inspect discrepancies on the 54 training sites. Divide the gradient into four fixed bins: $[-1,-0.5]$, $(-0.5,0]$, $(0,0.5]$ and $(0.5,1]$. Within each bin, average the observed counts minus the model's *marginal* expected counts, and sum the four squared bin means. This is a crude summary of a remaining gradient, not a test that can uniquely identify the missing term. Also compare the variance of the 54 site totals, the number of zero counts and the number of counts at least six. The observed values of these last three statistics are 69.24, 62 and 32, respectively.
 
@@ -1113,6 +1110,8 @@ After adding both the smooth and the site term, the corresponding bin means are 
 
 The simulation ranges condition on fitted parameters and do not include refitting or smoothing uncertainty. Their empirical tails use roughly 25 of the 1,000 replicates each, so endpoints have Monte Carlo uncertainty. Several summaries were inspected and they are exploratory; falling inside any one range is not a calibrated goodness-of-fit test or proof of adequacy. The combined example's complete script records the seeds and the same training design used here.
 
+### Held-Out Comparison and Sensitivity
+
 The table follows the same sites through the modelling decisions. The score is the sum, over 18 held-out sites, of the joint log predictive density of each site's four visits; larger is better for this realised split.
 
 | Training model | Estimated NB2 shape | Site-effect SD | Effective degrees of freedom | Held-out joint log score |
@@ -1128,6 +1127,8 @@ Moving from the Poisson to the linear NB2 model improves this score substantiall
 The combined fit also has assumptions about the site variance and the available smooth. `gam.vcomp` reports a site-effect **standard deviation** of 0.3383, with approximate interval 0.1618–0.7070; the simulated generating standard deviation was 0.55. This interval reflects an approximate smoothing-parameter calculation, not a definitive test against zero. A variance of zero is a boundary, and a small number of groups can leave this component weakly informed. In this split the no-site smooth candidate's joint score is −155.839, compared with −152.448 for the combined fit; neither that difference nor the site-total check proves the latent variance.
 
 The basis check for the combined fit gives `k`-prime 6, smooth EDF 3.942 and k-index 0.940. Its randomisation $p$-value is 0.6325 from 400 randomisations, with binomial Monte Carlo standard error approximately 0.024. A non-small value does not prove that the basis is sufficient, and the factor random effect does not have a k-index in this check. As a sensitivity comparison, refit with `k=10`: the NB2 shape is 1.4319, site SD 0.3404 and total EDF 19.6629, versus 1.4278, 0.3383 and 19.3262 for `k=7`. The larger-basis score is −152.349 on the **same** held-out sites, versus −152.448. This reuse is a sensitivity check, not an independent validation set or a warrant to tune the basis on the test outcomes and then call its score untouched evidence.
+
+### Prediction for a New Site
 
 For the first held-out site the four observed counts are $(0,0,1,2)$. Under the combined fit, the four plug-in zero-effect means are $(1.25173,1.21587,1.92562,1.04072)$. If its site effect were known to be $b=0.25$, the conditional means would be $(1.60725,1.56120,2.47255,1.33631)$. A genuinely new site has an unknown effect: integration over its fitted normal distribution gives marginal means $(1.32543,1.28746,2.03900,1.10199)$. The first visit's integrated predictive probability of zero is 0.409056. These predictions are different because the question changed, not because one is a corrected version of the other.
 
@@ -1199,7 +1200,7 @@ In `examples/extensions.R`, a simulated continuous latent score plus logistic no
 
 **R:**
 
-```r
+```{#cb18 .r}
 set.seed(469)
 N <- 240
 x <- seq(-1.5, 1.5, length.out = N)
@@ -1209,7 +1210,6 @@ condition <- ordered(cut(latent, c(-Inf, -0.7, 0.7, Inf),
 fit <- MASS::polr(condition ~ x, Hess = TRUE, method = "logistic")
 predict(fit, newdata = data.frame(x = 0), type = "probs")
 ```
-
 The [MASS `polr` documentation](https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/polr.html) describes the ordered response and sign convention. Compare predicted probabilities at several covariate values, not only at the centre, and show uncertainty when interpreting fitted differences.
 
 The proportional-odds restriction can be wrong. For example, restoration might make severely degraded reaches less common without changing the distinction between moderate and good reaches to the same degree. Compare observed and predicted cumulative probabilities across relevant covariate ranges, inspect threshold-specific binary fits as an exploratory diagnostic, and assess a less restrictive model with an appropriate test or validation strategy. The separate binary fits are correlated and can produce crossing cumulative probabilities; they are diagnostic comparisons, not automatically a coherent replacement. A partial proportional-odds model can allow selected slopes to vary by threshold while preserving ordered predicted cumulative probabilities in the intended range; a multinomial model is another option that gives up the ordering constraint and uses more parameters. Check that the data support the added flexibility and assess category probability calibration on held-out units.
@@ -1245,6 +1245,8 @@ This second calculation deliberately changes the observed data: the same Beta(2,
 A posterior credible interval for $p$ is an interval containing a stated fraction of the posterior probability under the prior and likelihood. It is conditional on the model and observed data. A frequentist confidence-interval procedure is instead assessed by its coverage over repeated datasets under its assumptions; its nominal coverage does not mean that, after the data are fixed, the unknown fixed parameter has that probability of lying in the computed interval. Both approaches can be useful, but their probability statements answer different questions. A credible interval's probability statement is not a guarantee that the sampling design was representative or that the prior was appropriate.
 
 The posterior mean is not the complete answer if the next question concerns future counts. For $m$ future visits, draw $p$ from the posterior and then draw a future count from $\operatorname{Binomial}(m,p)$. Repeating both steps gives the posterior predictive distribution. The first step propagates uncertainty about $p$; the second includes variation in future observations even if $p$ were known. In this particular beta-binomial example the predicted number in $m$ visits has mean $m(a+y)/(a+b+n)$. For one further visit, the predictive detection probability is $9/14$; a future 0 or 1 remains uncertain even if the posterior for $p$ becomes very concentrated. If future visits differ in weather, observer or site, the single common-probability model does not account for those differences.
+
+### Count-Model Updating and Predictive Checks
 
 Consider twelve hypothetical independent equal-effort surveys with recorded counts `0, 0, 0, 0, 0, 0, 0, 3, 4, 5, 7, 9`: total 28. For a first model, $Y_i\mid\lambda\sim\operatorname{Poisson}(\lambda)$ with a shared rate, and $\lambda\sim\operatorname{Gamma}(2,1)$ using **shape and rate**. The prior mean is two counts per survey. Multiplying likelihood and prior gives $\lambda\mid y\sim\operatorname{Gamma}(2+28,1+12)=\operatorname{Gamma}(30,13)$. Its mean is 2.308 and central 95% credible interval is 1.557–3.204 counts per survey.
 
@@ -1313,6 +1315,8 @@ Posterior predictive checking asks whether data simulated from the fitted model 
 The same ten-observation logistic case provides a small numerical check. With the $N(0,2^2)$ coefficient priors and the observed predictor values held fixed, 30,000 prior-predictive datasets have all ten outcomes equal to zero or all equal to one about 9.9% of the time. That is a statement about this proposed prior, design and statistic; whether it is implausible depends on domain knowledge and sampling context. It is not the observed frequency of extreme field datasets.
 
 For posterior prediction, `examples/bayes.R` samples coefficient pairs from the normalised grid, then draws new binary outcomes at the same ten predictors. The observed dataset has five detections. About 0.610 of simulated datasets have at least five; this is an upper-tail fraction with ties included. As a second preselected discrepancy, subtract the number of detections at negative $x$ from the number at positive $x$, excluding the observation at zero. The observed difference is two; about 0.624 of simulated datasets have an absolute difference of at least two. Both fractions have Monte Carlo variation, depend on the fitted prior and model, and use data twice in the posterior predictive comparison. They are not uniformly distributed frequentist $p$-values, and neither value establishes adequacy. Inspect the simulated distributions and discrepancies relevant to the scientific question. If a check suggested a missing group effect or an implausible gradient, propose a model that addresses that specific mismatch and rerun the check; do not choose the most favourable statistic after looking at many alternatives.
+
+### Hierarchical Sharing Across Sites
 
 This next hierarchy revisits the partial-pooling idea from the mixed-model chapter. Here the site-specific latent quantity is a probability with a beta distribution, rather than the normal log-rate intercept in the count GLMM. Both share information across sites, but their likelihoods and response-scale interpretations are different.
 
@@ -1399,7 +1403,7 @@ These exercises use hypothetical values unless a dataset is named. Work on the s
 7. Under conditional lognormality the arithmetic mean is $e^{m+s^2/2}$. Without that distributional assumption, the same correction need not apply; $e^m$ is not generally the arithmetic mean.
 8. The chosen penalty has used test outcomes and the test score is no longer a clean evaluation of the full selection procedure. Tune within training data using a split appropriate to the intended prediction; hold whole sites out when the target is a new site.
 
-### Categorical and Bayesian Models {#categorical-and-bayesian-models}
+### Count Extensions, Categorical and Bayesian Models {#categorical-and-bayesian-models}
 Work through the calculations before consulting the solutions. In each applied answer state the population, observational unit and assumptions as well as the numerical result.
 
 1. A three-category multinomial model has reference-category weight 1 and other weights 2 and 3. Calculate all category probabilities. If the first non-reference weight doubles while the others are unchanged, calculate the new probabilities and explain what happens to the other categories.
