@@ -23,6 +23,25 @@ The reviewed source was `primer_glm/primer_glm.md`, at source commit
 `27d68fb0fdb9686588bf349404a88764702ae405e1d96cfc99f05d85f19cef07`.
 The trials do not prove that every structural issue was found.
 
+### Locator remapping failure
+
+Following the GLM revision at source commit `0245c0356ecd5fb33d94f46ae8eac3ebf133ba58`,
+the revision-bound checks for the brief `glm-brief-v6` and audit
+`glm-content-audit-v4` passed their schema and locator-existence checks. A
+subsequent semantic review found many route and concept cells bound to real but
+incorrect passages, including headings, unrelated statements and a reference-only
+route presented as a complete teaching transition. Thus the mechanical passes did
+not establish that the cited passages supported the claims. Further locator
+corrections and independent verification are in progress; this record does not
+claim that those corrections have been validated.
+
+Guidance commit `ab7bcd9` strengthens `.agents/skills/primer-audit/SKILL.md`
+and `maintenance/docs/primer-production-procedure.md` to require semantic
+checking of every retained or moved explanation, action, interpretation and
+limitation locator after revision. This addresses the identified guidance gap;
+it does not itself validate the GLM evidence or establish a complete technical
+audit.
+
 ## Knowledge graph
 
 A manual trial inspected the current outline and representative passages of
