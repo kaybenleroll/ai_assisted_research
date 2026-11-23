@@ -1,48 +1,37 @@
 # Primer teaching-case contract: Generalised linear models and their extensions
 
-- Issue and milestone: #468 draft; #467 planning.
-- Case revision: glm-case-v4
-- Source revision: a32765f5b07dbd5710af38bc15b003ae8fb56f03
-- Source SHA-256: fa462de926d187323b1c03f518745f68ab6fb64db7521a35bce81950a46e6e92
-- Reader capability: construct and assess a model from observed units to interpreted prediction, diagnosis, revision and explicit limitations.
+- Issue and milestone: #468 primer; #467 planning.
+- Case revision: glm-case-v5
+- Source revision: 8417dba1d9183041213115f6361d84107ae40109
+- Source SHA-256: 27d68fb0fdb9686588bf349404a88764702ae405e1d96cfc99f05d85f19cef07
+- Reader capability: construct and assess a model from observed units to prediction, diagnosis, revision and limits.
 - Case purpose: link sampling and estimand to distribution, design, fit, uncertainty and revision.
-- Case boundary: the continuous teaching spine is a simulated Gamma/log positive response; distinct synthetic count, grouping, zero and categorical mechanisms and real penguin and package-derived Salamanders studies are explicitly separate. Known simulation truth is not empirical truth.
+- Case boundary: the cumulative simulated count case, Gamma companion, other synthetic cases and real penguin and package-derived Salamanders studies are distinct datasets.
 
-## Trace
+The independent complete content reading covered source SHA-256 `84eba056acb9ed85f3f0586b36555887bb4729de0178c62e1d27d91c92bb7e95` at commit `858f4ef29e6e85ef50acbc3231ccc639a27a1b99`. The only subsequent source changes, verified in the Git diff to `8417dba1d9183041213115f6361d84107ae40109`, add inline style attributes to two existing compatibility spans; prose and line positions are unchanged. The independent reviewer did not reread the full source at the new hash. The recorded current revision and concept-row evidence revisions bind the preserved content judgement and this delta inspection to the current source; they do not claim a new independent full read.
 
-| Stage | Description | Evidence or artefact | Status |
+
+## Combined count trace
+
+The author ran the combined R fit and fixed-input R/Python/Julia prediction checks in pinned isolated containers, including training diagnostics; the independent reviewer read the complete preceding source and independently integrated the fixed prediction fixture. The reviewer did not refit the model. The current full 23-entry manifest subsequently passed in the pinned runtimes; that execution is separate from the independent reviewer’s checks.
+
+| Stage | Input, operation and result | Mode and evidence | Limit |
 |---|---|---|---|
-| Source inputs or assumptions | 400 independent Gamma observations, mean exp(1+1.1x), shape 4, seed 222468 | primer_glm/primer_glm.md:407; examples/core-repairs.R | Executed by author in pinned R; independent reviewer inspected prose, did not rerun |
-| Construction or transformation | First 250 train, 150 held out | primer_glm/primer_glm.md:407 | Executed by author; fixed split applies only to this independent simulation |
-| Intermediate representation | Gamma/log intercept-only versus x predictor | primer_glm/primer_glm.md:409 | Executed by author; same outcome and target for both fits |
-| Stored or computed result | Baseline residual pattern and revised fit | primer_glm/primer_glm.md:409 | Executed by author; simulated truth known |
-| Reader-facing operation | Predict held-out observations and compare scores and coverage | primer_glm/primer_glm.md:411 | Executed by author; 89.3% coverage remains a warning |
-| Interpretation | Parametric bootstrap mean and future observation at x=0.8 | primer_glm/primer_glm.md:413 | Executed by author; 500 refits and model assumptions limit tail precision |
-| Failure mode or scope limit | Remaining undercoverage, fitted-distribution assumptions, independent simulation | primer_glm/primer_glm.md:411 | Illustrative independent prose review; no real-data validity claim |
-| Correction and re-evaluation | Add x and check the same held-out target; identify incomplete interval repair | primer_glm/primer_glm.md:409 | Author executed; independent content re-review retained scientific limitation |
+| Input and split | primer_glm/primer_glm.md:1088: seed 4682026, 72 sites, four visits, known effort and nonlinear NB2 truth; 54 training and 18 test sites | executable; author ran | simulated truth is not empirical evidence |
+| Model and diagnostic | primer_glm/primer_glm.md:1096: Poisson, NB, site and smooth fits; training residual bins, zero, tail and site-total checks | executable; author ran; independent prose review | site-total result does not identify site dependence; checks are plug-in and finite simulation |
+| Repair and re-evaluation | primer_glm/primer_glm.md:1110: inspect patterns, compare candidates and scores for the same held-out new sites | executable; author ran | one split; test reuse and model-selection limits |
+| Prediction | primer_glm/primer_glm.md:1132: integrate one shared site effect; compare means, [0,6] predictive interval and joint score | executable fixed-input R/Python/Julia; independent fixed-fixture integration | fitted-parameter and smoothing uncertainty omitted; no Python/Julia refit |
+| Boundary | primer_glm/primer_glm.md:1138: evaluate remaining discrepancy and observation process | illustrative review | detection, causation and biological zero states not identified |
+
+## Gamma companion trace
+
+| Stage | Input, operation and result | Mode and evidence | Limit |
+|---|---|---|---|
+| Input and construction | primer_glm/primer_glm.md:565: 400 synthetic Gamma observations, seed 222468; 250 train and 150 test | executable; author reported | separate simulation |
+| Fit and discrepancy | primer_glm/primer_glm.md:567: intercept-only then gradient mean | executable; author reported | simulated truth is known |
+| Compare and interpret | primer_glm/primer_glm.md:573: held-out scores and intervals | executable; author reported | same-target comparison, one split |
+| Correction and boundary | primer_glm/primer_glm.md:579: remaining undercoverage despite mean repair | illustrative independent review | no claim of general calibration |
 
 ## Teaching decisions
 
-- Executable stages: `core-repairs-r`; the targeted runner was reported passed, and this independent reviewer did not rerun it. The case has no claim of validated real-data prediction.
-- Illustrative stages: independent content-review interpretation and mathematical explanation, despite prior author execution.
-- Measured stages: synthetic held-out log score, coverage and bootstrap intervals are simulation results at the stated seed, not ecological measurements.
-- Required alternatives: matched R/Python/Julia core, NB and fixed-penalty spline; extension examples are currently R-first and the agreed three-language main-example promise remains subject to release verification. Bounded methods are explicitly labelled.
-- Expected abstentions: do not infer occupancy from non-detection, causation from association, model truth from a predictive check, or universal calibration from one split.
-- Evidence and freshness: penguin and package-derived Salamanders source/rights in `primer_glm/data/README.txt`; historical independent review and scoped final re-review; final revision, link checks and outputs pending.
-
-## Related case traces
-
-The brief maps each route to input, decision, result, interpretation and limit. The Gamma spine does not claim the separately seeded count, hierarchical, zero-inflation and category examples are one ecological dataset. The observed-site/new-site GLMM example conditions on fitted parameters, and the real salamander mixed model remains a proposal. The ordinal and Bayesian simulation cases supply their own repair and sensitivity comparisons. See the audit for route-level locators and review provenance.
-
-## Committed snapshot and language checks
-
-The committed source/output snapshot is `e77fa0721fe4a062e7219aa3e068e00adcc6ab66`, source SHA-256 `f6487efe39fa5f66aa97c8a1c401c0b8750b013204ac1af39e0cda72adf29da5`. An independent reviewer retained the case judgement after layout-only repairs, without repeating the whole-source review or all executions. The author reports four passed targeted Python/Julia entries for the real penguin and Salamanders Poisson cases and conjugate count posterior; other specialised demonstrations remain R-only. These checks add concrete comparable operations and do not establish complete ecological, production or language parity. Release checks remain pending.
-
-
-## Earlier Editorial Revision
-
-The intermediate source SHA-256 `4ef85f9f9492e4716f2333b2207daac5588171716635e76dac3081776f363b8b` differs from the historical `e77fa072` snapshot only by the bounded verification note and heading case/explicit preserved IDs. The case mechanism, simulation inputs and limitations are unchanged. The final spelling correction and source/output snapshot are recorded below.
-
-## Final Editorial Snapshot
-
-Source and outputs are committed at `a32765f5b07dbd5710af38bc15b003ae8fb56f03`; source SHA-256 `fa462de926d187323b1c03f518745f68ab6fb64db7521a35bce81950a46e6e92`. The final spelling-only correction changed no case input, model operation, result or line number. The final publication build passed and sampled visual checks are recorded in the audit; unchanged examples retain their earlier 20-entry execution evidence. PR, CI and final repository gates remain pending.
+Author executions and independent content reading are distinct. Mathematical explanations are illustrative review evidence even where companion scripts ran. Specialised GLMM, GAM, zero, categorical and posterior algorithms are R-first; the combined three-language check compares predictions at fixed fitted inputs. Real studies are observational and do not identify detection or causation. Source and outputs are bound to the recorded commit; final release checks remain pending.

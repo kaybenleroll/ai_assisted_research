@@ -1,33 +1,34 @@
 # Primer brief: Generalised linear models and their extensions
 
-- Issue and milestone: #468, drafted primer; #467 planning.
-- Brief revision: glm-brief-v4
-- Source revision: a32765f5b07dbd5710af38bc15b003ae8fb56f03
-- Source SHA-256: fa462de926d187323b1c03f518745f68ab6fb64db7521a35bce81950a46e6e92
+- Issue and milestone: #468 primer; #467 planning.
+- Brief revision: glm-brief-v5
+- Source revision: 8417dba1d9183041213115f6361d84107ae40109
+- Source SHA-256: 27d68fb0fdb9686588bf349404a88764702ae405e1d96cfc99f05d85f19cef07
+- Reviewed revision: 8417dba1d9183041213115f6361d84107ae40109
 - Tracked path: primer_glm/primer_glm.brief.md
 - Reader: quantitatively literate ecological researcher or analyst who can read basic R.
-- Prerequisites: algebra, logs, elementary probability, derivatives, vectors and basic regression; local refreshers accompany their use.
-- Problem and motivation: observed ecological counts, proportions and positive measurements need distributions, means and uncertainty aligned with their sampling design.
-- Intended outcome: construct, fit, interpret, diagnose and revise GLMs and taught extensions, distinguish conditional and predictive targets, and recognise design and model limits.
-- Scope: Gaussian, binomial, Poisson, Gamma, likelihood and IRLS; inference, prediction and validation; quasi, NB, GLMM, GAM, hurdle and zero-inflated, multinomial, ordinal and Bayesian routes.
-- Exclusions: complete causal, spatial, temporal, occupancy/detection and survival modelling; reference-only boundaries identify when they are needed.
-- Proposed dependency-led route: design and regression, distribution/link and fitting, core responses and inference, then categorical and extensions, Bayesian synthesis and boundaries.
-- Approximate depth: substantial self-contained explanations and worked cases; no word-count ceiling.
-- Worked examples: fixed-design core, penalised separation, Gamma holdout, overdispersed and zero-heavy counts, random sites, smooths, categorical and Bayesian cases.
-- Real-world cases: frozen Palmer penguins and explicitly package-derived Salamanders, with observational and missingness limits and data provenance in primer_glm/data/README.txt.
-- Teaching-case contract: primer_glm/primer_glm.case.md, glm-case-v4.
-- Worked-case trace: route-keyed table and checkpoint below; core continuous Gamma case and clearly distinguished branches.
-- Core-concept depth matrix: this brief, glm-brief-v4.
-- Route classification and teaching spines: route table below; each primary or alternative route has a worked mechanism, interpretation and boundary.
-- Figures, tables, and equations: nine context-specific figures, model/design tables, derivations and interpreted numerical examples; release-level visual QA is pending.
-- Languages and executable examples: R primary; matched bounded core, fixed-dispersion NB and penalised spline in Python and Julia; extension implementations are currently R-first. The agreed three-language main-example promise remains subject to release verification and is not silently reduced. Explicit algorithms are teaching implementations with bounded checks.
-- Evidence plan: independent content review and scoped re-review, route and concept traces, source attribution, manifest checks and pinned render/visual/accessibility QA.
-- Open decisions: complete current link, build, accessibility, provenance and release checks. Additional production-package implementations are not implied by toy code.
+- Prerequisites: algebra, logarithms, elementary probability, derivatives, vectors and basic regression.
+- Problem and motivation: match ecological observations, design, distributions and inference while recognising limits of sampling and prediction.
+- Intended outcome: build, interpret, diagnose and revise GLMs and taught extensions, with explicit prediction targets and limits.
+- Scope: Gaussian, binomial, Poisson and Gamma GLMs, likelihood, IRLS, inference and diagnostics; quasi, NB, mixed models, smooths, zero models, categorical and Bayesian routes.
+- Exclusions: complete causal, spatial, temporal, occupancy/detection and survival modelling; reference-only boundaries identify when to seek specialist methods.
+- Proposed dependency-led route: regression and concrete response families, general fitting, inference and diagnostics, count extensions and combined case, categorical and Bayesian models, then synthesis and boundaries.
+- Approximate depth: substantial worked explanations; no word-count ceiling.
+- Worked examples: penguin and Salamanders studies and explicitly separate simulated core, Gamma, count, grouped, zero, categorical and Bayesian cases.
+- Real-world cases: Palmer penguins and package-derived Salamanders; `primer_glm/data/README.txt` records provenance and observational limits.
+- Teaching-case contract: primer_glm/primer_glm.case.md, glm-case-v5.
+- Worked-case trace: route-keyed table below and combined/Gamma case contract.
+- Core-concept depth matrix: this brief, glm-brief-v5.
+- Route classification and teaching spines: primary, alternative and reference-only as listed below.
+- Figures, tables and equations: nine figures, design tables, derivations and numerical examples; sampled PDF and HTML visual QA passed.
+- Languages: R primary; core, fixed-dispersion NB, fixed-penalty spline, real-data analyses and conjugate count example have bounded R/Python/Julia counterparts. Combined case is R fit with matched fixed-input Python/Julia predictions, not refit parity; specialised demonstrations are R-only.
+- Evidence plan: independent whole-source and repaired-transition review, distinct author execution, source checks, 23-entry manifest, pinned build and visual/link QA.
+- Open decisions: current repository, link, PR and CI gates.
 
-The canonical route and concept IDs remain R01–R11 and C01–C26. Matrix aliases use lowercase `r01`–`r11` and `c01`–`c26` solely to satisfy the evidence checker's ID syntax; each alias denotes exactly its uppercase canonical ID and no identifier has been reassigned. The source and output snapshot is bound to the recorded Git commit.
+The independent complete content reading covered source SHA-256 `84eba056acb9ed85f3f0586b36555887bb4729de0178c62e1d27d91c92bb7e95` at commit `858f4ef29e6e85ef50acbc3231ccc639a27a1b99`. The only subsequent source changes, verified in the Git diff to `8417dba1d9183041213115f6361d84107ae40109`, add inline style attributes to two existing compatibility spans; prose and line positions are unchanged. The independent reviewer did not reread the full source at the new hash. The recorded current revision and concept-row evidence revisions bind the preserved content judgement and this delta inspection to the current source; they do not claim a new independent full read.
 
 
-Explicit canonical-to-schema mapping: R01=r01; R02=r02; R03=r03; R04=r04; R05=r05; R06=r06; R07=r07; R08=r08; R09=r09; R10=r10; R11=r11. C01=c01; C02=c02; C03=c03; C04=c04; C05=c05; C06=c06; C07=c07; C08=c08; C09=c09; C10=c10; C11=c11; C12=c12; C13=c13; C14=c14; C15=c15; C16=c16; C17=c17; C18=c18; C19=c19; C20=c20; C21=c21; C22=c22; C23=c23; C24=c24; C25=c25; C26=c26.
+Original R01–R11 and C01–C26 identities and meanings are preserved; machine rows use one-to-one lowercase aliases r01–r11 and c01–c26. No lexical identity is reassigned and no scope is reduced.
 
 ## Route classification and teaching spines
 
@@ -47,40 +48,42 @@ Explicit canonical-to-schema mapping: R01=r01; R02=r02; R03=r03; R04=r04; R05=r0
 
 ## Worked-case trace
 
-The Gamma branch follows generated observations through training and holdout, intercept-only discrepancy, revised model and remaining undercoverage. The other rows name related, explicitly distinct cases. Mathematical explanation and interpretation are illustrative review evidence; execution claims refer to the separately recorded example runs.
+These independent teaching cases link input to an operation, result, interpretation and boundary. Source walkthroughs were independently read; author execution is separately attributed in the audit.
 
 | route_id | Input or assumptions | Transformation | Intermediate representation | Reader-facing operation | Interpretation | Failure or boundary | Correction and re-evaluation | Evidence | original IDs |
 |---|---|---|---|---|---|---|---|---|---|
-| r01 | Penguin sampling and model matrix; primer_glm/primer_glm.md:67 | define response and design | species fit; primer_glm/primer_glm.md:75 | calculate or fit; primer_glm/primer_glm.md:103 | mean and future intervals; primer_glm/primer_glm.md:128 | observational selection and variance; primer_glm/primer_glm.md:142 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R01 |
-| r02 | family and link; primer_glm/primer_glm.md:150 | define response and design | moments and score; primer_glm/primer_glm.md:168 | calculate or fit; primer_glm/primer_glm.md:188 | IRLS update; primer_glm/primer_glm.md:202 | rank and link assumptions; primer_glm/primer_glm.md:236 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R02 |
-| r03 | binomial trials and exposure; primer_glm/primer_glm.md:272 | define response and design | logistic and Poisson models; primer_glm/primer_glm.md:286 | calculate or fit; primer_glm/primer_glm.md:336 | offset and interaction; primer_glm/primer_glm.md:511 | separation and ridge sensitivity; primer_glm/primer_glm.md:248 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R03 |
-| r04 | positive Gamma response; primer_glm/primer_glm.md:366 | define response and design | held-out correction; primer_glm/primer_glm.md:407 | calculate or fit; primer_glm/primer_glm.md:437 | prediction intervals and nested test; primer_glm/primer_glm.md:453 | undercoverage and approximation; primer_glm/primer_glm.md:411 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R04 |
-| r05 | extra count variance; primer_glm/primer_glm.md:666 | define response and design | quasi and NB; primer_glm/primer_glm.md:678 | calculate or fit; primer_glm/primer_glm.md:715 | fitted means and simulated checks; primer_glm/primer_glm.md:743 | NB upper-tail mismatch; primer_glm/primer_glm.md:749 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R05 |
-| r06 | clustered visits; primer_glm/primer_glm.md:763 | define response and design | integrated site effects; primer_glm/primer_glm.md:785 | calculate or fit; primer_glm/primer_glm.md:813 | known/new-site prediction and group score; primer_glm/primer_glm.md:858 | small groups and parameter uncertainty; primer_glm/primer_glm.md:864 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R06 |
-| r10 | nonlinear gradient; primer_glm/primer_glm.md:874 | define response and design | basis and penalty; primer_glm/primer_glm.md:893 | calculate or fit; primer_glm/primer_glm.md:911 | smooth fit and concurvity repair; primer_glm/primer_glm.md:944 | support and grouped validation; primer_glm/primer_glm.md:950 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R10 |
-| r11 | category observations; primer_glm/primer_glm.md:587 | define response and design | softmax and ordered thresholds; primer_glm/primer_glm.md:624 | calculate or fit; primer_glm/primer_glm.md:641 | probability and held-out comparison; primer_glm/primer_glm.md:656 | sparse categories and assumptions; primer_glm/primer_glm.md:618 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R11 |
-| r07 | zero counts; primer_glm/primer_glm.md:962 | define response and design | hurdle and mixture masses; primer_glm/primer_glm.md:980 | calculate or fit; primer_glm/primer_glm.md:997 | held-out predictions; primer_glm/primer_glm.md:1041 | detection and unidentified mechanisms; primer_glm/primer_glm.md:1075 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R07 |
-| r08 | prior and likelihood; primer_glm/primer_glm.md:1089 | define response and design | posterior and predictive check; primer_glm/primer_glm.md:1109 | calculate or fit; primer_glm/primer_glm.md:1115 | count interval and sampling; primer_glm/primer_glm.md:1141 | prior and diagnostics limits; primer_glm/primer_glm.md:1149 | inspect the stated repair and remaining uncertainty | Source walkthrough illustrative; manifest executions recorded in audit | R08 |
+| r01 | primer_glm/primer_glm.md:71: Penguin design and species matrix | Specify target and model | primer_glm/primer_glm.md:113: fitted means and observation intervals | Follow the worked operation | primer_glm/primer_glm.md:137: interpret computed result | primer_glm/primer_glm.md:145: selection and missingness | Inspect the stated alternative and remaining limit | independently read; author execution separate | R01 |
+| r02 | primer_glm/primer_glm.md:155: family/link and predictor | Specify target and model | primer_glm/primer_glm.md:305: score, information and hand IRLS | Follow the worked operation | primer_glm/primer_glm.md:348: interpret computed result | primer_glm/primer_glm.md:371: rank and link constraints | Inspect the stated alternative and remaining limit | independently read; author execution separate | R02 |
+| r03 | primer_glm/primer_glm.md:177: trials, offsets and interactions | Specify target and model | primer_glm/primer_glm.md:221: likelihood and probability contrast | Follow the worked operation | primer_glm/primer_glm.md:481: interpret computed result | primer_glm/primer_glm.md:389: separation and penalty assumptions | Inspect the stated alternative and remaining limit | independently read; author execution separate | R03 |
+| r04 | primer_glm/primer_glm.md:253: positive Gamma outcome | Specify target and model | primer_glm/primer_glm.md:567: held-out repair and predictive coverage | Follow the worked operation | primer_glm/primer_glm.md:575: interpret computed result | primer_glm/primer_glm.md:579: remaining interval undercoverage | Inspect the stated alternative and remaining limit | independently read; author execution separate | R04 |
+| r05 | primer_glm/primer_glm.md:603: count dispersion | Specify target and model | primer_glm/primer_glm.md:647: quasi versus NB and fitted checks | Follow the worked operation | primer_glm/primer_glm.md:712: interpret computed result | primer_glm/primer_glm.md:722: NB tail remains discrepant | Inspect the stated alternative and remaining limit | independently read; author execution separate | R05 |
+| r06 | primer_glm/primer_glm.md:738: repeated sites | Specify target and model | primer_glm/primer_glm.md:772: integration and group prediction | Follow the worked operation | primer_glm/primer_glm.md:831: interpret computed result | primer_glm/primer_glm.md:833: few groups and parameter uncertainty | Inspect the stated alternative and remaining limit | independently read; author execution separate | R06 |
+| r10 | primer_glm/primer_glm.md:851: nonlinear gradient | Specify target and model | primer_glm/primer_glm.md:870: basis, penalty and smooth repair | Follow the worked operation | primer_glm/primer_glm.md:917: interpret computed result | primer_glm/primer_glm.md:925: concurvity and support | Inspect the stated alternative and remaining limit | independently read; author execution separate | R10 |
+| r07 | primer_glm/primer_glm.md:945: zero observations | Specify target and model | primer_glm/primer_glm.md:978: hurdle and mixture mass calculations | Follow the worked operation | primer_glm/primer_glm.md:1020: interpret computed result | primer_glm/primer_glm.md:1056: detection and non-identifiability | Inspect the stated alternative and remaining limit | independently read; author execution separate | R07 |
+| r11 | primer_glm/primer_glm.md:1148: unordered and ordered categories | Specify target and model | primer_glm/primer_glm.md:1187: softmax and cumulative thresholds | Follow the worked operation | primer_glm/primer_glm.md:1219: interpret computed result | primer_glm/primer_glm.md:1221: proportional-odds and sparse categories | Inspect the stated alternative and remaining limit | independently read; author execution separate | R11 |
+| r08 | primer_glm/primer_glm.md:1227: prior and count likelihood | Specify target and model | primer_glm/primer_glm.md:1267: posterior, predictive checking and sampling | Follow the worked operation | primer_glm/primer_glm.md:1311: interpret computed result | primer_glm/primer_glm.md:1337: prior sensitivity and finite-chain limits | Inspect the stated alternative and remaining limit | independently read; author execution separate | R08 |
 
 ## Post-draft teaching-depth checkpoint
 
-- Draft source revision: a32765f5b07dbd5710af38bc15b003ae8fb56f03; source SHA-256 fa462de926d187323b1c03f518745f68ab6fb64db7521a35bce81950a46e6e92
-- Brief revision reviewed: glm-brief-v4
+- Draft source revision: 8417dba1d9183041213115f6361d84107ae40109
+- Source SHA-256: 27d68fb0fdb9686588bf349404a88764702ae405e1d96cfc99f05d85f19cef07
+- Brief revision reviewed: glm-brief-v5
 
-The original full-source review found substantive route gaps; the independent scoped re-review inspected the repairs and their dependent transitions. The final scoped review corrected the hurdle figure, duplicate concurvity text and separated-example wording. No route was demoted. Each row links case stages and preserves the stated limitations; a passing script is not the rationale for a content pass.
+Independent reviewer read the whole preceding source and repaired combined trace; no route was demoted. The earlier whole review found a combined-case diagnostic gap, now repaired and independently re-read. Execution is distinct from prose judgement.
 
 | route_id | brief trace or teaching device | draft locators and transition findings | decision and rationale | scope reduction and effect on reader promise | original IDs |
 |---|---|---|---|---|---|
-| r01 | Penguin sampling and model matrix to mean and future intervals | primer_glm/primer_glm.md:67 input; primer_glm/primer_glm.md:75 species fit; primer_glm/primer_glm.md:128 result; primer_glm/primer_glm.md:142 limit | retain: independent re-review found a complete reader path | none; retain route promise | R01 |
-| r02 | family and link to IRLS update | primer_glm/primer_glm.md:150 input; primer_glm/primer_glm.md:168 moments and score; primer_glm/primer_glm.md:202 result; primer_glm/primer_glm.md:236 limit | retain: independent re-review found a complete reader path | none; retain route promise | R02 |
-| r03 | binomial trials and exposure to offset and interaction | primer_glm/primer_glm.md:272 input; primer_glm/primer_glm.md:286 logistic and Poisson models; primer_glm/primer_glm.md:511 result; primer_glm/primer_glm.md:248 limit | retain: independent re-review found a complete reader path | none; retain route promise | R03 |
-| r04 | positive Gamma response to prediction intervals and nested test | primer_glm/primer_glm.md:366 input; primer_glm/primer_glm.md:407 held-out correction; primer_glm/primer_glm.md:453 result; primer_glm/primer_glm.md:411 limit | retain: independent re-review found a complete reader path | none; retain route promise | R04 |
-| r05 | extra count variance to fitted means and simulated checks | primer_glm/primer_glm.md:666 input; primer_glm/primer_glm.md:678 quasi and NB; primer_glm/primer_glm.md:743 result; primer_glm/primer_glm.md:749 limit | retain: independent re-review found a complete reader path | none; retain route promise | R05 |
-| r06 | clustered visits to known/new-site prediction and group score | primer_glm/primer_glm.md:763 input; primer_glm/primer_glm.md:785 integrated site effects; primer_glm/primer_glm.md:858 result; primer_glm/primer_glm.md:864 limit | retain: independent re-review found a complete reader path | none; retain route promise | R06 |
-| r10 | nonlinear gradient to smooth fit and concurvity repair | primer_glm/primer_glm.md:874 input; primer_glm/primer_glm.md:893 basis and penalty; primer_glm/primer_glm.md:944 result; primer_glm/primer_glm.md:950 limit | retain: independent re-review found a complete reader path | none; retain route promise | R10 |
-| r11 | category observations to probability and held-out comparison | primer_glm/primer_glm.md:587 input; primer_glm/primer_glm.md:624 softmax and ordered thresholds; primer_glm/primer_glm.md:656 result; primer_glm/primer_glm.md:618 limit | retain: independent re-review found a complete reader path | none; retain route promise | R11 |
-| r07 | zero counts to held-out predictions | primer_glm/primer_glm.md:962 input; primer_glm/primer_glm.md:980 hurdle and mixture masses; primer_glm/primer_glm.md:1041 result; primer_glm/primer_glm.md:1075 limit | retain: independent re-review found a complete reader path | none; retain route promise | R07 |
-| r08 | prior and likelihood to count interval and sampling | primer_glm/primer_glm.md:1089 input; primer_glm/primer_glm.md:1109 posterior and predictive check; primer_glm/primer_glm.md:1141 result; primer_glm/primer_glm.md:1149 limit | retain: independent re-review found a complete reader path | none; retain route promise | R08 |
+| r01 | Penguin design and species matrix | primer_glm/primer_glm.md:71 input; primer_glm/primer_glm.md:113 mechanism; primer_glm/primer_glm.md:137 result; primer_glm/primer_glm.md:145 boundary | retain: independently read and interpreted | none | R01 |
+| r02 | family/link and predictor | primer_glm/primer_glm.md:155 input; primer_glm/primer_glm.md:305 mechanism; primer_glm/primer_glm.md:348 result; primer_glm/primer_glm.md:371 boundary | retain: independently read and interpreted | none | R02 |
+| r03 | trials, offsets and interactions | primer_glm/primer_glm.md:177 input; primer_glm/primer_glm.md:221 mechanism; primer_glm/primer_glm.md:481 result; primer_glm/primer_glm.md:389 boundary | retain: independently read and interpreted | none | R03 |
+| r04 | positive Gamma outcome | primer_glm/primer_glm.md:253 input; primer_glm/primer_glm.md:567 mechanism; primer_glm/primer_glm.md:575 result; primer_glm/primer_glm.md:579 boundary | retain: independently read and interpreted | none | R04 |
+| r05 | count dispersion | primer_glm/primer_glm.md:603 input; primer_glm/primer_glm.md:647 mechanism; primer_glm/primer_glm.md:712 result; primer_glm/primer_glm.md:722 boundary | retain: independently read and interpreted | none | R05 |
+| r06 | repeated sites | primer_glm/primer_glm.md:738 input; primer_glm/primer_glm.md:772 mechanism; primer_glm/primer_glm.md:831 result; primer_glm/primer_glm.md:833 boundary | retain: independently read and interpreted | none | R06 |
+| r10 | nonlinear gradient | primer_glm/primer_glm.md:851 input; primer_glm/primer_glm.md:870 mechanism; primer_glm/primer_glm.md:917 result; primer_glm/primer_glm.md:925 boundary | retain: independently read and interpreted | none | R10 |
+| r07 | zero observations | primer_glm/primer_glm.md:945 input; primer_glm/primer_glm.md:978 mechanism; primer_glm/primer_glm.md:1020 result; primer_glm/primer_glm.md:1056 boundary | retain: independently read and interpreted | none | R07 |
+| r11 | unordered and ordered categories | primer_glm/primer_glm.md:1148 input; primer_glm/primer_glm.md:1187 mechanism; primer_glm/primer_glm.md:1219 result; primer_glm/primer_glm.md:1221 boundary | retain: independently read and interpreted | none | R11 |
+| r08 | prior and count likelihood | primer_glm/primer_glm.md:1227 input; primer_glm/primer_glm.md:1267 mechanism; primer_glm/primer_glm.md:1311 result; primer_glm/primer_glm.md:1337 boundary | retain: independently read and interpreted | none | R08 |
+| r09 | specialist boundaries | primer_glm/primer_glm.md:1363 input; primer_glm/primer_glm.md:1367 mechanism; primer_glm/primer_glm.md:1371 result; primer_glm/primer_glm.md:1373 boundary | retain: independently read and interpreted | none | R09 |
 
 ## Core-concept depth matrix
 
@@ -131,23 +134,11 @@ The following retains the planning matrix and stable concept meanings. T, D and 
 
 | route_id | concept_id | unresolved gap | decision and reason | effect on reader outcome | original IDs |
 |---|---|---|---|---|---|
-| r09 | c24 | Other response and dependence extensions are large independent subjects | Narrow original boundary to beta, Tweedie, detection, spatial/temporal and survival; retain ID. Multinomial/ordinal now have new IDs c25–c26 in r11 | Reader recognises the remaining boundary, and gains categorical fitting only if the expanded route is accepted | R09, C24, C25, C26, R11 |
-| r01 | c22 | Selected cases have known missingness and observation limits, but full route-specific interpretation remains unaudited | Use penguin missingness and salamander detection limits as bounded cases; retain general counterexamples | Reader can diagnose a threat and qualify inference; final prose and checks remain | R01, C22 |
-| r03 | c23 | Penalised fit and cross-language parity not verified | Expand demonstration; choose a pinned implementation and validate failure/repair examples | Reader understands separation and consequences; exact final commands pending | R03, C23 |
-
-## Review plan
-
-Content and release gates remain separate. Compare every taught route and concept to the revision-bound independent audit, verify trace continuity and decide whether prose teaches the operation and limit. Complete source, example, link, render, accessibility and revision checks before release. The old planning snapshots remain historical; this revision records the draft and scoped independent review.
-
-## Committed layout and language-coverage update
-
-The source and output snapshot at `e77fa0721fe4a062e7219aa3e068e00adcc6ab66` incorporates independently reviewed layout-only line breaks after the content review. Cross-language matched cases now include penguin Gaussian/Gamma means, contrasts and rank; Salamanders GP Poisson; and conjugate Poisson–Gamma count updating, in addition to the fixed core, NB2 and spline examples. The targeted four Python/Julia entries passed in their pinned offline runtimes. Specialised estimated-NB, GLMM, REML GAM, mixture, ordinal and logistic MCMC demonstrations remain R-only; this is explicit implementation coverage, not a claim of universal parity. The final full manifest, publication checks and CI remain release gates.
+| r09 | c24 | Other response and dependence extensions are large independent subjects | Narrow original boundary to beta, Tweedie, detection, spatial/temporal and survival; retain ID. Multinomial/ordinal retain IDs c25–c26 in r11 | Reader recognises the remaining boundary, and gains categorical fitting through the accepted expanded route | R09, C24, C25, C26, R11 |
+| r01 | c22 | Selected cases have known missingness and observation limits, but full route-specific interpretation remains unaudited | Use penguin missingness and salamander detection limits as bounded cases; retain general counterexamples | Reader can diagnose a threat and qualify inference; complete-case interpretation remains conditional | R01, C22 |
+| r03 | c23 | Penalised fit is demonstrated; general cross-language parity is not promised | Expand demonstration; choose a pinned implementation and validate failure/repair examples | Reader understands separation and consequences; general tuning and uncertainty remain bounded | R03, C23 |
 
 
-## Earlier Editorial Revision
+## Evidence and remaining gates
 
-The 22 November editorial revision applies Title Case and preserves existing heading IDs, and adds a bounded primary-source verification note after the orientation. The previous source/output snapshot remains historical at `e77fa0721fe4a062e7219aa3e068e00adcc6ab66`; the intermediate source SHA-256 was `4ef85f9f9492e4716f2333b2207daac5588171716635e76dac3081776f363b8b`. An independent editorial comparison examined the changed headings, retained IDs and note against the earlier source-verification report; it does not replace the earlier independent technical review. The final spelling correction and source/output snapshot are recorded below; no route or concept promise was reduced.
-
-## Final Editorial Snapshot
-
-The reviewed source and outputs are committed at `a32765f5b07dbd5710af38bc15b003ae8fb56f03`, source SHA-256 `fa462de926d187323b1c03f518745f68ab6fb64db7521a35bce81950a46e6e92`. The last change after the heading/verification-note review corrected `optimizer` to `optimiser` in prose without changing line count or model content. The final full publication build, source-scoped lint and offline links passed; PDF and HTML inspection was sampled as recorded in the audit. The unchanged 20-example manifest passed on the preceding source snapshot. Final repository checks, PR and CI remain pending.
+The previous fa462de9 source audit and its 20-example/build checks are historical. The independently reviewed preceding source has content PASS; the span-only source delta is described above; the separate release gate is NOT READY pending PR update and current-head CI. The 23-example run and offline HTML links passed. Current render QA passed. Independent PDF visual sampling passed on pages 1, 11, 12, 50, 51, 66 and 68–70. Primary and MathML browser checks passed for both preserved fragments and an ordinary heading below the header, with MathML display and MathJax inline maths visible. The online source-link check had eight DOI errors and remains advisory. The combined author execution and independent fixed-fixture calculation are different evidence. Retain limitations in the case and audit; no full specialist or language parity claim.
