@@ -269,6 +269,93 @@ def checklist_findings(text: str) -> list[str]:
     return errors
 
 
+def coverage_findings(text: str, source_bytes: bytes) -> list[str]:
+    """Check optional self-reported inclusive line ranges in the current outline.
+
+    The ranges record a claim; they cannot establish that anyone read the source.
+    Revision validation separately binds these bytes to the reviewed commit.
+    """
+    outline: list[str] = []
+    checklist: list[str] = []
+    metadata_lines: list[str] = []
+    all_coverage: list[str] = []
+    all_schemas: list[str] = []
+    in_metadata = True
+    current: list[str] | None = None
+    fence: tuple[str, int] | None = None
+    for line in text.splitlines():
+        marker = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
+        if marker:
+            token = marker.group(1)
+            if fence is None:
+                fence = (token[0], len(token))
+            elif token[0] == fence[0] and len(token) >= fence[1] and not line[marker.end():].strip():
+                fence = None
+            continue
+        if fence is not None:
+            continue
+        heading = re.match(r"^ {0,3}(#{1,6})[ \t]+(.*?)[ \t]*#*[ \t]*$", line)
+        if heading:
+            # A document title may precede its metadata.
+            if heading.group(1) != "#":
+                in_metadata = False
+            current = None
+            if heading.group(1) == "##" and heading.group(2) == "Outline and hierarchy review":
+                current = outline
+            elif heading.group(1) == "##" and heading.group(2) == "Release readiness checklist":
+                current = checklist
+            continue
+        if in_metadata:
+            metadata_lines.append(line)
+        if re.match(r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Audit schema\b", line, re.I):
+            all_schemas.append(line)
+        if re.match(r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Source read coverage\b", line, re.I):
+            all_coverage.append(line)
+        if current is not None:
+            current.append(line)
+
+    schemas = [line for line in metadata_lines if re.match(
+        r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Audit schema\b", line, re.I)]
+    if all_schemas and (len(all_schemas) != 1 or len(schemas) != 1
+                        or not re.fullmatch(r"- Audit schema: 2\s*", schemas[0])):
+        return ["audit: expected one supported Audit schema entry: - Audit schema: 2"]
+    entries = [line for line in outline if re.match(
+        r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Source read coverage\b", line, re.I)]
+    if schemas and (len(entries) != 1 or len(all_coverage) != 1):
+        return ["audit: Audit schema 2 requires exactly one Source read coverage entry in the current outline review"]
+    if not entries:
+        return []  # Unversioned historical audits are exempt until they opt in.
+    if len(entries) != 1:
+        return ["audit: expected exactly one Source read coverage entry in outline review"]
+    match = re.fullmatch(r"- Source read coverage: (none|[0-9]+-[0-9]+(?:,\s*[0-9]+-[0-9]+)*)\s*", entries[0])
+    if not match:
+        return ["audit: malformed Source read coverage; use none or inclusive ranges such as 1-20, 21-40"]
+    gate = [re.fullmatch(r"- Structural gate:\s+\*\*(pass|fail|not-checked)\*\*(?:[,. ;:]\s*\S.*|\s+\S.*)?\s*", line)
+            for line in checklist if re.match(r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Structural gate\b", line, re.I)]
+    if len(gate) != 1 or gate[0] is None:
+        return ["audit: Source read coverage requires one valid Structural gate entry"]
+    line_count = source_bytes.count(b"\n") + bool(source_bytes and not source_bytes.endswith(b"\n"))
+    ranges = [] if match.group(1) == "none" else [tuple(map(int, item.split("-"))) for item in match.group(1).split(",")]
+    errors = []
+    previous = 0
+    complete = True
+    for start, end in sorted(ranges):
+        if start < 1 or end < start or end > line_count:
+            errors.append(f"audit: Source read coverage range {start}-{end} is invalid for {line_count} source lines")
+            continue
+        if start <= previous:
+            errors.append(f"audit: Source read coverage range {start}-{end} overlaps a previous range")
+        if start > previous + 1:
+            complete = False
+        previous = max(previous, end)
+    complete = complete and previous == line_count
+    if gate[0].group(1) == "pass" and line_count == 0:
+        errors.append("audit: Structural gate pass requires a nonempty source")
+    if gate[0].group(1) == "pass" and not complete:
+        errors.append(f"audit: Structural gate pass requires complete Source read coverage of lines 1-{line_count}")
+    return errors
+
+
 def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
     errors = []
     if not brief.is_file():
@@ -278,10 +365,17 @@ def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
     if errors:
         return errors
     errors.extend(locator_findings(root, audit))
-    revision_errors, _, digest = revision_findings(root, source_path(root, source), brief, audit)
+    revision_errors, reviewed_source, digest = revision_findings(root, source_path(root, source), brief, audit)
     errors.extend(revision_errors)
     audit_text = audit.read_text(encoding="utf-8")
     errors.extend(checklist_findings(audit_text))
+    if reviewed_source:
+        committed = subprocess.run(
+            ["git", "show", f"{reviewed_source}:{source.relative_to(root).as_posix()}"],
+            cwd=root, capture_output=True,
+        )
+        if committed.returncode == 0:
+            errors.extend(coverage_findings(audit_text, committed.stdout))
     print(f"source: {source.relative_to(root)}")
     print(f"source sha256: {digest}")
     return errors

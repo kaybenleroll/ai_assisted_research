@@ -2,6 +2,7 @@
 
 - Issue and milestone: <primary issue; related issues>
 - Audit revision: <stable revision identifier>
+- Audit schema: 2
 - Source revision: <exact commit or source artefact revision>
 - Tracked path: <repository path to this audit>
 - Starting branch: <branch>
@@ -62,8 +63,15 @@ count as evidence of depth.
 
 Record the actual source outline and inspect the rendered contents at the
 reviewed source revision, including every top-level section boundary and its
-heading hierarchy. Record unavailable current rendered contents as `not-checked`.
+heading hierarchy. Record unavailable current rendered contents as `not-checked`. The source-read
+coverage record lists successfully received and inspected inclusive line ranges
+at the reviewed revision; it is not proof of understanding. A structural pass
+requires all lines, with no gaps, overlaps or duplicate ranges. Partial
+coverage permits a fail for an observed defect or `not-checked`, but never a
+pass. The mechanical checker validates coverage only when the marker is
+present; older unmarked audits remain exempt.
 
+- Source read coverage: <inclusive ranges such as 1-120, 121-240, or none>
 - Rendered contents: <**checked** or **not-checked**; output revision and method> For each top-level
 section, explain its purpose, how its children support it, and the distinction
 or relationship between adjacent siblings. Examine boundaries and hierarchy

@@ -165,6 +165,99 @@ class PrimerAuditTests(unittest.TestCase):
             self.assertTrue(any("working source differs" in error
                                 for error in MODULE.validate(root, source, brief, audit)))
 
+    def test_opt_in_source_read_coverage_ranges_and_gate(self):
+        def audit(coverage, gate="pass", release="ready"):
+            return (OUTLINE + (f"- Source read coverage: {coverage}\n" if coverage is not None else "")
+                    + "## Release readiness checklist\n- Content gate: **pass**\n"
+                    + f"- Structural gate: **{gate}**\n- Release readiness: **{release}**\n")
+
+        source = b"one\ntwo\nthree"  # Last line need not end in a newline.
+        for coverage in ("1-3", "2-2, 1-1, 3-3"):
+            with self.subTest(coverage=coverage):
+                self.assertEqual(MODULE.coverage_findings(audit(coverage), source), [])
+        for coverage in ("1-2", "2-3", "1-1, 3-3", "none", "1-4", "0-2", "2-1",
+                         "1-2, 2-3", "1-3, 1-3", "1", "1-3,", "pending"):
+            with self.subTest(coverage=coverage):
+                self.assertTrue(MODULE.coverage_findings(audit(coverage), source))
+        for gate in ("fail", "not-checked"):
+            text = audit("1-2", gate, "not-ready")
+            self.assertEqual(MODULE.coverage_findings(text, source), [])
+            self.assertEqual(MODULE.checklist_findings(text), [])
+        self.assertTrue(MODULE.coverage_findings(audit("none"), b""))
+        self.assertEqual(MODULE.coverage_findings(audit("none", "not-checked", "not-ready"), b""), [])
+        self.assertTrue(MODULE.coverage_findings(audit("1-1"), b""))
+        self.assertEqual(MODULE.coverage_findings(audit(None), source), [])
+        self.assertTrue(MODULE.coverage_findings(audit("1-3") + "", b"one\ntwo\nthree\nfour\n"))
+        duplicate = audit("1-3").replace("## Release readiness", "- Source read coverage: 1-3\n## Release readiness")
+        self.assertTrue(MODULE.coverage_findings(duplicate, source))
+        fenced = audit(None).replace("## Release readiness", "```md\n- Source read coverage: 1-1\n```\n## Release readiness")
+        self.assertEqual(MODULE.coverage_findings(fenced, source), [])
+
+    def test_schema_two_requires_coverage_in_current_outline(self):
+        checklist = ("## Release readiness checklist\n- Content gate: **pass**\n"
+                     "- Structural gate: **pass**\n- Release readiness: **ready**\n")
+        prefix = "# Audit\n- Audit schema: 2\n"
+        full = prefix + OUTLINE + "- Source read coverage: 1-2\n" + checklist
+        self.assertEqual(MODULE.coverage_findings(full, b"one\ntwo\n"), [])
+        missing = full.replace("- Source read coverage: 1-2\n", "")
+        misplaced = missing + "- Source read coverage: 1-2\n"
+        duplicate = full + "- Source read coverage: 1-2\n"
+        for text in (missing, misplaced, duplicate, full.replace("schema: 2", "schema: 3"),
+                     full.replace("- Audit schema: 2\n", "- Audit schema: 2\n- Audit schema: 2\n")):
+            with self.subTest(text=text):
+                self.assertTrue(MODULE.coverage_findings(text, b"one\ntwo\n"))
+        partial = full.replace("1-2", "1-1").replace("**pass**\n- Release readiness", "**not-checked**\n- Release readiness").replace("**ready**", "**not-ready**")
+        self.assertEqual(MODULE.coverage_findings(partial, b"one\ntwo\n"), [])
+        self.assertEqual(MODULE.checklist_findings(partial), [])
+        self.assertTrue(MODULE.coverage_findings(full.replace("1-2", "1-1"), b"one\ntwo\n"))
+        self.assertEqual(MODULE.coverage_findings(missing.replace("- Audit schema: 2\n", ""), b"one\ntwo\n"), [])
+
+    def test_coverage_is_bound_to_the_reviewed_source_revision(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.git_repo(root)
+            source = root / "primer.md"
+            source.write_bytes(b"one\ntwo")
+            revision = self.commit(root, "source")
+            brief, audit = root / "brief.md", root / "audit.md"
+            brief.write_text(f"- Source revision: {revision}\n", encoding="utf-8")
+            audit.write_text(f"- Source revision: {revision}\n- Reviewed revision: {revision}\n"
+                             + OUTLINE + "- Source read coverage: 1-2\n"
+                             + "## Release readiness checklist\n- Content gate: **pass**\n"
+                             + "- Structural gate: **pass**\n- Release readiness: **ready**\n", encoding="utf-8")
+            self.assertEqual(MODULE.validate(root, source, brief, audit), [])
+            source.write_bytes(b"one\ntwo\nthree")
+            self.assertTrue(any("working source differs" in error for error in MODULE.validate(root, source, brief, audit)))
+            newer = self.commit(root, "changed source")
+            audit.write_text(audit.read_text().replace(f"Reviewed revision: {revision}", f"Reviewed revision: {newer}"))
+            self.assertTrue(any("resolve to different commits" in error for error in MODULE.validate(root, source, brief, audit)))
+
+    def test_schema_two_coverage_end_to_end_at_reviewed_git_revision(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.git_repo(root)
+            source = root / "primer.md"
+            source.write_bytes(b"one\ntwo\nthree\nfour\nfive")
+            revision = self.commit(root, "five source lines")
+            brief, audit = root / "brief.md", root / "audit.md"
+            brief.write_text(f"- Source revision: {revision}\n", encoding="utf-8")
+            text = (f"# Audit\n- Audit schema: 2\n- Source revision: {revision}\n"
+                    f"- Reviewed revision: {revision}\n" + OUTLINE
+                    + "- Source read coverage: 1-3, 4-5\n"
+                    + "## Release readiness checklist\n- Content gate: **pass**\n"
+                    + "- Structural gate: **pass**\n- Release readiness: **ready**\n")
+            audit.write_text(text, encoding="utf-8")
+            self.assertEqual(MODULE.validate(root, source, brief, audit), [])
+            audit.write_text(text.replace("1-3, 4-5", "1-3"), encoding="utf-8")
+            self.assertTrue(any("complete Source read coverage" in error
+                                for error in MODULE.validate(root, source, brief, audit)))
+            source.write_bytes(b"one\ntwo\nthree\nfour\nfive\nsix\n")
+            newer = self.commit(root, "six source lines")
+            audit.write_text(text.replace(f"Reviewed revision: {revision}",
+                                          f"Reviewed revision: {newer}"), encoding="utf-8")
+            self.assertTrue(any("resolve to different commits" in error
+                                for error in MODULE.validate(root, source, brief, audit)))
+
     def test_changed_ranges_report_affected_locators(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

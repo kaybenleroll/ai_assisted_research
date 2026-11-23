@@ -60,7 +60,11 @@ contiguous, non-overlapping batches small enough for complete tool output.
 Read every batch, tracking first and last line; if any output is truncated,
 split and reread it before advancing. Verify there are no gaps between ranges.
 If tool output cannot be recovered, stop the whole-document verdict and record
-the missing ranges and reason.
+the missing ranges and reason. For a new or migrated audit use `- Audit schema: 2` and record the
+successfully received source lines in the audit outline section as `- Source read coverage: 1-120, 121-240`
+using inclusive ranges (or `none` if no lines were read). Bind the record to
+the reviewed source revision. It records coverage, not proof of comprehension;
+never claim a range whose output was truncated or not inspected.
 
 Read the complete source and perform a whole-document inventory against the
 tracked, revision-bound brief. Check coverage, technical claims and
