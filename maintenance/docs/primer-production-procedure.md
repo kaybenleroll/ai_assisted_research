@@ -208,6 +208,9 @@ blocks readiness; an optional unperformed check is a stated limitation, not
 automatic failure. State the reasoned verdict, outstanding blockers and
 stopping boundary instead of leaving an unexplained pending status.
 
+Before reading a long source, inventory its line count and read in bounded,
+contiguous, non-overlapping batches; verify that the recorded ranges have no
+gaps. If a batch is truncated, split and reread it before moving on.
 If a source read is truncated, continue in bounded, contiguous batches and
 record inspected and unreviewed ranges. Do not mark the whole-document review
 complete while gaps remain; if reading cannot continue, state the cause and

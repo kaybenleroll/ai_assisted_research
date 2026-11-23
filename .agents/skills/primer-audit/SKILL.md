@@ -55,6 +55,13 @@ locator and revision check, opted-in examples, build, render QA, freshness,
 and scoped link checks. Record its result in the audit. It does not replace
 human judgement of depth, citations, accessibility meaning, or visual quality.
 
+Before reading a long source, determine its line count and divide it into
+contiguous, non-overlapping batches small enough for complete tool output.
+Read every batch, tracking first and last line; if any output is truncated,
+split and reread it before advancing. Verify there are no gaps between ranges.
+If tool output cannot be recovered, stop the whole-document verdict and record
+the missing ranges and reason.
+
 Read the complete source and perform a whole-document inventory against the
 tracked, revision-bound brief. Check coverage, technical claims and
 calculations, sources and freshness, prerequisites and explanatory depth,
