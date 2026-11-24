@@ -59,6 +59,11 @@ Before reading a long source, determine its line count and divide it into
 contiguous, non-overlapping batches small enough for complete tool output.
 Read every batch, tracking first and last line; if any output is truncated,
 split and reread it before advancing. Verify there are no gaps between ranges.
+Request and inspect one batch per tool call; do not combine multiple batch
+outputs into a single response that can itself be truncated. Check the tool's
+truncation indication and the returned line sequence, not just the first and
+last lines. After any interrupted or truncated recovery, retry each missing
+interval in smaller batches until it is received or a retry actually fails.
 If tool output cannot be recovered, stop the whole-document verdict and record
 the missing ranges and reason. For a new or migrated audit use `- Audit schema: 2` and record the
 successfully received source lines in the audit outline section as `- Source read coverage: 1-120, 121-240`
