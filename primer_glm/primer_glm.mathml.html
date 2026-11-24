@@ -861,22 +861,14 @@ probability distribution for an observation, a systematic predictor
 built from its covariates, and a link connecting that predictor to the
 conditional mean. This primer explains why each decision exists, how the
 pieces determine a fit and its interpretation, and what to do when the
-assumptions fail. It begins with ordinary regression and concrete
-response models, derives the fitting machinery, and then develops
-uncertainty and model checking. Later sections develop overdispersion,
-dependence, smooth effects, multiple categories, zero processes, and
-Bayesian inference as responses to specific limitations.</p>
+assumptions fail.</p>
 <p>The running setting is ecological monitoring, but no ecology
 background is required. A <em>site</em> is a location selected for
 study, a <em>visit</em> is a sampling occasion, and a <em>detection</em>
 means that an organism was recorded during that visit. A non-detection
 need not mean the organism was absent: an observer may miss it.
-Likewise, a recorded count need not equal the number present. We use
-small hypothetical calculations where the answer can be checked by hand,
-explicitly simulated examples where the generating mechanism is known,
-and separate real penguin and salamander studies. The real studies are
-not part of the simulated programme and should not be treated as causal
-experiments.</p>
+Likewise, a recorded count need not equal the number present. Small
+hypothetical calculations can be checked by hand.</p>
 <p>You should be comfortable with algebra, logarithms, elementary
 probability, derivatives, and the idea of a matrix. We refresh each tool
 as it becomes necessary. Read the main route in order: the later
@@ -887,19 +879,20 @@ alongside the published example files; a code fragment is a teaching
 illustration unless its execution is recorded in the example manifest.
 The following cases use calculations and checks together.</p>
 <p>The route moves from a question and ordinary regression to four
-response models, then asks why fitting works and how to assess its
-uncertainty. Count extensions follow a sequence of different
-discrepancies: variability, shared sites, nonlinear means and zeros.
-These components can coexist. The later <a href="#combined-count-case">combined case</a> puts them together. The <a href="#categorical-responses">categorical</a> and <a href="#bayesian-models">Bayesian</a> chapters are optional branches for
+response models, then explains fitting, uncertainty and model checking.
+Count extensions address different discrepancies: variability, shared
+sites, nonlinear means and zeros. These components can coexist, as the
+later <a href="#combined-count-case">combined case</a> shows. The <a href="#categorical-responses">categorical</a> and <a href="#bayesian-models">Bayesian</a> chapters are optional branches for
 those response types and inferential questions; the synthesis returns to
 the decisions made along the way.</p>
 <p>The cases do not all use the same observations. Penguins are a real
 positive-measurement study; Salamanders are a separate real
-repeated-count study. The Gamma holdout, the independent
-negative-binomial sample, the eight-site mixed-model illustration, the
-zero-process experiment and the combined monitoring survey are
-separately generated simulations. Their known mechanisms help diagnose a
-model; none establishes how the real studies were generated.</p>
+repeated-count study. Neither observational study should be treated as a
+causal experiment. The Gamma holdout, the independent negative-binomial
+sample, the eight-site mixed-model illustration, the zero-process
+experiment and the combined monitoring survey are separately generated
+simulations. Their known mechanisms help diagnose a model; none
+establishes how the real studies were generated.</p>
 <p>Keep a short analysis ledger as you read. For the penguins, the
 question is a species-specific mass mean and a future individual
 measurement; 342 rows supply both, while a sex comparison uses 333. For
