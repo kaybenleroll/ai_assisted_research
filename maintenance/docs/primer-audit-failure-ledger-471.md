@@ -21,6 +21,23 @@ its disposition. Test both permitted hierarchies against N1. The rule change is
 not approval of an individual outline, and this ledger does not claim such a
 test has been run.
 
+## Closing-section purpose mistaken for sufficient depth
+
+**Classification: application and evidence-design failure.** The GLM audit at
+`d929bea` retained its synthesis, specialist boundaries and exercises using
+labels such as “bounded” and “distinct purpose”, without showing that the
+closing journey gave readers enough developed reasoning or practice. A
+separate challenge repeated the conclusion. The content and structural passes
+were subsequently withdrawn at `808c5ba`. Distinct jobs are real but do not
+establish sufficient depth.
+
+**Bounded remedy:** cite the reader tasks and passages on both sides of a
+boundary, compare a meaningful alternative where relevant, and test the
+reader's next action against an actual opportunity and feedback or explain why
+these are not promised. Record unsupported transfer and its consequence. The
+two scoped trials and their limits are in the calibration report. They do not
+establish reliable whole-document behaviour.
+
 ## Truncated or fragmentary structural review
 
 **Classification: application failure; prior instruction sufficiency is

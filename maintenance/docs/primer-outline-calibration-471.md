@@ -194,3 +194,27 @@ The reviewer also identified a possible promise-to-evidence gap at lines 1015–
 A fresh single-reviewer session independently assessed three primary concept rows (`kg-boundary`, `kg-mentions` and `kg-extraction`) and three Q4 transition rows in the knowledge-graph audit. The prompt named the rows and requested comparison with the brief, source and case inputs, decisions, outputs and limitations; it did not identify the anticipated source-role ambiguity or table-header locators. The source revision was `5924434d90d25eba7360d78172d74b21365462c6`, the brief `kg-398-brief-r13` and the audit `kg-398-depth-audit-r18`. The reviewer selected and read the audit skill and limited its conclusion to this sample.
 
 The reviewer traced the two-source Q4 comparison through the answer and the controlled bad-answer repair without inventing a case break. It qualified the audit's phrase “admit R1/M1/D1”: D1 supplies identity and affiliation context, not a third Q4 applicability assertion. It identified three example locators that point to table headers rather than the worked rows immediately following them, and supplied the relevant row ranges. The significance of a header locator depends on the repository's locator convention; a header is not itself the worked action. It also distinguished the prose's illustrative semantic refusals from what the companion's narrow pattern implementation demonstrates, and did not claim that it had executed the companion. The source-role qualification and header positions were independently checked during calibration. These observations support the semantic and continuity review of this small real sample; they do not establish that other rows, the whole primer, or the companion execution have been verified. The temporary prompt and event log are `prompt-semantic-independent.txt` and `session-semantic-independent.jsonl` under `/tmp/primer-audit-trials-471/`.
+
+### Closing-journey depth trials
+
+On 24 November, user feedback challenged the GLM audit's retention of the
+closing sections at source `46bcfa4`. The existing reasoning asserted that
+the sections were bounded without demonstrating whether their development was
+adequate. A first independent scoped trial of an uncommitted guidance revision
+inspected source lines 1325–1440 and the heading inventory. It cited passages
+and compared boundaries, but retained the exercises without examining whether
+they practise the synthesis as a complete decision. This was a behavioural
+failure, not a validation of the revision.
+
+After further instruction to test a concrete reader action, a fresh reviewer
+examined source lines 1280–1440 and the outline. The revised skill SHA-256 was
+`5868a36eb830a03f5a3b1463c681992f262af36d47aecb5d5c23502dc814fcce`.
+The reviewer identified that the combined exercise supplies no new diagnostic
+or score evidence for a model-selection decision, while treating this as an
+advisory opportunity because the brief and whole source were outside the
+trial. It retained the section boundaries and reported the structural gate
+not-checked. This is useful partial detection, not a validated whole-document
+audit or evidence that all closing-section depth issues were found. Neither
+trial inspected rendered contents, checked the brief or executed examples;
+both were explicitly scoped and manually directed to the revised skill. They
+do not establish native activation or reliable generalisation to other primers.

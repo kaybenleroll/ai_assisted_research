@@ -80,6 +80,12 @@ inventory of headings alone is not a review. Record evidence and a disposition
 for each boundary, including justified retention. Judge structure separately
 from the depth and dependency-order gates.
 
+In the boundary and disposition cells, cite passages on both sides, identify
+the reader task each serves, and explain their connection or distinction. Where
+a plausible alternative matters, describe its placement or grouping and compare
+its effect on navigation and reasoning with the existing structure. A label
+such as “bounded” or “distinct purpose” is not a comparison or rationale.
+
 Consider isolated orientation or notation, short sections with a single child,
 long combined cases without subsections, and balance between related branches
 of the hierarchy. For each relevant candidate, compare plausible placements or
@@ -114,7 +120,18 @@ apply or interpret it, and a material limitation or failure case. Assign an
 explicit disposition of `expand`, `consolidate`, or `retain`. Use exact source
 locators and the reviewed revision. A `retain` decision for an intentionally
 brief section needs an editorial reason, such as orientation, transition, or a
-deliberately bounded reference branch.
+deliberately bounded reference branch. Explain what the cited development
+enables the intended reader to do. If it is insufficient, identify the missing
+reasoning and the resulting reader consequence; a brief or reference label
+alone does not establish that the section fulfils its promised job.
+
+For each major synthesis, practice, or reference section, state a concrete
+decision or action a reader needs after the preceding route. Locate an
+opportunity to perform it with the information and feedback needed there, or
+explain why that opportunity or feedback is not promised. Record unsupported
+transfer from earlier material and the reader consequence. Judge the actual
+development independently of the title, section label, or existence of earlier
+examples; this does not require an exercise in every section.
 
 | Section and route/concept IDs | Teaching job | Reasoning spine or worked thread | Application or interpretation locator | Material limitation or failure-case locator | Disposition and rationale |
 |---|---|---|---|---|---|

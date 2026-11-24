@@ -84,7 +84,11 @@ in `maintenance/docs/primer-production-procedure.md` and recording evidence in
 the purpose of parent and child sections, and whether siblings serve distinct
 reader needs or develop one continuous task or argument. Record an explicit,
 evidence-based decision for each boundary, including why it should be retained
-or changed and the reader consequence. Distinguish an unresolved substantive
+or changed and the reader consequence. Cite passages on both sides and explain
+the reader task each serves and how those tasks connect or differ. Where a
+plausible alternative grouping or placement matters, describe it and compare its
+effect on navigation and reasoning with the existing structure. Labels such as
+“bounded” or “distinct purpose” alone do not justify retention. Distinguish an unresolved substantive
 structural finding that blocks content readiness from an editorial improvement
 that does not; an unmet user-specified structural requirement blocks readiness.
 Do not infer either decision from heading counts alone.
@@ -163,7 +167,19 @@ main reasoning spine or worked thread, the exact passage where the reader can
 apply or interpret it, and the material limit or failure case. Then make an
 explicit disposition: `expand`, `consolidate`, or `retain`. `retain` requires
 an editorial reason when the section is intentionally brief (for example,
-orientation, a transition, or a deliberately bounded reference branch).
+orientation, a transition, or a deliberately bounded reference branch). Explain
+what the cited development enables the intended reader to do; where it is
+insufficient, identify the missing reasoning and resulting reader consequence.
+A brief or reference label alone does not establish that the section fulfils its
+promised job.
+For a major synthesis, practice, or reference section, pose a concrete reader
+task after the preceding route: what decision or action is now needed? Locate
+an opportunity to carry it out with the information and feedback needed there,
+or explain why that opportunity or feedback is not promised. Identify any
+unsupported transfer from earlier material and its consequence for the reader.
+Judge the actual development independently of the title, section label, or
+existence of earlier examples. This does not require an exercise in every
+section or prescribe a structural outcome.
 Expand a section when the reader cannot explain the mechanism, reproduce the
 promised operation, interpret its result, or recognise its failure without
 silently importing missing reasoning from another section. Consolidate
