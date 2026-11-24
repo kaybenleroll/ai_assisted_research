@@ -218,3 +218,52 @@ audit or evidence that all closing-section depth issues were found. Neither
 trial inspected rendered contents, checked the brief or executed examples;
 both were explicitly scoped and manually directed to the revised skill. They
 do not establish native activation or reliable generalisation to other primers.
+
+### Whole-source GLM and contrasting Pi editorial trials
+
+Two independent reviewers were manually directed to the revised skill at
+`3f43392` and asked to examine complete sources and their reader promises,
+without seeing the current audit. The GLM reviewer received an inadvertent
+truncated tail of the brief's evidence section, describing build, link and
+accessibility status but no visible editorial finding or content verdict. The
+trial is therefore non-blind. The reviewer reported receiving GLM source lines
+1–1440 in twelve contiguous batches without truncation, and inspected the
+committed HTML contents as text. The source was last changed at `46bcfa4`;
+its SHA-256 was `29e0923b94c1e824412b6d51541d1b6d8de419b43f4aae8d86f5dbcb7a6cd5d3`.
+
+The GLM reviewer identified that exercises 1423–1425 repeat the numerical
+inputs and answers at 1188, 1211 and 1251/1261, weakening independent transfer,
+and that the practice does not require choosing and justifying an end-to-end
+revision on new evidence. The coordinator checked these three repetitions in
+the source. The reviewer retained the synthesis and reference boundaries as
+substantive for their stated jobs, with possible synthesis expansion; that does
+not resolve the user's concern about the depth and organisation of the ending.
+A separate closing assessment also proposed more explicit boundary-recognition
+and solution steps. The trial detected a specific important weakness, but did
+not establish that all the provisional closing assessment's concerns were
+found or that an absence of further gaps is verified.
+
+The second reviewer reported reading Pi coding-agent source lines 1–1082 in
+six contiguous batches and its brief, without reading its audit or rendered
+contents. The source was last changed at `c193c88` and its SHA-256 was
+`1a8edd490e0f3fb58f864a89da5a3d15b5fb3320aa2e20c7dd471a90e0fd0`.
+The reviewer found that the first-run example creates an untracked README at
+131–135, then asks for `git diff` at 143–151; the coordinator confirmed the
+instructions, and Git does not show an untracked file's contents in a normal
+diff. The reviewer also identified an ambiguity: the contract at 784–787
+requires exact extrema, but the comparator description at 840 names only keys,
+counts and mean in its parenthetical. It also says to compare each row with the
+expected file, so this is not proof that an actual comparator omits extrema;
+the example does not supply that implementation. The reviewer retained the
+short glossary and closing perspective as useful references and proposed moving
+the comparison section; that placement is an editorial judgement, not a
+verified defect.
+
+Both trials were editorial, not full technical, source, execution, visual or
+release audits. Historical reconciliation was intentionally excluded; neither
+proves native skill activation or behaviour on every primer. The Pi findings
+are review candidates, not changes or a fresh readiness decision for that
+primer. These observations support further use of the guidance with human
+adjudication, but do not establish reliable detection of all depth or
+structural issues. Retain the distinction between a useful finding, an
+unresolved interpretation and a demonstrated repair.
