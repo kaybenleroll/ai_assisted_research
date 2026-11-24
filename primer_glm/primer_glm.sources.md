@@ -1,6 +1,6 @@
 # GLM primer: source identity review
 
-24 November 2026. An independent reviewer inventoried the external links in source revision `46bcfa4ada0d763e9851a20b9910b57fb549bda4`: 31 distinct URLs, including 12 DOI links. The table records identity checks against opened primary records or documentation; it is not a full-text review or a verification of every claim. The direct Ferrari and Cribari-Neto article page returned 403; the publisher-indexed record identified the work. The automated online check separately reported access errors and redirects; those results are not represented as a clean pass.
+24 November 2026. An independent reviewer inventoried the external links in source revision `46bcfa4ada0d763e9851a20b9910b57fb549bda4`: 31 distinct URLs, including 12 DOI links. The table records checks against opened primary records or documentation; it is not an exhaustive full-text review or verification of every claim. The direct Ferrari and Cribari-Neto article page returned 403; the publisher-indexed record identified the work and an author-hosted full paper was opened independently. The automated online check separately reported access errors and redirects; those results are not represented as a clean pass.
 
 | Source in primer | Identity and checked primary record |
 |---|---|
@@ -30,7 +30,7 @@
 | Effective sample size | [Effective Sample Size](https://mc-stan.org/docs/2_19/reference-manual/effective-sample-size-section.html), Stan Development Team. |
 | NUTS | [The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo](https://arxiv.org/abs/1111.4246), Hoffman and Gelman, author preprint. |
 | Divergences | [MCMC sampling manual](https://mc-stan.org/docs/reference-manual/mcmc.html), Stan Development Team; the linked divergent-transitions page redirected here. |
-| Beta regression | [Beta Regression for Modelling Rates and Proportions](https://www.tandfonline.com/servlet/linkout?type=Scholix&url=https%3A%2F%2Fdx.doi.org%2F10.1080%252F0266476042000214501), Ferrari and Cribari-Neto, DOI `10.1080/0266476042000214501`; publisher-indexed identity, direct article page returned 403. |
+| Beta regression | [Beta Regression for Modelling Rates and Proportions](https://www.tandfonline.com/servlet/linkout?type=Scholix&url=https%3A%2F%2Fdx.doi.org%2F10.1080%252F0266476042000214501), Ferrari and Cribari-Neto, DOI `10.1080/0266476042000214501`; publisher-indexed identity; direct article page returned 403. The [author-hosted full paper](https://users.ime.usp.br/~sferrari/beta.pdf) was opened independently. |
 | statmod | [statmod: Statistical Modeling](https://cran.r-project.org/web/packages/statmod/statmod.pdf), Smyth and contributors. |
 | Occupancy | [Estimating Site Occupancy Rates When Detection Probabilities Are Less Than One](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1890/0012-9658%282002%29083%5B2248%3AESORWD%5D2.0.CO%3B2?journalCode=ecol), MacKenzie and colleagues, DOI `10.1890/0012-9658(2002)083[2248:ESORWD]2.0.CO;2`. |
 | INLA | [Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations](https://rss.onlinelibrary.wiley.com/doi/10.1111/j.1467-9868.2008.00700.x), Rue, Martino and Chopin, DOI `10.1111/j.1467-9868.2008.00700.x`. |

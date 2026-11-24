@@ -10,7 +10,7 @@
 - Date: 2026-11-22
 - Reviewed revision: 46bcfa4ada0d763e9851a20b9910b57fb549bda4
 - Brief reviewed: primer_glm/primer_glm.brief.md, glm-brief-v11 for targeted trace-cell and r03 reader-path reviews; glm-brief-v12 for scoped semantic locator corrections only. Historical whole-content review predates both.
-- Review boundary: historical independent content and execution evidence; full structural reading at `2427632`, scoped opening delta at `46bcfa4`, independent semantic evidence review, and bounded technical and source checks. Current-head PR and CI remain pending after push.
+- Review boundary: historical independent content and execution evidence; full structural reading at `2427632`, scoped opening delta at `46bcfa4`, independent semantic evidence review, and bounded technical and source checks. CI passed at `24ccbf4`; CI for the subsequent evidence revision remains pending.
 - Teaching-case contract: primer_glm/primer_glm.case.md, glm-case-v5.
 - Core-concept depth matrix: primer_glm/primer_glm.brief.md, glm-brief-v12.
 - Readiness decision: not-ready
@@ -214,15 +214,15 @@ A bounded follow-up on 23 November 2026 checked the eight DOI references that ha
 |---|---|---|
 | Current independent content | pass | The historical independent content review, whole-source structural and reader-depth pass at `2427632`, reviewed opening delta at `46bcfa4`, complete scoped semantic review and risk-selected technical checks support the current teaching gate. Their different scopes are recorded above; no exhaustive independent refit or technical verification is claimed. |
 | Source and locator binding | reviewed | Independent semantic review covered all 26 concept rows and every primary and alternative route transition and brief trace; corrections were rechecked. Source `46bcfa4` differs from the preceding reviewed source only at opening lines 7, 9, 14 and 16; the opening delta was reviewed and other source lines carry forward unchanged. This does not repeat the whole technical audit. |
-| Examples | passed locally | `just examples glm` passed all 23 at source `46bcfa4`; independent prose review and example execution have distinct provenance. Current-head CI remains pending after push. |
+| Examples | passed locally | `just examples glm` passed all 23 at source `46bcfa4`; independent prose review and example execution have distinct provenance. CI examples passed at `24ccbf4`; CI for the subsequent evidence revision remains pending. |
 | Build, render and visual | sampled | Pinned full build passed at `46bcfa4`; PDF code-spacing output was updated at `2a82379`, and final render QA passed. Visual checks sampled the pages listed above, including the updated contents; interactive browser and assistive-technology checks were not performed. |
-| Links and sources | bounded; online advisory issues | Offline HTML links passed. The latest online advisory reported 57 successes, seven errors (six 403 and one 302), seven unsupported and five redirects; it is not a clean pass. Risk-selected primary-source and technical checks are described above, with full-text and freshness limits. Earlier online run: wrapper exited 0 while Lychee exited 2, with 68 total, 56 successes, four redirects, eight unsupported and eight errors (seven DOI 403 and one DOI redirect limit). The earlier publisher follow-up and this run remain historical. |
-| Accessibility | advisory | PDF untagged; interactive browser, assistive technology, keyboard and navigation not verified; no conformance claim. |
-| Repository, PR and CI | pending | `just check` passed; final draft PR update and current-head CI remain pending until push. |
+| Links and sources | bounded; online advisory issues | Offline HTML links passed. The latest online advisory reported 57 successes, seven errors (six 403 and one 302), seven unsupported and five redirects; it is not a clean pass. Risk-selected primary-source and technical checks are described above, with full-text and freshness limits. Direct publisher access to Ferrari and Wedderburn was unavailable; identity was verified through publisher-indexed records. An author-hosted Ferrari full manuscript (https://users.ime.usp.br/~sferrari/beta.pdf) and the Wedderburn publisher issue index were opened. Direct DOI access was not a pass. For source identity, the opened author manuscript and publisher issue index are accepted as bounded substitutes; the direct-access limitation remains disclosed and should be revisited if reader access is reported as impaired. Earlier online run: wrapper exited 0 while Lychee exited 2, with 68 total, 56 successes, four redirects, eight unsupported and eight errors (seven DOI 403 and one DOI redirect limit). The earlier publisher follow-up and this run remain historical. |
+| Accessibility | advisory | Static HTML checks found `en-GB`, labelled contents and main landmarks, a skip link, nine images with nonempty alternative text, 78 valid contents targets and no duplicate IDs. Interactive browser, assistive-technology, keyboard and navigation checks remain unperformed and advisory under the publication-accessibility policy. The PDF is untagged; no conformance claim. |
+| Repository, PR and CI | pending | `just check` passed. At exact head `24ccbf4`, CI checks, PR-body and examples passed, and an isolated full `just primer-audit` passed. These results are historical for a subsequent evidence commit; CI on that new head remains pending and the PR remains draft. |
 
 - Content gate: **pass** (whole-source reader-depth review, corrected route and concept evidence, reviewed opening delta and risk-selected technical checks; not an exhaustive technical or source verification)
 - Structural gate: **pass** (source boundaries reviewed and current rendered contents statically inspected; interactive browser unavailable)
-- Release readiness: **not-ready**
+- Release readiness: **not-ready** (CI for the subsequent head pending; PR remains draft)
 
 ## Pilot learning
 
