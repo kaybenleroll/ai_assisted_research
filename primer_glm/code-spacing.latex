@@ -5,10 +5,11 @@
 \BeforeBeginEnvironment{Shaded}{\vspace{0.9em}}
 \AfterEndEnvironment{Shaded}{\vspace{0.9em}}
 
-% Allow two-digit chapter and subsection numbers in the contents without
+% Allow two-digit section numbers at every contents level without
 % running them into their titles. Fail the build if the template changes.
 \makeatletter
 \patchcmd{\l@section}{1.5em}{2.0em}{}{\PackageError{glm}{Unable to adjust section contents spacing}{}}
 \patchcmd{\l@subsection}{2.3em}{2.7em}{}{\PackageError{glm}{Unable to adjust subsection contents spacing}{}}
+\patchcmd{\l@subsubsection}{3.2em}{4.0em}{}{\PackageError{glm}{Unable to adjust subsubsection contents spacing}{}}
 \makeatother
 \AtBeginDocument{\addtocontents{toc}{\protect\small}}
