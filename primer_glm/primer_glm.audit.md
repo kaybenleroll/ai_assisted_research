@@ -1,7 +1,7 @@
 # Primer audit: Generalised linear models and their extensions
 
 - Issue and milestone: #468 primer; #467 planning.
-- Audit revision: glm-content-audit-v11
+- Audit revision: glm-content-audit-v12
 - Source revision: 46bcfa4ada0d763e9851a20b9910b57fb549bda4
 - Source SHA-256: 29e0923b94c1e824412b6d51541d1b6d8de419b43f4aae8d86f5dbcb7a6cd5d3
 - Tracked path: primer_glm/primer_glm.audit.md
@@ -14,6 +14,21 @@
 - Teaching-case contract: primer_glm/primer_glm.case.md, glm-case-v5.
 - Core-concept depth matrix: primer_glm/primer_glm.brief.md, glm-brief-v12.
 - Readiness decision: not-ready
+
+On 24 November 2026 the previous content and structural passes were withdrawn
+after the closing sections were challenged. The earlier review established
+that they have distinct stated jobs, but its assertions that they are bounded
+do not demonstrate sufficient teaching depth or a considered hierarchy. In
+particular, the exercises do not ask the reader to carry diagnostic evidence
+through a model revision and a new-site prediction decision, or practise the
+mean-versus-future-observation interval distinction highlighted in the
+synthesis. The synthesis and specialist referrals also need a substantive
+reader-journey and hierarchy reassessment. The historical retain rows and
+review claims below record what was decided then; they are not current passes.
+The content gate is fail pending assessment and correction of these learning
+gaps; the structural gate is not-checked pending an evidence-backed review of
+the closing sequence. This finding does not invalidate the separately scoped
+technical, execution, source or rendering evidence.
 
 The independent complete content reading covered source SHA-256 `84eba056acb9ed85f3f0586b36555887bb4729de0178c62e1d27d91c92bb7e95` at commit `858f4ef29e6e85ef50acbc3231ccc639a27a1b99`. The only subsequent source changes, verified in the Git diff to `8417dba1d9183041213115f6361d84107ae40109`, add inline style attributes to two existing compatibility spans; prose and line positions are unchanged. The independent reviewer did not reread the full source at the new hash. That historical judgement remains distinct from the subsequent structural review described below.
 
@@ -212,7 +227,7 @@ A bounded follow-up on 23 November 2026 checked the eight DOI references that ha
 
 | Gate | Decision | Evidence or limitation |
 |---|---|---|
-| Current independent content | pass | The historical independent content review, whole-source structural and reader-depth pass at `2427632`, reviewed opening delta at `46bcfa4`, complete scoped semantic review and risk-selected technical checks support the current teaching gate. Their different scopes are recorded above; no exhaustive independent refit or technical verification is claimed. |
+| Current independent content | fail | The closing-section review and transfer practice are insufficient as described above. Earlier content and structural passes are withdrawn; other checks retain their stated scope. |
 | Source and locator binding | reviewed | Independent semantic review covered all 26 concept rows and every primary and alternative route transition and brief trace; corrections were rechecked. Source `46bcfa4` differs from the preceding reviewed source only at opening lines 7, 9, 14 and 16; the opening delta was reviewed and other source lines carry forward unchanged. This does not repeat the whole technical audit. |
 | Examples | passed locally | `just examples glm` passed all 23 at source `46bcfa4`; independent prose review and example execution have distinct provenance. CI examples passed at `24ccbf4`; CI for the subsequent evidence revision remains pending. |
 | Build, render and visual | sampled | Pinned full build passed at `46bcfa4`; PDF code-spacing output was updated at `2a82379`, and final render QA passed. Visual checks sampled the pages listed above, including the updated contents; interactive browser and assistive-technology checks were not performed. |
@@ -220,9 +235,9 @@ A bounded follow-up on 23 November 2026 checked the eight DOI references that ha
 | Accessibility | advisory | Static HTML checks found `en-GB`, labelled contents and main landmarks, a skip link, nine images with nonempty alternative text, 78 valid contents targets and no duplicate IDs. Interactive browser, assistive-technology, keyboard and navigation checks remain unperformed and advisory under the publication-accessibility policy. The PDF is untagged; no conformance claim. |
 | Repository, PR and CI | pending | `just check` passed. At exact head `24ccbf4`, CI checks, PR-body and examples passed, and an isolated full `just primer-audit` passed. These results are historical for a subsequent evidence commit; CI on that new head remains pending and the PR remains draft. |
 
-- Content gate: **pass** (whole-source reader-depth review, corrected route and concept evidence, reviewed opening delta and risk-selected technical checks; not an exhaustive technical or source verification)
-- Structural gate: **pass** (source boundaries reviewed and current rendered contents statically inspected; interactive browser unavailable)
-- Release readiness: **not-ready** (CI for the subsequent head pending; PR remains draft)
+- Content gate: **fail** (closing-section teaching and transfer gaps require assessment and correction)
+- Structural gate: **not-checked** (the earlier closing-sequence rationale is insufficient and must be reassessed)
+- Release readiness: **not-ready** (content and structure gates remain open; PR remains draft)
 
 ## Pilot learning
 
