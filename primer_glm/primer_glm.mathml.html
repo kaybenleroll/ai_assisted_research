@@ -821,19 +821,38 @@ Predictions</a></li>
 <li><a href="#hierarchical-sharing-across-sites" id="toc-hierarchical-sharing-across-sites"><span class="toc-section-number">15.6</span> Hierarchical Sharing Across
 Sites</a></li>
 </ul></li>
-<li><a href="#model-building-synthesis" id="toc-model-building-synthesis"><span class="toc-section-number">16</span> Model-Building Synthesis</a></li>
-<li><a href="#further-study" id="toc-further-study"><span class="toc-section-number">17</span> Further Study and
-Boundaries</a></li>
+<li><a href="#model-building-synthesis" id="toc-model-building-synthesis"><span class="toc-section-number">16</span> Model-Building Synthesis</a>
+<ul>
+<li><a href="#evidence-competing-explanations-and-revision" id="toc-evidence-competing-explanations-and-revision"><span class="toc-section-number">16.1</span> Evidence, Competing Explanations,
+and Revision</a></li>
+<li><a href="#from-the-question-to-a-defensible-report" id="toc-from-the-question-to-a-defensible-report"><span class="toc-section-number">16.2</span> From the Question to a Defensible
+Report</a></li>
+</ul></li>
+<li><a href="#further-study" id="toc-further-study"><span class="toc-section-number">17</span> Further Study and Boundaries</a>
+<ul>
+<li><a href="#measurement-and-zeros" id="toc-measurement-and-zeros"><span class="toc-section-number">17.1</span> Measurement and Zeros</a></li>
+<li><a href="#observation-and-dependence" id="toc-observation-and-dependence"><span class="toc-section-number">17.2</span> Observation and
+Dependence</a></li>
+</ul></li>
 <li><a href="#exercises" id="toc-exercises"><span class="toc-section-number">18</span> Exercises and Outline Solutions</a>
 <ul>
 <li><a href="#core-exercises" id="toc-core-exercises"><span class="toc-section-number">18.1</span> Foundations and Core Models</a>
 <ul>
 <li><a href="#outline-solutions" id="toc-outline-solutions"><span class="toc-section-number">18.1.1</span> Outline Solutions</a></li>
 </ul></li>
-<li><a href="#categorical-and-bayesian-models" id="toc-categorical-and-bayesian-models"><span class="toc-section-number">18.2</span> Count Extensions, Categorical and
-Bayesian Models</a>
+<li><a href="#categorical-and-bayesian-models" id="toc-categorical-and-bayesian-models"><span class="toc-section-number">18.2</span> Categorical, Bayesian and Count
+Extension Practice</a>
 <ul>
 <li><a href="#outline-solutions-1" id="toc-outline-solutions-1"><span class="toc-section-number">18.2.1</span> Outline Solutions</a></li>
+</ul></li>
+<li><a href="#transfer-from-diagnostics-to-prediction" id="toc-transfer-from-diagnostics-to-prediction"><span class="toc-section-number">18.3</span> Transfer: From Diagnostics to
+Prediction</a>
+<ul>
+<li><a href="#outline-solutions-2" id="toc-outline-solutions-2"><span class="toc-section-number">18.3.1</span> Outline Solutions</a></li>
+</ul></li>
+<li><a href="#boundary-recognition" id="toc-boundary-recognition"><span class="toc-section-number">18.4</span> Boundary Recognition</a>
+<ul>
+<li><a href="#outline-solutions-3" id="toc-outline-solutions-3"><span class="toc-section-number">18.4.1</span> Outline Solutions</a></li>
 </ul></li>
 </ul></li>
 </ul></nav>
@@ -4308,15 +4327,15 @@ density of each site’s four visits; larger is better for this realised
 split.</p>
 <table>
 <colgroup>
-<col style="width: 15%" />
-<col style="width: 21%" />
-<col style="width: 21%" />
-<col style="width: 21%" />
-<col style="width: 21%" />
+<col style="width: 30%" />
+<col style="width: 18%" />
+<col style="width: 13%" />
+<col style="width: 19%" />
+<col style="width: 17%" />
 </colgroup>
 <thead>
 <tr>
-<th>Training model</th>
+<th style="text-align: left;">Training model</th>
 <th style="text-align: right;">Estimated NB2 shape</th>
 <th style="text-align: right;">Site-effect SD</th>
 <th style="text-align: right;">Effective degrees of freedom</th>
@@ -4325,35 +4344,35 @@ split.</p>
 </thead>
 <tbody>
 <tr>
-<td>Poisson, linear gradient</td>
+<td style="text-align: left;">Poisson, linear gradient</td>
 <td style="text-align: right;">Not applicable</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2.000</td>
 <td style="text-align: right;">−246.089</td>
 </tr>
 <tr>
-<td>NB2, linear gradient</td>
+<td style="text-align: left;">NB2, linear gradient</td>
 <td style="text-align: right;">1.016</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2.000</td>
 <td style="text-align: right;">−155.489</td>
 </tr>
 <tr>
-<td>NB2, linear gradient and site</td>
+<td style="text-align: left;">NB2, linear gradient and site</td>
 <td style="text-align: right;">1.197</td>
 <td style="text-align: right;">0.366</td>
 <td style="text-align: right;">17.224</td>
 <td style="text-align: right;">−154.160</td>
 </tr>
 <tr>
-<td>NB2, smooth gradient</td>
+<td style="text-align: left;">NB2, smooth gradient</td>
 <td style="text-align: right;">1.208</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">4.956</td>
 <td style="text-align: right;">−155.839</td>
 </tr>
 <tr>
-<td>NB2, smooth gradient and site</td>
+<td style="text-align: left;">NB2, smooth gradient and site</td>
 <td style="text-align: right;">1.428</td>
 <td style="text-align: right;">0.338</td>
 <td style="text-align: right;">19.326</td>
@@ -5282,6 +5301,8 @@ question, not a contest in which the most elaborate model wins. The
 sequence can loop back: a diagnostic may show that the sampling
 description or response definition needs revision before a different
 likelihood is worth fitting.</p>
+<h2 data-number="16.1" role="heading" aria-level="3" id="evidence-competing-explanations-and-revision"><span class="header-section-number">16.1</span> Evidence, Competing
+Explanations, and Revision</h2>
 <p>The combined survey gives this sequence a specific outcome. On the 54
 training sites, the linear Poisson model underpredicted the observed
 site-total variation and zeros, while the linear NB2 model’s bin
@@ -5302,6 +5323,33 @@ a prediction comparison for this simulation, not a conclusion that the
 generating components have been uniquely recovered. The training
 simulation ranges omit parameter uncertainty, and further design-matched
 checks and independent sites remain valuable after selection.</p>
+<p>The progression illustrates why a discrepancy is a question rather
+than a diagnosis. Too many zeros under Poisson could reflect extra
+conditional count variation, an omitted site effect, an incorrect mean,
+or a separate observation process. The changing residual direction
+across gradient bins gives a more specific reason to examine mean shape;
+the repeat visits make shared-site dependence a separate possibility.
+Checking residual patterns and within-site dependence, alongside
+simulated zeros and tails, helps distinguish what each revision
+addresses. In this case the smooth reduces the training gradient
+pattern, while adding a site term changes the joint prediction for
+visits at a site. Neither establishes the biological mechanism.</p>
+<p>The held-site comparison asks whether the candidate distributions
+predict visits at new sites together. The combined model is a defensible
+candidate for this split, but its advantage over the simpler NB2
+candidates is modest compared with the Poisson-to-NB2 change. If
+selecting it using these held-out scores, evaluate the selection
+procedure on independent sites or with appropriately nested group
+validation. If prediction instead concerns a further visit at a known
+site, condition on its prior observations and choose validation that
+mimics that task. For the first visit at a new site, the reported
+marginal mean is about 1.33 counts and the plug-in future-count interval
+is 0–6; the interval describes variation in a future count under the
+fitted model, not uncertainty in the estimated mean. Neither includes
+all parameter uncertainty. These numbers apply to the specified
+covariates and effort, not to every site.</p>
+<h2 data-number="16.2" role="heading" aria-level="3" id="from-the-question-to-a-defensible-report"><span class="header-section-number">16.2</span> From the Question to a
+Defensible Report</h2>
 <p>The real Salamanders case answers a more limited question. Its 92 GP
 visit records support the stated recorded-count association with mining
 and scaled precipitation, but the row split and held-site split assess
@@ -5366,7 +5414,21 @@ Study and Boundaries</h1>
 ecological questions change the response model, the observation process
 or the dependence structure. Recognising the boundary is an analytical
 result: it prevents a convenient model from being asked to answer a
-question it cannot identify.</p>
+question it cannot identify. Start with what each record measures and
+how it was collected; a percentage, a zero and a non-detection may look
+similar in a table while requiring different information.</p>
+<h2 data-number="17.1" role="heading" aria-level="3" id="measurement-and-zeros"><span class="header-section-number">17.1</span> Measurement and Zeros</h2>
+<p>A record of 8 occupied quadrats out of 20 retains a known trial
+denominator; it is a different observation from estimated continuous
+cover of 40%. Ask whether the trials and denominator were recorded,
+whether their dependence is plausible, and whether cover estimates
+include exact endpoints or measurement uncertainty. Repeated
+non-detections answer a different question again: they record no
+sighting, not confirmed absence. To estimate occupancy separately from
+detection, the design needs informative repeat observations and
+defensible assumptions about closure and detection; a single
+non-detection per site generally cannot separate the two without extra
+information or assumptions.</p>
 <ul>
 <li><strong>Continuous proportions:</strong> A count of successes out of
 a known number of trials has a binomial denominator. A continuous
@@ -5383,8 +5445,12 @@ distribution. A two-part model can separately describe occurrence and
 positive amount; some compound Poisson–Gamma Tweedie distributions
 provide another model under particular power parameters. The choice
 changes the scientific and statistical assumptions. See <a href="https://cran.r-project.org/web/packages/statmod/statmod.pdf">Tweedie
-GLM documentation</a> for the variance-power family and limits; model
-fit alone cannot identify the ecological source of zeros.</li>
+GLM documentation</a> for the variance-power family and limits; fit
+alone cannot identify the source of zeros.</li>
+</ul>
+<h2 data-number="17.2" role="heading" aria-level="3" id="observation-and-dependence"><span class="header-section-number">17.2</span> Observation and
+Dependence</h2>
+<ul>
 <li><strong>Imperfect detection and occupancy:</strong> Repeated
 non-detections do not prove absence. Occupancy models distinguish a
 latent presence process from detection conditional on presence and
@@ -5408,8 +5474,22 @@ times and censoring directly; see <a href="https://doi.org/10.1111/j.2517-6161.1
 proportional-hazards paper</a>. Decide whether the censoring and
 risk-set assumptions fit the study before applying the method.</li>
 </ul>
-<p>For the main routes, return to <a href="https://doi.org/10.2307/2344614">Nelder and Wedderburn’s GLM
-paper</a> for the original common fitting framework, and to the <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/glm.html">R
+<p>For example, if neighbouring sites share residual patterns, first
+check their locations and sampling times: a site intercept for repeated
+visits cannot represent correlation between distinct sites. If locations
+or visit times were never recorded, the existing data cannot reveal the
+corresponding pattern reliably; collect those design variables in future
+sampling. For an event-time question, retain observation start and end
+times and whether the event occurred; an undifferentiated zero cannot
+distinguish a censored duration from a completed event time. These
+referrals identify next questions and sources, not a licence to fit a
+specialist model without its design information.</p>
+<p>The <a href="#transfer-from-diagnostics-to-prediction">transfer
+exercise</a> applies the modelling sequence to a new survey, and the
+boundary exercise then tests the distinctions above. For the main
+routes, return to <a href="https://doi.org/10.2307/2344614">Nelder and
+Wedderburn’s GLM paper</a> for the original common fitting framework,
+and to the <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/glm.html">R
 <code>glm</code> documentation</a> for the implementation used here. <a href="https://doi.org/10.1111/j.2517-6161.1980.tb01109.x">McCullagh’s
 ordinal models</a> develop the ordered-response route; <a href="https://doi.org/10.1214/20-BA1221">Vehtari and colleagues</a>
 explain improved MCMC diagnostics. These sources are starting points for
@@ -5418,9 +5498,10 @@ and assumptions of a particular analysis.</p>
 <h1 data-number="18" role="heading" aria-level="2" id="exercises"><span class="header-section-number">18</span> Exercises and Outline
 Solutions</h1>
 <p>The exercises revisit calculations, assumptions, interpretation and
-model revision. Use the outline answers to check the reasoning;
-simulated outputs may vary when you change a seed or generating
-mechanism.</p>
+model revision. The first two groups include recall of earlier numerical
+examples; the transfer and boundary exercises use new situations. Use
+the outline answers to check the reasoning; simulated outputs may vary
+when you change a seed or generating mechanism.</p>
 <h2 data-number="18.1" role="heading" aria-level="3" id="core-exercises"><span class="header-section-number">18.1</span>
 Foundations and Core Models</h2>
 <p>These exercises use hypothetical values unless a dataset is named.
@@ -5505,8 +5586,8 @@ longer a clean evaluation of the full selection procedure. Tune within
 training data using a split appropriate to the intended prediction; hold
 whole sites out when the target is a new site.</li>
 </ol>
-<h2 data-number="18.2" role="heading" aria-level="3" id="categorical-and-bayesian-models"><span class="header-section-number">18.2</span> Count Extensions, Categorical
-and Bayesian Models</h2>
+<h2 data-number="18.2" role="heading" aria-level="3" id="categorical-and-bayesian-models"><span class="header-section-number">18.2</span> Categorical, Bayesian and
+Count Extension Practice</h2>
 <p>Work through the calculations before consulting the solutions. In
 each applied answer state the population, observational unit and
 assumptions as well as the numerical result.</p>
@@ -5553,31 +5634,54 @@ sites?</p></li>
 </ol>
 <h3 data-number="18.2.1" role="heading" aria-level="4" id="outline-solutions-1"><span class="header-section-number">18.2.1</span> Outline Solutions</h3>
 <ol type="1">
-<li>The original probabilities are
+<li>In the order of the two non-reference categories followed by the
+reference, the original weights sum to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">2+3+1=6</annotation></semantics></math>,
+giving probabilities
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>/</mi><mn>6</mn><mo>,</mo><mn>3</mn><mi>/</mi><mn>6</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>6</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>6</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2/6,3/6,1/6)=(1/3,1/2,1/6)</annotation></semantics></math>.
-With weights
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(4,3,1)</annotation></semantics></math>
-they are
+After the first weight doubles, the denominator becomes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">4+3+1=8</annotation></semantics></math>,
+giving
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>3</mn><mi>/</mi><mn>8</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>8</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1/2,3/8,1/8)</annotation></semantics></math>.
-The other probabilities change because all weights share the same
-normalising denominator.</li>
-<li>The cumulative probabilities are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mn>0.119</mn></mrow><annotation encoding="application/x-tex">F(-2)\approx0.119</annotation></semantics></math>
+Both other probabilities fall even though their weights are unchanged:
+every probability shares the larger normalising denominator.</li>
+<li>The cumulative-logit convention is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>≤</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>α</mi><mi>k</mi></msub><mo>−</mo><mi>η</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Y\leq k)=F(\alpha_k-\eta)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
+is the logistic cumulative distribution and the thresholds are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha_1=-1</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">F(0)=0.5</annotation></semantics></math>;
-subtracting gives approximately
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0.119</mn><mo>,</mo><mn>0.381</mn><mo>,</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0.119,0.381,0.5)</annotation></semantics></math>.
-The lower-tail cumulative odds at each threshold are multiplied by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">e^{-1}</annotation></semantics></math>.</li>
-<li>The posterior is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Beta</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mo>,</mo><mn>5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{Beta}(9,5)</annotation></semantics></math>
-and its mean is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mi>/</mi><mn>14</mn><mo>≈</mo><mn>0.643</mn></mrow><annotation encoding="application/x-tex">9/14\approx0.643</annotation></semantics></math>.
-The posterior predictive probability on one further comparable visit is
-also
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mi>/</mi><mn>14</mn></mrow><annotation encoding="application/x-tex">9/14</annotation></semantics></math>.
-The model describes detections under a common probability, not the
-chance of presence when detection is imperfect.</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha_2=1</annotation></semantics></math>.
+Substituting
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\eta=1</annotation></semantics></math>
+gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>≤</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mn>0.119</mn></mrow><annotation encoding="application/x-tex">P(Y\leq 1)=F(-2)\approx0.119</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo>≤</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">P(Y\leq 2)=F(0)=0.5</annotation></semantics></math>.
+The middle category is the difference,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.5</mn><mo>−</mo><mn>0.119</mn><mo>=</mo><mn>0.381</mn></mrow><annotation encoding="application/x-tex">0.5-0.119=0.381</annotation></semantics></math>,
+and the last is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>0.5</mn><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">1-0.5=0.5</annotation></semantics></math>.
+Increasing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>
+by one subtracts one from each cumulative log odds, so the odds of being
+at or below either threshold are multiplied by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">e^{-1}</annotation></semantics></math>.
+This common odds ratio is the proportional-odds assumption.</li>
+<li>Seven detections and three non-detections update the two prior shape
+parameters separately:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Beta</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>+</mo><mn>7</mn><mo>,</mo><mn>2</mn><mo>+</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">Beta</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mo>,</mo><mn>5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{Beta}(2+7,2+3)=\operatorname{Beta}(9,5)</annotation></semantics></math>.
+Its mean is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mo>+</mo><mn>5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>9</mn><mi>/</mi><mn>14</mn><mo>≈</mo><mn>0.643</mn></mrow><annotation encoding="application/x-tex">9/(9+5)=9/14\approx0.643</annotation></semantics></math>.
+Averaging the conditional probability of one further detection over this
+posterior gives the same
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mi>/</mi><mn>14</mn></mrow><annotation encoding="application/x-tex">9/14</annotation></semantics></math>
+for that single comparable visit. This assumes a common detection
+probability and conditional independence given it. The result describes
+detections, not the chance of presence when detection is imperfect; the
+latter requires a separate observation model and suitable repeated
+sampling.</li>
 <li>The model combines that site’s likelihood with a shared distribution
 learned from all four sites. Vary the fixed concentration and the
 hyperprior, and check the assumptions of comparable independent visits
@@ -5602,6 +5706,124 @@ effect for the stated prediction. The design must contain enough sites
 and within-site replication to distinguish the components; none
 identifies detection on its own.</li>
 </ol>
+<h2 data-number="18.3" role="heading" aria-level="3" id="transfer-from-diagnostics-to-prediction"><span class="header-section-number">18.3</span> Transfer: From Diagnostics to
+Prediction</h2>
+<p>The following results are invented for practice, not a report of a
+fitted dataset. Assume sites were assigned to training and held-site
+sets before fitting or choosing a model. A survey records moth counts on
+repeated visits to each site, with known positive hours of effort. The
+intended use is prediction at a previously unsurveyed site in the same
+region and season. A Poisson log-link baseline includes log effort as an
+offset and a linear temperature effect. Its training residuals have a
+curved pattern against temperature, counts at the same site tend to be
+jointly high or low, and the Pearson dispersion statistic is 2.4. A site
+with more moths is not necessarily a site with higher detection
+probability.</p>
+<p>Two prespecified revisions are fitted using training sites: A adds a
+smooth temperature effect and NB2 count variation; B adds the same
+smooth and NB2 distribution plus a site random intercept. On held sites,
+the negative joint log predictive density for each site is calculated by
+integrating over one shared new-site effect for all its visits. Summing
+these site scores and dividing by the total number of visits gives 2.18
+for the baseline, 2.02 for A and 1.91 for B, where lower is better.
+These scores use prediction distributions appropriate to new sites; they
+are averages over a finite set of sites, with no uncertainty estimate
+supplied. Assume the B fit has no reported convergence warning. For a
+new site at a stated temperature and one hour of effort, B estimates a
+marginal mean count of 4.0 and gives a 95% confidence interval of 3.2 to
+5.0 for that mean. Separately, for a <em>different illustrative
+calculation</em>, suppose a future count is Poisson with known fixed
+mean 4; its equal-tailed 95% predictive interval is 1 to 8 counts.</p>
+<ol type="1">
+<li>Give two plausible explanations of the baseline diagnostics and
+identify a follow-up check for each. Which components of B respond to
+which patterns? Explain why the diagnostics alone do not identify the
+true generating process.</li>
+<li>Using the supplied held-site scores, choose a provisional model for
+the stated target and explain an alternative decision. What further
+evaluation would increase confidence, and what information does the
+supplied score omit?</li>
+<li>Interpret the interval 3.2 to 5.0 and the separate interval 1 to 8.
+Why is the latter not a predictive interval from B? What additional
+variation should a predictive interval for B at a new site include?</li>
+<li>A manager asks whether temperature causes changes in abundance, and
+whether a zero count proves absence. Can these observations answer
+either question by themselves? Identify the missing evidence or
+design.</li>
+</ol>
+<h3 data-number="18.3.1" role="heading" aria-level="4" id="outline-solutions-2"><span class="header-section-number">18.3.1</span> Outline Solutions</h3>
+<ol type="1">
+<li>The curved residual pattern suggests a misspecified mean; compare
+residual patterns by temperature and inspect whether effort or a
+correlated seasonal variable explains it. The smooth in B permits
+curvature but cannot determine which covariate causes it. Extra
+dispersion and within-site association could reflect shared site
+conditions, unmodelled mean structure, varying detection, or genuinely
+overdispersed counts. Inspect residuals and replicated counts within and
+between sites, and check the survey protocol. B’s NB2 component allows
+extra conditional count variation and its shared random intercept
+induces dependence among visits; either pattern can have more than one
+explanation, and the dispersion statistic does not apportion it between
+components.</li>
+<li>B has the lowest supplied held-site score, so it is a defensible
+provisional choice for probabilistic prediction at new sites. A is a
+plausible simpler choice if the improvement is too uncertain or the
+random-effect distribution is unsupported. Compare site-level score
+differences and their uncertainty across enough independent held sites,
+inspect calibration and performance across temperature and effort, and
+evaluate the final selection procedure on untouched sites. The averages
+alone do not report site count, variability, calibration, extrapolation
+performance or the cost of errors. Repeatedly choosing on the same held
+sites makes those scores selection data, not an independent final
+test.</li>
+<li>The first interval concerns uncertainty in the <em>marginal
+mean</em> for sites with the specified covariates: under the method’s
+repeated-sampling assumptions, such 95% confidence intervals cover the
+fixed mean in 95% of repetitions. It is not a range containing 95% of
+individual counts. With known Poisson mean 4, the separate interval
+describes a future count under that assumed distribution; discreteness
+gives at least the nominal coverage. It is not B’s interval: B has NB2
+variation and a distribution of new-site effects, and its parameters are
+estimated. A predictive interval should integrate over a new site’s
+random effect and count variation and account for parameter uncertainty
+using an appropriate predictive procedure; the precise target must also
+say whether it concerns one visit or several at the same site.</li>
+<li>The temperature association could be confounded by season, habitat
+or other site differences; a causal claim needs an appropriate causal
+design and defensible assumptions about confounding and measurement. A
+zero is compatible with non-detection as well as absence. Repeated
+visits with a suitable detection protocol, closure assumptions and,
+where possible, independent presence evidence are needed to investigate
+presence separately from detection; the counts alone do not establish
+it.</li>
+</ol>
+<h2 data-number="18.4" role="heading" aria-level="3" id="boundary-recognition"><span class="header-section-number">18.4</span> Boundary Recognition</h2>
+<p>Three hypothetical surveys record (a) 7 occupied quadrats out of 20
+examined, (b) visually estimated vegetation cover of 0.35 on a
+continuous scale, including some exact zeros and ones, and (c) three
+non-detections of a bird on repeat visits to a site. For each, name a
+suitable starting response or observation model, the first design
+question to ask, and one limit on what the recorded data establish.
+Which surveys could need information about detection to infer
+presence?</p>
+<h3 data-number="18.4.1" role="heading" aria-level="4" id="outline-solutions-3"><span class="header-section-number">18.4.1</span> Outline Solutions</h3>
+<p>For (a), a binomial count is a starting point if the 20 quadrats are
+comparable trials with an appropriate dependence structure. Ask how
+quadrats were selected and whether occupancy was observed without error;
+7/20 is not automatically an unbiased region-wide occupancy estimate.
+For (b), cover is not a count of successes out of 20: ask how it was
+measured and why exact endpoints occur. A beta model applies to values
+strictly inside zero and one; endpoints and measurement error need
+additional choices. For (c), repeated-visit occupancy and detection
+models are a possible route if the design and closure assumptions
+support them. Ask whether visits were independent conditional on the
+model and whether presence could change during them. Three
+non-detections do not establish absence; inferring presence requires
+information about detection, and an insufficient repeat-visit design may
+require further sampling. Both (a) and (c) can require detection
+information if presence is inferred from sightings rather than observed
+without error. These are starting points, not evidence that any
+specialist model is identified or fits.</p>
         <footer class="doc-disclosure">Drafted with AI assistance and reviewed by the author. The document date is that of its last substantive review.</footer>
       </div>
     </main>

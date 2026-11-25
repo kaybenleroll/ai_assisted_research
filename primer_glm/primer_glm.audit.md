@@ -15,6 +15,16 @@
 - Core-concept depth matrix: primer_glm/primer_glm.brief.md, glm-brief-v12.
 - Readiness decision: not-ready
 
+On 25 November 2026 the closing synthesis, specialist boundaries and exercises
+were revised in the working tree to address the gaps below. This is a draft
+revision, not an independent reassessment: content remains fail, structure
+not-checked and release not-ready until the changed source and its dependent
+evidence, rendered outputs and reader journey have been reviewed and bound.
+
+The independent review covered source SHA-256 `f144108a0d69f86ee7afc7020d19022828d0843bb1d6d7f7d71a6dedc9c0a8df`. The later source SHA-256 `262f89baa3941689e43f9b8d943935cfb1dfe8647fecd120856e66c9358490a9` shortens two sentences for page layout; the author checked that their meaning is unchanged. A focused independent review of the closing delta found ambiguity in the site scoring unit and detection question, imprecise navigation and unlabelled recall practice; the author corrected these and the reviewer rechecked them. This review was not a whole-document audit or independent execution of every example. The synthesis and practice now develop competing explanations, held-site decisions, prediction intervals and boundary recognition; the earlier route and concept bindings remain historical until a complete delta and structural review is recorded.
+
+A separate independent whole-source editorial review on 25 November received and inspected lines 1–150, 151–300, 301–450, 451–600, 601–750, 751–900, 901–1050, 1051–1200, 1201–1350 and 1351–1487 at the source hash above, against glm-brief-v12. It found no major blocking structural or reader-reasoning gap in that scope. It compared keeping the count extensions separate with merging them: the separate sections address conditional dispersion, shared-site dependence, nonlinear means and zero processes, and the combined case reconnects the decisions. It compared categorical-before-Bayesian with earlier placement among response families and retained the optional branch after the core modelling route. For the closing sequence it considered practice before further study; the existing order prepares the boundary-recognition exercise and links directly to transfer practice. The reviewer identified a non-blocking limitation at primer_glm/primer_glm.md:235: readers must run the offset simulation to see its realised coefficient; the earlier worked offset and later real-data interpretation support the underlying operation. Reference-only boundaries remain concise and do not teach specialist fitting. The review did not repeat independent fits, verify all citations or reconcile every route and concept locator, and did not itself inspect the rendered contents or accessibility.
+
 On 24 November 2026 the previous content and structural passes were withdrawn
 after the closing sections were challenged. The earlier review established
 that they have distinct stated jobs, but its assertions that they are bounded
@@ -111,6 +121,8 @@ The structural reviewer read the original source and every top-level boundary, t
 | Model-building synthesis (r01/c01; r05/c16; r06/c17; r10/c18) | return to model decisions | revisit question, diagnostics and prediction | primer_glm/primer_glm.md:1365 | primer_glm/primer_glm.md:1377 | retain: deliberately bounded synthesis |
 | Further study and boundaries (r09/c24) | identify specialist needs | map departures to specialist approaches | primer_glm/primer_glm.md:1385 | primer_glm/primer_glm.md:1389 | retain: brief reference boundary, not a fitting route |
 | Exercises and outline solutions (r01–r11) | practise and check | core and extension exercises with outline solutions | primer_glm/primer_glm.md:1397 | primer_glm/primer_glm.md:1420 | retain: bounded practice follows synthesis |
+
+Current-source closing delta: synthesis spans primer_glm/primer_glm.md:1365–1391 and develops evidence, competing explanations, revision and reporting; further study at primer_glm/primer_glm.md:1393–1412 distinguishes response and observation boundaries; practice at primer_glm/primer_glm.md:1414–1487 includes staged transfer and boundary recognition. These current dispositions supersede the three historical closing rows above, which describe the earlier source and are retained as history. The r03 design-to-revision synthesis is now at primer_glm/primer_glm.md:1383–1389; reference-only r09/c24 is illustrated at primer_glm/primer_glm.md:1399–1410 and practised at primer_glm/primer_glm.md:1481–1487. Complete reconciliation and binding remain pending.
 
 ## Outline and hierarchy review
 
