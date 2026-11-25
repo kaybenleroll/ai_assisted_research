@@ -2,9 +2,9 @@
 
 - Issue and milestone: #468 primer; #467 planning.
 - Brief revision: glm-brief-v12
-- Source revision: 46bcfa4ada0d763e9851a20b9910b57fb549bda4
-- Source SHA-256: 29e0923b94c1e824412b6d51541d1b6d8de419b43f4aae8d86f5dbcb7a6cd5d3
-- Reviewed revision: 46bcfa4ada0d763e9851a20b9910b57fb549bda4
+- Source revision: 5f8bec31a915176c43b96e0c220adb7f24546455
+- Source SHA-256: 71d96a540ae66592ac2e84bfd3ca4316356f166aa200f77f523d9bbae46e974d
+- Reviewed revision: 5f8bec31a915176c43b96e0c220adb7f24546455
 - Tracked path: primer_glm/primer_glm.brief.md
 - Reader: quantitatively literate ecological researcher or analyst who can read basic R.
 - Prerequisites: algebra, logarithms, elementary probability, derivatives, vectors and basic regression.
@@ -23,7 +23,22 @@
 - Figures, tables and equations: nine figures, design tables, derivations and numerical examples; historical sampled PDF and HTML visual QA passed; current outputs require integration review.
 - Languages: R primary; core, fixed-dispersion NB, fixed-penalty spline, real-data analyses and conjugate count example have bounded R/Python/Julia counterparts. Combined case is R fit with matched fixed-input Python/Julia predictions, not refit parity; specialised demonstrations are R-only.
 - Evidence: whole-source structural and scoped technical reviews; independently checked concept and route bindings; 23 examples, pinned build, sampled render QA and offline HTML link checks. The audit records provenance and limits.
-- Remaining release gates: draft PR update and current-head CI after push; online link failures and unperformed interactive accessibility checks remain recorded limitations.
+- Remaining release gates: reconcile current review evidence, complete current-head checks and reassess readiness; online link failures and unperformed interactive accessibility checks remain recorded limitations.
+
+The committed source at `5f8bec3` has SHA-256
+`71d96a540ae66592ac2e84bfd3ca4316356f166aa200f77f523d9bbae46e974d`.
+Its only source change after `8f7f012` shortens a sentence at
+primer_glm/primer_glm.md:1375 for PDF layout; the scoped comparison retains
+the instruction to compare residual patterns, dependence, zeros and tails.
+The revision binding records this delta review, not a new full audit or
+execution; historical reviews retain their original revisions and scope.
+
+The source and reviewed revisions above identify the scoped current binding;
+the historical full review remains bound to its original revision. The audit records the
+separate 25 November editorial review, the two-sentence author-checked delta,
+and the remaining content, structure and release decisions. Evidence for
+unchanged passages through line 1360 retains its original revision, reviewer
+and execution scope; the table alignment change at line 1132 is non-substantive.
 
 The independent complete content reading covered source SHA-256 `84eba056acb9ed85f3f0586b36555887bb4729de0178c62e1d27d91c92bb7e95` at commit `858f4ef29e6e85ef50acbc3231ccc639a27a1b99`. The only subsequent source changes, verified in the Git diff to `8417dba1d9183041213115f6361d84107ae40109`, add inline style attributes to two existing compatibility spans; prose and line positions are unchanged. The independent reviewer did not reread the full source at the new hash. That historical judgement remains distinct from the subsequent structural review recorded in the audit.
 
@@ -96,6 +111,15 @@ Independent reviewer read the whole preceding source and repaired combined trace
 | r11 | unordered and ordered categories | primer_glm/primer_glm.md:1188–1192 unordered illustration and fit; primer_glm/primer_glm.md:1213 ordinal fit; primer_glm/primer_glm.md:1231–1233 separate violation simulation and comparison | retain: separate examples; continuity across cases not asserted | none | R11 |
 | r08 | prior and count likelihood | primer_glm/primer_glm.md:1265–1277 count update and check; primer_glm/primer_glm.md:1285, primer_glm/primer_glm.md:1293, primer_glm/primer_glm.md:1301–1309 and primer_glm/primer_glm.md:1331 separate logistic grid, chains and predictive check | retain: separate examples; continuity across cases not asserted | none | R08 |
 | r09 | specialist boundaries | primer_glm/primer_glm.md:1385 input; mechanism and result not applicable (reference-only); primer_glm/primer_glm.md:1389 specialist referral; primer_glm/primer_glm.md:1387 boundary | retain: reference-only boundaries independently read; no fitting route or execution promised | none | R09 |
+
+The r03 and r09 closing locators in the historical checkpoint table above refer
+to `46bcfa4`. At `8f7f012`, the r03 design-to-revision synthesis is at
+primer_glm/primer_glm.md:1383–1389. For reference-only r09, the recognition
+input is at primer_glm/primer_glm.md:1399, referrals at
+primer_glm/primer_glm.md:1401–1408, the missing-design boundary at
+primer_glm/primer_glm.md:1410, and practice at
+primer_glm/primer_glm.md:1483–1487. This updates locators without claiming a
+new fitting route or independent execution.
 
 ## Core-concept depth matrix
 
