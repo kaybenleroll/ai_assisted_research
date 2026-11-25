@@ -25,7 +25,7 @@ execution; historical reviews retain their original revisions and scope.
 
 On 25 November 2026 the closing synthesis, specialist boundaries and exercises
 were revised to address the gaps below. The current source is committed at
-`5f8bec3`; content remains fail, structure not-checked and release not-ready
+`5f8bec3`; content and structure decisions were pending, and release remained not-ready
 pending integration of the changed-source evidence and remaining checks.
 
 The independent review covered source SHA-256 `f144108a0d69f86ee7afc7020d19022828d0843bb1d6d7f7d71a6dedc9c0a8df`. The later source SHA-256 `262f89baa3941689e43f9b8d943935cfb1dfe8647fecd120856e66c9358490a9` shortens two sentences for page layout; the author checked that their meaning is unchanged. A focused independent review of the closing delta found ambiguity in the site scoring unit and detection question, imprecise navigation and unlabelled recall practice; the author corrected these and the reviewer rechecked them. This review was not a whole-document audit or independent execution of every example. The synthesis and practice now develop competing explanations, held-site decisions, prediction intervals and boundary recognition; the earlier route and concept bindings remain historical until a complete delta and structural review is recorded.
@@ -129,13 +129,15 @@ The structural reviewer read the original source and every top-level boundary, t
 | Further study and boundaries (r09/c24) | identify specialist needs | map departures to specialist approaches | primer_glm/primer_glm.md:1385 | primer_glm/primer_glm.md:1389 | retain: brief reference boundary, not a fitting route |
 | Exercises and outline solutions (r01–r11) | practise and check | core and extension exercises with outline solutions | primer_glm/primer_glm.md:1397 | primer_glm/primer_glm.md:1420 | retain: bounded practice follows synthesis |
 
-Current-source closing delta: synthesis spans primer_glm/primer_glm.md:1365–1391 and develops evidence, competing explanations, revision and reporting; further study at primer_glm/primer_glm.md:1393–1412 distinguishes response and observation boundaries; practice at primer_glm/primer_glm.md:1414–1487 includes staged transfer and boundary recognition. These current dispositions supersede the three historical closing rows above, which describe the earlier source and are retained as history. The r03 design-to-revision synthesis is now at primer_glm/primer_glm.md:1383–1389; reference-only r09/c24 is illustrated at primer_glm/primer_glm.md:1399–1410 and practised at primer_glm/primer_glm.md:1481–1487. Complete reconciliation and binding remain pending.
+Current-source closing delta: synthesis spans primer_glm/primer_glm.md:1365–1391 and develops evidence, competing explanations, revision and reporting; further study at primer_glm/primer_glm.md:1393–1412 distinguishes response and observation boundaries; practice at primer_glm/primer_glm.md:1414–1487 includes staged transfer and boundary recognition. These current dispositions supersede the three historical closing rows above, which describe the earlier source and are retained as history. The r03 design-to-revision synthesis is now at primer_glm/primer_glm.md:1383–1389; reference-only r09/c24 is illustrated at primer_glm/primer_glm.md:1399–1410 and practised at primer_glm/primer_glm.md:1481–1487. The closing locators are reconciled and bound to the current source; historical rows retain their original provenance.
 
 At `8f7f012`, the current synthesis applies diagnostics and competing explanations at primer_glm/primer_glm.md:1371–1377 and sets reporting limits at primer_glm/primer_glm.md:1381–1391. The reference section identifies measurement and detection questions at primer_glm/primer_glm.md:1399–1410; the exercise uses those distinctions at primer_glm/primer_glm.md:1483–1487. Staged practice at primer_glm/primer_glm.md:1465–1479 asks for a revision, prediction target and limitation. The earlier evidence through line 1360 remains applicable to unchanged passages, with its original revision, reviewer and execution scope; the table alignment change at line 1132 does not alter its contents. This locator reconciliation is not a new independent execution or a content or release pass.
 
 At source and output commit `5f8bec3`, an independent visual reviewer inspected PDF pages 89–103 and contents pages 2–3. The previous split word and figure interruption were corrected; no clipping, overlap or new material layout defect was found in those pages, and contents references matched. The figure-only page and surrounding whitespace result from keeping the figure before the synthesis. This is sampled visual evidence, not an accessibility or complete PDF audit.
 
 At source/output commit `5f8bec3`, `just -f primer_glm/Justfile all` and `just render-qa primer_glm` passed, as did offline `just lint-links` for all three HTML variants. The full plot build and reproducibility check passed before the subsequent prose-only and table-layout changes. The updated evidence checker passed; these checks do not establish content readiness. Interactive accessibility was not retested and the PDF remains untagged.
+
+Current structure decision, 25 November: the full-source editorial reviewer compared the count-extension grouping, placement of categorical and Bayesian material, and the closing sequence, with reasons recorded above. The integrator inspected current HTML contents entries 16–18 and their nested links against the source hierarchy; offline checks passed for all three variants. An independent reviewer inspected the PDF contents on pages 2–3 and final pages 89–103 at source/output `5f8bec3`. These support the structural pass; no interactive browser or assistive-technology navigation test was performed.
 
 ## Outline and hierarchy review
 
@@ -278,7 +280,7 @@ A bounded follow-up on 23 November 2026 checked the eight DOI references that ha
 
 | Gate | Decision | Evidence or limitation |
 |---|---|---|
-| Current independent content | fail | The closing-section review and transfer practice are insufficient as described above. Earlier content and structural passes are withdrawn; other checks retain their stated scope. |
+| Current independent content | pass | The 25 November full-source editorial review and scoped delta review found the revised closing sequence develops the previously missing decisions and transfer practice. Historical technical and execution evidence retains its recorded scope. |
 | Source and locator binding | reviewed | Independent semantic review covered all 26 concept rows and every primary and alternative route transition and brief trace; corrections were rechecked. Source `46bcfa4` differs from the preceding reviewed source only at opening lines 7, 9, 14 and 16; the opening delta was reviewed and other source lines carry forward unchanged. This does not repeat the whole technical audit. |
 | Examples | passed locally | `just examples glm` passed all 23 at source `46bcfa4`; independent prose review and example execution have distinct provenance. CI examples passed at `24ccbf4`; CI for the subsequent evidence revision remains pending. |
 | Build, render and visual | sampled | Pinned full build passed at `46bcfa4`; PDF code-spacing output was updated at `2a82379`, and final render QA passed. Visual checks sampled the pages listed above, including the updated contents; interactive browser and assistive-technology checks were not performed. |
@@ -286,9 +288,9 @@ A bounded follow-up on 23 November 2026 checked the eight DOI references that ha
 | Accessibility | advisory | Static HTML checks found `en-GB`, labelled contents and main landmarks, a skip link, nine images with nonempty alternative text, 78 valid contents targets and no duplicate IDs. Interactive browser, assistive-technology, keyboard and navigation checks remain unperformed and advisory under the publication-accessibility policy. The PDF is untagged; no conformance claim. |
 | Repository, PR and CI | pending | `just check` passed. At exact head `24ccbf4`, CI checks, PR-body and examples passed, and an isolated full `just primer-audit` passed. These results are historical for a subsequent evidence commit; CI on that new head remains pending and the PR remains draft. |
 
-- Content gate: **fail** (closing-section teaching and transfer gaps require assessment and correction)
-- Structural gate: **not-checked** (the earlier closing-sequence rationale is insufficient and must be reassessed)
-- Release readiness: **not-ready** (content and structure gates remain open; PR remains draft)
+- Content gate: **pass** (the previous closing gaps were corrected and independently reviewed; the later sentence change received scoped comparison)
+- Structural gate: **pass** (full-source editorial review compared alternative groupings and current HTML/PDF contents show the revised hierarchy; interactive navigation was not retested)
+- Release readiness: **not-ready** (current-head CI and final release assessment remain pending; PR remains draft)
 
 ## Pilot learning
 
