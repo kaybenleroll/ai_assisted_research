@@ -276,6 +276,8 @@ The earlier original content-depth gaps, hurdle q-notation defect, duplicate con
 
 A bounded follow-up on 23 November 2026 checked the eight DOI references that had produced access errors. Publisher records or publisher-indexed excerpts identified all eight. Opened publisher content supported the cited general claims for Wood's smoothing-parameter estimation, MacKenzie's imperfect detection and Rue's latent Gaussian framework. Publisher search excerpts supported the specific quasi-likelihood and beta-regression claims for Wedderburn and Ferrari; Price and McCullagh were checked for identity and topic, and Cox for identity only. Some full-text pages remained inaccessible; this is not exhaustive source or freshness verification, and no fresh Lychee run was performed. The detailed URL-by-URL record is `.scratch/outline-audit-471/glm-source-followup.md`.
 
+On 25 November at commit `3986eb8`, `just primer-audit primer_glm` passed: revision-bound evidence, configured executable examples, pinned full build and figure reproducibility, render QA, freshness, Markdown lint and offline primary HTML links. Markdown lint reported one pre-existing advisory bare URL in this audit. The rebuild changed the PDF bytes; the previously committed, visually inspected PDF was restored after the check. This execution does not replace the content review.
+
 ## Release readiness checklist
 
 | Gate | Decision | Evidence or limitation |
