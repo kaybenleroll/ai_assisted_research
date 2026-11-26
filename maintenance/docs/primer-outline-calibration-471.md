@@ -246,7 +246,7 @@ found or that an absence of further gaps is verified.
 The second reviewer reported reading Pi coding-agent source lines 1–1082 in
 six contiguous batches and its brief, without reading its audit or rendered
 contents. The source was last changed at `c193c88` and its SHA-256 was
-`1a8edd490e0f3fb58f864a89da5a3d15b5fb3320aa2e20c7dd471a90e0fd0`.
+`1a8edd490e0f3fb58f864a89da5a3d15b5fb3320aa2e20c7dd471a90e0ee0fd0`.
 The reviewer found that the first-run example creates an untracked README at
 131–135, then asks for `git diff` at 143–151; the coordinator confirmed the
 instructions, and Git does not show an untracked file's contents in a normal
