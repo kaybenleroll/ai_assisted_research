@@ -192,6 +192,11 @@ information or approach is needed next from a specialist fitting route offered
 only for reference. Assess the former against the tier and scope of the route
 that promises it; the latter does not require a full teaching spine or become
 blocking solely because it is reference-only.
+For a promised recognition action, try a concrete unfamiliar observation or
+design: can the reader distinguish a relevant boundary from a plausible
+neighbour and identify the information needed next? Cite where the document
+enables that decision, or record the missing link and its consequence. A
+referral naming a method alone is not evidence of this action.
 Expand a section when the reader cannot explain the mechanism, reproduce the
 promised operation, interpret its result, or recognise its failure without
 silently importing missing reasoning from another section. Consolidate

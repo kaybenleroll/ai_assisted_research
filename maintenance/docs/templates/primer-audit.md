@@ -143,6 +143,11 @@ Assess a promised action to recognise a boundary and decide what information or
 approach is needed next against the tier and scope of the route that promises
 it. A specialist fitting route offered only for reference does not require a
 full teaching spine or become blocking solely because it is reference-only.
+For a promised recognition action, try a concrete unfamiliar observation or
+design and check whether the reader can distinguish a relevant boundary from a
+plausible neighbour and identify the information needed next. Cite the passage
+that enables the decision, or record the missing link and its consequence. A
+method name alone is not evidence of the action.
 
 | Section and route/concept IDs | Teaching job | Reasoning spine or worked thread | Application or interpretation locator | Material limitation or failure-case locator | Disposition and rationale |
 |---|---|---|---|---|---|

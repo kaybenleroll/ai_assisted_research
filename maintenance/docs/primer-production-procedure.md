@@ -214,6 +214,11 @@ A promised action to recognise a boundary and decide what information or
 approach is needed next is assessed against the tier and scope of the route
 that promises it. A specialist fitting route offered only for reference remains
 non-blocking and does not require a full teaching spine solely for that role.
+For a promised recognition action, try a concrete unfamiliar observation or
+design: can the reader distinguish the relevant boundary from a plausible
+neighbour and identify the information needed next? Cite the enabling passage
+or record the missing link and reader consequence; naming a method is not
+enough.
 
 For each unresolved item, record its concrete risk or reader consequence,
 what evidence would resolve it, who will decide it, and whether it blocks a
