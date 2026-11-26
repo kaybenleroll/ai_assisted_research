@@ -1,4 +1,8 @@
 import importlib.util
+import hashlib
+import json
+import os
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -134,6 +138,9 @@ class PrimerAuditTests(unittest.TestCase):
             )
 
     def git_repo(self, root):
+        registry = root / "maintenance/docs/primer-audit-legacy.json"
+        registry.parent.mkdir(parents=True, exist_ok=True)
+        registry.write_text('{"version": 1, "legacy": []}\n', encoding="utf-8")
         subprocess.run(["git", "init", "-q"], cwd=root, check=True)
         subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=root, check=True)
         subprocess.run(["git", "config", "user.name", "Test"], cwd=root, check=True)
@@ -155,9 +162,10 @@ class PrimerAuditTests(unittest.TestCase):
             brief.write_text(f"- Source revision: {revision}\n", encoding="utf-8")
             audit = root / "audit.md"
             audit.write_text(
-                f"- Source revision: {revision}\n- Reviewed revision: {revision}\n"
-                "## Release readiness checklist\n"
-                "- Content gate: **pass**\n- Release readiness: **ready**\n"
+                f"- Audit schema: 2\n- Source revision: {revision}\n- Reviewed revision: {revision}\n"
+                "## Outline and hierarchy review\n- Source read coverage: 1-2\n"
+                "## Release readiness checklist\n- Structural gate: **not-checked**\n"
+                "- Content gate: **pass**\n- Release readiness: **not-ready**\n"
                 "## Adversarial depth gate\nprimer.md:2\n", encoding="utf-8"
             )
             self.assertEqual(MODULE.validate(root, source, brief, audit), [])
@@ -167,7 +175,7 @@ class PrimerAuditTests(unittest.TestCase):
 
     def test_opt_in_source_read_coverage_ranges_and_gate(self):
         def audit(coverage, gate="pass", release="ready"):
-            return (OUTLINE + (f"- Source read coverage: {coverage}\n" if coverage is not None else "")
+            return ("- Audit schema: 2\n" + OUTLINE + (f"- Source read coverage: {coverage}\n" if coverage is not None else "")
                     + "## Release readiness checklist\n- Content gate: **pass**\n"
                     + f"- Structural gate: **{gate}**\n- Release readiness: **{release}**\n")
 
@@ -186,12 +194,12 @@ class PrimerAuditTests(unittest.TestCase):
         self.assertTrue(MODULE.coverage_findings(audit("none"), b""))
         self.assertEqual(MODULE.coverage_findings(audit("none", "not-checked", "not-ready"), b""), [])
         self.assertTrue(MODULE.coverage_findings(audit("1-1"), b""))
-        self.assertEqual(MODULE.coverage_findings(audit(None), source), [])
+        self.assertTrue(MODULE.coverage_findings(audit(None), source))
         self.assertTrue(MODULE.coverage_findings(audit("1-3") + "", b"one\ntwo\nthree\nfour\n"))
         duplicate = audit("1-3").replace("## Release readiness", "- Source read coverage: 1-3\n## Release readiness")
         self.assertTrue(MODULE.coverage_findings(duplicate, source))
         fenced = audit(None).replace("## Release readiness", "```md\n- Source read coverage: 1-1\n```\n## Release readiness")
-        self.assertEqual(MODULE.coverage_findings(fenced, source), [])
+        self.assertTrue(MODULE.coverage_findings(fenced, source))
 
     def test_schema_two_requires_coverage_in_current_outline(self):
         checklist = ("## Release readiness checklist\n- Content gate: **pass**\n"
@@ -210,7 +218,8 @@ class PrimerAuditTests(unittest.TestCase):
         self.assertEqual(MODULE.coverage_findings(partial, b"one\ntwo\n"), [])
         self.assertEqual(MODULE.checklist_findings(partial), [])
         self.assertTrue(MODULE.coverage_findings(full.replace("1-2", "1-1"), b"one\ntwo\n"))
-        self.assertEqual(MODULE.coverage_findings(missing.replace("- Audit schema: 2\n", ""), b"one\ntwo\n"), [])
+        self.assertTrue(MODULE.coverage_findings(missing.replace("- Audit schema: 2\n", ""), b"one\ntwo\n"))
+        self.assertEqual(MODULE.coverage_findings(missing.replace("- Audit schema: 2\n", ""), b"one\ntwo\n", legacy=True), [])
 
     def test_coverage_is_bound_to_the_reviewed_source_revision(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -221,7 +230,7 @@ class PrimerAuditTests(unittest.TestCase):
             revision = self.commit(root, "source")
             brief, audit = root / "brief.md", root / "audit.md"
             brief.write_text(f"- Source revision: {revision}\n", encoding="utf-8")
-            audit.write_text(f"- Source revision: {revision}\n- Reviewed revision: {revision}\n"
+            audit.write_text(f"- Audit schema: 2\n- Source revision: {revision}\n- Reviewed revision: {revision}\n"
                              + OUTLINE + "- Source read coverage: 1-2\n"
                              + "## Release readiness checklist\n- Content gate: **pass**\n"
                              + "- Structural gate: **pass**\n- Release readiness: **ready**\n", encoding="utf-8")
@@ -257,6 +266,158 @@ class PrimerAuditTests(unittest.TestCase):
                                           f"Reviewed revision: {newer}"), encoding="utf-8")
             self.assertTrue(any("resolve to different commits" in error
                                 for error in MODULE.validate(root, source, brief, audit)))
+
+    def test_cli_enforces_registered_legacy_and_new_audits(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.git_repo(root)
+            source = root / "primer.md"
+            source.write_text("one\ntwo\n", encoding="utf-8")
+            revision = self.commit(root, "source")
+            brief, audit = root / "brief.md", root / "audit.md"
+            brief.write_text(f"- Source revision: {revision}\n", encoding="utf-8")
+            legacy = (f"# Audit\n- Source revision: {revision}\n- Reviewed revision: {revision}\n"
+                      "## Release readiness checklist\n- Content gate: **pass**\n"
+                      "- Release readiness: **ready**\n")
+            registry = root / "maintenance/docs/primer-audit-legacy.json"
+            test_script = root / "maintenance/scripts/check/checker.py"
+            test_script.parent.mkdir(parents=True, exist_ok=True)
+            def run(target=audit):
+                return subprocess.run(["python3", "-I", str(test_script), "--repo-root", str(root),
+                                       "--source", str(source), "--brief", str(brief),
+                                       "--audit", str(target)], capture_output=True, text=True)
+            def register(content):
+                digest = hashlib.sha256(content.encode()).hexdigest()
+                script = SCRIPT.read_text(encoding="utf-8")
+                start = script.index("LEGACY_BASELINE = {")
+                end = script.index("\n}", start) + 2
+                script = script[:start] + "LEGACY_BASELINE = " + repr({"audit.md": digest}) + script[end:]
+                test_script.write_text(script, encoding="utf-8")
+                registry.write_text(json.dumps({"version": 1, "legacy": [{"path": "audit.md", "sha256": hashlib.sha256(content.encode()).hexdigest()}]}))
+            register(legacy)
+            registry.write_text('{"version":1,"legacy":[]}')
+            audit.write_text(legacy, encoding="utf-8")
+            self.assertNotEqual(run().returncode, 0)  # New unversioned audit.
+            register(legacy)
+            self.assertEqual(run().returncode, 0)
+            audit.write_text(legacy + "\nchanged\n", encoding="utf-8")
+            self.assertNotEqual(run().returncode, 0)
+            copied = root / "copied.md"
+            copied.write_text(legacy, encoding="utf-8")
+            self.assertNotEqual(run(copied).returncode, 0)
+            current = (f"# Audit\n- Audit schema: 2\n- Source revision: {revision}\n"
+                       f"- Reviewed revision: {revision}\n" + OUTLINE + "- Source read coverage: 1-2\n"
+                       + "## Release readiness checklist\n- Content gate: **pass**\n"
+                       "- Structural gate: **pass**\n- Release readiness: **ready**\n")
+            audit.write_text(current, encoding="utf-8")
+            self.assertEqual(run().returncode, 0)
+            audit.write_text(current.replace("1-2", "1-1"), encoding="utf-8")
+            self.assertNotEqual(run().returncode, 0)
+            audit.write_text(current.replace("- Source read coverage: 1-2\n", ""), encoding="utf-8")
+            self.assertNotEqual(run().returncode, 0)
+            for invalid in ('{"version":1,"version":1,"legacy":[]}',
+                            '{"version":1,"legacy":[{"path":"../audit.md","sha256":"' + '0'*64 + '"}]}',
+                            json.dumps({"version": 1, "legacy": [{"path": "audit.md", "sha256": "0"*64}]*2}),
+                            '{"version":1,"legacy":{},"extra":1}'):
+                registry.write_text(invalid, encoding="utf-8")
+                self.assertNotEqual(run().returncode, 0)
+            registry.unlink()
+            self.assertNotEqual(run().returncode, 0)
+
+    def test_real_project_and_changed_discovery_enforce_baseline(self):
+        if not shutil.which("just"):
+            self.skipTest("just is required for the changed-project recipe")
+        repository = SCRIPT.parents[3]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "checkout"
+            subprocess.run(["git", "clone", "--quiet", "--shared", str(repository), str(root)], check=True)
+            self.git_repo(root)
+            checker = root / "maintenance/scripts/check/primer_audit.py"
+            shutil.copyfile(SCRIPT, checker)
+            registry = root / "maintenance/docs/primer-audit-legacy.json"
+            shutil.copyfile(repository / "maintenance/docs/primer-audit-legacy.json", registry)
+            def project(name):
+                return subprocess.run(["python3", "-I", str(checker), "--repo-root", str(root),
+                                       "--project", name], text=True, capture_output=True)
+            name = "primer_pi_coding_agent"
+            self.assertEqual(project(name).returncode, 0)
+            base = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True,
+                                  text=True, capture_output=True).stdout.strip()
+            # Exercise the actual changed-discovery recipe with a genuine legacy project.
+            brief = root / name / f"{name}.brief.md"
+            brief.write_text(brief.read_text() + "\n", encoding="utf-8")
+            env = dict(os.environ, BASE_REF=base, XDG_RUNTIME_DIR=temporary)
+            result = subprocess.run(["just", "check-primer-evidence-changed"], cwd=root,
+                                    env=env, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            # A registry edit cannot register a changed historical audit.
+            audit = root / name / f"{name}.audit.md"
+            audit.write_text(audit.read_text() + "\n", encoding="utf-8")
+            data = json.loads(registry.read_text())
+            item = next(x for x in data["legacy"] if x["path"] == f"{name}/{name}.audit.md")
+            item["sha256"] = hashlib.sha256(audit.read_bytes()).hexdigest()
+            registry.write_text(json.dumps(data))
+            result = project(name)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("not in the fixed historical baseline", result.stderr)
+            # A new unversioned project is discovered and rejected, even if registry-edited.
+            shutil.copyfile(repository / "maintenance/docs/primer-audit-legacy.json", registry)
+            new = root / "primer_new"
+            new.mkdir()
+            source = new / "primer_pi_coding_agent.md"
+            shutil.copyfile(root / name / "primer_pi_coding_agent.md", source)
+            shutil.copyfile(root / name / "Justfile", new / "Justfile")
+            subprocess.run(["git", "add", "primer_new/Justfile", "primer_new/primer_pi_coding_agent.md"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-qm", "new source"], cwd=root, check=True)
+            revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True,
+                                      text=True, capture_output=True).stdout.strip()
+            old_revision = "c193c88ce7f16a2145c4be27dd53f7feb6668422"
+            for kind in ("brief", "audit"):
+                original = (root / name / f"{name}.{kind}.md").read_text()
+                (new / f"primer_new.{kind}.md").write_text(original.replace(old_revision, revision))
+            # Restore old project so only the new project is relevant.
+            subprocess.run(["git", "checkout", "--", str(brief.relative_to(root)),
+                            str(audit.relative_to(root))], cwd=root, check=True)
+            result = subprocess.run(["just", "check-primer-evidence-changed"], cwd=root,
+                                    env=env, text=True, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Audit schema 2 is required", result.stderr)
+            data = json.loads(registry.read_text())
+            data["legacy"].append({"path": "primer_new/primer_new.audit.md",
+                                   "sha256": hashlib.sha256((new / "primer_new.audit.md").read_bytes()).hexdigest()})
+            registry.write_text(json.dumps(data))
+            result = project("primer_new")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("not in the fixed historical baseline", result.stderr)
+            shutil.copyfile(repository / "maintenance/docs/primer-audit-legacy.json", registry)
+            new_audit = new / "primer_new.audit.md"
+            content = new_audit.read_text(encoding="utf-8")
+            line_count = len(source.read_text(encoding="utf-8").splitlines())
+            content = content.replace("# Primer audit: Pi Coding Agent\n", "# Primer audit: Pi Coding Agent\n\n- Audit schema: 2\n", 1)
+            content = content.replace("## Release readiness checklist", OUTLINE + f"- Source read coverage: 1-{line_count}\n\n## Release readiness checklist", 1)
+            content = content.replace("- Content gate: **pass**\n", "- Content gate: **pass**\n- Structural gate: **pass**\n", 1)
+            new_audit.write_text(content, encoding="utf-8")
+            result = subprocess.run(["just", "check-primer-evidence-changed"], cwd=root,
+                                    env=env, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("primer audit check passed", result.stdout)
+            subprocess.run(["git", "add", "primer_new/primer_new.brief.md", "primer_new/primer_new.audit.md"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-qm", "new audit"], cwd=root, check=True)
+            audit_base = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True,
+                                        text=True, capture_output=True).stdout.strip()
+            env["BASE_REF"] = audit_base
+            renamed = new / "previous-audit.md"
+            subprocess.run(["git", "mv", str(new_audit.relative_to(root)), str(renamed.relative_to(root))], cwd=root, check=True)
+            result = subprocess.run(["just", "check-primer-evidence-changed"], cwd=root,
+                                    env=env, text=True, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("primer_new.audit.md", result.stdout + result.stderr)
+            subprocess.run(["git", "reset", "--hard", "-q", audit_base], cwd=root, check=True)
+            new_audit.unlink()
+            result = subprocess.run(["just", "check-primer-evidence-changed"], cwd=root,
+                                    env=env, text=True, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("primer_new.audit.md", result.stdout + result.stderr)
 
     def test_changed_ranges_report_affected_locators(self):
         with tempfile.TemporaryDirectory() as temporary:

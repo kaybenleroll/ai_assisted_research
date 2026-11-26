@@ -160,8 +160,8 @@ on the reader promise before audit handoff.
 ## 5. Run the post-draft audit
 
 Create the tracked audit artefact from [the audit template](templates/primer-audit.md),
-bind it to the exact source and brief revisions, and review the complete source,
-not just a sample. The whole-document pass checks the brief, coverage,
+bind it to the exact source and brief revisions, use `- Audit schema: 2` and record source-read coverage, and review the complete source,
+not just a sample. The [legacy registry](primer-audit-legacy.json) exempts only listed historical audit paths at their exact SHA-256; migrate an edited or renamed record instead of refreshing its hash. The checker fixes the allowed historical path and hash pairs independently of registry edits; a change to that code or policy still requires review and is not an adversarial security boundary. Recorded ranges are self-reported and do not prove comprehension. The whole-document pass checks the brief, coverage,
 technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.

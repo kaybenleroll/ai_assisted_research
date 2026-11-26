@@ -78,8 +78,12 @@ coverage record lists successfully received and inspected inclusive line ranges
 at the reviewed revision; it is not proof of understanding. A structural pass
 requires all lines, with no gaps, overlaps or duplicate ranges. Partial
 coverage permits a fail for an observed defect or `not-checked`, but never a
-pass. The mechanical checker validates coverage only when the marker is
-present; older unmarked audits remain exempt.
+pass. The checker requires schema 2 for new and changed audits. Only exact unversioned
+historical records listed by path and SHA-256 in [the legacy registry](../primer-audit-legacy.json)
+are exempt. Migrate a changed or renamed historical audit to schema 2; do not
+refresh its registry hash to avoid a review. The checker fixes the permitted
+historical pairs independently of that registry. Code or policy changes remain
+reviewable and this is not an adversarial security boundary.
 
 - Source read coverage: <inclusive ranges such as 1-120, 121-240, or none>
 - Rendered contents: <**checked** or **not-checked**; output revision and method>
