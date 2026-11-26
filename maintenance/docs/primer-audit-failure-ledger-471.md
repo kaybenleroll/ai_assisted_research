@@ -154,3 +154,13 @@ blinding. This is one bounded observation, not evidence that the guidance
 caused the detections or miss, nor a reliability or exhaustive-coverage claim.
 The trial does not assess or establish the outcome of any pagination fix.
 Pages outside the listed sample remain uninspected.
+
+The manually supplied skill was the render-QA skill at `c763201`, SHA-256
+`49a5e63e10956c3bd84763d4dd3cc9fa0459b10aaa6d2d8d62b105d7bfb22af1`.
+The reviewer was a fresh `gpt-6.1-terra` medium subagent. Its prompt asked it
+to apply that skill and the review checklist to the supplied PDF after a
+whole-document pagination change, choose representative pages and transitions,
+report pages, SHA, material defects and limits, and avoid other repository
+files, history, audits, PRs, conversation and memory. No source, brief or HTML
+was supplied. This is the recorded task description, not a retained tool-event
+transcript; the shared environment could not enforce those exclusions.
