@@ -106,6 +106,14 @@ podman run --rm --entrypoint sh -v "$PWD":/work:Z -w /work docker.io/pandoc/late
 
 For another document, replace the PDF path and page numbers 17, 13, and 3 with pages containing a table, code, and a figure or equation. Open all four PNGs and record the result.
 
+If a shared layout or pagination change can affect pages throughout the
+document, broaden the sample beyond one representative page per type. Inspect
+both sides of affected page breaks, particularly where code continues across
+pages or a figure can float between listing parts. Record source and PDF
+revisions, the affected page span and element, and what was inspected. In the
+sampled review, state what remains uninspected and why; this targeted guidance
+does not require page-by-page review.
+
 ## PR Description Template
 
 The first line identifies the primary issue. Put each additional issue reference

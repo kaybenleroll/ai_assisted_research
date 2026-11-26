@@ -118,3 +118,19 @@ unnamed-task probe record the event log, exact skill revision, fixture and both
 gate labels, including failure or omitted labels. Repeat on an independent
 fixture before making a broader reliability claim. Manual application and a
 single successful retry do not establish reliable native activation.
+
+## Pagination changes and visual sampling
+
+**Classification: visual sampling gap; broader reliability unproven.** In the
+GLM draft PR #470, the PDF at output revision `117083d` passed render QA and a
+sampled visual review, but a later independent wider sample found Figure 7
+between two parts of an R listing on pages 66–67. The sampled pass did not
+establish that other page boundaries were sound. Output revision `72b5b19`
+flushes deferred figures before code; a reviewer inspected the affected pages
+and a wider sample, with a figure-only page and whitespace still recorded.
+
+**Remedy:** after changes that can repaginate a document, widen the sample and
+inspect both sides of affected code and figure page breaks. Record the output
+revision, pages, result and remaining scope. This directly addresses the
+observed blind spot; the guidance has not yet been tested in a fresh independent
+trial and does not establish exhaustive visual coverage.

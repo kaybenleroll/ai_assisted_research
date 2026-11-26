@@ -40,6 +40,13 @@ equation. Check HTML structure, anchors, images, extracted text, and actual
 render errors rather than relying on exit status or file existence. Keep these
 output findings separate from the audit's human teaching-depth decision.
 
+When a shared layout or pagination change can affect the whole document, widen
+the visual sample beyond one page of each type. Inspect both sides of affected
+page breaks, especially where a code listing continues or a figure may float
+between its parts. Record the source and PDF revisions, page span, element, and
+inspection scope. This is targeted sampling, not an exhaustive page-by-page
+review; record any uninspected scope and its reason.
+
 If a required runtime or container is unavailable, record it as unverified and
 stop at the safe boundary. Do not install repository build dependencies on the
 host, delete generated files, or publish merely because a render succeeded.
