@@ -2,7 +2,11 @@
 % Restore that space and add a small separation from surrounding prose while
 % retaining the shared compact font and line spacing inside code blocks.
 \usepackage{etoolbox}
-\BeforeBeginEnvironment{Shaded}{\vspace{0.9em}}
+% Flush deferred figures before code so floats cannot interrupt a listing.
+\makeatletter
+\newcommand{\glmflushfigures}{\ifx\@deferlist\@empty\else\clearpage\fi}
+\makeatother
+\BeforeBeginEnvironment{Shaded}{\glmflushfigures\vspace{0.9em}}
 \AfterEndEnvironment{Shaded}{\vspace{0.9em}}
 
 % Keep hyphenated words and single lines from straddling page boundaries.
