@@ -5,6 +5,11 @@
 \BeforeBeginEnvironment{Shaded}{\vspace{0.9em}}
 \AfterEndEnvironment{Shaded}{\vspace{0.9em}}
 
+% Keep hyphenated words and single lines from straddling page boundaries.
+\brokenpenalty=10000
+\clubpenalty=10000
+\widowpenalty=10000
+
 % Allow two-digit section numbers at every contents level without
 % running them into their titles. Fail the build if the template changes.
 \makeatletter
