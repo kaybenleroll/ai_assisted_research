@@ -403,3 +403,15 @@ improvement indeterminate; the same known primer was reused. The [native trial
 record](primer-audit-native-trial-2026-11-26.md) records the prompt, fixture
 output and limits. This is useful behavioural evidence, not proof of general
 reliability or of recovery from genuine tool-output truncation.
+
+A paired offline practical-state test then exercised the revised guidance on a
+separate synthetic workflow. A fresh reviewer detected that a successful check
+read staging while the published file omitted a row. The intended control was
+not initially sound: its reviewer found a genuine duplicate-header bypass,
+which was reproduced and corrected. A fresh reviewer of the corrected control
+accepted its narrow fixed-inventory promise while identifying overwrite and
+staging qualifications. The [state-transition trial record](primer-audit-state-trial-2026-11-26.md)
+retains the prompts, input hashes, outcomes, failure of the original control and
+limits; fixtures and executable validation are tracked. The tests were manually
+directed, small and related, and the corrected control was created after the
+first review. They support a narrow observation, not general reliability.
