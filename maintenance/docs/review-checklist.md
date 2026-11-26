@@ -113,7 +113,11 @@ pages or a figure may interrupt a listing, sentence, or equation. Check
 continuity across the boundary as well as the page layout. Record source and
 PDF revisions, the affected page span and element, and what was inspected. In
 the sampled review, state what remains uninspected and why; this targeted
-guidance does not require page-by-page review.
+guidance does not require page-by-page review. An optional caption-first
+[transition candidate screen](pdf-transition-calibration-489.md) can help
+select further page pairs; it can miss interruptions and produces false positives and
+never substitutes for visual inspection or establishes that unlisted pages are
+clear.
 
 ## PR Description Template
 
