@@ -38,8 +38,10 @@ locations; whether they are irretrievable is unknown.
 
 The report distinguishes observable selection and reading of the skill from a
 separately recorded native activation event. A command that opens `SKILL.md`
-shows manual application; catalogue discovery, native selection or activation,
-skill reading and successful substantive application are separate observations.
+shows a file read. The prompt and event record determine whether the read was
+manually instructed or autonomously selected; applying the guidance substantively
+requires further evidence. Catalogue discovery, selection, activation, file
+reading and successful application are separate observations.
 In particular, the reported native-truncation session said its first response
 was truncated, but the described event log retained the complete command output.
 The delivered payload was not independently observable. Subsequent range reads
