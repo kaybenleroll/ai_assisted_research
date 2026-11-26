@@ -125,13 +125,24 @@ enables the intended reader to do. If it is insufficient, identify the missing
 reasoning and the resulting reader consequence; a brief or reference label
 alone does not establish that the section fulfils its promised job.
 
-For each major synthesis, practice, or reference section, state a concrete
-decision or action a reader needs after the preceding route. Locate an
-opportunity to perform it with the information and feedback needed there, or
-explain why that opportunity or feedback is not promised. Record unsupported
-transfer from earlier material and the reader consequence. Judge the actual
-development independently of the title, section label, or existence of earlier
-examples; this does not require an exercise in every section.
+For each major synthesis, practice, or reference section, identify the distinct
+material reader outcomes promised by the brief and the decisions or actions
+needed after the preceding route. Locate opportunities to perform them with
+the necessary information and feedback, or explain why those opportunities or
+feedback are not promised. One easy task does not establish a different
+promised outcome. Where unfamiliar-input transfer is promised, assess whether
+practice provides new inputs and enough evidence for the requested decision,
+rather than only repeating worked values. For representative multi-step
+exercises, trace the solution's intermediate reasoning and whether feedback
+helps a reader locate and correct a consequential mistake. Record unsupported
+transfer and its reader consequence. Judge the actual development independently
+of the title, section label, or existence of earlier examples; this does not
+require an exercise in every section or a fixed number of tasks.
+
+Assess a promised action to recognise a boundary and decide what information or
+approach is needed next against the tier and scope of the route that promises
+it. A specialist fitting route offered only for reference does not require a
+full teaching spine or become blocking solely because it is reference-only.
 
 | Section and route/concept IDs | Teaching job | Reasoning spine or worked thread | Application or interpretation locator | Material limitation or failure-case locator | Disposition and rationale |
 |---|---|---|---|---|---|

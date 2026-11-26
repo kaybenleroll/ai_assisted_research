@@ -172,14 +172,26 @@ what the cited development enables the intended reader to do; where it is
 insufficient, identify the missing reasoning and resulting reader consequence.
 A brief or reference label alone does not establish that the section fulfils its
 promised job.
-For a major synthesis, practice, or reference section, pose a concrete reader
-task after the preceding route: what decision or action is now needed? Locate
-an opportunity to carry it out with the information and feedback needed there,
-or explain why that opportunity or feedback is not promised. Identify any
-unsupported transfer from earlier material and its consequence for the reader.
-Judge the actual development independently of the title, section label, or
-existence of earlier examples. This does not require an exercise in every
-section or prescribe a structural outcome.
+For a major synthesis, practice, or reference section, identify the distinct
+material reader outcomes promised by the brief and pose the decisions or
+actions needed after the preceding route. Locate opportunities to carry them
+out with the necessary information and feedback, or explain why those
+opportunities or feedback are not promised. A single easy task does not
+establish a different promised outcome. Where transfer to unfamiliar inputs is
+promised, check whether practice supplies new inputs rather than only repeating
+worked values, and whether the reader has enough evidence to make and justify
+the requested decision. For representative multi-step exercises, trace the
+answer's intermediate reasoning and check whether feedback helps a reader find
+and correct a consequential mistake. Identify unsupported transfer and its
+reader consequence. Judge the actual development independently of the title,
+section label, or existence of earlier examples. This does not require an
+exercise in every section, a fixed number of tasks, or a structural outcome.
+
+Distinguish a promised reader action to recognise a boundary and decide what
+information or approach is needed next from a specialist fitting route offered
+only for reference. Assess the former against the tier and scope of the route
+that promises it; the latter does not require a full teaching spine or become
+blocking solely because it is reference-only.
 Expand a section when the reader cannot explain the mechanism, reproduce the
 promised operation, interpret its result, or recognise its failure without
 silently importing missing reasoning from another section. Consolidate

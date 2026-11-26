@@ -199,6 +199,22 @@ contents and opening satisfy explicit user requirements. Explain justified
 short reference or orientation sections. A completed matrix does not substitute
 for this integrated judgement.
 
+For major synthesis, practice, or reference sections, assess the distinct
+material reader outcomes promised by the brief rather than treating one easy
+task as evidence for all of them. Locate the information and feedback needed
+for each relevant decision or action, or explain why they are not promised.
+Where the promise includes transfer to unfamiliar inputs, check for new inputs
+and enough evidence to justify the decision, not only repetitions of worked
+values. Trace representative multi-step solutions to judge whether intermediate
+reasoning and feedback help a reader find and correct a consequential mistake.
+Record unsupported transfer and its reader consequence; do not impose an
+exercise quota.
+
+A promised action to recognise a boundary and decide what information or
+approach is needed next is assessed against the tier and scope of the route
+that promises it. A specialist fitting route offered only for reference remains
+non-blocking and does not require a full teaching spine solely for that role.
+
 For each unresolved item, record its concrete risk or reader consequence,
 what evidence would resolve it, who will decide it, and whether it blocks a
 content, structural or release gate or is advisory. Reconcile existing
