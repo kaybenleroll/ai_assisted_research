@@ -195,6 +195,10 @@ For consequential practical instructions, check the stated state before each
 command and whether its result exposes the change being verified. Reproduce a
 minimal safe fixture when feasible, or record the check as unperformed; command
 success alone is not evidence that it checks the intended result.
+For the central practical route, document each consequential input state,
+operation, resulting state and what the next verification actually reveals.
+Examine tracking, generated-output and persistence assumptions where relevant;
+mark an unassessed transition not-checked.
 
 Before the readiness decision, assess the document as a continuous reader
 journey: whether major sections have sufficient development for their teaching

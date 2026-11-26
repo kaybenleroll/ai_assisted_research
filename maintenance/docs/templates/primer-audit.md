@@ -43,6 +43,11 @@ each command and whether its output exposes the claimed result. Where feasible,
 reproduce the relevant steps using a minimal disposable fixture; otherwise
 record the check as unperformed. A successful command alone does not establish
 that it verifies the intended change.
+For the central practical route, record each consequential state transition:
+input and pre-existing state, operation, resulting state, and exactly what the
+next verification reveals. Inspect tracking, generated-output and persistence
+assumptions where relevant. Record an unsupported result as a finding and an
+unassessed transition as not-checked.
 
 | Case stage | Source or section | Evidence and result | Execution status | Gap or limitation |
 |---|---|---|---|---|

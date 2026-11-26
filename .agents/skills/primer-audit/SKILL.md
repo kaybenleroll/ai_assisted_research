@@ -130,6 +130,13 @@ command and whether its result lets the reader observe or verify the promised
 change. Where feasible, reproduce the relevant steps with a minimal disposable
 fixture; otherwise record the check as unperformed. A command that runs but
 does not expose the intended evidence is not a completed verification.
+For the central practical route, record the state transition for each step:
+input and pre-existing state, operation, resulting state, and what the next
+verification command actually reveals. Inspect file-tracking, generated-output
+and persistence assumptions when they affect the result. If the published
+steps cannot reveal the claimed result, record the reader consequence; if
+they were not assessed, mark that transition not-checked rather than retaining
+the route by its stated purpose.
 
 For every `primary` and `alternative` route, follow at least one complete
 reader path from its stated input or assumption through the promised operation
