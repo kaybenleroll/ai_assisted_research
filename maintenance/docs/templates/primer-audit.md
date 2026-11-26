@@ -82,9 +82,10 @@ pass. The mechanical checker validates coverage only when the marker is
 present; older unmarked audits remain exempt.
 
 - Source read coverage: <inclusive ranges such as 1-120, 121-240, or none>
-- Rendered contents: <**checked** or **not-checked**; output revision and method> For each top-level
-section, explain its purpose, how its children support it, and the distinction
-or relationship between adjacent siblings. Examine boundaries and hierarchy
+- Rendered contents: <**checked** or **not-checked**; output revision and method>
+
+For each top-level section, explain its purpose, how its children support it,
+and the distinction or relationship between adjacent siblings. Examine boundaries and hierarchy
 throughout the document, including reference and orientation sections; an
 inventory of headings alone is not a review. Record evidence and a disposition
 for each boundary, including justified retention. Judge structure separately
@@ -117,7 +118,10 @@ short sections need consolidation or that a heading or length quota applies.
 
 An unresolved structural defect, unmet user-specified structural requirement,
 or incomplete required examination blocks release readiness. Mark unexamined
-material `not-checked` and release readiness `not-ready`; do not give a provisional pass to a truncated review. Record the
+material `not-checked`. If a confirmed structural defect has been found, record
+the structural gate as `fail` even if the examination is incomplete; otherwise
+use `not-checked` for an incomplete examination. In both cases release readiness
+is `not-ready`. Do not give a provisional pass to a truncated review. Record the
 structural gate decision below and revisit affected boundaries and hierarchy
 after revisions.
 
@@ -345,9 +349,9 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 | Revision review | | Changed artefacts and affected evidence rows reviewed. |
 | Handoff | | Remaining gaps, reviewer, branch, commands, and release decision. |
 
-- Content gate: <pass or fail>
-- Structural gate: <pass, fail, or not-checked>
-- Release readiness: <ready or not-ready>
+- Content gate: **<pass or fail>**
+- Structural gate: **<pass, fail, or not-checked>**
+- Release readiness: **<ready or not-ready>**
 
 ## Execution and render evidence
 

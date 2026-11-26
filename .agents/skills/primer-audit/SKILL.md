@@ -108,9 +108,11 @@ change the existing structure; do not merely justify the status quo.
 
 If any required part of this review is incomplete, record its scope and reason
 as `not-checked` and report release readiness as `not-ready`; do not use
-`not-checked` as the release decision. State both decisions even for a scoped
-review, using separate `Structural gate: not-checked` and `Release readiness:
-not-ready` statements. Do not report a pass based on a truncated source read
+`not-checked` as the release decision. If a confirmed structural defect has
+already been found, record `- Structural gate: **fail**` and identify the
+unreviewed scope. Otherwise record `- Structural gate: **not-checked**`.
+State the separate release decision as `- Release readiness: **not-ready**`,
+even for a scoped review. Do not report a pass based on a truncated source read
 or incomplete outline inspection. If a read is truncated, resume in bounded,
 contiguous batches and record the inspected ranges; do not stop at the
 truncation when further reading is available. If coverage still cannot be
