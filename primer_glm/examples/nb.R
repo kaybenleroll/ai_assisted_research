@@ -1,0 +1,8 @@
+x<-seq(-1.5,1.5,length.out=24); g<-rep(c(0,1),12)
+y<-c(1,2,1,3,0,2,2,1,3,2,4,1,2,4,3,3,5,2,4,5,3,6,4,7)
+effort<-rep(c(1,2,1.5),8)
+m<-glm(y~x+g+offset(log(effort)),family=MASS::negative.binomial(theta=2))
+stopifnot(m$converged)
+cat('coefficients',sprintf('%.10f',coef(m)),'\n')
+cat('prediction',sprintf('%.10f',predict(m,newdata=data.frame(x=c(-.7,.8),g=c(0,1),effort=c(1.3,2.1)),type='response')),'\n')
+stopifnot(max(abs(predict(m,newdata=data.frame(x=c(-.7,.8),g=c(0,1),effort=c(1.3,2.1)),type="response")-c(1.6070231,6.0269524)))<1e-5)

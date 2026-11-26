@@ -1,0 +1,37 @@
+SOURCE_MD   := "primer_glm.md"
+PROJECT_DIR := "primer_glm"
+TITLE       := "Generalised Linear Models: How the Pieces Fit Together"
+AUTHOR      := "Mick Cooney"
+DATE        := "22 November 2026"
+HTML_EXTRA  := "--mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true --number-sections --shift-heading-level-by=-1"
+PDF_EXTRA   := "-V mainfont='DejaVu Serif' -V sansfont='DejaVu Sans' -V monofont='DejaVu Sans Mono' --number-sections --shift-heading-level-by=-1 --include-in-header=/repo/primer_glm/code-spacing.latex"
+
+plots:
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -e MPLCONFIGDIR=/tmp/mpl-config \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    --entrypoint python {{PYTHON_RUNTIME_IMAGE}} \
+    plots/generate.py
+
+plots-check:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  temp_dir=$(mktemp -d)
+  trap 'rm -rf "$temp_dir"' EXIT
+  {{OCI}} run --rm {{OCI_FLAGS}} \
+    -e MPLCONFIGDIR=/tmp/mpl-config \
+    -v "{{REPO_ROOT}}:/repo{{MOUNT_SUFFIX}}" \
+    -v "$temp_dir:/generated{{MOUNT_SUFFIX}}" \
+    -w "/repo/{{PROJECT_DIR}}" \
+    --entrypoint python {{PYTHON_RUNTIME_IMAGE}} \
+    plots/generate.py --output-dir /generated --data-dir /repo/{{PROJECT_DIR}}/data
+  diff -r "$temp_dir" "{{justfile_directory()}}/figures"
+
+full: plots plots-check all
+
+# For maths variants, add --metadata mathvariants=true to HTML_EXTRA.
+# Mermaid flag: " --lua-filter=" + MERMAID_FILTER (for both flag sets).
+# MERMAID_FILTER points to maintenance/build/filters/mermaid-to-image.lua.
+
+import '../maintenance/build/common.just'

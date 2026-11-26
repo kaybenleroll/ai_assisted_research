@@ -476,6 +476,15 @@ information-theory-pdf:
 information-theory-all:
   cd primer_information_theory && just all
 
+glm-html:
+  cd primer_glm && just html
+
+glm-pdf:
+  cd primer_glm && just pdf
+
+glm-all:
+  cd primer_glm && just full
+
 retrieval-rag-html:
   cd primer_retrieval_rag && just html
 
@@ -495,11 +504,11 @@ knowledge-graph-all:
   cd primer_knowledge_graph && just all
 
 # Common daily build across active document projects
-html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html spectral-graph-theory-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html knowledge-graph-html
+html-dev: pi-agent-html building-ai-html building-ai-docs political-html numerical-html fluid-mechanics-html spectral-graph-theory-html ml-optimisation-html openclaw-html hermes-server-html research-html linux-git-html catmodel-html-dev claude-alt-html codex-claude-html silo-html deep-learning-html digital-signal-processing-html eval-loop-html python-r-html military-html ohmyzsh-html comparative-religion-html containerization-html complex-analysis-html information-theory-html retrieval-rag-html knowledge-graph-html glm-html
   @echo "✓ Dev HTML render complete across projects"
 
 # Full render where supported
-html-full: pi-agent-all building-ai-all political-all numerical-all fluid-mechanics-all spectral-graph-theory-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all knowledge-graph-all
+html-full: pi-agent-all building-ai-all political-all numerical-all fluid-mechanics-all spectral-graph-theory-all ml-optimisation-all openclaw-html hermes-server-all research-html linux-git-all catmodel-html-full claude-alt-docs codex-claude-docs silo-all deep-learning-all digital-signal-processing-all eval-loop-all python-r-all military-all ohmyzsh-all comparative-religion-all containerization-all complex-analysis-all information-theory-all retrieval-rag-all knowledge-graph-all glm-all
   @echo "✓ Full HTML render complete across projects"
 
 clean-generated:
@@ -525,5 +534,6 @@ clean-generated:
   cd primer_pi_coding_agent && just clobber
   cd primer_complex_analysis && just clobber
   cd primer_information_theory && just clobber
+  cd primer_glm && just clobber
   cd primer_retrieval_rag && just clobber
   @echo "✓ Generated artifacts cleaned"

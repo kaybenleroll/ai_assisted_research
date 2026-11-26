@@ -1,0 +1,27 @@
+options(width = 130)
+out <- Sys.getenv('EXAMPLE_OUT', unset=tempdir())
+check_sha256 <- function(path, expected) {
+  actual <- strsplit(system2('sha256sum', shQuote(path), stdout=TRUE), ' +')[[1]][1]
+  stopifnot(identical(actual, expected))
+}
+check_sha256('data/penguins.csv', 'f204db2c753b0937caac3cb35258562c14f073e4bbc76be24b4c51ce22767a93')
+check_sha256('data/Salamanders.rda', 'cca69c7eb8488d7932217ccc623a815105eb3e522f4debcb1841342c31bfc389')
+check_sha256('data/salamanders-package.csv', '1dadca43a8c917da58cd341fb04f15c0ad22384a8487a33dc3f6b77516bf8874')
+p <- read.csv('data/penguins.csv', na.strings = 'NA', stringsAsFactors = FALSE)
+stopifnot(nrow(p) == 344, identical(names(p), c('species', 'island', 'bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g', 'sex', 'year')))
+cat('PENGUINS missing per column\n'); print(colSums(is.na(p)))
+cat('PENGUINS species/island\n'); print(table(p$species, p$island))
+cat('PENGUINS species/sex\n'); print(table(p$species, p$sex, useNA='ifany'))
+cat('PENGUINS mass by species complete\n'); print(table(p$species[!is.na(p$body_mass_g)]))
+stopifnot(all(p$body_mass_g[!is.na(p$body_mass_g)] > 0))
+load('data/Salamanders.rda')
+s <- Salamanders
+write.csv(s, file.path(out, 'salamanders-package.csv'), row.names = FALSE, na = 'NA')
+check_sha256(file.path(out, 'salamanders-package.csv'), '1dadca43a8c917da58cd341fb04f15c0ad22384a8487a33dc3f6b77516bf8874')
+stopifnot(nrow(s) == 644, length(unique(s$site)) == 23, all(s$count >= 0), all(s$count == floor(s$count)))
+cat('SALAMANDERS structure\n'); str(s)
+cat('SALAMANDERS missing per column\n'); print(colSums(is.na(s)))
+cat('SALAMANDERS species and zero counts\n'); print(table(s$spp, s$count == 0))
+cat('SALAMANDERS distinct samples per site\n'); print(table(tapply(as.character(s$sample), s$site, function(x) length(unique(x)))))
+cat('SALAMANDERS unique site/sample/species keys\n'); stopifnot(anyDuplicated(s[c('site','sample','spp')])==0); print(anyDuplicated(s[c('site','sample','spp')]))
+cat('SALAMANDERS site mining constancy\n'); print(table(tapply(as.character(s$mined), s$site, function(x) length(unique(x)))))

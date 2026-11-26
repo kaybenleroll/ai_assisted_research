@@ -1,0 +1,12 @@
+x <- seq(-1.5, 1.5, length.out=24)
+g <- rep(c(0,1),12)
+ybin <- c(0,1,0,0,1,0,1,0,0,1,1,0,1,1,0,1,1,0,1,1,1,0,1,1)
+ycount <- c(1,2,1,3,0,2,2,1,3,2,4,1,2,4,3,3,5,2,4,5,3,6,4,7)
+effort <- rep(c(1,2,1.5),8)
+ygauss <- 4 + .7*x + .4*g + rep(c(-.3,.2,.1,-.2),6)
+ygamma <- exp(.5+.3*x+.2*g)*rep(c(.7,1.2,.9,1.3),6)
+d <- data.frame(x,g,ybin,ycount,effort,ygauss,ygamma)
+models <- list(gaussian=glm(ygauss~x+g,data=d,family=gaussian()), binomial=glm(ybin~x+g,data=d,family=binomial()), poisson=glm(ycount~x+g+offset(log(effort)),data=d,family=poisson()), gamma=glm(ygamma~x+g,data=d,family=Gamma(link='log')))
+new <- data.frame(x=c(-.7,.8),g=c(0,1),effort=c(1.3,2.1))
+reference <- list(gaussian=c(3.41,4.96), binomial=c(.5602052091,.6537850817), poisson=c(1.5197656922,5.8214687823), gamma=c(1.0600187950,3.2313426832))
+for(n in names(models)) {m<-models[[n]]; value<-predict(m,new,type="response"); stopifnot(m$converged, max(abs(value-reference[[n]]))<1e-7); cat(n, paste(sprintf("%.10f",value),collapse=" "),"\n")}
