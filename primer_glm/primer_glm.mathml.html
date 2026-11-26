@@ -2599,10 +2599,14 @@ repeatedly searching many candidate models.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">x=0,1,2,3,4</annotation></semantics></math>
 are approximately 1.102, 0.000, -0.875, -2.660, and 2.432. Their
 systematic pattern is a reason to inspect the mean function. After
-adding the prespecified quadratic, they are 0.278, -0.485, -0.214,
-0.771, and -0.350; the remaining fluctuations are not all zero. The log
-likelihoods are -99.835 and -90.830, and residual deviances are 64.708
-and 46.698. The likelihood-ratio statistic is
+adding the prespecified quadratic, they are 0.278,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.485</mn></mrow><annotation encoding="application/x-tex">-0.485</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.214</mn></mrow><annotation encoding="application/x-tex">-0.214</annotation></semantics></math>,
+0.771, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.350</mn></mrow><annotation encoding="application/x-tex">-0.350</annotation></semantics></math>;
+the remaining fluctuations are not all zero. The log likelihoods are
+-99.835 and -90.830, and residual deviances are 64.708 and 46.698. The
+likelihood-ratio statistic is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>90.830</mn><mo>+</mo><mn>99.835</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>18.010</mn></mrow><annotation encoding="application/x-tex">2(-90.830+99.835)=18.010</annotation></semantics></math>,
 also the deviance difference because the saturated reference and
 observed data are identical. The quadratic model uses one additional
@@ -2648,16 +2652,74 @@ these calculations were performed or that a single split establishes
 transport to other regions.</p>
 <h2 data-number="8.5" role="heading" aria-level="3" id="missing-data-and-model-revision"><span class="header-section-number">8.5</span> Missing Data and Model
 Revision</h2>
-<p>Complete-case analysis is easy to run and can be appropriate under
-particular assumptions, but it changes the analysed population if
-missingness depends on measurements, response, or unobserved values. In
-the penguin example, adding sex reduces the analysis from 342 mass
-records to 333 complete records. Compare models on the same defined
-sample when comparing fits, describe who was excluded, and investigate
-the pattern of missingness. Imputation, weighting, sensitivity analysis,
-or collecting better measurements may be appropriate, but each requires
-assumptions and a method suited to the design; replacing a missing value
-with zero silently asserts a measurement that was not made.</p>
+<p>Complete-case analysis uses only units with every variable needed for
+the chosen model observed. In the penguin example, adding sex reduces
+the analysis from 342 mass records to 333 records with both mass and
+sex. The loss of nine records alone does not tell us whether the
+remaining birds represent the intended population. Compare models on the
+same defined sample when comparing fits, describe who was excluded, and
+investigate the pattern of missingness.</p>
+<p>The answer also depends on the target. Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+be the outcome,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+all predictors in a proposed regression, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">R=1</annotation></semantics></math>
+indicate a complete record. A simple sufficient condition for
+interpreting the fitted conditional relationship in the original sampled
+population is that, within each predictor combination, completeness is
+independent of the outcome:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>⟂</mo><mi>Y</mi><mo>∣</mo><mi>X</mi></mrow><annotation encoding="application/x-tex">R \perp Y\mid X</annotation></semantics></math>.
+Then the complete records have the same distribution of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+given
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+as the original sampled population. The conditional model must also be
+correctly specified, the sampling and fitting assumptions must be
+appropriate, and complete records must occur across the predictor
+combinations needed for the target and identify the model. This is a
+sufficient condition, not the only possible one; it cannot generally be
+verified from the observed records alone. See <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4173105/">Bartlett and
+colleagues</a> for the conditional argument with incomplete
+covariates.</p>
+<p>A valid conditional regression is not automatically a valid average
+over the whole population. Suppose two equally common groups have true
+mean outcomes 1 and 3, and all outcomes in the first group but exactly
+half, selected at random, in the second group are recorded,
+independently of outcome within each group. Each group’s complete-case
+mean can still estimate its own group mean, but the recorded sample
+contains twice as many observations from the first group as the second.
+Its overall mean is consequently
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">5/3</annotation></semantics></math>
+in expectation, rather than the population mean 2. To estimate a
+population average from the conditional means, use the target
+population’s group distribution, which must be known or estimated with
+suitable assumptions; the complete-case distribution need not suffice. A
+representative original sample, or separate justification for transport
+to a wider population, is still needed.</p>
+<p>Missing completely at random (MCAR) is a stronger special case in
+which missingness does not depend on observed or unobserved data.
+Missing at random (MAR) permits missingness to depend on observed
+information, but does not by itself guarantee the conditional
+independence needed by this complete-case regression. For example, if
+body mass is observed for every sampled bird but sex is more often
+missing for heavier birds, selecting records with known sex can change
+the mass distribution even within a sex. The missingness could be MAR
+given observed mass, yet the complete-case mass-on-sex relationship can
+be distorted. If mass itself is more likely to be missing for heavier
+birds, the unobserved mass may drive selection; the observed records
+alone cannot establish that it does not. These are hypothetical
+mechanisms, not findings about the penguin data.</p>
+<p>Imputation, weighting, sensitivity analysis, or collecting better
+measurements may be appropriate, but each requires assumptions and a
+method suited to the design. For example, compare conclusions under
+several plausible associations between missingness and unobserved mass,
+and report where the conclusion changes; sensitivity analysis describes
+dependence on assumptions rather than discovering the missing values.
+Replacing a missing value with zero silently asserts a measurement that
+was not made. The missingness assumptions do not resolve unequal
+sampling, measurement error, or imperfect detection; those require their
+own design or model considerations.</p>
 <p>A useful modelling ledger records the question, sampling unit,
 response, predictor and variance assumptions, diagnostic concern, chosen
 change, and what happened after re-evaluation. If count residuals reveal
@@ -2668,11 +2730,9 @@ when the design and question justify it, then repeat the checks and
 state the limits that remain. See <a href="#smooth-effects">smooth
 effects</a>, <a href="#zero-processes">zero processes</a>, and <a href="#categorical-responses">categorical responses</a> for further
 changes to the model.</p>
-<p>The next case has a different role from the penguin analysis. Its
-generated data supply a known mean function, so we can tell whether an
-apparent repair addresses the constructed mistake. The training and
-held-out observations below are independent synthetic units, not
-penguins or salamander visits.</p>
+<p>The next case uses independent synthetic units, not penguins or
+salamander visits. Its known generating mean lets us check whether a
+repair addresses the constructed mistake.</p>
 <h2 data-number="8.6" role="heading" aria-level="3" id="gamma-repair"><span class="header-section-number">8.6</span> A Gamma
 Mean Repair and Its Remaining Uncertainty</h2>
 <p>The penguin fit illustrates a real positive response; a separate
@@ -2729,8 +2789,7 @@ of the conditional distribution and assessment of dispersion uncertainty
 are needed before interpreting its 95% label as reliable.</p>
 <p>At
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">x=0.8</annotation></semantics></math>,
-the revised model’s estimated mean is 6.225 in the simulation’s
-measurement units.</p>
+the revised model estimates a mean of 6.225 simulation units.</p>
 <p>A 500-replicate parametric bootstrap resimulates the training
 responses under that fitted Gamma model, refits both mean and dispersion
 and, for each successful refit, simulates one future observation at
