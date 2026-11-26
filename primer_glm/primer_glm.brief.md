@@ -20,7 +20,7 @@
 - Worked-case trace: route-keyed table below and combined/Gamma case contract.
 - Core-concept depth matrix: this brief, glm-brief-v13.
 - Route classification and teaching spines: primary, alternative and reference-only as listed below.
-- Figures, tables and equations: nine figures, design tables, derivations and numerical examples; primary HTML contents and sampled PDF pages reviewed; the pagination-adjusted PDF has a separate figure page with substantial whitespace.
+- Figures, tables and equations: nine figures, design tables, derivations and numerical examples; primary HTML contents and sampled PDF pages reviewed; the current PDF has a figure-only page and other substantial whitespace before figures.
 - Languages: R primary; core, fixed-dispersion NB, fixed-penalty spline, real-data analyses and conjugate count example have bounded R/Python/Julia counterparts. Combined case is R fit with matched fixed-input Python/Julia predictions, not refit parity; specialised demonstrations are R-only.
 - Evidence: historical whole-source structural and scoped technical reviews, concept and route bindings, 23 examples, pinned build, sampled render QA and offline HTML links; the audit records their revisions and limits. The audit records 23 example passes at source `ea93f6d`.
 - Remaining release gates: reconcile current review evidence, complete current-head checks and reassess readiness; online link failures and unperformed interactive accessibility checks remain recorded limitations.
