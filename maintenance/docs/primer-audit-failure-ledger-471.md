@@ -49,8 +49,10 @@ and contents. Its editorial judgement did not override the user's explicit
 requirement. The calibration report documents both trials and their limits.
 
 **Measurable remedy:** record the reviewed revision, contiguous source ranges,
-each top-level boundary and rendered contents inspected; report the structural
-gate `not-checked` and release `not-ready` if required coverage is incomplete.
+each top-level boundary and rendered contents inspected. If required coverage
+is incomplete, report the structural gate `fail` when a structural defect has
+already been confirmed; otherwise report it `not-checked`. In either case,
+report release readiness as `not-ready` and identify the unreviewed scope.
 The [audit skill](../../.agents/skills/primer-audit/SKILL.md) now states these
 gates. A complete read does not itself prove sound editorial or technical
 judgement. The later spectral review's recorded contiguous ranges 1–2251 are an
