@@ -1,0 +1,10 @@
+Rendered contents (extract from the supplied final HTML navigation; complete list)
+
+1. Reference points
+2. Offset
+3. Gain
+4. Residuals
+5. A linear correction
+6. Notation
+7. Checklist
+8. Handoff

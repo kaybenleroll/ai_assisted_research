@@ -32,11 +32,44 @@ primer. Neither type of test replaces the human content judgement. Keep the
 content gate (`pass` or `fail`) separate from release readiness (`ready` or
 `not-ready`); unresolved primary or alternative gaps block the content gate.
 
+Before the final verdict, read the document as one reader journey and state
+whether the major sections develop their teaching jobs with enough reasoning,
+application and limits for the promised audience. Check the opening and
+rendered contents against any explicit user requirements. Explain retained
+brief sections by their purpose; do not equate a populated matrix with a sound
+whole-document judgement.
+
+For every open item, identify the specific risk or reader consequence, the
+evidence needed to decide it, who is responsible and whether it blocks content,
+structure or release, or is an advisory limitation. Reconcile that item with
+existing evidence before asking for more checks. Use risk-selected technical
+verification: do not demand exhaustive independent reproduction merely
+because a calculation or fit has not been independently rerun. An incomplete
+required review blocks readiness; an unperformed optional check is not
+automatically a defect. Give a reasoned decision, the remaining blockers and
+the stopping boundary; do not leave an unexplained `pending` verdict.
+
 After the human review, run `just primer-audit <primer-directory>` for a
 tracked primer. This performs the structural evidence check, Git-backed
 locator and revision check, opted-in examples, build, render QA, freshness,
 and scoped link checks. Record its result in the audit. It does not replace
 human judgement of depth, citations, accessibility meaning, or visual quality.
+
+Before reading a long source, determine its line count and divide it into
+contiguous, non-overlapping batches small enough for complete tool output.
+Read every batch, tracking first and last line; if any output is truncated,
+split and reread it before advancing. Verify there are no gaps between ranges.
+Request and inspect one batch per tool call; do not combine multiple batch
+outputs into a single response that can itself be truncated. Check the tool's
+truncation indication and the returned line sequence, not just the first and
+last lines. After any interrupted or truncated recovery, retry each missing
+interval in smaller batches until it is received or a retry actually fails.
+If tool output cannot be recovered, stop the whole-document verdict and record
+the missing ranges and reason. Only unchanged historical path and hash pairs in the fixed baseline can use the legacy registry; migrate changed or renamed records. For a new, changed or renamed audit use `- Audit schema: 2` and record the
+successfully received source lines in the audit outline section as `- Source read coverage: 1-120, 121-240`
+using inclusive ranges (or `none` if no lines were read). Bind the record to
+the reviewed source revision. It records coverage, not proof of comprehension;
+never claim a range whose output was truncated or not inspected.
 
 Read the complete source and perform a whole-document inventory against the
 tracked, revision-bound brief. Check coverage, technical claims and
@@ -44,6 +77,46 @@ calculations, sources and freshness, prerequisites and explanatory depth,
 dependency order and section fragmentation, examples and limitations,
 figures/tables/equations/accessibility, and committed outputs. Record the
 audited source revision and reviewer.
+
+Inspect the actual source outline in sequence, using the shared outline review
+in `maintenance/docs/primer-production-procedure.md` and recording evidence in
+`maintenance/docs/templates/primer-audit.md`. Review every top-level boundary,
+the purpose of parent and child sections, and whether siblings serve distinct
+reader needs or develop one continuous task or argument. Record an explicit,
+evidence-based decision for each boundary, including why it should be retained
+or changed and the reader consequence. Cite passages on both sides and explain
+the reader task each serves and how those tasks connect or differ. Where a
+plausible alternative grouping or placement matters, describe it and compare its
+effect on navigation and reasoning with the existing structure. Labels such as
+“bounded” or “distinct purpose” alone do not justify retention. Distinguish an unresolved substantive
+structural finding that blocks content readiness from an editorial improvement
+that does not; an unmet user-specified structural requirement blocks readiness.
+Do not infer either decision from heading counts alone.
+For repository Pandoc HTML, run the advisory candidate comparison
+`python3 -I maintenance/scripts/check/primer_outline_compare.py SOURCE.md OUTPUT.html`
+and inspect each difference or ambiguity against the source and rendered
+contents. It can expose missing headings, but heuristics, unmatched HTML
+layouts and numbering can yield false positives or misses; it does not replace
+the outline or contents review. Record the actual command, output and scope.
+
+Inspect the rendered contents as well as the source outline, including the
+opening orientation and placement of notation. Consider an isolated brief
+chapter, a chapter with a single child heading, and a long undivided case as
+candidates for review, not automatic defects. Compare plausible alternative
+groupings and their effects on the reader before deciding whether to retain or
+change the existing structure; do not merely justify the status quo.
+
+If any required part of this review is incomplete, record its scope and reason
+as `not-checked` and report release readiness as `not-ready`; do not use
+`not-checked` as the release decision. If a confirmed structural defect has
+already been found, record `- Structural gate: **fail**` and identify the
+unreviewed scope. Otherwise record `- Structural gate: **not-checked**`.
+State the separate release decision as `- Release readiness: **not-ready**`,
+even for a scoped review. Do not report a pass based on a truncated source read
+or incomplete outline inspection. If a read is truncated, resume in bounded,
+contiguous batches and record the inspected ranges; do not stop at the
+truncation when further reading is available. If coverage still cannot be
+completed, report the unreviewed ranges and their readiness consequence.
 
 For a process, system, or applied-method primer, read the teaching-case
 contract and trace at least one case end to end: source input or declared
@@ -53,6 +126,19 @@ failure or scope limit. A curated fixture or passing runtime check does not
 establish this trace. Record the execution status of each stage; mark an
 untraceable case as a substantive gap unless the brief
 explicitly justifies another teaching device.
+
+For a consequential practical instruction, check the actual state before each
+command and whether its result lets the reader observe or verify the promised
+change. Where feasible, reproduce the relevant steps with a minimal disposable
+fixture; otherwise record the check as unperformed. A command that runs but
+does not expose the intended evidence is not a completed verification.
+For the central practical route, record the state transition for each step:
+input and pre-existing state, operation, resulting state, and what the next
+verification command actually reveals. Inspect file-tracking, generated-output
+and persistence assumptions when they affect the result. If the published
+steps cannot reveal the claimed result, record the reader consequence; if
+they were not assessed, mark that transition not-checked rather than retaining
+the route by its stated purpose.
 
 For every `primary` and `alternative` route, follow at least one complete
 reader path from its stated input or assumption through the promised operation
@@ -66,7 +152,10 @@ from headings or adjacent examples. State precisely what a missing or shallow
 link prevents the reader from doing or understanding, including the dependent
 step affected. A conceptual route can use a proof, worked calculation, or
 explained comparison instead of code, provided the reader can follow the
-promised operation end to end.
+promised operation end to end. Distinguish genuinely separate examples from a
+continuous case, but do not require every concept or different response type
+to share one dataset unless the brief promises that connection. Judge whether
+the reader can transfer between the examples, and record any material gap.
 
 Give each transition one execution status: `executed` (the stated operation was
 run on the stated input and its result checked), `parsed-only` (syntax or static
@@ -93,7 +182,36 @@ main reasoning spine or worked thread, the exact passage where the reader can
 apply or interpret it, and the material limit or failure case. Then make an
 explicit disposition: `expand`, `consolidate`, or `retain`. `retain` requires
 an editorial reason when the section is intentionally brief (for example,
-orientation, a transition, or a deliberately bounded reference branch).
+orientation, a transition, or a deliberately bounded reference branch). Explain
+what the cited development enables the intended reader to do; where it is
+insufficient, identify the missing reasoning and resulting reader consequence.
+A brief or reference label alone does not establish that the section fulfils its
+promised job.
+For a major synthesis, practice, or reference section, identify the distinct
+material reader outcomes promised by the brief and pose the decisions or
+actions needed after the preceding route. Locate opportunities to carry them
+out with the necessary information and feedback, or explain why those
+opportunities or feedback are not promised. A single easy task does not
+establish a different promised outcome. Where transfer to unfamiliar inputs is
+promised, check whether practice supplies new inputs rather than only repeating
+worked values, and whether the reader has enough evidence to make and justify
+the requested decision. For representative multi-step exercises, trace the
+answer's intermediate reasoning and check whether feedback helps a reader find
+and correct a consequential mistake. Identify unsupported transfer and its
+reader consequence. Judge the actual development independently of the title,
+section label, or existence of earlier examples. This does not require an
+exercise in every section, a fixed number of tasks, or a structural outcome.
+
+Distinguish a promised reader action to recognise a boundary and decide what
+information or approach is needed next from a specialist fitting route offered
+only for reference. Assess the former against the tier and scope of the route
+that promises it; the latter does not require a full teaching spine or become
+blocking solely because it is reference-only.
+For a promised recognition action, try a concrete unfamiliar observation or
+design: can the reader distinguish a relevant boundary from a plausible
+neighbour and identify the information needed next? Cite where the document
+enables that decision, or record the missing link and its consequence. A
+referral naming a method alone is not evidence of this action.
 Expand a section when the reader cannot explain the mechanism, reproduce the
 promised operation, interpret its result, or recognise its failure without
 silently importing missing reasoning from another section. Consolidate
@@ -138,6 +256,14 @@ material. Record the revisions compared, exact locations, scope, reviewer,
 judgement and result in the tracked audit. Mark unresolved review or gaps as
 blocking where the route requires it. Rebinding revision metadata or rerunning
 a structural check alone is insufficient evidence of a fresh judgement.
+
+After a revision, inspect each retained or moved explanation, example/action,
+interpretation, and limitation locator against the passage it describes in the
+current source. Correct wrong mappings; mark unverified evidence `not-checked`
+and apply the route gate. A reachable line or anchor does not establish that it
+contains the described evidence. Record this semantic locator check separately
+from mechanical reachability and from the earlier content review; checking a
+mapping does not itself repeat or renew that review.
 
 Distinguish evidence retained from the earlier audit, with its original revision
 and reason it remains applicable, from evidence newly reviewed or executed,

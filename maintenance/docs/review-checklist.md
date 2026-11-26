@@ -32,6 +32,10 @@ replace visual inspection of representative rendered pages.
 - Check that one coherent opening orientation block delivers the stated promise, explains scope and exclusions, states prerequisites, and gives the reader a route through the document. Do not accept separate top-level headings for each orientation item unless a documented navigation need justifies them.
 - For every H2 with child headings, verify the framing paragraph required by S6; review short subsections for a distinct purpose and consolidate those that split continuous reasoning. Record any navigation-only exception. Run `just check-structure` and review its advisory output; it catches missing prose before the first H3 but cannot judge whether the prose is substantive.
 - Read the outline and adjacent sections as a continuous route. Flag clusters of short sections or repeated heading–paragraph/list patterns, including top-level sections, and decide whether each heading marks a distinct concept, task, comparison, or useful navigation point. Keep this judgement editorial: do not use a fixed heading, word, or paragraph count as a pass/fail rule.
+- For a new or substantially revised primer, record the actual outline at the reviewed source revision and review every top-level boundary and heading hierarchy. Explain each section's purpose, how its children support it, and the relationship or distinction between adjacent siblings. Record a disposition, including justified retention, for each boundary. An unresolved structural defect or unreviewed boundary blocks readiness independently of the depth and dependency-order reviews. For proposed changes, map current sections to the proposed structure and account for preservation of substantive coverage, examples, and figures; justify any deliberate scope change. Use the tracked audit's outline review.
+- Support boundary decisions with passages and reader tasks on both sides. Where a plausible alternative grouping or placement matters, compare its effect on navigation and reasoning with the current structure; a “bounded” or “distinct purpose” label alone is not a rationale. For section depth, explain what the cited development enables the reader to do, or identify the missing reasoning and its reader consequence.
+- For each major synthesis, practice, or reference section, identify a concrete decision or action a reader needs after the preceding route. Locate an opportunity to perform it with the information and feedback needed there, or explain why that opportunity or feedback is not promised. Identify unsupported transfer and its reader consequence; judge the development independently of titles, labels, and earlier examples. Do not require an exercise in every section.
+- Consider isolated orientation or notation, a short section with one child, a long combined case without subsections, and balance between related branches. Compare plausible placements or landmarks and their effect on the reader; these patterns are prompts, not automatic defects or quotas. If the required examination is incomplete, record unexamined material as `not-checked` and readiness as `not-ready`.
 - Check that the main route is dependency-led: introduce the organising model before enumerating components, keep optional or reference-heavy branches clearly marked, and provide a comparison, synthesis, or decision framework after a broad survey where readers need one.
 - For a process, system, or applied-method primer, trace one central case from source input or assumptions through construction, intermediate representation, useful query or operation, interpretation, and failure or scope limit. A curated fixture, schema validation, or successful smoke test is not evidence of an end-to-end teaching case. Record executable, illustrative, and measured stages separately.
 - For core concepts, use a worked example, proof, case, comparison, counterexample, or failure case when it helps the reader apply or test the idea. Pair it with explanation, and prefer prose to a dump of bullets.
@@ -101,6 +105,15 @@ podman run --rm --entrypoint sh -v "$PWD":/work:Z -w /work docker.io/pandoc/late
 ```
 
 For another document, replace the PDF path and page numbers 17, 13, and 3 with pages containing a table, code, and a figure or equation. Open all four PNGs and record the result.
+
+If a shared layout or pagination change can affect pages throughout the
+document, broaden the sample beyond one representative page per type. Inspect
+both sides of affected page breaks, particularly where code continues across
+pages or a figure may interrupt a listing, sentence, or equation. Check
+continuity across the boundary as well as the page layout. Record source and
+PDF revisions, the affected page span and element, and what was inspected. In
+the sampled review, state what remains uninspected and why; this targeted
+guidance does not require page-by-page review.
 
 ## PR Description Template
 
