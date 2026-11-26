@@ -79,3 +79,44 @@ Exact prompt:
 > Conduct a read-only editorial review of `/tmp/audit-evaluation-2026-11-26/primer.md` using the reader and scope excerpt `/tmp/audit-evaluation-2026-11-26/brief-excerpt.md`. Apply `/tmp/ai-research-outline-review/.agents/skills/primer-audit/SKILL.md` and relevant referenced guidance. Review the whole source in bounded contiguous batches; report covered ranges, concrete findings with locators, reader consequences, and your content/structure decisions and unperformed checks. The excerpt is not a complete tracked brief; scope your verdict accordingly. Do not inspect prior audits, calibration records, failure ledgers or conversation context, do not edit files or delegate. You are not alone; preserve other work.
 
 The returned review reported source lines 1–1440 in twelve contiguous batches and found repeated worked inputs and missing unfamiliar staged diagnosis-to-prediction practice, citing source lines 1402, 1423–1425 and 1430. It made the content-blocking consequence conditional on the unavailable complete brief, retained the specialist section as reference material, and did not identify boundary-recognition practice as a separate issue. It reported structure not-checked and release not-ready because the rendered contents and other checks were not supplied. No raw tool-event log was retained; source coverage is reviewer-reported and manual skill use does not establish native activation. The excerpt matches the supplied source identity but does not provide complete route tiers, concepts or case contract. This trial supports a narrow detection observation, not a full audit or a general reliability claim.
+
+## Third Trial: Explicit Boundary-Recognition Instruction
+
+A fresh independent `gpt-6.1-terra` medium reviewer used guidance commit
+`9c56ea6`, skill SHA-256
+`a141d8d65c1ed06e3f410cc6f45fd23272bbf57efb33984e386d7f9c6c250eb9`, the
+historical GLM source and the same incomplete excerpt as the second trial. Its
+prompt was identical to the second trial prompt above. It reported reading all
+source lines 1–1440 in twelve batches and identified the repeated-value and
+missing staged-practice problem. For a boundary task it compared 12 successes
+out of 20 with continuous cover 0.6, cited source lines 190 and 1385, and judged
+the basic distinction supported. It noted little unfamiliar-case feedback but
+retained the specialist section as a reference. This demonstrates that the
+reviewer attempted a concrete recognition decision. It did not recommend the
+boundary-recognition practice proposed in the earlier closing assessment; the
+strength of the existing explanation remains an editorial disagreement. The
+incomplete brief, unverified execution, unavailable rendered contents, manual
+skill instruction and lack of retained raw event logs limit this result as in
+the preceding trial. Structural gate was not-checked and release not-ready.
+
+## Fourth Trial: Spectral Graph Theory
+
+A fresh `gpt-6.1-terra` medium reviewer used the same guidance revision on
+`primer_spectral_graph_theory/primer_spectral_graph_theory.md` (SHA-256
+`37a27a61a40eeb81bb3c35253de5be4483a92c1529ff5f8b01db9c017ed4cf7c`)
+and its HTML contents. Its exact prompt was:
+
+> Perform a read-only independent editorial and structural review of `/tmp/ai-research-outline-review/primer_spectral_graph_theory/primer_spectral_graph_theory.md` and its available rendered HTML contents. Apply `/tmp/ai-research-outline-review/.agents/skills/primer-audit/SKILL.md` and relevant procedure. Review the entire source in bounded batches and record received ranges; report concrete reader-facing depth, hierarchy, content/structure findings with locators and limits. Treat notation placement in the introduction before first use as a user requirement. Do not read prior audits, calibration reports, issues, or failure ledgers, and do not edit, run full builds, or delegate. A tracked brief may be absent; state how that limits decisions. You are not alone; preserve others' work.
+
+The reviewer reported reading lines 1–2251 in fifteen batches, inspecting HTML
+contents, and running the advisory comparator. It found the standalone notation
+section at lines 42–65, contrary to the stated requirement, and the missing
+rendered portfolio heading at line 1122. It identified incomplete or compressed
+exercise feedback at lines 1565–1593 as an editorial concern and judged whether
+that blocked a route indeterminate without the brief. It found comparator
+candidates at lines 432 and 1944 to be typography mismatches, not missing
+headings. Its structural decision was fail; release was not-ready. The
+coordinator received the review but did not retain the tool-event log, so source
+coverage and individual tool observations are reviewer-reported. The brief,
+full technical verification, example execution and final release checks were
+outside scope. Manual application does not demonstrate native activation.

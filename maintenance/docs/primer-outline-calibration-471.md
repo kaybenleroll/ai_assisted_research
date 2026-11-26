@@ -323,3 +323,40 @@ derived for the trial rather than a complete revision-bound brief, and received
 ranges remain reviewer-reported. This independent run supports detection of the
 practice problem under a verdict-free prompt, but repeats the boundary-detection
 miss and does not establish general reliability or native skill activation.
+
+### Revised boundary instruction and independent spectral trial
+
+Two more fresh manually directed reviews used skill commit `9c56ea6` (skill
+SHA-256 `a141d8d65c1ed06e3f410cc6f45fd23272bbf57efb33984e386d7f9c6c250eb9`).
+On the historical GLM source and the same incomplete, verdict-free excerpt,
+the reviewer again found repeated values and missing staged practice. This
+reviewer also tried a concrete count-versus-continuous-cover recognition task,
+cited source passages and judged the distinction supported; it mentioned little
+applied unfamiliar-case feedback. That observation shows use of the new
+instruction, but does not independently settle the earlier assessment that
+boundary recognition needed more development. The reviewer did not propose the
+same boundary exercise and did not have the complete brief. Record this as a
+partial detection and editorial disagreement, not a clear pass or false positive.
+
+A second reviewer examined the 2,251-line spectral graph theory primer (source
+SHA-256 `37a27a61a40eeb81bb3c35253de5be4483a92c1529ff5f8b01db9c017ed4cf7c`)
+and its HTML contents, with an explicit introductory-notation requirement. It
+reported contiguous source coverage, found the missing rendered portfolio
+heading at line 1122 and the unmet notation requirement, and identified weak
+exercise feedback as a scoped editorial concern. It also reported two advisory
+comparator false positives caused by smart apostrophe typography, at source lines
+432 and 1944; both headings appeared in the HTML contents. The tracked brief was
+not available and examples, technical claims and release checks were not run.
+The reviewer reported structural fail and release not-ready. This real-primer
+trial is an additional observed use, not proof of general reliability. Reviewer
+coverage is self-reported; raw tool-event logs were not retained. Prompts and
+adjudication limits are recorded in the accompanying trial record.
+
+At comparator commit `e742854`, prose apostrophes are matched across straight
+and typographic forms. The spectral comparison then reports only the missing
+portfolio heading. Apostrophes inside code spans are flagged as ambiguous for
+human review rather than silently treated as equivalent. Regression tests use
+both affected spectral headings, an omitted-heading control and literal-code
+cases. This corrects the observed false positives; it does not establish that
+other typographic or Markdown forms are handled exhaustively. The independently
+identified spectral practice-feedback issue is recorded as #486.
