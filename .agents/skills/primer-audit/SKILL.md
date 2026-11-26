@@ -65,7 +65,7 @@ truncation indication and the returned line sequence, not just the first and
 last lines. After any interrupted or truncated recovery, retry each missing
 interval in smaller batches until it is received or a retry actually fails.
 If tool output cannot be recovered, stop the whole-document verdict and record
-the missing ranges and reason. For a new or migrated audit use `- Audit schema: 2` and record the
+the missing ranges and reason. Only unchanged historical path and hash pairs in the fixed baseline can use the legacy registry; migrate changed or renamed records. For a new, changed or renamed audit use `- Audit schema: 2` and record the
 successfully received source lines in the audit outline section as `- Source read coverage: 1-120, 121-240`
 using inclusive ranges (or `none` if no lines were read). Bind the record to
 the reviewed source revision. It records coverage, not proof of comprehension;

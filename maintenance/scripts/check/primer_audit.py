@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import re
 import subprocess
 import sys
@@ -17,6 +18,15 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
+# Historical snapshots fixed in policy; removing a registry entry is allowed.
+LEGACY_BASELINE = {
+    "primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.audit.md":
+        "a7e6ab742d9ce9b9a0c40cda5808317e9b8cc5b23570cba4b403a43436938ad9",
+    "primer_knowledge_graph/primer_knowledge_graph.audit.md":
+        "f1365a210f14ab06c8e688009dbb0b37fe586c4cf5eb5f662381faf997226fd6",
+    "primer_pi_coding_agent/primer_pi_coding_agent.audit.md":
+        "334eba0c311f2633530fc71f3bc5306e056007e5cc8db66110099d254a27983b",
+}
 REVISION_RE = re.compile(r"^[A-Za-z0-9._/-]+@[0-9a-f]{7,64}$|^[0-9a-f]{7,64}$")
 METADATA_RE = re.compile(r"^\s*-\s*([^:]+):\s*(.*?)\s*$")
 LOCATOR_RE = re.compile(
@@ -269,8 +279,8 @@ def checklist_findings(text: str) -> list[str]:
     return errors
 
 
-def coverage_findings(text: str, source_bytes: bytes) -> list[str]:
-    """Check optional self-reported inclusive line ranges in the current outline.
+def coverage_findings(text: str, source_bytes: bytes, *, legacy: bool = False) -> list[str]:
+    """Check required self-reported inclusive line ranges in the current outline.
 
     The ranges record a claim; they cannot establish that anyone read the source.
     Revision validation separately binds these bytes to the reviewed commit.
@@ -323,8 +333,10 @@ def coverage_findings(text: str, source_bytes: bytes) -> list[str]:
         r"^\s*(?:(?:[-+*]|\d+[.)])\s+)?Source read coverage\b", line, re.I)]
     if schemas and (len(entries) != 1 or len(all_coverage) != 1):
         return ["audit: Audit schema 2 requires exactly one Source read coverage entry in the current outline review"]
+    if not schemas and not legacy:
+        return ["audit: Audit schema 2 is required for unregistered or changed audits"]
     if not entries:
-        return []  # Unversioned historical audits are exempt until they opt in.
+        return []  # Only an exact registered historical record is exempt.
     if len(entries) != 1:
         return ["audit: expected exactly one Source read coverage entry in outline review"]
     match = re.fullmatch(r"- Source read coverage: (none|[0-9]+-[0-9]+(?:,\s*[0-9]+-[0-9]+)*)\s*", entries[0])
@@ -356,8 +368,48 @@ def coverage_findings(text: str, source_bytes: bytes) -> list[str]:
     return errors
 
 
+def legacy_audit_registry(root: Path) -> dict[str, str]:
+    """Load the reviewed snapshot exemptions; malformed or absent registries fail closed."""
+    registry = root / "maintenance/docs/primer-audit-legacy.json"
+    try:
+        data = json.loads(registry.read_text(encoding="utf-8"), object_pairs_hook=_unique_object)
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"invalid legacy audit registry {registry}: {exc}") from exc
+    if not isinstance(data, dict) or set(data) != {"version", "legacy"} or type(data["version"]) is not int or data["version"] != 1 or not isinstance(data["legacy"], list):
+        raise ValueError("invalid legacy audit registry: expected version 1 and legacy list")
+    entries = {}
+    for item in data["legacy"]:
+        if not isinstance(item, dict) or set(item) != {"path", "sha256"}:
+            raise ValueError("invalid legacy audit registry entry")
+        path, digest = item["path"], item["sha256"]
+        if (not isinstance(path, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\.md", path)
+                or any(part in (".", "..") for part in path.split("/"))
+                or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+            raise ValueError("invalid legacy audit registry path or SHA-256")
+        if path in entries:
+            raise ValueError(f"duplicate legacy audit registry path: {path}")
+        if LEGACY_BASELINE.get(path) != digest:
+            raise ValueError(f"legacy audit registry entry is not in the fixed historical baseline: {path}")
+        entries[path] = digest
+    return entries
+
+
+def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate registry field: {key}")
+        result[key] = value
+    return result
+
+
 def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
     errors = []
+    registry = legacy_audit_registry(root)
+    try:
+        relative_audit = audit.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError as exc:
+        raise ValueError("audit is outside repository") from exc
     if not brief.is_file():
         errors.append(f"brief does not exist: {brief.relative_to(root)}")
     if not audit.is_file():
@@ -375,7 +427,9 @@ def validate(root: Path, source: Path, brief: Path, audit: Path) -> list[str]:
             cwd=root, capture_output=True,
         )
         if committed.returncode == 0:
-            errors.extend(coverage_findings(audit_text, committed.stdout))
+            errors.extend(coverage_findings(audit_text, committed.stdout, legacy=(
+                registry.get(relative_audit) == hashlib.sha256(audit.read_bytes()).hexdigest()
+            )))
     print(f"source: {source.relative_to(root)}")
     print(f"source sha256: {digest}")
     return errors
