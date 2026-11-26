@@ -38,6 +38,11 @@ field defined below.
 For a process, system, or applied-method primer, complete this additional
 trace. A curated fixture, schema validation, or successful smoke test is not
 evidence of an end-to-end teaching case.
+For consequential practical instructions, check the stated input and state before
+each command and whether its output exposes the claimed result. Where feasible,
+reproduce the relevant steps using a minimal disposable fixture; otherwise
+record the check as unperformed. A successful command alone does not establish
+that it verifies the intended change.
 
 | Case stage | Source or section | Evidence and result | Execution status | Gap or limitation |
 |---|---|---|---|---|

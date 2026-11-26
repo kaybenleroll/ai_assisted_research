@@ -191,6 +191,10 @@ teaching-case trace from input through construction, representation, useful
 operation, interpretation, and limits. If that trace cannot be completed, the
 content gate has a substantive finding regardless of build or smoke-test
 results.
+For consequential practical instructions, check the stated state before each
+command and whether its result exposes the change being verified. Reproduce a
+minimal safe fixture when feasible, or record the check as unperformed; command
+success alone is not evidence that it checks the intended result.
 
 Before the readiness decision, assess the document as a continuous reader
 journey: whether major sections have sufficient development for their teaching

@@ -125,6 +125,12 @@ establish this trace. Record the execution status of each stage; mark an
 untraceable case as a substantive gap unless the brief
 explicitly justifies another teaching device.
 
+For a consequential practical instruction, check the actual state before each
+command and whether its result lets the reader observe or verify the promised
+change. Where feasible, reproduce the relevant steps with a minimal disposable
+fixture; otherwise record the check as unperformed. A command that runs but
+does not expose the intended evidence is not a completed verification.
+
 For every `primary` and `alternative` route, follow at least one complete
 reader path from its stated input or assumption through the promised operation
 to an interpreted result and material limit. Record each meaningful transition
