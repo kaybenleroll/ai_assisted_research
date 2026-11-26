@@ -360,3 +360,16 @@ both affected spectral headings, an omitted-heading control and literal-code
 cases. This corrects the observed false positives; it does not establish that
 other typographic or Markdown forms are handled exhaustively. The independently
 identified spectral practice-feedback issue is recorded as #486.
+
+### Fresh Codex selection trial
+
+A fresh unnamed-task Codex session at `2688081` announced use of the audit
+skill, read its file and ran the outline comparator. The recorder retained nine
+contiguous source-read outputs matching all 2,251 spectral-primer lines, and
+the final review found the missing rendered heading, stated notation problem,
+practice-feedback gap and perturbation-ledger gap. This is one encouraging
+natural-selection observation on a previously used primer, not a general
+reliability or genuine-truncation test. The exact prompt, hashes, observable
+actions and evidence boundaries are in the [native trial record](primer-audit-native-trial-2026-11-26.md).
+The raw event file was not retained as a reviewed tracked artefact; recorded
+outputs do not prove comprehension or the exact payload delivered to the model.
