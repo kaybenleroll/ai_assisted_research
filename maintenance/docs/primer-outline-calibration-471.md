@@ -373,3 +373,13 @@ reliability or genuine-truncation test. The exact prompt, hashes, observable
 actions and evidence boundaries are in the [native trial record](primer-audit-native-trial-2026-11-26.md).
 The raw event file was not retained as a reviewed tracked artefact; recorded
 outputs do not prove comprehension or the exact payload delivered to the model.
+
+A second unnamed-task Codex trial at `fcd58e9` read the audit skill and all
+1,082 Pi source lines in six recorder-verified output batches, but described its
+first-session control loop as sound without identifying the untracked README
+and ineffective `git diff` inspection already recorded in #473. It reported a
+separate possible gap in the illustrative Rocker project, whose significance
+requires the unavailable brief; it also omitted an explicit structural-gate
+label. This is a substantive miss and gate-reporting miss, not a reliable
+pass. The exact prompt, observed actions, result hashes and limits are retained
+in [the native trial record](primer-audit-native-trial-2026-11-26.md).

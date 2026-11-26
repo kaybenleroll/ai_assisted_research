@@ -60,3 +60,40 @@ a hash alone cannot reconstruct a lost report. Only the observations above are
 retained. This is one natural-selection trial on a previously used primer, not
 proof of reliable activation, genuine truncation recovery, general audit
 quality, or release readiness.
+
+## Second Native Trial: Pi Coding Agent
+
+A fresh `codex exec` session with the same CLI, model and effort ran at
+`fcd58e9` against `primer_pi_coding_agent/primer_pi_coding_agent.md`
+(SHA-256 `1a8edd490e0f3fb58f864a89da5a3d15b5fb3320aa2e20c7dd471a90e0ee0fd0`)
+and its HTML. The prompt SHA-256 was
+`d3380d4dae817fa33cc95d256f2aaa3758dc26b859ad9959afcf502d43fa1c21`:
+
+> Please review primer_pi_coding_agent/primer_pi_coding_agent.md and its published HTML for structure and explanatory depth. Read the entire source in bounded contiguous batches, check the reader journey and practical examples, and report source coverage, concrete reader consequences, structural and release decisions, and checks not performed. This is a read-only review. Do not read existing audit records, issues, calibration reports or failure ledgers, and do not edit files or delegate.
+
+The prompt did not name the skill. Recorded commands show one read of
+`.agents/skills/primer-audit/SKILL.md` and two invocations containing the
+outline comparator. The recorder's six source outputs matched the source
+exactly for ranges 1–180, 181–360, 361–540, 541–720, 721–900 and 901–1082.
+As above, recorded outputs do not independently prove the delivered payload or
+comprehension; a structured native-activation event was not established.
+
+The final review characterised the first-session route as sound, but did not
+identify that `git diff` cannot show the contents of the newly created untracked
+README (source lines 127–151; previously verified issue #473). This is a
+concrete missed practical verification step. The reviewer also questioned
+whether the Rocker case fulfils its culminating role because several components
+are absent. The source explicitly calls it illustrative and states those
+components must be created (lines 774–776); without the complete brief, the
+reviewer's stronger assertion is an unresolved scope judgement, not a confirmed
+defect or false positive. The comparator reported no candidate heading mismatch;
+the review did not run examples, verify live claims, inspect the tracked brief
+or perform release checks. It reported release not-ready and gave no explicit
+structural-gate label, despite an overall structural disposition.
+
+This trial shows one natural skill-file read but a consequential missed action
+and an omitted gate label; it does not establish reliable skill behaviour. The
+raw event file was not reviewed for publication or committed. Its temporary
+SHA-256 is `22182b3dca44789771b2dcd4358e8b2e7591cfd593eeb5e225eaabdbff004a4e`;
+the final report SHA-256 is
+`5fd9ac505f60b4eb447fe2b89e9d6941a0e68c74054f619156b69c9d8257c564`.
