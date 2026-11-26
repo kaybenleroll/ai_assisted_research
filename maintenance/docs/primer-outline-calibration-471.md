@@ -415,3 +415,39 @@ retains the prompts, input hashes, outcomes, failure of the original control and
 limits; fixtures and executable validation are tracked. The tests were manually
 directed, small and related, and the corrected control was created after the
 first review. They support a narrow observation, not general reliability.
+
+### Incomplete structural reviews with and without a confirmed defect
+
+An independent review found that the skill's earlier blanket `not-checked`
+instruction conflicted with the template and checker, which allow structural
+`fail` on a confirmed defect even when coverage is incomplete. Commit `4a29edf`
+aligned the skill and template: record the unchecked scope; report `fail` when
+an observed structural defect is confirmed, or `not-checked` when an incomplete
+review has no confirmed defect; both leave release `not-ready`. It also aligned
+the copyable gate examples with the checker's bold syntax.
+
+Two fresh `gpt-6.1-terra` medium reviewers were manually directed to that
+skill (SHA-256
+`7141fac3c7d586c8c7286241ec2708d806ea59ea5da481c1f5044c080cb9859e`).
+Each received only a neutral-named source and rendered extract and the same
+scoped structural-review request. Case 17 contains a confirmed source-to-HTML
+heading loss; case 29 contains no confirmed heading defect but lacks the full
+document. The reviewers reported, respectively, structural `fail` and
+`not-checked`, with release `not-ready` in both cases, using the required
+bold syntax and explaining the unreviewed scope. The clean-case reviewer
+reported an initial failed attempt to invoke the comparator from the wrong
+workspace, followed by a successful invocation from the owning checkout.
+
+The exact inputs and answer key are retained under
+`maintenance/tests/fixtures/primer_audit_behaviour/partial-gates/`; comparator
+regression tests check the observed heading discrepancy and the control. The
+review prompt for each differed only by its neutral case path:
+
+> Using the skill at /tmp/ai-research-outline-review/.agents/skills/primer-audit/SKILL.md, perform a read-only scoped structural review of the source.md and rendered.html under /tmp/partial-gate-test/case-17. These are extracts; the rest of the document is not provided. Report actual findings with locators, checked/unchecked scope and explicit structural and release gate decisions using the required syntax. Do not inspect sibling fixture directories or prior audits, issue, calibration records or answer keys; no file edits or delegation. You are not alone.
+
+These are two deliberately small manual-skill probes with a specific scoped
+request, not whole-document audits, native-activation tests or proof that future
+reviews will classify every issue correctly. The coordinator received their
+reports; raw event logs were not retained. The earlier typo in the historical
+Pi source hash was corrected independently; this does not restore that trial's
+missing raw evidence.
