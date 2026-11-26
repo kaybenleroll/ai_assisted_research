@@ -14,6 +14,16 @@ SPEC.loader.exec_module(MODULE)
 
 
 class OutlineComparisonTests(unittest.TestCase):
+    def test_partial_gate_fixture_reports_only_confirmed_missing_heading(self):
+        root = Path(__file__).resolve().parent / "fixtures/primer_audit_behaviour/partial-gates"
+        defective = root / "case-17"
+        sound = root / "case-29"
+        findings = MODULE.compare((defective / "source.md").read_text(),
+                                  (defective / "rendered.html").read_text())
+        self.assertTrue(any("Follow-up checks" in finding for finding in findings))
+        self.assertEqual(MODULE.compare((sound / "source.md").read_text(),
+                                        (sound / "rendered.html").read_text()), [])
+
     def test_common_inline_markup_and_fenced_headings(self):
         source = ("## A *simple* [link](https://example.org) &amp; `my_code` {#intro}\n"
                   "```md\n## Not a heading\n```\n### A **child**\n")
