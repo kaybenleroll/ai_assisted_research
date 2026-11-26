@@ -97,3 +97,33 @@ raw event file was not reviewed for publication or committed. Its temporary
 SHA-256 is `22182b3dca44789771b2dcd4358e8b2e7591cfd593eeb5e225eaabdbff004a4e`;
 the final report SHA-256 is
 `5fd9ac505f60b4eb447fe2b89e9d6941a0e68c74054f619156b69c9d8257c564`.
+
+## Third Native Trial: Practical-Verification Guidance Retry
+
+A fresh read-only Codex session used the same Pi prompt and source, with the
+new practical-verification guidance at commit `d65b98d` (skill SHA-256
+`d9d51ca7fc6802affb27d0c4a091a67693feebe47c52e080651d09e573c49804`).
+The prompt prohibited edits and the session used a read-only sandbox, so it was
+not given a writable disposable fixture; a failure to execute such a fixture is
+not itself a violation. The skill file was read. Eight recorder-captured source
+outputs matched the source for lines 1–150, 151–300, 301–450, 451–600,
+601–750, 751–900, 901–1050 and 1051–1082. This establishes recorded outputs,
+not the exact delivered payload or comprehension.
+
+The reviewer again described the first-session route as making independent
+diff review observable and did not identify the untracked README problem in
+#473. It also omitted an explicit structural-gate label. The coordinator
+independently ran a minimal temporary Git reproduction: `git status --short`
+showed `?? README.md`, while `git diff` returned no README contents. The retry
+found the separately tracked Rocker comparator-description ambiguity (#474),
+but its stronger judgement on the explicitly illustrative project remains
+unresolved without the complete brief. This was a fresh session but the same
+source and task as the preceding trial, so it is not independent generalisation.
+The new instruction did not reliably surface the known practical failure in this
+setting. The reviewer was not asked to read existing audit or issue records.
+
+The unreviewed raw event file remains temporary only (SHA-256
+`3f1b6fd556a7c1bfba94f6c793d4d7f0c9637b162f3b9ae9394e1feb3e6d186d`);
+the returned report SHA-256 was
+`599f5da23b90dad4daf3f9e8f871668542e535993ee7501e87601060158961a9`.
+Neither hash preserves its file. No genuine tool-layer truncation was tested.

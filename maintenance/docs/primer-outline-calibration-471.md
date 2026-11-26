@@ -383,3 +383,14 @@ requires the unavailable brief; it also omitted an explicit structural-gate
 label. This is a substantive miss and gate-reporting miss, not a reliable
 pass. The exact prompt, observed actions, result hashes and limits are retained
 in [the native trial record](primer-audit-native-trial-2026-11-26.md).
+
+A fresh Pi retry after adding a practical-verification instruction still missed
+#473 and omitted the explicit structural-gate label, although it identified the
+separately recorded comparator ambiguity #474. The task and read-only sandbox
+did not permit a disposable fixture. The coordinator independently reproduced
+the untracked-file behaviour in a temporary Git repository. The retry is a
+repeated known-case observation, not independent generalisation. The [native
+trial record](primer-audit-native-trial-2026-11-26.md) retains its prompt,
+revisions, observable output ranges, results and limits. Further guidance now
+requires recording actual state transitions; this remains unvalidated until a
+fresh trial, including a safely writable disposable fixture, is assessed.
