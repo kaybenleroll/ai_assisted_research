@@ -267,3 +267,59 @@ primer. These observations support further use of the guidance with human
 adjudication, but do not establish reliable detection of all depth or
 structural issues. Retain the distinction between a useful finding, an
 unresolved interpretation and a demonstrated repair.
+
+### Reader-outcome trial on historical GLM source, 26 November
+
+A fresh single reviewer was manually directed to the amended audit skill at
+`94acd9d` (skill SHA-256
+`29d6db7c0ee95b558f415809c762a546fe9659a3c6bb9253477e7c7b723510df`).
+The prompt requested a complete read-only editorial audit of a supplied primer
+and brief, required bounded source reads and reported ranges, and excluded the
+existing audit, calibration and failure ledger. It did not name the closing
+findings or proposed fixes. The reviewer was `gpt-6.1-terra` at medium effort.
+The source was taken from commit `46bcfa4` (SHA-256
+`29e0923b94c1e824412b6d51541d1b6d8de419b43f4aae8d86f5dbcb7a6cd5d3`);
+the supplied brief from that commit had SHA-256
+`a37fb3f6925209f6259499856c6e2c35831a97fdb91eb6f421d534b490b11f1b`.
+The reviewer correctly observed that the brief records a different source hash.
+Its historical gate statements were also visible. Consequently this is blind
+to the specific closing findings, not to the earlier overall verdict, and its
+source/brief revision binding is not valid evidence of a release audit.
+
+The reviewer reported untruncated contiguous source coverage 1–1440 in twelve
+120-line batches. The coordinator received the reviewer result but did not
+retain a raw event log, so the ranges are reviewer-reported, not independent
+proof of delivery or comprehension. Manual direction to read the skill does
+not establish native activation. The reviewer identified the absence of a
+fresh staged diagnostic-to-revision exercise, repeated values and limited
+intermediate feedback (source lines 1361–1379, 1400–1408 and 1423–1440),
+explained the consequence for independent transfer, and recommended expansion.
+It distinguished this gap from the substantive worked case. It gave content
+fail, structural not-checked because rendered contents were unavailable, and
+release not-ready. These observations are consistent with the earlier closing
+assessment; the test was not scored as having found every proposed improvement.
+
+The reviewer retained specialist boundaries as reference material and did not
+identify the separate opportunity to practise recognising which boundary fits a
+new observation. It did not independently check calculations, render outputs,
+links, source identity, examples or every concept row. The trial demonstrates
+one useful detection under partial blindness, not reliability across primers or
+proof that the new boundary-recognition instruction was effective. A second
+trial should use a revision-matched brief without prior verdicts and preserve
+safe observable output under the durable evidence format in #484.
+
+A second fresh manual-skill trial used the same historical source and an
+explicitly prepared reader-and-scope excerpt of `glm-brief-v11` with the correct
+source identity and no historical gate verdict. The full brief and case contract
+were not supplied. The safe prompt, exact excerpt and input hashes are retained
+in [the trial record](primer-audit-trial-2026-11-26.md). The reviewer reported
+coverage of lines 1–1440 in twelve batches, found the repeated inputs and lack
+of unfamiliar staged decision practice, and correctly declined a full content
+gate because the complete brief and route matrix were unavailable. It retained
+the specialist section as a reference and did not identify the separate
+boundary-recognition practice opportunity. Structural gate was not-checked
+because outputs were not supplied; release remained not-ready. The excerpt was
+derived for the trial rather than a complete revision-bound brief, and received
+ranges remain reviewer-reported. This independent run supports detection of the
+practice problem under a verdict-free prompt, but repeats the boundary-detection
+miss and does not establish general reliability or native skill activation.
