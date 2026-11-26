@@ -1,7 +1,8 @@
 # Primer audit: Generalised linear models and their extensions
 
 - Issue and milestone: #468 primer; #467 planning.
-- Audit revision: glm-content-audit-v12
+- Audit revision: glm-content-audit-v13
+- Audit schema: 2
 - Source revision: 5f8bec31a915176c43b96e0c220adb7f24546455
 - Source SHA-256: 71d96a540ae66592ac2e84bfd3ca4316356f166aa200f77f523d9bbae46e974d
 - Tracked path: primer_glm/primer_glm.audit.md
@@ -14,6 +15,18 @@
 - Teaching-case contract: primer_glm/primer_glm.case.md, glm-case-v5.
 - Core-concept depth matrix: primer_glm/primer_glm.brief.md, glm-brief-v12.
 - Readiness decision: not-ready
+
+On 26 November 2026 an independent reviewer reported a complete read of the
+current source at `5f8bec3` (SHA-256 `71d96a540ae66592ac2e84bfd3ca4316356f166aa200f77f523d9bbae46e974d`)
+in the contiguous batches recorded under Outline and hierarchy review. The
+reviewer inspected the HTML contents and compared section boundaries. They
+found a blocking `r01/c22` teaching gap: the brief promises conditions for
+complete-case interpretation, but source line 566 does not explain such a
+condition or counterexample. The integrator checked the source and brief;
+see issue #488. The previous content pass is withdrawn. This was a scoped
+editorial review, not example execution, source verification, or visual and
+accessibility QA. The source ranges are reviewer-reported; no raw tool-event
+log was retained, so they do not establish delivery or comprehension.
 
 The committed source at `5f8bec3` has SHA-256
 `71d96a540ae66592ac2e84bfd3ca4316356f166aa200f77f523d9bbae46e974d`.
@@ -141,7 +154,8 @@ Current structure decision, 25 November: the full-source editorial reviewer comp
 
 ## Outline and hierarchy review
 
-- Rendered contents: **checked** at source `0245c03`: the integrator statically inspected all 78 contents entries in each of the three HTML variants and extracted all three PDF contents pages. Interactive browser inspection was unavailable; PDF contents spacing was corrected in output commit `7a0fcb2` and visually rechecked.
+- Source read coverage: 1-150, 151-300, 301-450, 451-600, 601-750, 751-900, 901-1050, 1051-1200, 1201-1350, 1351-1487
+- Rendered contents: **checked** at source/output `5f8bec3`: the 26 November reviewer inspected the current primary HTML contents; an earlier independent visual inspection checked PDF contents pages 2–3 and final pages 89–103. Interactive browser and assistive-technology checks were not performed. Earlier checks at `0245c03` covered all three HTML variants and PDF contents; those are historical.
 
 The structural reviewer read the source and boundaries through `9f0396f`; the integrator inspected the final wording change at `0245c03`. Considered alternatives include placing notation in a standalone chapter, merging model components into the response cases, combining count extensions, splitting the combined case, and merging synthesis, reference boundaries and exercises. The chosen grouping preserves a clear route from foundations to distinct model problems and a continuous combined case.
 
@@ -162,12 +176,11 @@ The structural reviewer read the source and boundaries through `9f0396f`; the in
 | primer_glm/primer_glm.md:1068 Combining Mean Shape, Site Dependence, and Count Variation | Combine count model components; children: Model Components and Prediction Targets; Simulated Survey and Candidate Models; Training Diagnostics; Held-Out Comparison and Sensitivity; Prediction for a New Site. | retain; optional different response type | Retain: children develop a coherent teaching task. |
 | primer_glm/primer_glm.md:1157 Categorical Responses | Teach unordered and ordered categories; children: Unordered Categories and the Multinomial Model; Ordered Categories and Thresholds. | retain; optional inferential framework rather than another category | Retain: children develop a coherent teaching task. |
 | primer_glm/primer_glm.md:1237 Bayesian Models | Develop bayesian updating and checks; children: Updating a Probability: Likelihood, Prior and Posterior; Count-Model Updating and Predictive Checks; Priors and a Logistic Regression; From a Grid to Markov Chain Monte Carlo; Checking Posterior Predictions; Hierarchical Sharing Across Sites. | retain; return from branch to shared workflow | Retain: children develop a coherent teaching task. |
-| primer_glm/primer_glm.md:1361 Model-Building Synthesis | Synthesise model-building decisions; children: No child headings; the bounded section is continuous. | retain; distinguish recap from specialist referral | Retain: bounded closing section serves its distinct purpose. |
-| primer_glm/primer_glm.md:1381 Further Study and Boundaries | Identify specialist boundaries; children: No child headings; the bounded section is continuous. | retain; distinguish referral from practice | Retain: bounded closing section serves its distinct purpose. |
-| primer_glm/primer_glm.md:1393 Exercises and Outline Solutions | Practise with outline solutions; children: Foundations and Core Models; Count Extensions, Categorical and Bayesian Models. | Final section follows the specialist boundary and closes the document with practice. | Retain: bounded closing section serves its distinct purpose. |
+| primer_glm/primer_glm.md:1365 Model-Building Synthesis | Connect diagnostic evidence, competing explanations, model choice and reporting; children: Evidence, Competing Explanations, and Revision; From the Question to a Defensible Report. | Retain separately from specialist referrals: the synthesis evaluates the taught route, while referrals identify different observation or response structures. | Retain the developed workflow and examples; merging with referrals would bury the decision sequence. |
+| primer_glm/primer_glm.md:1393 Further Study and Boundaries | Recognise when the observed response, missing detection or dependence calls for additional information or specialist methods; children: Measurement and Zeros; Observation and Dependence. | Retain before practice: the boundary exercise uses these distinctions; a forward link provides direct access to transfer practice. | Retain as reference-only specialist scope, with boundary recognition rather than specialist fitting. |
+| primer_glm/primer_glm.md:1414 Exercises and Outline Solutions | Practise core, categorical, Bayesian and count-extension routes, unfamiliar diagnosis-to-prediction transfer and boundary recognition. | Retain as the final practice section; moving it before the references would separate the boundary exercise from its preparation. | Retain the new staged decision and feedback, with earlier repeated inputs labelled as recall. |
 
-The preceding three rows describe the historical outline, not the current
-headings. At `8f7f012`, synthesis begins at primer_glm/primer_glm.md:1365 and
+At `8f7f012`, synthesis begins at primer_glm/primer_glm.md:1365 and
 has children at primer_glm/primer_glm.md:1369 and primer_glm/primer_glm.md:1379;
 boundaries begin at primer_glm/primer_glm.md:1393 with children at
 primer_glm/primer_glm.md:1397 and primer_glm/primer_glm.md:1404; exercises begin
@@ -192,7 +205,7 @@ current design-to-revision counterpart is primer_glm/primer_glm.md:1383–1389.
 
 | route_id | concept_id(s) | transition (from to) | linked input and reader operation | intermediate reasoning or decision | result | interpretation | material limitation | execution status | gap and reader consequence | original IDs |
 |---|---|---|---|---|---|---|---|---|---|---|
-| r01 | c01,c02,c03,c22 | input to interpreted result | primer_glm/primer_glm.md:113 and primer_glm/primer_glm.md:115: penguin dataset and species–island design | primer_glm/primer_glm.md:134 and primer_glm/primer_glm.md:136: fitted means and observation intervals | primer_glm/primer_glm.md:136: worked result | primer_glm/primer_glm.md:136: interpret target | primer_glm/primer_glm.md:143: selection and missingness | illustrative | none found in independent content read | R01, C01,C02,C03,C22 |
+| r01 | c01,c02,c03,c22 | input to interpreted result | primer_glm/primer_glm.md:113 and primer_glm/primer_glm.md:115: penguin dataset and species–island design | primer_glm/primer_glm.md:134 and primer_glm/primer_glm.md:136: fitted means and observation intervals | primer_glm/primer_glm.md:136: worked result | primer_glm/primer_glm.md:136: interpret target | primer_glm/primer_glm.md:143: selection and missingness | illustrative | c22 gap: the missing-data discussion does not explain a condition for complete-case interpretation or its reader consequence (issue #488) | R01, C01,C02,C03,C22 |
 | r02 | c04,c05,c06,c07 | input to interpreted result | primer_glm/primer_glm.md:158: family/link and predictor | primer_glm/primer_glm.md:327, primer_glm/primer_glm.md:339 and primer_glm/primer_glm.md:351: score, information and hand IRLS | primer_glm/primer_glm.md:360: worked result | primer_glm/primer_glm.md:360: interpret target | primer_glm/primer_glm.md:383: singular fitting | illustrative | none found in independent content read | R02, C04,C05,C06,C07 |
 | r03 | c08 | grouped binomial example | primer_glm/primer_glm.md:205–210: grouped successes and failures | primer_glm/primer_glm.md:211–212: fit group probabilities | primer_glm/primer_glm.md:215: fitted group probabilities | primer_glm/primer_glm.md:215: odds ratio and probability difference | primer_glm/primer_glm.md:194: dependence and detection | illustrative | primer_glm/primer_glm.md:217 relates the earlier three-of-eight illustration to the reference group; the grouped example adds a restored group | R03, C08 |
 | r03 | c23 | separated binomial example | primer_glm/primer_glm.md:399: separated observations | primer_glm/primer_glm.md:399: unpenalised likelihood approaches its supremum; primer_glm/primer_glm.md:401 and primer_glm/primer_glm.md:403–414: penalised objective and fit | primer_glm/primer_glm.md:401: penalised probabilities | primer_glm/primer_glm.md:401: penalty choice changes probabilities | primer_glm/primer_glm.md:397: tuning and uncertainty | illustrative | separate case from grouped binomial example | R03, C23 |
@@ -236,7 +249,7 @@ current design-to-revision counterpart is primer_glm/primer_glm.md:1383–1389.
 | r07 | alternative | c19 | primer_glm/primer_glm.md:949 | primer_glm/primer_glm.md:1004 | primer_glm/primer_glm.md:1023 | primer_glm/primer_glm.md:1060 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | simulation at primer_glm/primer_glm.md:1004; fit at primer_glm/primer_glm.md:1011; interpretation and boundary independently read | retain; no scope reduction | R07, C19 |
 | r08 | alternative | c20 | primer_glm/primer_glm.md:1243 | primer_glm/primer_glm.md:1249 | primer_glm/primer_glm.md:1251 | primer_glm/primer_glm.md:1259 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | mechanism, action, interpretation and boundary independently read | retain; no scope reduction | R08, C20 |
 | r08 | alternative | c21 | primer_glm/primer_glm.md:1327 | primer_glm/primer_glm.md:1331 | primer_glm/primer_glm.md:1331 | primer_glm/primer_glm.md:1321 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | logistic model context at primer_glm/primer_glm.md:1285; prior predictive checks at primer_glm/primer_glm.md:1287; posterior predictive mechanism at primer_glm/primer_glm.md:1327 and grid-based example at primer_glm/primer_glm.md:1331 | retain; no scope reduction | R08, C21 |
-| r01 | primary | c22 | primer_glm/primer_glm.md:71 | primer_glm/primer_glm.md:566 | primer_glm/primer_glm.md:143 | primer_glm/primer_glm.md:566 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | data at primer_glm/primer_glm.md:113; proposed missing-data actions at primer_glm/primer_glm.md:566; boundary independently read | retain; no scope reduction | R01, C22 |
+| r01 | primary | c22 | primer_glm/primer_glm.md:71 | primer_glm/primer_glm.md:566 | primer_glm/primer_glm.md:143 | primer_glm/primer_glm.md:566 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent editorial reviewer, 26 November; integrator confirmation | gap | line 566 names assumptions without explaining a condition for interpreting complete cases; the reader cannot justify the promised target-population interpretation (issue #488) | expand; no scope reduction | R01, C22 |
 | r03 | primary | c23 | primer_glm/primer_glm.md:395 | primer_glm/primer_glm.md:401 | primer_glm/primer_glm.md:401 | primer_glm/primer_glm.md:397 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | mechanism, action, interpretation and boundary independently read | retain; no scope reduction | R03, C23 |
 | r09 | reference-only | c24 | primer_glm/primer_glm.md:1399 | primer_glm/primer_glm.md:1483 | primer_glm/primer_glm.md:1401 | primer_glm/primer_glm.md:1410 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | reference-only recognition and boundaries independently read; no executed tutorial | retain; no scope reduction | R09, C24 |
 | r11 | alternative | c25 | primer_glm/primer_glm.md:1171 | primer_glm/primer_glm.md:1192 | primer_glm/primer_glm.md:1188 | primer_glm/primer_glm.md:1192 | 5f8bec31a915176c43b96e0c220adb7f24546455 | independent content reviewer; structural delta reviewer | verified | baseline-category logits and softmax at primer_glm/primer_glm.md:1171–1186; fitted probabilities at primer_glm/primer_glm.md:1192; interpretation of relative and absolute changes at primer_glm/primer_glm.md:1188 is a separate fixed-probability illustration | retain; no scope reduction | R11, C25 |
@@ -282,7 +295,7 @@ On 25 November at commit `3986eb8`, `just primer-audit primer_glm` passed: revis
 
 | Gate | Decision | Evidence or limitation |
 |---|---|---|
-| Current independent content | pass | The 25 November full-source editorial review and scoped delta review found the revised closing sequence develops the previously missing decisions and transfer practice. Historical technical and execution evidence retains its recorded scope. |
+| Current independent content | fail | The 26 November independent source review found an unresolved primary r01/c22 complete-case interpretation gap (#488). The earlier closing-section improvements remain; historical technical and execution evidence retains its recorded scope. |
 | Source and locator binding | reviewed | Independent semantic review covered all 26 concept rows and every primary and alternative route transition and brief trace; corrections were rechecked. Source `46bcfa4` differs from the preceding reviewed source only at opening lines 7, 9, 14 and 16; the opening delta was reviewed and other source lines carry forward unchanged. This does not repeat the whole technical audit. |
 | Examples | passed locally | `just examples glm` passed all 23 at source `46bcfa4`; independent prose review and example execution have distinct provenance. CI examples passed at `24ccbf4`; CI for the subsequent evidence revision remains pending. |
 | Build, render and visual | sampled | Pinned full build passed at `46bcfa4`; PDF code-spacing output was updated at `2a82379`, and final render QA passed. Visual checks sampled the pages listed above, including the updated contents; interactive browser and assistive-technology checks were not performed. |
@@ -290,7 +303,7 @@ On 25 November at commit `3986eb8`, `just primer-audit primer_glm` passed: revis
 | Accessibility | advisory | Static HTML checks found `en-GB`, labelled contents and main landmarks, a skip link, nine images with nonempty alternative text, 78 valid contents targets and no duplicate IDs. Interactive browser, assistive-technology, keyboard and navigation checks remain unperformed and advisory under the publication-accessibility policy. The PDF is untagged; no conformance claim. |
 | Repository, PR and CI | pending | `just check` passed. At exact head `24ccbf4`, CI checks, PR-body and examples passed, and an isolated full `just primer-audit` passed. These results are historical for a subsequent evidence commit; CI on that new head remains pending and the PR remains draft. |
 
-- Content gate: **pass** (the previous closing gaps were corrected and independently reviewed; the later sentence change received scoped comparison)
+- Content gate: **fail** (primary r01/c22 complete-case interpretation is insufficient; see #488)
 - Structural gate: **pass** (full-source editorial review compared alternative groupings and current HTML/PDF contents show the revised hierarchy; interactive navigation was not retested)
 - Release readiness: **not-ready** (current-head CI and final release assessment remain pending; PR remains draft)
 
