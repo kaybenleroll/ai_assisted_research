@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "legacy": [
+    {
+      "path": "primer_codex_for_claude_code_users/primer_codex_for_claude_code_users.audit.md",
+      "sha256": "a7e6ab742d9ce9b9a0c40cda5808317e9b8cc5b23570cba4b403a43436938ad9"
+    },
+    {
+      "path": "primer_knowledge_graph/primer_knowledge_graph.audit.md",
+      "sha256": "f1365a210f14ab06c8e688009dbb0b37fe586c4cf5eb5f662381faf997226fd6"
+    },
+    {
+      "path": "primer_pi_coding_agent/primer_pi_coding_agent.audit.md",
+      "sha256": "334eba0c311f2633530fc71f3bc5306e056007e5cc8db66110099d254a27983b"
+    }
+  ]
+}

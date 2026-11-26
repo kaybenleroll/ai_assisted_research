@@ -44,6 +44,14 @@ exclusions, dependency-led route, qualitative depth, examples, cases, figures,
 languages, evidence plan, and open decisions. Explain why the proposed
 structure solves the reader's problem.
 
+Set out the proposed reader-facing heading hierarchy in the tracked brief,
+following the shared outline review in
+`maintenance/docs/primer-production-procedure.md`. Explain the teaching purpose
+of each parent and its children, the relationship between siblings, and the
+reader need served by each top-level boundary. Record explicit decisions and
+their reasons where material could instead be grouped or separated; distinguish
+unresolved decisions that block planning readiness from optional refinements.
+
 Treat coverage and explanatory quality as the primary planning criteria. Build a
 coverage matrix for the topics a competent reader must understand and be able to
 apply, then use the dependency-led route to determine the necessary depth. Word

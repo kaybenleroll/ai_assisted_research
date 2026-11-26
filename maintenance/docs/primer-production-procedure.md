@@ -24,8 +24,9 @@ decisions visible and explain exceptions.
 4. **Draft:** write from the dependency structure, integrating examples,
    figures, equations, limitations, and practical use cases.
    Complete the post-draft teaching-depth checkpoint before audit handoff.
-5. **Independent review:** review the whole document for coverage and claims;
-   sample representative passages and outputs for depth, structure, and layout.
+5. **Independent review:** review the whole document for coverage, claims,
+   depth, and structure; sample representative passages and outputs for local
+   explanation and layout risks.
 6. **Render and verify:** build the committed HTML/PDF outputs in containers and
    run the repository checks and visual checks required by the guides.
 7. **Evidence and handoff:** record what was checked, what was sampled, what
@@ -159,17 +160,90 @@ on the reader promise before audit handoff.
 ## 5. Run the post-draft audit
 
 Create the tracked audit artefact from [the audit template](templates/primer-audit.md),
-bind it to the exact source and brief revisions, and review the complete source,
-not just a sample. The whole-document pass checks the brief, coverage,
+bind it to the exact source and brief revisions, use `- Audit schema: 2` and record source-read coverage, and review the complete source,
+not just a sample. The [legacy registry](primer-audit-legacy.json) exempts only listed historical audit paths at their exact SHA-256; migrate an edited or renamed record instead of refreshing its hash. The checker fixes the allowed historical path and hash pairs independently of registry edits; a change to that code or policy still requires review and is not an adversarial security boundary. Recorded ranges are self-reported and do not prove comprehension. The whole-document pass checks the brief, coverage,
 technical claims and calculations, source support, explanatory depth,
 structure, examples, figures/tables/equations, limitations, outputs, and
 residual uncertainty.
+
+Review the actual source outline and rendered contents at the recorded source
+revision, including every top-level section boundary and the heading hierarchy
+within each section. If current rendered contents are unavailable, record that
+inspection as not checked.
+Record the purpose of each section, how its children serve that purpose, and
+whether adjacent siblings belong together or mark a useful distinction. Judge
+the structure as its own release gate, separately from teaching depth and
+dependency order. Consider whether orientation or notation stands apart from
+its useful context, a short section with a single child needs both levels, a
+long unbroken case needs landmarks, or the hierarchy gives related material
+appropriate balance. Compare plausible placements and their effects on the
+reader; none of these patterns is automatically a defect. An unresolved
+structural defect, unmet user-specified structural requirement, or incomplete
+required examination blocks readiness; record unexamined material as not checked. When proposing a change, map current
+sections to the proposed structure and account for the substantive coverage,
+examples, figures, and published heading targets to be preserved or for any
+deliberate scope change. A
+decision to retain the structure is valid when the evidence supports it; do
+not restructure to meet a heading or length quota.
 
 For a process, system, or applied-method primer, the audit must complete the
 teaching-case trace from input through construction, representation, useful
 operation, interpretation, and limits. If that trace cannot be completed, the
 content gate has a substantive finding regardless of build or smoke-test
 results.
+For consequential practical instructions, check the stated state before each
+command and whether its result exposes the change being verified. Reproduce a
+minimal safe fixture when feasible, or record the check as unperformed; command
+success alone is not evidence that it checks the intended result.
+For the central practical route, document each consequential input state,
+operation, resulting state and what the next verification actually reveals.
+Examine tracking, generated-output and persistence assumptions where relevant;
+mark an unassessed transition not-checked.
+
+Before the readiness decision, assess the document as a continuous reader
+journey: whether major sections have sufficient development for their teaching
+jobs, how their boundaries aid the promised reader, and whether the rendered
+contents and opening satisfy explicit user requirements. Explain justified
+short reference or orientation sections. A completed matrix does not substitute
+for this integrated judgement.
+
+For major synthesis, practice, or reference sections, assess the distinct
+material reader outcomes promised by the brief rather than treating one easy
+task as evidence for all of them. Locate the information and feedback needed
+for each relevant decision or action, or explain why they are not promised.
+Where the promise includes transfer to unfamiliar inputs, check for new inputs
+and enough evidence to justify the decision, not only repetitions of worked
+values. Trace representative multi-step solutions to judge whether intermediate
+reasoning and feedback help a reader find and correct a consequential mistake.
+Record unsupported transfer and its reader consequence; do not impose an
+exercise quota.
+
+A promised action to recognise a boundary and decide what information or
+approach is needed next is assessed against the tier and scope of the route
+that promises it. A specialist fitting route offered only for reference remains
+non-blocking and does not require a full teaching spine solely for that role.
+For a promised recognition action, try a concrete unfamiliar observation or
+design: can the reader distinguish the relevant boundary from a plausible
+neighbour and identify the information needed next? Cite the enabling passage
+or record the missing link and reader consequence; naming a method is not
+enough.
+
+For each unresolved item, record its concrete risk or reader consequence,
+what evidence would resolve it, who will decide it, and whether it blocks a
+content, structural or release gate or is advisory. Reconcile existing
+evidence first; select additional technical checks by risk and scope rather
+than demanding exhaustive reproduction by default. Required unchecked work
+blocks readiness; an optional unperformed check is a stated limitation, not
+automatic failure. State the reasoned verdict, outstanding blockers and
+stopping boundary instead of leaving an unexplained pending status.
+
+Before reading a long source, inventory its line count and read in bounded,
+contiguous, non-overlapping batches; verify that the recorded ranges have no
+gaps. If a batch is truncated, split and reread it before moving on.
+If a source read is truncated, continue in bounded, contiguous batches and
+record inspected and unreviewed ranges. Do not mark the whole-document review
+complete while gaps remain; if reading cannot continue, state the cause and
+readiness consequence.
 
 Sampling is complementary, not a substitute for reading. Choose representative
 passages and output pages: an opening motivation, a formal or difficult
@@ -193,8 +267,14 @@ or alternative route blocks readiness. Missing evidence is a content finding,
 not a suggestion to add a token paragraph. The remedy is to narrow or demote
 the route, or to develop it properly; a passing build or smoke test cannot
 override the gate. Mechanical validation may check row shape and completeness,
-but human review must decide whether the prose genuinely teaches. Do not add
-quotas.
+but human review must decide whether the prose genuinely teaches. After a
+revision, individually inspect every retained or moved explanation, example
+or action, interpretation, and limitation locator against its described
+passage in the current source. Correct wrong mappings and mark evidence not
+actually checked as `not-checked`, applying the route gate. Record this human
+semantic check separately from mechanical locator reachability and historical
+content review: a valid line or anchor does not establish meaning, and a
+checked mapping does not itself repeat the content review. Do not add quotas.
 
 ## 6. Render and verify
 

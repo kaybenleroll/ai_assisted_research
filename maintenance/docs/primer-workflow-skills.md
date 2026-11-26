@@ -37,6 +37,10 @@ successful render does not establish content correctness. Choose the skills
 the task needs; there is no requirement to use all four or meet a quota. This
 guidance is the shared router; it does not require a dedicated router skill.
 
+For behavioural tests of the audit workflow, use the [calibration evidence
+record](primer-audit-calibration-evidence.md) to preserve the inputs, observed
+results, adjudication and limits.
+
 ## Decision checklist
 
 Before starting and when handing off, establish:
