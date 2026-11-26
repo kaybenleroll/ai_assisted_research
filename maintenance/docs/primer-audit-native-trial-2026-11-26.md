@@ -127,3 +127,41 @@ The unreviewed raw event file remains temporary only (SHA-256
 the returned report SHA-256 was
 `599f5da23b90dad4daf3f9e8f871668542e535993ee7501e87601060158961a9`.
 Neither hash preserves its file. No genuine tool-layer truncation was tested.
+
+## Fourth Native Trial: State Transitions and Disposable Fixture
+
+A fresh Codex session used guidance commit `2edc135` (skill SHA-256
+`86db2891c690bca131541e7cabdf61c4ff525ce350a079ae56870ca492b3cb20`)
+and the same Pi source and HTML. Unlike the preceding read-only-sandbox trial,
+this run allowed a disposable temporary directory and the reviewer chose to
+read the tracked brief and case contract. Their SHA-256 values were respectively
+`0a9de70192ca8fb5862337e8a4d6229251335bdbd360e586551a20c625898d56` and
+`b88cf7973b9a90e65dbb6d8d123a0ed4fbc69dcdb1bf21f7d89268fa79a86e93`.
+The brief promises an independently reviewed first-run change but does not
+identify the untracked-file defect. The prompt (SHA-256
+`6cced5545cb323220f4fc5909c475b36e1cb99751d09d90d8ed0724174b634c1`) was:
+
+> Please review primer_pi_coding_agent/primer_pi_coding_agent.md and its published HTML for structure and explanatory depth. Read the entire source in bounded contiguous batches, check the reader journey and practical examples, and report source coverage, concrete reader consequences, structural and release decisions, and checks not performed. This is a read-only review of the repository; you may create a disposable temporary directory outside the repository to check commands. Do not read existing audit records, issues, calibration reports or failure ledgers, and do not edit repository files or delegate.
+
+The recorder shows a skill-file read and eleven source-read outputs matching
+lines 1–1082 after removing the displayed line numbers. It also records a
+successful temporary Git reproduction: status printed `?? README.md` and the
+following `git diff -- README.md` printed no content. The final review identified
+the first-run verification defect, gave a structural-gate pass for its scoped
+review, and reported release not-ready pending correction and release checks.
+It treated the Rocker project as illustrative within its disclosed limits,
+which differs from the previous reviewer's unresolved scope concern. It did not
+execute Pi or check current external claims or rendered visual accessibility.
+
+This is a successful detection and independently observable reproduction of
+the known #473 failure, after two unsuccessful Pi trials. It used the same
+source and a changed prompt/sandbox, and consulted a brief and contract that the
+previous trial did not. Those differences prevent attribution of the result
+to the new instruction alone. A success on this known example does not prove
+general reliability, native-activation semantics or genuine truncation recovery.
+The reviewed minimal observations are retained here; the unreviewed raw event
+file is temporary only, SHA-256
+`43d8f71dbc576a2653e0f32737b550ac358d407cb0eaac8368755e37cdbb24a0`.
+The returned report SHA-256 was
+`be9324f4dbcba5ceacd6efde69c2742258e3ca175e6aafdce492f7ada05f4423`.
+Hashes alone cannot recover lost files.

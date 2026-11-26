@@ -394,3 +394,12 @@ trial record](primer-audit-native-trial-2026-11-26.md) retains its prompt,
 revisions, observable output ranges, results and limits. Further guidance now
 requires recording actual state transitions; this remains unvalidated until a
 fresh trial, including a safely writable disposable fixture, is assessed.
+
+After state-transition guidance was added, a fresh Pi session with permission
+for a disposable temporary fixture reproduced and identified #473. It also
+read the tracked brief and case contract, which the previous failed trial did
+not. The changed guidance, prompt and available inputs make the cause of the
+improvement indeterminate; the same known primer was reused. The [native trial
+record](primer-audit-native-trial-2026-11-26.md) records the prompt, fixture
+output and limits. This is useful behavioural evidence, not proof of general
+reliability or of recovery from genuine tool-output truncation.
