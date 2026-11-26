@@ -132,5 +132,25 @@ and a wider sample, with a figure-only page and whitespace still recorded.
 **Remedy:** after changes that can repaginate a document, widen the sample and
 inspect both sides of affected code and figure page breaks. Record the output
 revision, pages, result and remaining scope. This directly addresses the
-observed blind spot; the guidance has not yet been tested in a fresh independent
-trial and does not establish exhaustive visual coverage.
+observed blind spot; the additional prose and equation cases below refine the
+sampling guidance but do not establish exhaustive visual coverage.
+
+### Calibrated visual-sampling trial, 26 November 2026
+
+A fresh reviewer was manually instructed to apply the then-current render-QA
+guidance to the GLM PDF at SHA-256
+`29f4ea649855957255c84f3ffcff68e9020ccd36b589a425120830270b74400b`. The
+sample covered pages 1, 6, 16–20, 47–49, 58–60, 71–73, and 82–83. The reviewer
+detected a figure splitting the introduction and equation on pages 16–17, and
+sentence interruptions on pages 58–59 and 82–83, but missed the known code
+listing interruption on pages 66–67. Those target pages were not in the
+sample. The trial therefore supports adding prose and equation floats to the
+boundary checks, while showing that the sampled review still missed a known
+defect.
+
+The reviewer was manually instructed; native skill selection was not tested.
+No raw event logs were retained, and the shared filesystem did not enforce
+blinding. This is one bounded observation, not evidence that the guidance
+caused the detections or miss, nor a reliability or exhaustive-coverage claim.
+The trial does not assess or establish the outcome of any pagination fix.
+Pages outside the listed sample remain uninspected.

@@ -109,10 +109,11 @@ For another document, replace the PDF path and page numbers 17, 13, and 3 with p
 If a shared layout or pagination change can affect pages throughout the
 document, broaden the sample beyond one representative page per type. Inspect
 both sides of affected page breaks, particularly where code continues across
-pages or a figure can float between listing parts. Record source and PDF
-revisions, the affected page span and element, and what was inspected. In the
-sampled review, state what remains uninspected and why; this targeted guidance
-does not require page-by-page review.
+pages or a figure may interrupt a listing, sentence, or equation. Check
+continuity across the boundary as well as the page layout. Record source and
+PDF revisions, the affected page span and element, and what was inspected. In
+the sampled review, state what remains uninspected and why; this targeted
+guidance does not require page-by-page review.
 
 ## PR Description Template
 

@@ -42,10 +42,11 @@ output findings separate from the audit's human teaching-depth decision.
 
 When a shared layout or pagination change can affect the whole document, widen
 the visual sample beyond one page of each type. Inspect both sides of affected
-page breaks, especially where a code listing continues or a figure may float
-between its parts. Record the source and PDF revisions, page span, element, and
-inspection scope. This is targeted sampling, not an exhaustive page-by-page
-review; record any uninspected scope and its reason.
+page breaks, including where a figure may interrupt a code listing, sentence,
+or equation. Check continuity across the boundary as well as the page layout.
+Record the source and PDF revisions, page span, element, and inspection scope.
+This is targeted sampling, not an exhaustive page-by-page review; record any
+uninspected scope and its reason.
 
 If a required runtime or container is unavailable, record it as unverified and
 stop at the safe boundary. Do not install repository build dependencies on the
