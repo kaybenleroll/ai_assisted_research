@@ -2,6 +2,7 @@
 
 - Issue and milestone: <primary issue; related issues>
 - Audit revision: <stable revision identifier>
+- Audit schema: 2
 - Source revision: <exact commit or source artefact revision>
 - Tracked path: <repository path to this audit>
 - Starting branch: <branch>
@@ -37,6 +38,16 @@ field defined below.
 For a process, system, or applied-method primer, complete this additional
 trace. A curated fixture, schema validation, or successful smoke test is not
 evidence of an end-to-end teaching case.
+For consequential practical instructions, check the stated input and state before
+each command and whether its output exposes the claimed result. Where feasible,
+reproduce the relevant steps using a minimal disposable fixture; otherwise
+record the check as unperformed. A successful command alone does not establish
+that it verifies the intended change.
+For the central practical route, record each consequential state transition:
+input and pre-existing state, operation, resulting state, and exactly what the
+next verification reveals. Inspect tracking, generated-output and persistence
+assumptions where relevant. Record an unsupported result as a finding and an
+unassessed transition as not-checked.
 
 | Case stage | Source or section | Evidence and result | Execution status | Gap or limitation |
 |---|---|---|---|---|
@@ -58,6 +69,66 @@ For each core concept, check mechanism or reasoning, significance, conditions or
 limits, and the teaching device used. Do not treat word count or subsection
 count as evidence of depth.
 
+## Outline and hierarchy review
+
+Record the actual source outline and inspect the rendered contents at the
+reviewed source revision, including every top-level section boundary and its
+heading hierarchy. Record unavailable current rendered contents as `not-checked`. The source-read
+coverage record lists successfully received and inspected inclusive line ranges
+at the reviewed revision; it is not proof of understanding. A structural pass
+requires all lines, with no gaps, overlaps or duplicate ranges. Partial
+coverage permits a fail for an observed defect or `not-checked`, but never a
+pass. The checker requires schema 2 for new and changed audits. Only exact unversioned
+historical records listed by path and SHA-256 in [the legacy registry](../primer-audit-legacy.json)
+are exempt. Migrate a changed or renamed historical audit to schema 2; do not
+refresh its registry hash to avoid a review. The checker fixes the permitted
+historical pairs independently of that registry. Code or policy changes remain
+reviewable and this is not an adversarial security boundary.
+
+- Source read coverage: <inclusive ranges such as 1-120, 121-240, or none>
+- Rendered contents: <**checked** or **not-checked**; output revision and method>
+
+For each top-level section, explain its purpose, how its children support it,
+and the distinction or relationship between adjacent siblings. Examine boundaries and hierarchy
+throughout the document, including reference and orientation sections; an
+inventory of headings alone is not a review. Record evidence and a disposition
+for each boundary, including justified retention. Judge structure separately
+from the depth and dependency-order gates.
+
+In the boundary and disposition cells, cite passages on both sides, identify
+the reader task each serves, and explain their connection or distinction. Where
+a plausible alternative matters, describe its placement or grouping and compare
+its effect on navigation and reasoning with the existing structure. A label
+such as “bounded” or “distinct purpose” is not a comparison or rationale.
+
+Consider isolated orientation or notation, short sections with a single child,
+long combined cases without subsections, and balance between related branches
+of the hierarchy. For each relevant candidate, compare plausible placements or
+landmarks and explain their effect on the reader. These patterns prompt
+judgement; none is automatically a defect or subject to a quota.
+
+| Actual section and hierarchy at reviewed revision | Purpose and parent/child relationship | Adjacent sibling boundary and rationale | Finding and disposition |
+|---|---|---|---|
+| | | | |
+
+When a structural change is proposed, map the current sections to the proposed
+structure and account for substantive coverage, examples, figures, and
+published heading targets to be preserved. Identify and justify any deliberate scope change. Do not assume that
+short sections need consolidation or that a heading or length quota applies.
+
+| Current section(s) | Proposed location or structure | Coverage, examples, and figures preserved; any scope change |
+|---|---|---|
+| | | |
+
+An unresolved structural defect, unmet user-specified structural requirement,
+or incomplete required examination blocks release readiness. Mark unexamined
+material `not-checked`. If a confirmed structural defect has been found, record
+the structural gate as `fail` even if the examination is incomplete; otherwise
+use `not-checked` for an incomplete examination. In both cases release readiness
+is `not-ready`. Do not give a provisional pass to a truncated review. Record the
+structural gate decision below and revisit affected boundaries and hierarchy
+after revisions.
+
 ## Reader-scale section depth
 
 Review every major section and every section that carries a primary or
@@ -67,7 +138,34 @@ apply or interpret it, and a material limitation or failure case. Assign an
 explicit disposition of `expand`, `consolidate`, or `retain`. Use exact source
 locators and the reviewed revision. A `retain` decision for an intentionally
 brief section needs an editorial reason, such as orientation, transition, or a
-deliberately bounded reference branch.
+deliberately bounded reference branch. Explain what the cited development
+enables the intended reader to do. If it is insufficient, identify the missing
+reasoning and the resulting reader consequence; a brief or reference label
+alone does not establish that the section fulfils its promised job.
+
+For each major synthesis, practice, or reference section, identify the distinct
+material reader outcomes promised by the brief and the decisions or actions
+needed after the preceding route. Locate opportunities to perform them with
+the necessary information and feedback, or explain why those opportunities or
+feedback are not promised. One easy task does not establish a different
+promised outcome. Where unfamiliar-input transfer is promised, assess whether
+practice provides new inputs and enough evidence for the requested decision,
+rather than only repeating worked values. For representative multi-step
+exercises, trace the solution's intermediate reasoning and whether feedback
+helps a reader locate and correct a consequential mistake. Record unsupported
+transfer and its reader consequence. Judge the actual development independently
+of the title, section label, or existence of earlier examples; this does not
+require an exercise in every section or a fixed number of tasks.
+
+Assess a promised action to recognise a boundary and decide what information or
+approach is needed next against the tier and scope of the route that promises
+it. A specialist fitting route offered only for reference does not require a
+full teaching spine or become blocking solely because it is reference-only.
+For a promised recognition action, try a concrete unfamiliar observation or
+design and check whether the reader can distinguish a relevant boundary from a
+plausible neighbour and identify the information needed next. Cite the passage
+that enables the decision, or record the missing link and its consequence. A
+method name alone is not evidence of the action.
 
 | Section and route/concept IDs | Teaching job | Reasoning spine or worked thread | Application or interpretation locator | Material limitation or failure-case locator | Disposition and rationale |
 |---|---|---|---|---|---|
@@ -218,6 +316,22 @@ the initial audit.
 |---|---|---|---|
 | | | | |
 
+## Integrated reader judgement and open decisions
+
+Explain whether the complete reader journey and each major section meet the
+promised teaching job, including the opening, rendered contents and any
+explicit user requirements. Reference the section and outline evidence above;
+a populated matrix alone is not this judgement.
+
+| Open item and concrete risk or reader consequence | Existing evidence and remaining decision | Evidence needed and decision owner | Blocking gate or advisory limitation |
+|---|---|---|---|
+| | | | |
+
+Choose further technical checks by risk. Explain why an unperformed check is
+required or optional; do not treat exhaustive independent reproduction as the
+default. Record a reasoned verdict and stopping boundary, not an unexplained
+`pending` label. Required unchecked work blocks readiness.
+
 ## Release readiness checklist
 
 Record the content gate and release-readiness decision separately. Use
@@ -229,6 +343,7 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 |---|---|---|
 | Brief and audit binding | | Source, brief, audit, and reviewed revisions agree. |
 | Route/concept gate | | Stable IDs, exact locators, and no blocking primary/alternative rows. |
+| Structure | | Actual outline, every top-level boundary and hierarchy reviewed at the source revision; no unresolved structural defects or unreviewed boundaries. |
 | Locator validity | | Git-backed source and line validation result. |
 | Examples | | Manifest IDs, runtime, command, result, and execution status. |
 | Rendered outputs | | HTML/PDF existence, metadata, freshness, and render-QA result. |
@@ -238,8 +353,9 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 | Revision review | | Changed artefacts and affected evidence rows reviewed. |
 | Handoff | | Remaining gaps, reviewer, branch, commands, and release decision. |
 
-- Content gate: <pass or fail>
-- Release readiness: <ready or not-ready>
+- Content gate: **<pass or fail>**
+- Structural gate: **<pass, fail, or not-checked>**
+- Release readiness: **<ready or not-ready>**
 
 ## Execution and render evidence
 
@@ -261,5 +377,5 @@ for semantic depth, citation support, accessibility meaning, and visual quality.
 - Missed issues: <issues found later or by another reviewer>
 - Procedure changes proposed: <specific change or “none”>
 - Remaining work: <issue-linked next actions>
-- Readiness decision: <ready only if all primary and alternative routes pass the
-  adversarial depth gate; otherwise name the blocking gaps and scope decision>
+- Readiness decision: <ready only if the structural gate and all primary and
+  alternative routes pass; otherwise name the blocking gaps and scope decision>

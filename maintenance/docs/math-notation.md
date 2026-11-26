@@ -4,7 +4,7 @@ This guide is the notation contract for repository-authored documents that use m
 
 ## Notation Contract
 
-**N1.** Put a reader-facing `## Notation` section before the first mathematical use in every new maths primer. Start it with a table of symbol, meaning, and first use; give each concept one notation and define variables locally when a derivation introduces them. Existing maths primers add the section when their #138 content-audit row is finished. [check: review]
+**N1.** Put a reader-facing Notation section before the first mathematical use in every new maths primer, either within the opening introduction or at the top level when that better serves navigation. Start it with a table of symbol, meaning, and first use; give each concept one notation and define variables locally when a derivation introduces them. Existing maths primers add the section when their #138 content-audit row is finished. [check: review]
 
 For example, a document using gradient descent could begin its Notation section with this table, then explain the update immediately afterwards.
 
