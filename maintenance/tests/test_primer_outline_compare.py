@@ -42,6 +42,37 @@ class OutlineComparisonTests(unittest.TestCase):
         self.assertEqual(MODULE.compare(source.replace("## Convolutional Neural Networks\n", ""), html, -1), [])
         self.assertEqual(MODULE.compare("## A\n#### Subsection\n", "<h1>A</h1><h3>Subsection</h3>", -1), [])
 
+    def test_typographic_apostrophes_match_without_hiding_other_differences(self):
+        source = "## Reader's Model\n### ‘Quoted’ Term\n"
+        html = "<h1>Reader’s Model</h1><h2>'Quoted' Term</h2>"
+        self.assertEqual(MODULE.analyse(source, html), ([], -1))
+        findings = MODULE.compare(source, html.replace("Model", "Models"), -1)
+        self.assertTrue(any("Reader's Model" in item for item in findings))
+        self.assertTrue(any("Reader’s Models" in item for item in findings))
+
+    def test_spectral_apostrophes_and_missing_heading(self):
+        source = ("### Spectral Sweeps and Cheeger's Inequality\n"
+                  "### A Compact Portfolio of Small Graphs\n"
+                  "### Public-Data Community Case: Zachary's Karate Club\n")
+        html = ("<h2>Spectral Sweeps and Cheeger’s Inequality</h2>"
+                "<h2>Public-Data Community Case: Zachary’s Karate Club</h2>")
+        findings, offset = MODULE.analyse(source, html)
+        self.assertEqual(offset, -1)
+        self.assertEqual(len(findings), 1)
+        self.assertIn("A Compact Portfolio of Small Graphs", findings[0])
+
+    def test_apostrophes_in_code_are_not_silently_normalised(self):
+        source = "## Context\n### `user's` Identifier\n"
+        html = "<h2>Context</h2><h3><code>user’s</code> Identifier</h3>"
+        findings = MODULE.compare(source, html)
+        self.assertTrue(any("ambiguous heading conversion" in item for item in findings))
+        # Even identical apostrophes in code need human review: they are literal.
+        self.assertTrue(any("ambiguous heading conversion" in item
+                            for item in MODULE.compare(source, html.replace("user’s", "user's"))))
+        # An apostrophe only in the rendered code is still flagged.
+        self.assertTrue(any("ambiguous heading conversion" in item
+                            for item in MODULE.compare("## Context\n### users Identifier\n", html)))
+
     def test_code_span_link_syntax_is_literal(self):
         self.assertEqual(MODULE.compare("## `[x](y)`\n", "<h2><code>[x](y)</code></h2>"), [])
 

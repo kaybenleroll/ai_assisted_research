@@ -34,7 +34,8 @@ def markdown_text(value: str) -> tuple[str, bool]:
         code.append(" ".join(match.group(2).split()))
         return f"\x00{len(code) - 1}\x00"
     value = re.sub(r"(`+)(.*?)\1", save_code, value)
-    ambiguous = bool(re.search(r"!\[|\]\[|<[^>]+>|\{[^}]+\}|~~|\$", value))
+    ambiguous = (bool(re.search(r"!\[|\]\[|<[^>]+>|\{[^}]+\}|~~|\$", value))
+                 or any(re.search("['\u2018\u2019]", content) for content in code))
     # Nested brackets and nested link destinations require a full Markdown parser.
     if re.search(r"\[[^]]*\[[^]]*\]|\]\([^)]*\([^)]*\)", value):
         ambiguous = True
@@ -98,6 +99,7 @@ class HTMLHeadings(HTMLParser):
         self.ambiguous = False
         self.excluded: list[str] = []
         self.number_depth = 0
+        self.code_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attributes = dict(attrs)
@@ -115,6 +117,8 @@ class HTMLHeadings(HTMLParser):
         if self.level is not None and tag == "span" and "header-section-number" in (attributes.get("class") or "").split():
             self.number_depth = 1
             return
+        if self.level is not None and tag == "code":
+            self.code_depth += 1
         if tag in ("h1", "h2", "h3", "h4"):
             if self.level is not None:
                 self.ambiguous = True
@@ -128,6 +132,8 @@ class HTMLHeadings(HTMLParser):
 
     def handle_data(self, data: str) -> None:
         if self.level is not None and not self.excluded and not self.number_depth:
+            if self.code_depth and re.search("['\u2018\u2019]", data):
+                self.ambiguous = True
             self.parts.append(data)
 
     def handle_endtag(self, tag: str) -> None:
@@ -139,10 +145,17 @@ class HTMLHeadings(HTMLParser):
             if tag == "span":
                 self.number_depth -= 1
             return
+        if self.level is not None and tag == "code" and self.code_depth:
+            self.code_depth -= 1
         if self.level is not None and tag == f"h{self.level}":
             self.headings.append(Heading(self.level, " ".join("".join(self.parts).split()),
                                          f"html:{self.start_line}", self.ambiguous))
             self.level = None
+
+
+def comparison_text(value: str) -> str:
+    """Treat typographic apostrophes as equivalent; flag code separately."""
+    return value.replace("\u2018", "'").replace("\u2019", "'")
 
 
 def analyse(source: str, html: str, level_offset: int | None = None) -> tuple[list[str], int | None]:
@@ -157,8 +170,8 @@ def analyse(source: str, html: str, level_offset: int | None = None) -> tuple[li
         # choose an offset when the available evidence gives a tied best score.
         scores = {}
         for offset in (-1, 0, 1):
-            expected = [(h.level + offset, h.text) for h in candidates if not h.ambiguous]
-            actual = [(h.level, h.text) for h in parser.headings if h.level in (2 + offset, 3 + offset) and not h.ambiguous]
+            expected = [(h.level + offset, comparison_text(h.text)) for h in candidates if not h.ambiguous]
+            actual = [(h.level, comparison_text(h.text)) for h in parser.headings if h.level in (2 + offset, 3 + offset) and not h.ambiguous]
             scores[offset] = sum(block.size for block in SequenceMatcher(a=expected, b=actual, autojunk=False).get_matching_blocks())
         best = max(scores.values())
         winners = [offset for offset, score in scores.items() if score == best]
@@ -169,8 +182,8 @@ def analyse(source: str, html: str, level_offset: int | None = None) -> tuple[li
     for heading in candidates + actual_headings:
         if heading.ambiguous:
             warnings.append(f"{heading.location}: ambiguous heading conversion: {heading.text!r}")
-    expected = [(h.level + level_offset, h.text) for h in candidates]
-    actual = [(h.level, h.text) for h in actual_headings]
+    expected = [(h.level + level_offset, comparison_text(h.text)) for h in candidates]
+    actual = [(h.level, comparison_text(h.text)) for h in actual_headings]
     matcher = SequenceMatcher(a=expected, b=actual, autojunk=False)
     for operation, i1, i2, j1, j2 in matcher.get_opcodes():
         if operation == "equal":
