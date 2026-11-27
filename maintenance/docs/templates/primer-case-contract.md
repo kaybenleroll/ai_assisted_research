@@ -44,7 +44,10 @@ must resolve to a commit containing the same source bytes as the working tree;
 the digest must match those bytes. Surround each group of current trace
 locators with standalone `<!-- current locators: start -->` and
 `<!-- current locators: end -->` lines. Use repository-relative `path:line`
-or `path:first–last` locators; at least one is required. The audit gate checks
+or `path:first–last` locators, with a file extension and positive line numbers;
+any text-file extension is supported and at least one locator is required.
+A hyphen may replace the en dash. The audit gate rejects malformed line ranges
+and checks
 file existence and line bounds inside these regions. Historical references
 outside them are not checked as current. Existing cases without the fields or
 markers remain unbound. These checks establish mechanical consistency, not

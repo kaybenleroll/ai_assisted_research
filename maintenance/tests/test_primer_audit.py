@@ -187,11 +187,16 @@ class PrimerAuditTests(unittest.TestCase):
                     f"- Current source revision: {rev}\n- Current source SHA-256: {sha}\n"
                     "Historical missing.md:999\n<!-- current locators: start -->\n"
                     f"{locator}\n<!-- current locators: end -->\n", encoding="utf-8")
-            write()
+            (root / "example.jl").write_text("one\ntwo\n", encoding="utf-8")
+            write(locator="primer.md:1 and example.jl:1–2")
             self.assertEqual(MODULE.case_findings(root, source, case), [])
             for kwargs in ({"rev": "abcdef123456789"}, {"sha": "0" * 64},
                            {"locator": "missing.md:1"}, {"locator": "primer.md:0"},
-                           {"locator": "primer.md:1–3"}, {"locator": "primer.md:2–1"}):
+                           {"locator": "primer.md:1–3"}, {"locator": "primer.md:2–1"},
+                           {"locator": "primer.md:1 and missing.jl:999"},
+                           {"locator": "primer.md:1 and primer.md:1–bogus"},
+                           {"locator": "primer.md:1 and primer.md:2-"},
+                           {"locator": "primer.md:1 and missing.unknown:1"}):
                 with self.subTest(kwargs=kwargs):
                     write(**kwargs)
                     self.assertTrue(MODULE.case_findings(root, source, case))

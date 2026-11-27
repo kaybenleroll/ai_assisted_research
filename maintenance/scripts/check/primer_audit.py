@@ -133,7 +133,9 @@ def case_findings(root: Path, source: Path, case: Path) -> list[str]:
     active = False
     regions = 0
     locators = 0
-    range_re = re.compile(r"(?<![A-Za-z0-9_/.-])(?P<path>[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\.(?:md|py|R|json|toml|txt|html|pdf)):(?P<line>[0-9]+)(?:[-–](?P<end>[0-9]+))?")
+    # Capture the whole candidate before validating it; a valid prefix must
+    # not hide a malformed range or a locator with another file extension.
+    locator_re = re.compile(r"(?<![A-Za-z0-9_/.-])(?P<path>[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\.[A-Za-z0-9]+):(?P<reference>[^\s|`]*)")
     for number, line in enumerate(text.splitlines(), 1):
         if line.strip() == start:
             if active:
@@ -145,8 +147,13 @@ def case_findings(root: Path, source: Path, case: Path) -> list[str]:
                 errors.append(f"case:{number}: unmatched current locator end")
             active = False
         elif active:
-            for match in range_re.finditer(line):
+            for match in locator_re.finditer(line):
                 locators += 1
+                reference = match.group("reference").rstrip(".,;:)")
+                bounds = re.fullmatch(r"([1-9][0-9]*)(?:[-–]([1-9][0-9]*))?", reference)
+                if not bounds:
+                    errors.append(f"case:{number}: malformed current locator {match.group(0)}")
+                    continue
                 relative = Path(match.group("path"))
                 target = (root / relative).resolve()
                 try:
@@ -154,8 +161,8 @@ def case_findings(root: Path, source: Path, case: Path) -> list[str]:
                     if not target.is_file():
                         raise ValueError("file does not exist")
                     count = len(target.read_text(encoding="utf-8").splitlines())
-                    first = int(match.group("line"))
-                    last = int(match.group("end") or first)
+                    first = int(bounds.group(1))
+                    last = int(bounds.group(2) or first)
                     if first < 1 or last < first or last > count:
                         raise ValueError(f"line range is outside file ({count} lines)")
                 except (ValueError, OSError, UnicodeError) as exc:
