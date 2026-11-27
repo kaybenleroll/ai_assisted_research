@@ -332,3 +332,36 @@ At `344efdd` (source SHA-256 `df737b7e02b6d00b94c58edff15cd67c21e357bbb01af1067c
 The pinned `just full` build, `just render-qa primer_glm`, `just examples glm`, `just lint-changed` (including offline links), and `just check-primer-evidence primer_glm/primer_glm.brief.md primer_glm/primer_glm.audit.md` passed for this correction. Pandoc 3.11 used image `localhost/primers-pandoc@sha256:239428f1d61de725be479c72ada0bbe146a313791ee2d68333114b6c623ad771`. The build emitted Pandoc maths-option deprecation warnings; lint retained existing advisory findings. Render QA checked all three HTML variants and the 106-page PDF. The author visually inspected PDF pages 1, 11, 18–19, 55, 65–67 and 74, including both sides of the affected page breaks; text, equations, code, table and figure were legible and continuous. This is a sample, not a full visual review. The PDF is untagged; interactive keyboard, no-JavaScript, accessibility-tree and screen-reader checks were not performed. Configured example scripts passed; the changed inline hurdle listing was not independently executed by that runner, and the local rename was checked against its unchanged likelihood expression.
 
 An independent delta reviewer inspected the correction and its evidence and identified stale readiness and CI claims in the audit and brief. That follow-up corrected those claims; CI was then unperformed. This was a scoped delta review, not a fresh whole-document technical or release audit.
+
+
+## HTML maths fallback check, 27 November 2026
+
+Issue #509 changes shared navigation and regenerates the three GLM HTML files
+from source revision `0ff4b2599d01cfd6ddff260f98fbb5bfba954d32` with the
+modified shared template and recipes in this change. `just html html-variants`
+used `localhost/primers-pandoc:latest` (image ID `61d7d31cd74f`, Pandoc 3.11).
+`just render-qa primer_glm` passed automated HTML and asset checks; its PDF
+candidates on pages 1, 74, 55 and 11 were visually inspected, with no defect
+seen. The PDF was unchanged and remains untagged. The focused fallback test,
+`just check-variants`, and `just lint-links primer_glm/primer_glm.html` passed.
+
+An independent reviewer tested commit `e185ac1` on the local GLM HTML file
+using headless Google Chrome 158.0.8127.88 and CDP
+`Emulation.setScriptExecutionDisabled`. With script
+execution disabled before loading, the MathML link was visible, targeted the
+corresponding file and appeared in the accessibility tree with the name
+“Read the MathML version”; the renderer button was hidden. Tab focused the skip
+link and then the MathML link; Enter opened the MathML output, which contained
+781 native maths elements. With scripts enabled, the fallback was absent, the
+visible switch was labelled “Switch to MathML”, and 781 MathJax containers
+were present. This is a targeted check, not a review of broader navigation.
+A screen-reader check was not performed and remains required as applicable
+before release. This is an output check, not a renewed content audit. Existing
+outputs for other primers do not gain the fallback until rebuilt.
+
+A subsequent recipe correction for primers that use the implicit MathJax
+default did not change GLM's primary HTML: `just html` reproduced the
+browser-reviewed file byte for byte. A container render of fluid mechanics
+confirmed the link and was discarded after inspection; existing published
+fluid mechanics outputs were not changed. `just check-mathml-fallback` now
+runs from `just check` and covers both explicit and implicit defaults.

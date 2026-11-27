@@ -632,6 +632,10 @@ $if(word_count)$    <span class="navbar-meta">$word_count$ words</span>$endif$
       <div class="sidebar-tools">
 $if(mathvariants)$
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+        <noscript>
+          <style>#math-mode-toggle { display: none; }</style>
+$if(mathmlfallback)$          <p>JavaScript is disabled. <a href="$mathmlhref$">Read the MathML version</a> for rendered equations.</p>$endif$
+        </noscript>
 $endif$
       </div>
 $if(toc)$      <nav id="TOC" aria-label="Table of contents">$table-of-contents$</nav>
