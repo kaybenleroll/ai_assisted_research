@@ -65,26 +65,28 @@ node transformation too compressed. The source describes the operation at
 line 806; the companion calculates membership and adds node fields at lines
 24–33 and prints a node table at lines 59–64. More explanation could aid the
 reader, but whether it is required is an editorial judgement, not an established
-technical error. The reviewer supported this concern by asserting a
-no-programming prerequisite for the R route. That premise is false: brief lines
-14–17 say familiarity with tables and identifiers suffices for the standalone
-route and that R applies to optional implementation material. The separate
-claim that the node-table explanation needs expansion is not thereby resolved.
+technical error. The reviewer said a reader with the stated no-programming
+prerequisite can understand the hand-worked table but has little guidance for
+checking that the R output represents it. Source line 39 states that no
+programming experience is required and describes R as an optional companion;
+brief lines 14–17 apply R to optional implementation material. How much guidance
+the optional R companion should provide to that reader remains a scope
+judgement. The practical question of how to check the node table remains open.
 
 The open knowledge-graph issue [#481](https://github.com/kaybenleroll/ai_assisted_research/issues/481)
 concerns different sampled evidence bindings; it does not adjudicate these
 R-route findings. The trial did not use a pre-existing answer key, so misses
-and other false positives cannot be exhaustively identified. No other false
-positive is established by this bounded check. The route was not run and its
+and false positives cannot be exhaustively identified. No false positive is
+established by this bounded check. The route was not run and its
 dependency versions and numerical outputs were not independently verified.
 
 The operator reviewed the relevant event types, commands and report for privacy;
 this record retains a minimised summary rather than raw output. The temporary
 JSONL had SHA-256 `86ee1a879f2d179bee176955702fc4c79f645fc3a7fe1939f2e1af8cd112b17b`;
 its hash cannot reconstruct it and the temporary file is not a durable archive.
-One unsupported prerequisite claim warrants checking audience assertions
-against the brief when adjudicating future findings; it does not by itself
-justify changing the audit guidance or establish a failure rate.
+The audience and optional-companion scope warrant checking together when
+adjudicating the node-table concern. This trial does not by itself justify
+changing the audit guidance or establish a failure rate.
 
 ## Captured command requests
 
