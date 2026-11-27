@@ -39,7 +39,7 @@ The common background is vectors, matrix multiplication, quadratic forms, and ei
 
 *Verification note. The mathematical claims are checked against the listed primary sources, and the executable examples are checked against the repository's pinned Python and R runtimes. Claims about package interfaces are dated where they may change; the synthetic case study is verified against its checked-in fixture rather than external route data.*
 
-## Notation
+### Notation {#notation}
 
 The table provides a reference for the main symbols; each derivation defines its variables locally.
 
@@ -64,7 +64,7 @@ Vectors are columns, $\mathbf{1}$ is an all-ones vector, and $\top$ denotes tran
 
 Order Laplacian eigenvalues increasingly as $0=\lambda_1\leq\cdots\leq\lambda_n$. This notation refers to $L$ unless another operator is named. Eigenvectors have arbitrary scale and sign.
 
-### Minimal Linear-Algebra Background
+#### Minimal Linear-Algebra Background {#minimal-linear-algebra-background}
 
 For vectors $\mathbf{x},\mathbf{y}\in\mathbb{R}^n$, the inner product is $\mathbf{x}^{\top}\mathbf{y}$ and the Euclidean norm is $\|\mathbf{x}\|_2=\sqrt{\mathbf{x}^{\top}\mathbf{x}}$. A symmetric matrix has real eigenvalues and an orthonormal eigenbasis. If $M=Q\Lambda Q^{\top}$, then the quadratic form is $\mathbf{x}^{\top}M\mathbf{x}=\sum_k\lambda_k(q_k^{\top}\mathbf{x})^2$. This identity is why an eigenbasis turns a coupled calculation into a sum of independent modes.
 
