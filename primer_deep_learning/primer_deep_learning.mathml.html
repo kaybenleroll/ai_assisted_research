@@ -4850,19 +4850,27 @@ shape of it is the point.</p>
 the gap between “CPU feasible” and “TPU months” is the gap between a
 weekend project and a budget that only a handful of organisations can
 field.</p>
-<p>Consider a small manufacturer with 2,000 labelled inspection images,
-a requirement to detect defects, and a device with a fixed latency
-budget. Split by production batch or acquisition time before tuning so
-near-duplicates do not leak across training and evaluation. Start with a
-simple image-feature classifier and a pretrained vision model, then
-compare them on the same held-out batches using defect recall, false
-alarms and measured device latency. Suppose the pretrained model
-improves recall but misses the latency budget: try a smaller model or
-compression, then remeasure both quality and latency. If recall drops on
-a new camera or product batch, collect and label representative examples
-and evaluate that shift separately before deployment. These outcomes are
-illustrative, not benchmark results; the right threshold depends on the
-cost of missed defects and inspection capacity.</p>
+<p>Consider a manufacturer with 2,000 labelled inspection images. Before
+fitting, split by production batch into 1,200 training, 400 validation
+and 400 untouched test images so near-duplicates do not leak across
+splits. Suppose the validation set contains 120 defective and 280 good
+items, and the operating requirement is at least 90% defect recall, at
+most 20 false alarms on these 280 good items, and at most 50 ms per
+image on the target device. These figures are illustrative assumptions,
+not benchmark results.</p>
+<p>A simple image-feature classifier finds 90 of the 120 defects, raises
+12 false alarms and takes 20 ms: its 75% recall misses the requirement.
+A pretrained vision model finds 114 defects with 25 false alarms in 80
+ms: its 95% recall is better, but it misses both the false-alarm and
+latency limits. After compression, suppose a candidate finds 108
+defects, raises 14 false alarms and takes 35 ms. Its 90% recall meets
+the stated validation thresholds, so it is the provisional choice.
+Evaluate the selected configuration once on the untouched test batches
+and measure uncertainty; the small validation set makes the apparent
+margin fragile. If a new camera or product batch changes recall, collect
+representative labels and reassess the threshold and model before
+deployment. The actual operating limits depend on the cost of missed
+defects and inspection capacity.</p>
 <h2 data-number="13.6" role="heading" aria-level="3" id="the-practical-starting-point"><span class="header-section-number">13.6</span> The Practical Starting
 Point</h2>
 <p>Which leads to the single most useful piece of advice in this primer:
