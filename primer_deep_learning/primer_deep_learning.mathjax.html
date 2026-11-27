@@ -1552,21 +1552,20 @@ this factor at that operating point. In a network of matrices,
 directions, singular values and activation states all matter. Saturation
 can still make gradients small, but the activation derivative alone does
 not determine the whole-network gradient.</p>
-<p>The exploding gradient problem is the mirror image. If the weights
-are initialised too large, each layer multiplies the gradient by a
-factor greater than 1, and the product grows exponentially as it
-propagates backward. The gradient reaching the early layers becomes
-enormous, the weight update overshoots wildly, and the loss diverges.
-The characteristic symptom is a loss that suddenly becomes NaN — the
-gradients grew past the range of floating-point numbers. Both problems
-are two faces of the same fact: backpropagation multiplies, and repeated
-multiplication is unstable in both directions. The fixes —
-non-saturating activations, careful initialisation, normalisation
-layers, and gradient clipping — are all, at bottom, ways to keep that
-per-layer factor near 1. This problem returns with full force in
-recurrent networks, where the same weight matrix is multiplied not
-across layers but across time steps, and the later RNN section relies on
-exactly this analysis without re-deriving it.</p>
+<p>The exploding gradient problem is the mirror image. Large weights can
+make the relevant Jacobian product amplify some gradient directions as
+it propagates backward; whether it does so depends on the weights,
+activations and directions involved. The gradient reaching the early
+layers becomes enormous, the weight update overshoots wildly, and the
+loss diverges. The characteristic symptom is a loss that suddenly
+becomes NaN — the gradients grew past the range of floating-point
+numbers. Both problems involve products of Jacobians. Initialisation,
+activations and normalisation can improve signal propagation; gradient
+clipping limits an update after a large gradient has formed rather than
+guaranteeing that each layer factor is near 1. This problem returns with
+full force in recurrent networks, where the same weight matrix is
+multiplied not across layers but across time steps, and the later RNN
+section relies on exactly this analysis without re-deriving it.</p>
 <h2 data-number="4.4" role="heading" aria-level="3" id="gradient-descent-variants"><span class="header-section-number">4.4</span> Gradient Descent Variants</h2>
 <p>Once backpropagation has produced the gradient, an optimiser decides
 how to use it to update the weights. Plain stochastic gradient descent
@@ -3307,9 +3306,10 @@ images to codes <span class="math inline">\(\mathbf{z}_1\)</span> and
 between them, <span class="math inline">\(\mathbf{z}_t =
 (1-t)\mathbf{z}_1 + t\mathbf{z}_2\)</span> for <span class="math inline">\(t\)</span> from 0 to 1, and decode each point
 along the way. With a plain autoencoder this path crosses dead regions
-and produces nonsense in the middle. With a VAE the KL regularisation
-has filled in the space, which can make interpolation smoother, though
-coherence along every path is not guaranteed.</p>
+and produces nonsense in the middle. With a VAE, KL regularisation can
+encourage a more useful latent organisation and smoother interpolation,
+though it does not guarantee that every region is well trained or every
+path coherent.</p>
 <h2 data-number="9.6" role="heading" aria-level="3" id="limitations"><span class="header-section-number">9.6</span>
 Limitations</h2>
 <p>That word “blurry” is the VAE’s signature weakness, and it falls
@@ -3391,10 +3391,12 @@ Train</h2>
 fall out of the minimax structure. Three are worth knowing by name.</p>
 <p>The first is <strong>vanishing gradients for the generator</strong>,
 and it is the cruel irony of the setup. Suppose the discriminator is
-doing well — it confidently classifies every fake as fake, so <span class="math inline">\(D(G(\mathbf{z})) \approx 0\)</span>. Look at the
-generator’s term, <span class="math inline">\(\log(1 -
-D(G(\mathbf{z})))\)</span>: near <span class="math inline">\(D =
-0\)</span> this function is almost flat, its gradient nearly zero.
+doing well — it confidently classifies every fake as fake, so <span class="math inline">\(D(G(\mathbf{z})) \approx 0\)</span>. For a sigmoid
+discriminator with a very negative logit on fake samples, the derivative
+of <span class="math inline">\(\log(1-D)\)</span> with respect to that
+logit approaches zero. The full gradient also depends on the
+discriminator and generator Jacobians; the logarithm as a function of
+<span class="math inline">\(D\)</span> alone is not flat at zero.
 Precisely when the discriminator is winning and the generator most needs
 informative feedback, the gradient signal dries up and the generator
 stops learning. The standard fix is the <strong>non-saturating
@@ -3453,11 +3455,12 @@ network — now called a <strong>critic</strong> rather than a
 discriminator, because it outputs an unbounded real-valued score rather
 than a probability, so the final sigmoid is dropped. The critic is
 trained to approximate the supremum; its finite-model objective is an
-approximate distance estimate. The practical payoff is large: the
-critic’s loss is a meaningful, non-saturating distance metric, so even a
-well-trained critic hands the generator informative gradients, and —
-bonus — the loss value actually correlates with sample quality, which
-the original GAN’s loss never did.</p>
+approximate distance estimate. Under the idealised dual, changing
+distributions can give a useful distance signal even when their supports
+do not overlap. In practice critic capacity, optimisation and constraint
+enforcement limit that interpretation: critic loss and generator
+gradients are diagnostics, not guarantees of sample quality or
+convergence.</p>
 <p>The constraint that <span class="math inline">\(f\)</span> be
 1-Lipschitz has to be enforced somehow, and how you do it matters. The
 original WGAN clipped the critic’s weights to a small range, which is
