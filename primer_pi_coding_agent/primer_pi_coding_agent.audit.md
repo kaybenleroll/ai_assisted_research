@@ -14,9 +14,9 @@
 - Core-concept depth matrix: brief pi-current-docs-v1; all nine stable IDs and unchanged tiers (eight primary, one reference-only).
 - Teaching-case contract: primer_pi_coding_agent/primer_pi_coding_agent.case.md.
 - Review boundary: complete 1022-line baseline source and complete brief/case/research evidence read; complete refreshed diff, changed passages and dependent routes reviewed at 340fc52, then final three source corrections reread at c193c88. Current primary-documentation and synthetic RPC evidence supplied by separate researcher/main. No live Pi/provider, package-security or complete Rocker execution.
-- Readiness decision: not-ready
+- Readiness decision: ready
 
-**Historical #442 decision: content gate passed and release readiness was ready**, following the coordinator’s verification recorded below. The current #473/#474 source review is recorded below; release readiness remains not-ready pending final integration checks. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
+**Historical #442 decision: content gate passed and release readiness was ready**, following the coordinator’s verification recorded below. The current #473/#474 source review is recorded below; release readiness follows the final integration checks recorded below. Earlier pending statements describe the independent reviewer’s draft checkpoint and are superseded by that verification. All eight primary routes supply actual reasoning, action, interpreted result and material limit. Source line ranges below refer to `primer_pi_coding_agent/primer_pi_coding_agent.md` at the reviewed commit. Current output checks and synthetic protocol tests do not certify live provider behaviour or execute the illustrative Rocker case.
 
 ## Whole-document review
 
@@ -193,7 +193,7 @@ The shared template/navigation/rendering components are unchanged ordinary conte
 
 - Content gate: **pass**; current route locators and teaching limits were reviewed; whole-outline review remains separate.
 - Structural gate: **pass**; source hierarchy and rendered contents were reviewed as recorded above.
-- Release readiness: **not-ready**
+- Release readiness: **ready**
 
 ## Execution and render evidence
 
@@ -265,3 +265,7 @@ At source `629d566`, the first-run path (127–157) gives a baseline, supervised
 ## Current semantic locator review
 
 At source `629d566`, the nine matrix rows were checked against the passages named in each explanation, action, interpretation and limitation cell. This rechecks what the source teaches, not whether volatile provider claims are still current or whether illustrative commands ran. The first-run fixture and comparator negative check are the only new executions. The Pi/Rocker case contract was read end to end: its inputs, expected aggregates, comparator and conditional acceptance are present at 786–844 and 966–977, while missing implementations and host authority remain explicit at 780 and 975.
+
+## Final #473/#474 integration verification
+
+`just primer-audit primer_pi_coding_agent` passed in a normal disposable clone at audit commit `f94b9b8`: evidence and revision checks, pinned HTML/PDF rebuild, render QA, freshness, Markdown and offline links passed. The rebuild changed the clone PDF timestamp; the committed PDF was visually sampled separately on pages 1, 8–9, 14, 21, 33–35 and 39. The container uses Pandoc 3.11 image digest `sha256:239428f1d61de725be479c72ada0bbe146a313791ee2d68333114b6c623ad771`. `just check` passed at `72aad24`; the subsequent changes update only this audit review. The complete case and Pi/provider operations remain illustrative and unexecuted; interactive accessibility checks were not performed and the PDF is untagged. #475 remains an open editorial follow-up, not an identified structural failure.
