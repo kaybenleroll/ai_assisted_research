@@ -905,6 +905,11 @@ This approach avoids two opposite failures. Starting with a production solver ca
 
 ![Flow-model selection from question and scales through candidate model and evidence gate](figures/model_escalation.png)
 
+```{=latex}
+% Flush this figure before the following explanation.
+\clearpage
+```
+
 *Figure: illustrative model-escalation route. Check balances, refinement, comparison, and uncertainty against the decision tolerance; diagnose a failed check before increasing model complexity.*
 
 ## Introductory CFD: Balances on Control Volumes
@@ -916,6 +921,11 @@ $$
 $$
 
 ![Finite-volume cells and shared face fluxes](figures/finite_volume_faces.png)
+
+```{=latex}
+% Flush this figure before the following explanation.
+\clearpage
+```
 
 *Figure: an internal face flux must be computed once and used with opposite signs in its two neighbouring cells. This pairwise cancellation is the source of exact discrete conservation in the finite-volume update.*
 
@@ -1325,6 +1335,11 @@ Run the same physical problem to the same final time while using $N$, $2N$, and 
 Use the cell-average exact solution when the numerical state is a cell average. Comparing a cell average with the exact value at its centre introduces an additional quadrature error. For a smooth sine wave this may be small, but the mismatch can obscure the expected order at fine resolution. The example should state which comparison is used and use the same definition in all three language implementations.
 
 ![Advection refinement convergence](figures/advection_convergence.png)
+
+```{=latex}
+% Flush this figure before the following explanation.
+\clearpage
+```
 
 *Figure: a log–log refinement plot makes the observed first-order trend visible. The generated example uses the same error definition and physical final time at each resolution.*
 

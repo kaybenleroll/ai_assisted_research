@@ -32,6 +32,17 @@ color: var(--text);
 background: var(--bg);
 line-height: 1.7;
 }
+.skip-link {
+position: fixed;
+top: .5rem; left: 1rem;
+z-index: 200;
+padding: .5rem 1rem;
+background: var(--surface);
+transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 3px; }
+#main-content { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .navbar {
 position: fixed;
@@ -173,6 +184,7 @@ vertical-align: middle;
 flex: 1 0 100%;
 width: 100%;
 }
+#TOC [hidden] { display: none; }
 
 .toc-toggle {
 background: none;
@@ -184,7 +196,6 @@ color: #9399b2;
 font-size: 1em;
 line-height: 1;
 vertical-align: middle;
-outline: none;
 transition: color .15s;
 }
 .toc-toggle:focus,
@@ -585,7 +596,7 @@ code span.wa { color: #da4453; } /* Warning */
 
     /* ── Print ─────────────────────────────────────────────────────── */
     @media print {
-      .navbar, .sidebar, .sidebar-resizer { display: none; }
+      .navbar, .sidebar, .sidebar-resizer, .skip-link { display: none; }
       .content { padding: 0; max-width: 100%; }
       .code-tab-bar { display: none; }
       .code-tabs { overflow: visible; border: 0; }
@@ -605,18 +616,21 @@ code span.wa { color: #da4453; } /* Warning */
   <script>
     // MathJax's boldsymbol extension is a separate file that an embedded
     // bundle cannot load, and \mathbf leaves lower-case Greek upright. The
-    // extension is therefore vendored in _shared/vendor/mathjax/ (exact
+    // extension is therefore vendored inline below (exact
     // bytes of the matching mathjax@<version> release file) and run inside
     // startup.ready, before MathJax typesets. When Pandoc embeds a different
     // MathJax version, download input/tex/extensions/boldsymbol.js from
-    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the vendored file
+    // https://cdn.jsdelivr.net/npm/mathjax@<version>/ over the marked inline block
     // and re-render the maths primers. A version mismatch is not checked in
     // CI; MathJax's runtime checkVersion warns in the browser console on drift.
     // The MathML variants ignore this block.
     window.MathJax = {
       tex: { packages: { '[+]': ['boldsymbol'] } },
       startup: { ready() {
-(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();        MathJax.startup.defaultReady();
+// BEGIN vendored MathJax boldsymbol extension
+(()=>{"use strict";var t={d:(o,e)=>{for(var a in e)t.o(e,a)&&!t.o(o,a)&&Object.defineProperty(o,a,{enumerable:!0,get:e[a]})}};t.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),t.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o),t.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var o={};t.r(o),t.d(o,{BoldsymbolConfiguration:()=>g,BoldsymbolMethods:()=>f,createBoldToken:()=>x,rewriteBoldTokens:()=>m});const e=("undefined"!=typeof window?window:t.g).MathJax._.components.global,a=(e.GLOBAL,e.isObject,e.combineConfig,e.combineDefaults,e.combineWithMathJax),n=(e.MathJax,MathJax._.input.tex.HandlerTypes),r=n.ConfigurationType,i=n.HandlerType,l=MathJax._.input.tex.Configuration,s=l.Configuration,d=(l.ConfigurationHandler,l.ParserConfiguration,MathJax._.input.tex.NodeUtil.default),b=MathJax._.input.tex.TexConstants.TexConstant,c=MathJax._.input.tex.TokenMap,u=(c.parseResult,c.AbstractTokenMap,c.RegExpMap,c.AbstractParseMap,c.CharacterMap,c.DelimiterMap,c.MacroMap,c.CommandMap),p=(c.EnvironmentMap,MathJax._.input.tex.NodeFactory.NodeFactory),y={};y[b.Variant.NORMAL]=b.Variant.BOLD,y[b.Variant.ITALIC]=b.Variant.BOLDITALIC,y[b.Variant.FRAKTUR]=b.Variant.BOLDFRAKTUR,y[b.Variant.SCRIPT]=b.Variant.BOLDSCRIPT,y[b.Variant.SANSSERIF]=b.Variant.BOLDSANSSERIF,y["-tex-calligraphic"]="-tex-bold-calligraphic",y["-tex-oldstyle"]="-tex-bold-oldstyle",y["-tex-mathit"]=b.Variant.BOLDITALIC;const f={Boldsymbol(t,o){const e=t.stack.env.boldsymbol;t.stack.env.boldsymbol=!0;const a=t.ParseArg(o);t.stack.env.boldsymbol=e,t.Push(a)}};function x(t,o,e,a){const n=p.createToken(t,o,e,a);return"mtext"!==o&&t.configuration.parser.stack.env.boldsymbol&&(d.setProperty(n,"fixBold",!0),t.configuration.addNode("fixBold",n)),n}function m(t){for(const o of t.data.getList("fixBold"))if(d.getProperty(o,"fixBold")){const t=d.getAttribute(o,"mathvariant");d.setAttribute(o,"mathvariant",y[t]||t),d.removeProperties(o,"fixBold")}}new u("boldsymbol",{boldsymbol:f.Boldsymbol});const g=s.create("boldsymbol",{[r.HANDLER]:{[i.MACRO]:["boldsymbol"]},[r.NODES]:{token:x},[r.POSTPROCESSORS]:[m]});MathJax.loader&&MathJax.loader.checkVersion("[tex]/boldsymbol","4.1.3","tex-extension"),a({_:{input:{tex:{boldsymbol:{BoldsymbolConfiguration:o}}}}})})();
+// END vendored MathJax boldsymbol extension
+        MathJax.startup.defaultReady();
       } }
     };
   </script>
@@ -624,13 +638,15 @@ code span.wa { color: #da4453; } /* Warning */
 </head>
 <body>
 
-  <nav class="navbar">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="navbar">
     <span class="navbar-brand">Fluid Mechanics: From Conservation Laws
 to Verified Flow Models</span>
     <span class="navbar-meta">24 October 2026</span>
     <span class="navbar-meta">Mick Cooney</span>
 
-  </nav>
+  </header>
 
   <div class="layout">
 
@@ -638,8 +654,12 @@ to Verified Flow Models</span>
       <p class="sidebar-heading">Contents</p>
       <div class="sidebar-tools">
         <button id="math-mode-toggle" class="math-mode-btn" type="button">Switch math renderer</button>
+        <noscript>
+          <style>#math-mode-toggle { display: none; }</style>
+
+        </noscript>
       </div>
-      <div id="TOC" aria-label="Table of contents"><ul>
+      <nav id="TOC" aria-label="Table of contents"><ul>
 <li><a href="#orientation-notation-and-reading-routes" id="toc-orientation-notation-and-reading-routes"><span class="toc-section-number">1</span> Orientation, Notation, and Reading
 Routes</a>
 <ul>
@@ -884,15 +904,17 @@ Plan</a></li>
 <li><a href="#physical-evidence" id="toc-physical-evidence"><span class="toc-section-number">19.4</span> Physical Evidence</a></li>
 </ul></li>
 <li><a href="#further-reading" id="toc-further-reading"><span class="toc-section-number">20</span> Further Reading</a></li>
-</ul></div>
+</ul></nav>
 
     </aside>
 
     <div class="sidebar-resizer" aria-hidden="true" title="Drag to resize sidebar"></div>
 
-    <main class="content">
+    <main id="main-content" class="content" tabindex="-1" aria-labelledby="document-title">
       <div class="content-inner">
-<h1 data-number="1" id="orientation-notation-and-reading-routes"><span class="header-section-number">1</span> Orientation, Notation, and
+<h1 id="document-title" class="document-title">Fluid Mechanics: From
+Conservation Laws to Verified Flow Models</h1>
+<h1 data-number="1" role="heading" aria-level="2" id="orientation-notation-and-reading-routes"><span class="header-section-number">1</span> Orientation, Notation, and
 Reading Routes</h1>
 <p>Fluid mechanics describes how liquids and gases move and how their
 motion interacts with forces, boundaries, and other physical processes.
@@ -946,7 +968,7 @@ should pay particular attention to integral balances and the
 verification section.</p>
 <p><em>Verified against primary sources for all sections; unverified
 claims are flagged inline.</em></p>
-<h2 data-number="1.1" id="notation"><span class="header-section-number">1.1</span> Notation</h2>
+<h2 data-number="1.1" role="heading" aria-level="3" id="notation"><span class="header-section-number">1.1</span> Notation</h2>
 <p>The following table establishes the notation used in this section.
 Symbols are defined again where a local calculation introduces a
 narrower meaning.</p>
@@ -1040,7 +1062,7 @@ A dot between vectors denotes the Euclidean inner product; a colon
 between second-order tensors denotes double contraction. Surface
 integrals use the outward normal. These conventions fix the signs in the
 flux and stress equations below.</p>
-<h2 data-number="1.2" id="scales-before-equations"><span class="header-section-number">1.2</span> Scales Before Equations</h2>
+<h2 data-number="1.2" role="heading" aria-level="3" id="scales-before-equations"><span class="header-section-number">1.2</span> Scales Before Equations</h2>
 <p>Before manipulating a governing equation, write down the
 characteristic scales of the problem. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
@@ -1103,7 +1125,7 @@ and the instrument resolution is
 a wall-stress validation claim is unsupported. Scales connect equations
 to experimental design and to the precision that a result can reasonably
 carry.</p>
-<h1 data-number="2" id="foundations-continuum-and-kinematics"><span class="header-section-number">2</span> Foundations: Continuum and
+<h1 data-number="2" role="heading" aria-level="2" id="foundations-continuum-and-kinematics"><span class="header-section-number">2</span> Foundations: Continuum and
 Kinematics</h1>
 <p>In the continuum model, quantities such as density, velocity,
 pressure, and temperature are fields: they assign a value to every
@@ -1125,7 +1147,7 @@ evolve but do not determine every stress, heat flux, or thermodynamic
 response; those require constitutive and state relations. For example,
 the Newtonian-fluid relation between deviatoric stress and strain rate
 is a material model, not a conservation law.</p>
-<h2 data-number="2.1" id="material-spatial-and-reference-descriptions"><span class="header-section-number">2.1</span> Material, Spatial, and
+<h2 data-number="2.1" role="heading" aria-level="3" id="material-spatial-and-reference-descriptions"><span class="header-section-number">2.1</span> Material, Spatial, and
 Reference Descriptions</h2>
 <p>There are three related choices behind the notation. A material
 description follows a particle labelled by its reference position
@@ -1164,7 +1186,7 @@ moving-mesh method follows changing cells, while a fixed-grid method
 accounts for transport through cell faces. Neither is intrinsically more
 physical; the balance and geometric terms must be consistent with the
 choice.</p>
-<h2 data-number="2.2" id="local-versus-integral-statements"><span class="header-section-number">2.2</span> Local Versus Integral
+<h2 data-number="2.2" role="heading" aria-level="3" id="local-versus-integral-statements"><span class="header-section-number">2.2</span> Local Versus Integral
 Statements</h2>
 <p>Differential equations are local limits of integral balances. To
 obtain a local equation, assume enough regularity to apply the
@@ -1224,7 +1246,7 @@ is a fixed control volume. The last term is the net outward advective
 flux. This form assumes the fields are integrable and the moving
 boundary travels with the local fluid velocity. It is the bridge from
 particle-following physics to fixed-region accounting.</p>
-<h2 data-number="2.3" id="kinematics-describing-motion"><span class="header-section-number">2.3</span> Kinematics: Describing
+<h2 data-number="2.3" role="heading" aria-level="3" id="kinematics-describing-motion"><span class="header-section-number">2.3</span> Kinematics: Describing
 Motion</h2>
 <p>Let a particle labelled by its initial position
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑿</mi><annotation encoding="application/x-tex">\mathbf{X}</annotation></semantics></math>
@@ -1320,7 +1342,7 @@ direction and contracts in the
 direction at matching fractional rates; its area is unchanged to first
 order. Zero divergence therefore means no local volume change, not
 absence of deformation.</p>
-<h2 data-number="2.4" id="deformation-rotation-and-rigid-motion"><span class="header-section-number">2.4</span> Deformation, Rotation, and
+<h2 data-number="2.4" role="heading" aria-level="3" id="deformation-rotation-and-rigid-motion"><span class="header-section-number">2.4</span> Deformation, Rotation, and
 Rigid Motion</h2>
 <p>The velocity gradient can be decomposed into translation, rotation,
 and deformation only locally. In two dimensions, a solid-body rotation
@@ -1351,7 +1373,7 @@ no-slip condition and a non-zero viscous traction are compatible. A
 free-slip idealisation sets the normal velocity and tangential traction
 differently; it should not be substituted silently for no-slip because
 it changes the near-wall solution.</p>
-<h2 data-number="2.5" id="vorticity-and-flow-descriptions"><span class="header-section-number">2.5</span> Vorticity and Flow
+<h2 data-number="2.5" role="heading" aria-level="3" id="vorticity-and-flow-descriptions"><span class="header-section-number">2.5</span> Vorticity and Flow
 Descriptions</h2>
 <p>The vorticity is</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝎</mi><mo>=</mo><mi>∇</mi><mo>×</mo><mi mathvariant="bold-italic">𝒖</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -1406,7 +1428,8 @@ streaklines</figcaption>
 <p><em>Figure: the three curves coincide in a steady flow but can differ
 in an unsteady field. The source point shown here continuously emits the
 streakline, while the pathline follows one marked particle.</em></p>
-<h1 data-number="3" id="conservation-laws"><span class="header-section-number">3</span> Conservation Laws</h1>
+<h1 data-number="3" role="heading" aria-level="2" id="conservation-laws"><span class="header-section-number">3</span>
+Conservation Laws</h1>
 <p>Mass, momentum, and energy balances describe different quantities
 crossing the same chosen boundary. The local equations show how those
 quantities change at a point, while control-volume balances account for
@@ -1429,7 +1452,8 @@ for its energy port fluxes. Gravitational potential energy is excluded,
 so work by gravity and other body forces enters explicitly through
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>W</mi><mrow><mi mathvariant="normal">b</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">y</mi></mrow></msub><annotation encoding="application/x-tex">W_{\mathrm{body}}</annotation></semantics></math>.
 The port labels represent flux averages.</em></p>
-<h2 data-number="3.1" id="mass-conservation"><span class="header-section-number">3.1</span> Mass Conservation</h2>
+<h2 data-number="3.1" role="heading" aria-level="3" id="mass-conservation"><span class="header-section-number">3.1</span>
+Mass Conservation</h2>
 <p>Mass conservation says that the mass of every material volume remains
 constant. Applying transport to a fixed control volume gives the
 integral balance, and for smooth fields the local continuity
@@ -1467,7 +1491,7 @@ steady mass conservation gives
 The speed doubles as the area halves. This is a section-averaged result;
 it does not establish a uniform velocity profile or apply unchanged to a
 compressible flow with varying density.</p>
-<h2 data-number="3.2" id="momentum-conservation"><span class="header-section-number">3.2</span> Momentum Conservation</h2>
+<h2 data-number="3.2" role="heading" aria-level="3" id="momentum-conservation"><span class="header-section-number">3.2</span> Momentum Conservation</h2>
 <p>Newton’s second law for a material volume equates the rate of change
 of its momentum to surface forces and body forces. With
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝝈</mi><annotation encoding="application/x-tex">\boldsymbol{\sigma}</annotation></semantics></math>
@@ -1528,7 +1552,7 @@ along that direction. The negative sign means the net force points
 opposite to the flow. A support or vane experiences the opposite
 reaction, provided the chosen control surface includes all relevant
 pressure and shear forces.</p>
-<h2 data-number="3.3" id="control-volume-force-calculations"><span class="header-section-number">3.3</span> Control-Volume Force
+<h2 data-number="3.3" role="heading" aria-level="3" id="control-volume-force-calculations"><span class="header-section-number">3.3</span> Control-Volume Force
 Calculations</h2>
 <p>Control-volume analysis is particularly useful when the detailed
 field is unavailable or unnecessary. Choose a surface that cuts the
@@ -1563,7 +1587,8 @@ regions. This is why a global force or mass balance is a strong
 diagnostic for a CFD calculation: summing the discrete cell equations
 should recover the control-volume result up to source, boundary, and
 solver tolerances.</p>
-<h2 data-number="3.4" id="energy-conservation"><span class="header-section-number">3.4</span> Energy Conservation</h2>
+<h2 data-number="3.4" role="heading" aria-level="3" id="energy-conservation"><span class="header-section-number">3.4</span>
+Energy Conservation</h2>
 <p>Energy conservation tracks changes in kinetic and internal energy due
 to work and heat transfer. Like the schematic above, the following local
 equation excludes gravitational potential energy from its specific
@@ -1615,7 +1640,7 @@ validation asks whether those equations adequately represent the
 physical situation. Later sections should connect these balances to
 explicit model checks rather than treating conservation as a certificate
 of physical truth.</p>
-<h2 data-number="3.5" id="reynolds-transport-theorem-in-practice"><span class="header-section-number">3.5</span> Reynolds Transport Theorem in
+<h2 data-number="3.5" role="heading" aria-level="3" id="reynolds-transport-theorem-in-practice"><span class="header-section-number">3.5</span> Reynolds Transport Theorem in
 Practice</h2>
 <p>The Reynolds transport theorem is easiest to use when the extensive
 property is named before any algebra begins. For mass, set
@@ -1667,7 +1692,7 @@ pipe, the pipe flow appears as a surface flux. Both descriptions can
 agree, but combining the accumulation term from one boundary with the
 fluxes from the other double-counts material. Draw the boundary before
 writing the equation.</p>
-<h2 data-number="3.6" id="jump-conditions-and-interfaces"><span class="header-section-number">3.6</span> Jump Conditions and
+<h2 data-number="3.6" role="heading" aria-level="3" id="jump-conditions-and-interfaces"><span class="header-section-number">3.6</span> Jump Conditions and
 Interfaces</h2>
 <p>Consider a surface moving with normal speed
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>.
@@ -1691,7 +1716,7 @@ represent the integral flux across the discontinuity. The numerical
 solution still needs an appropriate flux, entropy condition, and
 resolution, but the integral form supplies the correct bookkeeping
 foundation.</p>
-<h2 data-number="3.7" id="three-small-balance-derivations"><span class="header-section-number">3.7</span> Three Small Balance
+<h2 data-number="3.7" role="heading" aria-level="3" id="three-small-balance-derivations"><span class="header-section-number">3.7</span> Three Small Balance
 Derivations</h2>
 <p>It is useful to practise the same balance pattern on different
 physical properties. Consider a perfectly mixed tank of volume
@@ -1751,7 +1776,7 @@ identify the flux through each boundary, state the source, and choose
 the geometry that makes the desired average meaningful. A solver or
 derivation that cannot be reduced to this accounting pattern deserves
 scrutiny before more physics is added.</p>
-<h1 data-number="4" id="hydrostatics-and-inviscid-models"><span class="header-section-number">4</span> Hydrostatics and Inviscid
+<h1 data-number="4" role="heading" aria-level="2" id="hydrostatics-and-inviscid-models"><span class="header-section-number">4</span> Hydrostatics and Inviscid
 Models</h1>
 <p>Hydrostatics is the limiting case in which the fluid acceleration is
 negligible. With a stationary fluid and body acceleration
@@ -1834,7 +1859,7 @@ ideal horizontal-contraction curve shows static pressure decreasing as
 speed increases. The reference levels and assumptions are different, so
 the curves are a comparison of mechanisms rather than one combined
 solution.</em></p>
-<h2 data-number="4.1" id="pressure-head-and-reference-levels"><span class="header-section-number">4.1</span> Pressure, Head, and Reference
+<h2 data-number="4.1" role="heading" aria-level="3" id="pressure-head-and-reference-levels"><span class="header-section-number">4.1</span> Pressure, Head, and Reference
 Levels</h2>
 <p>Engineering calculations often divide pressure by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">\rho g</annotation></semantics></math>
@@ -1864,7 +1889,7 @@ value affected by losses, alignment, and local gradients. Calling every
 pressure reading “stagnation pressure” obscures the measurement model.
 State whether the quantity is static pressure, total pressure, gauge
 pressure, or a pressure difference between specified locations.</p>
-<h2 data-number="4.2" id="buoyancy-and-stability-of-stratification"><span class="header-section-number">4.2</span> Buoyancy and Stability of
+<h2 data-number="4.2" role="heading" aria-level="3" id="buoyancy-and-stability-of-stratification"><span class="header-section-number">4.2</span> Buoyancy and Stability of
 Stratification</h2>
 <p>The buoyancy force follows from integrating hydrostatic pressure over
 a closed surface. For a body displacing volume
@@ -1891,7 +1916,7 @@ uses buoyancy to show how a body force enters the balances. A rotating
 or stratified application should add the relevant Rossby, Richardson, or
 buoyancy scales and validate the reduced model against observations
 appropriate to that setting.</p>
-<h1 data-number="5" id="viscosity-and-internal-flow"><span class="header-section-number">5</span> Viscosity and Internal Flow</h1>
+<h1 data-number="5" role="heading" aria-level="2" id="viscosity-and-internal-flow"><span class="header-section-number">5</span> Viscosity and Internal Flow</h1>
 <p>Viscosity describes momentum transport associated with velocity
 gradients. For a Newtonian fluid, the deviatoric stress is proportional
 to the rate of deformation. In the incompressible constant-viscosity
@@ -1931,7 +1956,8 @@ surfaces can require a slip model. At an inlet one may prescribe
 velocity, mass flow, or a developed profile; at an outlet one may
 prescribe pressure or an appropriate traction. Specifying incompatible
 data at every boundary can overconstrain the problem.</p>
-<h2 data-number="5.1" id="couette-flow"><span class="header-section-number">5.1</span> Couette Flow</h2>
+<h2 data-number="5.1" role="heading" aria-level="3" id="couette-flow"><span class="header-section-number">5.1</span> Couette
+Flow</h2>
 <p>Two parallel plates separated by distance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
 contain a Newtonian fluid. The lower plate is stationary and the upper
@@ -1963,7 +1989,7 @@ then
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub><mo>=</mo><mn>0.20</mn><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">a</mi></mrow></mrow><annotation encoding="application/x-tex">\tau_{xy}=0.20\,\mathrm{Pa}</annotation></semantics></math>.
 This result does not describe the start-up transient, edge effects,
 turbulence, or a pressure-driven component.</p>
-<h2 data-number="5.2" id="plane-poiseuille-flow"><span class="header-section-number">5.2</span> Plane Poiseuille Flow</h2>
+<h2 data-number="5.2" role="heading" aria-level="3" id="plane-poiseuille-flow"><span class="header-section-number">5.2</span> Plane Poiseuille Flow</h2>
 <p>For a wide channel with stationary plates, steady fully developed
 flow driven by a constant pressure gradient satisfies</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>=</mo><mi>−</mi><mfrac><mrow><mi>d</mi><mi>p</mi></mrow><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><mo>+</mo><mi>μ</mi><mfrac><mrow><msup><mi>d</mi><mn>2</mn></msup><mi>u</mi></mrow><mrow><mi>d</mi><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
@@ -2014,7 +2040,7 @@ the curves are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>P</mi></msub><mi>/</mi><msub><mi>U</mi><mi>w</mi></msub><mo>=</mo><mn>4</mn><mi>η</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">u_P/U_w=4\eta(1-\eta)</annotation></semantics></math>,
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mrow><mi>C</mi><mo>+</mo><mi>P</mi></mrow></msub><mi>/</mi><msub><mi>U</mi><mi>w</mi></msub><mo>=</mo><mi>η</mi><mo>+</mo><mn>4</mn><mi>η</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">u_{C+P}/U_w=\eta+4\eta(1-\eta)</annotation></semantics></math>.</em></p>
-<h2 data-number="5.3" id="transient-viscous-diffusion"><span class="header-section-number">5.3</span> Transient Viscous
+<h2 data-number="5.3" role="heading" aria-level="3" id="transient-viscous-diffusion"><span class="header-section-number">5.3</span> Transient Viscous
 Diffusion</h2>
 <p>The steady profiles hide an important timescale. If a wall suddenly
 moves, the rest of the fluid does not acquire the Couette profile
@@ -2078,7 +2104,7 @@ steady profile has removed the transient problem before it begins. When
 comparing with a laboratory start-up, record the wall motion, fluid
 temperature, and whether the measurement begins before or after the
 actuation delay.</p>
-<h2 data-number="5.4" id="internal-flow-diagnostics"><span class="header-section-number">5.4</span> Internal-Flow Diagnostics</h2>
+<h2 data-number="5.4" role="heading" aria-level="3" id="internal-flow-diagnostics"><span class="header-section-number">5.4</span> Internal-Flow Diagnostics</h2>
 <p>Mean speed is an area-weighted quantity, not necessarily the speed at
 the centreline. For a cross-section
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>,</p>
@@ -2121,7 +2147,7 @@ multiplying the streamwise momentum equation by velocity and integrating
 produces an energy statement in which pressure work is converted into
 viscous dissipation. This gives an independent sign and units check on a
 numerical solution.</p>
-<h2 data-number="5.5" id="wall-stress-and-force-accounting"><span class="header-section-number">5.5</span> Wall Stress and Force
+<h2 data-number="5.5" role="heading" aria-level="3" id="wall-stress-and-force-accounting"><span class="header-section-number">5.5</span> Wall Stress and Force
 Accounting</h2>
 <p>For a Newtonian fluid next to a stationary wall, the tangential
 traction is related to the local velocity gradient through the stress
@@ -2149,7 +2175,7 @@ grid study should include the actual requested wall output and should
 state whether the wall value is extrapolated, reconstructed, or obtained
 directly from a boundary flux. “The velocity field looks converged” does
 not establish wall-stress convergence.</p>
-<h2 data-number="5.6" id="entrance-length-and-fully-developed-flow"><span class="header-section-number">5.6</span> Entrance Length and Fully
+<h2 data-number="5.6" role="heading" aria-level="3" id="entrance-length-and-fully-developed-flow"><span class="header-section-number">5.6</span> Entrance Length and Fully
 Developed Flow</h2>
 <p>The phrase “fully developed” means that the velocity profile is no
 longer changing in the streamwise direction, not simply that the flow
@@ -2173,7 +2199,7 @@ integrated flow rate and pressure gradient. A profile can look stable
 while a slowly varying pressure field continues to adjust, particularly
 in a geometry with area changes or recirculation. Use the
 output-specific criterion rather than a visual judgement.</p>
-<h2 data-number="5.7" id="losses-and-network-models"><span class="header-section-number">5.7</span> Losses and Network Models</h2>
+<h2 data-number="5.7" role="heading" aria-level="3" id="losses-and-network-models"><span class="header-section-number">5.7</span> Losses and Network Models</h2>
 <p>In a system of pipes, local components are often represented by a
 loss coefficient
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
@@ -2192,7 +2218,7 @@ pressure references, and include the uncertainty of resistance
 coefficients. Comparing a network prediction with a detailed simulation
 is meaningful only if both represent the same measurement interval and
 component losses.</p>
-<h1 data-number="6" id="scaling-and-external-flow"><span class="header-section-number">6</span> Scaling and External Flow</h1>
+<h1 data-number="6" role="heading" aria-level="2" id="scaling-and-external-flow"><span class="header-section-number">6</span> Scaling and External Flow</h1>
 <p>Nondimensionalisation turns a long equation into a comparison of
 mechanisms. Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
@@ -2259,7 +2285,7 @@ is a dimensionless reporting convention, not a material constant. The
 reference area, orientation, surface condition, and flow regime belong
 with the number. Comparing coefficients with different reference choices
 can create a false disagreement.</p>
-<h2 data-number="6.1" id="nondimensional-equations-and-model-tests"><span class="header-section-number">6.1</span> Nondimensional Equations and
+<h2 data-number="6.1" role="heading" aria-level="3" id="nondimensional-equations-and-model-tests"><span class="header-section-number">6.1</span> Nondimensional Equations and
 Model Tests</h2>
 <p>Nondimensionalisation is more than a way to produce a dimensionless
 number. It exposes which terms are small under a declared scaling and
@@ -2346,7 +2372,7 @@ return to the dimensional terms after using a dimensionless number.
 “<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Re</annotation></semantics></math>
 is large” is incomplete unless the length, speed, property, and output
 affected by that statement are named.</p>
-<h2 data-number="6.2" id="transition-and-turbulence-as-a-boundary"><span class="header-section-number">6.2</span> Transition and Turbulence as a
+<h2 data-number="6.2" role="heading" aria-level="3" id="transition-and-turbulence-as-a-boundary"><span class="header-section-number">6.2</span> Transition and Turbulence as a
 Boundary</h2>
 <p>At sufficiently high Reynolds number, disturbances can be amplified
 and a flow may become turbulent. Turbulence contains a range of
@@ -2370,7 +2396,7 @@ transition behaviour. If a calculation is near a transition range,
 represent the classification as uncertain and test how the requested
 output changes across plausible regimes. This is often more honest than
 assigning a binary label from a single number.</p>
-<h2 data-number="6.3" id="instability-as-a-modelling-boundary"><span class="header-section-number">6.3</span> Instability as a Modelling
+<h2 data-number="6.3" role="heading" aria-level="3" id="instability-as-a-modelling-boundary"><span class="header-section-number">6.3</span> Instability as a Modelling
 Boundary</h2>
 <p>An instability is a growth mechanism, not merely a failure of a
 steady solver. A small disturbance may be amplified by a shear layer,
@@ -2394,7 +2420,7 @@ to an unstable calculation is not automatically to force steady
 convergence; it may be to use a transient model and report a
 statistically converged quantity, or to narrow the claim to the stable
 regime.</p>
-<h2 data-number="6.4" id="boundary-layer-reasoning"><span class="header-section-number">6.4</span> Boundary-Layer Reasoning</h2>
+<h2 data-number="6.4" role="heading" aria-level="3" id="boundary-layer-reasoning"><span class="header-section-number">6.4</span> Boundary-Layer Reasoning</h2>
 <p>For a flat plate aligned with a uniform stream, the no-slip wall
 condition and the outer-flow condition cannot both be satisfied by an
 inviscid solution at the wall. The boundary-layer approximation resolves
@@ -2447,7 +2473,7 @@ profiles use a shared reference length, with
 marked as one possible thickness criterion. Displacement and momentum
 thickness are defined in the text but are not plotted; these curves do
 not predict a universal laminar–turbulent transition.</em></p>
-<h2 data-number="6.5" id="worked-flat-plate-scaling-estimate"><span class="header-section-number">6.5</span> Worked Flat-Plate Scaling
+<h2 data-number="6.5" role="heading" aria-level="3" id="worked-flat-plate-scaling-estimate"><span class="header-section-number">6.5</span> Worked Flat-Plate Scaling
 Estimate</h2>
 <p>As a bounded external-flow estimate, take air with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><mn>10</mn><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">m</mi><mspace width="0.167em"></mspace><msup><mi mathvariant="normal">s</mi><mrow><mi mathvariant="normal">−</mi><mn mathvariant="normal">1</mn></mrow></msup></mrow></mrow><annotation encoding="application/x-tex">U=10\,\mathrm{m\,s^{-1}}</annotation></semantics></math>,
@@ -2482,7 +2508,7 @@ regime where disturbances can matter, the result should be treated as a
 laminar lower-order baseline. A measured drag substantially above it
 would not be surprising and would not, by itself, identify the missing
 mechanism.</p>
-<h2 data-number="6.6" id="similarity-and-scaling-limits"><span class="header-section-number">6.6</span> Similarity and Scaling
+<h2 data-number="6.6" role="heading" aria-level="3" id="similarity-and-scaling-limits"><span class="header-section-number">6.6</span> Similarity and Scaling
 Limits</h2>
 <p>Two flows are dynamically similar when their nondimensional governing
 equations, geometry ratios, boundary conditions, and initial conditions
@@ -2518,13 +2544,13 @@ visualisation, not a velocity or force measurement. Credit: NASA Dryden
 Flight Research Center; <a href="https://commons.wikimedia.org/wiki/File:F-18_model_in_water_tunnel_with_dye_injections_(side_view).jpg">source
 file</a>; <a href="https://commons.wikimedia.org/wiki/Template:PD-USGov-NASA">public-domain
 licence (PD-USGov-NASA)</a>. The local copy is unmodified.</em></p>
-<h1 data-number="7" id="canonical-flow-families"><span class="header-section-number">7</span> Canonical Flow Families</h1>
+<h1 data-number="7" role="heading" aria-level="2" id="canonical-flow-families"><span class="header-section-number">7</span> Canonical Flow Families</h1>
 <p>Canonical flows are deliberately simplified problems that isolate one
 mechanism. Their value is not that real apparatuses look exactly like
 them; it is that the assumptions, scales, and limiting behaviour can be
 inspected. A canonical result should be used as a benchmark with its
 geometry and regime attached.</p>
-<h2 data-number="7.1" id="couette-and-pressure-driven-flow-together"><span class="header-section-number">7.1</span> Couette and Pressure-Driven
+<h2 data-number="7.1" role="heading" aria-level="3" id="couette-and-pressure-driven-flow-together"><span class="header-section-number">7.1</span> Couette and Pressure-Driven
 Flow Together</h2>
 <p>If a parallel-plate channel has both a moving wall and a pressure
 gradient, linearity of the steady constant-property equation allows the
@@ -2541,7 +2567,8 @@ transport cancel in the integral. This is a useful warning against
 inferring local motion from the net flow rate alone. It also provides a
 simple test for a solver that must handle a non-zero wall velocity and a
 body or pressure forcing at once.</p>
-<h2 data-number="7.2" id="stokes-flow"><span class="header-section-number">7.2</span> Stokes Flow</h2>
+<h2 data-number="7.2" role="heading" aria-level="3" id="stokes-flow"><span class="header-section-number">7.2</span> Stokes
+Flow</h2>
 <p>When
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><mo>≪</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Re\ll1</annotation></semantics></math>,
 advective inertia is small relative to viscosity. For steady flow, or
@@ -2568,7 +2595,8 @@ terminal speed follows from a force balance between weight corrected for
 buoyancy and viscous drag. The result is sensitive to particle shape,
 wall proximity, and Brownian motion at small scales, so the spherical
 unbounded-fluid formula should be labelled as a baseline.</p>
-<h2 data-number="7.3" id="potential-flow"><span class="header-section-number">7.3</span> Potential Flow</h2>
+<h2 data-number="7.3" role="heading" aria-level="3" id="potential-flow"><span class="header-section-number">7.3</span>
+Potential Flow</h2>
 <p>An inviscid, incompressible, irrotational region admits a velocity
 potential
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
@@ -2588,7 +2616,7 @@ as a real viscous force without explaining the missing dissipation. The
 complex-analysis primer’s cylinder example is a good mathematical case;
 the fluid-mechanics lesson is to pair it with the boundary-layer and
 separation limits.</p>
-<h2 data-number="7.4" id="gravity-driven-free-surfaces"><span class="header-section-number">7.4</span> Gravity-Driven Free
+<h2 data-number="7.4" role="heading" aria-level="3" id="gravity-driven-free-surfaces"><span class="header-section-number">7.4</span> Gravity-Driven Free
 Surfaces</h2>
 <p>Free-surface problems introduce gravity, a moving interface, and
 often surface tension. A Froude number compares inertia with gravity,
@@ -2604,7 +2632,7 @@ different questions. For a preliminary hydraulic estimate, a
 depth-averaged model may be justified; for spray breakup or capillary
 dynamics it is not. State whether the free surface is prescribed,
 approximated, or solved.</p>
-<h2 data-number="7.5" id="lubrication-and-thin-gap-flow"><span class="header-section-number">7.5</span> Lubrication and Thin-Gap
+<h2 data-number="7.5" role="heading" aria-level="3" id="lubrication-and-thin-gap-flow"><span class="header-section-number">7.5</span> Lubrication and Thin-Gap
 Flow</h2>
 <p>Lubrication theory is a particularly useful reduced model because it
 shows how geometry changes the dominant balance. Let a gap have
@@ -2632,7 +2660,7 @@ leakage matters. Its validity should be checked using the aspect ratio,
 Reynolds number based on the gap, and the variation scale of the wall. A
 fine numerical mesh in the streamwise direction does not make a
 lubrication assumption valid if the geometry violates its ordering.</p>
-<h2 data-number="7.6" id="rotating-and-swirling-flow"><span class="header-section-number">7.6</span> Rotating and Swirling Flow</h2>
+<h2 data-number="7.6" role="heading" aria-level="3" id="rotating-and-swirling-flow"><span class="header-section-number">7.6</span> Rotating and Swirling Flow</h2>
 <p>Rotation introduces a body-like acceleration in a rotating frame and
 can produce a radial pressure gradient. For steady solid-body rotation
 with angular velocity
@@ -2665,7 +2693,7 @@ pressure gradient, add unsteadiness, then add geometry or property
 variation. At each step retain the previous checks. This makes the
 effect of a new mechanism visible and prevents a complex case from
 becoming the only evidence for a solver.</p>
-<h2 data-number="7.7" id="pipe-flow-and-pressure-loss"><span class="header-section-number">7.7</span> Pipe Flow and Pressure
+<h2 data-number="7.7" role="heading" aria-level="3" id="pipe-flow-and-pressure-loss"><span class="header-section-number">7.7</span> Pipe Flow and Pressure
 Loss</h2>
 <p>The circular-pipe analogue of plane Poiseuille flow is a useful
 bridge from exact solutions to engineering correlations. For a fully
@@ -2707,7 +2735,7 @@ calibrated for a regime, not a replacement for the conservation laws in
 every geometry. Entrance losses, fittings, contractions, and expansions
 should be added as separate terms only when the correlation definitions
 support that decomposition.</p>
-<h2 data-number="7.8" id="jets-wakes-and-mixing-layers"><span class="header-section-number">7.8</span> Jets, Wakes, and Mixing
+<h2 data-number="7.8" role="heading" aria-level="3" id="jets-wakes-and-mixing-layers"><span class="header-section-number">7.8</span> Jets, Wakes, and Mixing
 Layers</h2>
 <p>A free jet issues into a surrounding fluid and entrains ambient fluid
 as it develops. A wake is a momentum deficit downstream of a body. A
@@ -2731,7 +2759,7 @@ conservative transport and refinement, but it does not model entrainment
 or turbulence. A reader can transfer the balance logic and verification
 habits to a jet or wake study while recognising that a new closure and
 validation data are required.</p>
-<h1 data-number="8" id="introductory-compressible-flow"><span class="header-section-number">8</span> Introductory Compressible
+<h1 data-number="8" role="heading" aria-level="2" id="introductory-compressible-flow"><span class="header-section-number">8</span> Introductory Compressible
 Flow</h1>
 <p>Compressibility is a coupling between density, pressure, velocity,
 and often temperature. The continuity equation remains valid, but
@@ -2816,7 +2844,7 @@ NASA; <a href="https://commons.wikimedia.org/wiki/File:Schlieren_photograph_of_T
 file</a>; <a href="https://commons.wikimedia.org/wiki/Template:PD-USGov-NASA">public-domain
 licence (PD-USGov-NASA)</a>. The local pixel data is unmodified; its
 invalid source DPI metadata was normalised for PDF rendering.</em></p>
-<h2 data-number="8.1" id="worked-isentropic-nozzle-estimate"><span class="header-section-number">8.1</span> Worked Isentropic Nozzle
+<h2 data-number="8.1" role="heading" aria-level="3" id="worked-isentropic-nozzle-estimate"><span class="header-section-number">8.1</span> Worked Isentropic Nozzle
 Estimate</h2>
 <p>For a quasi-one-dimensional, steady, adiabatic, isentropic ideal-gas
 nozzle, continuity gives
@@ -2905,7 +2933,7 @@ reservoir losses, and the effective throat area. A single measured mass
 flow cannot identify which correction dominates, so pressure and
 temperature measurements along the nozzle are valuable complementary
 evidence.</p>
-<h2 data-number="8.2" id="thermodynamic-state-and-stagnation-quantities"><span class="header-section-number">8.2</span> Thermodynamic State and
+<h2 data-number="8.2" role="heading" aria-level="3" id="thermodynamic-state-and-stagnation-quantities"><span class="header-section-number">8.2</span> Thermodynamic State and
 Stagnation Quantities</h2>
 <p>Static quantities describe the local state seen by a fluid moving
 with the flow. Stagnation quantities describe the state obtained by
@@ -2934,7 +2962,7 @@ the model contains a shock or viscous loss that can explain the entropy
 increase. A static pressure decrease is not by itself evidence of energy
 loss: acceleration in a smooth nozzle can lower static pressure while
 preserving stagnation enthalpy.</p>
-<h2 data-number="8.3" id="boundary-data-across-mach-regimes"><span class="header-section-number">8.3</span> Boundary Data Across Mach
+<h2 data-number="8.3" role="heading" aria-level="3" id="boundary-data-across-mach-regimes"><span class="header-section-number">8.3</span> Boundary Data Across Mach
 Regimes</h2>
 <p>The number of independent inlet and outlet conditions changes with
 the local Mach number because characteristics carry information in
@@ -2953,7 +2981,7 @@ modelling choice. A converged solution with an outlet reflection is
 still the solution of the stated truncated problem. The model ledger
 should record the distance to the outlet and any evidence that the
 result is insensitive to it.</p>
-<h2 data-number="8.4" id="low-mach-and-high-mach-limits"><span class="header-section-number">8.4</span> Low-Mach and High-Mach
+<h2 data-number="8.4" role="heading" aria-level="3" id="low-mach-and-high-mach-limits"><span class="header-section-number">8.4</span> Low-Mach and High-Mach
 Limits</h2>
 <p>The incompressible limit is subtle because pressure may contain a
 rapidly adjusting component that enforces the divergence constraint
@@ -2981,7 +3009,7 @@ method may smear it. The choice of numerical flux and limiter is
 therefore part of the model and verification evidence. A shock location
 that changes substantially under grid refinement is not a converged
 engineering prediction, even if the global mass flow is conserved.</p>
-<h2 data-number="8.5" id="a-compressible-calculation-checklist"><span class="header-section-number">8.5</span> A Compressible Calculation
+<h2 data-number="8.5" role="heading" aria-level="3" id="a-compressible-calculation-checklist"><span class="header-section-number">8.5</span> A Compressible Calculation
 Checklist</h2>
 <p>For an ideal-gas example, check the following in order: the units and
 sign of the equation of state; positivity of
@@ -3001,7 +3029,7 @@ uses a different energy convention. Independent calculation and
 executable assertions reduce that risk. The example in this primer
 remains an analytical isentropic calculation rather than a shock solver,
 so its contract is limited to the stated relations.</p>
-<h1 data-number="9" id="constitutive-behaviour-properties-and-energy"><span class="header-section-number">9</span> Constitutive Behaviour,
+<h1 data-number="9" role="heading" aria-level="2" id="constitutive-behaviour-properties-and-energy"><span class="header-section-number">9</span> Constitutive Behaviour,
 Properties, and Energy</h1>
 <p>Conservation laws constrain changes in mass, momentum, and energy,
 but they do not tell us how a particular material responds. Constitutive
@@ -3069,7 +3097,7 @@ is often convenient in flow problems because pressure work is grouped
 with internal energy. The notation should distinguish specific enthalpy
 from geometric height, even when both are informally called “head” in
 engineering discussions.</p>
-<h2 data-number="9.1" id="non-newtonian-behaviour-at-the-boundary"><span class="header-section-number">9.1</span> Non-Newtonian Behaviour at the
+<h2 data-number="9.1" role="heading" aria-level="3" id="non-newtonian-behaviour-at-the-boundary"><span class="header-section-number">9.1</span> Non-Newtonian Behaviour at the
 Boundary</h2>
 <p>Some fluids do not have a stress that is proportional to the
 instantaneous shear rate. A simple power-law model may write the
@@ -3085,7 +3113,7 @@ may be a useful baseline but is not automatically a valid model. The
 relevant constitutive data may need to be measured under the same shear,
 temperature, and time scales as the application. A more detailed fluid
 equation cannot compensate for an unsupported material law.</p>
-<h2 data-number="9.2" id="units-and-property-checks"><span class="header-section-number">9.2</span> Units and Property Checks</h2>
+<h2 data-number="9.2" role="heading" aria-level="3" id="units-and-property-checks"><span class="header-section-number">9.2</span> Units and Property Checks</h2>
 <p>Before solving, make a property table with symbols, values, units,
 temperature, and source. Check dimensions independently. For example,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mi>U</mi><mi>L</mi><mi>/</mi><mi>μ</mi></mrow><annotation encoding="application/x-tex">\rho UL/\mu</annotation></semantics></math>
@@ -3104,7 +3132,7 @@ is in temperature, pressure, or another variable and whether values are
 extrapolated. If a property is uncertain, propagate that uncertainty
 through the requested output rather than reporting a long decimal value
 that the data do not support.</p>
-<h2 data-number="9.3" id="energy-heat-and-coupled-flow"><span class="header-section-number">9.3</span> Energy, Heat, and Coupled
+<h2 data-number="9.3" role="heading" aria-level="3" id="energy-heat-and-coupled-flow"><span class="header-section-number">9.3</span> Energy, Heat, and Coupled
 Flow</h2>
 <p>Low-speed fluid problems are often introduced without an energy
 equation because the velocity and pressure field can be solved under an
@@ -3130,7 +3158,7 @@ changes appreciably, buoyancy can alter the velocity field as well. An
 isothermal calculation may still be useful for an initial estimate, but
 it should identify temperature as an unresolved input and state which
 output is sensitive to it.</p>
-<h2 data-number="9.4" id="energy-balances-and-boundary-work"><span class="header-section-number">9.4</span> Energy Balances and Boundary
+<h2 data-number="9.4" role="heading" aria-level="3" id="energy-balances-and-boundary-work"><span class="header-section-number">9.4</span> Energy Balances and Boundary
 Work</h2>
 <p>The sign convention for heat flux is easy to reverse. Here
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒒</mi><annotation encoding="application/x-tex">\mathbf{q}</annotation></semantics></math>
@@ -3158,7 +3186,7 @@ part of verification for compressible examples. If a scheme clips a
 negative density after the update, the clipping is a modification of the
 equation and must be reported; it is not evidence that the original
 update was physically admissible.</p>
-<h2 data-number="9.5" id="when-a-coupled-calculation-is-justified"><span class="header-section-number">9.5</span> When a Coupled Calculation Is
+<h2 data-number="9.5" role="heading" aria-level="3" id="when-a-coupled-calculation-is-justified"><span class="header-section-number">9.5</span> When a Coupled Calculation Is
 Justified</h2>
 <p>Use an energy equation when the requested output depends on
 temperature, density changes, compressibility, phase state, or heat
@@ -3175,7 +3203,7 @@ sensitivity experiment shows whether thermal coupling matters for the
 decision. It also provides a regression case: if adding a weak thermal
 perturbation changes the baseline flow by orders of magnitude, inspect
 the scaling and implementation before trusting the result.</p>
-<h2 data-number="9.6" id="temperature-boundary-conditions"><span class="header-section-number">9.6</span> Temperature Boundary
+<h2 data-number="9.6" role="heading" aria-level="3" id="temperature-boundary-conditions"><span class="header-section-number">9.6</span> Temperature Boundary
 Conditions</h2>
 <p>Thermal boundary conditions are physical statements about the surface
 and the surrounding environment. A prescribed temperature represents a
@@ -3195,7 +3223,7 @@ and thermal condition are separate pieces of the model. A wall can be
 stationary and isothermal, stationary with a heat flux, or moving with a
 prescribed temperature; the mechanical and thermal choices should be
 stated independently.</p>
-<h2 data-number="9.7" id="thermal-and-momentum-boundary-layers"><span class="header-section-number">9.7</span> Thermal and Momentum Boundary
+<h2 data-number="9.7" role="heading" aria-level="3" id="thermal-and-momentum-boundary-layers"><span class="header-section-number">9.7</span> Thermal and Momentum Boundary
 Layers</h2>
 <p>The momentum diffusion time uses kinematic viscosity
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ν</mi><annotation encoding="application/x-tex">\nu</annotation></semantics></math>,
@@ -3218,7 +3246,7 @@ heat, while thermal gradients do not generally create momentum without
 buoyancy or property coupling. Similar-looking diffusion operators do
 not justify copying boundary conditions or numerical stabilisation
 choices without checking the underlying fluxes.</p>
-<h2 data-number="9.8" id="phase-change-and-the-boundary-of-the-model"><span class="header-section-number">9.8</span> Phase Change and the Boundary
+<h2 data-number="9.8" role="heading" aria-level="3" id="phase-change-and-the-boundary-of-the-model"><span class="header-section-number">9.8</span> Phase Change and the Boundary
 of the Model</h2>
 <p>A phase-change problem adds an interface condition involving latent
 heat and the interface speed. The temperature may be near a saturation
@@ -3235,7 +3263,8 @@ a pressure drop in a temperature-controlled single-phase channel, a
 constant-property isothermal model may be the most transparent choice.
 If boiling, condensation, or cavitation controls the outcome, the scope
 must expand and the validation evidence must change.</p>
-<h1 data-number="10" id="choosing-a-flow-model"><span class="header-section-number">10</span> Choosing a Flow Model</h1>
+<h1 data-number="10" role="heading" aria-level="2" id="choosing-a-flow-model"><span class="header-section-number">10</span>
+Choosing a Flow Model</h1>
 <p>A flow calculation begins with a question, not a solver. “What is the
 pressure drop through this duct?” and “Will a jet mix uniformly before
 reaching a sensor?” require different outputs and may require different
@@ -3295,7 +3324,7 @@ closure assumptions, boundary data, and outputs. A steady solver is not
 evidence that the physical flow is steady. A two-dimensional calculation
 is not automatically a valid slice of a three-dimensional flow. Record
 unresolved assumptions and carry them into interpretation.</p>
-<h2 data-number="10.1" id="boundary-and-initial-data"><span class="header-section-number">10.1</span> Boundary and Initial Data</h2>
+<h2 data-number="10.1" role="heading" aria-level="3" id="boundary-and-initial-data"><span class="header-section-number">10.1</span> Boundary and Initial Data</h2>
 <p>The boundary condition must match the differential model and the
 physical boundary. A no-slip wall specifies velocity, but it does not by
 itself specify temperature, heat flux, species concentration, or surface
@@ -3323,7 +3352,8 @@ primer does not develop characteristic boundary conditions in detail,
 but the principle is important: boundary data should follow the model’s
 information structure, not a generic template copied from a different
 regime.</p>
-<h2 data-number="10.2" id="a-model-ledger"><span class="header-section-number">10.2</span> A Model Ledger</h2>
+<h2 data-number="10.2" role="heading" aria-level="3" id="a-model-ledger"><span class="header-section-number">10.2</span> A
+Model Ledger</h2>
 <p>Before writing a solver, record a model ledger. It should include the
 question, geometry, coordinate system, dimensionality, fluid properties,
 equations, constitutive laws, state or equation-of-state relations,
@@ -3340,7 +3370,7 @@ reverse-engineer a solver. When the model changes, record which
 conclusions remain valid and which checks must be repeated. Versioning
 the ledger alongside executable code is more useful than relying on a
 notebook cell or an informal conversation.</p>
-<h2 data-number="10.3" id="choosing-dimensionality"><span class="header-section-number">10.3</span> Choosing Dimensionality</h2>
+<h2 data-number="10.3" role="heading" aria-level="3" id="choosing-dimensionality"><span class="header-section-number">10.3</span> Choosing Dimensionality</h2>
 <p>Dimensionality is a physical approximation, not just a display
 setting. A two-dimensional model assumes invariance or a controlled
 reduction in the third direction. Plane flow between wide plates can
@@ -3358,7 +3388,7 @@ scale with the output sensitivity. A short 3D pilot calculation or a
 measured cross-section may be more informative than a very fine 2D grid.
 State whether the reported flow rate is per unit depth, integrated over
 a width, or an axisymmetric volume rate.</p>
-<h2 data-number="10.4" id="steady-unsteady-and-averaged-models"><span class="header-section-number">10.4</span> Steady, Unsteady, and Averaged
+<h2 data-number="10.4" role="heading" aria-level="3" id="steady-unsteady-and-averaged-models"><span class="header-section-number">10.4</span> Steady, Unsteady, and Averaged
 Models</h2>
 <p>“Steady” can mean three different things: the equations have no
 explicit time derivative; a transient has reached a time-independent
@@ -3380,7 +3410,7 @@ instantaneous pressure drops are usually equivalent only under a linear
 measurement operation. Nonlinear quantities such as kinetic energy, drag
 based on squared speed, or reaction rates require the averaging
 operation to be written explicitly.</p>
-<h2 data-number="10.5" id="reduced-models-and-closure"><span class="header-section-number">10.5</span> Reduced Models and
+<h2 data-number="10.5" role="heading" aria-level="3" id="reduced-models-and-closure"><span class="header-section-number">10.5</span> Reduced Models and
 Closure</h2>
 <p>Depth-averaged shallow-water equations, lubrication theory,
 boundary-layer equations, pipe-network models, and potential flow all
@@ -3403,7 +3433,7 @@ uncertainty, resolving that effect adds cost without adding evidence. If
 it is sensitive, the sensitivity result identifies what to measure or
 model next. Model selection is therefore an iterative experiment-design
 problem rather than a one-time choice made from a solver menu.</p>
-<h2 data-number="10.6" id="model-hierarchies-and-escalation"><span class="header-section-number">10.6</span> Model Hierarchies and
+<h2 data-number="10.6" role="heading" aria-level="3" id="model-hierarchies-and-escalation"><span class="header-section-number">10.6</span> Model Hierarchies and
 Escalation</h2>
 <p>An escalation plan should state what observation would justify moving
 to a more detailed model. For a channel, begin with a one-dimensional
@@ -3428,7 +3458,7 @@ scales through candidate model and evidence gate</figcaption>
 <p><em>Figure: illustrative model-escalation route. Check balances,
 refinement, comparison, and uncertainty against the decision tolerance;
 diagnose a failed check before increasing model complexity.</em></p>
-<h1 data-number="11" id="introductory-cfd-balances-on-control-volumes"><span class="header-section-number">11</span> Introductory CFD: Balances on
+<h1 data-number="11" role="heading" aria-level="2" id="introductory-cfd-balances-on-control-volumes"><span class="header-section-number">11</span> Introductory CFD: Balances on
 Control Volumes</h1>
 <p>Finite-volume methods translate integral conservation laws into
 updates over small cells. Divide the domain into non-overlapping control
@@ -3497,7 +3527,7 @@ solvers, complex meshes, turbulence closure, and careful wall treatment.
 Alternatively, keep the executable solver one-dimensional and use a
 two-dimensional diagram to explain face fluxes; depth and checkability
 matter more than dimensional marketing.</p>
-<h2 data-number="11.1" id="advection-diffusion-and-fluxes"><span class="header-section-number">11.1</span> Advection, Diffusion, and
+<h2 data-number="11.1" role="heading" aria-level="3" id="advection-diffusion-and-fluxes"><span class="header-section-number">11.1</span> Advection, Diffusion, and
 Fluxes</h2>
 <p>Transport terms are where a compact equation becomes a family of
 numerical choices. For a scalar concentration
@@ -3549,7 +3579,7 @@ and high
 for a weakly diffusing one. Do not transfer a numerical choice from
 momentum to temperature or concentration without checking the relevant
 transport scale.</p>
-<h2 data-number="11.2" id="time-integration-and-stability"><span class="header-section-number">11.2</span> Time Integration and
+<h2 data-number="11.2" role="heading" aria-level="3" id="time-integration-and-stability"><span class="header-section-number">11.2</span> Time Integration and
 Stability</h2>
 <p>An explicit update computes the new state from known old values. It
 is easy to inspect and often easy to execute in a teaching example, but
@@ -3576,7 +3606,7 @@ state, not agreement with a transient experiment. Conversely, a periodic
 physical solution should not be declared failed merely because a steady
 residual cannot reach zero. Identify the expected temporal behaviour
 before selecting the stopping rule.</p>
-<h2 data-number="11.3" id="pressure-and-incompressibility"><span class="header-section-number">11.3</span> Pressure and
+<h2 data-number="11.3" role="heading" aria-level="3" id="pressure-and-incompressibility"><span class="header-section-number">11.3</span> Pressure and
 Incompressibility</h2>
 <p>In an incompressible formulation, pressure enforces the divergence
 constraint rather than evolving through an independent compressible
@@ -3677,7 +3707,7 @@ divergence. If the boundary fluxes imply a net volume increase in a
 fixed domain, no pressure gauge choice can make the system compatible;
 the model needs storage, a moving boundary, compressibility, or
 corrected boundary data.</p>
-<h2 data-number="11.4" id="meshes-geometry-and-resolution"><span class="header-section-number">11.4</span> Meshes, Geometry, and
+<h2 data-number="11.4" role="heading" aria-level="3" id="meshes-geometry-and-resolution"><span class="header-section-number">11.4</span> Meshes, Geometry, and
 Resolution</h2>
 <p>The grid is part of the numerical model. A mesh must resolve the
 scales relevant to the requested output: a wall shear stress needs
@@ -3722,7 +3752,7 @@ recirculation region. A periodic direction that is too short can force
 coherent structures to interact with their own copies. Increase the
 domain as a sensitivity test when the quantity of interest depends on an
 outer boundary or a long downstream development region.</p>
-<h2 data-number="11.5" id="boundary-conditions-in-a-discrete-balance"><span class="header-section-number">11.5</span> Boundary Conditions in a
+<h2 data-number="11.5" role="heading" aria-level="3" id="boundary-conditions-in-a-discrete-balance"><span class="header-section-number">11.5</span> Boundary Conditions in a
 Discrete Balance</h2>
 <p>A boundary condition is implemented through a numerical flux, not
 merely by assigning a value to the nearest cell. For a scalar Dirichlet
@@ -3748,7 +3778,7 @@ remain constant. With a prescribed inflow and a passive scalar, the
 inflow value should influence the interior only after the expected
 transport time. These tests are more diagnostic than immediately running
 a complicated geometry.</p>
-<h2 data-number="11.6" id="a-minimal-finite-volume-update"><span class="header-section-number">11.6</span> A Minimal Finite-Volume
+<h2 data-number="11.6" role="heading" aria-level="3" id="a-minimal-finite-volume-update"><span class="header-section-number">11.6</span> A Minimal Finite-Volume
 Update</h2>
 <p>For a one-dimensional conservation law on cells of width
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta x</annotation></semantics></math>,
@@ -3781,7 +3811,7 @@ truncation error and stability behaviour. The right comparison is not
 “upwind versus centred” in the abstract; it is the measured
 conservation, boundedness, phase error, and convergence of the complete
 update under the stated boundary and time-step choices.</p>
-<h2 data-number="11.7" id="solvers-residuals-and-stopping-rules"><span class="header-section-number">11.7</span> Solvers, Residuals, and
+<h2 data-number="11.7" role="heading" aria-level="3" id="solvers-residuals-and-stopping-rules"><span class="header-section-number">11.7</span> Solvers, Residuals, and
 Stopping Rules</h2>
 <p>Coupled flow calculations often contain linear systems from
 diffusion, pressure, or implicit time integration. An iterative solver
@@ -3806,7 +3836,7 @@ unnecessary, while a residual that allows a ten percent mass imbalance
 is unacceptable. Perform a tolerance perturbation on at least one
 representative case and include the result in the verification
 record.</p>
-<h2 data-number="11.8" id="conservation-at-interfaces-and-refinement-boundaries"><span class="header-section-number">11.8</span> Conservation at Interfaces and
+<h2 data-number="11.8" role="heading" aria-level="3" id="conservation-at-interfaces-and-refinement-boundaries"><span class="header-section-number">11.8</span> Conservation at Interfaces and
 Refinement Boundaries</h2>
 <p>A mesh with local refinement has faces between cells of different
 size. The numerical flux across that interface must be single-valued and
@@ -3831,7 +3861,7 @@ variable. The interface model should name which quantities are
 continuous and which jump. Treating an interface as an ordinary internal
 face without checking those conditions can produce a smooth but
 non-conservative result.</p>
-<h1 data-number="12" id="verification-and-validation"><span class="header-section-number">12</span> Verification and Validation</h1>
+<h1 data-number="12" role="heading" aria-level="2" id="verification-and-validation"><span class="header-section-number">12</span> Verification and Validation</h1>
 <p>Verification asks whether the equations have been solved correctly.
 Validation asks whether those equations and assumptions represent the
 physical system well enough for the intended use. A small residual, a
@@ -3893,7 +3923,7 @@ aggregate score. If parameters were calibrated using the data, reserve
 independent cases for validation. If no suitable measurements exist, say
 “verified against the stated numerical tests; not physically validated”.
 A model can be well verified and poorly validated, or vice versa.</p>
-<h2 data-number="12.1" id="error-norms-and-observed-order"><span class="header-section-number">12.1</span> Error Norms and Observed
+<h2 data-number="12.1" role="heading" aria-level="3" id="error-norms-and-observed-order"><span class="header-section-number">12.1</span> Error Norms and Observed
 Order</h2>
 <p>Suppose a numerical field
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mi>h</mi></msub><annotation encoding="application/x-tex">u_h</annotation></semantics></math>
@@ -3926,7 +3956,7 @@ help reveal a pre-asymptotic regime, an implementation error, or a
 change in the dominant error source. A straight line on a log–log plot
 is useful evidence, not a substitute for understanding the
 discretisation.</p>
-<h2 data-number="12.2" id="separating-error-sources"><span class="header-section-number">12.2</span> Separating Error Sources</h2>
+<h2 data-number="12.2" role="heading" aria-level="3" id="separating-error-sources"><span class="header-section-number">12.2</span> Separating Error Sources</h2>
 <p>A refinement study is most informative when one numerical choice
 changes at a time. If the grid is refined while the time step, solver
 tolerance, and geometry representation all change, the observed
@@ -3944,7 +3974,7 @@ a physically appropriate model can appear non-convergent because the
 grid does not resolve a boundary layer or because the time window is too
 short to reach the relevant state. Report the numerical limit and the
 physical uncertainty separately.</p>
-<h2 data-number="12.3" id="symmetry-conservation-and-invariants"><span class="header-section-number">12.3</span> Symmetry, Conservation, and
+<h2 data-number="12.3" role="heading" aria-level="3" id="symmetry-conservation-and-invariants"><span class="header-section-number">12.3</span> Symmetry, Conservation, and
 Invariants</h2>
 <p>Expected symmetries are inexpensive verification tests. A centred
 channel with symmetric forcing should have a symmetric velocity profile;
@@ -3962,7 +3992,7 @@ invariant in every formulation: viscosity dissipates kinetic energy,
 heat conduction changes temperature gradients, and numerical diffusion
 may dissipate a scalar variance. Name the expected invariant and the
 mechanism that can break it before using it as a test.</p>
-<h2 data-number="12.4" id="regression-tests-and-reproducibility"><span class="header-section-number">12.4</span> Regression Tests and
+<h2 data-number="12.4" role="heading" aria-level="3" id="regression-tests-and-reproducibility"><span class="header-section-number">12.4</span> Regression Tests and
 Reproducibility</h2>
 <p>Once a case has passed its independent checks, preserve a small set
 of scalar outputs as regression tests. Store the inputs, code version,
@@ -4011,7 +4041,7 @@ misinterpret. If the finest grid takes a different number of time steps
 or uses a different outlet treatment, it is not a pure grid comparison.
 The visual convergence plot is most useful when the accompanying table
 makes those choices explicit.</p>
-<h2 data-number="12.5" id="manufactured-solutions"><span class="header-section-number">12.5</span> Manufactured Solutions</h2>
+<h2 data-number="12.5" role="heading" aria-level="3" id="manufactured-solutions"><span class="header-section-number">12.5</span> Manufactured Solutions</h2>
 <p>When no convenient analytical flow exists, choose a smooth field,
 substitute it into the differential equations, and derive the source
 term that makes it exact. This manufactured solution tests the
@@ -4029,7 +4059,7 @@ forcing must be included consistently in the discrete balance. If the
 manufactured case converges at the wrong order, inspect sign
 conventions, face locations, source quadrature, and the comparison
 between point and cell-average values.</p>
-<h2 data-number="12.6" id="verification-evidence-is-layered"><span class="header-section-number">12.6</span> Verification Evidence Is
+<h2 data-number="12.6" role="heading" aria-level="3" id="verification-evidence-is-layered"><span class="header-section-number">12.6</span> Verification Evidence Is
 Layered</h2>
 <p>No single check proves a solver correct. A useful ladder begins with
 syntax and dimensional checks, then tests limiting cases, local balance,
@@ -4047,7 +4077,7 @@ dominates. If a conservation residual is larger than round-off because
 of a deliberate source approximation, quantify that approximation. A
 check that is impossible to satisfy exactly can still be useful when its
 expected scale is documented.</p>
-<h2 data-number="12.7" id="validation-and-uncertainty"><span class="header-section-number">12.7</span> Validation and
+<h2 data-number="12.7" role="heading" aria-level="3" id="validation-and-uncertainty"><span class="header-section-number">12.7</span> Validation and
 Uncertainty</h2>
 <p>Validation begins with a measurement model. Identify what the
 instrument measures, where it measures it, its spatial and temporal
@@ -4073,7 +4103,7 @@ distinguishes stochastic variability from systematic bias. For a
 consequential decision, the question is not whether the plotted curve
 looks close; it is whether the uncertainty interval changes the decision
 threshold.</p>
-<h1 data-number="13" id="worked-decision-pressure-drop-in-a-laminar-channel"><span class="header-section-number">13</span> Worked Decision: Pressure Drop
+<h1 data-number="13" role="heading" aria-level="2" id="worked-decision-pressure-drop-in-a-laminar-channel"><span class="header-section-number">13</span> Worked Decision: Pressure Drop
 in a Laminar Channel</h1>
 <p>Suppose a design team must estimate the pressure drop required to
 drive water through a long, wide, shallow channel at a specified flow
@@ -4132,7 +4162,7 @@ geometry matter; measure pressure drop on a representative assembly
 before relying on the result for a consequential design. The model
 choice follows the output and risk, and the next evidence-gathering step
 is explicit.</p>
-<h2 data-number="13.1" id="sensitivity-of-the-channel-estimate"><span class="header-section-number">13.1</span> Sensitivity of the Channel
+<h2 data-number="13.1" role="heading" aria-level="3" id="sensitivity-of-the-channel-estimate"><span class="header-section-number">13.1</span> Sensitivity of the Channel
 Estimate</h2>
 <p>The formula also makes sensitivity visible. Holding
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>,
@@ -4187,7 +4217,7 @@ contributions without additional measurements or a model of the
 assembly. The analytical result remains a limiting baseline, but the
 decision must change from “is the formula correct?” to “which
 contributions are included in the measured quantity?”</p>
-<h2 data-number="13.2" id="an-audit-table-for-a-result"><span class="header-section-number">13.2</span> An Audit Table for a
+<h2 data-number="13.2" role="heading" aria-level="3" id="an-audit-table-for-a-result"><span class="header-section-number">13.2</span> An Audit Table for a
 Result</h2>
 <p>Before publishing the estimate, an audit table can record the claim
 and its evidence:</p>
@@ -4237,11 +4267,11 @@ for the ideal scale</td>
 promoted into a broad physical claim. It is also a compact handover for
 the next analyst: each unresolved qualification names the next useful
 piece of work.</p>
-<h1 data-number="14" id="common-modelling-failures"><span class="header-section-number">14</span> Common Modelling Failures</h1>
+<h1 data-number="14" role="heading" aria-level="2" id="common-modelling-failures"><span class="header-section-number">14</span> Common Modelling Failures</h1>
 <p>Fluid calculations often fail through small inconsistencies rather
 than through an inability to solve a difficult equation. A review should
 look for the following patterns.</p>
-<h2 data-number="14.1" id="assumptions-and-comparison-quantities"><span class="header-section-number">14.1</span> Assumptions and Comparison
+<h2 data-number="14.1" role="heading" aria-level="3" id="assumptions-and-comparison-quantities"><span class="header-section-number">14.1</span> Assumptions and Comparison
 Quantities</h2>
 <p><strong>Changing Assumptions Silently:</strong> An argument may begin
 with an incompressible fluid, use a constant-density continuity
@@ -4266,7 +4296,7 @@ its geometry, roughness, property range, reference length, transition
 range, and uncertainty. If it is used outside its documented range,
 label the result as an extrapolation and test sensitivity to the
 choice.</p>
-<h2 data-number="14.2" id="interpreting-results-and-references"><span class="header-section-number">14.2</span> Interpreting Results and
+<h2 data-number="14.2" role="heading" aria-level="3" id="interpreting-results-and-references"><span class="header-section-number">14.2</span> Interpreting Results and
 References</h2>
 <p><strong>Mistaking Solver Convergence for Physical Adequacy:</strong>
 Reducing a nonlinear residual proves only that the discrete equations
@@ -4289,7 +4319,7 @@ are not interchangeable in a compressible or cavitating problem.
 Likewise, potential energy depends on a selected datum even though a
 difference is observable. State the reference and compare invariant
 differences where possible.</p>
-<h2 data-number="14.3" id="reporting-and-model-checks"><span class="header-section-number">14.3</span> Reporting and Model
+<h2 data-number="14.3" role="heading" aria-level="3" id="reporting-and-model-checks"><span class="header-section-number">14.3</span> Reporting and Model
 Checks</h2>
 <p><strong>Reporting Precision Unsupported by the Model:</strong> If
 viscosity is known to two significant figures and the inlet flow rate is
@@ -4321,7 +4351,7 @@ for exploration, not a substitute for a model ledger. Record the
 version, selected schemes, boundary conditions, and tolerances. When a
 result changes after a software upgrade, compare the effective settings
 rather than assuming the physical model stayed fixed.</p>
-<h1 data-number="15" id="a-reproducible-flow-study-workflow"><span class="header-section-number">15</span> A Reproducible Flow-Study
+<h1 data-number="15" role="heading" aria-level="2" id="a-reproducible-flow-study-workflow"><span class="header-section-number">15</span> A Reproducible Flow-Study
 Workflow</h1>
 <p>The equations and code are only one part of a defensible flow study.
 A reproducible workflow keeps the physical question, numerical model,
@@ -4382,7 +4412,7 @@ condition, a different constitutive law, or a narrower claim rather than
 a smaller residual tolerance. Keeping the record of those decisions
 makes the calculation reusable and prevents the same modelling error
 from being rediscovered in a later project.</p>
-<h2 data-number="15.1" id="a-compact-handover-record"><span class="header-section-number">15.1</span> A Compact Handover Record</h2>
+<h2 data-number="15.1" role="heading" aria-level="3" id="a-compact-handover-record"><span class="header-section-number">15.1</span> A Compact Handover Record</h2>
 <p>At the end of a study, a second person should be able to reproduce
 the result without a conversation with the original analyst. The
 handover should contain the repository or project revision, command used
@@ -4403,7 +4433,7 @@ condition, or new measurement should be traceable. Do not overwrite a
 baseline merely because the new result looks better. The comparison
 between old and new outputs can reveal which assumption was controlling
 the earlier conclusion.</p>
-<h2 data-number="15.2" id="a-review-meeting-in-questions"><span class="header-section-number">15.2</span> A Review Meeting in
+<h2 data-number="15.2" role="heading" aria-level="3" id="a-review-meeting-in-questions"><span class="header-section-number">15.2</span> A Review Meeting in
 Questions</h2>
 <p>An effective technical review can be structured as questions. What
 exactly is the quantity of interest? What is the control volume? Which
@@ -4418,7 +4448,7 @@ or a finite-volume solver because they trace the same chain from
 physical decision to conservation law to evidence. A review that
 discusses only mesh density or residuals has skipped the model and
 measurement parts of the chain.</p>
-<h1 data-number="16" id="measurements-and-model-comparison"><span class="header-section-number">16</span> Measurements and Model
+<h1 data-number="16" role="heading" aria-level="2" id="measurements-and-model-comparison"><span class="header-section-number">16</span> Measurements and Model
 Comparison</h1>
 <p>Measurements connect a model to a physical system, but they do not
 arrive as perfect values at mathematical points. A pressure tap samples
@@ -4445,7 +4475,7 @@ calibration and scale it does not establish quantitative agreement with
 a simulation. Credit: Willa; <a href="https://commons.wikimedia.org/wiki/File:PIV_analysis_of_a_stalled_flat_plate.jpg">source
 file</a>; <a href="https://creativecommons.org/licenses/by-sa/3.0/">licence (CC BY-SA
 3.0)</a>. The local copy is unmodified.</em></p>
-<h2 data-number="16.1" id="sampling-and-averaging"><span class="header-section-number">16.1</span> Sampling and Averaging</h2>
+<h2 data-number="16.1" role="heading" aria-level="3" id="sampling-and-averaging"><span class="header-section-number">16.1</span> Sampling and Averaging</h2>
 <p>A numerical field can be sampled at a sensor location, averaged over
 a probe volume, or averaged over a time window. These operations are
 different. If the flow is unsteady, the time average of a nonlinear
@@ -4464,7 +4494,7 @@ differentiating noisy data amplifies high-frequency error. A simulation
 that resolves a gradient more sharply than the instrument can measure
 should be filtered or averaged before a like-for-like comparison. This
 is not hiding information; it is applying the measurement model.</p>
-<h2 data-number="16.2" id="pressure-and-force-measurements"><span class="header-section-number">16.2</span> Pressure and Force
+<h2 data-number="16.2" role="heading" aria-level="3" id="pressure-and-force-measurements"><span class="header-section-number">16.2</span> Pressure and Force
 Measurements</h2>
 <p>Pressure data should identify the reference, tap location, elevation,
 and whether the reported value is static, stagnation, or a reconstructed
@@ -4479,7 +4509,7 @@ are not automatically equivalent in practice because the measurement
 surfaces and unmeasured supports differ. A validation plan should state
 which force definition is being compared and how omitted surfaces are
 handled.</p>
-<h2 data-number="16.3" id="designing-a-comparison-for-flow-models"><span class="header-section-number">16.3</span> Designing a Comparison for
+<h2 data-number="16.3" role="heading" aria-level="3" id="designing-a-comparison-for-flow-models"><span class="header-section-number">16.3</span> Designing a Comparison for
 Flow Models</h2>
 <p>Choose comparison cases that vary the mechanism being tested. One
 operating point can show agreement by accident. A small matrix of
@@ -4533,7 +4563,8 @@ and image-correlation assumptions. Document the coordinate transform and
 filtering used to turn raw data into the compared quantity. If
 preprocessing removes fluctuations, the simulation should be averaged or
 filtered in a comparable way.</p>
-<h2 data-number="16.4" id="uncertainty-budgets"><span class="header-section-number">16.4</span> Uncertainty Budgets</h2>
+<h2 data-number="16.4" role="heading" aria-level="3" id="uncertainty-budgets"><span class="header-section-number">16.4</span>
+Uncertainty Budgets</h2>
 <p>An uncertainty budget lists the inputs and modelling choices that can
 move the output. For the plane-channel estimate, viscosity, gap, length,
 and either mean speed or flow rate and width are inputs; entrance losses
@@ -4587,7 +4618,7 @@ correlations where they are known. A sensitivity run is not a
 replacement for a probability model when probabilities are needed, but
 it is often enough to show that a proposed design margin is dominated by
 one property or one omitted mechanism.</p>
-<h2 data-number="16.5" id="reporting-a-negative-result"><span class="header-section-number">16.5</span> Reporting a Negative
+<h2 data-number="16.5" role="heading" aria-level="3" id="reporting-a-negative-result"><span class="header-section-number">16.5</span> Reporting a Negative
 Result</h2>
 <p>A failed verification or validation check is a result. Report the
 case, expected behaviour, observed behaviour, tolerance, and likely
@@ -4604,7 +4635,7 @@ inertial or roughness effect; a constant offset may indicate a pressure
 reference or calibration issue. The next action should follow the
 residual pattern rather than the desire to make the plot look
 closer.</p>
-<h2 data-number="16.6" id="dimensionless-comparison-of-data"><span class="header-section-number">16.6</span> Dimensionless Comparison of
+<h2 data-number="16.6" role="heading" aria-level="3" id="dimensionless-comparison-of-data"><span class="header-section-number">16.6</span> Dimensionless Comparison of
 Data</h2>
 <p>Plotting dimensional data can hide similarity. If pressure drop is
 expected to scale with
@@ -4622,7 +4653,7 @@ random agreement. Also inspect residuals against the instrument
 uncertainty: if the trend is smaller than the uncertainty, it may not
 affect the decision; if it is larger, the model or experiment needs
 attention.</p>
-<h2 data-number="16.7" id="figures-and-contours-as-evidence"><span class="header-section-number">16.7</span> Figures and Contours as
+<h2 data-number="16.7" role="heading" aria-level="3" id="figures-and-contours-as-evidence"><span class="header-section-number">16.7</span> Figures and Contours as
 Evidence</h2>
 <p>A figure should answer a question stated in its caption. A
 velocity-profile plot can show whether a boundary condition and shape
@@ -4662,7 +4693,7 @@ differ. If a visualisation is used to support a transport claim, label
 which construction was plotted and compare it with an integral or
 particle diagnostic. A contour is an aid to reasoning, not a substitute
 for the governing balance.</p>
-<h1 data-number="17" id="computational-examples-and-evidence"><span class="header-section-number">17</span> Computational Examples and
+<h1 data-number="17" role="heading" aria-level="2" id="computational-examples-and-evidence"><span class="header-section-number">17</span> Computational Examples and
 Evidence</h1>
 <p>The periodic-advection example provides a small numerical laboratory.
 Consider a scalar
@@ -4715,7 +4746,7 @@ result interpretable.</p>
 diffuses the translated wave. The exact translation is the independent
 reference; the numerical curve is not expected to retain its amplitude
 exactly.</em></p>
-<h2 data-number="17.1" id="reading-the-refinement-result"><span class="header-section-number">17.1</span> Reading the Refinement
+<h2 data-number="17.1" role="heading" aria-level="3" id="reading-the-refinement-result"><span class="header-section-number">17.1</span> Reading the Refinement
 Result</h2>
 <p>Run the same physical problem to the same final time while using
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>,
@@ -4744,7 +4775,7 @@ convergence</figcaption>
 <p><em>Figure: a log–log refinement plot makes the observed first-order
 trend visible. The generated example uses the same error definition and
 physical final time at each resolution.</em></p>
-<h2 data-number="17.2" id="a-language-parity-contract"><span class="header-section-number">17.2</span> A Language-Parity
+<h2 data-number="17.2" role="heading" aria-level="3" id="a-language-parity-contract"><span class="header-section-number">17.2</span> A Language-Parity
 Contract</h2>
 <p>The R and Julia channel scripts are not separate scientific models.
 They are independent implementations of the same dimensional
@@ -4774,7 +4805,7 @@ language choice does not change the physics. A fourth language is not
 needed for this primer unless the repository already has a supported
 runtime and the additional example tests a genuinely different
 capability.</p>
-<h2 data-number="17.3" id="what-the-examples-do-not-establish"><span class="header-section-number">17.3</span> What the Examples Do Not
+<h2 data-number="17.3" role="heading" aria-level="3" id="what-the-examples-do-not-establish"><span class="header-section-number">17.3</span> What the Examples Do Not
 Establish</h2>
 <p>The executable examples verify their own stated calculations. They do
 not establish that a particular water channel is laminar, that a real
@@ -4783,7 +4814,7 @@ first-order scalar scheme is suitable for a production CFD calculation.
 Those are physical and numerical claims outside the examples’ contracts.
 This boundary should be printed near the code, not inferred from the
 fact that the scripts exit successfully.</p>
-<h2 data-number="17.4" id="delivered-executable-examples"><span class="header-section-number">17.4</span> Delivered Executable
+<h2 data-number="17.4" role="heading" aria-level="3" id="delivered-executable-examples"><span class="header-section-number">17.4</span> Delivered Executable
 Examples</h2>
 <p>The five scripts registered in <a href="examples/manifest.toml">the
 example manifest</a> run offline in the repository’s Python base, R, and
@@ -4916,7 +4947,7 @@ The isentropic script checks analytical ideal-gas ratios; the advection
 script checks discrete conservation and refinement behaviour. Neither
 validates the incompressible channel model, and the registered set
 contains no incompressible CFD solver.</p>
-<h2 data-number="17.5" id="finite-volume-code-in-three-languages"><span class="header-section-number">17.5</span> Finite-Volume Code in Three
+<h2 data-number="17.5" role="heading" aria-level="3" id="finite-volume-code-in-three-languages"><span class="header-section-number">17.5</span> Finite-Volume Code in Three
 Languages</h2>
 <p>The following snippets show the core periodic upwind update in three
 languages. They intentionally use plain arrays and explicit loops so
@@ -4990,7 +5021,7 @@ they are used with a smooth wave. A useful unit test is
 with one selected CFL value, for which the expected result can be
 calculated by hand. A second test should use a constant vector: every
 update must return the same constant vector to round-off.</p>
-<h2 data-number="17.6" id="code-review-questions"><span class="header-section-number">17.6</span> Code Review Questions</h2>
+<h2 data-number="17.6" role="heading" aria-level="3" id="code-review-questions"><span class="header-section-number">17.6</span> Code Review Questions</h2>
 <p>Review a numerical example by asking where the physical state is
 stored, where each face flux is computed, which sign represents outward
 flux, how periodic or wall boundaries are represented, and which
@@ -5007,12 +5038,12 @@ the interpretation changes the admissible range and source terms. If
 is a concentration, negative values may be physically impossible; if it
 is a signed perturbation, negative values can be valid. The code
 contract should state which interpretation is intended.</p>
-<h1 data-number="18" id="practice-problems-and-extensions"><span class="header-section-number">18</span> Practice Problems and
+<h1 data-number="18" role="heading" aria-level="2" id="practice-problems-and-extensions"><span class="header-section-number">18</span> Practice Problems and
 Extensions</h1>
 <p>The following problems are intended to turn the chapter into a
 working checklist. Each has a short analytical route and a verification
 question; none requires a production CFD package.</p>
-<h2 data-number="18.1" id="problem-1-a-tank-with-a-controlled-outlet"><span class="header-section-number">18.1</span> Problem 1: A Tank with a
+<h2 data-number="18.1" role="heading" aria-level="3" id="problem-1-a-tank-with-a-controlled-outlet"><span class="header-section-number">18.1</span> Problem 1: A Tank with a
 Controlled Outlet</h2>
 <p>A tank has cross-sectional area
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>T</mi></msub><annotation encoding="application/x-tex">A_T</annotation></semantics></math>
@@ -5035,7 +5066,7 @@ the inflow contain momentum or a scalar that makes the well-mixed
 assumption poor? If the measured depth does not follow the predicted
 exponential near equilibrium, inspect the outlet relation and the sensor
 response before adding a spatial solver.</p>
-<h2 data-number="18.2" id="problem-2-a-pressure-driven-channel"><span class="header-section-number">18.2</span> Problem 2: A Pressure-Driven
+<h2 data-number="18.2" role="heading" aria-level="3" id="problem-2-a-pressure-driven-channel"><span class="header-section-number">18.2</span> Problem 2: A Pressure-Driven
 Channel</h2>
 <p>Use the plane-channel profile to derive the flow rate, mean speed,
 wall shear, and viscous dissipation per unit width. Check that pressure
@@ -5050,7 +5081,7 @@ converge more slowly. Report both. If a code fits the mean flow rate by
 adjusting pressure gradient on every grid, the pressure result is not an
 independent convergence test; compare the profile and wall traction as
 well.</p>
-<h2 data-number="18.3" id="problem-3-a-passive-scalar-pulse"><span class="header-section-number">18.3</span> Problem 3: A Passive Scalar
+<h2 data-number="18.3" role="heading" aria-level="3" id="problem-3-a-passive-scalar-pulse"><span class="header-section-number">18.3</span> Problem 3: A Passive Scalar
 Pulse</h2>
 <p>Use the periodic finite-volume update to transport a smooth pulse.
 Measure total scalar, peak value, centroid, and error against the exact
@@ -5064,7 +5095,7 @@ error is visible. If refining the grid changes the centroid but not the
 total, transport accuracy is improving while conservation was already
 satisfied. If the peak grows or develops negative undershoots for a
 positive pulse, inspect the flux and CFL guard.</p>
-<h2 data-number="18.4" id="problem-4-a-compressible-state-check"><span class="header-section-number">18.4</span> Problem 4: A Compressible
+<h2 data-number="18.4" role="heading" aria-level="3" id="problem-4-a-compressible-state-check"><span class="header-section-number">18.4</span> Problem 4: A Compressible
 State Check</h2>
 <p>For a chosen ideal-gas state, calculate pressure, density, sound
 speed, Mach number, and isentropic stagnation ratios independently in a
@@ -5079,7 +5110,7 @@ introducing a shock solver. An extension can add a prescribed heat input
 and ask which stagnation quantity is no longer constant. The answer
 should be derived from the energy balance rather than inferred from a
 plot.</p>
-<h2 data-number="18.5" id="problem-5-a-verification-plan"><span class="header-section-number">18.5</span> Problem 5: A Verification
+<h2 data-number="18.5" role="heading" aria-level="3" id="problem-5-a-verification-plan"><span class="header-section-number">18.5</span> Problem 5: A Verification
 Plan</h2>
 <p>Write a one-page verification plan for a hypothetical two-dimensional
 incompressible solver. Include a constant-state test, a periodic
@@ -5095,7 +5126,8 @@ analytical profile, and the output changes less than the decision
 tolerance under a solver-tolerance perturbation. If a criterion fails,
 narrow the claim or repair the implementation; do not simply remove the
 test.</p>
-<h2 data-number="18.6" id="extension-paths"><span class="header-section-number">18.6</span> Extension Paths</h2>
+<h2 data-number="18.6" role="heading" aria-level="3" id="extension-paths"><span class="header-section-number">18.6</span>
+Extension Paths</h2>
 <p>Readers who need more depth can extend one mechanism at a time. Add
 variable viscosity to the channel and compare with a numerical
 quadrature or a manufactured solution. Add a thermal scalar and compare
@@ -5109,10 +5141,12 @@ extension path also makes clear what is outside this primer: turbulence
 closure, multiphase interface dynamics, reacting chemistry,
 shock-capturing design, and production-scale parallel performance each
 need their own assumptions and evidence.</p>
-<h1 data-number="19" id="final-checklist"><span class="header-section-number">19</span> Final Checklist</h1>
+<h1 data-number="19" role="heading" aria-level="2" id="final-checklist"><span class="header-section-number">19</span> Final
+Checklist</h1>
 <p>Before accepting a fluid calculation, ask the following questions and
 record the answers.</p>
-<h2 data-number="19.1" id="physical-question"><span class="header-section-number">19.1</span> Physical Question</h2>
+<h2 data-number="19.1" role="heading" aria-level="3" id="physical-question"><span class="header-section-number">19.1</span>
+Physical Question</h2>
 <ul>
 <li>Is the quantity of interest defined, including its location,
 averaging operation, units, and decision threshold?</li>
@@ -5123,7 +5157,8 @@ constitutive law appropriate to the regime?</li>
 <li>Are the mechanisms omitted from the model named, with a reason why
 they are unimportant or a plan to test them?</li>
 </ul>
-<h2 data-number="19.2" id="mathematical-model"><span class="header-section-number">19.2</span> Mathematical Model</h2>
+<h2 data-number="19.2" role="heading" aria-level="3" id="mathematical-model"><span class="header-section-number">19.2</span>
+Mathematical Model</h2>
 <ul>
 <li>Are mass, momentum, and energy balances written with one consistent
 sign and reference convention?</li>
@@ -5134,7 +5169,8 @@ conditions specified rather than left to defaults?</li>
 <li>Does the dimensionality or reduced model have a stated small
 parameter and a known limit?</li>
 </ul>
-<h2 data-number="19.3" id="numerical-evidence"><span class="header-section-number">19.3</span> Numerical Evidence</h2>
+<h2 data-number="19.3" role="heading" aria-level="3" id="numerical-evidence"><span class="header-section-number">19.3</span>
+Numerical Evidence</h2>
 <ul>
 <li>Does a constant-state, limiting-case, or symmetry test pass?</li>
 <li>Do global mass, momentum, scalar, and energy balances close at a
@@ -5147,7 +5183,8 @@ the required sensitivity?</li>
 <li>Are positive quantities such as density, pressure, temperature, and
 concentration kept within their physical domain?</li>
 </ul>
-<h2 data-number="19.4" id="physical-evidence"><span class="header-section-number">19.4</span> Physical Evidence</h2>
+<h2 data-number="19.4" role="heading" aria-level="3" id="physical-evidence"><span class="header-section-number">19.4</span>
+Physical Evidence</h2>
 <ul>
 <li>Is the comparison made with the same spatial and temporal averaging
 as the measurement?</li>
@@ -5203,7 +5240,8 @@ and more transferable than a solver-specific screenshot. The examples
 and figures in this primer are deliberately small so that the reader can
 reproduce the chain from equation to computation to interpretation
 before applying the same discipline to a larger flow study.</p>
-<h1 data-number="20" id="further-reading"><span class="header-section-number">20</span> Further Reading</h1>
+<h1 data-number="20" role="heading" aria-level="2" id="further-reading"><span class="header-section-number">20</span>
+Further Reading</h1>
 <p>The following route is deliberately task-oriented rather than a
 bibliography without guidance.</p>
 <ul>
@@ -5249,7 +5287,7 @@ cannot turn an unmeasured calculation into physical validation.</p>
   </div>
 
   <script>
-    // Robust collapsible TOC logic: wait for #TOC, add logging
+    // Progressive enhancement: all contents links are available without JavaScript.
     function firstChildByTag(parent, tagName) {
       var children = parent.children;
       for (var i = 0; i < children.length; i++) {
@@ -5279,18 +5317,27 @@ cannot turn an unmeasured calculation into physical validation.</p>
       if (toc.classList.contains('collapsible-ready')) { return true; }
       toc.classList.add('collapsible-ready');
 
+      var nextListId = 0;
       Array.prototype.forEach.call(toc.querySelectorAll('li'), function (li) {
         var depth = tocDepth(li, toc);
         li.classList.add('toc-depth-' + String(depth));
 
         var sublist = firstChildByTag(li, 'UL');
-        if (sublist && depth >= 1) {
+        var firstLink = firstChildByTag(li, 'A');
+        if (sublist && firstLink && depth >= 1) {
           var btn = document.createElement('button');
           btn.setAttribute('type', 'button');
           btn.className = 'toc-toggle';
-          btn.innerHTML = '<span class="toc-arrow">▶</span>';
-          btn.setAttribute('aria-label', 'Expand/collapse section');
-          var firstLink = firstChildByTag(li, 'A');
+          btn.innerHTML = '<span class="toc-arrow" aria-hidden="true">▶</span>';
+          // The link includes its section number, disambiguating repeated titles.
+          btn.setAttribute('aria-label', 'Toggle subsections of ' + firstLink.textContent.replace(/\s+/g, ' ').trim());
+          if (!sublist.id) {
+            var listId;
+            do { listId = 'toc-subsections-' + (++nextListId); }
+            while (document.getElementById(listId));
+            sublist.id = listId;
+          }
+          btn.setAttribute('aria-controls', sublist.id);
           li.classList.add('has-toggle');
           if (firstLink) {
             firstLink.classList.add('toc-link-inline');
@@ -5298,19 +5345,18 @@ cannot turn an unmeasured calculation into physical validation.</p>
           } else {
             li.insertBefore(btn, li.firstChild);
           }
-          sublist.style.display = 'none';
+          sublist.hidden = true;
           btn.classList.add('collapsed');
           btn.setAttribute('aria-expanded', 'false');
           btn.addEventListener('click', function () {
-            var open = sublist.style.display !== 'none';
-            sublist.style.display = open ? 'none' : '';
+            var open = !sublist.hidden;
+            sublist.hidden = open;
             btn.classList.toggle('collapsed', open);
             btn.classList.toggle('expanded', !open);
             btn.setAttribute('aria-expanded', open ? 'false' : 'true');
           });
         }
       });
-      console.log('[TOC] Collapsible TOC initialized');
       return true;
     }
 
