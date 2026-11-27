@@ -12,8 +12,9 @@ real-primer performance. Line locators refer to the tracked fixture revision.
 2. **Missing feedback for the second practice decision:** the second practice
    paragraph supplies no percentage or action and its general principle cannot
    distinguish the correct decision. `230 - 200 = 30`, `30 / 200 = 15%`, so
-   the rule does not alert. The brief promises enough feedback to check both
-   arithmetic and action. Earlier examples do not provide that case's answer.
+   the rule does not alert. The brief promises feedback for each of the two
+   practice cases sufficient to check both arithmetic and action. Earlier
+   examples do not provide that case's answer.
    This is a definite failure of the explicit promise, although a reader can
    calculate the result independently. A reviewer may describe this as one
    feedback defect rather than a separate computation error.

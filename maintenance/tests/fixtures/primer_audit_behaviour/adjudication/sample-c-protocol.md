@@ -18,9 +18,9 @@ environments. At preparation their SHA-256 hashes are:
 | Input | SHA-256 |
 |---|---|
 | `PROMPT.md` | `a1ef339f7e8e0023dcfe48c35c6347e762f034026ed0c69b356e1295c9901b4b` |
-| `brief.md` | `094ac78150bcf04de6d104cb98bbbb572c71713a2ca1179ccc0237400451f5b2` |
+| `brief.md` | `11777ae8eba71d90278f36e81386aeff90b04f6f6cd42445c3d0ba638e650b27` |
 | `primer.md` | `1c4175ed83cc7189e76c9f7acbaed9b51e2d8dbc36235f4c9eb8d7e707d061f6` |
-| `adjudication/sample-c-key.md` | `85d35035aca2cf6ddbf756116e8c9a658ffcd4ca9dd7d083c447db789c749f28` |
+| `adjudication/sample-c-key.md` | `a9b94c77d5a51a6240f3ba8c89b27bf40f7e3ccd7e79bc765775ecd96194f0c7` |
 | `.agents/skills/primer-audit/SKILL.md` at base `655fda2631a1875b5ea6ed72e0b2f3fc2a271082` | `8b0744aff0d49efead38f6bac7b3f93b0e660988cec95db28ae361d07f32d3f5` |
 
 Build two separate disposable environments from an explicit allowlist: the

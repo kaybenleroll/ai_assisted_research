@@ -13,5 +13,5 @@ specified locally. No network, software execution or external source is needed.
 | Concept ID | Route ID | Required teaching |
 |---|---|---|
 | `relative-change` | `alert-decision` | Explain the denominator, calculate a worked change, and interpret the result and a material limit. |
-| `threshold-action` | `alert-decision` | Apply the stated rule to a worked case, and give the reader a practice case with enough feedback to check both arithmetic and action. |
+| `threshold-action` | `alert-decision` | Apply the stated rule to a worked case, and give the reader feedback for each of the two practice cases sufficient to check both arithmetic and action. |
 | `symbols` | `quick-lookup` | Supply a concise symbol and rule lookup, not a second tutorial. |
