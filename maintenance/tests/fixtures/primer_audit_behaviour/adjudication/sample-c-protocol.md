@@ -4,8 +4,9 @@ This is an unexecuted protocol, not evidence that isolation, catalogue discovery
 activation, event capture, or recovery works. It supports #496. Use two fresh
 Codex CLI sessions, no delegation, one unnamed-guidance review and one manually
 directed review. This is a small behavioural probe, not a reliability estimate
-or a comparison powered to detect a difference. Stop if the controls cannot be
-established; record an unavailable test rather than weakening the blinding.
+or a comparison powered to detect a difference. If restricted egress cannot be
+established, the explicitly non-blind fallback below may be run; do not call it
+blind or claim that filesystem isolation prevents access through the network.
 
 ## Pin and isolate
 
@@ -35,6 +36,14 @@ for the CLI, without copying session history. Restrict network access to what
 the review runtime requires and prevent access to repository hosts or local
 services that could expose the key. Do not store credentials in evidence.
 
+If restricted egress is unavailable, retain the filesystem boundary and its
+canaries, and record the shared network and the key's public availability as
+uncontrolled access paths. The fallback is a non-blind trial even if no key
+access appears in the observable events. Record the failed or unimplemented
+network control and do not infer key exclusion from a lack of observed reads.
+Use the same fallback for both reviewers. This does not establish the isolated
+trial originally designed here.
+
 Before running the model, from each actual reviewer boundary, attempt to read
 the key's host path and a known host-only sentinel and confirm both fail; also
 list the environment's mounted paths and confirm the three inputs are readable
@@ -42,7 +51,8 @@ with matching hashes. Record the commands, exit status and non-sensitive output.
 Confirm that the intended native skill catalogue exposes `primer-audit` in
 both environments, using an observed catalogue or session event; merely copying
 `SKILL.md` is not catalogue evidence. If the environment cannot support this
-control, the native-selection comparison is unavailable. Do not disclose the
+control, catalogue availability is unverified; still distinguish observed file
+reads from native activation. Do not disclose the
 key or its contents to a reviewer, including in a prompt or accessible file.
 
 ## Execute and record
