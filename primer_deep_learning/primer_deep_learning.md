@@ -1414,7 +1414,7 @@ A simple image-feature classifier finds 90 of the 120 defects, raises 12 false a
 
 ### The Practical Starting Point
 
-Which leads to the single most useful piece of advice in this primer: for almost every real application, start with a pretrained model. The compute and data required to train a competitive model from scratch are out of reach for most projects, and the table above is why. The practical skill in modern deep learning is not pre-training — it is fine-tuning a pretrained model on your task and, increasingly, prompting one well. Train from scratch only when three things are all true: your domain is genuinely out-of-distribution from every available pretrained model, so their learned features will not transfer; you actually have the data and the compute to do it; and you have a specific, articulable reason to believe pretrained features will fail you. If you cannot make all three arguments, fine-tune.
+A practical starting point is to compare a simple task-specific baseline with an appropriate pretrained model before committing to a costly training run. Measure zero-shot or prompted performance where applicable, then test feature extraction or fine-tuning against the same held-out data and deployment constraints. Check that the model licence, data handling and intended domain are acceptable. Training from scratch may be justified by domain mismatch, control or other requirements, but test those reasons against available baselines and budget for the data and compute. If no candidate meets the quality or operational requirement, improve the data or revisit the problem rather than assuming fine-tuning must succeed.
 
 ## Further Reading
 
