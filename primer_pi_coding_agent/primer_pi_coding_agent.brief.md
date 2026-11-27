@@ -2,7 +2,7 @@
 
 - Issue and milestone: #442, current-documentation refresh, after Codex #441.
 - Brief revision: pi-current-docs-v1
-- Source revision: 629d566
+- Source revision: 6793909
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.brief.md
 - Reader: experienced Claude Code user evaluating, configuring and supervising Pi for a bounded repository task.
 - Prerequisites: terminal, Git, repository instructions and basic Claude Code concepts; TypeScript reading helpful for extension route.

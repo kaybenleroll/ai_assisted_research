@@ -3,8 +3,8 @@
 - Issue and milestone: #442; current-documentation refresh after Codex #441.
 - Audit revision: pi-first-run-473-v1.
 - Audit schema: 2
-- Source revision: 629d566
-- Reviewed revision: 629d566
+- Source revision: 6793909
+- Reviewed revision: 6793909
 - Source SHA256: 2da79108a2f215417efac09acdb315d2f0460efb96885aa8b218d44984c448c2.
 - Tracked path: primer_pi_coding_agent/primer_pi_coding_agent.audit.md
 - Starting branch: docs/442-pi-current-refresh.
