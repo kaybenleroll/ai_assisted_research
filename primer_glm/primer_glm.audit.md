@@ -332,3 +332,21 @@ At `344efdd` (source SHA-256 `df737b7e02b6d00b94c58edff15cd67c21e357bbb01af1067c
 The pinned `just full` build, `just render-qa primer_glm`, `just examples glm`, `just lint-changed` (including offline links), and `just check-primer-evidence primer_glm/primer_glm.brief.md primer_glm/primer_glm.audit.md` passed for this correction. Pandoc 3.11 used image `localhost/primers-pandoc@sha256:239428f1d61de725be479c72ada0bbe146a313791ee2d68333114b6c623ad771`. The build emitted Pandoc maths-option deprecation warnings; lint retained existing advisory findings. Render QA checked all three HTML variants and the 106-page PDF. The author visually inspected PDF pages 1, 11, 18–19, 55, 65–67 and 74, including both sides of the affected page breaks; text, equations, code, table and figure were legible and continuous. This is a sample, not a full visual review. The PDF is untagged; interactive keyboard, no-JavaScript, accessibility-tree and screen-reader checks were not performed. Configured example scripts passed; the changed inline hurdle listing was not independently executed by that runner, and the local rename was checked against its unchanged likelihood expression.
 
 An independent delta reviewer inspected the correction and its evidence and identified stale readiness and CI claims in the audit and brief. That follow-up corrected those claims; CI was then unperformed. This was a scoped delta review, not a fresh whole-document technical or release audit.
+
+
+## HTML maths fallback check, 27 November 2026
+
+Issue #509 changes shared navigation and regenerates the three GLM HTML files
+from source revision `0ff4b2599d01cfd6ddff260f98fbb5bfba954d32` with the
+modified shared template and recipes in this change. `just html html-variants`
+used `localhost/primers-pandoc:latest` (image ID `61d7d31cd74f`, Pandoc 3.11).
+`just render-qa primer_glm` passed automated HTML and asset checks; its PDF
+candidates on pages 1, 74, 55 and 11 were visually inspected, with no defect
+seen. The PDF was unchanged and remains untagged. The focused fallback test,
+`just check-variants`, and `just lint-links primer_glm/primer_glm.html` passed.
+
+This is an output check, not a renewed content audit. No-JavaScript browser,
+keyboard, accessibility-tree and screen-reader checks were not performed: the
+available browser runtime reported no connected browser. These interactive
+checks remain required for this navigation change before release. Existing
+outputs for other primers do not gain the fallback until rebuilt.

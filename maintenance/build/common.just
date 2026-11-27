@@ -44,7 +44,7 @@ html:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o {{SOURCE_MD_STEM}}.html \
-    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} \
+    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} {{if HTML_EXTRA =~ "mathrenderer=mathjax" { "--metadata mathmlfallback=true" } else { "" } }} --metadata mathmlhref="{{SOURCE_MD_STEM}}.mathml.html" \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}" \
@@ -86,7 +86,7 @@ html-mathjax: _require-mathvariants
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o {{SOURCE_MD_STEM}}.mathjax.html \
-    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} --mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true \
+    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} --mathjax --metadata mathrenderer=mathjax --metadata mathvariants=true --metadata mathmlfallback=true --metadata mathmlhref="{{SOURCE_MD_STEM}}.mathml.html" \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}" \
