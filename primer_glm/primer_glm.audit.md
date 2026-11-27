@@ -358,3 +358,10 @@ were present. This is a targeted check, not a review of broader navigation.
 A screen-reader check was not performed and remains required as applicable
 before release. This is an output check, not a renewed content audit. Existing
 outputs for other primers do not gain the fallback until rebuilt.
+
+A subsequent recipe correction for primers that use the implicit MathJax
+default did not change GLM's primary HTML: `just html` reproduced the
+browser-reviewed file byte for byte. A container render of fluid mechanics
+confirmed the link and was discarded after inspection; existing published
+fluid mechanics outputs were not changed. `just check-mathml-fallback` now
+runs from `just check` and covers both explicit and implicit defaults.

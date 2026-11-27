@@ -44,7 +44,7 @@ html:
     -w "/repo/{{PROJECT_DIR}}" \
     {{IMAGE}} \
     {{SOURCE_MD}} -o {{SOURCE_MD_STEM}}.html \
-    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} {{if HTML_EXTRA =~ "mathrenderer=mathjax" { "--metadata mathmlfallback=true" } else { "" } }} --metadata mathmlhref="{{SOURCE_MD_STEM}}.mathml.html" \
+    {{HTML_FLAGS_BASE}} {{HTML_EXTRA}} {{if HTML_EXTRA =~ "mathvariants=true" { if HTML_EXTRA =~ "mathrenderer=mathml" { "" } else { "--metadata mathmlfallback=true" } } else { "" } }} --metadata mathmlhref="{{SOURCE_MD_STEM}}.mathml.html" \
     --template="{{TEMPLATE}}" \
     --metadata title="{{TITLE}}" \
     --metadata author="{{AUTHOR}}" \
