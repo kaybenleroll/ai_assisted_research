@@ -345,8 +345,16 @@ candidates on pages 1, 74, 55 and 11 were visually inspected, with no defect
 seen. The PDF was unchanged and remains untagged. The focused fallback test,
 `just check-variants`, and `just lint-links primer_glm/primer_glm.html` passed.
 
-This is an output check, not a renewed content audit. No-JavaScript browser,
-keyboard, accessibility-tree and screen-reader checks were not performed: the
-available browser runtime reported no connected browser. These interactive
-checks remain required for this navigation change before release. Existing
+An independent reviewer tested commit `e185ac1` on the local GLM HTML file
+using headless Google Chrome 158.0.8127.88 and CDP
+`Emulation.setScriptExecutionDisabled`. With script
+execution disabled before loading, the MathML link was visible, targeted the
+corresponding file and appeared in the accessibility tree with the name
+“Read the MathML version”; the renderer button was hidden. Tab focused the skip
+link and then the MathML link; Enter opened the MathML output, which contained
+781 native maths elements. With scripts enabled, the fallback was absent, the
+visible switch was labelled “Switch to MathML”, and 781 MathJax containers
+were present. This is a targeted check, not a review of broader navigation.
+A screen-reader check was not performed and remains required as applicable
+before release. This is an output check, not a renewed content audit. Existing
 outputs for other primers do not gain the fallback until rebuilt.
