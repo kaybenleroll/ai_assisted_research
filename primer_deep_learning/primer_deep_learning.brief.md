@@ -5,7 +5,7 @@
 - Source revision: `8ca11ff954fe4499d4437413878c174700d33ab4`
 - Historical baseline: `bda64e7666f2c228de6f12b87c9beeaa36831076`
 - Reviewed revision: `8ca11ff954fe4499d4437413878c174700d33ab4`
-- Tracked path: `primer_deep_learning/issue-482-brief.md`.
+- Tracked path: `primer_deep_learning/primer_deep_learning.brief.md`.
 - Reader: A practitioner familiar with classical ML but new to neural networks.
 - Prerequisites: Classical ML, basic matrix multiplication and derivatives.
 - Problem and motivation: Connect architectural mechanisms to training, generation and practical model choice without treating them as black boxes.

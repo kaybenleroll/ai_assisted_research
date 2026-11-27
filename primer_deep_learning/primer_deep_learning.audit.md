@@ -4,13 +4,13 @@
 - Audit revision: `482-audit-draft-v1`.
 - Audit schema: 2
 - Source revision: `8ca11ff954fe4499d4437413878c174700d33ab4`
-- Tracked path: `primer_deep_learning/issue-482-audit.md`.
+- Tracked path: `primer_deep_learning/primer_deep_learning.audit.md`.
 - Starting branch: `docs/482-deep-learning-audit`.
 - Reviewer(s): Codex.
 - Date: 2026-11-27.
 - Reviewed revision: `8ca11ff954fe4499d4437413878c174700d33ab4`
 - Historical review: the full continuous pre-revision read was at `bda64e7666f2c228de6f12b87c9beeaa36831076`; a subsequent continuous reread covered lines 1–1424 at `538fa40`, with lines 1–184 carried from the identical pre-correction text and lines 185–200 reread after that correction; the changed passages at the current revision have been sampled but have not received a complete audit.
-- Brief reviewed: `primer_deep_learning/issue-482-brief.md`, `482-brief-v1`.
+- Brief reviewed: `primer_deep_learning/primer_deep_learning.brief.md`, `482-brief-v1`.
 - Readiness decision: not-ready
 - Review boundary: Full source read and provisional outline decisions at the pre-revision revision; changed passages and numeric arithmetic sampled after revision. Source claims, all route transitions, and post-change outline and depth gates remain incomplete.
 - Teaching-case contract: Separate mathematical worked threads and an explicitly illustrative decision case are planned in the brief.
@@ -63,7 +63,7 @@ The following placeholders mark unreviewed transitions, not verified teaching. C
 | diffusion | score | clean sample to noise estimate | x0 and noise at lines 1126–1163 | construct xt and predict sampled noise | per-image coefficients and noise estimate | score is conditional expected noise scaled at line 1175 | finite network approximates optimum | executed | Broadcast only executed; score derivation and full training transition not independently reproduced. |
 | selection | model_choice | inspection data to model comparison | 2,000 labelled images and explicit thresholds at line 1411 | compare validation recall, false alarms and target-device latency | 75%, 95% and 90% recalls with stated constraints at line 1413 | compressed candidate meets thresholds provisionally | hypothetical results and shift risk; test set remains untouched | illustrative | Cost table and categorical recommendations elsewhere remain unverified. |
 
-## Verification and readiness
+## Release readiness checklist
 
 At `8ca11ff`, pinned `just deep-learning-all`, `just render-qa primer_deep_learning`, targeted offline links, spelling, Markdown and prose checks completed on the changed inputs. Prose reports five existing advisories. The two-layer update was independently checked by finite differences; scalar recurrence, gate and attention arithmetic were independently recalculated; a non-symmetric Jacobian finite-difference counterexample is documented in the proposal. PDF visual samples were taken on an immediately preceding build, including pages 1, 14, 34, 41, 46, 54–56, 69 and 79–80; after the notation move page 5 was rechecked, and after the later changes pages 19–20 and 57–62 were rechecked, including both sides of affected page breaks; the universal approximation correction was checked on preceding-build pages 14–16. At `8ca11ff`, changed regions and page breaks were inspected on pages 16–18, 44–45, 49–52 and 63–65; after tokenizer changes pages 47–49 were inspected; the subsequent scenario was inspected on pages 78–80; the network and gated-cell additions were inspected on pages 18–19 and 36–37; the attention and diagnostics passages were inspected on pages 8, 16, 25, 35, 39–41 and 60–62; after the WordPiece change pages 47–49 were inspected. These are targeted samples, not an exhaustive inspection of the final 80-page PDF. Other pagination on the final build must be rechecked against the changed source. PDF metadata reports `Tagged: no`.
 
@@ -71,4 +71,4 @@ The browser service returned no available browser during the parent work; keyboa
 
 - Structural gate: **not-checked**
 - Content gate: **fail** (primary routes remain not-checked).
-- Release readiness: **not-ready**.
+- Release readiness: **not-ready**
