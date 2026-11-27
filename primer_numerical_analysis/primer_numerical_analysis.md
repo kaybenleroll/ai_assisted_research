@@ -524,49 +524,60 @@ All three converge to approximately $(1.932, 0.518)$ and its symmetric counterpa
 
 This function has a root near $0.739085...$
 
+The bisection examples accept an endpoint root and otherwise require a finite, ordered bracket with opposite signs. They stop when the bracket gives an absolute position bound, or when an exact zero is found; a small residual alone does not give that bound. Newton checks both step and residual, with an exact zero as a special case. Both methods report non-convergence at the iteration cap. These teaching implementations assume scalar real-valued functions; continuity is needed for the bisection guarantee.
+
 **Python:**
 ```python
-from math import cos, sin
+from math import cos, sin, isfinite
 
 
 def bisection(f, a, b, tol=1e-12, max_iter=200):
+    if not (isfinite(a) and isfinite(b) and a < b and
+            isfinite(tol) and tol > 0 and isinstance(max_iter, int) and max_iter > 0):
+        raise ValueError("invalid bracket, tolerance or iteration limit")
     fa, fb = f(a), f(b)
-    if fa * fb > 0:
-        raise ValueError("f(a) and f(b) must have opposite signs")
-
+    if not (isfinite(fa) and isfinite(fb)):
+        raise ValueError("non-finite function value")
+    if fa == 0: return a
+    if fb == 0: return b
+    if (fa < 0) == (fb < 0):
+        raise ValueError("endpoints must have opposite signs")
     for _ in range(max_iter):
-        c = 0.5 * (a + b)
+        c = a / 2 + b / 2
         fc = f(c)
-
-        if abs(fc) < tol or 0.5 * (b - a) < tol:
-            return c
-
-        if fa * fc < 0:
-            b, fb = c, fc
+        if not isfinite(fc): raise ValueError("non-finite function value")
+        if fc == 0 or b / 2 - a / 2 <= tol: return c
+        if c == a or c == b: raise RuntimeError("bisection stagnated")
+        if (fa < 0) != (fc < 0):
+            b = c
         else:
             a, fa = c, fc
-
-    return 0.5 * (a + b)
+    raise RuntimeError("bisection did not converge")
 
 
 def newton(f, df, x0, tol=1e-12, max_iter=50):
+    if not (isfinite(x0) and isfinite(tol) and tol > 0 and
+            isinstance(max_iter, int) and max_iter > 0):
+        raise ValueError("invalid starting point, tolerance or iteration limit")
     x = x0
     for _ in range(max_iter):
         fx = f(x)
+        if not isfinite(fx): raise ValueError("non-finite function value")
+        if fx == 0: return x
         dfx = df(x)
-        if dfx == 0:
-            raise ZeroDivisionError("Derivative became zero")
-
+        if not isfinite(dfx) or dfx == 0: raise ValueError("invalid derivative")
         x_new = x - fx / dfx
-        if abs(x_new - x) < tol * (1 + abs(x_new)) and abs(f(x_new)) < tol:
+        if not isfinite(x_new): raise ValueError("non-finite iterate")
+        f_new = f(x_new)
+        if not isfinite(f_new): raise ValueError("non-finite function value")
+        if f_new == 0 or (abs(x_new - x) < tol * (1 + abs(x_new)) and abs(f_new) < tol):
             return x_new
         x = x_new
-    return x
+    raise RuntimeError("Newton's method did not converge")
 
 
 f = lambda x: cos(x) - x
 df = lambda x: -sin(x) - 1
-
 print("bisection:", bisection(f, 0.0, 1.0))
 print("newton:", newton(f, df, 0.5))
 ```
@@ -574,108 +585,104 @@ print("newton:", newton(f, df, 0.5))
 **R:**
 ```r
 bisection <- function(f, a, b, tol = 1e-12, max_iter = 200) {
-  fa <- f(a)
-  fb <- f(b)
-
-  if (fa * fb > 0) {
-    stop("f(a) and f(b) must have opposite signs")
-  }
-
+  if (!is.finite(a) || !is.finite(b) || a >= b || !is.finite(tol) || tol <= 0 ||
+      !is.finite(max_iter) || max_iter < 1 || max_iter != floor(max_iter))
+    stop("invalid bracket, tolerance or iteration limit")
+  fa <- f(a); fb <- f(b)
+  if (!is.finite(fa) || !is.finite(fb)) stop("non-finite function value")
+  if (fa == 0) return(a)
+  if (fb == 0) return(b)
+  if ((fa < 0) == (fb < 0)) stop("endpoints must have opposite signs")
   for (i in seq_len(max_iter)) {
-    c <- 0.5 * (a + b)
-    fc <- f(c)
-
-    if (abs(fc) < tol || 0.5 * (b - a) < tol) {
-      return(c)
-    }
-
-    if (fa * fc < 0) {
-      b <- c
-      fb <- fc
-    } else {
-      a <- c
-      fa <- fc
-    }
+    mid <- a / 2 + b / 2
+    fm <- f(mid)
+    if (!is.finite(fm)) stop("non-finite function value")
+    if (fm == 0 || b / 2 - a / 2 <= tol) return(mid)
+    if (mid == a || mid == b) stop("bisection stagnated")
+    if ((fa < 0) != (fm < 0)) b <- mid else { a <- mid; fa <- fm }
   }
-
-  0.5 * (a + b)
+  stop("bisection did not converge")
 }
 
 newton <- function(f, df, x0, tol = 1e-12, max_iter = 50) {
+  if (!is.finite(x0) || !is.finite(tol) || tol <= 0 || !is.finite(max_iter) ||
+      max_iter < 1 || max_iter != floor(max_iter))
+    stop("invalid starting point, tolerance or iteration limit")
   x <- x0
-
   for (i in seq_len(max_iter)) {
     fx <- f(x)
+    if (!is.finite(fx)) stop("non-finite function value")
+    if (fx == 0) return(x)
     dfx <- df(x)
-
-    if (dfx == 0) {
-      stop("Derivative became zero")
-    }
-
+    if (!is.finite(dfx) || dfx == 0) stop("invalid derivative")
     x_new <- x - fx / dfx
-
-    if (abs(x_new - x) < tol * (1 + abs(x_new)) && abs(f(x_new)) < tol) {
+    if (!is.finite(x_new)) stop("non-finite iterate")
+    f_new <- f(x_new)
+    if (!is.finite(f_new)) stop("non-finite function value")
+    if (f_new == 0 || (abs(x_new - x) < tol * (1 + abs(x_new)) && abs(f_new) < tol))
       return(x_new)
-    }
-
     x <- x_new
   }
-
-  x
+  stop("Newton's method did not converge")
 }
 
 f <- function(x) cos(x) - x
 df <- function(x) -sin(x) - 1
-
 cat("bisection:", bisection(f, 0, 1), "\n")
 cat("newton:", newton(f, df, 0.5), "\n")
+```
+
+```{=latex}
+\newpage
 ```
 
 **Julia:**
 ```julia
 function bisection(f, a, b; tol=1e-12, max_iter=200)
+    (isfinite(a) && isfinite(b) && a < b && isfinite(tol) && tol > 0 &&
+     max_iter isa Integer && max_iter > 0) || error("invalid bracket, tolerance or iteration limit")
     fa, fb = f(a), f(b)
-    fa * fb > 0 && error("f(a) and f(b) must have opposite signs")
-
+    (isfinite(fa) && isfinite(fb)) || error("non-finite function value")
+    fa == 0 && return a
+    fb == 0 && return b
+    (fa < 0) != (fb < 0) || error("endpoints must have opposite signs")
     for _ in 1:max_iter
-        c = (a + b) / 2
-        fc = f(c)
-
-        if abs(fc) < tol || (b - a) / 2 < tol
-            return c
-        end
-
-        if fa * fc < 0
-            b, fb = c, fc
+        mid = a / 2 + b / 2
+        fm = f(mid)
+        isfinite(fm) || error("non-finite function value")
+        (fm == 0 || b / 2 - a / 2 <= tol) && return mid
+        (mid == a || mid == b) && error("bisection stagnated")
+        if (fa < 0) != (fm < 0)
+            b = mid
         else
-            a, fa = c, fc
+            a, fa = mid, fm
         end
     end
-
-    return (a + b) / 2
+    error("bisection did not converge")
 end
 
 function newton(f, df, x0; tol=1e-12, max_iter=50)
+    (isfinite(x0) && isfinite(tol) && tol > 0 && max_iter isa Integer && max_iter > 0) ||
+        error("invalid starting point, tolerance or iteration limit")
     x = x0
     for _ in 1:max_iter
         fx = f(x)
+        isfinite(fx) || error("non-finite function value")
+        fx == 0 && return x
         dfx = df(x)
-        dfx == 0 && error("Derivative became zero")
-
+        (isfinite(dfx) && dfx != 0) || error("invalid derivative")
         x_new = x - fx / dfx
-
-        if abs(x_new - x) < tol * (1 + abs(x_new)) && abs(f(x_new)) < tol
-            return x_new
-        end
-
+        isfinite(x_new) || error("non-finite iterate")
+        f_new = f(x_new)
+        isfinite(f_new) || error("non-finite function value")
+        (f_new == 0 || (abs(x_new - x) < tol * (1 + abs(x_new)) && abs(f_new) < tol)) && return x_new
         x = x_new
     end
-    return x
+    error("Newton's method did not converge")
 end
 
 f(x) = cos(x) - x
 df(x) = -sin(x) - 1
-
 println("bisection: ", bisection(f, 0.0, 1.0))
 println("newton: ", newton(f, df, 0.5))
 ```
@@ -2556,67 +2563,36 @@ Julia was designed so readable numerical code can still run fast. Its just-in-ti
 
 Seeing the same algorithm in all three languages exposes something that is easy to miss when you work in just one: the underlying numerical method is language-agnostic, but the shape of the code that implements it reveals what each language values. The algorithm here is bisection — simple enough that no library machinery is needed, but concrete enough that idiomatic choices are visible.
 
+The following snippets reuse `bisection` from the shared root-finding example above; run that definition first. The library calls provide production alternatives.
+
 **Python:**
 
 ```python
-# Explicit loop
-def bisect(f, a, b, tol=1e-10):
-    while (b - a) / 2 > tol:
-        mid = (a + b) / 2
-        if f(mid) == 0:
-            return mid
-        elif f(a) * f(mid) < 0:
-            b = mid
-        else:
-            a = mid
-    return (a + b) / 2
-
-# Idiomatic one-liner
+root_loop = bisection(lambda x: x**3 - 2, 0.0, 2.0)
 from scipy.optimize import brentq
-root = brentq(lambda x: x**3 - 2, 0, 2)
+root_library = brentq(lambda x: x**3 - 2, 0, 2)
 ```
 
-The `brentq` one-liner is how you would actually solve this in production Python. The loop version demonstrates that Python has no built-in type constraints — `f` is any callable, `a` and `b` are any comparable values, and the function applies to floats, complex numbers, or anything else that supports the arithmetic without any declaration change.
+Python accepts a callable without a type declaration; this implementation assumes real scalar values, since its bracket must be ordered.
 
 **R:**
 
 ```r
-# Explicit loop
-bisect <- function(f, a, b, tol = 1e-10) {
-  while ((b - a) / 2 > tol) {
-    mid <- (a + b) / 2
-    if (f(mid) == 0) return(mid)
-    else if (f(a) * f(mid) < 0) b <- mid
-    else a <- mid
-  }
-  (a + b) / 2
-}
-
-# Idiomatic one-liner
-root <- uniroot(function(x) x^3 - 2, c(0, 2))$root
+root_loop <- bisection(function(x) x^3 - 2, 0, 2)
+root_library <- uniroot(function(x) x^3 - 2, c(0, 2))$root
 ```
 
-Notice that `uniroot` returns a list, not a scalar — you extract `$root` explicitly. R functions almost always return structured objects, and this is a deliberate design choice: the return value carries convergence diagnostics alongside the answer, so you pay attention to what the solver actually found. The `<-` assignment operator is functionally equivalent to `=` here, but it is a strong community norm and you will see it in all idiomatic R code.
+`uniroot` returns a list rather than a scalar, so `$root` extracts the root. Its other fields carry convergence diagnostics.
 
 **Julia:**
 
 ```julia
-# Explicit loop
-function bisect(f, a, b, tol=1e-10)
-    while (b - a) / 2 > tol
-        mid = (a + b) / 2
-        f(mid) == 0 && return mid
-        f(a) * f(mid) < 0 ? (b = mid) : (a = mid)
-    end
-    return (a + b) / 2
-end
-
-# Idiomatic one-liner
+root_loop = bisection(x -> x^3 - 2, 0.0, 2.0)
 using Roots
-root = find_zero(x -> x^3 - 2, (0.0, 2.0))
+root_library = find_zero(x -> x^3 - 2, (0.0, 2.0))
 ```
 
-The explicit loop in Julia runs at speeds comparable to a C implementation — the JIT compiler generates native code for this kind of type-stable, loop-heavy arithmetic. The `&&` short-circuit and the ternary expression are idiomatic Julia: they are not clever tricks to avoid loop overhead (there is no such overhead), they are just compact ways to express conditional flow that the compiler handles efficiently. `find_zero` from Roots.jl dispatches to Brent's method when given an interval, giving the same robustness as `brentq` with Julia's multiple-dispatch design.
+Julia can compile the explicit loop in `bisection` to native code. The interval-based `find_zero` call provides a library solver with a bracketing starting point.
 
 ---
 
