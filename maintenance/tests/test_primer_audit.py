@@ -365,6 +365,12 @@ class PrimerAuditTests(unittest.TestCase):
             root = Path(temporary) / "checkout"
             subprocess.run(["git", "clone", "--quiet", "--shared", str(repository), str(root)], check=True)
             self.git_repo(root)
+            # Use the fixed historical Pi snapshot, even after the live audit migrates.
+            legacy_revision = "d3f76649bfe51d5465fd999c49c45ac74ad98fe8"
+            subprocess.run(["git", "checkout", legacy_revision, "--", "primer_pi_coding_agent"],
+                           cwd=root, check=True)
+            subprocess.run(["git", "commit", "--allow-empty", "-qm", "historical Pi fixture"],
+                           cwd=root, check=True)
             checker = root / "maintenance/scripts/check/primer_audit.py"
             shutil.copyfile(SCRIPT, checker)
             registry = root / "maintenance/docs/primer-audit-legacy.json"
