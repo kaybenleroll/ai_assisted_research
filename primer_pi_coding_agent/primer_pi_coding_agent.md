@@ -129,19 +129,23 @@ The commands above target macOS and Linux. Pi also documents [native Windows and
 The first session should prove the complete control loop, not demonstrate how much work Pi can do unattended. Use a disposable project:
 
 ```bash
-mkdir -p ~/tmp/pi-first-run && cd ~/tmp/pi-first-run
+project_dir=$(mktemp -d "${TMPDIR:-/tmp}/pi-first-run.XXXXXX")
+cd "$project_dir"
 git init
 printf '# Pi test project\n' > README.md
+git add README.md
+git -c user.name="Pi Example" -c user.email="pi-example@example.invalid" \
+  commit -m "Initial README"
 pi --version
 ```
 
-Then work through this sequence:
+The initial commit supplies a baseline for the diff. The one-command identity applies only to that commit and does not change your Git configuration. Then work through this sequence:
 
 1. **Authenticate and choose one model.** Use `/login` or one environment variable (see "Hosted authentication" in the next section), then `/model`. Start with one tool-capable hosted model or one already-tested local model. Do not add routing or fallbacks before the basic loop works.
 2. **Orient with restricted tools.** Start Pi with `pi --no-mcp --tools read,grep,find,ls`, then send the prompt below. This removes editing and shell tools and disables built-in MCP for the run; `--tools` alone now keeps MCP tools unless it explicitly filters them. Loaded extensions still execute with your permissions, so this is a tool-selection check, not operating-system containment.
 3. **Check what Pi loaded.** The working directory is the project: Pi discovers instructions and configuration from it and groups sessions by it. The startup header lists the context files and skills that loaded. If the folder holds `.pi/` resources or `.agents/skills`, Pi first asks whether to trust the project (see "Safety and containment").
-4. **Make one supervised change.** Restart without `--tools`. Choose a small documentation or test change. Ask Pi to explain its plan, edit only the named files, run one check, and stop.
-5. **Inspect independently.** Run `git status`, `git diff`, and the project's check command yourself. Keep or revert the change on evidence, not on Pi's confidence.
+4. **Make one supervised change.** Restart without `--tools`. Choose a small documentation or test change. Ask Pi to explain its plan, edit only the named files, make no commit, run one check, and stop.
+5. **Inspect independently.** Run `git log --oneline`, `git status --short`, and `git diff HEAD -- README.md` yourself; confirm the initial commit is still `HEAD`. The diff compares the tracked README with the initial commit, including staged and unstaged edits. Inspect any untracked files listed by status separately: Git diffs do not show their contents. Run the project's check command yourself if the change has one. Keep or revert the change on evidence, not on Pi's confidence.
 
 ```text
 Inspect this repository. Report the files, likely project type,

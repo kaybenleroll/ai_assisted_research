@@ -225,3 +225,9 @@ Content gate **pass** and release readiness **ready for PR review**, without a l
 The pipeline rebuild changed PDF binary bytes; pinned Poppler extraction compared byte-for-byte identical to the visually reviewed final PDF text (`cmp pi-final-pdf.txt pi-pipeline-pdf.txt`: pass). Source and HTML were unchanged. This is text-equivalence evidence, not a claim of binary or pixel identity. Final brief/audit schema, Git-backed binding/locator validation and `git diff --check` passed again after the audit results were recorded.
 
 Pre-merge editorial review, 19 November 2026: source unchanged from c193c88; independent reviewer confirmed no substantive blocker or execution overclaim. Reconciled stale pending-check wording with completed coordinator verification; no concept, route, tier, source claim or output changed.
+
+## Issue #473: first-run revision review
+
+The affected source is bound by SHA-256 `aa9d213fd1787ea29e248c28998095dae9db76ea1ab8fee3f4f81b4dfb2b1340`; the earlier commit-bound whole-document audit and its locators remain historical. The changed `first-run` / `harness-control` route at source lines 127–154 now creates a unique disposable repository, commits the README with a command-local identity, asks Pi not to commit, checks that the baseline remains HEAD, compares the tracked file with HEAD, and calls out separate inspection of untracked files. This repairs the claimed independent evidence without changing the route's illustrative status or asserting a Pi/provider run.
+
+A disposable Git fixture executed the documented initialisation and commit, appended the example sentence, and added an untracked file. `git status --short` showed both; `git diff HEAD -- README.md` showed the added sentence both before and after staging it. No Pi or provider was run. The review is limited to this changed route and its dependent interpretation; the previous audit is not a fresh whole-document audit.
