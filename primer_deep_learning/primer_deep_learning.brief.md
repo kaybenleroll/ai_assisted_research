@@ -2,9 +2,9 @@
 
 - Issue and milestone: #482; depends on #476 and its draft PR #516.
 - Brief revision: `482-brief-v1`.
-- Source revision: `8ca11ff954fe4499d4437413878c174700d33ab4`
+- Source revision: `26ae9ed25c29d09280b26efc9ebb3925439ce796`
 - Historical baseline: `bda64e7666f2c228de6f12b87c9beeaa36831076`
-- Reviewed revision: `8ca11ff954fe4499d4437413878c174700d33ab4`
+- Reviewed revision: `26ae9ed25c29d09280b26efc9ebb3925439ce796`
 - Tracked path: `primer_deep_learning/primer_deep_learning.brief.md`.
 - Reader: A practitioner familiar with classical ML but new to neural networks.
 - Prerequisites: Classical ML, basic matrix multiplication and derivatives.
