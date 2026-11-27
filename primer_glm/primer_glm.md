@@ -255,7 +255,7 @@ The intercept's exponent is a rate for the reference habitat in the chosen unit;
 
 Suppose independent counts $y_i$ are observed at equal known exposure and the model assigns all of them the same Poisson mean $\mu$. Leaving the factorial terms visible, the log likelihood is $\sum_i\{y_i\log\mu-\mu-\log(y_i!)\}$. Its derivative is $\sum_i y_i/\mu-n$, so an interior maximum has $\widehat\mu=\sum_i y_i/n$. Thus the sample mean is not an arbitrary summary here: it is the maximum-likelihood estimate under this particular model. If all counts are zero, the maximum occurs at the boundary $\mu=0$; a finite log-mean parameter does not attain it, although it can approach it.
 
-With unequal known exposure, the intercept-only rate estimate is total events divided by total exposure. For instance, counts 1 and 3 over one and three hours give a fitted rate of one event per hour, not the unweighted mean of the two observed hourly rates by accident or convention. With covariates the fitted rate changes across observations, and the corresponding coefficient score must be solved jointly. If effort is unknown, replacing it with an assumed constant can confound rate with time spent looking.
+With unequal known exposure, suppose each independent count has Poisson mean $e_i\lambda$, where $e_i$ is its known exposure and $\lambda$ is a common rate. The likelihood score for $\lambda$ gives the estimate total events divided by total exposure. For counts 1 and 6 over one and three hours, this is $(1+6)/(1+3)=1.75$ events per hour. The observed hourly rates are 1 and 2, whose unweighted mean is 1.5. The pooled estimate weights each observed rate by its exposure: the longer visit contributes three times as much time as the shorter one. It estimates the common rate under the model, rather than treating the two visit rates as equally weighted observations. With covariates the fitted rate changes across observations, and the corresponding coefficient score must be solved jointly. If effort is unknown, replacing it with an assumed constant can confound rate with time spent looking.
 
 A Poisson model can arise from a constant-rate process with independent increments, but ecological counts may violate these conditions through aggregation, dependence, varying detection, or unobserved habitat differences. A good fit to the average does not prove the underlying event process.
 
@@ -1005,7 +1005,7 @@ For a different hurdle example, keep $\mu=2$ and set $q=0.4$. The probability of
 
 A practical fit must evaluate log probabilities stably, constrain probabilities and dispersion, and inspect convergence. At a zero, evaluate the log of a sum of component probabilities with stable log-sum-exp arithmetic; at small $\mu$, compute $\log(1-e^{-\mu})$ using a numerically stable function such as `log(-expm1(-mu))`. Weak separation of mixture components may give flat likelihoods, extreme coefficients, boundary estimates or singular Hessians. Starting values, multiple plausible initialisations, profile intervals or simulation can expose instability. A numerical optimum is not proof of identification; neither a single zero statistic nor a successful convergence flag establishes the assumed process.
 
-The following bounded intercept-only fit makes the observable calculation explicit. It uses optimised probabilities on transformed scales; it is an educational likelihood, not a production fitting routine. In particular, the simple probability arithmetic can be unstable for extreme parameters.
+The following bounded intercept-only fit makes the observable calculation explicit. It uses optimised probabilities on transformed scales; in the hurdle code `p_zero` is $P(Y=0)=1-q$, using the $q$ defined above. It is an educational likelihood, not a production fitting routine. In particular, the simple probability arithmetic can be unstable for extreme parameters.
 
 ```{#cb16 .r}
 # Intercept-only mixture and hurdle likelihoods.
@@ -1013,9 +1013,9 @@ set.seed(468); raw <- rpois(300,2); z <- ifelse(runif(300)<.3,0,raw)
 zip_obj <- function(par) {pi<-plogis(par[1]); mu<-exp(par[2]);
   -sum(ifelse(z==0,log(pi+(1-pi)*exp(-mu)),
               log1p(-pi)+dpois(z,mu,log=TRUE)))}
-hur_obj <- function(par) {q<-plogis(par[1]); mu<-exp(par[2]);
-  -sum(ifelse(z==0,log(q),
-              log1p(-q)+dpois(z,mu,log=TRUE)-log1p(-exp(-mu))))}
+hur_obj <- function(par) {p_zero<-plogis(par[1]); mu<-exp(par[2]);
+  -sum(ifelse(z==0,log(p_zero),
+              log1p(-p_zero)+dpois(z,mu,log=TRUE)-log1p(-exp(-mu))))}
 zip <- optim(c(-1,.5),zip_obj,method='BFGS'); hur <- optim(c(-1,.5),hur_obj,method='BFGS')
 cat('zi_convergence',zip$convergence,'zero_prob',
     plogis(zip$par[1])+(1-plogis(zip$par[1]))*exp(-exp(zip$par[2])),
