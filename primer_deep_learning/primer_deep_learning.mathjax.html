@@ -2056,18 +2056,14 @@ to a standard transformer (the architecture covered in full in §7).
 There is no built-in notion of locality or translation equivariance; the
 model has to learn spatial relationships from data through
 attention.</p>
-<p>That trade-off has a clear shape. Convolution’s hard-wired
-assumptions about images are an <em>inductive bias</em>, and inductive
-bias is most valuable exactly when data is scarce — it is prior
-knowledge you did not have to learn. So on small and medium datasets,
-CNNs still win, because the convolutional structure is doing work the
-ViT would otherwise need millions of extra examples to discover. But
-give a ViT enough data — and “enough” here means pretraining on hundreds
-of millions of images — and it overtakes comparable CNNs, because it is
-not constrained by convolution’s assumptions and can learn whatever
-spatial structure the data actually contains. The headline lesson is
-that architectural priors and data volume are substitutes: the more data
-you have, the less you need to bake in by hand.</p>
+<p>Convolution supplies an <em>inductive bias</em> that can help when
+labelled data is limited, but the winner depends on pretraining,
+augmentation, model size, compute and task. The original <a href="https://arxiv.org/abs/2010.11929">Vision Transformer study</a>
+showed strong transfer after large-scale pretraining. A later <a href="https://arxiv.org/abs/2106.10270">augmentation and regularisation
+study</a> found that training choices could match results obtained with
+much more data. Compare pretrained CNN and ViT baselines on the actual
+dataset and deployment hardware rather than assuming a universal data
+threshold.</p>
 <h2 data-number="5.6" role="heading" aria-level="3" id="when-cnns-are-the-wrong-tool"><span class="header-section-number">5.6</span> When CNNs Are the Wrong
 Tool</h2>
 <p>Convolution is a bet that your data has grid-like spatial structure
@@ -4323,38 +4319,28 @@ order you should ask them, because the early ones eliminate whole
 branches of the tree.</p>
 <h2 data-number="13.1" role="heading" aria-level="3" id="the-first-cut-structured-versus-unstructured-data"><span class="header-section-number">13.1</span> The First Cut: Structured
 Versus Unstructured Data</h2>
-<p>Before anything else, look at your data. If it is tabular — rows that
-are independent of each other, columns that are individually meaningful,
-the kind of thing that lives comfortably in a spreadsheet or a database
-— classical machine learning almost always wins. Gradient-boosted trees,
-logistic regression, and SVMs are not just adequate here; they are
-usually better. Deep learning brings enormous capacity, and capacity
-needs data to justify it. On structured data where the features are
-already engineered and meaningful, that extra capacity buys you little,
-and the data needed to feed it is often more than you have. This is not
-a temporary state of affairs that the next architecture will overturn.
-It is a consequence of what deep learning is good at — discovering
-features from raw signal — and tabular data is the case where the
-features are already discovered. Reach for a neural network on tabular
-data only when you have a specific reason, not by default.</p>
+<p>Before anything else, look at your data. For tabular data — rows with
+individually meaningful columns — compare gradient-boosted trees and a
+simple linear model before assuming a neural network will help. A <a href="https://arxiv.org/abs/2207.08815">benchmark of medium-sized
+tabular datasets</a> found tree-based models highly competitive across
+the tested tasks; it does not prove they win on every dataset. Compare
+tuned baselines using the same split, metrics and compute budget. Neural
+models may still be useful when there is enough data, useful pretraining
+or structure shared with other modalities.</p>
 <h2 data-number="13.2" role="heading" aria-level="3" id="images-and-spatial-data"><span class="header-section-number">13.2</span> Images and Spatial Data</h2>
-<p>For images, the choice is between convolutional networks and Vision
-Transformers, and it comes down to how much data you have and where the
-model will run. CNNs are the right call for limited data and
-deployment-constrained settings: their built-in assumptions about
-spatial structure (locality and translation invariance) let them learn
-from fewer examples, and they are lighter to run. Vision Transformers
-come into their own in large-data regimes and when you are fine-tuning
-from a big pretrained model, where their lack of built-in spatial bias
-stops being a handicap and their capacity becomes an asset. For most
-vision tasks, a ResNet-50 pretrained on ImageNet remains an excellent
-starting point — old, but still hard to beat as a baseline. The newer
-foundation models have shifted the floor, though: SAM (the Segment
-Anything Model) and CLIP bring strong zero-shot capability, meaning
-useful results on segmentation and image-text matching before you have
-done any task-specific fine-tuning at all. The first thing to try on a
-new vision problem is often one of these pretrained models, not a
-network of your own.</p>
+<p>For images, compare convolutional networks and Vision Transformers
+using the data, pretraining and hardware available. CNNs encode locality
+and can be useful baselines with limited data; pretrained ViTs can also
+transfer well to smaller tasks. Neither family is always lighter or more
+accurate: measure the selected models under the actual latency and
+memory constraints. For most vision tasks, a ResNet-50 pretrained on
+ImageNet remains an excellent starting point — old, but still hard to
+beat as a baseline. The newer foundation models have shifted the floor,
+though: SAM (the Segment Anything Model) and CLIP bring strong zero-shot
+capability, meaning useful results on segmentation and image-text
+matching before you have done any task-specific fine-tuning at all. The
+first thing to try on a new vision problem is often one of these
+pretrained models, not a network of your own.</p>
 <h2 data-number="13.3" role="heading" aria-level="3" id="sequences-and-text"><span class="header-section-number">13.3</span>
 Sequences and Text</h2>
 <p>For text and sequences, transformers have almost entirely displaced
@@ -4406,8 +4392,11 @@ Requirements</h2>
 <p>It helps to have a rough sense of what each architecture costs to
 train from scratch, because the numbers are what make the “use a
 pretrained model” advice concrete rather than abstract. The table below
-is approximate — orders of magnitude, not precise figures — but the
-shape of it is the point.</p>
+retains rough illustrative scales for contrasting workloads, not minimum
+data requirements or current cost quotations. Dataset composition,
+objectives, hardware, optimisation and the desired quality change the
+figures substantially; check original training reports and measure the
+intended setup before budgeting.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -4418,9 +4407,9 @@ shape of it is the point.</p>
 <thead>
 <tr>
 <th>Architecture</th>
-<th>Minimum data to train from scratch</th>
+<th>Illustrative data scale</th>
 <th>Typical parameters</th>
-<th>Training compute</th>
+<th>Illustrative training compute</th>
 </tr>
 </thead>
 <tbody>
