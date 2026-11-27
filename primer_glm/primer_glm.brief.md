@@ -2,9 +2,9 @@
 
 - Issue and milestone: #468 primer; #467 planning.
 - Brief revision: glm-brief-v13
-- Source revision: 190d12d538f9ac9700a72c36522fbf4fae31f112
+- Source revision: 0ff4b2599d01cfd6ddff260f98fbb5bfba954d32
 - Source SHA-256: a9ee8afb265930574bdaa1025396f5023f21fe5dbff0ecc5607a0418e33340a1
-- Reviewed revision: 190d12d538f9ac9700a72c36522fbf4fae31f112
+- Reviewed revision: 0ff4b2599d01cfd6ddff260f98fbb5bfba954d32
 - Tracked path: primer_glm/primer_glm.brief.md
 - Reader: quantitatively literate ecological researcher or analyst who can read basic R.
 - Prerequisites: algebra, logarithms, elementary probability, derivatives, vectors and basic regression.
@@ -24,6 +24,8 @@
 - Languages: R primary; core, fixed-dispersion NB, fixed-penalty spline, real-data analyses and conjugate count example have bounded R/Python/Julia counterparts. Combined case is R fit with matched fixed-input Python/Julia predictions, not refit parity; specialised demonstrations are R-only.
 - Evidence: historical whole-source structural and scoped technical reviews, concept and route bindings, 23 examples, pinned build, sampled render QA and offline HTML links; the audit records their revisions and limits. The audit records 23 example passes at source `ea93f6d`.
 - Release assessment: ready subject to final PR checks on this audit and brief update. PR #507 checks and PR-body passed at `82bed7d`; online link failures and unperformed interactive accessibility checks remain recorded limitations.
+
+The current binding uses squash-merge commit `0ff4b25`, whose source blob and SHA-256 match reviewed branch commit `190d12d`. This makes the binding reachable from main without claiming a new review.
 
 The earlier binding was source `ea93f6d`, SHA-256 `df737b7e02b6d00b94c58edff15cd67c21e357bbb01af1067c59f71e85a1682e`. Its complete-case discussion at primer_glm/primer_glm.md:566–574 was independently reviewed for the conditional assumption, population-average counterexample and MAR caveats. The audit records the fresh reviewer-reported source coverage and its limitations. Other evidence is carried forward from the historical reviews within their recorded scope; content and structural decisions passed within the recorded scope, and CI passed at `c024979`. Those checks preceded the correction at `190d12d`; the later scoped review and CI at `82bed7d` are recorded in the audit.
 

@@ -2,11 +2,13 @@
 
 - Issue and milestone: #468 primer; #467 planning.
 - Case revision: glm-case-v6
-- Current source revision: 190d12d538f9ac9700a72c36522fbf4fae31f112
+- Current source revision: 0ff4b2599d01cfd6ddff260f98fbb5bfba954d32
 - Current source SHA-256: a9ee8afb265930574bdaa1025396f5023f21fe5dbff0ecc5607a0418e33340a1
 - Reader capability: construct and assess a model from observed units to prediction, diagnosis, revision and limits.
 - Case purpose: link sampling and estimand to distribution, design, fit, uncertainty and revision.
 - Case boundary: the cumulative simulated count case, Gamma companion, other synthetic cases and real penguin and package-derived Salamanders studies are distinct datasets.
+
+The current source binding is the reachable squash-merge commit `0ff4b25`; its source blob and SHA-256 match reviewed branch commit `190d12d`. This does not claim a new review.
 
 The independent complete content reading covered source SHA-256 `84eba056acb9ed85f3f0586b36555887bb4729de0178c62e1d27d91c92bb7e95` at commit `858f4ef29e6e85ef50acbc3231ccc639a27a1b99`. A span-only delta was subsequently inspected at `8417dba1d9183041213115f6361d84107ae40109`. The source changed further after that point. The [audit](primer_glm.audit.md) records the later scoped reviews, including the correction at the source revision above; it does not claim a new independent whole-document technical review at that revision. The trace locators below were reconciled semantically to that source for this case update; this is not a new execution or independent content review.
 
