@@ -3838,16 +3838,165 @@ multiplicity is discontinuous at the exact deletion, while the positive
 eigenvalue approaches zero continuously. This is why a component count
 and an algebraic-connectivity value answer different robustness
 questions.</p>
-<p>The perturbation ledger should record the bridge weight, component
-count,
+<p>To make the comparison reproducible, use unit internal edges and
+bridge weights
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>.
+The table reports the second eigenvalues in ascending order, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ν</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\nu_2</annotation></semantics></math>
+from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">ℒ</mi><mo>=</mo><mi>I</mi><mo>−</mo><msup><mi>D</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mi>A</mi><msup><mi>D</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\mathcal{L}=I-D^{-1/2}AD^{-1/2}</annotation></semantics></math>.
+The triangle cut has boundary
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
+and volume
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>+</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">6+\varepsilon</annotation></semantics></math>
+on each side. For positive weights, choose a unit Euclidean eigenvector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>,
-the normalised gap, the cut boundary, the cut volume, and the residual
-of the reported eigenpair. It should also record the eigenvector’s group
-means and within-group deviations. In the weak-bridge regime the group
-means dominate and the deviations are small; as the bridge becomes
-stronger, the mode ceases to be a pair of nearly constant group
-indicators. That transition is more informative than a single threshold
-saying “community” or “no community”.</p>
+with positive mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>A</mi></msub><annotation encoding="application/x-tex">m_A</annotation></semantics></math>
+on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>.
+Its mean on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msub><mi>m</mi><mi>A</mi></msub></mrow><annotation encoding="application/x-tex">-m_A</annotation></semantics></math>
+by symmetry. The relative deviation is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mrow><mi>i</mi><mo>∈</mo><mi>A</mi></mrow></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><msub><mi>m</mi><mi>A</mi></msub><mo stretchy="false" form="prefix">|</mo><mi>/</mi><mo stretchy="false" form="prefix">|</mo><msub><mi>m</mi><mi>A</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">\max_{i\in A}|x_i-m_A|/|m_A|</annotation></semantics></math>;
+it is invariant to an overall rescaling or sign flip. The residual is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi>L</mi><mi>x</mi><mo>−</mo><msub><mi>λ</mi><mn>2</mn></msub><mi>x</mi><msub><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\|Lx-\lambda_2x\|_2</annotation></semantics></math>
+before rounding. The <a href="examples/weak_bridge_ledger.py">executable
+ledger</a> constructs the matrices and checks the reported mode against
+the exact root and both trial bounds. For an independent normalised
+check, the same antisymmetric ansatz in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi>x</mi><mo>=</mo><mi>ν</mi><mi>D</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">Lx=\nu Dx</annotation></semantics></math>
+gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>+</mo><mi>ε</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>ν</mi><mn>2</mn></msup><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mn>6</mn><mo>+</mo><mn>5</mn><mi>ε</mi><mo stretchy="false" form="postfix">)</mo><mi>ν</mi><mo>+</mo><mn>2</mn><mi>ε</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">2(2+\varepsilon)\nu^2-(6+5\varepsilon)\nu+2\varepsilon=0</annotation></semantics></math>;
+its smaller root agrees with the numerical
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ν</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\nu_2</annotation></semantics></math>
+in these rows.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></th>
+<th style="text-align: right;">Components</th>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math></th>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ν</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\nu_2</annotation></semantics></math></th>
+<th style="text-align: right;">Boundary</th>
+<th style="text-align: right;">Volume per side</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6</mn><annotation encoding="application/x-tex">6</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.006637</mn><annotation encoding="application/x-tex">0.006637</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.003313</mn><annotation encoding="application/x-tex">0.003313</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.01</mn><annotation encoding="application/x-tex">6.01</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.063771</mn><annotation encoding="application/x-tex">0.063771</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.031407</mn><annotation encoding="application/x-tex">0.031407</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.1</mn><annotation encoding="application/x-tex">6.1</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.438447</mn><annotation encoding="application/x-tex">0.438447</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.204666</mn><annotation encoding="application/x-tex">0.204666</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>7</mn><annotation encoding="application/x-tex">7</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p>The corresponding eigenvector diagnostics use the same rows and
+conventions:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></th>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>A</mi></msub><annotation encoding="application/x-tex">m_A</annotation></semantics></math></th>
+<th style="text-align: right;">Relative deviation</th>
+<th style="text-align: right;">Residual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math></td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.408246</mn><annotation encoding="application/x-tex">0.408246</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.004435</mn><annotation encoding="application/x-tex">0.004435</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>12</mn></mrow></msup></mrow><annotation encoding="application/x-tex">&lt;10^{-12}</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.408056</mn><annotation encoding="application/x-tex">0.408056</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.043437</mn><annotation encoding="application/x-tex">0.043437</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>12</mn></mrow></msup></mrow><annotation encoding="application/x-tex">&lt;10^{-12}</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.396789</mn><annotation encoding="application/x-tex">0.396789</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.342329</mn><annotation encoding="application/x-tex">0.342329</annotation></semantics></math></td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>12</mn></mrow></msup></mrow><annotation encoding="application/x-tex">&lt;10^{-12}</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p>At deletion, the zero eigenspace has dimension two, so an individual
+second eigenvector is not uniquely determined; the dashes avoid treating
+a solver’s arbitrary basis as a stable group statistic. For positive
+weights, the eigenvalues agree with the preceding exact root and the two
+upper bounds. For example, at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\varepsilon=0.1</annotation></semantics></math>,
+the combinatorial bound is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.066667</mn><annotation encoding="application/x-tex">0.066667</annotation></semantics></math>
+and the normalised bound is about
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.032787</mn><annotation encoding="application/x-tex">0.032787</annotation></semantics></math>,
+both above their ledger values. Increasing the bridge from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
+makes the relative within-triangle deviation grow from about
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.4</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">0.4\%</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>34.2</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">34.2\%</annotation></semantics></math>:
+the bridge endpoints move towards each other while the mode remains
+separated by sign. This is a quantitative description of this six-vertex
+family, not a universal community threshold. The small residual checks
+the numerical eigenpair against its matrix; the independent root and
+bounds check what that pair is meant to represent, and neither
+establishes robustness to other graph changes.</p>
 <p>The ledger also exposes scale dependence. Multiplying every edge
 weight by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>

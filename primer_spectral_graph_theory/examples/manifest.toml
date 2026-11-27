@@ -42,3 +42,10 @@ markdown = "primer_spectral_graph_theory.md"
 fence = "openflights-r-companion"
 profile = "r-graph"
 timeout_seconds = 120
+
+[[examples]]
+id = "weak-bridge-ledger"
+language = "python"
+script = "examples/weak_bridge_ledger.py"
+profile = "python-base"
+timeout_seconds = 30

@@ -1018,7 +1018,25 @@ The trial bound and exact eigenvalue above describe one bridge weight at a time.
 
 The weak-bridge graph supplies a second integrated test. At $\varepsilon=0$, the two triangles are disconnected and the Laplacian has two zero modes. For every $\varepsilon>0$, there is one zero mode and a small positive bridge mode. The zero multiplicity is discontinuous at the exact deletion, while the positive eigenvalue approaches zero continuously. This is why a component count and an algebraic-connectivity value answer different robustness questions.
 
-The perturbation ledger should record the bridge weight, component count, $\lambda_2$, the normalised gap, the cut boundary, the cut volume, and the residual of the reported eigenpair. It should also record the eigenvector's group means and within-group deviations. In the weak-bridge regime the group means dominate and the deviations are small; as the bridge becomes stronger, the mode ceases to be a pair of nearly constant group indicators. That transition is more informative than a single threshold saying “community” or “no community”.
+To make the comparison reproducible, use unit internal edges and bridge weights $0$, $0.01$, $0.1$, and $1$. The table reports the second eigenvalues in ascending order, with $\nu_2$ from $\mathcal{L}=I-D^{-1/2}AD^{-1/2}$. The triangle cut has boundary $\varepsilon$ and volume $6+\varepsilon$ on each side. For positive weights, choose a unit Euclidean eigenvector $x$ of $L$ for $\lambda_2$, with positive mean $m_A$ on $A$. Its mean on $B$ is $-m_A$ by symmetry. The relative deviation is $\max_{i\in A}|x_i-m_A|/|m_A|$; it is invariant to an overall rescaling or sign flip. The residual is $\|Lx-\lambda_2x\|_2$ before rounding. The [executable ledger](examples/weak_bridge_ledger.py) constructs the matrices and checks the reported mode against the exact root and both trial bounds. For an independent normalised check, the same antisymmetric ansatz in $Lx=\nu Dx$ gives $2(2+\varepsilon)\nu^2-(6+5\varepsilon)\nu+2\varepsilon=0$; its smaller root agrees with the numerical $\nu_2$ in these rows.
+
+| $\varepsilon$ | Components | $\lambda_2$ | $\nu_2$ | Boundary | Volume per side |
+|---:|---:|---:|---:|---:|---:|
+| $0$ | $2$ | $0$ | $0$ | $0$ | $6$ |
+| $0.01$ | $1$ | $0.006637$ | $0.003313$ | $0.01$ | $6.01$ |
+| $0.1$ | $1$ | $0.063771$ | $0.031407$ | $0.1$ | $6.1$ |
+| $1$ | $1$ | $0.438447$ | $0.204666$ | $1$ | $7$ |
+
+The corresponding eigenvector diagnostics use the same rows and conventions:
+
+| $\varepsilon$ | $m_A$ | Relative deviation | Residual |
+|---:|---:|---:|---:|
+| $0$ | — | — | — |
+| $0.01$ | $0.408246$ | $0.004435$ | $<10^{-12}$ |
+| $0.1$ | $0.408056$ | $0.043437$ | $<10^{-12}$ |
+| $1$ | $0.396789$ | $0.342329$ | $<10^{-12}$ |
+
+At deletion, the zero eigenspace has dimension two, so an individual second eigenvector is not uniquely determined; the dashes avoid treating a solver's arbitrary basis as a stable group statistic. For positive weights, the eigenvalues agree with the preceding exact root and the two upper bounds. For example, at $\varepsilon=0.1$, the combinatorial bound is $0.066667$ and the normalised bound is about $0.032787$, both above their ledger values. Increasing the bridge from $0.01$ to $1$ makes the relative within-triangle deviation grow from about $0.4\%$ to $34.2\%$: the bridge endpoints move towards each other while the mode remains separated by sign. This is a quantitative description of this six-vertex family, not a universal community threshold. The small residual checks the numerical eigenpair against its matrix; the independent root and bounds check what that pair is meant to represent, and neither establishes robustness to other graph changes.
 
 The ledger also exposes scale dependence. Multiplying every edge weight by $c$ multiplies the combinatorial gap and divides effective resistances by $c$, but leaves the random-walk matrix and normalised spectrum unchanged. Increasing only the bridge weight changes all of these quantities because it changes both connectivity and, for normalised methods, local degree. A report that lists only a normalised eigenvalue would miss the absolute conductance scale; a report that lists only $\lambda_2$ would miss degree-relative behaviour. Preserve both when the application could plausibly depend on either.
 
