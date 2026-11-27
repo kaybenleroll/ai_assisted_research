@@ -4,7 +4,7 @@
 
 Deep learning is everywhere, and the explanations of it split into two unhelpful camps. The first treats neural networks as magic black boxes: you feed in data, gradient descent does something mysterious, and out comes a model that recognises faces or writes essays. This is comforting but useless — you cannot debug a black box, you cannot reason about when it will fail, and you certainly cannot build one. The second camp is the primary literature: dense academic papers that assume you already live in this world, written for reviewers rather than learners, with the load-bearing intuition compressed into a single sentence between two pages of notation.
 
-This primer sits in the middle. The goal is full mathematical rigour built up from what you already know. You are not starting from zero — you know classical machine learning. You have trained models with gradient descent, you have fought overfitting with regularisation, you understand the bias-variance tradeoff in your bones, and you can explain why an SVM finds a maximum-margin separator. What you have not done is work with neural networks. So this primer does not re-explain what a loss function is or why you split data into train and validation sets. It explains the things that are genuinely new: what backpropagation actually computes, why depth buys you something width does not, why a transformer pays attention, and how a diffusion model turns noise into an image.
+This primer sits in the middle. The goal is mathematically explicit foundations built up from what you already know, with the assumptions and limits of advanced results made clear. You are not starting from zero — you know classical machine learning. You have trained models with gradient descent, you have fought overfitting with regularisation, you understand the bias-variance tradeoff in your bones, and you can explain why an SVM finds a maximum-margin separator. What you have not done is work with neural networks. So this primer does not re-explain what a loss function is or why you split data into train and validation sets. It explains the things that are genuinely new: what backpropagation actually computes, why depth buys you something width does not, why a transformer pays attention, and how a diffusion model turns noise into an image.
 
 The promise is that you will finish able to reason about deep learning the way you already reason about classical ML — not as a believer in magic, but as someone who knows the failure modes, the design choices, and the mathematics underneath.
 
@@ -18,6 +18,25 @@ The whole thing is designed for a reader who knows classical ML and wants the ne
 
 This is not a guide to training models from scratch on novel research problems. Reproducing a frontier result is its own discipline involving data pipelines, hyperparameter searches, and a great deal of patience; this primer gives you the conceptual foundation, not the lab notebook. It is also not a replacement for reading the primary papers. When something here matters to your work, the original paper will have details and caveats this document omits by design — read it. This primer does not cover classical ML; it assumes you already have it, and it leans on that assumption constantly. And it does not cover hardware engineering, distributed training infrastructure, or model serving at scale. Those are real and large topics, but they are about running deep learning systems in production, not about understanding what the systems are.
 
+### Notation
+
+The table collects the symbols used repeatedly in the derivations; local definitions still appear where a new equation introduces a variable.
+
+| Symbol | Meaning | First Use |
+|---|---|---|
+| $\mathbf{x}$ | Input or feature vector | Perceptron |
+| $\mathbf{w}$ | Weight vector | Perceptron |
+| $b$ | Bias parameter | Perceptron |
+| $\sigma$ | Activation function | Perceptron |
+| $\mathcal{L}$ | Loss function | Backpropagation |
+| $\nabla \mathcal{L}$ | Gradient of the loss | Optimisation |
+| $\eta$ | Learning rate | Gradient descent |
+| $\varepsilon$ | Small positive numerical-stability constant | RMSProp |
+| $\mathbf{W}, \mathbf{Q}, \mathbf{K}, \mathbf{V}$ | Weight, query, key, and value matrices | Backpropagation and attention |
+| $\top$ | Matrix or vector transpose | Perceptron |
+| $\mathbf{x}_t$ | Noisy sample at diffusion timestep $t$ | Diffusion forward process |
+| $\boldsymbol{\varepsilon}$ | Gaussian noise vector | Variational autoencoders |
+
 ### Assumed Background
 
 You should be comfortable with gradient descent — what a gradient is, why following its negative reduces a loss, and what a learning rate does. You should know loss functions (mean squared error, cross-entropy), regularisation (L1, L2, and the intuition for why penalising weights helps), and the overfitting/underfitting distinction along with the tools to diagnose it (cross-validation, train/validation splits). You should have working knowledge of classical models — at minimum decision trees and SVMs — enough to have an opinion about when a linear model is the wrong choice.
@@ -28,7 +47,9 @@ On the mathematics, you need linear algebra and calculus at the level of "knows 
 
 The arc runs from foundations to frontier. It opens with why deep learning became viable when it did — a question of data, compute, and algorithms rather than raw cleverness. It then builds the multilayer perceptron from the single neuron up, and works through how such a network is trained: backpropagation, the optimisers, and the failure modes that make training hard. With those foundations in place, it moves to the specialised architectures — convolutional, recurrent, attentional — each motivated by the structure of the data it handles. From transformers it steps up to large language models, then turns to the generative families: VAEs, GANs, and diffusion. It closes on the frameworks and the practical concerns of building real systems. Each section assumes the ones before it, so the vanishing-gradient problem defined while discussing training is the same one that explains why recurrent networks struggle with long sequences.
 
-*Verified against primary sources for all sections; unverified claims are flagged inline.*
+The Further Reading section links to primary papers for details and limitations beyond this primer.
+
+
 
 ## Why Deep Learning Now
 
@@ -237,13 +258,15 @@ The pattern is now visible and it generalises to any depth: compute the error at
 
 In practice you will never write this out by hand. Automatic differentiation (autodiff) in PyTorch, JAX, and TensorFlow records the computation graph as the forward pass runs and then applies exactly this backward traversal mechanically, computing the chain rule for whatever operations you composed. But autodiff is not a substitute for understanding backprop — it is backprop, automated. When a gradient is zero where it should not be, or explodes to infinity, the explanation is always somewhere in the chain of local derivatives you just saw, and knowing that chain is how you debug it.
 
+A small scalar update makes the direction concrete. Let $x=2$, $w=0.5$, $b=0$, prediction $\hat y=wx+b=1$ and target $y=3$. With $L=\frac12(\hat y-y)^2=2$, the chain rule gives $\partial L/\partial w=(\hat y-y)x=-4$ and $\partial L/\partial b=\hat y-y=-2$. At learning rate $0.1$, gradient descent gives $w'=0.9$, $b'=0.2$. The new prediction is $2$ and the loss is $0.5$. The negative gradient increases both parameters here; a different input, target or step size can change that direction or even increase loss. This scalar example uses squared error rather than the softmax loss above, but the same local chain-rule composition applies.
+
 ### Vanishing and Exploding Gradients
 
 The backward pass just described has a built-in danger, and it is important enough that several later architectures are designed specifically to escape it. Look again at how the error propagates: at each layer it is multiplied by a weight matrix and by an activation derivative. Repeat that multiplication across many layers and the gradient's magnitude is the product of all those per-layer factors. Products of many numbers behave violently — if the factors are consistently below 1 the product collapses towards zero, and if they are consistently above 1 it blows up.
 
 The vanishing gradient problem is the collapse case. Suppose each layer multiplies the gradient by a factor of about 0.01 — entirely plausible with a saturating activation like sigmoid, whose derivative goes nearly to zero in its flat regions. After $L$ layers the gradient reaching the earliest weights is scaled by $0.01^L$. With ten layers that is $0.01^{10} = 10^{-20}$, effectively zero. The early layers receive no usable gradient signal, so they never learn — the network is deep on paper but only its last few layers actually train. This is the concrete reason sigmoid and tanh stall deep networks, and the reason ReLU, whose positive-region derivative is exactly 1, was such a decisive fix: a factor of 1 does not shrink the product.
 
-The numbers are sobering even without a pathologically small factor. The sigmoid derivative is $\sigma'(z) = \sigma(z)(1 - \sigma(z))$, which is maximised at $z = 0$ where $\sigma(z) = 0.5$ and so $\sigma'(z) = 0.25$. That is the best case — the derivative is at most 0.25 anywhere. After ten sigmoid layers, even at this most favourable value, the gradient is scaled by $0.25^{10} \approx 10^{-6}$. A factor of a million reduction in the learning signal, in the best case, from stacking ten layers. Away from $z = 0$ it is far worse.
+The numbers are sobering even without a pathologically small factor. The sigmoid derivative is $\sigma'(z) = \sigma(z)(1 - \sigma(z))$, which is maximised at $z = 0$ where $\sigma(z) = 0.5$ and so $\sigma'(z) = 0.25$. That is the best case — the derivative is at most 0.25 anywhere. In a scalar chain where each weight has magnitude 1 and each pre-activation is zero, ten such activation derivatives contribute $0.25^{10} \approx 10^{-6}$ to the gradient. The full layer Jacobian also includes the weights: a scalar weight of 4 at each layer would cancel this factor at that operating point. In a network of matrices, directions, singular values and activation states all matter. Saturation can still make gradients small, but the activation derivative alone does not determine the whole-network gradient.
 
 The exploding gradient problem is the mirror image. If the weights are initialised too large, each layer multiplies the gradient by a factor greater than 1, and the product grows exponentially as it propagates backward. The gradient reaching the early layers becomes enormous, the weight update overshoots wildly, and the loss diverges. The characteristic symptom is a loss that suddenly becomes NaN — the gradients grew past the range of floating-point numbers. Both problems are two faces of the same fact: backpropagation multiplies, and repeated multiplication is unstable in both directions. The fixes — non-saturating activations, careful initialisation, normalisation layers, and gradient clipping — are all, at bottom, ways to keep that per-layer factor near 1. This problem returns with full force in recurrent networks, where the same weight matrix is multiplied not across layers but across time steps, and the later RNN section relies on exactly this analysis without re-deriving it.
 
@@ -538,15 +561,19 @@ graph LR
 
 The crucial detail is that every box labelled `[RNN]` is the *same* box — the weight matrices $\mathbf{W}_h,$ $\mathbf{W}_x,$ and the bias are shared across all time steps. There is one set of parameters, applied repeatedly. This is exactly the parameter-sharing logic of a CNN, just applied along the time axis instead of across spatial positions: a CNN reuses a kernel at every location, an RNN reuses a cell at every step. The shared cell is what lets a single small network handle a sequence of any length.
 
+For a numerical state trace, take the scalar recurrence $h_t=\tanh(0.5h_{t-1}+x_t)$, $h_0=0$, $x_1=1$ and $x_2=0$. Then $h_1=\tanh(1)\approx0.762$ and $h_2=\tanh(0.381)\approx0.363$. The second state retains information from the first input even though the second input is zero, but it is already attenuated. This is one illustrative parameter choice, not a universal memory length; gating changes the state update and can preserve a useful path for longer.
+
 ### Backpropagation Through Time
 
 To train an RNN you unroll it across the full sequence of $T$ steps, which turns it into a (very deep, but weight-tied) feed-forward network, and then you run ordinary backpropagation over that unrolled graph. This procedure has a name — backpropagation through time, or BPTT — but mechanically it is just the chain rule applied to the unrolled network. Because every step shares the same weights, the gradient contributions from all $T$ steps are summed into a single update for each parameter.
 
 The trouble shows up when you trace how a gradient at the end of the sequence reaches the beginning. The gradient of the loss with respect to an early hidden state has to pass back through every intervening step, and each step contributes a Jacobian factor:
 
-$$\frac{\partial \mathcal{L}}{\partial \mathbf{h}_0} = \left( \prod_{t=1}^{T} \frac{\partial \mathbf{h}_t}{\partial \mathbf{h}_{t-1}} \right) \cdot \frac{\partial \mathcal{L}}{\partial \mathbf{h}_T}$$
+With column-vector gradients, define $\mathbf{J}_t = \partial \mathbf{h}_t / \partial \mathbf{h}_{t-1}$. For a loss depending on the final state, the chain rule is
 
-That product of $T$ Jacobians is the whole problem.
+$$\nabla_{\mathbf{h}_0} \mathcal{L} = \mathbf{J}_1^{\top} \mathbf{J}_2^{\top} \cdots \mathbf{J}_T^{\top} \nabla_{\mathbf{h}_T} \mathcal{L}.$$
+
+The rightmost factor acts first: the final-state gradient travels backwards through $\mathbf{J}_T^{\top}$, then each earlier transposed Jacobian. If losses also depend on intermediate states, their gradient contributions must be added along the way. The product of Jacobians is the source of the difficulty.
 
 ### The Vanishing Gradient Problem in RNNs
 
@@ -683,6 +710,8 @@ $$\operatorname{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{s
 Walk through it piece by piece. The product $\mathbf{Q}\mathbf{K}^{\top}$ computes a similarity score for every query against every key — entry $(i, j)$ is the dot product of query $i$ with key $j$, so the result is a matrix of shape (number of queries × number of keys). A large dot product means the query and key point in similar directions, signalling relevance. Dividing by $\sqrt{d_k}$, where $d_k$ is the dimension of the key vectors, is the "scaled" part, and it matters more than it looks. As $d_k$ grows, dot products are sums of more terms and their variance grows with $d_k$, so without the scaling the scores would get large in magnitude, and large inputs push the softmax into its saturated regime where one entry is near 1 and the rest near 0. In saturation the softmax's gradients are tiny, and learning stalls. Dividing by $\sqrt{d_k}$ rescales the scores so their variance stays around 1, keeping the softmax in a healthy, well-gradiented range. The softmax then converts each row of scores into a probability distribution over the keys — non-negative weights summing to 1. Finally multiplying by $\mathbf{V}$ takes, for each query, the weighted average of the value vectors using those attention weights. Every operation here is smooth and differentiable, so gradients flow cleanly back through the weights to the queries, keys, and values.
 
 It is worth distinguishing two uses of this same machinery. In **self-attention**, the queries, keys, and values all come from the same sequence — each token attends to every token in its own sequence, including itself, to build a context-aware representation. In **cross-attention**, the queries come from one sequence and the keys and values from another — this is how a decoder attends over an encoder's output, which is exactly the bottleneck-removing mechanism we started with.
+
+For one numerical lookup, take a scalar query $q=1$, keys $k_1=0$, $k_2=\log 3$, values $v_1=2$, $v_2=10$, and $d_k=1$. The scores are $(0,\log 3)$, so softmax gives weights $(1/4,3/4)$ and the output is $(1/4)2+(3/4)10=8$. The second value dominates because its key scores higher. If the query becomes $q=0$, both scores are zero and the result is the equal mixture $6$. These are chosen projections, not an assertion that attention weights alone explain a model's decision.
 
 ### Multi-Head Attention
 
@@ -976,9 +1005,19 @@ The way through is to bring the encoder back, but now with a job defined by the 
 
 $$\log p_\theta(\mathbf{x}) \geq \mathbb{E}_{q_\phi(\mathbf{z} \mid \mathbf{x})}\big[\log p_\theta(\mathbf{x} \mid \mathbf{z})\big] - \operatorname{KL}\big(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z})\big).$$
 
-This right-hand side is the **Evidence Lower BOund**, the ELBO. Because it sits below the log-likelihood, pushing it up pushes up a guaranteed lower bound on the quantity we actually care about, and — unlike the marginal — every piece of it is computable. Maximise the ELBO over $\theta$ and $\phi$ and you are doing approximate maximum likelihood.
+To see the missing bridge, suppose $q_\phi(\mathbf z\mid\mathbf x)$ is positive wherever the joint density contributing to $p_\theta(\mathbf x)$ is positive. Insert $q_\phi/q_\phi$ into the marginal and use the concavity of $\log$:
 
-The two terms have clean readings, and together they are exactly the autoencoder objective plus the regulariser it was missing. The first term, $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$, is a **reconstruction** term: encode $\mathbf{x}$ to a distribution over $\mathbf{z}$, sample, decode, and reward the decoder for assigning high probability to the original. The second term, $-\operatorname{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z}))$, is a **regularisation** term: it penalises the encoder for placing its codes anywhere the prior wouldn't, pulling every per-input posterior towards the standard Gaussian. That second term is precisely what ordinary autoencoders lacked. It forces the encoder to use the same region of latent space the decoder will be sampling from at generation time, so the holes close and sampling from the prior produces something sensible.
+$$\begin{aligned}
+\log p_\theta(\mathbf x)
+&= \log \mathbb E_{q_\phi}\!\left[\frac{p_\theta(\mathbf x,\mathbf z)}{q_\phi(\mathbf z\mid\mathbf x)}\right] \\
+&\geq \mathbb E_{q_\phi}\!\left[\log \frac{p_\theta(\mathbf x,\mathbf z)}{q_\phi(\mathbf z\mid\mathbf x)}\right].
+\end{aligned}$$
+
+Substitute $p_\theta(\mathbf x,\mathbf z)=p_\theta(\mathbf x\mid\mathbf z)p(\mathbf z)$ and group the prior and variational terms to obtain the displayed ELBO. The exact difference between the log marginal and the bound is $\operatorname{KL}(q_\phi(\mathbf z\mid\mathbf x)\|p_\theta(\mathbf z\mid\mathbf x))$, when these quantities are defined. Thus a larger bound need not improve the marginal by the same amount: the approximation gap can change too. The reconstruction expectation is generally estimated by samples; the Gaussian KL below is analytic. See [Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114).
+
+This right-hand side is the **Evidence Lower BOund**, the ELBO. Because it sits below the log-likelihood, pushing it up pushes up a guaranteed lower bound on the quantity we actually care about, and its terms can be evaluated or estimated under the chosen model. Maximise the ELBO over $\theta$ and $\phi$ and you are doing approximate maximum likelihood.
+
+The two terms have clean readings, and together they are exactly the autoencoder objective plus the regulariser it was missing. The first term, $\mathbb{E}_{q_\phi}[\log p_\theta(\mathbf{x} \mid \mathbf{z})]$, is a **reconstruction** term: encode $\mathbf{x}$ to a distribution over $\mathbf{z}$, sample, decode, and reward the decoder for assigning high probability to the original. The second term, $-\operatorname{KL}(q_\phi(\mathbf{z} \mid \mathbf{x}) \| p(\mathbf{z}))$, is a **regularisation** term: it penalises the encoder for placing its codes anywhere the prior wouldn't, pulling every per-input posterior towards the standard Gaussian. That second term is precisely what ordinary autoencoders lacked. It forces the encoder to use the same region of latent space the decoder will be sampling from at generation time, which encourages overlap with the prior; finite training and model capacity do not guarantee that every prior sample decodes well.
 
 The KL term is also the part you can compute in closed form, which is what makes the whole thing practical. Choose the encoder to output a diagonal Gaussian, $q_\phi = \mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(\boldsymbol{\sigma}^2))$, and compare it to the standard normal prior. The KL between two Gaussians has a known formula, and for this case it reduces to
 
@@ -1016,7 +1055,7 @@ loss.backward()
 
 To *generate* after training, you throw the encoder away. Sample $\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ straight from the prior and decode — and because the KL term forced the training-time posteriors to cover that prior, the decoder produces something coherent rather than garbage. This is the gap from the start of the section, closed.
 
-The same regularity makes interpolation work, which is the cleanest demonstration that the latent space is now well-behaved. Encode two images to codes $\mathbf{z}_1$ and $\mathbf{z}_2$, walk a straight line between them, $\mathbf{z}_t = (1-t)\mathbf{z}_1 + t\mathbf{z}_2$ for $t$ from 0 to 1, and decode each point along the way. With a plain autoencoder this path crosses dead regions and produces nonsense in the middle. With a VAE the KL regularisation has filled in the space, so the interpolation sweeps smoothly from one image to the other — every intermediate point decodes to something coherent, even if blurry.
+The same regularity makes interpolation work, which is the cleanest demonstration that the latent space is now well-behaved. Encode two images to codes $\mathbf{z}_1$ and $\mathbf{z}_2$, walk a straight line between them, $\mathbf{z}_t = (1-t)\mathbf{z}_1 + t\mathbf{z}_2$ for $t$ from 0 to 1, and decode each point along the way. With a plain autoencoder this path crosses dead regions and produces nonsense in the middle. With a VAE the KL regularisation has filled in the space, which can make interpolation smoother, though coherence along every path is not guaranteed.
 
 ### Limitations
 
@@ -1056,17 +1095,17 @@ The third is **training oscillation**. Because the two networks chase opposing o
 
 A good deal of the instability traces back to the divergence the original GAN minimises. When $p_{\mathrm{data}}$ and $p_G$ have little overlap — which is exactly the situation early in training, when the generator is bad — the Jensen-Shannon divergence saturates to a constant, and a constant has no useful gradient. The discriminator can perfectly separate real from fake, the JSD is pinned at its maximum, and the generator gets nothing to climb. The **Wasserstein GAN** (Arjovsky et al., 2017) attacks this at the root by changing the distance being minimised.
 
-Instead of JSD it uses the **Earth Mover** or Wasserstein-1 distance, which measures the minimum cost of transporting probability mass to turn one distribution into the other. It varies smoothly with the distributions even when they don't overlap — there is always a meaningful "how far apart" even when one distribution sits entirely beside the other, so there is always a gradient. The Wasserstein distance has a dual form that is what you actually compute:
+Instead of JSD it uses the **Earth Mover** or Wasserstein-1 distance, which measures the minimum cost of transporting probability mass to turn one distribution into the other. It varies smoothly with the distributions even when they don't overlap — there is always a meaningful "how far apart" even when one distribution sits entirely beside the other, although useful optimisation gradients are not guaranteed for every parameterisation or trained critic. The Wasserstein distance has a dual form that is what you actually compute:
 
 $$W(p_{\mathrm{data}}, p_G) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{\mathbf{x} \sim p_{\mathrm{data}}}\big[f(\mathbf{x})\big] - \mathbb{E}_{\mathbf{x} \sim p_G}\big[f(\mathbf{x})\big],$$
 
-a supremum over all 1-Lipschitz functions $f$. In the GAN, that function is the network — now called a **critic** rather than a discriminator, because it outputs an unbounded real-valued score rather than a probability, so the final sigmoid is dropped. The critic is trained to approximate the supremum, and its output becomes a genuine distance estimate. The practical payoff is large: the critic's loss is a meaningful, non-saturating distance metric, so even a well-trained critic hands the generator informative gradients, and — bonus — the loss value actually correlates with sample quality, which the original GAN's loss never did.
+a supremum over all 1-Lipschitz functions $f$. In the GAN, that function is the network — now called a **critic** rather than a discriminator, because it outputs an unbounded real-valued score rather than a probability, so the final sigmoid is dropped. The critic is trained to approximate the supremum; its finite-model objective is an approximate distance estimate. The practical payoff is large: the critic's loss is a meaningful, non-saturating distance metric, so even a well-trained critic hands the generator informative gradients, and — bonus — the loss value actually correlates with sample quality, which the original GAN's loss never did.
 
-The constraint that $f$ be 1-Lipschitz has to be enforced somehow, and how you do it matters. The original WGAN clipped the critic's weights to a small range, which is crude and causes its own problems. The standard improvement, **WGAN-GP**, enforces the Lipschitz condition with a gradient penalty instead: a Lipschitz constant of 1 means the gradient norm should be 1 everywhere, so you add a term penalising departure from that,
+The constraint that $f$ be 1-Lipschitz has to be enforced somehow, and how you do it matters. The original WGAN clipped the critic's weights to a small range, which is crude and causes its own problems. The standard improvement, **WGAN-GP**, enforces the Lipschitz condition with a gradient penalty instead: a differentiable 1-Lipschitz critic has gradient norm at most 1, not necessarily equal to 1 everywhere. The proposed penalty instead encourages norm 1 at selected points,
 
 $$\mathcal{L}_{\mathrm{GP}} = \lambda \, \mathbb{E}_{\hat{\mathbf{x}}}\big[(\|\nabla_{\hat{\mathbf{x}}} D(\hat{\mathbf{x}})\|_2 - 1)^2\big],$$
 
-evaluated at points $\hat{\mathbf{x}}$ sampled along lines between real and fake examples. This softly holds the critic's gradient norm near 1 without the pathologies of weight clipping, and it is the recipe most stable GAN training is built on.
+evaluated at points $\hat{\mathbf{x}}$ sampled along lines between real and fake examples. This softly encourages the critic's gradient norm towards 1 on those sampled interpolants; it does not prove a global Lipschitz constraint. A finite critic trained for finitely many steps only approximates the dual optimum, so its loss is not automatically the exact Wasserstein distance. See [WGAN](https://proceedings.mlr.press/v70/arjovsky17a.html) and [WGAN-GP](https://arxiv.org/abs/1704.00028).
 
 ### Architecture Variants
 
@@ -1126,7 +1165,7 @@ The bracketed part removes the network's estimate of the current step's noise; t
 
 ### Score Matching, Briefly
 
-This connects to a broader theory because it explains why the noise-prediction trick works and links diffusion to a whole other line of research. The **score** of a distribution is $\nabla_\mathbf{x} \log p(\mathbf{x})$ — the gradient of log-density, pointing in the direction of steepest increase in probability, i.e. "which way is more like real data from here". If you knew the score everywhere, you could generate by starting somewhere random and repeatedly stepping uphill in density. It turns out the noise the network predicts is, up to a scale factor, the *negative* score of the noised data distribution: predicting $\boldsymbol{\varepsilon}$ is equivalent to estimating $\nabla_\mathbf{x} \log p(\mathbf{x})$. So a diffusion model is a score-based model in disguise, and the denoising it learns is really an estimate of the direction towards higher data density at each noise level. This places diffusion inside the family of energy-based and score-based generative models, and the equivalence is more than cosmetic — it is where a lot of the theory and the faster samplers come from. A close relative worth a name-check is **flow matching**, which trains a network to regress a velocity field along a chosen path from noise to data rather than a noise-prediction target. Sampling then integrates that learned vector field from the noise endpoint towards the data endpoint. The path and numerical solver become part of the design; flow matching uses a different training objective from diffusion and offers another route to fast, high-quality continuous generation.
+This connects to a broader theory because it explains why the noise-prediction trick works and links diffusion to a whole other line of research. The **score** of a distribution is $\nabla_\mathbf{x} \log p(\mathbf{x})$ — the gradient of log-density, pointing in the direction of steepest increase in probability, i.e. "which way is more like real data from here". The score guides sampling, but deterministic uphill steps alone seek high-density regions rather than sampling the full distribution. Let $s_t=\sqrt{1-\bar\alpha_t}$ and let $q_t(\mathbf{x}_t)$ be the noised data density. The Gaussian corruption has conditional score $\nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t\mid\mathbf{x}_0)=-\boldsymbol{\varepsilon}/s_t$. Averaging over the posterior of $\mathbf{x}_0$ given $\mathbf{x}_t$ gives $\nabla_{\mathbf{x}_t}\log q_t(\mathbf{x}_t)=-\mathbb E[\boldsymbol{\varepsilon}\mid\mathbf{x}_t]/s_t$. The optimal mean-squared-error noise predictor estimates that conditional expectation, so its negative, divided by $s_t$, estimates the marginal score. This identity assumes the relevant densities and differentiations are well defined; a finite trained network only approximates the optimum. So a diffusion model is a score-based model in disguise, and the denoising it learns is really an estimate of the direction towards higher data density at each noise level. This places diffusion inside the family of energy-based and score-based generative models, and the equivalence is more than cosmetic — it is where a lot of the theory and the faster samplers come from. A close relative worth a name-check is **flow matching**, which trains a network to regress a velocity field along a chosen path from noise to data rather than a noise-prediction target. Sampling then integrates that learned vector field from the noise endpoint towards the data endpoint. The path and numerical solver become part of the design; flow matching uses a different training objective from diffusion and offers another route to fast, high-quality continuous generation.
 
 ### DDIM: Fewer Steps
 
@@ -1362,6 +1401,8 @@ It helps to have a rough sense of what each architecture costs to train from scr
 
 Read down the right-hand column and the practical lesson is obvious: the gap between "CPU feasible" and "TPU months" is the gap between a weekend project and a budget that only a handful of organisations can field.
 
+Consider a small manufacturer with 2,000 labelled inspection images, a requirement to detect defects, and a device with a fixed latency budget. Split by production batch or acquisition time before tuning so near-duplicates do not leak across training and evaluation. Start with a simple image-feature classifier and a pretrained vision model, then compare them on the same held-out batches using defect recall, false alarms and measured device latency. Suppose the pretrained model improves recall but misses the latency budget: try a smaller model or compression, then remeasure both quality and latency. If recall drops on a new camera or product batch, collect and label representative examples and evaluate that shift separately before deployment. These outcomes are illustrative, not benchmark results; the right threshold depends on the cost of missed defects and inspection capacity.
+
 ### The Practical Starting Point
 
 Which leads to the single most useful piece of advice in this primer: for almost every real application, start with a pretrained model. The compute and data required to train a competitive model from scratch are out of reach for most projects, and the table above is why. The practical skill in modern deep learning is not pre-training — it is fine-tuning a pretrained model on your task and, increasingly, prompting one well. Train from scratch only when three things are all true: your domain is genuinely out-of-distribution from every available pretrained model, so their learned features will not transfer; you actually have the data and the compute to do it; and you have a specific, articulable reason to believe pretrained features will fail you. If you cannot make all three arguments, fine-tune.
@@ -1381,22 +1422,3 @@ This primer gives you the conceptual foundation; the papers give you the detail 
 - [fast.ai](https://course.fast.ai/) — a practical course for applying deep learning.
 - [Stanford CS231n](https://cs231n.stanford.edu/) — a reference course for convolutional networks and computer vision.
 - [Stanford CS224n](https://web.stanford.edu/class/cs224n/) — a reference course for natural-language processing.
-
-## Notation
-
-The table collects the symbols used repeatedly in the derivations; local definitions still appear where a new equation introduces a variable.
-
-| Symbol | Meaning | First Use |
-|---|---|---|
-| $\mathbf{x}$ | Input or feature vector | Perceptron |
-| $\mathbf{w}$ | Weight vector | Perceptron |
-| $b$ | Bias parameter | Perceptron |
-| $\sigma$ | Activation function | Perceptron |
-| $\mathcal{L}$ | Loss function | Backpropagation |
-| $\nabla \mathcal{L}$ | Gradient of the loss | Optimisation |
-| $\eta$ | Learning rate | Gradient descent |
-| $\varepsilon$ | Small positive numerical-stability constant | RMSProp |
-| $\mathbf{W}, \mathbf{Q}, \mathbf{K}, \mathbf{V}$ | Weight, query, key, and value matrices | Backpropagation and attention |
-| $\top$ | Matrix or vector transpose | Perceptron |
-| $\mathbf{x}_t$ | Noisy sample at diffusion timestep $t$ | Diffusion forward process |
-| $\boldsymbol{\varepsilon}$ | Gaussian noise vector | Variational autoencoders |
