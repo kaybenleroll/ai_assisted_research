@@ -721,27 +721,27 @@ Directly</a></li>
 <li><a href="#prompt-injection-telemetry-and-reporting" id="toc-prompt-injection-telemetry-and-reporting"><span class="toc-section-number">9.3</span> Prompt Injection, Telemetry, and
 Reporting</a></li>
 </ul></li>
-<li><a href="#pi-compared-with-other-coding-agents" id="toc-pi-compared-with-other-coding-agents"><span class="toc-section-number">10</span> Pi Compared With Other Coding
-Agents</a>
-<ul>
-<li><a href="#pi-versus-opencode-and-aider" id="toc-pi-versus-opencode-and-aider"><span class="toc-section-number">10.1</span> Pi Versus OpenCode and
-Aider</a></li>
-<li><a href="#pi-versus-claude-code-and-codex" id="toc-pi-versus-claude-code-and-codex"><span class="toc-section-number">10.2</span> Pi Versus Claude Code and
-Codex</a></li>
-<li><a href="#forks-and-derivatives" id="toc-forks-and-derivatives"><span class="toc-section-number">10.3</span> Forks and Derivatives</a></li>
-</ul></li>
-<li><a href="#worked-example-a-reproducible-data-science-project-with-pi-and-rocker" id="toc-worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="toc-section-number">11</span> Worked Example: A Reproducible
+<li><a href="#worked-example-a-reproducible-data-science-project-with-pi-and-rocker" id="toc-worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="toc-section-number">10</span> Worked Example: A Reproducible
 Data-Science Project With Pi and Rocker</a>
 <ul>
-<li><a href="#project-goal-and-contract" id="toc-project-goal-and-contract"><span class="toc-section-number">11.1</span> Project Goal and
+<li><a href="#project-goal-and-contract" id="toc-project-goal-and-contract"><span class="toc-section-number">10.1</span> Project Goal and
 Contract</a></li>
-<li><a href="#give-pi-bounded-tasks" id="toc-give-pi-bounded-tasks"><span class="toc-section-number">11.2</span> Give Pi Bounded Tasks</a></li>
-<li><a href="#build-a-digest-pinned-rocker-image" id="toc-build-a-digest-pinned-rocker-image"><span class="toc-section-number">11.3</span> Build a Digest-Pinned Rocker
+<li><a href="#give-pi-bounded-tasks" id="toc-give-pi-bounded-tasks"><span class="toc-section-number">10.2</span> Give Pi Bounded Tasks</a></li>
+<li><a href="#build-a-digest-pinned-rocker-image" id="toc-build-a-digest-pinned-rocker-image"><span class="toc-section-number">10.3</span> Build a Digest-Pinned Rocker
 Image</a></li>
-<li><a href="#run-it-with-rootless-podman" id="toc-run-it-with-rootless-podman"><span class="toc-section-number">11.4</span> Run It With Rootless
+<li><a href="#run-it-with-rootless-podman" id="toc-run-it-with-rootless-podman"><span class="toc-section-number">10.4</span> Run It With Rootless
 Podman</a></li>
-<li><a href="#verify-the-result-independently" id="toc-verify-the-result-independently"><span class="toc-section-number">11.5</span> Verify the Result
+<li><a href="#verify-the-result-independently" id="toc-verify-the-result-independently"><span class="toc-section-number">10.5</span> Verify the Result
 Independently</a></li>
+</ul></li>
+<li><a href="#pi-compared-with-other-coding-agents" id="toc-pi-compared-with-other-coding-agents"><span class="toc-section-number">11</span> Pi Compared With Other Coding
+Agents</a>
+<ul>
+<li><a href="#pi-versus-opencode-and-aider" id="toc-pi-versus-opencode-and-aider"><span class="toc-section-number">11.1</span> Pi Versus OpenCode and
+Aider</a></li>
+<li><a href="#pi-versus-claude-code-and-codex" id="toc-pi-versus-claude-code-and-codex"><span class="toc-section-number">11.2</span> Pi Versus Claude Code and
+Codex</a></li>
+<li><a href="#forks-and-derivatives" id="toc-forks-and-derivatives"><span class="toc-section-number">11.3</span> Forks and Derivatives</a></li>
 </ul></li>
 <li><a href="#reference" id="toc-reference"><span class="toc-section-number">12</span> Reference</a>
 <ul>
@@ -2315,116 +2315,7 @@ package. Do not treat <code>--offline</code> as a firewall for tools or
 extensions; use OS or network policy for that. <code>/share</code> and
 <code>/bug</code> are explicit upload actions whose transcript contents
 need inspection.</p>
-<h1 data-number="10" role="heading" aria-level="2" id="pi-compared-with-other-coding-agents"><span class="header-section-number">10</span> Pi Compared With Other Coding
-Agents</h1>
-<p>The useful comparison is not a feature checklist. Ask where the
-product puts workflow decisions and what the default execution boundary
-is.</p>
-<table>
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 23%" />
-<col style="width: 23%" />
-</colgroup>
-<thead>
-<tr>
-<th>Agent</th>
-<th>Centre of gravity</th>
-<th>Provider posture</th>
-<th>Web posture</th>
-<th>Customisation and controls</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Pi</strong></td>
-<td>Programmable terminal harness and embeddable runtime (MIT)</td>
-<td>Broad providers plus compatible and local endpoints</td>
-<td>Add a skill, MCP service, extension, package, or shell workflow</td>
-<td>TypeScript extensions, built-in MCP and optional codemode; no
-per-tool approval system</td>
-</tr>
-<tr>
-<td><strong>OpenCode</strong></td>
-<td>Ready-made terminal coding application</td>
-<td>Broad provider and local support</td>
-<td>Built-in <code>webfetch</code>; <code>websearch</code> only with the
-OpenCode provider or an opt-in Exa or Parallel flag</td>
-<td>Per-tool permissions, plugins, skills, MCP</td>
-</tr>
-<tr>
-<td><strong>Aider</strong></td>
-<td>Git-aware pair programmer</td>
-<td>Many providers and local endpoints</td>
-<td><code>/web &lt;url&gt;</code> scrapes a page into the chat; no
-built-in search</td>
-<td>Configuration and scripts; narrower runtime</td>
-</tr>
-<tr>
-<td><strong>Claude Code</strong></td>
-<td>Opinionated terminal agent around Claude</td>
-<td>Strong Anthropic alignment and supported cloud deployments</td>
-<td>Built-in <code>WebFetch</code> and <code>WebSearch</code>,
-permission-gated</td>
-<td>Permission modes, optional OS-level sandbox, subagents, hooks,
-skills, plugins, MCP</td>
-</tr>
-<tr>
-<td><strong>Codex</strong></td>
-<td>Product-connected coding agent from OpenAI</td>
-<td>OpenAI-first; custom providers and local <code>--oss</code> models
-supported</td>
-<td>Built-in web search, cached results by default</td>
-<td>Instructions, skills, plugins, MCP; sandbox modes and approval
-policies built in</td>
-</tr>
-</tbody>
-</table>
-<h2 data-number="10.1" role="heading" aria-level="3" id="pi-versus-opencode-and-aider"><span class="header-section-number">10.1</span> Pi Versus OpenCode and
-Aider</h2>
-<p>OpenCode feels like a complete coding application; Pi starts smaller
-and asks you to assemble the workflow. Choose OpenCode for a richer
-day-one experience. Choose Pi when the agent loop itself must be
-programmable, when you want a narrow, provider-neutral harness, or when
-you are building an embedded agent. Aider’s centre is the repository,
-selected editable files, a repository map, and a reviewable Git edit
-loop. Pi can reproduce that loop but can also become a research tool,
-browser bridge, or application component; choose Aider for focused
-supervised edits.</p>
-<h2 data-number="10.2" role="heading" aria-level="3" id="pi-versus-claude-code-and-codex"><span class="header-section-number">10.2</span> Pi Versus Claude Code and
-Codex</h2>
-<p>Claude Code and Codex supply the surrounding workflow themselves:
-permission prompts, sandbox options, web search, and established
-instruction systems. The mapping table in “Coming from Claude Code”
-shows where Pi leaves each of those to you: you select the model,
-assemble research access, review extensions, and define containment.
-That flexibility is not automatically cheaper or safer. Local models add
-hardware and quality costs; extensions can add exactly the capability
-you want while gaining full process access. The sibling primers cover
-the <a href="../primer_claude_code_alternative/primer-claude-code-alternatives.html">alternatives
-to Claude Code</a> and <a href="../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html">Codex
-for Claude Code users</a> in more depth.</p>
-<h2 data-number="10.3" role="heading" aria-level="3" id="forks-and-derivatives"><span class="header-section-number">10.3</span> Forks and Derivatives</h2>
-<p>Because Pi is MIT-licensed and embeddable, others build on it.
-<code>oh-my-pi</code> (Stencil Labs, MIT) is, by its own README, a fork
-that adds subagents, integrated development environment (IDE) and
-Language Server Protocol (LSP) support, and browser tooling. OpenClaw
-(see the <a href="../primer_openclaw/primer_openclaw.html">OpenClaw
-primer</a>) was described in January 2026 as having Pi “under the hood”
-(<a href="https://lucumr.pocoo.org/2026/1/31/pi/">Armin Ronacher</a>);
-its current documentation says only <code>@earendil-works/pi-tui</code>,
-the terminal-UI toolkit, remains a dependency. A claim that a project
-“runs on Pi” needs a date.</p>
-<p>A fork can be useful when its integrated defaults match the task, but
-it changes the code and update path you are trusting. Compare the fork’s
-actual release and security model with the Pi version in this primer
-before carrying over commands. Likewise, an application that once
-embedded Pi need not still share Pi’s sessions, tools, or provider
-handling. Treat those relationships as versioned implementation facts
-rather than product categories.</p>
-<h1 data-number="11" role="heading" aria-level="2" id="worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="header-section-number">11</span> Worked Example: A Reproducible
+<h1 data-number="10" role="heading" aria-level="2" id="worked-example-a-reproducible-data-science-project-with-pi-and-rocker"><span class="header-section-number">10</span> Worked Example: A Reproducible
 Data-Science Project With Pi and Rocker</h1>
 <p>This illustrative project makes the boundary between an agent and an
 analysis runtime concrete. It does not supply complete cleaners, tests,
@@ -2450,7 +2341,7 @@ host. A <strong>digest</strong> is a content hash
 (<code>sha256:...</code>) identifying an exact image, where a tag is a
 movable label. <strong><code>renv</code></strong> is R’s dependency
 lockfile tool.</p>
-<h2 data-number="11.1" role="heading" aria-level="3" id="project-goal-and-contract"><span class="header-section-number">11.1</span> Project Goal and Contract</h2>
+<h2 data-number="10.1" role="heading" aria-level="3" id="project-goal-and-contract"><span class="header-section-number">10.1</span> Project Goal and Contract</h2>
 <p>Build a small “daily temperature quality” project. The input is a
 fictional CSV of station readings; two independent implementations, one
 in R and one in Python, must produce the same summary. Do not call
@@ -2541,7 +2432,7 @@ non-zero for any mismatch. For a negative check, change only station A’s
 minimum from <code>5.10</code> to <code>5.20</code>: even with the
 correct count, mean, and maximum, the comparator must reject that
 row.</p>
-<h2 data-number="11.2" role="heading" aria-level="3" id="give-pi-bounded-tasks"><span class="header-section-number">11.2</span> Give Pi Bounded Tasks</h2>
+<h2 data-number="10.2" role="heading" aria-level="3" id="give-pi-bounded-tasks"><span class="header-section-number">10.2</span> Give Pi Bounded Tasks</h2>
 <p>Use a separate, named session for each phase. The fixture, expected
 output, and comparison script are committed before the implementation
 task starts.</p>
@@ -2567,7 +2458,7 @@ agreement. Use `just qa` (defined below) and stop if the contract is ambiguous.<
 build, and comparison decide whether it is correct. Pi also writes some
 tests, so review them: a test written to match the model’s own output
 proves nothing.</p>
-<h2 data-number="11.3" role="heading" aria-level="3" id="build-a-digest-pinned-rocker-image"><span class="header-section-number">11.3</span> Build a Digest-Pinned Rocker
+<h2 data-number="10.3" role="heading" aria-level="3" id="build-a-digest-pinned-rocker-image"><span class="header-section-number">10.3</span> Build a Digest-Pinned Rocker
 Image</h2>
 <p>Rocker’s versioned tags are not immutable: the images are rebuilt
 periodically, so <code>4.6.1</code> today need not be byte-identical to
@@ -2642,7 +2533,7 @@ host user whatever <code>USER</code> says; <code>USER rstudio</code>
 <code>!requirements.txt</code> and <code>!renv.lock</code>), because the
 build context includes everything not ignored.</li>
 </ul>
-<h2 data-number="11.4" role="heading" aria-level="3" id="run-it-with-rootless-podman"><span class="header-section-number">11.4</span> Run It With Rootless
+<h2 data-number="10.4" role="heading" aria-level="3" id="run-it-with-rootless-podman"><span class="header-section-number">10.4</span> Run It With Rootless
 Podman</h2>
 <p>A small <code>Justfile</code> exposes the workflow without hiding the
 container boundary. The 16 October 2026 edition reported a toy
@@ -2697,7 +2588,7 @@ fetch anything.</p>
 <code>--user &quot;$(id -u):$(id -g)&quot;</code> instead and drop <code>:Z</code>
 unless the host uses SELinux. Never mount the repository parent, home
 directory, SSH agent, cloud credentials, or a container socket.</p>
-<h2 data-number="11.5" role="heading" aria-level="3" id="verify-the-result-independently"><span class="header-section-number">11.5</span> Verify the Result
+<h2 data-number="10.5" role="heading" aria-level="3" id="verify-the-result-independently"><span class="header-section-number">10.5</span> Verify the Result
 Independently</h2>
 <p>Pi should run <code>just qa</code> and report its output, but its
 report of its own run is not evidence. Run <code>just qa</code> yourself
@@ -2731,6 +2622,115 @@ read-only. Do not give Pi access to sensitive datasets or credentials
 merely because the analysis container can read them. This example
 teaches reproducibility and review; it does not make Pi a trusted
 data-processing authority.</p>
+<h1 data-number="11" role="heading" aria-level="2" id="pi-compared-with-other-coding-agents"><span class="header-section-number">11</span> Pi Compared With Other Coding
+Agents</h1>
+<p>The useful comparison is not a feature checklist. Ask where the
+product puts workflow decisions and what the default execution boundary
+is.</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 23%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Centre of gravity</th>
+<th>Provider posture</th>
+<th>Web posture</th>
+<th>Customisation and controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pi</strong></td>
+<td>Programmable terminal harness and embeddable runtime (MIT)</td>
+<td>Broad providers plus compatible and local endpoints</td>
+<td>Add a skill, MCP service, extension, package, or shell workflow</td>
+<td>TypeScript extensions, built-in MCP and optional codemode; no
+per-tool approval system</td>
+</tr>
+<tr>
+<td><strong>OpenCode</strong></td>
+<td>Ready-made terminal coding application</td>
+<td>Broad provider and local support</td>
+<td>Built-in <code>webfetch</code>; <code>websearch</code> only with the
+OpenCode provider or an opt-in Exa or Parallel flag</td>
+<td>Per-tool permissions, plugins, skills, MCP</td>
+</tr>
+<tr>
+<td><strong>Aider</strong></td>
+<td>Git-aware pair programmer</td>
+<td>Many providers and local endpoints</td>
+<td><code>/web &lt;url&gt;</code> scrapes a page into the chat; no
+built-in search</td>
+<td>Configuration and scripts; narrower runtime</td>
+</tr>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>Opinionated terminal agent around Claude</td>
+<td>Strong Anthropic alignment and supported cloud deployments</td>
+<td>Built-in <code>WebFetch</code> and <code>WebSearch</code>,
+permission-gated</td>
+<td>Permission modes, optional OS-level sandbox, subagents, hooks,
+skills, plugins, MCP</td>
+</tr>
+<tr>
+<td><strong>Codex</strong></td>
+<td>Product-connected coding agent from OpenAI</td>
+<td>OpenAI-first; custom providers and local <code>--oss</code> models
+supported</td>
+<td>Built-in web search, cached results by default</td>
+<td>Instructions, skills, plugins, MCP; sandbox modes and approval
+policies built in</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="11.1" role="heading" aria-level="3" id="pi-versus-opencode-and-aider"><span class="header-section-number">11.1</span> Pi Versus OpenCode and
+Aider</h2>
+<p>OpenCode feels like a complete coding application; Pi starts smaller
+and asks you to assemble the workflow. Choose OpenCode for a richer
+day-one experience. Choose Pi when the agent loop itself must be
+programmable, when you want a narrow, provider-neutral harness, or when
+you are building an embedded agent. Aider’s centre is the repository,
+selected editable files, a repository map, and a reviewable Git edit
+loop. Pi can reproduce that loop but can also become a research tool,
+browser bridge, or application component; choose Aider for focused
+supervised edits.</p>
+<h2 data-number="11.2" role="heading" aria-level="3" id="pi-versus-claude-code-and-codex"><span class="header-section-number">11.2</span> Pi Versus Claude Code and
+Codex</h2>
+<p>Claude Code and Codex supply the surrounding workflow themselves:
+permission prompts, sandbox options, web search, and established
+instruction systems. The mapping table in “Coming from Claude Code”
+shows where Pi leaves each of those to you: you select the model,
+assemble research access, review extensions, and define containment.
+That flexibility is not automatically cheaper or safer. Local models add
+hardware and quality costs; extensions can add exactly the capability
+you want while gaining full process access. The sibling primers cover
+the <a href="../primer_claude_code_alternative/primer-claude-code-alternatives.html">alternatives
+to Claude Code</a> and <a href="../primer_codex_for_claude_code_users/primer-codex-for-claude-code-users.html">Codex
+for Claude Code users</a> in more depth.</p>
+<h2 data-number="11.3" role="heading" aria-level="3" id="forks-and-derivatives"><span class="header-section-number">11.3</span> Forks and Derivatives</h2>
+<p>Because Pi is MIT-licensed and embeddable, others build on it.
+<code>oh-my-pi</code> (Stencil Labs, MIT) is, by its own README, a fork
+that adds subagents, integrated development environment (IDE) and
+Language Server Protocol (LSP) support, and browser tooling. OpenClaw
+(see the <a href="../primer_openclaw/primer_openclaw.html">OpenClaw
+primer</a>) was described in January 2026 as having Pi “under the hood”
+(<a href="https://lucumr.pocoo.org/2026/1/31/pi/">Armin Ronacher</a>);
+its current documentation says only <code>@earendil-works/pi-tui</code>,
+the terminal-UI toolkit, remains a dependency. A claim that a project
+“runs on Pi” needs a date.</p>
+<p>A fork can be useful when its integrated defaults match the task, but
+it changes the code and update path you are trusting. Compare the fork’s
+actual release and security model with the Pi version in this primer
+before carrying over commands. Likewise, an application that once
+embedded Pi need not still share Pi’s sessions, tools, or provider
+handling. Treat those relationships as versioned implementation facts
+rather than product categories.</p>
 <h1 data-number="12" role="heading" aria-level="2" id="reference"><span class="header-section-number">12</span> Reference</h1>
 <p>Look-up material for when something breaks, when you need to find a
 file, and when you want the next document to read.</p>
