@@ -1119,7 +1119,8 @@ The conductance guarantee also concerns a particular graph and its volume measur
 There is a second distinction between theorem and computation. An exact zero eigenvalue corresponds to a component in exact arithmetic, but a floating-point solver reports a small number. The decision threshold should be tied to a matrix norm and a residual, not copied from a different graph. A weak bridge can generate a small positive eigenvalue, while a disconnected graph can generate a numerically tiny value that is exactly zero in the mathematical model. Run a component algorithm on the edge data before deciding how many eigenvectors to request.
 
 Finally, a repeated eigenvalue makes individual coordinates non-identifiable. The clique's mean-zero eigenspace is the clearest example, but nearly repeated eigenvalues occur in many symmetric or weakly perturbed graphs. Compare the projectors $QQ^{\top}$ for the selected subspaces, or compare downstream invariants such as pairwise embedding distances and cut values. A sign flip of one eigenvector is harmless; a rotation within a repeated eigenspace is also harmless, but it can make a column-by-column comparison look unstable. This validation rule is part of the expansion argument because a claimed community boundary is a property of the rounded subspace, not of an arbitrary basis returned by one eigensolver.
-### A Compact Portfolio of Small Graphs
+
+### A Compact Portfolio of Small Graphs {#compact-portfolio-small-graphs}
 
 This portfolio is a reference synthesis of the preceding laboratories. Its new task is to assemble their results into a regression suite: which graph tests boundary effects, degree bias, degeneracy, or sensitivity? The family descriptions below recall the mechanisms rather than introduce additional derivations.
 
